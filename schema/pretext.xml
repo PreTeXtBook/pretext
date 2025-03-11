@@ -112,7 +112,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary)+,
+                            (BlockDivision | Paragraphs)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
@@ -167,7 +167,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary)+,
+                            (BlockDivision | Paragraphs)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
@@ -189,7 +189,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary)+,
+                            (BlockDivision | Paragraphs)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
@@ -211,7 +211,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary)+,
+                            (BlockDivision | Paragraphs)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
@@ -231,7 +231,7 @@
                     MetaDataAltTitle,
                     AuthorByline*,
                     Objectives?,
-                    (BlockDivision | Paragraphs | Commentary)+,
+                    (BlockDivision | Paragraphs)+,
                     (ReadingQuestions? &amp; Exercises? &amp;
                      Solutions? &amp; References? &amp; Glossary?),
                     Outcomes?
@@ -243,8 +243,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary |
-                             NotationList)+,
+                            (BlockDivision | Paragraphs | NotationList)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
@@ -266,8 +265,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary |
-                             NotationList)+,
+                            (BlockDivision | Paragraphs | NotationList)+,
                             (ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
@@ -300,8 +298,8 @@
 
         <p>The <c>NoNumber</c> variant allows for light-weight sectioning of un-numbered divisions, such as a Preface.</p>
 
-        <p><tag>commentary</tag> is elective and is only functional with version support, hence a <attr>component</attr> attribute.  (2024-02-16: <tag>commentary</tag> could be eliminated in favor of a full-on use of version support, so try that first.</p>
-
+        <!-- 2025-03-08: removed "commentary" from schema -->
+\
         <fragment xml:id="paragraphs">
             <title>Paragraphs division</title>
             <code>
@@ -316,10 +314,6 @@
                     MetaDataTitle,
                     Index*,
                     BlockStatementNoCaption+
-                }
-            Commentary =
-                element commentary {
-                    attribute component { text }
                 }
             </code>
         </fragment>
@@ -505,7 +499,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary)+,
+                            (BlockDivision | Paragraphs)+,
                             (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
@@ -527,7 +521,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary)+,
+                            (BlockDivision | Paragraphs)+,
                             (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
@@ -549,7 +543,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary)+,
+                            (BlockDivision | Paragraphs)+,
                             (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
@@ -569,7 +563,7 @@
                     MetaDataAltTitle,
                     AuthorByline*,
                     Objectives?,
-                    (BlockDivision | Paragraphs | Commentary)+,
+                    (BlockDivision | Paragraphs)+,
                     (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
                      Solutions? &amp; References? &amp; Glossary?),
                     Outcomes?
@@ -581,8 +575,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary |
-                             NotationList)+,
+                            (BlockDivision | Paragraphs | NotationList)+,
                             (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
@@ -604,8 +597,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary |
-                             NotationList)+,
+                            (BlockDivision | Paragraphs | NotationList)+,
                             (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
@@ -3117,7 +3109,7 @@
             Biography =
                 element biography {
                     MetaDataTitleOptional,
-                    (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
+                    (BlockStatementNoCaption | ParagraphsNoNumber)+
                 }
             Dedication =
                 element dedication {
@@ -3127,24 +3119,21 @@
             Acknowledgement =
                 element acknowledgement {
                     MetaDataTitleOptional,
-                    (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
+                    (BlockStatementNoCaption | ParagraphsNoNumber)+
                 }
             Preface =
                 element preface {
                     MetaDataTitleOptional,
                     (
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber |
-                             Commentary)+,
+                            (BlockStatementNoCaption | ParagraphsNoNumber)+,
                             Attribution*
                         )
                         |
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber |
-                             Commentary)*,
+                            (BlockStatementNoCaption | ParagraphsNoNumber )*,
                             Contributors,
-                            (BlockStatementNoCaption | ParagraphsNoNumber |
-                             Commentary)*
+                            (BlockStatementNoCaption | ParagraphsNoNumber)*
                         )
                     )
                 }

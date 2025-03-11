@@ -60,7 +60,6 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
-              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <interleave>
@@ -172,7 +171,6 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
-              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <interleave>
@@ -243,7 +241,6 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
-              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <interleave>
@@ -314,7 +311,6 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
-              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <interleave>
@@ -383,7 +379,6 @@
         <choice>
           <ref name="BlockDivision"/>
           <ref name="Paragraphs"/>
-          <ref name="Commentary"/>
         </choice>
       </oneOrMore>
       <interleave>
@@ -423,7 +418,6 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
-              <ref name="Commentary"/>
               <ref name="NotationList"/>
             </choice>
           </oneOrMore>
@@ -495,7 +489,6 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
-              <ref name="Commentary"/>
               <ref name="NotationList"/>
             </choice>
           </oneOrMore>
@@ -624,6 +617,9 @@
           <ref name="Keywords"/>
         </zeroOrMore>
         <optional>
+          <ref name="Support"/>
+        </optional>
+        <optional>
           <ref name="Website"/>
         </optional>
         <optional>
@@ -690,7 +686,7 @@
     </element>
   </define>
   <define name="Location">
-    <element name="address">
+    <element name="location">
       <choice>
         <ref name="TextSimple"/>
         <oneOrMore>
@@ -888,7 +884,6 @@
         <choice>
           <ref name="BlockStatementNoCaption"/>
           <ref name="ParagraphsNoNumber"/>
-          <ref name="Commentary"/>
         </choice>
       </oneOrMore>
     </element>
@@ -911,7 +906,6 @@
         <choice>
           <ref name="BlockStatementNoCaption"/>
           <ref name="ParagraphsNoNumber"/>
-          <ref name="Commentary"/>
         </choice>
       </oneOrMore>
     </element>
@@ -925,7 +919,6 @@
             <choice>
               <ref name="BlockStatementNoCaption"/>
               <ref name="ParagraphsNoNumber"/>
-              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <zeroOrMore>
@@ -937,7 +930,6 @@
             <choice>
               <ref name="BlockStatementNoCaption"/>
               <ref name="ParagraphsNoNumber"/>
-              <ref name="Commentary"/>
             </choice>
           </zeroOrMore>
           <ref name="Contributors"/>
@@ -945,7 +937,6 @@
             <choice>
               <ref name="BlockStatementNoCaption"/>
               <ref name="ParagraphsNoNumber"/>
-              <ref name="Commentary"/>
             </choice>
           </zeroOrMore>
         </group>
@@ -1024,11 +1015,6 @@
       <oneOrMore>
         <ref name="BlockStatementNoCaption"/>
       </oneOrMore>
-    </element>
-  </define>
-  <define name="Commentary">
-    <element name="commentary">
-      <attribute name="component"/>
     </element>
   </define>
   <define name="ReadingQuestions">

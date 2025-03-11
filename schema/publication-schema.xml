@@ -157,6 +157,9 @@
                     element qrcode {
                         attribute image { text }
                     }
+                    element journal {
+                        attribute name {text}
+                    }
                 }
 
             ExerciseAttributes =
@@ -315,10 +318,26 @@
             <code>
             Html =
                 element html {
-                    attribute platform { "web" | "runestone" }?,
                     attribute favicon { "none" | "simple" }?,
                     attribute short-answer-responses { "graded" | "always" }?,
-                    (Analytics? &amp; Baseurl? &amp; Calculator? &amp; WebworkDynamism? &amp; Indexpage? &amp; Knowls? &amp; Exercises? &amp; Css? &amp; Search? &amp; Video? &amp; Asymptote? &amp; Feedback? &amp; NavigationHTML? &amp; Tableofcontents? &amp; Crossreferences?)
+                    (
+                        Analytics? &amp;
+                        Asymptote? &amp;
+                        Baseurl? &amp;
+                        Calculator? &amp;
+                        Css? &amp;
+                        Crossreferences?
+                        Exercises? &amp;
+                        Feedback? &amp;
+                        Indexpage? &amp;
+                        Knowls? &amp;
+                        NavigationHTML? &amp;
+                        Platform? &amp;
+                        Search? &amp;
+                        Tableofcontents? &amp;
+                        Video? &amp;
+                        WebworkDynamism? &amp;
+                    )
                 }
 
             Analytics =
@@ -396,6 +415,11 @@
                 element navigation {
                     attribute logic { "linear" | "tree" }?,
                     attribute upbutton { "yes" | "no" }?
+                }
+            Platform =
+                element platform {
+                    attribute host { "web" | "runestone" }
+                    attribute portable { "yes" | "no" }
                 }
             Search =
                 element search {

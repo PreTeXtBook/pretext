@@ -227,6 +227,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-watermark" select="$publication/common/watermark or ($watermark.text != '')"/>
 <xsl:variable name="b-latex-watermark" select="$b-watermark or ($latex.watermark != '')"/>
 
+<!-- Journal name for bibliography formatting and latex style selection -->
+<xsl:variable name="journal-name">
+    <xsl:apply-templates select="$publisher-attribute-options/common/journal/pi:pub-attribute[@name='name']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
+
 <!-- ########################### -->
 <!-- Exercise component switches -->
 <!-- ########################### -->
@@ -1846,17 +1852,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="feedback-button-href">
     <!-- internal variable, just for error-checking -->
     <xsl:variable name="attempted-href">
-        <xsl:choose>
-            <xsl:when test="$publication/html/feedback/@href">
-                <xsl:value-of select="$publication/html/feedback/@href"/>
-            </xsl:when>
-            <!-- deprecated -->
-            <xsl:when test="$assembly-docinfo/feedback/url">
-                <xsl:value-of select="$assembly-docinfo/feedback/url"/>
-            </xsl:when>
-            <!-- default to empty, as a signal of failure -->
-            <xsl:otherwise/>
-        </xsl:choose>
+        <xsl:if test="$publication/html/feedback/@href">
+            <xsl:value-of select="$publication/html/feedback/@href"/>
+        </xsl:if>
+        <!-- default to empty, as a signal of failure -->
     </xsl:variable>
     <!-- we error-check a bad @href *only* as a publisher -->
     <!-- variable, and not in the deprecated situation    -->
@@ -1871,18 +1870,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Empty is a meaningful value         -->
 <xsl:variable name="feedback-button-text">
     <xsl:variable name="provided-button-text">
-        <xsl:choose>
-            <xsl:when test="$publication/html/feedback">
-                <xsl:value-of select="$publication/html/feedback"/>
-            </xsl:when>
-            <!-- deprecated -->
-            <!-- "apply-templates is historical, may do poorly as -->
-            <!-- markup below in the absence of "copy-of", etc.   -->
-            <xsl:when test="$assembly-docinfo/feedback/text">
-                <xsl:apply-templates select="$assembly-docinfo/feedback/text"/>
-            </xsl:when>
-            <xsl:otherwise/>
-        </xsl:choose>
+        <xsl:if test="$publication/html/feedback">
+            <xsl:value-of select="$publication/html/feedback"/>
+        </xsl:if>
     </xsl:variable>
     <!-- Clean-up *and* utilize emptieness as a signal to use -->
     <!-- default text. If empty, provide default text in      -->
@@ -2179,22 +2169,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: We add a trailing slash, if not authored already -->
 <xsl:variable name="baseurl">
     <xsl:variable name="raw-input">
-        <xsl:choose>
-            <!-- if publisher file has a base url, use it -->
-            <xsl:when test="$publication/html/baseurl/@href">
-                <xsl:value-of select="$publication/html/baseurl/@href"/>
-            </xsl:when>
-            <!-- reluctantly query the old docinfo version  -->
-            <!-- If the "version" feature controls multiple -->
-            <!-- "docinfo" then this might query the wrong  -->
-            <!-- one (using $assembly-docinfo here led to a -->
-            <!-- circular variable definition).             -->
-            <xsl:when test="$original/docinfo/html/baseurl/@href">
-                <xsl:value-of select="$original/docinfo/html/baseurl/@href"/>
-            </xsl:when>
-            <!-- otherwise use the default, is empty as sentinel -->
-            <xsl:otherwise/>
-        </xsl:choose>
+        <!-- if publisher file has a base url, use it -->
+        <xsl:if test="$publication/html/baseurl/@href">
+            <xsl:value-of select="$publication/html/baseurl/@href"/>
+        </xsl:if>
+        <!-- otherwise use the default, is empty as sentinel -->
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$raw-input =''"/>
@@ -2463,13 +2442,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="not($html.statcounter.project = '')">
             <xsl:value-of select="$html.statcounter.project"/>
         </xsl:when>
-        <!-- deprecated -->
-        <xsl:when test="$assembly-docinfo/analytics/statcounter/project">
-            <xsl:value-of select="$assembly-docinfo/analytics/statcounter/project"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
+        <xsl:otherwise/>
     </xsl:choose>
 </xsl:variable>
 
@@ -2482,13 +2455,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="not($html.statcounter.security = '')">
             <xsl:value-of select="$html.statcounter.security"/>
         </xsl:when>
-        <!-- deprecated -->
-        <xsl:when test="$assembly-docinfo/analytics/statcounter/security">
-            <xsl:value-of select="$assembly-docinfo/analytics/statcounter/security"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
+        <xsl:otherwise/>
     </xsl:choose>
 </xsl:variable>
 
@@ -2498,28 +2465,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="not($html.google-classic = '')">
             <xsl:value-of select="$html.google-classic"/>
         </xsl:when>
-        <xsl:when test="$assembly-docinfo/analytics/google">
-            <xsl:value-of select="$assembly-docinfo/analytics/google/tracking"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
+        <xsl:otherwise/>
     </xsl:choose>
 </xsl:variable>
 
 <!-- 2019-11-28 all settings used here are deprecated -->
 <xsl:variable name="google-universal-tracking">
-    <xsl:choose>
-        <xsl:when test="not($html.google-universal = '')">
-            <xsl:value-of select="$html.google-universal"/>
-        </xsl:when>
-        <xsl:when test="$assembly-docinfo/analytics/google-universal">
-            <xsl:value-of select="$assembly-docinfo/analytics/google-universal/@tracking"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:if test="not($html.google-universal = '')">
+        <xsl:value-of select="$html.google-universal"/>
+    </xsl:if>
 </xsl:variable>
 
 <!-- This is the preferred Google method as of 2019-11-28 -->
@@ -2538,7 +2492,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML Search Configuration -->
 <!--                           -->
 
-<!-- Deprecated "docinfo" options are respected for now. -->
 <!-- String parameters are deprecated, so in -common     -->
 <!-- file, and are only consulted secondarily here       -->
 <xsl:variable name="google-search-cx">
@@ -2549,12 +2502,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="not($html.google-search = '')">
             <xsl:value-of select="$html.google-search"/>
         </xsl:when>
-        <xsl:when test="$assembly-docinfo/search/google/cx">
-            <xsl:value-of select="$assembly-docinfo/search/google/cx"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
+        <xsl:otherwise/>
     </xsl:choose>
 </xsl:variable>
 
@@ -2635,6 +2583,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2019-12-19: only 'web' vs. 'runestone' implemented    -->
 <xsl:variable name="b-host-web"       select="$host-platform = 'web'"/>
 <xsl:variable name="b-host-runestone" select="$host-platform = 'runestone'"/>
+
+<!-- To create a standalone html document with all css and js served by CDN -->
+<!-- we can select platform/@portable to "yes"                              -->
+<xsl:variable name="portable-html">
+    <xsl:apply-templates select="$publisher-attribute-options/html/platform/pi:pub-attribute[@name='portable']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-portable-html" select="$portable-html = 'yes'"/>
 
 <!--                            -->
 <!-- HTML Favicon Specification -->
@@ -2992,10 +2947,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$external-directory"/>
             <xsl:value-of select="$publication/latex/cover/@front"/>
         </xsl:when>
-        <!-- backward compatibility (from source "docinfo") -->
-        <xsl:when test="$assembly-docinfo/covers/@front">
-            <xsl:value-of select="$assembly-docinfo/covers/@front"/>
-        </xsl:when>
+        <otherwise/>
     </xsl:choose>
 </xsl:variable>
 <xsl:variable name="b-has-latex-front-cover" select="not($latex-front-cover-filename = '')"/>
@@ -3008,10 +2960,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$external-directory"/>
             <xsl:value-of select="$publication/latex/cover/@back"/>
         </xsl:when>
-        <!-- backward compatibility (from source "docinfo") -->
-        <xsl:when test="$assembly-docinfo/covers/@back">
-            <xsl:value-of select="$assembly-docinfo/covers/@back"/>
-        </xsl:when>
+        <otherwise/>
     </xsl:choose>
 </xsl:variable>
 <xsl:variable name="b-has-latex-back-cover" select="not($latex-back-cover-filename = '')"/>
@@ -3145,6 +3094,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <mermaid>
             <pi:pub-attribute name="theme" default="default" options="dark forest light"/>
         </mermaid>
+        <journal>
+            <pi:pub-attribute name="name" default="" freeform="yes"/>
+        </journal>
     </common>
     <html>
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
@@ -3191,6 +3143,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </video>
         <platform>
             <pi:pub-attribute name="host" default="web" options="runestone" legacy-options="aim"/>
+            <pi:pub-attribute name="portable" default="no" options="yes"/>
         </platform>
     </html>
     <epub>

@@ -1291,7 +1291,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}, after upper={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//@workspace">
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
@@ -5580,13 +5580,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
     <xsl:text>\end{paragraphs}%&#xa;</xsl:text>
 </xsl:template>
-
-<!-- Commentary -->
-<!-- 2024-02-16: deprecated, and not expected to survive      -->
-<!-- the assembly phase but we kill it here explicity, rather -->
-<!-- than having a default template process the contents.     -->
-<!-- (This should be expanded as a new implementation.)       -->
-<xsl:template match="commentary"/>
 
 <!-- Theorems, Proofs, Definitions, Examples, Exercises -->
 

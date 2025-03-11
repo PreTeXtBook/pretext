@@ -48,12 +48,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <directories external="media" generated="gen"/>
         <!-- this is an example of placing @generated *outside* of revision control -->
         <!-- <directories external="media" generated="../../../altgen"/> -->
-        <!-- A single "commentary" is included and we place it into the -->
-        <!-- "instructor" component, and then we need this "version"    -->
-        <!-- element to make that component include'd.  Until we remove -->
-        <!-- the "commentary" string parameter (planned for 2024-02-13, -->
-        <!-- or later) we need to have that set to "yes" as well.       -->
-        <version include="instructor"/>
     </source>
 
     <!-- For an "article" with "section" we can only go 3 levels    -->

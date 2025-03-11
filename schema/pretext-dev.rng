@@ -512,7 +512,6 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
-              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <interleave>
@@ -590,7 +589,6 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
-              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <interleave>
@@ -668,7 +666,6 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
-              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <interleave>
@@ -744,7 +741,6 @@
         <choice>
           <ref name="BlockDivision"/>
           <ref name="Paragraphs"/>
-          <ref name="Commentary"/>
         </choice>
       </oneOrMore>
       <interleave>
@@ -787,7 +783,6 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
-              <ref name="Commentary"/>
               <ref name="NotationList"/>
             </choice>
           </oneOrMore>
@@ -866,7 +861,6 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
-              <ref name="Commentary"/>
               <ref name="NotationList"/>
             </choice>
           </oneOrMore>

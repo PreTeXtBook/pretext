@@ -2366,7 +2366,7 @@ Book (with parts), "section" at level 3
 <!-- descended introduction or conclusion .                          -->
 <!-- Also, list items are considered blocks.                         -->
 <!-- NB: we don't point to a sidebyside, so not included here        -->
-<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|commentary|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|exercise|li" mode="is-block">
+<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|exercise|li" mode="is-block">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -2937,7 +2937,7 @@ Book (with parts), "section" at level 3
 <!-- pieces simply so it is more readable.                     -->
 <!--                                                           -->
 <!-- Blocks -->
-<xsl:template match="&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise|commentary|assemblage" mode="title-wants-punctuation">
+<xsl:template match="&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise|assemblage" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Miscellaneous -->
@@ -11722,9 +11722,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2024-02-16'" />
         <xsl:with-param name="message" select="'a &quot;commentary&quot; element without a @component attribute is now routinely visible in all conversions.  This is unlikely to be what you want since the same effect can be had with no &quot;commentary&quot; element at all.  This message expands on the warning of 2023-02-13, and you might also be getting messages about the deprecation of the string parameter also named &quot;commentary&quot;.   Remove the &quot;commentary&quot; element, or consult the PreTeXt Guide to learn about version support and place the &quot;commentary&quot; element into a component using the attribute of the same name.'"/>
     </xsl:call-template>
+    <!-- 2025-03-08: add yet another warning message, but now -->
+    <!-- it is serious - "commentary" is deprecated (even if  -->
+    <!-- its use with version support will be respected)      -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//commentary&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-08'" />
+        <xsl:with-param name="message" select="'the &quot;commentary&quot; element has been deprecated.  Remove the &quot;commentary&quot; element, and consult the PreTeXt Guide to learn about how version support can have the same effect. (If your &quot;commentary&quot; element uses a &quot;component&quot; attribute, we will try to honor your intent.)'"/>
+    </xsl:call-template>
     <!-- Any componentless "commentary" at all - fatal error -->
-    <xsl:if test="$document-root//commentary[not(@component)]">
-        <xsl:message terminate="yes">PTX:FATAL:    a "commentary" without a @component attribute is a fatal error from 2024-02-16 onward.  Read prior error messages and make the suggested changes.  Quitting...</xsl:message>
+    <!-- NB: $document-root is "too late" here it seems,     -->
+    <!-- as this is not the "deprecation-message" template,  -->
+    <!-- so we instead hard-code the $original tree          -->
+    <xsl:if test="$original//commentary[not(@component)]">
+        <xsl:message terminate="yes">PTX:FATAL:    a "commentary" without a @component attribute is a fatal error from 2024-02-16 onward.  Read preceding error messages (2023-02-13, 2024-02-16, 2025-03-08), and make the suggested changes.  Quitting...</xsl:message>
     </xsl:if>
     <!--  -->
     <!-- 2024-07-08  various mis-matches all settled in favor of "qrcode" -->
@@ -11774,6 +11785,45 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="&quot;$document-root//program/input&quot;" />
         <xsl:with-param name="date-string" select="'2024-11-19'" />
         <xsl:with-param name="message" select="'program/input now should be program/code. An automatic correction will be attempted.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!--  -->
+    <!-- 2025-03-09: mass removal of backward-compatiblity of old-style specifications in "docinfo" -->
+    <!--  -->
+    <!--  -->
+    <!-- From 2019-04-14 -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/analytics&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-09'" />
+        <xsl:with-param name="message" select="'site-specific ID for HTML analytics services (Statcounter, Google) provided within &quot;docinfo/analytics&quot; are now options supplied by publishers as command-line options.  See the Publishers Guide for specifics.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- From 2019-04-14 -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/search&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-09'" />
+        <xsl:with-param name="message" select="'site-specific ID for HTML search services (Google) is no longer provided within &quot;docinfo/search&quot;.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide. Specification in &quot;docinfo&quot; is now being ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- From 2020-11-22 -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/html/baseurl/@href&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-09'" />
+        <xsl:with-param name="message" select="'the &quot;baseurl/@href&quot; element in the &quot;docinfo&quot; has been replaced and is now specified in the publisher file with &quot;html/baseurl/@href&quot;, as documented in the PreTeXt Guide.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- From 2023-01-07 -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/feedback&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-09'" />
+        <xsl:with-param name="message" select="'election and configuration of a feedback button via a &quot;docinfo/feedback&quot; element has moved to the publication file with some small changes.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- From 2023-01-10  -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/covers&quot;" />
+        <xsl:with-param name="date-string" select="'2025-03-09'" />
+        <xsl:with-param name="message" select="'PDF front and back covers via a &quot;docinfo/covers&quot; element has moved to the publication file with some small changes.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

@@ -4109,4 +4109,5 @@ body.pretext {
   --primary-color-gray-98: color-mix(in oklab, var(--primary-color), gray 98%);
   --primary-color-gray-99: color-mix(in oklab, var(--primary-color), gray 99%);
 }
+/*! Theme: salem */
 /*# sourceMappingURL=theme-salem.css.map */

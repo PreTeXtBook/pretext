@@ -169,6 +169,27 @@
                 QR code pixels.
             </p>
         </subsection>
+
+        <subsection xml:id="common-journal">
+            <title>Journal name</title>
+            <idx><h>common option</h><h>journal name</h></idx>
+            <idx><h>journal name</h><h>common option</h></idx>
+
+            <p>
+                When an article is intended for publication in a particular journal, the name of the
+                journal can be specified with
+                <cd>
+                    <cline>/publication/common/journal/@name</cline>
+                </cd>
+                with a value being one of a list of supported journal short name codes.  Setting this option
+                will control the format of bibliography entries and the format of <latex/> that can be produced.
+            </p>
+
+            <p>
+                A complete list of the supported journals, together with their short name codes, will
+                be available in <xref ref="appendix-journals"/>.
+            </p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-numbering">
@@ -626,14 +647,31 @@
         <subsection xml:id="online-platform-options">
             <title>HTML Platforms</title>
             <idx><h>platform</h><h>HTML</h></idx>
+            <idx><h>host</h><h>HTML</h></idx>
             <idx>online platforms</idx>
 
             <p>The<cd>
-                <cline>/publication/html</cline>
-            </cd>element can have an attribute <attr>platform</attr> with values:<ul>
+                <cline>/publication/html/platform</cline>
+            </cd>element can have an attribute <attr>host</attr> with values:<ul>
                 <li><c>web</c>: the default, meant for self-hosting with no server configuration, features, or assumptions</li>
                 <li><c>runestone</c>: output meant for hosting on a Runestone server (<xref ref="runestone"/>)</li>
             </ul>Here <term>platform</term> refers to the server where the <init>HTML</init> output will eventually be hosted.  The effect is to create minor variations in the output to take advantage of extra features of the indicated platform.</p>
+        </subsection>
+
+        <subsection xml:id="online-portable-options">
+            <title>Portable HTML</title>
+            <idx><h>platform</h><h>HTML</h></idx>
+            <idx><h>portable</h><h>HTML</h></idx>
+            <idx><h>portable html</h></idx>
+
+            <p>To limit the number of files and directories created by the HTML conversion,
+            you can set the
+            <cd>
+                <cline>/publication/html/platform/@portable</cline>
+            </cd>
+            attribute to the value <c>"yes"</c>. 
+            This will result in the HTML using hosted CSS and Javascript files, rather than including them adjacent to the rest of your output.
+            This is especially useful in conjunction with setting the <xref ref="common-chunking-options">chunking variable</xref> to 0 to get a single html file.</p>
         </subsection>
 
         <subsection xml:id="online-style-options">

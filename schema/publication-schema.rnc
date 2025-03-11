@@ -52,6 +52,9 @@
                     element qrcode {
                         attribute image { text }
                     }
+                    element journal {
+                        attribute name {text}
+                    }
                 }
 
             ExerciseAttributes =
@@ -154,10 +157,26 @@
             
             Html =
                 element html {
-                    attribute platform { "web" | "runestone" }?,
                     attribute favicon { "none" | "simple" }?,
                     attribute short-answer-responses { "graded" | "always" }?,
-                    (Analytics? & Baseurl? & Calculator? & WebworkDynamism? & Indexpage? & Knowls? & Exercises? & Css? & Search? & Video? & Asymptote? & Feedback? & NavigationHTML? & Tableofcontents? & Crossreferences?)
+                    (
+                        Analytics? &
+                        Asymptote? &
+                        Baseurl? &
+                        Calculator? &
+                        Css? &
+                        Crossreferences?
+                        Exercises? &
+                        Feedback? &
+                        Indexpage? &
+                        Knowls? &
+                        NavigationHTML? &
+                        Platform? &
+                        Search? &
+                        Tableofcontents? &
+                        Video? &
+                        WebworkDynamism? &
+                    )
                 }
 
             Analytics =
@@ -235,6 +254,11 @@
                 element navigation {
                     attribute logic { "linear" | "tree" }?,
                     attribute upbutton { "yes" | "no" }?
+                }
+            Platform =
+                element platform {
+                    attribute host { "web" | "runestone" }
+                    attribute portable { "yes" | "no" }
                 }
             Search =
                 element search {

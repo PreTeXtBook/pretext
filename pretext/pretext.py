@@ -535,11 +535,28 @@ def sage_conversion(
         stringparams["subtree"] = xmlid_root
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     with working_directory(tmp_dir):
+        failed_images = []
         for sageplot in os.listdir(tmp_dir):
-            if ext_converter:
-                ext_converter(sageplot, outformat, dest_dir, sage_executable_cmd)
-            else:
-                individual_sage_conversion(sageplot, outformat, dest_dir, sage_executable_cmd)
+            try:
+                if ext_converter:
+                    ext_converter(sageplot, outformat, dest_dir, sage_executable_cmd)
+                else:
+                    individual_sage_conversion(sageplot, outformat, dest_dir, sage_executable_cmd)
+            except Exception as e:
+                failed_images.append(sageplot)
+                log.warning(e)
+    # raise an error if there were *any* failed images
+    if failed_images:
+        msg = "\n".join(
+            [
+                'Sage conversion failed for {} sageplot(s).',
+                "Build with '-v debug' option and review the log for error messages.",
+                "Images are:",
+            ]
+        ).format(len(failed_images))
+        # 2-space indentation
+        image_list = "\n  " + "\n  ".join(failed_images)
+        raise ValueError(msg + image_list)
 
 def individual_sage_conversion(sageplot, outformat, dest_dir, sage_executable_cmd):
     filebase, _ = os.path.splitext(sageplot)
@@ -547,8 +564,13 @@ def individual_sage_conversion(sageplot, outformat, dest_dir, sage_executable_cm
     sage_cmd = sage_executable_cmd + [sageplot]
     log.info("converting {} to {}".format(sageplot, sageout))
     log.debug("sage conversion {}".format(sage_cmd))
-    subprocess.call(sage_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-    shutil.copy2(sageout, dest_dir)
+
+    result = subprocess.run(sage_cmd, capture_output=True, encoding="utf-8")
+    if result.returncode:
+        log.debug(result.stderr)
+        raise Exception("sage conversion of {} failed".format(sageplot))
+    else:
+        shutil.copy2(sageout, dest_dir)
 
 def latex_image_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, ext_converter
@@ -3497,7 +3519,7 @@ def _runestone_services(stringparams, ext_rs_methods):
     # ext_rs_methods - an optional function that can replace the querying
     #                   of the Runestone Services file
     # Result - returns five pieces of discovered or set information,
-    #          see *two* retrn statements, one is intermediate.
+    #          see *two* return statements, one is intermediate.
     #          Failure is an option, if a network request fails
 
     # Canonical location of file of redirections to absolute-latest
@@ -3570,6 +3592,61 @@ def _runestone_services(stringparams, ext_rs_methods):
     stringparams["rs-css"] = rs_css
     stringparams["rs-version"] = rs_version
     return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
+
+
+def _cdn_runestone_services(stringparams, ext_rs_methods):
+    """Version of _runestone_services function to query the Runestone Services file from the PreTeXt html-static CDN"""
+
+    # stringparams - string parameter dictionary, this gains three
+    #                new keys which are passed on to the XSL eventually
+    # ext_rs_methods - an optional function that can replace the querying
+    #                   of the Runestone Services file
+    # Result - returns None, but updates stringparams dictionary with relevant rs values.
+
+    # CDN url for runestone services xml file
+    services_url_template = 'https://cdn.jsdelivr.net/gh/pretextbook/html-static@{}/dist/_static/runestone_services.xml'
+
+    # When builing portable html using the pretext CDN, it doesn't make sense to
+    # use the rs.version or rs.dev stringparams.  We warn if either of these are set.
+    if "debug.rs.version" in stringparams:
+        log.warning("Building portable html so ignoring the debug.rs.version string param")
+        stringparams.pop("debug.rs.version")
+    if "debug.rs.dev" in stringparams:
+        log.warning("Building portable html so ignoring the debug.rs.dev string param")
+        stringparams.pop("debug.rs.dev")
+
+    # set version to "latest" unless cli set cdn version
+    rs_version = stringparams.get("cli.version") or "latest"
+    log.info("Using rs services version {} from the PreTeXt CDN".format(rs_version))
+    services_url = services_url_template.format(rs_version)
+
+    # Otherwise, we have a URL pointing to the Runestone server/CDN
+    # which may be successful and may not.
+    try:
+        if ext_rs_methods:
+            # ext_rs_methods can be passed by the calling function.
+            # It should only accept keyword arguments, including `format` to
+            # distinguish between different types of requests.  Here we use
+            # format="xml" to indicate we are getting the small XML file containing
+            # data about the services and returning it as a string.
+            services_xml = ext_rs_methods(url=services_url, format="xml")
+        else:
+            # Network failure is fatal.  query_runestone_services() will raise an exception
+            # if it cannot get the Runestone Services file
+            services_xml = query_runestone_services(services_url)
+    except Exception as e:
+        raise Exception(e)
+
+    # Now services_xml should be meaningful since we haven't raised an exception.
+    services = ET.fromstring(services_xml)
+    # Interrogate the services XML
+    rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
+
+    # Set rs stringparams
+    stringparams["rs-js"] = rs_js
+    stringparams["rs-css"] = rs_css
+    stringparams["rs-version"] = rs_version
+    return None
 
 
 def query_runestone_services(services_url):
@@ -3725,7 +3802,7 @@ def _move_prebuilt_theme(theme_name, theme_opts, tmp_dir):
     if 'secondary-color' not in theme_opts['options'].keys():
         theme_opts['options']['secondary-color'] = color_schemes[scheme]['secondary-color']
 
-    log.debug("Using prebuilt theme: " + theme_name + " with options: " + str(theme_opts))
+    log.info("Using prebuilt CSS theme: " + theme_name + " with options: " + str(theme_opts))
 
     # copy src -> dest with modifications
     with open(src, 'r') as theme_file:
@@ -3775,7 +3852,7 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
         node_exec_cmd = get_executable_cmd("node")
         # theme name is prefixed with "theme-" in the cssbuilder script output
         full_name = "theme-{}".format(theme_name)
-        log.debug("Building custom theme: " + full_name)
+        log.info("Building custom css theme: " + full_name)
         log.debug("Theme options:" + json.dumps(theme_opts))
         result = subprocess.run(node_exec_cmd + [script, "-t", full_name, "-o", css_dest, "-c", json.dumps(theme_opts)], capture_output=True, timeout=60)
         if result.stdout:
@@ -3896,9 +3973,17 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # names for scratch directories
     tmp_dir = get_temporary_directory()
 
-    # interrogate Runestone server (or debugging switches) and populate
-    # NB: stringparams is augmented with Runestone Services information
-    _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
+    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
+    include_static_files = get_publisher_variable(pub_vars, 'portable-html') != "yes"
+
+    if include_static_files:
+        # interrogate Runestone server (or debugging switches) and populate
+        # NB: stringparams is augmented with Runestone Services information
+        _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
+    else:
+        # even if we don't need static files, we need to set stringparams for
+        # Runestone Services information.
+        _cdn_runestone_services(stringparams, ext_rs_methods)
 
     # support publisher file, and subtree argument
     if pub_file:
@@ -3915,18 +4000,21 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # consulted during the XSL run and so need to be placed beforehand
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
-    # place JS in scratch directory
-    copy_html_js(tmp_dir)
+    if include_static_files:
+        # Copy js and css, but only if not building portable html
+        # place JS in scratch directory
+        copy_html_js(tmp_dir)
 
-    # build or copy theme
-    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
-    build_or_copy_theme(xml, pub_vars, tmp_dir)
+        # build or copy theme
+        build_or_copy_theme(xml, pub_vars, tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
-    # extra css for custom ol markers
-    move_ol_marker_css(tmp_dir)
+
+    if include_static_files:
+        # extra css for custom ol markers
+        move_ol_marker_css(tmp_dir)
 
     if file_format  == "html":
         # with multiple files, we need to copy a tree
@@ -4035,6 +4123,32 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
 # Conversion to LaTeX
 #####################
 
+def get_latex_style(xml, pub_file, stringparams):
+    """
+    Returns the name of a latex_style to be used for processing to latex.
+      - Checks the value of the publisher variable 'journal-name'.
+      - If it finds a journal name, tries to resolve that using the list of
+        journals, returning the corresponding latex-style entry for that journal.
+      - If there is no journal-name publisher variable, or the variable is not in the
+        list of journals, checks for the publisher variable 'latex-style' and returns this.
+    """
+    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
+    journal_name = get_publisher_variable(pub_vars, "journal-name")
+    pub_latex_style = get_publisher_variable(pub_vars, "latex-style")
+    if len(journal_name) > 0:
+        journal_info = get_journal_info(journal_name)
+        latex_style = journal_info["latex-style"]
+        if len(latex_style) == 0:
+            msg = "The journal name {} in your publication file is invalid or does not correspond to a valid latex-style.  Using the default LaTeX style instead."
+            log.warning(msg.format(journal_name))
+            latex_style = pub_latex_style
+        if len(pub_latex_style) > 0 and pub_latex_style != latex_style:
+            msg = "Your publication file specifies a latex-style of {}, but a journal name of {}.  Building with the latex style {} which matches that journal instead."
+            log.warning(msg.format(pub_latex_style, journal_name, latex_style))
+    else:
+        latex_style = pub_latex_style
+    return latex_style
+
 # This is not a build target, there is no such thing as a "latex build."
 # Instead, this is a conveience for developers who want to compare
 # different versions of this file during development and testing.
@@ -4050,8 +4164,7 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
         stringparams["publisher"] = pub_file
 
     # Get potential extra XSL for LaTeX style from publication file
-    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
-    latex_style = get_publisher_variable(pub_vars, "latex-style")
+    latex_style = get_latex_style(xml, pub_file, stringparams)
 
     # Optional extra XSL could be None, or sanitized full filename
     if extra_xsl:
@@ -4936,6 +5049,29 @@ def get_publisher_variable(variable_dict, variable_name):
                         "Did you spell it correctly or does it need implementation?",
                         "If the latter, read instructions in code comments in the relevant routines."])
         raise ValueError(msg.format(variable_name))
+
+
+def get_journal_info(journal_name):
+    """
+    Returns a dictionary of data for a journal based on
+    a master list of journals in journals/journals.xml.
+    """
+    journal_xml = os.path.join(get_ptx_path(), "journals", "journals.xml")
+    log.debug("Reading list of journals in {}".format(journal_xml))
+    journals_tree = ET.parse(journal_xml)
+    journals_tree.xinclude()
+    # Find the node with <code> value journal_name:
+    try:
+        journal = journals_tree.xpath(f"//journal[code='{journal_name.lower()}']")[0]
+    except Exception as e:
+        log.warning("The journal name {} specified in the publication file is not supported.".format(journal_name))
+        return {"latex-style": ""}
+    keys = ["name", "code", "latex-style", "publisher"]
+    journal_info = {}
+    for key in keys:
+        if journal.find(key) is not None:
+            journal_info[key] = journal.find(key).text
+    return journal_info
 
 
 ###########################
