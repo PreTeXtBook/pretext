@@ -2515,6 +2515,10 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
     import urllib.parse
     import PIL.Image
+    import os
+    import requests
+    import shutil
+    from lxml import etree
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -2546,89 +2550,105 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     id_filename = os.path.join(tmp_dir, "mom-ids.txt")
     log.debug("MyOpenMath id list temporarily in {}".format(id_filename))
     xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
-    # prep regex for looking for images
-    graphics_pattern = re.compile(r'<image(.*?)source="([^"]*)"')
     images_dir = os.path.join(dest_dir, 'images')
     if not (os.path.isdir(images_dir)):
         os.mkdir(images_dir)
-
     # "run" an assignment for the list of problem numbers
     with open(id_filename, "r") as id_file:
         # read lines, skipping blank lines
         problems = [p.strip() for p in id_file.readlines() if not p.isspace()]
+
     for problem in problems:
         # &preservesvg=true is MOM flag to preserve embedded SVG
-        url = "https://www.myopenmath.com/util/mbx.php?id={}&preservesvg=true".format(problem)
-        path = os.path.join(dest_dir, "mom-{}.xml".format(problem))
-        log.info("downloading MOM #{} to {}...".format(problem, path))
+        url = f"https://www.myopenmath.com/util/mbx.php?id={problem}&preservesvg=true"
+        path = os.path.join(dest_dir, f"mom-{problem}.xml")
+        log.info(f"downloading MOM #{problem} to {path}...")
 
-        # download question xml
-        r = requests.get(url, timeout=10)
-        with open(path, "w", encoding="utf-8") as f:
-            # f.write(__xml_header.encode("utf-8"))
-            f.write('<?xml version="1.0" encoding="utf-8"?>\n')
-            if r.status_code == 200:
-                problemcontent = r.text
-                # add pi namespace
-                problemcontent = problemcontent.replace('<myopenmath', '<myopenmath xmlns:pi="http://pretextbook.org/2020/pretext/internal"')
-                # extract any images in content
-                for match in re.finditer(graphics_pattern, problemcontent):
-                    image_url = match.group(2)
-                    image_url_parsed = urllib.parse.urlparse(image_url)
-                    image_filename = os.path.basename(image_url_parsed.path)
-                    imageloc = 'problems/images/' + image_filename
-                    image_path = os.path.join(images_dir, image_filename)
-                    # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
-                    # removed some settings wrapper from around the URL, otherwise verbatim
+        try:
+            r = requests.get(url, timeout=10)
+            r.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+
+            xml_content = f'<?xml version="1.0" encoding="utf-8"?>\n{r.text}'
+            xml_content = xml_content.replace('<myopenmath', '<myopenmath xmlns:pi="http://pretextbook.org/2020/pretext/internal"')
+
+            tree = etree.fromstring(xml_content.encode("utf-8"))
+
+            # Process images
+            image_elements = tree.xpath("//image[contains(@source, 'http')]")
+            for image_element in image_elements:
+                image_url = image_element.get("source")
+                image_url_parsed = urllib.parse.urlparse(image_url)
+                image_filename = os.path.basename(image_url_parsed.path)
+                imageloc = f'problems/images/{image_filename}'
+                image_path = os.path.join(images_dir, image_filename)
+
+                try:
                     imageresp = requests.get(image_url, stream=True, timeout=10)
+                    imageresp.raise_for_status()
                     with open(image_path, "wb") as imagefile:
                         imageresp.raw.decode_content = True
                         shutil.copyfileobj(imageresp.raw, imagefile)
-                    imgwidthtag = ''
                     try:
                         img = PIL.Image.open(image_path)
-                        imgwidthtag = ' width="' + str(min(100,round(img.width/6))) + '%" '
+                        imgwidthtag = min(100, round(img.width / 6))
                         img.close()
                     except Exception as e:
-                        log.info("Unable to read image width of " + image_path)
-                    # replace image source, using pi:
-                    newtagstart = ('<image' + imgwidthtag + match.group(1) + 'pi:generated="' + imageloc + '"')
-                    problemcontent = problemcontent.replace(match.group(0), newtagstart)
-                # extract any embedded SVG
-                # must be after downloading images or it will attempt to download these
-                count = 1
-                svg_pattern = re.compile(r'(?i)(<image>)(<svg[\s\S]*?</svg>)(</image>)')
-                for match in re.finditer(svg_pattern, problemcontent):
-                    svgname = 'images/mom-{}-{}'.format(problem,count)
-                    svgname_ext = svgname + '.svg'
-                    svgpath = os.path.join(dest_dir,svgname_ext)
-                    pdfname_ext = svgname + '.pdf'
-                    pdfpath = os.path.join(dest_dir,pdfname_ext)
-                    pngname_ext = svgname + '.png'
-                    pngpath = os.path.join(dest_dir,pngname_ext)
+                        log.error(f"Unable to read image width of {image_path}: {e}")
+
+                    image_element.set("width", f"{imgwidthtag}%")
+                    del image_element.attrib["source"]
+                    image_element.set("{http://pretextbook.org/2020/pretext/internal}generated", imageloc)
+                except requests.exceptions.RequestException as e:
+                    log.error(f"Error downloading image {image_url}: {e}")
+
+            # Process embedded SVGs
+            image_svg_elements = tree.xpath("//image/*[local-name()='svg']")
+            count = 1
+            for svg_element in image_svg_elements:
+                if svg_element is not None:
+                    svg_string = etree.tostring(svg_element, encoding="unicode")
+                    # generate file names for image files
+                    svgname = f'images/mom-{problem}-{count}'
+                    svgname_ext = f'{svgname}.svg'
+                    svgpath = os.path.join(dest_dir, svgname_ext)
+                    pdfname_ext = f'{svgname}.pdf'
+                    pdfpath = os.path.join(dest_dir, pdfname_ext)
+                    pngname_ext = f'{svgname}.png'
+                    pngpath = os.path.join(dest_dir, pngname_ext)
+
+                    # write out the embedded SVG to file
                     with open(svgpath, "w") as svgfile:
                         svgfile.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
-                        svgfile.write(match.group(2))
+                        svgfile.write(svg_string)
                         svgfile.close()
-                    # construct PDF and PNG using pymupdf
-                    log.info("convert {} to PDF".format(svgname))
-                    svg = pymupdf.open(svgpath)
-                    pdfbytes = svg.convert_to_pdf()
-                    pdf = pymupdf.open("pdf",pdfbytes)
-                    pdf.save(pdfpath)
-                    png = svg.load_page(0).get_pixmap(dpi=300, alpha=True)
-                    png.save(pngpath)
-                    # now update pretext xml
-                    newimagetag = ('<image pi:generated="problems/' + svgname + '" />')
-                    problemcontent = problemcontent.replace('<image>',newimagetag,1)
-                    problemcontent = problemcontent.replace(match.group(2),'')
-                    problemcontent = problemcontent.replace('</image>','')
+
+                    try:
+                        svg = pymupdf.open(svgpath)
+                        pdfbytes = svg.convert_to_pdf()
+                        pdf = pymupdf.open("pdf", pdfbytes)
+                        pdf.save(pdfpath)
+                        png = svg.load_page(0).get_pixmap(dpi=300, alpha=True)
+                        png.save(pngpath)
+                    except Exception as e:
+                        log.error(f"Error converting SVG {svgname}: {e}")
+
+                    # update the <image> element to reference the file
+                    svg_element.getparent().set("{http://pretextbook.org/2020/pretext/internal}generated", f'problems/{svgname}')
+                    svg_element.getparent().remove(svg_element)
+
                     count += 1
 
-                f.write(problemcontent)
-            else:
-                msg = "PTX:ERROR: download returned a bad status code ({}), perhaps try {} manually?"
-                raise OSError(msg.format(r.status_code, url))
+            # Write the modified XML back to file
+            with open(path, "wb") as f:
+                f.write(etree.tostring(tree, encoding="utf-8", xml_declaration=True))
+
+        except requests.exceptions.RequestException as e:
+            log.error(f"Error downloading MOM #{problem}: {e}")
+        except etree.XMLSyntaxError as e:
+            log.error(f"Error parsing XML for MOM #{problem}: {e}")
+        except Exception as e:
+            log.error(f"An unexpected error occurred for MOM #{problem}: {e}")
+    
     log.info("MyOpenMath static problem download complete")
 
 
