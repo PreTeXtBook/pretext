@@ -50,7 +50,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   "pretext" element.                                          -->
 <!-- * The "version" templates are applied to decide if certain    -->
 <!--   elements are excluded from the source tree.  This creates   -->
-<!--   the new $version source tree by *removing* source.          -->
+<!--   the new $version source tree by *removing* source.  It also -->
+<!--   resolves "custom" elements.  If these two features have     -->
+<!--   been used properly by an author, then the result should be  -->
+<!--   valid PreTeXt (when perhaps the authored source was not).   -->
 <!-- * The modal "assembly" templates are applied to the source    -->
 <!--   root element, creating a new version of the source, which   -->
 <!--   has been "enhanced".  Various things happen in this pass,   -->
@@ -171,12 +174,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="node()|@*" mode="commentary">
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="commentary"/>
-    </xsl:copy>
-</xsl:template>
-
 <xsl:template match="node()|@*" mode="webwork">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="webwork"/>
@@ -267,35 +264,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- convert it into real XML nodes. These "real" trees have a -->
 <!-- root element, as a result of the node-set() manufacture.  -->
 
-<!-- This pass adds 100% internal identification for elements before    -->
-<!-- anything has been added or subtracted. The tree it builds is used  -->
-<!-- for constructing "View Source" knowls in HTML output as a form of  -->
-<!-- always-accurate documentation.                                     -->
-<!-- Update 2024-12-03: we needed to switch to using the $version-root  -->
-<!-- tree (a few trees later/further) since at this point versions have -->
-<!-- not been considered.  The "original-id" should still be            -->
-<!-- useful/valid after any version support has removed some elements.  -->
-<xsl:variable name="original-labeled-rtf">
-    <xsl:apply-templates select="/" mode="id-attribute">
-        <!-- $parent-id defaults to 'root' in template -->
-        <xsl:with-param name="attr-name" select="'original-id'"/>
-    </xsl:apply-templates>
-</xsl:variable>
-<xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
-
 <xsl:variable name="version-rtf">
-    <xsl:apply-templates select="$original-labeled" mode="version"/>
+    <xsl:apply-templates select="/" mode="version"/>
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
-
-<xsl:variable name="commentary-rtf">
-    <xsl:apply-templates select="$version" mode="commentary"/>
-</xsl:variable>
-<xsl:variable name="commentaried" select="exsl:node-set($commentary-rtf)"/>
-
-<!-- A global list of all "webwork" used for       -->
-<!-- efficient backward-compatible indentification -->
-<xsl:variable name="all-webwork" select="$commentaried//webwork"/>
 
 <!-- Support for versions mean there may be multiple instances of  -->
 <!-- the same structure in authored source, and conceivably they   -->
@@ -307,8 +279,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="version-docinfo" select="$version-root/docinfo"/>
 <xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
 
+<!-- This pass adds 100% internal identification for elements before    -->
+<!-- anything has been added or subtracted. The tree it builds is used  -->
+<!-- for constructing "View Source" knowls in HTML output as a form of  -->
+<!-- always-accurate documentation.  And this is its only purpose.      -->
+<!-- N.B.: see the $original-labeled tree used in the HTML conversion,  -->
+<!-- optionally, under the sway of a string parameter.  This is in the  -->
+<!-- (imported) pretext-view-source.xsl stylesheet.                     -->
+<xsl:variable name="original-labeled-rtf">
+    <xsl:apply-templates select="$version" mode="id-attribute">
+        <!-- $parent-id defaults to 'root' in template -->
+        <xsl:with-param name="attr-name" select="'original-id'"/>
+    </xsl:apply-templates>
+</xsl:variable>
+<xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
+
+<!-- A global list of all "webwork" used for       -->
+<!-- efficient backward-compatible indentification -->
+<xsl:variable name="all-webwork" select="$original-labeled//webwork"/>
+
 <xsl:variable name="webwork-rtf">
-    <xsl:apply-templates select="$commentaried" mode="webwork"/>
+    <xsl:apply-templates select="$original-labeled" mode="webwork"/>
 </xsl:variable>
 <xsl:variable name="webworked" select="exsl:node-set($webwork-rtf)"/>
 
@@ -832,52 +823,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="solution" mode="assembly"/>
         <xsl:apply-templates select="$n-solution[@ref=$the-id]" mode="assembly"/>
     </xsl:copy>
-</xsl:template>
-
-<!-- ############## -->
-<!-- Customizations -->
-<!-- ############## -->
-
-<!-- The "custom" element, with a @name in an auxiliary file,     -->
-<!-- and a @ref in a source file, allows for custom substitutions -->
-
-<!-- If the publisher variable  $customizations-file  is bad, -->
-<!-- then  document()  will raise an error.  The empty string -->
-<!-- (default) will not raise an error, so if not specified,  -->
-<!-- no problem.  But an empty string, and an attempted       -->
-<!-- access in the template *will* raise the error below.     -->
-<xsl:variable name="customizations" select="document($customizations-file, $original)"/>
-
-<!-- Set the key, nodes to be located are named -->
-<!-- "custom" within the file just accessed     -->
-<!-- For each one, @name is the search term     -->
-<!-- that will locate it: the key, the index    -->
-<xsl:key name="name-key" match="custom" use="@name"/>
-
-<xsl:template match="custom[@ref]" mode="assembly">
-    <!-- We need to get the @ref attribute now, due to a context shift -->
-    <!-- And the "custom" context also, for use in a location report   -->
-    <xsl:variable name="the-ref" select="string(@ref)"/>
-    <xsl:variable name="the-custom" select="."/>
-    <!-- Now the context shift to query the customizations -->
-    <xsl:for-each select="$customizations">
-        <xsl:variable name="the-lookup" select="key('name-key', $the-ref)"/>
-        <!-- This is an AWOL node, not empty content (which is allowed) -->
-        <xsl:if test="not($the-lookup)">
-            <xsl:text>[MISSING CUSTOM CONTENT HERE]</xsl:text>
-            <xsl:message>PTX:WARNING:   lookup for a "custom" element with @name set to "<xsl:value-of select="$the-ref"/>" has failed, while consulting the customization file "<xsl:value-of select="$customizations-file"/>".  Output will contain "[MISSING CUSTOM CONTENT HERE]" instead</xsl:message>
-            <xsl:apply-templates select="$the-custom" mode="location-report"/>
-        </xsl:if>
-        <!-- Copying the contents of "custom" via the "assembly" templates -->
-        <!-- will keep the "pi" namespace from appearing in palces, as it  -->
-        <!-- will with an "xsl:copy-of" on the same node set.  But it      -->
-        <!-- allows nested "custom" elements.                              -->
-        <!--                                                               -->
-        <!-- Do we want authors to potentially create cyclic references?   -->
-        <!-- A simple 2-cycle test failed quickly and obviously, so it     -->
-        <!-- will be caught quite easily, it seems.                        -->
-        <xsl:apply-templates select="$the-lookup/node()" mode="assembly"/>
-    </xsl:for-each>
 </xsl:template>
 
 
@@ -1422,6 +1367,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- 2025-03-08:  "commentary" is deprecated.  Authors should remove it, -->
+<!-- but we have suggested that it could be used with version support.   -->
+<!-- So, if extant here in the repair phase, then it must have had a     -->
+<!-- @component value that a publication file suggested retaining.       -->
+<!-- So, just like the previous (now gone) "component" pass, we just     -->
+<!-- unwrap the element.                                                 -->
+<xsl:template match="commentary" mode="repair">
+    <!-- do not duplicate "commentary", do not replicate   -->
+    <!-- @component, do replicate element and text children -->
+    <xsl:apply-templates select="node()" mode="repair"/>
+</xsl:template>
+
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
@@ -1807,6 +1764,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Versions -->
 <!-- ######## -->
 
+<!-- The version feature (@component markings) allows for   -->
+<!-- invalid PreTeXt source.  For example, an author might  -->
+<!-- have two different "docinfo" elements for some reason. -->
+<!-- So we allow a sort of pre-PreTeXt, which does not      -->
+<!-- satisfy the schema.  Support for the "custom" element  -->
+<!-- is similar in spirit.  So very early on, we unravel    -->
+<!-- (resolve) these features, and if used properly the     -->
+<!-- result will be valid PreTeXt, according to the schema. -->
+
 <xsl:template match="*" mode="version">
     <xsl:choose>
         <!-- version scheme not elected, so use element no matter what -->
@@ -1840,18 +1806,46 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- ########## -->
-<!-- Commentary -->
-<!-- ########## -->
+<!-- The "custom" element, with a @name in an auxiliary file,     -->
+<!-- and a @ref in a source file, allows for custom substitutions -->
 
-<!-- Unwrap any "commentary" that survives versions.  This is the      -->
-<!-- entire feature-set of a "commentary" element.  The schema         -->
-<!-- should enforce, and the code assumes, that every "commentary"     -->
-<!-- does have a @component attribute.  It would make no sense not to. -->
-<xsl:template match="commentary" mode="commentary">
-    <!-- do not duplicate "commentary", do not replicate   -->
-    <!-- @component, do replicate element and text children -->
-    <xsl:apply-templates select="node()" mode="commentary"/>
+<!-- If the publisher variable  $customizations-file  is bad, -->
+<!-- then  document()  will raise an error.  The empty string -->
+<!-- (default) will not raise an error, so if not specified,  -->
+<!-- no problem.  But an empty string, and an attempted       -->
+<!-- access in the template *will* raise the error below.     -->
+<xsl:variable name="customizations" select="document($customizations-file, $original)"/>
+
+<!-- Set the key, nodes to be located are named -->
+<!-- "custom" within the file just accessed     -->
+<!-- For each one, @name is the search term     -->
+<!-- that will locate it: the key, the index    -->
+<xsl:key name="name-key" match="custom" use="@name"/>
+
+<xsl:template match="custom[@ref]" mode="version">
+    <!-- We need to get the @ref attribute now, due to a context shift -->
+    <!-- And the "custom" context also, for use in a location report   -->
+    <xsl:variable name="the-ref" select="string(@ref)"/>
+    <xsl:variable name="the-custom" select="."/>
+    <!-- Now the context shift to query the customizations -->
+    <xsl:for-each select="$customizations">
+        <xsl:variable name="the-lookup" select="key('name-key', $the-ref)"/>
+        <!-- This is an AWOL node, not empty content (which is allowed) -->
+        <xsl:if test="not($the-lookup)">
+            <xsl:text>[MISSING CUSTOM CONTENT HERE]</xsl:text>
+            <xsl:message>PTX:WARNING:   lookup for a "custom" element with @name set to "<xsl:value-of select="$the-ref"/>" has failed, while consulting the customization file "<xsl:value-of select="$customizations-file"/>".  Output will contain "[MISSING CUSTOM CONTENT HERE]" instead</xsl:message>
+            <xsl:apply-templates select="$the-custom" mode="location-report"/>
+        </xsl:if>
+        <!-- Copying the contents of "custom" via the "version" templates  -->
+        <!-- will keep the "pi" namespace from appearing in places, as it  -->
+        <!-- will with an "xsl:copy-of" on the same node set.  But it      -->
+        <!-- allows nested "custom" elements.                              -->
+        <!--                                                               -->
+        <!-- Do we want authors to potentially create cyclic references?   -->
+        <!-- A simple 2-cycle test failed quickly and obviously, so it     -->
+        <!-- will be caught quite easily, it seems.                        -->
+        <xsl:apply-templates select="$the-lookup/node()" mode="version"/>
+    </xsl:for-each>
 </xsl:template>
 
 

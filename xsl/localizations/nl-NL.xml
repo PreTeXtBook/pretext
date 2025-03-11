@@ -100,7 +100,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages
     -->
     <localization string-id='paragraphs'>Alinea's</localization>
-    <localization string-id='commentary'>Commentaar</localization>
     <localization string-id='subparagraph'>Subalinea</localization>
     <!-- Adjustments to titles of divisions -->
     <!-- <localization string-id='group'>Group</localization> -->

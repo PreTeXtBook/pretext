@@ -92,7 +92,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'>Material posterior</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'>Paràgraf</localization>
-    <localization string-id='commentary'>Comentari</localization>
     <localization string-id='subparagraph'>Subparàgraf</localization>
     <!-- Adjustments to titles of divisions -->
     <!-- <localization string-id='group'>Group</localization> -->

@@ -110,9 +110,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- So the name says "dir", but effectively it is "location". -->
 <!-- But this is not the intent, nor supported, and thus can   -->
 <!-- change without warning.                                   -->
-<xsl:variable name="html.css.dir" select="'_static/pretext/css'"/>
-<xsl:variable name="html.js.dir" select="'_static/pretext/js'"/>
-<xsl:variable name="html.jslib.dir" select="'_static/pretext/js/lib'"/>
+<xsl:variable name="html.css.dir" select="concat($cdn-prefix, '_static/pretext/css')"/>
+<xsl:variable name="html.js.dir" select="concat($cdn-prefix, '_static/pretext/js')"/>
+<xsl:variable name="html.jslib.dir" select="concat($cdn-prefix, '_static/pretext/js/lib')"/>
+
+<!-- Add a prefix for the cdn url, which is empty unless the portable html variable is true -->
+<!-- We use version "latest" unless the CLI provides a version -->
+<xsl:param name="cli.version" select="'latest'"/>
+<xsl:variable name="cdn-prefix">
+    <xsl:if test="$b-portable-html">
+        <xsl:text>https://cdn.jsdelivr.net/gh/PreTeXtBook/html-static@</xsl:text>
+        <xsl:value-of select="$cli.version"/>
+        <xsl:text>/dist/</xsl:text>
+    </xsl:if>
+</xsl:variable>
+
+<!-- The css file name is usually "theme.css", but if portable html is selected, -->
+<!-- then we use a minified version and need to give the full theme name.        -->
+<xsl:variable name="html-css-theme-file">
+    <xsl:choose>
+        <xsl:when test="$b-portable-html">
+            <xsl:text>theme-</xsl:text>
+            <xsl:value-of select="$html-theme-name"/>
+            <xsl:text>.min.css</xsl:text> 
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>theme.css</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
@@ -2492,13 +2518,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (5) "body": main template to produce the HTML "body" portion of a knowl, or the content displayed on a page.  Reacts to four modes: 'visible' (original or duplicate), 'hidden', or 'xref'. -->
 
 <!-- (6) TODO: "wrapped-content" called by "body" to separate code. -->
-
-<!-- Commentary -->
-<!-- 2024-02-16: deprecated, and not expected to survive      -->
-<!-- the assembly phase but we kill it here explicity, rather -->
-<!-- than having a default template process the contents.     -->
-<!-- (This should be expanded as a new implementation.)       -->
-<xsl:template match="commentary"/>
 
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md|mdn|fragment">
     <xsl:param name="b-original" select="true()" />
@@ -6834,9 +6853,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <xsl:variable name="watermark-css">
-    <xsl:text>background-image:url('data:image/svg+xml;utf8,</xsl:text>
-    <xsl:apply-templates select="exsl:node-set($watermark-svg)" mode="serialize" />
+    <xsl:text>background-image:url('data:image/svg+xml;charset=utf-8,</xsl:text>
+    <xsl:apply-templates select="exsl:node-set($watermark-svg)" mode="serialize">
+        <!-- as-authored-source to preserve namespace on svg -->
+        <xsl:with-param name="as-authored-source" select="true()"/>
+    </xsl:apply-templates>
     <xsl:text>');</xsl:text>
+    <xsl:text>background-position:center top;background-repeat:repeat-y;</xsl:text>
 </xsl:variable>
 
 <!-- NB: here, and elesewhere, references -->
@@ -10710,14 +10733,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="sidebars" />
                 <!-- HTML5 main will be a "main" landmark automatically -->
                 <main class="ptx-main">
+                    <xsl:if test="$b-watermark">
+                        <xsl:attribute name="style">
+                            <xsl:value-of select="$watermark-css"/>
+                        </xsl:attribute>
+                    </xsl:if>
                     <div id="ptx-content" class="ptx-content">
                         <xsl:if test="$b-printable">
                             <xsl:apply-templates select="." mode="print-button"/>
-                        </xsl:if>
-                        <xsl:if test="$b-watermark">
-                            <xsl:attribute name="style">
-                                <xsl:value-of select="$watermark-css" />
-                            </xsl:attribute>
                         </xsl:if>
                         <!-- Alternative to "copy-of": convert $content to a  -->
                         <!-- node-set, and then hit with an identity template -->
@@ -13060,7 +13083,7 @@ TODO:
 <!-- Diagcess header library -->
 <xsl:template name="diagcess-header">
     <xsl:if test="$b-has-prefigure-annotations">
-        <script src="_static/pretext/js/diagcess/diagcess.js"></script>
+        <script src="{$html.js.dir}/diagcess/diagcess.js"></script>
     </xsl:if>
 </xsl:template>
 
@@ -13074,7 +13097,7 @@ TODO:
 <!-- CSS header -->
 <xsl:template name="css">
     <xsl:if test="not($b-debug-react)">
-        <link href="{$html.css.dir}/theme.css" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/{$html-css-theme-file}" rel="stylesheet" type="text/css"/>
     </xsl:if>
     <!-- Temporary until css handling overhaul by ascholer complete -->
     <link href="{$html.css.dir}/ol-markers.css" rel="stylesheet" type="text/css"/>

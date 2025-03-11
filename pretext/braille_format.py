@@ -24,7 +24,11 @@ import lxml.etree as ET
 
 # could import in a routine, but will do here in the module
 # Note: an import into the BRF class requires changes to the static method
-import louis
+try:
+    import louis
+except ImportError:
+    msg = 'The "louis" module, providing Python bindings for LibLouis, is required for Braille output.  See the PreTeXt Guide for instructions.'
+    raise ImportError(msg)
 
 # A  Cursor  object tracks location in a BRF file:
 # location in a line, line in a page, overall page number

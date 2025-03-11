@@ -92,7 +92,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'>Záró rész</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'>Paragrafusok</localization>
-    <!-- <localization string-id='commentary'>Commentary</localization> -->
     <localization string-id='subparagraph'>Al-paragrafus</localization>
     <!-- Adjustments to titles of divisions -->
     <!-- <localization string-id='group'>Group</localization> -->

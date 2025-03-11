@@ -89,7 +89,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='references'>Références</localization>
     <localization string-id='backmatter'>Annexes</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
-    <localization string-id='commentary'>Commentaire</localization>
     <localization string-id='paragraphs'>Paragraphes</localization>  <!--checked-->
     <localization string-id='subparagraph'>Sous-paragraphe</localization> <!--checked-->
     <!-- Adjustments to titles of divisions -->

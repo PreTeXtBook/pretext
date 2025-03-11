@@ -242,7 +242,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary)+,
+                            (BlockDivision | Paragraphs)+,
                             (Worksheet? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
@@ -264,7 +264,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary)+,
+                            (BlockDivision | Paragraphs)+,
                             (Worksheet? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
@@ -286,7 +286,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary)+,
+                            (BlockDivision | Paragraphs)+,
                             (Worksheet? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
@@ -306,7 +306,7 @@
                     MetaDataAltTitle,
                     AuthorByline*,
                     Objectives?,
-                    (BlockDivision | Paragraphs | Commentary)+,
+                    (BlockDivision | Paragraphs)+,
                     (Worksheet? & ReadingQuestions? & Exercises? &
                      Solutions? & References? & Glossary?),
                     Outcomes?
@@ -318,8 +318,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary |
-                             NotationList)+,
+                            (BlockDivision | Paragraphs | NotationList)+,
                             (Worksheet? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
@@ -341,8 +340,7 @@
                     (
                         (
                             Objectives?,
-                            (BlockDivision | Paragraphs | Commentary |
-                             NotationList)+,
+                            (BlockDivision | Paragraphs | NotationList)+,
                             (Worksheet? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?

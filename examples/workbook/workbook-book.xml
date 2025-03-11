@@ -159,10 +159,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </frontmatter>
 
         <chapter xml:id="ch-triplet">
-          <title>Three Worksheets</title>
+          <title>Four Worksheets</title>
             <xi:include href="ws-geometric-prelude.xml" />
             <xi:include href="ws-networks.xml" />
             <xi:include href="ws-testing.xml" />
+            <xi:include href="ws-exercisegroup.xml" />
           </chapter>
           <chapter xml:id="ch-duo">
             <title>Two Worksheet Chapter</title>

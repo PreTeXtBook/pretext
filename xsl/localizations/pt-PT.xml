@@ -93,7 +93,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'>Pós Texto</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'>Parágrafos</localization>
-    <!-- <localization string-id='commentary'>Commentary</localization> -->
     <!-- Adjustments to titles of divisions -->
     <!-- <localization string-id='group'>Group</localization> -->
     <localization string-id='subparagraph'>Subparágrafo</localization>
