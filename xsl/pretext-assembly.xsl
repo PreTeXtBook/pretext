@@ -1773,35 +1773,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (resolve) these features, and if used properly the     -->
 <!-- result will be valid PreTeXt, according to the schema. -->
 
-<xsl:template match="*" mode="version">
+<!-- Only elements "marked" with @component need to be      -->
+<!-- examined, the catch-all xerox template above suffices. -->
+<xsl:template match="*[@component]" mode="version">
+    <!-- prepare for test below -->
+    <xsl:variable name="single-component-fenced" select="concat('|', normalize-space(@component), '|')"/>
     <xsl:choose>
         <!-- version scheme not elected, so use element no matter what -->
+        <!-- note that @include="" yields "||" in test here            -->
         <xsl:when test="$components-fenced = ''">
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="version"/>
-            </xsl:copy>
-        </xsl:when>
-        <!-- version scheme elected, but element not participating, -->
-        <!-- so a 100% un-tagged element is included by default     -->
-        <xsl:when test="not(@component)">
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="version"/>
             </xsl:copy>
         </xsl:when>
         <!-- version scheme elected, element participating, so use element -->
         <!-- if it is a component in publisher's selection of components   -->
-        <xsl:when test="@component">
-            <xsl:variable name="single-component-fenced" select="concat('|', normalize-space(@component), '|')"/>
-            <xsl:if test="contains($components-fenced, $single-component-fenced)">
-                <xsl:copy>
-                    <xsl:apply-templates select="node()|@*" mode="version"/>
-                </xsl:copy>
-            </xsl:if>
-            <!-- scheme in publisher file, element tagged,    -->
-            <!-- but not elected, hence element dropped here  -->
+        <xsl:when test="contains($components-fenced, $single-component-fenced)">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="version"/>
+            </xsl:copy>
         </xsl:when>
-        <!-- previous two "when" mutually-exclusive, -->
-        <!-- thus we should not ever reach here      -->
+        <!-- version scheme elected, element participating, but its component -->
+        <!-- has not been selected in publisher file, so it gets dropped here -->
         <xsl:otherwise/>
     </xsl:choose>
 </xsl:template>
