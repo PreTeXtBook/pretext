@@ -7155,8 +7155,13 @@ Book (with parts), "section" at level 3
 <!-- No conversion will create content directly from bibinfo -->
 <xsl:template match="bibinfo"/>
 
-<!-- Keywords: create a comma-separated list.  No punctuation after final keyword -->
+<!-- Keywords: create a comma-separated list of each keyword -->
+<!-- (the comma can be overridden by a passed param).        -->
+<!-- Include "Primary" or "Secondary" appropriately, ";" to  -->
+<!-- separate the list of primary and secondary keywords.    -->
+<!-- No ending period (some styles don't include it).        -->
 <xsl:template match="keywords/keyword">
+    <xsl:param name="sep" select="', '"/>
     <xsl:if test="@primary='yes'">
         <xsl:text>Primary </xsl:text>
     </xsl:if>
@@ -7164,9 +7169,15 @@ Book (with parts), "section" at level 3
         <xsl:text>Secondary </xsl:text>
     </xsl:if>
     <xsl:value-of select="."/>
-    <xsl:if test="following-sibling::keyword">
-        <xsl:text>, </xsl:text>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="following-sibling::keyword[1][@primary='no' or @secondary='yes']">
+            <xsl:text>; </xsl:text>
+        </xsl:when>
+        <xsl:when test="following-sibling::keyword">
+            <xsl:value-of select="$sep"/>
+        </xsl:when>
+        <xsl:otherwise/>
+    </xsl:choose>
 </xsl:template>
 
 
