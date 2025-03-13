@@ -1196,18 +1196,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A file of hint|answer|solution, with @ref back to "exercise" -->
 <!-- so that the solutions can see limited distribution.  No real -->
-<!-- error-checking.  If not set/present, then an empty string    -->
+<!-- error-checking.  If not set/present, then an empty string.   -->
+<!-- NB: the empty string is checked in pretext-assembly.xsl to   -->
+<!-- prevent unnecessary manipulations of "exercise" and "task"   -->
+<!-- when no file is indicated.                                   -->
 
 <xsl:variable name="private-solutions-file">
     <xsl:choose>
         <xsl:when test="$publication/source/@private-solutions">
             <xsl:value-of select="str:replace($publication/source/@private-solutions, '&#x20;', '%20')"/>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
+        <!-- sentinel for no private solution manipulation -->
+        <xsl:otherwise/>
     </xsl:choose>
 </xsl:variable>
+<xsl:variable name="b-private-solutions" select="not($private-solutions-file = '')"/>
 
 
 <!-- ############### -->

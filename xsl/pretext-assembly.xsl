@@ -454,8 +454,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "private-solutions-file" is provided, it will be mined    -->
 <!-- for these private solutions.                              -->
 
-<xsl:variable name="b-private-solutions" select="not($private-solutions-file = '')"/>
-
 <!-- Note: there may be (nested) "pi:privatesolutionsdivision"  -->
 <!-- elements in this file.  They are largely meaningless, but  -->
 <!-- are necessary if an author wants to modularize their       -->
