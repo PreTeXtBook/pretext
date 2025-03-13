@@ -6176,6 +6176,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <svg xmlns="http://www.w3.org/2000/svg">
         <xsl:copy-of select="$image-svg-xml/svg:svg/namespace::*"/>
         <xsl:copy-of select="$image-svg-xml/svg:svg/@version"/>
+        <!-- Keep the viewbox, or create one based on the height and width -->
+        <xsl:choose>
+            <xsl:when test="$image-svg-xml/svg:svg/@viewBox">
+                <xsl:attribute name="viewBox">
+                    <xsl:value-of select="$image-svg-xml/svg:svg/@viewBox"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="viewBox">
+                    <xsl:text>0 0 </xsl:text>
+                    <xsl:value-of select="$image-svg-xml/svg:svg/@width"/>
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="$image-svg-xml/svg:svg/@height"/>
+                </xsl:attribute>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:copy-of select="$image-svg-xml/svg:svg/@viewBox"/>
         <xsl:attribute name="role">
             <xsl:text>img</xsl:text>
