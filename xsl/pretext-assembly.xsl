@@ -148,6 +148,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     need a stringparam override to view and test dynamic versions.  -->
 <xsl:variable name="exercise-style" select="'static'"/>
 
+<!-- Short-Circuit -->
+<!-- Sometimes we only want to convert to a "version" (valid PreTeXt) via -->
+<!-- the resolution of version support and customizations.  Examples are  -->
+<!-- determining publisher variables (for generating something like LaTeX -->
+<!-- images, when we do not process the whole source) or performiong      -->
+<!-- validation.  We control this with an internal variable, which is not -->
+<!-- documented as an author or publisher feature.  When we select only   -->
+<!-- the production of the "version" tree, the choice of "exercise-style" -->
+<!-- is irrelevant.                                                       -->
+
+<!-- default is empty, so we ccan detect non-use -->
+<xsl:param name="assembly.version-only" select="''"/>
+
+<!-- onvert to a boolean, with error-checking -->
+<xsl:variable name="version-only">
+    <xsl:choose>
+        <xsl:when test="$assembly.version-only = ''">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$assembly.version-only = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$assembly.version-only = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG:  the internal parameter  assembly.version-only  received an unrecognized value of "<xsl:value-of select="$assembly.version-only"/>" (possible values are "yes" and "no")</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-version-only" select="$version-only = 'yes'"/>
+
 <!-- ############################## -->
 <!-- Source Assembly Infrastructure -->
 <!-- ############################## -->
@@ -299,18 +331,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="version-docinfo" select="$version-root/docinfo"/>
 <xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
 
-<!-- This pass adds 100% internal identification for elements before    -->
-<!-- anything has been added or subtracted. The tree it builds is used  -->
-<!-- for constructing "View Source" knowls in HTML output as a form of  -->
-<!-- always-accurate documentation.  And this is its only purpose.      -->
-<!-- N.B.: see the $original-labeled tree used in the HTML conversion,  -->
-<!-- optionally, under the sway of a string parameter.  This is in the  -->
-<!-- (imported) pretext-view-source.xsl stylesheet.                     -->
+<!-- This pass adds 100% internal identification for elements before   -->
+<!-- anything has been added or subtracted. The tree it builds is used -->
+<!-- for constructing "View Source" knowls in HTML output as a form of -->
+<!-- always-accurate documentation.  And this is its only purpose.     -->
+<!-- N.B.: see the $original-labeled tree used in the HTML conversion, -->
+<!-- optionally, under the sway of a string parameter.  This is in the -->
+<!-- (imported) pretext-view-source.xsl stylesheet.                    -->
+<!-- Hack: to short-circuit this stylesheet, in the case of desiring   -->
+<!-- the "version" tree *only*, we create an empty RTF.  This becomes  -->
+<!-- a (essentially) empty node-set.  The empty node-set is the input  -->
+<!-- the next pass, which will create an empty RTF, which will create  -->
+<!-- an empty node-set.  Rinse.  Repeat.  Even though all these        -->
+<!-- passes/variables are created, this is about a 17x speed-up.       -->
+<!-- A review suggests there is no fixed overhead in any of these      -->
+<!-- subsequent passes.                                                -->
 <xsl:variable name="original-labeled-rtf">
-    <xsl:apply-templates select="$version" mode="id-attribute">
-        <!-- $parent-id defaults to 'root' in template -->
-        <xsl:with-param name="attr-name" select="'original-id'"/>
-    </xsl:apply-templates>
+    <!-- written as a "choose" for clarity -->
+    <xsl:choose>
+        <!-- short-circuit to stop after "version" -->
+        <xsl:when test="$b-version-only"/>
+        <!-- build on "version" to add original id's -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="$version" mode="id-attribute">
+                <!-- $parent-id defaults to 'root' in template -->
+                <xsl:with-param name="attr-name" select="'original-id'"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:variable>
 <xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
 
