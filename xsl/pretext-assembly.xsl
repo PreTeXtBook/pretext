@@ -467,6 +467,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="n-answer"   select="$privatesolns/pi:privatesolutions//answer"/>
 <xsl:variable name="n-solution" select="$privatesolns/pi:privatesolutions//solution"/>
 
+<!-- Note that when there are any private solutions then we make a copy that     -->
+<!--   - does not preserve interstitial text nodes (whitespace indentation)      -->
+<!--   - preserves things like "feedback", "choices", but may reorder them       -->
+<!--     to occur before solutions                                               -->
+<!--   - this happens for *every* "exercise", even if it does not have           -->
+<!--     private solutions                                                       -->
+<!--                                                                             -->
+<!-- So there could be                                                           -->
+<!--   - more care about placing new "hint", "answer", "solution"                -->
+<!--     in the right order, perhaps by exploding this out into templates        -->
+<!--   - condition on                                                            -->
+<!--     $n-hint[@ref=$the-id]|$n-answer[@ref=$the-id]|$n-solution[@ref=$the-id] -->
+<!--     to only manipulate an exercise that needs it                            -->
 <xsl:template match="exercise|task" mode="private-solutions">
     <xsl:choose>
         <!-- $b-private-solutions is a publisher variable determined   -->
