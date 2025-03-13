@@ -90,7 +90,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and auxiliary files that the assembly stylesheet reacts to. -->
 
 <xsl:template match="/">
-    <xsl:apply-templates select="$root" mode="showme"/>
+    <xsl:choose>
+        <xsl:when test="$b-version-only">
+            <xsl:apply-templates select="$version" mode="showme"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$root" mode="showme"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="node()|@*" mode="showme">
