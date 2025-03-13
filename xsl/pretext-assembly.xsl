@@ -168,6 +168,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pass: elements, attributes, text, whitespace, comments,     -->
 <!-- everything. Various other templates will override these     -->
 <!-- templates to create a new enhanced source tree.             -->
+
+<xsl:template match="node()|@*" mode="private-solutions">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="private-solutions"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="version">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="version"/>
@@ -264,8 +271,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- convert it into real XML nodes. These "real" trees have a -->
 <!-- root element, as a result of the node-set() manufacture.  -->
 
+<!-- Grab private solutions first.  The "exercise" (and more) -->
+<!-- that they belong to might be part of a version (have a   -->
+<!-- @component attribute) and we don't want to miss that.    -->
+<!-- It can happen next.                                      -->
+<xsl:variable name="private-solutions-rtf">
+    <xsl:apply-templates select="/" mode="private-solutions"/>
+</xsl:variable>
+<xsl:variable name="private-solutions" select="exsl:node-set($private-solutions-rtf)"/>
+
 <xsl:variable name="version-rtf">
-    <xsl:apply-templates select="/" mode="version"/>
+    <xsl:apply-templates select="$private-solutions" mode="version"/>
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
@@ -801,7 +817,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="n-answer"   select="$privatesolns/pi:privatesolutions//answer"/>
 <xsl:variable name="n-solution" select="$privatesolns/pi:privatesolutions//solution"/>
 
-<xsl:template match="exercise|task" mode="assembly">
+<xsl:template match="exercise|task" mode="private-solutions">
     <xsl:variable name="the-id" select="@xml:id"/>
     <xsl:copy>
         <!-- attributes, then all elements that are not solutions                               -->
@@ -814,14 +830,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- (identify proper structure + non-empty union of three additions -->
         <!-- Fix unstructured cases by inserting "statement",                -->
         <!-- warn about non-terminal task case and drop additions (error)    -->
-        <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]|@*" mode="assembly"/>
+        <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]|@*" mode="private-solutions"/>
         <!-- hints, answers, solutions; first regular, second private -->
-        <xsl:apply-templates select="hint" mode="assembly"/>
-        <xsl:apply-templates select="$n-hint[@ref=$the-id]" mode="assembly"/>
-        <xsl:apply-templates select="answer" mode="assembly"/>
-        <xsl:apply-templates select="$n-answer[@ref=$the-id]" mode="assembly"/>
-        <xsl:apply-templates select="solution" mode="assembly"/>
-        <xsl:apply-templates select="$n-solution[@ref=$the-id]" mode="assembly"/>
+        <xsl:apply-templates select="hint" mode="private-solutions"/>
+        <xsl:apply-templates select="$n-hint[@ref=$the-id]" mode="private-solutions"/>
+        <xsl:apply-templates select="answer" mode="private-solutions"/>
+        <xsl:apply-templates select="$n-answer[@ref=$the-id]" mode="private-solutions"/>
+        <xsl:apply-templates select="solution" mode="private-solutions"/>
+        <xsl:apply-templates select="$n-solution[@ref=$the-id]" mode="private-solutions"/>
     </xsl:copy>
 </xsl:template>
 
