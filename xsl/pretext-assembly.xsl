@@ -468,27 +468,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="n-solution" select="$privatesolns/pi:privatesolutions//solution"/>
 
 <xsl:template match="exercise|task" mode="private-solutions">
-    <xsl:variable name="the-id" select="@xml:id"/>
-    <xsl:copy>
-        <!-- attributes, then all elements that are not solutions                               -->
-        <!--   unstructured exercise:  "p" etc, then solutions OK even if schema violation?     -->
-        <!--   structured exercise: copy statement, then interleave solutions                   -->
-        <!--   non-terminal Task: introduction, task, conclusion                                -->
-        <!--   terminal unstructured task: "p" etc, then solutions OK even if schema violation? -->
-        <!--   terminal structured task: copy statement, then interleave solutions              -->
-        <!-- TODO: defend against non-terminal task, unstructured cases      -->
-        <!-- (identify proper structure + non-empty union of three additions -->
-        <!-- Fix unstructured cases by inserting "statement",                -->
-        <!-- warn about non-terminal task case and drop additions (error)    -->
-        <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]|@*" mode="private-solutions"/>
-        <!-- hints, answers, solutions; first regular, second private -->
-        <xsl:apply-templates select="hint" mode="private-solutions"/>
-        <xsl:apply-templates select="$n-hint[@ref=$the-id]" mode="private-solutions"/>
-        <xsl:apply-templates select="answer" mode="private-solutions"/>
-        <xsl:apply-templates select="$n-answer[@ref=$the-id]" mode="private-solutions"/>
-        <xsl:apply-templates select="solution" mode="private-solutions"/>
-        <xsl:apply-templates select="$n-solution[@ref=$the-id]" mode="private-solutions"/>
-    </xsl:copy>
+    <xsl:choose>
+        <!-- $b-private-solutions is a publisher variable determined   -->
+        <!-- by the specification of a file of private solutions there -->
+        <xsl:when test="$b-private-solutions">
+            <xsl:variable name="the-id" select="@xml:id"/>
+            <xsl:copy>
+                <!-- attributes, then all elements that are not solutions                               -->
+                <!--   unstructured exercise:  "p" etc, then solutions OK even if schema violation?     -->
+                <!--   structured exercise: copy statement, then interleave solutions                   -->
+                <!--   non-terminal Task: introduction, task, conclusion                                -->
+                <!--   terminal unstructured task: "p" etc, then solutions OK even if schema violation? -->
+                <!--   terminal structured task: copy statement, then interleave solutions              -->
+                <!-- TODO: defend against non-terminal task, unstructured cases      -->
+                <!-- (identify proper structure + non-empty union of three additions -->
+                <!-- Fix unstructured cases by inserting "statement",                -->
+                <!-- warn about non-terminal task case and drop additions (error)    -->
+                <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]|@*" mode="private-solutions"/>
+                <!-- hints, answers, solutions; first regular, second private -->
+                <xsl:apply-templates select="hint" mode="private-solutions"/>
+                <xsl:apply-templates select="$n-hint[@ref=$the-id]" mode="private-solutions"/>
+                <xsl:apply-templates select="answer" mode="private-solutions"/>
+                <xsl:apply-templates select="$n-answer[@ref=$the-id]" mode="private-solutions"/>
+                <xsl:apply-templates select="solution" mode="private-solutions"/>
+                <xsl:apply-templates select="$n-solution[@ref=$the-id]" mode="private-solutions"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- otherwise, just a straight xerox -->
+        <xsl:otherwise>
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="private-solutions"/>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ######## -->
