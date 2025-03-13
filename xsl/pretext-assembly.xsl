@@ -443,6 +443,137 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="bibinfo" select="$document-root/frontmatter/bibinfo"/>
 
 
+<!-- ################# -->
+<!-- Private Solutions -->
+<!-- ################# -->
+
+<!-- "solutions" here refers generically to "hint", "answer",  -->
+<!-- and "solution" elements of an "exercise".  An author may  -->
+<!-- wish to provide limited distribution of some solutions to -->
+<!-- exercises, which we deem "private" here.  If a            -->
+<!-- "private-solutions-file" is provided, it will be mined    -->
+<!-- for these private solutions.                              -->
+
+<xsl:variable name="b-private-solutions" select="not($private-solutions-file = '')"/>
+
+<!-- Note: there may be (nested) "pi:privatesolutionsdivision"  -->
+<!-- elements in this file.  They are largely meaningless, but  -->
+<!-- are necessary if an author wants to modularize their       -->
+<!-- collection across multiple files.  Then each file can be a -->
+<!-- single overall element.  (We expect/require no additional  -->
+<!-- structure in this file.)  The consequence is the "//" in   -->
+<!-- each expression below.                                     -->
+<!-- NB: relative to *original* source file/tree                -->
+<xsl:variable name="privatesolns" select="document($private-solutions-file, $original)"/>
+<xsl:variable name="n-hint"     select="$privatesolns/pi:privatesolutions//hint"/>
+<xsl:variable name="n-answer"   select="$privatesolns/pi:privatesolutions//answer"/>
+<xsl:variable name="n-solution" select="$privatesolns/pi:privatesolutions//solution"/>
+
+<xsl:template match="exercise|task" mode="private-solutions">
+    <xsl:variable name="the-id" select="@xml:id"/>
+    <xsl:copy>
+        <!-- attributes, then all elements that are not solutions                               -->
+        <!--   unstructured exercise:  "p" etc, then solutions OK even if schema violation?     -->
+        <!--   structured exercise: copy statement, then interleave solutions                   -->
+        <!--   non-terminal Task: introduction, task, conclusion                                -->
+        <!--   terminal unstructured task: "p" etc, then solutions OK even if schema violation? -->
+        <!--   terminal structured task: copy statement, then interleave solutions              -->
+        <!-- TODO: defend against non-terminal task, unstructured cases      -->
+        <!-- (identify proper structure + non-empty union of three additions -->
+        <!-- Fix unstructured cases by inserting "statement",                -->
+        <!-- warn about non-terminal task case and drop additions (error)    -->
+        <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]|@*" mode="private-solutions"/>
+        <!-- hints, answers, solutions; first regular, second private -->
+        <xsl:apply-templates select="hint" mode="private-solutions"/>
+        <xsl:apply-templates select="$n-hint[@ref=$the-id]" mode="private-solutions"/>
+        <xsl:apply-templates select="answer" mode="private-solutions"/>
+        <xsl:apply-templates select="$n-answer[@ref=$the-id]" mode="private-solutions"/>
+        <xsl:apply-templates select="solution" mode="private-solutions"/>
+        <xsl:apply-templates select="$n-solution[@ref=$the-id]" mode="private-solutions"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- ######## -->
+<!-- Versions -->
+<!-- ######## -->
+
+<!-- The version feature (@component markings) allows for   -->
+<!-- invalid PreTeXt source.  For example, an author might  -->
+<!-- have two different "docinfo" elements for some reason. -->
+<!-- So we allow a sort of pre-PreTeXt, which does not      -->
+<!-- satisfy the schema.  Support for the "custom" element  -->
+<!-- is similar in spirit.  So very early on, we unravel    -->
+<!-- (resolve) these features, and if used properly the     -->
+<!-- result will be valid PreTeXt, according to the schema. -->
+
+<!-- Only elements "marked" with @component need to be      -->
+<!-- examined, the catch-all xerox template above suffices. -->
+<xsl:template match="*[@component]" mode="version">
+    <!-- prepare for test below -->
+    <xsl:variable name="single-component-fenced" select="concat('|', normalize-space(@component), '|')"/>
+    <xsl:choose>
+        <!-- version scheme not elected, so use element no matter what -->
+        <!-- note that @include="" yields "||" in test here            -->
+        <xsl:when test="$components-fenced = ''">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="version"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- version scheme elected, element participating, so use element -->
+        <!-- if it is a component in publisher's selection of components   -->
+        <xsl:when test="contains($components-fenced, $single-component-fenced)">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="version"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- version scheme elected, element participating, but its component -->
+        <!-- has not been selected in publisher file, so it gets dropped here -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:template>
+
+<!-- The "custom" element, with a @name in an auxiliary file,     -->
+<!-- and a @ref in a source file, allows for custom substitutions -->
+
+<!-- If the publisher variable  $customizations-file  is bad, -->
+<!-- then  document()  will raise an error.  The empty string -->
+<!-- (default) will not raise an error, so if not specified,  -->
+<!-- no problem.  But an empty string, and an attempted       -->
+<!-- access in the template *will* raise the error below.     -->
+<xsl:variable name="customizations" select="document($customizations-file, $original)"/>
+
+<!-- Set the key, nodes to be located are named -->
+<!-- "custom" within the file just accessed     -->
+<!-- For each one, @name is the search term     -->
+<!-- that will locate it: the key, the index    -->
+<xsl:key name="name-key" match="custom" use="@name"/>
+
+<xsl:template match="custom[@ref]" mode="version">
+    <!-- We need to get the @ref attribute now, due to a context shift -->
+    <!-- And the "custom" context also, for use in a location report   -->
+    <xsl:variable name="the-ref" select="string(@ref)"/>
+    <xsl:variable name="the-custom" select="."/>
+    <!-- Now the context shift to query the customizations -->
+    <xsl:for-each select="$customizations">
+        <xsl:variable name="the-lookup" select="key('name-key', $the-ref)"/>
+        <!-- This is an AWOL node, not empty content (which is allowed) -->
+        <xsl:if test="not($the-lookup)">
+            <xsl:text>[MISSING CUSTOM CONTENT HERE]</xsl:text>
+            <xsl:message>PTX:WARNING:   lookup for a "custom" element with @name set to "<xsl:value-of select="$the-ref"/>" has failed, while consulting the customization file "<xsl:value-of select="$customizations-file"/>".  Output will contain "[MISSING CUSTOM CONTENT HERE]" instead</xsl:message>
+            <xsl:apply-templates select="$the-custom" mode="location-report"/>
+        </xsl:if>
+        <!-- Copying the contents of "custom" via the "version" templates  -->
+        <!-- will keep the "pi" namespace from appearing in places, as it  -->
+        <!-- will with an "xsl:copy-of" on the same node set.  But it      -->
+        <!-- allows nested "custom" elements.                              -->
+        <!--                                                               -->
+        <!-- Do we want authors to potentially create cyclic references?   -->
+        <!-- A simple 2-cycle test failed quickly and obviously, so it     -->
+        <!-- will be caught quite easily, it seems.                        -->
+        <xsl:apply-templates select="$the-lookup/node()" mode="version"/>
+    </xsl:for-each>
+</xsl:template>
+
 <!-- ######################## -->
 <!-- Bibliography Manufacture -->
 <!-- ######################## -->
@@ -789,56 +920,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:copy>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- ################# -->
-<!-- Private Solutions -->
-<!-- ################# -->
-
-<!-- "solutions" here refers generically to "hint", "answer",  -->
-<!-- and "solution" elements of an "exercise".  An author may  -->
-<!-- wish to provide limited distribution of some solutions to -->
-<!-- exercises, which we deem "private" here.  If a            -->
-<!-- "private-solutions-file" is provided, it will be mined    -->
-<!-- for these private solutions.                              -->
-
-<xsl:variable name="b-private-solutions" select="not($private-solutions-file = '')"/>
-
-<!-- Note: there may be (nested) "pi:privatesolutionsdivision"  -->
-<!-- elements in this file.  They are largely meaningless, but  -->
-<!-- are necessary if an author wants to modularize their       -->
-<!-- collection across multiple files.  Then each file can be a -->
-<!-- single overall element.  (We expect/require no additional  -->
-<!-- structure in this file.)  The consequence is the "//" in   -->
-<!-- each expression below.                                     -->
-<!-- NB: relative to *original* source file/tree                -->
-<xsl:variable name="privatesolns" select="document($private-solutions-file, $original)"/>
-<xsl:variable name="n-hint"     select="$privatesolns/pi:privatesolutions//hint"/>
-<xsl:variable name="n-answer"   select="$privatesolns/pi:privatesolutions//answer"/>
-<xsl:variable name="n-solution" select="$privatesolns/pi:privatesolutions//solution"/>
-
-<xsl:template match="exercise|task" mode="private-solutions">
-    <xsl:variable name="the-id" select="@xml:id"/>
-    <xsl:copy>
-        <!-- attributes, then all elements that are not solutions                               -->
-        <!--   unstructured exercise:  "p" etc, then solutions OK even if schema violation?     -->
-        <!--   structured exercise: copy statement, then interleave solutions                   -->
-        <!--   non-terminal Task: introduction, task, conclusion                                -->
-        <!--   terminal unstructured task: "p" etc, then solutions OK even if schema violation? -->
-        <!--   terminal structured task: copy statement, then interleave solutions              -->
-        <!-- TODO: defend against non-terminal task, unstructured cases      -->
-        <!-- (identify proper structure + non-empty union of three additions -->
-        <!-- Fix unstructured cases by inserting "statement",                -->
-        <!-- warn about non-terminal task case and drop additions (error)    -->
-        <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]|@*" mode="private-solutions"/>
-        <!-- hints, answers, solutions; first regular, second private -->
-        <xsl:apply-templates select="hint" mode="private-solutions"/>
-        <xsl:apply-templates select="$n-hint[@ref=$the-id]" mode="private-solutions"/>
-        <xsl:apply-templates select="answer" mode="private-solutions"/>
-        <xsl:apply-templates select="$n-answer[@ref=$the-id]" mode="private-solutions"/>
-        <xsl:apply-templates select="solution" mode="private-solutions"/>
-        <xsl:apply-templates select="$n-solution[@ref=$the-id]" mode="private-solutions"/>
-    </xsl:copy>
 </xsl:template>
 
 
@@ -1774,87 +1855,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates select="node()" mode="language"/>
     </xsl:copy>
-</xsl:template>
-
-<!-- ######## -->
-<!-- Versions -->
-<!-- ######## -->
-
-<!-- The version feature (@component markings) allows for   -->
-<!-- invalid PreTeXt source.  For example, an author might  -->
-<!-- have two different "docinfo" elements for some reason. -->
-<!-- So we allow a sort of pre-PreTeXt, which does not      -->
-<!-- satisfy the schema.  Support for the "custom" element  -->
-<!-- is similar in spirit.  So very early on, we unravel    -->
-<!-- (resolve) these features, and if used properly the     -->
-<!-- result will be valid PreTeXt, according to the schema. -->
-
-<!-- Only elements "marked" with @component need to be      -->
-<!-- examined, the catch-all xerox template above suffices. -->
-<xsl:template match="*[@component]" mode="version">
-    <!-- prepare for test below -->
-    <xsl:variable name="single-component-fenced" select="concat('|', normalize-space(@component), '|')"/>
-    <xsl:choose>
-        <!-- version scheme not elected, so use element no matter what -->
-        <!-- note that @include="" yields "||" in test here            -->
-        <xsl:when test="$components-fenced = ''">
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="version"/>
-            </xsl:copy>
-        </xsl:when>
-        <!-- version scheme elected, element participating, so use element -->
-        <!-- if it is a component in publisher's selection of components   -->
-        <xsl:when test="contains($components-fenced, $single-component-fenced)">
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="version"/>
-            </xsl:copy>
-        </xsl:when>
-        <!-- version scheme elected, element participating, but its component -->
-        <!-- has not been selected in publisher file, so it gets dropped here -->
-        <xsl:otherwise/>
-    </xsl:choose>
-</xsl:template>
-
-<!-- The "custom" element, with a @name in an auxiliary file,     -->
-<!-- and a @ref in a source file, allows for custom substitutions -->
-
-<!-- If the publisher variable  $customizations-file  is bad, -->
-<!-- then  document()  will raise an error.  The empty string -->
-<!-- (default) will not raise an error, so if not specified,  -->
-<!-- no problem.  But an empty string, and an attempted       -->
-<!-- access in the template *will* raise the error below.     -->
-<xsl:variable name="customizations" select="document($customizations-file, $original)"/>
-
-<!-- Set the key, nodes to be located are named -->
-<!-- "custom" within the file just accessed     -->
-<!-- For each one, @name is the search term     -->
-<!-- that will locate it: the key, the index    -->
-<xsl:key name="name-key" match="custom" use="@name"/>
-
-<xsl:template match="custom[@ref]" mode="version">
-    <!-- We need to get the @ref attribute now, due to a context shift -->
-    <!-- And the "custom" context also, for use in a location report   -->
-    <xsl:variable name="the-ref" select="string(@ref)"/>
-    <xsl:variable name="the-custom" select="."/>
-    <!-- Now the context shift to query the customizations -->
-    <xsl:for-each select="$customizations">
-        <xsl:variable name="the-lookup" select="key('name-key', $the-ref)"/>
-        <!-- This is an AWOL node, not empty content (which is allowed) -->
-        <xsl:if test="not($the-lookup)">
-            <xsl:text>[MISSING CUSTOM CONTENT HERE]</xsl:text>
-            <xsl:message>PTX:WARNING:   lookup for a "custom" element with @name set to "<xsl:value-of select="$the-ref"/>" has failed, while consulting the customization file "<xsl:value-of select="$customizations-file"/>".  Output will contain "[MISSING CUSTOM CONTENT HERE]" instead</xsl:message>
-            <xsl:apply-templates select="$the-custom" mode="location-report"/>
-        </xsl:if>
-        <!-- Copying the contents of "custom" via the "version" templates  -->
-        <!-- will keep the "pi" namespace from appearing in places, as it  -->
-        <!-- will with an "xsl:copy-of" on the same node set.  But it      -->
-        <!-- allows nested "custom" elements.                              -->
-        <!--                                                               -->
-        <!-- Do we want authors to potentially create cyclic references?   -->
-        <!-- A simple 2-cycle test failed quickly and obviously, so it     -->
-        <!-- will be caught quite easily, it seems.                        -->
-        <xsl:apply-templates select="$the-lookup/node()" mode="version"/>
-    </xsl:for-each>
 </xsl:template>
 
 
