@@ -4067,7 +4067,12 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
         stringparams["publisher"] = pub_file
     # method dictates which type of exercises are produced
     # parameter is exclusive to utility styleheet below
-    stringparams["debug.assembly.exercise"] = method
+    if method in ["static", "dynamic", "pg-problems"]:
+        stringparams["debug.assembly.exercise"] = method
+    elif method == "version":
+        stringparams["assembly.version-only"] = "yes"
+    else:
+        log.error("assembly method {} not recognized".format(method))
     # "extra_xsl" would be silly in this context (?)
     extraction_xslt = os.path.join(
         get_ptx_xsl_path(), "utilities/pretext-enhanced-source.xsl"
