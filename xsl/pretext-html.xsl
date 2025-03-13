@@ -45,6 +45,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
@@ -6227,9 +6228,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="description"/>
             </desc>
         </xsl:if>
-        <xsl:copy-of select="$image-svg-xml/svg:svg/*" />
+        <xsl:apply-templates select="$image-svg-xml/svg:svg/*" mode="svg-unique-ids">
+            <xsl:with-param name="svg-unique-id">
+                <xsl:value-of select="@unique-id"/>
+            </xsl:with-param>
+        </xsl:apply-templates>
     </svg>
 </xsl:template>
+
+<!-- When embedding multiple svgs in a single page, the ids used     -->
+<!-- to refer to svg elements can collide.  This recursively adds    -->
+<!-- a unique id (per svg) suffix to all id and xlink:href elements. -->
+
+<xsl:template match="node()|@*" mode="svg-unique-ids">
+    <xsl:param name="svg-unique-id"/>
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="svg-unique-ids">
+            <xsl:with-param name="svg-unique-id" select="$svg-unique-id"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="@id|@xlink:href" mode="svg-unique-ids">
+    <xsl:param name="svg-unique-id"/>
+    <xsl:attribute name="{local-name()}">
+        <xsl:value-of select="."/>
+        <xsl:text>_</xsl:text>
+        <xsl:value-of select="$svg-unique-id"/>
+    </xsl:attribute>
+</xsl:template>
+
 
 <xsl:template match="image" mode="description">
     <xsl:if test="description">
