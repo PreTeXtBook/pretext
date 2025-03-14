@@ -2583,7 +2583,7 @@
             </section>
 
             <section xml:id="sec-ac-in-runestone-tests" xmlns:xi="http://www.w3.org/2001/XInclude">
-            <title>AC in Runestone Test Problems</title>
+                <title>AC in Runestone Test Problems</title>
     
                 <exploration xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-1-1" label="ACS__Preview__1-1">
                     <title>Good test problem, scaffolded, dropdown, radio buttons, check that answers restore</title>
@@ -2600,7 +2600,7 @@
                     <webwork source="Library/Westmont/ActiveCalculus/Preview_7_1/preview_7_1_all.pg" />
                 </exploration>
     
-                <exploration label="Library__Westmont__ActiveCalculus__Preview_6_3__preview_6_3_a" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-6-3" permid="AvD">
+                <exploration label="Library__Westmont__ActiveCalculus__Preview_6_3__preview_6_3_a" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-6-3">
                     <title>No possible correct answer for dropdown immediately after the first essay box</title>
                     <webwork source="Library/Westmont/ActiveCalculus/Preview_6_3/preview_6_3_a.pg" />
                 </exploration>
@@ -2906,10 +2906,9 @@
                         <title>Another problem that changes after hitting submit</title>          
                         <webwork source="Library/Michigan/Chap8Sec2/Q22.pg"/>
                     </exercise>
-
                 </exercises>
 
-    </section>
+            </section>
 
             <section xml:id="section-deprecations">
                 <title>Deprecations</title>
