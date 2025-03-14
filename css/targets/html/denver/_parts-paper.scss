@@ -210,3 +210,11 @@ $sidebar-hide-breakpoint: $content-width + 2 * $content-side-padding-tight + $si
     padding-right: $content-side-padding-tight;
   }
 }
+
+
+// TOC hover spans entire width of TOC item
+.toc-item:is(:hover, :focus) {
+  color: var(--tocitem-highlight-text-color);
+  background-color: var(--tocitem-highlight-background);
+  border-color: var(--tocitem-highlight-border-color);
+}
