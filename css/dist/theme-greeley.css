@@ -2953,6 +2953,11 @@ body.pretext > a.assistive:focus {
     padding-right: 20px;
   }
 }
+.toc-item:is(:hover, :focus) {
+  color: var(--tocitem-highlight-text-color);
+  background-color: var(--tocitem-highlight-background);
+  border-color: var(--tocitem-highlight-border-color);
+}
 .hide-type .codenumber:not(:empty)::after {
   content: ". ";
 }

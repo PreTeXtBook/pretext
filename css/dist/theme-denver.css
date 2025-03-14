@@ -799,6 +799,11 @@ body.pretext > a.assistive:focus {
     padding-right: 20px;
   }
 }
+.toc-item:is(:hover, :focus) {
+  color: var(--tocitem-highlight-text-color);
+  background-color: var(--tocitem-highlight-background);
+  border-color: var(--tocitem-highlight-border-color);
+}
 .aside-like {
   position: absolute;
   margin-left: 45%;
@@ -1529,21 +1534,21 @@ summary.knowl__link {
   border-bottom: none;
   display: none;
 }
-.exercise-like > .heading:first-child {
+.exercises .exercise-like > .heading:first-child {
   display: inline;
   line-height: initial;
   border-bottom: 0;
 }
-.exercise-like > .heading:first-child:after {
+.exercises .exercise-like > .heading:first-child:after {
   content: "\2009";
 }
-.exercise-like > .heading:first-child + .para {
+.exercises .exercise-like > .heading:first-child + .para {
   display: inline;
 }
-.exercise-like > .heading:first-child + .introduction {
+.exercises .exercise-like > .heading:first-child + .introduction {
   display: inline;
 }
-.exercise-like > .heading:first-child + .introduction > .para:first-child {
+.exercises .exercise-like > .heading:first-child + .introduction > .para:first-child {
   display: inline;
 }
 * {
