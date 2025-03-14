@@ -4977,6 +4977,14 @@ def get_publisher_variable_report(xml_source, pub_file, params):
 
     # construct filename for the XSL to report variable/value pairs
     reporting_xslt = os.path.join(get_ptx_xsl_path(), "utilities","report-publisher-variables.xsl")
+    # Short-circuit the assembly (pre-processor) stylesheet to only
+    # make the "version" tree.  This is as much as is needed for the
+    # determination of the publisher variables and will be significantly
+    # faster (by a factor of 15 or so wuih the sample article.  So every
+    # place we call "get_publisher_variable_report()" will see a reduction
+    # in time.   "assembly.version-only" is defined in pretext-assembly.xsl,
+    # which is im[ported by the stylesheet just defined.
+    params["assembly.version-only"] = "yes"
 
     # file to receive result of stylesheet
     tmp_dir = get_temporary_directory()
