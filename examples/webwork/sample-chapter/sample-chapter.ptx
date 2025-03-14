@@ -2583,351 +2583,331 @@
             </section>
 
             <section xml:id="sec-ac-in-runestone-tests" xmlns:xi="http://www.w3.org/2001/XInclude">
-    <title>AC in Runestone Test Problems</title>
+            <title>AC in Runestone Test Problems</title>
     
-    <!-- good test problem, scaffolded, dropdown, radio buttons, check that answers restore and coloring of parts is correct -->
-    <exploration xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-1-1" label="ACS__Preview__1-1">
-        <title>Good test problem, scaffolded, dropdown, radio buttons, check that answers restore</title>
-        <webwork source="csafranski/1.1Preview_prob1.pg" />
-    </exploration>
+                <exploration xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-1-1" label="ACS__Preview__1-1">
+                    <title>Good test problem, scaffolded, dropdown, radio buttons, check that answers restore</title>
+                    <webwork source="csafranski/1.1Preview_prob1.pg" />
+                </exploration>
 
-    <!-- lots of dropdowns (using NiceTables), check that answers restore -->
-    <exploration xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-5-5" permid="XEz" label="ACS__Preview__5-5">
-        <title>Lots of dropdowns, using NiceTables, check that answers restore</title>
-        <webwork source="csafranski/5.5Preview_prob1.pg" />
-    </exploration>
+                <exploration xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-5-5" label="ACS__Preview__5-5">
+                    <title>Lots of dropdowns, using NiceTables, check that answers restore</title>
+                    <webwork source="csafranski/5.5Preview_prob1.pg" />
+                </exploration>
 
-    <!-- old checkboxes -->
-    <exploration label="Library__Westmont__ActiveCalculus__Preview_7_1__preview_7_1_all" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-7-1" permid="Mow">
-        <title>Old Checkbox macro</title>
-        <webwork source="Library/Westmont/ActiveCalculus/Preview_7_1/preview_7_1_all.pg" />
-    </exploration>
+                <exploration label="Library__Westmont__ActiveCalculus__Preview_7_1__preview_7_1_all" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-7-1">
+                    <title>Old Checkbox macro</title>
+                    <webwork source="Library/Westmont/ActiveCalculus/Preview_7_1/preview_7_1_all.pg" />
+                </exploration>
+    
+                <exploration label="Library__Westmont__ActiveCalculus__Preview_6_3__preview_6_3_a" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-6-3" permid="AvD">
+                    <title>No possible correct answer for dropdown immediately after the first essay box</title>
+                    <webwork source="Library/Westmont/ActiveCalculus/Preview_6_3/preview_6_3_a.pg" />
+                </exploration>
 
-    <!-- answers after an essay box, or multiple essay boxes, no possible correct answer of next dropdown? -->
-    <exploration label="Library__Westmont__ActiveCalculus__Preview_6_3__preview_6_3_a" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-6-3" permid="AvD">
-        <title>No possible correct answer for dropdown immediately after the first essay box</title>
-        <webwork source="Library/Westmont/ActiveCalculus/Preview_6_3/preview_6_3_a.pg" />
-    </exploration>
+                <exploration label="csafranski__5-_1Preview" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-5-1">
+                    <title>Causes (caused?) webwork generation to fail. Weird feedback/color behavior when entering 0 for f(3) or f(5)</title>
+                    <webwork source="csafranski/5.1Preview.pg" />
+                </exploration>
 
-    <!-- this one throws an error and says file is missing-->
-    <!--  enter 0 for f(3) or f(5) and feedback says it is blank rather than incorrect and the box doesn't turn red -->
-    <!-- <exploration label="csafranski__5-_1Preview" xmlns:xi="http://www.w3.org/2001/XInclude"
-	     xml:id="PA-5-1" permid="Mhf">
-        <webwork source="csafranski/5.1Preview.pg" />
-    </exploration> -->
+                <exploration xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-8a-2" label="ajordan_8a-_2_Preview_sine_Taylor">
+                    <title>Hardcoded by Alex, risk of being too long, solutions commented out</title>
+                    <webwork xml:id="webwork-PA-8a-2">
+                    <pg-code>
+                        $v=" approximation is closer to the function for more values of ${BM}x${EM}.";
+                        $radio = RadioButtons(["The cubic$v","The tangent line$v","Both approximate the function equally well."],0);
+                        Context("Interval")->flags->set(tolType,'absolute',tolerance,.25);
+                        $I1=Interval(-.9,.9);
+                        $I3=Interval(-1.7,1.7);
+                        Context("Fraction");
+                        $f=Fraction(-1,6);
+                        $s=Formula("sin(x)");
+                        $c=$s->D('x');
+                        $T3=Formula("x-1/6x^3");
+                        Context("LimitedNumeric");
+                    </pg-code>
+                    <introduction>
+                        <p>
+                        Let <m>f(x)=\sin(x)</m> and let <m>T_3(x)=c_0+c_1x+c_2x^2+c_3x^3</m>.
+                        Our goal is to find the values of <m>c_0,\ldots,c_3</m> that make the sine function and
+                        its derivative values agree with those of the cubic polynomial <m>T_3</m> at <m>a=0</m>
+                        and to study the resulting degree <m>3</m> approximation of the sine function.
+                        </p>
+                    </introduction>
+                
+                    <task>
+                        <statement>
+                        <p>
+                            As in previous work, the derivatives of <m>T_3(x)</m> and their respective values at
+                            <m>a=0</m> are those shown in the following table. Compute the various derivatives of
+                            <m>f(x)=\sin(x)</m> and evaluate them at <m>a=0</m> accordingly, recording your
+                            results in the left side of the table.
+                        </p>
+                
+                        <tabular top="major">
+                            <col halign="right"/>
+                            <col halign="left" right="minor"/>
+                            <col halign="right"/>
+                            <col halign="left"/>
+                            <row>
+                            <cell><m>f(x)=</m></cell>
+                            <cell><m>\sin(x)</m></cell>
+                            <cell><m>T_3(x)=</m></cell>
+                            <cell><m>c_0+c_1x+c_2x^2+c_3x^3</m></cell>
+                            </row>
+                            <row>
+                            <cell><m>f'(x)=</m></cell>
+                            <cell><var name="$c" width="10"/></cell>
+                            <cell><m>T_3'(x)=</m></cell>
+                            <cell><m>c_1+2c_2x+3c_3x^2</m></cell>
+                            </row>                
+                            <row>
+                            <cell><m>f''(x)=</m></cell>
+                            <cell><var name="-$s" width="10"/></cell>
+                            <cell><m>T_3''(x)=</m></cell>
+                            <cell><m>2c_2+6c_3x</m></cell>
+                            </row>
+                            <row>
+                            <cell><m>f'''(x)=</m></cell>
+                            <cell><var name="-$c" width="10"/></cell>
+                            <cell><m>T_3'''(x)=</m></cell>
+                            <cell><m>6c_3</m></cell>
+                            </row>
+                            <row>
+                            <cell><m>f(0)=</m></cell>
+                            <cell><var name="0" width="10"/></cell>
+                            <cell><m>T_3(0)=</m></cell>
+                            <cell><m>c_0</m></cell>
+                            </row>
+                            <row>
+                            <cell><m>f'(0)=</m></cell>
+                            <cell><var name="1" width="10"/></cell>
+                            <cell><m>T_3'(0)=</m></cell>
+                            <cell><m>c_1</m></cell>
+                            </row>                
+                            <row>
+                            <cell><m>f''(0)=</m></cell>
+                            <cell><var name="0" width="10"/></cell>
+                            <cell><m>T_3''(0)=</m></cell>
+                            <cell><m>2c_2</m></cell>
+                            </row>
+                            <row bottom="major">
+                            <cell><m>f'''(0)=</m></cell>
+                            <cell><var name="-1" width="10"/></cell>
+                            <cell><m>T_3'''(0)=</m></cell>
+                            <cell><m>6c_3</m></cell>
+                            </row>
+                        </tabular>
+                        </statement>
+                
+                        <!-- <solution>
+                        <p>
+                            Since <m>f(x) = \sin(x)</m>, we calculate that <m>f'(x) = \cos(x)</m>,
+                            <m>f''(x) = -\sin(x)</m>, and <m>f'''(x) = -\cos(x)</m>.
+                        </p>
+                        <p>
+                            Evaluating those at <m>a = 0</m> gives us that <m>f(0) = \sin(0) = 0</m>,
+                            <m>f'(0) = \cos(0) = 1</m>, <m>f''(0) = -\sin(0) = 0</m>,
+                            and <m>f'''(0) = -\cos(0) = -1</m>.
+                        </p>
+                        </solution> -->
+                    </task>
+                
+                    <task>
+                        <statement>
+                        <p>
+                            Now, set <m>T_3(0)=f(0)</m>, <m>T_3'(0)=f'(0)</m>, <m>T_3''(0)=f''(0)</m>,
+                            and <m>T_3'''(0)=f'''(0)</m>. This implies <m>c_0={}</m><var name="'0'" width="10"/>,
+                            <m>c_1={}</m><var name="'1'" width="10"/>, <m>c_2={}</m><var name="'0'" width="10"/>,
+                            and <m>c_3={}</m><var name="$f" width="10"/>.
+                        </p>
+                        <p>
+                            Putting it all together, what is the resulting formula for <m>T_3(x)</m>?
+                        </p>
+                        <p>
+                            <var name="$T3" width="20"/>
+                        </p>
+                        </statement>
+                
+                        <!-- <solution>
+                        <p>
+                            Setting <m>T(0) = f(0)</m> gives us that <m>c_0 = 0</m>. Setting <m>T'(0) = f'(0)</m>
+                            gives us that <m>c_1 = 1</m>.
+                        </p>
+                        <p>
+                            Setting <m>T''(0) = f''(0)</m> gives us that <m>c_2 = 0</m>.
+                            Setting<m>T'''(0) = f'''(0)</m> gives us that <m>c_3 = -\frac16</m>.
+                        </p>
+                        <p>
+                            Putting those together we see that
+                            <m>T_3(x) = c_0 + c_1 x + c_2 x^2 + c_3 x^3 = x - \frac16x^3</m>.
+                        </p>
+                        </solution> -->
+                    </task>
+                
+                    <task>
+                        <statement>
+                        <p>
+                            Recall that the tangent line approximation <m>T_1</m> to <m>f(x)=\sin(x)</m> at
+                            <m>a=0</m> is <m>T_1(x)=x</m>, as plotted below.
+                            On the same axes, we've plotted the cubic approximation <m>T_3</m> you found in part (b).
+                        </p>
+                        <image width="47%">
+                            <latex-image>
+                            \begin{tikzpicture}
+                            \begin{axis}[xmin=-2,xmax=2,xtick={-1,1},minor xtick={-2,-1.75,...,2},ymin=-2,ymax=2,ytick={-1,1},minor ytick={-2,-1.75,...,2},legend style={at={(0.03,0.97)},anchor=north west},domain=-2:2,smooth]
+                            \addplot+{sin(deg(x))};
+                            \addlegendentry{\(f(x)\)};
+                            \addplot+{x};
+                            \addlegendentry{\(T_1(x)\)};
+                            \addplot+{x-x^3/6};
+                            \addlegendentry{\(T_3(x)\)};
+                            \end{axis}
+                            \end{tikzpicture}
+                            </latex-image>
+                        </image>
+                        <p>
+                            What do you observe about the approximation <m>T_3</m> generates compared to the tangent
+                            line approximation <m>T_1</m>?
+                        </p>
+                        <p>
+                            <var name="$radio" form="buttons"/>
+                        </p>
+                        </statement>
+                
+                        <!-- <solution>
+                        <p>
+                            We look at the graph and see that <m>T_3(x)</m> more closely approximates <m>\sin(x)</m>
+                            for more values of <m>x</m> than <m>T_1</m>.
+                        </p>
+                        </solution> -->
+                    </task>
+                
+                    <task>
+                        <statement>
+                        <p>
+                            Compute <m>f(1)-T_1(1)</m> and <m>f(1)-T_3(1)</m>.
+                        </p>
+                        <p>
+                            <var name="sin(1)-1" width="5"/>
+                        </p>
+                        <p>
+                            <var name="sin(1)-5/6" width="5"/>
+                        </p>
+                        <p>
+                            What do you notice about the size and sign of those differences?
+                        </p>
+                        </statement>
+                
+                        <!-- <solution>
+                        <p>
+                            We compute <m>f(1) - T_1(1) = \sin(1) - 1 = -0.1585\ldots</m> and
+                            <m>f(1) - T_3(1) = \sin(1) - \left(1 - \frac16\right) = 0.008137\ldots</m>.
+                            We can see that the error of <m>T_3</m> is much smaller in magnitude than the error in
+                            <m>T_1</m>, but we also notice that the error in <m>T_1</m> is negative, which means
+                            <m>f(1)</m> is less than <m>T_1(1)</m> while the error in <m>T_3</m> is positive, which
+                            means that <m>f(1)</m> is greater than <m>T_1(1)</m>.
+                        </p>
+                        </solution> -->
+                    </task>
+                
+                    <task>
+                        <statement>
+                        <p>
+                            For about what values of <m>x</m> does it appear that
+                            <m>|f(x)-T_1(x)|\lt0.1</m>?
+                        </p>
+                        <!-- the earlier image automatically is built as $image_1 -->
+                        <image pg-name="$image_1" width="47%"/>
+                        <instruction>Use interval notation.</instruction>
+                        <p>
+                            <var name="$I1" width="10"/>
+                        </p>
+                        <p>
+                            For about what values of <m>x</m> does it appear that
+                            <m>|f(x)-T_3(x)|\lt0.1</m>?
+                        </p>
+                        <instruction>Use interval notation.</instruction>
+                        <p>
+                            <var name="$I3" width="10"/>
+                        </p>
+                        </statement>
+                
+                        <!-- <solution>
+                        <p>
+                            Finally, we look at the graph and/or a spreadsheet to estimate that
+                            <m>\lvert f(x) - T_3(x)\rvert \lt 0.1</m> for all <m>x</m>-values in
+                            <m><var naame="$I3"/></m> and <m>\vlert f(x) - T_1(x) \rvert \lt 0.1</m> for all
+                            <m>x</m>-values in <m><var naame="$I1"/></m>. <m>T_3</m> is a much better approximation of
+                            <m>\sin(x)</m> than <m>T_1</m>.
+                        </p>
+                        </solution> -->
+                    </task>
+                    </webwork>
+                </exploration>
 
-    <exploration xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PA-8a-2" label="ajordan_8a-_2_Preview_sine_Taylor">
-        <title>Hardcoded by Alex, risk of being too long</title>
-        <webwork xml:id="webwork-PA-8a-2">
-          <!-- This exercise is very long. It runs the risk of butting up agains a server's URI length -->
-          <!-- cap. So solutions are commented out for now.                                            -->
-          <pg-code>
-            $v=" approximation is closer to the function for more values of ${BM}x${EM}.";
-            $radio = RadioButtons(["The cubic$v","The tangent line$v","Both approximate the function equally well."],0);
-            Context("Interval")->flags->set(tolType,'absolute',tolerance,.25);
-            $I1=Interval(-.9,.9);
-            $I3=Interval(-1.7,1.7);
-            Context("Fraction");
-            $f=Fraction(-1,6);
-            $s=Formula("sin(x)");
-            $c=$s->D('x');
-            $T3=Formula("x-1/6x^3");
-            Context("LimitedNumeric");
-          </pg-code>
-          <introduction>
-            <p>
-              Let <m>f(x)=\sin(x)</m> and let <m>T_3(x)=c_0+c_1x+c_2x^2+c_3x^3</m>.
-              Our goal is to find the values of <m>c_0,\ldots,c_3</m> that make the sine function and
-              its derivative values agree with those of the cubic polynomial <m>T_3</m> at <m>a=0</m>
-              and to study the resulting degree <m>3</m> approximation of the sine function.
-            </p>
-          </introduction>
-      
-          <task>
-            <statement>
-              <p>
-                As in previous work, the derivatives of <m>T_3(x)</m> and their respective values at
-                <m>a=0</m> are those shown in the following table. Compute the various derivatives of
-                <m>f(x)=\sin(x)</m> and evaluate them at <m>a=0</m> accordingly, recording your
-                results in the left side of the table.
-              </p>
-      
-              <tabular top="major">
-                <col halign="right"/>
-                <col halign="left" right="minor"/>
-                <col halign="right"/>
-                <col halign="left"/>
-                <row>
-                  <cell><m>f(x)=</m></cell>
-                  <cell><m>\sin(x)</m></cell>
-                  <cell><m>T_3(x)=</m></cell>
-                  <cell><m>c_0+c_1x+c_2x^2+c_3x^3</m></cell>
-                </row>
-                <row>
-                  <cell><m>f'(x)=</m></cell>
-                  <cell><var name="$c" width="10"/></cell>
-                  <cell><m>T_3'(x)=</m></cell>
-                  <cell><m>c_1+2c_2x+3c_3x^2</m></cell>
-                </row>                
-                <row>
-                  <cell><m>f''(x)=</m></cell>
-                  <cell><var name="-$s" width="10"/></cell>
-                  <cell><m>T_3''(x)=</m></cell>
-                  <cell><m>2c_2+6c_3x</m></cell>
-                </row>
-                <row>
-                  <cell><m>f'''(x)=</m></cell>
-                  <cell><var name="-$c" width="10"/></cell>
-                  <cell><m>T_3'''(x)=</m></cell>
-                  <cell><m>6c_3</m></cell>
-                </row>
-                <row>
-                  <cell><m>f(0)=</m></cell>
-                  <cell><var name="0" width="10"/></cell>
-                  <cell><m>T_3(0)=</m></cell>
-                  <cell><m>c_0</m></cell>
-                </row>
-                <row>
-                  <cell><m>f'(0)=</m></cell>
-                  <cell><var name="1" width="10"/></cell>
-                  <cell><m>T_3'(0)=</m></cell>
-                  <cell><m>c_1</m></cell>
-                </row>                
-                <row>
-                  <cell><m>f''(0)=</m></cell>
-                  <cell><var name="0" width="10"/></cell>
-                  <cell><m>T_3''(0)=</m></cell>
-                  <cell><m>2c_2</m></cell>
-                </row>
-                <row bottom="major">
-                  <cell><m>f'''(0)=</m></cell>
-                  <cell><var name="-1" width="10"/></cell>
-                  <cell><m>T_3'''(0)=</m></cell>
-                  <cell><m>6c_3</m></cell>
-                </row>
-              </tabular>
-            </statement>
-      
-            <!-- <solution>
-              <p>
-                Since <m>f(x) = \sin(x)</m>, we calculate that <m>f'(x) = \cos(x)</m>,
-                <m>f''(x) = -\sin(x)</m>, and <m>f'''(x) = -\cos(x)</m>.
-              </p>
-              <p>
-                Evaluating those at <m>a = 0</m> gives us that <m>f(0) = \sin(0) = 0</m>,
-                <m>f'(0) = \cos(0) = 1</m>, <m>f''(0) = -\sin(0) = 0</m>,
-                and <m>f'''(0) = -\cos(0) = -1</m>.
-              </p>
-            </solution> -->
-          </task>
-      
-          <task>
-            <statement>
-              <p>
-                Now, set <m>T_3(0)=f(0)</m>, <m>T_3'(0)=f'(0)</m>, <m>T_3''(0)=f''(0)</m>,
-                and <m>T_3'''(0)=f'''(0)</m>. This implies <m>c_0={}</m><var name="'0'" width="10"/>,
-                <m>c_1={}</m><var name="'1'" width="10"/>, <m>c_2={}</m><var name="'0'" width="10"/>,
-                and <m>c_3={}</m><var name="$f" width="10"/>.
-              </p>
-              <p>
-                Putting it all together, what is the resulting formula for <m>T_3(x)</m>?
-              </p>
-              <p>
-                <var name="$T3" width="20"/>
-              </p>
-            </statement>
-      
-            <!-- <solution>
-              <p>
-                Setting <m>T(0) = f(0)</m> gives us that <m>c_0 = 0</m>. Setting <m>T'(0) = f'(0)</m>
-                gives us that <m>c_1 = 1</m>.
-              </p>
-              <p>
-                Setting <m>T''(0) = f''(0)</m> gives us that <m>c_2 = 0</m>.
-                Setting<m>T'''(0) = f'''(0)</m> gives us that <m>c_3 = -\frac16</m>.
-              </p>
-              <p>
-                Putting those together we see that
-                <m>T_3(x) = c_0 + c_1 x + c_2 x^2 + c_3 x^3 = x - \frac16x^3</m>.
-              </p>
-            </solution> -->
-          </task>
-      
-          <task>
-            <statement>
-              <p>
-                Recall that the tangent line approximation <m>T_1</m> to <m>f(x)=\sin(x)</m> at
-                <m>a=0</m> is <m>T_1(x)=x</m>, as plotted below.
-                On the same axes, we've plotted the cubic approximation <m>T_3</m> you found in part (b).
-              </p>
-              <image width="47%">
-                <latex-image>
-                  \begin{tikzpicture}
-                  \begin{axis}[xmin=-2,xmax=2,xtick={-1,1},minor xtick={-2,-1.75,...,2},ymin=-2,ymax=2,ytick={-1,1},minor ytick={-2,-1.75,...,2},legend style={at={(0.03,0.97)},anchor=north west},domain=-2:2,smooth]
-                  \addplot+{sin(deg(x))};
-                  \addlegendentry{\(f(x)\)};
-                  \addplot+{x};
-                  \addlegendentry{\(T_1(x)\)};
-                  \addplot+{x-x^3/6};
-                  \addlegendentry{\(T_3(x)\)};
-                  \end{axis}
-                  \end{tikzpicture}
-                </latex-image>
-              </image>
-              <p>
-                What do you observe about the approximation <m>T_3</m> generates compared to the tangent
-                line approximation <m>T_1</m>?
-              </p>
-              <p>
-                <var name="$radio" form="buttons"/>
-              </p>
-            </statement>
-      
-            <!-- <solution>
-              <p>
-                We look at the graph and see that <m>T_3(x)</m> more closely approximates <m>\sin(x)</m>
-                for more values of <m>x</m> than <m>T_1</m>.
-              </p>
-            </solution> -->
-          </task>
-      
-          <task>
-            <statement>
-              <p>
-                Compute <m>f(1)-T_1(1)</m> and <m>f(1)-T_3(1)</m>.
-              </p>
-              <p>
-                <var name="sin(1)-1" width="5"/>
-              </p>
-              <p>
-                <var name="sin(1)-5/6" width="5"/>
-              </p>
-              <p>
-                What do you notice about the size and sign of those differences?
-              </p>
-            </statement>
-      
-            <!-- <solution>
-              <p>
-                We compute <m>f(1) - T_1(1) = \sin(1) - 1 = -0.1585\ldots</m> and
-                <m>f(1) - T_3(1) = \sin(1) - \left(1 - \frac16\right) = 0.008137\ldots</m>.
-                We can see that the error of <m>T_3</m> is much smaller in magnitude than the error in
-                <m>T_1</m>, but we also notice that the error in <m>T_1</m> is negative, which means
-                <m>f(1)</m> is less than <m>T_1(1)</m> while the error in <m>T_3</m> is positive, which
-                means that <m>f(1)</m> is greater than <m>T_1(1)</m>.
-              </p>
-            </solution> -->
-          </task>
-      
-          <task>
-            <statement>
-              <p>
-                For about what values of <m>x</m> does it appear that
-                <m>|f(x)-T_1(x)|\lt0.1</m>?
-              </p>
-              <!-- the earlier image automatically is built as $image_1 -->
-              <image pg-name="$image_1" width="47%"/>
-              <instruction>Use interval notation.</instruction>
-              <p>
-                <var name="$I1" width="10"/>
-              </p>
-              <p>
-                For about what values of <m>x</m> does it appear that
-                <m>|f(x)-T_3(x)|\lt0.1</m>?
-              </p>
-              <instruction>Use interval notation.</instruction>
-              <p>
-                <var name="$I3" width="10"/>
-              </p>
-            </statement>
-      
-            <!-- <solution>
-              <p>
-                Finally, we look at the graph and/or a spreadsheet to estimate that
-                <m>\lvert f(x) - T_3(x)\rvert \lt 0.1</m> for all <m>x</m>-values in
-                <m><var naame="$I3"/></m> and <m>\vlert f(x) - T_1(x) \rvert \lt 0.1</m> for all
-                <m>x</m>-values in <m><var naame="$I1"/></m>. <m>T_3</m> is a much better approximation of
-                <m>\sin(x)</m> than <m>T_1</m>.
-              </p>
-            </solution> -->
-          </task>
-        </webwork>
-      </exploration>
+                <exercises xml:id="exercises-ac-in-runestone-tests">
+                    <exercise xml:id="ez-5-6-WW1" label="michigan_chap7sec6_q05">
+                        <title>Runs the risk of being too long, depending on what students enter</title>
+                        <introduction>
+                        <p>
+                        In this problem, the notation "SIMP(2)" is actually what we have called "SIMP(4)" in our previous work.  Different authors use different notation, and the author of this WeBWorK exercise chooses to write "SIMP(n)" where we have written "SIMP(2n)".
+                        </p>
+                        </introduction>    
+                        <webwork source="Library/Michigan/Chap7Sec6/Q05.pg" />
+                    </exercise>
 
-    <exercises xml:id="exercises-ac-in-runestone-tests">
+                    <exercise label="csafranski__5-_6HW_prob3">
+                        <title>Shortened version of question above, but told one student everything was wrong</title>
+                        <webwork source="csafranski/5.6HW_prob3.pg"/>
+                    </exercise>
 
-        <!-- risk of being too long, depending on what students enter -->
-        <exercise xml:id="ez-5-6-WW1" permid="Uru">
-            <title>Runs the risk of being too long, depending on what students enter</title>
-            <introduction permid="hSh">
-            <p permid="NZq">
-            In this problem, the notation "SIMP(2)" is actually what we have called "SIMP(4)" in our previous work.  Different authors use different notation, and the author of this WeBWorK exercise chooses to write "SIMP(n)" where we have written "SIMP(2n)".
-            </p>
-            </introduction>    
-            <webwork source="Library/Michigan/Chap7Sec6/Q05.pg" />
-        </exercise>
+                    <exercise label="Library__LoyolaChicago__Precalc__Chap1Sec2__Q10.pg">
+                        <title>Uses old table macros, but parserCheckboxList</title>
+                        <webwork source="csafranski/1.1HW_prob1.pg"/>
+                    </exercise>
 
-        <!-- shortened version of same question, but one student had it say everything was wrong when it wasn't. -->
-        <exercise label="csafranski__5-_6HW_prob3">
-            <title>Shortened version of question above, but told one student everything was wrong</title>
-            <webwork source="csafranski/5.6HW_prob3.pg"/>
-        </exercise>
+                    <exercise label="Library__Michigan__Chap5Sec4__Q03">
+                        <title>Uses NiceTables</title>
+                        <webwork source="csafranski/5.1HW_prob1.pg"/>
+                    </exercise>
+                    
+                    <exercise label="Library__Michigan__Chap8Sec4__Q03" xml:id="ez-6-3-WW1">
+                        <title>Units Help, once activated and clicked on</title>
+                        <webwork source="Library/Michigan/Chap8Sec4/Q03.pg"/>
+                    </exercise>
 
-        <!-- old table, new checkbox -->
-        <exercise label="Library__LoyolaChicago__Precalc__Chap1Sec2__Q10.pg">
-            <title>Uses old table macros, but parserCheckboxList</title>
-            <webwork source="csafranski/1.1HW_prob1.pg"/>
-        </exercise>
+                    <exercise label="Library__Michigan__Chap2Sec4__Q01" xml:id="ez-1-5-WW1">
+                        <title>Check Units being Accepted when MathQuill is being used</title>
+                        <webwork source="Library/Michigan/Chap2Sec4/Q01.pg" />
+                    </exercise>
 
-        <!-- new table -->
-        <exercise label="Library__Michigan__Chap5Sec4__Q03">
-            <title>Uses NiceTables</title>
-            <webwork source="csafranski/5.1HW_prob1.pg"/>
-        </exercise>
-        
-        <!-- units help link, when activated and clicked on -->
-        <exercise label="Library__Michigan__Chap8Sec4__Q03" xml:id="ez-6-3-WW1" permid="WgU">
-            <title>Units Help, once activated and clicked on</title>
-            <webwork source="Library/Michigan/Chap8Sec4/Q03.pg"/>
-        </exercise>
+                    <exercise label="Library__WinonaState__StewartCalcEarlyTran7ed__Chap11Section09__SCalcET7-11-9-026">
+                        <title>Click on the HelpLink when activated</title>
+                        <webwork source="Library/WinonaState/StewartCalcEarlyTran7ed/Chap11Section09/SCalcET7-11-9-026.pg"/>
+                    </exercise>
 
-        <!-- units not being accepted unless you use the MathQuill toolbar and the textbox -->
-        <exercise label="Library__Michigan__Chap2Sec4__Q01" xml:id="ez-1-5-WW1" permid="XqR">
-            <title>Check Units being Accepted when MathQuill is being used</title>
-            <webwork source="Library/Michigan/Chap2Sec4/Q01.pg" />
-        </exercise>
+                    <exercise label="Library__Rochester__setDiffEQ2DirectionFields__ur_de_2_3">
+                        <title> Weird Error in the Static Rendering </title>
+                        <webwork source="Library/Rochester/setDiffEQ2DirectionFields/ur_de_2_3.pg"/>
+                    </exercise>
 
-        <!-- another HelpLink, when activated and clicked on -->
-        <exercise label="Library__WinonaState__StewartCalcEarlyTran7ed__Chap11Section09__SCalcET7-11-9-026">
-            <title>Click on the HelpLink when activated</title>
-            <webwork source="Library/WinonaState/StewartCalcEarlyTran7ed/Chap11Section09/SCalcET7-11-9-026.pg"/>
-        </exercise>
+                    <exercise label="Library__Rochester__setDiffEQ6AutonomousStability__ur_de_6_4">
+                        <title>My note only said weird... not sure why</title> 
+                        <webwork source="Library/Rochester/setDiffEQ6AutonomousStability/ur_de_6_4.pg"/>
+                    </exercise>
 
-        <!-- weird error in the static rendering -->
-        <exercise label="Library__Rochester__setDiffEQ2DirectionFields__ur_de_2_3">
-            <title> Weird Error in the Static Rendering </title>
-            <webwork source="Library/Rochester/setDiffEQ2DirectionFields/ur_de_2_3.pg"/>
-        </exercise>
+                    <exercise label="Library__Michigan__Chap7Sec4__Q33" xml:id="ez-5-5-WW2">
+                        <title>Problem changes after hitting submit</title>
+                        <webwork source="Library/Michigan/Chap7Sec4/Q33.pg"/>
+                    </exercise>
 
-        <!-- sorry, my note only said weird -->
-        <exercise label="Library__Rochester__setDiffEQ6AutonomousStability__ur_de_6_4">
-            <title>My note only said weird... not sure why</title> 
-            <webwork source="Library/Rochester/setDiffEQ6AutonomousStability/ur_de_6_4.pg"/>
-        </exercise>
+                    <exercise label="Library__Michigan__Chap8Sec2__Q22">
+                        <title>Another problem that changes after hitting submit</title>          
+                        <webwork source="Library/Michigan/Chap8Sec2/Q22.pg"/>
+                    </exercise>
 
-        <!-- problem changes after hitting submit -->
-        <exercise label="Library__Michigan__Chap7Sec4__Q33" xml:id="ez-5-5-WW2" permid="LOG">
-            <title>Problem changes after hitting submit</title>
-            <webwork source="Library/Michigan/Chap7Sec4/Q33.pg"/>
-        </exercise>
-
-        <!-- another problem changes after hitting submit -->
-        <exercise label="Library__Michigan__Chap8Sec2__Q22">
-            <title>Another problem that changes after hitting submit</title>          
-            <webwork source="Library/Michigan/Chap8Sec2/Q22.pg"/>
-        </exercise>
-
-    </exercises>
+                </exercises>
 
     </section>
 
