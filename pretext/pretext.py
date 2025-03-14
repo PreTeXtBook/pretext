@@ -3984,6 +3984,9 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     if include_static_files:
         # extra css for custom ol markers
         move_ol_marker_css(tmp_dir)
+    if not(include_static_files):
+        # remove latex-image generated directories for portable builds
+        shutil.rmtree(os.path.join(tmp_dir, "generated", "latex-image"), ignore_errors=True)
 
     if file_format  == "html":
         # with multiple files, we need to copy a tree
