@@ -2422,7 +2422,8 @@ iframe.asymptote,
 img.contained {
   width: 100%;
 }
-.ptx-content img {
+.ptx-content img,
+.ptx-content svg {
   background: var(--ptx-image-bg);
 }
 .image-description summary {
