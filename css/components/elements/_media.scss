@@ -22,7 +22,7 @@ img.contained {
 
 // ---------------------------------------------
 // images
-.ptx-content img {
+.ptx-content img, .ptx-content svg {
   // for body images in dark mode, we want to be able to force a light colored background
   // as most transparent images will assume that the background is white
   background: var(--ptx-image-bg);
