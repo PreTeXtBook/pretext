@@ -9194,6 +9194,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We allow some mark-up inside the "latex-image" element, -->
 <!-- which was formerly assumed to be purely text.  Then we  -->
 <!-- sanitize it.                                            -->
+<!-- NB: the only experimental aspect here is the use of a   -->
+<!-- "label" element mixed in with text nodes of a           -->
+<!-- "latex-image".  This was deprecated on 2024-07-29 and   -->
+<!-- that suggests manual replacement.  We *could* move the  -->
+<!-- templates supporting this to the "repair" phase of      -->
+<!-- pretext-assembly.xsl  or just remove these templates.   -->
 
 <!-- This template (and those it employs) are also used  -->
 <!-- in "extract-latex-image.xsl" so check consequences  -->
