@@ -1551,7 +1551,10 @@
       </optional>
       <optional>
         <attribute name="interactive">
-          <value>codelens</value>
+          <choice>
+            <value>codelens</value>
+            <value>activecode</value>
+          </choice>
         </attribute>
       </optional>
       <optional>
