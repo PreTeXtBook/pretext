@@ -2537,10 +2537,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
     import urllib.parse
     import PIL.Image
-    import os
-    import requests
     import shutil
-    from lxml import etree
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -2551,9 +2548,15 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
         global __module_warning
         raise ImportError(__module_warning.format("requests"))
     try:
-        import pymupdf # for svg to pdf conversion
-    except ImportError:
-        raise ImportError(__module_warning.format("pyMuPDF"))
+        subprocess.run(["inkscape","--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        ink_avail = True
+    except FileNotFoundError:
+        log.info('Inkscape not found. Trying pyMuPDF.')
+        ink_avail = False
+        try:
+            import pymupdf # for svg to pdf conversion
+        except ImportError:
+            raise ImportError(__module_warning.format("pyMuPDF"))
 
     log.info(
         "downloading MyOpenMath static problems from {} for placement in {}".format(
@@ -2592,8 +2595,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
             xml_content = f'<?xml version="1.0" encoding="utf-8"?>\n{r.text}'
             xml_content = xml_content.replace('<myopenmath', '<myopenmath xmlns:pi="http://pretextbook.org/2020/pretext/internal"')
-
-            tree = etree.fromstring(xml_content.encode("utf-8"))
+            tree = ET.fromstring(xml_content.encode("utf-8"))
 
             # Process images
             image_elements = tree.xpath("//image[contains(@source, 'http')]")
@@ -2628,7 +2630,9 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
             count = 1
             for svg_element in image_svg_elements:
                 if svg_element is not None:
-                    svg_string = etree.tostring(svg_element, encoding="unicode")
+                    svg_string = f'<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n{ET.tostring(svg_element, encoding="unicode")}'
+                    # kludge: no nice way to remove namespace inherited from MyOpenMath element
+                    svg_string = svg_string.replace(' xmlns:pi="http://pretextbook.org/2020/pretext/internal"','')
                     # generate file names for image files
                     svgname = f'images/mom-{problem}-{count}'
                     svgname_ext = f'{svgname}.svg'
@@ -2640,21 +2644,29 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
                     # write out the embedded SVG to file
                     with open(svgpath, "w") as svgfile:
-                        svgfile.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
                         svgfile.write(svg_string)
                         svgfile.close()
 
-                    try:
+                    # convert SVG to PDF and PNG
+                    if ink_avail:
+                        svg_file = open(svgpath)
+                        result = subprocess.run(["inkscape","--export-type=pdf",svgpath], capture_output=True, text=True)
+                        if result.returncode != 0:
+                            log.error(f"Error converting image {svgname} to PDF: {result.returncode}")
+                            log.error(f"{result.stderr}")
+                        result = subprocess.run(["inkscape","--export-type=png",svgpath], capture_output=True, text=True)
+                        if result.returncode != 0:
+                            log.error(f"Error converting image {svgname} to PNG: {result.returncode}")
+                            log.error(f"{result.stderr}")
+                    else:
                         svg = pymupdf.open(svgpath)
                         pdfbytes = svg.convert_to_pdf()
                         pdf = pymupdf.open("pdf", pdfbytes)
                         pdf.save(pdfpath)
                         png = svg.load_page(0).get_pixmap(dpi=300, alpha=True)
                         png.save(pngpath)
-                    except Exception as e:
-                        log.error(f"Error converting SVG {svgname}: {e}")
 
-                    # update the <image> element to reference the file
+                    # update the <image> element in MyOpenMath xml to reference the file
                     svg_element.getparent().set("{http://pretextbook.org/2020/pretext/internal}generated", f'problems/{svgname}')
                     svg_element.getparent().remove(svg_element)
 
@@ -2662,11 +2674,11 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
             # Write the modified XML back to file
             with open(path, "wb") as f:
-                f.write(etree.tostring(tree, encoding="utf-8", xml_declaration=True))
+                f.write(ET.tostring(tree, encoding="utf-8", xml_declaration=True))
 
         except requests.exceptions.RequestException as e:
             log.error(f"Error downloading MOM #{problem}: {e}")
-        except etree.XMLSyntaxError as e:
+        except ET.XMLSyntaxError as e:
             log.error(f"Error parsing XML for MOM #{problem}: {e}")
         except Exception as e:
             log.error(f"An unexpected error occurred for MOM #{problem}: {e}")
