@@ -9199,23 +9199,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in "extract-latex-image.xsl" so check consequences  -->
 <!-- there if this changes.                              -->
 <xsl:template match="latex-image">
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text">
-            <!-- we need to copy text bits verbatim (value-of), -->
-            <!-- versus applying templates to "label" elements  -->
-            <!-- (could match on, e.g., latex-image/text() )    -->
-            <xsl:for-each select="text()|label">
-                <xsl:choose>
-                    <xsl:when test="self::text()">
-                        <xsl:value-of select="."/>
-                    </xsl:when>
-                    <xsl:when test="self::label">
-                        <xsl:apply-templates select="."/>
-                    </xsl:when>
-                </xsl:choose>
-            </xsl:for-each>
-        </xsl:with-param>
-    </xsl:call-template>
+    <xsl:variable name="latex-code">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text">
+                <!-- we need to copy text bits verbatim (value-of), -->
+                <!-- versus applying templates to "label" elements  -->
+                <!-- (could match on, e.g., latex-image/text() )    -->
+                <xsl:for-each select="text()|label">
+                    <xsl:choose>
+                        <xsl:when test="self::text()">
+                            <xsl:value-of select="."/>
+                        </xsl:when>
+                        <xsl:when test="self::label">
+                            <xsl:apply-templates select="."/>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:for-each>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- All but a guaranteed trailing newline as last -->
+    <!-- character (which comes from "sanitize-text")  -->
+    <xsl:value-of select="substring($latex-code, 1, string-length($latex-code)-1)"/>
+    <!-- A percent to control unwanted space, post-LaTeX  -->
+    <!-- code, then newline as visual formatting          -->
+    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- This is producing TikZ code, so will not be effective in all poassible -->
