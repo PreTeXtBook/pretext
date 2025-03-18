@@ -1455,7 +1455,7 @@
                     attribute hidecode {"yes"|"no"}?,
                     attribute highlight-lines {text}?,
                     attribute include {text}?,
-                    attribute interactive {"codelens"}?,
+                    attribute interactive {"codelens"|"activecode"}?,
                     attribute interpreter-args {text}?,
                     attribute language {text}?,
                     attribute line-numbers {"yes"|"no"}?,
