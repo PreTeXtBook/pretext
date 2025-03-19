@@ -6827,27 +6827,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:if>
                     <xsl:apply-templates select="." mode="title-plain" />
                 </title>
-                <meta name="Keywords" content="Authored in PreTeXt" />
                 <!-- canonical link for better SEO -->
                 <xsl:call-template name="canonical-link">
                     <xsl:with-param name="filename" select="$filename"/>
                 </xsl:call-template>
-                <!-- more "meta" elements for discovery -->
-                <xsl:call-template name="open-graph-info"/>
-                <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-                <!-- ########################################## -->
-                <!-- A variety of libraries were loaded here    -->
-                <!-- Only purpose of this page is YouTube video -->
-                <!-- A hook could go here for some extras       -->
-                <!-- ########################################## -->
-                <xsl:call-template name="pretext-js" />
-                <xsl:call-template name="knowl" />
-                <xsl:call-template name="fonts" />
-                <xsl:call-template name="font-awesome" />
-                <xsl:call-template name="diagcess-header" />
-                <xsl:call-template name="css" />
-                <xsl:call-template name="runestone-header"/>
+                <!-- grab the contents every page gets -->
+                <xsl:copy-of select="$file-wrap-basic-head-cache"/>
+                <!-- now do anything that is or could be page-specific and comes after cache -->
+                <xsl:apply-templates select="." mode="knowl" />
             </head>
             <body>
                 <!-- potential document-id per-page -->
@@ -6917,14 +6904,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                           </div>
                     </main>
                 </div>
-                <xsl:call-template name="runestone-ethical-ads"/>
-                <!-- analytics services, if requested -->
-                <xsl:call-template name="statcounter"/>
-                <xsl:call-template name="google-classic"/>
-                <xsl:call-template name="google-universal"/>
-                <xsl:call-template name="google-gst"/>
-                <xsl:call-template name="diagcess-footer"/>
-                <xsl:call-template name="extra-js-footer"/>
+                <xsl:copy-of select="$file-wrap-basic-endbody-cache"/>
             </body>
         </html>
     </exsl:document>
@@ -9787,13 +9767,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <html>
             <xsl:call-template name="language-attributes"/>
             <head>
-                <!-- configure MathJax by default for @platform variants -->
-                <xsl:call-template name="mathjax" />
-                <!-- need CSS for sidebyside         -->
-                <!-- perhaps this can be specialized -->
-                <xsl:call-template name="css" />
-                <!-- maybe icons in captions? -->
-                <xsl:call-template name="font-awesome" />
+                <!-- grab the contents every iframe gets -->
+                <xsl:copy-of select="$file-wrap-iframe-head-cache"/>
+                <!-- now do anything that is or could be page-specific and comes after cache -->
                 <!-- and CSS for the entire interactive, into the head -->
                 <xsl:apply-templates select="@css" />
                 <!-- load header libraries (for all "slate") -->
@@ -10708,6 +10684,73 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Web Page Infrastructure -->
 <!--                         -->
 
+<!-- Start by building a series of "cache" variables that hold common head/foot -->
+<!-- page elements. Ideally, all pages types can be kept in a strict ordering   -->
+<!-- of complexity so each cahce is a superset of the previous ones.            -->
+
+<!-- Start with what is required by iframes -->
+<xsl:variable name="file-wrap-iframe-head-cache">
+    <xsl:call-template name="fonts"/>
+    <xsl:call-template name="font-awesome"/>
+    <xsl:call-template name="css"/>
+    <xsl:call-template name="mathjax"/>
+</xsl:variable>
+
+<!-- Build a cache of the head elements that are constant across ALL standalone -->
+<!-- pages in the document. Main targets are "standalone" pages for meadia and  -->
+<!-- interactive extraction.                                                    -->
+<xsl:variable name="file-wrap-basic-head-cache">
+    <xsl:copy-of select="$file-wrap-iframe-head-cache"/>
+    <!-- Add keywords, including those in bibinfo -->
+    <xsl:call-template name="keywords-meta-element"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- more "meta" elements for discovery -->
+    <xsl:call-template name="open-graph-info"/>
+    <xsl:call-template name="pretext-js"/>
+    <xsl:call-template name="runestone-header"/>
+    <xsl:call-template name="diagcess-header"/>
+</xsl:variable>
+
+<!-- Content used by simple-file-wrap -->
+<xsl:variable name="file-wrap-simple-head-cache">
+    <xsl:copy-of select="$file-wrap-basic-head-cache"/>
+    <xsl:call-template name="sagecell-code" />
+    <xsl:call-template name="favicon"/>
+    <xsl:call-template name="webwork-js"/>
+    <xsl:call-template name="myopenmath-js"/>
+    <xsl:call-template name="syntax-highlight"/>
+    <xsl:call-template name="hypothesis-annotation" />
+    <xsl:call-template name="geogebra" />
+    <xsl:call-template name="jsxgraph" />
+    <xsl:call-template name="mermaid-header" />
+</xsl:variable>
+
+<!-- Content used by main file-wrap template -->
+<xsl:variable name="file-wrap-full-head-cache">
+    <xsl:copy-of select="$file-wrap-simple-head-cache"/>
+    <xsl:call-template name="google-search-box-js" />
+    <xsl:call-template name="native-search-box-js" />
+</xsl:variable>
+
+<!-- Now build end of body caches in the same manner          -->
+<!-- Again, start with univeral content and build from there  -->
+
+<!-- basic content is in any standalone page-->
+<xsl:variable name="file-wrap-basic-endbody-cache">
+    <xsl:call-template name="statcounter"/>
+    <xsl:call-template name="google-classic"/>
+    <xsl:call-template name="google-universal"/>
+    <xsl:call-template name="google-gst"/>
+    <xsl:call-template name="diagcess-footer"/>
+    <xsl:call-template name="extra-js-footer"/>
+</xsl:variable>
+
+<!-- extra contents for main file-wrap template -->
+<xsl:variable name="file-wrap-full-endbody-cache">
+    <xsl:copy-of select="$file-wrap-basic-endbody-cache"/>
+    <xsl:call-template name="runestone-ethical-ads"/>
+</xsl:variable>
+
 <!-- An individual page:                                   -->
 <!-- Inputs:                                               -->
 <!-- * page content (exclusive of banners, navigation etc) -->
@@ -10754,39 +10797,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
                 <xsl:apply-templates select="." mode="title-plain" />
             </title>
-            <!-- Add keywords, including those in bibinfo -->
-            <xsl:call-template name="keywords-meta-element"/>
-            <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <!-- canonical link for better SEO -->
             <xsl:call-template name="canonical-link">
                 <xsl:with-param name="filename" select="$the-filename"/>
             </xsl:call-template>
-            <!-- more "meta" elements for discovery -->
-            <xsl:call-template name="open-graph-info"/>
-            <!-- favicon -->
-            <xsl:call-template name="favicon"/>
-            <!-- jquery used by sage, webwork, knowls -->
-            <xsl:call-template name="sagecell-code" />
-            <xsl:call-template name="mathjax" />
-            <!-- webwork's iframeResizer needs to come before sage -->
-            <xsl:call-template name="webwork-js"/>
-            <xsl:call-template name="myopenmath-js"/>
+            <!-- grab the contents every page gets -->
+            <xsl:copy-of select="$file-wrap-full-head-cache"/>
+            <!-- now do anything that is or could be page-specific and comes after cache -->
+            <xsl:apply-templates select="." mode="knowl" />
+            <!-- webwork's iframeResizer needs to come before sagecell template -->
             <xsl:apply-templates select="." mode="sagecell" />
-            <xsl:call-template name="syntax-highlight"/>
-            <xsl:call-template name="google-search-box-js" />
-            <xsl:call-template name="native-search-box-js" />
-            <xsl:call-template name="pretext-js" />
-            <xsl:call-template name="knowl" />
-            <xsl:call-template name="fonts" />
-            <xsl:call-template name="hypothesis-annotation" />
-            <xsl:call-template name="geogebra" />
-            <xsl:call-template name="jsxgraph" />
-            <xsl:call-template name="diagcess-header" />
-            <xsl:call-template name="css" />
-            <xsl:call-template name="runestone-header"/>
-            <xsl:call-template name="font-awesome" />
-            <xsl:call-template name="mermaid-header" />
         </head>
         <body>
             <!-- potential document-id per-page -->
@@ -10882,14 +10902,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="runestone-link"/>
                 <xsl:call-template name="mathjax-link" />
             </div>
-            <xsl:call-template name="runestone-ethical-ads"/>
-            <!-- analytics services, if requested -->
-            <xsl:call-template name="statcounter"/>
-            <xsl:call-template name="google-classic"/>
-            <xsl:call-template name="google-universal"/>
-            <xsl:call-template name="google-gst"/>
-            <xsl:call-template name="diagcess-footer"/>
-            <xsl:call-template name="extra-js-footer"/>
+            <xsl:copy-of select="$file-wrap-full-endbody-cache"/>
         </body>
     </html>
     </exsl:document>
@@ -10898,7 +10911,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A minimal individual page:                              -->
 <!-- Inputs:                                                 -->
 <!-- * page content (exclusive of banners, navigation etc)   -->
-<!-- Maybe a page title -->
 <xsl:template match="*" mode="simple-file-wrap">
     <xsl:param name="content" />
     <xsl:variable name="filename">
@@ -10912,31 +10924,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="language-attributes"/>
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
-            <!-- keywords, including those from bibinfo -->
-            <xsl:call-template name="keywords-meta-element" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <title>
+                <xsl:apply-templates select="." mode="title-plain" />
+            </title>
             <!-- canonical link for better SEO -->
             <xsl:call-template name="canonical-link">
                 <xsl:with-param name="filename" select="$filename"/>
             </xsl:call-template>
-            <!-- more "meta" elements for discovery -->
-            <xsl:call-template name="open-graph-info"/>
-            <!-- jquery used by sage, webwork, knowls -->
-            <xsl:call-template name="sagecell-code" />
-            <xsl:call-template name="mathjax" />
-            <!-- webwork's iframeResizer needs to come before sage -->
-            <xsl:call-template name="webwork-js"/>
-            <xsl:call-template name="myopenmath-js"/>
+            <!-- grab the contents every page gets -->
+            <xsl:copy-of select="$file-wrap-simple-head-cache"/>
+            <!-- now do anything that is or could be page-specific and comes after cache -->
+            <xsl:apply-templates select="." mode="knowl" />
             <xsl:apply-templates select="." mode="sagecell" />
-            <xsl:call-template name="knowl" />
-            <xsl:call-template name="fonts" />
-            <xsl:call-template name="hypothesis-annotation" />
-            <xsl:call-template name="geogebra" />
-            <xsl:call-template name="jsxgraph" />
-            <xsl:call-template name="diagcess-header" />
-            <xsl:call-template name="css" />
-            <xsl:call-template name="runestone-header"/>
-            <xsl:call-template name="font-awesome" />
         </head>
         <!-- TODO: needs some padding etc -->
         <!-- ignore MathJax signals everywhere, then enable selectively -->
@@ -10946,13 +10945,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- React flag -->
             <xsl:call-template name="react-in-use-flag"/>
             <xsl:copy-of select="$content" />
-            <!-- analytics services, if requested -->
-            <xsl:call-template name="statcounter"/>
-            <xsl:call-template name="google-classic"/>
-            <xsl:call-template name="google-universal"/>
-            <xsl:call-template name="google-gst"/>
-            <xsl:call-template name="diagcess-footer"/>
-            <xsl:call-template name="extra-js-footer"/>
+            <xsl:copy-of select="$file-wrap-basic-endbody-cache"/>
         </body>
     </html>
     </exsl:document>
@@ -13047,7 +13040,7 @@ TODO:
 </xsl:template>
 
 <!-- Knowl header -->
-<xsl:template name="knowl">
+<xsl:template match="*" mode="knowl">
     <xsl:if test="not($b-debug-react)">
         <script src="{$html.jslib.dir}/knowl.js"></script>
         <!-- Variables are defined to defaults in knowl.js and  -->
