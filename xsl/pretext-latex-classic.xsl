@@ -296,7 +296,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="email">
         <xsl:text>\\&#xa;</xsl:text>
-        <xsl:apply-templates select="email" />
+        <xsl:apply-templates select="email" mode="article-info"/>
     </xsl:if>
     <xsl:if test="following-sibling::author" >
         <xsl:text>&#xa;\and</xsl:text>
@@ -323,6 +323,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="location">
         <xsl:apply-templates select="location" />
     </xsl:if>
+    <!-- always end with a new line -->
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -350,6 +352,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="email" mode="article-info">
     <xsl:value-of select="." />
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Since the bibinfo-post-begin-document takes care of all frontmatter, we kill the frontmatter as a separate thing here -->
