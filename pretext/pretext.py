@@ -4114,6 +4114,8 @@ def get_latex_style(xml, pub_file, stringparams):
     pub_latex_style = get_publisher_variable(pub_vars, "latex-style")
     if len(journal_name) > 0:
         journal_info = get_journal_info(journal_name)
+        log.debug(f"Journal Info: {journal_info}")
+        stringparams["journal.code"] = journal_name
         latex_style = journal_info["latex-style"]
         if len(latex_style) == 0:
             msg = "The journal name {} in your publication file is invalid or does not correspond to a valid latex-style.  Using the default LaTeX style instead."
@@ -5051,11 +5053,16 @@ def get_journal_info(journal_name):
     except Exception as e:
         log.warning("The journal name {} specified in the publication file is not supported.".format(journal_name))
         return {"latex-style": ""}
-    keys = ["name", "code", "latex-style", "publisher"]
+    keys = ["name", "code", "publisher"]
     journal_info = {}
     for key in keys:
         if journal.find(key) is not None:
             journal_info[key] = journal.find(key).text
+    # Set the latex-style value.  This will either be the value of an attribute of "method", or should be "texstyle"
+    if journal.find("method") is not None and "latex-style" in journal.find("method").attrib:
+        journal_info["latex-style"] = journal.find("method").attrib["latex-style"]
+    else:
+        journal_info["latex-style"] = "texstyle"
     return journal_info
 
 
