@@ -14365,6 +14365,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </introduction>
                 <myopenmath problem="2168"/>
             </exercise>
+
+            <exercise>
+                <title>Geometry of a Cone</title>
+                <introduction>
+                    <p>This problem has two figures.  They come from the MOM server as SVG files.  These image files are then converted to PDF for static formats like PDF, and into PNG for formats like Kindle.</p>
+                </introduction>
+                <myopenmath problem="930582" params="maxtries=2"/>
+            </exercise>
         </section>
 
 

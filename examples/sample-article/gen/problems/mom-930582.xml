@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<myopenmath xmlns:pi="http://pretextbook.org/2020/pretext/internal" id="930582">
+<statement>
+<p>The right circular conical tank shown has height 4.00 m and top radius <m>\displaystyle{1.20}</m> m. It is filled with water to a height of <m>\displaystyle{3.80}</m> m. The cross section is a right triangle with height 4.00 m and top side <m>\displaystyle{1.20}</m> m. Inside is another right triangle with height <m>\displaystyle{3.80}</m> m.</p>
+<image pi:generated="problems/images/mom-930582-1"/> <image pi:generated="problems/images/mom-930582-2"/>
+<p>What is the volume of water? <fillin characters="4"/> m</p>
+<p>How much water must be added to fill the tank? <fillin characters="4"/> <m>\displaystyle\text{m}^{{3}}</m></p>
+
+</statement>
+<solution>
+<p><ul><li>5.17</li><li>0.86</li></ul></p>
+</solution>
+</myopenmath>
