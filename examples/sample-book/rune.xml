@@ -4398,24 +4398,6 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </reading-questions>
 
-    <section xml:id="splice-integration-two">
-        <title>SPLICE Integration</title>
-
-        <p><url href="https://cssplice.org/">SPLICE</url> is a project to supply documentation and infrastructure to help with adopting shared standards, protocols, and tools for web-based learning tools. The project has designed a <url href="https://cssplice.org/slcp/index.html">protocol</url> for an embedded iframe to communicate with its host page.</p>
-
-        <p>One aspect is the ability of an iframe to ask for a new size. Below is a test of that capability.</p>
-
-        <interactive xml:id="splice-resize-example" platform="javascript" width="60%" aspect="2:1" source="splice/splice-resize.js"/>
-
-        <p>And here is a more complex example that uses various parts of the grading protocol.</p>
-
-        <figure xml:id="horstmann-codecheck-two">
-            <caption>CodeCheck <c>iframe</c></caption>
-            <interactive xml:id="interactive-horstmann-codecheck-two" iframe="https://codecheck.io/files/wiley/ch-bj4cc-c06_exp_6_105" width="100%" aspect="1:1" />
-        </figure>
-    </section>
-
-
     <section xml:id="atomic-video">
         <title>YouTube Video Embedding</title>
 
@@ -4731,9 +4713,17 @@ TEST_CASE( "Test the add function" ) {
     <section xml:id="splice-integration">
         <title>SPLICE Integration</title>
 
-        <p>These are examples that use the <url href="https://cssplice.org/slcp/index.html" visual="cssplice.org/slcp">SPLICE</url> protocol for communicating with a server, such as Runestone.  The first uses <url href="https://codecheck.io" visual="codecheck.io">CodeCheck</url>.  The remaing four are from the <url href="https://opendsax.cs.vt.edu/" visual="opendsax.cs.vt.edu">OpenDSA</url> project.</p>
+        <p><url href="https://cssplice.org/" visual="cssplice.org">SPLICE</url> is a project to supply documentation and infrastructure to help with adopting shared standards, protocols, and tools for web-based learning tools. The project has designed a <url href="https://cssplice.org/slcp/index.html" visual="cssplice.org/slcp">protocol</url> for an embedded iframe to communicate with its host page.</p>
 
-        <p>They are all integrated into this <pretext/> book as an <tag>interactive</tag> that uses an <attr>iframe</attr> attribute to embed an iframe from some other server.</p>
+        <p>One aspect is the ability of an iframe to ask for a new size. Below is a test of that capability.</p>
+
+        <p>These are examples that use the <url href="https://cssplice.org/slcp/index.html" visual="cssplice.org/slcp">SPLICE</url> protocol for communicating with a server, such as Runestone. They are all integrated into this <pretext/> book as an <tag>interactive</tag> that uses an <attr>iframe</attr> attribute to embed an iframe from some other server.</p>
+
+        <p>This first sample tests the ability of an iframe to ask for a new size.</p>
+
+        <interactive xml:id="splice-resize-example" platform="javascript" width="60%" aspect="2:1" source="splice/splice-resize.js"/>
+
+        <p>The next uses <url href="https://codecheck.io" visual="codecheck.io">CodeCheck</url>.</p>
 
         <figure xml:id="horstmann-codecheck">
             <caption>CodeCheck <c>iframe</c></caption>
@@ -4743,6 +4733,8 @@ TEST_CASE( "Test the add function" ) {
                 aspect="1:1"
             />
         </figure>
+
+        <p>And the remaing four are from the <url href="https://opendsax.cs.vt.edu/" visual="opendsax.cs.vt.edu">OpenDSA</url> project.</p>
 
         <figure xml:id="opendsa-slideshow">
             <caption>Stack pop slideshow</caption>
