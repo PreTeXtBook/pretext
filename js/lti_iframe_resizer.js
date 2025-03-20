@@ -1,20 +1,20 @@
 // SPLICE resize handling - https://cssplice.org/
 // Expected message format:
-// { 
-//   subject: lti.frameResize', 
+// {
+//   subject: lti.frameResize',
 //   message_id: (a unique string ID),  // optional - not used
 //   height: ...,
-//   width: ... 
+//   width: ...
 // }
 
 window.addEventListener('message', function (event) {
     let edata = event.data;
-  
+
     //MoM sends event.data as a string instead of JSON
     if (typeof event.data == 'string' && event.data.match(/lti\.frameResize/)) {
         edata = JSON.parse(event.data);
     }
-  
+
     if (edata.subject === "lti.frameResize") {
         if ("frame_id" in edata) {
             // MoM may send frame_id
@@ -41,7 +41,7 @@ window.addEventListener('message', function (event) {
         }
     }
   });
-  
+
   // Currently only used by My Open Math to request a resize after knowls open
   function sendResizeRequest(el) {
     el.contentWindow.postMessage("requestResize", "*");
