@@ -2599,10 +2599,21 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
             # Process images
             image_elements = tree.xpath("//image[contains(@source, 'http')]")
+            count = 1
             for image_element in image_elements:
                 image_url = image_element.get("source")
                 image_url_parsed = urllib.parse.urlparse(image_url)
-                image_filename = os.path.basename(image_url_parsed.path)
+                source_filename = os.path.basename(image_url_parsed.path)
+#                find_ext = re.search(r"\.([a-zA-Z0-9]+)$",source_filename)
+#                source_ext = find_ext.group(0)
+                source_ext = re.search(r"\.([a-zA-Z0-9]+)$",source_filename).group(0)
+                if source_ext:
+                    image_filename = f'mom-{problem}-{count}{source_ext}'
+                    if ( source_ext.upper() == ".BMP" ):
+                        log.info(f'BMP file found in MOM {problem}. This will not work for LaTeX/PDF.')
+                else:
+                    image_filename = f'mom-{problem}-{count}.{source_ext}'
+                    log.info(f'No file name extension for MOM {problem} image {count}')
                 imageloc = f'problems/images/{image_filename}'
                 image_path = os.path.join(images_dir, image_filename)
 
@@ -2624,10 +2635,10 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                     image_element.set("{http://pretextbook.org/2020/pretext/internal}generated", imageloc)
                 except requests.exceptions.RequestException as e:
                     log.error(f"Error downloading image {image_url}: {e}")
+                count += 1
 
             # Process embedded SVGs
             image_svg_elements = tree.xpath("//image/*[local-name()='svg']")
-            count = 1
             for svg_element in image_svg_elements:
                 if svg_element is not None:
                     svg_string = f'<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n{ET.tostring(svg_element, encoding="unicode")}'
@@ -2666,6 +2677,24 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                         png = svg.load_page(0).get_pixmap(dpi=300, alpha=True)
                         png.save(pngpath)
 
+                    # Try to read the SVG width and set PreTeXt width based on document width assumptions
+                    temp = svg_element.get('width')
+                    svg_width = re.search(r"([0-9]+)([a-zA-Z]*)",temp)
+                    if svg_width:
+                        if svg_width.group(2):
+                            svg_units = svg_width.group(2).lower()
+                            if svg_units=="mm":
+                                svg_scale = 178
+                            elif svg_units=="cm":
+                                svg_scale = 18
+                            elif svg_units=="in":
+                                svg_scale = 7
+                            else:
+                                svg_scale = 600
+                        imgwidthtag = min(100, round(100*int(svg_width.group(1)) / svg_scale))
+                    else:
+                        imgwidthtag = 100
+                    svg_element.getparent().set("width", f"{imgwidthtag}%")
                     # update the <image> element in MyOpenMath xml to reference the file
                     svg_element.getparent().set("{http://pretextbook.org/2020/pretext/internal}generated", f'problems/{svgname}')
                     svg_element.getparent().remove(svg_element)
