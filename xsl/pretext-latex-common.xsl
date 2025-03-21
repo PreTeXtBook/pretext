@@ -81,7 +81,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-has-icon"         select="boolean($document-root//icon)" />
 <xsl:variable name="b-has-webwork-var"  select="boolean($document-root//statement//ul[@pi:ww-form])" />
-<xsl:variable name="b-has-program"      select="boolean($document-root//program)" />
+<xsl:variable name="b-has-program"      select="boolean($document-root//program|$document-root//pf)" />
 <xsl:variable name="b-has-console"      select="boolean($document-root//console)" />
 <xsl:variable name="b-has-sidebyside"   select="boolean($document-root//sidebyside)" />
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)" />
@@ -1673,6 +1673,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Arguments: language, left margin, width, right margin (latter ignored) -->
             <xsl:text>\newtcblisting{program}[4]{programboxstyle, left skip=#2\linewidth, width=#3\linewidth, listing options={language=#1, style=programcodestyle}}&#xa;</xsl:text>
             <xsl:text>\newtcblisting{programnumbered}[4]{programboxnumberedstyle, left skip=#2\linewidth, width=#3\linewidth, listing options={language=#1, style=programcodenumberedstyle}}&#xa;</xsl:text>
+            <!-- Arguments: language, body text. body text must start and end with a    -->
+            <!-- single character delimeter not in the text itself.                     -->
+            <xsl:text>\newcommand{\programfragment}[2]{\lstinline[language=#1, style=programcodestyle, basicstyle=\ttfamily]#2}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
@@ -8499,6 +8502,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ##################### -->
 <!-- Programs and Consoles -->
 <!-- ##################### -->
+
+<!-- Program fragment, inline                                  -->
+<!-- Similar to a "c" element, but will attempt to syntax      -->
+<!-- highlight language in the same way as "program"           -->
+<xsl:template match="pf">
+    <xsl:variable name="language">
+        <xsl:apply-templates select="." mode="listings-language" />
+    </xsl:variable>
+    <xsl:if test="$language = ''">
+        <xsl:message>PTX:WARNING: pf element without a language. Styling will be unpredictable.</xsl:message>
+    </xsl:if>
+    <!-- Need a single delimiter char not present in body -->
+    <xsl:variable name="delimiter">
+        <xsl:call-template name="find-unused-character">
+            <xsl:with-param name="string" select="."/>
+            <!-- Try a few ascii symbols before iterating through alphanumerics -->
+            <xsl:with-param name="charset" select="concat('`~^|#',&SIMPLECHAR;)"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:text>\programfragment{</xsl:text>
+    <xsl:value-of select="$language"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:value-of select="$delimiter"/>
+    <xsl:call-template name="escape-latex-special-chars">
+        <xsl:with-param name="text" select="." />
+    </xsl:call-template>
+        <!-- <xsl:value-of select="." /> -->
+    <xsl:value-of select="$delimiter"/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
 
 <!-- Both "program" and "console" are implemented as tcolorbox -->
 <!-- "tcblisting", based on the LaTeX "lstlistings" package.   -->
