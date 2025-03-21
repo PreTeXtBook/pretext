@@ -11306,6 +11306,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Utilities -->
 <!-- ######### -->
 
+<!-- "escape-latex-special-chars"                          -->
+<!-- Escape for the Latex 10 special characters            -->
+<!-- First define the replacements. These must be in       -->
+<!-- order as search + replace pairs                       -->
+<xsl:variable name="latex-replacements">
+    <search>\</search>
+    <replace>\\</replace>
+    <search>&amp;</search>
+    <replace>\&amp;</replace>
+    <search>%</search>
+    <replace>\%</replace>
+    <search>$</search>
+    <replace>\$</replace>
+    <search>#</search>
+    <replace>\#</replace>
+    <search>_</search>
+    <replace>\_</replace>
+    <search>{</search>
+    <replace>\{</replace>
+    <search>}</search>
+    <replace>\}</replace>
+    <search>~</search>
+    <replace>\~</replace>
+    <search>^</search>
+    <replace>\^</replace>
+</xsl:variable>
+<xsl:variable name="latex-replacements-search-set" select="exsl:node-set($latex-replacements)/search" />
+<xsl:variable name="latex-replacements-replace-set" select="exsl:node-set($latex-replacements)/replace" />
+<xsl:template name="escape-latex-special-chars">
+    <xsl:param name="text"/>
+    <xsl:value-of select="str:replace($text, $latex-replacements-search-set, $latex-replacements-replace-set)" />
+</xsl:template>
+
 <!-- Escape URL Text as LaTeX -->
 <!-- Slash first, so don't clobber later additions    -->
 <!-- Double-quote is problematic in LaTeX, and also   -->
