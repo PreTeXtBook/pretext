@@ -989,6 +989,8 @@
             <idx>literal text</idx>
 
             <p>The <tag>c</tag> tag is a mnemonic for <q>code</q>, but is really meant to be any chunk of literal characters that you want to emphasise that way.  So a <q>typewriter</q> font of fixed-width characters would be a typical presentation.  It is meant for use within a sentence or caption (<q>inline</q>) so its use is limited to those situations, and others that are similar, such as a title or a cell of a table.  Typically these pieces of text do not hyphenate words, and so can lead to spillover into a right margin.  In these situations, consider options below for longer pieces of text.</p>
+            
+            <p>There is also a <tag>pf</tag> tag, which is a mnemonic for <q>program fragment</q>.  It is used in the same way as <tag>c</tag>, but will apply syntax highlighting so that the displayed text matches the formatting of a <tag>program</tag> See <xref ref="program-fragments"/> for more information.</p>
         </subsection>
 
         <subsection xml:id="long-verbatim-text">
@@ -3444,7 +3446,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
     </section>
 
     <section xml:id="topic-program">
-        <title>Programs</title>
+        <title>Programs and Program Fragments</title>
         <idx>program</idx>
 
         <subsection>
@@ -3507,9 +3509,14 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>Finally, when authoring programs, it may be helpful to keep the source code as plain text in separate files. This can avoid the need to manually escape characters that have special meaning in XML and can facilitate testing and updating the code samples. See <xref ref="topic-xinclude"/> for how to do so.</p>
 
             <subsubsection xml:id="program-default-values">
-                <title>Default attributes for programs</title>
+                <title>Default Attributes for Programs</title>
                 <p>Book-level default values for some program attributes can be set in <c>docinfo/programs</c>. If a value for an attribute is set in that location, it will be used for any <tag>program</tag> that lacks the corresponding attribute.</p>
                 <p>The following attributes can be given default values - some only are applicable to interactive programs (see <xref ref="interactive-program-codelens"/> and <xref ref="interactive-program-activecode"/>): <attr>compiler-args</attr>, <attr>linker-args</attr>, <attr>interpreter-args</attr>, <attr>download</attr>, <attr>language</attr>, <attr>linenumbers</attr>, and <attr>timelimit</attr>.</p>
+            </subsubsection>
+
+            <subsubsection xml:id="program-fragments">
+                <title>Program Fragments</title>
+                <p>Fragments of a program can be added inline with text using the <tag>pf</tag>. A program fragment will be displayed similar to a <tag>c</tag>, but will be syntax highlighted to match a <tag>program</tag>. The language to interpret the fragment as can be specified with <attr>language</attr> or by relying on a document level default for programs (see <xref ref="program-default-values"/>).</p>
             </subsubsection>
         </subsection>
 
