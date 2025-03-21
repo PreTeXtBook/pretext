@@ -78,7 +78,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='appendices'>Appendices</localization>
     <localization string-id='section'>Section</localization>
     <localization string-id='subsection'>Sous-section</localization>
-    <localization string-id='subsubsection'>Sous-sous-section</localization>
+    <localization string-id='subsubsection'>Sous sous-section</localization>
     <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
     <localization string-id='slide'>Diapositive</localization>
     <localization string-id='introduction'>Introduction</localization>
