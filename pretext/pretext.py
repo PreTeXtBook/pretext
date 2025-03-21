@@ -3934,6 +3934,17 @@ def download_file(url, dest_filename):
     except Exception as e:
         raise Exception("Failed to save download", dest_filename)
 
+def quick_dirty_check_file(path):
+    """Check for existence of a file, returning True/False
+       logs a message if file was found and will be used
+       instead of downloading/rebuilding"""
+    filename = os.path.basename(path)
+    if os.path.exists(path):
+        log.info("Quick and dirty HTML is using existing {}. Delete {} from output to update.".format(filename, path))
+        return True
+    else:
+        return False
+
 def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir, ext_rs_methods):
     """Convert XML source to HTML files, in destination directory or as zip file"""
 
@@ -3957,18 +3968,15 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     if include_static_files:
         # If quick and dirty, check for existing _static files
         add_runestone_services = True
-        if "html.quick-dirty" in stringparams:
-            try:
-                services_record_files = os.path.join(dest_dir, "_static", "_runestone-services.xml")
+        if stringparams.get("html.quick-dirty", "no") == "yes":
+            services_record_files = os.path.join(dest_dir, "_static", "_runestone-services.xml")
+            if quick_dirty_check_file(services_record_files):
                 with open(services_record_files, 'r') as f:
                     services_xml = f.read()
                 services = ET.fromstring(services_xml)
                 rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
                 _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
-                log.info("Quick and dirty HTML is using old Runestone Services. Delete _static/_runestone-services.xml from output to update Runestone.")
                 add_runestone_services = False
-            except:
-                log.info("Quick and dirty HTML failed to use old Runestone Services. Will download Runestone.")
 
         if add_runestone_services:
             # interrogate Runestone server (or debugging switches) and populate
@@ -3991,17 +3999,21 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     else:
         extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
 
-    if "html.quick-dirty" not in stringparams:
-        # place managed directories - some of these (Asymptote HTML) are
-        # consulted during the XSL run and so need to be placed beforehand
-        copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     if include_static_files:
         # Copy js and css, but only if not building portable html
         # place JS in scratch directory
         copy_html_js(tmp_dir)
 
-        if "html.quick-dirty" not in stringparams:
+        need_theme_css = True
+        # quick and dirty reuses existing theme.css if possible
+        if stringparams.get("html.quick-dirty", "no") == "yes":
+            theme_css = os.path.join(dest_dir, "_static", "pretext", "css", "theme.css")
+            if quick_dirty_check_file(theme_css):
+                need_theme_css = False
+
+        if need_theme_css:
             build_or_copy_theme(xml, pub_vars, tmp_dir)
 
     # Write output into temporary directory

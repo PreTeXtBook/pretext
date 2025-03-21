@@ -109,7 +109,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- It will omit updating knowls, search index, theme, Runestone files,... -->
 <!-- When combined with param subtree, it will only process that subtree.   -->
 <xsl:param name="html.quick-dirty" select="''"/>
-<xsl:variable name="b-quick-dirty" select="not($html.quick-dirty = '')"/>
+<xsl:variable name="b-quick-dirty" select="$html.quick-dirty = 'yes'"/>
 
 <!-- CSS and Javascript Directories -->
 <!-- These are convenience variables to specify file prefixes  -->
