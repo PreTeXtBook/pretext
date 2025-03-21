@@ -1218,16 +1218,16 @@ summary.knowl__link {
 .assemblage-like:not(.knowl__content, .born-hidden-knowl) > *:first-child {
   margin-top: 0;
 }
-.conclusion:not(.knowl__content, .born-hidden-knowl),
-.goal-like:not(.knowl__content, .born-hidden-knowl) {
+.ptx-content:not(:has(> .worksheet)) .conclusion:not(.knowl__content, .born-hidden-knowl),
+.ptx-content:not(:has(> .worksheet)) .goal-like:not(.knowl__content, .born-hidden-knowl) {
   border: 3px solid var(--goal-like-border-color);
   background-color: var(--goal-like-body-background);
   padding: 20px;
   padding-top: calc(20px + 0.25ex);
   margin-top: 2.5em !important;
 }
-.conclusion:not(.knowl__content, .born-hidden-knowl) > .heading:first-child,
-.goal-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
+.ptx-content:not(:has(> .worksheet)) .conclusion:not(.knowl__content, .born-hidden-knowl) > .heading:first-child,
+.ptx-content:not(:has(> .worksheet)) .goal-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   background-color: var(--goal-like-border-color);
   display: block;
   color: white;
@@ -1237,13 +1237,16 @@ summary.knowl__link {
   width: fit-content;
   border: 0;
 }
-.conclusion:not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after,
-.goal-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after {
+.ptx-content:not(:has(> .worksheet)) .conclusion:not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after,
+.ptx-content:not(:has(> .worksheet)) .goal-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after {
   display: none;
 }
-.knowl__content *:first-child .conclusion,
-.knowl__content *:first-child .goal-like {
+.knowl__content *:first-child .ptx-content:not(:has(> .worksheet)) .conclusion,
+.knowl__content *:first-child .ptx-content:not(:has(> .worksheet)) .goal-like {
   margin-top: 1em;
+}
+.ptx-content:has(> .worksheet) .goal-like {
+  margin-top: 1.5em;
 }
 .theorem-like:not(.knowl__content, .born-hidden-knowl) {
   border-left: 1px solid var(--theorem-like-border-color);
@@ -1323,32 +1326,6 @@ summary.knowl__link {
 .example-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child + * {
   margin-top: 0;
 }
-.exercise-like:not(.knowl__content, .born-hidden-knowl) {
-  border-left: 1px solid var(--exercise-like-border-color);
-  border-bottom: 1px solid var(--exercise-like-border-color);
-  background-color: var(--content-background-background);
-  padding: 0 0px 12px 12px;
-  border-bottom-left-radius: 2px;
-}
-.exercise-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
-  background-color: var(--exercise-like-border-color);
-  display: inline-block;
-  color: white;
-  padding: 5px 10px;
-  margin-left: -12px;
-  margin-top: 0;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-}
-.exercise-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after {
-  display: none;
-}
-.exercise-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
-  margin-bottom: 12px;
-}
-.exercise-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child + * {
-  margin-top: 0;
-}
 .project-like:not(.knowl__content, .born-hidden-knowl) {
   border-left: 1px solid var(--project-like-border-color);
   border-bottom: 1px solid var(--project-like-border-color);
@@ -1426,6 +1403,49 @@ summary.knowl__link {
 }
 .proof-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child + * {
   margin-top: 0;
+}
+.ptx-content:not(:has(> .worksheet)) .exercise-like:not(.knowl__content, .born-hidden-knowl) {
+  border-left: 1px solid var(--exercise-like-border-color);
+  border-bottom: 1px solid var(--exercise-like-border-color);
+  background-color: var(--content-background-background);
+  padding: 0 0px 12px 12px;
+  border-bottom-left-radius: 2px;
+}
+.ptx-content:not(:has(> .worksheet)) .exercise-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
+  background-color: var(--exercise-like-border-color);
+  display: inline-block;
+  color: white;
+  padding: 5px 10px;
+  margin-left: -12px;
+  margin-top: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+.ptx-content:not(:has(> .worksheet)) .exercise-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after {
+  display: none;
+}
+.ptx-content:not(:has(> .worksheet)) .exercise-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
+  margin-bottom: 12px;
+}
+.ptx-content:not(:has(> .worksheet)) .exercise-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child + * {
+  margin-top: 0;
+}
+.ptx-content:has(> .worksheet) .exercise-like > .heading:first-child {
+  display: inline;
+  line-height: initial;
+  border-bottom: 0;
+}
+.ptx-content:has(> .worksheet) .exercise-like > .heading:first-child:after {
+  content: "\2009";
+}
+.ptx-content:has(> .worksheet) .exercise-like > .heading:first-child + .para {
+  display: inline;
+}
+.ptx-content:has(> .worksheet) .exercise-like > .heading:first-child + .introduction {
+  display: inline;
+}
+.ptx-content:has(> .worksheet) .exercise-like > .heading:first-child + .introduction > .para:first-child {
+  display: inline;
 }
 * {
   box-sizing: border-box;
