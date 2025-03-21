@@ -51,17 +51,25 @@ $border-radius: 2px !default;
   );
 }
 
-.conclusion,
-.goal-like {
-  @include heading-box-mixin.box(
-    $background-color: var(--goal-like-body-background),
-    $border-color: var(--goal-like-border-color),
-    $heading-background: var(--goal-like-border-color),
-    $heading-color: white
-  );
+// get rid of this wrapper when print worksheet styles are fixed
+.ptx-content:not(:has(>.worksheet)) {
+  .conclusion,
+  .goal-like {
+    @include heading-box-mixin.box(
+      $background-color: var(--goal-like-body-background),
+      $border-color: var(--goal-like-border-color),
+      $heading-background: var(--goal-like-border-color),
+      $heading-color: white
+    );
+  }
+}
+.ptx-content:has(>.worksheet) {
+  .goal-like {
+    margin-top: 1.5em;
+  }
 }
 
-$c-boxes: "theorem-like", "definition-like", "example-like", "exercise-like", "project-like", "computation-like", "proof-like";
+$c-boxes: "theorem-like", "definition-like", "example-like", "project-like", "computation-like", "proof-like";
 
 @each $box in $c-boxes {
   .#{$box} {
@@ -69,5 +77,19 @@ $c-boxes: "theorem-like", "definition-like", "example-like", "exercise-like", "p
       $border-color: var(--#{$box}-border-color),
       $heading-background: var(--#{$box}-border-color),
     );
+  }
+}
+
+// skip styling of exercises in worksheets, apply elsewhere
+$c-boxes-screen-only: "exercise-like";
+@each $box in $c-boxes-screen-only {
+  .ptx-content:not(:has(>.worksheet)) .#{$box} {
+    @include C-box-mixin.box(
+      $border-color: var(--#{$box}-border-color),
+      $heading-background: var(--#{$box}-border-color),
+    );
+  }
+  .ptx-content:has(>.worksheet) .#{$box} {
+    @include inline-heading-mixin.heading();
   }
 }
