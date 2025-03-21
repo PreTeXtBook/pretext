@@ -10706,6 +10706,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <program languge="python">print("Hello world")</program>
 
+            <p>Sometimes it is nice to author an inline fragment of a program and have the styling of its text match that of a <tag>program</tag>. To do this we can use the <tag>pf</tag> tag (<q>program fragment</q>).  It is similar to a <tag>c</tag> element, but will be syntax highlighted according to either a <attr>language</attr> or the default language for <tag>programs</tag>. Here is an example in C: <pf language="c">printf("The cost is $%f.2", money);</pf>. And another that is in Python and tests problematic characters: <pf language="python">print("&amp; % $ # _ { } ~ ^ \")</pf>.</p>
+
             <p>If you are discussing algorithms in the abstract (or even concretely), you can set them off like a theorem, with a number, a title and a target for cross-references.  Sometimes you claim an algorithm produces something in particular, or has certain properties, such as a theoretical run time, so a proof may be included.  See the discussion just preceding about (limited) options for pseudo-code.</p>
 
             <algorithm xml:id="algorithm-sieve-eratosthenes">
