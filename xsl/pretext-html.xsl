@@ -9317,6 +9317,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- An inline program fragment with potential -->
+<!-- syntax highlighting from Prism            -->
+<!-- Whitespace is left as authored            -->
+<xsl:template match="pf">
+    <xsl:variable name="prism-language">
+        <xsl:apply-templates select="." mode="prism-language"/>
+    </xsl:variable>
+    <code>
+        <xsl:attribute name="class">
+            <xsl:text>code-inline tex2jax_ignore</xsl:text>
+            <xsl:choose>
+                <xsl:when test="not($prism-language = '')">
+                    <xsl:text> language-</xsl:text>
+                    <xsl:value-of select="$prism-language" />
+                </xsl:when>
+                <!-- else, explicitly use what code gives -->
+                <xsl:otherwise>
+                    <xsl:text> language-none</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:value-of select="." />
+    </code>
+</xsl:template>
+
 <!-- A non-interactive version with potential -->
 <!-- syntax highlighting from Prism           -->
 <xsl:template match="program" mode="code-inclusion">

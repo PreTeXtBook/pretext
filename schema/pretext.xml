@@ -921,7 +921,11 @@
             <code>
             Verbatim =
                 element c {text} |
-                Email
+                Email |
+                element pf {
+                    attribute language {text}?,
+                    text
+                }
             </code>
         </fragment>
 

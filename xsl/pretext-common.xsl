@@ -8120,7 +8120,7 @@ Book (with parts), "section" at level 3
 <!-- Determine programming language to use. First choice is @language     -->
 <!-- on current element. If that is not available, check docinfo default. -->
 <!-- "exercise" might be a Runestone interactive (programming) exercise.  -->
-<xsl:template match="program" mode="get-programming-language">
+<xsl:template match="program|pf" mode="get-programming-language">
     <xsl:call-template name="get-program-attr-or-default">
         <xsl:with-param name="attr" select="'language'"/>
     </xsl:call-template>
@@ -8155,7 +8155,7 @@ Book (with parts), "section" at level 3
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of listings name comes out -->
-<xsl:template match="program" mode="listings-language">
+<xsl:template match="program|pf" mode="listings-language">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
@@ -8166,7 +8166,7 @@ Book (with parts), "section" at level 3
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of prism name comes out -->
-<xsl:template match="program" mode="prism-language">
+<xsl:template match="program|pf" mode="prism-language">
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>

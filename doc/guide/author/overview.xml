@@ -188,7 +188,7 @@
         <idx>program</idx>
         <idx>console</idx>
 
-        <p>If you are writing about computer science, or more general scientific or engineering topics, you may wish to include sample computer programs, or command-line sessions.  A <tag>program</tag> will contain a complete computer program, or a portion of the code from a program.  Some <tag>program</tag> can execute in an online output format, while others are both editable and executable.  This behavior depends on the language used and the host employed.  A <tag>console</tag> holds a command-line session.  These elements feature monospace fonts, preservation of whitespace, and syntax highlighting.  These may also be placed in a <tag>listing</tag> to be more prominent, or as the target of a cross-reference.  See <xref ref="topic-program"/> for details.</p>
+        <p>If you are writing about computer science, or more general scientific or engineering topics, you may wish to include sample computer programs, or command-line sessions.  A <tag>program</tag> will contain a complete computer program, or a portion of the code from a program, while a <tag>pf</tag> (<q>program fragment</q>) will display a chunk of code inline with the text.  Some <tag>program</tag> can execute in an online output format, while others are both editable and executable.  This behavior depends on the language used and the host employed.    A <tag>console</tag> holds a command-line session.  These elements feature monospace fonts, preservation of whitespace, and syntax highlighting.  These may also be placed in a <tag>listing</tag> to be more prominent, or as the target of a cross-reference.  See <xref ref="topic-program"/> for details.</p>
     </section>
 
     <section xml:id="overview-worksheet">
