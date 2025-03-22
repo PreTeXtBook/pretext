@@ -3544,6 +3544,12 @@ def _parse_runestone_services(et):
 
     return (rs_js, rs_css, rs_cdn_url, rs_version)
 
+# Update stringparams with Runestone Services information
+def _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version):
+    stringparams["rs-js"] = rs_js
+    stringparams["rs-css"] = rs_css
+    stringparams["rs-version"] = rs_version
+
 # A helper function to query the latest Runestone
 # Services file, while failing gracefully
 
@@ -3595,9 +3601,7 @@ def _runestone_services(stringparams, ext_rs_methods):
         rs_version = "dev"
         services_xml = None
         # Return, plus side-effect
-        stringparams["rs-js"] = rs_js
-        stringparams["rs-css"] = rs_css
-        stringparams["rs-version"] = rs_version
+        _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
         return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
     # Otherwise, we have a URL pointing to the Runestone server/CDN
@@ -4009,14 +4013,36 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # names for scratch directories
     tmp_dir = get_temporary_directory()
 
+    # Two primary options for runestone services
+    # 1. Grab latest version and store into _static
+    #    quick and dirty build will with option 1 will try to use exising _static files
+    # 2. Rely on links to CDN copies
+
     pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
     include_static_files = get_publisher_variable(pub_vars, 'portable-html') != "yes"
 
     if include_static_files:
-        # interrogate Runestone server (or debugging switches) and populate
-        # NB: stringparams is augmented with Runestone Services information
-        _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
-    else:
+        # If quick and dirty, check for existing _static files
+        add_runestone_services = True
+        if "html.quick-dirty" in stringparams:
+            try:
+                services_record_files = os.path.join(dest_dir, "_static", "_runestone-services.xml")
+                with open(services_record_files, 'r') as f:
+                    services_xml = f.read()
+                services = ET.fromstring(services_xml)
+                rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
+                _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
+                log.info("Quick and dirty HTML is using old Runestone Services. Delete _static/_runestone-services.xml from output to update Runestone.")
+                add_runestone_services = False
+            except:
+                log.info("Quick and dirty HTML failed to use old Runestone Services. Will download Runestone.")
+
+        if add_runestone_services:
+            # interrogate Runestone server (or debugging switches) and populate
+            # NB: stringparams is augmented with Runestone Services information
+            _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
+
+    else:  # Options 2 - CDN RS services
         # even if we don't need static files, we need to set stringparams for
         # Runestone Services information.
         _cdn_runestone_services(stringparams, ext_rs_methods)
@@ -4032,17 +4058,18 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     else:
         extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
 
-    # place managed directories - some of these (Asymptote HTML) are
-    # consulted during the XSL run and so need to be placed beforehand
-    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    if "html.quick-dirty" not in stringparams:
+        # place managed directories - some of these (Asymptote HTML) are
+        # consulted during the XSL run and so need to be placed beforehand
+        copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     if include_static_files:
         # Copy js and css, but only if not building portable html
         # place JS in scratch directory
         copy_html_js(tmp_dir)
 
-        # build or copy theme
-        build_or_copy_theme(xml, pub_vars, tmp_dir)
+        if "html.quick-dirty" not in stringparams:
+            build_or_copy_theme(xml, pub_vars, tmp_dir)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
@@ -4951,8 +4978,7 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
 
 
 def copy_html_js(work_dir):
-    '''Copy all necessary CSS and JS into working directory'''
-
+    '''Copy all necessary JS into working directory'''
     # Place support files where expected.
     # We are not careful about placing only modules that are needed, all are copied.
     js_src = os.path.join(get_ptx_path(), "js")
