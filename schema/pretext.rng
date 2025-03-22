@@ -3921,6 +3921,12 @@
         <text/>
       </element>
       <ref name="Email"/>
+      <element name="pf">
+        <optional>
+          <attribute name="language"/>
+        </optional>
+        <text/>
+      </element>
     </choice>
   </define>
   <define name="Group" combine="choice">

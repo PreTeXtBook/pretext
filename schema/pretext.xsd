@@ -3355,9 +3355,15 @@
     <xs:choice>
       <xs:element ref="c"/>
       <xs:element ref="email"/>
+      <xs:element ref="pf"/>
     </xs:choice>
   </xs:group>
   <xs:element name="c" type="xs:string"/>
+  <xs:element name="pf">
+    <xs:complexType mixed="true">
+      <xs:attribute name="language"/>
+    </xs:complexType>
+  </xs:element>
   <xs:group name="Group">
     <xs:choice>
       <xs:choice>

@@ -1546,7 +1546,11 @@
             
             Verbatim =
                 element c {text} |
-                Email
+                Email |
+                element pf {
+                    attribute language {text}?,
+                    text
+                }
             
             Group |=
                 element abbr {TextSimple} |
