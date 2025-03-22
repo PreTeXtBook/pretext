@@ -3160,7 +3160,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <pi:pub-attribute name="pageref" options="yes no" legacy-stringparam="latex.pageref"/>
         <pi:pub-attribute name="draft" default="no" options="yes" legacy-stringparam="latex.draft"/>
         <pi:pub-attribute name="open-odd" default="no" options="add-blanks skip-pages"/>
-        <pi:pub-attribute name="latex-style" default="" options="AIM chaos CLP dyslexic-font guide amsart tf elsevier ejc"/>
+        <pi:pub-attribute name="latex-style" default="" options="AIM chaos CLP dyslexic-font guide amsart tf elsevier ejc texstyle"/>
         <page>
             <pi:pub-attribute name="bottom-alignment" default="ragged" options="flush"/>
         </page>
