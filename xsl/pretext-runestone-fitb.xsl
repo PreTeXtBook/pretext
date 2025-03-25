@@ -81,9 +81,7 @@
     <div class="ptx-runestone-container">
         <div class="runestone">
             <div data-component="fillintheblank" class="fillintheblank" style="visibility: hidden;">
-                <xsl:attribute name="id">
-                    <xsl:value-of select="$the-id"/>
-                </xsl:attribute>
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <script type="application/json">
                     <xsl:text>{&#xa;</xsl:text>
                     <!-- A seed is provided to generate consistent static content -->
