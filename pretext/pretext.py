@@ -1124,6 +1124,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     # Spawn a new process running a local html.server
     import subprocess
     import random
+    import sys
     # Try a standard port and if it fails, try a random port
     port = 8888
     looking_for_port = True
@@ -1134,7 +1135,12 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
             numAttempt = numAttempt + 1
             log.info(f"Opening subprocess http.server with port={port}")
             # -u so that stdout and stderr are not cached
-            server = subprocess.Popen(["python", "-u", "-m", "http.server", f"{port}", "-d", tmp_dir], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            server = subprocess.Popen(
+                [sys.executable, "-u", "-m", "http.server", f"{port}", "-d", tmp_dir],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
             # Check if terminated. Allow 1 second to start-up.
             try:
                 result = server.wait(1)
