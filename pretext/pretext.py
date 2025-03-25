@@ -2604,13 +2604,10 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                 image_url = image_element.get("source")
                 image_url_parsed = urllib.parse.urlparse(image_url)
                 source_filename = os.path.basename(image_url_parsed.path)
-#                find_ext = re.search(r"\.([a-zA-Z0-9]+)$",source_filename)
-#                source_ext = find_ext.group(0)
                 source_ext = re.search(r"\.([a-zA-Z0-9]+)$",source_filename).group(0)
                 if source_ext:
                     image_filename = f'mom-{problem}-{count}{source_ext}'
-                    if ( source_ext.upper() == ".BMP" ):
-                        log.info(f'BMP file found in MOM {problem}. This will not work for LaTeX/PDF.')
+                # uncertain this is necessary: MOM won't likely allow
                 else:
                     image_filename = f'mom-{problem}-{count}.{source_ext}'
                     log.info(f'No file name extension for MOM {problem} image {count}')
@@ -2654,7 +2651,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                     pngpath = os.path.join(dest_dir, pngname_ext)
 
                     # write out the embedded SVG to file
-                    with open(svgpath, "w") as svgfile:
+                    with open(svgpath, 'w', encoding='utf-8') as svgfile:
                         svgfile.write(svg_string)
                         svgfile.close()
 
@@ -2684,11 +2681,11 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                         if svg_width.group(2):
                             svg_units = svg_width.group(2).lower()
                             if svg_units=="mm":
-                                svg_scale = 178
+                                svg_scale = 158.8
                             elif svg_units=="cm":
-                                svg_scale = 18
+                                svg_scale = 15.88
                             elif svg_units=="in":
-                                svg_scale = 7
+                                svg_scale = 6.25
                             else:
                                 svg_scale = 600
                         imgwidthtag = min(100, round(100*int(svg_width.group(1)) / svg_scale))
