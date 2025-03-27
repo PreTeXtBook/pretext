@@ -2676,7 +2676,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
                     # Try to read the SVG width and set PreTeXt width based on document width assumptions
                     temp = svg_element.get('width')
-                    svg_width = re.search(r"([0-9]+)([a-zA-Z]*)",temp)
+                    svg_width = re.search(r"([0-9\.]+)([a-zA-Z]*)",temp)
                     if svg_width:
                         if svg_width.group(2):
                             svg_units = svg_width.group(2).lower()
@@ -2688,7 +2688,10 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                                 svg_scale = 6.25
                             else:
                                 svg_scale = 600
-                        imgwidthtag = min(100, round(100*int(svg_width.group(1)) / svg_scale))
+                            imgwidthtag = min(100, round(100*float(svg_width.group(1)) / svg_scale))
+                        else:
+                            # this condition should never happen: implies badly formed width element
+                            imgwidthtag = 100
                     else:
                         imgwidthtag = 100
                     svg_element.getparent().set("width", f"{imgwidthtag}%")
