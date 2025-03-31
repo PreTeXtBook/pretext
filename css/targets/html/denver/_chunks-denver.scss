@@ -184,7 +184,7 @@ $chunk-heading-font-size: 1.125em !default;
   }
 }
 
-// Keep heading inline for divisional exercises (the parent of the .exercise-like will have class .exercises).
-.exercises .exercise-like {
+// Keep heading inline for divisional exercises and all tasks (the parent of the .exercise-like will have class .exercises).
+.exercises .exercise-like, .task {
   @include inline-heading-mixin.heading;
 }
