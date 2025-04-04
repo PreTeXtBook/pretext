@@ -8957,64 +8957,85 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <c>example.doenetml</c>, then include this file
                     within your <pretext/> document using
                     <c>&lt;xi:include parse="text" href="path/to/example.doenetml"/&gt;</c>.
+                    Altenatively, you can enclose your DoenetML in a <c>CDATA</c>, as we do below.
                 </p>
 
                 <figure xml:id="figure-doenetml">
                     <caption>DoenetML example</caption>
-                    <!-- 2024-04-25: This exact interactive appears in the sample book, for testing on Rynestone. -->
+                    <!-- 2024-04-25: This exact interactive appears in the sample book, for testing on Runestone. -->
                     <!-- A @label is preferred, since it is required for use on Runestone -->
                     <interactive label="interactive-doenetml-example" platform="doenetml" width="100%" aspect="3:2">
                         <slate surface="doenetml">
-                            &lt;p&gt;
-                            Adjust the vectors &lt;m&gt;\vec u&lt;/m&gt;, &lt;m&gt;\vec v&lt;/m&gt;, and &lt;m&gt;\vec w&lt;/m&gt; in the
-                            left graph to visualize the areas calculated by
-                            &lt;m&gt;\det[\vec u\hspace{0.5em}\vec w]&lt;/m&gt;, &lt;m&gt;\det[\vec v\hspace{0.5em}\vec w]&lt;/m&gt;,
-                            and
-                            &lt;m&gt;\det[\vec u+\vec v\hspace{0.5em}\vec w]&lt;/m&gt;.
-                          &lt;/p&gt;
-                          &lt;setup&gt;&lt;line through=&quot;(0,0) $v&quot; name=&quot;vLine&quot;/&gt;&lt;math simplify  name=&quot;c&quot;&gt;$cv.x/$v.x&lt;/math&gt;&lt;/setup&gt;
-                          &lt;sideBySide&gt;
-                            &lt;graph xmin=&quot;-4&quot; ymin=&quot;-4&quot; xmax=&quot;16&quot; ymax=&quot;16&quot;&gt;
-                              &lt;m draggable=&quot;false&quot; anchor=&quot;(10,14)&quot;&gt;
-                                \det[\vec u\hspace{0.5em}\vec w],
-                                \det[\vec v\hspace{0.5em}\vec w]
-                              &lt;/m&gt;
-                              &lt;point name=&quot;u&quot; styleNumber=&quot;3&quot;&gt;
-                                (6,2)
-                                &lt;label&gt;&lt;m&gt;\vec u&lt;/m&gt;&lt;/label&gt;
-                              &lt;/point&gt;
-                              &lt;point name=&quot;w&quot; styleNumber=&quot;3&quot;&gt;
-                                (3,7)
-                                &lt;label&gt;&lt;m&gt;\vec w&lt;/m&gt;&lt;/label&gt;
-                              &lt;/point&gt;
-                              &lt;point name=&quot;uPlusV&quot; styleNumber=&quot;4&quot;&gt;
-                                (9,5)
-                                &lt;label&gt;&lt;m&gt;\vec v&lt;/m&gt;&lt;/label&gt;
-                              &lt;/point&gt;
-                              &lt;polygon vertices=&quot;(0,0) $u $u+$w $w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;3&quot;/&gt;
-                              &lt;polygon vertices=&quot;$u $uPlusV $uPlusV+$w $u+$w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;4&quot;/&gt;
-                              &lt;lineSegment endpoints=&quot;(0,0) $uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
-                              &lt;lineSegment endpoints=&quot;$w $uPlusV+$w&quot; styleNumber=&quot;6&quot;/&gt;
-                            &lt;/graph&gt;
-                            &lt;graph xmin=&quot;-4&quot; ymin=&quot;-4&quot; xmax=&quot;16&quot; ymax=&quot;16&quot;&gt;
-                              &lt;m draggable=&quot;false&quot; anchor=&quot;(12,14)&quot;&gt;
-                                \det[\vec u+\vec v\hspace{0.5em}\vec w]
-                              &lt;/m&gt;
-                              &lt;polygon vertices=&quot;(0,0) $uPlusV $uPlusV+$w $w&quot; filled draggable=&quot;false&quot; styleNumber=&quot;2&quot;/&gt;
-                              &lt;point draggable=&quot;false&quot; styleNumber=&quot;3&quot;&gt;
-                                $w
-                                &lt;label&gt;&lt;m&gt;\vec w&lt;/m&gt;&lt;/label&gt;
-                              &lt;/point&gt;
-                              &lt;point draggable=&quot;false&quot; styleNumber=&quot;4&quot;&gt;
-                                $uPlusV
-                                &lt;label&gt;&lt;m&gt;\vec u+\vec v&lt;/m&gt;&lt;/label&gt;
-                              &lt;/point&gt;
-                              &lt;lineSegment endpoints=&quot;(0,0) $u&quot; styleNumber=&quot;6&quot;/&gt;
-                              &lt;lineSegment endpoints=&quot;$u $uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
-                              &lt;lineSegment endpoints=&quot;$w $w+$u&quot; styleNumber=&quot;6&quot;/&gt;
-                              &lt;lineSegment endpoints=&quot;$w+$u $w+$uPlusV&quot; styleNumber=&quot;6&quot;/&gt;
-                            &lt;/graph&gt;
-                          &lt;/sideBySide&gt;
+                            <![CDATA[
+                            <p>
+                                Adjust the vectors <m>\vec u</m>, <m>\vec v</m>, and <m>\vec w</m> in the left
+                                graph to visualize the areas calculated by
+                                <m>\det[\vec u\hspace{0.5em}\vec w]</m>, <m>\det[\vec v\hspace{0.5em}\vec w]</m>,
+                                and
+                                <m>\det[\vec u+\vec v\hspace{0.5em}\vec w]</m>.
+                            </p>
+                            <setup>
+                                <line through="(0,0) $v" name="vLine" />
+                                <math simplify="true" name="c">$cv.x/$v.x</math>
+                            </setup>
+                            <sideBySide>
+                                <graph xmin="-4" ymin="-4" xmax="16" ymax="16">
+                                    <m draggable="false" anchor="(10,14)">
+                                        \det[\vec u\hspace{0.5em}\vec w],
+                                        \det[\vec v\hspace{0.5em}\vec w]
+                                    </m>
+                                    <point name="u" styleNumber="3">
+                                        (6,2)
+                                        <label><m>\vec u</m></label>
+                                    </point>
+                                    <point name="w" styleNumber="3">
+                                        (3,7)
+                                        <label><m>\vec w</m></label>
+                                    </point>
+                                    <point name="uPlusV" styleNumber="4">
+                                        (9,5)
+                                        <label><m>\vec v</m></label>
+                                    </point>
+                                    <polygon
+                                        vertices="(0,0) $u $u+$w $w"
+                                        filled="true"
+                                        draggable="false"
+                                        styleNumber="3"
+                                    />
+                                    <polygon
+                                        vertices="$u $uPlusV $uPlusV+$w $u+$w"
+                                        filled="true"
+                                        draggable="false"
+                                        styleNumber="4"
+                                    />
+                                    <lineSegment endpoints="(0,0) $uPlusV" styleNumber="6" />
+                                    <lineSegment endpoints="$w $uPlusV+$w" styleNumber="6" />
+                                </graph>
+                                <graph xmin="-4" ymin="-4" xmax="16" ymax="16">
+                                    <m draggable="false" anchor="(12,14)">
+                                        \det[\vec u+\vec v\hspace{0.5em}\vec w]
+                                    </m>
+                                    <polygon
+                                        vertices="(0,0) $uPlusV $uPlusV+$w $w"
+                                        filled="true"
+                                        draggable="false"
+                                        styleNumber="2"
+                                    />
+                                    <point draggable="false" styleNumber="3">
+                                        $w
+                                        <label><m>\vec w</m></label>
+                                    </point>
+                                    <point draggable="false" styleNumber="4">
+                                        $uPlusV
+                                        <label><m>\vec u+\vec v</m></label>
+                                    </point>
+                                    <lineSegment endpoints="(0,0) $u" styleNumber="6" />
+                                    <lineSegment endpoints="$u $uPlusV" styleNumber="6" />
+                                    <lineSegment endpoints="$w $w+$u" styleNumber="6" />
+                                    <lineSegment endpoints="$w+$u $w+$uPlusV" styleNumber="6" />
+                                </graph>
+                            </sideBySide>
+                            ]]>
                         </slate>
                     </interactive>
                 </figure>
