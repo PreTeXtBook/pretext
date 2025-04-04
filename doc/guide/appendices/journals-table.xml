@@ -7,12 +7,40 @@
       <cell>Code</cell>
     </row>
     <row bottom="minor">
+      <cell>AMS journals</cell>
+      <cell>ams</cell>
+    </row>
+    <row bottom="minor">
+      <cell>Elsevier journals</cell>
+      <cell>elsevier</cell>
+    </row>
+    <row bottom="minor">
+      <cell>Springer Nature journals</cell>
+      <cell>springer-nature</cell>
+    </row>
+    <row bottom="minor">
+      <cell>Taylor Francis journals</cell>
+      <cell>taylor-francis</cell>
+    </row>
+    <row bottom="minor">
+      <cell>Annals of Pure and Applied Logic</cell>
+      <cell>ann-pure-appl-logic</cell>
+    </row>
+    <row bottom="minor">
       <cell>Bulletin (New Series) of the American Mathematical Society</cell>
       <cell>bull-amer-math-soc</cell>
     </row>
     <row bottom="minor">
       <cell>Conformal Geometry and Dynamics</cell>
       <cell>conform-geom-dyn</cell>
+    </row>
+    <row bottom="minor">
+      <cell>Electronic Journal of Combinatorics</cell>
+      <cell>electron-j-combin</cell>
+    </row>
+    <row bottom="minor">
+      <cell>Experimental Mathematics</cell>
+      <cell>exp-math</cell>
     </row>
     <row bottom="minor">
       <cell>Journal of Algebraic Geometry</cell>
@@ -32,19 +60,11 @@
     </row>
     <row bottom="minor">
       <cell>Proceedings of the American Mathematical Society</cell>
-      <cell>Proc-Amer-Math-Soc</cell>
+      <cell>proc-amer-math-soc</cell>
     </row>
     <row bottom="minor">
       <cell>Representation Theory</cell>
       <cell>represent-theory</cell>
-    </row>
-    <row bottom="minor">
-      <cell>St. Petersburg Mathematical Journal</cell>
-      <cell>st-petersburg-math-j</cell>
-    </row>
-    <row bottom="minor">
-      <cell>Sugaku Expositions</cell>
-      <cell>sugaku-expositions</cell>
     </row>
     <row bottom="minor">
       <cell>Theory of Probability and Mathematical Statistics</cell>
@@ -53,26 +73,6 @@
     <row bottom="minor">
       <cell>Transactions of the American Mathematical Society</cell>
       <cell>trans-ams</cell>
-    </row>
-    <row bottom="minor">
-      <cell>Transactions of the Moscow Mathematical Society</cell>
-      <cell>trans-moscow-math-soc</cell>
-    </row>
-    <row bottom="minor">
-      <cell>General - All other AMS journals</cell>
-      <cell>ams-general</cell>
-    </row>
-    <row bottom="minor">
-      <cell>Electronic Journal of Combinatorics</cell>
-      <cell>electron-j-combin</cell>
-    </row>
-    <row bottom="minor">
-      <cell>Experimental Mathematics</cell>
-      <cell>exp-math</cell>
-    </row>
-    <row bottom="minor">
-      <cell>Annals of Pure and Applied Logic</cell>
-      <cell>ann-pure-appl-logic</cell>
     </row>
   </tabular>
 </table>

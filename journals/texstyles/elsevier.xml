@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<texstyle>
+    <metadata>
+        <code>elsevier</code>
+        <name>Eslevier journals</name>
+        <publisher>Elsevier</publisher>
+        <!-- Each file element of required files should have an href to a location where wget can download the file.  @compression describes how the file is compressed (or None).  @path gives the path to the file relative to the extracted resource.  The file at this path will be copied to the build directory before running xelatex/pdflatex -->
+        <!--<required-files>
+            <file href="https://resource-cms.springernature.com/springer-cms/rest/v1/content/18782940/data/v13.zip" compression="zip" path="sn-article-template/sn-jnl.cls"/>
+        </required-files>-->
+        <latex-engine command="pdflatex"/>
+        <!--<bibliography-style>spbasic</bibliography-style>-->
+
+        <style-author>Oscar Levin</style-author>
+        <date>2025-03-21</date>
+    </metadata>
+
+<documentclass name="elsarticle"/>
+
+
+
+    <ptx-preamble/>
+
+
+    <begin-document/>
+
+    <frontmatter env="frontmatter">
+
+        <title cmd="title">
+            <arg><ptx-title/></arg>
+        </title>
+
+
+        <author-list>
+            <author cmd="author">
+                <arg>
+                    <ptx-personname/>
+                    <fnmark cmd="fnref" arg="unique-id"/>
+                </arg>
+            </author>
+            <fntext cmd="fntext" opt="unique-id">
+                <arg><ptx-support/></arg>
+            </fntext>
+            <affiliation cmd="affiliation">
+                <arg><ptx-affiliation sep=", "/></arg>
+            </affiliation>
+            <email cmd="ead">
+                <arg><ptx-email/></arg>
+            </email>
+        </author-list>
+
+
+        <abstract env="abstract">
+            <arg><ptx-abstract/></arg>
+        </abstract>
+
+        <keywords env="keyword">
+            <keywords authority="author" sep=" \sep "/>
+
+            <keywords authority="msc" cmd="MSC" variant-style="opt" sep=" \sep "/>
+        </keywords>
+
+    <!--<maketitle/>-->
+    </frontmatter>
+
+    <mainmatter/>
+
+
+    <acknowledgments heading="\section*{Acknowledgments}"/>
+
+
+    <appendices cmd="appendix"/>
+
+
+    <bibliography cmd="bibliography">
+        <arg><bib-file/></arg>
+    </bibliography>
+
+
+    <end-document/>
+</texstyle>
