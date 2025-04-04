@@ -4181,7 +4181,9 @@ def get_latex_style(xml, pub_file, stringparams):
     pub_latex_style = get_publisher_variable(pub_vars, "latex-style")
     if len(journal_name) > 0:
         journal_info = get_journal_info(journal_name)
-        latex_style = journal_info["latex-style"]
+        log.debug(f"Journal Info: {journal_info}")
+        stringparams["journal.code"] = journal_info.get("texstyle", "")
+        latex_style = journal_info.get("latex-style", "")
         if len(latex_style) == 0:
             msg = "The journal name {} in your publication file is invalid or does not correspond to a valid latex-style.  Using the default LaTeX style instead."
             log.warning(msg.format(journal_name))
@@ -5107,6 +5109,9 @@ def get_journal_info(journal_name):
     """
     Returns a dictionary of data for a journal based on
     a master list of journals in journals/journals.xml.
+
+    Arguments:
+    journal_name: The code name of the journal to look up, such as bull-amer-math-soc. This is the <code> element of the journals.xml file, and will usually agree with the name of the texstyle file.
     """
     journal_xml = os.path.join(get_ptx_path(), "journals", "journals.xml")
     log.debug("Reading list of journals in {}".format(journal_xml))
@@ -5118,11 +5123,22 @@ def get_journal_info(journal_name):
     except Exception as e:
         log.warning("The journal name {} specified in the publication file is not supported.".format(journal_name))
         return {"latex-style": ""}
-    keys = ["name", "code", "latex-style", "publisher"]
+    keys = ["name", "code", "publisher"]
     journal_info = {}
     for key in keys:
         if journal.find(key) is not None:
             journal_info[key] = journal.find(key).text
+    # Set the latex-style value.  This will either be the value of an attribute of "method", or should be "texstyle"
+    if journal.find("method") is not None and "latex-style" in journal.find("method").attrib:
+        journal_info["latex-style"] = journal.find("method").attrib["latex-style"]
+    else:
+        journal_info["latex-style"] = "texstyle"
+    # Finally, set the "texstyle" value, which will either be the "code" value or the value of the "texstyle" attribute of "method"
+    if journal.find("method") is not None and "texstyle" in journal.find("method").attrib:
+        journal_info["texstyle"] = journal.find("method").attrib["texstyle"]
+    else:
+        journal_info["texstyle"] = journal.find("code").text
+        log.debug("Using the journal code {} as the texstyle value.".format(journal_info["texstyle"]))
     return journal_info
 
 
