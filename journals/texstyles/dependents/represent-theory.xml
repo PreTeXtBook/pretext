@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<texstyle>
+    <metadata>
+        <code>represent-theory</code>
+        <name>Representation Theory</name>
+        <publisher>American Mathematical Society</publisher>
+        <extends>ams</extends>
+        <required-files>
+            <file name="ert-l.cls" href="https://www.ams.org/arc/journals/packages/ert/ert_amslatex/ert-l.cls" compression="none"/>
+        </required-files>
+        <style-author>Oscar Levin</style-author>
+        <date>2025-04-01</date>
+    </metadata>
+
+<!-- Override the document class.  Everything else is the same. -->
+    <documentclass name="ert-l"/>
+
+</texstyle>

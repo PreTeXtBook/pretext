@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<texstyle>
+    <metadata>
+        <code>math-comp</code>
+        <name>Mathematics of Computation</name>
+        <publisher>American Mathematical Society</publisher>
+        <extends>ams</extends>
+
+        <style-author>Oscar Levin</style-author>
+        <date>2025-04-01</date>
+    </metadata>
+
+<!-- Override the document class.  Everything else is the same. -->
+    <documentclass name="mcom-l"/>
+
+</texstyle>

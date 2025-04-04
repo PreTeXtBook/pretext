@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<texstyle>
+    <metadata>
+        <code>theory-probab-math-statist</code>
+        <name>Theory of Probability and Mathematical Statistics</name>
+        <publisher>American Mathematical Society</publisher>
+        <extends>ams</extends>
+        <required-files>
+            <file href="https://probability.knu.ua/tims/tpms_amslatex.zip" compression="zip" path="tpms_amslatex/tpms-l.cls"/>
+        </required-files>
+        <style-author>Oscar Levin</style-author>
+        <date>2025-03-12</date>
+    </metadata>
+
+<!-- Override the document class.  Everything else is the same. -->
+    <documentclass name="tpms-l"/>
+
+</texstyle>
