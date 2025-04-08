@@ -3138,7 +3138,7 @@ TEST_CASE( "Test the add function" ) {
     <idx>matching function types</idx>
     <statement>
       <p>
-        Sort the following functions into their correct categories. [Ed. As of 2024-10-07 the following problem is not expected to render and function properly.  It is here to aid development work.  Nothing to see here.]
+        Sort the following functions into their correct categories. 
       </p>
     </statement>
     <feedback>
