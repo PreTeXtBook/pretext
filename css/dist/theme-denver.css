@@ -1534,21 +1534,26 @@ summary.knowl__link {
   border-bottom: none;
   display: none;
 }
-.exercises .exercise-like > .heading:first-child {
+.exercises .exercise-like > .heading:first-child,
+.task > .heading:first-child {
   display: inline;
   line-height: initial;
   border-bottom: 0;
 }
-.exercises .exercise-like > .heading:first-child:after {
+.exercises .exercise-like > .heading:first-child:after,
+.task > .heading:first-child:after {
   content: "\2009";
 }
-.exercises .exercise-like > .heading:first-child + .para {
+.exercises .exercise-like > .heading:first-child + .para,
+.task > .heading:first-child + .para {
   display: inline;
 }
-.exercises .exercise-like > .heading:first-child + .introduction {
+.exercises .exercise-like > .heading:first-child + .introduction,
+.task > .heading:first-child + .introduction {
   display: inline;
 }
-.exercises .exercise-like > .heading:first-child + .introduction > .para:first-child {
+.exercises .exercise-like > .heading:first-child + .introduction > .para:first-child,
+.task > .heading:first-child + .introduction > .para:first-child {
   display: inline;
 }
 * {
