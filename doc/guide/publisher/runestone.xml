@@ -137,6 +137,11 @@
 
     <section xml:id="sec-the-author-interface">
         <title>The Author Interface</title>
+        <subsection xml:id="author-interface-basics">
+            <title>Author Interface Basics</title>
+            <p>
+                The author interface is a web-based interface that allows you to manage your book on Runestone Academy.  It is designed to be easy to use and provides a number of features to help you manage your book.
+            </p>
         <p>
             The author interface is available at <url href="https://author.runestone.academy" visual="author.runestone.academy"/>.  You can log in with your Runestone account.  Once you have logged in you will see a list of your books.  You can click on the book title to to edit metadata about your book.  The author interface is also where you can build a new version of your book, see some analytics about your book, and publish your book to the Runestone Academy servers.  You can even get an anonymized data set from a large sample of the classes using your book.
         </p>
@@ -172,6 +177,38 @@
             <image source="edit-metadata.png" width="100%">
                 <description>Editing metatdata about a book</description>
             </image>
-        </figure>        
+        </figure>    
+        </subsection>
+        <subsection xml:id="author-interface-advanced">
+            <title>Advanced Author Interface</title>
+            <p>
+                The author interface also provides a number of advanced features to address the following scenarios:
+                <ul>
+                    <li>Your repository and your <tag>document-id</tag> do not match.</li>
+                    <li>Your repository is structured so that your  <c>project.ptx</c> file is not in the root of your repository.</li>
+                    <li>You have a single repository with more than one book.</li>
+                    <li>You want to produce multiple books from a single repository using the PreTeXt versions feature.</li>
+                </ul>
+            </p>
+            <p>
+                If your repository name and your document-id do not match you will need to fill out the the path to an existing repo field so that it matches what you checked out from github.
+            </p>
+            <p>
+                If your repository is structured so that your project.ptx file is not in the root of your repository you will need to configure the path to the project.ptx file.  This is done by filling in the field for the path to the project.ptx file.  This should be a relative path from the root of your repository to the project.ptx file.
+            </p>
+            <p>
+                If you have a single repository with more than one book you will need to do the following steps.
+                <ol>
+                    <li>Create a new book for book number 1 on the main author page using the Github URL to your repository.</li>
+                    <li>Make sure you have a target in your project.ptx file for this book and it is configured to use the publication file you created for Runestone.</li>
+                    <li>Edit the metadata for your book in case any of the other advanced configuration situtations apply.</li>
+                    <li>To create book number 2 on the main author page use the existing repo field.  This should be <c>/books/&lt;your-repo-name&gt;</c>.  Leave the Github URL field blank.</li>
+                    <li>Depending on how your repository is structured you may need to make sure you have a second target for the second book with a different output folder configured and a different document-id.  Alternatively you may have an entirely separate <c>project.ptx</c> file for the second book in a different folder of your repository.  In this case you need to fill in the field for the path to the project.ptx file. </li>
+                </ol>
+            </p>
+            <p>
+                If you have a single repository and want to build two books using different versions then the process is the same as above, but you will need to have a second publisher file with the appropriate version information so that you will get a different output.  This includes using the <attr>component</attr> on the <tag>document-id</tag> element.  This will allow you to have two different books in the same repository with different document-ids.
+            </p>
+        </subsection>
     </section>
 </chapter>
