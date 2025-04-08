@@ -4162,6 +4162,26 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
     )
     xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
+def assembly_internal(xml, pub_file, stringparams, method):
+    """A version of the assembly function above that just returns the result tree instead of writing it to a file"""
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+    # support publisher file
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    # method dictates which type of exercises are produced
+    if method in ["static", "dynamic", "pg-problems"]:
+        stringparams["debug.assembly.exercise"] = method
+    elif method == "version":
+        stringparams["assembly.version-only"] = "yes"
+    else:
+        log.error("assembly method {} not recognized".format(method))
+    # use the right xsl template
+    extraction_xslt = os.path.join(
+        get_ptx_xsl_path(), "utilities/pretext-enhanced-source.xsl"
+    )
+    log.debug("converting {} to enhanced (pre-processed) PreTeXt source for internal use".format(xml))
+    return xsltproc(extraction_xslt, xml, None, None, stringparams)
 
 #####################
 # Conversion to LaTeX
@@ -4434,6 +4454,8 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     try:
         if result:
             result_tree.write_output(result)
+        # Regardless, return the result_tree, which might be useful for the calling function
+        return result_tree
     except LookupError as e:
         root_cause = str(e)
         msg = "".join(
