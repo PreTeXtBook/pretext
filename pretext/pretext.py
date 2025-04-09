@@ -4129,6 +4129,7 @@ def revealjs(
 # AKA the aftermath of the pre-processor
 # Parameterized by static v. dynamic exercises
 
+# N.B. Keep this in-sync with the `assembly_internal` method
 
 def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
     """Convert XML source to pre-processed PreTeXt in destination directory"""
@@ -4162,8 +4163,12 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
     )
     xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
+# lxml element tree as return value. for use internally
+
+# N.B. Keep this in-sync with the `assembly` method
+
 def assembly_internal(xml, pub_file, stringparams, method):
-    """A version of the assembly function above that just returns the result tree instead of writing it to a file"""
+    """Assembled source as an lxml element tree, provided as a return value"""
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
     # support publisher file
@@ -4332,6 +4337,14 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     file, and it may *also simultaneously* produce many files to be
     collected in the "output_dir" directory.  An example is in the
     formation of preview images for interactives.
+
+    Return: an lxml element tree data structure of the result.
+    This is whatever the stylesheet creates in the file whose name
+    is given by the `result` argument.  It could be empty, or it might
+    be only a partial result of the stylesheet, since the stylesheet
+    could independently produce multiple files with fixed names.  This
+    return value may be useful to consumers of this module (and that
+    is the intent).  Normally the return value is ignored.
     """
     import threading  # Thread()
 
