@@ -9791,6 +9791,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="converter-blurb-html-no-date"/>
         <html>
             <xsl:call-template name="language-attributes"/>
+            <xsl:attribute name="class"/>
             <head>
                 <!-- grab the contents every iframe gets -->
                 <xsl:copy-of select="$file-wrap-iframe-head-cache"/>
