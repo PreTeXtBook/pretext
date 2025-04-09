@@ -4150,7 +4150,7 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
         log.error("assembly method {} not recognized".format(method))
     # "extra_xsl" would be silly in this context (?)
     extraction_xslt = os.path.join(
-        get_ptx_xsl_path(), "utilities/pretext-enhanced-source.xsl"
+        get_ptx_xsl_path(), "utilities", "pretext-enhanced-source.xsl"
     )
     # form output filename based on source filename,
     # unless an  out_file  has been specified
@@ -4183,7 +4183,7 @@ def assembly_internal(xml, pub_file, stringparams, method):
         log.error("assembly method {} not recognized".format(method))
     # use the right xsl template
     extraction_xslt = os.path.join(
-        get_ptx_xsl_path(), "utilities/pretext-enhanced-source.xsl"
+        get_ptx_xsl_path(), "utilities", "pretext-enhanced-source.xsl"
     )
     log.debug("converting {} to enhanced (pre-processed) PreTeXt source for internal use".format(xml))
     return xsltproc(extraction_xslt, xml, None, None, stringparams)
