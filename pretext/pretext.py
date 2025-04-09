@@ -2536,27 +2536,22 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     import urllib.parse
-    import PIL.Image
+    import PIL.Image # save images provided by MOM
     import shutil
+    import asyncio # for playwright
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
     try:
-        import requests  # MyOpenMath server
+        import requests  # to access MyOpenMath server
     except ImportError:
         global __module_warning
         raise ImportError(__module_warning.format("requests"))
     try:
-        subprocess.run(["inkscape","--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        ink_avail = True
-    except FileNotFoundError:
-        log.info('Inkscape not found. Trying pyMuPDF.')
-        ink_avail = False
-        try:
-            import pymupdf # for svg to pdf conversion
-        except ImportError:
-            raise ImportError(__module_warning.format("pyMuPDF"))
+        import playwright.async_api # for conversion to PDF and PNG
+    except ImportError:
+        raise ImportError(__module_warning.format("playwright"))
 
     log.info(
         "downloading MyOpenMath static problems from {} for placement in {}".format(
@@ -2617,9 +2612,11 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                 try:
                     imageresp = requests.get(image_url, stream=True, timeout=10)
                     imageresp.raise_for_status()
+                    # save the image file
                     with open(image_path, "wb") as imagefile:
                         imageresp.raw.decode_content = True
                         shutil.copyfileobj(imageresp.raw, imagefile)
+                    # find the width of the image for setting PreTeXt width tag
                     try:
                         img = PIL.Image.open(image_path)
                         imgwidthtag = min(100, round(img.width / 6))
@@ -2655,31 +2652,74 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                         svgfile.write(svg_string)
                         svgfile.close()
 
-                    # convert SVG to PDF and PNG
-                    if ink_avail:
-                        svg_file = open(svgpath)
-                        result = subprocess.run(["inkscape","--export-type=pdf",svgpath], capture_output=True, text=True)
-                        if result.returncode != 0:
-                            log.error(f"Error converting image {svgname} to PDF: {result.returncode}")
-                            log.error(f"{result.stderr}")
-                        result = subprocess.run(["inkscape","--export-type=png",svgpath], capture_output=True, text=True)
-                        if result.returncode != 0:
-                            log.error(f"Error converting image {svgname} to PNG: {result.returncode}")
-                            log.error(f"{result.stderr}")
-                    else:
-                        svg = pymupdf.open(svgpath)
-                        pdfbytes = svg.convert_to_pdf()
-                        pdf = pymupdf.open("pdf", pdfbytes)
-                        pdf.save(pdfpath)
-                        png = svg.load_page(0).get_pixmap(dpi=300, alpha=True)
-                        png.save(pngpath)
+                    # SVG width and height needed for PDF conversion and PreTeXt <image>
+                    # Note that these are assumed to be present, if not, fix the SVG image in MOM
+                    svg_width = svg_element.get('width')
+                    svg_height = svg_element.get('height')
+                    svg_viewbox = svg_element.get('viewBox')
+#                    svg_width_parsed = re.search(r"([0-9\.]+)([a-zA-Z]*)",svg_width)
+                    svg_width_parsed = re.search(r"([0-9\.]+)([a-zA-Z%]*)",svg_width)
+                    svg_height_parsed = re.search(r"([0-9\.]+)([a-zA-Z%]*)",svg_height)
+                    if svg_width:
+                        svg_units = svg_width_parsed.group(2).lower()
+                        # assume that width and height have the same units
+
+                    width = svg_width
+                    height = svg_height
+                    if svg_units == '%':
+                        # if height or width is in percentage fall back to viewBox
+                        height = None
+                        width = None
+                    elif svg_units == 'pt':
+                        # playwright doesn't support pt units, transform to px
+                        height = str(float(svg_height_parsed.group(1)) / 72 * 96) + 'px'
+                        width = str(float(svg_width_parsed.group(1)) / 72 * 96) + 'px'
+
+                    if (not height or not width) and svg_viewBox:
+                        viewBox_values = svg_viewbox.split(' ')
+                        height = str(float(viewBox_values[3]) - float(viewBox_values[1])) + 'px'
+                        width = str(float(viewBox_values[2]) - float(viewBox_values[0])) + 'px'
+
+                    async def write_pdf(svg_string):
+                        # convert SVG to PDF and PNG
+                        static_html = f'''
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="utf-8" />
+                            <meta name="viewport" content="width=device-width,initial-scale=1" />
+                            <style>
+                            /* prevent page breaks after svg */
+                            * {{
+                                margin:0;
+                                padding:0;
+                                white-space:nowrap;
+                                overflow: hidden;
+                                line-height: 0;
+                            }}
+                            </style>
+                            </head>
+                        <body>
+                        {svg_string}
+                        </body>
+                        </html>'''
+
+                        async with playwright.async_api.async_playwright() as pw:
+                            browser = await pw.chromium.launch()
+                            page = await browser.new_page()
+                            await page.set_content(static_html)
+                            await page.pdf(path=pdfpath, width=width, height=height)
+                            await page.locator("svg").screenshot(path=pngpath,scale="device")
+
+                            await browser.close()
+
+                    # convert to PDF
+                    asyncio.get_event_loop().run_until_complete(write_pdf(svg_string))
 
                     # Try to read the SVG width and set PreTeXt width based on document width assumptions
-                    temp = svg_element.get('width')
-                    svg_width = re.search(r"([0-9\.]+)([a-zA-Z]*)",temp)
-                    if svg_width:
-                        if svg_width.group(2):
-                            svg_units = svg_width.group(2).lower()
+                    if svg_width_parsed:
+                        if svg_units:
+                            
                             if svg_units=="mm":
                                 svg_scale = 158.8
                             elif svg_units=="cm":
@@ -2688,7 +2728,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                                 svg_scale = 6.25
                             else:
                                 svg_scale = 600
-                            imgwidthtag = min(100, round(100*float(svg_width.group(1)) / svg_scale))
+                            imgwidthtag = min(100, round(100*float(svg_width_parsed.group(1)) / svg_scale))
                         else:
                             # this condition should never happen: implies badly formed width element
                             imgwidthtag = 100
