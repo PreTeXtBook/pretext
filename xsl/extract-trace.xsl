@@ -58,7 +58,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="text" select="code" />
         </xsl:call-template>
     </xsl:variable>
-    <xsl:value-of select="str:replace($code-with-newlines, '&#xa;', '\n')"/>
+    <xsl:variable name="removed-carriage-returns">
+        <xsl:value-of select="str:replace($code-with-newlines, '&#xd;', '')" />
+    </xsl:variable>
+    <xsl:value-of select="str:replace($removed-carriage-returns, '&#xa;', '\n')"/>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
