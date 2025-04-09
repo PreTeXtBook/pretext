@@ -4323,6 +4323,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="." mode="runestone-to-interactive"/>
             </xsl:if>
+            <!-- Include hints. Solution/answer get special handling       -->
+            <xsl:apply-templates select="." mode="solutions-div">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
+            </xsl:apply-templates>
         </xsl:when>
         <!-- Finally nothing too exceptional, do the usual drill. Consider -->
         <!-- structured versus unstructured, non-interactive.              -->
