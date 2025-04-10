@@ -1,16 +1,15 @@
-/*! Theme: greeley */
-// Theme designed for short articles (i.e., research papers).
+/*! Theme: boulder */
+// Theme designed for short articles (i.e., research papers) or course documents.
+// Minimal navigation bar; there is likely only one html page per document.
 
 // Current maintainer: Oscar Levin
 
 // Variables used by theme. CSSBuilder overrides these by prepending
 // different definitions for these variables to this file before the theme
 // is compiled.
-$palette: 'grays' !default;
-$primary-color: null !default;
-$secondary-color: null !default;
-$primary-color-dark: #829ab1 !default;
-$background-color-dark: #23241f !default;
+$primary-color: hsl(270, 40%, 15%) !default;
+$primary-color-dark: hsl(270, 40%, 70%) !default;
+$background-color-dark: hsl(270, 5%, 5%) !default;
 
 @use "sass:map";
 
@@ -22,7 +21,7 @@ $background-color-dark: #23241f !default;
 @use '../denver/parts-paper';
 //@use 'shell';
 @use 'customization';
-@use 'chunks-greeley';
+@use '../greeley/chunks-greeley';
 
 //@use 'heading-tweaks';
 

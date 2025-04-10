@@ -1,0 +1,33 @@
+//$color: var(--primary-color) !default;
+//$text-color: white !default;
+
+.hide-type .codenumber:not(:empty)::after {
+    content: ". ";
+}
+
+.ptx-masthead {
+    display: none;
+}
+
+.ptx-navbar {
+    border-top: none;
+}
+
+.ptx-page {
+    margin-top: 36px;
+    margin-bottom: 36px;
+}
+
+.button.disabled {
+    display: none;
+}
+
+//.ptx-toc {
+//    padding-top:unset;
+//}
+
+//// Top heading followed by no content and then a subsection that starts with heading
+//section > .heading + section > .heading {
+//  margin-top: 0.5em;
+//}
+
