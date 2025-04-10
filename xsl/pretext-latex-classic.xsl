@@ -296,7 +296,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="email">
         <xsl:text>\\&#xa;</xsl:text>
-        <xsl:apply-templates select="email" />
+        <xsl:apply-templates select="email" mode="article-info"/>
     </xsl:if>
     <xsl:if test="following-sibling::author" >
         <xsl:text>&#xa;\and</xsl:text>
@@ -308,20 +308,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Preprocessor always puts Department, Institution, and Address          -->
 <!-- inside Affiliation. This just adds line breaks between them as needed. -->
 <xsl:template match="affiliation">
+    <xsl:param name="sep" select="'\\&#xa;'"/>
+    <xsl:param name="after"/>
     <xsl:if test="department">
-        <xsl:apply-templates select="department" />
+        <xsl:apply-templates select="department">
+            <xsl:with-param name="sep" select="$sep"/>
+        </xsl:apply-templates>
         <xsl:if test="department/following-sibling::*">
-            <xsl:text>\\&#xa;</xsl:text>
+            <xsl:value-of select="$sep"/>
         </xsl:if>
     </xsl:if>
     <xsl:if test="institution">
-        <xsl:apply-templates select="institution" />
+        <xsl:apply-templates select="institution">
+            <xsl:with-param name="sep" select="$sep"/>
+        </xsl:apply-templates>
         <xsl:if test="institution/following-sibling::*">
-            <xsl:text>\\&#xa;</xsl:text>
+            <xsl:value-of select="$sep"/>
         </xsl:if>
     </xsl:if>
     <xsl:if test="location">
-        <xsl:apply-templates select="location" />
+        <xsl:apply-templates select="location">
+            <xsl:with-param name="sep" select="$sep"/>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- always end with a new line, after the `after` param if passed -->
+    <xsl:value-of select="$after"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+
+<!-- override the default department[line] etc and line templates to use sep param -->
+<xsl:template match="department[line]|institution[line]|location[line]">
+    <xsl:param name="sep" select="'\\&#xa;'"/>
+    <xsl:apply-templates select="line">
+        <xsl:with-param name="sep" select="$sep"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="line">
+    <xsl:param name="sep" select="'\\&#xa;'"/>
+    <xsl:apply-templates/>
+    <xsl:if test="following-sibling::line">
+        <xsl:value-of select="$sep"/>
     </xsl:if>
 </xsl:template>
 
