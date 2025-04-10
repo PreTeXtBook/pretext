@@ -20,6 +20,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
 <publication>
+    <common>
+        <chunking level="1"/>
+    </common>
 
     <!-- Relative path, relative to "main" source file         -->
     <!-- This file name *must* be webwork-representations.xml, -->
