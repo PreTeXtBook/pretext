@@ -42,7 +42,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </latex>
 
     <!-- Relative path, relative to "main" source file -->
-    <source webwork-problems="webwork-representations.xml">
+    <source>
         <directories external="external" generated="generated"/>
     </source>
 

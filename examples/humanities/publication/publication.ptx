@@ -12,7 +12,7 @@
   <!-- Set where external assets and generated assets will be   -->
   <!-- stored or created.  Directories are relative to the main -->
   <!-- source PreTeXt file                                      -->
-  <source webwork-problems="../generated-assets/webwork/webwork-representations.ptx">
+  <source>
     <directories external="../assets" generated="../generated-assets"/>
   </source>
 

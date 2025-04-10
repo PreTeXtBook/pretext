@@ -114,7 +114,7 @@
       and the one created by the <c>pretext init</c> command.
       The file created by <c>pretext init</c> will contain some directory management details, such as:
       <cd>
-        <cline>&lt;source webwork-problems="../generated-assets/webwork/webwork-representations.xml"&gt;</cline>
+        <cline>&lt;source&gt;</cline>
         <cline>    &lt;directories external="../assets" generated="../generated-assets"/&gt;</cline>
         <cline>&lt;/source&gt;</cline>
       </cd>

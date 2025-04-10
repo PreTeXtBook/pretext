@@ -947,7 +947,6 @@
             </cd>element can have the following attributes:<ul>
                 <li><attr>customizations</attr>: A filename for a structured file of <tag>custom</tag> elements, each with a <attr>name</attr> attribute and content meant to be substituted into source.  See <xref ref="publisher-customizations"/> for details about the use of customizations.</li>
                 <li><attr>private-solutions</attr>: A filename for a structured file of <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag> that will see limited distribution (for example, instructors only).  See <xref ref="private-solutions-file"/> for details about the use of a private solutions file.</li>
-                <li><attr>webwork-problems</attr>: A filename for a structured file of multiple representations of <webwork/> problems.  It is now recommended that when using <webwork/>, that you also use managed directories (see <xref ref="processing-directory-management"/>), in which case this attribute is unsused.</li>
             </ul></p>
         </subsection>
     </section>
