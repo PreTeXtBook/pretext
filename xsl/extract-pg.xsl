@@ -2711,11 +2711,21 @@
     </xsl:variable>
     <xsl:variable name="row-bottom">
         <xsl:choose>
-            <xsl:when test="parent::row/@bottom = str:tokenize('minor medium major none', ' ') and parent::row/@bottom != $tabular-bottom">
+            <xsl:when test="parent::row/@bottom = str:tokenize('minor medium major none', ' ')">
                 <xsl:value-of select="parent::row/@bottom"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$tabular-bottom"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="cell-bottom">
+        <xsl:choose>
+            <xsl:when test="@bottom = str:tokenize('minor medium major none', ' ')">
+                <xsl:value-of select="@bottom"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$row-bottom"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -2733,7 +2743,7 @@
     </xsl:variable>
     <xsl:variable name="row-valign">
         <xsl:choose>
-            <xsl:when test="parent::row/@valign = str:tokenize('top middle bottom', ' ') and parent::row/@valign != $tabular-valign">
+            <xsl:when test="parent::row/@valign = str:tokenize('top middle bottom', ' ')">
                 <xsl:value-of select="parent::row/@valign"/>
             </xsl:when>
             <xsl:otherwise>
@@ -2806,7 +2816,7 @@
     </xsl:variable>
     <xsl:variable name="row-left">
         <xsl:choose>
-            <xsl:when test="parent::row/@left = str:tokenize('minor medium major none', ' ') and parent::row/@left != $tabular-left">
+            <xsl:when test="parent::row/@left = str:tokenize('minor medium major none', ' ')">
                 <xsl:value-of select="parent::row/@left"/>
             </xsl:when>
             <xsl:otherwise>
@@ -2828,7 +2838,7 @@
     </xsl:variable>
     <xsl:variable name="col-right">
         <xsl:choose>
-            <xsl:when test="ancestor::tabular[1]/col[$right-col]/@right = str:tokenize('minor medium major none', ' ') and ancestor::tabular[1]/col[$right-col]/@right != $tabular-right">
+            <xsl:when test="ancestor::tabular[1]/col[$right-col]/@right = str:tokenize('minor medium major none', ' ')">
                 <xsl:value-of select="ancestor::tabular[1]/col[$right-col]/@right"/>
             </xsl:when>
             <xsl:otherwise>
@@ -2854,6 +2864,8 @@
             or
             ($row-bottom != 'none' and not(preceding-sibling::cell))
             or
+            $cell-bottom != $row-bottom
+            or
             ($row-valign != $tabular-valign and not(preceding-sibling::cell))
             or
             ($row-left != $tabular-left and not(preceding-sibling::cell))
@@ -2876,11 +2888,11 @@
             <xsl:text>[PGML(</xsl:text>
             <xsl:apply-templates select="." mode="delimit"/>
             <xsl:text>),</xsl:text>
-            <!-- declare bottom if needed; note niceTables.pl does not respect bottom on an individual cell -->
+            <!-- declare rowbottom if needed -->
             <xsl:if test="$row-bottom != 'none' and not(preceding-sibling::cell)">
                 <xsl:call-template name="key-value">
                     <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-                    <xsl:with-param name="key" select="'bottom'"/>
+                    <xsl:with-param name="key" select="'rowbottom'"/>
                     <xsl:with-param name="value">
                         <xsl:call-template name="pg-hrule-specification">
                             <xsl:with-param name="width" select="$row-bottom"/>
@@ -2892,6 +2904,18 @@
                     <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
                     <xsl:with-param name="key" select="'midrule'"/>
                     <xsl:with-param name="value" select="1"/>
+                </xsl:call-template>
+            </xsl:if>
+             <!-- declare bottom if needed -->
+             <xsl:if test="$cell-bottom != $row-bottom">
+                <xsl:call-template name="key-value">
+                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+                    <xsl:with-param name="key" select="'bottom'"/>
+                    <xsl:with-param name="value">
+                        <xsl:call-template name="pg-hrule-specification">
+                            <xsl:with-param name="width" select="$cell-bottom"/>
+                        </xsl:call-template>
+                    </xsl:with-param>
                 </xsl:call-template>
             </xsl:if>
             <!-- declare valign if needed -->
