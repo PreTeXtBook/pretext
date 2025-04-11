@@ -296,6 +296,72 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+
+<!-- Pruning templates generate a subtree towards $target-node -->
+<!-- that prunes as many other branches as possible while      -->
+<!-- retaining halfway decent output of the desire tree.       -->
+<xsl:template match="@*" mode="pruning">
+    <xsl:apply-templates select="." mode="pruning-keep"/>
+</xsl:template>
+<xsl:template match="node()" mode="pruning">
+    <xsl:param name="target-node"/>
+    <!-- <xsl:message>==here at "<xsl:value-of select="name()"/>".</xsl:message>
+    <xsl:message>==target count "<xsl:value-of select="count($target-node)"/>".</xsl:message>
+    <xsl:message>==desc count "<xsl:value-of select="count(descendant::*)"/>".</xsl:message>
+    <xsl:message>==combined count "<xsl:value-of select="count(descendant::*|$target-node)"/>".</xsl:message> -->
+    <xsl:choose>
+        <!-- This node contains the target node, copy and keep going -->
+        <xsl:when test="count(descendant::*|$target-node) = count(descendant::*)">
+            <!-- <xsl:message>==continue at "<xsl:value-of select="name()"/>".</xsl:message> -->
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="pruning">
+                    <xsl:with-param name="target-node" select="$target-node"/>
+                </xsl:apply-templates>
+            </xsl:copy>
+        </xsl:when>
+        <!-- This node is target node, keep it all -->
+        <xsl:when test="count(.|$target-node) = 1">
+            <!-- <xsl:message>==keep at "<xsl:value-of select="name()"/>".</xsl:message> -->
+            <xsl:apply-templates select="." mode="pruning-keep"/>
+        </xsl:when>
+        <!-- Shift to aggressive pruning -->
+        <xsl:otherwise>
+            <!-- <xsl:message>==aggressive at "<xsl:value-of select="name()"/>".</xsl:message> -->
+            <xsl:apply-templates select="." mode="pruning-prune"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- If we hit frontmatter or docinfo, preserve all the content   -->
+<!-- docinfo and bookinfo have important config info. frontmatter -->
+<!-- has authors/subtitle/etc...                                  -->
+<xsl:template match="frontmatter|docinfo|bookinfo" mode="pruning">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="pruning-keep"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Preserve anything from here on down -->
+<xsl:template match="node()|@*" mode="pruning-keep">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="pruning-keep"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Once aggressively pruning, only keep structural elements that give us -->
+<!-- numbering and toc info.                                               -->
+<xsl:template match="&STRUCTURAL;|@*" mode="pruning-prune">
+    <xsl:copy>
+        <xsl:apply-templates select="&STRUCTURAL;|title|@*" mode="pruning-prune">
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- If we hit a title, grab all the contents so the ToC gets content-->
+<xsl:template match="title" mode="pruning-prune">
+    <xsl:apply-templates select="." mode="pruning-keep"/>
+</xsl:template>
+
 <!-- These templates initiate and create several iterations of -->
 <!-- the source tree via modal templates.  Think of each as a  -->
 <!-- "pass" through the source. Generally this constructs the  -->
@@ -331,6 +397,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="version-docinfo" select="$version-root/docinfo"/>
 <xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
 
+<xsl:variable name="display1">
+<xsl:message>Number of nodes in pre-pruned: <xsl:value-of select="count($version//node())"/></xsl:message>
+</xsl:variable>
+
+<!-- see pretext-html for full version of these params             -->
+<xsl:param name="subtree" select="''"/>
+<xsl:param name="html.quick-dirty" select="''"/>
+<xsl:variable name="pruning-tree-rtf">
+    <xsl:choose>
+        <xsl:when test="$subtree != '' and $html.quick-dirty = 'yes'">
+            <xsl:variable name="target-node" select="$version//*[@xml:id = $subtree]"/>
+
+            <!-- <xsl:message>==target "<xsl:value-of select="local-name($target-node)"/>".</xsl:message>
+            <xsl:message>==count "<xsl:value-of select="count($target-node//*)"/>".</xsl:message> -->
+            <xsl:apply-templates select="$version" mode="pruning">
+                <xsl:with-param name="target-node" select="$version//*[@xml:id = $subtree]"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy-of select="$version"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="pruning-tree" select="exsl:node-set($pruning-tree-rtf)"/>
+
+<xsl:variable name="display2">
+<xsl:message>Number of nodes in pruned: <xsl:value-of select="count($pruning-tree//node())"/></xsl:message>
+</xsl:variable>
+
 <!-- This pass adds 100% internal identification for elements before   -->
 <!-- anything has been added or subtracted. The tree it builds is used -->
 <!-- for constructing "View Source" knowls in HTML output as a form of -->
@@ -353,7 +448,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-version-only"/>
         <!-- build on "version" to add original id's -->
         <xsl:otherwise>
-            <xsl:apply-templates select="$version" mode="id-attribute">
+            <xsl:apply-templates select="$pruning-tree" mode="id-attribute">
                 <!-- $parent-id defaults to 'root' in template -->
                 <xsl:with-param name="attr-name" select="'original-id'"/>
             </xsl:apply-templates>

@@ -104,6 +104,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- See more generally applicable parameters in pretext-common.xsl file     -->
 
+<!-- Fast HTML build that skips steps inessential for quickly checking      -->
+<!-- changes to a document or a portion of a document.                      -->
+<!-- It will omit updating knowls, search index, theme, Runestone files,... -->
+<!-- When combined with param subtree, it will only process that subtree.   -->
+<xsl:param name="html.quick-dirty" select="''"/>
+<xsl:variable name="b-quick-dirty" select="$html.quick-dirty = 'yes'"/>
+
 <!-- CSS and Javascript Directories -->
 <!-- These are convenience variables to specify file prefixes  -->
 <!-- consistently.  If you know what you are doing you could   -->
@@ -298,15 +305,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
-    <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
+    <xsl:choose>
+        <!-- if working on a subtree, only warn on that part -->
+        <xsl:when test="$b-quick-dirty and $b-subsetting">
+            <xsl:apply-templates select="$pruning-tree" mode="generic-warnings"/>
+            <xsl:apply-templates select="$pruning-tree" mode="element-deprecation-warnings"/>
+            <xsl:apply-templates select="$pruning-tree" mode="parameter-deprecation-warnings"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$original" mode="generic-warnings"/>
+            <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
+            <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- Usually no manifest is created -->
     <xsl:call-template name="runestone-manifest"/>
     <!-- A structured Table of Contents for a React app approach -->
     <xsl:call-template name="doc-manifest"/>
     <!-- build a search page (in development) -->
-    <xsl:if test="$has-native-search">
+    <xsl:if test="$has-native-search and not($b-quick-dirty)">
         <xsl:call-template name="search-page-construction"/>
     </xsl:if>
     <!-- The main event                          -->

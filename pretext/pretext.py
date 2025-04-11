@@ -3550,9 +3550,14 @@ def _parse_runestone_services(et):
 
     return (rs_js, rs_css, rs_cdn_url, rs_version)
 
+# Update stringparams with Runestone Services information
+def _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version):
+    stringparams["rs-js"] = rs_js
+    stringparams["rs-css"] = rs_css
+    stringparams["rs-version"] = rs_version
+
 # A helper function to query the latest Runestone
 # Services file, while failing gracefully
-
 def _runestone_services(stringparams, ext_rs_methods):
     """Query the very latest Runestone Services file from the RS CDN"""
 
@@ -3601,9 +3606,7 @@ def _runestone_services(stringparams, ext_rs_methods):
         rs_version = "dev"
         services_xml = None
         # Return, plus side-effect
-        stringparams["rs-js"] = rs_js
-        stringparams["rs-css"] = rs_css
-        stringparams["rs-version"] = rs_version
+        _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
         return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
     # Otherwise, we have a URL pointing to the Runestone server/CDN
@@ -3738,6 +3741,21 @@ def query_runestone_services(services_url):
     # Return the XML from the services response
     return services_response.text
 
+
+def query_existing_runestone_services(dest_dir, stringparams):
+    '''Attempt to get Runestone service data from existing
+       Runestone Services file in _static directory.
+       Returns a tuple of the JS, CSS, CDN URL and version or None'''
+    services_record_files = os.path.join(dest_dir, "_static", "_runestone-services.xml")
+    
+    if os.path.exists(services_record_files):
+        with open(services_record_files, 'r') as f:
+            services_xml = f.read()
+        services = ET.fromstring(services_xml)
+        return _parse_runestone_services(services)
+    else:
+        msg = "query_existing_runestone_services failed: no _runestone-services.xml file found in _static directory"
+        raise RuntimeError(msg)
 
 def _place_runestone_services(tmp_dir, stringparams, ext_rs_methods):
     '''Obtain Runestone Services and place in _static directory of build'''
@@ -3909,6 +3927,7 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
 # Temporary helper to move style file for custom ol markers into _static/pretext/css
 def move_ol_marker_css(tmp_dir):
     css_dest = os.path.join(tmp_dir, "_static", "pretext", "css")
+    os.makedirs(css_dest, exist_ok=True)
     src = os.path.join(tmp_dir, "ol-markers.css")
     dest = os.path.join(get_ptx_path(), os.path.join(css_dest, "ol-markers.css"))
     if os.path.exists(src):
@@ -3924,6 +3943,7 @@ def check_color_contrast(color1, color2):
         log.warning("The coloraide module is not available and is necessary for checking color contrast. Install it with 'pip install coloraide' or by using the requirements.txt file.")
 
 def build_or_copy_theme(xml, pub_var_dict, tmp_dir):
+    return
     theme_name = get_publisher_variable(pub_var_dict, 'html-theme-name')
     theme_opts_json = get_publisher_variable(pub_var_dict, 'html-theme-options')
     import json
@@ -4003,8 +4023,46 @@ def download_file(url, dest_filename):
     except Exception as e:
         raise Exception("Failed to save download", dest_filename)
 
+def html_incremental(xml, stringparams, xmlid_root, extra_xsl, dest_dir, pub_vars):
+    """Update an HTML incrementally in place.
+       Depends on _static and generated files already being in the destination directory.
+       Caller must supply:
+       * dict of pub_vars containing the results of get_publisher_variable_report
+       * stringparams supplemented with:
+          * rs-js, rs-css, and rs-version (can use _set_runestone_stringparams to set)
+          * publisher: path to publisher file for use by xsltproc
+       """
+    if not pub_vars:
+        log.error("Incremental build lacks required pub_vars dict.  Unable to complete build.")
+        return False
+    if not "rs-js" in stringparams or not "publisher" in stringparams:
+        log.error("Incremental build missing needed stringparam(s).  Unable to complete build.")
+        return False
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    # support subtree argument
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+
+    # Optional extra XSL could be None, or sanitized full filename
+    if extra_xsl:
+        extraction_xslt = extra_xsl
+    else:
+        extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
+
+    log.info("incremental convertsion of {} to HTML in {}".format(xml, dest_dir))
+    xsltproc(extraction_xslt, xml, None, dest_dir, stringparams)
+
+
 def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir, ext_rs_methods):
     """Convert XML source to HTML files, in destination directory or as zip file"""
+    import time
+    start = time.time()
+    start2 = start
+    print("====Starting html()", time.time() - start2)
+    start2 = time.time()
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -4015,18 +4073,28 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # names for scratch directories
     tmp_dir = get_temporary_directory()
 
+    # Two primary options for runestone services
+    # 1. Grab latest version and store into _static
+    #    quick and dirty build will with option 1 will try to use exising _static files
+    # 2. Rely on links to CDN copies
     pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
     include_static_files = get_publisher_variable(pub_vars, 'portable-html') != "yes"
+
+    print("====Post pub var checks", time.time() - start2)
+    start2 = time.time()
 
     if include_static_files:
         # interrogate Runestone server (or debugging switches) and populate
         # NB: stringparams is augmented with Runestone Services information
         _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
-    else:
+
+    else:  # Options 2 - CDN RS services
         # even if we don't need static files, we need to set stringparams for
         # Runestone Services information.
         _cdn_runestone_services(stringparams, ext_rs_methods)
 
+    print("====Runestone placed", time.time() - start2)
+    start2 = time.time()
     # support publisher file, and subtree argument
     if pub_file:
         stringparams["publisher"] = pub_file
@@ -4038,22 +4106,24 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     else:
         extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
 
-    # place managed directories - some of these (Asymptote HTML) are
-    # consulted during the XSL run and so need to be placed beforehand
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    print("====Copy managed done", time.time() - start2)
+    start2 = time.time()
 
     if include_static_files:
         # Copy js and css, but only if not building portable html
         # place JS in scratch directory
         copy_html_js(tmp_dir)
-
-        # build or copy theme
         build_or_copy_theme(xml, pub_vars, tmp_dir)
 
+    print("====static files included", time.time() - start2)
+    start2 = time.time()
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
 
+    print("====xsltproc complete", time.time() - start2)
+    start2 = time.time()
     if include_static_files:
         # extra css for custom ol markers
         move_ol_marker_css(tmp_dir)
@@ -4061,6 +4131,8 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
         # remove latex-image generated directories for portable builds
         shutil.rmtree(os.path.join(tmp_dir, "generated", "latex-image"), ignore_errors=True)
 
+    print("====move_ol_marker_css moved", time.time() - start2)
+    start2 = time.time()
     if file_format  == "html":
         # with multiple files, we need to copy a tree
         # see comments at  copy_build_directory()
@@ -4084,6 +4156,10 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
             log.info("zip file of HTML output deposited as {}".format(derivedname))
     else:
         raise ValueError("PTX:BUG: HTML file format not recognized")
+    
+    print("====copy_build_directory complete", time.time() - start2)
+    start2 = time.time()
+    print("====html() complete", time.time() - start)
 
 
 def revealjs(
@@ -4994,8 +5070,7 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
 
 
 def copy_html_js(work_dir):
-    '''Copy all necessary CSS and JS into working directory'''
-
+    '''Copy all necessary JS into working directory'''
     # Place support files where expected.
     # We are not careful about placing only modules that are needed, all are copied.
     js_src = os.path.join(get_ptx_path(), "js")
@@ -5029,6 +5104,8 @@ def copy_build_directory(build_dir, dest_dir):
 
     for filename in os.listdir(build_dir):
         src = os.path.join(build_dir, filename)
+        import time
+        start = time.time()
         if os.path.isfile(src):
             shutil.copy2(src, dest_dir)
         elif os.path.isdir(src):
@@ -5039,6 +5116,8 @@ def copy_build_directory(build_dir, dest_dir):
         else:
             msg = "the build directory {} contained an unexpected object, {}"
             log.debug(msg.format(build_dir, src))
+        end = time.time()
+        #print("copying {} took {} seconds".format(src, end - start))
 
 
 def targz(output, source_dir):
@@ -5124,6 +5203,9 @@ def get_publisher_variable_report(xml_source, pub_file, params):
             else:
                 # value could have spaces, so rejoin other parts
                 variables[parts[0]] = " ".join(parts[1:])
+
+    import pprint
+    pprint.pprint(variables)
 
     return variables
 
