@@ -106,18 +106,24 @@ PGOUT      = $(SCRATCH)/pg
 #########################################################################
 #  Construct macros file. This must be uploaded into the macros folder
 #  of the server's host course before building representations below.
-#  There are no macros for the minimal example, so omitted
+#  This file will be built inside a folder tree in generated/webwork/pg
+#  or if there is no generated folder, into the destination folder. The
+#  folder tree will be in the form PROJECT_TITLE/macros/INITIALISM.pl.
+#  If building representations locally, this must be run first and
+#  the macros file will be in the right place relative to the generated
+#  folder. There are no macros for the minimal example, so omitted.
 
 sample-chapter-macros:
-	install -d $(PGOUT)/macros
-	cd $(PGOUT)/macros; \
-	$(PTX)/pretext/pretext -v -c pg-macros -p $(SMPCPUB) $(SMPC)
+	$(PTX)/pretext/pretext -v -c pg-macros -p $(SMPCPUB) -d $(PGOUT)/macros $(SMPC)
 
 
 #########################################################################
 #  Extract webwork problems into a single XML file.
 #  Location is within generated folder (named in the publisher file),
 #  within "webwork" subfolder
+#  This also produces PG files for each problem, PG macros, set defintion
+#  files for problem sets, and set header files all within the "webwork/pg"
+#  folder
 
 sample-chapter-representations:
 	$(PTX)/pretext/pretext -v -c webwork -p $(SMPCPUB) $(SMPC)
@@ -185,27 +191,29 @@ mini-html:
 
 #########################################################################
 # PG output
-# Make an archive of webwork problem sets for each "section" (as specified
-# by chunk level) with set definition files, set header files, and problem
-# files in a file tree. Separate problem sets for inline and divisional
-# problems. This does not require having the representations file.
-# We turn off dates in file headers, so when we use these for testing we
-# can get more accurate diffs. Dates are useful for single file output
-# (or at least less of an annoyance).  This should not be taken as necessary
-# or best practice for a real PreTeXt project using WeBWorK problems.
-# Adding a "-z" switch will create a "tgz" compressed archive
+# The following may be redundant in some circumstances. Above, the
+# "representations" recipe will cause PG files, PG macros, set defintion files,
+# and set header files to be created in the "generated" folder, within
+# webwork/pg. This below does the same, however you can specify a destination
+# folder. And you can use the -z switch to make a compressed tarball (.tgz file)
+# with that folder's contents instead. This does not require first building the
+# representations file. We turn off dates in file headers, so when we use these
+# for testing we can get more helpful diffs. Dates are useful for single file
+# output (or at least less of an annoyance). Turning off dates should not be
+# taken as necessary or best practice for a real PreTeXt project using WeBWorK
+# problems.
 
 sample-chapter-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r Integrating_WeBWorK_into_Textbooks; \
-	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x chunk.level 1 debug.datedfiles no -p $(SMPCPUB) $(SMPC)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x debug.datedfiles no -p $(SMPCPUB) $(SMPC);
 
 mini-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r WeBWorK_Minimal_Example; \
-	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x chunk.level 1 debug.datedfiles no -p $(MINIPUB) $(MINI)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x debug.datedfiles no -p $(MINIPUB) $(MINI);
 
 
 #########################################################################
