@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<texstyle>
+    <metadata>
+        <code>taylor-francis</code>
+        <name>Taylor Francis General - All other Taylor-Francis journals</name>
+        <publisher>Taylor-Francis</publisher>
+        <!-- Each file element of required files should have an href to a location where wget can download the file.  @compression describes how the file is compressed (or None).  @path gives the path to the file relative to the extracted resource.  The file at this path will be copied to the build directory before running xelatex/pdflatex -->
+        <latex-engine command="pdflatex"/>
+        <bibliography-style>spbasic</bibliography-style>
+
+        <style-author>Oscar Levin</style-author>
+        <date>2025-03-17</date>
+    </metadata>
+
+    <documentclass name="article"/>
+
+
+    <ptx-preamble/>
+
+
+    <title cmd="title">
+        <arg>
+            <ptx-title/>
+            <support cmd="support">
+                <arg><ptx-bibinfo-support/></arg>
+            </support>
+        </arg>
+    </title>
+
+    <author cmd="author">
+        <arg>
+            <author-list sep="\and">
+                <ptx-personname/>
+                <support cmd="thanks" after="\\">
+                    <arg><ptx-support/></arg>
+                </support>
+                <ptx-affiliation sep="\\&#xa;" after="\\"/>
+                <ptx-email/>
+            </author-list>
+        </arg>
+    </author>
+
+    <date cmd="date">
+        <arg><ptx-date/></arg>
+    </date>
+
+    <begin-document/>
+
+    <maketitle/>
+
+    <abstract env="abstract">
+        <ptx-abstract/>
+         <!--  heading="\noindent{\bfseries Keywords}." -->
+        <keywords authority="author" style="bf-heading" sep=", " before="\par\medskip" />
+        <keywords authority="msc" style="bf-heading" variant-style="before" sep=", " before="\par\medskip"/>
+        <!--<subj-class heading="\noindent{\bfseries {@variant} Mathematics Subject Classification}."/>-->
+    </abstract>
+
+    <mainmatter/>
+
+
+
+    <acknowledgments heading="\section*{Acknowledgments}"/>
+
+
+    <appendices/>
+
+
+    <bibliography cmd="bibliography">
+        <arg><bib-file/></arg>
+    </bibliography>
+
+
+    <end-document/>
+</texstyle>

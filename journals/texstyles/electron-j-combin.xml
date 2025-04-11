@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<texstyle>
+    <metadata>
+        <code>electron-j-combin</code>
+        <name>Electronic Journal of Combinatorics</name>
+        <publisher>Electronic Journal of Combinatorics</publisher>
+        <!-- Each file element of required files should have an href to a location where wget can download the file.  @compression describes how the file is compressed (or None).  @path gives the path to the file relative to the extracted resource.  The file at this path will be copied to the build directory before running xelatex/pdflatex -->
+        <!--<required-files>
+            <file href="https://resource-cms.springernature.com/springer-cms/rest/v1/content/18782940/data/v13.zip" compression="zip" path="sn-article-template/sn-jnl.cls"/>
+        </required-files>-->
+        <latex-engine command="pdflatex"/>
+        <!--<bibliography-style>spbasic</bibliography-style>-->
+
+        <style-author>Oscar Levin</style-author>
+        <date>2025-03-23</date>
+    </metadata>
+
+<documentclass name="article"/>
+
+<packages>
+    \usepackage[amsmath]{e-jc}
+</packages>
+
+<!-- the e-jc.cls provides some theorem environments; we add the pretext ones it misses. -->
+<ptx-preamble>
+    <theoremstyle name="plain" environments="identity"/>
+    <theoremstyle name="definition" environments="axiom, principle, heuristic, hypothesis, assumption, openproblem, openquestion, algorithm, activity, exercise, inlineexercise, investigation, exploration, project"/>
+    <theoremstyle name="remark" environments="warning, convention, insight, computation, technology, data"/>
+</ptx-preamble>
+
+    <date cmd="dateline">
+        <arg><ptx-date/></arg>
+        <arg><text>TBD</text></arg>
+        <arg><text>TBD</text></arg>
+    </date>
+
+    <keywords authority="msc" cmd="MSC" sep=", "/>
+
+    <copyright cmd="Copyright">
+        <arg>The author.</arg>
+    </copyright>
+
+    <title cmd="title">
+        <arg><ptx-title/></arg>
+    </title>
+
+    <author cmd="author">
+        <arg>
+            <author-list sep="&#xa;\and&#xa;">
+                <ptx-personname/>
+                <fnmark cmd="authornote" arg="ordinal"/>
+            </author-list>
+        </arg>
+    </author>
+
+    <author-list>
+        <fntext cmd="authortext" arg="ordinal">
+            <arg>
+                <ptx-affiliation after="\\"/>
+                <ptx-email/>
+            </arg>
+        </fntext>
+    </author-list>
+
+
+    <begin-document/>
+
+    <maketitle/>
+
+    <abstract env="abstract">
+        <ptx-abstract/>
+        <keywords authority="author" style="bf-heading" sep=", " before="\par\medskip"/>
+    </abstract>
+
+
+
+
+    <mainmatter/>
+
+
+    <acknowledgments heading="\section*{Acknowledgments}"/>
+
+
+    <appendices cmd="appendix"/>
+
+
+    <bibliography cmd="bibliography">
+        <arg><bib-file/></arg>
+    </bibliography>
+
+
+    <end-document/>
+</texstyle>

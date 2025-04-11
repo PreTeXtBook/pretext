@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<texstyle>
+    <metadata>
+        <code>proc-amer-math-soc</code>
+        <name>Proceedings of the American Mathematical Society</name>
+        <publisher>American Mathematical Society</publisher>
+        <extends>ams</extends>
+        <required-files>
+            <file href="https://www.ams.org/arc/journals/packages/proc/proc_amslatex/proc-l.cls" compression="none" path="proc-l.cls"/>
+        </required-files>
+        <style-author>Oscar Levin</style-author>
+        <date>2025-04-01</date>
+    </metadata>
+
+<!-- Override the document class.  Everything else is the same. -->
+    <documentclass name="proc-l"/>
+
+</texstyle>

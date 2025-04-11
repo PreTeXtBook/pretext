@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<texstyle>
+    <metadata>
+        <code>ams</code>
+        <name>AMS journals</name>
+        <publisher>American Mathematical Society</publisher>
+        <!-- Each file element of required files should have an href to a location where wget can download the file.  @compression describes how the file is compressed (or None).  @path gives the path to the file relative to the extracted resource.  The file at this path will be copied to the build directory before running xelatex/pdflatex -->
+        <latex-engine command="pdflatex"/>
+        <bibliography-style>spbasic</bibliography-style>
+
+        <style-author>Oscar Levin</style-author>
+        <date>2025-03-12</date>
+    </metadata>
+
+    <documentclass name="amsart"/>
+
+
+    <ptx-preamble>
+        <theoremstyle name="plain" environments="theorem, proposition, lemma, corollary, claim, fact, identity, conjecture"/>
+        <theoremstyle name="definition" environments=", definition, axiom,, principle, heuristic, hypothesis, assumption, openproblem, openquestion, algorithm, question, activity, exercise, inlineexercise, investigation, exploration, problem, example, project"/>
+        <theoremstyle name="remark" environments="remark, warning, convention, insight, note, observation, computation, technology, data"/>
+    </ptx-preamble>
+
+    <begin-document/>
+
+    <title cmd="title">
+        <opt><ptx-short-title/></opt>
+        <arg><ptx-title/></arg>
+    </title>
+
+    <author-list>
+        <author cmd="author" corresponding="author*">
+            <arg><ptx-personname/></arg>
+        </author>
+        <affiliation cmd="address">
+            <arg><ptx-affiliation/></arg>
+        </affiliation>
+        <email cmd="email">
+            <arg><ptx-email/></arg>
+        </email>
+        <support cmd="thanks">
+            <arg><ptx-support/></arg>
+        </support>
+    </author-list>
+
+    <keywords authority="msc" cmd="subjclass" variant-style="opt" sep=", "/>
+
+    <date cmd="date">
+        <arg><ptx-date/></arg>    
+    </date>
+
+    <dedication cmd="dedicatory">
+        <arg><ptx-dedication/></arg>
+    </dedication>
+
+
+    <keywords authority="author" cmd="keywords" sep=", "/>
+
+    <abstract env="abstract">
+        <ptx-abstract/>
+    </abstract>
+
+    <maketitle/>
+
+
+    <mainmatter/>
+
+
+    <acknowledgments heading="\section*{Acknowledgments}"/>
+
+
+
+    <appendices env="appendices" />
+
+
+    <bibliography cmd="bibliography">
+        <arg><bib-file/></arg>
+    </bibliography>
+
+
+    <end-document/>
+</texstyle>

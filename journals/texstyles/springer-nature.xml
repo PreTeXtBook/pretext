@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<texstyle>
+    <metadata>
+        <code>springer-nature</code>
+        <name>Springer Nature journals</name>
+        <publisher>Springer Nature</publisher>
+        <!-- Each file element of required files should have an href to a location where wget can download the file.  @compression describes how the file is compressed (or None).  @path gives the path to the file relative to the extracted resource.  The file at this path will be copied to the build directory before running xelatex/pdflatex -->
+        <required-files>
+            <file href="https://resource-cms.springernature.com/springer-cms/rest/v1/content/18782940/data/v13.zip" compression="zip" path="sn-article-template/sn-jnl.cls"/>
+        </required-files>
+        <latex-engine command="pdflatex"/>
+        <bibliography-style>spbasic</bibliography-style>
+
+        <style-author>Oscar Levin</style-author>
+        <date>2025-04-01</date>
+    </metadata>
+
+<documentclass name="sn-jnl"/>
+
+
+    <packages>
+        \usepackage{multirow}%
+        \usepackage{amsmath,amssymb,amsfonts}%
+        \usepackage{amsthm}%
+        \usepackage{mathrsfs}%
+        \usepackage[title]{appendix}%
+        \usepackage{xcolor}%
+        \usepackage{textcomp}%
+        \usepackage{manyfoot}%
+        \usepackage{booktabs}%
+        \usepackage{algorithm}%
+        \usepackage{algorithmicx}%
+        \usepackage{algpseudocode}%
+        \usepackage{listings}%
+    </packages>
+
+
+
+
+
+    <ptx-preamble>
+        <theoremstyle
+            name="thmstyleone"
+            environments="
+                theorem,
+                proposition
+                lemma
+                corollary, claim
+                fact
+                identity
+                conjecture
+            "
+        />
+        <theoremstyle
+            name="thmstyletwo"
+            environments="
+                definition,
+                axiom,
+                principle
+                heuristic
+                hypothesis
+                assumption
+                openproblem
+                openquestion
+                algorithm
+                question
+                activity
+                exercise
+                inlineexercise
+                investigation
+                exploration
+                problem
+                example
+                project
+            "
+        />
+        <theoremstyle
+            name="thmstylethree"
+            environments="
+                remark
+                warning
+                convention
+                insight
+                note
+                observation
+                computation
+                technology
+                data
+            "
+        />
+    </ptx-preamble>
+
+
+    <begin-document/>
+
+    <title cmd="title">
+        <opt><ptx-short-title/></opt>
+        <arg><ptx-title/></arg>
+    </title>
+
+
+    <author-list>
+        <author cmd="author" corresponding="author*">
+            <opt><affiliation-ordinal/></opt>
+            <arg><ptx-personname/></arg>
+        </author>
+        <email cmd="email">
+            <arg><ptx-email/></arg>
+        </email>
+    </author-list>
+
+    <affiliation-list>
+        <affiliation cmd="affil" current="affil*">
+            <opt><affiliation-ordinal/></opt>
+            <arg><ptx-affiliation/></arg>
+        </affiliation>
+    </affiliation-list>
+
+
+
+
+    <abstract cmd="abstract">
+        <arg><ptx-abstract/></arg>
+    </abstract>
+
+    <keywords authority="author" cmd="keywords" sep=", "/>
+
+    <keywords authority="msc" cmd="pacs" variant-style="opt" sep=", "/>
+
+    <maketitle/>
+
+
+    <mainmatter>
+        <content/>
+    </mainmatter>
+
+
+    <backmatter cmd="backmatter"/>
+
+    <supplement heading="\bmhead{Supplementary information}">
+        <content/>
+    </supplement>
+
+    <acknowledgments heading="\bmhead{Acknowledgments}">
+        <content/>
+    </acknowledgments>
+
+    <declarations heading="\section*{Declarations}" required="yes">
+        <content/>
+    </declarations>
+
+    <appendices env="appendices">
+        <content/>
+    </appendices>
+
+
+    <bibliography cmd="bibliography">
+        <arg><bib-file/></arg>
+    </bibliography>
+
+
+    <end-document/>
+</texstyle>
