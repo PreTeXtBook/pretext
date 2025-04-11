@@ -21,9 +21,4 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <publication>
 
-    <!-- Relative path, relative to "main" source file         -->
-    <!-- This file name *must* be webwork-representations.xml, -->
-    <!-- but you could specify a different path to the file.   -->
-    <source webwork-problems="webwork-representations.xml"/>
-
 </publication>
