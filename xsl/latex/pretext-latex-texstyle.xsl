@@ -680,7 +680,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Mainmatter -->
 <xsl:template match="texstyle/mainmatter">
-    <xsl:apply-templates select="$document-root/*[not(backmatter|references)]"/>
+    <xsl:apply-templates select="$document-root/*[not(self::backmatter|self::references)]"/>
 </xsl:template>
 
 
