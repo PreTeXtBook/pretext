@@ -992,7 +992,11 @@ function setDarkMode(isDark) {
     for (const iframe of iframes) {
         try {
             const iframeHtml = iframe.contentWindow.document.documentElement;
-            iframeHtml.className = parentHtml.className;
+            if (isDark) {
+              iframeHtml.classList.add("dark-mode")
+            } else {
+              iframeHtml.classList.remove("dark-mode")
+            }
         } catch (err) {
             console.warn("Dark mode sync to iframe failed:", err);
         }
