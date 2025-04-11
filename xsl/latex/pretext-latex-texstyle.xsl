@@ -120,6 +120,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="article">
     <!-- Some boiler plate at the top of the file -->
     <xsl:call-template name="converter-blurb-latex"/>
+    <xsl:call-template name="snapshot-package-info"/>
     <!-- Now hand over control of the document order to the texstyle file -->
     <xsl:apply-templates select="$texstyle-root/texstyle"/>
     <!-- Each of the elements of the texstyle file will have its own template below -->
