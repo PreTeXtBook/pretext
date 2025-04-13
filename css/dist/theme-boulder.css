@@ -3,7 +3,7 @@
 @import "https://fonts.googleapis.com/css2?family=PT Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap";
 @import "https://fonts.googleapis.com/css2?family=Inconsolata:ital,wght@0,400..700;1,400..700&display=swap";
 
-/* ../../css/targets/html/greeley/theme-greeley.scss */
+/* ../../css/targets/html/boulder/theme-boulder.scss */
 * {
   box-sizing: border-box;
 }
@@ -2962,6 +2962,19 @@ body.pretext > a.assistive:focus {
 .hide-type .codenumber:not(:empty)::after {
   content: ". ";
 }
+.ptx-masthead {
+  display: none;
+}
+.ptx-navbar {
+  border-top: none;
+}
+.ptx-page {
+  margin-top: 36px;
+  margin-bottom: 36px;
+}
+.button.disabled {
+  display: none;
+}
 .aside-like {
   position: absolute;
   margin-left: 45%;
@@ -3697,7 +3710,7 @@ article > .heading:first-child + .introduction > .para:first-child {
   --primary-color-gray-97: color-mix(in oklab, var(--primary-color), gray 97%);
   --primary-color-gray-98: color-mix(in oklab, var(--primary-color), gray 98%);
   --primary-color-gray-99: color-mix(in oklab, var(--primary-color), gray 99%);
-  --primary-color: #2a5ea4;
+  --primary-color: hsl(270, 40%, 15%);
   --toc-border: var(--primary-color-gray-10);
 }
 :root.dark-mode {
@@ -3707,7 +3720,7 @@ article > .heading:first-child + .introduction > .para:first-child {
   --page-border-color: var(--background-color-white-25);
   --doc-title-color: var(--primary-color);
   --byline-color: var(--background-color-white-50);
-  --banner-background: #23241f;
+  --banner-background: hsl(270, 5%, 5%);
   --navbar-background: var(--background-color-gray-15);
   --footer-background: var(--background-color-black-10);
   --toc-border-color: #555;
@@ -3789,8 +3802,8 @@ article > .heading:first-child + .introduction > .para:first-child {
   --goal-like-border-color: var(--block-border-color);
   --solution-like-body-background: var(--block-body-background);
   --solution-like-border-color: var(--block-border-color);
-  --primary-color: #829ab1;
-  --background-color: #23241f;
+  --primary-color: hsl(270, 40%, 70%);
+  --background-color: hsl(270, 5%, 5%);
   --background-color-white-1: color-mix(in oklab, var(--background-color), white 1%);
   --background-color-white-2: color-mix(in oklab, var(--background-color), white 2%);
   --background-color-white-3: color-mix(in oklab, var(--background-color), white 3%);
@@ -3942,5 +3955,5 @@ article > .heading:first-child + .introduction > .para:first-child {
   --primary-color-gray-98: color-mix(in oklab, var(--primary-color), gray 98%);
   --primary-color-gray-99: color-mix(in oklab, var(--primary-color), gray 99%);
 }
-/*! Theme: greeley */
-/*# sourceMappingURL=theme-greeley.css.map */
+/*! Theme: boulder */
+/*# sourceMappingURL=theme-boulder.css.map */
