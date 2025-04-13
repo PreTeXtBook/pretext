@@ -48,17 +48,17 @@ $primary-color: map.get(palette-single.$colors, 'primary-color');
 );
 
 
+$light-colors: map.merge(palette-single.$colors, (
+  "toclevel1-background": var(--content-background),
+  "toclevel2-background": var(--content-background),
+  "toclevel3-background": var(--content-background),
+));
 
 
-:root {
-    color-scheme: light;
-    &:not(.dark-mode) {  // prevent variable leak through to dark
-      @include colorHelpers.scss-to-css(palette-single.$colors);
-    }
-}
+$dark-colors: map.merge(palette-dark.$colors,  (
+  "toclevel1-background": var(--content-background),
+  "toclevel2-background": var(--content-background),
+  "toclevel3-background": var(--content-background),
+));
 
-:root.dark-mode {
-    color-scheme: dark;
-
-    @include colorHelpers.scss-to-css(palette-dark.$colors);
-}
+@include colorHelpers.set-root-colors($light-colors, $dark-colors);
