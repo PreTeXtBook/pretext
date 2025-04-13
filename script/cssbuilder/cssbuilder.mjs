@@ -116,6 +116,7 @@ function getTargets(options) {
     { out: 'theme-salem', in: path.join(cssRoot, 'targets/html/salem/theme-salem.scss')},
     { out: 'theme-denver', in: path.join(cssRoot, 'targets/html/denver/theme-denver.scss') },
     { out: 'theme-greeley', in: path.join(cssRoot, 'targets/html/greeley/theme-greeley.scss') },
+    { out: 'theme-boulder', in: path.join(cssRoot, 'targets/html/boulder/theme-boulder.scss') },
     { out: 'theme-tacoma', in: path.join(cssRoot, 'targets/html/tacoma/theme-tacoma.scss') },
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------

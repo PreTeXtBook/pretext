@@ -1,0 +1,63 @@
+/*! Theme: boulder */
+// Theme designed for short articles (i.e., research papers) or course documents.
+// Minimal navigation bar; there is likely only one html page per document.
+
+// Current maintainer: Oscar Levin
+
+// Variables used by theme. CSSBuilder overrides these by prepending
+// different definitions for these variables to this file before the theme
+// is compiled.
+$primary-color: hsl(270, 40%, 15%) !default;
+$primary-color-dark: hsl(270, 40%, 70%) !default;
+$background-color-dark: hsl(270, 5%, 5%) !default;
+
+@use "sass:map";
+
+// Imports in this file can be either relative to this file or 
+// relative to css/ directory
+// Basic components: 
+//@use 'components/pretext';// with ($inline-section-headings: false);
+@use 'components/pretext'; 
+@use '../denver/parts-paper';
+//@use 'shell';
+@use 'customization';
+@use '../greeley/chunks-greeley';
+
+//@use 'heading-tweaks';
+
+// fonts and colors
+// $body-font: 'Open Sans' !default;
+// $heading-font: 'Roboto' !default;
+@use 'fonts/fonts-google'; // with ($body: $body-font, $heading: $heading-font);
+
+@use "colors/color-helpers" as colorHelpers;
+@use "colors/palette-single-bold" as palette-single with (
+  $primary-color: $primary-color,
+);
+
+
+// primary/secondary color defined as determined by palette-chunks from
+// color-scheme, primary-color, secondary-color
+$primary-color: map.get(palette-single.$colors, 'primary-color');
+//$secondary-color: map.get(palette-dual.$colors, 'secondary-color');
+
+@use 'colors/palette-dark' as palette-dark with (
+    $primary-color: $primary-color-dark,
+    $background-color: $background-color-dark,
+);
+
+
+$light-colors: map.merge(palette-single.$colors, (
+  "toclevel1-background": var(--content-background),
+  "toclevel2-background": var(--content-background),
+  "toclevel3-background": var(--content-background),
+));
+
+
+$dark-colors: map.merge(palette-dark.$colors,  (
+  "toclevel1-background": var(--content-background),
+  "toclevel2-background": var(--content-background),
+  "toclevel3-background": var(--content-background),
+));
+
+@include colorHelpers.set-root-colors($light-colors, $dark-colors);

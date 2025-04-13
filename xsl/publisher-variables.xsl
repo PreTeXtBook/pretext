@@ -2335,6 +2335,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <option name="primary-color" check-contrast="#fff"/>
         <option name="primary-color-dark" check-contrast="#23241f"/>
     </theme>
+    <theme name="boulder">
+        <option name="provide-dark-mode" default="yes"/>
+        <option name="primary-color" check-contrast="#fff"/>
+        <option name="primary-color-dark" check-contrast="#23241f"/>
+    </theme>
     <theme name="custom">
         <option name="provide-dark-mode" default="yes"/>
         <option name="entry-point" default="custom-theme.scss"/>
