@@ -4204,6 +4204,7 @@ def get_latex_style(xml, pub_file, stringparams):
       - Checks the value of the publisher variable 'journal-name'.
       - If it finds a journal name, tries to resolve that using the list of
         journals, returning the corresponding latex-style entry for that journal.
+        Also adds the texstyle file name to the string params
       - If there is no journal-name publisher variable, or the variable is not in the
         list of journals, checks for the publisher variable 'latex-style' and returns this.
     """
@@ -4213,7 +4214,7 @@ def get_latex_style(xml, pub_file, stringparams):
     if len(journal_name) > 0:
         journal_info = get_journal_info(journal_name)
         log.debug(f"Journal Info: {journal_info}")
-        stringparams["journal.code"] = journal_info.get("texstyle", "")
+        stringparams["journal.texstyle.file"] = journal_info.get("texstyle-file", "")
         latex_style = journal_info.get("latex-style", "")
         if len(latex_style) == 0:
             msg = "The journal name {} in your publication file is invalid or does not correspond to a valid latex-style.  Using the default LaTeX style instead."
@@ -5158,28 +5159,43 @@ def get_journal_info(journal_name):
     log.debug("Reading list of journals in {}".format(journal_xml))
     journals_tree = ET.parse(journal_xml)
     journals_tree.xinclude()
+
     # Find the node with <code> value journal_name:
     try:
         journal = journals_tree.xpath(f"//journal[code='{journal_name.lower()}']")[0]
     except Exception as e:
         log.warning("The journal name {} specified in the publication file is not supported.".format(journal_name))
         return {"latex-style": ""}
+
+    # name, code, and publisher are nodes containing text
     keys = ["name", "code", "publisher"]
     journal_info = {}
     for key in keys:
-        if journal.find(key) is not None:
-            journal_info[key] = journal.find(key).text
-    # Set the latex-style value.  This will either be the value of an attribute of "method", or should be "texstyle"
-    if journal.find("method") is not None and "latex-style" in journal.find("method").attrib:
-        journal_info["latex-style"] = journal.find("method").attrib["latex-style"]
-    else:
-        journal_info["latex-style"] = "texstyle"
-    # Finally, set the "texstyle" value, which will either be the "code" value or the value of the "texstyle" attribute of "method"
-    if journal.find("method") is not None and "texstyle" in journal.find("method").attrib:
-        journal_info["texstyle"] = journal.find("method").attrib["texstyle"]
-    else:
-        journal_info["texstyle"] = journal.find("code").text
-        log.debug("Using the journal code {} as the texstyle value.".format(journal_info["texstyle"]))
+        element = journal.find(key)
+        journal_info[key] = element.text if element is not None else None
+    # get the attribute values of the optional 'method' element.  Possible attributes are @latex-style, @texstyle, and @dependent
+    if journal.find("method") is not None:
+        for attr in ["latex-style", "texstyle", "dependent"]:
+            if attr in journal.find("method").attrib:
+                journal_info[attr] = journal.find("method").attrib[attr]
+
+    # If any of these are not yet set (or are None), set them to the default values
+    journal_info["latex-style"] = journal_info.get("latex-style", "texstyle")
+    journal_info["texstyle"] = journal_info.get("texstyle", journal_info.get("code"))
+    journal_info["dependent"] = journal_info.get("dependent", "no")
+    log.debug("Using the journal code {} as the texstyle value.".format(journal_info.get("texstyle")))
+
+    # If the latex-style is "texstyle", then find a filename for the texstyle file (as a relative path inside journals/texstyles).  What this is depends on whether dependent is "yes"
+    if journal_info["latex-style"] == "texstyle":
+        # If dependent is "yes", then we need to set the texstyle-file to the filename of the texstyle file, which is the code value.
+        if journal_info["dependent"] == "yes":
+            journal_info["texstyle-file"] = "dependents/" + journal_info.get("texstyle") + ".xml"
+            log.debug("Using texstyle-file {}.".format(journal_info["texstyle-file"]))
+        # If dependent is "no", then we need to set the texstyle-file to the filename of the texstyle file, which is the code value.
+        else:
+            journal_info["texstyle-file"] =  journal_info.get("texstyle") + ".xml"
+            log.debug("Using texstyle-file {}.".format(journal_info["texstyle-file"]))
+
     return journal_info
 
 
