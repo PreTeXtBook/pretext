@@ -58,8 +58,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="text" select="code" />
         </xsl:call-template>
     </xsl:variable>
+    <!-- Windows text files do not get normalized when xi:included -->
+    <!-- with @parse="text" so a CR-LF line-ending might persist.  -->
+    <!-- We do thaat normalization first, then convert LF to an    -->
+    <!-- escape sequend that is necessary for conversion.          -->
     <xsl:variable name="removed-carriage-returns">
-        <xsl:value-of select="str:replace($code-with-newlines, '&#xd;', '')" />
+        <xsl:value-of select="str:replace($code-with-newlines, '&#xd;&#xa;', '&#xa;')" />
     </xsl:variable>
     <xsl:value-of select="str:replace($removed-carriage-returns, '&#xa;', '\n')"/>
     <xsl:text>&#xa;</xsl:text>
