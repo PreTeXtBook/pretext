@@ -744,7 +744,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="texstyle/bibliography">
     <xsl:message>PTX:WARNING: Bibliographies are not implemented correctly yet.</xsl:message>
-    <xsl:apply-templates select="$document-root/references"/>
+    <xsl:apply-templates select="$document-root/references|$document-root/backmatter/references"/>
 </xsl:template>
 
 
