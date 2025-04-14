@@ -1018,25 +1018,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Return the first character from the list that is not in the string     -->
 <xsl:template name="find-unused-character">
     <xsl:param name="string" select="''"/>
-    <!-- set of characters passed in the original call -->
-    <xsl:param name="charset" select="concat($apos,'&quot;|/!?=~')"/>
-    <!-- reduced set of characters still in play during a recursive iteration  -->
-    <xsl:param name="characters" select="$charset"/>
+    <!-- set of characters that are candidates for use as delimiters -->
+    <!-- with empty string as default, failure is guaranteed         -->
+    <xsl:param name="charset" select="''"/>
+    <!-- If a character in $charset is inside the string, then we do   -->
+    <!-- not want to use it as a delimiter.  The translate() function  -->
+    <!-- operates so as to morph its first argument, $charset.  Called -->
+    <!-- this way, each character of the $charset that is in $string,  -->
+    <!-- will be replaced by an empty string.  So any character of     -->
+    <!-- $charset that survives un-translated, is not in $string.      -->
+    <xsl:variable name="characters" select="translate($charset, $string, '')"/>
+
+    <!-- We fail, big time, or elect to use the first available character -->
     <xsl:choose>
         <xsl:when test="$characters = ''">
             <xsl:message>PTX:FATAL:   Unable to find an unused character in:&#xa;<xsl:value-of select="$string" />&#xa;using characters from: <xsl:value-of select="$charset" /></xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
             <xsl:message terminate="yes">             That's fatal.  Sorry.  Quitting...</xsl:message>
         </xsl:when>
-        <xsl:when test="not(contains($string,substring($characters,1,1)))">
-            <xsl:value-of select="substring($characters,1,1)"/>
-        </xsl:when>
         <xsl:otherwise>
-            <xsl:call-template name="find-unused-character">
-                <xsl:with-param name="string" select="$string"/>
-                <xsl:with-param name="charset" select="$charset"/>
-                <xsl:with-param name="characters" select="substring($characters,2)"/>
-            </xsl:call-template>
+            <xsl:value-of select="substring($characters, 1, 1)"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
