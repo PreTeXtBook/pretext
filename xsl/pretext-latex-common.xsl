@@ -1951,11 +1951,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex-numbering-maxlevel" />
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
-    <xsl:text>%% AMS "proof" environment is no longer used, but we leave previously&#xa;</xsl:text>
-    <xsl:text>%% implemented \qedhere in place, should the LaTeX be recycled&#xa;</xsl:text>
-    <!-- 2024-09-28: this device has been harmed, search here -->
-    <!-- by date, and in the sample article for more.         -->
-    <xsl:text>\newcommand{\qedhere}{\relax}&#xa;</xsl:text>
     <!--  -->
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
@@ -7134,57 +7129,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label" />
 </xsl:template>
 
-<!-- QED Here -->
-<!-- 2024-09-28: this device has been harmed, search here by date, -->
-<!-- and in the sample article for more.  This was a result of     -->
-<!-- removing an "xsl:strip-space" declaration for PROOF-LIKE      -->
-<!-- (and "case") and being more careful about applying templates. -->
-<!-- Likely some small change in whitespace has impacted the tail  -->
-<!-- end of this gauntlet.                                         -->
-<!--                                                               -->
-<!-- 2018-11-20: we have abandoned the amsthm "proof"              -->
-<!-- environment, in favor of tcolorbox.  But this is              -->
-<!--   (a) some fancy XSL                                          -->
-<!--   (b) perhaps useful if the LaTeX is recycled                 -->
-<!-- So elsewhere, we redefine \qedhere to do nothing              -->
-<!--                                                               -->
-<!-- Analyze a final "mrow" or any "me"                            -->
-<!-- Strictly LaTeX/amsthm, not a MathJax feature (yet? ever?)     -->
-<!--   (1) Locate enclosing proof, quit if no such thing           -->
-<!--   (2) Check an mrow for being numbered, do not clobber that   -->
-<!--   (3) Locate all trailing element, text nodes                 -->
-<!--       strip-space: between "mrow" and "md" or "mdn"           -->
-<!--       strip-space: between final "p" and "proof"              -->
-<!--   (4) Form nodes interior to proof, and trailing ("remnants") -->
-<!--   (5) At very end of proof                                    -->
-<!--      (a) if no more nodes, or                                 -->
-<!--      (b) one node, totally whitespace and punctuation         -->
-<!--          (we don't differentiate whitespace policy here)      -->
-<!--   (6) Having survived all this write a \qedhere               -->
-<!-- TODO: \qedhere also functions at the end of a list            -->
-
-<!-- This is default in -common, but explicit here -->
-<xsl:template match="men" mode="qed-here"/>
-
-<xsl:template match="mrow|me" mode="qed-here">
-    <!-- <xsl:message>here</xsl:message> -->
-    <xsl:variable name="enclosing-proof" select="ancestor::*[&PROOF-FILTER;]" />
-    <xsl:if test="$enclosing-proof and not(self::mrow and parent::md and @number='yes') and not(self::mrow and parent::mdn and not(@number='no'))">
-        <xsl:variable name="proof-nodes" select="$enclosing-proof/descendant-or-self::*|$enclosing-proof/descendant-or-self::text()" />
-        <xsl:variable name="trailing-nodes" select="following::*|following::text()" />
-        <xsl:variable name="proof-remnants" select="$proof-nodes[count(.|$trailing-nodes) = count($trailing-nodes)]" />
-        <xsl:choose>
-            <xsl:when test="count($proof-remnants) = 0">
-                <xsl:text>\qedhere</xsl:text>
-            </xsl:when>
-            <xsl:when test="(count($proof-remnants) = 1) and (translate(normalize-space($proof-remnants), $clause-ending-marks, '') = '')">
-                <xsl:text>\qedhere</xsl:text>
-            </xsl:when>
-            <xsl:otherwise />
-        </xsl:choose>
-    </xsl:if>
-</xsl:template>
-
 
 <!-- Displayed Multi-Line Math ("md", "mdn") -->
 
@@ -7201,7 +7145,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Template in -common is sufficient with abstract templates -->
 <!--                                                           -->
 <!-- (1) "display-page-break"                                  -->
-<!-- (2) "qed-here" (implemented above)                        -->
 
 <!-- Page Breaks within Display Math -->
 <!-- \allowdisplaybreaks is on globally always          -->

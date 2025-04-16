@@ -5432,7 +5432,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Template in -common is sufficient with base templates     -->
 <!--                                                           -->
 <!-- (1) "display-page-break" (LaTeX only)                     -->
-<!-- (2) "qed-here" (LaTeX only)                               -->
 
 <!-- Intertext -->
 <!-- A LaTeX construct really, we just jump out/in of    -->
