@@ -3617,6 +3617,7 @@ TEST_CASE( "Test the add function" ) {
                     </test>
                 </evaluate>
             </evaluation>
+            <hint><p>Do you really need a hint? Carefully reread the question.</p></hint>
         </exercise>
 
         <exercise label="ex-demo-jscmp-primes">
