@@ -798,56 +798,91 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
     </xsl:choose>
     <xsl:text>%% Enable secondary languages based on discovery of @xml:lang values&#xa;</xsl:text>
-    <!-- secondary: so not already "main", and look just beyond $document-root (eg "book") -->
-    <xsl:if test="not($document-language = 'en-US') and ($document-root/*//@xml:lang = 'en-US')">
-        <xsl:text>%% document contains language code "en-US", US English&#xa;</xsl:text>
-        <xsl:text>%% usmax variant has extra hypenation&#xa;</xsl:text>
-        <xsl:text>\setotherlanguage[variant=usmax]{english}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($document-language = 'es-ES') and ($document-root/*//@xml:lang = 'es-ES')">
-        <xsl:text>%% document contains language code "es-ES", Spanish&#xa;</xsl:text>
-        <xsl:text>\setotherlanguage{spanish}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($document-language = 'el') and ($document-root/*//@xml:lang = 'el')">
-        <xsl:text>%% document contains language code "el", Modern Greek (1453-)&#xa;</xsl:text>
-        <xsl:text>\setotherlanguage[variant=monotonic]{greek}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($document-language = 'hu-HU') and ($document-root/*//@xml:lang = 'hu-HU')">
-        <xsl:text>%% document contains language code "hu-HU", Magyar (Hungarian)&#xa;</xsl:text>
-        <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($document-language = 'ko-KR') and ($document-root/*//@xml:lang = 'ko-KR')">
-        <xsl:text>%% document contains language code "ko-KR", Korean&#xa;</xsl:text>
-        <xsl:text>\setotherlanguage{korean}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($document-language = 'ru-RU') and ($document-root/*//@xml:lang = 'ru-RU')">
-        <xsl:text>%% document contains language code "ru-RU", Russian&#xa;</xsl:text>
-        <xsl:text>\setotherlanguage{russian}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($document-language = 'vi-VN') and ($document-root/*//@xml:lang = 'vi-VN')">
-        <xsl:text>%% document contains language code "vi-VN", Vietnamese&#xa;</xsl:text>
-        <xsl:text>\setotherlanguage{vietnamese}&#xa;</xsl:text>
-    </xsl:if>
+    <!-- collect every @xml:lang attribute in use into a variable/node-set -->
+    <xsl:variable name="secondary-languages" select="$document-root/*//@xml:lang"/>
+
+    <!-- sort into a new node-set so we can eliminate duplicate values -->
+    <xsl:variable name="sorted-language-values-rtf">
+        <xsl:for-each select="$secondary-languages">
+            <xsl:sort select="."/>
+            <language>
+                <xsl:value-of select="."/>
+            </language>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="sorted-language-values" select="exsl:node-set($sorted-language-values-rtf)"/>
+
+    <!-- secondary language support, not already the "main" language -->
+    <xsl:for-each select="$sorted-language-values/language">
+        <!-- take action for first occurence -->
+        <xsl:if test="not(. = preceding-sibling::language)">
+            <xsl:variable name="language">
+                <xsl:value-of select="."/>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="not($document-language = 'en-US') and ($language = 'en-US')">
+                    <xsl:text>%% document contains language code "en-US", US English&#xa;</xsl:text>
+                    <xsl:text>%% usmax variant has extra hypenation&#xa;</xsl:text>
+                    <xsl:text>\setotherlanguage[variant=usmax]{english}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:when test="not($document-language = 'es-ES') and ($language = 'es-ES')">
+                    <xsl:text>%% document contains language code "es-ES", Spanish&#xa;</xsl:text>
+                    <xsl:text>\setotherlanguage{spanish}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:when test="not($document-language = 'el') and ($language = 'el')">
+                    <xsl:text>%% document contains language code "el", Modern Greek (1453-)&#xa;</xsl:text>
+                    <xsl:text>\setotherlanguage[variant=monotonic]{greek}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:when test="not($document-language = 'hu-HU') and ($language = 'hu-HU')">
+                    <xsl:text>%% document contains language code "hu-HU", Magyar (Hungarian)&#xa;</xsl:text>
+                    <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:when test="not($document-language = 'ko-KR') and ($language = 'ko-KR')">
+                    <xsl:text>%% document contains language code "ko-KR", Korean&#xa;</xsl:text>
+                    <xsl:text>\setotherlanguage{korean}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:when test="not($document-language = 'ru-RU') and ($language = 'ru-RU')">
+                    <xsl:text>%% document contains language code "ru-RU", Russian&#xa;</xsl:text>
+                    <xsl:text>\setotherlanguage{russian}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:when test="not($document-language = 'vi-VN') and ($language = 'vi-VN')">
+                    <xsl:text>%% document contains language code "vi-VN", Vietnamese&#xa;</xsl:text>
+                    <xsl:text>\setotherlanguage{vietnamese}&#xa;</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:for-each>
+
     <xsl:text>%% Enable fonts/scripts based on discovery of @xml:lang values&#xa;</xsl:text>
     <xsl:text>%% Western languages should be ably covered by Latin Modern Roman&#xa;</xsl:text>
-    <xsl:if test="$document-root/*//@xml:lang='el'">
-        <xsl:text>%% Font for Modern Greek&#xa;</xsl:text>
-        <xsl:text>%% Font families: CMU Serif (Ubuntu fonts-cmu package), Linux Libertine O, GFS Artemisia&#xa;</xsl:text>
-        <xsl:text>%% OTF Script needs to be enabled&#xa;</xsl:text>
-        <xsl:text>\newfontfamily\greekfont[Script=Greek]{CMU Serif}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root/*//@xml:lang='ko-KR'">
-        <xsl:text>%% Font for Hangul&#xa;</xsl:text>
-        <xsl:text>%% Font families: alternate - UnBatang with [Script=Hangul]&#xa;</xsl:text>
-        <xsl:text>%% Debian/Ubuntu "fonts-nanum" package&#xa;</xsl:text>
-        <xsl:text>\newfontfamily\koreanfont{NanumMyeongjo}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root/*//@xml:lang='ru-RU'">
-        <xsl:text>%% Font for Cyrillic&#xa;</xsl:text>
-        <xsl:text>%% Font families: CMU Serif, Linux Libertine O&#xa;</xsl:text>
-        <xsl:text>%% OTF Script needs to be enabled&#xa;</xsl:text>
-        <xsl:text>\newfontfamily\russianfont[Script=Cyrillic]{CMU Serif}&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:for-each select="$sorted-language-values/language">
+        <!-- take action for first occurence -->
+        <xsl:if test="not(. = preceding-sibling::language)">
+            <xsl:variable name="language">
+                <xsl:value-of select="."/>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$language = 'el'">
+                    <xsl:text>%% Font for Modern Greek&#xa;</xsl:text>
+                    <xsl:text>%% Font families: CMU Serif (Ubuntu fonts-cmu package), Linux Libertine O, GFS Artemisia&#xa;</xsl:text>
+                    <xsl:text>%% OTF Script needs to be enabled&#xa;</xsl:text>
+                    <xsl:text>\newfontfamily\greekfont[Script=Greek]{CMU Serif}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:when test="$language = 'ko-KR'">
+                    <xsl:text>%% Font for Hangul&#xa;</xsl:text>
+                    <xsl:text>%% Font families: alternate - UnBatang with [Script=Hangul]&#xa;</xsl:text>
+                    <xsl:text>%% Debian/Ubuntu "fonts-nanum" package&#xa;</xsl:text>
+                    <xsl:text>\newfontfamily\koreanfont{NanumMyeongjo}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:when test="$language = 'ru-RU'">
+                    <xsl:text>%% Font for Cyrillic&#xa;</xsl:text>
+                    <xsl:text>%% Font families: CMU Serif, Linux Libertine O&#xa;</xsl:text>
+                    <xsl:text>%% OTF Script needs to be enabled&#xa;</xsl:text>
+                    <xsl:text>\newfontfamily\russianfont[Script=Cyrillic]{CMU Serif}&#xa;</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:for-each>
     <xsl:text>%% end:   font setup and configuration for use with xelatex&#xa;</xsl:text>
     <!--  -->
     <xsl:text>}{%&#xa;</xsl:text>
