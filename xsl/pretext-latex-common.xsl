@@ -799,7 +799,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:text>%% Enable secondary languages based on discovery of @xml:lang values&#xa;</xsl:text>
     <!-- collect every @xml:lang attribute in use into a variable/node-set -->
-    <xsl:variable name="secondary-languages" select="$document-root/*//@xml:lang"/>
+    <xsl:variable name="secondary-languages" select="$document-root//@xml:lang"/>
 
     <!-- sort into a new node-set so we can eliminate duplicate values -->
     <xsl:variable name="sorted-language-values-rtf">
