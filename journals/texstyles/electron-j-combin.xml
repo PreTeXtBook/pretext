@@ -5,10 +5,9 @@
         <code>electron-j-combin</code>
         <name>Electronic Journal of Combinatorics</name>
         <publisher>Electronic Journal of Combinatorics</publisher>
-        <!-- Each file element of required files should have an href to a location where wget can download the file.  @compression describes how the file is compressed (or None).  @path gives the path to the file relative to the extracted resource.  The file at this path will be copied to the build directory before running xelatex/pdflatex -->
-        <!--<required-files>
-            <file href="https://resource-cms.springernature.com/springer-cms/rest/v1/content/18782940/data/v13.zip" compression="zip" path="sn-article-template/sn-jnl.cls"/>
-        </required-files>-->
+        <required-files>
+            <file name="e-jc.sty" href="https://www.combinatorics.org/files/e-jc.sty" />
+        </required-files>
         <latex-engine command="pdflatex"/>
         <!--<bibliography-style>spbasic</bibliography-style>-->
 
@@ -24,7 +23,7 @@
 
 <!-- the e-jc.cls provides some theorem environments; we add the pretext ones it misses. -->
 <ptx-preamble>
-    <theoremstyle name="plain" environments="identity"/>
+    <theoremstyle name="plain" environments="identity" define-counter="no"/>
     <theoremstyle name="definition" environments="axiom, principle, heuristic, hypothesis, assumption, openproblem, openquestion, algorithm, activity, exercise, inlineexercise, investigation, exploration, project"/>
     <theoremstyle name="remark" environments="warning, convention, insight, computation, technology, data"/>
 </ptx-preamble>

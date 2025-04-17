@@ -5,7 +5,6 @@
         <code>ams</code>
         <name>AMS journals</name>
         <publisher>American Mathematical Society</publisher>
-        <!-- Each file element of required files should have an href to a location where wget can download the file.  @compression describes how the file is compressed (or None).  @path gives the path to the file relative to the extracted resource.  The file at this path will be copied to the build directory before running xelatex/pdflatex -->
         <latex-engine command="pdflatex"/>
         <bibliography-style>spbasic</bibliography-style>
 

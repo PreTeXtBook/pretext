@@ -7,7 +7,7 @@
         <publisher>American Mathematical Society</publisher>
         <extends>ams</extends>
         <required-files>
-            <file href="https://probability.knu.ua/tims/tpms_amslatex.zip" compression="zip" path="tpms_amslatex/tpms-l.cls"/>
+            <file name="tpms-l.cls" href="https://probability.knu.ua/tims/tpms_amslatex.zip" path="tpms_amslatex/tpms-l.cls"/>
         </required-files>
         <style-author>Oscar Levin</style-author>
         <date>2025-03-12</date>

@@ -260,8 +260,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}%&#xa;</xsl:text>
     <!-- In just the first theoremstyle, we use "theorem" as the     -->
     <!-- default theorem for purposes of defining a counter.         -->
+    <!-- Unless we see @define-counter="no", in which case we assume -->
+    <!-- that the package for the journal does this already.         -->
     <!-- Note that "theorem" is not among the $numbered-theorem-envs -->
-    <xsl:if test="not(preceding-sibling::theoremstyle)">
+    <xsl:if test="not(preceding-sibling::theoremstyle) and not(@define-counter='no')">
         <xsl:text>\newtheorem{theorem}{</xsl:text>
         <xsl:apply-templates select="($document-root//theorem)[1]" mode="type-name"/>
         <xsl:text>}[section]&#xa;</xsl:text>
