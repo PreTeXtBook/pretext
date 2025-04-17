@@ -1800,6 +1800,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exsl:document href="{$knowl-file}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <html>
             <xsl:call-template name="language-attributes"/>
+            <xsl:call-template name="pretext-advertisement-and-style"/>
             <!-- header since separate file -->
             <xsl:text>&#xa;</xsl:text>
             <xsl:call-template name="converter-blurb-html-no-date"/>
@@ -6822,6 +6823,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="converter-blurb-html-no-date"/>
         <html>
             <xsl:call-template name="language-attributes"/>
+            <xsl:call-template name="pretext-advertisement-and-style"/>
             <!-- Open Graph Protocol only in "meta" elements, within "head" -->
             <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
                 <title>
@@ -10779,6 +10781,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="runestone-ethical-ads"/>
 </xsl:variable>
 
+<xsl:template name="pretext-advertisement-and-style">
+    <!-- 40 characters within comment for each line -->
+    <xsl:variable name="fixed-width-theme"
+        select="concat(substring(concat($html-theme-name,   '                               '), 1, 31), '*')"/>
+    <xsl:variable name="fixed-width-palette"
+        select="concat(substring(concat($html-palette-name, '                               '), 1, 29), '*')"/>
+    <xsl:comment>******************************************</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>*  Authored with PreTeXt                 *</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>*  pretextbook.org                       *</xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>*  Theme: <xsl:value-of select="$fixed-width-theme"/></xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>*  Palette: <xsl:value-of select="$fixed-width-palette"/></xsl:comment><xsl:text>&#xa;</xsl:text>
+    <xsl:comment>******************************************</xsl:comment><xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+
+
 <!-- An individual page:                                   -->
 <!-- Inputs:                                               -->
 <!-- * page content (exclusive of banners, navigation etc) -->
@@ -10815,6 +10833,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <html>
         <xsl:call-template name="language-attributes"/>
         <xsl:call-template name="html-theme-attributes"/>
+        <xsl:call-template name="pretext-advertisement-and-style"/>
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <title>
@@ -10950,6 +10969,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="converter-blurb-html-no-date"/>
     <html>
         <xsl:call-template name="language-attributes"/>
+        <xsl:call-template name="pretext-advertisement-and-style"/>
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <title>
