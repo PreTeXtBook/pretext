@@ -134,6 +134,7 @@ def get_destination_directory(directory, xml_source, pub_file, component):
         "qrcode": "qrcode",
         "datafile": "datafile",
         "play-button": "play-button",
+        "latex-package": "latex-packages",
     }
     # if specified, check, sanitize, return absolute path
     if directory:
@@ -337,6 +338,7 @@ def get_cli_arguments():
         ("theme", "theme.css file for HTML build. Any theme options which require HTML changes will not be updated."),
         ("trace", "Program trace data for CodeLens"),
         ("datafile", "data files to text representations"),
+        ("latex-package", "LaTeX external packages for journals"),
         (
             "all",
             "Complete document (in various formats) (for pdf, method: [xelatex], pdflatex)",
@@ -727,6 +729,8 @@ def main():
         )
     elif args.component == "theme":
         ptx.update_theme(xml_source, publication_file, stringparams, dest_dir)
+    elif args.component == "latex-package":
+        ptx.latex_package(xml_source, publication_file, stringparams, dest_dir)
     elif args.component == "all":
         if args.format == "html":
             ptx.html(

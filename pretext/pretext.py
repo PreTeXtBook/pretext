@@ -4227,10 +4227,27 @@ def get_latex_style(xml, pub_file, stringparams):
         latex_style = pub_latex_style
     return latex_style
 
+def latex_package(xml, pub_file, stringparams, dest_dir):
+    """
+    Fetch latex packages (.sty/.cls files) required for building a
+    latex document in a particular journal's style (as specified by
+    a texstyle file).  This always downloads a fresh version of the files.
+    """
+    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
+    journal_name = get_publisher_variable(pub_vars, "journal-name")
+    if journal_name:
+        tmp_dir = get_temporary_directory()
+        # place_latex_package_files checks if tmp_dir already has the files, which it won't, so new files will always be downloaded.
+        dest_dir = os.path.join(dest_dir, journal_name)
+        place_latex_package_files(dest_dir, journal_name, tmp_dir)
+        log.info("latex package files downloaded to " + dest_dir)
+    else:
+        log.warning("No journal name found in publication file, so no latex package files downloaded.")
+
+
 # This is not a build target, there is no such thing as a "latex build."
 # Instead, this is a conveience for developers who want to compare
 # different versions of this file during development and testing.
-
 def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     """Convert XML source to LaTeX in destination directory"""
 
@@ -4296,6 +4313,12 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     # (an empty string is impossible due to a slash always being present?)
 
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+
+    # If we are building for a journal, we might need extra files
+    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
+    journal_name = get_publisher_variable(pub_vars, "journal-name")
+    if journal_name:
+        place_latex_package_files(tmp_dir, journal_name, os.path.join(generated_abs, "latex-packages"))
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
@@ -5197,6 +5220,51 @@ def get_journal_info(journal_name):
             log.debug("Using texstyle-file {}.".format(journal_info["texstyle-file"]))
 
     return journal_info
+
+def place_latex_package_files(dest_dir, journal_name, cache_dir):
+    """
+    Check whether the latex requires additional files specified in a texstyle file.
+    If so, either copy them from cache_dir or download them from the internet (and also store a copy in the cache_dir).
+    """
+    # Get the texstyle file for the journal name
+    texstyle_file = get_journal_info(journal_name).get("texstyle-file")
+    # Double check that there is a texstyle file
+    if texstyle_file is None:
+        return
+    # Otherwise, parse this file and check for any <file> elements.
+    texstyle_tree = ET.parse(os.path.join(get_ptx_path(), "journals", "texstyles", texstyle_file))
+    texstyle_file_elements = texstyle_tree.xpath("//required-files/file")
+    if not texstyle_file_elements:
+        log.debug("No required files found in the texstyle file.")
+        return
+    # Check whether the journal code is present in the metadata element of the texstyle file
+    journal_code = texstyle_tree.xpath("//metadata/code")[0].text
+    cache_dir = os.path.join(cache_dir, journal_code)
+    # Create the cache_dir if it doesn't exist
+    os.makedirs(cache_dir, exist_ok=True)
+
+    for file in texstyle_file_elements:
+        file_path = os.path.join(cache_dir, file.attrib["name"])
+        if not os.path.exists(file_path):
+            # download the file if it is not already in the cache_dir
+            log.debug("Downloading required file {} from {}".format(file.attrib["name"], file.attrib["href"]))
+            url = file.attrib["href"]
+            # The url might be to the file, or to a compressed archive.  We do slightly different things in each case.  TODO: other archive formats.
+            if url.endswith(".zip"):
+                tmp_zip = os.path.join(cache_dir, "tmp.zip")
+                download_file(url, tmp_zip)
+                with zipfile.ZipFile(tmp_zip, 'r') as zip_ref:
+                    with open(file_path, 'wb') as f:
+                        f.write(zip_ref.read(file.attrib["path"]))
+                os.remove(tmp_zip)
+            else:
+                download_file(url, file_path)
+            log.debug("Saved file {} to {}".format(file.attrib["name"], file_path))
+        else:
+            log.debug("File {} already exists in the generated assets directory.".format(file.attrib["name"]))
+        # Copy required resource to the destination directory
+        shutil.copy2(file_path, dest_dir)
+
 
 
 ###########################
