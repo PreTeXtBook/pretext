@@ -2298,6 +2298,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<xsl:variable name="html-palette-name">
+    <xsl:apply-templates select="$publisher-attribute-options/html/css/pi:pub-attribute[@name='palette']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
+
 <!-- lookup dict for known theme options -->
 <xsl:variable name="html-theme-option-list">
     <theme name="default-modern" focused-toc="yes">
@@ -3111,6 +3116,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <calculator>
             <pi:pub-attribute name="model" default="none" options="geogebra-classic geogebra-graphing geogebra-geometry geogebra-3d" legacy-stringparam="html.calculator"/>
         </calculator>
+        <css>
+            <pi:pub-attribute name="palette" freeform="yes"/>
+        </css>
         <knowl>
             <pi:pub-attribute name="theorem" default="no" options="yes" legacy-stringparam="html.knowl.theorem"/>
             <pi:pub-attribute name="proof" default="yes" options="no" legacy-stringparam="html.knowl.proof"/>
