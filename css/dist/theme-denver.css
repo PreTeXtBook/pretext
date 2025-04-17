@@ -698,19 +698,61 @@ body.pretext > a.assistive:focus {
     height: 2em;
   }
 }
+.ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) {
+  width: calc(100cqw - 40px);
+  max-width: unset;
+  margin-left: calc(-0.5 * (100cqw - 640px));
+}
+.ptx-runestone-container .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) {
+  width: 100%;
+  min-width: 100%;
+  margin-left: auto;
+}
+:is(.theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) {
+  width: calc(100cqw - 40px);
+  max-width: unset;
+  margin-left: calc(-0.5 * (100cqw - 640px));
+}
+:is(.theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) :is(.theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) {
+  width: 100%;
+  margin-left: auto;
+}
+:is(.theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content) .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) {
+  width: 100%;
+  margin-left: 0;
+}
+.runestone.ac_section > div > div > *:not(.ac_code_div):not(.ac_output):not(.codelens):not(.ac_actions) {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.runestone.parsons_section > .parsons {
+  width: 100%;
+  padding-right: 0;
+}
+.runestone.parsons_section > .parsons .sortable-code-container {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin: 10px auto;
+}
+.runestone.parsons_section > .parsons .sortable-code {
+  margin: 0;
+}
+.runestone.parsons_section > .parsons .runestone_caption_text {
+  max-width: unset;
+}
+.runestone.parsons_section > .parsons > div > *:not(.sortable-code-container) {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .ptx-main {
   margin-right: 320px;
 }
 .ptx-sidebar.hidden + .ptx-main {
   margin-left: 320px;
-}
-.ptx-runestone-container:has(.parsons_section, .ac_section, .codelens) {
-  width: 780px;
-  max-width: 780px;
-  margin-left: calc(-0.75 * var(--content-padding));
-}
-:is(.theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content) .ptx-runestone-container:has(.parsons_section, .ac_section, .codelens) {
-  margin-left: calc(-0.75 * var(--content-padding) - 21px);
 }
 .ptx-main {
   box-shadow: 5px 10px 40px -10px var(--primary-color-gray-80);
@@ -770,14 +812,6 @@ body.pretext > a.assistive:focus {
   .ptx-navbar .toc-toggle {
     transform: translateX(-240px);
     justify-content: center;
-  }
-  .ptx-runestone-container:has(.parsons_section, .ac_section, .codelens) {
-    --cur-width: calc(min(100cqw - 2 * 20px, 780px));
-    width: var(--cur-width);
-    margin-left: calc(-0.5 * (var(--cur-width) - 100%));
-  }
-  :is(.theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content) .ptx-runestone-container:has(.parsons_section, .ac_section, .codelens) {
-    margin-left: calc(-0.5 * (var(--cur-width) - 100%));
   }
 }
 @media screen and (width <= 880px) {
