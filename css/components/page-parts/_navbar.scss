@@ -72,6 +72,25 @@ $center-content: true !default;
     height: 34px;
   }
 
+  .embed-popup {
+    padding: 10px;
+    background-color: var(--navbar-background);
+    position: absolute;
+    margin-top: $nav-height;
+    border: 1px solid var(--page-border-color);
+    border-radius: 3px;
+    box-shadow: 0 0 5px var(--primary-color-gray-80);
+    .embed-code-container {
+      width: "100%";
+      padding:5px;
+      .embed-code-textbox {
+        width: 100%;
+        padding: 10px;
+        height: 5em;
+      }
+    }
+  }
+
   .treebuttons > * {
     display: flex;
     align-items: center;
@@ -87,7 +106,7 @@ $center-content: true !default;
     display: none;
   }
 
-  :is(.runestone-profile, .activecode-toggle, .searchbutton, .calculator-toggle, .light-dark-button) .name {
+  :is(.runestone-profile, .activecode-toggle, .searchbutton, .calculator-toggle, .light-dark-button, .embed-button) .name {
     display: none;
   }
 
@@ -156,12 +175,17 @@ $center-content: true !default;
       display: none;
     }
 
+    .embed-popup {
+      margin-top: unset;
+      bottom: $nav-height;
+    }
+
     .dropdown-content {
       top: unset;
       bottom: $nav-height;
     }
 
-    :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
+    :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button, .embed-button) .name {
       display: none;
     }
   }
