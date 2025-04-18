@@ -1025,3 +1025,65 @@ window.addEventListener("DOMContentLoaded", function(event) {
         localStorage.setItem("theme", wasDark ? "light" : "dark");
     });
 });
+
+// Share button and embed in LMS code
+window.addEventListener("DOMContentLoaded", function(event) {
+    const shareButton = document.getElementById("embed-button");
+    if (shareButton) {
+        const sharePopup = document.getElementById("embed-popup");
+        const embedCode = "<iframe src='" + window.location.href + "?embed' width='100%' height='1000px' frameborder='0'></iframe>";
+        const embedTextbox = document.getElementById("embed-code-textbox");
+        if (embedTextbox) {
+            embedTextbox.value = embedCode;
+        }
+        shareButton.addEventListener("click", function() {
+            sharePopup.classList.toggle("hidden");
+        });
+        const copyButton = document.getElementById("copy-embed-button");
+        if (copyButton) {
+            copyButton.addEventListener("click", function() {
+                const embedTextbox = document.getElementById("embed-code-textbox");
+                if (embedTextbox) {
+                    navigator.clipboard.writeText(embedCode).then(() => {
+                        console.log("Embed code copied to clipboard!");
+                    }).catch(err => {
+                        console.error("Failed to copy embed code: ", err);
+                    });
+                    //copyButton.innerHTML = "✓✓";
+                    // show confirmation for 2 seconds:
+                    copyButton.querySelector('.icon').innerText = "library_add_check";
+                    setTimeout(function() {
+                        copyButton.querySelector('.icon').innerText = "content_copy";
+                        sharePopup.classList.add("hidden");
+                    }, 450);
+                }
+            });
+        }
+    }
+});
+
+// Hide everything except the content when the URL has "embed" in it
+window.addEventListener("DOMContentLoaded", function(event) {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("embed")) {
+        // Set dark mode based on value of param
+        if (urlParams.get("embed") === "dark") {
+            setDarkMode(true);
+        } else {
+            setDarkMode(false);
+        }
+        const elemsToHide = [
+            "ptx-navbar",
+            "ptx-masthead",
+            "ptx-page-footer",
+            "ptx-sidebar",
+            "ptx-content-footer"
+        ];
+        for (let id of elemsToHide) {
+            const elem = document.getElementById(id);
+            if (elem) {
+                elem.classList.add("hidden");
+            }
+        }
+    }
+});
