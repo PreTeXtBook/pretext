@@ -10906,7 +10906,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- output. (2023-01-11)                             -->
                         <xsl:copy-of select="$content" />
                     </div>
-                    <div class="ptx-content-footer">
+                    <div id="ptx-content-footer" class="ptx-content-footer">
                         <xsl:apply-templates select="." mode="previous-button"/>
                         <a class="top-button button" href="#" title="Top">
                             <xsl:call-template name="insert-symbol">
@@ -11551,6 +11551,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </button>
 </xsl:template>
 
+<xsl:template name="embed-button">
+    <button id="embed-button" class="embed-button button" title="Embed this page">
+        <xsl:call-template name="insert-symbol">
+            <xsl:with-param name="name" select="'code'"/>
+        </xsl:call-template>
+        <span class="name">Embed</span>
+
+    </button>
+    <div class="embed-popup hidden" id="embed-popup">
+        <p>Copy the code below to embed this page in your own website or LMS page.</p>
+        <div class="embed-code-container">
+            <textarea class="embed-code-textbox" id="embed-code-textbox" readonly="true" aria-label="textbox">
+                <iframe src="https://example.com/embed" width="100%" height="1000"></iframe>
+            </textarea>
+            <button class="copy-embed-button button" id="copy-embed-button" title="Copy embed code">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'content_copy'"/>
+                </xsl:call-template>
+                <span class="name">Copy</span>
+            </button>
+        </div>
+    </div>
+</xsl:template>
+
 <xsl:template match="*" mode="print-button"/>
 
 <xsl:template match="worksheet" mode="print-button">
@@ -11624,6 +11648,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-has-calculator">
             <xsl:call-template name="calculator-toggle" />
             <xsl:call-template name="calculator" />
+        </xsl:if>
+        <!-- Button to show code for embedding in an LMS or webpage  -->
+         <xsl:if test="$b-has-embed-button">
+             <xsl:call-template name="embed-button" />
         </xsl:if>
         <xsl:if test="$b-theme-has-darkmode">
             <xsl:call-template name="light-dark-button" />

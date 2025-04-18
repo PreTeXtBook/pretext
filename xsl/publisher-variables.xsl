@@ -2606,6 +2606,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/html/pi:pub-attribute[@name='favicon']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!--                            -->
+<!-- HTML Embed Page button     -->
+<!--                            -->
+
+<xsl:variable name="embed-button">
+    <xsl:apply-templates select="$publisher-attribute-options/html/pi:pub-attribute[@name='embed-button']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-has-embed-button" select="$embed-button = 'yes')"/>
+
 
 <!-- ##################### -->
 <!-- EPUB-Specific Options -->
@@ -3108,6 +3117,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <html>
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
         <pi:pub-attribute name="favicon" default="none" options="simple"/>
+        <pi:pub-attribute name="embed-button" default="no" options="yes"/>
         <calculator>
             <pi:pub-attribute name="model" default="none" options="geogebra-classic geogebra-graphing geogebra-geometry geogebra-3d" legacy-stringparam="html.calculator"/>
         </calculator>
