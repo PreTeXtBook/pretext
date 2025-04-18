@@ -828,6 +828,18 @@
                 <li><attr>knowled</attr> with values <c>maximum</c> (default), <c>never</c> and <c>cross-page</c>. <c>maximum</c> will render xref's to structural elements as HTML links and xref's to smaller elements as knowls. <c>never</c> forces all xref's to be rendered as traditional HTML links. <c>cross-page</c> bases the rendering decision on if the xref and its target are on the same page. If so, the xref is always rendered as an HTML link. If the link and target are on different pages, the behavior is the same as <c>maximum</c></li>
             </ul>See <xref ref="knowled-content"/> for explanations and details.</p>
         </subsection>
+
+        <subsection xml:id="online-embed-button-options">
+            <title>Embed Page Button</title>
+            <idx><h>embed page button</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html</cline>
+            </cd>element can have an attribute <attr>embed-button</attr> with values:<ul>
+                <li><c>no</c>: the default, do not display button.</li>
+                <li><c>yes</c>: show a button in the navigation bar, that when clicked, displays a popup allowing the user to copy an iframe code snippet to paste into their website or LMS.</li>
+            </ul></p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-revealjs">
