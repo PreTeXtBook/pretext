@@ -744,6 +744,36 @@ def main():
                 dest_dir,
                 None
             )
+        elif args.format == "html-incremental":
+            import time
+            start = time.time()
+            # provide needed extra stringparams
+            stringparams["html.quick-dirty"] = "yes"
+            stringparams["publisher"] = publication_file
+
+            # attempt to reuse RS services
+            rs_js, rs_css, rs_cdn_url, rs_version = ptx.query_existing_runestone_services(
+                dest_dir=dest_dir,
+                stringparams=stringparams
+            )
+            ptx._set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
+
+            # get pub_vars from the publication file
+            pub_vars = ptx.get_publisher_variable_report(xml_source, publication_file, stringparams)
+
+            print("----Time to set up incremental build:", time.time() - start)
+            start = time.time()
+
+            ptx.html_incremental(
+                xml=xml_source,
+                stringparams=stringparams,
+                xmlid_root=args.xmlid,
+                extra_xsl=extra_stylesheet,
+                dest_dir=dest_dir,
+                pub_vars=pub_vars,
+            )
+            print("----Time for incremental build:", time.time() - start)
+            start = time.time()
         elif args.format == "html-zip":
             # no "subtree root" build is possible
             ptx.html(
