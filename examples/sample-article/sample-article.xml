@@ -5658,6 +5658,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li xml:id="cpu-definition">
                         <title>Central Processing Unit (CPU)</title>
                         <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
+                        <p>This is a second paragraph that should appear indented in PDF output.</p>
                     </li>
 
                     <li>
