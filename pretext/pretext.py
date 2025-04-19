@@ -4204,6 +4204,7 @@ def get_latex_style(xml, pub_file, stringparams):
       - Checks the value of the publisher variable 'journal-name'.
       - If it finds a journal name, tries to resolve that using the list of
         journals, returning the corresponding latex-style entry for that journal.
+        Also adds the texstyle file name to the string params
       - If there is no journal-name publisher variable, or the variable is not in the
         list of journals, checks for the publisher variable 'latex-style' and returns this.
     """
@@ -4213,7 +4214,7 @@ def get_latex_style(xml, pub_file, stringparams):
     if len(journal_name) > 0:
         journal_info = get_journal_info(journal_name)
         log.debug(f"Journal Info: {journal_info}")
-        stringparams["journal.code"] = journal_info.get("texstyle", "")
+        stringparams["journal.texstyle.file"] = journal_info.get("texstyle-file", "")
         latex_style = journal_info.get("latex-style", "")
         if len(latex_style) == 0:
             msg = "The journal name {} in your publication file is invalid or does not correspond to a valid latex-style.  Using the default LaTeX style instead."
@@ -4226,10 +4227,27 @@ def get_latex_style(xml, pub_file, stringparams):
         latex_style = pub_latex_style
     return latex_style
 
+def latex_package(xml, pub_file, stringparams, dest_dir):
+    """
+    Fetch latex packages (.sty/.cls files) required for building a
+    latex document in a particular journal's style (as specified by
+    a texstyle file).  This always downloads a fresh version of the files.
+    """
+    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
+    journal_name = get_publisher_variable(pub_vars, "journal-name")
+    if journal_name:
+        tmp_dir = get_temporary_directory()
+        # place_latex_package_files checks if tmp_dir already has the files, which it won't, so new files will always be downloaded.
+        dest_dir = os.path.join(dest_dir, journal_name)
+        place_latex_package_files(dest_dir, journal_name, tmp_dir)
+        log.info("latex package files downloaded to " + dest_dir)
+    else:
+        log.warning("No journal name found in publication file, so no latex package files downloaded.")
+
+
 # This is not a build target, there is no such thing as a "latex build."
 # Instead, this is a conveience for developers who want to compare
 # different versions of this file during development and testing.
-
 def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     """Convert XML source to LaTeX in destination directory"""
 
@@ -4295,6 +4313,12 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     # (an empty string is impossible due to a slash always being present?)
 
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+
+    # If we are building for a journal, we might need extra files
+    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
+    journal_name = get_publisher_variable(pub_vars, "journal-name")
+    if journal_name:
+        place_latex_package_files(tmp_dir, journal_name, os.path.join(generated_abs, "latex-packages"))
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
@@ -5158,29 +5182,89 @@ def get_journal_info(journal_name):
     log.debug("Reading list of journals in {}".format(journal_xml))
     journals_tree = ET.parse(journal_xml)
     journals_tree.xinclude()
+
     # Find the node with <code> value journal_name:
     try:
         journal = journals_tree.xpath(f"//journal[code='{journal_name.lower()}']")[0]
     except Exception as e:
         log.warning("The journal name {} specified in the publication file is not supported.".format(journal_name))
         return {"latex-style": ""}
+
+    # name, code, and publisher are nodes containing text
     keys = ["name", "code", "publisher"]
     journal_info = {}
     for key in keys:
-        if journal.find(key) is not None:
-            journal_info[key] = journal.find(key).text
-    # Set the latex-style value.  This will either be the value of an attribute of "method", or should be "texstyle"
-    if journal.find("method") is not None and "latex-style" in journal.find("method").attrib:
-        journal_info["latex-style"] = journal.find("method").attrib["latex-style"]
-    else:
-        journal_info["latex-style"] = "texstyle"
-    # Finally, set the "texstyle" value, which will either be the "code" value or the value of the "texstyle" attribute of "method"
-    if journal.find("method") is not None and "texstyle" in journal.find("method").attrib:
-        journal_info["texstyle"] = journal.find("method").attrib["texstyle"]
-    else:
-        journal_info["texstyle"] = journal.find("code").text
-        log.debug("Using the journal code {} as the texstyle value.".format(journal_info["texstyle"]))
+        element = journal.find(key)
+        journal_info[key] = element.text if element is not None else None
+    # get the attribute values of the optional 'method' element.  Possible attributes are @latex-style, @texstyle, and @dependent
+    if journal.find("method") is not None:
+        for attr in ["latex-style", "texstyle", "dependent"]:
+            if attr in journal.find("method").attrib:
+                journal_info[attr] = journal.find("method").attrib[attr]
+
+    # If any of these are not yet set (or are None), set them to the default values
+    journal_info["latex-style"] = journal_info.get("latex-style", "texstyle")
+    journal_info["texstyle"] = journal_info.get("texstyle", journal_info.get("code"))
+    journal_info["dependent"] = journal_info.get("dependent", "no")
+    log.debug("Using the journal code {} as the texstyle value.".format(journal_info.get("texstyle")))
+
+    # If the latex-style is "texstyle", then find a filename for the texstyle file (as a relative path inside journals/texstyles).  What this is depends on whether dependent is "yes"
+    if journal_info["latex-style"] == "texstyle":
+        # If dependent is "yes", then we need to set the texstyle-file to the filename of the texstyle file, which is the code value.
+        if journal_info["dependent"] == "yes":
+            journal_info["texstyle-file"] = "dependents/" + journal_info.get("texstyle") + ".xml"
+            log.debug("Using texstyle-file {}.".format(journal_info["texstyle-file"]))
+        # If dependent is "no", then we need to set the texstyle-file to the filename of the texstyle file, which is the code value.
+        else:
+            journal_info["texstyle-file"] =  journal_info.get("texstyle") + ".xml"
+            log.debug("Using texstyle-file {}.".format(journal_info["texstyle-file"]))
+
     return journal_info
+
+def place_latex_package_files(dest_dir, journal_name, cache_dir):
+    """
+    Check whether the latex requires additional files specified in a texstyle file.
+    If so, either copy them from cache_dir or download them from the internet (and also store a copy in the cache_dir).
+    """
+    # Get the texstyle file for the journal name
+    texstyle_file = get_journal_info(journal_name).get("texstyle-file")
+    # Double check that there is a texstyle file
+    if texstyle_file is None:
+        return
+    # Otherwise, parse this file and check for any <file> elements.
+    texstyle_tree = ET.parse(os.path.join(get_ptx_path(), "journals", "texstyles", texstyle_file))
+    texstyle_file_elements = texstyle_tree.xpath("//required-files/file")
+    if not texstyle_file_elements:
+        log.debug("No required files found in the texstyle file.")
+        return
+    # Check whether the journal code is present in the metadata element of the texstyle file
+    journal_code = texstyle_tree.xpath("//metadata/code")[0].text
+    cache_dir = os.path.join(cache_dir, journal_code)
+    # Create the cache_dir if it doesn't exist
+    os.makedirs(cache_dir, exist_ok=True)
+
+    for file in texstyle_file_elements:
+        file_path = os.path.join(cache_dir, file.attrib["name"])
+        if not os.path.exists(file_path):
+            # download the file if it is not already in the cache_dir
+            log.debug("Downloading required file {} from {}".format(file.attrib["name"], file.attrib["href"]))
+            url = file.attrib["href"]
+            # The url might be to the file, or to a compressed archive.  We do slightly different things in each case.  TODO: other archive formats.
+            if url.endswith(".zip"):
+                tmp_zip = os.path.join(cache_dir, "tmp.zip")
+                download_file(url, tmp_zip)
+                with zipfile.ZipFile(tmp_zip, 'r') as zip_ref:
+                    with open(file_path, 'wb') as f:
+                        f.write(zip_ref.read(file.attrib["path"]))
+                os.remove(tmp_zip)
+            else:
+                download_file(url, file_path)
+            log.debug("Saved file {} to {}".format(file.attrib["name"], file_path))
+        else:
+            log.debug("File {} already exists in the generated assets directory.".format(file.attrib["name"]))
+        # Copy required resource to the destination directory
+        shutil.copy2(file_path, dest_dir)
+
 
 
 ###########################

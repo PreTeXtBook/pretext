@@ -45,23 +45,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Import of correct texstyle files -->
 <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
 
-<!-- Set a default parameter value, but this will be overridden by -->
-<!-- pretext.py  using the journal-name variable.                  -->
-<xsl:param name="journal.code" select="''"/>
 
-<!-- Get the journal corresponding to code with value 'journal.name' -->
-<xsl:variable name="journal-listing" select="document('../../journals/journals.xml')/ptx-journals/journal[code=$journal.code]"/>
+<!-- stringparam that pretext.py will override with the texstyle file name -->
+<!-- (including "dependents/" if appropriate and ".xml")                   -->
+<xsl:param name="journal.texstyle.file" select="''"/>
 
-<!-- Get the texstyle file corresponding to the selected journal -->
-<xsl:variable name="texstyle-file-path">
-    <xsl:text>../../journals/texstyles/</xsl:text>
-    <xsl:if test="$journal-listing/method[@dependent='yes']">
-        <xsl:text>dependents/</xsl:text>
-    </xsl:if>
-</xsl:variable>
+<!-- Base texstyle folder -->
+<xsl:variable name="texstyle-file-path" select="'../../journals/texstyles/'"/>
+
 
 <!-- Read in the original texstyle file -->
-<xsl:variable name="orig-texstyle-root" select="document(concat($texstyle-file-path, $journal.code, '.xml'))"/>
+<xsl:variable name="orig-texstyle-root" select="document(concat($texstyle-file-path, $journal.texstyle.file))"/>
 
 <!-- We create a texstyle-root element which is either the root of the     -->
 <!-- original texstyle file, or is the root of a texstyle file that the    -->
@@ -80,7 +74,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="metadata/extends">
             <xsl:variable name="base-texstyle-file-name" select="metadata/extends"/>
-            <xsl:variable name="base-texstyle-root" select="document(concat($texstyle-file-path,'../', $base-texstyle-file-name, '.xml'))"/>
+            <xsl:variable name="base-texstyle-root" select="document(concat($texstyle-file-path, $base-texstyle-file-name, '.xml'))"/>
             <xsl:copy>
                 <xsl:apply-templates select="$base-texstyle-root/texstyle/*" mode="include-base"/>
             </xsl:copy>
@@ -266,8 +260,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}%&#xa;</xsl:text>
     <!-- In just the first theoremstyle, we use "theorem" as the     -->
     <!-- default theorem for purposes of defining a counter.         -->
+    <!-- Unless we see @define-counter="no", in which case we assume -->
+    <!-- that the package for the journal does this already.         -->
     <!-- Note that "theorem" is not among the $numbered-theorem-envs -->
-    <xsl:if test="not(preceding-sibling::theoremstyle)">
+    <xsl:if test="not(preceding-sibling::theoremstyle) and not(@define-counter='no')">
         <xsl:text>\newtheorem{theorem}{</xsl:text>
         <xsl:apply-templates select="($document-root//theorem)[1]" mode="type-name"/>
         <xsl:text>}[section]&#xa;</xsl:text>

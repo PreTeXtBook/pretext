@@ -5,9 +5,8 @@
         <code>springer-nature</code>
         <name>Springer Nature journals</name>
         <publisher>Springer Nature</publisher>
-        <!-- Each file element of required files should have an href to a location where wget can download the file.  @compression describes how the file is compressed (or None).  @path gives the path to the file relative to the extracted resource.  The file at this path will be copied to the build directory before running xelatex/pdflatex -->
         <required-files>
-            <file href="https://resource-cms.springernature.com/springer-cms/rest/v1/content/18782940/data/v13.zip" compression="zip" path="sn-article-template/sn-jnl.cls"/>
+            <file name="sn-jnl.cls" href="https://resource-cms.springernature.com/springer-cms/rest/v1/content/18782940/data/v13.zip" path="sn-article-template/sn-jnl.cls"/>
         </required-files>
         <latex-engine command="pdflatex"/>
         <bibliography-style>spbasic</bibliography-style>
@@ -42,15 +41,7 @@
     <ptx-preamble>
         <theoremstyle
             name="thmstyleone"
-            environments="
-                theorem,
-                proposition
-                lemma
-                corollary, claim
-                fact
-                identity
-                conjecture
-            "
+            environments="theorem, proposition, lemma, corollary, claim, fact, identity, conjecture"
         />
         <theoremstyle
             name="thmstyletwo"
@@ -63,7 +54,6 @@
                 assumption
                 openproblem
                 openquestion
-                algorithm
                 question
                 activity
                 exercise
