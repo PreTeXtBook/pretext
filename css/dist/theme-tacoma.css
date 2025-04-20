@@ -296,6 +296,24 @@ body.pretext > a.assistive:focus {
 .ptx-navbar .pretext .navbar .dropdown {
   height: 34px;
 }
+.ptx-navbar .embed-popup {
+  padding: 10px;
+  background-color: var(--navbar-background);
+  position: absolute;
+  margin-top: 36px;
+  border: 1px solid var(--page-border-color);
+  border-radius: 3px;
+  box-shadow: 0 0 5px var(--primary-color-gray-80);
+}
+.ptx-navbar .embed-popup .embed-code-container {
+  width: "100%";
+  padding: 5px;
+}
+.ptx-navbar .embed-popup .embed-code-container .embed-code-textbox {
+  width: 100%;
+  padding: 10px;
+  height: 5em;
+}
 .ptx-navbar .treebuttons > * {
   display: flex;
   align-items: center;
@@ -308,7 +326,7 @@ body.pretext > a.assistive:focus {
 .ptx-navbar :is(.index-button) .icon {
   display: none;
 }
-.ptx-navbar :is(.runestone-profile, .activecode-toggle, .searchbutton, .calculator-toggle, .light-dark-button) .name {
+.ptx-navbar :is(.runestone-profile, .activecode-toggle, .searchbutton, .calculator-toggle, .light-dark-button, .embed-button) .name {
   display: none;
 }
 .ptx-navbar .index-button {
@@ -387,11 +405,15 @@ body.pretext > a.assistive:focus {
   .ptx-navbar .index-button {
     display: none;
   }
+  .ptx-navbar .embed-popup {
+    margin-top: unset;
+    bottom: 36px;
+  }
   .ptx-navbar .dropdown-content {
     top: unset;
     bottom: 36px;
   }
-  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
+  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button, .embed-button) .name {
     display: none;
   }
 }
