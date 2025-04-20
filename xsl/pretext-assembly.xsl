@@ -674,6 +674,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- We cosmetically change a "drag-n-drop" style matching problem from    -->
+<!-- being signaled by "matches" and instead call it a "cardsort" problem, -->
+<!-- which is a more accurate description of the interface from Runestoone -->
+<!-- Services.  We can't wait for "repair" since we do manipulation of     -->
+<!-- exercises in advance.  Why's that?  So an old WeBWorK server can send -->
+<!-- back old PreTeXt and have it be repaired.  So we do this change in an -->
+<!-- earlier pass.                                                         -->
+<xsl:template match="exercise/matches|project/matches|activit/matches|exploration/matches|investigation/matches|task/matches" mode="assembly">
+    <!-- literal element gets namespace declarations -->
+    <xsl:element name="cardsort">
+        <xsl:apply-templates select="node()|@*" mode="assembly"/>
+    </xsl:element>
+</xsl:template>
+
+
 <!-- ##################################################### -->
 <!-- Dynamic Substitutions                                 -->
 <!-- Cut out dynamic setup and evaluation for static mode. -->
@@ -2143,7 +2158,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (inline, divisional, reading, worksheet, project-like) based largely  -->
 <!-- on location.  They can be static, interactive in HTML, interactive    -->
 <!-- on a server.  Interactive versions come in many flavors, such as      -->
-<!-- short answer, multiple choice, true/false, Parson, matching, fill-in, -->
+<!-- short answer, multiple choice, true/false, Parson, cardsort, fill-in, -->
 <!-- and so on.  Their solutions (hint, answer, solution) apear, or do not -->
 <!-- appear, where born or in specialized "solutions" divisions.  We       -->
 <!-- scribble on each to record as much as we can right now.  It'll be     -->
@@ -2280,8 +2295,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and blocks and (blocks/@layout = 'horizontal')">
                 <xsl:text>parson-horizontal</xsl:text>
             </xsl:when>
-            <xsl:when test="statement and matches">
-                <xsl:text>matching</xsl:text>
+            <xsl:when test="statement and cardsort">
+                <xsl:text>cardsort</xsl:text>
             </xsl:when>
             <xsl:when test="statement and areas">
                 <xsl:text>clickablearea</xsl:text>
@@ -2368,7 +2383,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- True/False        -->
 <!-- Multiple Choice   -->
 <!-- Parson problems   -->
-<!-- Matching problems -->
+<!-- Cardsort problems -->
 <!-- Clickable Area    -->
 <!-- ActiveCode        -->
 
@@ -2380,7 +2395,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -2392,7 +2407,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -2404,7 +2419,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -2416,7 +2431,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -2428,7 +2443,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -2440,7 +2455,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or

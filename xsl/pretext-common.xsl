@@ -11818,6 +11818,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'PDF front and back covers via a &quot;docinfo/covers&quot; element has moved to the publication file with some small changes.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2025-04-18 -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//matches&quot;"/>
+        <xsl:with-param name="date-string" select="'2025-04-18'" />
+        <xsl:with-param name="message" select="'the &quot;matches&quot; element inside an &quot;exercise&quot; (or similar) to specify a drag-n-drop problem has been replaced by the &quot;cardsort&quot; element.  This is an entirely cosmetic change.  Until you make the change in your source, we will try to honor your intent.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
