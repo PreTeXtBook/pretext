@@ -636,7 +636,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - every multiple choice "exercise"             -->
 <!--   - every Parsons problem "exercise"             -->
 <!--   - every horizontal Parsons problem "exercise"  -->
-<!--   - every matching problem "exercise"            -->
+<!--   - every cardsort problem "exercise"            -->
 <!--   - every clickable area problem "exercise"      -->
 <!--   - every "exercise" with fill-in blanks         -->
 <!--   - every "exercise" with additional "program"   -->
@@ -648,7 +648,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -661,7 +661,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -673,7 +673,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -684,7 +684,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                   exploration[ (@exercise-interactive = 'truefalse') or
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
@@ -697,7 +697,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -709,7 +709,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'multiplechoice') or
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'matching') or
+                               (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
@@ -1436,11 +1436,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Matching Problem -->
+<!-- Carsort Problem -->
 
-<xsl:template match="*[@exercise-interactive = 'matching']" mode="runestone-to-interactive">
+<xsl:template match="*[@exercise-interactive = 'cardsort']" mode="runestone-to-interactive">
     <div class="ptx-runestone-container">
-        <div class="runestone matching_section">
+        <div class="runestone cardsort_section">
             <ul data-component="dragndrop" data-question_label="" style="visibility: hidden;">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <span data-subcomponent="question">
@@ -1456,7 +1456,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:variable name="rsid">
                     <xsl:apply-templates select="." mode="runestone-id"/>
                 </xsl:variable>
-                <xsl:for-each select="matches/match">
+                <xsl:for-each select="cardsort/match">
 
                     <!-- PTX premise = RS draggable -->
                     <!-- may be multiple premise or none -->
@@ -1465,7 +1465,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:attribute name="id">
                                 <xsl:value-of select="$rsid"/>
                                 <xsl:text>_drag</xsl:text>
-                                <xsl:number count="premise" from="matches" level="any"/>
+                                <xsl:number count="premise" from="cardsort" level="any"/>
                             </xsl:attribute>
                             <xsl:apply-templates select="parent::match" mode="category-attribute"/>
                             <xsl:apply-templates select="."/>
@@ -1478,7 +1478,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:attribute name="for">
                                 <xsl:value-of select="$rsid"/>
                                 <xsl:text>_drag</xsl:text>
-                                <xsl:number count="response" from="matches" level="any"/>
+                                <xsl:number count="response" from="cardsort" level="any"/>
                             </xsl:attribute>
                             <xsl:apply-templates select="parent::match" mode="category-attribute"/>
                             <xsl:apply-templates select="."/>
@@ -1497,7 +1497,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="match" mode="category-attribute">
     <xsl:attribute name="data-category">
         <!-- no @count, then implies count="match" (peers),   -->
-        <!-- from="matches", while @level="single" is default -->
+        <!-- from="cardsort", while @level="single" is default -->
         <xsl:number/>
     </xsl:attribute>
 </xsl:template>
