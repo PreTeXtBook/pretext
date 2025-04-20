@@ -562,7 +562,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Matching Problems -->
 
-<xsl:template match="*[@exercise-interactive = 'matching']" mode="runestone-to-static">
+<xsl:template match="*[@exercise-interactive = 'cardsort']" mode="runestone-to-static">
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- Statement -->
@@ -570,7 +570,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:copy-of select="statement/node()"/>
         <tabular>
             <!-- provide two "col" if necessary -->
-            <xsl:apply-templates select="matches/match" mode="matching-statement"/>
+            <xsl:apply-templates select="cardsort/match" mode="cardsort-statement"/>
         </tabular>
     </statement>
     <!-- Any authored hint, answers, solutions not derived from   -->
@@ -583,15 +583,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <solution>
         <tabular>
             <!-- provide two "col" if necessary -->
-            <xsl:apply-templates select="matches/match" mode="matching-solution"/>
+            <xsl:apply-templates select="cardsort/match" mode="cardsort-solution"/>
         </tabular>
     </solution>
 </xsl:template>
 
 <!-- responses re-orered according to match/@order -->
-<xsl:template match="matches/match" mode="matching-statement">
+<xsl:template match="cardsort/match" mode="cardsort-statement">
     <xsl:variable name="premise-number" select="count(preceding-sibling::match) + 1"/>
-    <xsl:variable name="all-matches" select="parent::matches/match"/>
+    <xsl:variable name="all-matches" select="parent::cardsort/match"/>
     <row>
         <xsl:if test="following-sibling::match">
             <xsl:attribute name="bottom">
@@ -609,7 +609,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </row>
 </xsl:template>
 
-<xsl:template match="matches/match" mode="matching-solution">
+<xsl:template match="cardsort/match" mode="cardsort-solution">
     <row>
         <xsl:if test="following-sibling::match">
             <xsl:attribute name="bottom">
