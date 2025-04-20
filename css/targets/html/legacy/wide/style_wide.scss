@@ -202,11 +202,11 @@
   max-width: var(--content-width);
 }
 
-.matching_section > div > div {
+.codepart_section > div > div {
   font-size: 1rem;
   clear: both;
 }
-.matching_section > div > div:first-of-type {
+.codepart_section > div > div:first-of-type {
   font-size: var(--content-font-size);
 }
 
