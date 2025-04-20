@@ -68,7 +68,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!--     favicon/favicon-32x32.png   -->
     <!--     favicon/favicon-16x16.png   -->
     <!-- in external images directory    -->
-    <html favicon="simple">
+    <html favicon="simple" embed-button="yes">
         <!-- links below images to open full-size, must be elected -->
         <asymptote links="yes"/>
         <!-- Several embedded calculators are available            -->
