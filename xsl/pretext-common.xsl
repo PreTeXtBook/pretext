@@ -11825,6 +11825,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;matches&quot; element inside an &quot;exercise&quot; (or similar) to specify a drag-n-drop problem has been replaced by the &quot;cardsort&quot; element.  This is an entirely cosmetic change.  Until you make the change in your source, we will try to honor your intent.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2025-04-23 -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//matches/match/@order|$document-root//cardsort/match/@order&quot;"/>
+        <xsl:with-param name="date-string" select="'2025-04-23'" />
+        <xsl:with-param name="message" select="'an &quot;@order&quot; attribute on a &quot;match&quot; is deprecated and should instead be placed on the contained &quot;premise&quot; element(s).  If your cardsort problem is simply a 1-1 correspondence, then we will honor your intent.  If your problem is more complicated (multiple &quot;premise&quot; inside a &quot;match&quot;) results may be variable and unpredictable.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

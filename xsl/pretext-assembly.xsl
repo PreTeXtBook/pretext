@@ -688,6 +688,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- Ordering for static version of a cardsort exercise no longer goes   -->
+<!-- on the "match", due to the possibility of multiple "premise" inside -->
+<!-- the "match".  If the problem is an old-style 1-1 corrspondence, we  -->
+<!-- will move it onto *all* contained "premise", which will be fine if  -->
+<!-- there is one or less within the "match".  We allow for a recent     -->
+<!-- transition from "matches" to "cardsort".                            -->
+<xsl:template match="matches/match/@order|cardsort/match/@order" mode="assembly"/>
+
+<xsl:template match="matches/match/premise|cardsort/match/premise" mode="assembly">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="assembly"/>
+        <xsl:if test="parent::match/@order">
+            <xsl:attribute name="order">
+                <xsl:value-of select="parent::match/@order"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="node()" mode="assembly"/>
+    </xsl:copy>
+</xsl:template>
 
 <!-- ##################################################### -->
 <!-- Dynamic Substitutions                                 -->
