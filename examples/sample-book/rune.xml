@@ -3115,11 +3115,11 @@ TEST_CASE( "Test the add function" ) {
                 <p>Each putative basis is a subset of exactly one of the three subspaces.  So for each subspace, two of the three sets can be ruled out by simply testing that the vectors of the basis are members of the subspace, via the membership criteria.</p>
             </feedback>
             <cardsort>
-                <match order="2">
+                <match order="1">
                     <premise><m>\left\{\langle x,y,z\rangle\mid - y + z = 0\right\}</m></premise>
                     <response><m>\left\{\langle -4, 3, 3\rangle, \langle 3, -2, -2 \rangle\right\}</m></response>
                 </match>
-                <match order="2">
+                <match order="3">
                     <premise><m>\left\{\langle x,y,z\rangle\mid -3x - 5y + z = 0\right\}</m></premise>
                     <response><m>\left\{\langle -4, 3, 3\rangle, \langle 5, -4, -5 \rangle\right\}</m></response>
                 </match>
