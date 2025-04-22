@@ -3743,11 +3743,27 @@ Book (with parts), "section" at level 3
             <xsl:apply-templates select="." mode="location-report"/>
         </xsl:when>
     </xsl:choose>
-    <!-- Prefix just for RS-server builds, in order that the database -->
-    <!-- of exercises gets a globally unique identifier.              -->
-    <!-- And for a non-RS-server build, we add a prefix in order to   -->
-    <!-- differentiate from nearby (wrappers) uses of @label for      -->
-    <!-- PreTeXt functions.                                           -->
+    <xsl:call-template name="runestone-label-prefix"/>
+    <!-- We require a @label attribute, but allow it to be -->
+    <!-- the result of an automatic copy from an @xml:id.  -->
+    <xsl:value-of select="@label"/>
+</xsl:template>
+
+<!-- Special handling for programs in exercise-like elements.              -->
+<!-- We want to associate those programs with the label on their container -->
+<!-- and NOT with an auto-generated label on the program itself that might -->
+<!-- come from an @xml:id.                                                 -->
+<xsl:template match="exercise/program" mode="runestone-id">
+    <xsl:call-template name="runestone-label-prefix"/>
+    <xsl:value-of select="../@label"/>
+</xsl:template>
+
+<!-- Prefix just for RS-server builds, in order that the database -->
+<!-- of exercises gets a globally unique identifier.              -->
+<!-- And for a non-RS-server build, we add a prefix in order to   -->
+<!-- differentiate from nearby (wrappers) uses of @label for      -->
+<!-- PreTeXt functions.                                           -->
+<xsl:template name="runestone-label-prefix">
     <xsl:choose>
         <xsl:when test="$b-host-runestone">
             <!-- global variables defined in this stylesheet -->
@@ -3760,9 +3776,6 @@ Book (with parts), "section" at level 3
             <xsl:text>rs-</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <!-- We require a @label attribute, but allow it to be -->
-    <!-- the result of an automatic copy from an @xml:id.  -->
-    <xsl:value-of select="@label"/>
 </xsl:template>
 
 <!--            -->
