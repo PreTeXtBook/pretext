@@ -365,6 +365,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </exercise>
 
+        <p>Now a C++ program that is spread across multiple files. This example will only be interactive on a Runestone server.</p>
+
+        <p>First, we have a <c>.h</c> file that defines an <attr>filename</attr>. It has an <attr>xml:id</attr> so other elements can reference it. It also has an <attr>label</attr> which is it's unique identifier in the Runestone database. (The label is intentionally different than the xml:id for demonstration purposes, but they can be the same.) The <attr>filename</attr> is used to indicate what to name to use when the contents of the element are written to a file on the server - other program code and/or tools on the server can look for it using this name. The <attr>filename</attr> need not be unique<mdash/>we could have multiple programs with <attr>filename="add.h"</attr>. As we will see below, the author specifies which <q>version</q> of a file should be used in any given location with its unique xml:id.</p>
+
+        <p>The <tag>program</tag> is inside of a <tag>listing</tag> so that we have a place to add a caption and so that we can reference the code sample, including that caption, with an <tag>xref</tag> from elsewhere. Note that the <tag>listing</tag> has both a <tag>caption</tag> and a <tag>title</tag>. The <tag>caption</tag> will be rendered with the program. The <tag>title</tag> will not appear locally. It will be used if an <tag>xref</tag> links to the <tag>listing</tag> using <attr>text="title"</attr></p>
+
+        <listing xml:id="addh-v1-listing">
+            <title>add.h (version 1)</title>
+            <caption>add.h (version 1) - A very simple header file that lacks header guards.</caption>
+            <program filename="add.h" xml:id="addh-v1" label="addh-v1-label" language="cpp" include-source="yes">
+                int add(int a, int b);
+            </program>
+        </listing>
+
+        <p>Next, a <c>.cpp</c> file. Note that because it is part of an exercise, the <attr>label</attr> is applied to the exercise that contains it. The <attr>xml:id</attr> and <attr>filename</attr> still belong on the program itself.</p>
+
+        <p>It also has <attr>extra-compiler-args</attr>. These will be added to any default compiler args for the book. In this case, the <c>-c</c> indicates that we only want to compile this file when it is <q>Run</q> and not try to link it or actually run it.</p>
+
+        <exercise label="addcpp-v1">
+            <statement>
+                <p>You can leave this code as is or modify it. When you click <q>Run</q>, the code will be compiled. However, it will not be run as this is not a standalone program. To run it, use the full program below.</p>
+            </statement>
+            <program filename="add.cpp" xml:id="addcpp-v1" extra-compiler-args="-c" interactive="activecode" language="cpp" include-source="yes">
+                int add(int a, int b) {
+                    return a + b;
+                }
+            </program>
+        </exercise>
+
+        <p>Finally, the core program. <attr>add-files</attr> is used to specify (by xml:id) the files that need to be added to the program directory. <attr>compile-also</attr> specifies files that must be compiled with this source file (they will be assumed to be also part of <attr>add-files</attr>). Notice that when using <attr>add-files</attr> to reference code we want to include, we use the xml:id of the target program - it has the contents we want to include. When making a textual reference with an <tag>xref</tag> we can't link to the program, as it lacks the contextual information required to create a valid reference. Instead, we should link to a listing (or some other container) that surrounds the code, like this: <xref ref="addh-v1-listing"/> or <xref ref="addh-v1-listing" text="title"/></p>
+
+        <program label="multiple-file-program" interactive="activecode" add-files="addh-v1" compile-also="addcpp-v1" include-source="yes" language="cpp">
+            <![CDATA[
+            #include "add.h"
+            #include <iostream>
+            using namespace std;
+            int main() {
+                int a = 1;
+                int b = 2;
+                cout << "The sum of " << a << " and " << b << " is " << add(a, b) << endl;
+            }]]>
+        </program>
+
+        <p>Note that there is a cross page test of <attr>add-files</attr> located in <xref ref="runestone-hodgepodge"/></p>
+
         <p>A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.</p>
     </section>
 
@@ -4028,8 +4073,26 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
-    <exercises>
+    <exercises xml:id="runestone-hodgepodge">
         <title>Hodgepodge</title>
+
+        <exercise label="multifile-program-2">
+            <statement>
+                <p>This is a test of accessing program resources across pages by relying on what is in the database.</p>
+            </statement>
+
+            <program interactive="activecode" add-files="addh-v1 addcpp-v1" compile-also="addcpp-v1" language="cpp" include-source="yes">
+                <![CDATA[
+                #include "add.h"
+                #include <iostream>
+                using namespace std;
+                int main() {
+                    int a = 1;
+                    int b = 2;
+                    cout << "The sum of " << a << " and " << b << " is " << add(a, b) << endl;
+                }]]>
+            </program>
+        </exercise>
 
         <exercise label="true-false-exercise-with-tasks-in-exercises">
             <title>With Tasks in an Exercises Division</title>
