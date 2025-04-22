@@ -2003,6 +2003,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:attribute name="id">
                             <xsl:value-of select="$rsid"/>
                         </xsl:attribute>
+                        <!-- filename used for this data if another program makes use of it -->
+                        <!-- via add-files                                                  -->
+                        <xsl:if test="@filename">
+                            <xsl:attribute name="data-filename">
+                                <xsl:value-of select="@filename"/>
+                            </xsl:attribute>
+                        </xsl:if>
                         <!-- add some lead-in text to the window -->
                         <xsl:if test="$exercise-statement">
                             <div class="ac_question">
@@ -2268,10 +2275,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="attr" select="'compiler-args'"/>
         </xsl:call-template>
     </xsl:variable>
-    <xsl:if test="$compiler-args != '' and ($hosting = 'jobeserver')">
+    <!-- extra compiler args, appended to compiler args -->
+    <xsl:variable name="extra-compiler-args" select="@extra-compiler-args"/>
+    <xsl:if test="($compiler-args != '' or $extra-compiler-args != '') and ($hosting = 'jobeserver')">
+        <xsl:variable name="compiler-args-full">
+            <xsl:value-of select="$compiler-args"/>
+            <xsl:if test="$compiler-args != '' and $extra-compiler-args != ''">
+                <xsl:text>,</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="$extra-compiler-args"/>
+        </xsl:variable>
         <xsl:attribute name="data-compileargs">
             <xsl:call-template name="comma-list-to-json-array">
-                <xsl:with-param name="list" select="$compiler-args"/>
+                <xsl:with-param name="list" select="$compiler-args-full"/>
             </xsl:call-template>
         </xsl:attribute>
     </xsl:if>
