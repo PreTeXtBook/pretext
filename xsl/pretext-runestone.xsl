@@ -2134,6 +2134,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
         </xsl:attribute>
     </xsl:if>
+
+    <!-- Merge add-files and compile-also, get unique items               -->
+    <!-- This will be the list that we use as add-files for the manifest  -->
+    <xsl:variable name="all-extra-files">
+        <xsl:variable name="id-list">
+            <xsl:value-of select="@add-files"/>
+            <xsl:if test="@add-files and @compile-also">
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+            <xsl:value-of select="@compile-also"/>
+        </xsl:variable>
+        <xsl:variable name="unique-tokens">
+            <xsl:call-template name="unique-token-set">
+                <xsl:with-param name="s" select="$id-list"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:for-each select="exsl:node-set($unique-tokens)/token">
+            <xsl:value-of select="."/>
+            <xsl:if test="following-sibling::token">
+                <xsl:text>,</xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:variable>
+
+    <!-- allow @add-files attribute on <program> -->
+    <xsl:if test="$all-extra-files != ''">
+        <xsl:attribute name="data-add-files">
+            <xsl:call-template name="runestone-targets">
+                <xsl:with-param name="id-list" select="$all-extra-files"/>
+                <xsl:with-param name="separator" select="','"/>
+            </xsl:call-template>
+        </xsl:attribute>
+    </xsl:if>
+    <!-- allow @compile-with attribute on <program> -->
+    <xsl:if test="@compile-also">
+        <xsl:attribute name="data-compile-also">
+            <xsl:call-template name="runestone-targets">
+                <xsl:with-param name="id-list" select="@compile-also"/>
+                <xsl:with-param name="separator" select="','"/>
+                <xsl:with-param name="output-field" select="'filename'"/>
+            </xsl:call-template>
+        </xsl:attribute>
+    </xsl:if>
     <!-- allow @include attribute on <program> -->
     <xsl:if test="@include">
         <!-- space-separated this time -->
