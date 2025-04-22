@@ -1522,10 +1522,16 @@
         <attribute name="compiler-args"/>
       </optional>
       <optional>
+        <attribute name="extra-compiler-args"/>
+      </optional>
+      <optional>
         <attribute name="database"/>
       </optional>
       <optional>
-        <attribute name="datafile"/>
+        <attribute name="add-files"/>
+      </optional>
+      <optional>
+        <attribute name="compile-also"/>
       </optional>
       <optional>
         <attribute name="download">
@@ -1548,6 +1554,9 @@
       </optional>
       <optional>
         <attribute name="include"/>
+      </optional>
+      <optional>
+        <attribute name="filename"/>
       </optional>
       <optional>
         <attribute name="interactive">
