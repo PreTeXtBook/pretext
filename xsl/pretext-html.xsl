@@ -9377,6 +9377,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
             </xsl:if>
             <code>
+                <!-- Runestone may have a use for ids and filenames, even on non-interactive -->
+                <!-- programs (e.g. inclusion elsewhere).                                    -->
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <xsl:if test="@filename">
+                    <xsl:attribute name="data-filename">
+                        <xsl:value-of select="@filename"/>
+                    </xsl:attribute>
+                </xsl:if>
                 <!-- Prism only needs a single class name, per language  -->
                 <!-- placed on "code" but will migrate to the "pre" also -->
                 <xsl:attribute name="class">
