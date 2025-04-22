@@ -11855,6 +11855,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'an &quot;@order&quot; attribute on a &quot;match&quot; is deprecated and should instead be placed on the contained &quot;premise&quot; element(s).  If your cardsort problem is simply a 1-1 correspondence, then we will honor your intent.  If your problem is more complicated (multiple &quot;premise&quot; inside a &quot;match&quot;) results may be variable and unpredictable.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2025-04-25  deprecate "program@datafile" in favor of "program@add-files"   -->
+    <xsl:call-template name="deprecation-message">
+      <xsl:with-param name="occurrences" select="&quot;$document-root//datafile[@datafile]&quot;" />
+      <xsl:with-param name="date-string" select="'2025-04-25'" />
+      <xsl:with-param name="message" select="'the program@datafile attribute containing datafile@filename has been deprecated. You should change programs to use the @add-files attribute and use it specify the xml:id of datafiles to make available.'"/>
+    <!--  -->
+  </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
