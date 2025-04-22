@@ -2632,6 +2632,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="@*" mode="runestone-targets">
     <xsl:param name="separator" select="'MISSING SEPARATOR'"/>
+    <xsl:param name="output-field" select="'runestone-id'"/>
 
     <!-- save off original context attribute for error-reporting -->
     <xsl:variable name="original-attribute" select="."/>
@@ -2649,7 +2650,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:message>PTX:ERROR:   an interactive with @xml:id value "<xsl:value-of select="$the-id"/>" in a "@<xsl:value-of select="local-name($original-attribute)"/>" attribute was not found</xsl:message>
             </xsl:if>
             <!-- build Runestone database id of the target -->
-            <xsl:apply-templates select="$target" mode="runestone-id"/>
+            <xsl:choose>
+                <xsl:when test="$output-field = 'runestone-id'">
+                    <xsl:apply-templates select="$target" mode="runestone-id"/>
+                </xsl:when>
+                <xsl:when test="$output-field = 'filename'">
+                    <xsl:value-of select="$target/@filename"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$target" mode="runestone-id"/>
+                    <xsl:message>PTX:ERROR:   runestone-targets template was called with an invalid @output-field value "<xsl:value-of select="$output-field"/>"</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
             <!-- n - 1 separators, required by receiving Javascript -->
         </xsl:for-each>
         <xsl:if test="following-sibling::token">
