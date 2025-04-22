@@ -419,6 +419,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Compute list of any programs that are linked to from other programs, -->
+<!-- they will need to be rendered into the source. Result is a node-set  -->
+<!-- containing <token>id</token>                                         -->
+<xsl:variable name="linked-programs-list-rtf">
+    <xsl:variable name="linked-id-string">
+      <xsl:for-each select="//program[boolean(@add-files) or boolean(@include) or boolean(@compile-also)]">
+          <xsl:value-of select="@add-files"/>
+          <xsl:text>,</xsl:text>
+          <xsl:value-of select="@include"/>
+          <xsl:text>,</xsl:text>
+          <xsl:value-of select="@compile-also"/>
+          <xsl:text>,</xsl:text>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:call-template name="unique-token-set">
+        <xsl:with-param name="s" select="$linked-id-string"/>
+    </xsl:call-template>
+</xsl:variable>
+<xsl:variable name="linked-programs-list" select="exsl:node-set($linked-programs-list-rtf)/token"/>
+
 <xsl:template match="book|article" mode="runestone-manifest">
     <exsl:document href="runestone-manifest.xml" method="xml" indent="yes" encoding="UTF-8">
         <manifest>
@@ -534,6 +554,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- recurse into non-container "task" eventually, so "task" do get           -->
         <!-- processed, even if they seem to be missing from this select.             -->
         <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile|.//interactive[@platform = 'doenetml']" mode="runestone-manifest"/>
+
+        <!-- Now check for programs that have been included elsewhere. They need      -->
+        <!-- to be rendered into <source> elements.                                   -->
+        <xsl:apply-templates select=".//program[@xml:id = $linked-programs-list]" mode="runestone-manifest-source"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
 </xsl:template>
@@ -806,6 +830,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="runestone-activecode"/>
         </htmlsrc>
     </question>
+</xsl:template>
+
+<!-- Source for every program that is linked to goes in as a <source>              -->
+<!-- For activecode/codelens, source will also appear in a <question> element      -->
+<!-- but in that location it will be buried in a pile of html.                     -->
+<xsl:template match="program" mode="runestone-manifest-source">
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="runestone-filename"/>
+    </xsl:variable>
+    <source>
+        <xsl:attribute name="filename">
+            <xsl:value-of select="$filename"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="code"/>
+        </xsl:call-template>
+    </source>
+</xsl:template>
+
+<!-- Get filename to use for an element, fallback on label if filename is missing -->
+<xsl:template match="program|datafile" mode="runestone-filename">
+    <xsl:choose>
+        <xsl:when test="@filename">
+            <xsl:value-of select="@filename"/>
+        </xsl:when>
+        <xsl:when test="@label">
+            <xsl:value-of select="@label"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>Missing filename attribute on </xsl:text>
+            <xsl:value-of select="name()"/>
+            <xsl:text> with xml:id </xsl:text>
+            <xsl:value-of select="@xml:id"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- In database with the same structure as an exercise/question. -->
