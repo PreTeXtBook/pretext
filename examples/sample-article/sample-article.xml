@@ -9339,20 +9339,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>Review <url href="https://www.britannica.com/list/25-decade-defining-events-in-us-history" visual="www.britannica.com/list/25-decade-defining-events-in-us-history">Encyclopedia Brittania, 25 Decade-Defining Events in U.S. History</url>url.</p>
                     </feedback>
                     <cardsort>
-                        <match order="4">
-                            <premise>Monroe Doctrine</premise>
+                        <match>
+                            <premise order="4">Monroe Doctrine</premise>
                             <response>1823</response>
                         </match>
-                        <match order="3">
-                            <premise>Haymarket Riot</premise>
+                        <match>
+                            <premise order="3">Haymarket Riot</premise>
                             <response>1886</response>
                         </match>
-                        <match order="1">
-                            <premise>Louisiana Purchase</premise>
+                        <match>
+                            <premise order="1">Louisiana Purchase</premise>
                             <response>1803</response>
                         </match>
-                        <match order="2">
-                            <premise>Battle of Gettysburg</premise>
+                        <match>
+                            <premise order="2">Battle of Gettysburg</premise>
                             <response>1863</response>
                         </match>
                     </cardsort>
