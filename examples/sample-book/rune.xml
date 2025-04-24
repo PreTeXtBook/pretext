@@ -146,6 +146,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
+        <p>The <attr>highlight-lines</attr> works on ActiveCode programs, but the highlighted lines are only shown when viewing the initial code. Any version of the code that the reader has edited may have shifted lines of code and thus highlighting might affect the wrong lines, causing confusion.</p>
+
+        <program interactive='activecode' language="python" label="program-activecode-highlights" highlight-lines="1-2,5" include-source="yes">
+            def add(a, b):
+                return a + b
+
+            # Use the function
+            result = add(2, 3)
+            if result == 5:
+                print("Test passed")
+            else:
+                print("Test failed")
+        </program>
+
         <p>A program can have a <tag>preamble</tag> and/or <tag>postamble</tag> which are added to the code that the user writes before it is run. They are visible by default, but can be made invisible with <attr>visible</attr> set to <c>"no"</c>. When visible, the code editor will prevent those regions from being modified. The indentation for lines in the <c>preamble/code/postamble</c> elements will be calculated relative to each other - make sure to indent them all to a similar extent. (In the source for the sample below, the <c># TODO...</c> is intentially indented one stop extra so that the user's code is part of the <c>add</c> function.</p>
         <p><tag>tests</tag> are similar to <tag>postamble</tag> in that it represents code that is added to the users submission. However, <tag>tests</tag> is intended specifically for unit testing code (see examples below for unit testing in Python, Java, C++, SQL). Tests are invisble by default and can be made visible with <attr>visible</attr> set to <c>"yes"</c>. For historical reasons, the indentation of the <tag>tests</tag> is treated separately from the rest of the program.</p>
 
