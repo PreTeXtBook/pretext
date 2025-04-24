@@ -2234,6 +2234,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>yes</xsl:text>
         </xsl:attribute>
     </xsl:if>
+    <!-- Pass on highlighted line numbering -->
+    <xsl:if test="@highlight-lines != ''">
+        <xsl:attribute name="data-highlight-lines">
+            <!-- force comma-, or space-separated, list to commas -->
+            <xsl:value-of select="translate(normalize-space(translate(@highlight-lines, ',', ' ')), ' ', ',')"/>
+        </xsl:attribute>
+    </xsl:if>
 </xsl:template>
 
 
