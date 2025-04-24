@@ -29,7 +29,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
-    extension-element-prefixes="pi"
+    xmlns:exsl="http://exslt.org/common"
+    extension-element-prefixes="pi exsl"
 >
 
 <!-- Conversion of author source for Runestone/interactive exercises  -->
@@ -562,16 +563,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Matching Problems -->
 
+<!-- Cardort variant first, then fully-general matching afterward -->
+
 <xsl:template match="*[@exercise-interactive = 'cardsort']" mode="runestone-to-static">
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- Statement -->
     <statement>
         <xsl:copy-of select="statement/node()"/>
-        <tabular>
-            <!-- provide two "col" if necessary -->
-            <xsl:apply-templates select="cardsort/match" mode="cardsort-statement"/>
-        </tabular>
+        <xsl:apply-templates select="cardsort" mode="cardsort-statement"/>
     </statement>
     <!-- Any authored hint, answers, solutions not derived from   -->
     <!-- problem formulation. *Before* automatic solution, so     -->
@@ -579,52 +579,112 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="hint"/>
     <xsl:copy-of select="answer"/>
     <xsl:copy-of select="solution"/>
-    <!-- Solution -->
+    <!-- Automatically generated solution -->
     <solution>
-        <tabular>
-            <!-- provide two "col" if necessary -->
-            <xsl:apply-templates select="cardsort/match" mode="cardsort-solution"/>
-        </tabular>
+        <xsl:apply-templates select="cardsort" mode="cardsort-solution"/>
     </solution>
 </xsl:template>
 
-<!-- responses re-orered according to match/@order -->
-<xsl:template match="cardsort/match" mode="cardsort-statement">
-    <xsl:variable name="premise-number" select="count(preceding-sibling::match) + 1"/>
-    <xsl:variable name="all-matches" select="parent::cardsort/match"/>
-    <row>
-        <xsl:if test="following-sibling::match">
-            <xsl:attribute name="bottom">
-                <xsl:text>minor</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
-        <cell>
-            <xsl:copy-of select="premise/node()"/>
-        </cell>
-        <!-- Add an empty column between premises and responses: -->
-        <cell bottom="none"><nbsp/><nbsp/></cell>
-        <cell>
-            <xsl:copy-of select="$all-matches[@order = $premise-number]/response/node()"/>
-        </cell>
-    </row>
+<!-- For a problem statement, we use a response list re-ordered    -->
+<!-- according to response/@order attribute values given by author -->
+<xsl:template match="cardsort" mode="cardsort-statement">
+
+    <!-- Reorder premises -->
+    <xsl:variable name="sorted-premises-rtf">
+        <xsl:for-each select="match/premise">
+            <xsl:sort select="@order"/>
+            <xsl:copy-of select="."/>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="sorted-premises" select="exsl:node-set($sorted-premises-rtf)"/>
+
+    <!-- responses in authored order -->
+    <xsl:variable name="all-responses" select="match/response"/>
+
+    <tabular>
+        <xsl:call-template name="matching-row">
+            <!-- $sorted-premises gets a root element, collecting the "premise" -->
+            <xsl:with-param name="premises" select="$sorted-premises/premise"/>
+            <xsl:with-param name="responses" select="$all-responses"/>
+        </xsl:call-template>
+    </tabular>
 </xsl:template>
 
-<xsl:template match="cardsort/match" mode="cardsort-solution">
-    <row>
-        <xsl:if test="following-sibling::match">
-            <xsl:attribute name="bottom">
-                <xsl:text>minor</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
-        <cell>
-            <xsl:copy-of select="premise/node()"/>
-        </cell>
-        <!-- Add an empty column between premises and responses: -->
-        <cell bottom="none"><nbsp/><nbsp/></cell>
-        <cell>
-            <xsl:copy-of select="response/node()"/>
-        </cell>
-    </row>
+<!-- Make one row of a tabular, recursively.  We do not know which list  -->
+<!-- is longer (or they are the same length).  So we "zip" them together -->
+<!-- by making a row and then effectively discarding the contents of the -->
+<!-- row in the recursive call.  (We could pass/increment a row number   -->
+<!-- and not keep updating the node-set.)                                -->
+
+<xsl:template name="matching-row">
+    <xsl:param name="premises"/>
+    <xsl:param name="responses"/>
+
+    <xsl:choose>
+        <xsl:when test="not($premises) and not($responses)"/>
+        <xsl:otherwise>
+            <row>
+                <cell>
+                    <xsl:if test="count($premises) > 1">
+                        <xsl:attribute name="bottom">
+                            <xsl:text>minor</xsl:text>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:copy-of select="$premises[1]/node()"/>
+                </cell>
+                <!-- An empty (two-character wide) column is a bit of a hack to get -->
+                <!-- a visual separation.  Could we do better with paragraph cells? -->
+                <cell bottom="none"><nbsp/><nbsp/></cell>
+                <cell>
+                    <xsl:if test="count($responses) > 1">
+                        <xsl:attribute name="bottom">
+                            <xsl:text>minor</xsl:text>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:copy-of select="$responses[1]/node()"/>
+                </cell>
+            </row>
+            <xsl:call-template name="matching-row">
+                <xsl:with-param name="premises" select="$premises[position() > 1]"/>
+                <xsl:with-param name="responses" select="$responses[position() > 1]"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- For a solution, we make an unordered list of the responses     -->
+<!-- (the "buckets" in true cardsort terminology) and for each      -->
+<!-- we make a sub-list wioth the premises that match (the "cards"  -->
+<!-- in true cardsort terminology.  Note that potential distractors -->
+<!-- are a premise with no response (empty sub-list) and a response -->
+<!-- with no premise (a premise that is null-ish).                  -->
+
+<xsl:template match="cardsort" mode="cardsort-solution">
+    <p><ul>
+        <xsl:for-each select="match">
+            <li>
+                <p>
+                    <xsl:choose>
+                        <xsl:when test="response">
+                            <xsl:copy-of select="response"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>(uncategorized)</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:if test="premise">
+                        <ul>
+                            <xsl:for-each select="premise">
+                                <li>
+                                    <xsl:copy-of select="."/>
+                                </li>
+                            </xsl:for-each>
+                        </ul>
+                    </xsl:if>
+                </p>
+            </li>
+        </xsl:for-each>
+    </ul></p>
 </xsl:template>
 
 <!-- Clickable Area -->
