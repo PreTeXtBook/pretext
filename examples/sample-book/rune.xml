@@ -3061,20 +3061,20 @@ TEST_CASE( "Test the add function" ) {
                 <p>Review <url href="https://www.britannica.com/list/25-decade-defining-events-in-us-history" visual="www.britannica.com/list/25-decade-defining-events-in-us-history">Encyclopedia Brittania, 25 Decade-Defining Events in U.S. History</url>url.</p>
             </feedback>
             <cardsort>
-                <match order="4">
-                    <premise>Monroe Doctrine</premise>
+                <match>
+                    <premise order="4">Monroe Doctrine</premise>
                     <response>1823</response>
                 </match>
-                <match order="3">
-                    <premise>Haymarket Riot</premise>
+                <match>
+                    <premise order="3">Haymarket Riot</premise>
                     <response>1886</response>
                 </match>
-                <match order="1">
-                    <premise>Louisiana Purchase</premise>
+                <match>
+                    <premise order="1">Louisiana Purchase</premise>
                     <response>1803</response>
                 </match>
-                <match order="2">
-                    <premise>Battle of Gettysburg</premise>
+                <match>
+                    <premise order="2">Battle of Gettysburg</premise>
                     <response>1863</response>
                 </match>
             </cardsort>
@@ -3090,16 +3090,16 @@ TEST_CASE( "Test the add function" ) {
                 <p>Did you compute the derivative of each function in the premises (left column)?</p>
             </feedback>
             <cardsort>
-                <match order="1">
-                    <premise><m>x^3-6x^2+5</m></premise>
+                <match>
+                    <premise order="1"><m>x^3-6x^2+5</m></premise>
                     <response><m>3x^2-12x</m></response>
                 </match>
-                <match order="3">
-                    <premise><m>x^{-3}</m></premise>
+                <match>
+                    <premise order="3"><m>x^{-3}</m></premise>
                     <response><m>-3x^{-4}</m></response>
                 </match>
-                <match order="2">
-                    <premise><m>(x+1)^2</m></premise>
+                <match>
+                    <premise order="2"><m>(x+1)^2</m></premise>
                     <response><m>2x+2</m></response>
                 </match>
             </cardsort>
@@ -3115,16 +3115,16 @@ TEST_CASE( "Test the add function" ) {
                 <p>Each putative basis is a subset of exactly one of the three subspaces.  So for each subspace, two of the three sets can be ruled out by simply testing that the vectors of the basis are members of the subspace, via the membership criteria.</p>
             </feedback>
             <cardsort>
-                <match order="1">
-                    <premise><m>\left\{\langle x,y,z\rangle\mid - y + z = 0\right\}</m></premise>
+                <match>
+                    <premise order="1"><m>\left\{\langle x,y,z\rangle\mid - y + z = 0\right\}</m></premise>
                     <response><m>\left\{\langle -4, 3, 3\rangle, \langle 3, -2, -2 \rangle\right\}</m></response>
                 </match>
-                <match order="3">
-                    <premise><m>\left\{\langle x,y,z\rangle\mid -3x - 5y + z = 0\right\}</m></premise>
+                <match>
+                    <premise order="3"><m>\left\{\langle x,y,z\rangle\mid -3x - 5y + z = 0\right\}</m></premise>
                     <response><m>\left\{\langle -4, 3, 3\rangle, \langle 5, -4, -5 \rangle\right\}</m></response>
                 </match>
-                <match order="2">
-                    <premise><m>\left\{\langle x,y,z\rangle\mid -2x - 5y + 2z = 0\right\}</m></premise>
+                <match>
+                    <premise order="2"><m>\left\{\langle x,y,z\rangle\mid -2x - 5y + 2z = 0\right\}</m></premise>
                     <response><m>\left\{\langle 3, -2, -2 \rangle, \langle 5, -4, -5 \rangle\right\}</m></response>
                 </match>
             </cardsort>
@@ -4108,20 +4108,20 @@ TEST_CASE( "Test the add function" ) {
                     <p>Review <url href="https://www.britannica.com/list/25-decade-defining-events-in-us-history" visual="www.britannica.com/list/25-decade-defining-events-in-us-history">Encyclopedia Brittania, 25 Decade-Defining Events in U.S. History</url> url.</p>
                 </feedback>
                 <cardsort>
-                    <match order="4">
-                        <premise>Monroe Doctrine</premise>
+                    <match>
+                        <premise order="4">Monroe Doctrine</premise>
                         <response>1823</response>
                     </match>
-                    <match order="3">
-                        <premise>Haymarket Riot</premise>
+                    <match>
+                        <premise order="3">Haymarket Riot</premise>
                         <response>1886</response>
                     </match>
-                    <match order="1">
-                        <premise>Louisiana Purchase</premise>
+                    <match>
+                        <premise order="1">Louisiana Purchase</premise>
                         <response>1803</response>
                     </match>
-                    <match order="2">
-                        <premise>Battle of Gettysburg</premise>
+                    <match>
+                        <premise order="2">Battle of Gettysburg</premise>
                         <response>1863</response>
                     </match>
                 </cardsort>
