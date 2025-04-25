@@ -73,6 +73,13 @@
   margin-top: 0;
 }
 
+// RS does not care what kind of element is used
+// PTX chooses to use a ul, so we will fix margins for it here instead of RS
+ul[data-component="timedAssessment"] {
+  margin: 0;
+  padding: 0;
+}
+
 :root.dark-mode {
   // Darker styling to match Runesone's code mirror theme
   .ptx-runestone-container code[class*="language-"],
