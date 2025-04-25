@@ -12,7 +12,7 @@ $rs-wide-elements: ".ac_section, .codelens, .parsons_section, .hparsons_section,
 
 // grouping elements that may have wide elements and require different margins
 // need to make sure those elements have a consistent amount of (padding+border)
-$grouping-elements: ".theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content";
+$grouping-elements: ".timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content";
 
 
 // widen all runestone elements that should be wide
