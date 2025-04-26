@@ -637,6 +637,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - every Parsons problem "exercise"             -->
 <!--   - every horizontal Parsons problem "exercise"  -->
 <!--   - every cardsort problem "exercise"            -->
+<!--   - every matching problem "exercise"            -->
 <!--   - every clickable area problem "exercise"      -->
 <!--   - every "exercise" with fill-in blanks         -->
 <!--   - every "exercise" with additional "program"   -->
@@ -649,6 +650,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'parson') or
                                (@exercise-interactive = 'parson-horizontal') or
                                (@exercise-interactive = 'cardsort') or
+                               (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
