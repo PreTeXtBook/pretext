@@ -1504,6 +1504,88 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
 </xsl:template>
 
+<!-- Matching Problem -->
+
+<xsl:template match="*[@exercise-interactive = 'matching']" mode="runestone-to-interactive">
+    <div class="ptx-runestone-container">
+        <div data-component="matching" class="runestone">
+            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+            <script type="text/xml">
+                <!-- one-off XML for Runestone JS to consume -->
+                <matching>
+                    <!-- sequence of "premise" -->
+                    <xsl:apply-templates select="matching/premise" mode="node-info"/>
+                    <!-- sequence of "response" -->
+                    <xsl:apply-templates select="matching/response" mode="node-info"/>
+                    <!-- sequence of "edge" -->
+                    <xsl:apply-templates select="matching" mode="matching-adjacencies"/>
+                </matching>
+            </script>
+        </div>
+    </div>
+</xsl:template>
+
+<!-- utility template to create unique ID for each premise and       -->
+<!-- response for use in the user interface, invisible to the reader -->
+<xsl:template match="matching/premise|matching/response" mode="matching-identification">
+    <xsl:value-of select="parent::matching/parent::*/@label"/>
+    <xsl:text>-</xsl:text>
+    <xsl:choose>
+        <xsl:when test="self::premise">
+            <xsl:text>p</xsl:text>
+        </xsl:when>
+        <xsl:when test="self::response">
+            <xsl:text>r</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <!-- counts among elements of current type -->
+    <xsl:number/>
+</xsl:template>
+
+<xsl:template match="premise|response" mode="node-info">
+    <xsl:variable name="element-name" select="local-name(.)"/>
+    <xsl:element name="{$element-name}">
+        <id>
+            <xsl:apply-templates select="." mode="matching-identification"/>
+        </id>
+        <label>
+            <xsl:apply-templates select="."/>
+        </label>
+    </xsl:element>
+</xsl:template>
+
+
+<xsl:template match="matching" mode="matching-adjacencies">
+    <!-- Run over all response, to see if their single @xml:id -->
+    <!-- is present in the premise's multi-valued @ref         -->
+    <!-- array of pairs -->
+    <xsl:for-each select="premise">
+        <!-- save off some "premise" info before context change -->
+        <xsl:variable name="the-ref-fenced" select="concat('|', translate(@ref, ' ', '|'), '|')"/>
+        <xsl:variable name="the-premise-identification">
+            <xsl:apply-templates select="." mode="matching-identification"/>
+        </xsl:variable>
+        <!-- note context is no longer "matching", so step up -->
+        <xsl:for-each select="../response">
+            <xsl:variable name="response-xmlid-fenced" select="concat('|', @xml:id, '|')"/>
+            <!-- finally, the test for adjacency -->
+            <xsl:if test="contains($the-ref-fenced, $response-xmlid-fenced)">
+                <!-- a pair, connecting "premise" to "response"-->
+                <edge>
+                    <label>
+                        <!-- "matching-identification", saved off above -->
+                        <xsl:value-of select="$the-premise-identification"/>
+                    </label>
+                    <label>
+                        <xsl:apply-templates select="." mode="matching-identification"/>
+                    </label>
+                </edge>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:for-each>
+</xsl:template>
+
+
 <!-- Clickable Area Problem -->
 
 <xsl:template match="*[@exercise-interactive = 'clickablearea']" mode="runestone-to-interactive">
