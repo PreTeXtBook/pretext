@@ -687,6 +687,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </ul></p>
 </xsl:template>
 
+<!-- General matching: temporary - stub out static -->
+
+<xsl:template match="*[@exercise-interactive = 'matching']" mode="runestone-to-static">
+    <statement>
+        <p>2025-04-25: stub while static versions of general matching questions are under development.</p>
+        <xsl:copy-of select="statement/node()"/>
+    </statement>
+</xsl:template>
+
+
 <!-- Clickable Area -->
 
 <xsl:template match="*[@exercise-interactive = 'clickablearea']" mode="runestone-to-static">
