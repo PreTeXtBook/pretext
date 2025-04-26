@@ -3188,6 +3188,37 @@ TEST_CASE( "Test the add function" ) {
   </exercise>
 
 
+        <exercise label="matching-music-history">
+            <title>Matching Problem, Popular Music History</title>
+            <idx>matching music history</idx>
+            <statement>
+              <p>
+                Drag each performer onto every applicable category.
+              </p>
+            </statement>
+            <feedback>
+              <p>
+                Paul McCartney, Ringo Starr, Eric Clapton, Elton John.  Jethro Tull is the name of a band, not a performer, and
+                its best-known member would be the flautist Ian Anderson.
+              </p>
+            </feedback>
+            <matching>
+                <premise ref="beatle">Paul</premise>
+                <premise ref="beatle drum">Ringo</premise>
+                <premise ref="guitar yardbirds">Eric</premise>
+                <premise ref="piano">Elton</premise>
+                <premise>Jethro</premise>
+                <!--  -->
+                <response xml:id="beatle">Beatle</response>
+                <response xml:id="yardbirds">Yardbirds</response>
+                <response xml:id="guitar">Guitarist</response>
+                <response xml:id="drum">Drummer</response>
+                <response xml:id="flute">Flautist</response>
+                <response xml:id="harp">Harpist</response>
+                <response xml:id="piano">Pianist</response>
+                <response xml:id="math"><em>Some</em> "Math": <m>\sin{x^2)</m></response>
+            </matching>
+        </exercise>
     </exercises>
 
     <exercises xml:id="clickable-area-exercises">
