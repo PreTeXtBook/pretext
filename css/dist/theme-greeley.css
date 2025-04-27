@@ -1958,6 +1958,10 @@ body.standalone.worksheet section.worksheet > .heading + .para {
 .runestone.datafile + .program {
   margin-top: 0;
 }
+ul[data-component=timedAssessment] {
+  margin: 0;
+  padding: 0;
+}
 :root.dark-mode .ptx-runestone-container code[class*=language-],
 :root.dark-mode .ptx-runestone-container pre[class*=language-] {
   color: white;
@@ -2885,16 +2889,16 @@ body.pretext > a.assistive:focus {
   min-width: 100%;
   margin-left: auto;
 }
-:is(.theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) {
+:is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) {
   width: calc(100cqw - 40px);
   max-width: unset;
   margin-left: calc(-0.5 * (100cqw - 640px));
 }
-:is(.theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) :is(.theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) {
+:is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) {
   width: 100%;
   margin-left: auto;
 }
-:is(.theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content) .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) {
+:is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content) .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .contains-wide) {
   width: 100%;
   margin-left: 0;
 }

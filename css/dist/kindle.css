@@ -1955,6 +1955,10 @@ body.standalone.worksheet section.worksheet > .heading + .para {
 .runestone.datafile + .program {
   margin-top: 0;
 }
+ul[data-component=timedAssessment] {
+  margin: 0;
+  padding: 0;
+}
 :root.dark-mode .ptx-runestone-container code[class*=language-],
 :root.dark-mode .ptx-runestone-container pre[class*=language-] {
   color: white;
