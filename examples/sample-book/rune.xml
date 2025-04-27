@@ -3216,7 +3216,7 @@ TEST_CASE( "Test the add function" ) {
                 <response xml:id="flute">Flautist</response>
                 <response xml:id="harp">Harpist</response>
                 <response xml:id="piano">Pianist</response>
-                <response xml:id="math"><em>Some</em> "Math": <m>\sin{x^2)</m></response>
+                <response xml:id="math"><em>Some</em> "Math": <m>\sin(x^2)</m></response>
             </matching>
         </exercise>
     </exercises>
