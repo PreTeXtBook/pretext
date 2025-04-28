@@ -1771,8 +1771,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lists and related layouts -->
 <xsl:template name="list-layout">
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
-     <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//contributors">
+     <xsl:if test="($index-maker = 'pretext') or
+                   (document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//contributors)">
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
+        <xsl:text>%% ol, ul, contributors, PreTeXt index&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//@landscape">
@@ -2864,7 +2866,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Pervasive -->
 <!-- Specialized divisions                         -->
 <!-- Product of PTX name with LaTeX level/division -->
-<xsl:template match="exercises|solutions|worksheet|reading-questions|glossary|references" mode="division-environment-name">
+<xsl:template match="exercises|solutions|worksheet|reading-questions|glossary|references|index" mode="division-environment-name">
     <xsl:value-of select="local-name(.)"/>
     <xsl:text>-</xsl:text>
     <xsl:apply-templates select="." mode="division-name"/>
@@ -4850,13 +4852,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Appendices are handled in the general subdivision template -->
 
 <!-- The index itself needs special handling    -->
-<!-- The "index-" element signals an index,     -->
+<!-- The "index" element signals an index,      -->
 <!-- and the content is just an optional title  -->
 <!-- and a compulsory "index-list"              -->
-<!-- LaTeX does sectioning via \printindex      -->
+<!-- For a LaTeX-native index, we just          -->
+<!-- apply-templates to the "index-list"        -->
+<!-- element since the "\printindex macro takes -->
+<!-- care of the heading.  For a PreTeXt index  -->
+<!-- we utilize an environment purpose-built    -->
+<!-- for the index.                             -->
 <!-- TODO: multiple indices, with different titles -->
 <xsl:template match="index">
-    <xsl:apply-templates select="*"/>
+    <xsl:choose>
+        <xsl:when test="$index-maker = 'pretext'">
+            <!-- The LaTeX "classic" index always appears on a new page. -->
+            <!-- Perhaps this should be part of some page/division       -->
+            <!-- infrastructure and not so hard-coded as it is here.     -->
+            <xsl:text>\newpage%&#xa;</xsl:text>
+            <xsl:apply-templates select="." mode="latex-division-heading"/>
+            <xsl:apply-templates select="index-list"/>
+            <xsl:apply-templates select="." mode="latex-division-footing"/>
+        </xsl:when>
+        <xsl:when test="$index-maker = 'latex'">
+            <xsl:apply-templates select="index-list"/>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- TEMPORARY (2024-08-11) (migrate to publisher)  -->
@@ -4875,6 +4895,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- Reach down into -common for shared code that   -->
         <!-- relies on abstract templates for presentation. -->
+        <!-- Start here with abstract template matching     -->
+        <!-- "index-list"                                   -->
         <xsl:when test="$index-maker = 'pretext'">
             <xsl:apply-imports/>
         </xsl:when>
@@ -5355,9 +5377,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX chapter for a "book" and a LaTeX "section" for an "article". -->
 <!-- Specialized Divisions: we do not implement "author", "subtitle",   -->
 <!-- or "epigraph" yet.  These may be added/supported later.            -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|worksheet" mode="latex-division-heading">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet" mode="latex-division-heading">
     <!-- NB: could be obsoleted, see single use -->
-    <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet)"/>
+    <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet|self::index)"/>
 
     <!-- change geometry if worksheet should be formatted -->
     <xsl:if test="self::worksheet and $b-latex-worksheet-formatted">
@@ -5515,7 +5537,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Footings are straightforward -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|worksheet" mode="latex-division-footing">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet" mode="latex-division-footing">
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="division-environment-name" />
     <!-- possibly numberless -->
