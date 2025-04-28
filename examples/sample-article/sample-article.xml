@@ -430,7 +430,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <idx sortby="quorum">sorted as if <q>Quorum</q></idx>
             <idx><h>units</h><h sortby="A">Z (<alert>sort as</alert> A)</h></idx>
             <idx><h>units</h><h sortby="Z">A (<alert>sort as</alert> Z)</h></idx>
-            <idx><c>verbatim text</c>, use sortby</idx>
+            <idx sortby="verbatim"><c>verbatim text</c>, use sortby</idx>
             <!-- keep this, collides with real "R" entry elsewhere -->
             <idx sortby="R"><m>\rho</m><ndash/>fibers</idx>
             <!-- test identical text, but variant upper- and lower-case  -->
@@ -3662,7 +3662,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <subsection>
                 <title><latex/> images</title>
-                <idx><latex/> image</idx>
+                <idx sortby="latex"><latex/> image</idx>
                 <idx><h>image</h><h><latex/> image</h></idx>
 
                 <p>There are several graphics engine packages that a <latex/> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex/> files.  For HTML output the <c>pretext</c> script produces SVG versions of the pictures.  The script can also produce standalone <tex/> source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. If any ampersands occur in your <latex/> code you should use the <c>\amp</c> macro pre-defined by <pretext/>. These first examples are from the <url href="http://www.texample.net/tikz/examples/" visual="www.texample.net/tikz/examples/">TeXample.net</url> site.  Note that any <latex/> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with this feature coming to Sage graphics next?).</p>
