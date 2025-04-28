@@ -694,7 +694,7 @@ TEST_CASE( "Test the add function" ) {
         <p>In the following file of climate data, the first column is Year, second column is Global Average Temperature (Celcius), and the third column is Global Emmisions C02 (Giga-tons).  [Normally you might place this inside a block with the <tag>datafile</tag>.]</p>
 
         <!-- # Section 11.4 Think Like a Computer Scientist, Runestone 2023-01-23 -->
-        <datafile label="file-global-climate-one" filename="ccdata1.txt" rows="18" cols="40" editable="yes" include-source="yes">
+        <datafile label="file-global-climate-one" xml:id="file-global-climate-one" filename="ccdata1.txt" rows="18" cols="40" editable="yes" include-source="yes">
             <pre>
             1850    -0.37     2.24E-7
             1860    -0.34     3.94E-7
@@ -717,7 +717,9 @@ TEST_CASE( "Test the add function" ) {
             </pre>
         </datafile>
 
-        <program label="python-average-climate" interactive='activecode' language="python" include-source="yes">
+        <p>Browser based programs are automatically given access to data files by their filename.</p>
+
+        <program label="python-average-climate" xml:id="python-average-climate" interactive='activecode' language="python" include-source="yes">
             <code>
             ccfile = open("ccdata1.txt", "r")
 
@@ -818,15 +820,13 @@ TEST_CASE( "Test the add function" ) {
             </program>
         </computation>
 
-        <p>The examples above all use Python, which will run in your browser.   Other languages will only run when a project is hosted on Runestone Academy servers.  And in this case there is a small twist.  You need to indicate which existing <tag>datafile</tag> your program needs, even if that seems obvious by reading the code.  Use a <attr>datafile</attr> attribute on <tag>program</tag> that has a list of filenames.  These are the filenames you set via the <attr>filename</attr> attribute of the <tag>datafile</tag> element, and are the names you use in your program's code.  As before, no path information is neede, nor allowed.</p>
-
-        <p>[2023-02-21: testing for single files first, list of several not yet implemented.]</p>
+        <p>The examples above all use Python, which will run in your browser.   Other languages will only run when a project is hosted on Runestone Academy servers.  And in this case there is a small twist.  You need to indicate which existing <tag>datafile</tag> your program needs, even if that seems obvious by reading the code.  To do this, make sure each datafile has an <attr>xml:id</attr> and then use the <attr>add-files</attr> attribute on <tag>program</tag> to specify a list of xml:id's that you want to be available.  These datafiles will be written to the program's working directory using the filename specified by the <attr>filename</attr> attribute of the <tag>datafile</tag> element, and are the names you use in your program's code.  As before, no path information is needed, nor allowed.</p>
 
         <p>When the <attr>language</attr> attribute of a <tag>program</tag> is set to <c>python3</c> that means in-browser Python is not good enough, and you want the greater power and flexibility of having your code run on a Runestone Academy server.  So this is our first example of using the <attr>datafile</attr> attribute.</p>
 
         <p>The data file is an abbreviated version of the example above, just to be different.  And is not editable.</p>
 
-        <datafile label="file-global-climate-two" filename="ccdata2.txt" rows="4" cols="40" editable="no" include-source="yes">
+        <datafile label="file-global-climate-two" xml:id="file-global-climate-two" filename="ccdata2.txt" rows="4" cols="40" editable="no" include-source="yes">
             <pre>
             1900    -0.2      2.38
             1910    -0.49     3.34
@@ -846,7 +846,7 @@ TEST_CASE( "Test the add function" ) {
 
         <p>The program is identical to the above, but we specify <c>python3</c> as the language, and use the smaller file.  So this example is only active when this content is hosted on a Runestone Academy server.</p>
 
-        <program label="python-average-climate-two" interactive='activecode' language="python3" datafile="ccdata2.txt" include-source="yes">
+        <program label="python-average-climate-two" interactive='activecode' language="python3" add-files="file-global-climate-two" include-source="yes">
             <code>
             ccfile = open("ccdata2.txt", "r")
 
@@ -867,16 +867,16 @@ TEST_CASE( "Test the add function" ) {
 
             <!-- Images are 100 x 100.  So width are 100/600 = 17% -->
 
-            <datafile label="flower1-datafile" filename="flower1.jpg" include-source="yes">
+            <datafile label="flower1-datafile" xml:id="flower1-datafile" filename="flower1.jpg" include-source="yes">
                 <image source="datafiles/flower-one.jpeg" width="17%"/>
             </datafile>
 
-            <datafile label="flower2-datafile" filename="flower2.jpg" include-source="yes">
+            <datafile label="flower2-datafile" xml:id="flower2-datafile" filename="flower2.jpg" include-source="yes">
                 <image source="datafiles/flower-two.jpeg" width="17%"/>
             </datafile>
         </data>
 
-        <program label="java-flower-collage" interactive='activecode' language="java" datafile="flower1.jpg, flower2.jpg" include-source="yes">
+        <program label="java-flower-collage" interactive='activecode' language="java" add-files="file-picture-classes-jar, flower1-datafile, flower2-datafile" include-source="yes">
             <!-- About 10 XML characters, hence CDATA -->
             <code><![CDATA[
             import java.awt.*;
@@ -1066,11 +1066,11 @@ TEST_CASE( "Test the add function" ) {
         <!-- https://runestone.academy/ns/books/published/csawesome/Unit8-2DArray/pictureLabA5.html -->
         <!-- https://github.com/bhoffman0/CSAwesome/blob/master/_sources/Unit8-2DArray/pictureLabA5.rst -->
 
-        <datafile label="beach-datafile" filename="beach.jpg" include-source="yes">
+        <datafile label="beach-datafile" xml:id="beach-datafile" filename="beach.jpg" include-source="yes">
             <image source="datafiles/beach.jpg" width="17%"/>
         </datafile>
 
-        <datafile label="file-picture-classes-jar" filename="pictureClasses1.jar" editable="no" hide="yes" include-source="yes">
+        <datafile label="file-picture-classes-jar" xml:id="file-picture-classes-jar" filename="pictureClasses1.jar" editable="no" hide="yes" include-source="yes">
             <pre>
             <![CDATA[
             import java.awt.Image;
@@ -2175,7 +2175,7 @@ TEST_CASE( "Test the add function" ) {
             <!-- <pre source="datafiles/picture-classes-library.jar"/> -->
         </datafile>
 
-        <program label="java-only-blue" interactive='activecode' language="java" datafile="pictureClasses1.jar, beach.jpg" include-source="yes">
+        <program label="java-only-blue" interactive='activecode' language="java" add-files="file-picture-classes-jar, beach-datafile" include-source="yes">
             <code>
                 <![CDATA[
                 import java.awt.*;
