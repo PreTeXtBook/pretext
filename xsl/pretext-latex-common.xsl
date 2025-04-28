@@ -5293,6 +5293,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "solutions" content needs to call content generator       -->
     <xsl:choose>
         <xsl:when test="self::solutions">
+            <xsl:apply-templates select="idx"/>
             <xsl:apply-templates select="." mode="solutions">
                 <xsl:with-param name="heading-level">
                     <xsl:choose>
@@ -6910,6 +6911,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="block-options"/>
     <xsl:text>%&#xa;</xsl:text>
+    <!-- Process any metadata-type elements,  -->
+    <!-- except title is in the block options -->
+    <xsl:apply-templates select="idx"/>
     <!-- Coordinate with schema, since we enforce it here -->
     <xsl:apply-templates select="p|blockquote|pre|image|video|program|console|tabular"/>
     <xsl:text>\end{</xsl:text>
