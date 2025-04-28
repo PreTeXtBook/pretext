@@ -68,15 +68,11 @@
 
     <acknowledgments heading="\section*{Acknowledgments}"/>
 
-
-
-    <appendices env="appendices" />
-
+    <appendices />
 
     <bibliography cmd="bibliography">
         <arg><bib-file/></arg>
     </bibliography>
-
 
     <end-document/>
 </texstyle>

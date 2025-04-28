@@ -6,12 +6,14 @@
         <name>Bulletin (New Series) of the American Mathematical Society</name>
         <publisher>American Mathematical Society</publisher>
         <extends>ams</extends>
-
+        <required-files>
+            <file name="bull-l.cls" href="https://www.ams.org/arc/journals/packages/bull/bull_amslatex/bull-l.cls" />
+        </required-files>
         <style-author>Oscar Levin</style-author>
         <date>2025-04-01</date>
     </metadata>
 
 <!-- Override the document class.  Everything else is the same. -->
-    <documentclass name="bull"/>
+    <documentclass name="bull-l"/>
 
 </texstyle>
