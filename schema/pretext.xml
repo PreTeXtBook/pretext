@@ -1457,7 +1457,6 @@
                     attribute database {text}?,
                     attribute add-files {text}?,
                     attribute compile-also {text}?,
-                    attribute datafile {text}?,
                     attribute download {"yes"|"no"}?,
                     attribute hidecode {"yes"|"no"}?,
                     attribute highlight-lines {text}?,
