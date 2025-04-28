@@ -312,9 +312,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- template in the "pretext-html" stylesheet, with this         -->
 <!-- implementation doing an overide.                             -->
 <xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet|interactive[@platform = 'doenetml']" mode="runestone-id-attribute">
-    <xsl:attribute name="id">
+    <xsl:variable name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
-    </xsl:attribute>
+    </xsl:variable>
+    <xsl:if test="$id != ''">
+        <xsl:attribute name="id">
+              <xsl:value-of select="$id"/>
+        </xsl:attribute>
+    </xsl:if>
 </xsl:template>
 
 <!-- ############### -->
