@@ -3743,10 +3743,15 @@ Book (with parts), "section" at level 3
             <xsl:apply-templates select="." mode="location-report"/>
         </xsl:when>
     </xsl:choose>
-    <xsl:call-template name="runestone-label-prefix"/>
     <!-- We require a @label attribute, but allow it to be -->
     <!-- the result of an automatic copy from an @xml:id.  -->
-    <xsl:value-of select="@label"/>
+    <xsl:variable name="label">
+        <xsl:value-of select="@label"/>
+    </xsl:variable>
+    <xsl:if test="$label != ''">
+        <xsl:call-template name="runestone-label-prefix"/>
+        <xsl:value-of select="$label"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- Special handling for programs in exercise-like elements.              -->
@@ -3754,8 +3759,13 @@ Book (with parts), "section" at level 3
 <!-- and NOT with an auto-generated label on the program itself that might -->
 <!-- come from an @xml:id.                                                 -->
 <xsl:template match="exercise/program" mode="runestone-id">
-    <xsl:call-template name="runestone-label-prefix"/>
-    <xsl:value-of select="../@label"/>
+    <xsl:variable name="label">
+        <xsl:value-of select="../@label"/>
+    </xsl:variable>
+    <xsl:if test="$label != ''">
+        <xsl:call-template name="runestone-label-prefix"/>
+        <xsl:value-of select="$label"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- Prefix just for RS-server builds, in order that the database -->
