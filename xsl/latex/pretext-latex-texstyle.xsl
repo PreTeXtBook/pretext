@@ -156,7 +156,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For the document class -->
 <!-- TODO: respond to options with correct options -->
 <xsl:template match="texstyle/documentclass">
-    <xsl:text>\documentclass{</xsl:text>
+    <xsl:text>\documentclass</xsl:text>
+    <xsl:if test="@opt">
+        <xsl:text>[</xsl:text>
+        <xsl:value-of select="@opt"/>
+        <xsl:text>]</xsl:text>
+    </xsl:if>
+    <xsl:text>{</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>}&#xa;%&#xa;</xsl:text>
 </xsl:template>
@@ -169,6 +175,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
+<!-- This could be inserted in the texstyle file before or after ptx-preamble -->
+<!-- to add arbitrary preamble content that is needed to resolve conflicts    -->
+<!-- with the journals .cls or .sty files                                     -->
+<xsl:template match="texstyle/preamble-addition">
+    <xsl:text>% TexStyle preamble additions:&#xa;</xsl:text>
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="." />
+    </xsl:call-template>
+    <xsl:text>% End TexStyle preamble addioions.</xsl:text>
+</xsl:template>
 
 <!-- Here we build the "standard" (classic) latex preamble,       -->
 <!-- with some minor modifications suggested by the texstyle file -->
@@ -204,7 +220,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="music-support"/>
     <xsl:call-template name="code-support"/>
     <xsl:call-template name="list-layout"/>
-    <xsl:call-template name="load-configure-hyperref"/>
+    <!-- Option to exclude the hyperref chunk; implemented for the springer nature texstyle -->
+    <xsl:if test="not(@hyperref = 'no')">
+        <xsl:call-template name="load-configure-hyperref"/>
+    </xsl:if>
     <xsl:call-template name="create-numbered-tcolorbox"/>
     <xsl:call-template name="watermark"/>
     <xsl:call-template name="showkeys"/>
