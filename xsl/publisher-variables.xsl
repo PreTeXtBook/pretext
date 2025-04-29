@@ -2218,7 +2218,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Whether or not to tag TOC as focused -->
 <xsl:variable name="html-toc-focused_value">
     <xsl:choose>
-        <xsl:when test="$html-theme-name = 'custom' or contains($html-theme-name, '-legacy')">
+        <xsl:when test="$html-theme-name = 'custom' or $b-html-theme-legacy">
             <!-- legacy/custom themes can pick whether to use a focused toc or not -->
             <xsl:apply-templates select="$publisher-attribute-options/html/tableofcontents/pi:pub-attribute[@name='focused']" mode="set-pubfile-variable"/>
         </xsl:when>
@@ -2297,6 +2297,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<xsl:variable name="b-html-theme-legacy" select="contains($html-theme-name, '-legacy')"/>
 
 <xsl:variable name="html-palette-name">
     <xsl:apply-templates select="$publisher-attribute-options/html/css/pi:pub-attribute[@name='palette']" mode="set-pubfile-variable"/>
