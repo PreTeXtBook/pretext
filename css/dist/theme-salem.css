@@ -3688,6 +3688,12 @@ label.incorrect .feedback {
   margin-left: auto;
   margin-right: auto;
 }
+.hparsons_section .hp_question,
+.hparsons_section .hp_feedback {
+  max-width: 725px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .runestone.parsons_section > .parsons {
   width: 100%;
   padding-right: 0;
