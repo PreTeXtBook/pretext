@@ -10810,6 +10810,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="native-search-box-js" />
 </xsl:variable>
 
+<!-- Generate a version of file-wrap-full-head-cache customized for  -->
+<!-- use in printable worksheets. There does not seem to be a better -->
+<!-- (and straightforward) method other than duplicating above work. -->
+<xsl:variable name="file-wrap-full-head-cache-printable">
+    <!-- file-wrap-iframe-head-cache -->
+    <xsl:call-template name="fonts"/>
+    <xsl:call-template name="font-awesome"/>
+    <xsl:call-template name="css-printable"/>
+    <xsl:call-template name="mathjax"/>
+    <!-- file-wrap-basic-head-cache -->
+    <xsl:call-template name="keywords-meta-element"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <xsl:call-template name="open-graph-info"/>
+    <xsl:call-template name="pretext-js"/>
+    <xsl:call-template name="runestone-header"/>
+    <xsl:call-template name="diagcess-header"/>
+    <!-- file-wrap-simple-head-cache -->
+    <xsl:call-template name="sagecell-code" />
+    <xsl:call-template name="favicon"/>
+    <xsl:call-template name="webwork-js"/>
+    <xsl:call-template name="lti-iframe-resizer"/>
+    <xsl:call-template name="syntax-highlight"/>
+    <xsl:call-template name="hypothesis-annotation" />
+    <xsl:call-template name="geogebra" />
+    <xsl:call-template name="jsxgraph" />
+    <xsl:call-template name="mermaid-header" />
+    <!-- file-wrap-full-head-cache -->
+    <xsl:call-template name="google-search-box-js" />
+    <xsl:call-template name="native-search-box-js" />
+</xsl:variable>
+
 <!-- Now build end of body caches in the same manner          -->
 <!-- Again, start with univeral content and build from there  -->
 
@@ -10897,7 +10928,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="filename" select="$the-filename"/>
             </xsl:call-template>
             <!-- grab the contents every page gets -->
-            <xsl:copy-of select="$file-wrap-full-head-cache"/>
+            <xsl:choose>
+                <xsl:when test="$b-printable">
+                    <xsl:copy-of select="$file-wrap-full-head-cache-printable"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy-of select="$file-wrap-full-head-cache"/>
+                </xsl:otherwise>
+            </xsl:choose>
             <!-- now do anything that is or could be page-specific and comes after cache -->
             <xsl:apply-templates select="." mode="knowl" />
             <!-- webwork's iframeResizer needs to come before sagecell template -->
@@ -13348,10 +13386,7 @@ TODO:
 </xsl:template>
 
 <!-- CSS header -->
-<xsl:template name="css">
-    <xsl:if test="not($b-debug-react)">
-        <link href="{$html.css.dir}/{$html-css-theme-file}" rel="stylesheet" type="text/css"/>
-    </xsl:if>
+<xsl:template name="css-common">
     <!-- Temporary until css handling overhaul by ascholer complete -->
     <link href="{$html.css.dir}/ol-markers.css" rel="stylesheet" type="text/css"/>
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
@@ -13376,6 +13411,21 @@ TODO:
         <xsl:comment> must supply it.                                             </xsl:comment>
         <link href="developer.css" rel="stylesheet" type="text/css" />
     </xsl:if>
+</xsl:template>
+
+<xsl:template name="css-printable">
+    <xsl:if test="not($b-debug-react)">
+        <link href="{$html.css.dir}/{$html-css-theme-file}" media="screen" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/print-worksheet.css" media="print" rel="stylesheet" type="text/css"/>
+    </xsl:if>
+    <xsl:call-template name="css-common"/>
+</xsl:template>
+
+<xsl:template name="css">
+    <xsl:if test="not($b-debug-react)">
+        <link href="{$html.css.dir}/{$html-css-theme-file}" rel="stylesheet" type="text/css"/>
+    </xsl:if>
+    <xsl:call-template name="css-common"/>
 </xsl:template>
 
 <!-- Inject classes into the root div of a book. Only for used for   -->
