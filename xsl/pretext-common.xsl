@@ -7668,7 +7668,8 @@ Book (with parts), "section" at level 3
 <!--   TODO: use content of "see" and "seealso"            -->
 <xsl:template name="locator-list">
     <xsl:param name="the-index-list"/>
-    <xsl:param name="heading-group" />
+    <xsl:param name="heading-group"/>
+    <xsl:param name="cross-reference-separator"/>
 
     <!-- Some formatting depends on presence of subentries -->
     <xsl:variable name="b-has-subentry" select="not(text[2] = '')"/>
@@ -7685,17 +7686,21 @@ Book (with parts), "section" at level 3
                 <xsl:when test="$heading-group/see and $b-has-subentry">
                     <xsl:text> </xsl:text>
                 </xsl:when>
-                <!-- cross-reference, w/ or w/out see also -->
-                <xsl:otherwise>
-                    <xsl:text>,</xsl:text>
-                </xsl:otherwise>
+                <!-- cross-reference, w/ or w/out "see also" -->
+                <!-- don't do anything as we will prefix     -->
+                <!-- instances of "cross-reference" below    -->
+                <xsl:otherwise/>
             </xsl:choose>
             <!-- course over the "index" in the group -->
             <xsl:for-each select="$heading-group">
                 <xsl:choose>
                     <!--  -->
                     <xsl:when test="cross-reference">
-                        <xsl:text> </xsl:text>
+                        <!-- *prefix* with a separator, since we do not     -->
+                        <!-- create it previously and this way we can avoid -->
+                        <!-- determining the last "cross-reference" element -->
+                        <!-- (which seems difficult)                        -->
+                        <xsl:value-of select="$cross-reference-separator"/>
                         <xsl:copy-of select="cross-reference/node()"/>
                     </xsl:when>
                     <!--  -->

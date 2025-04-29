@@ -1567,6 +1567,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="locator-list">
                 <xsl:with-param name="the-index-list" select="$the-index-list"/>
                 <xsl:with-param name="heading-group" select="$heading-group" />
+                <!-- use space to separate knowls -->
+                <xsl:with-param name="cross-reference-separator" select="' '" />
             </xsl:call-template>
         </xsl:if>
     </div>
