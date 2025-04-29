@@ -4913,6 +4913,120 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<xsl:template name="present-index">
+    <xsl:param name="content"/>
+
+    <xsl:text>\begin{multicols*}{2}%&#xa;</xsl:text>
+    <!-- Turn off paragraph indentation within the -->
+    <!-- scope of the multicolumn environment      -->
+    <xsl:text>\setlength{\parindent}{0pt}%&#xa;</xsl:text>
+    <xsl:copy-of select="$content"/>
+    <xsl:text>\end{multicols*}%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="present-letter-group">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="letter-group"/>
+    <xsl:param name="current-letter"/>
+    <xsl:param name="content"/>
+
+    <xsl:copy-of select="$content"/>
+
+    <!-- The index for CMoS has only gaps between letter groups,  -->
+    <!-- about 2 lines, much like default LaTeX.  Bringhurst has  -->
+    <!-- fleurons and in the margin, the first and last entry of  -->
+    <!-- each page.                                               -->
+
+    <!-- Visual separation to next letter group          -->
+    <!-- Seems to be about 20% taller than default LaTeX -->
+    <!-- TODO: pass in flag for last letter group, so we don't write -->
+    <!-- this out when not necessary (and maybe force a new page?    -->
+    <xsl:text>\par\vspace*{1.0\parskip}%&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="present-index-heading">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="heading-group"/>
+    <xsl:param name="b-write-locators"/>
+    <xsl:param name="heading-level"/>
+    <xsl:param name="content"/>
+
+    <!-- TODO: implement indentation with macros? -->
+    <xsl:choose>
+        <xsl:when test="$heading-level = 1">
+            <!-- visual formatting, break with the past -->
+            <xsl:text>%&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$heading-level = 2">
+            <xsl:text>\hspace*{18pt}</xsl:text>
+        </xsl:when>
+        <xsl:when test="$heading-level = 3">
+            <xsl:text>\hspace*{36pt}</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+
+    <xsl:copy-of select="$content"/>
+
+    <!-- perhaps time to write locators -->
+    <xsl:if test="$b-write-locators">
+        <xsl:call-template name="locator-list">
+            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+            <xsl:with-param name="heading-group" select="$heading-group" />
+            <!-- use comma-space to separate knowls -->
+            <xsl:with-param name="cross-reference-separator" select="', '" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:text>\\%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- This is poorly named and maybe needs a refactor.  For an HTML index,  -->
+<!-- we look up the tree to find an object that can be knowlized as the    -->
+<!-- locator, and build a knowl cross-reference.  The $enclosure parameter -->
+<!-- is the provoking "idx", unclear why that is not passed through the    -->
+<!-- match/select.  In any event, we need to make a cross-reference here,  -->
+<!-- a standard page reference, which will be fine in print and which will -->
+<!-- be a hyperlink in electronic versions.  The \pageref\label mechanism  -->
+<!-- uses the string from the "unique-id" for the "idx" element, so the    -->
+<!-- \label must be set elsewhere.                                         -->
+<xsl:template match="index-list" mode="index-enclosure">
+    <xsl:param name="enclosure"/>
+
+    <!-- NB: $enclosure is always an "idx" element, -->
+    <!-- this should be unwound in a refactor       -->
+
+    <xsl:text>\pageref{</xsl:text>
+    <xsl:apply-templates select="$enclosure" mode="unique-id"/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template name="present-index-locator">
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<!-- Just duplicate, processed text from -->
+<!-- abstract templates is sufficient    -->
+<xsl:template name="present-index-see">
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<!-- Just duplicate, processed text from -->
+<!-- abstract templates is sufficient    -->
+<xsl:template name="present-index-see-also">
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<xsl:template name="present-index-italics">
+    <xsl:param name="content"/>
+
+    <xsl:text>{\textit </xsl:text>
+    <xsl:copy-of select="$content"/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+
 <!--               -->
 <!-- Notation List -->
 <!--               -->
