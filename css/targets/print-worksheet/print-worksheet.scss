@@ -1,0 +1,116 @@
+/*! Theme: print-worksheet */
+
+// Used for printing versions of worksheets for all themes
+
+// File is included into page with @media="print", so no need to use media query around rules
+
+// Also see:
+// components/_printing.scss : base rules for printing a standard PreTeXt page - removes UI
+// components/_worksheet.scss : worksheet specific rules to apply to screen AND print
+
+// Current maintainer: ???
+
+// ---------------------------------------------
+// Grouping containers - based off of those in default-modern
+@use 'chunks-worksheet' with ($border-radius: 0);
+
+// Bring in the standard PreTeXt styles for components
+@use 'components/pretext';
+
+// Use underline style headings
+@use 'components/elements/extras/heading-underlines';
+
+// Make sure fonts are available
+@use 'fonts/fonts-google';
+
+
+// ---------------------------------------------
+// concrete rules / includes that generate CSS
+
+
+
+// Todo - review/refactor below
+
+.standalone.worksheet .print-button {
+  display: none;
+}
+
+
+.standalone.worksheet [data-knowl]:hover,
+.standalone.worksheet [data-knowl]:active,
+.standalone.worksheet [data-knowl].active {
+  background: none;
+  color: black;
+}
+.standalone.worksheet [data-knowl]::after {
+  border: none;
+}
+
+
+
+body.standalone.worksheet .ptx-page > .ptx-main {
+  width: 820px;
+  max-width: 820px;
+  font-size: 12.5px;
+}
+body.standalone.worksheet {
+  margin: 0;
+}
+body.standalone section.worksheet {
+  border: none;
+}
+body.standalone.worksheet .ptx-masthead,
+body.standalone.worksheet .ptx-page-footer {
+  display: none;
+}
+
+body.standalone.worksheet.has-sidebar-left.mathbook-loaded .ptx-page .ptx-main {
+  margin: 0;
+}
+
+body.standalone.worksheet .ptx-page > .ptx-main {
+  margin: 0;
+}
+body.standalone.worksheet section.onepage {
+  max-height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  page-break-after: always;
+  /*
+  height: 1243px;
+  */
+  border: none;
+  page-break-inside: avoid;
+}
+body.standalone.worksheet .onepage.lastpage {
+  margin-bottom: -2em;  /* to avoid blank space overflow causing an extra blank page */
+  page-break-after: auto;
+}
+body.standalone.worksheet.a4 .onepage {
+  /*
+  height: 1320px;
+  */
+}
+body.standalone.worksheet .onepage div.workspace,
+body.standalone.worksheet .onepage div.workspace.squashed.tight {
+  border: none;
+  padding: 0;
+  background: none !important;
+}
+body.standalone.worksheet a {
+  color: black;
+}
+
+body.standalone.worksheet .ptx-page  .ptx-main {
+  padding: 0;
+}
+
+body.standalone.worksheet.mathbook-loaded .ptx-page .ptx-main .ptx-contentsection.onepage {
+  padding-bottom: 20px;  /* to help prevent flow onto the next page, particularly in Safari */
+  /* the page is not full length, but what is missing was blank anyway */
+  /*
+  margin: 0;
+  */
+}
+
+@page { margin: 0 }
