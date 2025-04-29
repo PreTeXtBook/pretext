@@ -7216,12 +7216,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Excellent built-in LaTeX support, HTML may lag -->
 
+<xsl:template match="idx">
+    <xsl:choose>
+        <xsl:when test="$index-maker = 'latex'">
+            <xsl:apply-templates select="." mode="latex-index"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Unstructured                       -->
 <!-- simple and quick, minimal features -->
 <!-- Only supports  @sortby  attribute  -->
-<xsl:template match="idx[not(h)]">
+<xsl:template match="idx[not(h)]" mode="latex-index">
     <xsl:text>\index{</xsl:text>
-    <xsl:apply-templates select="@sortby" />
+    <xsl:apply-templates select="@sortby" mode="latex-index"/>
     <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
     <!-- do not introduce anymore whitespace into a "p" than there   -->
@@ -7235,12 +7243,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   h - one to three                              -->
 <!--   see, seealso - one total                      -->
 <!--   @start, @finish support page ranges for print -->
-<xsl:template match="idx[h]">
+<xsl:template match="idx[h]" mode="latex-index">
     <xsl:text>\index{</xsl:text>
-    <xsl:apply-templates select="h" />
-    <xsl:apply-templates select="see" />
-    <xsl:apply-templates select="seealso" />
-    <xsl:apply-templates select="@finish" />
+    <xsl:apply-templates select="h" mode="latex-index"/>
+    <xsl:apply-templates select="see" mode="latex-index"/>
+    <xsl:apply-templates select="seealso" mode="latex-index"/>
+    <xsl:apply-templates select="@finish" mode="latex-index"/>
     <xsl:text>}</xsl:text>
     <!-- do not introduce anymore whitespace into a "p" than there   -->
     <!-- already is, but do format these one-per-line outside of "p" -->
@@ -7252,13 +7260,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Page Range, Finish Variant              -->
 <!-- @start is a marker for END of a range   -->
 <!-- End of page range duplicates it's start -->
-<xsl:template match="index[@start] | idx[@start]">
+<xsl:template match="index[@start] | idx[@start]" mode="latex-index">
     <xsl:variable name="start" select="id(@start)" />
     <xsl:text>\index{</xsl:text>
-    <xsl:apply-templates select="$start/h" />
-    <xsl:apply-templates select="$start/see" />
-    <xsl:apply-templates select="$start/seealso" />
-    <xsl:apply-templates select="@start" />
+    <xsl:apply-templates select="$start/h" mode="latex-index"/>
+    <xsl:apply-templates select="$start/see" mode="latex-index"/>
+    <xsl:apply-templates select="$start/seealso" mode="latex-index"/>
+    <xsl:apply-templates select="@start" mode="latex-index"/>
     <xsl:text>}</xsl:text>
     <!-- do not introduce anymore whitespace into a "p" than there   -->
     <!-- already is, but do format these one-per-line outside of "p" -->
@@ -7267,38 +7275,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="index/@sortby|idx/@sortby|h/@sortby">
+<xsl:template match="index/@sortby|idx/@sortby|h/@sortby" mode="latex-index">
     <xsl:value-of select="." />
     <xsl:text>@</xsl:text>
 </xsl:template>
 
-<xsl:template match="idx/h">
+<xsl:template match="idx/h" mode="latex-index">
     <xsl:if test="preceding-sibling::h">
         <xsl:text>!</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="@sortby" />
+    <xsl:apply-templates select="@sortby" mode="latex-index"/>
     <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="idx/see">
+<xsl:template match="idx/see" mode="latex-index">
     <xsl:text>|see{</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="idx/seealso">
+<xsl:template match="idx/seealso" mode="latex-index">
     <xsl:text>|seealso{</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- finish  attribute suggests range (only) -->
-<xsl:template match="@finish">
+<xsl:template match="@finish" mode="latex-index">
     <xsl:text>|(</xsl:text>
 </xsl:template>
 
 <!-- start  attribute marks end of range  -->
-<xsl:template match="@start">
+<xsl:template match="@start" mode="latex-index">
     <xsl:text>|)</xsl:text>
 </xsl:template>
 
