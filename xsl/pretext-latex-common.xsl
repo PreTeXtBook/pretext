@@ -7236,15 +7236,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Index -->
 <!-- ##### -->
 
-<!-- Excellent built-in LaTeX support, HTML may lag -->
+<!-- Support LaTeX-native or PreTeXt universal -->
+
+<!-- $index-maker is a parameter that will eventually be set as a  -->
+<!-- publisher variable.  It defaults to "latex", though this may  -->
+<!-- change.  We support two schemes for marking index locations.  -->
 
 <xsl:template match="idx">
     <xsl:choose>
+        <xsl:when test="$index-maker = 'pretext'">
+            <xsl:apply-templates select="." mode="pretext-index"/>
+        </xsl:when>
         <xsl:when test="$index-maker = 'latex'">
             <xsl:apply-templates select="." mode="latex-index"/>
         </xsl:when>
     </xsl:choose>
 </xsl:template>
+
+<xsl:template match="idx" mode="pretext-index">
+    <xsl:text>\label{</xsl:text>
+    <xsl:apply-templates select="." mode="unique-id"/>
+    <xsl:text>}</xsl:text>
+    <!-- do not introduce anymore whitespace into a "p" than there   -->
+    <!-- already is, but do format these one-per-line outside of "p" -->
+    <xsl:if test="not(ancestor::p)">
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Unstructured                       -->
 <!-- simple and quick, minimal features -->
