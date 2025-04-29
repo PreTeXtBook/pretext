@@ -13015,7 +13015,7 @@ TODO:
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-highlight/prism-line-highlight.min.js" integrity="sha512-93uCmm0q+qO5Lb1huDqr7tywS8A2TFA+1/WHvyiWaK6/pvsFl6USnILagntBx8JnVbQH5s3n0vQZY6xNthNfKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <xsl:if test="contains($html-theme-name, '-legacy')">
+        <xsl:if test="$b-html-theme-legacy">
             <!-- Legacy themes rely on external css for prism, but newer ones have it built in -->
             <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism.css" rel="stylesheet"/>
             <!-- We could conditionally load the following based on line number -->
@@ -13205,7 +13205,7 @@ TODO:
     <!-- Material Symbols font used for symbols -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <!-- Legacy themes need these fonts, modern ones load them on their own -->
-    <xsl:if test="contains($html-theme-name, '-legacy')">
+    <xsl:if test="$b-html-theme-legacy">
             <!-- DejaVu Serif from an alternate CDN -->
             <link href="https://fonts.cdnfonts.com/css/dejavu-serif" rel="stylesheet"/>
             <!-- A variable font from Google, with serifs -->
@@ -13313,7 +13313,7 @@ TODO:
 <!-- legacy styles - handles old css@colors and dark-mode disabling  -->
 <xsl:template name="html-theme-attributes">
     <!-- check for use of old css color sheets -->
-    <xsl:if test="contains($html-theme-name, '-legacy')">
+    <xsl:if test="$b-html-theme-legacy">
         <xsl:attribute name="data-legacy-colorscheme">
             <xsl:choose>
                 <xsl:when test="not($debug.colors = '')">
