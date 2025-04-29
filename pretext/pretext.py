@@ -3873,9 +3873,17 @@ def _move_prebuilt_theme(theme_name, theme_opts, tmp_dir):
         with open(dest, 'w+') as file:
             file.write(filedata)
 
-    # map file copied as is if it exists
+    # map file copied to theme.css.map
     if os.path.exists(src + ".map"):
         shutil.copy(src + ".map", dest + ".map")
+
+    # print-worksheet
+    for file in ["print-worksheet.css", "print-worksheet.css.map"]:
+        src = os.path.join(css_src, file)
+        dest = os.path.join(css_dest, file)
+        if os.path.exists(src):
+            shutil.copy(src, dest)
+
 
 # Helper to build a custom version of a theme
 def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):

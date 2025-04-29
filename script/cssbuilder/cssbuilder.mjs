@@ -112,13 +112,11 @@ function getTargets(options) {
     // -------------------------------------------------------------------------
     // Modern web targets
     { out: 'theme-default-modern', in: path.join(cssRoot, 'targets/html/default-modern/theme-default-modern.scss')},
-    // only default is prebuilt
     { out: 'theme-salem', in: path.join(cssRoot, 'targets/html/salem/theme-salem.scss')},
     { out: 'theme-denver', in: path.join(cssRoot, 'targets/html/denver/theme-denver.scss') },
     { out: 'theme-greeley', in: path.join(cssRoot, 'targets/html/greeley/theme-greeley.scss') },
     { out: 'theme-boulder', in: path.join(cssRoot, 'targets/html/boulder/theme-boulder.scss') },
     { out: 'theme-tacoma', in: path.join(cssRoot, 'targets/html/tacoma/theme-tacoma.scss') },
-    // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     // Non-web targets
     { out: 'reveal', in: path.join(cssRoot, 'targets/revealjs/reveal.scss')},
@@ -169,8 +167,30 @@ function getTargets(options) {
   return targets;
 }
 
+// Secondary files that are never the primary target but may need to be built with the theme
+function getModules(options) {
+  let webModules = [
+    // -------------------------------------------------------------------------
+    // Modules - these are secondary files 
+    { out: 'print-worksheet', in: path.join(cssRoot, 'targets/print-worksheet/print-worksheet.scss')}
+  ];
+  // Could be other types of modules here...
+
+  if (!options['selected-target']) {
+    // No particular target, build all
+    return webModules;
+  }
+  else if (options['selected-target'].indexOf('theme-') !== -1) {
+    // Building a web theme, build the web modules
+    return webModules;
+  }
+
+  return [];
+}
+
 async function getESBuildConfig(options) {
   const targets = getTargets(options);
+  const modules = getModules(options);
   const outDir = getOutDir(options);
   // Only minify if there is only one target
   // when building all the prebuilt themes to dist, we want to preserve new lines
@@ -178,7 +198,7 @@ async function getESBuildConfig(options) {
   const minifyCSS = targets.length === 1;
   const ctx = await esbuild
     .context({
-      entryPoints: targets,
+      entryPoints: targets.concat(modules),
       bundle: true,
       sourcemap: true,
       minify: minifyCSS,
