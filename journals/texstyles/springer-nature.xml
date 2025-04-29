@@ -15,71 +15,42 @@
         <date>2025-04-01</date>
     </metadata>
 
-<documentclass name="sn-jnl"/>
+<documentclass name="sn-jnl" opt="pdflatex"/>
 
 
     <packages>
         \usepackage{multirow}%
-        \usepackage{amsmath,amssymb,amsfonts}%
-        \usepackage{amsthm}%
+        \usepackage{amsfonts}%
         \usepackage{mathrsfs}%
         \usepackage[title]{appendix}%
-        \usepackage{xcolor}%
         \usepackage{textcomp}%
         \usepackage{manyfoot}%
         \usepackage{booktabs}%
-        \usepackage{algorithm}%
-        \usepackage{algorithmicx}%
-        \usepackage{algpseudocode}%
         \usepackage{listings}%
     </packages>
 
-
-
-
-
-    <ptx-preamble>
+    <ptx-preamble hyperref="no">
         <theoremstyle
             name="thmstyleone"
             environments="theorem, proposition, lemma, corollary, claim, fact, identity, conjecture"
         />
         <theoremstyle
             name="thmstyletwo"
-            environments="
-                definition,
-                axiom,
-                principle
-                heuristic
-                hypothesis
-                assumption
-                openproblem
-                openquestion
-                question
-                activity
-                exercise
-                inlineexercise
-                investigation
-                exploration
-                problem
-                example
-                project
-            "
+            environments="definition, axiom, principle, algorithm, heuristic, hypothesis, assumption, openproblem, openquestion, question, activity, exercise, inlineexercise, investigation, exploration, problem, example, project"
         />
         <theoremstyle
             name="thmstylethree"
-            environments="
-                remark
-                warning
-                convention
-                insight
-                note
-                observation
-                computation
-                technology
-                data
-            "
+            environments="remark, warning, convention, insight, note, observation, computation, technology, data"
         />
     </ptx-preamble>
+
+    <preamble-addition>
+        % Redefine some commands that are usually in the table preamble chunk
+        % Note that this no longer distinguishes between these rule widths.
+        \renewcommand{\crulethin}{\cmidrule}
+        \renewcommand{\crulemedium}{\cmidrule}
+        \renewcommand{\crulethick}{\cmidrule}
+    </preamble-addition>
 
 
     <begin-document/>
