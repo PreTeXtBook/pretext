@@ -145,6 +145,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.annotation" select="''" />
 <xsl:variable name="b-activate-hypothesis" select="boolean($html.annotation='hypothesis')" />
 
+<!-- Should we build the SCORM manifest file? -->
+<xsl:param name="html.scorm" select="'no'" />
+<xsl:variable name="b-build-scorm-manifest" select="$html.scorm = 'yes'" />
+
 <!-- ######### -->
 <!-- Variables -->
 <!-- ######### -->
@@ -308,6 +312,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- build a search page (in development) -->
     <xsl:if test="$has-native-search">
         <xsl:call-template name="search-page-construction"/>
+    </xsl:if>
+    <!-- Optionally, build a SCORM manifest -->
+    <xsl:if test="$b-build-scorm-manifest">
+        <xsl:call-template name="scorm-manifest"/>
     </xsl:if>
     <!-- The main event                          -->
     <!-- We process the enhanced source pointed  -->
@@ -13625,5 +13633,51 @@ TODO:
     </xsl:if>
 </xsl:template>
 
+
+<!-- SCORM manifest -->
+<!-- Generate a simple xml file describing a minimal SCORM "course". -->
+<!-- Besides some boiler plate, we include the title of the course   -->
+<!-- (under the main organization), a single item (since the entire  -->
+<!-- document is a single iframe), and the entry point for that item -->
+<!-- (the resource with its file).  It appears that while other files-->
+<!-- can be listed as files for that resource, this is not required. -->
+
+<!-- The only customization we do here is setting the main title to  -->
+<!-- the title of the document.  We could easily expand this.        -->
+<xsl:template name="scorm-manifest">
+    <xsl:variable name="root-filename">
+        <xsl:apply-templates select="$document-root" mode="containing-filename" />
+    </xsl:variable>
+    <exsl:document href="imsmanifest.xml" method="xml" omit-xml-declaration="no" indent="yes">
+        <manifest identifier="ptx-scorm-test" version="1" xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_v1p3" xmlns:adlseq="http://www.adlnet.org/xsd/adlseq_v1p3" xmlns:adlnav="http://www.adlnet.org/xsd/adlnav_v1p3" xmlns:imsss="http://www.imsglobal.org/xsd/imsss" xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1 imscp_v1p1.xsd http://www.adlnet.org/xsd/adlcp_v1p3 adlcp_v1p3.xsd http://www.adlnet.org/xsd/adlseq_v1p3 adlseq_v1p3.xsd http://www.adlnet.org/xsd/adlnav_v1p3 adlnav_v1p3.xsd http://www.imsglobal.org/xsd/imsss imsss_v1p0.xsd">
+            <!--The metadata node simply declares which SCORM version this course operates under.-->
+            <metadata>
+                <schema>ADL SCORM</schema>
+                <schemaversion>2004 3rd Edition</schemaversion>
+            </metadata>
+            <!-- There is just one organization. The organization contains just one item.-->
+            <organizations default="main">
+                <organization identifier="main">
+                    <title>
+                        <xsl:apply-templates select="$document-root" mode="title-full"/>
+                    </title>
+                    <item identifier="item_1" identifierref="main-resource">
+                        <!-- "Main" here is a generic name.  Only visible when importing a into LMS -->
+                        <!-- (at least in Canvas), sort of a sole entry in the table of contents.   -->
+                        <title>Main</title>
+                    </item>
+                </organization>
+            </organizations>
+            <!-- There is just one resource that represents the single SCO that comprises the entirety of this course. The href attribute points to the launch URL for the course and all of the files required by the course are listed. -->
+            <resources>
+                <!-- We use the index.html file pretext produces, as this always points to the right place.  -->
+                <!-- NB we could point to any entry filename, as long as it is in the resulting zip          -->
+                <resource identifier="main-resource" type="webcontent" adlcp:scormType="sco" href="index.html">
+                <file href="index.html"/>
+                </resource>
+            </resources>
+        </manifest>
+    </exsl:document>
+</xsl:template>
 
 </xsl:stylesheet>
