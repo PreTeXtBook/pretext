@@ -4032,6 +4032,9 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
         stringparams["publisher"] = pub_file
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
+    # Build SCORM manifest if requested
+    if file_format == "scorm":
+        stringparams["html.scorm"] = "yes"
     # Optional extra XSL could be None, or sanitized full filename
     if extra_xsl:
         extraction_xslt = extra_xsl
@@ -4066,7 +4069,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
         # see comments at  copy_build_directory()
         # before replacing with  shutil.copytree()
         copy_build_directory(tmp_dir, dest_dir)
-    elif file_format == "zip":
+    elif file_format == "zip" or file_format == "scorm":
         # working in temporary directory gets simple paths in zip file
         with working_directory(tmp_dir):
             zip_file = "html-output.zip"
