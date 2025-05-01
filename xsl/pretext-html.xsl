@@ -332,7 +332,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- usually not working on a subset -->
         <xsl:when test="not($b-subsetting)">
-            <xsl:call-template name="index-redirect-page"/>
+            <!-- Build the index-redirect-page, but not if doing a portable build -->
+            <xsl:if test="not($b-portable-html)">
+                <xsl:call-template name="index-redirect-page"/>
+            </xsl:if>
             <xsl:apply-templates mode="chunking" />
         </xsl:when>
         <!-- if subsetting, begin chunking at specified node -->
