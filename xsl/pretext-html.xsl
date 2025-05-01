@@ -133,7 +133,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-portable-html">
             <xsl:text>theme-</xsl:text>
             <xsl:value-of select="$html-theme-name"/>
-            <xsl:text>.min.css</xsl:text> 
+            <xsl:text>.min.css</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>theme.css</xsl:text>
@@ -310,7 +310,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A structured Table of Contents for a React app approach -->
     <xsl:call-template name="doc-manifest"/>
     <!-- build a search page (in development) -->
-    <xsl:if test="$has-native-search">
+    <xsl:if test="$has-native-search and not($b-portable-html)">
         <xsl:call-template name="search-page-construction"/>
     </xsl:if>
     <!-- Optionally, build a SCORM manifest -->
@@ -10961,6 +10961,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="mathjax-link" />
             </div>
             <xsl:copy-of select="$file-wrap-full-endbody-cache"/>
+            <!-- For portable builds we stash the lunr search here -->
+            <xsl:if test="$b-portable-html and $has-native-search">
+                <xsl:call-template name="embedded-search-construction"/>
+            </xsl:if>
         </body>
     </html>
     </exsl:document>
@@ -12106,38 +12110,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <xsl:template name="search-page-construction">
-    <!-- First, a Javascript file, defining the raw "documents"     -->
+    <!-- The a Javascript file with the Lunr search index (non-portable builds).  -->
+    <exsl:document href="{$lunr-search-file}" method="text" encoding="UTF-8">
+        <xsl:call-template name="search-script-contents"/>
+    </exsl:document>
+</xsl:template>
+
+<xsl:template name="embedded-search-construction">
+    <!-- For portable html builds, we include the contents of what    -->
+    <!-- what would otherwise go in the lunr-search-file inside the   -->
+    <!-- HTML file itself, inside script tags (to be placed as the    -->
+    <!-- last script tag in the body).                                -->
+    <script>
+        <xsl:call-template name="search-script-contents"/>
+    </script>
+</xsl:template>
+
+<xsl:template name="search-script-contents">
+    <!-- The contents of either the lunr-search-page or the script  -->
+    <!-- embedded in HTML. This defines  the raw "documents"        -->
     <!-- of the eventual index, and then converted by Lunr into     -->
     <!-- a Javascript variable , ptx_lunr_idx.  This index variable -->
     <!-- is included later in the search page via a script element, -->
     <!-- for use/consumption by the Lunr search() method.           -->
-    <exsl:document href="{$lunr-search-file}" method="text" encoding="UTF-8">
-        <xsl:text>var ptx_lunr_search_style = "</xsl:text>
-        <xsl:value-of select="$native-search-variant"/>
-        <xsl:text>";&#xa;</xsl:text>
-        <!-- the actual search documents in one HUGE variable, then a list -->
-        <xsl:variable name="json-docs">
-            <xsl:apply-templates select="$document-root" mode="search-page-docs"/>
-        </xsl:variable>
-        <xsl:text>var ptx_lunr_docs = [&#xa;</xsl:text>
-        <!-- Strip a trailing comma, and a newline, to be proper JSON -->
-        <xsl:value-of select="substring($json-docs, 1, string-length($json-docs) - 2)"/>
-        <!-- restore newline just stripped -->
-        <xsl:text>&#xa;]&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <!-- the Javascript function to make the index -->
-        <xsl:text>var ptx_lunr_idx = lunr(function () {&#xa;</xsl:text>
-        <xsl:text>  this.ref('id')&#xa;</xsl:text>
-        <xsl:text>  this.field('title')&#xa;</xsl:text>
-        <xsl:text>  this.field('body')&#xa;</xsl:text>
-        <xsl:text>  this.metadataWhitelist = ['position']&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>  ptx_lunr_docs.forEach(function (doc) {&#xa;</xsl:text>
-        <xsl:text>    this.add(doc)&#xa;</xsl:text>
-        <xsl:text>  }, this)&#xa;</xsl:text>
-        <xsl:text>})&#xa;</xsl:text>
-    </exsl:document>
+    <xsl:text>var ptx_lunr_search_style = "</xsl:text>
+    <xsl:value-of select="$native-search-variant"/>
+    <xsl:text>";&#xa;</xsl:text>
+    <!-- the actual search documents in one HUGE variable, then a list -->
+    <xsl:variable name="json-docs">
+        <xsl:apply-templates select="$document-root" mode="search-page-docs"/>
+    </xsl:variable>
+    <xsl:text>var ptx_lunr_docs = [&#xa;</xsl:text>
+    <!-- Strip a trailing comma, and a newline, to be proper JSON -->
+    <xsl:value-of select="substring($json-docs, 1, string-length($json-docs) - 2)"/>
+    <!-- restore newline just stripped -->
+    <xsl:text>&#xa;]&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <!-- the Javascript function to make the index -->
+    <xsl:text>var ptx_lunr_idx = lunr(function () {&#xa;</xsl:text>
+    <xsl:text>  this.ref('id')&#xa;</xsl:text>
+    <xsl:text>  this.field('title')&#xa;</xsl:text>
+    <xsl:text>  this.field('body')&#xa;</xsl:text>
+    <xsl:text>  this.metadataWhitelist = ['position']&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>  ptx_lunr_docs.forEach(function (doc) {&#xa;</xsl:text>
+    <xsl:text>    this.add(doc)&#xa;</xsl:text>
+    <xsl:text>  }, this)&#xa;</xsl:text>
+    <xsl:text>})&#xa;</xsl:text>
 </xsl:template>
+
 
 <!-- The modal template "search-page-docs" traverses the structural   -->
 <!-- elements (divisions), stopping when a division is a chunk of the -->
