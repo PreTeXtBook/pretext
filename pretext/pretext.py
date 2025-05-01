@@ -4078,7 +4078,13 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
             with zipfile.ZipFile(zip_file, mode="w", compression=zipfile.ZIP_DEFLATED) as epub:
                 for root, dirs, files in os.walk("."):
                     for name in files:
-                        epub.write(os.path.join(root, name))
+                        # Avoid recursively zipping the zip file
+                        # Small chance we might be clobbering an existing
+                        # "html-output.zip" that could be part of a project.
+                        # TODO: zip directly into the derivedname below?
+                        #       Or, zip into some new temporary directory?
+                        if name != zip_file:
+                            epub.write(os.path.join(root, name))
             derivedname = get_output_filename(xml, out_file, dest_dir, ".zip")
             shutil.copy2(zip_file, derivedname)
             log.info("zip file of HTML output deposited as {}".format(derivedname))
