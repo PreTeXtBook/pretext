@@ -9700,7 +9700,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </introduction>
 
                 <listing xml:id="program-activecode-python">
-                    <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
+                    <title>An interactive Python program, using <pubtitle>Runestone</pubtitle></title>
                     <program xml:id="python-hello-world" label="python-hello-world" interactive='activecode' language="python">
                         <code>
                         print("Hello, World!")
@@ -9709,7 +9709,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </listing>
 
                 <listing xml:id="program-activecode-python-no-codelens">
-                    <caption>An interactive Python program without codelens.</caption>
+                    <title>An interactive Python program without codelens.</title>
                     <program xml:id="python-hello-world-no-codelens" label="python-hello-world-no-codelens" interactive='activecode' language="python" codelens="no">
                         <code>
                         print("Hello, World!")
@@ -9726,7 +9726,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </introduction>
 
                 <listing xml:id="program-codelens-python">
-                    <caption>A Python program, stepable with CodeLens</caption>
+                    <title>A Python program, stepable with CodeLens</title>
                     <program xml:id="python-hello-world-code-lens" label="python-hello-world-code-lens" interactive="codelens" language="python">
                         <code>
                         print('Hello, World!')
@@ -10662,10 +10662,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Note that the above examples all have slightly different widths (theser are very evident in print with the frames).  As 2-D atomic objects, to place them in the narrative requires the layout features of a <c>sidebyside</c> element.  Then <c>width</c> and/or <c>margin</c> attributes will influence the width of the panel.</p>
 
-            <p>A <c>program</c> may also be nested inside a <c>listing</c>, which behaves similar to a <c>figure</c>.  You can provide a <c>caption</c>, and the listing will be numbered along with tables and figures.  This then makes it possible to cross-reference the listing, such as <xref ref="listing-c-hello" text="type-global"/>.  It also removes the requirement of wrapping the <c>program</c> in a <c>sidebyside</c>.  For technical reasons, the three examples above will not split across a page break in PDF output, but the placement inside a <c>listing</c> will allow splits, as you should see in at least one example following.</p>
+            <p>A <c>program</c> may also be nested inside a <c>listing</c>, which behaves similar to a <c>figure</c>.  You can provide a <c>title</c>, and the listing will be numbered along with tables and figures.  This then makes it possible to cross-reference the listing, such as <xref ref="listing-c-hello" text="type-global" />.  It also removes the requirement of wrapping the <c>program</c> in a <c>sidebyside</c>.  For technical reasons, the three examples above will not split across a page break in PDF output, but the placement inside a <c>listing</c> will allow splits, as you should see in at least one example following.</p>
 
             <listing xml:id="listing-c-hello">
-                <caption>C Version of <q>Hello, World!</q></caption>
+                <title>C Version of <q>Hello, World!</q></title>
                 <program language="c">
                     <code>
                     /* Hello World program */
@@ -10683,7 +10683,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>A <tag>program</tag> may include line numbers.</p>
 
             <listing xml:id="program-line-numbers">
-                <caption>A static Java program with line numbers</caption>
+                <title>A static Java program with line numbers</title>
                 <program interactive='no' language="java" line-numbers="yes">
                     <code>
                     import javax.swing.JFrame;  //Importing class JFrame
@@ -10705,7 +10705,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>A <tag>program</tag> may also include highlighted lines.</p>
 
             <listing xml:id="program-highlight-lines">
-                <caption>A static Java program with line numbers</caption>
+                <title>A static Java program with line numbers</title>
                 <program interactive='no' language="java" line-numbers="yes" highlight-lines="1,3-5">
                     <code>
                     import javax.swing.JFrame;  //Importing class JFrame
@@ -10773,7 +10773,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>A specialized version of a program listing is an interactive command/response session at a command-line, where differing fonts are used to differentiate the system prompt, the user's commands, and the system's reaction.  A   <c>console</c> session may be used by itself inside a <c>sidebyside</c>, or it can be wrapped in a listing to get a number and a caption.  As elsewhere, you will need to escape ampersands and angle brackets (such as if you have a command using redirection), using <c>&amp;amp;</c>, <c>&amp;lt;</c>, and <c>&amp;gt;</c> in your source.</p>
 
             <listing xml:id="console-raspberry-pi">
-                <caption>Console Session: <c>int</c> and <c>float</c></caption>
+                <title>Console Session: <c>int</c> and <c>float</c></title>
                 <console prompt="pi@raspberrypi ~/progs/chap02 $ ">
                     <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
                     <input>./intAndFloat</input>
@@ -10798,7 +10798,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>If your console input exceeds more than one line, you can author it across several lines and your choice of line breaks will be reflected in the rendering.  You can decide to indent lines after the first one for clarity, if desired.  You can also decide if your audience needs line-continuation characters or not.</p>
 
             <listing xml:id="console-raspberry-pi-multi">
-                <caption>Console Session: <c>int</c> and <c>float</c> (multi-line input)</caption>
+                <title>Console Session: <c>int</c> and <c>float</c> (multi-line input)</title>
                 <console prompt="pi@raspberrypi ~/progs/chap02 $ ">
                     <input>
                     gcc -Wall
@@ -10840,7 +10840,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>The next listing is just absurdity, to check various characters from <latex/> that are otherwise employed by the code supporting consoles, and some Latin-1 characters.  We test each in a prompt, input, and output.  We use <c>(*</c> and <c>*)</c> as sequences used to escape embedded <latex/> commands, so we test those also.</p>
 
             <listing>
-                <caption>Console Session: problematic <latex/> characters</caption>
+                <title>Console Session: problematic <latex /> characters</title>
                 <console>
                     <input prompt="A backslash \ here  ">A backslash \ here</input>
                     <output>A backslash \ here</output>
@@ -10871,7 +10871,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>We conclude this section with a longer example of a program listing, an assembly language program from Bob Plantz, included to test a <c>listing</c> breaking across pages in PDF output.</p>
 
             <listing>
-                <caption>A longer program listing</caption>
+                <title>A longer program listing</title>
                 <program>
                     <code>
                     @ structPass2.s
@@ -12680,7 +12680,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <caption>A <tag>listing</tag> and a <tag>list</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <listing>
-                        <caption>A statistical computation</caption>
+                        <title>A statistical computation</title>
                         <program language="r">
                             <code>
                             n_loops &lt;- 10
@@ -13091,7 +13091,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li>inside a <tag>sidebyside</tag>, with size and layout configured, and inside a <tag>figure</tag></li>
                     <li>inside a <tag>sidebyside</tag>, with size and layout configured, with each inside a <tag>listing</tag>, earning different numbers</li>
 
-                    <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag> inside a <tag>listing</tag>, with size and layout configured, with a number and caption, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
+                    <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag> inside a <tag>listing</tag>, with size and layout configured, with a number and title, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
                 </ol>Examples of each, and more.</p>
 
                <p>Programs can be realized in many forms, and can come from a variety of sources.  See <xref ref="section-video" text="type-global"/> for tests of some of that variety.  Here we are testing placement within surroundings and testing the schema for location.  But we do have two videos in each test, one provided as a local file and one embedded from a service.</p>
@@ -13178,10 +13178,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <input prompt="pi@raspberrypi ~/progs/chap02 $ "/>
                 </console>
 
-                <p>Two <tag>listing</tag>, with <tag>caption</tag>, and no layout control.</p>
+                <p>Two <tag>listing</tag>, with <tag>title</tag>, and no layout control.</p>
 
                 <listing>
-                    <caption>Hello, World! in C</caption>
+                    <title>Hello, World! in C</title>
                         <program language="c">
                             <code>
                             /* Hello World program */
@@ -13197,7 +13197,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </listing>
 
                 <listing>
-                    <caption>A console session on a Raspberry Pi</caption>
+                    <title>A console session on a Raspberry Pi</title>
                         <console>
                             <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
                             <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
@@ -13211,7 +13211,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Same two <tag>listing</tag>, but now with layout control on the <tag>program</tag> and <tag>console</tag>.</p>
 
                 <listing>
-                    <caption>Hello, World! in C</caption>
+                    <title>Hello, World! in C</title>
                         <program language="c" margins="40% 20%" width="40%">
                             <code>
                             /* Hello World program */
@@ -13227,7 +13227,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </listing>
 
                 <listing>
-                    <caption>A console session on a Raspberry Pi</caption>
+                    <title>A console session on a Raspberry Pi</title>
                         <console margins="10% 10%">
                             <input prompt="pi@raspberrypi ~/progs/chap02 $ ">gcc -Wall -o intAndFloat intAndFloat.c</input>
                             <input prompt="pi@raspberrypi ~/progs/chap02 $ ">./intAndFloat</input>
@@ -13319,7 +13319,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <sidebyside margins="0% 0%" widths="35% 55%" valign="bottom">
                     <listing>
-                        <caption>Hello!</caption>
+                        <title>Hello!</title>
                         <program language="c">
                             <code>
                             /* Hello World program */
@@ -13334,7 +13334,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </program>
                     </listing>
                     <listing>
-                        <caption>Raspberry Pi</caption>
+                        <title>Raspberry Pi</title>
                         <console>
                             <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
                             <input>./intAndFloat</input>
@@ -13346,14 +13346,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </listing>
                 </sidebyside>
 
-                <p>And again, the two-panel <tag>sidebyside</tag> of <tag>listing</tag>, but now inside a <tag>figure</tag> that has a number and a caption.  And then the <tag>listing</tag> are sub-numbered as (a) and (b).</p>
+                <p>And again, the two-panel <tag>sidebyside</tag> of <tag>listing</tag>, but now inside a <tag>figure</tag> that has a number and a title.  And then the <tag>listing</tag> are sub-numbered as (a) and (b).</p>
 
 
                 <figure>
                     <caption>Two Code Listings</caption>
                     <sidebyside margins="0% 0%" widths="35% 55%" valign="bottom">
                         <listing>
-                            <caption>Hello!</caption>
+                            <title>Hello!</title>
                             <program language="c">
                                 <code>
                                 /* Hello World program */
@@ -13368,7 +13368,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </program>
                         </listing>
                         <listing>
-                            <caption>Raspberry Pi</caption>
+                            <title>Raspberry Pi</title>
                             <console>
                                 <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
                                 <input>./intAndFloat</input>
