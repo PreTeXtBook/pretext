@@ -80,7 +80,7 @@
     </p>
 
     <listing xml:id="basics-l-p">
-      <caption>Some basic content of a paragraph</caption>
+      <title>Some basic content of a paragraph</title>
         <idx><h sortby="p"><tag>p</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="p"><tag>p</tag></h></idx>
 
@@ -114,7 +114,7 @@
     </p>
 
     <listing xml:id="basics-l-section-primitive">
-      <caption>The general outline of a section as a model division</caption>
+      <title>The general outline of a section as a model division</title>
       <idx><h sortby="section"><tag>section</tag></h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h sortby="section"><tag>section</tag></h></idx>
 <program><code><xi:include href="section.ptx" parse="text"/></code> </program>
@@ -138,7 +138,7 @@
     </p>
 
     <listing xml:id="basics-l-section-sub">
-      <caption>A <tag>section</tag> with <tag>subsection</tag>s.</caption>
+      <title>A <tag>section</tag> with <tag>subsection</tag>s.</title>
       <idx><h sortby="section"><tag>section</tag></h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h sortby="section"><tag>section</tag></h></idx>
       <idx><h sortby="subsection"><tag>subsection</tag></h><h><pretext/> code for</h></idx>
@@ -240,7 +240,7 @@
     </p>
 
     <listing xml:id="basics-l-me">
-      <caption>Displayed equations</caption>
+      <title>Displayed equations</title>
       <idx><h><pretext/> code for</h><h>displayed equation</h></idx>
       <idx><h>equation</h><h>displayed</h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h sortby="me"><tag>me</tag></h></idx>
@@ -262,7 +262,7 @@
     </p>
 
     <listing xml:id="basics-l-md">
-      <caption>Aligned equations</caption>
+      <title>Aligned equations</title>
       <idx><h><pretext/> code for</h><h>aligned equations</h></idx>
       <idx><h>equation</h><h>aligned</h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h sortby="md"><tag>md</tag></h></idx>
@@ -325,7 +325,7 @@
     </p>
 
     <listing xml:id="basics-l-ol">
-      <caption>An ordered list</caption>
+      <title>An ordered list</title>
       <idx><h>list</h><h>ordered</h><h><pretext/> code for</h></idx>
       <idx><h>ordered list</h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h>ordered list</h></idx>
@@ -356,7 +356,7 @@
     </p>
 
     <listing xml:id="basics-l-ul">
-      <caption>An unordered list</caption>
+      <title>An unordered list</title>
       <idx><h>list</h><h>unordered</h><h><pretext/> code for</h></idx>
       <idx><h>unordered list</h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h>unordered list</h></idx>
@@ -409,7 +409,7 @@
     </p>
 
     <listing xml:id="basics-l-theorem">
-      <caption>A theorem</caption>
+      <title>A theorem</title>
       <idx><h sortby="theorem"><tag>theorem</tag></h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h>theorem-like elements (<tag>algorithm</tag>, <tag>claim</tag>, <tag>corollary</tag>, <tag>fact</tag>, <tag>identity</tag>, <tag>lemma</tag>, <tag>proposition</tag>, <tag>theorem</tag>)</h></idx>
       <idx><h>theorem-like elements (<tag>algorithm</tag>, <tag>claim</tag>, <tag>corollary</tag>, <tag>fact</tag>, <tag>identity</tag>, <tag>lemma</tag>, <tag>proposition</tag>, <tag>theorem</tag>)</h><h><pretext/> code for</h></idx>
@@ -457,7 +457,7 @@
     </p>
 
     <listing xml:id="basics-l-definition">
-      <caption>A definition with notation</caption>
+      <title>A definition with notation</title>
       <idx><h sortby="definition"><tag>definition</tag></h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h sortby="definition"><tag>definition</tag></h></idx>
       <idx><h>notation (to be included in a notation list)</h><h><pretext/> code for</h></idx>
@@ -519,7 +519,7 @@
     </aside>
 
     <listing xml:id="basics-l-example-simple">
-      <caption>A simple example</caption>
+      <title>A simple example</title>
       <idx><h>example-like elements (<tag>example</tag>, <tag>problem</tag>, <tag>question</tag>)</h><h>unstructured</h><h><pretext/> code for</h></idx>
             <idx><h sortby="example"><tag>example</tag></h><h>unstructured</h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h>example</h><h>unstructured</h></idx>
@@ -544,7 +544,7 @@
     </p>
 
     <listing xml:id="basics-l-example-structured">
-      <caption>A structured example</caption>
+      <title>A structured example</title>
       <idx><h sortby="example"><tag>example</tag></h><h>structured</h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h>example</h><h>structured</h></idx>
       <idx><h><pretext/> code for</h><h>example-like elements (<tag>example</tag>, <tag>problem</tag>, <tag>question</tag>)</h></idx>
@@ -585,7 +585,7 @@
     </p>
 
     <listing xml:id="basics-l-axiom">
-      <caption>An axiom</caption>
+      <title>An axiom</title>
       <idx><h sortby="remark"><tag>axiom</tag></h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h>axiom-like elements (<tag>assumption</tag>, <tag>axiom</tag>, <tag>conjecture</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, <tag>principle</tag>)</h></idx>
       <idx><h>axiom-like elements (<tag>assumption</tag>, <tag>axiom</tag>, <tag>conjecture</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, <tag>principle</tag>)</h><h><pretext/> code for</h></idx>
@@ -626,7 +626,7 @@
     </p>
 
     <listing xml:id="basics-l-remark">
-      <caption>A remark</caption>
+      <title>A remark</title>
       <idx><h sortby="remark"><tag>remark</tag></h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h>remark-like elements (<tag>convention</tag>, <tag>insight</tag>, <tag>note</tag>, <tag>observation</tag>, <tag>remark</tag>, <tag>warning</tag>)</h></idx>
       <idx><h>remark-like elements (<tag>convention</tag>, <tag>insight</tag>, <tag>note</tag>, <tag>observation</tag>, <tag>remark</tag>, <tag>warning</tag>)</h><h><pretext/> code for</h></idx>
@@ -661,7 +661,7 @@
     </p>
 
     <listing xml:id="basics-l-project">
-      <caption>A project</caption>
+      <title>A project</title>
       <idx><h sortby="project"><tag>project</tag></h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h>project-like elements
       (<tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>, <tag>project</tag>)</h></idx>
@@ -708,7 +708,7 @@
       </p>
 
       <listing xml:id="basics-l-exercise">
-        <caption>An exercise</caption>
+        <title>An exercise</title>
         <idx><h sortby="exercise"><tag>exercise</tag></h><h><pretext/> code for</h></idx>
         <idx><h>inline exercise</h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="exercise"><tag>exercise</tag></h><h>inline</h></idx>
@@ -751,7 +751,7 @@
 	such an <tag>exercise</tag>.
       </p>
       <listing xml:id="basics-l-exercise-task">
-        <caption>An exercise with tasks</caption>
+        <title>An exercise with tasks</title>
         <idx><h sortby="exercise"><tag>exercise</tag></h><h
 	sortby="with task">with <tag>task</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h
@@ -844,7 +844,7 @@
       </p>
 
       <listing xml:id="basics-l-exercisegroup">
-        <caption>Using an <tag>exercisegroup</tag>.</caption>
+        <title>Using an <tag>exercisegroup</tag>.</title>
         <idx><h sortby="exercisegroup"><tag>exercisegroup</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="exercisegroup"><tag>exercisegroup</tag></h></idx>
 <program>
@@ -882,7 +882,7 @@
       </p>
 
       <listing xml:id="basics-l-reading-questions">
-        <caption>Structure of <tag>reading-questions</tag>.</caption>
+        <title>Structure of <tag>reading-questions</tag>.</title>
         <idx><h sortby="reading-questions"><tag>reading-questions</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="reading-questions"><tag>reading-questions</tag></h></idx>
 <program>
@@ -944,7 +944,7 @@
     </p>
 
     <listing xml:id="basics-l-worksheet">
-        <caption>Structure of <tag>worksheet</tag>.</caption>
+        <title>Structure of <tag>worksheet</tag>.</title>
         <idx><h sortby="worksheet"><tag>worksheet</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="worksheet"><tag>worksheet</tag></h></idx>
 	<program>
@@ -980,7 +980,7 @@
     </p>
 
     <listing xml:id="basics-l-porism">
-      <caption>A porism generated using <tag>algorithm</tag> and <tag>rename</tag></caption>
+      <title>A porism generated using <tag>algorithm</tag> and <tag>rename</tag></title>
 
 <program>
 <code><xi:include href="porism.ptx" parse="text"/></code>
@@ -1061,7 +1061,7 @@
         so that's a good option when vector graphic formats like <init>SVG</init> and <init>PDF</init> are not available or appropriate.
       </p>
       <listing xml:id="basics-l-image">
-          <caption>Code to include an image without a number or caption</caption>
+          <title>Code to include an image without a number or caption</title>
           <idx><h sortby="image"><tag>image</tag></h><h><pretext/> code for</h></idx>
           <idx><h><pretext/> code for</h><h sortby="image"><tag>image</tag></h></idx>
           <idx><h sortby="description"><tag>description</tag></h><h sortby="of image">of <tag>image</tag></h></idx>
@@ -1108,7 +1108,7 @@
 	the <tag>figure</tag> but is displayed <em>below</em> the
 	<tag>figure</tag>'s content.</p>
       <listing xml:id="basics-l-figure">
-          <caption>Code to include a figure</caption>
+          <title>Code to include a figure</title>
           <idx><h sortby="figure"><tag>figure</tag></h><h><pretext/> code for</h></idx>
           <idx><h><pretext/> code for</h><h sortby="figure"><tag>figure</tag></h></idx>
           <idx><h sortby="caption"><tag>caption</tag></h><h sortby="of figure">of <tag>figure</tag></h></idx>
@@ -1156,7 +1156,7 @@
       </p>
 
       <listing xml:id="basics-l-sbs">
-        <caption>Code to place things side by side</caption>
+        <title>Code to place things side by side</title>
         <idx><h sortby="sidebyside"><tag>sidebyside</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="sidebyside"><tag>sidebyside</tag></h></idx>
         <idx><h sortby="figure"><tag>figure</tag></h><h sortby="inside sidebyside">inside <tag>sidebyside</tag></h></idx>
@@ -1176,7 +1176,7 @@
       <xi:include href="sidebyside.ptx"/>
 
       <listing xml:id="basics-l-sbs2">
-        <caption>A few more bells and whistles for <tag>sidebyside</tag></caption>
+        <title>A few more bells and whistles for <tag>sidebyside</tag></title>
         <idx><h sortby="sidebyside"><tag>sidebyside</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="sidebyside"><tag>sidebyside</tag></h></idx>
         <idx><h sortby="figure"><tag>figure</tag></h><h sortby="containing sidebyside">containing <tag>sidebyside</tag></h></idx>
@@ -1199,7 +1199,7 @@
       </p>
 
       <listing xml:id="basics-l-sbsgroup">
-        <caption>Use of <tag>sbsgroup</tag></caption>
+        <title>Use of <tag>sbsgroup</tag></title>
         <idx><h sortby="sbsgroup"><tag>sbsgroup</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="sbsgroup"><tag>sbsgroup</tag></h></idx>
 
@@ -1271,7 +1271,7 @@
 </pre>
 
       <listing xml:id="basics-l-tikz">
-        <caption>How to use <tag>latex-image</tag> to invoke TikZ</caption>
+        <title>How to use <tag>latex-image</tag> to invoke TikZ</title>
         <idx><h sortby="latex-image"><tag>latex-image</tag></h><h><pretext/> code for</h></idx>
                 <idx><h><pretext/> code for</h><h sortby="latex-image"><tag>latex-image</tag></h></idx>
                 <idx><h>TikZ</h><h sortby="inside latex-image">inside <tag>latex-image</tag></h></idx>
@@ -1344,7 +1344,7 @@
         Similar to <latex/>, <pretext/> provides a <tag>table</tag> tag and a <tag>tabular</tag> tag. The <tag>tabular</tag> tag is used for producing the array of data, while the <tag>table</tag> tag provides the number and title.
     </p>
     <listing xml:id="basics-l-table">
-      <caption>Code to produce a table</caption>
+      <title>Code to produce a table</title>
       <idx><h sortby="table"><tag>table</tag></h><h><pretext/> code for</h></idx>
       <idx><h><pretext/> code for</h><h sortby="table"><tag>table</tag></h></idx>
       <idx><h sortby="title"><tag>title</tag></h><h sortby="of table">of <tag>table</tag></h></idx>
@@ -1415,7 +1415,7 @@
       </p>
 
       <listing xml:id="basics-l-sage">
-        <caption>SageMath cell</caption>
+        <title>SageMath cell</title>
         <idx><h sortby="sage"><tag>sage</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="sage"><tag>sage</tag></h></idx>
 <program>
@@ -1448,7 +1448,7 @@
       </p>
 
       <listing xml:id="basics-l-sageplot">
-        <caption><tag>sageplot</tag> to produce a graphic</caption>
+        <title><tag>sageplot</tag> to produce a graphic</title>
         <idx><h sortby="sageplot"><tag>sageplot</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h sortby="sageplot"><tag>sageplot</tag></h></idx>
 <program>
@@ -1585,7 +1585,7 @@
       </p>
 
       <listing xml:id="basics-l-aside">
-        <caption>A sample <tag>aside</tag></caption>
+        <title>A sample <tag>aside</tag></title>
         <idx><h sortby="aside"><tag>aside</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h><tag>aside</tag></h></idx>
 <program>
@@ -1677,7 +1677,7 @@
       </p>
 
       <listing xml:id="basics-l-blockquote">
-        <caption>A sample <tag>blockquote</tag></caption>
+        <title>A sample <tag>blockquote</tag></title>
         <idx><h sortby="blockquote"><tag>blockquote</tag></h><h><pretext/> code for</h></idx>
         <idx><h><pretext/> code for</h><h><tag>blockquote</tag></h></idx>
 <program>

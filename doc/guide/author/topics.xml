@@ -2313,7 +2313,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         ]]>
                         </code>
                     </program>
-                    <caption>Possible structures for using <tag>mathcmp</tag> within a <tag>test</tag>. The <tag>de-expression</tag> would be replaced by any valid construction as described for the <tag>setup</tag>.</caption>
+                    <title>Possible structures for using <tag>mathcmp</tag> within a <tag>test</tag>. The <tag>de-expression</tag> would be replaced by any valid construction as described for the <tag>setup</tag>.</title>
                 </listing>
 
                 <p>Compound logical structures are created using the <tag>logic</tag> element in the place of a comparison. To specify which operation is being used, the <attr>op</attr> attribute is set to one of <attr>op="and"</attr>, <attr>op="or"</attr>, or <attr>op="not"</attr>. The operations are considered <m>n</m>-ary, meaning that the contents should be one or more comparison elements, which might include additional logic. The <attr>op="and"</attr> will evaluate as true when <em>all</em> of the children comparisons evaluate as true. The <attr>op="or"</attr> will evaluate as true when <em>at least one</em> of the children comparisons evaluates as true. The <attr>op="not"</attr> is technically implemented as the negation of <attr>op="and"</attr>, and so will evaluate as true when <em>at least one</em> of the children comparisons evaluates as <em>false</em>. In the absence of any <tag>logic</tag>, there is always an implicit <attr>op="and"</attr> so that any sequence of comparisons within a single <tag>test</tag>, all comparisons are required to evaluate as true.</p>
@@ -3456,7 +3456,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>The text contents of a program can be surrounded with <tag>code</tag>, but that is only necessary if you have other elements inside of the <tag>program</tag> like <tag>preamble</tag> or <tag>tests</tag> used by an interactive program (see <xref ref="interactive-program-activecode"/> below for details).</p>
 
-            <p>Like a console (see <xref ref="topic-console"/>) a <tag>program</tag> may be wrapped in a <tag>listing</tag> (see <xref ref="topic-listing"/>). If you want to assign a visible number, cross reference to the program, or assign it a visible filename a surrounding <tag>listing</tag> element is appropriate.</p>
+            <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, see <xref ref="topic-listing"/>.  This will behave similar to a <tag>figure</tag>, with the <tag>title</tag> displayed above, and a number assigned.  So, in particular, if your program or console is important enough to cross-reference, it is an enclosing <tag>listing</tag> that serves as the target.</p>
 
             <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting and/or interactive behavior.  The current known languages are:
                 <ul cols="3">
@@ -4099,7 +4099,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
     <section xml:id="topic-listing">
         <title>Program Listings</title>
-        <p>A <tag>listing</tag> is really a specialized type of <tag>figure</tag>, whose purpose is to hold computer code.  Just like a figure, it has a <tag>caption</tag> and <tag>title</tag> which behave identically.  However, the enclosed planar content is limited to a <tag>program</tag> or <tag>console</tag> (see <xref ref="topic-program"/> and <xref ref="topic-console"/>).</p>
+        <p>A <tag>listing</tag> is really a specialized type of <tag>figure</tag>, whose purpose is to hold computer code.  It has an optional <tag>title</tag> which is rendered above the listing.  However, the enclosed planar content is limited to a <tag>program</tag> or <tag>console</tag> (see <xref ref="topic-program-console"/>).</p>
     </section>
 
     <section xml:id="topic-named-list">

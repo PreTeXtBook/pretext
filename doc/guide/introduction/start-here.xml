@@ -95,7 +95,7 @@
             <p>The hierarchical nature of <init>XML</init> is perfect to capture the hierarchical nature of a scholarly document.  Consider the start of a <pretext /> document shown in <xref ref="listing-simple"/>.</p>
 
             <listing xml:id="listing-simple">
-                <caption>Source of a simple <pretext /> book project.</caption>
+                <title>Source of a simple <pretext /> book project.</title>
                 <program language="xml">
                     <code>
                     <![CDATA[
