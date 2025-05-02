@@ -3331,7 +3331,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- and "listing" always, and always for panels of a side-by-side -->
         <!-- not already handled as subnumbered panels.                    -->
         <!-- Only the type-number is bolded, caption in #1 is plain text   -->
-        <xsl:when test="(self::figure|self::listing) or $b-panel">
+        <xsl:when test="self::figure or $b-panel">
             <xsl:text>lower separated=false, </xsl:text>
             <xsl:text>before lower={{</xsl:text>
             <xsl:text>\textbf{#1~</xsl:text>
@@ -3348,9 +3348,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}}, </xsl:text>
         </xsl:when>
         <!-- Case for titles placed above with "regular" numbers,            -->
-        <!-- just remaining "table" and "list", as per CMoS                  -->
+        <!-- just remaining "table", "list" and "listing", as per CMoS       -->
         <!-- Only the type-number is bolded here, caption in #1 is bold text -->
-        <xsl:when test="self::table|self::list">
+        <xsl:when test="self::table|self::list|self::listing">
             <xsl:text>title={{</xsl:text>
             <xsl:text>\textbf{#1~</xsl:text>
             <xsl:choose>
@@ -3541,8 +3541,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- FIGURE-LIKE: -->
 <!-- 2019-08-08: ad-hoc for now, named-styles will evolve      -->
-<!-- "figure" and listing" are very similar (captions)         -->
-<!-- "table" and "list" are very similar (titles)              -->
+<!-- "table", "list", and "listing" are very similar (titles)  -->
 <!-- NB: these will be used for "plain" 2D displays and for    -->
 <!-- when these are the panels of a "sidebyside".  So within   -->
 <!-- environments we bold titles (table and list) as produced, -->
@@ -3554,8 +3553,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: there could be 4 more styles, conditioning all 8 on   -->
 <!-- "ancestor::*[self::figure]" (or "not()") to manage the    -->
 <!-- panels of a subnumbered sidebyside.                      -->
-<xsl:template match="figure|listing" mode="tcb-style">
+<xsl:template match="figure" mode="tcb-style">
     <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, fontlower=\blocktitlefont</xsl:text>
+</xsl:template>
+
+<!-- panels of a subnumbered sidebyside.                      -->
+<xsl:template match="listing" mode="tcb-style">
+    <xsl:text>bwminimalstyle, blockspacingstyle, bottomtitle=2ex, fonttitle=\blocktitlefont</xsl:text>
 </xsl:template>
 
 <!-- This style is "breakable" to allow for "tabular" realized as "longtable". -->
@@ -9020,7 +9024,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 1: caption text                               -->
 <!-- 2: standard identifier for cross-references   -->
 <!-- 3: empty, or a hard-coded number from -common -->
-<xsl:template match="figure|listing">
+<xsl:template match="figure">
     <xsl:if test="@landscape and $b-latex-print">
       <xsl:text>\begin{sidewaysfigure}%&#xa;</xsl:text>
     </xsl:if>
@@ -9063,7 +9067,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 1: title text, bolded here, not in environment -->
 <!-- 2: standard identifier for cross-references    -->
 <!-- 3: empty, or a hard-coded number from -common  -->
-<xsl:template match="table|list">
+<xsl:template match="table|list|listing">
     <xsl:if test="@landscape and $b-latex-print">
       <xsl:text>\begin{sidewaystable}%&#xa;</xsl:text>
     </xsl:if>

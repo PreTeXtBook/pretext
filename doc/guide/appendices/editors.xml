@@ -267,7 +267,7 @@
         <p>Configuration is achieved via a <q>hidden</q> file at the top of your home directory, namely <c>.aspell.conf</c>.  A Mac will try to keep you away from hidden files, which are the ones whose name begins with a period.  Let SublimeText give you an assist here.  In <xref ref="aspell-configuration"/> we show a first run at a useful configuration file.  You <em>definitely</em> want to add the <init>SGML</init> filter, since this is what tells Aspell that you are working on <init>XML</init> files<fn><init>SGML</init> is the precursor of <init>XML</init>.</fn>, so that all element names, attributes, etc. will not be checked.  The remainder is a suggested list of <pretext/> elements to skip.  Suggestions for additions are welcome here.</p>
 
         <listing xml:id="aspell-configuration">
-            <caption>Aspell Configuration File</caption>
+            <title>Aspell Configuration File</title>
 
             <program>
                 <code>

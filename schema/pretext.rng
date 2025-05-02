@@ -2052,7 +2052,7 @@
         <ref name="Tabular"/>
       </element>
       <element name="listing">
-        <ref name="MetaDataCaption"/>
+        <ref name="MetaDataAltTitle"/>
         <optional>
           <ref name="Landscape"/>
         </optional>

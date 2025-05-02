@@ -826,10 +826,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>. </xsl:text>
     <xsl:choose>
-        <xsl:when test="self::figure|self::listing">
+        <xsl:when test="self::figure">
             <xsl:apply-templates select="." mode="caption-full"/>
         </xsl:when>
-        <xsl:when test="self::table|self::list">
+        <xsl:when test="self::table|self::list|self::listing">
             <xsl:apply-templates select="." mode="title-full"/>
         </xsl:when>
     </xsl:choose>

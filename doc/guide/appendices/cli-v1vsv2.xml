@@ -26,7 +26,7 @@
     </p>
 
     <listing xml:id="listing-v1-manifest">
-      <caption>Example of version 1 project manifest</caption>
+      <title>Example of version 1 project manifest</title>
     <program language="xml">
       <code>
       <![CDATA[
@@ -74,7 +74,7 @@
     </listing>
 
     <listing xml:id="listing-v2-manifest">
-      <caption>Example of version 2 project manifest</caption>
+      <title>Example of version 2 project manifest</title>
     <program language="xml">
       <code>
       <![CDATA[
@@ -117,7 +117,7 @@
     </p>
 
     <listing xml:id="listing-v2-manifest-simple">
-      <caption>Simplified project manifest in version 2 format</caption>
+      <title>Simplified project manifest in version 2 format</title>
     <program language="xml">
       <code>
       <![CDATA[

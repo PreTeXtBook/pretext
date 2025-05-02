@@ -2094,12 +2094,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <!-- a caption can have a footnote, hence a -->
             <!-- knowl, hence original or duplicate     -->
-            <xsl:when test="self::figure or self::listing">
+            <xsl:when test="self::figure">
                 <xsl:apply-templates select="." mode="caption-full">
                     <xsl:with-param name="b-original" select="$b-original"/>
                 </xsl:apply-templates>
             </xsl:when>
-            <xsl:when test="self::table or self::list">
+            <xsl:when test="self::table or self::list or self::listing">
                 <xsl:apply-templates select="." mode="title-full"/>
             </xsl:when>
         </xsl:choose>
@@ -3077,13 +3077,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="b-place-title-below" select="($fig-placement = 'subnumber') or ($fig-placement = 'panel')"/>
     <xsl:choose>
         <!-- caption at the bottom, always -->
-        <xsl:when test="self::figure|self::listing">
+        <xsl:when test="self::figure">
             <xsl:apply-templates select="*">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
             <xsl:apply-templates select="." mode="figure-caption">
                 <xsl:with-param name="b-original" select="$b-original"/>
             </xsl:apply-templates>
+        </xsl:when>
+        <!-- caption at the top as per CMoS if not subnumbered -->
+        <xsl:when test="self::listing">
+            <xsl:if test="not($b-place-title-below)">
+                <xsl:apply-templates select="." mode="figure-caption">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                </xsl:apply-templates>
+            </xsl:if>
+            <div class="listing__contents">
+                <xsl:apply-templates select="program|console">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+            </div>
+            <xsl:if test="$b-place-title-below">
+                <xsl:apply-templates select="." mode="figure-caption">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                </xsl:apply-templates>
+            </xsl:if>
         </xsl:when>
         <!-- table only contains a tabular; if not subnumbered  -->
         <!-- then title is displayed before data/tabular        -->

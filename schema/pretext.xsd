@@ -1775,7 +1775,7 @@
   <xs:element name="listing">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataCaption">
+        <xs:extension base="MetaDataAltTitle">
           <xs:choice>
             <xs:element ref="program"/>
             <xs:element ref="console"/>
