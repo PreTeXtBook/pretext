@@ -6761,7 +6761,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </div>
     <!-- Always build a standalone page, PDF links to these -->
-    <xsl:apply-templates select="." mode="media-standalone-page" />
+    <!-- The only exception is when building portable html  -->
+    <xsl:if test="not($b-portable-html)">
+        <xsl:apply-templates select="." mode="media-standalone-page" />
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="audio">
@@ -6791,7 +6794,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="media-embed"/>
     </div>
     <!-- Always build a standalone page, PDF links to these -->
-    <xsl:apply-templates select="." mode="media-standalone-page" />
+    <!-- (except when building portable html)               -->
+    <xsl:if test="not($b-portable-html)">
+        <xsl:apply-templates select="." mode="media-standalone-page" />
+    </xsl:if>
 </xsl:template>
 
 <!-- Formerly a "pop-out" page, now a "standalone" page     -->
@@ -9562,12 +9568,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- (1) Build, display full content on the page, where born -->
     <xsl:apply-templates select="." mode="interactive-core" />
     <!-- (2) Identical content, but now isolated on a reader-friendly page -->
-    <xsl:apply-templates select="." mode="standalone-page" >
-        <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="interactive-core" />
-        </xsl:with-param>
-    </xsl:apply-templates>
+    <!-- (we skip this for portable html)                                  -->
+    <xsl:if test="not($b-portable-html)">
+        <xsl:apply-templates select="." mode="standalone-page" >
+            <xsl:with-param name="content">
+                <xsl:apply-templates select="." mode="interactive-core" />
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
     <!-- (3) A simple page that can be used in an iframe construction -->
+    <!-- (portable html still needs these, since they contain the     -->
+    <!-- the content for the interactive                              -->
     <xsl:apply-templates select="." mode="create-iframe-page" />
 </xsl:template>
 
