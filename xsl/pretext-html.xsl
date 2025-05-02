@@ -180,6 +180,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We generally want to chunk longer HTML output -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
+        <!-- portable html always gets chunk level 0, even something else is entered -->
+        <xsl:when test="$b-portable-html">0</xsl:when>
         <xsl:when test="$chunk-level-entered != ''">
             <xsl:value-of select="$chunk-level-entered" />
         </xsl:when>
