@@ -378,7 +378,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="make-xref-knowls"/>
     </xsl:if>
     <!-- custom ol marker css production -->
-    <xsl:if test="not($b-subsetting)">
+    <xsl:if test="not($b-subsetting) and not($b-portable-html)">
         <xsl:call-template name="ol-marker-styles"/>
     </xsl:if>
 </xsl:template>
