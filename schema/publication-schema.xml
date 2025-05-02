@@ -156,7 +156,7 @@
                     }? &amp;
                     element qrcode {
                         attribute image { text }
-                    }
+                    }? &amp;
                     element journal {
                         attribute name {text}
                     }
@@ -326,7 +326,7 @@
                         Baseurl? &amp;
                         Calculator? &amp;
                         Css? &amp;
-                        Crossreferences?
+                        Crossreferences? &amp;
                         Exercises? &amp;
                         Feedback? &amp;
                         Indexpage? &amp;
@@ -336,7 +336,7 @@
                         Search? &amp;
                         Tableofcontents? &amp;
                         Video? &amp;
-                        WebworkDynamism? &amp;
+                        WebworkDynamism?
                     )
                 }
 
@@ -418,7 +418,7 @@
                 }
             Platform =
                 element platform {
-                    attribute host { "web" | "runestone" }
+                    attribute host { "web" | "runestone" },
                     attribute portable { "yes" | "no" }
                 }
             Search =

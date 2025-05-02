@@ -126,8 +126,13 @@
             <attribute name="theme"/>
           </element>
         </optional>
-        <element name="qrcode">
-          <attribute name="image"/>
+        <optional>
+          <element name="qrcode">
+            <attribute name="image"/>
+          </element>
+        </optional>
+        <element name="journal">
+          <attribute name="name"/>
         </element>
       </interleave>
     </element>
@@ -480,14 +485,6 @@
   <define name="Html">
     <element name="html">
       <optional>
-        <attribute name="platform">
-          <choice>
-            <value>web</value>
-            <value>runestone</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="favicon">
           <choice>
             <value>none</value>
@@ -508,13 +505,25 @@
           <ref name="Analytics"/>
         </optional>
         <optional>
+          <ref name="Asymptote"/>
+        </optional>
+        <optional>
           <ref name="Baseurl"/>
         </optional>
         <optional>
           <ref name="Calculator"/>
         </optional>
         <optional>
-          <ref name="WebworkDynamism"/>
+          <ref name="Css"/>
+        </optional>
+        <optional>
+          <ref name="Crossreferences"/>
+        </optional>
+        <optional>
+          <ref name="Exercises"/>
+        </optional>
+        <optional>
+          <ref name="Feedback"/>
         </optional>
         <optional>
           <ref name="Indexpage"/>
@@ -523,31 +532,22 @@
           <ref name="Knowls"/>
         </optional>
         <optional>
-          <ref name="Exercises"/>
+          <ref name="NavigationHTML"/>
         </optional>
         <optional>
-          <ref name="Css"/>
+          <ref name="Platform"/>
         </optional>
         <optional>
           <ref name="Search"/>
         </optional>
         <optional>
-          <ref name="Video"/>
-        </optional>
-        <optional>
-          <ref name="Asymptote"/>
-        </optional>
-        <optional>
-          <ref name="Feedback"/>
-        </optional>
-        <optional>
-          <ref name="NavigationHTML"/>
-        </optional>
-        <optional>
           <ref name="Tableofcontents"/>
         </optional>
         <optional>
-          <ref name="Crossreferences"/>
+          <ref name="Video"/>
+        </optional>
+        <optional>
+          <ref name="WebworkDynamism"/>
         </optional>
       </interleave>
     </element>
@@ -825,6 +825,22 @@
           </choice>
         </attribute>
       </optional>
+    </element>
+  </define>
+  <define name="Platform">
+    <element name="platform">
+      <attribute name="host">
+        <choice>
+          <value>web</value>
+          <value>runestone</value>
+        </choice>
+      </attribute>
+      <attribute name="portable">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
     </element>
   </define>
   <define name="Search">

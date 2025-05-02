@@ -27,7 +27,8 @@
         <xs:element minOccurs="0" ref="fillin"/>
         <xs:element minOccurs="0" ref="watermark"/>
         <xs:element minOccurs="0" ref="mermaid"/>
-        <xs:element ref="qrcode"/>
+        <xs:element minOccurs="0" ref="qrcode"/>
+        <xs:element ref="journal"/>
       </xs:all>
     </xs:complexType>
   </xs:element>
@@ -125,6 +126,11 @@
   <xs:element name="qrcode">
     <xs:complexType>
       <xs:attribute name="image" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="journal">
+    <xs:complexType>
+      <xs:attribute name="name" use="required"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="ExerciseAttributes">
@@ -443,29 +449,22 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="analytics"/>
+        <xs:element ref="asymptote"/>
         <xs:element ref="baseurl"/>
         <xs:element ref="calculator"/>
-        <xs:group ref="WebworkDynamism"/>
+        <xs:element ref="css"/>
+        <xs:element ref="cross-references"/>
+        <xs:element ref="exercises"/>
+        <xs:element ref="feedback"/>
         <xs:element ref="index-page"/>
         <xs:element ref="knowl"/>
-        <xs:element ref="exercises"/>
-        <xs:element ref="css"/>
-        <xs:element ref="search"/>
-        <xs:element ref="video"/>
-        <xs:element ref="asymptote"/>
-        <xs:element ref="feedback"/>
         <xs:group ref="NavigationHTML"/>
+        <xs:element ref="platform"/>
+        <xs:element ref="search"/>
         <xs:element ref="table-of-contents"/>
-        <xs:element ref="cross-references"/>
+        <xs:element ref="video"/>
+        <xs:group ref="WebworkDynamism"/>
       </xs:choice>
-      <xs:attribute name="platform">
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="web"/>
-            <xs:enumeration value="runestone"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
       <xs:attribute name="favicon">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -747,6 +746,26 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:element name="platform">
+    <xs:complexType>
+      <xs:attribute name="host" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="web"/>
+            <xs:enumeration value="runestone"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="portable" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="search">
     <xs:complexType>
       <xs:attribute name="variant">
