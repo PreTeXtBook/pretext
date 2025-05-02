@@ -61,17 +61,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Programs in supported languages are made interactive in HTML when <attr>interactive</attr> is set to <c>activecode</c>. Some languages can be made interactive on any server, while others require being served from Runestone servers. See <url href="https://pretextbook.org/doc/guide/html/topic-program-console.html#interactive-program-capabilities">Interactive Programs Capabilities in the PreTeXt Guide</url> for a list of what languages are supported in which environs.</p>
 
         <listing xml:id="program-activecode-python">
-            <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
-            <program xml:id="python-hello-world" interactive='activecode' language="python" label="hello-world" include-source="yes">
+            <title>An interactive Python program, using <pubtitle>Runestone</pubtitle></title>
+            <program xml:id="python-hello-world" interactive='activecode' language="python" label="hello-world">
                 <code>
                 print("Hello, World!")
                 </code>
             </program>
         </listing>
 
+        <p>Otherwise they are rendered as text with syntax coloring. Either way, if a <attr>language</attr> is not specified, <c>docinfo/programs/@language</c> will be checked to determine what language to assume the code is written in.
+        </p>
+
+        <listing xml:id="program-activecode-python2">
+            <title>An interactive Python program, using <pubtitle>Runestone</pubtitle></title>
+            <program xml:id="python-hello-world2" label="hello-world2">
+                <code>
+                print("Hello, World!")
+                </code>
+            </program>
+        </listing>
+
+        <p>A C program will only be interactive if hosted on a Runestone server.</p>
+
+        <listing xml:id="program-activecode-c">
+            <title>An C program, interactive on a <pubtitle>Runestone</pubtitle> server</title>
+            <program xml:id="c-hello-world" interactive='activecode' language="c">
+                <code>
+                #include &lt;stdio.h&gt;
+
+                int main(void)
+                {
+                    puts("Hello, world!");
+                }
+                </code>
+            </program>
+        </listing>
+
+        <p>A Java program will only be interactive if hosted on a Runestone server.</p>
+
+        <listing xml:id="program-activecode-java">
+            <title>Informal Java <q>Hello, World</q></title>
+            <title>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server</title>
+            <program xml:id="java-hello-world" interactive='activecode' language="java">
+                <title>"hi" in Java</title>
+                <code>
+                import javax.swing.JFrame;  //Importing class JFrame
+                import javax.swing.JLabel;  //Importing class JLabel
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        JFrame frame = new JFrame();           //Creating frame
+                        frame.setTitle("Hi!");                 //Setting title frame
+                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                        frame.pack();                          //Setting size to smallest
+                        frame.setLocationRelativeTo(null);     //Centering frame
+                        frame.setVisible(true);                //Showing frame
+                    }
+                }
+                </code>
+            </program>
+        </listing>
+
+        <p>Javascript programs are made interactive in HTML, on request.</p>
+
         <listing xml:id="program-activecode-javascript">
-            <caption>An interactive JavaScript program, using <pubtitle>Runestone</pubtitle></caption>
-            <program xml:id="javascript-hello-world" interactive='activecode' language="javascript" include-source="yes">
+            <title>An interactive JavaScript program, using <pubtitle>Runestone</pubtitle></title>
+            <program xml:id="javascript-hello-world" interactive='activecode' language="javascript">
                 <code>
                 document.write('Hello, world!');
                 </code>
@@ -81,7 +135,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Some languages, like Java or C++, are only interactive when run on a Runestone server where the code can be compiled and run. Those languages can specify <attr>compiler-args</attr> and <attr>linker-args</attr> or <attr>interpreter-args</attr> as appropriate to the language. Default values for those options can be set in <tag>docinfo/programs</tag> - any defaults set there will be used for any program that lacks the corresponding attribute.</p>
 
         <listing>
-            <caption>A C++ program with compiler-args and stdin</caption>
+            <title>A C++ program with compiler-args and stdin</title>
             <p>It may be convenient to set <attr>compiler-args</attr> and <attr>linker-args</attr> at the book level in <tag>docinfo/programs</tag>. Values specified in that location will be used for any <tag>program</tag> that does not override the values by specifying its own attributes.</p>
             <program interactive="activecode" label="hello-world-cpp" language="cpp" compiler-args="-std=c++17,-Wall,-g" linker-args="-g,-s" include-source="yes">
                 <code>
@@ -99,9 +153,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <listing xml:id="program-activecode-java-flags">
-            <caption>Java <q>Hello, World</q>, with flags</caption>
-            <program xml:id="java-hello-world-flags" interactive='activecode' language="java" interpreter-args="-Xrs,-Xss8m,-Xmx128m" include-source="yes">
+        <listing xml:id="program-static-java">
+            <title>A static Java program</title>
+            <program xml:id="java-static" interactive='no' language="java">
                 <code>
                 import javax.swing.JFrame;  //Importing class JFrame
                 import javax.swing.JLabel;  //Importing class JLabel
@@ -123,7 +177,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>An Octave program will also only be interactive if hosted on a Runestone server.  Octave is meant to be a drop-in replacement for Matlab.</p>
 
         <listing xml:id="program-activecode-octave">
-            <caption>A simple Octave program</caption>
+            <title>A simple Octave program</title>
             <program xml:id="octave-simple" interactive='activecode' language="octave" include-source="yes">
                 <code>
                 x = 2 + 2
@@ -135,7 +189,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A language not supported by Runestone Services will always be rendered static.</p>
 
         <listing xml:id="program-mistake-pascal">
-            <caption>A Pascal program that cannot be interactive on Runestone</caption>
+            <title>A Pascal program that cannot be interactive on Runestone</title>
             <program xml:id="pascal-mistake" interactive='activecode' language="pascal" include-source="yes">
                 <code>
                 program HelloWorld;
@@ -191,7 +245,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>The following Python program is in a <tag>listing</tag> since we will want to reference it shortly.  The program does not do very much, it just defines four variables whose values are lists of statistics.  It should run, and there will be no syntax errors, but it is a bit boring since there is no output. Note that it does not have an <attr>language</attr> and is relying on the default one specified in <tag>docinfo/programs</tag></p>
 
         <listing xml:id="listing-python-included">
-            <caption>A Python program that defines some statistics</caption>
+            <title>A Python program that defines some statistics</title>
             <program xml:id="python-statistics" interactive='activecode' label="statistics" include-source="yes">
                 <code>
                 loan_amount = [1250.0, 500.0, 1450.0, 200.0, 700.0, 100.0, 250.0, 225.0, 1200.0, 150.0, 600.0, 300.0, 700.0, 125.0, 650.0, 175.0, 1800.0, 1525.0, 575.0, 700.0, 1450.0, 400.0, 200.0, 1000.0, 350.0]
@@ -201,6 +255,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 time_to_raise = [193075.0, 1157108.0, 1552939.0, 244945.0, 238797.0, 1248909.0, 773599.0, 116181.0, 2288095.0, 51668.0, 26717.0, 48030.0, 1839190.0, 71117.0, 580401.0, 800427.0, 1156218.0, 1166045.0, 2924705.0, 470622.0, 24078.0, 260044.0, 445938.0, 201408.0, 2370450.0]
 
                 num_lenders_total = [38, 18, 51, 3, 21, 1, 10, 8, 42, 1, 18, 6, 28, 5, 16, 7, 54, 1, 18, 22, 36, 12, 8, 24, 8]
+                </code>
+            </program>
+        </listing>
+
+        <p>An ActiveCode running on the Runestone server (rather than in a browser) can be provided with attributes that are flags to influence the compiler and linker, as in this <tag>program</tag> recycled from before.</p>
+
+        <listing xml:id="program-activecode-java-flags">
+            <title>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server, with compiler and linker flags</title>
+            <program xml:id="java-hello-world-flags" interactive='activecode' language="java" compiler-args="-g" linker-args="-s">
+                <title>"hi" in Java</title>
+                <code>
+                import javax.swing.JFrame;  //Importing class JFrame
+                import javax.swing.JLabel;  //Importing class JLabel
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        JFrame frame = new JFrame();           //Creating frame
+                        frame.setTitle("Hi!");                 //Setting title frame
+                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                        frame.pack();                          //Setting size to smallest
+                        frame.setLocationRelativeTo(null);     //Centering frame
+                        frame.setVisible(true);                //Showing frame
+                    }
+                }
                 </code>
             </program>
         </listing>
@@ -297,7 +374,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>CodeLens is an interactive tool for following program execution, much like a debugger, without the ability to influence flow control or variable values.  For use without a server, traces must be computed beforehand.  First, we have some trivial programs, to provide minimal testing.</p>
 
         <listing xml:id="program-codelens-python">
-            <caption>A Python program, stepable with CodeLens</caption>
+            <title>A Python program, stepable with CodeLens</title>
             <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
                 <code>
                 print('Hello, World!')
@@ -306,7 +383,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </listing>
 
         <listing xml:id="program-codelens-c">
-            <caption>An C program, stepable with CodeLens</caption>
+            <title>An C program, stepable with CodeLens</title>
             <program xml:id="c-hello-world-code-lens" interactive="codelens" language="c">
                 <code>
                 #include &lt;stdio.h&gt;
@@ -320,7 +397,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </listing>
 
         <listing xml:id="program-codelens-java">
-            <caption>A Java program, stepable with CodeLens</caption>
+            <title>A Java program, stepable with CodeLens</title>
             <program xml:id="java-hello-world-code-lens" interactive="codelens" language="java">
                 <code>
                 public class HelloWorld {
@@ -335,7 +412,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Now some moderately more complicated programs to find teh prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
 
         <listing xml:id="sieve-python">
-            <caption><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</caption>
+            <title><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</title>
             <program xml:id="sieve-codelens-python" interactive="codelens" language="python">
                 <code><![CDATA[
                 def SieveOfEratosthenes(n):
@@ -366,7 +443,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </listing>
 
         <listing xml:id="sieve-cpp">
-            <caption><url href="https://www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range" visual="www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range">Sieve of Eratosthenes</url>, C++</caption>
+            <title><url href="https://www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range" visual="www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range">Sieve of Eratosthenes</url>, C++</title>
             <program xml:id="sieve-codelens-cpp" interactive="codelens" language="cpp">
                 <code> <![CDATA[
                 #include <stdio.h>
@@ -389,7 +466,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </listing>
 
         <listing xml:id="sieve-java">
-            <caption><url href="https://www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java" visual="www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java">Sieve of Eratosthenes</url>, Java</caption>
+            <title><url href="https://www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java" visual="www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java">Sieve of Eratosthenes</url>, Java</title>
             <program xml:id="sieve-codelens-java" interactive="codelens" language="java">
                 <code><![CDATA[
                 public class SievePrimeFactors  {
