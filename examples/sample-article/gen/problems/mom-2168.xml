@@ -1,14 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <myopenmath xmlns:pi="http://pretextbook.org/2020/pretext/internal" id="2168">
 <statement>
-<figure><image pi:generated="problems/images/55c6ba85fec75b24eae83325a6b6b6bf.png" /></figure><p>
+<image width="50%" pi:generated="problems/images/mom-2168-1.png"/>
+<p>
 Find the equation of the line in the form <m>\displaystyle{y}={m}{x}+{b}.</m></p>
 <p>
-Answer: <m>\displaystyle{y}=</m> <fillin characters="10" />
+Answer: <m>\displaystyle{y}=</m> <input type="text" style="width:13ch" name="qn0" id="qn0" value="" autocomplete="off" aria-label="Question 1" class="text"/>
+</p>
+<p>  
+
 </p>
 </statement>
 <solution>
-<p><m>\displaystyle{y}=-{3}{x}+{10}</m></p>
+<p><ul><li><m>\displaystyle{y}=-{2}{x}-{6}</m></li></ul></p>
 </solution>
 </myopenmath>
-

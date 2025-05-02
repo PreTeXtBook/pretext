@@ -1,14 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <myopenmath xmlns:pi="http://pretextbook.org/2020/pretext/internal" id="7492">
 <statement>
-<p>You wish to determine if there is a  linear correlation between the two variables at a significance level of <m>\displaystyle\alpha={0.10}</m>.
+<p>
+You wish to determine if there is a  linear correlation between the two variables at a significance level of <m>\displaystyle\alpha={0.001}</m>.
 You have the following bivariate data set.
-</p><table><tabular> <row><cell>x</cell><cell>y</cell></row><row><cell>20</cell><cell>29.3</cell></row><row><cell>23.1</cell><cell>41.6</cell></row><row><cell>20</cell><cell>35.7</cell></row><row><cell>13.7</cell><cell>63.1</cell></row><row><cell>29.8</cell><cell>25.8</cell></row><row><cell>25.3</cell><cell>24.9</cell></row><row><cell>22</cell><cell>21.7</cell></row><row><cell>28</cell><cell>17.8</cell></row><row><cell>32.8</cell><cell>34.8</cell></row><row><cell>17.7</cell><cell>37</cell></row><row><cell>16.7</cell><cell>37.4</cell></row><row><cell>23.2</cell><cell>36.5</cell></row><row><cell>15.5</cell><cell>28.3</cell></row><row><cell>19.5</cell><cell>45.5</cell></row><row><cell>13.3</cell><cell>24.5</cell></row><row><cell>30.3</cell><cell>43.3</cell></row><row><cell>14.8</cell><cell>22.9</cell></row><row><cell>13.8</cell><cell>39.6</cell></row><row><cell>38.5</cell><cell>33.3</cell></row><row><cell>33.6</cell><cell>23.4</cell></row><row><cell>25.5</cell><cell>19.6</cell></row><row><cell>12.9</cell><cell>51.5</cell></row><row><cell>13.3</cell><cell>13.4</cell></row><row><cell>18.5</cell><cell>28.3</cell></row><row><cell>29.1</cell><cell>35.1</cell></row><row><cell>28.5</cell><cell>29.6</cell></row><row><cell>30.4</cell><cell>28.8</cell></row><row><cell>27.4</cell><cell>26.4</cell></row><row><cell>24.8</cell><cell>20.9</cell></row><row><cell>18.2</cell><cell>50.1</cell></row></tabular></table><p>
-download link provided here:  <url href="denied:data:text/csv;charset=UTF-8,%22x%22%2C%22y%22%0A20%2C29.3%0A23.1%2C41.6%0A20%2C35.7%0A13.7%2C63.1%0A29.8%2C25.8%0A25.3%2C24.9%0A22%2C21.7%0A28%2C17.8%0A32.8%2C34.8%0A17.7%2C37%0A16.7%2C37.4%0A23.2%2C36.5%0A15.5%2C28.3%0A19.5%2C45.5%0A13.3%2C24.5%0A30.3%2C43.3%0A14.8%2C22.9%0A13.8%2C39.6%0A38.5%2C33.3%0A33.6%2C23.4%0A25.5%2C19.6%0A12.9%2C51.5%0A13.3%2C13.4%0A18.5%2C28.3%0A29.1%2C35.1%0A28.5%2C29.6%0A30.4%2C28.8%0A27.4%2C26.4%0A24.8%2C20.9%0A18.2%2C50.1">Download CSV</url></p>
+</p><tabular> <row><cell>x</cell><cell>y</cell></row><row><cell>34.3</cell><cell>86.5</cell></row><row><cell>42</cell><cell>45.6</cell></row><row><cell>35.5</cell><cell>46.7</cell></row><row><cell>42.2</cell><cell>48</cell></row><row><cell>0.7</cell><cell>138.9</cell></row><row><cell>78.6</cell><cell>-64.7</cell></row><row><cell>43.5</cell><cell>50.6</cell></row><row><cell>68.2</cell><cell>-45</cell></row><row><cell>50.2</cell><cell>17.4</cell></row><row><cell>39.1</cell><cell>64.9</cell></row><row><cell>78.3</cell><cell>-105.8</cell></row><row><cell>30.2</cell><cell>47.5</cell></row><row><cell>52.7</cell><cell>19.4</cell></row><row><cell>40.8</cell><cell>51</cell></row><row><cell>21.5</cell><cell>72.1</cell></row><row><cell>57</cell><cell>30.6</cell></row><row><cell>67</cell><cell>-40.2</cell></row><row><cell>58.3</cell><cell>-9.7</cell></row><row><cell>30.8</cell><cell>90.9</cell></row><row><cell>45.5</cell><cell>34.3</cell></row><row><cell>3.3</cell><cell>168.3</cell></row><row><cell>43</cell><cell>23.1</cell></row><row><cell>34.8</cell><cell>29.2</cell></row><row><cell>30.9</cell><cell>104.8</cell></row><row><cell>13.1</cell><cell>101.6</cell></row><row><cell>60.9</cell><cell>-68.9</cell></row><row><cell>30.9</cell><cell>64.2</cell></row><row><cell>41.4</cell><cell>60.3</cell></row><row><cell>35.3</cell><cell>20.8</cell></row><row><cell>49.8</cell><cell>38.7</cell></row><row><cell>39</cell><cell>59.5</cell></row><row><cell>31.9</cell><cell>92.5</cell></row><row><cell>18.9</cell><cell>113.9</cell></row><row><cell>53.6</cell><cell>17.6</cell></row><row><cell>59</cell><cell>-40.4</cell></row></tabular><p>
+download link provided here:  <url href="denied:data:text/csv;charset=UTF-8,%22x%22%2C%22y%22%0A34.3%2C86.5%0A42%2C45.6%0A35.5%2C46.7%0A42.2%2C48%0A0.7%2C138.9%0A78.6%2C-64.7%0A43.5%2C50.6%0A68.2%2C-45%0A50.2%2C17.4%0A39.1%2C64.9%0A78.3%2C-105.8%0A30.2%2C47.5%0A52.7%2C19.4%0A40.8%2C51%0A21.5%2C72.1%0A57%2C30.6%0A67%2C-40.2%0A58.3%2C-9.7%0A30.8%2C90.9%0A45.5%2C34.3%0A3.3%2C168.3%0A43%2C23.1%0A34.8%2C29.2%0A30.9%2C104.8%0A13.1%2C101.6%0A60.9%2C-68.9%0A30.9%2C64.2%0A41.4%2C60.3%0A35.3%2C20.8%0A49.8%2C38.7%0A39%2C59.5%0A31.9%2C92.5%0A18.9%2C113.9%0A53.6%2C17.6%0A59%2C-40.4">Download CSV</url></p>
 <p>
 What is the correlation coefficient for this data set? </p>
 <p>
-       <em>r</em> = <fillin characters="10" /> </p>
+       <em>r</em> = <input type="text" style="width:13ch" name="qn1000" id="qn1000" value="" autocomplete="off" aria-label="Question 1 Part 1 of 3" class="text"/> </p>
 <p>
 (report answer accurate to at least 3 decimal places)</p>
 <p>
@@ -18,17 +19,18 @@ This <em>t</em>-score is from a <em>t</em>-distribution with <m>\displaystyle{n}
 <p>
 What is the p-value for this correlation coefficient? </p>
 <p>
-       p-value = <fillin characters="12" /> </p>
+       p-value = <input type="text" style="width:15.4ch" name="qn1001" id="qn1001" value="" autocomplete="off" aria-label="Question 1 Part 2 of 3" class="text"/> </p>
 <p>
 (report answer accurate to at least 4 decimal places)</p>
 <p>
 Your final conclusion is that... </p>
-<p><ul label="circle"><li><p>There is sufficient sample evidence to support the claim that there is a statistically significant  correlation between the two variables.</p></li> 
-<li><p>There is insufficient sample evidence to support the claim the there is a  correlation between the two variables.</p></li> 
-</ul></p>
+<p><ol style="list-style-type:upper-alpha"><li>There is sufficient sample evidence to support the claim that there is a statistically significant  correlation between the two variables.</li> 
+<li>There is insufficient sample evidence to support the claim the there is a  correlation between the two variables.</li> 
+</ol></p>
+
+
 </statement>
 <solution>
-<p><ul><li><p>-0.242</p></li><li><p>0.1974</p></li><li><p>There is insufficient sample evidence to support the claim the there is a  correlation between the two variables.</p></li></ul></p>
+<p><ul><li>-0.928</li><li>0</li><li>A: There is sufficient sample evidence to support the claim that there is a statistically significant  correlation between the two variables.</li></ul></p>
 </solution>
 </myopenmath>
-

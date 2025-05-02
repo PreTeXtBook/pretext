@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="150" height="182" version="1.1">
-    <defs>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" width="64mm" height="89mm" viewBox="0 0 64 89" version="1.1">
+  <defs>
+    <marker style="overflow:visible" id="ArrowTriangleStylized" refX="0" refY="0" orient="auto-start-reverse" markerWidth="1" markerHeight="1" viewBox="0 0 1 1" preserveAspectRatio="xMidYMid">
+      <path transform="scale(0.5)" style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt" d="m 6,0 c -3,1 -7,3 -9,5 0,0 0,-4 2,-5 -2,-1 -2,-5 -2,-5 2,2 6,4 9,5 z" id="path6"/>
+    </marker>
     <marker style="overflow:visible" id="Arrow1Mstart" refX="0" refY="0" orient="auto">
       <path transform="matrix(0.4,0,0,0.4,4,0)" style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path67873"/>
     </marker>
@@ -8,19 +11,17 @@
       <path transform="matrix(-0.4,0,0,-0.4,-4,0)" style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path67876"/>
     </marker>
   </defs>
-  <g id="layer1">
-    <path style="fill:#0000d7;fill-opacity:0.768627;stroke:#000000;stroke-width:1.091;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="M 77.796989,180.05863 V 49.038027 H 131.70121 L 77.796989,180.05863"/>
-    <path style="fill:#727272;fill-opacity:0.219608;stroke:#000000;stroke-width:1.091;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="M 77.796989,180.05863 C 100.19005,125.26964 144.97533,15.690866 144.97533,15.690866 H 77.796989 V 180.05863"/>
-  </g>
-  <g id="layer2">
-    <text xml:space="preserve" style="font-size:14.5271px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:1.08953" x="90.585709" y="12.864079"><tspan style="stroke-width:1.08953" x="90.585709" y="12.864079">1.20 m</tspan></text>
-    <path style="fill:none;stroke:#000000;stroke-width:1.091;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" d="M 14.120568,180.05863 H 72.745189"/>
-    <path style="fill:none;stroke:#000000;stroke-width:1.091;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" d="M 16.816664,16.077208 H 72.745189"/>
-    <path style="fill:none;stroke:#000000;stroke-width:1.091;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" d="M 46.837023,49.235181 H 72.745189"/>
-    <path style="fill:none;stroke:#000000;stroke-width:1.091;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Mstart);marker-end:url(#Arrow1Mend)" d="M 61.010229,178.3747 V 52.040139"/>
-    <path style="fill:none;stroke:#000000;stroke-width:1.091;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Mstart);marker-end:url(#Arrow1Mend)" d="M 25.4389,178.50478 V 18.89442"/>
-    <text xml:space="preserve" style="font-size:14.5271px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:1.08953" x="35.28257" y="109.48082"><tspan style="stroke-width:1.08953" x="35.28257" y="109.48082">3.80 m</tspan></text>
-    <text xml:space="preserve" style="font-size:14.5271px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:1.08953" x="0.89986986" y="78.531754"><tspan style="stroke-width:1.08953" x="0.89986986" y="78.531754">4.00 m</tspan></text>
-    <text xml:space="preserve" style="font-size:14.5271px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:1.08953" x="93.150215" y="45.709587"><tspan style="stroke-width:1.08953" x="93.150215" y="45.709587">r m</tspan></text>
+  <g>
+    <path style="fill:#727272;fill-opacity:0.219608;stroke:#000000;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:none" d="M 30.439415,87.638419 C 41.449153,60.700949 63.468214,6.8256191 63.468214,6.8256191 H 30.439415 V 87.638419"/>
+    <text xml:space="preserve" style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.535677" x="40.816093" y="5.4358053" id="text69732"><tspan id="tspan69730" style="font-size:4.23333px;stroke-width:0.535677" x="40.816093" y="5.4358053">1.40 m</tspan></text>
+    <text xml:space="preserve" style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.535677" x="49.671463" y="-23.570698" id="text72017" transform="rotate(90)"><tspan id="tspan72015" style="font-size:4.23333px;stroke-width:0.535677" x="49.671463" y="-23.570698">3.50 m</tspan></text>
+    <text xml:space="preserve" style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.535677" x="41.613129" y="-6.1529474" id="text73849" transform="rotate(90)"><tspan id="tspan73847" style="font-size:4.23333px;stroke-width:0.535677" x="41.613129" y="-6.1529474">4.0 m</tspan></text>
+    <text xml:space="preserve" style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.535677" x="40.089325" y="22.065704" id="text69732-8"><tspan id="tspan69730-3" style="font-size:4.23333px;stroke-width:0.535677" x="40.089325" y="22.065704">r m</tspan></text>
+    <path style="fill:#000000;stroke:#000000;stroke-width:0.265;stroke-dasharray:none" d="M 1.0825295,87.805165 H 27.784921"/>
+    <path style="fill:#000000;stroke:#000000;stroke-width:0.265;stroke-dasharray:none" d="M 15.275693,23.334524 H 27.424078"/>
+    <path style="fill:#000000;stroke:#000000;stroke-width:0.265;stroke-dasharray:none" d="M 0.7216863,6.8560198 H 27.424078"/>
+    <path style="fill:#000000;stroke:#000000;stroke-width:0.265;stroke-dasharray:none;marker-end:url(#ArrowTriangleStylized);marker-start:url(#ArrowTriangleStylized)" d="M 22.186062,86.810497 V 24.697046"/>
+    <path style="fill:#000000;stroke:#000000;stroke-width:0.265;stroke-dasharray:none;marker-end:url(#ArrowTriangleStylized);marker-start:url(#ArrowTriangleStylized)" d="M 4.697118,86.874452 V 8.4006734"/>
+    <path style="fill:#0707d1;fill-opacity:0.819608;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none" d="M 30.439415,87.638419 56.76733,23.221033 H 30.439415 v 64.417386"/>
   </g>
 </svg>

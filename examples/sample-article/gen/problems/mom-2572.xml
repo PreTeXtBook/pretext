@@ -1,13 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <myopenmath xmlns:pi="http://pretextbook.org/2020/pretext/internal" id="2572">
 <statement>
-<p>Try to evaluate <m>\displaystyle-{\left(-{81}\right)}^{{-{3}{/}{4}}}</m> without using a calculator. Enter your answer as an integer or reduced fraction (no decimals). Enter DNE if the number is not real.
+<p>
+Try to evaluate <m>\displaystyle-{\left(-{100}\right)}^{{-{1}{/}{2}}}</m> without using a calculator. Enter your answer as an integer or reduced fraction (no decimals). Enter DNE if the number is not real.
 </p>
 <p>
-The value is <fillin characters="20" /></p>
+The value is <input type="text" style="width:25ch" name="qn0" id="qn0" value="" autocomplete="off" aria-label="Question 1" class="text"/>   
+</p>
 </statement>
 <solution>
-<p>DNE</p>
+<p><ul><li>DNE</li></ul></p>
 </solution>
 </myopenmath>
-
