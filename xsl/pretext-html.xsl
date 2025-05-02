@@ -605,7 +605,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- to generate standalone printable and editable   -->
     <!-- versions. $paper becomes HTML class names, e.g. -->
     <!-- LOWER CASE "a4" and "letter"                    -->
-    <xsl:if test="self::worksheet">
+    <!-- NB we don't produce these for portable html     -->
+    <xsl:if test="self::worksheet and not($b-portable-html)">
         <xsl:apply-templates select="." mode="standalone-worksheet">
             <xsl:with-param name="paper" select="'letter'"/>
             <xsl:with-param name="heading-level" select="$heading-level"/>
@@ -948,7 +949,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Links to the "printable" version(s), meant only for "viewable" -->
     <!-- worksheet, so CSS can kill on the "printable" versions         -->
     <!-- $paper is LOWER CASE "a4" and "letter"                         -->
-    <xsl:if test="self::worksheet">
+    <!-- NB until worksheet printing can be done without extra files,   -->
+    <!-- we omit this for portable html.                                -->
+    <xsl:if test="self::worksheet and not($b-portable-html)">
         <xsl:apply-templates select="." mode="standalone-worksheet-links"/>
     </xsl:if>
 </xsl:template>
