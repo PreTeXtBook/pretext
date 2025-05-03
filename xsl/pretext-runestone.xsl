@@ -1590,9 +1590,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:choose>
                 <xsl:when test="select/@questions">
                     <xsl:attribute name="data-questionlist">
-                        <xsl:apply-templates select="select/@questions" mode="runestone-targets">
+                        <xsl:call-template name="runestone-targets">
+                            <xsl:with-param name="id-list" select="select/@questions"/>
                             <xsl:with-param name="separator" select="', '"/>
-                        </xsl:apply-templates>
+                        </xsl:call-template>
                     </xsl:attribute>
                     <p>Loading a dynamic question-list question...</p>
                 </xsl:when>
@@ -1601,9 +1602,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="select/@experiment-name"/>
                     </xsl:attribute>
                     <xsl:attribute name="data-questionlist">
-                        <xsl:apply-templates select="select/@ab-experiment" mode="runestone-targets">
-                            <xsl:with-param name="separator" select="', '"/>
-                        </xsl:apply-templates>
+                        <xsl:call-template name="runestone-targets">
+                          <xsl:with-param name="id-list" select="select/@ab-experiment"/>
+                          <xsl:with-param name="separator" select="', '"/>
+                        </xsl:call-template>
                     </xsl:attribute>
                     <p>Loading a dynamic A/B question...</p>
                 </xsl:when>
@@ -2136,9 +2138,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="@include">
         <!-- space-separated this time -->
         <xsl:attribute name="data-include">
-            <xsl:apply-templates select="@include" mode="runestone-targets">
+            <xsl:call-template name="runestone-targets">
+                <xsl:with-param name="id-list" select="@include"/>
                 <xsl:with-param name="separator" select="' '"/>
-            </xsl:apply-templates>
+            </xsl:call-template>
         </xsl:attribute>
     </xsl:if>
     <!-- SQL (only) needs an attribute so it can find some code -->
@@ -2629,15 +2632,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   * We locate the targets in the orginal source                 -->
 <!--   * Compute the Runestone database id                           -->
 <!--   * Return a list (varying separator) to use in Runestone HTML. -->
-
-<xsl:template match="@*" mode="runestone-targets">
+<xsl:template name="runestone-targets">
+    <xsl:param name="id-list"/>
     <xsl:param name="separator" select="'MISSING SEPARATOR'"/>
     <xsl:param name="output-field" select="'runestone-id'"/>
 
-    <!-- save off original context attribute for error-reporting -->
-    <xsl:variable name="original-attribute" select="."/>
     <!-- comma or space separated in PreTeXt source -->
-    <xsl:variable name="tokens" select="str:tokenize(., ', ')"/>
+    <xsl:variable name="tokens" select="str:tokenize($id-list, ', ')"/>
     <xsl:for-each select="$tokens">
         <!-- attribute value is an xml:id, get target interactive -->
         <xsl:variable name="the-id">
@@ -2647,7 +2648,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:for-each select="$original">
             <xsl:variable name="target" select="id($the-id)"/>
             <xsl:if test="not($target)">
-                <xsl:message>PTX:ERROR:   an interactive with @xml:id value "<xsl:value-of select="$the-id"/>" in a "@<xsl:value-of select="local-name($original-attribute)"/>" attribute was not found</xsl:message>
+                <xsl:message>PTX:ERROR:   an @xml:id value "<xsl:value-of select="$the-id"/>" was used to specify a runestone component but no item with that id exists.</xsl:message>
             </xsl:if>
             <!-- build Runestone database id of the target -->
             <xsl:choose>
