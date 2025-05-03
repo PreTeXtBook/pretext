@@ -56,6 +56,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:str="http://exslt.org/strings"
     xmlns:exsl="http://exslt.org/common"
     xmlns:math="http://exslt.org/math"
+    xmlns:set="http://exslt.org/sets"
     extension-element-prefixes="pi str math"
 >
 
@@ -1064,6 +1065,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   1. If $token-list = '', end recursion                       -->
 <!--   2. Process substring-before($token-list, ' ') as next token -->
 <!--   3. Pass substring-after($token-list, ' ') recursively       -->
+
+<!-- Generate a unique set of tokens from a given string                  -->
+<!-- Final structure will consist of set of <token>value</token> elements -->
+<!-- Produces a RTF, so result must be converted to nodeset               -->
+<xsl:template name="unique-token-set">
+    <xsl:param name="s" />
+    <xsl:param name="delimiter" select="', '" />
+    <xsl:variable name="token-list" select="str:tokenize($s, $delimiter)"/>
+    <xsl:variable name="token-set-temp" select="set:distinct($token-list)"/>
+    <!-- Next step is currently a no-op as str:tokenize drops empty strings. But that -->
+    <!-- appears to not be part of the spec. So for safety, get difference with       -->
+    <!-- a nodeset composed of a single empty token                                   -->
+    <xsl:variable name="token-set" select="set:difference($token-set-temp, str:tokenize(''))"/>
+    <xsl:copy-of select="$token-set" />
+</xsl:template>
 
 
 <!-- ################################## -->
