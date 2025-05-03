@@ -828,13 +828,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="program[(@interactive = 'activecode') and not(parent::exercise)]" mode="runestone-manifest">
-    <question>
-        <!-- label is from the "program", or enclosing "listing" -->
-        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-        <htmlsrc>
-            <xsl:apply-templates select="." mode="runestone-activecode"/>
-        </htmlsrc>
-    </question>
+    <!-- verify that program is in a language that can be made active -->
+    <xsl:variable name="active-language">
+        <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
+    <xsl:if test="$active-language != ''">
+        <question>
+            <!-- label is from the "program", or enclosing "listing" -->
+            <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+            <htmlsrc>
+                <xsl:apply-templates select="." mode="runestone-activecode"/>
+            </htmlsrc>
+        </question>
+    </xsl:if>
 </xsl:template>
 
 <!-- Source for every program that is linked to goes in as a <source>              -->
