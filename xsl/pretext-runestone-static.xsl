@@ -589,7 +589,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="solution"/>
     <!-- Automatically generated solution -->
     <solution>
-        <xsl:apply-templates select="cardsort" mode="cardsort-solution"/>
+        <xsl:apply-templates select="cardsort|matching" mode="cardsort-matching-solution"/>
     </solution>
 </xsl:template>
 
@@ -670,7 +670,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in true cardsort terminology.  Note that potential distractors -->
 <!-- are a premise with no response (empty sub-list) and a response -->
 <!-- with no premise (a premise that is null-ish).                  -->
-<xsl:template match="cardsort" mode="cardsort-solution">
+<xsl:template match="cardsort" mode="cardsort-matching-solution">
     <p><ul>
         <xsl:for-each select="match">
             <li>
@@ -698,6 +698,69 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </ul></p>
 </xsl:template>
 
+<!-- For a solution, we make an unordered list of the    -->
+<!-- responses (mirroring the cardsort organization) and -->
+<!-- for each we make a sub-list with the premises that. -->
+<!-- are matched.  Distractors are a premise with no     -->
+<!-- response (empty sub-list) and a response with no    -->
+<!-- premise (a premise that is null-ish).               S-->
+<xsl:template match="matching" mode="cardsort-matching-solution">
+    <p><ul>
+        <xsl:for-each select="response">
+            <xsl:variable name="response-xmlid-fenced" select="concat('|', @xml:id, '|')"/>
+            <li>
+                <p>
+                    <xsl:copy-of select="."/>
+                    <!-- form list items of matching premise -->
+                    <!-- this could be empty, so we not open -->
+                    <!-- a sub-list prematurely              -->
+                    <xsl:variable name="matched-premises-rtf">
+                        <!-- context is a "response" step up to get "permise" -->
+                        <xsl:for-each select="parent::matching/premise">
+                            <xsl:variable name="the-ref-fenced" select="concat('|', translate(@ref, ' ', '|'), '|')"/>
+                            <!-- the test for adjacency -->
+                            <xsl:if test="contains($the-ref-fenced, $response-xmlid-fenced)">
+                                <li>
+                                    <xsl:copy-of select="."/>
+                                </li>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:variable>
+                    <xsl:variable name="matched-premises" select="exsl:node-set($matched-premises-rtf)"/>
+                    <!-- create a non-empty sublist of matched premise -->
+                    <xsl:if test="$matched-premises/li">
+                        <ul>
+                            <xsl:copy-of select="$matched-premises"/>
+                        </ul>
+                    </xsl:if>
+                </p>
+            </li>
+        </xsl:for-each>
+        <!-- And we need to catch premises that do not get   -->
+        <!-- matched to any response (through null-ish @ref) -->
+        <!-- NB: context is now the "matching"               -->
+        <xsl:variable name="unmatched-premises-rtf">
+            <xsl:for-each select="premise">
+                <xsl:if test="not(@ref) or (normalize-space(@ref) = '')">
+                    <li>
+                        <xsl:copy-of select="."/>
+                    </li>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="unmatched-premises" select="exsl:node-set($unmatched-premises-rtf)"/>
+        <!-- Make a top-level list item "uncategorized" response,-->
+        <!-- and populate it with a sub-list of all the premise  -->
+        <!-- that do not get matched with anything               -->
+        <xsl:if test="$unmatched-premises/li">
+            <li><p>(uncategorized)
+                <ul>
+                    <xsl:copy-of select="$unmatched-premises/li"/>
+                </ul>
+            </p></li>
+        </xsl:if>
+    </ul></p>
+</xsl:template>
 
 
 <!-- Clickable Area -->
