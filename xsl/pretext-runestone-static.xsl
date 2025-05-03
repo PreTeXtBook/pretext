@@ -561,17 +561,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Matching Problems -->
+<!-- Cardsort and Matching Problems -->
 
-<!-- Cardort variant first, then fully-general matching afterward -->
+<!-- Cardsort problems are (roughly) functions, while a (general)   -->
+<!-- matching would be a relation.  Both match "premise" with       -->
+<!-- "response".  An implementation might have a colum of "premise" -->
+<!-- to the left and a column of "response" to the right, with an   -->
+<!-- interface allowing the reader to make associations.            -->
+<!-- The markup for each is similar and different.  Some templates  -->
+<!-- here do double-duty, some are specific (solutions).            -->
 
-<xsl:template match="*[@exercise-interactive = 'cardsort']" mode="runestone-to-static">
+<!-- Note how this template accomodates both types of problems  -->
+<!-- by using match/select and modal template names effectively. -->
+<xsl:template match="*[@exercise-interactive = 'cardsort']|*[@exercise-interactive = 'matching']" mode="runestone-to-static">
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- Statement -->
     <statement>
         <xsl:copy-of select="statement/node()"/>
-        <xsl:apply-templates select="cardsort" mode="cardsort-statement"/>
+        <xsl:apply-templates select="cardsort|matching" mode="cardsort-matching-statement"/>
     </statement>
     <!-- Any authored hint, answers, solutions not derived from   -->
     <!-- problem formulation. *Before* automatic solution, so     -->
@@ -585,13 +593,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </solution>
 </xsl:template>
 
+<!-- Exercise statement as a tabular -->
+
 <!-- For a problem statement, we use a response list re-ordered    -->
 <!-- according to response/@order attribute values given by author -->
-<xsl:template match="cardsort" mode="cardsort-statement">
+<xsl:template match="cardsort|matching" mode="cardsort-matching-statement">
 
     <!-- Reorder premises -->
     <xsl:variable name="sorted-premises-rtf">
-        <xsl:for-each select="match/premise">
+        <xsl:for-each select="match/premise|premise">
             <xsl:sort select="@order"/>
             <xsl:copy-of select="."/>
         </xsl:for-each>
@@ -599,7 +609,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="sorted-premises" select="exsl:node-set($sorted-premises-rtf)"/>
 
     <!-- responses in authored order -->
-    <xsl:variable name="all-responses" select="match/response"/>
+    <xsl:variable name="all-responses" select="match/response|response"/>
 
     <tabular>
         <xsl:call-template name="matching-row">
@@ -615,7 +625,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- by making a row and then effectively discarding the contents of the -->
 <!-- row in the recursive call.  (We could pass/increment a row number   -->
 <!-- and not keep updating the node-set.)                                -->
-
 <xsl:template name="matching-row">
     <xsl:param name="premises"/>
     <xsl:param name="responses"/>
@@ -652,13 +661,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Solutions are lists of lists, but seem to      -->
+<!-- require two different, but similar, templates. -->
+
 <!-- For a solution, we make an unordered list of the responses     -->
 <!-- (the "buckets" in true cardsort terminology) and for each      -->
 <!-- we make a sub-list wioth the premises that match (the "cards"  -->
 <!-- in true cardsort terminology.  Note that potential distractors -->
 <!-- are a premise with no response (empty sub-list) and a response -->
 <!-- with no premise (a premise that is null-ish).                  -->
-
 <xsl:template match="cardsort" mode="cardsort-solution">
     <p><ul>
         <xsl:for-each select="match">
@@ -687,14 +698,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </ul></p>
 </xsl:template>
 
-<!-- General matching: temporary - stub out static -->
-
-<xsl:template match="*[@exercise-interactive = 'matching']" mode="runestone-to-static">
-    <statement>
-        <p>2025-04-25: stub while static versions of general matching questions are under development.</p>
-        <xsl:copy-of select="statement/node()"/>
-    </statement>
-</xsl:template>
 
 
 <!-- Clickable Area -->
