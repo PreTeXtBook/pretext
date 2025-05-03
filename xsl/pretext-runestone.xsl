@@ -1513,6 +1513,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <script type="text/xml">
                 <!-- one-off XML for Runestone JS to consume -->
                 <matching>
+                    <!-- provide the authored statement of the exercise -->
+                    <statement>
+                        <xsl:apply-templates select="statement"/>
+                    </statement>
                     <!-- sequence of "premise" -->
                     <xsl:apply-templates select="matching/premise" mode="node-info"/>
                     <!-- sequence of "response" -->
