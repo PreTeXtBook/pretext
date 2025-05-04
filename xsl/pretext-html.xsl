@@ -52,7 +52,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:str="http://exslt.org/strings"
     xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:pf="https://prefigure.org"
-    exclude-result-prefixes="svg pi fn pf"
+    exclude-result-prefixes="svg xlink pi fn pf"
     extension-element-prefixes="exsl date str"
 >
 
