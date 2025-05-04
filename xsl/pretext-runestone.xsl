@@ -1517,6 +1517,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <statement>
                         <xsl:apply-templates select="statement"/>
                     </statement>
+                    <!-- "feedback" is for the interactive interface -->
+                    <!-- to show to the reader at the right time     -->
+                    <feedback>
+                        <xsl:apply-templates select="feedback"/>
+                    </feedback>
                     <!-- sequence of "premise" -->
                     <xsl:apply-templates select="matching/premise" mode="node-info"/>
                     <!-- sequence of "response" -->
