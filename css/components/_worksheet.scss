@@ -1,72 +1,54 @@
 // TODO refactor
 
-/* should be the default
-section.worksheet > .heading,
-section section.worksheet > .heading,
-section section section.worksheet > .heading {
-  display: block;
-}
-*/
-section.worksheet > .heading > .codenumber {
-  display: inline-block;
-  vertical-align: top;
-}
-section.worksheet > .heading > .title {
-  display: inline-block;
-  max-width: 70%;
-}
+// Rules in this file apply to both screen and print
+// Print specific rules should go in a file in targets/print-worksheet stylesheet
+
+
 .heading .print-links {
   display: inline-block;
   float: right;
   vertical-align: top;
   width: 19%;
   text-align: right;
+
+  & > a {
+    font-family: var(--font-body);
+    font-size: 0.6em;
+    font-weight: bold;
+    padding: 0.1em 0.2em;
+    background: #ffa;
+    border: 2px solid green;
+
+    &.us {
+      background: #eef;
+      color: #9b1c2c;
+      border-color: #041E42;
+    }
+
+  }
+  & > a + a {
+    margin-left: 0.25em;
+  }
 }
-.standalone .heading .print-links {
-  display: none;
-}
-.standalone.worksheet .previous-button,
-.standalone.worksheet .up-button,
-.standalone.worksheet .next-button {
-  display: none;
-}
-.standalone.worksheet .ptx-navbar .toc-toggle {
-  display: none;
-}
-.standalone.worksheet [data-knowl]:hover,
-.standalone.worksheet [data-knowl]:active,
-.standalone.worksheet [data-knowl].active {
-  background: none;
-  color: black;
-}
-.standalone.worksheet [data-knowl]::after {
-  border: none;
+
+.print-button {
+  position: relative;
+  right: 2px;
+  background-color: LightGreen;
+  z-index: 1;
+  float: right;
 }
 
 
-
-.heading .print-links > a {
-  font-family: var(--font-body);
-  font-size: 0.6em;
-  font-weight: bold;
-  padding: 0.1em 0.2em;
-  background: #ffa;
-  border: 2px solid green;
-}
-.heading .print-links > a.us {
-  background: #eef;
-  color: #9b1c2c;
-  border-color: #041E42;
-}
-.heading .print-links > a + a {
-  margin-left: 0.25em;
+.standalone.worksheet {
+  .print-links{
+    display: none;
+  }
 }
 
+// Todo, refactor below into nested rules
 
-
-/* also see section > heading for worksheets, maybe around line 1200 */
 /* one-page documents in the browser */
-
 body.standalone.worksheet .onepage > .heading {
   margin-top: 0;
   font-size: 1.3em;
@@ -82,28 +64,17 @@ body.standalone.worksheet .onepage .instructions {
   display: none;
 }
 body.standalone .worksheet {
-/*
-  padding: 40px 45px 45px 55px;
-*/
   padding: 40px 0 45px 0;
   border: 2px solid grey;
   margin: 0;
-/* height: 1243px; */
 }
 
 body.standalone .onepage {
-/*    padding: 40px 45px 45px 55px;
-  padding: 0 0 45px 0;
-*/
   padding: 40px 45px 45px 55px;
   border-bottom: 2px solid grey;
   margin: 0;
-/* height: 1243px; */
 }
 body.standalone .onepage + .onepage {
-/*
-  padding-top: 40px;
-*/
   border-top: 2px solid grey;
 }
 /* there may be worksheet content before the first page
@@ -271,4 +242,14 @@ body.standalone.worksheet section.worksheet > .conclusion {
 }
 body.standalone.worksheet section.worksheet > .heading + .para {
   display: inline;
+}
+
+.standalone.worksheet [data-knowl]:hover,
+.standalone.worksheet [data-knowl]:active,
+.standalone.worksheet [data-knowl].active {
+  background: none;
+  color: black;
+}
+.standalone.worksheet [data-knowl]::after {
+  border: none;
 }
