@@ -475,6 +475,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <subtitle>
                     <xsl:apply-templates select="$document-root" mode="subtitle"/>
                 </subtitle>
+                <xsl:for-each select="$document-root/frontmatter/bibinfo/author">
+                    <author>
+                        <xsl:apply-templates select="personname"/>
+                    </author>
+                </xsl:for-each>
                 <!-- edition, too? -->
                 <document-id>
                     <!-- global variables defined in -common -->
