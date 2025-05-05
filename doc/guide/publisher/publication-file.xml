@@ -987,7 +987,7 @@
                     <cline>/publication/webwork/@server</cline>
                 </cd>
                 should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not include a trailing slash.
-                The server should be version 2.14 or later.
+                The server should be version 2.16 or later.
             </p>
         </subsection>
 

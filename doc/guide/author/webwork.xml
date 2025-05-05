@@ -18,7 +18,7 @@
   <introduction>
     <p>
       With a <webwork/> server
-      (version 2.14 or higher, or <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>)
+      (version 2.16 or higher, or <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>)
       and a little setup work, you can embed <webwork/> exercises in your <pretext/> project.
       HTML output can have interactive problem cells or print problems in <q>static</q> form.
       PDF output will print static versions.
@@ -26,7 +26,7 @@
       for use in the <q>traditional</q> way.
     </p>
     <p>
-      Although we expect that version 2.14 and above are supported,
+      Although we expect that version 2.16 and above are supported,
       we recommend that you use the <url href="https://github.com/openwebwork/webwork2/blob/main/VERSION">current</url>
       (or one previous) version of <webwork/> whenever possible.
       Should bugs be discovered, it may be difficult to address them with older versions of <webwork/>.
