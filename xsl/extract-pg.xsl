@@ -176,39 +176,12 @@
         <!-- 4. human readable PG (for PTX-authored)                               -->
         <pghuman>
             <xsl:apply-templates select=".">
-                <xsl:with-param name="b-hint" select="true()" />
-                <xsl:with-param name="b-solution" select="true()" />
                 <xsl:with-param name="b-human-readable" select="true()" />
             </xsl:apply-templates>
         </pghuman>
         <!-- 5. PG optimized (and less human-readable) for use in PTX output modes -->
-        <pgdense hint="yes" solution="yes">
+        <pgdense>
             <xsl:apply-templates select=".">
-                <xsl:with-param name="b-hint" select="true()" />
-                <xsl:with-param name="b-solution" select="true()" />
-                <xsl:with-param name="b-human-readable" select="false()" />
-            </xsl:apply-templates>
-        </pgdense>
-        <!-- Below are only needed for WeBWorK 2.15 and earlier, -->
-        <!-- where we use an iframe for the embedding. Otherwise -->
-        <pgdense hint="no" solution="no">
-            <xsl:apply-templates select=".">
-                <xsl:with-param name="b-hint" select="false()" />
-                <xsl:with-param name="b-solution" select="false()" />
-                <xsl:with-param name="b-human-readable" select="false()" />
-            </xsl:apply-templates>
-        </pgdense>
-        <pgdense hint="no" solution="yes">
-            <xsl:apply-templates select=".">
-                <xsl:with-param name="b-hint" select="false()" />
-                <xsl:with-param name="b-solution" select="true()" />
-                <xsl:with-param name="b-human-readable" select="false()" />
-            </xsl:apply-templates>
-        </pgdense>
-        <pgdense hint="yes" solution="no">
-            <xsl:apply-templates select=".">
-                <xsl:with-param name="b-hint" select="false()" />
-                <xsl:with-param name="b-solution" select="true()" />
                 <xsl:with-param name="b-human-readable" select="false()" />
             </xsl:apply-templates>
         </pgdense>
@@ -290,8 +263,6 @@
 
 
 <xsl:template match="webwork[statement]">
-    <xsl:param name="b-hint" />
-    <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
     <xsl:if test="$b-human-readable">
         <xsl:call-template name="converter-blurb-webwork" />
@@ -318,24 +289,18 @@
     <xsl:apply-templates select="statement">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:if test="$b-hint">
-        <xsl:apply-templates select="hint">
-            <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-        </xsl:apply-templates>
-    </xsl:if>
-    <xsl:if test="$b-solution">
-        <xsl:apply-templates select="solution">
-            <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-        </xsl:apply-templates>
-    </xsl:if>
+    <xsl:apply-templates select="hint">
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:apply-templates select="solution">
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
     <xsl:call-template name="end-problem">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="webwork[task]">
-    <xsl:param name="b-hint" />
-    <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
     <xsl:if test="$b-human-readable">
         <xsl:call-template name="converter-blurb-webwork" />
@@ -397,8 +362,6 @@
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="task">
-        <xsl:with-param name="b-hint" select="$b-hint" />
-        <xsl:with-param name="b-solution" select="$b-solution" />
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
     <xsl:if test="$b-human-readable">
@@ -421,8 +384,6 @@
 </xsl:template>
 
 <xsl:template match="task[statement]">
-    <xsl:param name="b-hint" />
-    <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Section</xsl:with-param>
@@ -439,16 +400,12 @@
     <xsl:apply-templates select="statement">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:if test="$b-hint">
-        <xsl:apply-templates select="hint">
-            <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-        </xsl:apply-templates>
-    </xsl:if>
-    <xsl:if test="$b-solution">
-        <xsl:apply-templates select="solution">
-            <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-        </xsl:apply-templates>
-    </xsl:if>
+    <xsl:apply-templates select="hint">
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:apply-templates select="solution">
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
@@ -459,8 +416,6 @@
 </xsl:template>
 
 <xsl:template match="task[task]">
-    <xsl:param name="b-hint" />
-    <xsl:param name="b-solution" />
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Section</xsl:with-param>
@@ -490,8 +445,6 @@
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="task">
-        <xsl:with-param name="b-hint" select="$b-hint" />
-        <xsl:with-param name="b-solution" select="$b-solution" />
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
     <xsl:if test="$b-human-readable">
