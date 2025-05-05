@@ -18,7 +18,7 @@
   <introduction>
     <p>
       With a <webwork/> server
-      (version 2.14 or higher, or <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>)
+      (version 2.16 or higher, or <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>)
       and a little setup work, you can embed <webwork/> exercises in your <pretext/> project.
       HTML output can have interactive problem cells or print problems in <q>static</q> form.
       PDF output will print static versions.
@@ -42,7 +42,7 @@
     <p>
       If you are configuring your own <webwork/> server to use with <pretext/>,
       we assume a mild familiarity with administrating a <webwork/> server.
-      The version of <webwork/> needs to be 2.14 or later for use with <pretext/>.
+      The version of <webwork/> needs to be 2.16 or later for use with <pretext/>.
     </p>
     <p>
       The only thing you need to do at this level is set the web server to use certain headers on content that is fetched.
@@ -94,7 +94,7 @@
     <p>
       If you are configuring your own <webwork/> server to use with <pretext/>,
       we assume a mild familiarity with administrating a <webwork/> server.
-      The version of <webwork/> needs to be 2.14 or later for use with <pretext/>.
+      The version of <webwork/> needs to be 2.16 or later for use with <pretext/>.
     </p>
     <p>
       Using the <c>admin</c> course, create a course named <c>anonymous</c>.
@@ -250,7 +250,7 @@
         <attr>course</attr>, <attr>coursepassword</attr>, <attr>user</attr>, and <attr>userpassword</attr>.
         If absent, these default to <c>https://webwork-ptx.aimath.org</c>, <c>anonymous</c>, <c>anonymous</c>,
         <c>anonymous</c>, and <c>anonymous</c> respectively. If you specify a server, you must correctly
-        specify the protocol (<c>http</c> versus <c>https</c>). And it must be version 2.14 or later.
+        specify the protocol (<c>http</c> versus <c>https</c>). And it must be version 2.16 or later.
         Do not include a trailing slash.
       </p>
     </subsection>
