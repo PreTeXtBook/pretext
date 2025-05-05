@@ -3533,6 +3533,35 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Place the <attr>interactive</attr> attribute on a <tag>program</tag> element with the value <c>activecode</c> to elect this behavior (<c>no</c> is the default value).  Also, be sure to specify a language from the supported languages.  Consult <xref ref="table-program-interactive"/> below for a summary of various combinations.  When an output format does not support an interactive ActiveCode instance, the fallback is a static program listing.</p>
 
+            <warning>
+                <title>Labels and XML IDs</title>
+                <p>Properly placing labels and xml:id's can get tricky for programs. Understanding the purpose of these two different identifiers is important:
+                  <ul>
+                    <li>
+                      <p>
+                        <attr>xml:id</attr>s are used to link to a program from other parts of the book source code. Anny program that you want to use as the target of an <attr>add-files</attr> or <attr>include</attr> attribute in some other program must have a unique (within the book) <attr>xml:id</attr>.
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <attr>label</attr>s are used to provide an identifer for items in the Runestone database. They too should be unique within a book. But a program that is a direct child of an exercise-like element is considered to be a <term>programming exercise</term>. Programming exercises do not need a label as they are included in the database as part of the exercise.
+                      </p>
+                    </li>
+                  </ul>
+                </p>
+                <p>So best practices are:
+                  <ul>
+                    <li>
+                      <p>Every program should have a <attr>label</attr> attribute unless it is the direct child of an exercise like element. In that case, the label goes on the exercise and the program does not get a label. It is OK to leave a label off of a non-interactive program no other programs try to link to it (e.g. <attr>addfiles</attr>).</p>
+                    </li>
+                    <li>
+                      <p>Any program you want to link to from other places should get an <attr>xml:id</attr>. It always goes on the program itself.</p>
+                    </li>
+                  </ul>
+                  It is perfectly fine to use the same value for both <attr>label</attr> and <attr>xml:id</attr>, although xml:ids are more restrictive in terms of what characters are allowed.
+                </p>
+            </warning>
+
             <p>Inside the <tag>program</tag> of an ActiveCode, you can use the following elements:
                 <dl>
                     <li>
@@ -3592,12 +3621,16 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         <p>(C/C++ only) A comma separated list of strings to be passed to the compiler. Ex: <c>-Wall, -std=c++17</c>. A book-level default can be specified - see <xref ref="program-default-values"/>.</p>
                     </li>
                     <li>
+                        <title>extra-compiler-args</title>
+                        <p>(C/C++ only) A comma separated list of strings to be passed to the compiler in addition to the <attr>compiler-args</attr>. Mostly of interest to add an argument to a particular program without overriding any book-level default arguments.</p>
+                    </li>
+                    <li>
                         <title>database</title>
                         <p>(SQL only) SQL based programs can make use of an SQLite database file. Use this attribute to specify the file to load as a string relative to the <attr>external</attr> top-level directory.</p>
                     </li>
                     <li>
-                        <title>datafile</title>
-                        <p>A comma separated string identifying one or more <tag>datafile</tag>s that are available for processing in this program. See <xref ref="topic-datafile"/></p>
+                        <title>filename</title>
+                        <p>For server based programs. What name to use when the code from this file is written to the server. This is generally only required if using the <attr>add-files</attr> attribute on some other program to make the contents of this program available (as a .h file for example).</p>
                     </li>
                     <li>
                         <title>download</title>
@@ -3612,8 +3645,18 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     </li>
                     <li>
                         <title>include</title>
-                        <p>A comma separated string identifying one or more other ActiveCodes that are to be prepended to this program when it is run. See <xref ref="topic-datafile"/></p>
+                        <p>A comma separated string identifying one or more other ActiveCodes that are to be prepended to this program when it is run.</p>
                         <p>This allows you to write examples that build on each other without having to duplicate all the code in each successive block. For example, if you write a function definition in one ActiveCode, you can include it in a later ActiveCode block that has code to call the function without having to visibly include the definition. </p>
+                    </li>
+                    <li>
+                        <title>add-files</title>
+                        <p>(Server based code only) A comma separated string identifying one or more other programs or Datafiles by xml:id that are to be made available to this code. Each of those elements should have an <attr>filename</attr>.</p>
+                        <p>For server based programs, the other elements will be copied into files based on their <attr>filename</attr> attributes.</p>
+                        <p>This allows you to split code into multiple <q>files</q> and thus create more complex interconnections than when using <attr>include</attr>.</p>
+                    </li>
+                    <li>
+                        <title>compile-also</title>
+                        <p>(C/C++ only) A comma separated string identifying one or more other programs by xml:id that are also to be compiled when this program is compiled. They will be assumed to also be a part of the <attr>add-files</attr> collection. Each of those programs should have an <attr>filename</attr>.</p>
                     </li>
                     <li>
                         <title>interpreter-args</title>

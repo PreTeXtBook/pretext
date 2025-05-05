@@ -3743,11 +3743,37 @@ Book (with parts), "section" at level 3
             <xsl:apply-templates select="." mode="location-report"/>
         </xsl:when>
     </xsl:choose>
-    <!-- Prefix just for RS-server builds, in order that the database -->
-    <!-- of exercises gets a globally unique identifier.              -->
-    <!-- And for a non-RS-server build, we add a prefix in order to   -->
-    <!-- differentiate from nearby (wrappers) uses of @label for      -->
-    <!-- PreTeXt functions.                                           -->
+    <!-- We require a @label attribute, but allow it to be -->
+    <!-- the result of an automatic copy from an @xml:id.  -->
+    <xsl:variable name="label">
+        <xsl:value-of select="@label"/>
+    </xsl:variable>
+    <xsl:if test="$label != ''">
+        <xsl:call-template name="runestone-label-prefix"/>
+        <xsl:value-of select="$label"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- Special handling for programs in exercise-like elements.              -->
+<!-- We want to associate those programs with the label on their container -->
+<!-- and NOT with an auto-generated label on the program itself that might -->
+<!-- come from an @xml:id.                                                 -->
+<xsl:template match="exercise/program" mode="runestone-id">
+    <xsl:variable name="label">
+        <xsl:value-of select="../@label"/>
+    </xsl:variable>
+    <xsl:if test="$label != ''">
+        <xsl:call-template name="runestone-label-prefix"/>
+        <xsl:value-of select="$label"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- Prefix just for RS-server builds, in order that the database -->
+<!-- of exercises gets a globally unique identifier.              -->
+<!-- And for a non-RS-server build, we add a prefix in order to   -->
+<!-- differentiate from nearby (wrappers) uses of @label for      -->
+<!-- PreTeXt functions.                                           -->
+<xsl:template name="runestone-label-prefix">
     <xsl:choose>
         <xsl:when test="$b-host-runestone">
             <!-- global variables defined in this stylesheet -->
@@ -3760,9 +3786,6 @@ Book (with parts), "section" at level 3
             <xsl:text>rs-</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <!-- We require a @label attribute, but allow it to be -->
-    <!-- the result of an automatic copy from an @xml:id.  -->
-    <xsl:value-of select="@label"/>
 </xsl:template>
 
 <!--            -->
@@ -11844,6 +11867,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'an &quot;@order&quot; attribute on a &quot;match&quot; is deprecated and should instead be placed on the contained &quot;premise&quot; element(s).  If your cardsort problem is simply a 1-1 correspondence, then we will honor your intent.  If your problem is more complicated (multiple &quot;premise&quot; inside a &quot;match&quot;) results may be variable and unpredictable.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2025-04-25  deprecate "program@datafile" in favor of "program@add-files"   -->
+    <xsl:call-template name="deprecation-message">
+      <xsl:with-param name="occurrences" select="&quot;$document-root//datafile[@datafile]&quot;" />
+      <xsl:with-param name="date-string" select="'2025-04-25'" />
+      <xsl:with-param name="message" select="'the program@datafile attribute containing datafile@filename has been deprecated. You should change programs to use the @add-files attribute and use it specify the xml:id of datafiles to make available.'"/>
+    <!--  -->
+  </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->

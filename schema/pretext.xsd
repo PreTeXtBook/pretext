@@ -1310,8 +1310,10 @@
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="compiler-args"/>
+      <xs:attribute name="extra-compiler-args"/>
       <xs:attribute name="database"/>
-      <xs:attribute name="datafile"/>
+      <xs:attribute name="add-files"/>
+      <xs:attribute name="compile-also"/>
       <xs:attribute name="download">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -1330,6 +1332,7 @@
       </xs:attribute>
       <xs:attribute name="highlight-lines"/>
       <xs:attribute name="include"/>
+      <xs:attribute name="filename"/>
       <xs:attribute name="interactive">
         <xs:simpleType>
           <xs:restriction base="xs:token">

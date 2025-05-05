@@ -312,9 +312,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- template in the "pretext-html" stylesheet, with this         -->
 <!-- implementation doing an overide.                             -->
 <xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet|interactive[@platform = 'doenetml']" mode="runestone-id-attribute">
-    <xsl:attribute name="id">
+    <xsl:variable name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
-    </xsl:attribute>
+    </xsl:variable>
+    <xsl:if test="$id != ''">
+        <xsl:attribute name="id">
+              <xsl:value-of select="$id"/>
+        </xsl:attribute>
+    </xsl:if>
 </xsl:template>
 
 <!-- ############### -->
@@ -418,6 +423,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$document-root" mode="runestone-manifest"/>
     </xsl:if>
 </xsl:template>
+
+<!-- Compute list of any programs that are linked to from other programs, -->
+<!-- they will need to be rendered into the source. Result is a node-set  -->
+<!-- containing <token>id</token>                                         -->
+<xsl:variable name="linked-programs-list-rtf">
+    <xsl:variable name="linked-id-string">
+      <xsl:for-each select="//program[boolean(@add-files) or boolean(@include) or boolean(@compile-also)]">
+          <xsl:value-of select="@add-files"/>
+          <xsl:text>,</xsl:text>
+          <xsl:value-of select="@include"/>
+          <xsl:text>,</xsl:text>
+          <xsl:value-of select="@compile-also"/>
+          <xsl:text>,</xsl:text>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:call-template name="unique-token-set">
+        <xsl:with-param name="s" select="$linked-id-string"/>
+    </xsl:call-template>
+</xsl:variable>
+<xsl:variable name="linked-programs-list" select="exsl:node-set($linked-programs-list-rtf)/token"/>
 
 <xsl:template match="book|article" mode="runestone-manifest">
     <exsl:document href="runestone-manifest.xml" method="xml" indent="yes" encoding="UTF-8">
@@ -534,6 +559,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- recurse into non-container "task" eventually, so "task" do get           -->
         <!-- processed, even if they seem to be missing from this select.             -->
         <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile|.//interactive[@platform = 'doenetml']" mode="runestone-manifest"/>
+
+        <!-- Now check for programs that have been included elsewhere. They need      -->
+        <!-- to be rendered into <source> elements.                                   -->
+        <xsl:apply-templates select=".//program[@xml:id = $linked-programs-list]" mode="runestone-manifest-source"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
 </xsl:template>
@@ -799,13 +828,55 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="program[(@interactive = 'activecode') and not(parent::exercise)]" mode="runestone-manifest">
-    <question>
-        <!-- label is from the "program", or enclosing "listing" -->
-        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-        <htmlsrc>
-            <xsl:apply-templates select="." mode="runestone-activecode"/>
-        </htmlsrc>
-    </question>
+    <!-- verify that program is in a language that can be made active -->
+    <xsl:variable name="active-language">
+        <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
+    <xsl:if test="$active-language != ''">
+        <question>
+            <!-- label is from the "program", or enclosing "listing" -->
+            <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+            <htmlsrc>
+                <xsl:apply-templates select="." mode="runestone-activecode"/>
+            </htmlsrc>
+        </question>
+    </xsl:if>
+</xsl:template>
+
+<!-- Source for every program that is linked to goes in as a <source>              -->
+<!-- For activecode/codelens, source will also appear in a <question> element      -->
+<!-- but in that location it will be buried in a pile of html.                     -->
+<xsl:template match="program" mode="runestone-manifest-source">
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="runestone-filename"/>
+    </xsl:variable>
+    <source>
+        <xsl:attribute name="filename">
+            <xsl:value-of select="$filename"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="code"/>
+        </xsl:call-template>
+    </source>
+</xsl:template>
+
+<!-- Get filename to use for an element, fallback on label if filename is missing -->
+<xsl:template match="program|datafile" mode="runestone-filename">
+    <xsl:choose>
+        <xsl:when test="@filename">
+            <xsl:value-of select="@filename"/>
+        </xsl:when>
+        <xsl:when test="@label">
+            <xsl:value-of select="@label"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>Missing filename attribute on </xsl:text>
+            <xsl:value-of select="name()"/>
+            <xsl:text> with xml:id </xsl:text>
+            <xsl:value-of select="@xml:id"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- In database with the same structure as an exercise/question. -->
@@ -1683,9 +1754,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:choose>
                 <xsl:when test="select/@questions">
                     <xsl:attribute name="data-questionlist">
-                        <xsl:apply-templates select="select/@questions" mode="runestone-targets">
+                        <xsl:call-template name="runestone-targets">
+                            <xsl:with-param name="id-list" select="select/@questions"/>
                             <xsl:with-param name="separator" select="', '"/>
-                        </xsl:apply-templates>
+                        </xsl:call-template>
                     </xsl:attribute>
                     <p>Loading a dynamic question-list question...</p>
                 </xsl:when>
@@ -1694,9 +1766,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="select/@experiment-name"/>
                     </xsl:attribute>
                     <xsl:attribute name="data-questionlist">
-                        <xsl:apply-templates select="select/@ab-experiment" mode="runestone-targets">
-                            <xsl:with-param name="separator" select="', '"/>
-                        </xsl:apply-templates>
+                        <xsl:call-template name="runestone-targets">
+                          <xsl:with-param name="id-list" select="select/@ab-experiment"/>
+                          <xsl:with-param name="separator" select="', '"/>
+                        </xsl:call-template>
                     </xsl:attribute>
                     <p>Loading a dynamic A/B question...</p>
                 </xsl:when>
@@ -2003,6 +2076,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:attribute name="id">
                             <xsl:value-of select="$rsid"/>
                         </xsl:attribute>
+                        <!-- filename used for this data if another program makes use of it -->
+                        <!-- via add-files                                                  -->
+                        <xsl:if test="@filename">
+                            <xsl:attribute name="data-filename">
+                                <xsl:value-of select="@filename"/>
+                            </xsl:attribute>
+                        </xsl:if>
                         <!-- add some lead-in text to the window -->
                         <xsl:if test="$exercise-statement">
                             <div class="ac_question">
@@ -2218,13 +2298,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
         </xsl:attribute>
     </xsl:if>
+
+    <!-- Merge add-files and compile-also, get unique items               -->
+    <!-- This will be the list that we use as add-files for the manifest  -->
+    <xsl:variable name="all-extra-files">
+        <xsl:variable name="id-list">
+            <xsl:value-of select="@add-files"/>
+            <xsl:if test="@add-files and @compile-also">
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+            <xsl:value-of select="@compile-also"/>
+        </xsl:variable>
+        <xsl:variable name="unique-tokens">
+            <xsl:call-template name="unique-token-set">
+                <xsl:with-param name="s" select="$id-list"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:for-each select="exsl:node-set($unique-tokens)/token">
+            <xsl:value-of select="."/>
+            <xsl:if test="following-sibling::token">
+                <xsl:text>,</xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:variable>
+
+    <!-- allow @add-files attribute on <program> -->
+    <xsl:if test="$all-extra-files != ''">
+        <xsl:attribute name="data-add-files">
+            <xsl:call-template name="runestone-targets">
+                <xsl:with-param name="id-list" select="$all-extra-files"/>
+                <xsl:with-param name="separator" select="','"/>
+            </xsl:call-template>
+        </xsl:attribute>
+    </xsl:if>
+    <!-- allow @compile-with attribute on <program> -->
+    <xsl:if test="@compile-also">
+        <xsl:attribute name="data-compile-also">
+            <xsl:call-template name="runestone-targets">
+                <xsl:with-param name="id-list" select="@compile-also"/>
+                <xsl:with-param name="separator" select="','"/>
+                <xsl:with-param name="output-field" select="'filename'"/>
+            </xsl:call-template>
+        </xsl:attribute>
+    </xsl:if>
     <!-- allow @include attribute on <program> -->
     <xsl:if test="@include">
         <!-- space-separated this time -->
         <xsl:attribute name="data-include">
-            <xsl:apply-templates select="@include" mode="runestone-targets">
+            <xsl:call-template name="runestone-targets">
+                <xsl:with-param name="id-list" select="@include"/>
                 <xsl:with-param name="separator" select="' '"/>
-            </xsl:apply-templates>
+            </xsl:call-template>
         </xsl:attribute>
     </xsl:if>
     <!-- SQL (only) needs an attribute so it can find some code -->
@@ -2268,10 +2392,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="attr" select="'compiler-args'"/>
         </xsl:call-template>
     </xsl:variable>
-    <xsl:if test="$compiler-args != '' and ($hosting = 'jobeserver')">
+    <!-- extra compiler args, appended to compiler args -->
+    <xsl:variable name="extra-compiler-args" select="@extra-compiler-args"/>
+    <xsl:if test="($compiler-args != '' or $extra-compiler-args != '') and ($hosting = 'jobeserver')">
+        <xsl:variable name="compiler-args-full">
+            <xsl:value-of select="$compiler-args"/>
+            <xsl:if test="$compiler-args != '' and $extra-compiler-args != ''">
+                <xsl:text>,</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="$extra-compiler-args"/>
+        </xsl:variable>
         <xsl:attribute name="data-compileargs">
             <xsl:call-template name="comma-list-to-json-array">
-                <xsl:with-param name="list" select="$compiler-args"/>
+                <xsl:with-param name="list" select="$compiler-args-full"/>
             </xsl:call-template>
         </xsl:attribute>
     </xsl:if>
@@ -2706,14 +2839,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   * We locate the targets in the orginal source                 -->
 <!--   * Compute the Runestone database id                           -->
 <!--   * Return a list (varying separator) to use in Runestone HTML. -->
-
-<xsl:template match="@*" mode="runestone-targets">
+<xsl:template name="runestone-targets">
+    <xsl:param name="id-list"/>
     <xsl:param name="separator" select="'MISSING SEPARATOR'"/>
+    <xsl:param name="output-field" select="'runestone-id'"/>
 
-    <!-- save off original context attribute for error-reporting -->
-    <xsl:variable name="original-attribute" select="."/>
     <!-- comma or space separated in PreTeXt source -->
-    <xsl:variable name="tokens" select="str:tokenize(., ', ')"/>
+    <xsl:variable name="tokens" select="str:tokenize($id-list, ', ')"/>
     <xsl:for-each select="$tokens">
         <!-- attribute value is an xml:id, get target interactive -->
         <xsl:variable name="the-id">
@@ -2723,10 +2855,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:for-each select="$original">
             <xsl:variable name="target" select="id($the-id)"/>
             <xsl:if test="not($target)">
-                <xsl:message>PTX:ERROR:   an interactive with @xml:id value "<xsl:value-of select="$the-id"/>" in a "@<xsl:value-of select="local-name($original-attribute)"/>" attribute was not found</xsl:message>
+                <xsl:message>PTX:ERROR:   an @xml:id value "<xsl:value-of select="$the-id"/>" was used to specify a runestone component but no item with that id exists.</xsl:message>
             </xsl:if>
             <!-- build Runestone database id of the target -->
-            <xsl:apply-templates select="$target" mode="runestone-id"/>
+            <xsl:choose>
+                <xsl:when test="$output-field = 'runestone-id'">
+                    <xsl:apply-templates select="$target" mode="runestone-id"/>
+                </xsl:when>
+                <xsl:when test="$output-field = 'filename'">
+                    <xsl:value-of select="$target/@filename"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$target" mode="runestone-id"/>
+                    <xsl:message>PTX:ERROR:   runestone-targets template was called with an invalid @output-field value "<xsl:value-of select="$output-field"/>"</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
             <!-- n - 1 separators, required by receiving Javascript -->
         </xsl:for-each>
         <xsl:if test="following-sibling::token">
