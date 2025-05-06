@@ -91,6 +91,8 @@ import re
 # contextmanager tools
 import contextlib
 
+import time
+
 # cleanup multiline strings used as source code
 import textwrap
 
@@ -4735,6 +4737,9 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
+    log_time_info = stringparams.get("profile-py", False) == "yes"
+    time_logger = Stopwatch("html()", log_time_info)
+
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
     # Consult source for additional files
@@ -4745,6 +4750,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
 
     pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
     include_static_files = get_publisher_variable(pub_vars, 'portable-html') != "yes"
+    time_logger.log("pubvars loaded")
 
     if include_static_files:
         # interrogate Runestone server (or debugging switches) and populate
@@ -4754,6 +4760,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
         # even if we don't need static files, we need to set stringparams for
         # Runestone Services information.
         _cdn_runestone_services(stringparams, ext_rs_methods)
+    time_logger.log("runestone placed")
 
     # support publisher file, and subtree argument
     if pub_file:
@@ -4772,18 +4779,19 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # place managed directories - some of these (Asymptote HTML) are
     # consulted during the XSL run and so need to be placed beforehand
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
+    time_logger.log("managed directories copied")
 
     if include_static_files:
         # Copy js and css, but only if not building portable html
         # place JS in scratch directory
         copy_html_js(tmp_dir)
-
-        # build or copy theme
         build_or_copy_theme(xml, pub_vars, tmp_dir)
+        time_logger.log("css/js copied")
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
+    time_logger.log("xsltproc complete")
 
     if not(include_static_files):
         # remove latex-image generated directories for portable builds
@@ -4818,6 +4826,8 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
             log.info("zip file of HTML output deposited as {}".format(derivedname))
     else:
         raise ValueError("PTX:BUG: HTML file format not recognized")
+
+    time_logger.log("build completed")
 
 
 def revealjs(
@@ -6137,6 +6147,29 @@ def place_latex_package_files(dest_dir, journal_name, cache_dir):
         # Copy required resource to the destination directory
         shutil.copy2(file_path, dest_dir)
 
+
+class Stopwatch:
+    """A simple stopwatch class for measuring elapsed time.    """
+    """print_log set to false disables logging of elapsed time """
+
+    def __init__(self, name:str="", print_log:bool=True):
+        self.name = name
+        self.print_log = print_log
+        self.start_time = time.time()
+        self.last_log_time = self.start_time
+    
+    def reset(self):
+        """Reset the log timer to the current time."""
+        self.last_log_time = time.time()
+
+    def log(self, timepoint_description:str=""):
+        """Print a log message with the elapsed time since the last log event."""
+        if self.print_log:
+            cur_time = time.time()
+            elapsed_time = cur_time - self.start_time
+            since_last_log_time = cur_time - self.last_log_time
+            self.reset()
+            log.info(f"** Timing report from {self.name}: {timepoint_description}, {since_last_log_time:.2f}s since last watch reset. {elapsed_time:.2f}s total elapsed time.")
 
 
 ###########################
