@@ -11198,6 +11198,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:attribute>
                     </xsl:if>
                     <div id="ptx-content" class="ptx-content">
+                        <xsl:if test="$b-build-preview">
+                            <div class="preview-build-warning">Preview build. Links and knowls that cross pages may not function correctly.</div>
+                        </xsl:if>
                         <xsl:if test="$b-printable">
                             <div class="print-preview-header">
                                 <xsl:apply-templates select="." mode="print-preview-header"/>
