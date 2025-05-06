@@ -91,6 +91,8 @@ import re
 # contextmanager tools
 import contextlib
 
+import time
+
 # * For non-standard packages (such as those installed via PIP) try to keep
 #   dependencies to a minimum by *not* importing at the module-level
 #   (with justified exceptions)
@@ -5349,6 +5351,29 @@ def place_latex_package_files(dest_dir, journal_name, cache_dir):
         # Copy required resource to the destination directory
         shutil.copy2(file_path, dest_dir)
 
+
+class Stopwatch:
+    """A simple stopwatch class for measuring elapsed time.    """
+    """print_log set to false disables logging of elapsed time """
+
+    def __init__(self, name:str="", print_log:bool=True):
+        self.name = name
+        self.print_log = print_log
+        self.start_time = time.time()
+        self.last_log_time = self.start_time
+    
+    def reset(self):
+        """Reset the log timer to the current time."""
+        self.last_log_time = time.time()
+
+    def log(self, timepoint_description:str=""):
+        """Print a log message with the elapsed time since the last log event."""
+        if self.print_log:
+            cur_time = time.time()
+            elapsed_time = cur_time - self.start_time
+            since_last_log_time = cur_time - self.last_log_time
+            self.reset()
+            log.info(f"** Timing report from {self.name}: {timepoint_description}, {since_last_log_time:.2f}s since last watch reset. {elapsed_time:.2f}s total elapsed time.")
 
 
 ###########################
