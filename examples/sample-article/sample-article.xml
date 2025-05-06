@@ -15958,6 +15958,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash/>62.</biblio>
 
+                <!-- "ITEM-1" through "ITEM-5" are PreTeXt-ified examples from the "citeproc-py"    -->
+                <!-- repository within the  "examples/citeproc_json.py"  program.  Authors, dates,  -->
+                <!-- and the @type attribute are a bit different than the JSON, otherwise the       -->
+                <!-- mapping should be fairly obvious.                                              -->
+                <!--                                                                                -->
+                <!-- TO USE FOR TESTING: uncomment these, and likely you should comment-out         -->
+                <!-- the three references above so they don't skew results.                         -->
+                <!--                                                                                -->
+                <!-- WARNING: this is all strictly for testing and no markup infinal or guaranteed. -->
+
+                <!--
+                <biblio xml:id="ITEM-1" type="book">
+                    <issued>
+                        <date year="1987" month="8" day="3"/>
+                        <date year="2003" month="10" day="23"/>
+                    </issued>
+                    <title>Ignore me</title>
+                </biblio>
+
+                <biblio xml:id="ITEM-2" type="article-jo\urnal">
+                    <page>1-7</page>
+                    <issued>
+                        <date year="2006"/>
+                    </issued>
+                </biblio>
+
+                <biblio xml:id="ITEM-3" type="book">
+                    <author>
+                        <name>
+                            <family>Doe</family>
+                            <given>John</given>
+                        </name>
+                    </author>
+                    <issued>
+                        <date year="1965" month="6" day="1"/>
+                    </issued>
+                    <title>His Anonymous Life</title>
+                </biblio>
+
+                <biblio xml:id="ITEM-4" type="book">
+                    <author>
+                        <name>
+                            <family>Grignon</family>
+                            <given>Cyril</given>
+                        </name>
+                        <name>
+                            <family>Sentenac</family>
+                            <given>Corey</given>
+                        </name>
+                    </author>
+                    <issued>
+                        <date year="2000"/>
+                    </issued>
+                </biblio>
+
+                <biblio xml:id="ITEM-5" type="book">
+                    <title>Boundaries of Dissent: Protest and State Power in the Media Age</title>
+                    <author>
+                        <name>
+                            <family>D'Arcus</family>
+                            <given>Bruce</given>
+                            <static-ordering>false</static-ordering>
+                        </name>
+                    </author>
+                    <publisher>Rout"ledge</publisher>
+                    <publisher-place>New York</publisher-place>
+                    <issued>
+                        <date year="2006"/>
+                    </issued>
+                    <URL>http://www.test01.com</URL>
+                </biblio>
+                -->
             </references>
 
             <index label="the-index">

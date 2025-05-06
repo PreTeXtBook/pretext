@@ -2051,6 +2051,121 @@ def pg_macros(xml_source, pub_file, stringparams, dest_dir):
     extraction_xslt = os.path.join(ptx_xsl_dir, "support", "pretext-pg-macros.xsl")
     xsltproc(extraction_xslt, xml_source, None, output_dir=dest_dir, stringparams=stringparams)
 
+############################################################
+#
+#  References and Citations via Citation Stylesheet Language
+#
+############################################################
+
+def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+
+    import json  # parse JSON CSL for cite
+
+    # Requires the "citeproc-py" Python package to do
+    # most (all?) of the processing of a citation
+    # https://github.com/citeproc-py/citeproc-py
+
+    import citeproc.source.json  # CiteProcJSON
+    import citeproc  # CitationStylesStyle, CitationStylesBibliography, formatter, CitationItem, Citation
+
+    stringparams = stringparams.copy()
+
+    NSMAP = {"pi": "http://pretextbook.org/2020/pretext/internal"}
+
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-biblio-csl.xsl")
+
+    # And a place to work and a file there for result tree
+    tmp_dir = get_temporary_directory()
+    biblio_xml = os.path.join(tmp_dir, "biblio-csl.xml")
+
+    # Harvest bibliographic items and citations, converted to JSON
+    xsltproc(extraction_xslt, xml_source, biblio_xml, None, stringparams)
+
+
+    # Need the actual CSL style file to customize the output.
+    # Get the repo, copy into current directory, by hand.
+
+    # Not global, maybe in publisher file, two to test with
+    # style = citeproc.CitationStylesStyle('elsevier-with-titles', validate=False)
+    style = citeproc.CitationStylesStyle('harvard1', validate=False)
+
+    biblio_tree = ET.parse(biblio_xml)
+
+    # references collects an overall JSON blob of the PTX "references"
+    # lxml makes a list of length 1, which we massage some
+    references = biblio_tree.xpath("/pi:pretext-biblio-csl/pi:biblio-csl", namespaces=NSMAP)
+    json_raw = references[0].text
+    json_parsed = json.loads(json_raw)
+    print("Raw JSON:\n", json_parsed)
+
+    # Process the JSON data to generate a citeproc-py BibliographySource.
+    references_source = citeproc.source.json.CiteProcJSON(json_parsed)
+
+    # CiteProc source JSON structure
+    # Appears to be a dictionary, organized by IDs
+    # Fields/entries are dictionaries?  JSON arrays, ?
+    print("\n\nCiteProc internalized JSON source (reported):\n")
+    for key, entry in references_source.items():
+        print(key)
+        for name, value in entry.items():
+            print('   {}: {}'.format(name, value))
+
+    # Formatted references
+    # Note the use of an "HTML" formatter in last argument
+    # Now blindly following repository JSON example
+    references = citeproc.CitationStylesBibliography(style, references_source, citeproc.formatter.html)
+
+    # Singleton (faux) citations
+    # Seems necessary to have at least one citation before
+    #   anything will appear in the bibliography
+    # Printing each "citation" is not very informative,
+    # They just look look like "Citation(key-list)"
+    singletons = biblio_tree.xpath("/pi:pretext-biblio-csl/pi:all-biblio-id/pi:biblio-id", namespaces=NSMAP)
+    for single in singletons:
+        citation = citeproc.Citation([citeproc.CitationItem(single.text)])
+        references.register(citation)
+
+    # Now we have something we can work with
+    # We make a formatted display
+    # Note the HTML italic markup
+    print('')
+    print('Bibliography')
+    print('------------')
+    for item in references.bibliography():
+        print(str(item))
+
+    # Following is a list of lists, each inner list is a reference
+    # and it is a collection of strings.  These pieces might be easier
+    # to manipulate: such as removing numbering or changing markup
+    print("\n\nPython list/strings exploded bibliography:")
+    print(references.style.render_bibliography(references.items))
+
+
+    # Now messing about to xee what we can discern/manipulate
+    # from the formatted information.  Mostly a lot of chasing
+    # through source code to findf undocumented methods of
+    # accessing internal representations.
+
+    # Triple ### are erroneous commands
+
+    # print("#######################")
+
+    # print(references.keys) # the ids (in order?)
+    # print(references.items) # CitationItem
+    # print(references._cites) # empty now
+
+    # keys from items
+    for a in references.items:
+         # print("K", a.key, a.get_field('type'))
+         ### print("T", a.bibliography.formatter.get_field('type'))
+         ### print("T", a.bibliography.formatter.get_field('type'))
+         # print(references.style.render_bibliography([a]))
+         ### CitationStylesElement.render()
+         pass
+
 
 ##############################
 #

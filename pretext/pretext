@@ -327,6 +327,7 @@ def get_cli_arguments():
             "webwork",
             "WeBWorK problems in authored, PG, url, and static representations",
         ),
+        ("references", "References and citations via Citation Stylesheet Language"),
         ("pg-macros", "Server-side macros for WeBWorK problem generation"),
         ("dynamic", "Expression subsitutions for dynamically generated exercises"),
         ("youtube", "Thumbnails for YouTube videos (JPEG only)"),
@@ -691,6 +692,8 @@ def main():
             args.server,
             dest_dir,
         )
+    elif args.component == "references":
+        ptx.references(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
     elif args.component == "pg-macros":
         ptx.pg_macros(xml_source, publication_file, stringparams, dest_dir)
     elif args.component == "youtube":
