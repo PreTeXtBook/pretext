@@ -102,7 +102,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parameters -->
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
-<!-- See more generally applicable parameters in pretext-common.xsl file     -->
+<!-- See more generally applicable parameters in pretext-common.xsl file      -->
+
+<!-- Fast HTML build that skips steps not needed for quickly rebuilding       -->
+<!-- individual pages in a document.                                          -->
+<!-- Skips rebuilding search index, theme, Runestone manifest,                -->
+<!-- moving external/generated files, ...                                     -->
+<!-- Should produce clean diffs against pages from non-incremental build      -->
+<xsl:param name="html.build-incremental" select="''"/>
+<xsl:variable name="b-build-incremental" select="$html.build-incremental = 'yes'"/>
 
 <!-- CSS and Javascript Directories -->
 <!-- These are convenience variables to specify file prefixes  -->
