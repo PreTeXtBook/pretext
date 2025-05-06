@@ -151,6 +151,16 @@ article.theorem-like .emphasis {
     font-style: oblique;
 }
 
+.preview-build-warning {
+  background-color: rgb(249, 240, 240);
+  border: 2px solid rgb(202, 38, 38);
+  border-radius: 2px;
+  color: #333;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+
 /* Adapted from William Hammond (attributed to David Carlisle) */
 /* "mathjax-users" Google Group, 2015-12-27 */
 
