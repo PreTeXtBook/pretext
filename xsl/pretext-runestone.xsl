@@ -2682,22 +2682,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text> contains-wide</xsl:text>
                 </xsl:if>
             </xsl:attribute>
+            <!-- "introduction" first as lead-in, not as a tab -->
+            <xsl:if test="introduction">
+                <div class="tabs-introduction exercise-leadin">
+                    <xsl:apply-templates select="introduction"/>
+                </div>
+            </xsl:if>
             <!-- @data-component="tab" do not need an HTML @id for any -->
             <!-- purpose in Runestone (such as, say, tracking activity -->
             <!-- as a reader clicks from tab to tab)                   -->
             <div data-component="tabbedStuff">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                <xsl:if test="introduction">
-                    <xsl:variable name="the-intro">
-                        <xsl:apply-templates select="." mode="type-name">
-                            <xsl:with-param name="string-id" select="'introduction'"/>
-                        </xsl:apply-templates>
-                    </xsl:variable>
-                    <div data-component="tab" data-tabname="{$the-intro}">
-                        <xsl:apply-templates select="introduction"/>
-                    </div>
-                </xsl:if>
-                <!--  -->
                 <xsl:for-each select="task">
                     <xsl:variable name="the-task-number">
                         <xsl:text>(</xsl:text>
@@ -2708,18 +2703,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:apply-templates select="."/>
                     </div>
                 </xsl:for-each>
-                <!--  -->
-                <xsl:if test="conclusion">
-                    <xsl:variable name="the-outro">
-                        <xsl:apply-templates select="." mode="type-name">
-                            <xsl:with-param name="string-id" select="'conclusion'"/>
-                        </xsl:apply-templates>
-                    </xsl:variable>
-                    <div data-component="tab" data-tabname="{$the-outro}">
-                        <xsl:apply-templates select="conclusion"/>
-                    </div>
-                </xsl:if>
             </div>
+            <!--  -->
+            <!-- "conclusion" last as lead-out, not as a tab -->
+            <xsl:if test="conclusion">
+                <div class="tabs-conclusion exercise-leadout">
+                    <xsl:apply-templates select="conclusion"/>
+                </div>
+            </xsl:if>
         </div>
     </div>
 </xsl:template>
