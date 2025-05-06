@@ -310,7 +310,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A structured Table of Contents for a React app approach -->
     <xsl:call-template name="doc-manifest"/>
     <!-- build a search page (in development) -->
-    <xsl:if test="$has-native-search and not($b-portable-html)">
+    <xsl:if test="$has-native-search and not($b-build-incremental) and not($b-portable-html)">
         <xsl:call-template name="search-page-construction"/>
     </xsl:if>
     <!-- Optionally, build a SCORM manifest -->
