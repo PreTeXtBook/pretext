@@ -3991,6 +3991,7 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
 # Temporary helper to move style file for custom ol markers into _static/pretext/css
 def move_ol_marker_css(tmp_dir):
     css_dest = os.path.join(tmp_dir, "_static", "pretext", "css")
+    os.makedirs(css_dest, exist_ok=True)
     src = os.path.join(tmp_dir, "ol-markers.css")
     dest = os.path.join(get_ptx_path(), os.path.join(css_dest, "ol-markers.css"))
     if os.path.exists(src):
