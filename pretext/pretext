@@ -782,6 +782,37 @@ def main():
                 dest_dir,
                 None
             )
+        elif args.format == "html-incremental":
+            # -----------------------------------------
+            # Setup - this work could be done one time in a frontend that is monitoring changes
+            # Force incremental build flag
+            stringparams["html.build-incremental"] = "yes"
+            
+            log_time_info = stringparams.get("profile-py", False) == "yes"
+            time_logger = ptx.Stopwatch("pretext:html-incremental", log_time_info)
+
+            # attempt to reuse RS services
+            if "debug.rs.dev" in stringparams:
+                rs_js, rs_css, rs_cdn_url, rs_version, services_xml = ptx._runestone_debug_service_info()
+            else:
+                rs_js, rs_css, rs_cdn_url, rs_version = ptx.query_existing_runestone_services(
+                    dest_dir=dest_dir,
+                    stringparams=stringparams
+                )
+            ptx._set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
+            time_logger.log("runestone stringparams set")
+
+            # -----------------------------------------
+            # Actual incremental build, this is the only work done on each change
+            ptx.html_incremental(
+                xml=xml_source,
+                pub_file=publication_file,
+                stringparams=stringparams,
+                xmlid_root=args.xmlid,
+                extra_xsl=extra_stylesheet,
+                dest_dir=dest_dir,
+            )
+            time_logger.log("complete incremental build")
         elif args.format == "html-zip":
             # no "subtree root" build is possible
             ptx.html(

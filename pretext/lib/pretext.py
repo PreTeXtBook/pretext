@@ -4830,6 +4830,41 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     time_logger.log("build completed")
 
 
+def html_incremental(xml, pub_file, stringparams, xmlid_root, extra_xsl, dest_dir):
+    """Update an HTML incrementally in place.
+       Depends on _static and generated files already being in the destination directory.
+       Caller must supply:
+       * stringparams supplemented with:
+          * rs-js, rs-css, and rs-version (can use _set_runestone_stringparams to set)
+          * publisher: path to publisher file for use by xsltproc
+    """
+    if not "rs-js" in stringparams:
+        log.error("Incremental build missing needed stringparam(s).  Unable to complete build.")
+        return False
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    log_time_info = stringparams.get("profile-py", False) == "yes"
+    time_logger = Stopwatch("html_incremental()", log_time_info)
+
+    # support publisher file, and subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+
+    # Optional extra XSL could be None, or sanitized full filename
+    if extra_xsl:
+        extraction_xslt = extra_xsl
+    else:
+        extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
+
+    log.info("incremental convertsion of {} to HTML in {}".format(xml, dest_dir))
+    xsltproc(extraction_xslt, xml, None, dest_dir, stringparams)
+    time_logger.log("xsltproc complete")
+
+
 def revealjs(
     xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
 ):
