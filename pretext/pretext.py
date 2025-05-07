@@ -1928,6 +1928,7 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
 
     if pub_file:
         stringparams["publisher"] = pub_file
+
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "pretext-ww-problem-sets.xsl")
     tmp_dir = get_temporary_directory()
@@ -1936,15 +1937,12 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
     # But it is the only thing in the tmp_dir
     folder_name = os.listdir(tmp_dir)[0]
     folder = os.path.join(tmp_dir, folder_name)
-    macros_folder = os.path.join(folder, 'macros')
-    os.mkdir(macros_folder)
-    pg_macros(xml_source, pub_file, stringparams, macros_folder)
     if tgz:
         archive_file = os.path.join(tmp_dir, folder_name + ".tgz")
         targz(archive_file, folder)
         shutil.copy2(archive_file, dest_dir)
     else:
-        # with multiple files, we need to copy a tree
+        # With multiple files, we need to copy a tree
         # see comments at  copy_build_directory()
         # before replacing with  shutil.copytree()
         copy_build_directory(folder, os.path.join(dest_dir,folder_name))
