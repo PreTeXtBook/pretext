@@ -302,9 +302,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
-    <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
+    <xsl:choose>
+        <!-- If working on a subtree, only warn on that part.              -->
+        <!-- Not much speed difference, but helpful if author is focusing  -->
+        <!-- on a part of the work.                                        -->
+        <xsl:when test="$b-build-incremental and $b-subsetting">
+            <xsl:apply-templates select="$pruning-tree" mode="generic-warnings"/>
+            <xsl:apply-templates select="$pruning-tree" mode="element-deprecation-warnings"/>
+            <xsl:apply-templates select="$pruning-tree" mode="parameter-deprecation-warnings"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$original" mode="generic-warnings"/>
+            <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
+            <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- Usually no manifest is created -->
     <xsl:call-template name="runestone-manifest"/>
     <!-- A structured Table of Contents for a React app approach -->
