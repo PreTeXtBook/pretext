@@ -4447,6 +4447,21 @@ def query_runestone_services(services_url):
     return services_response.text
 
 
+def query_existing_runestone_services(dest_dir, stringparams):
+    '''Attempt to get Runestone service data from existing
+       Runestone Services file in _static directory.
+       Returns a tuple of the JS, CSS, CDN URL and version or None'''
+    services_record_files = os.path.join(dest_dir, "_static", "_runestone-services.xml")
+    
+    if os.path.exists(services_record_files):
+        with open(services_record_files, 'r') as f:
+            services_xml = f.read()
+        services = ET.fromstring(services_xml)
+        return _parse_runestone_services(services)
+    else:
+        msg = "query_existing_runestone_services failed: no _runestone-services.xml file found in _static directory"
+        raise RuntimeError(msg)
+
 def _place_runestone_services(tmp_dir, stringparams, ext_rs_methods):
     '''Obtain Runestone Services and place in _static directory of build'''
 
