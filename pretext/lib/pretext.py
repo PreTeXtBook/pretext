@@ -4253,6 +4253,12 @@ def _parse_runestone_services(et):
 
     return (rs_js, rs_css, rs_cdn_url, rs_version)
 
+# Update stringparams with Runestone Services information
+def _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version):
+    stringparams["rs-js"] = rs_js
+    stringparams["rs-css"] = rs_css
+    stringparams["rs-version"] = rs_version
+
 # A helper function to query the latest Runestone
 # Services file, while failing gracefully
 
@@ -4298,15 +4304,8 @@ def _runestone_services(stringparams, ext_rs_methods):
     # Developer is responsible for placement of the right files in _static
     # ** Simply return early with stock values (or None) **
     if "debug.rs.dev" in stringparams:
-        rs_js = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
-        rs_css = "prefix-runtime-libs.css:prefix-runestone.css"
-        rs_cdn_url = None
-        rs_version = "dev"
-        services_xml = None
-        # Return, plus side-effect
-        stringparams["rs-js"] = rs_js
-        stringparams["rs-css"] = rs_css
-        stringparams["rs-version"] = rs_version
+        rs_js, rs_css, rs_cdn_url, rs_version, services_xml = _runestone_debug_service_info()
+        _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
         return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
     # Otherwise, we have a URL pointing to the Runestone server/CDN
@@ -4333,11 +4332,17 @@ def _runestone_services(stringparams, ext_rs_methods):
     rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
 
     # Return, plus side-effect
-    stringparams["rs-js"] = rs_js
-    stringparams["rs-css"] = rs_css
-    stringparams["rs-version"] = rs_version
+    _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
     return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
+def _runestone_debug_service_info():
+    """Return hardcoded values used for debugging Runestone Services (debug.rs.dev)"""
+    rs_js = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
+    rs_css = "prefix-runtime-libs.css:prefix-runestone.css"
+    rs_cdn_url = None
+    rs_version = "dev"
+    services_xml = None
+    return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
 def _cdn_runestone_services(stringparams, ext_rs_methods):
     """Version of _runestone_services function to query the Runestone Services file from the PreTeXt html-static CDN"""
