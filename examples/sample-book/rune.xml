@@ -3310,6 +3310,37 @@ TEST_CASE( "Test the add function" ) {
   </exercise>
 
 
+        <exercise label="matching-playing-cards">
+            <title>Matching Problem, Playing Cards</title>
+            <idx><h>matching</h><h>playing cards</h></idx>
+            <statement>
+              <p>
+                Associate each playing card with every applicable property.
+              </p>
+            </statement>
+            <feedback>
+              <p>
+                This one should not be very hard.
+              </p>
+            </feedback>
+            <matching>
+                <premise ref="jack heart">Jack of Hearts</premise>
+                <premise ref="ace spade">Ace of Spades</premise>
+                <premise ref="queen spade">Queen of Spades</premise>
+                <premise ref="king club">King of Clubs</premise>
+                <premise ref="queen diamond">Queen of Diamonds</premise>
+                <!--  -->
+                <response xml:id="ace">Ace</response>
+                <response xml:id="king">King</response>
+                <response xml:id="queen">Queen</response>
+                <response xml:id="jack">Jack</response>
+                <response xml:id="heart">Heart</response>
+                <response xml:id="diamond">Diamond</response>
+                <response xml:id="club">Club</response>
+                <response xml:id="spade">Spade</response>
+            </matching>
+        </exercise>
+
         <exercise label="matching-music-history">
             <title>Matching Problem, Popular Music History</title>
             <idx>matching music history</idx>
