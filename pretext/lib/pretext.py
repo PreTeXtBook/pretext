@@ -2873,7 +2873,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     xsltproc(braille_xslt, xml_source, preprint, tmp_dir, stringparams)
 
     # use Python to format simplified BRF as a real BRF
-    import braille_format as braille
+    from . import braille_format as braille
 
     # Build a BRF in the *temporary* directory: final or chunkable
     temp_brf = os.path.join(tmp_dir, "temporary.brf")
