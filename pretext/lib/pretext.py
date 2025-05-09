@@ -4768,11 +4768,15 @@ def set_ptx_path(path=None):
     if path:
         __ptx_path = path
     else:
-        # full path to module itself
-        ptx_path = os.path.abspath(__file__)
-        # split "python.py" off module's filename
-        module_dir, _ = os.path.split(ptx_path)
-        # split "pretext" path off executable
+        # full path to pretext.py module file itself
+        # <distribution-root>/pretext/lib/pretext.py
+        this_file_path = os.path.abspath(__file__)
+        # split off "python.py" off module's full path
+        lib_path, _ = os.path.split(this_file_path)
+        # now split off the "lib" directory
+        module_dir, _ = os.path.split(lib_path)
+        # now split off "pretext" directory
+        # to arrive at the root of the distribution
         __ptx_path, _ = os.path.split(module_dir)
     return None
 
