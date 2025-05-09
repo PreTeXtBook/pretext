@@ -118,9 +118,13 @@ sample-chapter-macros:
 #  Extract webwork problems into a single XML file.
 #  Location is within generated folder (named in the publisher file),
 #  within "webwork" subfolder
+#  We turn off dates in file headers, so when we use these for testing we
+#  can get more accurate diffs. Dates are useful for single file output
+#  (or at least less of an annoyance).  This should not be taken as necessary
+#  or best practice for a real PreTeXt project using WeBWorK problems.
 
 sample-chapter-representations:
-	$(PTX)/pretext/pretext -v -c webwork -p $(SMPCPUB) $(SMPC)
+	$(PTX)/pretext/pretext -v -c webwork -x debug.datedfiles no -p $(SMPCPUB) $(SMPC)
 
 mini-representations:
 	$(PTX)/pretext/pretext -v -c webwork -p $(MINIPUB) $(MINI)
