@@ -10551,14 +10551,22 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="exsl:node-set($the-attribute)/*" />
 </xsl:template>
 
+<!-- ################### -->
+<!-- Non-Semantic Markup -->
+<!-- ################### -->
 
-<!-- ############## -->
-<!-- Bibliographies -->
-<!-- ############## -->
+<!-- It is useful, initially for bibliographies to be able    -->
+<!-- to render some chunks of text as simply bold or italic.  -->
+<!--                                                          -->
+<!-- So we make an abstract modal templates for this purpose, -->
+<!-- with implementations in derived stylesheets.  We are     -->
+<!-- also able to employ these to define "internal" markup,   -->
+<!-- which we use on externally produced source.              -->
 
-<!-- Use simple abstract methods to provide necessary formatting      -->
-<!-- for bibliographic items, such as italics (titles), bold (volume) -->
-<!-- and a version of an abbrevation-period.                          -->
+<!-- These stubs alert a developer to the need for      -->
+<!-- implementation in a derived stylesheet.  These     -->
+<!-- allow us to define our own bibliography management -->
+<!-- here, not repeatedly in derived stylesheets.       -->
 
 <xsl:template match="*" mode="italic">
     <xsl:message>PTX:ERROR:  current conversion needs an implementation of the italic font</xsl:message>
@@ -10572,6 +10580,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:message>PTX:ERROR:  current conversion needs an implementation of a bibliographic period</xsl:message>
 </xsl:template>
 
+<!-- ############## -->
+<!-- Bibliographies -->
+<!-- ############## -->
 
 <!-- Raw Bibliographic Entry Formatting              -->
 <!-- Markup really, not full-blown data preservation -->

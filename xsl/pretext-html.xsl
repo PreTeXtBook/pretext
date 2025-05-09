@@ -9156,18 +9156,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- formatting of bibliographic entries in HTML. -->
 
 <xsl:template match="*" mode="italic">
-    <xsl:param name="content"/>
-
     <i>
-        <xsl:copy-of select="$content"/>
+        <xsl:apply-templates/>
     </i>
 </xsl:template>
 
 <xsl:template match="*" mode="bold">
-    <xsl:param name="content"/>
-
     <b>
-        <xsl:copy-of select="$content"/>
+        <xsl:apply-templates/>
     </b>
 </xsl:template>
 
