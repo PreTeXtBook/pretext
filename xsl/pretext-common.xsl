@@ -10589,11 +10589,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Title in italics -->
 <xsl:template match="biblio[@type='raw']/title">
-    <xsl:apply-templates select="." mode="italic">
-        <xsl:with-param name="content">
-            <xsl:apply-templates/>
-        </xsl:with-param>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="." mode="italic"/>
 </xsl:template>
 
 <!-- No treatment for journal -->
@@ -10603,11 +10599,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Volume in bold -->
 <xsl:template match="biblio[@type='raw']/volume">
-    <xsl:apply-templates select="." mode="bold">
-        <xsl:with-param name="content">
-            <xsl:apply-templates/>
-        </xsl:with-param>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="." mode="bold"/>
 </xsl:template>
 
 <!-- Year in parentheses -->
@@ -10648,11 +10640,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Title in italics, followed by comma -->
 <xsl:template match="biblio[@type='bibtex']/title">
-    <xsl:apply-templates select="." mode="italic">
-        <xsl:with-param name="content">
-            <xsl:apply-templates select="text()|m"/>
-        </xsl:with-param>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="." mode="italic"/>
     <xsl:text>, </xsl:text>
 </xsl:template>
 
@@ -10664,11 +10652,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Volume in bold -->
 <xsl:template match="biblio[@type='bibtex']/volume">
-    <xsl:apply-templates select="." mode="bold">
-        <xsl:with-param name="content">
-            <xsl:apply-templates select="text()"/>
-        </xsl:with-param>
-    </xsl:apply-templates>
+    <xsl:apply-templates select="." mode="bold"/>
     <xsl:text> </xsl:text>
 </xsl:template>
 
