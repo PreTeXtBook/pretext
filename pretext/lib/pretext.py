@@ -1261,7 +1261,6 @@ def webwork_to_xml(
             "courseID": ww_xml.find("server-params-pub").find("course-id").text,
             "userID": ww_xml.find("server-params-pub").find("user-id").text,
             "password": ww_xml.find("server-params-pub").find("password").text,
-            "course_password": ww_xml.find("server-params-pub").find("course-password").text,
         }
     else:
         server_params_pub = {}
@@ -1300,14 +1299,12 @@ def webwork_to_xml(
             ww_domain = sanitize_url(split_server_params[0])
             courseID = sanitize_alpha_num_underscore(split_server_params[1])
             userID = sanitize_alpha_num_underscore(split_server_params[2])
-            password = sanitize_alpha_num_underscore(split_server_params[3])
-            course_password = sanitize_alpha_num_underscore(split_server_params[4])
+            password = sanitize_alpha_num_underscore(split_server_params[4])
         else:
-            ww_domain       = sanitize_url(server_params)
-            courseID        = "anonymous"
-            userID          = "anonymous"
-            password        = "anonymous"
-            course_password = "anonymous"
+            ww_domain = sanitize_url(server_params)
+            courseID  = "anonymous"
+            userID    = "anonymous"
+            password  = "anonymous"
     else:
         # Now we know server_params_pub is nonepty
         # Use it, and warn if server_params argument is also present
@@ -1315,11 +1312,10 @@ def webwork_to_xml(
             log.warning("Publication file in use and -s argument passed for WeBWorK server.\n"
                   + "              -s argument will be ignored.\n"
                   + "              Using publication/webwork values (or defaults) instead.")
-        ww_domain       = sanitize_url(server_params_pub["ww_domain"])
-        courseID        = server_params_pub["courseID"]
-        userID          = server_params_pub["userID"]
-        password        = server_params_pub["password"]
-        course_password = server_params_pub["course_password"]
+        ww_domain = sanitize_url(server_params_pub["ww_domain"])
+        courseID  = server_params_pub["courseID"]
+        userID    = server_params_pub["userID"]
+        password  = server_params_pub["password"]
 
     ww_domain_ww2 = ww_domain + "/webwork2/"
     ww_domain_path = ww_domain_ww2 + "html2xml"
@@ -1334,7 +1330,7 @@ def webwork_to_xml(
             displayMode='PTX',
             courseID=courseID,
             userID=userID,
-            course_password=course_password,
+            course_password=password,
             outputformat='raw'
         )
         version_determination_json = requests.get(url=ww_domain_path, params=params_for_version_determination, timeout=10).json()
@@ -1469,8 +1465,7 @@ def webwork_to_xml(
             ("displayMode", "PTX"),
             ("courseID", courseID),
             ("userID", userID),
-            ("password", password),
-            ("course_password", course_password),
+            ("course_password", password),
             ("outputformat", "ptx"),
             server_params_source,
             ("problemSeed", seed[problem]),
@@ -1866,7 +1861,7 @@ def webwork_to_xml(
         server_data.set("domain", ww_domain)
         server_data.set("course-id", courseID)
         server_data.set("user-id", userID)
-        server_data.set("course-password", course_password)
+        server_data.set("password", password)
         server_data.set("language", localization)
 
         # Add PG for PTX-authored problems

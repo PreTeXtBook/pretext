@@ -247,7 +247,7 @@
       <p>
         <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
         In the publication file, the element <tag>webwork</tag> may have attributes <attr>server</attr>,
-        <attr>course</attr>, <attr>coursepassword</attr>, <attr>user</attr>, and <attr>userpassword</attr>.
+        <attr>course</attr>, <attr>user</attr>, and <attr>password</attr>.
         If absent, these default to <c>https://webwork-ptx.aimath.org</c>, <c>anonymous</c>, <c>anonymous</c>,
         <c>anonymous</c>, and <c>anonymous</c> respectively. If you specify a server, you must correctly
         specify the protocol (<c>http</c> versus <c>https</c>). And it must be version 2.16 or later.

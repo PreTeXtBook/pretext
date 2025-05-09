@@ -115,11 +115,8 @@
                     <xsl:value-of select="$webwork-user"/>
                 </user-id>
                 <password>
-                    <xsl:value-of select="$webwork-userpassword"/>
+                    <xsl:value-of select="$webwork-password"/>
                 </password>
-                <course-password>
-                    <xsl:value-of select="$webwork-coursepassword"/>
-                </course-password>
             </xsl:if>
         </server-params-pub>
         <xsl:apply-imports/>

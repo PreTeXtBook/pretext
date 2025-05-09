@@ -1001,16 +1001,6 @@
             </p>
         </subsection>
 
-        <subsection xml:id="publication-file-webwork-course-password">
-            <title>Course Password</title>
-            <p>
-                A course password (distinct from a user password) is in the attribute
-                <cd>
-                    <cline>/publication/webwork/@coursepassword</cline>
-                </cd>
-            </p>
-        </subsection>
-
         <subsection xml:id="publication-file-webwork-user">
             <title>User</title>
             <p>
@@ -1021,12 +1011,12 @@
             </p>
         </subsection>
 
-        <subsection xml:id="publication-file-webwork-user-password">
-            <title>User Password</title>
+        <subsection xml:id="publication-file-webwork-password">
+            <title>Password</title>
             <p>
-                That user's password is in the attribute
+                A password (for the host user in the host course) is in the attribute
                 <cd>
-                    <cline>/publication/webwork/@userpassword</cline>
+                    <cline>/publication/webwork/@password</cline>
                 </cd>
             </p>
         </subsection>

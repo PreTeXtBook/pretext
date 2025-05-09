@@ -1226,16 +1226,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='course']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
-<xsl:variable name="webwork-coursepassword">
-    <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='coursepassword']" mode="set-pubfile-variable"/>
-</xsl:variable>
-
 <xsl:variable name="webwork-user">
     <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='user']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
-<xsl:variable name="webwork-userpassword">
-    <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='userpassword']" mode="set-pubfile-variable"/>
+<xsl:variable name="webwork-password">
+    <xsl:choose>
+        <!-- For backwards compatibility -->
+        <xsl:when test="$publication/webwork/@coursepassword">
+            <xsl:value-of select="$publication/webwork/@coursepassword"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='password']" mode="set-pubfile-variable"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:variable>
 
 <!-- WeBWorK tasks can be revealed incrementally or all at once -->
@@ -3196,9 +3200,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <webwork>
         <pi:pub-attribute name="server" default="https://webwork-ptx.aimath.org" freeform="yes"/>
         <pi:pub-attribute name="course" default="anonymous" freeform="yes"/>
-        <pi:pub-attribute name="coursepassword" default="anonymous" freeform="yes"/>
         <pi:pub-attribute name="user" default="anonymous" freeform="yes"/>
-        <pi:pub-attribute name="userpassword" default="anonymous" freeform="yes"/>
+        <pi:pub-attribute name="password" default="anonymous" freeform="yes"/>
         <pi:pub-attribute name="task-reveal" default="all" options="preceding-correct"/>
     </webwork>
     <revealjs>
@@ -4206,6 +4209,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="date-string" select="'2024-07-12'" />
         <xsl:with-param name="message" select="'the html/css/@toc, @navbar, @shell, @knowls, and @banner publication entries have been deprecated. Use @theme to control html appearance. See the Guide for theme options.'" />
         <xsl:with-param name="incorrect-use" select="($publication/html/css/@toc != '' or $publication/html/css/@navbar != '' or $publication/html/css/@shell != '' or $publication/html/css/@knowls != '' or $publication/html/css/@banner != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2025-05-09'" />
+        <xsl:with-param name="message" select="'the webwork/@coursepassword and @userpassword publication entries have been deprecated. Use @password instead.'" />
+        <xsl:with-param name="incorrect-use" select="($publication/webwork/@coursepassword != '' or $publication/webwork/@userpassword != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>
