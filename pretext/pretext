@@ -23,7 +23,7 @@
 #     argparse is backported to 3.1 (?)
 # 2020-05-20: this script expects Python 3.4 or newer
 
-import pretext as ptx
+from lib import pretext as ptx
 
 # Set up logging (replacing _verbose/_debug).
 # Use log.info(<string>) or log.debug(<string>).

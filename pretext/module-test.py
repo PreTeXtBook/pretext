@@ -25,7 +25,7 @@
 # employ the pretext module in a Python application
 
 # Import the module into the local namespace as "ptx"
-import pretext as ptx
+from lib import pretext as ptx
 
 # Read arguments from the command line with the standard "sys" module
 import sys  # argv
