@@ -29,9 +29,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <webwork
         server="https://webwork-ptx.aimath.org"
         course="anonymous"
-        coursepassword="anonymous"
         user="anonymous"
-        userpassword="anonymous"
+        password="anonymous"
         task-reveal="preceding-correct"
         />
 

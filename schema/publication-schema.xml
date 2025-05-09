@@ -530,9 +530,8 @@
                 element webwork {
                     attribute server { text },
                     attribute course { text }?,
-                    attribute coursepassord { text }?,
                     attribute user { text }?,
-                    attribute userpassword { text }?,
+                    attribute password { text }?,
                     attribute task-reveal { "preceding-correct" | "all" }?
                 }
             </code>
