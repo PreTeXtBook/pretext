@@ -21,6 +21,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <publication>
 
+    <common>
+        <chunking level="1"/>
+    </common>
+
     <source>
       <directories generated="generated" external="external"/>
     </source>
