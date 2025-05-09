@@ -38,6 +38,7 @@
     </frontmatter>
     <section>
       <title><webwork /> Minimal Section</title>
+      <!-- An exercise "generated" from PTX source -->
       <exercise>
         <webwork>
           <pg-code>
@@ -64,6 +65,11 @@
             </p>
           </solution>
         </webwork>
+      </exercise>
+      <!-- An exercise with source from a "webwork2" server           -->
+      <!-- The path is relative to the host course's templates folder -->
+      <exercise>
+        <webwork source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg"/>
       </exercise>
     </section>
   </article>
