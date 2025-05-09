@@ -599,7 +599,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- according to response/@order attribute values given by author -->
 <xsl:template match="cardsort|matching" mode="cardsort-matching-statement">
 
-    <!-- Reorder premises -->
+    <!-- We allow for sorting the premise and response lists,  -->
+    <!-- independently of each other, so that a static version -->
+    <!-- may have a given permutation, decided by the author.  -->
+    <!-- As a practical matter, a "cardsort" should have an    -->
+    <!-- ordering, and premise might be easiest.  A "matching" -->
+    <!-- can be authored in a desired fashion and ordering is  -->
+    <!-- not needed.                                           -->
+
+    <!-- Reorder and collect premises -->
     <xsl:variable name="sorted-premises-rtf">
         <xsl:for-each select="match/premise|premise">
             <xsl:sort select="@order"/>
@@ -608,14 +616,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="sorted-premises" select="exsl:node-set($sorted-premises-rtf)"/>
 
-    <!-- responses in authored order -->
-    <xsl:variable name="all-responses" select="match/response|response"/>
+    <!-- Reorder and collect responses -->
+    <xsl:variable name="sorted-responses-rtf">
+        <xsl:for-each select="match/response|response">
+            <xsl:sort select="@order"/>
+            <xsl:copy-of select="."/>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="sorted-responses" select="exsl:node-set($sorted-responses-rtf)"/>
 
     <tabular>
         <xsl:call-template name="matching-row">
             <!-- $sorted-premises gets a root element, collecting the "premise" -->
             <xsl:with-param name="premises" select="$sorted-premises/premise"/>
-            <xsl:with-param name="responses" select="$all-responses"/>
+            <!-- $sorted-responses gets a root element, collecting the "response" -->
+            <xsl:with-param name="responses" select="$sorted-responses/response"/>
         </xsl:call-template>
     </tabular>
 </xsl:template>
