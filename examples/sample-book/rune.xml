@@ -3330,14 +3330,14 @@ TEST_CASE( "Test the add function" ) {
                 <premise ref="king club">King of Clubs</premise>
                 <premise ref="queen diamond">Queen of Diamonds</premise>
                 <!--  -->
-                <response xml:id="ace">Ace</response>
-                <response xml:id="king">King</response>
-                <response xml:id="queen">Queen</response>
-                <response xml:id="jack">Jack</response>
-                <response xml:id="heart">Heart</response>
-                <response xml:id="diamond">Diamond</response>
-                <response xml:id="club">Club</response>
-                <response xml:id="spade">Spade</response>
+                <response xml:id="ace" order="8">Ace</response>
+                <response xml:id="king" order="7">King</response>
+                <response xml:id="queen" order="6">Queen</response>
+                <response xml:id="jack" order="5">Jack</response>
+                <response xml:id="heart" order="4">Heart</response>
+                <response xml:id="diamond" order="3">Diamond</response>
+                <response xml:id="club" order="2">Club</response>
+                <response xml:id="spade" order="1">Spade</response>
             </matching>
         </exercise>
 
