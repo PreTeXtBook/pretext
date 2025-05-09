@@ -199,13 +199,13 @@ sample-chapter-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r Integrating_WeBWorK_into_Textbooks; \
-	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x chunk.level 1 debug.datedfiles no -p $(SMPCPUB) $(SMPC)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x debug.datedfiles no -p $(SMPCPUB) $(SMPC)
 
 mini-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r WeBWorK_Minimal_Example; \
-	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x chunk.level 1 debug.datedfiles no -p $(MINIPUB) $(MINI)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x debug.datedfiles no -p $(MINIPUB) $(MINI)
 
 
 #########################################################################
