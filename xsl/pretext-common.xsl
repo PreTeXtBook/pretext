@@ -10580,6 +10580,18 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:message>PTX:ERROR:  current conversion needs an implementation of a bibliographic period</xsl:message>
 </xsl:template>
 
+<!-- Single implementations of highly non-semantic elements    -->
+<!-- which trade on the modal templates.  We can use these in  -->
+<!-- manufactured text which is not authored, nor rarely seen. -->
+
+<xsl:template match="pi:italic">
+    <xsl:apply-templates select="." mode="italic"/>
+</xsl:template>
+
+<xsl:template match="pi:bold">
+    <xsl:apply-templates select="." mode="bold"/>
+</xsl:template>
+
 <!-- ############## -->
 <!-- Bibliographies -->
 <!-- ############## -->
