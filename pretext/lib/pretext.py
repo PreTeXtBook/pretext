@@ -244,15 +244,15 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
 #
 ##############################################
 
-def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
+def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, ext_converter):
     """Extract PreFigure code for diagrams and convert to graphics formats"""
+    # ext_converter: an optinal hook for external libraries to patch
+    #                the conversion of individual images.  The intent is that ext_converter
+    #                attempts to use a cached version of the image, or else calls
+    #                individual_prefigure_conversion() to generate the image (and cache it).
+    #
     # stringparams is a dictionary, best for lxml parsing
     import glob
-
-    try:
-        import prefig
-    except ImportError:
-        raise ImportError(__module_warning.format("prefig"))
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -275,7 +275,7 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     log.info("string parameters passed to extraction stylesheet: {}".format(stringparams))
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
 
-    # Resulting *.asy files are in tmp_dir, switch there to work
+    # Resulting prefigure files are in tmp_dir, switch there to work
     with working_directory(tmp_dir):
         if outformat == "source" or outformat == "all":
             log.info("copying PreFigure source files into {}".format(dest_dir))
@@ -292,47 +292,18 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
         except ValueError:
             pass
 
-        if outformat == "svg":
-            for pfdiagram in pf_source_files:
-                log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
-                prefig.engine.build('svg', pfdiagram)
-
-        elif outformat == "pdf":
-            for pfdiagram in pf_source_files:
-                log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
-                prefig.engine.pdf('svg', pfdiagram, dpi=100)
-
-        elif outformat == "png":
-            for pfdiagram in pf_source_files:
-                log.info("compiling PreFigure source file {} to PNG".format(pfdiagram))
-                prefig.engine.png('svg', pfdiagram)
-
-        elif outformat == "tactile":
-            for pfdiagram in pf_source_files:
-                log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
-                prefig.engine.pdf('tactile', pfdiagram)
-
-        elif outformat == "all":
-            # make directories for the resulting diagrams
-            # PreFigure makes 'output' but we also want to create 'output/tactile'
+        # make output/tactile directory if the outformat is "all"
+        # PreFigure makes 'output' but we also want to create 'output/tactile'
+        if outformat == "all":
             os.mkdir('output')
             os.mkdir('output/tactile')
 
-            # iterate through the diagrams making each format
-            for pfdiagram in pf_source_files:
-                log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
-                prefig.engine.pdf('tactile', pfdiagram)
-                pdf_name = pfdiagram[:-4] + '.pdf'
-                shutil.move('output/'+pdf_name, 'output/tactile/'+pdf_name)
-
-                log.info("compiling PreFigure source file {} to PNG".format(pfdiagram))
-                prefig.engine.png('svg', pfdiagram)
-
-                log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
-                prefig.engine.pdf('svg', pfdiagram, dpi=100)
-
-                log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
-                prefig.engine.build('svg', pfdiagram)
+        # Process each pf_source_file for requested format
+        for pfdiagram in pf_source_files:
+            if ext_converter:
+                ext_converter(pfdiagram, outformat, tmp_dir)
+            else:
+                individual_prefigure_conversion(pfdiagram, outformat)
 
         # Check to see if we made some diagrams before copying the tree
         if os.path.exists('output'):
@@ -342,6 +313,37 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
                 dest_dir,
                 dirs_exist_ok=True
             )
+
+def individual_prefigure_conversion(pfdiagram, outformat):
+    # We need to import prefig for this function.  Okay that we do it for each
+    # diagram; python will cache the module after the first import.
+    try:
+        import prefig
+    except ImportError:
+        raise ImportError(__module_warning.format("prefig"))
+
+    if outformat == "tactile" or outformat == "all":
+        # THe tactile outformat produces a pdf, but is different from the pdf outformat.
+        # After producing the output, it must be moved to the tactile subdirectory.
+        # NB we must do this before the pdf outformat option to avoid overwriting the regular pdf.
+        log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
+        prefig.engine.pdf('tactile', pfdiagram)
+        pdf_name = pfdiagram[:-4] + '.pdf'
+        shutil.move('output/'+pdf_name, 'output/tactile/'+pdf_name)
+
+    if outformat == "svg" or outformat == "all":
+        log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
+        prefig.engine.build('svg', pfdiagram)
+
+    if outformat == "pdf" or outformat == "all":
+        log.info("compiling PreFigure source file {} to PDF".format(pfdiagram))
+        prefig.engine.pdf('svg', pfdiagram, dpi=100)
+
+    if outformat == "png" or outformat == "all":
+        log.info("compiling PreFigure source file {} to PNG".format(pfdiagram))
+        prefig.engine.png('svg', pfdiagram)
+
+
 
 def asymptote_conversion(
     xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, method, ext_converter

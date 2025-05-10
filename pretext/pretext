@@ -614,7 +614,7 @@ def main():
         ptx.validate(xml_source, out_file, dest_dir)
     elif args.component == "prefigure":
         if args.format in ["source", "svg", "pdf", "png", "tactile", "all"]:
-            ptx.prefigure_conversion(xml_source, publication_file, stringparams, args.xmlid, dest_dir, args.format)
+            ptx.prefigure_conversion(xml_source, publication_file, stringparams, args.xmlid, dest_dir, args.format, None)
         else:
             raise NotImplementedError('cannot make Prefigure graphics in "{}" format'.format(args.format) )
     elif args.component == "asy":
