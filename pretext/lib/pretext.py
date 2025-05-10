@@ -1996,13 +1996,15 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Harvest bibliographic items and citations, converted to JSON
     xsltproc(extraction_xslt, xml_source, biblio_xml, None, stringparams)
 
-
-    # Need the actual CSL style file to customize the output.
-    # Get the repo, copy into current directory, by hand.
-
-    # Not global, maybe in publisher file, two to test with
-    # style = citeproc.CitationStylesStyle('elsevier-with-titles', validate=False)
-    style = citeproc.CitationStylesStyle('harvard1', validate=False)
+    # Compute publisher variable report one time, collecting results
+    pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
+    # style file name selected by the publisher, no path information
+    # citeproc-py looks in their DATAPATH/STYLES_PATH = data/styles
+    # so place by a given style file by hand right now
+    # Call below does not need an extension, so we do not supply it
+    csl_style = get_publisher_variable(pub_vars, 'csl-style-file')
+    # Initialize use of the chosen style
+    style = citeproc.CitationStylesStyle(csl_style, validate=False)
 
     biblio_tree = ET.parse(biblio_xml)
 
