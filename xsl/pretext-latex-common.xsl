@@ -1772,7 +1772,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="list-layout">
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
      <xsl:if test="($index-maker = 'pretext') or
-                   (document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//contributors)">
+                   ($document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//contributors)">
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>%% ol, ul, contributors, PreTeXt index&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
