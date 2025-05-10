@@ -244,8 +244,13 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
 #
 ##############################################
 
-def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
+def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat, ext_converter):
     """Extract PreFigure code for diagrams and convert to graphics formats"""
+    # ext_converter: an optinal hook for external libraries to patch
+    #                the conversion of individual images.  The intent is that ext_converter
+    #                attempts to use a cached version of the image, or else calls
+    #                individual_prefigure_conversion() to generate the image (and cache it).
+    #
     # stringparams is a dictionary, best for lxml parsing
     import glob
 
@@ -295,7 +300,10 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
 
         # Process each pf_source_file for requested format
         for pfdiagram in pf_source_files:
-            individual_prefigure_conversion(pfdiagram, outformat)
+            if ext_converter:
+                ext_converter(pfdiagram, outformat, tmp_dir)
+            else:
+                individual_prefigure_conversion(pfdiagram, outformat)
 
         # Check to see if we made some diagrams before copying the tree
         if os.path.exists('output'):
