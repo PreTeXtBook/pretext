@@ -2109,6 +2109,9 @@ body.pretext {
   margin-left: auto;
   margin-right: auto;
 }
+.worksheet .ptx-main .ptx-content {
+  max-width: 960px;
+}
 .ptx-page {
   max-width: 1480px;
   margin-left: auto;

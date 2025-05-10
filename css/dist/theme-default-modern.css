@@ -36,6 +36,9 @@ body.pretext {
   max-width: 696px;
   padding: 24px 48px 60px;
 }
+.worksheet .ptx-main .ptx-content {
+  max-width: 960px;
+}
 .ptx-page {
   max-width: 1200px;
   margin-left: auto;
