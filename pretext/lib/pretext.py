@@ -314,6 +314,15 @@ def individual_prefigure_conversion(pfdiagram, outformat):
     except ImportError:
         raise ImportError(__module_warning.format("prefig"))
 
+    if outformat == "tactile" or outformat == "all":
+        # THe tactile outformat produces a pdf, but is different from the pdf outformat.
+        # After producing the output, it must be moved to the tactile subdirectory.
+        # NB we must do this before the pdf outformat option to avoid overwriting the regular pdf.
+        log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
+        prefig.engine.pdf('tactile', pfdiagram)
+        pdf_name = pfdiagram[:-4] + '.pdf'
+        shutil.move('output/'+pdf_name, 'output/tactile/'+pdf_name)
+
     if outformat == "svg" or outformat == "all":
         log.info("compiling PreFigure source file {} to SVG".format(pfdiagram))
         prefig.engine.build('svg', pfdiagram)
@@ -326,17 +335,6 @@ def individual_prefigure_conversion(pfdiagram, outformat):
         log.info("compiling PreFigure source file {} to PNG".format(pfdiagram))
         prefig.engine.png('svg', pfdiagram)
 
-    if outformat == "tactile":
-        log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
-        prefig.engine.pdf('tactile', pfdiagram)
-
-    if outformat == "all":
-        # We will have already made all but the tactile formats; these need to be
-        # put into a separate directory so this logic is separate.
-        log.info("compiling PreFigure source file {} to tactile PDF".format(pfdiagram))
-        prefig.engine.pdf('tactile', pfdiagram)
-        pdf_name = pfdiagram[:-4] + '.pdf'
-        shutil.move('output/'+pdf_name, 'output/tactile/'+pdf_name)
 
 
 def asymptote_conversion(
