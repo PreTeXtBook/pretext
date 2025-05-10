@@ -41,6 +41,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- "box", and "shade" (the default for math)              -->
         <fillin textstyle="underline" mathstyle="shade"/>
         <qrcode image="misc/ptx-logo-square.png"/>
+        <!-- This is the minimum information to locate a     -->
+        <!-- Citation Stylesheet Language (CSL) style file   -->
+        <!-- in the CSL repository.  It is not expected to   -->
+        <!-- have the ".csl" suffix, but should have partial -->
+        <!-- path names, such as "dependent/"                -->
+        <!-- The default is "harvard1"                       -->
+        <!-- 2025-05-10: this is not being employed yet      -->
+        <citation-stylesheet-language style="harvard1"/>
     </common>
 
     <!-- we use customizations-two for the oscarlevin style example -->

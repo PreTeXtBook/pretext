@@ -232,6 +232,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/common/journal/pi:pub-attribute[@name='name']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- This is the minimum information to locate a     -->
+<!-- Citation Stylesheet Language (CSL) style file   -->
+<!-- in the CSL repository.  It is not expected to   -->
+<!-- have the ".csl" suffix, but should have partial -->
+<!-- path names, such as "dependent/".  Employers    -->
+<!-- should provide ".cls" and any additional path   -->
+<!-- information.                                    -->
+<xsl:variable name="csl-style-file">
+    <xsl:apply-templates select="$publisher-attribute-options/common/citation-stylesheet-language/pi:pub-attribute[@name='style']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 
 <!-- ########################### -->
 <!-- Exercise component switches -->
@@ -3124,6 +3135,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <journal>
             <pi:pub-attribute name="name" default="" freeform="yes"/>
         </journal>
+        <!-- default CSL style file is "harvard1" since it is  -->
+        <!-- copied into the right place in the citeproc-py    -->
+        <!-- distribution and should be present out-of-the-box -->
+        <citation-stylesheet-language>
+            <pi:pub-attribute name="style" default="harvard1" freeform="yes"/>
+        </citation-stylesheet-language>
     </common>
     <html>
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
