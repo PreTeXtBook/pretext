@@ -39,6 +39,10 @@ $border-radius: 0 !default;
     cursor: not-allowed;
   }
 
+  &.hidden {
+    display: none;
+  }
+
   &.open {
     color: var(--button-hover-text-color);
     background-color: var(--button-hover-background);
