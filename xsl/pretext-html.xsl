@@ -11759,6 +11759,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="primary-navigation-toc">
     <button class="toc-toggle button">
+        <xsl:if test="not($toc-level)">
+            <xsl:attribute name="class">
+                toc-toggle button hidden
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="title">
             <xsl:apply-templates select="." mode="type-name">
                 <xsl:with-param name="string-id" select="'toc'"/>
@@ -11778,6 +11783,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ToC sidebar                                                -->
 <xsl:template match="*" mode="sidebars">
     <div id="ptx-sidebar" class="ptx-sidebar">
+        <xsl:if test="not($toc-level)">
+            <xsl:attribute name="class">
+                ptx-sidebar hidden
+            </xsl:attribute>
+        </xsl:if>
         <nav id="ptx-toc">
             <xsl:attribute name="class">
                 <xsl:text>ptx-toc</xsl:text>
