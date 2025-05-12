@@ -2595,6 +2595,66 @@ TEST_CASE( "Test the add function" ) {
             </hint>
         </exercise>
 
+        <exercise label="multiple-choice-feedback-math">
+            <title>Multiple-Choice, Math in Feedback</title>
+            <statement>
+                <p>
+                  What is the coefficient on <m>x^4y^4</m> in <m>(2x+5xy^2)^4</m>?
+                </p>
+            </statement>
+            <choices>
+                <choice>
+                    <statement>
+                    <p>
+                        <m>6</m>
+                    </p>
+                    </statement>
+                    <feedback>
+                    <p>
+                        Have you accounted for the <m>2</m> and <m>5</m> that are in the original binomial?
+                    </p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                    <p>
+                        <m>60</m>
+                    </p>
+                    </statement>
+                    <feedback>
+                    <p>
+                        What should the exponents on <m>2</m> and <m>5</m> be when you expand <m>(2x+5xy^2)^4</m>?
+                    </p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                    <p>
+                        <m>100</m>
+                    </p>
+                    </statement>
+                    <feedback>
+                    <p>
+                        Have you included something of the form <m>\binom{n}{k}</m> in your computations?
+                    </p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                    <p>
+                        <m>600</m>
+                    </p>
+                    </statement>
+                    <feedback>
+                    <p>
+                        Correct! Using the binomial theorem, we get a term containing the monomial <m>x^4y^4</m> by taking two of the first term, and two of the second term in the expansion of <m>(2x+5xy^2)^4</m>, and so this term is equal to
+                        <me>\binom{4}{2} (2x)^2 (5xy^2)^2 = 6 \cdot 2^2 5^2 x^4 y^4 = 600 x^4 y^4</me>.
+                    </p>
+                    </feedback>
+                </choice>
+            </choices>
+        </exercise>
+
         <exercise label="multiple-choice-multiple-answers">
             <title>Multiple-Choice, Not Randomized, Multiple Answers</title>
             <idx>stop signs</idx>
@@ -4789,7 +4849,7 @@ TEST_CASE( "Test the add function" ) {
         <p>And a final paragraph in the section, and a chance to say there is a trailing <tag>exercise</tag> outside the <tag>exercisegroup</tag>.</p>
     </section>
 
-    <worksheet groupwork="yes" groupsize="2" label="worksheet-groupwork">
+    <worksheet groupwork="yes" groupsize="2" xml:id="worksheet-groupwork">
         <title>A <q>Group Work</q> Worksheet</title>
 
         <p>This is a <tag>worksheet</tag> which has a <attr>groupwork</attr> attribute set to <c>yes</c>, along with a <attr>label</attr> attribute to assist with the Runestone database.  Note, you can also set a <attr>groupsize</attr> attribute.  When hosted on Runestone, the exercises within will be available for a group of students to submit together.</p>
