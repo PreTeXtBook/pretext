@@ -482,9 +482,11 @@
         </xsl:if>
     </xsl:if>
     <!-- pg-code verbatim, but trim indentation -->
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select=".//pg-code" />
-    </xsl:call-template>
+    <xsl:if test=".//pg-code">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select=".//pg-code" />
+        </xsl:call-template>
+    </xsl:if>
     <!-- if there are latex-image in the problem, put their code here -->
     <!-- introduction images are not needed except for human readable code -->
     <xsl:if test="$b-human-readable">
@@ -555,6 +557,9 @@
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
     </xsl:apply-templates>
+    <xsl:if test="parent::exercisegroup">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="webwork/description">
@@ -661,7 +666,7 @@
         <xsl:with-param name="block-title">Header</xsl:with-param>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
-    <xsl:text>TEXT(beginproblem());&#xa;</xsl:text>
+    <xsl:text>TEXT(beginproblem());</xsl:text>
     <xsl:if test="not($b-human-readable)">
         <!-- see select-latex-macros template -->
         <xsl:variable name="macros">
@@ -1514,6 +1519,7 @@
 </xsl:template>
 
 <xsl:template match="image[latex-image]" mode="latex-image-code">
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text> = createLaTeXImage();&#xa;</xsl:text>
     <xsl:if test="$docinfo/latex-image-preamble">
@@ -1629,10 +1635,23 @@
     <xsl:if test="parent::li and not(following-sibling::*) and not(following::li)">
         <xsl:text>   </xsl:text>
     </xsl:if>
-    <!-- Blank line required or PGML will treat two adjacent p as one -->
-    <xsl:if test="not(parent::li) or following-sibling::* or parent::li/following-sibling::*">
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
+    <!-- A blank line is required for PGML to treat two adjacent p as disctinct  -->
+    <!-- So we usually end a "p" with a line break, and often with an additional -->
+    <!-- line break. There are conditions where we do not want one or either.    -->
+    <!-- First test: if the "p" has a list for its last element, that list will  -->
+    <!-- already end with a blank line, so the "p" should not add line breaks.   -->
+    <xsl:if test="not(*[last()]/self::ol//p|*[last()]/self::ul//p|*[last()]/self::dl//p) or normalize-space(node()[last()]/self::text())">
+        <!-- This line break is literally to move off the last line from the "p" -->
+        <!-- So we only do not want it when we already moved off that last line  -->
+         <xsl:if test="not(*[last()]/self::ol|*[last()]/self::ul|*[last()]/self::dl)">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="*[last()]/self::ol|*[last()]/self::ul|*[last()]/self::dl and (not(*[last()]//p) or normalize-space(node()[last()]/self::text()))">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="following-sibling::*">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
 </xsl:template>
 
@@ -1657,7 +1676,9 @@
         <xsl:text> &lt;&lt;</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:if test="following-sibling::*|parent::introduction/following-sibling::task">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- ######### -->
@@ -1713,7 +1734,10 @@
 <!-- PGML [```...```] creates display math -->
 <xsl:template match="me">
     <xsl:param name="b-human-readable" />
-    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:if test="preceding-sibling::text()[normalize-space()] or preceding-sibling::*">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
@@ -1724,8 +1748,13 @@
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
-    <xsl:text>```]&#xa;&#xa;</xsl:text>
-    <xsl:if test="following-sibling::text()[normalize-space()] or following-sibling::*">
+    <xsl:text>```]</xsl:text>
+    <!-- The "me" is a child of a "p" which will end with a line break. Only provide an    -->
+    <!-- additional blank line here if there is content within the "p" following this "me" -->
+    <xsl:if test="following-sibling::text()[normalize-space()]
+                and not(contains($clause-ending-marks, normalize-space(following-sibling::text())))
+                or following-sibling::*">
+        <xsl:text>&#xa;&#xa;</xsl:text>
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
 </xsl:template>
@@ -1798,7 +1827,10 @@
 <xsl:template match="md" mode="display-math-wrapper">
     <xsl:param name="b-human-readable" />
     <xsl:param name="content" />
-    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:if test="preceding-sibling::text()[normalize-space()] or preceding-sibling::*">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
@@ -1811,8 +1843,12 @@
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>```]</xsl:text>
-    <xsl:text>&#xa;&#xa;</xsl:text>
-    <xsl:if test="following-sibling::text()[normalize-space()] or following-sibling::*">
+    <!-- The "md" is a child of a "p" which will end with a line break. Only provide an    -->
+    <!-- additional blank line here if there is content within the "p" following this "md" -->
+    <xsl:if test="following-sibling::text()[normalize-space()]
+                and not(contains($clause-ending-marks, normalize-space(following-sibling::text())))
+                or following-sibling::*">
+        <xsl:text>&#xa;&#xa;</xsl:text>
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
 </xsl:template>
@@ -2287,7 +2323,10 @@
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>```&#xa;</xsl:text>
+    <xsl:text>```</xsl:text>
+    <xsl:if test="following-sibling::text()[normalize-space()] or following-sibling::*">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="cline">
@@ -2358,6 +2397,7 @@
     <xsl:apply-templates select="li">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
+    <xsl:text>&#xa;</xsl:text>
     <!-- When a list ends, there may be more content before the p ends. This  -->
     <!-- content needs to be indented the proper amount when the list was a   -->
     <!-- nested list.                                                         -->
@@ -2432,7 +2472,9 @@
     <xsl:if test="(child::*|child::text())[normalize-space()][position()=last()][self::text()] and not(following::*[1][self::li])">
         <xsl:text>   </xsl:text>
     </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:if test="following-sibling::li">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 
