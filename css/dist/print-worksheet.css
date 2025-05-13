@@ -2374,6 +2374,9 @@ body.standalone.worksheet section.worksheet > .heading + .para {
   opacity: 0.4;
   cursor: not-allowed;
 }
+.searchbox .closesearchresults.hidden {
+  display: none;
+}
 .searchbox .closesearchresults.open {
   color: var(--button-hover-text-color);
   background-color: var(--button-hover-background);
@@ -2622,6 +2625,9 @@ label.incorrect .feedback {
 .ptx-content .webwork-button.disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+.ptx-content .webwork-button.hidden {
+  display: none;
 }
 .ptx-content .webwork-button.open {
   color: var(--button-hover-text-color);
