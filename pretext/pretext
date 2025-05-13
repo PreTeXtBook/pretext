@@ -135,6 +135,7 @@ def get_destination_directory(directory, xml_source, pub_file, component):
         "datafile": "datafile",
         "play-button": "play-button",
         "latex-package": "latex-packages",
+        "references" : "references",
     }
     # if specified, check, sanitize, return absolute path
     if directory:
