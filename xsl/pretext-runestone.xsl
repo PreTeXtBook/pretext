@@ -1001,8 +1001,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*[@exercise-interactive = 'multiplechoice']" mode="runestone-to-interactive">
     <div class="ptx-runestone-container">
         <div class="runestone multiplechoice_section">
+            <!-- overall statement, not per-choice -->
+            <div class="exercise-statement">
+                <xsl:apply-templates select="statement"/>
+            </div>
             <!-- ul can have multiple answer attribute -->
-            <ul data-component="multiplechoice">
+            <ul data-component="multiplechoice" class="exercise-interactives">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                 <xsl:variable name="ncorrect" select="count(choices/choice[@correct = 'yes'])"/>
                 <xsl:attribute name="data-multipleanswers">
@@ -1025,9 +1029,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:if test="choices/@randomize = 'yes'">
                     <xsl:attribute name="data-random"/>
                 </xsl:if>
-                <!-- Q: the statement is not a list item, but appears *inside* the list? -->
-                <!-- overall statement, not per-choice -->
-                <xsl:apply-templates select="statement"/>
                 <xsl:apply-templates select="choices/choice">
                     <xsl:with-param name="the-id">
                         <xsl:apply-templates select="." mode="runestone-id"/>
