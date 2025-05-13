@@ -172,7 +172,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: simple fields for parts of a name are later, and grouped together.           -->
 <!-- NB: simple fields for alternate date model are at the end, and grouped together. -->
 <!-- TODO: many more, from "abstract" to "year-suffix", plus for names and dates.     -->
-<xsl:template match="publisher|publisher-place|page|title|URL|name/family|name/given|name/static-ordering|season|circa" mode="biblio-to-json">
+<xsl:template match="publisher|publisher-place|page|volume|title|collection-title|page-first|number-of-pages|URL|name/family|name/given|name/static-ordering|season|circa" mode="biblio-to-json">
     <xsl:text>"</xsl:text>
     <xsl:value-of select="local-name()"/>
     <xsl:text>"</xsl:text>
@@ -183,7 +183,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- apply-templates for math in titles??? -->
     <xsl:call-template name="escape-json-string">
         <xsl:with-param name="text">
-            <xsl:value-of select="."/>
+            <!-- convert to a textual representation -->
+            <xsl:apply-templates select="node()" mode="xml-to-string"/>
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>"</xsl:text>
