@@ -242,6 +242,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="csl-style-file">
     <xsl:apply-templates select="$publisher-attribute-options/common/citation-stylesheet-language/pi:pub-attribute[@name='style']" mode="set-pubfile-variable"/>
 </xsl:variable>
+<!-- global indication of if a publisher has opted in -->
+<xsl:variable name="b-using-csl-styles" select="not(normalize-space($csl-style-file) = '')"/>
 
 <!-- Worksheet margins.  Applies to both PDF and HTML. -->
 
@@ -3189,11 +3191,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <journal>
             <pi:pub-attribute name="name" default="" freeform="yes"/>
         </journal>
-        <!-- default CSL style file is "harvard1" since it is  -->
-        <!-- copied into the right place in the citeproc-py    -->
-        <!-- distribution and should be present out-of-the-box -->
+        <!-- The default CSL style file is empty so that this  -->
+        <!-- feature can be "opt in", initially, and perhaps   -->
+        <!-- forever.  A good first choice for a CSL style is  -->
+        <!-- the "harvard1" style since it is copied into the  -->
+        <!-- right place in the citeproc-py distribution and   -->
+        <!-- should be present out-of-the-box.                 -->
         <citation-stylesheet-language>
-            <pi:pub-attribute name="style" default="harvard1" freeform="yes"/>
+            <pi:pub-attribute name="style" default="" freeform="yes"/>
         </citation-stylesheet-language>
         <worksheet>
             <pi:pub-attribute name="margin" default="0.75in" freeform="yes"/>
