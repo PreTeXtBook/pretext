@@ -5755,6 +5755,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>A <c>dl</c> with <c>width="narrow"</c> might be a useful way to give commentary on a program listing.</p>
                     </li>
                 </dl></p>
+
+                <p>You can nest description lists, though items might get crowded horizontally.  We expand our computer list a bit.
+                <dl>
+                    <li xml:id="cpu-definition-expanded">
+                        <title>Expanded CPU</title>
+                        <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.<dl>
+                            <li>
+                                <title>Arithmetic</title>
+                                <p>The kind of computations that give a computer the name <q>computer.</q></p>
+                            </li>
+                            <li>
+                                <title>Logic</title>
+                                <p>Operations that make decisions, <q>if this, then that</q>, plus: and, or, and not.</p>
+                            </li>
+                            <li>
+                                <title>Memory</title>
+                                <p>Space to store information and results, permanently or temporarily.</p>
+                            </li>
+                        </dl></p>
+                        <p>This is a second paragraph that should appear indented in PDF output.</p>
+                    </li>
+
+                    <li>
+                        <title>Memory</title>
+                        <p>Provides storage for the instructions for the CPU and the data they manipulate.</p>
+                    </li>
+
+                    <li>
+                        <title>Input/Output (I/O)</title>
+                        <p>Communicates with the outside world and with mass storage devices (<eg/>, disks).</p>
+                    </li>
+
+                    <li>
+                        <title>Bus!</title>
+                        <p>A communication pathway with a protocol specifying exactly how the pathway is used. (The punctuation is just for testing.)</p>
+                    </li>
+
+                    <li>
+                        <title><m>\displaystyle \sum_{n=0}^\infty x^n = \frac{1}{1-x}</m></title>
+                        <p>A geometric series.  The formula is valid if <m>|x| &lt; 1</m>.</p>
+                    </li>
+                </dl></p>
             </subsection>
 
             <subsection>
