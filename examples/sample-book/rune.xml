@@ -105,16 +105,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <program xml:id="java-hello-world" interactive='activecode' language="java">
                 <title>"hi" in Java</title>
                 <code>
-                import javax.swing.JFrame;  //Importing class JFrame
-                import javax.swing.JLabel;  //Importing class JLabel
                 public class HelloWorld {
                     public static void main(String[] args) {
-                        JFrame frame = new JFrame();           //Creating frame
-                        frame.setTitle("Hi!");                 //Setting title frame
-                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
-                        frame.pack();                          //Setting size to smallest
-                        frame.setLocationRelativeTo(null);     //Centering frame
-                        frame.setVisible(true);                //Showing frame
+                        System.out.println("Hi world!");
                     }
                 }
                 </code>
@@ -628,56 +621,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Unit tests for Java can be written using junit.</p>
             </statement>
-            <program interactive="activecode" language="cpp">
+            <program interactive="activecode" language="java">
                 <code>
-                    public class StudentCode
+                    public class Test1
                     {
                         public static void main(String[] args)
                         {
-                            for(int count = 2; count $lt;= 10; count++)
+                            boolean isRaining = true;
+                            if (isRaining)
                             {
-                                System.out.println(count);
+                                System.out.println("Take an umbrella!");
                             }
-                        }
-
-                        public int adder(int a, int b) {
-                            return a+b;
+                            System.out.println("Drive carefully");
                         }
                     }
                 </code>
                 <tests>
                     import static org.junit.Assert.*;
-                    import org.junit.After;
-                    import org.junit.Before;
-                    import org.junit.Test;
+                    import org.junit.*;
                     import java.io.*;
-                    import java.nio.file.Files;
-                    import java.nio.file.Paths;
 
-                    public class ForLoopTestTester extends CodeTestHelper
+                    public class RunestoneTests extends CodeTestHelper
                     {
-                        /* Example test for main method - should pass */
                         @Test
                         public void testMain() throws IOException
                         {
-                            // I wrote a method to run a method and send back the output - only works       with String[] args for now
                             String output = getMethodOutput("main");
-                            String expect = "2\n3\n4\n5\n6\n7\n8\n9\n10\n";
-                            assertEquals("Output doesn't match", cleanString(expect), cleanString      (output));
-                        }
-
-                        @Test
-                        public void testAdder() throws IOException {
-                            StudentCode s = new StudentCode();
-                            String msg = createMessage("Adding 2+2", ""+4, ""+s.adder(2,2));
-                            System.out.println("testing s.adder(2,2)");
-                            assertEquals(msg, 4, s.adder(2,2));
-                            assertEquals("adding 3+3", 6, s.adder(3,3));
-                        }
-
-                        @Test
-                        public void testContent() throws IOException {
-                            String content = new String ( Files.readAllBytes( Paths.get("StudentCode.      java")));
+                            String expect = "Take an umbrella! \nDrive carefully";
+                            boolean passed = getResults(expect, output, "Expected output from main");
+                            assertTrue(passed);
                         }
                     }
                 </tests>
