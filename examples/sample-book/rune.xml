@@ -486,7 +486,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="sieve-python">
             <title><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</title>
-            <program label="sieve-codelens-python" interactive="codelens" language="python">
+            <program label="sieve-codelens-python" interactive="codelens" language="python" starting-step="73" include-source="yes">
                 <code><![CDATA[
                 def SieveOfEratosthenes(n):
                    # array of type boolean with True values in it
