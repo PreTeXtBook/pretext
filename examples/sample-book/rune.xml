@@ -485,8 +485,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Now some moderately more complicated programs to find the prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
 
         <listing xml:id="sieve-python">
-            <title><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Python</title>
-            <program xml:id="sieve-codelens-python" interactive="codelens" language="python">
+            <title><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Python. With starting-step specified.</title>
+            <program xml:id="sieve-codelens-python" interactive="codelens" language="python" starting-step="73" include-source="yes">
                 <code><![CDATA[
                 def SieveOfEratosthenes(n):
                    # array of type boolean with True values in it
