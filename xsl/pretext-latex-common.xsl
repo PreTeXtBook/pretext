@@ -11352,7 +11352,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="open-reference-list">
     <xsl:text>%% If this is a top-level references&#xa;</xsl:text>
-    <xsl:text>%%   you can replace with "thebibliography" environment&#xa;</xsl:text>
+    <xsl:text>%%   you can replace the "referencelist" environment&#xa;</xsl:text>
+    <xsl:text>%%   with a standard "thebibliography" environment&#xa;</xsl:text>
     <xsl:text>\begin{referencelist}&#xa;</xsl:text>
 </xsl:template>
 
