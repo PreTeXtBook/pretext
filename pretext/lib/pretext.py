@@ -965,11 +965,24 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     code_filename = os.path.join(tmp_dir, "codelens.txt")
     log.debug("Program sources for traces temporarily in {}".format(code_filename))
     xsltproc(extraction_xslt, xml_source, code_filename, None, stringparams)
-    # read lines, one-per-program
+    # get trace file contents minus trailing blank line
     with open(code_filename, "r") as code_file:
-        programs = code_file.readlines()
-    for program in programs:
-        # three parts, always
+        contents = code_file.read().rstrip()
+
+    if contents == "":
+        log.info("no traces found to generate in {}".format(code_filename))
+        return
+
+    # blank lines separate groups
+    program_groups = contents.split("\n\n")
+    for program_group in program_groups:
+        # Expect 1 program line and 0+ question lines after it
+        lines = program_group.split("\n")
+        program = lines[0]
+        questions = None
+        if len(lines) > 1:
+            questions = lines[1:]
+        # Program has three parts, always
         program_quad = program.split(",", 3)
         runestone_id = program_quad[0]
         visible_id = program_quad[1]
@@ -1010,9 +1023,30 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             except Exception as e:
                 log.critical(traceback.format_exc())
                 log.critical(server_error_msg.format(url, visible_id))
+
         # should now have a trace, except for timing out
         # no trace, then do not even try to produce a file
         if trace:
+            # inject questions into trace
+            if questions:
+                import json
+                trace_dict = json.loads(trace)
+                trace_steps = trace_dict.get("trace")
+                for question in questions:
+                    question_line, answer_raw, feedback, prompt = question.split(":||:")
+                    question_line = int(question_line)
+                    answer_type, answer_value = answer_raw.split("-", 2)
+                    question_dict = {
+                      "text": prompt,
+                      ("correctText" if answer_type == "literal" else "correct"): answer_value
+                    }
+                    if feedback:
+                        question_dict['feedback'] = feedback
+
+                    for trace_step in trace_steps:
+                        if trace_step['line'] == question_line and trace_step['event'] == "step_line":
+                            trace_step['question'] = question_dict
+                trace = json.dumps(trace_dict)
             # We will hardcode in the ID based on the runestone_id as built. It will be a fallback.
             # But also try to dynamically grab the ID of the containing codelens so 
             # Eventually we could maybe deprecate the hardcoded value.
