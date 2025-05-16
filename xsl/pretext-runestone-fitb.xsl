@@ -57,7 +57,7 @@
             <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
         </xsl:if>
         <xsl:if test="@width">
-            <xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute>
+            <xsl:attribute name="size"><xsl:value-of select="@width"/></xsl:attribute>
         </xsl:if>
     </xsl:element>
 </xsl:template>
