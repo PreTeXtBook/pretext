@@ -1463,6 +1463,7 @@
                     attribute autorun {"yes"|"no"}?,
                     attribute chatcodes {"yes"|"no"}?,
                     attribute codelens {"yes"|"no"}?,
+                    attribute starting-step {"yes"|"no"}?,
                     attribute compiler-args {text}?,
                     attribute extra-compiler-args {text}?,
                     attribute database {text}?,
