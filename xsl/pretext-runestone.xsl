@@ -2091,7 +2091,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:if>
                         <!-- add some lead-in text to the window -->
                         <xsl:if test="$exercise-statement">
-                            <div class="ac_question">
+                            <div class="ac_question exercise-statement">
                                 <xsl:attribute name="id">
                                     <xsl:value-of select="$rsid"/>
                                     <xsl:text>_question</xsl:text>
