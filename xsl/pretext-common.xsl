@@ -3651,11 +3651,11 @@ Book (with parts), "section" at level 3
     </xsl:if>
 </xsl:template>
 
-<!-- Special handling for programs in exercise-like elements.              -->
+<!-- Special handling for activecode programs in exercise-like elements.   -->
 <!-- We want to associate those programs with the label on their container -->
 <!-- and NOT with an auto-generated label on the program itself that might -->
 <!-- come from an @xml:id.                                                 -->
-<xsl:template match="exercise/program" mode="runestone-id">
+<xsl:template match="exercise/program[@exercise-interactive = 'activecode']" mode="runestone-id">
     <xsl:variable name="label">
         <xsl:value-of select="../@label"/>
     </xsl:variable>
