@@ -91,6 +91,9 @@ import re
 # contextmanager tools
 import contextlib
 
+# cleanup multiline strings used as source code
+import textwrap
+
 # * For non-standard packages (such as those installed via PIP) try to keep
 #   dependencies to a minimum by *not* importing at the module-level
 #   (with justified exceptions)
@@ -1010,9 +1013,23 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # should now have a trace, except for timing out
         # no trace, then do not even try to produce a file
         if trace:
-            script_leadin_string = 'if (allTraceData === undefined) {{\n var allTraceData = {{}};\n }}\n allTraceData["{}"] = '
-            script_leadin = script_leadin_string.format(runestone_id)
-            trace = script_leadin + trace
+            # We will hardcode in the ID based on the runestone_id as built. It will be a fallback.
+            # But also try to dynamically grab the ID of the containing codelens so 
+            # Eventually we could maybe deprecate the hardcoded value.
+            script_template = """
+                if (allTraceData === undefined) {{
+                    var allTraceData = {{}};
+                }}
+                (function() {{ // IIFE to avoid variable collision
+                    let codelensID = "{}";  //fallback
+                    let partnerCodelens = document.currentScript.parentElement.querySelector(".pytutorVisualizer");
+                    if (partnerCodelens) {{
+                        codelensID = partnerCodelens.id;
+                    }}
+                    allTraceData[codelensID] = {};
+                }})();"""
+            script_template = textwrap.dedent(script_template)
+            trace = script_template.format(runestone_id, trace.rstrip())
             trace_file = os.path.join(dest_dir, "{}.js".format(visible_id))
             with open(trace_file, "w") as f:
                 f.write(trace)
