@@ -5562,6 +5562,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="type-name"/>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
+    <!-- For references we open a list to hold "biblio" -->
+    <!-- unless we need to wait for an "introduction"   -->
+    <xsl:if test="self::references and not(introduction)">
+        <xsl:call-template name="open-reference-list"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- Exceptional, for a worksheet only, we clear the page  -->
@@ -5656,6 +5661,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Footings are straightforward -->
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet" mode="latex-division-footing">
+    <!-- For references we close a list holding "biblio"    -->
+    <!-- unless we already added it before the "conclusion" -->
+    <xsl:if test="self::references and not(conclusion)">
+        <xsl:call-template name="close-reference-list"/>
+    </xsl:if>
+
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="division-environment-name" />
     <!-- possibly numberless -->
@@ -5681,9 +5692,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <xsl:text>\end{introduction}%&#xa;</xsl:text>
+    <!-- We have not opened the list of references yet    -->
+    <!-- when it has an "introduction".  Now is the time. -->
+    <xsl:if test="parent::references">
+        <xsl:call-template name="open-reference-list"/>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|reading-questions/conclusion|references/conclusion">
+    <!-- We will not close the list of references when -->
+    <!-- it has an "introduction".  Now is the time.   -->
+    <xsl:if test="parent::references">
+        <xsl:call-template name="close-reference-list"/>
+    </xsl:if>
     <xsl:text>\begin{conclusion}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
@@ -11315,19 +11336,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################### -->
 <!-- References Sections -->
 <!-- ################### -->
+
 <!-- We use description lists to manage bibliographies,  -->
 <!-- and \bibitem seems comfortable there, so our source -->
 <!-- is nearly compatible with the usual usage           -->
 
+<!-- We open and close a single "referencelist" environment,    -->
+<!-- which we create in the preamble.  It opens right after     -->
+<!-- a "references" division, or after optional "introduction". -->
+<!-- It closes right before the "references" division closes,   -->
+<!-- or right before the "conclusion" begins.  The templates    -->
+<!-- below ensure consistency, and help with overrides.  You    -->
+<!-- can search on them to see the two pairs of scenarios       -->
+<!-- just described.                                            -->
+
+<xsl:template name="open-reference-list">
+    <xsl:text>%% If this is a top-level references&#xa;</xsl:text>
+    <xsl:text>%%   you can replace with "thebibliography" environment&#xa;</xsl:text>
+    <xsl:text>\begin{referencelist}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="close-reference-list">
+    <xsl:text>\end{referencelist}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- As an item of a description list, but       -->
 <!-- compatible with thebibliography environment -->
 <xsl:template match="biblio[@type='raw'] | biblio[@type='bibtex']">
-    <!-- begin the list with first item -->
-    <xsl:if test="not(preceding-sibling::biblio)">
-        <xsl:text>%% If this is a top-level references&#xa;</xsl:text>
-        <xsl:text>%%   you can replace with "thebibliography" environment&#xa;</xsl:text>
-        <xsl:text>\begin{referencelist}&#xa;</xsl:text>
-    </xsl:if>
     <xsl:text>\bibitem</xsl:text>
     <!-- "label" (e.g. Jud99), or by default serial number -->
     <!-- LaTeX's bibitem will provide the visual brackets  -->
@@ -11341,10 +11376,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates/>
     <xsl:text>&#xa;</xsl:text>
-    <!-- end the list after last item -->
-    <xsl:if test="not(following-sibling::biblio)">
-        <xsl:text>\end{referencelist}&#xa;</xsl:text>
-    </xsl:if>
 </xsl:template>
 
 <!-- Implement abstract templates to support      -->
