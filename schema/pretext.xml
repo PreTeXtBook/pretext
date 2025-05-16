@@ -1442,6 +1442,17 @@
                 element stdin {
                     text
                 }
+            CodelensQuestion =
+                element question {
+                    attribute line {text},
+                    (
+                        attribute answer {text},
+                    |
+                        attribute answer-variable {text}
+                    )
+                    element prompt {BlockText+},
+                    element feedback {BlockText+}?,
+                }
             Program =
                 element program {
                     Component?,
@@ -1476,7 +1487,8 @@
                             ProgramCode,
                             ProgramPostamble?,
                             ProgramTests?,
-                            ProgramStdin?
+                            ProgramStdin?,
+                            CodelensQuestion*
                         )
                     )
                 }
