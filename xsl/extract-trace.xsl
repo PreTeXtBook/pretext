@@ -77,6 +77,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:value-of select="str:replace($removed-carriage-returns, '&#xa;', '\n')"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- Authored as starting-step. Code in codelens eventually wants startingInstruction -->
+    <!-- so make the name change starting from here                                       -->
+    <xsl:text>startingInstruction:</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@starting-step != ''">
+            <!-- Codelens needs to execute n-1 instructions. It has bounds checking -->
+            <xsl:value-of select="number(@starting-step) - 1"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:for-each select="checkpoint">
         <xsl:value-of select="@line"/>
         <xsl:text>:||:</xsl:text>
