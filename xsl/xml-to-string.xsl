@@ -168,6 +168,8 @@ Recent changes:
     <xsl:value-of select="$attribute-delimiter"/>
   </xsl:template>
 
+  <xsl:template match="@*[name()='original-id' or name()='unique-id' or name()='assembly-id']" mode="xml-to-string" name="serialize-attribute-prune"/>
+
   <xsl:template match="comment()" mode="xml-to-string">
     <xsl:value-of select="$comment-start"/>
     <xsl:call-template name="comment-text">
