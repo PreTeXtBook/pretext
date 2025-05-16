@@ -976,17 +976,23 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # blank lines separate groups
     program_groups = contents.split("\n\n")
     for program_group in program_groups:
-        # Expect 1 program line and 0+ question lines after it
         lines = program_group.split("\n")
+        # The first line is the program in old or new tracefiles
         program = lines[0]
-        questions = None
-        if len(lines) > 1:
-            questions = lines[1:]
         # Program has three parts, always
         program_quad = program.split(",", 3)
         runestone_id = program_quad[0]
         visible_id = program_quad[1]
         language = program_quad[2]
+        # Newer trace files also specify extra lines with questions/start
+        questions = None
+        startingInstruction = 0
+        if len(lines) > 1:
+            # The second line looks like "startingInstruction:10", get the number
+            startingInstruction = int(lines[1].split(":")[1])
+            # Rest of lines are questions
+            questions = lines[2:]
+
         if language == 'python':
             url = url_string.format('py')
         else:
@@ -1027,10 +1033,12 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # should now have a trace, except for timing out
         # no trace, then do not even try to produce a file
         if trace:
+            import json
+            trace_dict = json.loads(trace)
+            # add startInstruction to the trace
+            trace_dict["startingInstruction"] = startingInstruction
             # inject questions into trace
             if questions:
-                import json
-                trace_dict = json.loads(trace)
                 trace_steps = trace_dict.get("trace")
                 for question in questions:
                     question_line, answer_raw, feedback, prompt = question.split(":||:")
@@ -1046,7 +1054,8 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                     for trace_step in trace_steps:
                         if trace_step['line'] == question_line and trace_step['event'] == "step_line":
                             trace_step['question'] = question_dict
-                trace = json.dumps(trace_dict)
+            trace = json.dumps(trace_dict)
+
             # We will hardcode in the ID based on the runestone_id as built. It will be a fallback.
             # But also try to dynamically grab the ID of the containing codelens so 
             # Eventually we could maybe deprecate the hardcoded value.
