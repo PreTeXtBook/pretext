@@ -136,6 +136,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <statement>
         <xsl:copy-of select="statement/node()"/>
         <p><ol marker="A."> <!-- conforms to RS markers -->
+            <!-- duplicate an optional @cols -->
+            <xsl:copy-of select="choices/@cols"/>
             <xsl:for-each select="choices/choice">
                 <li>
                     <xsl:copy-of select="statement/node()"/>
