@@ -10596,6 +10596,37 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Bibliographies -->
 <!-- ############## -->
 
+<!-- Note: this general approach to "biblio" entries is by-passed     -->
+<!-- in the HTML conversion, due to larger architectural limitations. -->
+
+<!-- Historical: first pass, mixed content, with a  -->
+<!-- few elements implemented for visual appearance -->
+<xsl:template match="biblio[@type = 'raw']">
+    <xsl:apply-templates select="." mode="bibentry-wrapper">
+        <xsl:with-param name="content">
+            <!-- mixed-content, text is relevant -->
+            <xsl:apply-templates select="text()|*"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- "BibTeX style": initiated by David Farmer  -->
+<!-- December 2021, see commit 44c9f8e00d525796 -->
+<!-- Structured, but rendered in document order -->
+<xsl:template match="biblio[@type = 'bibtex']">
+    <xsl:apply-templates select="." mode="bibentry-wrapper">
+        <xsl:with-param name="content">
+            <!-- structured, elements only, document order -->
+            <xsl:apply-templates select="*"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="biblio" mode="bibentry-wrapper">
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "bibentry-wrappper" template</xsl:message>
+</xsl:template>
+
+
 <!-- Raw Bibliographic Entry Formatting              -->
 <!-- Markup really, not full-blown data preservation -->
 
