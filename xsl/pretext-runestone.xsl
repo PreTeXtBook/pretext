@@ -1587,10 +1587,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <div class="ptx-runestone-container">
         <div data-component="matching" class="runestone">
             <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+            <!-- Note: Runestone will condition on script/@type as -->
+            <!-- it handles this (mostly to differentiate between  -->
+            <!-- JSON blobs.  Note below describes how this is     -->
+            <!-- really HTML, not XML.  So any adjustment here     -->
+            <!-- must be coordinated with the Runestone consumer.  -->
             <script type="text/xml">
                 <!-- one-off XML for Runestone JS to consume -->
                 <matching>
-                    <!-- provide the authored statement of the exercise -->
+                    <!-- Provide authored statement of the exercise. -->
+                    <!-- Here, and elsewhere, we need to be careful. -->
+                    <!-- We want to produce XML, but a rendered      -->
+                    <!-- "statement" will be HTML and have some      -->
+                    <!-- undesirable things, like unclosed tags      -->
+                    <!-- (e.g. "img").  We really want what was once -->
+                    <!-- called XHTML.  Our made-up XML below seems  -->
+                    <!-- to be OK when parsed as if it were HTML.    -->
                     <statement>
                         <xsl:apply-templates select="statement"/>
                     </statement>
