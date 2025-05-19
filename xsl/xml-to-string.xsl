@@ -18,6 +18,7 @@ Recent changes:
 
 -->
 <xsl:stylesheet version="1.0"
+  xmlns:exsl="http://exslt.org/common"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:output omit-xml-declaration="yes"/>
@@ -48,10 +49,16 @@ Recent changes:
   <xsl:param name="pi-start"            select="'&lt;?'"/>
   <xsl:param name="pi-end"              select="'?>'"/>
 
+  <!-- attributes to prune when as-authored = 'yes' -->
+  <xsl:param name="non-authored-attributes" select="'|original-id|unique-id|assembly-id|include-source|authored-label|'"/>
+
   <xsl:template name="xml-to-string">
     <xsl:param name="node-set" select="."/>
+    <!-- as-authored will attempt to filter out pretext created attributes and other extras -->
+    <xsl:param name="as-authored" select="'yes'"/>
     <xsl:apply-templates select="$node-set" mode="xml-to-string">
       <xsl:with-param name="depth" select="1"/>
+      <xsl:with-param name="as-authored" select="$as-authored"/>
     </xsl:apply-templates>
   </xsl:template>
 
@@ -61,13 +68,16 @@ Recent changes:
 
   <xsl:template match="/" mode="xml-to-string">
     <xsl:param name="depth"/>
+    <xsl:param name="as-authored"/>
     <xsl:apply-templates mode="xml-to-string">
       <xsl:with-param name="depth" select="$depth"/>
+      <xsl:with-param name="as-authored" select="$as-authored"/>
     </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="*" mode="xml-to-string">
     <xsl:param name="depth"/>
+    <xsl:param name="as-authored"/>
     <xsl:variable name="element" select="."/>
     <xsl:value-of select="$start-tag-start"/>
     <xsl:call-template name="element-name">
@@ -87,6 +97,7 @@ Recent changes:
         <xsl:value-of select="$start-tag-end"/>
         <xsl:apply-templates mode="xml-to-string">
           <xsl:with-param name="depth" select="$depth + 1"/>
+          <xsl:with-param name="as-authored" select="$as-authored"/>
         </xsl:apply-templates>
         <xsl:value-of select="$end-tag-start"/>
         <xsl:call-template name="element-name">
@@ -156,16 +167,24 @@ Recent changes:
 
   <xsl:template match="@*" mode="xml-to-string" name="serialize-attribute">
     <xsl:param name="att-value" select="string(.)"/>
-    <xsl:value-of select="$space"/>
-    <xsl:call-template name="attribute-name">
-      <xsl:with-param name="text" select="name()"/>
-    </xsl:call-template>
-    <xsl:value-of select="$equals"/>
-    <xsl:value-of select="$attribute-delimiter"/>
-    <xsl:call-template name="attribute-value">
-      <xsl:with-param name="text" select="$att-value"/>
-    </xsl:call-template>
-    <xsl:value-of select="$attribute-delimiter"/>
+    <xsl:param name="as-authored"/>
+    <xsl:choose>
+      <xsl:when test="$as-authored != 'yes' and contains($non-authored-attributes, concat('|', name(), '|'))">
+        <!-- do nothing -->
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$space"/>
+        <xsl:call-template name="attribute-name">
+          <xsl:with-param name="text" select="name()"/>
+        </xsl:call-template>
+        <xsl:value-of select="$equals"/>
+        <xsl:value-of select="$attribute-delimiter"/>
+        <xsl:call-template name="attribute-value">
+          <xsl:with-param name="text" select="$att-value"/>
+        </xsl:call-template>
+        <xsl:value-of select="$attribute-delimiter"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="comment()" mode="xml-to-string">
