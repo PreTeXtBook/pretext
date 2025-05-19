@@ -3414,8 +3414,9 @@ TEST_CASE( "Test the add function" ) {
             </statement>
             <feedback>
               <p>
-                This one should not be very hard.
+                This one should not be very hard.  And we have a gratuitous image to test the use of HTML in this component.
               </p>
+              <image source="datafiles/golden-gate-bridge.png" width="50%"/>
             </feedback>
             <matching>
                 <premise ref="jack heart">Jack of Hearts</premise>
