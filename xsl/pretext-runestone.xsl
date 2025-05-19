@@ -1927,7 +1927,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- serialize HTML as text, then escape as JSON -->
     <xsl:call-template name="escape-json-string">
         <xsl:with-param name="text">
-            <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="serialize"/>
+            <xsl:apply-templates select="exsl:node-set($feedback-rtf)" mode="xml-to-string"/>
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>

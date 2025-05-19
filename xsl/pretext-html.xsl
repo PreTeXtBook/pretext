@@ -59,6 +59,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Allow writing of JSON from structured HTML -->
 <xsl:import href="./xml-to-json.xsl"/>
 
+<!-- Allow serialization of XML -->
+<xsl:import href="./xml-to-string.xsl"/>
+
 <!-- Standard conversion groundwork -->
 <xsl:import href="./publisher-variables.xsl"/>
 <xsl:import href="./pretext-assembly.xsl"/>
@@ -6988,7 +6991,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="watermark-css">
     <xsl:text>background-image:url('data:image/svg+xml;charset=utf-8,</xsl:text>
-    <xsl:apply-templates select="exsl:node-set($watermark-svg)" mode="serialize">
+    <xsl:apply-templates select="exsl:node-set($watermark-svg)" mode="xml-to-string">
         <!-- as-authored-source to preserve namespace on svg -->
         <xsl:with-param name="as-authored-source" select="true()"/>
     </xsl:apply-templates>
@@ -12364,7 +12367,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:call-template name="escape-json-string">
         <xsl:with-param name="text">
-            <xsl:apply-templates select="exsl:node-set($title-html)" mode="serialize"/>
+            <xsl:apply-templates select="exsl:node-set($title-html)" mode="xml-to-string"/>
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>",&#xa;</xsl:text>

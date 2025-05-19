@@ -60,6 +60,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="pi str math"
 >
 
+<!-- Allow serialization of XML -->
+<xsl:import href="./xml-to-string.xsl"/>
+
 <!-- ########################## -->
 <!-- Text Manipulation Routines -->
 <!-- ########################## -->
@@ -982,7 +985,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="escape-quote-xml">
     <xsl:param name="xml_content"/>
     <xsl:variable name="xml_text">
-        <xsl:apply-templates select="exsl:node-set($xml_content)" mode="serialize"/>
+        <xsl:apply-templates select="exsl:node-set($xml_content)" mode="xml-to-string"/>
     </xsl:variable>
     <xsl:call-template name="escape-quote-string">
         <xsl:with-param name="text" select="$xml_text"/>

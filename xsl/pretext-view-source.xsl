@@ -38,6 +38,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl"
 >
 
+<!-- Allow serialization of XML -->
+<xsl:import href="./xml-to-string.xsl"/>
+
 <!--                       IMPORTANT                         -->
 <!-- The "sanitize-text" template can be called on sizeable  -->
 <!-- chunks of text, in a recursive manner, and then looks   -->
@@ -66,7 +69,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- their source.  So at the kast minute, while creating text versions -->
 <!-- of source materil, we kill it.  Any similar leakage could be       -->
 <!-- handled the same way.                                              -->
-<xsl:template match="@original-id" mode="serialize"/>
+<xsl:template match="@original-id" mode="xml-to-string"/>
 
 <!-- N.B.: the -assembly stylesheet first construct a "version" which   -->
 <!-- is the resolution of version support and customizations.  Then     -->
@@ -111,29 +114,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!--       the whole stanza left, since it may have a lot of  -->
         <!--       common indentation (which is why we caught         -->
         <!--       the preceding indentation).                        -->
-        <!--   (5) Run that through "strip-leading-blanks" to get rid -->
-        <!--       of spaces that may preceed the first element.      -->
+        <!--   (5) Run that through "sanitize-text" to deindent       -->
         <!-- NB: the $original-element is used *twice* below, in      -->
         <!-- order to have the right conteaxt for the manipulations   -->
         <xsl:variable name="serialized-html">
-            <xsl:call-template name="strip-leading-blanks">
+            <xsl:variable name="serialized-html-raw">
+                <xsl:variable name="lead-in">
+                    <xsl:apply-templates select="$original-element/preceding-sibling::node()[1]" mode="xml-to-string">
+                        <xsl:with-param name="as-authored-source" select="'yes'"/>
+                    </xsl:apply-templates>
+                </xsl:variable>
+                <xsl:call-template name="substring-after-last">
+                    <xsl:with-param name="input" select="$lead-in" />
+                    <xsl:with-param name="substr" select="'&#xa;'" />
+                </xsl:call-template>
+                <xsl:apply-templates select="$original-element" mode="xml-to-string">
+                    <xsl:with-param name="as-authored-source" select="'yes'"/>
+                </xsl:apply-templates>
+            </xsl:variable>
+            <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text">
-                    <xsl:call-template name="sanitize-text">
-                        <xsl:with-param name="text">
-                            <xsl:variable name="lead-in">
-                                <xsl:apply-templates select="$original-element/preceding-sibling::node()[1]" mode="serialize">
-                                    <xsl:with-param name="as-authored-source" select="'yes'"/>
-                                </xsl:apply-templates>
-                            </xsl:variable>
-                            <xsl:call-template name="substring-after-last">
-                                <xsl:with-param name="input" select="$lead-in" />
-                                <xsl:with-param name="substr" select="'&#xa;'" />
-                            </xsl:call-template>
-                            <xsl:apply-templates select="$original-element" mode="serialize">
-                                <xsl:with-param name="as-authored-source" select="'yes'"/>
-                            </xsl:apply-templates>
-                        </xsl:with-param>
-                    </xsl:call-template>
+                    <xsl:value-of select="$serialized-html-raw"/>
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:variable>
