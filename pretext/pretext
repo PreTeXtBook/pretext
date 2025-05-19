@@ -197,7 +197,8 @@ def sanitize_method(method, component, format):
         # set correctly
         else:
             return method
-    elif ((component == "all") and (format == "pdf")) or (component == "latex-image"):
+    elif (((component == "doc") or (component == "all")) and (format == "pdf")) or (component == "latex-image"):
+        # "all" component is deprecated for "doc"
         # we will arbitrarily set xelatex as the default
         if not (method):
             return "xelatex"
@@ -340,10 +341,8 @@ def get_cli_arguments():
         ("trace", "Program trace data for CodeLens"),
         ("datafile", "data files to text representations"),
         ("latex-package", "LaTeX external packages for journals"),
-        (
-            "all",
-            "Complete document (in various formats) (for pdf, method: [xelatex], pdflatex)",
-        ),
+        ("doc", "Complete document (in various formats) (for pdf, method: [xelatex], pdflatex)"),
+        ("all", "Complete document (in various formats) [DEPRECATED])"),
         ("tikz", "tikz pictures (removed, use latex-image)"),
     ]
     component_help = "Possible components are:\n" + "\n".join(
@@ -735,7 +734,8 @@ def main():
         ptx.update_theme(xml_source, publication_file, stringparams, dest_dir)
     elif args.component == "latex-package":
         ptx.latex_package(xml_source, publication_file, stringparams, dest_dir)
-    elif args.component == "all":
+    elif (args.component == "doc") or (component == "all"):
+        # "all" component is deprecated for "doc"
         if args.format == "html":
             ptx.html(
                 xml_source,
