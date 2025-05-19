@@ -11361,9 +11361,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{referencelist}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- As an item of a description list, but       -->
-<!-- compatible with thebibliography environment -->
-<xsl:template match="biblio[@type='raw'] | biblio[@type='bibtex']">
+<!-- As an item of a description list, but compatible        -->
+<!-- with the  thebibliography  environment.                 -->
+<!-- Note: matching "bibentry" happens within the common     -->
+<!-- templates, which in turn employs this wrapper template. -->
+<xsl:template match="biblio" mode="bibentry-wrapper">
+    <xsl:param name="content"/>
+
     <xsl:text>\bibitem</xsl:text>
     <!-- "label" (e.g. Jud99), or by default serial number -->
     <!-- LaTeX's bibitem will provide the visual brackets  -->
@@ -11375,7 +11379,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="unique-id"/>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
-    <xsl:apply-templates/>
+    <xsl:copy-of select="$content"/>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
