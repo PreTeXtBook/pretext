@@ -45,7 +45,7 @@
     <section>
         <title>Overview</title>
 
-        <p>Generally, you use the <c>pretext/pretext</c> script by supplying a <term>component</term> (<c>-c</c>) and a <term>format</term> (<c>-f</c>), along with your <pretext/> source as the very last argument.  The component may be some limited subset of your document that needs specialized treatment, such as an image described by the Asymptote language (<c>-c asy</c>).  Or it could be the entire document (<c>-c all</c>) being converted to some format as a final output form.  So <c>-c asy -f svg</c> would produce Asymptote images in <init>SVG</init> files, while <c>-c all -f latex</c> would produce the entire document as a <latex/> file.</p>
+        <p>Generally, you use the <c>pretext/pretext</c> script by supplying a <term>component</term> (<c>-c</c>) and a <term>format</term> (<c>-f</c>), along with your <pretext/> source as the very last argument.  The component may be some limited subset of your document that needs specialized treatment, such as an image described by the Asymptote language (<c>-c asy</c>).  Or it could be the entire document (<c>-c doc</c>) being converted to some format as a final output form.  So <c>-c asy -f svg</c> would produce Asymptote images in <init>SVG</init> files, while <c>-c all -f latex</c> would produce the entire document as a <latex/> file.</p>
     </section>
 
 
@@ -121,7 +121,7 @@ The script should be run on the entire document, even if all the images are in o
 
         <p>For example:<cd>
             <cline>pretext -vv -x debug.datedfiles no debug.chunk 0</cline>
-            <cline>   -f html -c all -p ~/books/aota/pub.xml</cline>
+            <cline>   -f html -c doc -p ~/books/aota/pub.xml</cline>
             <cline>   -d /tmp/aota-html ~/books/aota/animals.xml</cline>
         </cd></p>
     </section>
@@ -172,7 +172,7 @@ The script should be run on the entire document, even if all the images are in o
                     <cell>[<c>xelatex</c>], <c>pdflatex</c></cell>
                 </row>
                 <row>
-                    <cell><c>-c all -f pdf</c></cell>
+                    <cell><c>-c doc -f pdf</c></cell>
                     <cell>[<c>xelatex</c>], <c>pdflatex</c></cell>
                 </row>
             </tabular>
@@ -204,7 +204,7 @@ The script should be run on the entire document, even if all the images are in o
             <dl width="narrow">
                 <li>
                     <title>Complete Conversions</title>
-                    <p>With <c>-c all</c> and various choices of the format (<c>-f</c>) the script will execute a complete conversion.  In some cases, this is a convenience compared with just using the <c>xsltproc</c> processor.  In other cases the conversion is very complex and multiple (arcane) output files must be packaged up in very specific ways and no author would want to manage it all.  Conversion to <c>EPUB</c> is one example (<xref provisional="epub conversion"/>).</p>
+                    <p>With <c>-c doc</c> and various choices of the format (<c>-f</c>) the script will execute a complete conversion.  In some cases, this is a convenience compared with just using the <c>xsltproc</c> processor.  In other cases the conversion is very complex and multiple (arcane) output files must be packaged up in very specific ways and no author would want to manage it all.  Conversion to <c>EPUB</c> is one example (<xref provisional="epub conversion"/>).</p>
                 </li>
 
                 <li>

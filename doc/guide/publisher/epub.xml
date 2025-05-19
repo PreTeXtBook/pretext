@@ -80,13 +80,13 @@
             If instead, you wish to use the <c>pretext/pretext</c> script, make sure to first generate images into the correct format (<init>SVG</init> for regular <init>EPUB</init> and <init>PNG</init> for kindle).
             Converting to <init>EPUB</init> with <init>SVG</init> math (used everywhere other than Kindle), run as a single command-line
             <cd>
-                <cline>/path/to/mathbook/pretext/pretext -c all -f epub-svg</cline>
+                <cline>/path/to/mathbook/pretext/pretext -c doc -f epub-svg</cline>
                 <cline>    -p publication.xml -d /path/to/output</cline>
                 <cline>    /path/to/yourmainfile.ptx</cline>
             </cd>
             For an <init>EPUB</init> file destined for Kindle, use the single command-line
             <cd>
-                <cline>/path/to/mathbook/pretext/pretext -c all -f epub-kindle</cline>
+                <cline>/path/to/mathbook/pretext/pretext -c doc -f epub-kindle</cline>
                 <cline>    -p publication.xml -d /path/to/output</cline>
                 <cline>    /path/to/yourmainfile.ptx</cline>
             </cd>

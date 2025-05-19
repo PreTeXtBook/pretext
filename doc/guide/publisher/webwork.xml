@@ -263,7 +263,7 @@
         You can also use <c>pretext/pretext</c> to build HTML. For example:
       </p>
       <console>
-        <input prompt="$ ">pretext -c all -f html -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
+        <input prompt="$ ">pretext -c doc -f html -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
       </console>
       <p>
         <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
@@ -293,7 +293,7 @@
         you may use <c>pretext/pretext</c> to build a <latex/> PDF. For example:
       </p>
       <console>
-        <input prompt="$ ">pretext -c all -f pdf -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
+        <input prompt="$ ">pretext -c doc -f pdf -p &lt;publisher&gt; -d &lt;destination&gt; aota.ptx</input>
       </console>
       <p>
         <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
