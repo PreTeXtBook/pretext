@@ -734,7 +734,7 @@ def main():
         ptx.update_theme(xml_source, publication_file, stringparams, dest_dir)
     elif args.component == "latex-package":
         ptx.latex_package(xml_source, publication_file, stringparams, dest_dir)
-    elif (args.component == "doc") or (component == "all"):
+    elif (args.component == "doc") or (args.component == "all"):
         # "all" component is deprecated for "doc"
         if args.format == "html":
             ptx.html(
