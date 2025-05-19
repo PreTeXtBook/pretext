@@ -482,6 +482,86 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
             </slide>
 
+            <slide>
+                <title>Annotated <prefigure/> diagrams</title>
+
+                <p>Annotated <prefigure/> diagrams also work well by including them in the usual way.</p>
+
+                <figure>
+                    <caption>An annotated <prefigure/> diagram that can be explored with a screenreader</caption>
+                    <image width="100%">
+                        <prefigure xmlns="https://prefigure.org"
+                                   label="annotated-prefigure-network">
+
+                            <diagram dimensions="(500,500)" margins="5">
+                                <definition>graph={1:[3,4,5],2:[4,5],3:[4,5],6:[2,4]}</definition>
+                                <coordinates bbox="(-1,-1,1,1)">
+                                    <network graph="graph" scale="0.8"
+	                                     node-fill="#fcf" node-stroke="black"
+	                                     seed="1" labels="yes" node-style="box"
+	                                     tactile-node-size="40">
+                                        <edge vertices="[3,5]" dash="9 9"/>
+                                        <edge vertices="[1,4]" dash="9 9"/>
+                                        <edge vertices="[4,6]" dash="9 9"/>
+                                        <edge vertices="[2,4]" dash="9 9"/>
+                                    </network>
+                                </coordinates>
+
+                                <annotations>
+                                    <annotation ref="figure"
+                                                text="A network with six nodes and nine edges.  We will remove four edges to form a spanning tree.">
+                                        <annotation ref="nodes"
+                                                    text="The six nodes are labeled from one to six.">
+                                            <annotation ref="node-1"
+                                                        text="The node 1"/>
+                                            <annotation ref="node-2"
+                                                        text="The node 2"/>
+                                            <annotation ref="node-3"
+                                                        text="The node 3"/>
+                                            <annotation ref="node-4"
+                                                        text="The node 4"/>
+                                            <annotation ref="node-5"
+                                                        text="The node 5"/>
+                                            <annotation ref="node-6"
+                                                        text="The node 6"/>
+                                        </annotation>
+
+                                        <annotation ref="edges"
+                                                    text="There are nine edges, four of which will be removed to form a spanning tree">
+                                            <annotation ref="kept-edges"
+                                                        text="We will keep five edges">
+                                                <annotation ref="edge-1-3"
+                                                            text="We keep the edge connecting nodes 1 and 3"/>
+                                                <annotation ref="edge-1-5"
+                                                            text="We keep the edge connecting nodes 1 and 5"/>
+                                                <annotation ref="edge-2-5"
+                                                            text="We keep the edge connecting nodes 2 and 5"/>
+                                                <annotation ref="edge-6-2"
+                                                            text="We keep the edge connecting nodes 2 and 6"/>
+                                                <annotation ref="edge-3-4"
+                                                            text="We keep the edge connecting nodes 3 and 4"/>
+                                            </annotation>
+                                            <annotation ref="removed-edges"
+                                                        text="We will remove four edges">
+                                                <annotation ref="edge-1-4"
+                                                            text="We remove the edge connecting nodes 1 and 4"/>
+                                                <annotation ref="edge-2-4"
+                                                            text="We remove the edge connecting nodes 2 and 4"/>
+                                                <annotation ref="edge-3-5"
+                                                            text="We remove the edge connecting nodes 3 and 5"/>
+                                                <annotation ref="edge-6-4"
+                                                            text="We remove the edge connecting nodes 4 and 6"/>
+                                            </annotation>
+                                        </annotation>
+                                    </annotation>
+                                </annotations>
+
+                            </diagram>
+                        </prefigure>
+                    </image>
+                </figure>
+            </slide>
+
         </section>
     </slideshow>
 </pretext>
