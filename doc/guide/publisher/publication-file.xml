@@ -1023,6 +1023,20 @@
             </p>
         </subsection>
 
+        <subsection xml:id="publication-file-webwork-interactive-processing">
+            <title>Interactive Processing</title>
+            <p>The attribute
+                <cd>
+                    <cline>/publication/webwork/@interactive-processing</cline>
+                </cd>
+                can have value <c>webwork2</c> (the default). Once the standalone PG renderer is
+                better at supporting live rendering, it will also be possible to set this to
+                <c>renderer</c>. When <webwork/> exercises are <q>live</q>, embedded in HTML, this
+                is the method that will be used. Either communicating with a <c>webwork2</c> server
+                or a PG renderer.
+            </p>
+        </subsection>
+
         <subsection xml:id="publication-file-webwork-pg-location">
             <title>PG Location</title>
             <p>The attribute
@@ -1032,6 +1046,20 @@
                 gives the absolute file path to a local copy of the <c>pg</c> repository, for when
                 static processing is local. The default value is <c>/opt/webwork/pg</c>. See
                 <xref ref="webwork-local-pg-static-processing"/>.
+            </p>
+        </subsection>
+
+        <subsection xml:id="publication-file-webwork-renderer">
+            <title>PG Renderer</title>
+            <p>
+                The URL to a PG renderer instance is in the attribute
+                <cd>
+                    <cline>/publication/webwork/@renderer</cline>
+                </cd>
+                It should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not
+                include a trailing slash. The renderer should use PG 2.19 or later. The default
+                value is <c>https://webwork-dev.aimath.org</c>. At this time, this is the only
+                instance of the PG renderer that is configured to work for <pretext/>.
             </p>
         </subsection>
 
@@ -1088,7 +1116,6 @@
 
         <subsection xml:id="publication-file-webwork-task-reveal">
             <title>Task Reveal</title>
-
             <p>
                 The attribute
                 <cd>

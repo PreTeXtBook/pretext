@@ -17,10 +17,10 @@
 
   <introduction>
     <p>
-      You can embed <webwork/> exercises in your <pretext/> project. This requires using a
-      <c>webwork2</c> server that is version 2.16 or later. The server could be the AIM <webwork/>
-      server that has been set up for this purpose, so to get started, there is no need to establish
-      your own <c>webwork2</c> server.
+      You can embed <webwork/> exercises in your <pretext/> project. This requires using either a
+      <c>webwork2</c> server that is version 2.16 or later, or a PG renderer that uses PG 2.19 or
+      later. Either of these could be AIM servers that have been set up for this purpose, so to get
+      started, there is no need to establish your own <c>webwork2</c> server or PG renderer.
     </p>
     <p>
       Part of the process can optionally be sped up by using a local copy of the <c>pg</c>
@@ -177,6 +177,27 @@
     </p>
   </section>
 
+  <section xml:id="webwork-renderer-static-processing">
+    <title>Using a PG rendering service</title>
+    <p>
+      <webwork/> problems can be processed using a standalone PG renderer. At this time, this
+      feature is under development. There is one functional renderer on an AIM server. We hope to
+      make the renderer something that is easy for anyone to install at other locations. The
+      renderer is more lightweight than a <c>webwork2</c> server and runs significantly faster
+      (although not as fast as using local <c>pg</c>).
+    </p>
+    <p>
+      To use this processing method, in a publisher file, you can set the <tag>webwork</tag> element
+      to have <attr>static-processing</attr> with value <c>renderer</c>. This will use the AIM
+      instance of the renderer. When the renderer becomes something you can install on other
+      servers, you will have another publisher option to specify where it is.
+    </p>
+    <p>
+      At this time, you will still need to use a <c>webwork2</c> server for problems in your HTML
+      output to render as live interactive exercises.
+    </p>
+  </section>
+
   <section xml:id="webwork-server-configuration">
     <title>Configuring a <c>webwork2</c> Server for <pretext/></title>
     <p>
@@ -189,7 +210,7 @@
       <webwork/> needs to be 2.16 or later for use with <pretext/>.
     </p>
     <p>
-      The only thing you need to do at the serverlevel is set the web server to use certain headers
+      The only thing you need to do at the server level is set the web server to use certain headers
       on content that is fetched. These headers tell a web browser that you are authorizing it to
       display content from this web server as embedded content inside pages from another web server
       (in particular, where you are hosting you <pretext/> book).
@@ -295,7 +316,7 @@
       <q>Allowed to view course home page</q> which should also be set to <c>login_proctor</c>.
     </p>
     <p>
-      In the Accounts Manager(Classlist Editor in older versions of <webwork/>), add a user named
+      In the Accounts Manager (Classlist Editor in older versions of <webwork/>), add a user named
       <c>anonymous</c> (again, you could use some other name), and set that user's permission level
       to <c>login_proctor</c>, the permission level one higher than <c>student</c>. Set that user's
       password to <c>anonymous</c> (again, you could use some other password). Note that because
@@ -362,30 +383,34 @@
   </section>
 
   <section xml:id="webwork-pg-macros">
-    <title>PG Macros from the <pretext/> Source</title>
+    <title>PG Macros from the <pretext/> source</title>
     <p>
       The project's <webwork/> exercises may rely on PG macros that are written into the project's
       source. For example, the exercises might have TikZ images that rely on
       <tag>docinfo/latex-image-preamble</tag>.
     </p>
     <p>
-      For this, a PG macro library file must be built and placed in the host course's
-      <c>templates/macros/</c> folder <em>before</em> attempting to process the <webwork/>
-      exercises. To build this macro library, run:
+      For this, a PG macro library file must be built and placed wherever it is needed. To build
+      this macro library, run:
       <cd>
-        pretext -c pg-macros aota.ptx
+        pretext/pretext/pretext -c pg-macros -p publication.xml mainfile.ptx
       </cd>
-      <c>aota.ptx</c> in the example is the root file for your <pretext/> project. You could also
-      specify a location to place the resulting macro library file:
-      <cd>
-        pretext -c pg-macros -d some/file/path aota.ptx
-      </cd>
+      <ul>
+        <li>
+          <q><c>publication.xml</c></q> should be your project's publisher file that declares a
+          generated folder, and you may need to include the path to this file.
+        </li>
+        <li>
+          <q><c>mainfile.ptx</c></q> should be the main file for your <pretext/> project.
+        </li>
+      </ul>
+      This will place the PG macros file in <c>generated/webwork/pg/[TITLE]/macros/</c> where
+      <c>[TITLE]</c> is a file-safe version of the title of your project. If you are using a host
+      course on a <c>webwork2</c> server, plase this macros file in that course's macros folder.
     </p>
     <p>
-      Once you have the macro library file, upload it to the host <webwork/> course's
-      <c>templates/macros</c> folder. If your project relies on the AIM <webwork/> server and you
-      need to supply a macro library file to a host course on that server, post to
-      <email>pretex-support@googlegroups.com</email> and we can help with that.
+      If the project's source changes in such a way that these PG macros would change, this file
+      should be regenerated.
     </p>
   </section>
 
@@ -535,7 +560,8 @@
         that you wrote, set defintion files corresponding to the sections (or other chunks) of your
         project, and header files for those sets. All of this was placed into your project's
         <c>generated/webwork/pg</c> folder when you executed <c>pretext -c webwork</c>, so you could
-        find it there and package it all up to send to your <webwork/> server.      </p>
+        find it there and package it all up to send to your <webwork/> server.
+      </p>
       <p>
         Alternativley, you may run the following:
       </p>
@@ -568,33 +594,9 @@
         </li>
         <li>
           <p>
-            Certain aspects of specifying borders of a <pretext/> <tag>tabular</tag> are not
-            realizable in a <init>PGML</init> table. Specifically,
-            <ul>
-              <li>
-                <p>
-                  Specifying column-specific top border attributes are not implemented.
-                </p>
-              </li>
-              <li>
-                <p>
-                  Cell-specific bottom border attributes are not implemented.
-                </p>
-              </li>
-              <li>
-                <p>
-                  <c>medium</c> and <c>major</c> table rule-thickness attributes will be handled as
-                  if they were <c>minor</c>.
-                </p>
-              </li>
-            </ul>
-          </p>
-        </li>
-        <li>
-          <p>
-            When constructing a list (<tag>ul</tag> or <tag>ol</tag>) specifying some number of
-            columns (using the <attr>cols</attr> attribute) will be ignored. PGML markup has no way
-            to declare multicolumn lists.
+            When constructing a list (<tag>ul</tag> or <tag>ol</tag>)
+            specifying some number of columns (using the <attr>cols</attr> attribute)
+            will be ignored. PGML markup has no way to declare multicolumn lists.
           </p>
         </li>
       </ul>
