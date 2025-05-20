@@ -1,0 +1,199 @@
+<diagram>
+  <annotations>
+    <annotation id="figure" speech2="A network with six nodes and nine edges.  We will remove four edges to form a spanning tree.">
+      <grouped>figure</grouped>
+      <position>1</position>
+      <children>
+        <active>nodes</active>
+        <active>edges</active>
+      </children>
+      <components>
+        <active>nodes</active>
+        <active>edges</active>
+      </components>
+    </annotation>
+    <annotation id="nodes" speech2="The six nodes are labeled from one to six.">
+      <grouped>nodes</grouped>
+      <position>1</position>
+      <children>
+        <active>node-1</active>
+        <active>node-2</active>
+        <active>node-3</active>
+        <active>node-4</active>
+        <active>node-5</active>
+        <active>node-6</active>
+      </children>
+      <components>
+        <active>node-1</active>
+        <active>node-2</active>
+        <active>node-3</active>
+        <active>node-4</active>
+        <active>node-5</active>
+        <active>node-6</active>
+      </components>
+      <parents>
+        <grouped>figure</grouped>
+      </parents>
+    </annotation>
+    <annotation id="node-1" speech2="The node 1">
+      <active>node-1</active>
+      <position>1</position>
+      <parents>
+        <grouped>nodes</grouped>
+      </parents>
+    </annotation>
+    <annotation id="node-2" speech2="The node 2">
+      <active>node-2</active>
+      <position>2</position>
+      <parents>
+        <grouped>nodes</grouped>
+      </parents>
+    </annotation>
+    <annotation id="node-3" speech2="The node 3">
+      <active>node-3</active>
+      <position>3</position>
+      <parents>
+        <grouped>nodes</grouped>
+      </parents>
+    </annotation>
+    <annotation id="node-4" speech2="The node 4">
+      <active>node-4</active>
+      <position>4</position>
+      <parents>
+        <grouped>nodes</grouped>
+      </parents>
+    </annotation>
+    <annotation id="node-5" speech2="The node 5">
+      <active>node-5</active>
+      <position>5</position>
+      <parents>
+        <grouped>nodes</grouped>
+      </parents>
+    </annotation>
+    <annotation id="node-6" speech2="The node 6">
+      <active>node-6</active>
+      <position>6</position>
+      <parents>
+        <grouped>nodes</grouped>
+      </parents>
+    </annotation>
+    <annotation id="edges" speech2="There are nine edges, four of which will be removed to form a spanning tree">
+      <grouped>edges</grouped>
+      <position>2</position>
+      <children>
+        <active>kept-edges</active>
+        <active>removed-edges</active>
+      </children>
+      <components>
+        <active>kept-edges</active>
+        <active>removed-edges</active>
+      </components>
+      <parents>
+        <grouped>figure</grouped>
+      </parents>
+    </annotation>
+    <annotation id="kept-edges" speech2="We will keep five edges">
+      <grouped>kept-edges</grouped>
+      <position>1</position>
+      <children>
+        <active>edge-1-3</active>
+        <active>edge-1-5</active>
+        <active>edge-2-5</active>
+        <active>edge-6-2</active>
+        <active>edge-3-4</active>
+      </children>
+      <components>
+        <active>edge-1-3</active>
+        <active>edge-1-5</active>
+        <active>edge-2-5</active>
+        <active>edge-6-2</active>
+        <active>edge-3-4</active>
+      </components>
+      <parents>
+        <grouped>edges</grouped>
+      </parents>
+    </annotation>
+    <annotation id="edge-1-3" speech2="We keep the edge connecting nodes 1 and 3">
+      <active>edge-1-3</active>
+      <position>1</position>
+      <parents>
+        <grouped>kept-edges</grouped>
+      </parents>
+    </annotation>
+    <annotation id="edge-1-5" speech2="We keep the edge connecting nodes 1 and 5">
+      <active>edge-1-5</active>
+      <position>2</position>
+      <parents>
+        <grouped>kept-edges</grouped>
+      </parents>
+    </annotation>
+    <annotation id="edge-2-5" speech2="We keep the edge connecting nodes 2 and 5">
+      <active>edge-2-5</active>
+      <position>3</position>
+      <parents>
+        <grouped>kept-edges</grouped>
+      </parents>
+    </annotation>
+    <annotation id="edge-6-2" speech2="We keep the edge connecting nodes 2 and 6">
+      <active>edge-6-2</active>
+      <position>4</position>
+      <parents>
+        <grouped>kept-edges</grouped>
+      </parents>
+    </annotation>
+    <annotation id="edge-3-4" speech2="We keep the edge connecting nodes 3 and 4">
+      <active>edge-3-4</active>
+      <position>5</position>
+      <parents>
+        <grouped>kept-edges</grouped>
+      </parents>
+    </annotation>
+    <annotation id="removed-edges" speech2="We will remove four edges">
+      <grouped>removed-edges</grouped>
+      <position>2</position>
+      <children>
+        <active>edge-1-4</active>
+        <active>edge-2-4</active>
+        <active>edge-3-5</active>
+        <active>edge-6-4</active>
+      </children>
+      <components>
+        <active>edge-1-4</active>
+        <active>edge-2-4</active>
+        <active>edge-3-5</active>
+        <active>edge-6-4</active>
+      </components>
+      <parents>
+        <grouped>edges</grouped>
+      </parents>
+    </annotation>
+    <annotation id="edge-1-4" speech2="We remove the edge connecting nodes 1 and 4">
+      <active>edge-1-4</active>
+      <position>1</position>
+      <parents>
+        <grouped>removed-edges</grouped>
+      </parents>
+    </annotation>
+    <annotation id="edge-2-4" speech2="We remove the edge connecting nodes 2 and 4">
+      <active>edge-2-4</active>
+      <position>2</position>
+      <parents>
+        <grouped>removed-edges</grouped>
+      </parents>
+    </annotation>
+    <annotation id="edge-3-5" speech2="We remove the edge connecting nodes 3 and 5">
+      <active>edge-3-5</active>
+      <position>3</position>
+      <parents>
+        <grouped>removed-edges</grouped>
+      </parents>
+    </annotation>
+    <annotation id="edge-6-4" speech2="We remove the edge connecting nodes 4 and 6">
+      <active>edge-6-4</active>
+      <position>4</position>
+      <parents>
+        <grouped>removed-edges</grouped>
+      </parents>
+    </annotation>
+  </annotations>
+</diagram>
