@@ -71,6 +71,7 @@
     </xsl:variable>
     <xsl:variable name="macro-file-content">
         <xsl:call-template name="header"/>
+        <xsl:apply-templates select="$document-root" mode="pg-macros"/>
         <xsl:apply-templates select="$document-root" mode="latex-image-preamble"/>
     </xsl:variable>
     <exsl:document href="{$macro-file-name}" method="text">
@@ -78,6 +79,15 @@
             <xsl:with-param name="text" select="$macro-file-content" />
         </xsl:call-template>
     </exsl:document>
+</xsl:template>
+
+<xsl:template match="book|article" mode="pg-macros">
+    <xsl:if test="$docinfo/pg-macros">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="$docinfo/pg-macros" />
+        </xsl:call-template>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="book|article" mode="latex-image-preamble">
@@ -104,7 +114,7 @@
     <xsl:apply-templates select="$document-root" mode="title-full" />
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>#############################################################################&#xa;</xsl:text>
-    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
