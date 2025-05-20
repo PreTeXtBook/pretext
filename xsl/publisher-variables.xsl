@@ -1264,12 +1264,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='static-processing']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- How to process PG for interactive output -->
+<xsl:variable name="webwork-interactive-processing">
+    <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='interactive-processing']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 <!-- Location of PG library for local static processing -->
 <xsl:variable name="webwork-pg-location">
     <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='pg-location']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
-<!-- WeBWorK server location and credentials for the daemon course -->
+<!-- PG renderer location -->
+<xsl:variable name="webwork-renderer">
+    <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='renderer']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
+<!-- WeBWorK server location and credentials which might be for a webwork2 -->
+<!-- course or might be for an instance of the static renderer             -->
 <xsl:variable name="webwork-server">
     <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='server']" mode="set-pubfile-variable"/>
 </xsl:variable>
@@ -1298,7 +1309,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="webwork-task-reveal">
     <xsl:apply-templates select="$publisher-attribute-options/webwork/pi:pub-attribute[@name='task-reveal']" mode="set-pubfile-variable"/>
 </xsl:variable>
-
 
 <!-- WeBWork problem representations are formed by Python routines  -->
 <!-- in the   pretext.py  module that communicates with a WeBWorK   -->
@@ -3263,8 +3273,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </worksheet>
     </latex>
     <webwork>
-        <pi:pub-attribute name="static-processing" default="webwork2" options="local"/>
+        <pi:pub-attribute name="static-processing" default="webwork2" options="local renderer"/>
+        <pi:pub-attribute name="interactive-processing" default="webwork2" options="renderer"/>
         <pi:pub-attribute name="pg-location" default="/opt/webwork/pg" freeform="yes"/>
+        <pi:pub-attribute name="renderer" default="https://webwork-dev.aimath.org" freeform="yes"/>
         <pi:pub-attribute name="server" default="https://webwork-ptx.aimath.org" freeform="yes"/>
         <pi:pub-attribute name="course" default="anonymous" freeform="yes"/>
         <pi:pub-attribute name="user" default="anonymous" freeform="yes"/>

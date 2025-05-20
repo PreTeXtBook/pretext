@@ -43,8 +43,10 @@
 <!-- The top of the ephemeral XML tree has some global attributes.         -->
 
 <!-- Then for each exercise, we record:                                    -->
-<!-- 1.  origin: there are two possible values                             -->
+<!-- 1.  origin: there are three possible values                           -->
 <!--        "generated" (it was authored in PTX)                           -->
+<!--        "external" (it is a local .pg file within the external folder  -->
+<!--            indicated by @local on the webwork element)                -->
 <!--        "webwork2" (it is a pg file accessible from a webwork2 host    -->
 <!--            course's templates folder indicated by @source on the      -->
 <!--            webwork element)                                           -->
@@ -52,6 +54,7 @@
 <!-- 2.  a seed for randomization                                          -->
 <!-- 3.  path: a file path to a .pg version of the problem                 -->
 <!--         path-defined-by-document-structure                            -->
+<!--         path-defined-by-@local                                        -->
 <!--         path-defined-by-@source                                       -->
 <!-- 4.  pghuman: human readable PG (for generated exercises only)         -->
 <!-- 5.  PG that is somewhat minimized (and less human-readable)           -->
@@ -146,6 +149,9 @@
             <xsl:attribute name="password">
                 <xsl:value-of select="$webwork-password"/>
             </xsl:attribute>
+            <xsl:attribute name="renderer">
+                <xsl:value-of select="$webwork-renderer"/>
+            </xsl:attribute>
         </server-params-pub>
         <!-- Settings for how PG is processed -->
         <processing>
@@ -180,11 +186,14 @@
         <xsl:attribute name="id">
             <xsl:value-of select="$problem" />
         </xsl:attribute>
-        <!-- 1. a generated|webwork2 flag                                          -->
+        <!-- 1. a generated|external|webwork2 flag                                 -->
         <xsl:attribute name="origin">
             <xsl:choose>
                 <xsl:when test="statement|task|text()">
                     <xsl:text>generated</xsl:text>
+                </xsl:when>
+                <xsl:when test="@local">
+                    <xsl:text>external</xsl:text>
                 </xsl:when>
                 <xsl:when test="@source">
                     <xsl:text>webwork2</xsl:text>
@@ -771,35 +780,6 @@
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>TEXT(beginproblem());</xsl:text>
-    <xsl:if test="not($b-human-readable)">
-        <!-- see select-latex-macros template -->
-        <xsl:variable name="macros">
-            <xsl:call-template name="select-latex-macros"/>
-        </xsl:variable>
-        <xsl:if test="$macros != ''">
-            <xsl:variable name="wrapped-macros">
-                <xsl:text>&lt;div style="display:none;">\(</xsl:text>
-                <xsl:value-of select="$macros" />
-                <xsl:text>\)&lt;/div></xsl:text>
-            </xsl:variable>
-            <xsl:variable name="delimiter">
-                <xsl:call-template name="find-unused-character">
-                    <xsl:with-param name="string" select="$wrapped-macros"/>
-                    <!-- https://stackoverflow.com/questions/43617820/what-are-the-legal-delimiters-for-perl-5s-pick-your-own-quotes-operators    -->
-                    <!-- NB: don't use (), <>, [], {}, because as perl delimiters, closer must be the right version; too complicated to check for -->
-                    <xsl:with-param name="charset" select="concat($apos,'|/?.,+-_~`!@$%^&amp;*')"/>
-                </xsl:call-template>
-            </xsl:variable>
-            <xsl:text>TEXT(MODES(PTX=&gt;'',HTML=&gt;</xsl:text>
-            <xsl:if test="$delimiter != $apos">
-                <xsl:text>q</xsl:text>
-            </xsl:if>
-            <xsl:value-of select="$delimiter"/>
-            <xsl:value-of select="$wrapped-macros"/>
-            <xsl:value-of select="$delimiter"/>
-            <xsl:text>));&#xa;</xsl:text>
-        </xsl:if>
-    </xsl:if>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
@@ -1581,6 +1561,9 @@
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
+    <xsl:if test="preceding-sibling::p|ancestor::sidebyside">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
     <xsl:text>[@image(insertGraph(</xsl:text>
     <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text>), width=&gt;</xsl:text>
@@ -1679,40 +1662,6 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Inside math we need to print definitions for PTX author-defined      -->
-<!-- LaTeX macros to support WeBWorK's images display mode.               -->
-
-<!-- TODO: This named template examines the current context (see '.' in   -->
-<!-- contains() below), so should be a match template. But its recursive  -->
-<!-- implementation makes it a named template for now.                    -->
-<xsl:template name="select-latex-macros">
-    <xsl:param name="macros" select="$latex-macros" />
-    <xsl:variable name="trimmed-start">
-        <xsl:if test="contains($macros, '\newcommand{')">
-            <xsl:value-of select="substring-after($macros, '\newcommand{')"/>
-        </xsl:if>
-    </xsl:variable>
-    <xsl:variable name="macro-name">
-        <xsl:if test="contains($trimmed-start, '}')">
-            <xsl:value-of select="substring-before($trimmed-start, '}')"/>
-        </xsl:if>
-    </xsl:variable>
-    <xsl:variable name="macro-command">
-        <xsl:value-of select="substring-before($macros, '&#xa;')"/>
-    </xsl:variable>
-    <xsl:variable name="next-lines">
-        <xsl:value-of select="substring-after($macros, '&#xa;')"/>
-    </xsl:variable>
-    <xsl:if test="contains(., $macro-name)">
-        <xsl:value-of select="normalize-space($macro-command)"/>
-    </xsl:if>
-    <xsl:if test="not($next-lines = '')">
-        <xsl:call-template name="select-latex-macros">
-            <xsl:with-param name="macros" select="$next-lines"/>
-        </xsl:call-template>
-    </xsl:if>
-</xsl:template>
-
 <!-- ##################################################################### -->
 <!-- ##################################################################### -->
 <!-- Above: templates for elements that only ever apply within a webwork   -->
@@ -1729,7 +1678,7 @@
 <!-- inside a list, special handling                                      -->
 <xsl:template match="p">
     <xsl:param name="b-human-readable" />
-    <xsl:if test="preceding-sibling::p and not(child::*[1][self::ol] or child::*[1][self::ul])">
+    <xsl:if test="preceding-sibling::p and not(child::*[1][self::ol]|child::*[1][self::ul]) or ancestor::sidebyside">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:apply-templates>
@@ -1759,30 +1708,137 @@
     </xsl:if>
 </xsl:template>
 
+<!-- ################# -->
+<!-- Image and Tabular -->
+<!-- ################# -->
+
 <!-- Some common wrappers for image and tabular   -->
-<!-- Formerly this template was for sidebyside    -->
-<!-- And we leave it to also work on a sidebyside -->
-<!-- for backwards compatibility. However, such   -->
-<!-- use will be caught by a deprectation warning -->
-<!-- as well as fail a schema validation.         -->
-<xsl:template match="image|tabular|sidebyside">
+<xsl:template match="image|tabular">
     <xsl:param name="b-human-readable" />
-    <xsl:if test="preceding-sibling::p">
-        <xsl:call-template name="potential-list-indent" />
-    </xsl:if>
-    <xsl:if test="not(ancestor::li)">
+    <xsl:if test="not(ancestor::li|ancestor::sidebyside)">
         <xsl:text>&gt;&gt; </xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="self::image|self::tabular|self::sidebyside/image|self::sidebyside/tabular" mode="components">
+    <xsl:apply-templates select="self::image|self::tabular" mode="components">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:if test="not(ancestor::li)">
+    <xsl:if test="not(ancestor::li|ancestor::sidebyside)">
         <xsl:text> &lt;&lt;</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:if test="following-sibling::*|parent::introduction/following-sibling::task">
+    <xsl:if test="following-sibling::*|parent::introduction/following-sibling::task or not(parent::sidebyside)">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- ########## -->
+<!-- Sidebyside -->
+<!-- ########## -->
+
+<xsl:template match="*" mode="panel-panel">
+    <xsl:param name="b-human-readable" />
+    <xsl:param name="width" />
+    <xsl:param name="left-margin" />
+    <xsl:param name="right-margin" />
+    <xsl:param name="valign" />
+
+    <xsl:variable name="arguments">
+    </xsl:variable>
+
+    <xsl:text>    [.&#xa;</xsl:text>
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:text>    .]</xsl:text>
+    <!-- star indicates cell is at the end of a row (end of one sbs in a sbsgroup) -->
+    <xsl:if test="not(following-sibling::*)">
+        <xsl:text>*</xsl:text>
+    </xsl:if>
+    <xsl:if test="$arguments != ''">
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$arguments"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+>>>>>>> e9c566e3 (WeBWorK: xsl and pretext for 2.19)
+</xsl:template>
+
+<xsl:template match="sidebyside" mode="compose-panels">
+    <xsl:param name="layout" />
+    <xsl:param name="panels" />
+
+    <xsl:variable name="arguments">
+        <xsl:choose>
+            <xsl:when test="@widths">
+                <xsl:text>align => '</xsl:text>
+                <xsl:for-each select="str:tokenize(@widths)">
+                    <xsl:text>p{</xsl:text>
+                    <xsl:call-template name="normalize-percentage">
+                        <xsl:with-param name="percentage" select="."/>>
+                    </xsl:call-template>
+                    <xsl:text>}</xsl:text>
+                </xsl:for-each>
+                <xsl:text>',</xsl:text>
+            </xsl:when>
+            <xsl:when test="@width">
+                <xsl:text>align => '*{</xsl:text>
+                <xsl:value-of select="$layout/number-panels"/>
+                <xsl:text>}{p{</xsl:text>
+                    <xsl:apply-templates select="." mode="absolute-width-inches"/>
+                <xsl:text>}}',</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:if test="$layout/valign != 'top'">
+            <xsl:text>valign => '</xsl:text>
+            <xsl:value-of select="$layout/valign"/>
+            <xsl:text>',</xsl:text>
+        </xsl:if>
+    </xsl:variable>
+
+    <xsl:text>[#&#xa;</xsl:text>
+    <xsl:copy-of select="$panels" />
+    <xsl:text>#]*</xsl:text>
+    <xsl:if test="$arguments != ''">
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$arguments"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="sbsgroup/sidebyside" mode="compose-panels">
+    <xsl:param name="panels" />
+    <xsl:copy-of select="$panels" />
+</xsl:template>
+
+<xsl:template match="sbsgroup">
+    <xsl:param name="b-human-readable" />
+
+    <xsl:variable name="arguments">
+        <xsl:if test="@width">
+            <xsl:text>align => 'p{</xsl:text>
+            <xsl:apply-templates select="." mode="absolute-width-inches"/>
+            <xsl:text>}*{</xsl:text>
+            <xsl:value-of select="$layout/number-panels"/>
+            <xsl:text>}',</xsl:text>
+        </xsl:if>
+        <xsl:if test="@valign and (@valign != 'top')">
+            <xsl:text>valign => '</xsl:text>
+            <xsl:value-of select="$layout/valign"/>
+            <xsl:text>',</xsl:text>
+        </xsl:if>
+    </xsl:variable>
+
+    <xsl:text>[#&#xa;</xsl:text>
+    <xsl:apply-templates select="sidebyside">
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:text>#]*</xsl:text>
+    <xsl:if test="$arguments != ''">
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$arguments"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ######### -->
@@ -1810,10 +1866,6 @@
 <!-- each math environment. This is the only way to simultaneiously        -->
 <!-- support HTML_mathjax, HTML_dpng, and TeX display modes.               -->
 
-<!-- extract-pg-ptx.xsl documentation -->
-<!-- PGML inline math uses its own delimiters: [`...`] and [```...```]     -->
-<!-- NB: we allow the "var" element as a child                             -->
-
 <!-- Common documentation -->
 <!-- See the -common stylesheet for manipulations of math elements     -->
 <!-- and subsequent text nodes that lead with punctuation.  Basically, -->
@@ -1826,9 +1878,6 @@
 <xsl:template match="m">
     <xsl:param name="b-human-readable" />
     <xsl:text>[`</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="select-latex-macros"/>
-    </xsl:if>
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
@@ -1846,9 +1895,6 @@
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>[```</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="select-latex-macros"/>
-    </xsl:if>
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
@@ -1939,9 +1985,6 @@
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>[```</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="select-latex-macros"/>
-    </xsl:if>
     <xsl:value-of select="$content" />
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
@@ -2601,7 +2644,9 @@
 
 <xsl:template match="tabular" mode="components">
     <xsl:param name="b-human-readable" />
-
+    <xsl:if test="preceding-sibling::p|ancestor::sidebyside">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
     <xsl:text>[@DataTable(</xsl:text>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
@@ -2657,6 +2702,7 @@
         </xsl:call-template>
     </xsl:if>
     <xsl:if test="$b-human-readable">
+        <xsl:text>&#xa;</xsl:text>
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>);@]*</xsl:text>
@@ -3156,7 +3202,7 @@
 <!-- Base indentation for lines of code in the middle of a list -->
 <xsl:template name="potential-list-indent">
     <xsl:call-template name="duplicate-string">
-        <xsl:with-param name="count" select="4 * (count(ancestor::ul) + count(ancestor::ol))" />
+        <xsl:with-param name="count" select="4 * (count(ancestor::ul) + count(ancestor::ol) + 2*count(ancestor::sidebyside))" />
         <xsl:with-param name="text"  select="' '" />
     </xsl:call-template>
 </xsl:template>

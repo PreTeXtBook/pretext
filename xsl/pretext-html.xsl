@@ -10725,6 +10725,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data-origin">
             <xsl:value-of select="rendering-data/@origin"/>
         </xsl:attribute>
+        <xsl:attribute name="data-renderer">
+            <xsl:value-of select="$webwork-renderer"/>
+        </xsl:attribute>
+        <xsl:attribute name="data-processing">
+            <xsl:value-of select="$webwork-interactive-processing"/>
+        </xsl:attribute>
         <xsl:choose>
             <xsl:when test="rendering-data/@problemSource">
                 <xsl:attribute name="data-problemSource">
@@ -10752,7 +10758,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="rendering-data/@password">
                     <xsl:value-of select="rendering-data/@password"/>
                 </xsl:when>
-                <!-- Old representations files will have @course-password instead of @password -->
                 <xsl:otherwise>
                     <xsl:value-of select="rendering-data/@course-password"/>
                 </xsl:otherwise>

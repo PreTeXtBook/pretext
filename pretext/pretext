@@ -326,10 +326,10 @@ def get_cli_arguments():
         ("latex-image", "LaTeX pictures (method: [xelatex], pdflatex)"),
         (
             "webwork",
-            "WeBWorK problems in authored, PG, url, and static representations",
+            "WeBWorK problems in PG files and various representations",
         ),
         ("references", "References and citations via Citation Stylesheet Language"),
-        ("pg-macros", "Server-side macros for WeBWorK problem generation"),
+        ("pg-macros", "PG macros for WeBWorK problem generation"),
         ("dynamic", "Expression subsitutions for dynamically generated exercises"),
         ("youtube", "Thumbnails for YouTube videos (JPEG only)"),
         ("play-button", "generate generic static video image"),
@@ -387,7 +387,7 @@ def get_cli_arguments():
         ),
         ("assembly-version", "PreTeXt source, after pre-processor resolves versions and customizations (for developers)", ),
         ("sagenb", "Sage worksheet conversion (removed)"),
-        ("webwork-sets", "Folder tree of PG files, set definitions, and set headers"),
+        ("webwork-sets", "Folder tree of PG files, PG macros, set definitions, and set headers"),
         ("all", "All available output formats"),
     ]
     format_help = "Output formats are:\n" + "\n".join(
