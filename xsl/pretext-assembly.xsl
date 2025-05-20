@@ -864,7 +864,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- element ("pi:") for later consumption.  Review the destination for     -->
 <!-- similar notes about possible changes.                                  -->
 
-<xsl:template match="webwork[* or @copy or @source]" mode="webwork">
+<xsl:template match="webwork[* or @copy or @source or @local]" mode="webwork">
     <!-- Every "webwork" that is a problem (not a generator) gets a   -->
     <!-- lifetime identification in both passes through the source.   -->
     <!-- The first migrates through the "extract-pg.xsl" template,    -->
@@ -963,6 +963,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:when>
                     <xsl:when test="$target/self::webwork[@source]">
                         <xsl:text>the @copy attribute points a "webwork" with a @source attribute.  (Replace the @copy by the @source?)</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$target/self::webwork[@local]">
+                        <xsl:text>the @copy attribute points a "webwork" with a @local attribute.  (Replace the @copy by the @local?)</xsl:text>
                     </xsl:when>
                     <xsl:when test="$target/self::webwork[@copy]">
                         <xsl:text>the @copy attribute points to "webwork" with a @copy attribute. Sorry, we are not that sophisticated.</xsl:text>
