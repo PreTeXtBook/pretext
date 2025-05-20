@@ -114,15 +114,16 @@ PGOUT      = $(SCRATCH)/pg
 #  folder. There are no macros for the minimal example, so omitted.
 
 sample-chapter-macros:
-	install -d $(PGOUT)/macros
-	cd $(PGOUT)/macros; \
-	$(PTX)/pretext/pretext -v -c pg-macros -p $(SMPCPUB) $(SMPC)
+	$(PTX)/pretext/pretext -v -c pg-macros -p $(SMPCPUB) -d $(PGOUT)/macros $(SMPC)
 
 
 #########################################################################
 #  Extract webwork problems into a single XML file.
 #  Location is within generated folder (named in the publisher file),
 #  within "webwork" subfolder
+#  This also produces PG files for each problem, PG macros, set defintion
+#  files for problem sets, and set header files all within the "webwork/pg"
+#  folder
 
 sample-chapter-representations:
 	$(PTX)/pretext/pretext -v -c webwork -p $(SMPCPUB) $(SMPC)
