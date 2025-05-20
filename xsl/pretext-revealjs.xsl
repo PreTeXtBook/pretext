@@ -258,7 +258,7 @@ div[style*="display:table-cell"] img {
     width: 100%;
 }
           </style>
-
+          <xsl:call-template name="diagcess-header"/>
         </head>
 
         <body>
@@ -271,6 +271,7 @@ div[style*="display:table-cell"] img {
                     <xsl:apply-templates select="section|slide"/>
                 </div>
             </div>
+            <xsl:call-template name="diagcess-footer"/>
         </body>
 
         <script>
