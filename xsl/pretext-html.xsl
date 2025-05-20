@@ -1028,12 +1028,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <h2 class="heading">
         <span class="title">
             <xsl:apply-templates select="$document-root" mode="title-full" />
-            <xsl:if test="$b-has-subtitle">
-                <xsl:text>:</xsl:text>
-            </xsl:if>
         </span>
         <xsl:if test="$b-has-subtitle">
-            <xsl:text> </xsl:text>
             <span class="subtitle">
                 <xsl:apply-templates select="$document-root" mode="subtitle" />
             </span>
@@ -6919,9 +6915,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         <!-- Do not use shorttitle in masthead,  -->
                                         <!-- which is much like cover of a book  -->
                                         <xsl:apply-templates select="$document-root" mode="title-simple" />
-                                        <xsl:if test="$b-has-subtitle">
-                                            <xsl:text>:</xsl:text>
-                                        </xsl:if>
                                     </span>
                                     <xsl:if test="$b-has-subtitle">
                                         <xsl:text> </xsl:text>
@@ -10952,9 +10945,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <!-- Do not use shorttitle in masthead,  -->
                                     <!-- which is much like cover of a book  -->
                                     <xsl:apply-templates select="$document-root" mode="title-simple" />
-                                    <xsl:if test="$b-has-subtitle">
-                                        <xsl:text>:</xsl:text>
-                                    </xsl:if>
                                 </span>
                                 <xsl:if test="$b-has-subtitle">
                                     <xsl:text> </xsl:text>
