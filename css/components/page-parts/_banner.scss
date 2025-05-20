@@ -39,11 +39,15 @@ $centered-content: false !default;
     padding-left: 9.68px;
     overflow: hidden;
     flex: 1;
-  
+
     .heading {
       font-weight: 700;
       font-size: 100%;
       line-height: 1.25em;
+    }
+
+    .title:has(+ .subtitle)::after {
+      content: ":";
     }
 
     .subtitle {
@@ -103,7 +107,7 @@ $centered-content: false !default;
       flex: unset;
       .heading {
         line-height: 1em;
-        
+
         .subtitle {
           /* Force the subtitle onto a separate line */
           display: block;
