@@ -16,6 +16,8 @@ Recent changes:
 2009-10-19: Added the $exclude-these-namespaces parameter 
 2009-10-08: Added $att-value parameter and template name to template rule for attributes.
 
+2025-05-27: PreTeXt, R. Beezer.  Escaped "greater-than".
+
 -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -286,8 +288,17 @@ Recent changes:
         <xsl:with-param name="with" select="'&amp;lt;'"/>
       </xsl:call-template>
     </xsl:variable>
+    <!-- 2025-05-27: PreTeXt, R. Beezer.  Escaped "greater-than". -->
+    <!-- Inserted new step w/ "gtEscaped" variable                -->
+    <xsl:variable name="gtEscaped">
+      <xsl:call-template name="replace-string">
+        <xsl:with-param name="text" select="$ltEscaped"/>
+        <xsl:with-param name="replace" select="'&gt;'"/>
+        <xsl:with-param name="with" select="'&amp;gt;'"/>
+      </xsl:call-template>
+    </xsl:variable>
     <xsl:call-template name="replace-string">
-      <xsl:with-param name="text" select="$ltEscaped"/>
+      <xsl:with-param name="text" select="$gtEscaped"/>
       <xsl:with-param name="replace" select="']]>'"/>
       <xsl:with-param name="with" select="']]&amp;gt;'"/>
     </xsl:call-template>
