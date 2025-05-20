@@ -840,7 +840,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- element ("pi:") for later consumption.  Review the destination for     -->
 <!-- similar notes about possible changes.                                  -->
 
-<xsl:template match="webwork[* or @copy or @source]" mode="webwork">
+<xsl:template match="webwork[* or @copy or @source or @local]" mode="webwork">
     <!-- Every "webwork" that is a problem (not a generator) gets a   -->
     <!-- lifetime identification in both passes through the source.   -->
     <!-- The first migrates through the "extract-pg.xsl" template,    -->
@@ -939,6 +939,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:when>
                     <xsl:when test="$target/self::webwork[@source]">
                         <xsl:text>the @copy attribute points a "webwork" with a @source attribute.  (Replace the @copy by the @source?)</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$target/self::webwork[@local]">
+                        <xsl:text>the @copy attribute points a "webwork" with a @local attribute.  (Replace the @copy by the @local?)</xsl:text>
                     </xsl:when>
                     <xsl:when test="$target/self::webwork[@copy]">
                         <xsl:text>the @copy attribute points to "webwork" with a @copy attribute. Sorry, we are not that sophisticated.</xsl:text>
@@ -2697,12 +2700,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This may only be needed as support for older servers' generated PreTeXt. -->
 <xsl:template match="statement//var[@form = 'checkboxes']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
 
-<!-- "var/@form" come back from the server as a result of authored -->
+<!-- @form comes back from the server as a result of authored      -->
 <!-- "answer forms" and should be rendered as lists in static      -->
 <!-- representations.                                              -->
 <!-- NB: this does not preclude the match below (scrubbing default -->
 <!-- items) from functioning.                                      -->
-<xsl:template match="statement//var[@form]" mode="webwork-rep-to-static">
+<xsl:template match="statement//ul[@form]|statement//var[@form]" mode="webwork-rep-to-static">
     <ul>
         <!-- duplicate attributes, but for @form -->
         <xsl:apply-templates select="@*[not(name() = 'form')]" mode="repair"/>
@@ -2726,6 +2729,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:apply-templates select="node()" mode="webwork-rep-to-static"/>
     </ul>
+</xsl:template>
+
+<xsl:template match="statement//ol[@form]" mode="webwork-rep-to-static">
+    <ol>
+        <!-- duplicate attributes, but for @form -->
+        <xsl:apply-templates select="@*[not(name() = 'form')]" mode="repair"/>
+        <!-- internal attribute to indicate WW origins -->
+        <xsl:attribute name="pi:ww-form">
+            <xsl:value-of select="@form"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()" mode="webwork-rep-to-static"/>
+    </ol>
+</xsl:template>
+
+<xsl:template match="statement//dl[@form]" mode="webwork-rep-to-static">
+    <dl>
+        <!-- duplicate attributes, but for @form -->
+        <xsl:apply-templates select="@*[not(name() = 'form')]" mode="repair"/>
+        <!-- internal attribute to indicate WW origins -->
+        <xsl:attribute name="pi:ww-form">
+            <xsl:value-of select="@form"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()" mode="webwork-rep-to-static"/>
+    </dl>
 </xsl:template>
 
 <!-- Default xeroxing template -->

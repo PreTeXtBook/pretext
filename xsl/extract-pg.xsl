@@ -32,27 +32,39 @@
     extension-element-prefixes="str"
 >
 
-<!-- This style sheet is intended to be used by the ptx script. It makes   -->
-<!-- several Python dictionaries that the ptx script will use to create a  -->
-<!-- single XML file called webwork-representations.xml with various       -->
-<!-- representations of each webwork.                                      -->
+<!-- This style sheet is intended to be used by pretext.py. It makes an    -->
+<!-- ephemeral XML tree with data about each webwork exercise in the PTX   -->
+<!-- project. This ephemeral tree also has some global publisher variable  -->
+<!-- data for how PG should be processed. This tree will be used by        -->
+<!-- pretext.py in conjuction with some form of renderer (webwork2, local  -->
+<!-- PG, or the standalone renderer) to create an XML file called          -->
+<!-- webwork-representations.xml with various representations of each      -->
 
-<!-- Each dictionary uses the webworks' visible-ids as keys. There are     -->
-<!-- dictionaries for obtaining:                                           -->
-<!-- 1. a ptx|server flag (authored in PTX [or a copy], or from server)    -->
-<!-- 1b. if it is copied, from which?                                      -->
-<!-- 2. a seed for randomization (with a default explicitly declared)      -->
-<!-- 3. source (a problem's file path if it is server-based)               -->
-<!-- 4. human readable PG (for PTX-authored)                               -->
-<!-- 5. PG optimized (and less human-readable) for use in PTX output modes -->
+<!-- The top of the ephemeral XML tree has some global attributes.         -->
+
+<!-- Then for each exercise, we record:                                    -->
+<!-- 1.  origin: there are three possible values                           -->
+<!--        "generated" (it was authored in PTX)                           -->
+<!--        "external" (it is a local .pg file within the external folder  -->
+<!--            indicated by @local on the webwork element)                -->
+<!--        "webwork2" (it is a pg file accessible from a webwork2 host    -->
+<!--            course's templates folder indicated by @source on the      -->
+<!--            webwork element)                                           -->
+<!-- 1b. if it is copied, what is an id from which it was copied?          -->
+<!-- 2.  a seed for randomization                                          -->
+<!-- 3.  path: a file path to a .pg version of the problem                 -->
+<!--         path-defined-by-document-structure                            -->
+<!--         path-defined-by-@local                                        -->
+<!--         path-defined-by-@source                                       -->
+<!-- 4.  pghuman: human readable PG (for generated exercises only)         -->
+<!-- 5.  PG that is somewhat minimized (and less human-readable)           -->
 
 <!-- The pretext/pretext script (-c webwork) uses all this to build a      -->
 <!-- single XML file (called webwork-representations.xml) containing       -->
 <!-- multiple representations of each webwork problem. The pretext/pretext -->
 <!-- script must be re-run whenever something changes with author source   -->
-<!-- within a webwork element. Or if something changes with a .pg file     -->
-<!-- that lives on a server. Or if the configuration of the hosting server -->
-<!-- or course changes.                                                    -->
+<!-- within a webwork element. Or if something changes with a .pg file.    -->
+<!-- Or if some configuration changes.                                     -->
 
 <!-- Then other translation sheets' assembly phase will factor in          -->
 <!-- webwork-representations.xml                                           -->
@@ -91,6 +103,17 @@
 <!-- used in the formation of WeBWorK problems                             -->
 <xsl:variable name="design-width-pg" select="'600'" />
 
+<xsl:variable name="chunk-level">
+    <xsl:choose>
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--#######################################################################-->
 <!-- Dictionary Architecture                                               -->
 <!--#######################################################################-->
@@ -98,33 +121,56 @@
 <!-- Initialize empty dictionaries, then define key-value pairs             -->
 <xsl:template match="*" mode="extraction-wrapper">
     <ww-extraction>
-        <localization>
+        <xsl:attribute name="localization">
             <xsl:value-of select="$document-language"/>
-        </localization>
-        <!-- Record the server address and credentials from publisher variables -->
-        <!-- This will be an empty element if there was no publication file. -->
+        </xsl:attribute>
+        <xsl:attribute name="numbered-title-filesafe">
+            <xsl:apply-templates select="$document-root" mode="numbered-title-filesafe"/>
+        </xsl:attribute>
+        <!-- Record certain publisher variables for ease of access by pretext.py -->
         <server-params-pub>
-            <xsl:if test="$publisher">
-                <ww-domain>
-                    <xsl:value-of select="$webwork-server"/>
-                </ww-domain>
-                <course-id>
-                    <xsl:value-of select="$webwork-course"/>
-                </course-id>
-                <user-id>
-                    <xsl:value-of select="$webwork-user"/>
-                </user-id>
-                <password>
-                    <xsl:value-of select="$webwork-password"/>
-                </password>
-            </xsl:if>
+            <xsl:attribute name="webwork2-server">
+                <xsl:value-of select="$webwork-server"/>
+            </xsl:attribute>
+            <xsl:attribute name="course-id">
+                <xsl:value-of select="$webwork-course"/>
+            </xsl:attribute>
+            <xsl:attribute name="user-id">
+                <xsl:value-of select="$webwork-user"/>
+            </xsl:attribute>
+            <xsl:attribute name="password">
+                <xsl:value-of select="$webwork-password"/>
+            </xsl:attribute>
+            <xsl:attribute name="renderer">
+                <xsl:value-of select="$webwork-renderer"/>
+            </xsl:attribute>
         </server-params-pub>
+        <!-- Settings for how PG is processed -->
+        <processing>
+            <xsl:attribute name="static">
+                <xsl:value-of select="$webwork-static-processing"/>
+            </xsl:attribute>
+            <xsl:attribute name="pg-location">
+                <xsl:value-of select="$webwork-pg-location"/>
+            </xsl:attribute>
+        </processing>
+        <!-- Will need to know the folder names for generated and external. -->
+        <!-- These are almost certainly "generated" and "external", but     -->
+        <!-- rather than hardcode them where we need them, we get them from -->
+        <!-- variables defined in publisher-variables.xsl                   -->
+        <directories>
+            <xsl:attribute name="generated-directory">
+                <xsl:value-of select="$generated-directory"/>
+            </xsl:attribute>
+            <xsl:attribute name="external-directory">
+                <xsl:value-of select="$external-directory"/>
+            </xsl:attribute>
+        </directories>
         <xsl:apply-imports/>
     </ww-extraction>
 </xsl:template>
 
-<xsl:template match="webwork[@source]" mode="extraction">
-    <!-- Define values for the visible-id as key -->
+<xsl:template match="webwork[@source|@local|statement|task]" mode="extraction">
     <xsl:variable name="problem">
         <xsl:value-of select="@ww-id"/>
     </xsl:variable>
@@ -132,35 +178,21 @@
         <xsl:attribute name="id">
             <xsl:value-of select="$problem" />
         </xsl:attribute>
-        <!-- 1. a ptx|copy|server flag (authored in PTX, a copy, or from server)   -->
+        <!-- 1. a generated|external|webwork2 flag                                 -->
         <xsl:attribute name="origin">
-            <xsl:text>server</xsl:text>
+            <xsl:choose>
+                <xsl:when test="statement|task">
+                    <xsl:text>generated</xsl:text>
+                </xsl:when>
+                <xsl:when test="@local">
+                    <xsl:text>external</xsl:text>
+                </xsl:when>
+                <xsl:when test="@source">
+                    <xsl:text>webwork2</xsl:text>
+                </xsl:when>
+            </xsl:choose>
         </xsl:attribute>
-        <!-- 2. a seed for randomization (with a default explicitly declared)      -->
-        <xsl:attribute name="seed">
-            <xsl:apply-templates select="." mode="get-seed" />
-        </xsl:attribute>
-        <!-- 3. source (a problem's file path if it is server-based)               -->
-        <xsl:attribute name="source">
-            <xsl:value-of select="@source" />
-        </xsl:attribute>
-    </problem>
-</xsl:template>
-
-<xsl:template match="webwork[statement|task]" mode="extraction">
-    <!-- Define values for the visible-id as key -->
-    <xsl:variable name="problem">
-        <xsl:value-of select="@ww-id"/>
-    </xsl:variable>
-    <problem>
-        <xsl:attribute name="id">
-            <xsl:value-of select="$problem" />
-        </xsl:attribute>
-        <!-- 1. a ptx|server flag (authored in PTX [or a copy], or from server)    -->
-        <xsl:attribute name="origin">
-            <xsl:text>ptx</xsl:text>
-        </xsl:attribute>
-        <!-- 1b. if this problem is a copy, record where it was copied from        -->
+        <!-- 1b. if this problem is a copy, record what it was copied from         -->
         <xsl:if test="@copied-from">
             <xsl:attribute name="copied-from">
                 <xsl:value-of select="@copied-from"/>
@@ -168,26 +200,86 @@
         </xsl:if>
         <!-- 2. a seed for randomization (with a default explicitly declared)      -->
         <xsl:attribute name="seed">
-            <xsl:apply-templates select="." mode="get-seed" />
+            <xsl:apply-templates select="." mode="get-seed"/>
         </xsl:attribute>
-        <!-- 4. human readable PG (for PTX-authored)                               -->
-        <pghuman>
-            <xsl:variable name="pg">
+        <!-- 3. file path                                                          -->
+        <xsl:attribute name="path">
+            <xsl:apply-templates select="." mode="filename"/>
+        </xsl:attribute>
+        <xsl:if test="statement|task">
+            <!-- 4. human readable PG (for PTX-authored)                           -->
+            <pghuman>
+                <xsl:variable name="pg">
+                    <xsl:apply-templates select=".">
+                        <xsl:with-param name="b-human-readable" select="true()" />
+                    </xsl:apply-templates>
+                </xsl:variable>
+                <xsl:call-template name="consolidate-empty-lines">
+                    <xsl:with-param name="text" select="$pg"/>
+                </xsl:call-template>
+            </pghuman>
+            <!-- 5. PG optimized (and less human-readable) for use in PTX output modes -->
+            <pgdense>
                 <xsl:apply-templates select=".">
-                    <xsl:with-param name="b-human-readable" select="true()" />
+                    <xsl:with-param name="b-human-readable" select="false()" />
                 </xsl:apply-templates>
-            </xsl:variable>
-            <xsl:call-template name="consolidate-empty-lines">
-                <xsl:with-param name="text" select="$pg"/>
-            </xsl:call-template>
-        </pghuman>
-        <!-- 5. PG optimized (and less human-readable) for use in PTX output modes -->
-        <pgdense>
-            <xsl:apply-templates select=".">
-                <xsl:with-param name="b-human-readable" select="false()" />
-            </xsl:apply-templates>
-        </pgdense>
+            </pgdense>
+        </xsl:if>
     </problem>
+</xsl:template>
+
+<!-- Append a filename to the directory path              -->
+<xsl:template match="webwork[@source|@local|statement|task]" mode="filename">
+    <xsl:choose>
+        <xsl:when test="@source">
+            <xsl:value-of select="@source"/>
+        </xsl:when>
+        <xsl:when test="@local">
+            <xsl:value-of select="@local"/>
+        </xsl:when>
+        <xsl:when test="statement|task">
+            <xsl:apply-templates select="." mode="directory-path" />
+            <xsl:if test="parent::project">
+                <xsl:text>Project-</xsl:text>
+            </xsl:if>
+            <xsl:apply-templates select="parent::exercise" mode="numbered-title-filesafe" />
+            <xsl:text>.pg</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Directory path, recursively climb structural nodes,  -->
+<!-- record names as pass up through chunk-level barrier  -->
+<!-- Includes root document node (book, article, etc)     -->
+<xsl:template match="*" mode="directory-path">
+    <xsl:variable name="structural">
+        <xsl:apply-templates select="." mode="is-structural"/>
+    </xsl:variable>
+    <xsl:variable name="current-level">
+        <xsl:choose>
+            <xsl:when test="$structural = 'true'">
+                <xsl:apply-templates select="." mode="level" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>undefined</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="self::mathbook|self::pretext" /> <!-- done -->
+        <xsl:when test="$structural='false'">  <!-- skip up -->
+            <xsl:apply-templates select="parent::*" mode="directory-path" />
+        </xsl:when>
+        <!-- structural is true now, compare levels -->
+        <xsl:when test="$current-level > $chunk-level">  <!-- also skip up -->
+            <xsl:apply-templates select="parent::*" mode="directory-path" />
+        </xsl:when>
+        <xsl:otherwise> <!-- append current node name -->
+            <xsl:apply-templates select="parent::*" mode="directory-path" />
+            <xsl:apply-templates select="." mode="numbered-title-filesafe" />
+            <xsl:text>/</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ################ -->
@@ -672,35 +764,6 @@
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>TEXT(beginproblem());</xsl:text>
-    <xsl:if test="not($b-human-readable)">
-        <!-- see select-latex-macros template -->
-        <xsl:variable name="macros">
-            <xsl:call-template name="select-latex-macros"/>
-        </xsl:variable>
-        <xsl:if test="$macros != ''">
-            <xsl:variable name="wrapped-macros">
-                <xsl:text>&lt;div style="display:none;">\(</xsl:text>
-                <xsl:value-of select="$macros" />
-                <xsl:text>\)&lt;/div></xsl:text>
-            </xsl:variable>
-            <xsl:variable name="delimiter">
-                <xsl:call-template name="find-unused-character">
-                    <xsl:with-param name="string" select="$wrapped-macros"/>
-                    <!-- https://stackoverflow.com/questions/43617820/what-are-the-legal-delimiters-for-perl-5s-pick-your-own-quotes-operators    -->
-                    <!-- NB: don't use (), <>, [], {}, because as perl delimiters, closer must be the right version; too complicated to check for -->
-                    <xsl:with-param name="charset" select="concat($apos,'|/?.,+-_~`!@$%^&amp;*')"/>
-                </xsl:call-template>
-            </xsl:variable>
-            <xsl:text>TEXT(MODES(PTX=&gt;'',HTML=&gt;</xsl:text>
-            <xsl:if test="$delimiter != $apos">
-                <xsl:text>q</xsl:text>
-            </xsl:if>
-            <xsl:value-of select="$delimiter"/>
-            <xsl:value-of select="$wrapped-macros"/>
-            <xsl:value-of select="$delimiter"/>
-            <xsl:text>));&#xa;</xsl:text>
-        </xsl:if>
-    </xsl:if>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
@@ -1482,6 +1545,9 @@
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
+    <xsl:if test="preceding-sibling::p|ancestor::sidebyside">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
     <xsl:text>[@image(insertGraph(</xsl:text>
     <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text>), width=&gt;</xsl:text>
@@ -1580,40 +1646,6 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Inside math we need to print definitions for PTX author-defined      -->
-<!-- LaTeX macros to support WeBWorK's images display mode.               -->
-
-<!-- TODO: This named template examines the current context (see '.' in   -->
-<!-- contains() below), so should be a match template. But its recursive  -->
-<!-- implementation makes it a named template for now.                    -->
-<xsl:template name="select-latex-macros">
-    <xsl:param name="macros" select="$latex-macros" />
-    <xsl:variable name="trimmed-start">
-        <xsl:if test="contains($macros, '\newcommand{')">
-            <xsl:value-of select="substring-after($macros, '\newcommand{')"/>
-        </xsl:if>
-    </xsl:variable>
-    <xsl:variable name="macro-name">
-        <xsl:if test="contains($trimmed-start, '}')">
-            <xsl:value-of select="substring-before($trimmed-start, '}')"/>
-        </xsl:if>
-    </xsl:variable>
-    <xsl:variable name="macro-command">
-        <xsl:value-of select="substring-before($macros, '&#xa;')"/>
-    </xsl:variable>
-    <xsl:variable name="next-lines">
-        <xsl:value-of select="substring-after($macros, '&#xa;')"/>
-    </xsl:variable>
-    <xsl:if test="contains(., $macro-name)">
-        <xsl:value-of select="normalize-space($macro-command)"/>
-    </xsl:if>
-    <xsl:if test="not($next-lines = '')">
-        <xsl:call-template name="select-latex-macros">
-            <xsl:with-param name="macros" select="$next-lines"/>
-        </xsl:call-template>
-    </xsl:if>
-</xsl:template>
-
 <!-- ##################################################################### -->
 <!-- ##################################################################### -->
 <!-- Above: templates for elements that only ever apply within a webwork   -->
@@ -1630,7 +1662,7 @@
 <!-- inside a list, special handling                                      -->
 <xsl:template match="p">
     <xsl:param name="b-human-readable" />
-    <xsl:if test="preceding-sibling::p and not(child::*[1][self::ol] or child::*[1][self::ul])">
+    <xsl:if test="preceding-sibling::p and not(child::*[1][self::ol]|child::*[1][self::ul]) or ancestor::sidebyside">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:apply-templates>
@@ -1660,30 +1692,137 @@
     </xsl:if>
 </xsl:template>
 
+<!-- ################# -->
+<!-- Image and Tabular -->
+<!-- ################# -->
+
 <!-- Some common wrappers for image and tabular   -->
-<!-- Formerly this template was for sidebyside    -->
-<!-- And we leave it to also work on a sidebyside -->
-<!-- for backwards compatibility. However, such   -->
-<!-- use will be caught by a deprectation warning -->
-<!-- as well as fail a schema validation.         -->
-<xsl:template match="image|tabular|sidebyside">
+<xsl:template match="image|tabular">
     <xsl:param name="b-human-readable" />
-    <xsl:if test="preceding-sibling::p">
-        <xsl:call-template name="potential-list-indent" />
-    </xsl:if>
-    <xsl:if test="not(ancestor::li)">
+    <xsl:if test="not(ancestor::li|ancestor::sidebyside)">
         <xsl:text>&gt;&gt; </xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="self::image|self::tabular|self::sidebyside/image|self::sidebyside/tabular" mode="components">
+    <xsl:apply-templates select="self::image|self::tabular" mode="components">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:if test="not(ancestor::li)">
+    <xsl:if test="not(ancestor::li|ancestor::sidebyside)">
         <xsl:text> &lt;&lt;</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:if test="following-sibling::*|parent::introduction/following-sibling::task">
+    <xsl:if test="following-sibling::*|parent::introduction/following-sibling::task or not(parent::sidebyside)">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- ########## -->
+<!-- Sidebyside -->
+<!-- ########## -->
+
+<xsl:template match="*" mode="panel-panel">
+    <xsl:param name="b-human-readable" />
+    <xsl:param name="width" />
+    <xsl:param name="left-margin" />
+    <xsl:param name="right-margin" />
+    <xsl:param name="valign" />
+
+    <xsl:variable name="arguments">
+    </xsl:variable>
+
+    <xsl:text>    [.&#xa;</xsl:text>
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:text>    .]</xsl:text>
+    <!-- star indicates cell is at the end of a row (end of one sbs in a sbsgroup) -->
+    <xsl:if test="not(following-sibling::*)">
+        <xsl:text>*</xsl:text>
+    </xsl:if>
+    <xsl:if test="$arguments != ''">
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$arguments"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+>>>>>>> e9c566e3 (WeBWorK: xsl and pretext for 2.19)
+</xsl:template>
+
+<xsl:template match="sidebyside" mode="compose-panels">
+    <xsl:param name="layout" />
+    <xsl:param name="panels" />
+
+    <xsl:variable name="arguments">
+        <xsl:choose>
+            <xsl:when test="@widths">
+                <xsl:text>align => '</xsl:text>
+                <xsl:for-each select="str:tokenize(@widths)">
+                    <xsl:text>p{</xsl:text>
+                    <xsl:call-template name="normalize-percentage">
+                        <xsl:with-param name="percentage" select="."/>>
+                    </xsl:call-template>
+                    <xsl:text>}</xsl:text>
+                </xsl:for-each>
+                <xsl:text>',</xsl:text>
+            </xsl:when>
+            <xsl:when test="@width">
+                <xsl:text>align => '*{</xsl:text>
+                <xsl:value-of select="$layout/number-panels"/>
+                <xsl:text>}{p{</xsl:text>
+                    <xsl:apply-templates select="." mode="absolute-width-inches"/>
+                <xsl:text>}}',</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:if test="$layout/valign != 'top'">
+            <xsl:text>valign => '</xsl:text>
+            <xsl:value-of select="$layout/valign"/>
+            <xsl:text>',</xsl:text>
+        </xsl:if>
+    </xsl:variable>
+
+    <xsl:text>[#&#xa;</xsl:text>
+    <xsl:copy-of select="$panels" />
+    <xsl:text>#]*</xsl:text>
+    <xsl:if test="$arguments != ''">
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$arguments"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="sbsgroup/sidebyside" mode="compose-panels">
+    <xsl:param name="panels" />
+    <xsl:copy-of select="$panels" />
+</xsl:template>
+
+<xsl:template match="sbsgroup">
+    <xsl:param name="b-human-readable" />
+
+    <xsl:variable name="arguments">
+        <xsl:if test="@width">
+            <xsl:text>align => 'p{</xsl:text>
+            <xsl:apply-templates select="." mode="absolute-width-inches"/>
+            <xsl:text>}*{</xsl:text>
+            <xsl:value-of select="$layout/number-panels"/>
+            <xsl:text>}',</xsl:text>
+        </xsl:if>
+        <xsl:if test="@valign and (@valign != 'top')">
+            <xsl:text>valign => '</xsl:text>
+            <xsl:value-of select="$layout/valign"/>
+            <xsl:text>',</xsl:text>
+        </xsl:if>
+    </xsl:variable>
+
+    <xsl:text>[#&#xa;</xsl:text>
+    <xsl:apply-templates select="sidebyside">
+        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
+    </xsl:apply-templates>
+    <xsl:text>#]*</xsl:text>
+    <xsl:if test="$arguments != ''">
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$arguments"/>
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ######### -->
@@ -1711,10 +1850,6 @@
 <!-- each math environment. This is the only way to simultaneiously        -->
 <!-- support HTML_mathjax, HTML_dpng, and TeX display modes.               -->
 
-<!-- extract-pg-ptx.xsl documentation -->
-<!-- PGML inline math uses its own delimiters: [`...`] and [```...```]     -->
-<!-- NB: we allow the "var" element as a child                             -->
-
 <!-- Common documentation -->
 <!-- See the -common stylesheet for manipulations of math elements     -->
 <!-- and subsequent text nodes that lead with punctuation.  Basically, -->
@@ -1727,9 +1862,6 @@
 <xsl:template match="m">
     <xsl:param name="b-human-readable" />
     <xsl:text>[`</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="select-latex-macros"/>
-    </xsl:if>
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
@@ -1747,9 +1879,6 @@
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>[```</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="select-latex-macros"/>
-    </xsl:if>
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
@@ -1840,9 +1969,6 @@
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>[```</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="select-latex-macros"/>
-    </xsl:if>
     <xsl:value-of select="$content" />
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
@@ -2496,7 +2622,9 @@
 
 <xsl:template match="tabular" mode="components">
     <xsl:param name="b-human-readable" />
-
+    <xsl:if test="preceding-sibling::p|ancestor::sidebyside">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
     <xsl:text>[@DataTable(</xsl:text>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
@@ -2552,6 +2680,7 @@
         </xsl:call-template>
     </xsl:if>
     <xsl:if test="$b-human-readable">
+        <xsl:text>&#xa;</xsl:text>
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>);@]*</xsl:text>
@@ -2655,7 +2784,7 @@
             <xsl:with-param name="percentage" select="@width"/>
         </xsl:call-template>
     </xsl:variable>
-    <xsl:value-of select="concat(number(substring-before($percent-width,'%')) div 100 * 6.25,in)"/>
+    <xsl:value-of select="concat(number(substring-before($percent-width,'%')) div 100 * 6.25,'in')"/>
 </xsl:template>
 
 
@@ -3051,7 +3180,7 @@
 <!-- Base indentation for lines of code in the middle of a list -->
 <xsl:template name="potential-list-indent">
     <xsl:call-template name="duplicate-string">
-        <xsl:with-param name="count" select="4 * (count(ancestor::ul) + count(ancestor::ol))" />
+        <xsl:with-param name="count" select="4 * (count(ancestor::ul) + count(ancestor::ol) + 2*count(ancestor::sidebyside))" />
         <xsl:with-param name="text"  select="' '" />
     </xsl:call-template>
 </xsl:template>
