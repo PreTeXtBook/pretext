@@ -2235,6 +2235,9 @@ body.pretext > a.assistive:focus {
   font-size: 100%;
   line-height: 1.25em;
 }
+.ptx-masthead .title-container .title:has(+ .subtitle)::after {
+  content: ":";
+}
 .ptx-masthead .title-container .subtitle {
   font-weight: normal;
 }
