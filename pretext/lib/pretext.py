@@ -1171,6 +1171,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
         log.debug("Using http.server subprocess {}".format(server.pid))
         baseurl = "http://localhost:{}".format(port)
         asyncio.get_event_loop().run_until_complete(extract_substitutions(dynamic_exercises, baseurl, dyn_subs_file))
+        # if this blows up, search for 'asyncio.get_event_loop() warning' in this file
     finally:
         # close the server and report (debug) results
         log.info("Closing http.server subprocess")
@@ -2449,6 +2450,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             asyncio.get_event_loop().run_until_complete(
                 generate_previews(interactives, baseurl, dest_dir)
             )
+            # if this blows up, search for 'asyncio.get_event_loop() warning' in this file
         finally:
             # close the server
             log.info("Closing http.server thread")
@@ -2751,6 +2753,15 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
                     # convert to PDF
                     asyncio.get_event_loop().run_until_complete(write_pdf(svg_string))
+                    # asyncio.get_event_loop() warning: this code assumes we are running from an synchronous context.
+                    # If called from some asynch function, by an outside tool, this will break. As will other uses in this file.
+                    # For a possible emergency fix see:
+                    # https://github.com/RunestoneInteractive/rs/pull/723
+                    # nested_asyncio did not work for RS as there were conflicts with other libraries.
+                    # get_event_loop is deprecated, so at some point we need to replace it - a permanent fix at that point would be nice
+                    # Official advice appears to be "rewrite anything that uses async to be async all the way up"
+                    # https://discuss.python.org/t/calling-coroutines-from-sync-code-2/24093/5
+                    # this warning referenced in other places... search for 'asyncio.get_event_loop() warning'
 
                     # Try to read the SVG width and set PreTeXt width based on document width assumptions
                     if svg_width_parsed:
