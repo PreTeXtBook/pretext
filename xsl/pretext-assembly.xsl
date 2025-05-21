@@ -681,7 +681,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- exercises in advance.  Why's that?  So an old WeBWorK server can send -->
 <!-- back old PreTeXt and have it be repaired.  So we do this change in an -->
 <!-- earlier pass.                                                         -->
-<xsl:template match="exercise/matches|project/matches|activit/matches|exploration/matches|investigation/matches|task/matches" mode="assembly">
+<xsl:template match="exercise/matches|project/matches|activity/matches|exploration/matches|investigation/matches|task/matches" mode="assembly">
     <!-- literal element gets namespace declarations -->
     <xsl:element name="cardsort">
         <xsl:apply-templates select="node()|@*" mode="assembly"/>
