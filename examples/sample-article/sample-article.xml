@@ -9541,10 +9541,57 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </evaluation>
                 </exercise>
 
+                <exercise label="fillin-multi-answer-jscmp">
+                    <title>Fill-In, Multiple Strings, Custom Checker</title>
+
+                    <statement>
+                        <p>
+                            In order to apply the Integral Test to a sequence <m>\{a_n\}</m>,
+                            the function <m>a(n) = a_n</m> must be
+                            <fillin mode="string" answer="continuous"/>, <fillin mode="string" answer="positive"/><nbsp/>and <fillin mode="string" answer="decreasing"/>.
+                        </p>
+                    </statement>
+                    <evaluation>
+                        <evaluate>
+                            <test correct="yes">
+                                <jscmp><![CDATA[
+                                ["continuous","positive","decreasing"].includes(ans)
+                                ]]></jscmp>
+                            </test>
+                        </evaluate>
+                        <evaluate>
+                            <test correct="yes">
+                                <jscmp><![CDATA[
+                                ["continuous","positive","decreasing"].includes(ans) && !ans_array.slice(0,1).includes(ans)
+                                ]]></jscmp>
+                            </test>
+                            <test>
+                                <jscmp><![CDATA[
+                                ans_array.slice(0,1).includes(ans)
+                                ]]></jscmp>
+                                <feedback>You already gave that answer.</feedback>
+                            </test>
+                        </evaluate>
+                        <evaluate>
+                            <test correct="yes">
+                                <jscmp><![CDATA[
+                                ["continuous","positive","decreasing"].includes(ans) && !ans_array.slice(0,2).includes(ans)
+                                ]]></jscmp>
+                            </test>
+                            <test>
+                                <jscmp><![CDATA[
+                                ans_array.slice(0,2).includes(ans)
+                                ]]></jscmp>
+                                <feedback>You already gave that answer.</feedback>
+                            </test>
+                        </evaluate>
+                     </evaluation>
+                </exercise>
+
                 <exercise label="dynamic-fitb-simple-formula">
                     <title>Fill-In Formula (Dynamic)</title>
                     <statement>
-                        <p>Find a formula for a cubic function <m>f(x)</m> that roots at <m>x=<eval obj="x1"/></m>,  <m>x=<eval obj="x2"/></m>, and <m>x=<eval obj="x3"/></m> and so that <m>f(0)=<eval obj="y0"/></m>.</p>
+                        <p>Find a formula for a cubic function <m>f(x)</m> that has roots at <m>x=<eval obj="x1"/></m>,  <m>x=<eval obj="x2"/></m>, and <m>x=<eval obj="x3"/></m> and so that <m>f(0)=<eval obj="y0"/></m>.</p>
                         <p><m>f(x)=</m> <fillin name="st_cubic" mode="math" ansobj="cubic"/></p>
                     </statement>
                     <solution>
