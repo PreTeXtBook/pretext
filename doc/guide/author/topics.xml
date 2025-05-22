@@ -2067,7 +2067,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>A True/False exercise <em>must</em> have a <tag>statement</tag> element, and this element <em>must</em> have a <attr>correct</attr> attribute, whose value is <c>yes</c> or <c>no</c> (there is no default value).  That's it.  The presence of the <attr>correct</attr> attribute is the signal that this is a True/False exercise.</p>
 
-            <p>The text of the statement is the assertion the reader must determine is true or not.  The <attr>correct</attr> attribute is how an author describes if the statment is true (<c>yes</c>) or false (<c>no</c>).  This is enough information for a conversion to formulate a version of the question.  An optional <tag>feedback</tag> element may follow the <tag>statement</tag>, and should provide more thatn a binary explanation of the exercise.</p>
+            <p>The text of the statement is the assertion the reader must determine is true or not.  The <attr>correct</attr> attribute is how an author describes if the statment is true (<c>yes</c>) or false (<c>no</c>).  This is enough information for a conversion to formulate a version of the question.  An optional <tag>feedback</tag> element may follow the <tag>statement</tag>, and should provide more than a binary explanation of the exercise.</p>
 
             <p>Presentation as an interactive element will vary cosmetically, according to the output type targeted.</p>
 
