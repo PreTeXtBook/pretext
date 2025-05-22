@@ -13667,12 +13667,16 @@ TODO:
     <xsl:if test="$b-has-mermaid">
         <script type="module">
             import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+            import elkLayouts from 'https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk/dist/mermaid-layout-elk.esm.min.mjs';
+            mermaid.registerLayoutLoaders(elkLayouts);
             let theme = '<xsl:value-of select="$mermaid-theme"/>';
+            let layout = '<xsl:value-of select="$mermaid-layout-engine"/>';
             if (isDarkMode())
                 theme = 'dark';
             mermaid.initialize({
                 securityLevel: 'loose',
                 theme: theme,
+                layout: layout,
             });
         </script>
     </xsl:if>
