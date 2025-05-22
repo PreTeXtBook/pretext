@@ -9591,7 +9591,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <exercise label="dynamic-fitb-simple-formula">
                     <title>Fill-In Formula (Dynamic)</title>
                     <statement>
-                        <p>Find a formula for a cubic function <m>f(x)</m> that roots at <m>x=<eval obj="x1"/></m>,  <m>x=<eval obj="x2"/></m>, and <m>x=<eval obj="x3"/></m> and so that <m>f(0)=<eval obj="y0"/></m>.</p>
+                        <p>Find a formula for a cubic function <m>f(x)</m> that has roots at <m>x=<eval obj="x1"/></m>,  <m>x=<eval obj="x2"/></m>, and <m>x=<eval obj="x3"/></m> and so that <m>f(0)=<eval obj="y0"/></m>.</p>
                         <p><m>f(x)=</m> <fillin name="st_cubic" mode="math" ansobj="cubic"/></p>
                     </statement>
                     <solution>
