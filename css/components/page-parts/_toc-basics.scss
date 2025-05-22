@@ -101,6 +101,16 @@ $nav-height: 36px !default;
     text-align: left;
     flex-grow: 0;
   }
+
+
+  /* ---------------icon customization----------------- */
+  .toc-item > .toc-title-box > .toc-expander > .icon:before {
+    content: "add";
+  }
+
+  .toc-item.expanded > .toc-title-box > .toc-expander > .icon:before {
+    content: "remove";
+  }
 }
 
 

@@ -88,8 +88,6 @@ function toggleTOCItem(expander) {
     listItem.classList.toggle("expanded");
     let expanded = listItem.classList.contains("expanded");
 
-    expander.querySelector('span').innerText = expanded ? "remove" : "add";
-
     let itemType = getTOCItemType(listItem);
     if(expanded) {
         expander.title = "Close" + (itemType !== "" ? " " + itemType : "");
@@ -157,7 +155,8 @@ window.addEventListener("DOMContentLoaded", function(event) {
             expander.classList.add('toc-expander');
             expander.classList.add('toc-chevron-surround');
             expander.title = 'toc-expander';
-            expander.innerHTML = '<span class="icon material-symbols-outlined" aria-hidden="true">add</span>';
+            // content of span is set by CSS :before rule.
+            expander.innerHTML = '<span class="icon material-symbols-outlined" aria-hidden="true"></span>';
             tocItem.querySelector(".toc-title-box").append(expander);
             expander.addEventListener('click', () => {
                 toggleTOCItem(expander);
