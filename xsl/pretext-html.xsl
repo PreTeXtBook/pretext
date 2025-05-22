@@ -10640,7 +10640,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="server-data/@user-id"/>
         </xsl:attribute>
         <xsl:attribute name="data-coursePassword">
-            <xsl:value-of select="server-data/@password"/>
+            <xsl:choose>
+                <xsl:when test="server-data/@password">
+                    <xsl:value-of select="server-data/@password"/>
+                </xsl:when>
+                <!-- Old representations files will have @course-password instead of @password -->
+                <xsl:otherwise>
+                    <xsl:value-of select="server-data/@course-password"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:attribute>
         <xsl:attribute name="aria-live">
             <xsl:value-of select="'polite'"/>
