@@ -1,0 +1,17 @@
+// Use chevrons instead of +/- in ToC expander control
+
+.ptx-toc {
+  .toc-item > .toc-title-box > .toc-expander > .icon {
+    font-size: 30px;
+    &:before {
+      content: "chevron_left";
+    }
+  }
+
+  .toc-item.expanded > .toc-title-box > .toc-expander > .icon {
+    transform: rotate(-90deg);
+    &:before {
+      content: "chevron_left";
+    }
+  }
+}
