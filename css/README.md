@@ -67,3 +67,13 @@ Files in the `target` folder are considered "owned" by the folder they are in. W
 Files in `components` are "shared". Changes to them should consider (and test) all targets that @use the component.
 
 There is a balancing act between the complexity of the include tree for targets and avoiding duplication of effort. Avoid coping/pasting large numbers of rules from one target to another. If you want to reuse some of the rules from another target, consider factoring out those rules into a `component` that the old file and your new one can both @use. But doing so to reuse a small number of CSS rules likely creates more complexity than simply duplicating those rules in your target.
+
+## Tips on differentiating theme code
+
+1) In cases of significantly different CSS, we try to provide different scss files that themes can choose to import (see `_toc-default` vs `_toc-overlay`). As any given theme will only (hopefully) import one of the options, we don't have to worry about cross talk between the CSS. Common features of the two can be factored out into a sheet they both import (`_toc-basics`).
+
+2) In cases of more minor variations, especially those that end up affecting multiple rules (e.g. how much margin to apply, whether or not to round off border corners) we try to pass in a variable to the scss file to control that aspect. Those variables can have defaults that are applied if a theme does not specify a default. The downside here is that variables need to be passed all the way down through any stylesheets that are between the theme and the target sheet. So in this case a theme file like `theme-default-modern` would have to pass $toc-expander-style to  `_toc-default` as it imports that and `_to-default` would then have to pass it to `_toc-basics` where it is applied.
+
+3) Differences that are only value differences in CSS properties can be set as cssvaraibles. We use that for lots of the colors. A low level file can set `border-right: 1px solid var(--toc-border-color);`. Then a theme can change --toc-border-color` and the new color is used.
+
+4) The last approach is to just define CSS in the theme SCSS file that adds to or overrides what is produced in the import. This works well if the change only makes sense in the context of a particular theme AND if they are extending what is already there instead of undoing all of the defaults to replace them with something new.  We do this for things like Salem making a bunch of the RS elements wider. If the same logic needs to be applied to multiple themes, consider making a mixin file that they can opt into (see `toc-expand-chevrons`).
