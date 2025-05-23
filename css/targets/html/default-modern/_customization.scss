@@ -2,6 +2,7 @@
 @use 'components/page-parts/extras/navbar-btn-borders';
 @use 'components/page-parts/extras/toc-last-level-plain';
 @use 'components/page-parts/extras/toc-borders';
+@use 'components/page-parts/extras/toc-expand-chevrons';
 
 // used to expand math and RS blocks
 @use 'components/helpers/expandable';

@@ -1,6 +1,9 @@
 $color: var(--primary-color) !default;
 $text-color: white !default;
 
+@use 'components/page-parts/extras/toc-expand-chevrons';
+
+
 .hide-type .codenumber:not(:empty)::after {
     content: " ";
 }

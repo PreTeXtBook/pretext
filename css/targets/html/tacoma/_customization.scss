@@ -1,4 +1,7 @@
 // more generous spacing for sections/articles
+
+@use 'components/page-parts/extras/toc-expand-chevrons';
+
 section>*:not(:first-child) {
   margin-top: 1.5em;
 }
