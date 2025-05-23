@@ -45,8 +45,7 @@
           software for version management.
         </p>
         <p>
-          There are other services such as <url href="https://cocalc.com">CoCalc</url>
-          (see <xref ref="topic-build-in-cocalc"/>) and
+          There are other services such as <url href="https://cocalc.com">CoCalc</url> and
           <url href="https://about.gitlab.com/">GitLab</url> for managing <pretext/> documents
           online, as well as other ways to write <pretext/> that don't require anything
           besides installing the free and open-source <pretext/> software onto your own device

@@ -63,8 +63,7 @@
     <p>The operating system on a Mac is built on Unix, which is very similar to Linux, so most of the directions here will be little changed between the two.  Procedures can be very different in Windows (<xref ref="windows-install-notes" />
     ,<xref ref="windows-subsystem-linux" />
     ).  One alternative is <url href="https://cocalc.com/" visual="cocalc.com">CoCalc</url>
-     which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments (<xref ref="topic-build-in-cocalc" />
-    ).</p>
+    which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments.</p>
 
     <paragraphs>
     <title>Step 1: <pretext />
