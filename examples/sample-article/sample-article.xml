@@ -16032,6 +16032,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <biblio type="raw" xml:id="biblio-strang-article-dos">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash/>855.</biblio>
 
                     <biblio type="raw" xml:id="biblio-strang-article-tres">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash/>855.</biblio>
+
+                    <biblio xml:id="conrey-farmer-plain" type="article-journal">
+                        <author>
+                            <name>
+                                <family>Conrey</family>
+                                <given>J. B.</given>
+                            </name>
+                            <name>
+                                <family>Farmer</family>
+                                <given>D. W.</given>
+                            </name>
+                        </author>
+                        <title>Mean values of <m>L</m>-functions and symmetry</title>
+                        <collection-title>Internat. Math. Res. Notices</collection-title>
+                        <issued>
+                            <date year="2000"/>
+                        </issued>
+                        <volume>17</volume>
+                        <page>883-908</page>
+                    </biblio>
                 </references>
              </appendix>
 
