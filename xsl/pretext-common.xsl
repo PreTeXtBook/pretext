@@ -10576,6 +10576,10 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:message>PTX:ERROR:  current conversion needs an implementation of the bold font</xsl:message>
 </xsl:template>
 
+<xsl:template match="*" mode="monospace">
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the monospace font</xsl:message>
+</xsl:template>
+
 <xsl:template name="biblio-period">
     <xsl:message>PTX:ERROR:  current conversion needs an implementation of a bibliographic period</xsl:message>
 </xsl:template>

@@ -11398,6 +11398,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- \mono{} macro *always* defined in preamble -->
+<xsl:template match="*" mode="monospace">
+    <xsl:text>\mono{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
 <xsl:template name="biblio-period">
     <xsl:text>.\@</xsl:text>
 </xsl:template>
