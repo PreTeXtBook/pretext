@@ -101,16 +101,6 @@ $nav-height: 36px !default;
     text-align: left;
     flex-grow: 0;
   }
-
-
-  /* ---------------icon customization----------------- */
-  .toc-item > .toc-title-box > .toc-expander > .icon:before {
-    content: "add";
-  }
-
-  .toc-item.expanded > .toc-title-box > .toc-expander > .icon:before {
-    content: "remove";
-  }
 }
 
 
@@ -282,5 +272,14 @@ and then clear indent if there is a codenumber */
         fill: var(--tocitem-highlight-text-color);
       }
     }
+  }
+
+  /* ---------------icon customization----------------- */
+  .toc-item > .toc-title-box > .toc-expander > .icon:before {
+    content: "add";
+  }
+
+  .toc-item.expanded > .toc-title-box > .toc-expander > .icon:before {
+    content: "remove";
   }
 }
