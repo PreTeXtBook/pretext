@@ -10622,6 +10622,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- If a plain "biblio" survives pre-processing, it means there -->
+<!-- is no CSL stylesheet specified and we just do our best to   -->
+<!-- make something reasonable.  We do assume the author knows   -->
+<!-- this, and has authored the elements in the desired order    -->
+<!-- (processing is in "document order").                        -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]">
+    <xsl:apply-templates select="." mode="bibentry-wrapper">
+        <xsl:with-param name="content">
+            <!-- structured, elements only, document order -->
+            <xsl:apply-templates select="*"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
 <xsl:template match="biblio" mode="bibentry-wrapper">
     <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "bibentry-wrappper" template</xsl:message>
 </xsl:template>
