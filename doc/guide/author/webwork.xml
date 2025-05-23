@@ -202,7 +202,7 @@
         or otherwise take advantage of the algorithmic programming capabilities of Perl and <webwork/>'s PG language
         requires using a <tag>pg-code</tag> tag.
         Having at least a little familiarity with coding problems in <webwork/> is necessary,
-        although for simpler problems you could get away with mimicking the sample article in <c>mathbook/examples/webwork/</c>.
+        although for simpler problems you could get away with mimicking the sample article in <c>pretext/examples/webwork/</c>.
         A <tag>statement</tag>, <em>optional</em> <tag>hint</tag>, and <em>optional</em> <tag>solution</tag> follow.
       </p>
       <pre>

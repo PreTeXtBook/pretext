@@ -24,15 +24,15 @@
         <p>Any <c>node.js</c> script requires installing Node. See <xref ref="node-and-npm"/> for instructions on doing so. Once Node is installed, you can use the following instructions to complete the installation of MathJax and the <init>SRE</init>.</p>
 
         <p>Follow the directions here <em>exactly</em>.  Do not free-style and think some modification will have a better or identical result.  In a terminal, set your working directory with<cd>
-            <cline>cd /path/to/mathbook/script/mjsre</cline>
+            <cline>cd /path/to/pretext/script/mjsre</cline>
         </cd>
         Install both packages at the same time with a single command:<cd>
             <cline>./update-sre</cline>
-        </cd>It is possible you will need to make this simple script executable.  On Unix-style systems (Linux, Mac OS) this can be done with the <c>chmod</c> command.  As this is a bash script, Windows users must use Window's Sybsystem for Linux or examine the contents of the script to run the commands manually.</p>
+        </cd>It is possible you will need to make this simple script executable.  On Unix-style systems (Linux, Mac OS) this can be done with the <c>chmod</c> command.  As this is a bash script, Windows users must use Window's Subsystem for Linux or examine the contents of the script to run the commands manually.</p>
 
         <p>The <c>update-sre</c> script is supplied by <pretext/>.  It will create a file and a directory:<cd>
-            <cline>/path/to/mathbook/script/mjsre/package-lock.json</cline>
-            <cline>/path/to/mathbook/script/mjsre/node_modules</cline>
+            <cline>/path/to/pretext/script/mjsre/package-lock.json</cline>
+            <cline>/path/to/pretext/script/mjsre/node_modules</cline>
         </cd>Neither will be tracked by <c>git</c>.  Since SRE changes faster than MathJax, this will replace MathJax's expectation for a version of SRE with a potentially newer version.  So do not be alarmed if it appears MathJax is missing a dependency, that is intentional.</p>
 
         <p>Now you have copies of MathJax and SRE that can be used by the <c>pretext/pretext</c> script to process mathematics offline into useful formats for conversions to <init>EPUB</init>, Kindle, and braille.</p>

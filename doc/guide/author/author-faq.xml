@@ -183,7 +183,7 @@
 
         <li>
             <title>I have great output, so why does validation produce hundreds of errors?</title>
-            <p>Success with a tool like the <pretext/>-CLI (see <xref ref="processing-CLI"/>), in terms of no errors and great-looking output, does not mean your source is correct.  <init>XSLT</init> processing can be forgiving, and many invalid constructions just work, and look great.  But that is no guaranteee this situation will continue, or the same happy accidents occur for a conversion to a different output format.</p>
+            <p>Success with a tool like the <pretext/>-CLI (see <xref ref="processing-CLI"/>), in terms of no errors and great-looking output, does not mean your source is correct.  <init>XSLT</init> processing can be forgiving, and many invalid constructions just work, and look great.  But that is no guarantee this situation will continue, or the same happy accidents occur for a conversion to a different output format.</p>
 
             <p>We do raise some errors during processing with the <pretext/>-CLI, but error-checking your input is a job for a validator, so in theory we should not ever produce any errors during a conversion.  So strive for having 100% valid <pretext /> source, not simply great-looking results.  See <xref ref="schema" /> and <xref ref="schema-install" />.</p>
         </li>
@@ -193,7 +193,7 @@
 
             <p>If you <em>were</em> somehow able to mix-in a dollar sign into your <pretext/> document, how would you then write <q>The bus ride cost me $2.50</q>?  The <latex/> solution, <c>\$</c>, is not going to help you.  It is a shortcoming of <tex/> that so many characters have special meanings in certain circumstances.</p>
 
-            <p>If you insist, you can still author using $<ellipsis/>$ and \[<ellipsis/>\], and before processing do a global search-and-replace.  But converting a leading <c>$</c> to <c>&lt;m&gt;</c> and a trailing <c>$</c> to <c>&lt;/m&gt;</c> will drive you mad unless you are really good with regular expressions.  So perhaps better to use <c>\(</c> and <c>\)</c> for inline mathematics and search-and-replace will go better.  I count six keypresses for that, including the shifts for the parentheses, while it just takes me seven keypresses for the PreTeXt <tag>m</tag> element, when I use an editor that auto-completes elements with a two-key combination.</p>
+            <p>If you insist, you can still author using $<ellipsis/>$ and \[<ellipsis/>\], and before processing do a global search-and-replace.  But converting a leading <c>$</c> to <c>&lt;m&gt;</c> and a trailing <c>$</c> to <c>&lt;/m&gt;</c> will drive you mad unless you are really good with regular expressions.  So perhaps better to use <c>\(</c> and <c>\)</c> for inline mathematics and search-and-replace will go better.  I count six key presses for that, including the shifts for the parentheses, while it just takes me seven key presses for the PreTeXt <tag>m</tag> element, when I use an editor that auto-completes elements with a two-key combination.</p>
 
             <p>We realize change is hard<mdash/>we used <latex/> for thirty years.  But we believe the long-term advantages of <pretext/> markup are worth the short-term rearrangements.</p>
         </li>

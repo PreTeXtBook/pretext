@@ -141,7 +141,7 @@
               or <url href="https://www.tug.org/texlive/windows.html" visual="www.tug.org/texlive/windows.html">TeXLive</url>.
               Although TeXLive is the default <latex /> distribution for Linux and MacOS platforms,
               most Windows users find MikTeX easier to use, since it comes with package management software to assist with automatically installing needed <latex/> packages.
-              One thing to keep in mind: with MikTeX, you <em>must</em> run an initial update from the MikTeX pacakage manager before it will work correctly.
+              One thing to keep in mind: with MikTeX, you <em>must</em> run an initial update from the MikTeX package manager before it will work correctly.
             </p>
           </li>
         </dl>
@@ -174,7 +174,7 @@
           </li>
 
           <li>
-            <title>GitHub Deskop</title>
+            <title>GitHub Desktop</title>
             <p>
               If you find it difficult to manage git from the command line,
               GitHub provides a graphical user interface for the Windows environment,
@@ -319,7 +319,7 @@
       <p>
         Congratulations! You are now ready to start using <pretext /> on your Windows machine.
         If you did not do so previously, there is one additional step you may want to take.
-        In VSCode, go to File, then Preferences, then Extentions in the menu, or type <kbd>Ctrl</kbd>-<kbd>Shift</kbd>-X.
+        In VSCode, go to File, then Preferences, then Extensions in the menu, or type <kbd>Ctrl</kbd>-<kbd>Shift</kbd>-X.
         In the search bar that comes up, type <q>pretext-tools</q>, and install the package that comes up.
         This will equip VSCode with syntax highlighting for <c>.ptx</c> files, as well as some automatic tag completion.
         (For example, typing <c>thm</c> and then the <kbd>Tab</kbd> key will automatically insert the <init>XML</init> markup for a theorem.)

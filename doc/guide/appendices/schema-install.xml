@@ -111,7 +111,7 @@
                 <cline>    -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=</cline>
                 <cline>        org.apache.xerces.parsers.XIncludeParserConfiguration\</cline>
                 <cline>    -jar ~/GitHub/jing-trang/build/jing.jar\</cline>
-                <cline>    ~/GitHub/mathbook/Schema/pretext.rng "$1"</cline>
+                <cline>    ~/GitHub/pretext/Schema/pretext.rng "$1"</cline>
                 <cline>}</cline>
             </cd>Then he can simply go<cd>
                 <cline>~ $ ptx-check my-book.xml</cline>

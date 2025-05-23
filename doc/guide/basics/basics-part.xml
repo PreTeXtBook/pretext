@@ -439,7 +439,7 @@
     <p>
         <idx sortby="proof"><tag>proof</tag></idx>
         <idx><h>theorem-like elements (<tag>algorithm</tag>, <tag>claim</tag>, <tag>corollary</tag>, <tag>fact</tag>, <tag>identity</tag>, <tag>lemma</tag>, <tag>proposition</tag>, <tag>theorem</tag>)</h><h>proofs of</h></idx>
-        A theorem-like element can contain multipe <tag>proof</tag> elements. In such instances, it would be useful to use the <tag>title</tag> tag within your proof. By default, a <tag>proof</tag> is hidden in a knowl when using <init>HTML</init> output. Click the <q>Proof.</q> heading to expand the proof. Click it again to hide the proof. A <tag>proof</tag> can also be divided into <tag>case</tag>s, each of which can have a title.<idx><h sortby="case"><tag>case</tag></h><h>of proof</h></idx> Although it has not always been so, you can author a <tag>proof</tag> all on its own within a division. The structure of such a detached <tag>proof</tag> is the same as for a <tag>proof</tag> contained within a theorem-like element.<idx><h sortby="proof"><tag>proof</tag></h><h>detached</h></idx>
+        A theorem-like element can contain multiple <tag>proof</tag> elements. In such instances, it would be useful to use the <tag>title</tag> tag within your proof. By default, a <tag>proof</tag> is hidden in a knowl when using <init>HTML</init> output. Click the <q>Proof.</q> heading to expand the proof. Click it again to hide the proof. A <tag>proof</tag> can also be divided into <tag>case</tag>s, each of which can have a title.<idx><h sortby="case"><tag>case</tag></h><h>of proof</h></idx> Although it has not always been so, you can author a <tag>proof</tag> all on its own within a division. The structure of such a detached <tag>proof</tag> is the same as for a <tag>proof</tag> contained within a theorem-like element.<idx><h sortby="proof"><tag>proof</tag></h><h>detached</h></idx>
         <idx><h sortby="proof"><tag>proof</tag></h><h>outside of theorem-like elements</h><see>proof, detached</see></idx>
         <idx>detached proof</idx>
     </p>
@@ -651,7 +651,7 @@
       They are <tag>activity</tag>, <tag>exploration</tag>, <tag>investigation</tag>, <tag>project</tag>.  We will focus on <tag>project</tag> here.
       These four tags allow a general, freeform structure similar to the unstructured <tag>example</tag> in <xref ref="basics-l-example-simple"/>;
       a structure analogous to that of the structured <tag>example</tag> in <xref ref="basics-l-example-structured"/>;
-      and the highly-stuctured <tag>introduction</tag>, <tag>task</tag>, <tag>conclusion</tag> model shown in <xref ref="basics-l-project"/>.
+      and the highly-structured <tag>introduction</tag>, <tag>task</tag>, <tag>conclusion</tag> model shown in <xref ref="basics-l-project"/>.
           <idx><h>example</h><h>comparison to project-like elements</h></idx>
           <idx sortby="project"><tag>project</tag></idx>
           <idx><h sortby="activity"><tag>activity</tag></h><see>project-like elements</see></idx>
@@ -692,7 +692,7 @@
       student has just read, perhaps submitting responses to an
       instructor before class so that plans for in-class time can be
       adjusted. Another way of collecting exercises might be as a
-      worksheet intended to be worked on during classtime.</p>
+      worksheet intended to be worked on during class.</p>
     </introduction>
     <section xml:id="basics-ss-exercise-structure">
       <title><tag>exercise</tag> structure</title>
@@ -799,7 +799,7 @@
 
 	  You can also put several <tag>exercise</tag>s as part of an
 	  <tag>exercises</tag> element within a division, which is the
-	  typical way for creating a collection of exercises togther
+	  typical way for creating a collection of exercises together
 	  at the end of a division such as a chapter or section. The
 	  content of an <tag>exercises</tag> division is rather
 	  limited. It can begin with an <tag>introduction</tag>
@@ -1472,11 +1472,11 @@
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to svg</h></idx> -->
       <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to pdf</h></idx> -->
       <console width="80%" margins="10% 10%">
-        <input>/path/to/mathbook]/script/pretext -c sageplot -f svg -d ./images /path/to/yoursource.ptx</input>
+        <input>/path/to/pretext/pretext/pretext -c sageplot -f svg -d ./images /path/to/yoursource.ptx</input>
       </console>
 
       <console width="80%" margins="10% 10%">
-        <input>/path/to/mathbook]/script/pretext -c sageplot -f pdf -d ./images /path/to/yoursource.ptx</input>
+        <input>/path/to/pretext/pretext/pretext -c sageplot -f pdf -d ./images /path/to/yoursource.ptx</input>
       </console>
 
       <p>
