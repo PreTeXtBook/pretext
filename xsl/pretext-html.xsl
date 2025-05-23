@@ -4839,11 +4839,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <div class="bibentry">
         <xsl:choose>
             <xsl:when test="@type = 'raw'">
+                <!-- mixed content, include text nodes -->
                 <xsl:apply-templates select="text()|*[not(self::note)]">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="@type = 'bibtex'">
+                <!-- structured, document order -->
+                <xsl:apply-templates select="*[not(self::note)]">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:when test="not(@type = 'raw') and not(@type = 'bibtex')">
+                <!-- structured, document order -->
                 <xsl:apply-templates select="*[not(self::note)]">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
