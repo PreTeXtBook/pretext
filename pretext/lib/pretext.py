@@ -2100,7 +2100,58 @@ def pg_macros(xml_source, pub_file, stringparams, dest_dir):
 #
 ############################################################
 
+# A helper function to clean up references and Citations
+# Likely preferable to use a CiteProc formatter object
+def _pretextify(biblio):
+    """Convert a string from CiteProc light HTML markup to PreTeXt internal markup"""
+
+    # biblio: some string formated by the CiteProc HTML formatter
+    # Return: string with better PreTeXt (internal) markup
+
+    # italics
+    biblio = re.sub(r'<i>', r'<pi:italic>', biblio)
+    biblio = re.sub(r'</i>', r'</pi:italic>', biblio)
+    # bold
+    biblio = re.sub(r'<b>', r'<pi:bold>', biblio)
+    biblio = re.sub(r'</b>', r'</pi:bold>', biblio)
+    # Unicode en dash, U+2013, e.g. for date ranges
+    # Escape sequence only, not "raw" r
+    biblio = re.sub('\u2013', r'<ndash/>', biblio)
+    # TODO: curly quotes as left/right pair/group
+    # THEN as left/right characters, U+201C, U+201D
+    biblio = re.sub('\u201C', r'<lq/>', biblio)
+    biblio = re.sub('\u201D', r'<rq/>', biblio)
+
+    return biblio
+
+
 def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+
+    ### Verify need for CSL processing ###
+    #
+    # * Examine publisher file, get string for CSL file name
+    # * Use of CSL styles in "opt-in", condition here
+    # * Abandon with an error message if not possible
+
+    # Compute publisher variable report one time, collecting results
+    pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
+    # style file name selected by the publisher, no path information
+    # citeproc-py looks in their DATAPATH/STYLES_PATH = data/styles
+    # so place by a given style file by hand right now
+    # Call below does not need an extension, so we do not supply it
+    csl_style = get_publisher_variable(pub_vars, 'csl-style-file')
+    # XSL "value-of" for boolean reports strings "true" or "false"
+    using_csl_styles = get_publisher_variable(pub_vars, 'b-using-csl-styles')
+
+    if using_csl_styles == "false":
+        msg = " ".join(["requesting formatted references and citations is not possible",
+              "without a CSL style file specified in the publication file.",
+              "No action is being taken."])
+        log.error(msg)
+        # bail out and do not do *anything*
+        return
+
+    ### Imports, Constants, Helpers ###
 
     import json  # parse JSON CSL for cite
 
@@ -2111,9 +2162,32 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import citeproc.source.json  # CiteProcJSON
     import citeproc  # CitationStylesStyle, CitationStylesBibliography, formatter, CitationItem, Citation
 
-    stringparams = stringparams.copy()
+    # Necessary namespace information for creating
+    # a file of bibliographic information later
+    # CSL is not used, except in an example
+    XML = "http://www.w3.org/XML/1998/namespace"
+    PI = "http://pretextbook.org/2020/pretext/internal"
+    NSMAP = {"xml": XML, "pi": PI}
+    # CSL = "http://purl.org/net/xbiblio/csl"
+    # NSMAP = {"xml": XML, "pi": PI, "cs": CSL}
 
-    NSMAP = {"pi": "http://pretextbook.org/2020/pretext/internal"}
+    # callback for non-existent citation
+    # copied from citeproc-py example
+    # TODO: convert to log() message
+    def warn(citation_item):
+        print("WARNING: Reference with key '{}' not found in the bibliography."
+          .format(citation_item.key))
+
+    ### XSL Stylesheet To Analyze Author's Source Bibliography ###
+    #
+    # * xsl/extract-biblio-csl.xsl
+    # * JSON blob of "biblio" information, indexed by biblio/@xml:id
+    # * Note that author's markup (e.g. "m" in a title) was converted
+    #   to text as it entered the JSON blob
+    # * Space separated list of xref/@ref, indexed by xref/@xml:id,
+    #   only when the xref/@ref points to backmatter/references/biblio
+
+    stringparams = stringparams.copy()
 
     if pub_file:
         stringparams["publisher"] = pub_file
@@ -2127,89 +2201,230 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Harvest bibliographic items and citations, converted to JSON
     xsltproc(extraction_xslt, xml_source, biblio_xml, None, stringparams)
 
-    # Compute publisher variable report one time, collecting results
-    pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
-    # style file name selected by the publisher, no path information
-    # citeproc-py looks in their DATAPATH/STYLES_PATH = data/styles
-    # so place by a given style file by hand right now
-    # Call below does not need an extension, so we do not supply it
-    csl_style = get_publisher_variable(pub_vars, 'csl-style-file')
+    # parse for lxml access
+    biblio_tree = ET.parse(biblio_xml)
+
+    ### Initialize CSL Style File ###
+    #
+    # * Examine publisher file, get string for CSL file name
+    # * Needs to be moved manually to <cite-proc>/data/styles
+    # * Need to automate placing the style file
+    # * We interrogate the punctuation of citations
+
     # Initialize use of the chosen style
     style = citeproc.CitationStylesStyle(csl_style, validate=False)
 
-    biblio_tree = ET.parse(biblio_xml)
+    # The citepoc-py "CitationStylesStyle" object is derived ultimately
+    # from an lxml Element Tree in a "xml" property of the object.  We
+    # can inspect this as needed, but there are better ways provided by
+    # the package.  Still, we preserve a bit of code that was functional
+    # on 2025-05-29 in case an example is useful later.  The
+    # CSL  /style/citation/layout  XML element has children that describe
+    # how a citation is rendered.  Compare this with ways to access
+    # (and manipulate!) these elements below.
+    #
+    # style_layout = style.xml.xpath("/cs:style/cs:citation/cs:layout", namespaces=NSMAP)[0]
+    # citation_punct = style_layout.attrib
+    # if "prefix" in citation_punct:
+    #     prefix = citation_punct["prefix"]
+    # else:
+    #     prefix = ""
 
-    # references collects an overall JSON blob of the PTX "references"
+    ### Import JSON References to CiteProc ###
+
+    # "references" collects a single overall JSON blob of the
+    # PTX "references" backmatter division. We "load" the json
+    # and feed it to the CiteProcJSON constructor
     # lxml makes a list of length 1, which we massage some
-    references = biblio_tree.xpath("/pi:pretext-biblio-csl/pi:biblio-csl", namespaces=NSMAP)
-    json_raw = references[0].text
-    json_parsed = json.loads(json_raw)
-    print("Raw JSON:\n", json_parsed)
 
+    references_blob = biblio_tree.xpath("/pi:pretext-biblio-csl/pi:biblio-csl", namespaces=NSMAP)
+    json_raw = references_blob[0].text
+    json_parsed = json.loads(json_raw)
     # Process the JSON data to generate a citeproc-py BibliographySource.
     references_source = citeproc.source.json.CiteProcJSON(json_parsed)
-
-    # CiteProc source JSON structure
-    # Appears to be a dictionary, organized by IDs
-    # Fields/entries are dictionaries?  JSON arrays, ?
-    print("\n\nCiteProc internalized JSON source (reported):\n")
-    for key, entry in references_source.items():
-        print(key)
-        for name, value in entry.items():
-            print('   {}: {}'.format(name, value))
-
-    # Formatted references
-    # Note the use of an "HTML" formatter in last argument
-    # Now blindly following repository JSON example
+    # Initialize a CitationStylesBibliography with a style,
+    # the internalized source, and a formatter.  You would think
+    # we had nicely formatted reference items now. No, we need
+    # to supply the actual citations
     references = citeproc.CitationStylesBibliography(style, references_source, citeproc.formatter.html)
+    # You would think we had nicely formatted reference items now.
+    # No, we need to supply the actual citations since their
+    # appearance and order affects the references.  For example,
+    # if a reference is never cited, it does not appear in the
+    # references.
 
-    # Singleton (faux) citations
-    # Seems necessary to have at least one citation before
-    #   anything will appear in the bibliography
-    # Printing each "citation" is not very informative,
-    # They just look look like "Citation(key-list)"
-    singletons = biblio_tree.xpath("/pi:pretext-biblio-csl/pi:all-biblio-id/pi:biblio-id", namespaces=NSMAP)
-    for single in singletons:
-        citation = citeproc.Citation([citeproc.CitationItem(single.text)])
-        references.register(citation)
+    ### Citations ###
+    #
+    # * Retrieve citations/xref from analysis of author's source,
+    #   as a space separated list of @ref that point to "biblio"
+    # * Per citation/xref make a list of CitationItem that
+    #   correspond to the @ref values/ids.
+    # * Wrap as a Citation object representing a multi-target
+    #   citation from the author.
+    # * Register each one with the CiteProc references (bibliography)
 
-    # Now we have something we can work with
-    # We make a formatted display
-    # Note the HTML italic markup
-    print('')
-    print('Bibliography')
-    print('------------')
-    for item in references.bibliography():
-        print(str(item))
+    citation_xref = biblio_tree.xpath("/pi:pretext-biblio-csl/pi:xref-csl", namespaces=NSMAP)
 
-    # Following is a list of lists, each inner list is a reference
-    # and it is a collection of strings.  These pieces might be easier
-    # to manipulate: such as removing numbering or changing markup
-    print("\n\nPython list/strings exploded bibliography:")
-    print(references.style.render_bibliography(references.items))
+    # citations/xref never get sorted until part of a
+    # multi-part overall citation.  Here are two useful
+    # parallel Python lists we can make now and use later
 
+    # A citation has an @xml:id on an originating xref, it is
+    # the @id attribute in the XML derived from the author's source
+    xref_ids = [c.attrib["id"] for c in citation_xref]
 
-    # Now messing about to xee what we can discern/manipulate
-    # from the formatted information.  Mostly a lot of chasing
-    # through source code to findf undocumented methods of
-    # accessing internal representations.
+    # Each citation is a list, @ref in author's source of the
+    # values of @xml:id on the biblio.  XML has a space-separated list
+    xref_refs = [c.text.split() for c in citation_xref]
 
-    # Triple ### are erroneous commands
+    # Now make CiteProc objects, and register
+    citeproc_citations = []
+    for ref_list in xref_refs:
+        citeproc_citation_items = []
+        for ref in ref_list:
+            citeproc_citation_items.append(citeproc.CitationItem(ref))
+        citeproc_citation = citeproc.Citation(citeproc_citation_items)
+        citeproc_citations.append(citeproc_citation)
+        # CiteProc *must* see a Citation() being registered.
+        references.register(citeproc_citation)
 
-    # print("#######################")
+    ### References formatted ###
+    #
+    # * Sort the references since we will eventually absorb "biblio"
+    #   from an external BibTeX-like file. And have no real control
+    #   over ordering.  Presumably different styles will have different
+    #   sort orders.
+    # * Replace resuts of HTML formatter with PreTeXt internal
+    #   non-semantic font-changing markup.  And other sensible
+    #   PreTeXt markup.
+    # * Eventually we will have an integrated formatter
+    # * Wrap up as "csl-biblio" elements to pass into PreTeXt
 
-    # print(references.keys) # the ids (in order?)
-    # print(references.items) # CitationItem
-    # print(references._cites) # empty now
+    # Here is the formatted version: a string representation of each reference
+    # Author's XML is here still and is still text.
+    # Note: attributes the pre-processor added are being capitalized?
+    # str() is necessary here, and results are srrings, not objects [checked]
+    # Note markup conversion from CiteProc HTML to "internal" PreTeXt (mostly)
+    references.sort()
+    references_formatted = [_pretextify(str(item)) for item in references.bibliography()]
+    # references.keys gets sorted along, since these are the biblio/@xml:id,
+    # so we can continue to track the sorted version of the references
+    references_wrapped = []
+    biblio_pattern = '<pi:csl-biblio xml:id="{}" xmlns:{}="{}">{}</pi:csl-biblio>'
+    for k, rf in zip(references.keys, references_formatted):
+        # references are text right now, we make a proper
+        # snippet of XML that can be parsed by the lxml
+        # "fromstring()" function into an ET element object.
+        # "xml" namespace seems to be known to lxml anyway
+        references_wrapped.append(biblio_pattern.format(k, "pi", PI, rf))
 
-    # keys from items
-    for a in references.items:
-         # print("K", a.key, a.get_field('type'))
-         ### print("T", a.bibliography.formatter.get_field('type'))
-         ### print("T", a.bibliography.formatter.get_field('type'))
-         # print(references.style.render_bibliography([a]))
-         ### CitationStylesElement.render()
-         pass
+    ### Citations formatted ###
+    #
+    # Now the formatted versions of the citations.  These are multi-part,
+    # which is going to be a big problem, as we want each part to be
+    # realized as a cross-refeence in various outputs as hyperlinks, knowls, etc.
+
+    #  Strategy
+    #  We will get back from CiteProc citations that might look like
+    #
+    #    (Brown, et al. 2025, Blue 1933)
+    #
+    #  and we want to turn them into PreTeXt source that looks like
+    #
+    #    (<xref ref="brown-paper">Brown, et al. 2025</xref>, <xref ref="blue-book">Grey 1933</xref>)
+    #
+    #  Not only is it hard to reliably find the separator (", ") but
+    #  the actual citations get re-ordered from whatever order the
+    #  actual "xref" are made.  So..
+    #
+    #  We first *replace* the separator, so we can reliably split
+    #  the multi-part citation, and then we mimic the sorting operation
+
+    # A faux separator on citations, which should be so rare
+    # that we can reliably match it.  Linux mkpasswd of "beezer"
+    rare = "P1zXvPN5SACeY"
+
+    # citeproc.py has a slew of objects that encapsulate parts of
+    # the CSL XML specification. These can be located from our
+    # style variable via a hierarchy from the root. Here we get
+    # the layout for citations, to retrieve the overall formatting
+    # of citation AND we make a change, by *inserting* our rare
+    # separator (delimiter).
+    layout = style.root.citation.layout
+    prefix = layout.get("prefix", "")
+    real_delimiter = layout.get("delimiter", "")
+    suffix = layout.get("suffix", "")
+    layout.set("delimiter", rare)
+
+    # Similarly citeproc-py has a "sort" *object* inside
+    # "citation" which in turn has an optional "sort" object,
+    # which has a "sort" method
+    citation = style.root.citation
+    sorter = citation.sort
+
+    # Here we go, we collect formatted citations
+    citations_wrapped = []
+    solo_xref_pattern = '<xref ref="{}" pi:custom-text="yes" xmlns:{}="{}">{}</xref>'
+    citation_pattern = '<pi:csl-citation xml:id="{}" xmlns:{}="{}">{}</pi:csl-citation>'
+    for c, xref_id in zip(citeproc_citations, xref_ids) :
+        # version with rare separator
+        # strip the prefix and suffix,
+        # and blow it up into pieces
+        rough = references.cite(c, warn)
+        rough = rough[len(prefix):-len(suffix)]
+        rough = rough.split(rare)
+
+        # get the permutation from the re-ordering
+        # this is all borrowed from the Layout Class
+        # and its render_citation() method
+        cites = c.cites
+        # generic sort on keys, this is the "natural" order
+        # of the appearnce in the sorted bibliography
+        cites.sort(key=lambda x: references.keys.index(x.key))
+        # but if there is a sorting specified, do that
+        if sorter is not None:
+            cites = sorter.sort(cites, layout)
+        one_citation = []
+        for text_cite, cite_cite in zip(rough, cites):
+            ptx_cite = solo_xref_pattern.format(cite_cite.key, "pi", PI, text_cite)
+            one_citation.append(ptx_cite)
+        a_cite = _pretextify(prefix + real_delimiter.join(one_citation) + suffix)
+        a_cite = citation_pattern.format(xref_id, "pi", PI, a_cite)
+        citations_wrapped.append(a_cite)
+
+    ### Produce Useful XML ###
+    #
+    # * Build up a simple XML tree from pieces above
+    # * Make available as a generated product to be saved
+    # * Components will be assembled into source, as
+    #   replacements of backmatter/references and xref
+
+    # Root element of produced XML file, "pi:csl-references"
+    csl_references = ET.Element(ET.QName(NSMAP["pi"], "csl-references"), nsmap=NSMAP)
+
+    index = 1
+    for rw in references_wrapped:
+        biblio_tree = ET.fromstring(rw)
+        csl_references.insert(index, biblio_tree)
+        index = index + 1
+    # not sure how to *start* with next_child,
+    # so keep index running for more insertions
+    for cw in citations_wrapped:
+        xref_tree = ET.fromstring(cw)
+        csl_references.insert(index, xref_tree)
+        index = index + 1
+
+    # Fill an XML file with the  csl_references  tree
+    bib_file = os.path.join(dest_dir, "csl-bibliography.xml")
+
+    try:
+        with open(bib_file, "wb") as f:
+            f.write(ET.tostring(csl_references, encoding="utf-8",
+                    xml_declaration=True, pretty_print=True))
+    except Exception as e:
+        root_cause = str(e)
+        msg = "PTX:ERROR: there was a problem writing a references file: {}\n"
+        raise ValueError(msg.format(f) + root_cause)
 
 
 ##############################
