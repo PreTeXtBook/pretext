@@ -685,7 +685,7 @@
 
             <p>The <q>legacy</q> stylesheets are still available. Any publication file that references <c>html/css/@style</c> will use the corresponding legacy style sheet (default, crc, wide, oscar-levin) as well as the colors selected for it. However, the full range of configuration is no longer available. If your publisher file mixes legacy style parts in an unexpected way (<c>toc="crc"</c> but <c>sidebar="wide"</c>) you will get one or the other complete style.</p>
 
-            <p>New themes other than <q>default-modern</q> require a build step involving node.js. If you are using the CLI, installing node will be handled for you. If you are using the <c>pretext/pretext</c> script, you will need to manually install node (see <xref ref="node-and-npm"/>) and then, one time, run <c>npm install</c> in the <c>script/cssbuilder</c> directory. Once node is installed, the necessary build script will automatically be invoked when you build a document.</p>
+            <p>New themes other than <q>default-modern</q> require a build step involving node.js. If node is not installed (try <c>node --version</c> to check), following the directions in <xref ref="node-and-npm"/>.  If you are using the  <c>pretext/pretext</c> script, you will need to, one time, run <c>npm install</c> in the <c>script/cssbuilder</c> directory (this step is done automatically if you are using the CLI). After this initial setup, the build script will automatically be invoked when you build a document.</p>
 
             <p>To rapidly test out different themes and options while using the CLI (see <xref ref="processing-CLI-build"/>) you can use <c>pretext build --theme</c> to rebuild the theme without a full book rebuild. If you are using the pretext script (see <xref ref="pretext-script"/>) you can use the flag <c>-c theme</c>. Note that doing this assumes the HTML needed for the different themes is the same. This should generally be the case, but if you encounter odd rendering issues you should do a full rebuild.</p>
 
@@ -705,8 +705,8 @@
                         </p>
                     </li>
                     <li>
-                        <title>tacoma, greeley</title>
-                        <p>The following attributes can be set on CSS to modify the appearance of tacoma and greely. They function in the same way as the corresponding attributes for default-modern.
+                        <title>tacoma, greeley, boulder</title>
+                        <p>The following attributes can be set on CSS to modify the appearance of tacoma, greely, and boulder. They function in the same way as the corresponding attributes for default-modern.
                             <ul>
                                 <li><attr>primary-color</attr></li>
                                 <li><attr>primary-color-dark</attr></li>

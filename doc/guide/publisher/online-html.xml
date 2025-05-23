@@ -232,12 +232,18 @@
                       <caption><term>greeley</term> A theme designed for short documents like academic papers.</caption>
                     </figure>
                 </sidebyside>
-                <sidebyside widths="40%" margins="5% 55%" valign="middle">
+                <sidebyside widths="40% 40%" margins="auto" valign="middle">
                     <figure>
                       <image source="theme-salem.png" width="100%">
                           <description>Screenshot of the salem theme</description>
                       </image>
                       <caption><term>salem</term> A theme that is optimized for displaying wide interactive elements (such as Active Code and Parsons).</caption>
+                    </figure>
+                    <figure>
+                      <image source="theme-boulder.png" width="100%">
+                          <description>Screenshot of the boulder theme</description>
+                      </image>
+                      <caption><term>boulder</term> A minimal theme designed to mimic a LaTeX pdf for academic paper (no masthead).</caption>
                     </figure>
                 </sidebyside>
             </sbsgroup>
