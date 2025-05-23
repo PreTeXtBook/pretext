@@ -10765,6 +10765,92 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:text>.</xsl:text>
 </xsl:template>
 
+<!-- Always: authors first, no leading separator -->
+<!-- Others: leading separators                  -->
+<!-- Document order                              -->
+<!-- Final period when no following-siblings     -->
+
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/*">
+    <xsl:message>PTX:WARNING:  a child of "biblio" (<xsl:value-of select="local-name()"/>) is not being processed.  Please report me so this can be fixed.</xsl:message>
+</xsl:template>
+
+<!-- Authors, no lead-in, no trailing space -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/author">
+    <xsl:for-each select="name">
+        <xsl:choose>
+            <!-- First, name with family name first -->
+            <xsl:when test="not(preceding-sibling::name)">
+                <xsl:apply-templates select="family"/>
+                <xsl:text>, </xsl:text>
+                <xsl:apply-templates select="given"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="given"/>
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="family"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:choose>
+            <!-- separators come before subsequent items -->
+            <xsl:when test="count(following-sibling::name) = 0"/>
+            <!-- one more left, use "and" -->
+            <xsl:when test="count(following-sibling::name) = 1">
+                <xsl:text> and </xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>; </xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Title, in italics -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/title">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates select="." mode="italic"/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Collection title -->
+<!-- Once had "lq-character" and "rq-character", but -->
+<!-- removed for consistency with other formats      -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/collection-title">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Volume in bold -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/volume">
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="bold"/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Date as a year, in parentheses -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/issued">
+    <xsl:text> </xsl:text>
+    <xsl:text>(</xsl:text>
+    <xsl:value-of select="date/@year"/>
+    <xsl:text>)</xsl:text>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Pages as a range             -->
+<!-- Differs from "bibtex" format -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/page">
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<xsl:template match="*" mode="plain-biblio-period">
+    <xsl:if test="not(following-sibling::*)">
+        <xsl:text>.</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ############ -->
 <!-- Conveniences -->
