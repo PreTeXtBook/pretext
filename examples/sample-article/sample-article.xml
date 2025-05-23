@@ -15420,7 +15420,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
             </exercises>
 
-
             <references>
                 <title>More Reading</title>
 
@@ -16018,6 +16017,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <title>Multiple Specialized References</title>
 
                     <p>You might want to have lists of references, in the back, but with multiple such lists.  Make an <tag>appendix</tag> to hold them, give it some structure (for an <tag>article</tag>, a leading <tag>subsection</tag>, such as the one you are reading right now), then follow with multiple <tag>references</tag> divisions.  A typical citation will then look like: <xref ref="biblio-strang-article-tres"/>.</p>
+
+                    <!-- Notes to add once CSL processing is enabled: Note: we need at least one citation for an item to show up.  Note: look at the source to see sorting/reordering. -->
+                    <p>2025-05-23: currently testing citations to CSL-style references in the back matter.  These should go eventually somewhere besides right where the references are.<ul>
+                        <li>Judson: <xref ref="biblio-judson-aata"/></li>
+                        <li>Lay: <xref ref="biblio-lay-article"/></li>
+                        <li>Doe: <xref ref="citeproc-py-item-3"/></li>
+                        <li>Doe, later: <xref ref="citeproc-py-item-3-later"/></li>
+                        <li>Conrey/Farmer: <xref ref="conrey-farmer"/></li>
+                        <li>D'Arcus: <xref ref="citeproc-py-item-5"/></li>
+                        <li>Two, authored in-order: <xref ref="conrey-farmer citeproc-py-item-5"/></li>
+                        <li>Two, authored out-of-order: <xref ref="citeproc-py-item-5 conrey-farmer"/></li>
+                        <li>Three, authored reverse-order: <xref ref="biblio-lay-article biblio-judson-aata citeproc-py-item-3"/></li>
+                    </ul></p>
                 </subsection>
 
                 <references>
@@ -16029,29 +16041,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <references>
                     <title>Specialized References</title>
 
-                    <biblio type="raw" xml:id="biblio-strang-article-dos">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash/>855.</biblio>
+                    <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
+                    <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
+                    </biblio>
 
                     <biblio type="raw" xml:id="biblio-strang-article-tres">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash/>855.</biblio>
-
-                    <biblio xml:id="conrey-farmer-plain" type="article-journal">
-                        <author>
-                            <name>
-                                <family>Conrey</family>
-                                <given>J. B.</given>
-                            </name>
-                            <name>
-                                <family>Farmer</family>
-                                <given>D. W.</given>
-                            </name>
-                        </author>
-                        <title>Mean values of <m>L</m>-functions and symmetry</title>
-                        <collection-title>Internat. Math. Res. Notices</collection-title>
-                        <issued>
-                            <date year="2000"/>
-                        </issued>
-                        <volume>17</volume>
-                        <page>883-908</page>
-                    </biblio>
                 </references>
              </appendix>
 
@@ -16061,39 +16055,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <references xml:id="references-backmatter" label="references-backmatter">
                 <title>References</title>
 
-                <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
-                <note xml:id="note-judson-AATA"><p>Another online, open-source offering.</p></note>
+                <!-- note lower-case on AATA! -->
+                <biblio xml:id="biblio-judson-aata" type="book">
+                    <author>
+                        <name>
+                            <given>Thomas</given>
+                            <family>Judson</family>
+                        </name>
+                    </author>
+                    <title>Abstract Algebra: Theory and Applications</title>
+                    <!-- "note" element not supported yet for CSL processing,     -->
+                    <!-- makes bad JSON. Add an @xml:id to test cross-referencing -->
+                    <note><p>Another online, open-source offering.</p></note>
                 </biblio>
 
-                <biblio type="raw" xml:id="biblio-lay-article">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash/>62.</biblio>
-
-                <!-- "ITEM-1" through "ITEM-5" are PreTeXt-ified examples from the "citeproc-py"    -->
-                <!-- repository within the  "examples/citeproc_json.py"  program.  Authors, dates,  -->
-                <!-- and the @type attribute are a bit different than the JSON, otherwise the       -->
-                <!-- mapping should be fairly obvious.                                              -->
-                <!--                                                                                -->
-                <!-- TO USE FOR TESTING: uncomment these, and likely you should comment-out         -->
-                <!-- the three references above so they don't skew results.                         -->
-                <!--                                                                                -->
-                <!-- WARNING: this is all strictly for testing and no markup infinal or guaranteed. -->
-
-                <!--
-                <biblio xml:id="ITEM-1" type="book">
+                <biblio xml:id="biblio-lay-article" type="article">
+                    <author>
+                        <name>
+                            <given>David C.</given>
+                            <family>Lay</family>
+                        </name>
+                    </author>
+                    <title>Subspaces and Echelon Forms</title>
+                    <collection-title>The College Mathematics Journal</collection-title>
                     <issued>
-                        <date year="1987" month="8" day="3"/>
-                        <date year="2003" month="10" day="23"/>
+                        <date year="1993" month="1"/>
                     </issued>
-                    <title>Ignore me</title>
+                    <volume>24</volume>
+                    <number>1</number>
+                    <page>57-62</page>
                 </biblio>
 
-                <biblio xml:id="ITEM-2" type="article-jo\urnal">
-                    <page>1-7</page>
+                <!-- from test suite in citeproc.py JSON example program -->
+                <biblio xml:id="citeproc-py-item-3-later" type="book">
+                    <author>
+                        <name>
+                            <family>Doe</family>
+                            <given>John</given>
+                        </name>
+                    </author>
                     <issued>
-                        <date year="2006"/>
+                        <date year="1970" month="6" day="1"/>
                     </issued>
+                    <title>Still Anonymous, But now Ibid</title>
                 </biblio>
 
-                <biblio xml:id="ITEM-3" type="book">
+                <!-- from test suite in citeproc.py JSON example program -->
+                <biblio xml:id="citeproc-py-item-3" type="book">
                     <author>
                         <name>
                             <family>Doe</family>
@@ -16106,24 +16114,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <title>His Anonymous Life</title>
                 </biblio>
 
-                <biblio xml:id="ITEM-4" type="book">
+                <biblio xml:id="conrey-farmer" type="article-journal">
                     <author>
                         <name>
-                            <family>Grignon</family>
-                            <given>Cyril</given>
+                            <family>Conrey</family>
+                            <given>J. B.</given>
                         </name>
                         <name>
-                            <family>Sentenac</family>
-                            <given>Corey</given>
+                            <family>Farmer</family>
+                            <given>D. W.</given>
                         </name>
                     </author>
+                    <title>Mean values of <m>L</m>-functions and symmetry</title>
+                    <collection-title>Internat. Math. Res. Notices</collection-title>
                     <issued>
                         <date year="2000"/>
                     </issued>
+                    <volume>17</volume>
+                    <page>883-908</page>
                 </biblio>
 
-                <biblio xml:id="ITEM-5" type="book">
-                    <title>Boundaries of Dissent: Protest and State Power in the Media Age</title>
+                <!-- from test suite in citeproc.py JSON example program -->
+                <biblio xml:id="citeproc-py-item-5" type="book">
                     <author>
                         <name>
                             <family>D'Arcus</family>
@@ -16131,14 +16143,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <static-ordering>false</static-ordering>
                         </name>
                     </author>
-                    <publisher>Rout"ledge</publisher>
+                    <title>Boundaries of Dissent: Protest and State Power in the Media Age</title>
+                    <publisher>Routledge</publisher>
                     <publisher-place>New York</publisher-place>
                     <issued>
                         <date year="2006"/>
                     </issued>
                     <URL>http://www.test01.com</URL>
                 </biblio>
-                -->
             </references>
 
             <index label="the-index">
