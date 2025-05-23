@@ -10825,10 +10825,40 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="plain-biblio-period"/>
 </xsl:template>
 
+<!-- Publisher -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/publisher">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Publisher place-->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/publisher-place">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Collection title -->
+<!-- Once had "lq-character" and "rq-character", but -->
+<!-- removed for consistency with other formats      -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/collection-title">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
 <!-- Volume in bold -->
 <xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/volume">
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="." mode="bold"/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Number, presumes it follows volume -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/number">
+    <xsl:text> no. </xsl:text>
+    <xsl:apply-templates/>
     <xsl:apply-templates select="." mode="plain-biblio-period"/>
 </xsl:template>
 
@@ -10846,6 +10876,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/page">
     <xsl:text> </xsl:text>
     <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- URL (upper-case?) -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/URL">
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="monospace"/>
     <xsl:apply-templates select="." mode="plain-biblio-period"/>
 </xsl:template>
 
