@@ -29,7 +29,7 @@
         <introduction>
             <p>Sublime Text is a fast cross-platform editor with thousands of user-contributed packages implemented in its Python <init>API</init>. It is not free or open-source, although most of the user-contributed packages are both. Development is active as of December<nbsp />2024. However after build 4180 of Sublime Text 4, the PreTeXt support is broken.</p>
             <p>Here we outline several of the most important Sublime Text features that will help you to minimize your typing overhead and work more efficiently with your <pretext/> project. We also introduce the no longer maintained PreTeXtual package designed to help <pretext/> authors work more efficiently.</p>
-            <p>Sublime Text 2, 3 and 4 are available for an unlimited evaluation period, but a licence must be purchased for continued use.</p>
+            <p>Sublime Text 2, 3 and 4 are available for an unlimited evaluation period, but a license must be purchased for continued use.</p>
         </introduction>
         <subsection xml:id="subsection-settings">
             <title>Settings</title>
@@ -37,7 +37,7 @@
             <p>To edit your Sublime Text settings, you can use the Preferences/Settings <mdash /> User menu (Sublime Text/Preferences<ellipsis /> on <init>OS X</init>). Make sure that when you go to edit Settings, you always choose the User option. Changes to Default settings files will be overwritten when Sublime Text updates. It is recommended to use the Default files to see what settings are available to change. There are a lot, and not all are documented.</p>
             <p>All Sublime Text users should be aware that a particular view (buffer) may receive settings in several different ways, e.g., from global default settings, from global <init>OS</init>-specific settings, from package-provided settings, from user-provided settings, and so on.</p>
             <p>Key bindings are also stored in files with a similar format. There
-            are only a limited number of keyboard shortcuts available, although Sublime Text does support multistep shortcuts like Emacs. If you find that you wish to reassign shortcuts, this is certainly possible through the Preferences/Key Bindings <mdash /> User menu (Sublime Text/Preferences<ellipsis /> on <init>OS X</init>).</p>
+            are only a limited number of keyboard shortcuts available, although Sublime Text does support multi-step shortcuts like Emacs. If you find that you wish to reassign shortcuts, this is certainly possible through the Preferences/Key Bindings <mdash /> User menu (Sublime Text/Preferences<ellipsis /> on <init>OS X</init>).</p>
         </subsection>
         <subsection xml:id="subsection-package-control">
             <title>Package Control</title>
@@ -63,7 +63,7 @@
             </subsubsection>
             <subsubsection xml:id="subsubsection-explicit-projects">
                 <title>Explicit Projects</title>
-                <p>To save your project explicitly, use the Project menu to choose Save As Project<ellipsis /> and choose an appropriate name and location. For a MathBook <init>XML</init> project, this would probably be the same name and location as the document root file. Use the Project menu commands to open and close your project.</p>
+                <p>To save your project explicitly, use the Project menu to choose Save As Project<ellipsis /> and choose an appropriate name and location. For a <pretext /> <init>XML</init> project, this would probably be the same name and location as the document root file. Use the Project menu commands to open and close your project.</p>
                 <p>There are a few benefits to using an explicit project to group files.<ul>
                     <li><p>You can group together files and folders in different parts of the file system, instead of being restricted to subtrees.</p></li>
                     <li><p>You can have project-specific settings that are different from Sublime Text's defaults and different from your user preferences (<xref provisional="subsection-settings" />).</p></li>
@@ -109,7 +109,7 @@
             are lots of ways to do it (<url
             href="http://docs.sublimetext.info/en/latest/editing/editing.html">see the Sublime Text documentation</url> for an almost exhaustive list), but the most frequently used is to hold down <c>Shift</c> while clicking and dragging with the right mouse button (on <init>OS X</init>, hold down <c>Option</c> while dragging with the right mouse button). See the documentation for keyboard-based shortcuts.</p>
             <p>Column selection becomes even more useful when used in combination with the keyboard shortcuts for moving and selecting, such as <c>Ctrl+Shift+Right</c> (select to end of word) and <c>Shift+End</c> (select to end of line).</p>
-            <p>Yet another example of the appallingly great utility of multiple selection comes when copying and pasting from a different file format. Suppose you have copied some lines of text and wish each such line to become a list item in your MathBook <init>XML</init> source.<ol>
+            <p>Yet another example of the appallingly great utility of multiple selection comes when copying and pasting from a different file format. Suppose you have copied some lines of text and wish each such line to become a list item in your <pretext /> source.<ol>
                 <li>
                     <p>Use column selection, as described above, to select each line individually.</p>
                 </li>
@@ -130,7 +130,7 @@
                 </li>
             </ol></p>
             <p>This does take a little mouse-work, but the keystroke savings can be considerable. (The Emmet package, described in <xref ref="subsection-emmet" />, provides an even quicker way to do this task and much more complicated ones.)</p>
-            <p>There are so many incredibly handy ways to use multiple selections that we will forgo any further examples to leave the reader the pleasure of discovering her own favorites. One particularly helpful package is Text Pastry, which provides some autonumbering and text insertion commands that work nicely with multiple selections. There are also a handful of packages that extend multiple selection functionality, such as PowerCursors and MultiEditUtils. PowerCursors allows you to add cursors and manipulate them without using the mouse. MultiEditUtils provides additional text processing commands designed to work with multiple selections.</p>
+            <p>There are so many incredibly handy ways to use multiple selections that we will forgo any further examples to leave the reader the pleasure of discovering her own favorites. One particularly helpful package is Text Pastry, which provides some auto-numbering and text insertion commands that work nicely with multiple selections. There are also a handful of packages that extend multiple selection functionality, such as PowerCursors and MultiEditUtils. PowerCursors allows you to add cursors and manipulate them without using the mouse. MultiEditUtils provides additional text processing commands designed to work with multiple selections.</p>
         </subsection>
         <subsection xml:id="subsection-emmet">
             <title>Emmet</title>
@@ -183,7 +183,7 @@
             <pre>section[xml:id]&gt;introduction&gt;p^(subsection[xml:id]&gt;p*2+figure+p+ol&gt;li*3)^^conclusion&gt;p</pre>
             <p>Upon typing this string and placing the caret to the right of it, hit <c>Ctrl+E</c> (or <c>Tab</c>, if you didn't disable the Emmet default). The entire tree structure is created immediately, with tab stops for the missing attribute values and for each matching begin/end pair.</p>
             <p>The Expand Abbreviation As You Type command allows you to tweak such abbreviations interactively. Hit <c>Ctrl+Alt+Enter</c> and type the expression above into the minibuffer at the bottom of the window, watching the tree appear as you type. </p>
-            <p>Emmet is a very powerful package that can do much more than is outlined here. However, it is by default mostly adapted to writing CSS and HTML. Customizing it to work more directly with MathBook <init>XML</init> is an ongoing project. You can discover more about Emmet by examining the <url href="http://docs.emmet.io/" visual="docs.emmet.io/">Emmet documentation</url> or poking around in the Settings and Keymap files.</p>
+            <p>Emmet is a very powerful package that can do much more than is outlined here. However, it is by default mostly adapted to writing CSS and HTML. Customizing it to work more directly with <pretext /> is an ongoing project. You can discover more about Emmet by examining the <url href="http://docs.emmet.io/" visual="docs.emmet.io/">Emmet documentation</url> or poking around in the Settings and Keymap files.</p>
         </subsection>
         <subsection xml:id="subsection-mbxtools">
             <title>PreTeXtual<mdash />a Sublime Text package for <pretext/></title>
@@ -317,8 +317,8 @@
         <title>emacs</title>
 
         <p>Jason Underdown reports on 2016-05-12 that emacs' <url href="https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html" visual="www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html">nXML mode</url> works well with a schema, and Mitch Keller reports on 2021-04-18 that specifically a <acro>RELAX-NG</acro> schema may be used.  The two versions of the <acro>RELAX-NG</acro> schema for <pretext/> can be found at<cd>
-            <cline>mathbook/schema/pretext.rng</cline>
-            <cline>mathbook/schema/pretext.rnc</cline>
+            <cline>pretext/schema/pretext.rng</cline>
+            <cline>pretext/schema/pretext.rnc</cline>
         </cd>The first is the <q>real</q> version, while the second is an entirely equivalent (compact) syntax that is meant to be a bit more human-readable, so perhaps either may be employed.</p>
 
         <p>On 2021-04-18, Mitch Keller reports success with placing the following <c>schemas.xml</c> file in his <pretext/> source file directories.  Note that you may need to adjust the path in the <attr>uri</attr> attribute, and the <attr>pattern</attr> attribute implies that Mitch has used a <c>.ptx</c> suffix for all his source filenames.  If you are already using emacs, you should have no trouble making the necessary adjustments.</p>
@@ -326,7 +326,7 @@
         <pre><![CDATA[
         <?xml version="1.0"?>
         <locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
-          <uri pattern="*.ptx" uri="../../mathbook/schema/pretext.rnc"/>
+          <uri pattern="*.ptx" uri="../../pretext/schema/pretext.rnc"/>
         </locatingRules>
         ]]>
         </pre>

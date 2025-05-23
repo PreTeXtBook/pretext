@@ -116,7 +116,7 @@
             </listing>
 
             <p>
-                The first line is boilerplate that lets various programs know the rest of the file is XML, and the line start <c>&lt;!--</c>  is an example of a comment that won't appear in the output.  Besides this, you can start to see how the structure of the book is layed out.
+                The first line is boilerplate that lets various programs know the rest of the file is XML, and the line start <c>&lt;!--</c>  is an example of a comment that won't appear in the output.  Besides this, you can start to see how the structure of the book is laid out.
             </p>
         </paragraphs>
 

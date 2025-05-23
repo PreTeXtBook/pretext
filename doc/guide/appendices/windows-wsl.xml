@@ -11,7 +11,7 @@
     <title>Windows Subsystem for Linux</title>
 
     <p>
-      Windows Subsytem for Linux is no longer the recommended method for Windows <pretext /> users.
+      Windows Subsystem for Linux is no longer the recommended method for Windows <pretext /> users.
       Instead, consider using either the web-based GitHub solution described in <xref ref="tutorial"/>
       or the handy <pretext />-CLI as discussed in <xref ref="processing-CLI"/>.
     </p>
@@ -122,10 +122,10 @@
         Here are the steps necessary to get the <pretext/> software onto
         your computer:
         <ul>
-        <li><p>Make a new directory <c>mkdir mathbook</c></p></li>
+        <li><p>Make a new directory <c>mkdir pretext</c></p></li>
         <li><p>Make your own clone of the <pretext/> repository
             <c>git clone https://github.com/PreTeXtBook/pretext.git</c></p></li>
-        <li><p>Move to the new directory <c>cd mathbook</c></p></li>
+        <li><p>Move to the new directory <c>cd pretext</c></p></li>
         <li><p>Initialize the new directory with <c>git pull</c></p></li>
         </ul>
         This last command synchronizes your files with those in the official repository.
@@ -168,7 +168,7 @@
         </li>
         <li><p>
             Run the command
-            <c>xsltproc mathbook/xsl/pretext-html.xsl hw.xml</c>
+            <c>xsltproc pretext/xsl/pretext-html.xsl hw.xml</c>
             Upon completion, your should have a file called <c>hw.html</c>.
         </p></li>
         <li><p>

@@ -410,7 +410,7 @@
                 <project ptx-version="2">
                 <targets>
                     <target name="web" format="html" />
-                    <target name="rs" format="html" publication="publication-runeston.ptx" />
+                    <target name="rs" format="html" publication="publication-runestone.ptx" />
                     <target name="print" format="pdf" />
                 </targets>
                 </project>
