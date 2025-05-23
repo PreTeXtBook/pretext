@@ -46,9 +46,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
-<xsl:variable name="biblio-csl-extracting">
-    <xsl:value-of select="true()"/>
-</xsl:variable>
+<!-- In "normal" circumstances, this variable is   -->
+<!-- set to "false()", but when employing this     -->
+<!-- specialized stylesheet, we override to "true" -->
+<xsl:variable name="b-biblio-csl-extracting" select="true()"/>
 
 <!-- We create a structured file of bibliographic and citation  -->
 <!-- information from the document.  Following is an outline of -->
