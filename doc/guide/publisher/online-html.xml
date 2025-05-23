@@ -351,15 +351,94 @@
     <section xml:id="one-page-html">
         <title>Single Page HTML</title>
 
-        <p>Sometimes you would like a shorter work to be a <em>single</em> file in <init>HTML</init> format.  Perhaps it is something self-contained, like a course syllabus, or you desire to attach it easily to an email or other post.  This section contains advice and procedures you can use to achieve this.<ul>
-            <li>Design your source as an <tag>article</tag>, with or without <tag>section</tag>.</li>
-            <li>Set the chunking option to zero (see <xref ref="common-chunking-options"/>).  This will prevent making a separate page for each <tag>section</tag> (or worse).</li>
-            <li>If you set the level for the Table of Contents to zero, there will be no sidebar Table of Contents at all.  This does not affect the number of files, but will make the page simpler.  Your call.  See <xref ref="common-toc-options"/>.</li>
-            <li>You might want to number some objects consecutively for the whole page, even if you choose to have <tag>section</tag>.  And if you do this, you might want to not even number the <tag>section</tag>.  None of this affect the number of files, but may make a single page look simpler.  See <xref ref="publication-file-numbering"/> to see how to accomplish these options.</li>
-            <li>Items that are <q>born hidden</q> as knowls, either automatically (<tag>answer</tag>, <tag>fn</tag>, <ellipsis/>) or electively (<tag>example</tag>, <tag>warning</tag>, <ellipsis/>) are contained in the page, so also do not affect the number of files.</li>
-            <li>Cross-references (<tag>xref</tag>) should be set to never be rendered as knowls. This will force them to render as HTML links to the target instead of as knowls that will attempt to load contents from a separate file. See <xref ref="html-xref-options"/> for documentation of the relevant publisher variable.</li>
-            <li>You will likely get a subdirectory called <c>knowls</c>. Assuming you have set cross-references to never be knowled you can delete this directory.</li>
-            <li>An <init>HTML</init> build always makes a <c>index.html</c> file which will cause a webserver to redirect to a page of the publisher's choosing.  You can safely delete it.</li>
-        </ul></p>
+        <p>
+            Sometimes you would like a shorter work to be a <em>single</em> file in <init>HTML</init> format.  Perhaps it is something self-contained, like a course syllabus, or you desire to attach it easily to an email or other post.  This section contains advice and procedures you can use to achieve this.
+        </p>
+
+        <p>
+            The primary mechanism for limiting the number of files in an HTML build is to set the <attr>portable</attr> attribute of <c>publication/html/platform</c> to <c>"yes"</c> (see <xref ref="online-portable-options"/>).  This will automatically take care of the following.
+
+            <ul>
+                <li>
+                    <p>
+                        Use hosted (CDN) versions of the <init>CSS</init> and javascript files rather than including them in your output directory.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Embed generated <init>SVG</init> images in the HTML (anything from <tag>prefigure</tag> or <tag>latex-image</tag>).
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Embed the search code in the HTML (if you are using the )
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Set all xref knowls to behave like links (same as setting <c>/publication/html/cross-references/@knowled</c> to <c>never</c>).
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Produce a single file will all your chapters/sections/subsections in it (the same as setting <c>/publication/common/chunking/@level</c> to <c>0</c>).
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Prevent the generation of most extra <q>standalone</q> pages (such as for most interactive elements and worksheets).
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Not produce the standard <c>index.html</c> file that is otherwise used to redirect to the main page.
+                    </p>
+                </li>
+            </ul>
+        </p>
+
+        <p>
+            Keep in mind that if your document has external assets, or uses generated assets that are not converted to <init>SVG</init>, these assets will still be needed in your output (regardless, you will get <c>external</c> and <c>generated</c> directories for your assets, but these might be empty or not needed).  Additionally, some interactive elements work by creating an <c>iframe</c> that loads an <init>HTML</init> file, and these cannot be avoided currently.
+        </p>
+
+        <p>
+            Finally, depending on the purpose of your document, you might consider using a simpler theme.  The <c>boulder</c> theme is designed to look like a <latex />-produced PDF; it doesn't have any masthead, which makes sense for a single page document.  Other style options are described in <xref ref="online-style"/>.
+        </p>
+
+        <p>
+            For very small documents, you might also consider turning off the table of contents by setting <c>/publication/common/tableofcontents/@level</c> to <c>0</c> (see <xref ref="common-toc-options"/>).
+        </p>
     </section>
+
+    <section xml:id="lms-hosting">
+        <title>HTML in an LMS</title>
+
+        <p>
+            If you are using <pretext /> to author course materials, you may want to include the resulting <init>HTML</init> in your LMS (Learning Management System) course shell.
+            While uploading PDFs can also be useful for students to print from, many universities require the documents to also be made available in accessible formats, so <init>HTML</init> is likely your best option.
+        </p>
+
+        <p>
+            Depending on which LMS you use, and possibly what settings have been applied to your course shell, you may be able to upload a portable <init>HTML</init> file, as described in <xref ref="one-page-html"/>.  This seems to work with Moodle, but not with Canvas, which blocks javascript inside uploaded files (the Javascript is required to render the MathJax math content).  In this case, you have two options:
+            <ol>
+                <li>
+                    <p>
+                        Host your <init>HTML</init> output on a web server (such as using <c>pretext deploy</c> to publish your files to GitHub pages) and then link to the content or embed it in your LMS using an iframe.  To make embedding easier, you can turn on an <q>embed this page</q> button by setting <c>/publication/html/@embed-button</c> to <c>yes</c> in the publication file (see <xref ref="online-embed-button-options"/>).
+                    </p>
+                    <p>
+                        Once your page is published, click on the button and copy the code to your clipboard.  In the LMS, create a page in your course shell.  There is likely an <q>embed code</q> button in the editor interface of your LMS where you can paste what you copied from the <pretext /> page.  When you save the page in your LMS, you should see just the <em>inner</em> content of the pretext page (no table of contents or navigation).  However, the page should be fully functional, including interactive elements and MathJax rendered math (so it will be screen reader friendly).
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        If you need to keep your document private to your course (for example, maybe it is a set of exam solutions you don't want to publish on the open web), you can produce a <init>SCORM</init><fn>Sharable Content Object Reference Model</fn> archive of your document.  To do this, in your <c>project.ptx</c> manifest, set <attr>compression</attr> to <c>scorm</c> for the <init>HTML</init> target you want to build.
+                    </p>
+                    <p>
+                        <pretext /> will produce the HTML inside a <c>.zip</c> archive which will also include a SCORM manifest that tells your LMS how to display the content.  You can then upload this SCORM file to your LMS and add it as a page.  In Canvas, you can do this by adding SCORM to your course navigation in settings and then clicking the upload button on that page.  Brightspace (D2L) lets you upload SCORM files from a page-creation menu.  See the documentation for your LMS for additional help.
+                    </p>
+                </li>
+            </ol>
+        </p>
+    </section>
+
 </chapter>
