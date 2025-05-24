@@ -577,6 +577,8 @@ body.pretext > a.assistive:focus {
   background-color: var(--tocitem-active-background);
   color: var(--tocitem-active-text-color);
 }
+.ptx-toc.focused {
+}
 .ptx-toc.focused ul.structural:not(.contains-active) > .toc-item {
   display: none;
 }
@@ -598,7 +600,7 @@ body.pretext > a.assistive:focus {
   align-items: center;
 }
 .ptx-toc.focused .toc-expander .icon {
-  font-size: 30px;
+  font-size: 1.25em;
   line-height: 18px;
   font-variation-settings: "wght" 200;
 }
@@ -609,8 +611,11 @@ body.pretext > a.assistive:focus {
 .ptx-toc.focused .toc-expander:is(:hover) .icon {
   fill: var(--tocitem-highlight-text-color);
 }
-.ptx-toc.focused .toc-item.expanded > .toc-title-box > .toc-expander > .icon {
-  transform: rotate(-90deg);
+.ptx-toc.focused .toc-item > .toc-title-box > .toc-expander > .icon:before {
+  content: "add";
+}
+.ptx-toc.focused .toc-item.expanded > .toc-title-box > .toc-expander > .icon:before {
+  content: "remove";
 }
 .ptx-sidebar {
   position: sticky;
