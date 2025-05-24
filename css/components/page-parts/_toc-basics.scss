@@ -259,7 +259,7 @@ and then clear indent if there is a codenumber */
     align-items: center;
 
     .icon {
-      font-size: 30px;
+      font-size: 1.25em;
       line-height: 18px;
       font-variation-settings: 'wght' 200;
     }
@@ -274,7 +274,12 @@ and then clear indent if there is a codenumber */
     }
   }
 
-  .toc-item.expanded > .toc-title-box > .toc-expander > .icon {
-    transform: rotate(-90deg);
+  /* ---------------icon customization----------------- */
+  .toc-item > .toc-title-box > .toc-expander > .icon:before {
+    content: "add";
+  }
+
+  .toc-item.expanded > .toc-title-box > .toc-expander > .icon:before {
+    content: "remove";
   }
 }
