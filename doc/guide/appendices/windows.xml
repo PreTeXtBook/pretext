@@ -316,11 +316,11 @@
         <cline>    -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=</cline>
         <cline>      org.apache.xerces.parsers.XIncludeParserConfiguration\</cline>
         <cline>    -jar /c/jing-trang/build/jing.jar\</cline>
-        <cline>    /c/PreTeXt/mathbook/schema/pretext.rng "$1"</cline>
+        <cline>    /c/PreTeXt/pretext/schema/pretext.rng "$1"</cline>
         <cline>}</cline>
       </cd>
       The above assumes that <c>jing-trang</c> is installed at <c>C:\jing-trang</c>
-      and that PreTeXt has been cloned at <c>C:\PreTeXt\mathbook</c>.
+      and that PreTeXt has been cloned at <c>C:\PreTeXt\pretext</c>.
       Adjust your paths as needed. You can now run validation from Git Bash using
       <cd>
         <cline>ptx-check ~/path/to/project/index.ptx > jing_report.txt</cline>

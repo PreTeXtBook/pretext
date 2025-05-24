@@ -57,7 +57,7 @@
                     <cline>(ptx) &gt; deactivate</cline>
                     <cline>&gt;</cline>
                 </cd></p>
-                <p>We have one report, on a Mac, of deactivation dropping you into a different virtual environment named <c>(base)</c>.  A way to leave that virtual enviroment is to run<cd>
+                <p>We have one report, on a Mac, of deactivation dropping you into a different virtual environment named <c>(base)</c>.  A way to leave that virtual environment is to run<cd>
                     <cline>(base) $ conda deactivate</cline>
                 </cd>This appears to be due to Anaconda somehow creating a default base environment initially.  If you have this experience and find a simple solution, please report it.  Some details at <url href="https://stackoverflow.com/questions/54429210/how-do-i-prevent-conda-from-activating-the-base-environment-by-default" visual="stackoverflow.com/questions/54429210">Stack Overflow 54429210</url> may be helpful.</p>
             </li>
@@ -75,7 +75,7 @@
         </p>
 
         <p>
-          To install all required additional python libraries, in your virtual enviroment, navigate to the <c>pretext</c> directory and run
+          To install all required additional python libraries, in your virtual environment, navigate to the <c>pretext</c> directory and run
           <cd>
             <cline>(ptx) $ pip install</cline>
           </cd>

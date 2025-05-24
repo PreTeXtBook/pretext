@@ -4140,7 +4140,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
     <section xml:id="topic-listing">
         <title>Program Listings</title>
-        <p>A <tag>listing</tag> is really a specialized type of <tag>figure</tag>, whose purpose is to hold computer code.  It has an optional <tag>title</tag> which is rendered above the listing.  However, the enclosed planar content is limited to a <tag>program</tag> or <tag>console</tag> (see <xref ref="topic-program-console"/>).</p>
+        <p>A <tag>listing</tag> is really a specialized type of <tag>figure</tag>, whose purpose is to hold computer code.  It has an optional <tag>title</tag> which is rendered above the listing.  However, the enclosed planar content is limited to a <tag>program</tag> or <tag>console</tag> (see <xref ref="topic-program"/> and <xref ref="topic-console"/>).</p>
     </section>
 
     <section xml:id="topic-named-list">

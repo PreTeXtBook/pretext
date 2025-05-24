@@ -23,7 +23,7 @@
     </p>
 
     <console>
-      <input prompt="rob@lava:~/mathbook$ ">xsltproc xsl/pretext-html.xsl ~/books/aota/animals.xml</input>
+      <input prompt="rob@lava:~/pretext$ ">xsltproc xsl/pretext-html.xsl ~/books/aota/animals.xml</input>
     </console>
 
     <p>
@@ -63,8 +63,7 @@
     <p>The operating system on a Mac is built on Unix, which is very similar to Linux, so most of the directions here will be little changed between the two.  Procedures can be very different in Windows (<xref ref="windows-install-notes" />
     ,<xref ref="windows-subsystem-linux" />
     ).  One alternative is <url href="https://cocalc.com/" visual="cocalc.com">CoCalc</url>
-     which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments (<xref ref="topic-build-in-cocalc" />
-    ).</p>
+    which provides a full Linux computer for free in your web browser, so that may be an excellent place for initial experiments.</p>
 
     <paragraphs>
     <title>Step 1: <pretext />
@@ -99,13 +98,13 @@
   <section xml:id="xsltproc-processing">
     <title>Processing</title>
 
-    <p>At a command prompt in your terminal or console adjust the pathnames for the two files and execute:<cd>
-    <cline>xsltproc /path/to/mathbook/xsl/pretext-html.xsl /path/to/quickstart.xml</cline>
+    <p>At a command prompt in your terminal or console adjust the path names for the two files and execute:<cd>
+    <cline>xsltproc /path/to/pretext/xsl/pretext-html.xsl /path/to/quickstart.xml</cline>
     </cd>In the current working directory you should now find the file <c>article-1.html</c> which you can view in a web browser.  (You will want an internet connection since various parts of the page come from the network.  Someday we will create output for the offline situation.)  It will look very plain, but you should be able to read the sentence.</p>
 
     <p>Now, try the following, again with adjusted paths, and all on one line:
       <cd>
-      <cline>xsltproc -o quick.tex /path/to/mathbook/xsl/pretext-latex.xsl</cline>
+      <cline>xsltproc -o quick.tex /path/to/pretext/xsl/pretext-latex.xsl</cline>
       <cline>/path/to/quickstart.xml</cline>
       </cd>
     </p>
@@ -118,7 +117,7 @@
     <p> Note that if your project includes multiple files you will need to pass the <c>-xinclude</c> flag to <c>xsltproc</c>, though this is not needed for this simple example.
             An example of this is the command
     <cd>
-    <cline>xsltproc -xinclude /path/to/mathbook/xsl/pretext-html.xsl /path/to/index.xml</cline>
+    <cline>xsltproc -xinclude /path/to/pretext/xsl/pretext-html.xsl /path/to/index.xml</cline>
     </cd>
     For more on this see <xref ref="topic-xinclude"/>
     and <xref ref="processing-modular"/>.
@@ -170,7 +169,7 @@
     </console>
 
     <p>
-                    Note that using this method, it is necessary to import the stock <init>XSL</init> using the <attr>href</attr> instead of <attr>pretext-href</attr>, as in <tage>xsl:import href="path/to/mathbook/xsl/pretext-latex.xsl"</tage>.  You need to specify the full path to the <c>mathbook/xsl</c> directory, or else put your custom <init>XSL</init> in the <c>mathbook/user</c> directory and use a relative path (<c>../xsl/pretext-latex.xsl</c>).
+                    Note that using this method, it is necessary to import the stock <init>XSL</init> using the <attr>href</attr> instead of <attr>pretext-href</attr>, as in <tage>xsl:import href="path/to/pretext/xsl/pretext-latex.xsl"</tage>.  You need to specify the full path to the <c>pretext/xsl</c> directory, or else put your custom <init>XSL</init> in the <c>pretext/user</c> directory and use a relative path (<c>../xsl/pretext-latex.xsl</c>).
     </p>
     </section>
     <section>
@@ -208,7 +207,7 @@
     </p>
 
     <console>
-    <input>xsltproc -xinclude path/to/mathbook/xsl/utilities/authors-report.xsl path/to/main.ptx</input>
+    <input>xsltproc -xinclude path/to/pretext/xsl/utilities/authors-report.xsl path/to/main.ptx</input>
     </console>
     </section>
     <section xml:id="xsltproc-updating-source">
@@ -274,7 +273,7 @@
 
     <console>
     <input prompt="rob@lava:/tmp/original$ ">for f in *.xml; do xsltproc -o ../normal/$f -stringparam fix normalize</input>
-    <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
+    <input>  /home/rob/pretext/xsl/utilities/fix-deprecations.xsl $f; done</input>
     </console>
 
     <p>This will loop over every <init>XML</init> file in the current working directory, <c>/tmp/original</c>, running the normalization conversion on each file, with the output files using the same filename, but now being placed in the <c>/tmp/normal</c> directory.  If you change to the <c>/tmp</c> directory, then you can compare the results.  I like to use the <c>diff</c> utility provided by <c>git</c>.
@@ -295,7 +294,7 @@
 
     <console>
     <input prompt="rob@lava:/tmp/normal$ ">for f in *.xml; do xsltproc -o ../clean/$f -stringparam fix all</input>
-    <input>  /home/rob/mathbook/xsl/utilities/fix-deprecations.xsl $f; done</input>
+    <input>  /home/rob/pretext/xsl/utilities/fix-deprecations.xsl $f; done</input>
     </console>
 
     <p>And as above, you can now compare the <c>normal</c> and <c>clean</c> directories to see actual changes.  If you are satisfied with the changes, you can copy the files in the <c>clean</c> directory back onto your source files.  If you are using revision-control (you are, aren't you?) then you can make a commit that holds these changes. (See <pubtitle>
@@ -339,7 +338,7 @@
 
     <p>My use of <c>make</c> is a bit of an abuse, since it is really designed for large software projects, with the aim of reducing duplicative compilations and that is not at all the purpose.  You could likely have exactly the same effect with a shell script and a case (or switch) statement.</p>
 
-    <p>My general strategy is to assemble all the necessary files into a temporary directory (under <c>/tmp</c> in Linux) by copying them out of their permanent home, copy customizing XSL into the right place (typically <c>mathbook/user</c>), run the <c>pretext</c> script as necessary and direct the results to the right place, and finally copy results out of the temporary directory if they are meant to be permanent.  Interesting, an exception to staging all these files is the source of the book itself which is only read for each conversion and then not needed for the output.  So you can just point directly to a top-level file and the <c>xinclude</c> mechanism locates any other necessary source files.</p>
+    <p>My general strategy is to assemble all the necessary files into a temporary directory (under <c>/tmp</c> in Linux) by copying them out of their permanent home, copy customizing XSL into the right place (typically <c>pretext/user</c>), run the <c>pretext</c> script as necessary and direct the results to the right place, and finally copy results out of the temporary directory if they are meant to be permanent.  Interesting, an exception to staging all these files is the source of the book itself which is only read for each conversion and then not needed for the output.  So you can just point directly to a top-level file and the <c>xinclude</c> mechanism locates any other necessary source files.</p>
 
     <p>A good example of this general strategy is the use and placement of image files for HTML output.  It is your responsibility to place images into the location your resulting HTML files expect to locate them.  By default, this is a subdirectory of the directory holding the HTML files, named <c>images</c>.  You will want to copy images, such as photographs, out of your main source directory (<c>src/images</c>?). But you may be actively modifying source code for diagrams, and you want to re-run the <c>pretext</c> script for each run, and make sure the output of the script is directed to the correct subdirectory for the HTML output.  Running the <c>pretext</c> script frequently can get tiresome, so maybe you have a makefile target <c>make diagrams</c> that updates a permanent directory, outside of your tracked files in the repository, and you copy those files into the correct subdirectory for the output.  That way, you can update images only when you are actively editing them, or when you are producing a draft that you want to be as up-to-date as possible.  As a project matures, you can add images into the directory tracked by <c>git</c> so they are available to others without getting involved with the <c>pretext</c> script.</p>
 
@@ -354,7 +353,7 @@
 
     <p>One of our main motivations for this project was mixing in code from the powerful, open source, mathematical software project, Sage (<xref ref="overview-sage" />).  When you add example Sage code to illustrate mathematical ideas, you are then encouraged to also include expected output in the <tag>output</tag> element.  Here comes one of the powerful advantages of XML source and XSL processing.</p>
 
-    <p>The <c>mathbook/xsl/pretext-sage-doctest.xsl</c> stylesheet, used in the usual way, will create one, or several file(s), in <em>exactly</em> the format Sage expects for automated testing.  So all your words are gone, and all your Sage input and output is packaged so Sage can run all the <tag>input</tag> and compare the results to the expected <tag>output</tag>.  See <xref ref="common-chunking-options"/> for details on obtaining more than one file.</p>
+    <p>The <c>pretext/xsl/pretext-sage-doctest.xsl</c> stylesheet, used in the usual way, will create one, or several file(s), in <em>exactly</em> the format Sage expects for automated testing.  So all your words are gone, and all your Sage input and output is packaged so Sage can run all the <tag>input</tag> and compare the results to the expected <tag>output</tag>.  See <xref ref="common-chunking-options"/> for details on obtaining more than one file.</p>
 
     <p>We have many years' experience testing hundreds of non-trivial Sage examples from textbooks, for linear algebra and abstract algebra.  Roughly every six months, we discover ten to twenty examples that fail.  Frequently the failures are trivial (usually output gets re-ordered), but some are significant changes in behavior that leads us to re-word surrounding guidance in the text, and in a few cases the failures have exposed bugs introduced into Sage.  It has been relatively easy to do this maintenance on a regular basis, and if it had not been done, the accumulated errors would be enough to greatly degrade confidence in the accuracy of the examples.</p>
 

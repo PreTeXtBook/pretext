@@ -120,7 +120,7 @@
 
                 <li>
                     <p>You are now going to make a local copy of your fork.  Think of it as a mirror<mdash/>you will do your best to keep the copy and the fork in-sync.  Git calls this a <term>clone</term><idx>clone</idx>.  In your fork (i.e. in your account, find a green button partway down the right side.  Clicking on it will bring up a textbox with a <init>URL</init> you can copy.  Now at the command-line, execute something similar to<cd>
-                        <cline>git clone https://github.com/mjsmith/mathbook.git</cline>
+                        <cline>git clone https://github.com/mjsmith/pretext.git</cline>
                     </cd>Your clone will also <q>know</q> where it came from.</p>
                 </li>
 
@@ -128,8 +128,8 @@
                     <p>That finishes setup.  You can check that all is well by running<cd>
                         <cline>git remote -vv</cline>
                     </cd>and the response should be something like<cd>
-                        <cline>origin      https://github.com/mjsmith/mathbook.git (fetch)</cline>
-                        <cline>origin      https://github.com/mjsmith/mathbook.git (push)</cline>
+                        <cline>origin      https://github.com/mjsmith/pretext.git (fetch)</cline>
+                        <cline>origin      https://github.com/mjsmith/pretext.git (push)</cline>
                         <cline>upstream    https://github.com/PreTeXtBook/pretext.git (fetch)</cline>
                         <cline>upstream    https://github.com/PreTeXtBook/pretext.git (push)</cline>
                     </cd><c>origin</c> is an alias for the location of the repository you cloned.  And <c>upstream</c> is an alias the fork uses to know the location of the official repository.</p>
@@ -164,7 +164,7 @@
                         <cline>git add xsl/pretext-common.xsl xsl/pretext-latex.xsl</cline>
                     </cd></p>
 
-                    <p>Runnning <c>git status</c> should now show that all affected files (changed, new) are now in the staging area, and no files with changes are left behind.  You can preview the commit with<cd>
+                    <p>Running <c>git status</c> should now show that all affected files (changed, new) are now in the staging area, and no files with changes are left behind.  You can preview the commit with<cd>
                         <cline>git diff --cached</cline>
                     </cd>If you need to edit some more, go ahead, and be sure to <c>add</c> your new changes into the staging area.  Now you are ready to make your commit.<cd>
                         <cline>git commit -m "Create a new conversion to an esoteric format"</cline>
@@ -269,7 +269,7 @@
                 </li>
             </ul></p>
 
-        <p>Alright, those are high expectations.  How do you make a well-formed sequece of commits?  This is not a git tutorial, but we will make some suggestions.  git has what is called a <term>staging area</term> where you can gradually place a collection of changes before making them part of a single commit.  The command <c>git commit -a</c> is a bad habit and breaking yourself of it will help you learn to be more flexible about how you package changes into a commit via the staging area.  Finally <c>-m</c> is a useful option for making (or changing) a commit message without being thrown into an editor.
+        <p>Alright, those are high expectations.  How do you make a well-formed sequence of commits?  This is not a git tutorial, but we will make some suggestions.  git has what is called a <term>staging area</term> where you can gradually place a collection of changes before making them part of a single commit.  The command <c>git commit -a</c> is a bad habit and breaking yourself of it will help you learn to be more flexible about how you package changes into a commit via the staging area.  Finally <c>-m</c> is a useful option for making (or changing) a commit message without being thrown into an editor.
             <ul>
                 <li>
                     <p>If your most recent commit (or only commit!) is lacking you can add new changes into it by adding them to the staging area and using <c>git commit --amend</c> to introduce them into the commit.</p>
@@ -281,7 +281,7 @@
                     <p>You can do an interactive rebase with <c>git rebase -i HEAD~n</c>.  This unwinds <m>n</m> commits on the current branch, makes a little script for replaying them in the proper order, and throws you into an editor with the script.  Exit the editor and the script runs.  With that description/process nothing interesting happens.  What is interesting is that you can edit the script to affect the replay.</p>
                     <p>You can rearrange the order of the commits.  But this only works if you know that interchanged commits do not build on one another.  For example, I often start developing a new feature by designing the <pretext/> markup and making an example in the sample article.  But once I am all done, I move it to be <em>later</em> than the code, as an example of how the new code will behave (ansd I do not leave the sample article in a broken state).</p>
                     <p>Suppose you have ten commits on a branch, and you discover that the third-newest has a small mistake.  Correct the mistake and make a throw-away commit with just that correction on it.  Now, do an interactive rebase with the newest <em>four</em> commits (you just added one), <c>git rebase -i HEAD~4</c>.  Edit the script to place the throwaway commit just after the commit with the mistake, and do not leave it as <c>pick</c>, but edit that action to <c>fix</c> (an <c>f</c> is all you really need).  Be sure to remove the line that has the original version of the throwaway commit.  Exit your editor.  Poof!  Three commits and the mistake is corrected.  (Do not use the <c>squash</c> action, that accumulates commit messages, which we do not want.)</p>
-                    <p>This is analgous to <c>git --amend</c> except it is needed for the times when you see a change that needs to be made several commits ago.</p>
+                    <p>This is analogous to <c>git --amend</c> except it is needed for the times when you see a change that needs to be made several commits ago.</p>
                 </li>
                 <li>
                     <p>The <c>git cherry-pick &lt;commit&gt;</c> command allows you to recycle existing commits onto new branches.  Suppose your current branch ends up having two very different projects on it.  Make a new branch and cherry-pick the commits for one project onto it.  Now do an interactive rebase on the original branch and remove those commits from the script.  Of course, this assumes you know the two sets of commits are independent of each other.</p>

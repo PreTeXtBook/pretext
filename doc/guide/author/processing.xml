@@ -27,12 +27,12 @@
                 </li>
                 <li>
                     <p>
-                        The <pretext/> script: a Python script that has a variety of utilities to process your source.  Requires Python 3.6 or later.  In rare cases this may be needed to test new features that have not yet been exposed in the <pretext/>-CLI.  See <xref ref="pretext-script"/>.
+                        The <pretext/> script (sometimes referred to as <c>pretext/pretext</c>): a Python script that has a large variety of utilities to process your source and its components.  Requires Python 3.6 or later.  This script is very useful for development and for users who prefer a <q>Swiss Army Knife</q> approach to their tools.  In rare cases this may be needed to test new features that have not yet been exposed in the <pretext/>-CLI.  See <xref ref="pretext-script"/>.
                     </p>
                 </li>
                 <li>
                     <p>
-                        <c>xsltproc</c>: an executable program that directly converts <init>XML</init> using a specified XSL file.  Requires <c>xsltproc</c>, which is easily available on Linux and MacOS, but harder to install on Windows.  Demonstrations of use in this Guide are being phased-out.
+                        <c>xsltproc</c>: an executable program that directly converts <init>XML</init> using a specified XSL file.  The command-line program is easily available on Linux and MacOS, but harder to install on Windows (using Windows Subsystem for Linux is probably your best bet).  Demonstrations of use in this Guide are being phased-out but will be collected in <xref ref="xsltproc"/>.
                     </p>
                 </li>
             </ol>
@@ -45,6 +45,10 @@
         <p>
             Wherever the functionality of the <pretext />-CLI allows it, instructions in this guide will use that method.  We will collect corresponding processing instructions using <c>xsltproc</c> in <xref ref="xsltproc"/>.  Information on the use of the <pretext /> script can be found in <xref ref="pretext-script" />.  These tools are especially useful when developing new features for <pretext />, so they are housed in the <xref ref="part-developer" text="title"/>.
         </p>
+
+        <p>
+            If you prefer to use online, cloud-based tools, all of the processing options are available when using a Github Codespace or similar online platform.  If you already use and have a license for CoCalc, it should have all the tools ready to go (although you will likely want to update the CLI).
+        </p>
     </section>
 
     <section xml:id="processing-CLI">
@@ -53,18 +57,13 @@
         <idx><h>CLI</h></idx>
         <introduction>
         <p>
-            Here we will outline the functionality of the <pretext />-CLI.  Instructions for using the CLI without any local installation can be found in <xref ref="tutorial"/>.  Note that an easy first step toward getting PreTeXt working locally would be to download VS Code and install the <c>pretext-tools</c> extension (which will install the <pretext />-CLI for you, assuming you have an appropriate version of python available).
+            Here we will outline the functionality of the <pretext />-CLI.  Instructions for using the CLI without any local installation can be found in <xref ref="tutorial"/>.  An easy first step toward getting PreTeXt working locally would be to download VS Code and install the <c>pretext-tools</c> extension (which will install the <pretext />-CLI for you, assuming you have an appropriate version of python available).
         </p>
 
         <p><idx>command-line</idx><idx>terminal</idx><idx>console</idx>
             We will work at the <term>command-line</term> inside of a <term>
             terminal</term> or <term>console</term>. If you do not know what this is, it will seem very primitive at first. This will be called a <q>Command Prompt</q> or <q>PowerShell</q> in Windows or a <q>Terminal</q> on a Mac. In Linux it may be known as a <q>console</q> or a <q>shell</q>. Whenever the guide says to enter something on the <em>command line</em> or in a <em>terminal</em>, or just to <em>enter the command</em>, this is what we are talking about.
         </p>
-
-        <p>
-            A final note before we get started: everything we describe here can be done locally or using an online service like <url href="https://cocalc.com/" visual="cocalc.com">CoCalc</url>, which has a terminal and has all the required software (python, <latex />, sagemath, etc) installed already.  To use CoCalc, you likely will need a paid account so you have internet access (required if you want to get the most recent version of <pretext /> or want to use <c>pretext deploy</c> to save and host your work on GitHub).
-        </p>
-
 
         </introduction>
 
@@ -108,12 +107,21 @@
             </console>
 
             <p>
-               (or, if <c>python3</c> worked above, do <c>python3 -m pip install pretext</c>.)
+                (or, if <c>python3</c> worked above, do <c>python3 -m pip install pretext</c>.)
             </p>
 
             <p>
                 The <c>python -m</c> helps in case Python is on your <init>PATH</init> but <c>pip</c> is not. This is a useful fix for the rest of the commands listed for the <pretext />-CLI.
             </p>
+
+            <note>
+                <p>
+                    Newer Linux distributions may give an error or warning when using <c>pip</c> outside of a virtual environment.  It is likely best practice to use a virtual environment, especially if you use python for other projects.  Some instructions are available in <xref ref="python-virtual"/>.
+                </p>
+                <p>
+                    Alternatively, you can use <c>pipx</c> to install the CLI with <c>pipx install pretext</c>, which will create and manage a virtual environment for you.
+                </p>
+            </note>
 
             <p>
                 To verify that the CLI is installed, type <c>pretext --version</c> (or <c>python -m pretext --version</c>) and you should get back a number (2.13.5, for example).
@@ -136,6 +144,10 @@
             </console>
 
             <p>
+                Versions of the CLI starting with 2.12 also allow you to simply run <c>pretext upgrade</c> to get the most recent version.
+            </p>
+
+            <p>
                 If you want to experiment with bleeding-edge features, you can install a nightly development version of the CLI by running:
             </p>
 
@@ -155,6 +167,7 @@
                     If you installed the <pretext />-CLI before version 1.0, you need to manually uninstall the package <c>pretextbook</c> (which is what the CLI was called during early development).  Run <c>pip uninstall pretextbook</c> and then <c>pip install pretext</c> te get caught up.
                 </p>
             </warning>
+
             </paragraphs>
         </subsection>
 
@@ -172,7 +185,7 @@
             </console>
 
             <p>
-                This creates a new book in the folder <q>new-pretext-project</q> (which you can safely rename).  For a new article, use <c>pretext new article</c>.  You might also try <c>pretext new demo</c> to get a project that shows off more features available, or <c>pretext new course</c> for a collection of course documents.
+                This creates a new book in the folder <q>new-pretext-project</q> (which you can safely rename).  For a new article, use <c>pretext new article</c>.  You might also try <c>pretext new demo</c> to get a project that shows off more features available, or <c>pretext new course</c> for a collection of course documents.  <c>pretext new slideshow</c> will create a new project with a simple slideshow template.
             </p>
 
             <p>
@@ -203,12 +216,6 @@
                         </p>
                     </li>
                     <li>
-                        <title>.gitignore</title>
-                        <p>
-                            A file containing a list of folders and files that should not be tracked by git if you use it for version control.
-                        </p>
-                    </li>
-                    <li>
                         <title>project.ptx</title>
                         <p>
                             An <init>XML</init> file called the <term>project manifest</term>. This specifies options for converting your source into different <term>target</term> outputs.  We will describe the contents of this file in <xref ref="cli-project-manifest"/>.
@@ -230,7 +237,15 @@
             </p>
 
             <p>
-                Once you build your project, you will get a folder called <q>output</q>.  Do not edit the contents of this folder manually.
+                Once you build your project, you will get a folder called <c>output</c> and possibly one called <c>.cache</c> (which stores cached generated assets).  Do not edit the contents of these folders manually; such changes will be overwritten anyway.
+            </p>
+
+            <p>
+                Additional files and folders will be generated if your project is managed by git (for example, if you use GitHub).  You can expect to see a file <c>.gitignore</c> and folders <c>.devcontainer</c> and <c>.github</c>.
+            </p>
+
+            <p>
+                Whenever you upgrade your installation of the CLI, you should run <c>pretext update</c> from inside your project folder.  Doing so will update any managed files that you have not edited.  This can be useful to get the latest features.
             </p>
         </subsection>
         <subsection xml:id="processing-CLI-build">
@@ -336,7 +351,7 @@
             <idx><h><c>pretext generate</c></h></idx>
             <idx><h>CLI</h><h><c>generate</c></h></idx>
             <p>
-                Some <pretext /> elements require special processing: <webwork/> exercises, <tag>latex-image</tag>, <tag>sageplot</tag>, and <tag>asymptote</tag> images, as well as previews for embedded youtube videos or interactive elements.  We call these elements <q>assets</q> or <q>generated assets</q>.
+                Some <pretext /> elements require special processing: <webwork/> exercises, <tag>prefigure</tag>, <tag>latex-image</tag>, <tag>sageplot</tag>, and <tag>asymptote</tag> images, as well as previews for embedded youtube videos or interactive elements.  We call these elements <q>assets</q> or <q>generated assets</q>.
             </p>
 
             <p>
@@ -344,14 +359,14 @@
             </p>
 
             <p>
-                If you are using an older version of the CLI, or if you want to generate assets without building, the following instructions can help you limit what you generate.
+                If you want to generate assets without building (or if you are using an older version of the CLI), the following instructions can help you limit what you generate.
                 <ul>
                     <li>
                         <p>
-                            You can limit which sorts of assets you generate.  For example, if you edit a few <tag>latex-image</tag> elements, you can just generate these (for the first target in the manifest) with <c>pretext generate latex-image</c>.
+                            You can limit which sorts of assets you generate.  For example, if you edit a few <tag>latex-image</tag> elements, you can just generate these (for the first target in the manifest) with <c>pretext generate latex-image</c>.  To get the same assets for a different target, use the <c>-t</c> flag (e.g., <c>pretext generate -t print prefigure</c>).  If you want to generate all assets for a specific target, use the <c>--all-assets</c> flag (e.g., <c>pretext generate -t web --all-assets</c>).  This will generate all assets for the specified target, regardless of whether they are out of date or not.
                         </p>
                         <p>
-                            Valid choices for what types of assets you can generate in this specific way are: <c>webwork</c>, <c>latex-image</c>, <c>sageplot</c>, <c>asymptote</c>, <c>interactive</c>, <c>youtube</c>, <c>codelense</c>, and <c>datafile</c>.
+                            Valid choices for what types of assets you can generate in this specific way are: <c>webwork</c>, <c>prefigure</c>, <c>latex-image</c>, <c>sageplot</c>, <c>asymptote</c>, <c>interactive</c>, <c>youtube</c>, <c>codelense</c>, and <c>datafile</c>.
                         </p>
                     </li>
                     <li>
@@ -361,7 +376,7 @@
                     </li>
                     <li>
                         <p>
-                            Finally, there might be times you would like to get all output formats for the assets you are generating.  You can accomplish this using the <c>--all-formats</c> flag on <c>pretext generate</c>
+                            Finally, there might be times you would like to get all output formats for the assets you are generating.  You can accomplish this using the <c>--all-formats</c> flag on <c>pretext generate</c>.  Different output formats require different asset formats; to get just those formats for a particular target, you can use the <c>-t</c> flag to specify a target name.
                         </p>
                     </li>
                 </ul>
@@ -379,7 +394,7 @@
             </p>
 
             <p>
-                The CLI looks for this file, so you should have only one.  If you have a project that was not created using <c>pretext new</c>, you can get a copy of the file by running <c>pretext init</c>.  You can also get the most recent template version of the manifest by running <c>pretext init --refresh</c>, which will create time-stamped versions of the files (so your files with matching names don't get overwritten) for you to copy from.
+                The CLI looks for this file, so you should have only one.  If you have a project that was not created using <c>pretext new</c>, you can get a copy of the file by running <c>pretext init</c>.  You can also get the most recent template version of the manifest by running <c>pretext init --refresh</c>, which will create a new versions of the files (and create a <c>.bak</c> backup version for those you have modified so you can compare then and update accordingly).
             </p>
 
             <p>
@@ -395,7 +410,7 @@
                 <project ptx-version="2">
                 <targets>
                     <target name="web" format="html" />
-                    <target name="rs" format="html" platform="runestone" />
+                    <target name="rs" format="html" publication="publication-runestone.ptx" />
                     <target name="print" format="pdf" />
                 </targets>
                 </project>
@@ -512,10 +527,15 @@
                         <cell><attr>platform</attr></cell><cell><p>Optional, no default. Only valid when <attr>format</attr> is <c>html</c>.  Valid values: <c>runestone</c>.  Used to specify that the target will be hosted on Runestone.</p></cell>
                     </row>
                     <row>
-                        <cell><attr>compression</attr></cell><cell><p>Optional, no default.  Only valid when <attr>format</attr> is <c>webwork</c> or <c>html</c> and <attr>platform</attr> is not <c>runestone</c>. Valid values: <c>zip</c>.  Results in output being compressed (as <c>.zip</c> file).</p></cell>
+                        <cell><attr>compression</attr></cell><cell><p>Optional, no default.  Only valid when <attr>format</attr> is <c>webwork</c> or <c>html</c> and <attr>platform</attr> is not <c>runestone</c>. Valid values: <c>scorm</c> or <c>zip</c>.  Results in output being compressed (as <c>.zip</c> file), and if the value is <c>scorm</c>, the required scorm manifest is also include in the archive.</p></cell>
                     </row>
                     <row>
                         <cell><attr>asy-method</attr></cell><cell><p>Optional, default: <c>server</c>.  Valid values: <c>server</c> or <c>local</c>. Overrides the <attr>asy-method</attr> attribute on <tag>project</tag>.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>standalone</attr></cell><cell><p>
+                            Optional, default: <c>no</c>.  Valid values: <c>yes</c> or <c>no</c>.  If <c>yes</c>, the target will be built as a standalone document.  This will place the output adjacent to the source file, unless <attr>output-dir</attr> is specified.  Useful for creating a target for which you will specify a different source file (using the <c>-i</c> flag when building).
+                        </p></cell>
                     </row>
                 </tabular>
             </table>
@@ -540,7 +560,7 @@
                             name="print"
                             format="pdf"
                             source="main-print.ptx"
-                            publication="pub/publication.ptx"/>
+                            publication="pub/publication.ptx" />
                     </targets>
                 </project>
                 ]]>
@@ -559,7 +579,10 @@
                 <idx><h>CLI</h><h>stringparam</h></idx>
                 <idx><h>xmlid-root</h></idx>
                 <idx><h>CLI</h><h>xmlid-root</h></idx>
-                In addition to the attributes available for <tag>target</tag> elements, there is one optional child element, <tag>stringparams</tag>, which can be used to specify string parameter options (see <xref ref="publisher-string-parameters"/>).  These are specified using an attribute for the name of the string parameter, and the value of the attribute is the value of the string parameter.  Multiple string parameters are set using multiple attributes on the single <tag>stringparams</tag> element.
+                In addition to the attributes available for <tag>target</tag> elements, there is one optional child element, <tag>stringparams</tag>, which can be used to specify string parameter options (see <xref ref="publisher-string-parameters"/>).  These are specified using an attribute for the name of the string parameter, and the value of the attribute is the value of the string parameter.  Multiple string parameters are set using multiple attributes on the single <tag>stringparams</tag> element.  For example,
+                <cd>
+                    <cline>&lt;stringparams author.tools="yes" html.css.extra="external/custom-style.css" /&gt;</cline>
+                </cd>
             </p>
         </subsection>
 
@@ -597,6 +620,30 @@
                     Prior to version 2 of the CLI, these executables were contained in the <c>project.ptx</c> file.  If you are using a version prior to 2.0, see <xref ref="cli-v1vsv2"/>.
                 </p>
               </warning>
+        </subsection>
+
+        <subsection xml:id="subsec-cli-standalone">
+            <title>Using <pretext /> outside of a project</title>
+            <idx><h>standalone files</h></idx>
+            <p>
+                Most of the time you will want to set up a project folder that will hold all the files you need for your project, including the <c>project.ptx</c> and <c>publication.ptx</c> configuration files, your possibly modular source files, and external assets.  However, it is also possible to use <pretext /> to process a single file, similar to how you might with <latex />.  Starting with the CLI version 2.19.0, this can be done easily.
+            </p>
+
+            <p>
+                Suppose a colleague sends you a file <c>mypaper.ptx</c> which you save to your <c>~/Desktop</c> folder.  You can process this file using the following command.
+            </p>
+
+                <console>
+                    <input>pretext build pdf -i ~/Desktop/mypaper.ptx</input>
+                </console>
+
+            <p>
+                This will create a <c>mypaper.pdf</c> file in the <c>~/Desktop</c> folder (i.e., adjacent to the source <c>.ptx</c> file).
+            </p>
+
+            <p>
+                You can also get portable <init>HTML</init> output using <c>pretext build html -i ~/Desktop/mypaper.ptx</c>, which will create a folder <c>mypaper_html</c> in the <c>~/Desktop</c> folder.  Note that often a portable <init>HTML</init> build will result in a single <c>.html</c> file, so this can easily be shared with others or uploaded to a web server.
+            </p>
         </subsection>
 
         <subsection>
@@ -793,8 +840,23 @@
                     </li>
 
                     <li>
+                        <title><c>dynamic_subs</c></title>
+                        <p><init>XML</init> files needed for dynamic fill-in-the-blank exercises.</p>
+                    </li>
+
+                    <li>
                         <title><c>latex-image</c></title>
                         <p>Images described by <latex/> code in a <tag>latex-image</tag> element.</p>
+                    </li>
+
+                    <li>
+                        <title><c>mermaid</c></title>
+                        <p>Images described by Mermaid code in a <tag>mermaid</tag> element.</p>
+                    </li>
+
+                    <li>
+                        <title><c>prefigure</c></title>
+                        <p>Images described by PreFigure code in a <tag>prefigure</tag> element.</p>
                     </li>
 
                     <li>
@@ -804,12 +866,22 @@
 
                     <li>
                         <title><c>problems</c></title>
-                        <p>MyOpenMath problems in static <pretext/> forms.  Possibly broken.</p>
+                        <p>MyOpenMath problems in static <pretext/> forms.</p>
+                    </li>
+
+                    <li>
+                        <title><c>qrcodes</c></title>
+                        <p>QR codes for <init>PDF</init> files that point to live versions of some interactive elements.</p>
                     </li>
 
                     <li>
                         <title><c>sageplot</c></title>
                         <p>Images described by Sage code in a <tag>sageplot</tag> element.</p>
+                    </li>
+
+                    <li>
+                        <title><c>trace</c></title>
+                        <p>Program trace data for <tag>codelens</tag> elements</p>
                     </li>
 
                     <li>
@@ -957,19 +1029,15 @@
         </console>
 
         <p>
-            You can replace <q>web</q> with any target name, although it is really <init>HTML</init> builds that benefit from this feature.  The CLI uses Python to spin up a local web server so you can see a copy of your output by going to the <init>URL</init> the CLI gives as output (usually <url href="http://localhost:8000" visual="http://localhost:8000"/>, although if you are working in CoCalc, this will be different).
+            You can replace <q>web</q> with any target name, although it is really <init>HTML</init> builds that benefit from this feature.  The CLI uses python to spin up a local web server so you can see a copy of your output by going to the <init>URL</init> the CLI gives as output (usually <url href="http://localhost:8128" visual="http://localhost:8128"/>, although if you are working in a GitHub codespace, this will be different).
         </p>
 
         <p>
-            There are two useful options that can be used with <c>pretext view</c> to speed up authoring.  First, the <c>-b</c> flag will build your source before starting the server (i.e., runs <c>pretext build</c> in the background).  Similarly, the <c>-g</c> flag will generate assets prior to viewing.  For small projects, adding the <c>-w</c> flag will <q>watch</q> your source for changes and rebuild the <init>HTML</init> output whenever the source changes (this also builds the source before starting the server).
+            There are two useful options that can be used with <c>pretext view</c> to speed up authoring.  First, the <c>-b</c> flag will build your source before starting the server (i.e., runs <c>pretext build</c> in the background).  Similarly, the <c>-g</c> flag will generate assets prior to viewing.
         </p>
 
         <p>
-            It is also possible to specify whether your server is public or private (on your local network) with the <c>-a</c> option, and to specify a port other than 8000 with the <c>-p</c> option.  (Run <c>pretext view --help</c> for more.)
-        </p>
-
-        <p>
-            Having this quick local web server might be useful for other purposes. You can use the <c>-d</c> option to specify a path to any directory to serve any files, not just those created in <pretext />.
+            It is also possible to specify whether your server is public or private (on your local network) with the <c>-a</c> option, and to specify a port other than 8128 with the <c>-p</c> option.  (Run <c>pretext view --help</c> for more.)
         </p>
 
         <p>Another option, in the case where you know where your output lives (such as when you use the <c>pretext/pretext</c> script) is to use Python itself to start a simple web server.  Ideally, first set your working directory to the location of your <init>HTML</init> output.  Then in a console, at a command-line:</p>
@@ -1006,22 +1074,6 @@
         <p>We have many years' experience testing hundreds of non-trivial Sage examples from textbooks, for linear algebra and abstract algebra.  Roughly every six months, we discover ten to twenty examples that fail.  Frequently the failures are trivial (usually output gets re-ordered), but some are significant changes in behavior that leads us to re-word surrounding guidance in the text, and in a few cases the failures have exposed bugs introduced into Sage.  It has been relatively easy to do this maintenance on a regular basis, and if it had not been done, the accumulated errors would be enough to greatly degrade confidence in the accuracy of the examples.</p>
 
         <p>Exact details for this process can be found in <xref ref="topic-doctest-sage" />.  Note that Sage is really just a huge Python library, so it might be possible to test pure Python code with this facility, but we have not tested this at all.  Similar support for other languages can be considered if requested for use in a serious project.</p>
-    </section>
-
-    <section xml:id="topic-build-in-cocalc">
-        <title>Building Output in CoCalc</title>
-
-        <p>CoCalc <url href="https://cocalc.com/" visual="cocalc.com/"><c>cocalc.com</c></url><idx>CoCalc</idx> has <em>all</em> the tools you need to author with <pretext />.  You will need an upgrade from a subscription to allow Internet connectivity, but at a minimum a colleague with a paid plan can spare you one, they are plentiful and meant to be shared.<ul>
-            <li><p>Text editor: reasonably good, partially <init>XML</init> syntax-aware.  It is also now possible to start a virtual VS Code session and use their powerful text editing capabilities.</p></li>
-            <li><p><c>git</c>: installed (so you can clone/pull <pretext/>).</p></li>
-            <li><p><c>jing</c>: installed, so you can do <init>RELAX-NG</init> validation.</p></li>
-            <li><p><latex />: installed with many additional packages.</p></li>
-            <li><p>Python: installed, necessary for <c>pretext</c> script.</p></li>
-            <li><p><c>pretext</c>: the CLI should be installed by default, although the version might lag.  Assuming you have a paid subscription, you should be able to upgrade with <c>pip install --upgrade pretext</c></p></li>
-            <li><p><init>PDF</init> viewer: handed off to your browser.</p></li>
-            <li><p><init>HTML</init> viewer: get a context menu on the cloud icon in the file view, and open in a new tab or new window.</p></li>
-           <li><p><c>pretext view web</c> will allow you to view output through a python server.</p></li>
-        </ul></p>
     </section>
 
 

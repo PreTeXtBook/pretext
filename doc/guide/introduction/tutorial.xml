@@ -45,8 +45,7 @@
           software for version management.
         </p>
         <p>
-          There are other services such as <url href="https://cocalc.com">CoCalc</url>
-          (see <xref ref="topic-build-in-cocalc"/>) and
+          There are other services such as <url href="https://cocalc.com">CoCalc</url> and
           <url href="https://about.gitlab.com/">GitLab</url> for managing <pretext/> documents
           online, as well as other ways to write <pretext/> that don't require anything
           besides installing the free and open-source <pretext/> software onto your own device
@@ -122,7 +121,7 @@
         </p>
         <p>
           Broadly speaking, you <q>author</q> within your Codespace, which you periodically
-          <q>commit and sync</q> to your repository, and then occassionally <q>deploy</q>
+          <q>commit and sync</q> to your repository, and then occasionally <q>deploy</q>
           to your public GitHub Pages website.
         </p>
       </subsection>
@@ -300,7 +299,7 @@
         </p>
 
         <figure xml:id="tutorial-figure-codespaces-sync">
-          <caption>Commiting and syncing changes</caption>
+          <caption>Committing and syncing changes</caption>
           <image width="50%" source="codespaces-sync.png">
             <description>Screenshot of VS Code source control in Codespaces</description>
           </image>
@@ -405,7 +404,7 @@
       <title>Videos</title>
 
       <p>
-        Occassional <q>Getting Started with PreTeXt</q> tutorials are offered to the community via
+        Occasional <q>Getting Started with PreTeXt</q> tutorials are offered to the community via
         Zoom. For updates on when these are available, subscribe to
         <url href="https://groups.google.com/g/pretext-announce">the PreTeXt announcements
         Google Group</url>.
