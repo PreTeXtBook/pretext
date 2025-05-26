@@ -87,8 +87,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- prompt, followed by ordered list of choices -->
     <statement>
-        <xsl:copy-of select="statement/node()"/>
         <p>True or False?</p>
+        <xsl:copy-of select="statement/node()"/>
     </statement>
     <!-- Hints are authored, not derived from problem formulation -->
     <xsl:copy-of select="hint"/>
