@@ -529,6 +529,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Merge consecutive empty lines -->
+<!-- In other words, if there are three or more consecutive newline -->
+<!-- characters, replace them with just two newline characters.     -->
+<xsl:template name="consolidate-empty-lines">
+    <xsl:param name="text" />
+    <xsl:choose>
+        <xsl:when test="not(contains($text, '&#xa;&#xa;&#xa;'))">
+            <xsl:value-of select="$text" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="consolidate-empty-lines">
+                <xsl:with-param name="text" select="str:replace($text,'&#xa;&#xa;&#xa;','&#xa;&#xa;')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Gobble leading whitespace -->
 <!-- Drop consecutive leading spaces and tabs, only     -->
 <!-- Designed for a single line as input                -->
