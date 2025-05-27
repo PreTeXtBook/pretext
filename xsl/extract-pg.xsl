@@ -172,9 +172,14 @@
         </xsl:attribute>
         <!-- 4. human readable PG (for PTX-authored)                               -->
         <pghuman>
-            <xsl:apply-templates select=".">
-                <xsl:with-param name="b-human-readable" select="true()" />
-            </xsl:apply-templates>
+            <xsl:variable name="pg">
+                <xsl:apply-templates select=".">
+                    <xsl:with-param name="b-human-readable" select="true()" />
+                </xsl:apply-templates>
+            </xsl:variable>
+            <xsl:call-template name="consolidate-empty-lines">
+                <xsl:with-param name="text" select="$pg"/>
+            </xsl:call-template>
         </pghuman>
         <!-- 5. PG optimized (and less human-readable) for use in PTX output modes -->
         <pgdense>
