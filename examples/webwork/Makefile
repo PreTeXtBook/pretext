@@ -189,23 +189,19 @@ mini-html:
 # by chunk level) with set definition files, set header files, and problem
 # files in a file tree. Separate problem sets for inline and divisional
 # problems. This does not require having the representations file.
-# We turn off dates in file headers, so when we use these for testing we
-# can get more accurate diffs. Dates are useful for single file output
-# (or at least less of an annoyance).  This should not be taken as necessary
-# or best practice for a real PreTeXt project using WeBWorK problems.
 # Adding a "-z" switch will create a "tgz" compressed archive
 
 sample-chapter-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r Integrating_WeBWorK_into_Textbooks; \
-	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x debug.datedfiles no -p $(SMPCPUB) $(SMPC)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -p $(SMPCPUB) $(SMPC)
 
 mini-problem-sets:
 	install -d $(PGOUT)
 	cd $(PGOUT); \
 	rm -r WeBWorK_Minimal_Example; \
-	$(PTX)/pretext/pretext -v -c all -f webwork-sets -x debug.datedfiles no -p $(MINIPUB) $(MINI)
+	$(PTX)/pretext/pretext -v -c all -f webwork-sets -p $(MINIPUB) $(MINI)
 
 
 #########################################################################

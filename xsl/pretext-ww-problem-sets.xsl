@@ -42,6 +42,7 @@
 <xsl:import href="./publisher-variables.xsl"/>
 <xsl:import href="./pretext-assembly.xsl"/>
 <xsl:import href="./pretext-common.xsl"/>
+<xsl:import href="./extract-pg.xsl"/>
 
 <!-- Intend output to be a PG/PGML problem or a "def" file -->
 <xsl:output method="text" />
@@ -77,8 +78,7 @@
 <!-- Then chunk the document to write reasonable problem definition files     -->
 <xsl:template match="/">
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <!-- Handle <webwork-reps> element carefully -->
-    <xsl:apply-templates select="$document-root//exercise/webwork-reps" />
+    <xsl:apply-templates select="$document-root//exercise/webwork[statement|task]" mode="write-file"/>
     <xsl:apply-templates select="$document-root" mode="chunking"/>
 </xsl:template>
 
@@ -86,10 +86,8 @@
 <!-- Filename Utilities -->
 <!-- ################## -->
 
-<!-- Overall document title, for root directory name -->
-<xsl:template name="root-directory">
+<xsl:template name="project-folder">
     <xsl:apply-templates select="$document-root" mode="numbered-title-filesafe" />
-    <xsl:text>/</xsl:text>
 </xsl:template>
 
 <!-- Directory path, recursively climb structural nodes,  -->
@@ -127,47 +125,73 @@
 </xsl:template>
 
 <!-- Append a filename to the directory path              -->
-<xsl:template match="webwork-reps" mode="filename">
+<xsl:template match="webwork[statement|task]" mode="relative-filename">
     <xsl:apply-templates select="." mode="directory-path" />
-    <xsl:apply-templates select="parent::exercise" mode="numbered-title-filesafe" />
+    <xsl:if test="parent::project">
+        <xsl:text>Project-</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="parent::*" mode="numbered-title-filesafe" />
     <xsl:text>.pg</xsl:text>
+</xsl:template>
+<xsl:template match="webwork[statement|task]" mode="filename">
+    <xsl:apply-templates select="." mode="relative-filename"/>
+</xsl:template>
+
+<xsl:template match="webwork[@source|@local]" mode="filename">
+    <xsl:apply-templates select="." mode="relative-filename"/>
 </xsl:template>
 
 <!-- For problems from the OPL, just report the @source -->
-<xsl:template match="webwork-reps[@source]" mode="filename">
+<xsl:template match="webwork[@source]" mode="relative-filename">
     <xsl:value-of select="@source"/>
 </xsl:template>
 
-<!-- For copied problems move to the problem that was copied -->
-<xsl:template match="webwork-reps[@copied-from]" mode="filename">
-    <xsl:variable name="copied-from" select="@copied-from"/>
-    <xsl:apply-templates select="$document-root//webwork-reps[@ww-id=$copied-from]" mode="filename"/>
+<!-- For local, just report @local but inside external directory, and all   -->
+<!-- inside the project folder, with the expectation that a host WW course  -->
+<!-- will copy the external folder to the project folder in templates/      -->
+<xsl:template match="webwork[@local]" mode="relative-filename">
+    <xsl:call-template name="project-folder"/>
+    <xsl:value-of select="concat('/',$external-directory,@local)"/>
 </xsl:template>
 
+<!-- For copied problems move to the problem that was copied -->
+<xsl:template match="webwork[@copied-from]" mode="relative-filename">
+    <xsl:variable name="copied-from" select="@copied-from"/>
+    <xsl:apply-templates select="$document-root//webwork[@xml:id=$copied-from]" mode="relative-filename"/>
+</xsl:template>
+<xsl:template match="webwork[@copied-from]" mode="filename">
+    <xsl:variable name="copied-from" select="@copied-from"/>
+    <xsl:apply-templates select="$document-root//webwork[@xml:id=$copied-from]" mode="filename"/>
+</xsl:template>
 
 <!-- ################## -->
 <!-- Problem Extraction -->
 <!-- ################## -->
 
 <!-- Extract an authored problem into its own file, flush left -->
-<xsl:template match="webwork-reps">
+<xsl:template match="webwork[statement|task]" mode="write-file">
     <xsl:variable name="filename">
         <xsl:apply-templates select="." mode="filename" />
     </xsl:variable>
     <exsl:document href="{$filename}" method="text">
         <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="."/>
+            <xsl:with-param name="text">
+                <xsl:call-template name="consolidate-empty-lines">
+                    <xsl:with-param name="text">
+                        <xsl:apply-templates select=".">
+                            <xsl:with-param name="b-hint" select="true()" />
+                            <xsl:with-param name="b-solution" select="true()" />
+                            <xsl:with-param name="b-human-readable" select="true()" />
+                        </xsl:apply-templates>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:with-param>
         </xsl:call-template>
     </exsl:document>
 </xsl:template>
 
-<!-- OPL problems don't produce PG source files, -->
-<!-- as they live on the server already          -->
-<xsl:template match="webwork-reps[@source]"/>
-
-<!-- Don't make PG file for copies -->
-<xsl:template match="webwork-reps[@copied-from]"/>
-
+<!-- We don't write a new file for a copied webwork exercise -->
+<xsl:template match="webwork[@copied-from]" mode="write-file"/>
 
 <!-- ################## -->
 <!-- Chunking Def Files-->
@@ -178,13 +202,13 @@
     <!-- Separate webwork within any exercises into their own set. -->
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">
-            <xsl:apply-templates select=".//webwork-reps[not(ancestor::exercises)]" mode="def-info-v2" />
+            <xsl:apply-templates select=".//webwork[statement|task|@source|@local|@copy and not(ancestor::exercises)]" mode="def-info-v2" />
         </xsl:with-param>
     </xsl:apply-templates>
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="exercises" select="true()" />
         <xsl:with-param name="content">
-            <xsl:apply-templates select=".//webwork-reps[ancestor::exercises]" mode="def-info-v2" />
+            <xsl:apply-templates select=".//webwork[statement|task|@source|@local|@copy and ancestor::exercises]" mode="def-info-v2" />
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -196,7 +220,7 @@
 <xsl:template match="&STRUCTURAL;" mode="intermediate">
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">
-            <xsl:apply-templates select="*[not(&STRUCTURAL-FILTER;)]//webwork-reps" mode="def-info-v2" />
+            <xsl:apply-templates select="*[not(&STRUCTURAL-FILTER;)]//webwork[statement|task|@source|@local|@copy]" mode="def-info-v2" />
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -213,8 +237,8 @@
     <xsl:if test="not($content = '')">
         <!-- filenames -->
         <xsl:variable name="def-filename">
-            <xsl:call-template name="root-directory" />
-            <xsl:text>def/</xsl:text>
+            <xsl:call-template name="project-folder" />
+            <xsl:text>/def/</xsl:text>
             <!-- mandatory filename initial string -->
             <xsl:text>set</xsl:text>
             <xsl:apply-templates select="." mode="numbered-title-filesafe" />
@@ -223,14 +247,17 @@
             </xsl:if>
             <xsl:text>.def</xsl:text>
         </xsl:variable>
-        <xsl:variable name="header-filename">
-            <xsl:call-template name="root-directory" />
-            <xsl:text>header/</xsl:text>
+        <xsl:variable name="relative-header-filename">
+            <xsl:call-template name="project-folder" />
+            <xsl:text>/header/</xsl:text>
             <xsl:apply-templates select="." mode="numbered-title-filesafe" />
             <xsl:if test="$exercises">
                 <xsl:text>_Exercises</xsl:text>
             </xsl:if>
             <xsl:text>.pg</xsl:text>
+        </xsl:variable>
+        <xsl:variable name="header-filename">
+            <xsl:value-of select="$relative-header-filename"/>
         </xsl:variable>
         <!-- set-definition file -->
         <exsl:document href="{$def-filename}" method="text">
@@ -259,10 +286,10 @@
             <xsl:value-of select="substring($due, 1, 4)" />
             <xsl:text> at 10:00pm&#xa;</xsl:text>
             <xsl:text>paperHeaderFile   = </xsl:text>
-            <xsl:value-of select="$header-filename" />
+            <xsl:value-of select="$relative-header-filename" />
             <xsl:text>&#xa;</xsl:text>
             <xsl:text>screenHeaderFile  = </xsl:text>
-            <xsl:value-of select="$header-filename" />
+            <xsl:value-of select="$relative-header-filename" />
             <xsl:text>&#xa;</xsl:text>
             <xsl:text>description       = </xsl:text>
             <xsl:apply-templates select="." mode="title-simple" />
@@ -287,10 +314,10 @@
 <!-- non-emptieness up the wrapping chain to ensure      -->
 <!--  no trivial problem definition files are created.   -->
 <!-- http://webwork.maa.org/wiki/Set_Definition_Files#Version_2 -->
-<xsl:template match="webwork-reps" mode="def-info-v2">
+<xsl:template match="webwork" mode="def-info-v2">
     <xsl:text>problem_start&#xa;</xsl:text>
     <xsl:text>source_file = </xsl:text> <!-- PG file -->
-    <xsl:apply-templates select="." mode="filename" />
+    <xsl:apply-templates select="." mode="relative-filename" />
     <xsl:text>&#xa;</xsl:text>
     <!--Much of the following commented out until we decide we should include them.   -->
     <!--WeBWorK provides good default values, customizable by sysadmin or instructor. -->
