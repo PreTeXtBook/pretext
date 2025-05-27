@@ -1883,10 +1883,6 @@ def webwork_to_xml(
                 )
             else:
                 formatted_pg = pghuman[problem]
-            # opportunity to cut out extra blank lines
-            formatted_pg = re.sub(
-                re.compile(r"(\n *\n)( *\n)*", re.MULTILINE), r"\n\n", formatted_pg
-            )
             pg.text = ET.CDATA("\n" + formatted_pg)
         elif origin[problem] == "server":
             pg.set("source", source[problem])
