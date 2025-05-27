@@ -487,9 +487,11 @@
         </xsl:if>
     </xsl:if>
     <!-- pg-code verbatim, but trim indentation -->
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select=".//pg-code" />
-    </xsl:call-template>
+    <xsl:if test=".//pg-code">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select=".//pg-code" />
+        </xsl:call-template>
+    </xsl:if>
     <!-- if there are latex-image in the problem, put their code here -->
     <!-- introduction images are not needed except for human readable code -->
     <xsl:if test="$b-human-readable">
@@ -560,6 +562,9 @@
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
     </xsl:apply-templates>
+    <xsl:if test="parent::exercisegroup">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="webwork/description">
@@ -1519,6 +1524,7 @@
 </xsl:template>
 
 <xsl:template match="image[latex-image]" mode="latex-image-code">
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pg-name"/>
     <xsl:text> = createLaTeXImage();&#xa;</xsl:text>
     <xsl:if test="$docinfo/latex-image-preamble">
@@ -2363,6 +2369,7 @@
     <xsl:apply-templates select="li">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
+    <xsl:text>&#xa;</xsl:text>
     <!-- When a list ends, there may be more content before the p ends. This  -->
     <!-- content needs to be indented the proper amount when the list was a   -->
     <!-- nested list.                                                         -->
