@@ -131,7 +131,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="pretext-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
-                <xsl:apply-templates select="$html-node-set" mode="serialize" />
+                <xsl:apply-templates select="$html-node-set" mode="xml-to-string" />
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
@@ -145,7 +145,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="pretext-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
-                <xsl:apply-templates select="$html-node-set" mode="serialize" />
+                <xsl:apply-templates select="$html-node-set" mode="xml-to-string" />
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
@@ -178,7 +178,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="pretext-cell">
                 <xsl:with-param name="content">
                     <xsl:call-template name="begin-string" />
-                        <xsl:apply-templates select="$html-node-set" mode="serialize" />
+                        <xsl:apply-templates select="$html-node-set" mode="xml-to-string" />
                     <xsl:call-template name="end-string" />
                 </xsl:with-param>
             </xsl:call-template>
@@ -426,7 +426,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="pretext-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
-                <xsl:apply-templates select="$html-node-set" mode="serialize" />
+                <xsl:apply-templates select="$html-node-set" mode="xml-to-string" />
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
@@ -656,7 +656,12 @@ TODO: (overall)
 <!-- delimit math.  This is a hunch based on similar      -->
 <!-- experiences with inline verbatim text.  But here we  -->
 <!-- are fortunate to be able to encode the dollar sign.  -->
-<xsl:template match="@href" mode="serialize">
+<!-- NOTE: This was a hook into the old                   -->
+<!-- "serialize" templates. Now intercepts xml-to-string  -->
+<!-- but behavior with it is untested. Does it work?      -->
+<!-- is it still necessary???                             -->
+<!-- Tested: preserves old behavior, unclear if necessary -->
+<xsl:template match="@href" mode="xml-to-string">
     <!-- sanitize value first -->
     <xsl:variable name="text">
         <xsl:value-of select="."/>
