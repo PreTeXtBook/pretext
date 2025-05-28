@@ -665,137 +665,64 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </label>
 </xsl:template>
 
-<!-- Exercises to the Runestone manifest -->
-<!--   - every True/False "exercise"                  -->
-<!--   - every multiple choice "exercise"             -->
-<!--   - every Parsons problem "exercise"             -->
-<!--   - every horizontal Parsons problem "exercise"  -->
-<!--   - every cardsort problem "exercise"            -->
-<!--   - every matching problem "exercise"            -->
-<!--   - every clickable area problem "exercise"      -->
-<!--   - every "exercise" with fill-in blanks         -->
-<!--   - every "exercise" with additional "program"   -->
-<!--   - every "exercise" elected as "shortanswer"    -->
-<!--   - every "exercise" with a WeBWorK core         -->
-<!--   - every PROJECT-LIKE with additional "program" -->
-<!--     NB: "task" does not have "webwork" children  -->
-<xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer') or
-                               (@exercise-interactive = 'webwork-reps')]
-                      |
-                      project[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer') or
-                               (@exercise-interactive = 'webwork-reps')]
-                     |
-                     activity[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer') or
-                               (@exercise-interactive = 'webwork-reps')]
-                     |
-                  exploration[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer') or
-                               (@exercise-interactive = 'webwork-reps')]
-                     |
-                investigation[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer') or
-                               (@exercise-interactive = 'webwork-reps')]
-                     |
-                         task[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]" mode="runestone-manifest">
-    <question>
-        <!-- A divisional exercise ("exercises/../exercise") is not really   -->
-        <!-- a reading activity in the Runestone model, so we flag these     -->
-        <!-- exercises as such.  Also, interactive "task" come through here, -->
-        <!-- so we need to look to an ancestor to see if the containing      -->
-        <!-- "exercise" is divisional. The @optional attribute matches the   -->
-        <!-- "optional" flag in the Runestone database.  We simply set the   -->
-        <!-- value to "yes" and nevver bother to say "no".  The  only        -->
-        <!-- consumer is the import into the Runestone database, so any      -->
-        <!-- change needs only coordinate there.                             -->
-        <xsl:if test="(@exercise-customization = 'divisional') or
-                      (self::task and ancestor::exercise[@exercise-customization = 'divisional'])">
-            <xsl:attribute name="optional">
-                <xsl:text>yes</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
-        <!-- label is from the "exercise" -->
-        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-        <!-- Duplicate, but still should look like original (ID, etc.),  -->
-        <!-- not knowled. Solutions are available in the originals, via  -->
-        <!-- an "in context" link off the Assignment page                -->
-        <htmlsrc>
-            <!-- next template produces nothing, unless the  -->
-            <!-- "exercise" is in an "exercisegroup" ("eg")  -->
-            <xsl:apply-templates select="." mode="eg-introduction"/>
-            <xsl:choose>
-                <!-- with "webwork" guts, the HTML is exceptional -->
-                <xsl:when test="@exercise-interactive = 'webwork-reps'">
-                    <xsl:apply-templates select="." mode="webwork-core">
-                        <xsl:with-param name="b-original" select="true()"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="."  mode="exercise-components">
-                        <xsl:with-param name="b-original" select="true()"/>
-                        <xsl:with-param name="block-type" select="'visible'"/>
-                        <xsl:with-param name="b-has-statement" select="true()" />
-                        <xsl:with-param name="b-has-hint"      select="false()" />
-                        <xsl:with-param name="b-has-answer"    select="false()" />
-                        <xsl:with-param name="b-has-solution"  select="false()" />
-                    </xsl:apply-templates>
-                </xsl:otherwise>
-            </xsl:choose>
-        </htmlsrc>
-    </question>
+<!-- Exercises to the Runestone manifest                                 -->
+<!-- This is includes some things that can't exist. e.g. webwork in task -->
+<!-- but standardized treatment is easier to maintain than explicit      -->
+<!-- listing of expected combinations.                                   -->
+<!-- Intentionally matching all containers and then filtering with if on -->
+<!-- attribute. Explicit listing in template match might be slightly more-->
+<!-- efficient but has proven to be a popular spot for bugs.             -->
+<xsl:template match="exercise|&PROJECT-LIKE;|task" mode="runestone-manifest">
+    <xsl:variable name="manifestable-interatives-fenced">|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|select|fillin-basic|fillin|coding|shortanswer|webwork-reps|</xsl:variable>
+    <xsl:if test="contains($manifestable-interatives-fenced, concat('|', @exercise-interactive, '|'))">
+        <question>
+            <!-- A divisional exercise ("exercises/../exercise") is not really   -->
+            <!-- a reading activity in the Runestone model, so we flag these     -->
+            <!-- exercises as such.  Also, interactive "task" come through here, -->
+            <!-- so we need to look to an ancestor to see if the containing      -->
+            <!-- "exercise" is divisional. The @optional attribute matches the   -->
+            <!-- "optional" flag in the Runestone database.  We simply set the   -->
+            <!-- value to "yes" and nevver bother to say "no".  The  only        -->
+            <!-- consumer is the import into the Runestone database, so any      -->
+            <!-- change needs only coordinate there.                             -->
+            <xsl:if test="(@exercise-customization = 'divisional') or
+                          (self::task and ancestor::exercise[@exercise-customization = 'divisional'])">
+                <xsl:attribute name="optional">
+                    <xsl:text>yes</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
+            <!-- label is from the "exercise" -->
+            <xsl:apply-templates select="." mode="runestone-manifest-label"/>
+            <!-- Duplicate, but still should look like original (ID, etc.),  -->
+            <!-- not knowled. Solutions are available in the originals, via  -->
+            <!-- an "in context" link off the Assignment page                -->
+            <htmlsrc>
+                <!-- next template produces nothing, unless the  -->
+                <!-- "exercise" is in an "exercisegroup" ("eg")  -->
+                <xsl:apply-templates select="." mode="eg-introduction"/>
+                <xsl:choose>
+                    <!-- with "webwork" guts, the HTML is exceptional -->
+                    <xsl:when test="@exercise-interactive = 'webwork-reps'">
+                        <xsl:apply-templates select="." mode="webwork-core">
+                            <xsl:with-param name="b-original" select="true()"/>
+                        </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="."  mode="exercise-components">
+                            <xsl:with-param name="b-original" select="true()"/>
+                            <xsl:with-param name="block-type" select="'visible'"/>
+                            <xsl:with-param name="b-has-statement" select="true()" />
+                            <xsl:with-param name="b-has-hint"      select="false()" />
+                            <xsl:with-param name="b-has-answer"    select="false()" />
+                            <xsl:with-param name="b-has-solution"  select="false()" />
+                        </xsl:apply-templates>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </htmlsrc>
+        </question>
+    </xsl:if>
+    <!-- if there are nested tasks, process them -->
+    <xsl:apply-templates select="task" mode="runestone-manifest"/>
 </xsl:template>
 
 <!-- For an "exercise" divorced from it's "exercisegroup" "introduction", -->
