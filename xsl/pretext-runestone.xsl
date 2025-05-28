@@ -1455,6 +1455,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <div class="runestone cardsort_section">
             <ul data-component="dragndrop" data-question_label="" style="visibility: hidden;">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <xsl:if test="cardsort/@randomize = 'no'">
+                    <xsl:attribute name="data-random">
+                        <xsl:value-of select="cardsort/@randomize"/>
+                    </xsl:attribute>
+                </xsl:if>
                 <span data-subcomponent="question">
                     <xsl:apply-templates select="statement"/>
                 </span>
