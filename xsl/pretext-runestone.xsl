@@ -721,7 +721,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </htmlsrc>
         </question>
     </xsl:if>
-    <!-- if there are nested tasks, process them -->
+    <!-- The match for this template will include "exercise" and &PROJECT-LIKE  -->
+    <!-- that are just containers for a bunch of "task".  In other words, they  -->
+    <!-- will not be marked with the "@exercise-interactive" attribute.  So the -->
+    <!-- "xsl:if" above will fail.  And right here is a dead-end.  We need to   -->
+    <!-- recurse into "task" for the possibility they are marked with           -->
+    <!-- "@exercise-interactive" so they can potentially get placed properly in -->
+    <!-- the manifest.                                                          -->
     <xsl:apply-templates select="task" mode="runestone-manifest"/>
 </xsl:template>
 
