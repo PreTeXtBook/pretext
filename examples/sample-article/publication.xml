@@ -49,6 +49,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- The default is "harvard1"                       -->
         <!-- 2025-05-10: this is not being employed yet      -->
         <citation-stylesheet-language style="harvard1"/>
+        <!-- If desired, defaults for mermaid theme and layout engine -->
+        <!-- can be specifed. These values can be overriden in a      -->
+        <!-- diagram using config: frontmatter                        -->
+        <!-- <mermaid theme="forest" layout-engine="elk"/> -->
     </common>
 
     <!-- we use customizations-two for the oscarlevin style example -->

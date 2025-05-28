@@ -4320,6 +4320,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </mermaid>
                     </image>
                 </figure>
+
+                <p>Mermaid has two layout engines<mdash/>the default and <c>elk</c>. The ELK engine often does a better job with complex diagrams. You can specify it as a default by setting <tag
+                  >common/mermaid/@layout-engine</tag> to <c>"elk"</c>, or by using standard Mermaid config frontmatter as shown in <xref ref="figure-mermaid-elk-layout"/> below.</p>
+
+                <figure xml:id="figure-mermaid-elk-layout">
+                    <caption>Mermaid Class Diagram using ELK layout engine</caption>
+                    <image>
+                        <mermaid><![CDATA[
+                ---
+                config:
+                  layout: elk
+                ---
+                classDiagram
+                          OrderMethod <|-- Phone
+                          OrderMethod <|-- Online
+                          OrderMethod <|-- InStore
+                          PaymentMethod <|-- Cash
+                          PaymentMethod <|-- Account
+                          PaymentMethod <|-- Credit
+                          Phone <|-- CashPhone
+                          Phone <|-- AccountPhone
+                          Phone <|-- CreditPhone
+                          Online <|-- CashOnline
+                          Online <|-- AccountOnline
+                          Online <|-- CreditOnline
+                          InStore <|-- CashInStore
+                          InStore <|-- AccountInStore
+                          InStore <|-- CreditInStore
+                          Cash <|-- CashPhone
+                          Account <|-- AccountPhone
+                          Credit <|-- CreditPhone
+                          Cash <|-- CashOnline
+                          Account <|-- AccountOnline
+                          Credit <|-- CreditOnline
+                          Cash <|-- CashInStore
+                          Account <|-- AccountInStore
+                          Credit <|-- CreditInStore
+                        ]]>
+                        </mermaid>
+                    </image>
+                </figure>
+
             </subsection>
 
             <subsection>
