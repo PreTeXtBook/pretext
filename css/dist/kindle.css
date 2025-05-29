@@ -64,7 +64,6 @@ dl:is(.description-list, .glossary) {
   margin-top: 1em;
   margin-left: 0;
   margin-bottom: 0;
-  overflow: hidden;
 }
 dl:is(.description-list, .glossary) dt {
   font-weight: bold;
@@ -1246,8 +1245,13 @@ mjx-msub mjx-utext {
 }
 section,
 article,
+li,
+blockquote,
+figcaption,
+dt,
 .exercisegroup,
 .discussion-like,
+.solution-like,
 .para {
   position: relative;
 }
@@ -1261,41 +1265,65 @@ article,
   transition: opacity 0.2s;
   margin-top: 0 !important;
 }
-li > .para > .autopermalink {
-  left: -3.4em;
-  top: 0;
+li > .autopermalink {
+  left: -3.5em;
 }
 .autopermalink > * {
   padding-left: 0.2em;
   padding-right: 0.2em;
 }
-:target {
-  scroll-margin-top: 45px;
-}
-.para > .autopermalink {
-  margin-top: 0.2em;
-}
-.exercises > .autopermalink,
-.introduction > .autopermalink,
-.glossary > .autopermalink {
-  margin-top: 0.3em;
-}
 .appendix > .autopermalink,
 .chapter > .autopermalink,
 .index > .autopermalink,
-.section > .autopermalink {
-  margin-top: 0.3em;
-}
+.section > .autopermalink,
 .subsection > .autopermalink,
 .references > .autopermalink,
 .exercises > .autopermalink {
-  margin-top: 0.3em;
+  top: 1.5ex;
 }
-.subsubsection > .autopermalink {
-  margin-top: 0;
+.assemblage-like > .para > .autopermalink,
+.example-like > .para > .autopermalink,
+.example-like > .exercise-like > .autopermalink,
+.project-like > .para > .autopermalink,
+.project-like > .exercise-like > .autopermalink,
+.project-like > .exercise-like > .introduction > .para > .autopermalink,
+.project-like > .exercise-like > .conclusion > .para > .autopermalink,
+.remark-like > .para > .autopermalink {
+  left: -2.9em;
 }
-.exercisegroup > .autopermalink {
-  margin-top: 1.4em;
+.axiom-like > .para:first-of-type > .autopermalink,
+.example-like > .para:first-of-type > .autopermalink,
+.exercise-like > .para:first-of-type > .autopermalink,
+.solution-like > .para:first-of-type > .autopermalink,
+.assemblage-like > .para:first-of-type > .autopermalink,
+.definition-like > .para:first-of-type > .autopermalink,
+.remark-like > .para:first-of-type > .autopermalink,
+.project-like > .para:first-of-type > .autopermalink,
+.openproblem-like > .para:first-of-type > .autopermalink,
+.computation-like > .para:first-of-type > .autopermalink,
+.theorem-like > .para:first-of-type > .autopermalink,
+.proof > .para:first-of-type > .autopermalink,
+.case > .para:first-of-type > .autopermalink,
+li > .para:first-of-type > .autopermalink,
+dd > .para:first-of-type > .autopermalink {
+  display: none;
+}
+.axiom-like > .introduction > .para:first-of-type > .autopermalink,
+.example-like > .introduction > .para:first-of-type > .autopermalink,
+.exercise-like > .introduction > .para:first-of-type > .autopermalink,
+.solution-like > .introduction > .para:first-of-type > .autopermalink,
+.assemblage-like > .introduction > .para:first-of-type > .autopermalink,
+.definition-like > .introduction > .para:first-of-type > .autopermalink,
+.remark-like > .introduction > .para:first-of-type > .autopermalink,
+.project-like > .introduction > .para:first-of-type > .autopermalink,
+.openproblem-like > .introduction > .para:first-of-type > .autopermalink,
+.computation-like > .introduction > .para:first-of-type > .autopermalink,
+.theorem-like > .introduction > .para:first-of-type > .autopermalink,
+.proof > .introduction > .para:first-of-type > .autopermalink,
+.case > .introduction > .para:first-of-type > .autopermalink,
+li > .introduction > .para:first-of-type > .autopermalink,
+dd > .introduction > .para:first-of-type > .autopermalink {
+  display: none;
 }
 .ptx-content:has(.autopermalink:hover) .autopermalink {
   opacity: 0.2;
@@ -1316,6 +1344,7 @@ li > .para > .autopermalink {
   z-index: 2001;
 }
 :target {
+  scroll-margin-top: 45px;
   animation: target-fade 10s 1;
 }
 @keyframes target-fade {
