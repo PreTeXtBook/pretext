@@ -18,7 +18,7 @@ dl:is(.description-list, .glossary) {
   margin-top: 1em;
   margin-left: 0;
   margin-bottom: 0;
-  overflow: hidden;
+  //overflow: hidden; // Removed to show permalinks
 
   dt {
     font-weight: bold;
