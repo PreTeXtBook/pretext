@@ -3280,9 +3280,25 @@ TEST_CASE( "Test the add function" ) {
     <exercises xml:id="matching-exercises">
         <title>Matching Exercises</title>
 
+        <introduction>
+          <p>
+            Matching exercises come in two varieties. Their differences are most noticeable in interactive versions.
+            <dl>
+                <li>
+                    <title>Cardsort</title>
+                    <p>A <tag>cardsort</tag> asks users to match items in a 1-1 or many-1 fashion. The interactive version of these involves dragging <q>card</q>s from the left column (the <tag>premise</tag>s) into containers on the right (the <tag>response</tag>s).</p>
+                </li>
+                <li>
+                    <title>Matching</title>
+                    <p>A <tag>matching</tag> interactive asks users to form connections between the <tag>premise</tag>s in the left column and the <tag>response</tag>s on the right. This format supports many-many matches.</p>
+                </li>
+            </dl>
+          </p>
+        </introduction>
+
         <!-- https://www.britannica.com/list/25-decade-defining-events-in-us-history -->
         <exercise xml:id="matching-one" label="matching-dates">
-            <title>Matching Problem, Dates</title>
+            <title>Cardsort Problem, Dates</title>
             <idx>matching US dates</idx>
             <statement>
                 <p>Match each event in United States history with the year it happened.</p>
@@ -3311,7 +3327,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
 
         <exercise label="matching-derivatives">
-            <title>Matching Problem, Derivatives</title>
+            <title>Cardsort Problem, Derivatives</title>
             <idx>matching derivatives</idx>
             <statement>
                 <p>Match each function with its derivative.</p>
@@ -3336,7 +3352,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
 
         <exercise label="matching-bases">
-            <title>Matching Problem, Linear Algebra</title>
+            <title>Cardsort Problem, Linear Algebra</title>
             <idx>matching bases and subspaces</idx>
             <statement>
                 <p>Match each subspace with a basis for that subspace. (You may assume that each set is really a basis for at least one of the subspaces.)</p>
@@ -3364,7 +3380,7 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
 
 <exercise label="matching-function-types">
-    <title>Matching Problem, Function Types</title>
+    <title>Cardsort Problem, Function Types</title>
     <idx>matching function types</idx>
     <statement>
       <p>
