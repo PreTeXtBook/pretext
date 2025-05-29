@@ -696,6 +696,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-is-groupwork">
             <xsl:apply-templates select="." mode="runestone-groupwork"/>
         </xsl:if>
+
+        <!-- Include permalink for the section as last child -->
+        <xsl:apply-templates select="." mode="permalink"/>
     </section>
 </xsl:template>
 
@@ -2094,6 +2097,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="title-full"/>
             </xsl:when>
         </xsl:choose>
+        <!-- Insert permalink directly below the title or caption -->
+        <xsl:apply-templates select="." mode="permalink"/>
     </figcaption>
 </xsl:template>
 
@@ -4779,6 +4784,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="*">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
+                <!-- Insert permalink -->
+                <xsl:apply-templates select="." mode="permalink"/>
             </article>
         </xsl:when>
         <xsl:otherwise>
@@ -4788,6 +4795,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="html-id-attribute"/>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="title-full" />
+                <!-- Insert permalink -->
+                <xsl:apply-templates select="." mode="permalink"/>
             </dt>
             <dd>
                 <xsl:apply-templates select="*">
@@ -5026,6 +5035,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="block-type" select="$block-type" />
         </xsl:apply-templates>
+        <!-- Insert a permalink as the last child of the block, but only   -->
+        <!-- if not FIGURE-LIKE (these get their permalink on the caption) -->
+        <xsl:if test="not(&FIGURE-FILTER;)">
+            <xsl:apply-templates select="." mode="permalink"/>
+        </xsl:if>
     </xsl:element>
     <!-- Extraordinary: PROOF-LIKE are not displayed within their-->
     <!-- parent theorem, but as a sibling, following.  It might  -->
@@ -5095,6 +5109,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
+        <!-- Insert permalink -->
+        <xsl:apply-templates select="." mode="permalink"/>
     </div>
 </xsl:template>
 
@@ -5186,6 +5202,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:for-each>
         <!-- INDENT ABOVE ON A WHITESPACE COMMIT -->
+    <!-- Insert permalink -->
+    <xsl:apply-templates select="." mode="permalink"/>
     </div>
 </xsl:template>
 
@@ -5287,6 +5305,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </div>
                     </xsl:otherwise>
                 </xsl:choose>
+                <!-- Insert permalink -->
+                <xsl:apply-templates select="." mode="permalink"/>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
@@ -5315,6 +5335,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="html-id-attribute"/>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="title-full" />
+                <!-- Insert permalink -->
+                <xsl:apply-templates select="." mode="permalink"/>
             </xsl:element>
             <xsl:element name="dd">
                 <xsl:apply-templates>
@@ -11421,6 +11443,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+
+<!-- ########## -->
+<!-- Permalinks -->
+<!-- ########## -->
+
+<xsl:template match="*" mode="permalink">
+    <div class="autopermalink">
+        <xsl:attribute name="data-description">
+            <xsl:apply-templates select="." mode="tooltip-text"/>
+        </xsl:attribute>
+        <a>
+            <xsl:attribute name="href">
+                <xsl:text>#</xsl:text>
+                <xsl:apply-templates select="." mode="unique-id"/>
+            </xsl:attribute>
+            <xsl:attribute name="title">
+                <xsl:text>Copy permalink for </xsl:text>
+                <xsl:apply-templates select="." mode="tooltip-text"/>
+            </xsl:attribute>
+            <xsl:text>🔗</xsl:text>
+        </a>
+    </div>
+</xsl:template>
+
+<!-- Asides and footnotes don't get permalinks -->
+<xsl:template match="fn|&ASIDE-LIKE;" mode="permalink"/>
+
+<!-- 2025-05-29: "p" inside a "feedback" of a dynamic FITB exercise -->
+<!-- are losing their context, can't look up the tree, don't know   -->
+<!-- their language, and can't make a tooltip.  This match is more  -->
+<!-- aggressive than necessary, but should suffice while we wait    -->
+<!-- for the underlying problem to be addressed.  Details may       -->
+<!-- appear at  https://github.com/PreTeXtBook/pretext/pull/2534    -->
+<xsl:template match="feedback/p" mode="permalink"/>
 
 
 <!--                     -->

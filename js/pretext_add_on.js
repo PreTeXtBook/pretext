@@ -49,126 +49,23 @@ function getScrollbarWidth() {
 }
 
 /*
-  generate permalink description
-*/
-function permalinkDescription(elem) {
-    var retStr;
-    var typeStr = "";
-    var nodeName = elem.nodeName;
-    if (elem.classList.contains("para")) {
-        if (elem.parentElement.nodeName == "LI") { nodeName = 'LI' }
-        else { nodeName = 'P' }
-    }
-    var isExerciseGroup = false;
-    if ((nodeName == 'P') && (elem.parentElement.parentElement.classList.contains("exercisegroup"))) {
-        isExerciseGroup = true;
-    }
-    // the data we need will be either in an element with class .heading or in a figcaption element
-    // but for:
-    //   exercisegroup            -- the heading element will be further up the tree
-    //   hidden knowl             -- the heading element will be further down the tree (this is the 'a > .heading' selector)
-    //   figcaption (figure-like) -- we are already in the figcaption node
-    var headerNode;
-    if (isExerciseGroup)  {
-        headerNode = elem.parentElement.parentElement.querySelector(':scope > .heading');
-    } else if (nodeName == 'FIGCAPTION') {
-        headerNode = elem;
-    } else {
-        headerNode = elem.querySelector(':scope > .heading, :scope > figcaption, :scope > a > .heading');
-    }
-    var numberStr = "";
-    var numberSep = " ";
-    var titleStr = "";
-    var typeStr = "";
-    var resultNodes;
-    if (nodeName == 'P') {
-        if (isExerciseGroup) {
-            typeStr = "Exercise Group";
-        } else {
-            typeStr = "Paragraph";
-        }
-    } else if (nodeName == 'LI') {
-        typeStr = "List item";
-
-    } else if (!headerNode) {
-        // handles assemblages with no title
-        var className = elem.className.split(' ')[0]
-        typeStr = className.charAt(0).toUpperCase() + className.slice(1);
-    } else {
-        if ((nodeName == 'ARTICLE') && (elem.classList.contains('exercise')) ) {
-            typeStr = "Exercise";
-        } else if ((nodeName == 'ARTICLE') && (elem.classList.contains('task')) ) {
-            typeStr = elem.parentElement.querySelector(':scope > .autopermalink').getAttribute('data-description');
-            numberSep = "";
-        } else {
-            resultNodes = headerNode.getElementsByClassName("type");
-            if (resultNodes.length > 0) {
-                typeStr = resultNodes[0].innerText;
-            }
-        }
-    }
-    typeStr = typeStr || "";  // hack because of error from https://pretextbook.org/examples/sample-article/html/interesting-corollary.html#p-206
-    if (headerNode) {
-        if (typeStr.length > 0) {
-            resultNodes = headerNode.getElementsByClassName("codenumber");
-            if (resultNodes.length > 0) {
-                numberStr = resultNodes[0].innerText;
-            }
-        }
-        resultNodes = headerNode.getElementsByClassName("title");
-        if (resultNodes.length > 0) {
-            for (let n of resultNodes[0].childNodes) {
-                if (n.nodeType == Node.TEXT_NODE) {
-                    titleStr += n.nodeValue;
-                } else if (n.nodeType == Node.ELEMENT_NODE) {
-                    if (n.classList.contains("process-math")) {
-                        titleStr += n.innerText.replace(/[\n\r]/g, "");
-                    } else {
-                        titleStr += n.innerText;
-                    }
-                }
-            }
-        }
-    }
-    retStr = typeStr;
-    if ((typeStr.length > 0) && (numberStr.length > 0)) {
-        retStr += numberSep + numberStr;
-    }
-    if (titleStr.length > 0) {
-        if (retStr.length > 0) {
-            if (typeStr != titleStr) {
-                retStr += ": " + titleStr;
-            }
-        } else {
-            retStr = titleStr;
-        }
-    }
-    var lastChr = retStr.charAt(retStr.length - 1);
-    if ((lastChr == '.') || (lastChr == ':'))  {
-        retStr = retStr.slice(0,retStr.length - 1);
-    }
-    return retStr;
-}
-
-/*
   copy permalink address to clipboard
   requires browser support, otherwise does nothing
 */
-async function copyPermalink(elem) {
+async function copyPermalink(linkNode) {
     // structure borrowed from https://flaviocopes.com/clipboard-api/
-//    elem.preventDefault();
     if (!navigator.clipboard) {
         // Clipboard API not available
         console.log("Error: Clipboard API not available");
         return
     }
-    console.log("copying permalink for", elem);
-    var linkNode = elem.querySelector(':scope > a');
+    console.log("copying permalink for", linkNode);
+    var elem = linkNode.parentElement
     if (!linkNode) {
         console.log("Error: Something went wrong finding permalink URL")
         return
     }
-    const this_permalink_url = linkNode.getAttribute('href');
+    const this_permalink_url = linkNode.href;
     const this_permalink_description = elem.getAttribute('data-description');
     var link     = "<a href=\""                    + this_permalink_url + "\">" + this_permalink_description + "</a>";
     var msg_link = "<a class=\"internal\" href=\"" + this_permalink_url + "\">" + this_permalink_description + "</a>";
@@ -213,6 +110,18 @@ async function copyPermalink(elem) {
     copied_msg.remove();
 
 }
+
+// Add event listener to add onClick handler for permalinks
+window.addEventListener("DOMContentLoaded", function() {
+    const permalinks = document.querySelectorAll('.autopermalink > a');
+    permalinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default anchor behavior
+            copyPermalink(link);
+        });
+    });
+});
+
 
 window.addEventListener("load",function(event) {
     $(".aside-like").click(function(){
@@ -302,78 +211,6 @@ console.log("this is e", e);
             }
         }
     }
-
-    if (document.querySelector('body.standalone')) {
-        console.log("no permalinks on standalone pages")
-    } else {
-        console.log("                       adding permalinks");
-        /* add permalinks to all sections and articles */
-        /* the main section p is just for legacy pre div.para html */
-        items_needing_permalinks = document.querySelectorAll('main section:not(.introduction), main section .para, main section p, main section article, main section > figure.table-like, main section > figure.figure-like > figcaption, main section  .exercisegroup article, main section  .exercisegroup, main section article.exercise, main section .discussion-like,  main section article.paragraphs > figure.table-like, main section article.paragraphs > figure.figure-like, section > details');
-        //   items_needing_permalinks = document.querySelectorAll('body section article');
-        this_url = window.location.href.split('#')[0];
-        permalink_word = "&#x1F517;";
-        for (var i = 0; i < items_needing_permalinks.length; i++) {
-            try {
-                this_item = items_needing_permalinks[i];
-                var this_anchor = this_item.id;
-                if (Boolean(this_item.closest(".parsons"))) { continue }  /* parsons block */
-                if (Boolean(this_item.closest("details"))) { continue }  /* hidden in details */
-                if (this_item.parentElement.classList.contains("lines")) { continue }  /* parsons block */
-                if (getComputedStyle(this_item).display == "inline") { continue }  /* inline paragraph at start of article, for example*/
-                try {
-                    if(this_item.closest(".hidden-content")) {continue}
-                } catch {
-                    // do nothing, because we are just avoiding permalinks on born-hidden knowls
-                }
-                if (this_item.tagName == "FIGCAPTION") { this_anchor  = this_item.parentElement.id }
-                if (this_item.classList.contains("para")) {
-                    if (this_item.id == "") {
-                        // should be .para inside .para.logical
-                        this_anchor  = this_item.parentElement.id;
-                    if(this_item.parentElement.parentElement.nodeName == "LI") {
-                    // we actually had a para inside a para.logical inside an li
-                        this_anchor  = "" //this_item.parentElement.parentElement.id;
-                        }
-                    } else if (this_item.parentElement.nodeName == "LI") {
-                        //    this_anchor  = this_item.parentElement.id;
-                        this_anchor  = "";
-                    }
-                }
-                if(this_anchor) {
-                    this_file_name = this_url.split('/').pop().split(".")[0];
-                    this_permalink_url = this_url;
-                    if (this_file_name !== this_anchor)
-                        this_permalink_url += "#" + this_anchor;
-                    const this_permalink_description = permalinkDescription(this_item);
-                    this_permalink_container = document.createElement('div');
-                    this_permalink_container.setAttribute('class', 'autopermalink');
-                    this_permalink_container.setAttribute('onclick', 'copyPermalink(this)');
-                    this_permalink_container.setAttribute('data-description', this_permalink_description);
-                    //         this_permalink_container.innerHTML = '<span href="' + this_permalink_url + '">' + permalink_word + '</span>';
-                    this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '" title="Copy permalink for ' + this_permalink_description + '">' + permalink_word + '</a>';
-                    // if permalinks are inserted as first element, they break lots of CSS that uses
-                    // first-child or first-of-type selectors (in both old and new styling)
-                    this_item.insertAdjacentElement("beforeend", this_permalink_container);
-                } else {
-                    /*
-                    console.log("      no permalink, because no id", this_item)
-                    */
-                }
-            } catch {
-                console.log("error with this_item", i, items_needing_permalinks);
-                continue
-            }
-        }
-    }
-
-    // first of these is for pre-overhaul html.  Delete when possible
-    $(".pretext-content .autopermalink a").on("click", function(event){
-        event.preventDefault();
-    });
-    $(".ptx-content .autopermalink a").on("click", function(event){
-        event.preventDefault();
-    });
 
     console.log("adding video popouts");
     all_iframes = document.querySelectorAll('body iframeXXXX');

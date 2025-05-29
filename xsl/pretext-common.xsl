@@ -4473,6 +4473,9 @@ Book (with parts), "section" at level 3
     <xsl:apply-templates select="parent::*" mode="number"/>
 </xsl:template>
 
+<!-- No numbers on pages of worksheets -->
+<xsl:template match="page" mode="serial-number"/>
+
 <!-- Should not drop in here.  Ever. -->
 <xsl:template match="*" mode="serial-number">
     <xsl:text>[NUM]</xsl:text>
@@ -4820,6 +4823,9 @@ Book (with parts), "section" at level 3
 <!-- Structure Numbers: Fragment -->
 <!-- We number serially, see below -->
 <xsl:template match="fragment" mode="structure-number"/>
+
+<!-- worksheet pages are unnumbered -->
+<xsl:template match="page" mode="structure-number"/>
 
 <!-- Should not drop in here.  Ever. -->
 <xsl:template match="*" mode="structure-number">
