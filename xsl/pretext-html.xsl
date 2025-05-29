@@ -11471,6 +11471,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Asides and footnotes don't get permalinks -->
 <xsl:template match="fn|&ASIDE-LIKE;" mode="permalink"/>
 
+<!-- 2025-05-29: "p" inside a "feedback" of a dynamic FITB exercise -->
+<!-- are losing their context, can't look up the tree, don't know   -->
+<!-- their language, and can't make a tooltip.  This match is more  -->
+<!-- aggressive than necessary, but should suffice while we wait    -->
+<!-- for the underlying problem to be addressed.  Details may       -->
+<!-- appear at  https://github.com/PreTeXtBook/pretext/pull/2534    -->
+<xsl:template match="feedback/p" mode="permalink"/>
+
 
 <!--                     -->
 <!-- Navigation Sections -->
