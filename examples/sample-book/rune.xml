@@ -447,11 +447,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>Now some moderately more complicated programs to find teh prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
+        <p>Codelens interactives can be given one or more checkpoints where the user is asked a question as the code is executed:</p>
+
+        <xi:include href="./rune-examples/code-lens-questions.xml"/>
+
+        <p>If a Codelens contains checkpoints, it is also possible to make it into an exercise. For use on Runestone, there should be an <attr>label</attr> on the exercise:</p>
+
+        <exercise label="program-codelens-cpp-questions">
+          <title>A C++ program as CodeLens exercise</title>
+          <statement>Run the codelens and answer the questions it asks.</statement>
+          <program xml:id="cpp-code-lens-questions" interactive="codelens" language="cpp" include-source="yes">
+              <code><![CDATA[
+                int foo() {
+                    int x = 2;
+                    int y = ++x;
+                    return y;
+                }
+                int main() {
+                    int x = foo();
+                    while (x < 20) {
+                      x *= 2;
+                    }
+                }
+                ]]>
+              </code>
+              <checkpoint line="3" answer="3">
+                  <prompt>What value will be assigned to <c>y</c>?</prompt>
+                  <feedback><c>++</c> has precedence over <c>=</c></feedback>
+              </checkpoint>
+              <checkpoint line="9" answer-variable="current_frame.x">
+                  <prompt>What value will be assigned to <c>x</c>?</prompt>
+                  <feedback>We are doubling it</feedback>
+              </checkpoint>
+          </program>
+        </exercise>
+
+        <p>Now some moderately more complicated programs to find the prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
 
         <listing xml:id="sieve-python">
-            <title><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</title>
-            <program xml:id="sieve-codelens-python" interactive="codelens" language="python">
+            <title><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Python. With starting-step specified.</title>
+            <program xml:id="sieve-codelens-python" interactive="codelens" language="python" starting-step="73" include-source="yes">
                 <code><![CDATA[
                 def SieveOfEratosthenes(n):
                    # array of type boolean with True values in it

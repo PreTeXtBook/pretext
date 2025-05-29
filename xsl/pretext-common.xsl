@@ -3651,11 +3651,11 @@ Book (with parts), "section" at level 3
     </xsl:if>
 </xsl:template>
 
-<!-- Special handling for programs in exercise-like elements.              -->
+<!-- Special handling for activecode programs in exercise-like elements.   -->
 <!-- We want to associate those programs with the label on their container -->
 <!-- and NOT with an auto-generated label on the program itself that might -->
 <!-- come from an @xml:id.                                                 -->
-<xsl:template match="exercise/program" mode="runestone-id">
+<xsl:template match="exercise/program[@exercise-interactive = 'activecode']" mode="runestone-id">
     <xsl:variable name="label">
         <xsl:value-of select="../@label"/>
     </xsl:variable>
@@ -11020,7 +11020,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- prompt, input, output for sage, console, program  -->
 <!-- NB: cline/area is used in Clickable Area problems -->
 <xsl:template match="mathbook|pretext" mode="text-element-warning">
-    <xsl:variable name="bad-elements" select=".//c/*|.//cline/*[not(self::area)]|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt/*|.//input/*|.//output/*" />
+    <xsl:variable name="bad-elements" select=".//c/*|.//cline/*[not(self::area)]|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt[not(parent::question)]/*|.//input/*|.//output/*" />
     <xsl:if test="$bad-elements">
         <xsl:message>
             <xsl:text>PTX:WARNING: </xsl:text>
