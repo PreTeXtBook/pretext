@@ -584,6 +584,9 @@ div[style*="display:table-cell"] img {
   [REF=TODO]
 </xsl:template>
 
+<!-- We don't want any permalinks -->
+<xsl:template match="*" mode="permalink"/>
+
 <!-- ######## -->
 <!-- Bad Bank -->
 <!-- ######## -->
