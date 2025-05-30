@@ -876,4 +876,7 @@ TODO: (overall)
     <xsl:call-template name="end-code-cell" />
 </xsl:template>
 
+<!-- We don't want any permalinks -->
+<xsl:template match="*" mode="permalink"/>
+
 </xsl:stylesheet>

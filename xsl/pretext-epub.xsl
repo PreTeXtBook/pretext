@@ -1444,4 +1444,7 @@ width: 100%
 <!-- future changes.                                               -->
 <xsl:template match="svg:svg/@focusable" mode="svg-edit"/>
 
+<!-- We don't want any permalinks in epub -->
+<xsl:template match="*" mode="permalink"/>
+
 </xsl:stylesheet>
