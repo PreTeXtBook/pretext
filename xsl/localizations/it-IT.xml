@@ -264,6 +264,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='activate'>Attiva</localization>
     <localization string-id='reset'>Azzera</localization>
     <localization string-id='array'>tabella</localization>
+    <!-- <localization string-id='papersize'>Paper size</localization> -->
     <localization string-id='print'>Stampa</localization>
+    <!--<localization string-id='print-preview'>Print preview</localization>-->
     <localization string-id='close'>Chiudi</localization>
 </locale>

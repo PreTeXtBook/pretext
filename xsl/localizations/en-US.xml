@@ -313,8 +313,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='reset'>Reset</localization>
     <!-- Describe an array of fill-in-the-blanks, say for a matrix -->
     <localization string-id='array'>array</localization>
-    <!-- Print page button text -->
+    <!-- "paper size" toggle title                                -->
+    <localization string-id="papersize">Paper size</localization>
+    <!-- Print page button text                                   -->
     <localization string-id='print'>Print</localization>
+    <!-- Print preview tooltip text                               -->
+    <localization string-id='print-preview'>Print preview</localization>
     <!-- Close something interactive                              -->
     <localization string-id='close'>Close</localization>
 
