@@ -774,6 +774,60 @@ function urlattribute() {
 window.addEventListener("load",function(event) {
 
   if (document.body.classList.contains("worksheet")) {
+    const papersize = localStorage.getItem("papersize");
+    if (papersize) {
+      const radio = document.querySelector(`input[name="papersize"][value="${papersize}"]`);
+      if (radio) {
+        radio.checked = true;
+      }
+      // Set the papersize class on body
+      document.body.classList.remove("a4", "letter");
+      document.body.classList.add(papersize);
+    } else {
+      // Try to set papersize based on user's geographic region
+      // Default to 'letter' for North and South America, 'a4' elsewhere
+        try {
+          fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+          let continent = data && data.continent_code ? data.continent_code : "";
+          let papersize = (continent === "NA" || continent === "SA") ? "letter" : "a4";
+          const radio = document.querySelector(`input[name="papersize"][value="${papersize}"]`);
+          if (radio) {
+            radio.checked = true;
+            localStorage.setItem("papersize", papersize);
+          }
+          document.body.classList.remove("a4", "letter");
+          document.body.classList.add(papersize);
+          console.log("Setting papersize to", papersize);
+            })
+            .catch((err) => {
+            // rethrow to be caught by the outer catch
+            throw err;
+            });
+        } catch (e) {
+          // fallback: default to letter
+          const radio = document.querySelector(`input[name="papersize"][value="letter"]`);
+          if (radio) radio.checked = true;
+        }
+      //NB: the default papersize is set to 'letter' in the body class list.
+    }
+    const papersizeRadios = document.querySelectorAll('input[name="papersize"]');
+    papersizeRadios.forEach(radio => {
+      radio.addEventListener('change', function() {
+        if (this.checked) {
+          document.body.classList.remove("a4", "letter");
+          document.body.classList.add(this.value);
+          localStorage.setItem("papersize", this.value);
+          console.log("Setting papersize to", this.value);
+          // reload the page to apply the new papersize
+          // It does not seem to work to just rerun adjustWorkspace
+          // (maybe because some attributes are already set?)
+          window.location.reload();
+        }
+      });
+    });
+
       console.log("begin adjusting workspace");
 
       var born_hidden_knowls = document.querySelectorAll('article > a[data-knowl]');

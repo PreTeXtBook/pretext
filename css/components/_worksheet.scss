@@ -2,43 +2,37 @@
 
 // Rules in this file apply to both screen and print
 // Print specific rules should go in a file in targets/print-worksheet stylesheet
-
+@use 'components/helpers/buttons-default' as buttons;
 
 .heading .print-links {
-  display: inline-block;
   float: right;
-  vertical-align: top;
-  width: 19%;
-  text-align: right;
-
-  & > a {
+  vertical-align: bottom;
+  .print-link {
     font-family: var(--font-body);
-    font-size: 0.6em;
-    font-weight: bold;
     padding: 0.1em 0.2em;
-    background: #ffa;
-    border: 2px solid green;
-
-    &.us {
-      background: #eef;
-      color: #9b1c2c;
-      border-color: #041E42;
-    }
-
   }
-  & > a + a {
-    margin-left: 0.25em;
+  .material-symbols-outlined {
+    margin-top:5pt;
   }
 }
 
 .print-button {
-  position: relative;
-  right: 2px;
-  background-color: LightGreen;
-  z-index: 1;
-  float: right;
+  @include buttons.ptx-button;
 }
 
+.papersize-select {
+  z-index: 1;
+  .name::after {
+    content: ": ";
+  }
+}
+
+.ws-page-controls {
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1em;
+}
 
 .standalone.worksheet {
   .print-links{

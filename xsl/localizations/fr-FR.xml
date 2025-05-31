@@ -261,6 +261,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='activate'>Activer</localization>
     <localization string-id='reset'>Réinitialiser</localization>
     <!-- <localization string-id='array'>array</localization> -->
+    <!-- <localization string-id='papersize'>Paper size</localization> -->
     <localization string-id='print'>Imprimer</localization>
+    <!--<localization string-id='print-preview'>Print preview</localization>-->
     <localization string-id='close'>Fermer</localization>
 </locale>
