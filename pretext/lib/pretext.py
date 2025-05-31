@@ -1234,7 +1234,7 @@ def webwork_to_xml(
     )
 
     # Either we have a "generated" directory, or we must assume placing everything in dest_dir
-    generated_dir, _ = get_managed_directories(xml_source, pub_file)
+    generated_dir, external_dir = get_managed_directories(xml_source, pub_file)
     if generated_dir:
         ww_reps_dir = os.path.join(generated_dir, "webwork")
         ww_images_dir = os.path.join(ww_reps_dir, "images")
@@ -1250,10 +1250,19 @@ def webwork_to_xml(
         # Below is not a good choice, but here for backwards compatibility
         ww_images_dir = dest_dir
 
+    # where generated pg problem files will live (each .pg file will usually be deeper in a folder
+    # tree based on document structure and chunking level)
+    ww_pg_dir = os.path.join(ww_reps_dir, "pg")
+
+    # create these directories if they don't already exist
     if not (os.path.isdir(ww_reps_dir)):
         os.mkdir(ww_reps_dir)
     if not (os.path.isdir(ww_images_dir)):
         os.mkdir(ww_images_dir)
+    if not (os.path.isdir(ww_pg_dir)):
+        os.mkdir(ww_pg_dir)
+
+    # file path for the representations file
     ww_reps_file = os.path.join(ww_reps_dir, "webwork-representations.xml")
 
     # execute XSL extraction to get back six dictionaries
@@ -1274,6 +1283,18 @@ def webwork_to_xml(
     # build necessary variables by reading xml with lxml
     ww_xml = ET.parse(ww_filename).getroot()
     localization = ww_xml.find("localization").text
+    numbered_title_filesafe = ww_xml.get("numbered-title-filesafe")
+    ww_project_dir = os.path.join(ww_reps_dir, "pg", numbered_title_filesafe)
+    if not (os.path.isdir(ww_project_dir)):
+        os.mkdir(ww_project_dir)
+    ww_macros_dir = os.path.join(ww_project_dir, "macros")
+    if not (os.path.isdir(ww_macros_dir)):
+        os.mkdir(ww_macros_dir)
+
+    # construct the generated pg files, etc, which may need to be read later for rendering problems
+    webwork_sets(xml_source, pub_file, stringparams, ww_pg_dir, False, False)
+    pg_macros(xml_source, pub_file, stringparams, ww_macros_dir)
+
     if ww_xml.find("server-params-pub").find("ww-domain") is not None:
         server_params_pub = {
             "ww_domain": ww_xml.find("server-params-pub").find("ww-domain").text,
@@ -1281,8 +1302,12 @@ def webwork_to_xml(
             "userID": ww_xml.find("server-params-pub").find("user-id").text,
             "password": ww_xml.find("server-params-pub").find("password").text,
         }
+        static_processing = ww_xml.find("processing").attrib["static"]
+        pg_location = ww_xml.find("processing").attrib["pg-location"]
     else:
-        server_params_pub = {}
+        server_params_pub =  {}
+        static_processing = 'webwork2'
+        pg_location = '/opt/webwork/pg'
     origin = {}
     copiedfrom = {}
     seed = {}
@@ -1292,9 +1317,8 @@ def webwork_to_xml(
     for ele in ww_xml.iter("problem"):
         origin[ele.get("id")] = ele.get("origin")
         seed[ele.get("id")] = ele.get("seed")
-        if ele.get("source") is not None:
-            source[ele.get("id")] = ele.get("source")
-        else:
+        source[ele.get("id")] = ele.get("source")
+        if ele.get("origin") == "ptx":
             if ele.get("copied-from") is not None:
                 copiedfrom[ele.get("id")] = ele.get("copied-from")
             pghuman[ele.get("id")] = ele.find("pghuman").text
@@ -1338,6 +1362,18 @@ def webwork_to_xml(
 
     ww_domain_ww2 = ww_domain + "/webwork2/"
     ww_domain_path = ww_domain_ww2 + "html2xml"
+
+    # Establish if there is any need to use webwork2
+    need_for_webwork2 = (
+        (static_processing == 'webwork2')
+        or (ww_xml.xpath("//problem[@origin='server']"))
+    )
+
+    # Establish if there is any need to use a socket
+    need_for_socket = (
+        (static_processing == 'local')
+        and (ww_xml.xpath("//problem[@origin!='server']"))
+    )
 
     # Establish WeBWorK version
 
@@ -1404,7 +1440,45 @@ def webwork_to_xml(
 
     # using a "Session()" will pool connection information
     # since we always hit the same server, this should increase performance
-    session = requests.Session()
+    if need_for_webwork2:
+        webwork2_session = requests.Session()
+
+    clientsocket = None
+
+    if need_for_socket:
+        import socket
+        import json
+
+        perl_executable_cmd = get_executable_cmd('perl')[0]
+        pgscript = os.path.join(get_ptx_path(), 'script', 'webwork', 'pg-ptx.pl')
+
+        extra_macro_dirs = []
+
+        if os.path.exists(ww_macros_dir):
+            extra_macro_dirs.append('--extraMacroDir')
+            extra_macro_dirs.append(ww_macros_dir)
+
+        if os.path.exists(os.path.join(external_dir, 'macros')):
+            extra_macro_dirs.append('--extraMacroDir')
+            extra_macro_dirs.append(os.path.join(external_dir, 'macros'))
+
+        proc = subprocess.Popen([
+            perl_executable_cmd, pgscript,
+            '--externalFileDir', external_dir,
+            '--tempDirectory', tmp_dir,
+            *extra_macro_dirs,
+        ], stdin=None, stdout=None, stderr=None, env={"PG_ROOT": pg_location, "MOJO_MODE": 'production'})
+        clientsocket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+
+        count = 1
+        while count > 0 and count < 10:
+            try:
+                clientsocket.connect(tmp_dir + '/pg-ptx.sock')
+                count = 0
+            except:
+                ++count
+        if count > 0:
+            raise ValueError("PTX:ERROR: unable to establish connection to local socket")
 
     # begin XML tree
     # then we loop through all problems, appending children
@@ -1466,67 +1540,89 @@ def webwork_to_xml(
                 "utf-8"
             )
 
-        # Construct URL to get static version from server
-        # WW server can react to a
-        #   URL of a problem stored there already
-        #   or a base64 encoding of a problem
-        # server_params is tuple rather than dictionary to enforce consistent order in url parameters
-        server_params_source = (
-            ("sourceFilePath", source[problem])
-            if origin[problem] == "server"
-            else ("problemSource", pgbase64)
-        )
+        if static_processing == 'local' and origin[problem] != 'server':
+            socket_params = { "problemSeed": seed[problem], "problemUUID": problem }
 
-        server_params = (
-            ("answersSubmitted", "0"),
-            ("showSolutions", "1"),
-            ("showHints", "1"),
-            ("displayMode", "PTX"),
-            ("courseID", courseID),
-            ("userID", userID),
-            ("course_password", password),
-            ("outputformat", "ptx"),
-            server_params_source,
-            ("problemSeed", seed[problem]),
-            ("problemUUID", problem),
-        )
+            if origin[problem] == 'ptx':
+                socket_params["source"] = pgdense[problem]
+            else:
+                socket_params["sourceFilePath"] = os.path.join(external_dir, source[problem])
 
-        msg = "sending {} to server to save in {}: origin is '{}'"
-        log.info(msg.format(problem, ww_reps_file, origin[problem]))
-        if origin[problem] == "server":
-            log.debug(
-                "server-to-ptx: {}\n{}\n{}\n{}".format(
-                    problem, ww_domain_path, source[problem], ww_reps_file
-                )
-            )
-        elif origin[problem] == "ptx":
-            log.debug(
-                "server-to-ptx: {}\n{}\n{}\n{}".format(
-                    problem, ww_domain_path, pgdense[problem], ww_reps_file
-                )
+            msg = "sending {} to socket to save in {}: origin is '{}'"
+            log.info(msg.format(problem, ww_reps_file, origin[problem]))
+            clientsocket.send(json.dumps(socket_params).encode('utf-8'))
+
+            buffer = bytearray()
+            while True:
+                received = clientsocket.recv(4096)
+                if not received: break
+                buffer.extend(received)
+                if buffer.endswith(b'ENDOFSOCKETDATA'): break
+            response_t = buffer.decode().replace('ENDOFSOCKETDATA', '')
+
+        else:
+            # Construct URL to get static version from server
+            # WW server can react to a
+            #   URL of a problem stored there already
+            #   or a base64 encoding of a problem
+            # server_params is tuple rather than dictionary to enforce consistent order in url parameters
+            server_params_source = (
+                ("sourceFilePath", source[problem])
+                if origin[problem] == "server"
+                else ("problemSource", pgbase64)
             )
 
-        # Ready, go out on the wire
-        try:
-            response = session.get(ww_domain_path, params=server_params)
-            log.debug("Getting problem response from: " + response.url)
+            server_params = (
+                ("answersSubmitted", "0"),
+                ("showSolutions", "1"),
+                ("showHints", "1"),
+                ("displayMode", "PTX"),
+                ("courseID", courseID),
+                ("userID", userID),
+                ("course_password", password),
+                ("outputformat", "ptx"),
+                server_params_source,
+                ("problemSeed", seed[problem]),
+                ("problemUUID", problem),
+            )
 
-        except requests.exceptions.RequestException as e:
-            root_cause = str(e)
-            msg = "PTX:ERROR: there was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
-            raise ValueError(msg.format(ww_domain_path, server_params) + root_cause)
+            msg = "sending {} to server to save in {}: origin is '{}'"
+            log.info(msg.format(problem, ww_reps_file, origin[problem]))
+            if origin[problem] == "server":
+                log.debug(
+                    "server-to-ptx: {}\n{}\n{}\n{}".format(
+                        problem, ww_domain_path, source[problem], ww_reps_file
+                    )
+                )
+            elif origin[problem] == "ptx":
+                log.debug(
+                    "server-to-ptx: {}\n{}\n{}\n{}".format(
+                        problem, ww_domain_path, pgdense[problem], ww_reps_file
+                    )
+                )
 
-        # Check for errors with PG processing
-        # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
-        file_empty = "ERROR:  This problem file was empty!" in response.text
+            # Ready, go out on the wire
+            try:
+                response = webwork2_session.get(ww_domain_path, params=server_params)
+                log.debug("Getting problem response from: " + response.url)
+                response_t = response.text
+
+            except requests.exceptions.RequestException as e:
+                root_cause = str(e)
+                msg = "PTX:ERROR: there was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
+                raise ValueError(msg.format(ww_domain_path, server_params) + root_cause)
+
+            # Check for errors with PG processing
+            # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
+        file_empty = "ERROR:  This problem file was empty!" in response_t
 
         no_compile = (
-            "ERROR caught by Translator while processing" in response.text
+            "ERROR caught by Translator while processing" in response_t
         )
 
         bad_xml = False
         try:
-            response_root = ET.fromstring(bytes(response.text, encoding='utf-8'))
+            response_root = ET.fromstring(bytes(response_t, encoding='utf-8'))
         except:
             response_root = ET.Element("webwork")
             bad_xml = True
@@ -1579,7 +1675,7 @@ def webwork_to_xml(
         # If we are aborting upon recoverable errors...
         if abort_early:
             if badness:
-                debugging_help = response.text
+                debugging_help = response_t
                 if origin[problem] == "ptx" and no_compile:
                     debugging_help += "\n" + pghuman[problem]
                 raise ValueError(
@@ -1608,7 +1704,7 @@ def webwork_to_xml(
         # \r would be valid XML, but too unpredictable in translations
 
         verbatim_split = re.split(
-            r"(\\verb\x1F.*?\x1F|\\verb\r.*?\r)", response.text
+            r"(\\verb\x1F.*?\x1F|\\verb\r.*?\r)", response_t
         )
         response_text = ""
         for item in verbatim_split:
@@ -1656,12 +1752,16 @@ def webwork_to_xml(
         # replace filenames, download images with new filenames
         count = 0
         # ww_image_url will be the URL to an image file used by the problem on the ww server
-        for match in re.finditer(graphics_pattern, response_text):
-            ww_image_url = match.group(1)
-            # strip away the scheme and location, if present (e.g 'https://webwork-ptx.aimath.org/')
-            ww_image_url_parsed = urllib.parse.urlparse(ww_image_url)
-            ww_image_scheme = ww_image_url_parsed.scheme
-            ww_image_full_path = ww_image_url_parsed.path
+        for match in re.finditer(graphics_pattern, response_t):
+            ww_image_full_path = match.group(1)
+            if static_processing == 'local' and origin[problem] != 'server':
+                ww_image_scheme = ''
+            else:
+                ww_image_url = urllib.parse.urljoin(ww_domain, ww_image_full_path)
+                # strip away the scheme and location, if present (e.g 'https://webwork-ptx.aimath.org/')
+                ww_image_url_parsed = urllib.parse.urlparse(ww_image_url)
+                ww_image_scheme = ww_image_url_parsed.scheme
+                ww_image_full_path = ww_image_url_parsed.path
             count += 1
             # split the full path into (path, file). path could theoretically be empty.
             ww_image_path, ww_image_filename = os.path.split(ww_image_full_path)
@@ -1704,31 +1804,48 @@ def webwork_to_xml(
                 response_text = response_text.replace(
                     ww_image_full_path, "images/" + ptx_image
                 )
-            # download actual image files
-            # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
-            try:
-                image_response = session.get(image_url)
-            except requests.exceptions.RequestException as e:
-                root_cause = str(e)
-                msg = "PTX:ERROR: there was a problem downloading an image file,\n URL: {}\n"
-                raise ValueError(msg.format(image_url) + root_cause)
-            # and save the image itself
-            destination_image_file = os.path.join(ww_images_dir, ptx_image_filename)
-            try:
-                with open(destination_image_file, "wb") as image_file:
-                    msg = "saving image file {} {} in {}"
-                    qualifier = ""
-                    if image_extension == ".tgz":
-                        qualifier = "(contents)"
-                    log.info(msg.format(ptx_image_filename, qualifier, ww_images_dir))
-                    image_file.write(image_response.content)
-            except Exception as e:
-                root_cause = str(e)
-                msg = "PTX:ERROR: there was a problem saving an image file,\n Filename: {}\n"
-                raise ValueError(
-                    msg.format(destination_image_file)
-                    + root_cause
-                )
+            if static_processing == 'local' and origin[problem] != 'server':
+                image_local_path = ww_image_full_path.replace('/pg_files/tmp', tmp_dir)
+                destination_image_file = os.path.join(ww_images_dir, ptx_image_filename)
+                try:
+                    log.info(
+                        "saving image file {} {} in {}".format(
+                            ptx_image_filename,
+                            "(contents)" if image_extension == ".tgz" else "",
+                            ww_images_dir
+                        )
+                    )
+                    shutil.copy2(image_local_path, destination_image_file)
+                except Exception as e:
+                    raise ValueError("PTX:ERROR:   There was an error copying the image file {} to {}.\n".format(
+                        image_local_path, destination_image_file
+                    ) + str(e))
+            else:
+                # download actual image files
+                # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
+                try:
+                    image_response = webwork2_session.get(image_url)
+                except requests.exceptions.RequestException as e:
+                    root_cause = str(e)
+                    msg = "PTX:ERROR: there was a problem downloading an image file,\n URL: {}\n"
+                    raise ValueError(msg.format(image_url) + root_cause)
+                # and save the image itself
+                destination_image_file = os.path.join(ww_images_dir, ptx_image_filename)
+                try:
+                    with open(destination_image_file, "wb") as image_file:
+                        msg = "saving image file {} {} in {}"
+                        qualifier = ""
+                        if image_extension == ".tgz":
+                            qualifier = "(contents)"
+                        log.info(msg.format(ptx_image_filename, qualifier, ww_images_dir))
+                        image_file.write(image_response.content)
+                except Exception as e:
+                    root_cause = str(e)
+                    msg = "PTX:ERROR: there was a problem saving an image file,\n Filename: {}\n"
+                    raise ValueError(
+                        msg.format(destination_image_file)
+                        + root_cause
+                    )
             # unpack if it's a tgz
             if image_extension == ".tgz":
                 tgzfile = tarfile.open(destination_image_file)
@@ -1921,8 +2038,14 @@ def webwork_to_xml(
         raise ValueError(msg.format(include_file_name) + root_cause)
 
     # close session to avoid resource wanrnings
-    session.close()
+    try:
+        webwork2_session.close()
+    except:
+        pass
 
+    # close the socket
+    if clientsocket:
+        clientsocket.send(b'quit')
 
 ################################
 #
@@ -1931,7 +2054,7 @@ def webwork_to_xml(
 ################################
 
 
-def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
+def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz, need_macros=True):
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -1948,7 +2071,8 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
     folder = os.path.join(tmp_dir, folder_name)
     macros_folder = os.path.join(folder, 'macros')
     os.mkdir(macros_folder)
-    pg_macros(xml_source, pub_file, stringparams, macros_folder)
+    if need_macros:
+        pg_macros(xml_source, pub_file, stringparams, macros_folder)
     if tgz:
         archive_file = os.path.join(tmp_dir, folder_name + ".tgz")
         targz(archive_file, folder)

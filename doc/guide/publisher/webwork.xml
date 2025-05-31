@@ -26,9 +26,79 @@
       for use in the <q>traditional</q> way.
     </p>
     <p>
+      Part of the process can optionally be sped up by using a local copy of the <c>pg</c>
+      repository.
+    </p>
+    <p>
       See <xref ref="webwork-author"/> for how to include or create <webwork/> problems in your source.
     </p>
   </introduction>
+
+  <section xml:id="webwork-local-pg-static-processing">
+    <title>Using a local copy of PG</title>
+    <p>
+      <webwork/> problems can be processed using a local copy of the <c>pg</c> repository. This can
+      siginificanlty speed up processing time, compared with the other options that use a network
+      connection.
+    </p>
+    <p>
+      To use this processing method, clone the <c>pg</c> repository. The code below places it in a
+      default location, but you could place it somewhere else.
+      <cd>
+        <cline>cd /opt</cline>
+        <cline>mkdir webwork</cline>
+        <cline>cd webwork</cline>
+        <cline>git clone https://github.com/openwebwork/pg</cline>
+      </cd>
+    </p>
+    <p>
+        Set the <c>PG_ROOT</c> environment variable to be the path to your copy of <c>pg</c>. If it
+        is at the default location, you could run:
+        <cd>export PG_ROOT=/opt/webwork/pg</cd>
+        This will only define <c>$PG_ROOT</c> for your current terminal session, so you might also
+        do whatever is appropriate on your system to set <c>PG_ROOT</c> each time a terminal session
+        begins.
+    </p>
+    <p>
+      In <c>pg/conf/</c>, make a copy of <c>pg_config.dist.yml</c> called <c>pg_config.yml</c>. In
+      general you should read through all the settings and set them appropriately. At a minimum, set
+      <c>directories: root:</c> to the absolute path to your clone of <c>pg</c>. You may need to set
+      paths in <c>externalPrograms:</c> as well. And maybe more...
+    </p>
+    <p>
+      You also need to have a recent enough perl version. Version 5.32 is known to work, and
+      versions as early as 5.26 may work, but have not been thoroughly tested. PG also uses perl
+      packages that you may need to install. These may be available from Linux package
+      distributions, but the details differ from one flavor of Linux to the next. If you can sort
+      out which packages based on the list of perl modules below, that is recommended. Otherwise,
+      use <c>cpanm</c> to install everything that PG uses:
+      <cd>cpanm Carp Class::Accessor Class::Tiny Data::Dumper DBI \
+Digest::MD5 File::Copy File::Find File::Path File::Spec \
+GD Getopt::Long HTML::Entities Locale::Maketext::Lexicon \
+MIME::Base64 Mojo::Base Mojo::IOLoop Mojo::DOM Mojo::JSON \
+Opcode Pandoc Perl::Tidy Pod::Simple::Search Scalar::Util \
+Socket Tie::IxHash UUID::Tiny YAML::XS</cd>
+      Not all these packages will be needed, strictly speaking. Some are only needed for certain
+      tools that may never be used in your PG problems.
+    </p>
+    <p>
+      And there may be more if needed by particular exercises. When a package is missing, an error
+      report should indicate what is missing.
+    </p>
+    <p>
+      Now in a publisher file, you can set the <tag>webwork</tag> element to have
+      <attr>static-processing</attr> with value <c>local</c>. If you put the <c>pg</c> repository
+      in the default location, this is all you need to do. Otherwise, you also need to add the
+      attribute <attr>pg-location</attr> with the absolute path, for example <c>/opt/webwork/pg</c>.
+      And when you process <webwork/> exercises for static representations (following
+      <xref ref="webwork-representations"/>) your local copy of PG will be used instead of some
+      remote server.
+    </p>
+    <p>
+      Note that you will still need a network connection for problems in your HTML output to render
+      as live interactive exercises.
+    </p>
+  </section>
 
   <section xml:id="webwork-server-configuration">
     <title>Configuring a <webwork/> Server for <pretext/></title>
