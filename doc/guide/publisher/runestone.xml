@@ -194,7 +194,7 @@
                 </ul>
             </p>
             <p>
-                If your repository name and your document-id do not match you will need to fill out the the path to an existing repo field so that it matches what you checked out from GitHub.
+                If your repository name and your document-id do not match you will need to fill out the the <q>path to an existing repository</q> field so that it matches what you checked out from GitHub.
             </p>
             <p>
                 If your repository is structured so that your project.ptx file is not in the root of your repository you will need to configure the path to the project.ptx file.  This is done by filling in the field for the path to the project.ptx file.  This should be a relative path from the root of your repository to the project.ptx file.
@@ -205,7 +205,7 @@
                     <li>Create a new book for book number 1 on the main author page using the GitHub URL to your repository.</li>
                     <li>Make sure you have a target in your project.ptx file for this book and it is configured to use the publication file you created for Runestone.</li>
                     <li>Edit the metadata for your book in case any of the other advanced configuration situations apply.</li>
-                    <li>To create book number 2 on the main author page use the existing repo field.  This should be <c>/books/&lt;your-repo-name&gt;</c>.  Leave the GitHub URL field blank.</li>
+                    <li>To create book number 2 on the main author page use the <q>path to an existing repository</q> field.  This should be <c>/books/&lt;your-repo-name&gt;</c>.  Leave the GitHub URL field blank.</li>
                     <li>Depending on how your repository is structured you may need to make sure you have a second target for the second book with a different output folder configured and a different document-id.  Alternatively you may have an entirely separate <c>project.ptx</c> file for the second book in a different folder of your repository.  In this case you need to fill in the field for the path to the project.ptx file. </li>
                 </ol>
             </p>
