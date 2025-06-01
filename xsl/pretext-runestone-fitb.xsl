@@ -1177,7 +1177,7 @@
 
 <xsl:template match="feedback" mode="serialize-feedback">
     <xsl:variable name="feedback-rtf">
-        <xsl:apply-templates select="*" mode="body"/>
+        <xsl:apply-templates select="*" />
     </xsl:variable>
     <!-- serialize HTML as text, then escape as JSON -->
     <xsl:call-template name="escape-json-string">
