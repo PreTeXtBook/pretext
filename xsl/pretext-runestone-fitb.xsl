@@ -143,7 +143,7 @@
                     <xsl:text>,&#xa;"feedbackArray": [</xsl:text>
                     <!-- In case all answers are based on one test               -->
                     <xsl:variable name="multiAns">
-                        <xsl:apply-templates select="evaluation" mode="get-multianswer-check" />
+                        <xsl:apply-templates select="evaluation" mode="get-multianswer-check"/>
                     </xsl:variable>
                     <!-- Generate test/feedback pair for each fillin             -->
                     <xsl:apply-templates select="statement//fillin" mode="dynamic-feedback">
@@ -386,71 +386,36 @@
     <xsl:variable name="responseTree" select="../statement//fillin" />
     <xsl:if test="count($responseTree) > 1 and evaluate[@all='yes']/test">
         <xsl:apply-templates select="evaluate[@all='yes']/test" mode="create-test-feedback">
+            <xsl:with-param name="b-correct" select="'yes'"/>
             <xsl:with-param name="fillin" select="$responseTree"/>
         </xsl:apply-templates>
     </xsl:if>
 </xsl:template>
 
+<!-- Return the index of an evaluate -->
+<xsl:template match="evaluation/evaluate" mode="get-index">
+    <xsl:value-of select="position()"/>
+</xsl:template>
 
-<!-- Template for answer checking. Actual work done by specialized templates. -->
-<xsl:template match="fillin" mode="dynamic-feedback">
+<!-- Build feedback based on the #evaluate element. -->
+<xsl:template match="evaluate" mode="dynamic-feedback">
     <xsl:param name="multiAns"/>
-    <xsl:variable name="curFillIn" select="."/>
-    <xsl:variable name="fillinName">
-        <xsl:apply-templates select="." mode="blank-name"/>
-    </xsl:variable>
-    <xsl:variable name="blankNum">
-        <xsl:value-of select="position()" />
-    </xsl:variable>
-    <xsl:variable name="check">
-        <xsl:choose>
-            <xsl:when test="ancestor::statement/../evaluation/evaluate[@name = $fillinName]">
-                <xsl:copy-of select="ancestor::statement/../evaluation/evaluate[@name = $fillinName]"/>
-            </xsl:when>
-            <xsl:when test="ancestor::statement/../evaluation/evaluate[position() = $blankNum]">
-                <xsl:copy-of select="ancestor::statement/../evaluation/evaluate[position() = $blankNum]"/>
-            </xsl:when>
-            <!-- No check matches: Make blank default. -->
-            <xsl:otherwise>
-                <evaluate>
-                    <xsl:attribute name="name">
-                        <xsl:value-of select="$fillinName"/>
-                    </xsl:attribute>
-                    <test>
-                        <xsl:attribute name="correct">
-                            <xsl:text>yes</xsl:text>
-                        </xsl:attribute>
-                        <jscmp>
-                            <xsl:text>false</xsl:text>
-                        </jscmp>
-                        <feedback>
-                            <xsl:text>No comparison rule was provided.</xsl:text>
-                        </feedback>
-                    </test>
-                </evaluate>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="checkCorrectTest">
-        <xsl:choose>
-            <xsl:when test="exsl:node-set($check)/evaluate/test[@correct='yes']">
-                <xsl:copy-of select="exsl:node-set($check)/evaluate/test[@correct='yes']"/>
-            </xsl:when>
-            <!-- If no test matches @correct='yes', then use the default answer. Leave blank. -->
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:if test="$blankNum > 1">
-        <xsl:text>, </xsl:text>
+    <xsl:param name="match-fillin"/>
+
+    <!-- Defend against name mismatches -->
+    <xsl:if test="@name and $match-fillin/@name and not(@name = $match-fillin/@name)">
+        <xsl:message>PTX:WARNING:   evaluate element for FITB matched by number has a mismatching blank name.</xsl:message>
     </xsl:if>
+
     <!-- First check is for correctness. -->
     <xsl:text>[</xsl:text>
     <xsl:choose>
-        <xsl:when test="string-length($multiAns)>0">
+        <xsl:when test="string-length($multiAns) > 0">
             <xsl:value-of select="$multiAns"/>
         </xsl:when>
-        <xsl:when test="string-length($checkCorrectTest) > 0">
-            <xsl:apply-templates select="exsl:node-set($checkCorrectTest)/test" mode="create-test-feedback">
-                <xsl:with-param name="fillin" select="$curFillIn" />
+        <xsl:when test="test[@correct='yes']">
+            <xsl:apply-templates select="test[@correct='yes']" mode="create-test-feedback">
+                <xsl:with-param name="fillin" select="$match-fillin" />
                 <xsl:with-param name="b-correct" select="'yes'" />
             </xsl:apply-templates>
         </xsl:when>
@@ -458,46 +423,44 @@
         <xsl:otherwise>
             <xsl:text>{</xsl:text>
             <xsl:choose>
-                <xsl:when test="$curFillIn/@answer">
+                <xsl:when test="$match-fillin/@answer">
                     <xsl:choose>
-                        <xsl:when test="$curFillIn/@mode='number'">
+                        <xsl:when test="$match-fillin/@mode='number'">
                             <xsl:text>"number": [</xsl:text>
-                            <xsl:value-of select="exsl:node-set($curFillIn)/@answer"/>
+                            <xsl:value-of select="$match-fillin/@answer"/>
                             <xsl:text>,</xsl:text>
-                            <xsl:value-of select="exsl:node-set($curFillIn)/@answer"/>
+                            <xsl:value-of select="$match-fillin/@answer"/>
                             <xsl:text>]</xsl:text>
                         </xsl:when>
-                        <xsl:when test="$curFillIn/@mode='string'">
+                        <xsl:when test="$match-fillin/@mode='string'">
                             <xsl:text>"regex": "</xsl:text>
-                            <xsl:value-of select="exsl:node-set($curFillIn)/@answer"/>
+                            <xsl:value-of select="$match-fillin/@answer"/>
                             <xsl:text>"</xsl:text>
                         </xsl:when>
                     </xsl:choose>
                 </xsl:when>
-                <xsl:when test="$curFillIn/@ansobj">
+                <xsl:when test="$match-fillin/@ansobj">
                     <xsl:choose>
-                        <xsl:when test="$curFillIn/@mode='number'">
+                        <xsl:when test="$match-fillin/@mode='number'">
                             <xsl:text>function() {&#xa;</xsl:text>
                             <xsl:text>    return (Math.abs(</xsl:text>
-                            <xsl:value-of select="$curFillIn/@ansobj"/>
+                            <xsl:value-of select="$match-fillin/@ansobj"/>
                             <xsl:text>- ans) &lt; 1e-10);&#xa;}</xsl:text>
                         </xsl:when>
-                        <xsl:when test="$curFillIn/@mode='string'">
+                        <xsl:when test="$match-fillin/@mode='string'">
                             <xsl:text>function() {&#xa;</xsl:text>
                             <xsl:text>    return (</xsl:text>
-                            <xsl:value-of select="$curFillIn/@ansobj"/>
+                            <xsl:value-of select="$match-fillin/@ansobj"/>
                             <xsl:text>== ans);&#xa;}</xsl:text>
                         </xsl:when>
+                        <xsl:when test="$match-fillin/@mode='math'">
+                            <xsl:text>function() {&#xa;</xsl:text>
+                            <xsl:text>    return _mobjs.compareExpressions(</xsl:text>
+                            <xsl:value-of select="$match-fillin/@ansobj"/>
+                            <xsl:text>, ans</xsl:text>
+                            <xsl:text>);&#xa;}</xsl:text>
+                        </xsl:when>
                     </xsl:choose>
-                </xsl:when>
-                <xsl:when test="$curFillIn/@mode='math'">
-                    <xsl:text>function() {&#xa;</xsl:text>
-                    <xsl:text>    return _mobjs.compareExpressions(</xsl:text>
-                    <xsl:value-of select="$curFillIn/@ansobj"/>
-                    <xsl:text>, ans</xsl:text>
-                    <!-- Can we use ans above instead of $curFillIn/@name? -->
-                    <!-- xsl:value-of select="exsl:node-set($curFillIn)/@name"/-->
-                    <xsl:text>);&#xa;}</xsl:text>
                 </xsl:when>
             </xsl:choose>
             <xsl:text>, "feedback": "</xsl:text>
@@ -509,10 +472,10 @@
     </xsl:choose>
 
     <!-- Now add additional checks for feedback. -->
-    <xsl:for-each select="exsl:node-set($check)//test[not(@correct='yes')]">
+    <xsl:for-each select="test[not(@correct='yes')]">
         <xsl:text>, </xsl:text>
         <xsl:apply-templates select="." mode="create-test-feedback">
-            <xsl:with-param name="fillin" select="$curFillIn"/>
+            <xsl:with-param name="fillin" select="$match-fillin"/>
         </xsl:apply-templates>
     </xsl:for-each>
     <!-- Default feedback for the blank. Always evaluates true.   -->
@@ -521,6 +484,73 @@
         <xsl:with-param name="b-correct" select="'no'"/>
     </xsl:apply-templates>
     <xsl:text>"}]</xsl:text>
+</xsl:template>
+
+<!-- Template for answer checking. Actual work done by specialized templates. -->
+<xsl:template match="fillin" mode="dynamic-feedback">
+    <xsl:param name="multiAns"/>
+    <xsl:variable name="curFillIn" select="."/>
+    <xsl:variable name="fillinName">
+        <xsl:apply-templates select="." mode="blank-name"/>
+    </xsl:variable>
+    <xsl:variable name="blankNum">
+        <xsl:value-of select="position()" />
+    </xsl:variable>
+
+    <!-- we need to know which #evaluate matches the #fillin -->
+    <xsl:variable name="evaluate-index">
+        <xsl:choose>
+            <xsl:when test="ancestor::statement/../evaluation/evaluate[@name = $fillinName]">
+                <xsl:apply-templates select="ancestor::statement/../evaluation/evaluate[@name = $fillinName]" mode="get-index"/>
+            </xsl:when>
+            <xsl:when test="ancestor::statement/../evaluation/evaluate[position() = $blankNum]">
+                <xsl:value-of select="$blankNum"/>
+            </xsl:when>
+            <!-- No check matches: Make blank default. -->
+            <xsl:otherwise>
+                <xsl:number value="-1"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:if test="$blankNum > 1">
+        <xsl:text>, </xsl:text>
+    </xsl:if>
+    <xsl:choose>
+        <!-- First look for a matching name. -->
+        <xsl:when test="ancestor::statement/../evaluation/evaluate[@name = $fillinName]">
+            <xsl:apply-templates select="ancestor::statement/../evaluation/evaluate[@name = $fillinName]" mode="dynamic-feedback">
+                <xsl:with-param name="multiAns" select="$multiAns"/>
+                <xsl:with-param name="match-fillin" select="."/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- Otherwise match on order. -->
+        <xsl:when test="ancestor::statement/../evaluation/evaluate[position() = $blankNum]">
+            <xsl:apply-templates select="ancestor::statement/../evaluation/evaluate[position() = $blankNum]" mode="dynamic-feedback">
+                <xsl:with-param name="multiAns" select="$multiAns"/>
+                <xsl:with-param name="match-fillin" select="."/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- No check matches: Make blank default. -->
+        <xsl:otherwise>
+            <evaluate>
+                <xsl:attribute name="name">
+                    <xsl:value-of select="$fillinName"/>
+                </xsl:attribute>
+                <test>
+                    <xsl:attribute name="correct">
+                        <xsl:text>yes</xsl:text>
+                    </xsl:attribute>
+                    <jscmp>
+                        <xsl:text>false</xsl:text>
+                    </jscmp>
+                    <feedback>
+                        <xsl:text>No comparison rule was provided.</xsl:text>
+                    </feedback>
+                </test>
+            </evaluate>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="test" mode="create-test-feedback">
