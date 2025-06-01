@@ -15,17 +15,6 @@
 <!-- Actual rules for substution when generating HTML     -->
 <!-- ==================================================== -->
 
-<!-- These need to be replaced by localization calls.      -->
-<!-- Or maybe push localization strings to Runestone,      -->
-<!-- since this feedback is only useful in an interactive. -->
-<xsl:variable name="defaultCorrectFeedback">
-    <p>Correct!</p>
-</xsl:variable>
-
-<xsl:variable name="defaultIncorrectFeedback">
-    <p>Incorrect.</p>
-</xsl:variable>
-
 <!-- Convert fillin tag to an input element on the page -->
 <xsl:template match="exercise[@exercise-interactive='fillin']//fillin
                      | project[@exercise-interactive='fillin']//fillin
@@ -373,6 +362,25 @@
 <!-- Evaluation and Feedback                                    -->
 <!-- ========================================================== -->
 
+<!-- Default localized feedback strings. -->
+<xsl:template match="*" mode="get-default-feedback">
+    <xsl:param name="b-correct" select="'no'"/>
+    <xsl:choose>
+        <xsl:when test="$b-correct='yes'">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'correct'"/>
+            </xsl:apply-templates>
+            <xsl:text>!</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'incorrect'"/>
+            </xsl:apply-templates>
+            <xsl:text>.</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Deal with possibility of global checker for all blanks -->
 <xsl:template match="evaluation" mode="get-multianswer-check">
     <xsl:variable name="responseTree" select="../statement//fillin" />
@@ -493,7 +501,9 @@
                 </xsl:when>
             </xsl:choose>
             <xsl:text>, "feedback": "</xsl:text>
-            <xsl:value-of select="$defaultCorrectFeedback"/>
+            <xsl:apply-templates select="." mode="get-default-feedback">
+                <xsl:with-param name="b-correct" select="'yes'"/>
+            </xsl:apply-templates>
             <xsl:text>"}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -507,7 +517,9 @@
     </xsl:for-each>
     <!-- Default feedback for the blank. Always evaluates true.   -->
     <xsl:text>, {"feedback": "</xsl:text>
-    <xsl:value-of select="$defaultIncorrectFeedback"/>
+    <xsl:apply-templates select="." mode="get-default-feedback">
+        <xsl:with-param name="b-correct" select="'no'"/>
+    </xsl:apply-templates>
     <xsl:text>"}]</xsl:text>
 </xsl:template>
 
@@ -531,11 +543,10 @@
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:when>
-        <xsl:when test="$b-correct">
-            <xsl:value-of select="$defaultCorrectFeedback"/>
-        </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="$defaultIncorrectFeedback"/>
+            <xsl:apply-templates select="." mode="get-default-feedback">
+                <xsl:with-param name="b-correct" select="$b-correct"/>
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 <xsl:text>"}</xsl:text>
