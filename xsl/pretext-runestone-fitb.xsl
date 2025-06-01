@@ -65,9 +65,6 @@
                      | exploration[@exercise-interactive='fillin']
                      | investigation[@exercise-interactive='fillin']
                      | task[@exercise-interactive='fillin']" mode="runestone-to-interactive">
-    <xsl:variable name="the-id">
-        <xsl:apply-templates select="." mode="html-id"/>
-    </xsl:variable>
     <xsl:variable name="b-is-dynamic" select="boolean(./setup)"/>
     <div class="ptx-runestone-container">
         <div class="runestone">
@@ -84,7 +81,7 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <!-- Report if a seed is not provided-->
-                                <xsl:message>PTX:WARNING:   Dynamic exercise "<xsl:value-of select="$the-id"/>" is missing setup @seed for static content generation.</xsl:message>
+                                <xsl:message>PTX:WARNING:   Dynamic exercise "<xsl:value-of select="@visible-id"/>" is missing setup @seed for static content generation.</xsl:message>
                                 <xsl:text>1234</xsl:text>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -404,7 +401,7 @@
 
     <!-- Defend against name mismatches -->
     <xsl:if test="@name and $match-fillin/@name and not(@name = $match-fillin/@name)">
-        <xsl:message>PTX:WARNING:   evaluate element for FITB matched by number has a mismatching blank name.</xsl:message>
+        <xsl:message>PTX:ERROR:    Dynamic content missing label "<xsl:value-of select="@visible-id"/>"</xsl:message>
     </xsl:if>
 
     <!-- First check is for correctness. -->
@@ -437,6 +434,9 @@
                             <xsl:value-of select="$match-fillin/@answer"/>
                             <xsl:text>"</xsl:text>
                         </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:message>PTX:ERROR: fillin has an @answer with invalid or missing mode (valid: number or string) in "<xsl:value-of select="@visible-id"/>. If dynamic, you should use @ansobj.".</xsl:message>
+                        </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$match-fillin/@ansobj">
@@ -460,8 +460,14 @@
                             <xsl:text>, ans</xsl:text>
                             <xsl:text>);&#xa;}</xsl:text>
                         </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:message>PTX:ERROR: fillin has an @ansobj with invalid or missing mode (valid: number|string|math) in "<xsl:value-of select="@visible-id"/>".</xsl:message>
+                        </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR: No method provided to identify a correct answer for #fillin in "<xsl:value-of select="@visible-id"/>".</xsl:message>
+                </xsl:otherwise>
             </xsl:choose>
             <xsl:text>, "feedback": "</xsl:text>
             <xsl:apply-templates select="." mode="get-default-feedback">
@@ -533,22 +539,7 @@
         </xsl:when>
         <!-- No check matches: Make blank default. -->
         <xsl:otherwise>
-            <evaluate>
-                <xsl:attribute name="name">
-                    <xsl:value-of select="$fillinName"/>
-                </xsl:attribute>
-                <test>
-                    <xsl:attribute name="correct">
-                        <xsl:text>yes</xsl:text>
-                    </xsl:attribute>
-                    <jscmp>
-                        <xsl:text>false</xsl:text>
-                    </jscmp>
-                    <feedback>
-                        <xsl:text>No comparison rule was provided.</xsl:text>
-                    </feedback>
-                </test>
-            </evaluate>
+            <xsl:message>PTX:ERROR: No matching #evaluate for #fillin in "<xsl:value-of select="@visible-id"/>".</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -687,7 +678,7 @@
     <xsl:variable name="max-val">
         <xsl:choose>
             <xsl:when test="numcmp/@max">
-            <xsl:value-of select="numcmp/@max"/>
+                <xsl:value-of select="numcmp/@max"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$ansObject"/>
@@ -738,6 +729,7 @@
                     <xsl:when test="strcmp/@case = 'insensitive'">
                         <xsl:text>i</xsl:text>
                     </xsl:when>
+                    <!-- Otherwise nothing -->
                 </xsl:choose>
             </xsl:variable>
             <!-- regex string match, drop    -->
@@ -792,6 +784,7 @@
             <xsl:when test="strcmp/@case = 'insensitive'">
                 <xsl:text>i</xsl:text>
             </xsl:when>
+            <!-- Otherwise Nothing -->
         </xsl:choose>
     </xsl:variable>
     <!-- create a function to do the regex -->
@@ -895,7 +888,7 @@
                 <xsl:when test="name($curTest)='mathcmp' and $curTest/@use-answer='yes'">
                     <xsl:choose>
                         <xsl:when test="not($fillin/@ansobj)">
-                            <xsl:message>PTX:WARNING: Feedback for "<xsl:value-of select="$the-id"/>" says to use given math answer, but @ansobj not defined. </xsl:message>
+                            <xsl:message>PTX:WARNING: Feedback for "<xsl:value-of select="@visible-id"/>" says to use given math answer, but @ansobj not defined. </xsl:message>
                             <xsl:text>UNDEFINED</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
@@ -943,6 +936,10 @@
         <xsl:when test="$logic = 'or'">         <!-- Treat logic like addition. A single true makes sum positive -->
             <xsl:text>testResults[</xsl:text><xsl:value-of select="$level" /><xsl:text>] = 0;&#xa;</xsl:text>
         </xsl:when>
+        <xsl:when test="$logic = 'not'"/>         <!-- Negation has no preparation -->
+        <xsl:otherwise>
+            <xsl:message>PTX:ERROR:    Invalid logic operator in dynamic fillin for "<xsl:value-of select="@visible-id"/>"</xsl:message>
+        </xsl:otherwise>
     </xsl:choose>
     <xsl:for-each select="$tests">    <!-- Work through the layer of tests one at a time. -->
         <xsl:choose>
@@ -997,6 +994,7 @@
                 <xsl:text>    testResults[</xsl:text><xsl:value-of select="$level" />
                 <xsl:text>] = !(testResults[</xsl:text><xsl:value-of select="$level+1" /><xsl:text>]);&#xa;</xsl:text>
             </xsl:when>
+            <!-- Otherwise: invalid logic call was signaled as Error earlier. -->
         </xsl:choose>
     </xsl:for-each>
 </xsl:template>
