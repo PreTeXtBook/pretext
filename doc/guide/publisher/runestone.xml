@@ -127,9 +127,12 @@
                 <p>
                     Log into GitHub and open an issue at
                     <url href="https://github.com/RunestoneInteractive/rs/issues/new" visual="github.com/RunestoneInteractive/rs/issues/new"/>
-                    to request that your project be added to Runestone Academy. Be sure to provide the URL
-                    of your GitHub repository (e.g. <c>https://github.com/UserName/repo-name/</c>). Runestone
-                    Academy administrators will communicate with you via GitHub to complete this process.
+                    to request that your project be added to Runestone Academy. Be sure to provide the URL of your GitHub repository (e.g.
+                    <c>https://github.com/UserName/repo-name/</c>). Runestone Academy administrators will communicate with you via GitHub to
+                    complete this process. When your book is first added to Runestone, it will clone your repo and build from your default
+                    branch. The default branch is configured on GitHub and is usually <c>main</c> or <c>master</c> but can be anything.
+                    However if you change your default branch after your book is added to Runstone you will need to get in touch with the
+                    Runestone Academy administrators to get them to re-clone your repo.
                 </p>
             </li>
         </ul>
