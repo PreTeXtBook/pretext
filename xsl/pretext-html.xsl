@@ -9982,10 +9982,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- DoenetML header libraries -->
 <xsl:template match="interactive[@platform = 'doenetml']" mode="header-libraries">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/doenet-standalone-test@0.6.0/dist/style.css" />
-    <script onload="onLoad()" type="module" src="https://cdn.jsdelivr.net/npm/doenet-standalone-test@0.6.0/dist/doenet-standalone.min.js"></script>
+    <xsl:variable name="doenet-version">
+        <xsl:choose>
+            <xsl:when test="@version">
+                <xsl:value-of select="@version" />
+            </xsl:when>
+            <xsl:when test="$docinfo/doenetml/@version">
+                <xsl:value-of select="$docinfo/doenetml/@version" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>latest</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="doenet-css-url">
+        <xsl:choose>
+            <xsl:when test="@override-css-url">
+                <xsl:value-of select="@override-css-url" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>https://cdn.jsdelivr.net/npm/@doenet/standalone@</xsl:text>
+                <xsl:value-of select="$doenet-version" />
+                <xsl:text>/style.css</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="doenet-js-url">
+        <xsl:choose>
+            <xsl:when test="@override-js-url">
+                <xsl:value-of select="@override-js-url" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>https://cdn.jsdelivr.net/npm/@doenet/standalone@</xsl:text>
+                <xsl:value-of select="$doenet-version" />
+                <xsl:text>/doenet-standalone.js</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <link rel="stylesheet" type="text/css" href="{$doenet-css-url}" />
+    <script onload="onLoad()" type="module" src="{$doenet-js-url}"></script>
     <script>
-        <xsl:text>function onLoad() {window.renderDoenetToContainer(document.querySelector(".doenetml-applet"))}</xsl:text>
+        <xsl:text>function onLoad() {window.renderDoenetViewerToContainer(document.querySelector(".doenetml-applet"))}</xsl:text>
     </script>
 </xsl:template>
 
@@ -10325,7 +10362,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="slate[@surface = 'doenetml']">
-    <div class="doenetml-applet">
+    <div class="doenetml-applet" data-doenet-add-virtual-keyboard="false" data-doenet-send-resize-events="true">
         <div class="doenetml-loading" style="text-align:center">
             <p><img src="https://www.doenet.org/Doenet_Logo_Frontpage.png"/></p>
             <p><xsl:text>Waiting on the page to load...</xsl:text></p>
