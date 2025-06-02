@@ -4406,9 +4406,26 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
 ###################
 
 
-def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
-    """Convert XML source to a PDF (incomplete)"""
+def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outputs):
+    """
+    Generate a PDF from an XML source using LaTeX as an intermediate format.
 
+    Args:
+        xml (str): Path to the XML source file.
+        pub_file (str or None): Path to the publisher configuration file, or None if not used.
+        stringparams (dict): Dictionary of string parameters to control the transformation.
+        extra_xsl (str or None): Path to an additional XSL stylesheet, or None if not used.
+        out_file (str or None): Path to the output PDF file. If None, the PDF is copied to      dest_dir.
+        dest_dir (str): Directory where the output PDF should be placed if out_file is not specified.
+        method (str): The LaTeX engine or processing method to use (e.g., 'pdflatex', 'xelatex').
+        outputs (str or None): Specify which files should be copied to dest_dir.  Possible values are pdf-only (default), all (.tex, assets, pdf, and *.log, *.aux, etc), all-clean (same as all but no *.log, *.aux, etc), or prebuild (same as all-clean but no pdf).
+
+    Returns:
+        None
+
+    Side Effects:
+        - Copies the generated PDF to the specified output location.
+    """
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
@@ -4442,6 +4459,14 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     if journal_name:
         place_latex_package_files(tmp_dir, journal_name, os.path.join(generated_abs, "latex-packages"))
 
+    # If requested, copy the LaTeX source and asset folders to dest_dir.
+    # Note that outputs == "all" needs to wait until after the build to copy build_dir.
+    if outputs == "all-clean" or outputs == "prebuild":
+        copy_build_directory(tmp_dir, dest_dir)
+        # prebuild means no pdf, so stop here.
+        if outputs == "prebuild":
+            return
+
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
     with working_directory(tmp_dir):
@@ -4463,6 +4488,13 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
             shutil.copy2(pdfname, out_file)
         else:
             shutil.copy2(pdfname, dest_dir)
+
+        # If we want all outputs, we copy the entire build directory now that the PDF is built
+        # so we can get the *.log, *.aux, etc build files.
+        if outputs == "all":
+            # This redundantely copies the pdf to the destination directory again
+            copy_build_directory(tmp_dir, dest_dir)
+
 
 #################
 # XSLT Processing
