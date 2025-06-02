@@ -106,18 +106,24 @@ PGOUT      = $(SCRATCH)/pg
 #########################################################################
 #  Construct macros file. This must be uploaded into the macros folder
 #  of the server's host course before building representations below.
-#  There are no macros for the minimal example, so omitted
+#  This file will be built inside a folder tree in generated/webwork/pg
+#  or if there is no generated folder, into the destination folder. The
+#  folder tree will be in the form PROJECT_TITLE/macros/INITIALISM.pl.
+#  If building representations locally, this must be run first and
+#  the macros file will be in the right place relative to the generated
+#  folder. There are no macros for the minimal example, so omitted.
 
 sample-chapter-macros:
-	install -d $(PGOUT)/macros
-	cd $(PGOUT)/macros; \
-	$(PTX)/pretext/pretext -v -c pg-macros -p $(SMPCPUB) $(SMPC)
+	$(PTX)/pretext/pretext -v -c pg-macros -p $(SMPCPUB) -d $(PGOUT)/macros $(SMPC)
 
 
 #########################################################################
 #  Extract webwork problems into a single XML file.
 #  Location is within generated folder (named in the publisher file),
 #  within "webwork" subfolder
+#  This also produces PG files for each problem, PG macros, set defintion
+#  files for problem sets, and set header files all within the "webwork/pg"
+#  folder
 
 sample-chapter-representations:
 	$(PTX)/pretext/pretext -v -c webwork -p $(SMPCPUB) $(SMPC)
