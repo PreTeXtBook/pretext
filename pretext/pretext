@@ -199,7 +199,7 @@ def sanitize_method(method, component, format):
         # set correctly
         else:
             return method
-    elif (((component == "doc") or (component == "all")) and (format == "pdf")) or (component == "latex-image"):
+    elif (((component == "doc") or (component == "all")) and ((format == "pdf") or format == "pdf-plus")) or (component == "latex-image"):
         # "all" component is deprecated for "doc"
         # we will arbitrarily set xelatex as the default
         if not (method):
@@ -375,6 +375,7 @@ def get_cli_arguments():
     format_info = [
         ("svg", "Scalable Vector Graphics file(s)"),
         ("pdf", "Portable Document Format file(s)"),
+        ("pdf-plus", "PDF and LaTeX, asset, and log files used/generated when building PDF"),
         ("png", "Portable Network Graphics file(s)"),
         ("eps", "Encapsulated Post Script file(s)"),
         ("mml", "MathML (math elements)"),
@@ -385,6 +386,7 @@ def get_cli_arguments():
         ("speech", "Speech (math elements)"),
         ("source", "Standalone source files"),
         ("latex", "LaTeX source file (only, an intermediate format for developers)"),
+        ("latex-plus", "LaTeX source file and all necessary build files"),
         ("html", "HyperText Markup Language (online/web pages)"),
         ("html-zip", "HyperText Markup Language (single zip file)"),
         ("html-scorm", "HyperText Markup Language (single zip file including SCORM manifest)"),
@@ -822,6 +824,18 @@ def main():
                 out_file,
                 dest_dir,
                 method,
+                "pdf-only",
+            )
+        elif args.format == "pdf-plus":
+            ptx.pdf(
+                xml_source,
+                publication_file,
+                stringparams,
+                extra_stylesheet,
+                out_file,
+                dest_dir,
+                method,
+                "all",
             )
         elif args.format == "latex":
             ptx.latex(
@@ -831,6 +845,17 @@ def main():
                 extra_stylesheet,
                 out_file,
                 dest_dir,
+            )
+        elif args.format == "latex-plus":
+            ptx.pdf(
+                xml_source,
+                publication_file,
+                stringparams,
+                extra_stylesheet,
+                out_file,
+                dest_dir,
+                method,
+                "prebuild",
             )
         elif args.format == "braille-emboss":
             ptx.braille(xml_source, publication_file, stringparams, out_file, dest_dir, "emboss")
