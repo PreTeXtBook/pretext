@@ -410,6 +410,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- substring from $input after first instance of $substr         -->
+<!-- if no match, returns original string                          -->
+<!-- similar to substring-after() function but preserves original  -->
+<xsl:template name="substring-after-preserve">
+    <xsl:param name="input"/>
+    <xsl:param name="substr"/>
+    <!-- Extract the string which comes after the first occurrence -->
+    <xsl:variable name="temp" select="substring-after($input,$substr)"/>
+    <xsl:choose>
+        <xsl:when test="$temp = ''">
+            <xsl:value-of select="$input"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$temp"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- If the substring is not contained, the first substring-after()   -->
 <!-- will return empty and entire template will return empty.  To     -->
 <!-- get the whole string, prepend $input with $substr prior to using -->
