@@ -41,6 +41,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     xsl/pretext-common.xsl (2022-03-27)                               -->
 <!--     xsl/pretext/pretext-runestone-static.xsl (2022-03-28)             -->
 
+<!-- "unit" tests for these templates are (partially) implemented in       -->
+<!-- xsl/tests/pretext-text-utilities-test.xsl                             -->
+<!-- Before modifying any templates in this file, you are encouraged to    -->
+<!-- make sure there is a set of tests for the template(s) and use those   -->
+<!-- to verify changes allong with diffs of sample-book/sample-article     -->
+
 <!-- There are &LOWERCASE; and &UPPERCASE; entities  -->
 <!-- in the "file-extension" template (only?) -->
 <!DOCTYPE xsl:stylesheet [
