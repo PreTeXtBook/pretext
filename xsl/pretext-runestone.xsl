@@ -2087,28 +2087,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:value-of select="str:padding($program-left-margin, ' ')" />
                             </xsl:variable>
                             <xsl:variable name="program-text">
+                                <!-- each section MUST end in a newline and author might not have provided one -->
+                                <!-- so first, remove up to one newline from front/back as appropriate         -->
+                                <!-- then add newline to end                                                   -->
+                                <!-- preamble - clean up end                                                   -->
                                 <xsl:for-each select="preamble">
                                     <!-- only expect one, for-each just for binding -->
-                                    <xsl:call-template name="substring-before-last">
-                                        <xsl:with-param name="input" select="." />
-                                        <xsl:with-param name="substr" select="'&#xA;'" />
+                                    <xsl:call-template name="trim-end">
+                                        <xsl:with-param name="text" select="." />
+                                        <xsl:with-param name="preserve-intentional" select="true()" />
                                     </xsl:call-template>
-                                    <xsl:text>&#xa;</xsl:text>
                                     <xsl:value-of select="$left-margin-string"/>
                                     <xsl:choose>
                                         <xsl:when test='@visible = "no"'>
-                                            <xsl:text>^^^^</xsl:text>
+                                            <xsl:text>^^^^&#xa;</xsl:text>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <xsl:text>^^^!</xsl:text>
+                                            <xsl:text>^^^!&#xa;</xsl:text>
                                         </xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:for-each>
-                                <xsl:call-template name="substring-before-last">
-                                    <xsl:with-param name="input" select="code" />
-                                    <xsl:with-param name="substr" select="'&#xA;'" />
+                                <!-- code - clean up start and end                                             -->
+                                <xsl:variable name="code-clean">
+                                  <xsl:call-template name="trim-start-lines">
+                                      <xsl:with-param name="text" select="code" />
+                                      <xsl:with-param name="preserve-intentional" select="true()" />
+                                  </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:call-template name="trim-end">
+                                    <xsl:with-param name="text" select="$code-clean" />
+                                    <xsl:with-param name="preserve-intentional" select="true()" />
                                 </xsl:call-template>
-                                <xsl:text>&#xA;</xsl:text>
+                                <!-- postamble - clean up start                                               -->
                                 <xsl:for-each select="postamble">
                                     <!-- only expect one, for-each just for binding -->
                                     <xsl:value-of select="$left-margin-string"/>
@@ -2120,10 +2130,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                             <xsl:text>===!&#xa;</xsl:text>
                                         </xsl:otherwise>
                                     </xsl:choose>
-                                    <xsl:value-of select="substring-after(.,'&#xA;')" />
+                                    <xsl:call-template name="trim-start-lines">
+                                        <xsl:with-param name="text" select="." />
+                                        <xsl:with-param name="preserve-intentional" select="true()" />
+                                    </xsl:call-template>
                                 </xsl:for-each>
                             </xsl:variable>
-                            <!-- assembled code as text -->
+                            <!-- now sanitize the whole blob -->
                             <xsl:call-template name="sanitize-text">
                                 <xsl:with-param name="text" select="$program-text" />
                             </xsl:call-template>
