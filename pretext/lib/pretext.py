@@ -2634,13 +2634,13 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                 image_url = image_element.get("source")
                 image_url_parsed = urllib.parse.urlparse(image_url)
                 source_filename = os.path.basename(image_url_parsed.path)
-                source_ext = re.search(r"\.([a-zA-Z0-9]+)$",source_filename).group(0)
+                _, source_ext = os.path.splitext(source_filename)
                 if source_ext:
                     image_filename = f'mom-{problem}-{count}{source_ext}'
-                # uncertain this is necessary: MOM won't likely allow
+                # uncertain this is necessary: MOM won't likely allow file without extension
                 else:
-                    image_filename = f'mom-{problem}-{count}.{source_ext}'
-                    log.info(f'No file name extension for MOM {problem} image {count}')
+                    image_filename = f'mom-{problem}-{count}'
+                    log.info(f'No file name extension for MOM {problem} image {count}; results are unpredictable.')
                 imageloc = f'problems/images/{image_filename}'
                 image_path = os.path.join(images_dir, image_filename)
 
