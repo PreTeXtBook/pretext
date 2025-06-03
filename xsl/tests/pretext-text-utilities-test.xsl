@@ -212,6 +212,51 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   </xsl:call-template>
 </xsl:variable>
 
+<!--========================================================================-->
+<!-- test substring-after-preserve-->
+<xsl:variable name="substring-after-preserve-b1">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="substring-after-preserve">
+      <xsl:with-param name="input" select="'aabcc'"/>
+      <xsl:with-param name="substr" select="'b'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="'cc'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'substring-after-preserve-b1'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="substring-after-preserve-miss">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="substring-after-preserve">
+      <xsl:with-param name="input" select="'aacc'"/>
+      <xsl:with-param name="substr" select="'b'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="'aacc'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'substring-after-preserve-miss'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="substring-after-preserve-empty">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="substring-after-preserve">
+      <xsl:with-param name="input" select="''"/>
+      <xsl:with-param name="substr" select="'b'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <xsl:with-param name="expected" select="''"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'substring-after-preserve-empty'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+
 
 <!--========================================================================-->
 
