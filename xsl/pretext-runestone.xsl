@@ -272,7 +272,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <hr/>
                 <a href="/runestone/default/courses">Change Course</a>
                 <hr/>
-                <a id="ip_dropdown_link" href="/runestone/admin/index">Instructor's Page</a>
+                <a id="ip_dropdown_link" href="/admin/instructor/menu">Instructor Dashboard</a>
                 <hr/>
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>{% endif %}&#xa;</xsl:text>
