@@ -2990,34 +2990,66 @@ article.theorem-like .emphasis {
   }
 }
 .heading .print-links {
-  display: inline-block;
   float: right;
-  vertical-align: top;
-  width: 19%;
-  text-align: right;
+  vertical-align: bottom;
 }
-.heading .print-links > a {
+.heading .print-links .print-link {
   font-family: var(--font-body);
-  font-size: 0.6em;
-  font-weight: bold;
   padding: 0.1em 0.2em;
-  background: #ffa;
-  border: 2px solid green;
 }
-.heading .print-links > a.us {
-  background: #eef;
-  color: #9b1c2c;
-  border-color: #041E42;
-}
-.heading .print-links > a + a {
-  margin-left: 0.25em;
+.heading .print-links .material-symbols-outlined {
+  margin-top: 5pt;
 }
 .print-button {
-  position: relative;
-  right: 2px;
-  background-color: LightGreen;
+  font: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+  min-height: 34px;
+  color: var(--button-text-color);
+  background-color: var(--button-background);
+  border-width: 1px;
+  border-color: var(--button-border-color);
+  border-style: solid;
+  border-radius: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  user-select: none;
+}
+.print-button:hover:not(.disabled) {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
+}
+.print-button:focus-visible {
+  outline: 2px solid var(--button-text-color);
+  outline-offset: -2px;
+}
+.print-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.print-button.hidden {
+  display: none;
+}
+.print-button.open {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
+}
+.papersize-select {
   z-index: 1;
-  float: right;
+}
+.papersize-select .name::after {
+  content: ": ";
+}
+.ws-page-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1em;
 }
 .standalone.worksheet .print-links {
   display: none;
