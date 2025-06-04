@@ -591,18 +591,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 
-    <!-- For a "worksheet" (only), we do it again TWICE, -->
-    <!-- to generate standalone printable and editable   -->
-    <!-- versions. $paper becomes HTML class names, e.g. -->
-    <!-- LOWER CASE "a4" and "letter"                    -->
-    <!-- NB we don't produce these for portable html     -->
+    <!-- For a "worksheet" (only), we do it again, to generate -->
+    <!-- a standalone printable and editable version.          -->
+    <!-- NB we don't produce these for portable html.          -->
     <xsl:if test="self::worksheet and not($b-portable-html)">
         <xsl:apply-templates select="." mode="standalone-worksheet">
-            <xsl:with-param name="paper" select="'letter'"/>
-            <xsl:with-param name="heading-level" select="$heading-level"/>
-        </xsl:apply-templates>
-        <xsl:apply-templates select="." mode="standalone-worksheet">
-            <xsl:with-param name="paper" select="'a4'"/>
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </xsl:if>
@@ -786,25 +779,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
 </xsl:template>
 
-<!-- Worksheets generate two additional versions, each -->
-<!-- designed for printing, on US Letter or A4 paper.  -->
+<!-- Worksheets generate one additional version     -->
+<!-- designed for printing, on Letter or A4 paper.  -->
 <xsl:template match="worksheet" mode="standalone-worksheet">
     <xsl:param name="heading-level"/>
-    <xsl:param name="paper"/>
 
     <xsl:variable name="base-filename">
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="filename">
-            <xsl:apply-templates select="." mode="standalone-worksheet-filename">
-                <xsl:with-param name="paper" select="$paper"/>
-             </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="standalone-worksheet-filename"/>
         </xsl:with-param>
         <xsl:with-param name="extra-body-classes">
-            <!-- Hack, include necessary spaces -->
-            <xsl:text> standalone worksheet </xsl:text>
-            <xsl:value-of select="$paper"/>
+            <!-- Hack, include necessary spaces; use letter as default -->
+            <xsl:text> standalone worksheet letter</xsl:text>
         </xsl:with-param>
         <xsl:with-param name="content">
             <xsl:apply-templates select="." mode="structural-division-content">
@@ -951,22 +940,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Links to the "printable" version(s), meant only for "viewable" -->
 <!-- worksheet, so CSS can kill on the "printable" versions         -->
-<!-- $paper is LOWER CASE "a4" and "letter".  We isolate link       -->
-<!-- creation, so we can kill it simply in derivative conversions   -->
+<!-- As of 2025-05-31, this is changing to a single print button    -->
+<!-- and will later change to have the button to popout printable   -->
+<!-- worksheet instead of linking to separate file.                 -->
+<!-- We isolate link creation, so we can kill it simply in          -->
+<!-- derivative  conversions                                        -->
 <xsl:template match="worksheet" mode="standalone-worksheet-links">
-    <xsl:variable name="letter-filename">
-        <xsl:apply-templates select="." mode="standalone-worksheet-filename">
-            <xsl:with-param name="paper" select="'letter'"/>
-        </xsl:apply-templates>
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="standalone-worksheet-filename"/>
     </xsl:variable>
-    <xsl:variable name="a4-filename">
-        <xsl:apply-templates select="." mode="standalone-worksheet-filename">
-            <xsl:with-param name="paper" select="'a4'"/>
+    <xsl:variable name="print-preview-text">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'print-preview'"/>
         </xsl:apply-templates>
     </xsl:variable>
     <div class="print-links">
-        <a href="{$a4-filename}" class="a4">A4</a>
-        <a href="{$letter-filename}" class="us">US</a>
+        <a href="{$filename}" class="print-link" title="{$print-preview-text}">
+            <xsl:call-template name="insert-symbol">
+                <xsl:with-param name="name" select="'print'"/>
+            </xsl:call-template>
+        </a>
     </div>
 </xsl:template>
 
@@ -11021,7 +11014,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:if>
                     <div id="ptx-content" class="ptx-content">
                         <xsl:if test="$b-printable">
-                            <xsl:apply-templates select="." mode="print-button"/>
+                            <div class="ws-page-controls">
+                                <xsl:apply-templates select="." mode="papersize-toggle"/>
+                                <xsl:apply-templates select="." mode="print-button"/>
+                            </div>
                         </xsl:if>
                         <!-- Alternative to "copy-of": convert $content to a  -->
                         <!-- node-set, and then hit with an identity template -->
@@ -11747,8 +11743,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
     </xsl:variable>
     <button class="print-button" title="{$print-text}" onClick="window.print()">
-        <span class="name"><xsl:value-of select="$print-text"/></span>
+        <xsl:call-template name="insert-symbol">
+            <xsl:with-param name="name" select="'print'"/>
+        </xsl:call-template>
+        <span class="name">
+            <xsl:value-of select="$print-text"/>
+        </span>
     </button>
+</xsl:template>
+
+<xsl:template match="*" mode="papersize-toggle"/>
+
+<xsl:template match="worksheet" mode="papersize-toggle">
+    <xsl:variable name="papersize">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'papersize'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <form class="papersize-select" id="papersize-select">
+        <span class="name"><xsl:value-of select="$papersize"/></span>
+        <label>
+            <input type="radio" name="papersize" value="a4"/>A4
+        </label>
+        <label>
+            <input type="radio" name="papersize" value="letter"/>Letter
+        </label>
+    </form>
 </xsl:template>
 
 <!-- Primary Navigation Panels -->
@@ -13758,11 +13778,8 @@ TODO:
 <!-- A template ensures standalone page creation, -->
 <!-- and links to same, are consistent            -->
 <xsl:template match="worksheet" mode="standalone-worksheet-filename">
-    <xsl:param name="paper"/>
-
     <xsl:apply-templates select="." mode="visible-id"/>
-    <xsl:text>-</xsl:text>
-    <xsl:value-of select="$paper"/>
+    <xsl:text>-printable</xsl:text>
     <xsl:text>.html</xsl:text>
 </xsl:template>
 

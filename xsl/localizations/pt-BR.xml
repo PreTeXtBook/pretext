@@ -272,6 +272,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='activate'>Ativar</localization>
     <localization string-id='reset'>Redefinir</localization>
     <localization string-id='array'>lista</localization>
+    <!-- <localization string-id='papersize'>Paper size</localization> -->
     <!-- <localization string-id='print'>Print</localization> -->
+    <!--<localization string-id='print-preview'>Print preview</localization>-->
     <!-- <localization string-id='close'>Close</localization> -->
 </locale>

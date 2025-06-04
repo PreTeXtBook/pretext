@@ -35,6 +35,10 @@
   display: none;
 }
 
+.standalone.worksheet .papersize-select {
+  display: none;
+}
+
 
 .standalone.worksheet [data-knowl]:hover,
 .standalone.worksheet [data-knowl]:active,
