@@ -286,18 +286,20 @@
                 attribute number {text}?,
                 StatementExercise,
                 Feedback?,
-                element matches {
-                    Match+
-                },
+                Matches,
                 Hint*, Answer*, Solution*
+            Matches =
+                element cardsort {
+                    Match+
+                }
             Match =
                 element match {
-                    attribute order {xsd:integer}?,
                     element premise {
-                        mixed {BlockText?}
-                    },
+                        attribute order {xsd:integer}?,
+                        TextLong
+                    }+,
                     element response {
-                        mixed {BlockText?}
+                        TextLong
                     }
                 }
             FreeResponse =
