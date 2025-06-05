@@ -45,6 +45,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" encoding="UTF-8"/>
 
+<!-- The default "exercise-style" is "static". For traces,     -->
+<!-- we will form a different representation, and pass through -->
+<!-- the authored version for a dynamic representation.        -->
+<xsl:variable name="exercise-style" select="'dynamic'"/>
+
 <!-- YouTube ID, and internal id as a comma-separated pair per line -->
 <xsl:template match="program[@interactive = 'codelens']" mode="extraction">
     <xsl:apply-templates select="." mode="runestone-id"/>
