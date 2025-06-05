@@ -794,6 +794,7 @@ def main():
                 out_file,
                 dest_dir,
                 method,
+                False,
             )
         elif args.format == "latex":
             ptx.latex(
