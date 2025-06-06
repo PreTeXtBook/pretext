@@ -43,6 +43,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
 
+<!-- Need trace-filename template -->
+<xsl:import href="./pretext-runestone.xsl"/>
+
 <xsl:output method="text" encoding="UTF-8"/>
 
 <!-- The default "exercise-style" is "static". For traces,     -->
@@ -54,7 +57,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="program[@interactive = 'codelens']" mode="extraction">
     <xsl:apply-templates select="." mode="runestone-id"/>
     <xsl:text>,</xsl:text>
-    <xsl:apply-templates select="." mode="visible-id"/>
+    <xsl:apply-templates select="." mode="runestone-codelens-trace-filename"/>
     <xsl:text>,</xsl:text>
     <xsl:apply-templates select="." mode="active-language"/>
     <xsl:text>,</xsl:text>

@@ -2492,6 +2492,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- CodeLens -->
 <!-- ######## -->
 
+<!-- Need a unique filename for codelens traces                                -->
+<!-- visible-id can change if an xml:id is added to program for other reasons  -->
+<!-- Can't vary with build target (so no runestone-id)                         -->
+<!-- Should generally mirror rs-id but without prefix                          -->
+<xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens-trace-filename">
+    <xsl:choose>
+        <!-- If part of exercise-like, use that label, otherwise own -->
+        <xsl:when test="contains('exercise|task|&PROJECT-LIKE;', name(..))">
+            <xsl:value-of select="../@label"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@label"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>.js</xsl:text>
+</xsl:template>
+
 <xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens">
     <xsl:variable name="active-language">
       <xsl:apply-templates select="." mode="active-language"/>
@@ -2512,8 +2529,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-managed-directories">
             <xsl:text>trace/</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="visible-id"/>
-        <xsl:text>.js</xsl:text>
+        <xsl:apply-templates select="." mode="runestone-codelens-trace-filename"/>
     </xsl:variable>
     <!-- the Runestone HTML -->
     <div class="ptx-runestone-container">

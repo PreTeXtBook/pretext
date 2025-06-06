@@ -969,7 +969,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # three parts, always
         program_quad = program.split(",", 3)
         runestone_id = program_quad[0]
-        visible_id = program_quad[1]
+        trace_filename = program_quad[1]
         language = program_quad[2]
         if language == 'python':
             url = url_string.format('py')
@@ -979,7 +979,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # instead use  .decode('string_escape')  somehow
         # as part of reading the file?
         source = program_quad[3].replace("\\n", "\n")
-        log.info("converting {} source {} to a trace...".format(language, visible_id))
+        log.info("converting {} source {} to tracefile {}...".format(language, runestone_id, trace_filename))
 
         # success will replace this empty string
         trace = ""
@@ -990,7 +990,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                     trace = r.text[r.text.find('{"code":') :]
             except Exception as e:
                 log.critical(traceback.format_exc())
-                log.critical(server_error_msg.format(url, visible_id))
+                log.critical(server_error_msg.format(url, trace_filename))
         elif language == "java":
             try:
                 r = requests.post(url, data=dict(src=source), timeout=30)
@@ -998,7 +998,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                     trace = r.text
             except Exception as e:
                 log.critical(traceback.format_exc())
-                log.critical(server_error_msg.format(url, visible_id))
+                log.critical(server_error_msg.format(url, trace_filename))
         elif language == "python":
             try:
                 r = requests.post(url, data=dict(src=source), timeout=30)
@@ -1013,7 +1013,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             script_leadin_string = 'if (allTraceData === undefined) {{\n var allTraceData = {{}};\n }}\n allTraceData["{}"] = '
             script_leadin = script_leadin_string.format(runestone_id)
             trace = script_leadin + trace
-            trace_file = os.path.join(dest_dir, "{}.js".format(visible_id))
+            trace_file = os.path.join(dest_dir, trace_filename)
             with open(trace_file, "w") as f:
                 f.write(trace)
 
