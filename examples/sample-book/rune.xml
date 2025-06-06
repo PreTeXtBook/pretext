@@ -3896,7 +3896,9 @@ TEST_CASE( "Test the add function" ) {
         <exercise label="fillin-strings-">
             <title>Fill-In, New Markup Strings</title>
             <statement>
-                <p>The word I'm thinking about is <q>magic</q>. What word am I thinking about? <fillin width="5" answer="magic"/> (Interactive feedback explores a variety of options: Try what happens if you mix the case, or type in a number, or include more than the word, or try <q>pizzazz</q>.")</p>
+                <p>The word I'm thinking about is hinted at by the image.</p>  
+                <p><image source="cartoon-magic.jpg" width="50%"/></p>
+                <p>What word am I thinking about? <fillin width="5" answer="magic"/> (Interactive feedback explores a variety of options: Try what happens if you mix the case, or type in a number, or include more than the word, or try <q>pizzazz</q>.")</p>
             </statement>
             <evaluation>
                 <evaluate>
