@@ -1885,8 +1885,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- unless one of the two tests below is true -->
     <xsl:choose>
         <xsl:when test="program/@interactive = 'codelens'">
-            <xsl:apply-templates select="statement"/>
-            <xsl:apply-templates select="program" mode="runestone-codelens"/>
+            <xsl:apply-templates select="program" mode="runestone-codelens">
+                <xsl:with-param name="exercise-statement" select="statement"/>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:when test="program/@interactive = 'activecode'">
             <xsl:apply-templates select="program" mode="runestone-activecode">
@@ -2425,7 +2426,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- CodeLens -->
 <!-- ######## -->
 
+<!-- Need a unique filename for codelens traces                                -->
+<!-- visible-id can change if an xml:id is added to program for other reasons  -->
+<!-- Can't vary with build target (so no runestone-id)                         -->
+<!-- Should generally mirror rs-id but without prefix                          -->
+<xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens-trace-filename">
+    <xsl:choose>
+        <!-- If part of exercise-like, use that label, otherwise own -->
+        <xsl:when test="contains('exercise|task|&PROJECT-LIKE;', name(..))">
+            <xsl:value-of select="../@label"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@label"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>.js</xsl:text>
+</xsl:template>
+
 <xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens">
+    <xsl:param name="exercise-statement" select="/.."/>
     <xsl:variable name="active-language">
       <xsl:apply-templates select="." mode="active-language"/>
     </xsl:variable>
@@ -2445,14 +2464,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-managed-directories">
             <xsl:text>trace/</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="visible-id"/>
-        <xsl:text>.js</xsl:text>
+        <xsl:apply-templates select="." mode="runestone-codelens-trace-filename"/>
     </xsl:variable>
     <!-- the Runestone HTML -->
     <div class="ptx-runestone-container">
         <div class="runestone codelens">
             <div class="cd_section" data-component="codelens" data-question_label="">
-                <div class="pytutorVisualizer">
+                <xsl:if test="$exercise-statement">
+                    <div class="exercise-statement">
+                        <xsl:apply-templates select="$exercise-statement"/>
+                    </div>
+                </xsl:if>
+                <div class="pytutorVisualizer exercise-interactive">
                     <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                     <xsl:attribute name="data-params">
                         <xsl:value-of select="$parameter-dictionary"/>
@@ -2466,6 +2489,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="src">
                     <xsl:value-of select="$trace-file"/>
                 </xsl:attribute>
+                <!-- script tag MUST not be self closing. force content to prevent -->
+                <xsl:text> </xsl:text> 
             </script>
         </div>
     </div>

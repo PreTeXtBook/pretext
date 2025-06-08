@@ -91,6 +91,9 @@ import re
 # contextmanager tools
 import contextlib
 
+# cleanup multiline strings used as source code
+import textwrap
+
 # * For non-standard packages (such as those installed via PIP) try to keep
 #   dependencies to a minimum by *not* importing at the module-level
 #   (with justified exceptions)
@@ -962,15 +965,34 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     code_filename = os.path.join(tmp_dir, "codelens.txt")
     log.debug("Program sources for traces temporarily in {}".format(code_filename))
     xsltproc(extraction_xslt, xml_source, code_filename, None, stringparams)
-    # read lines, one-per-program
+    # get trace file contents minus trailing blank line
     with open(code_filename, "r") as code_file:
-        programs = code_file.readlines()
-    for program in programs:
-        # three parts, always
+        contents = code_file.read().rstrip()
+
+    if contents == "":
+        log.info("no traces found to generate in {}".format(code_filename))
+        return
+
+    # blank lines separate groups
+    program_groups = contents.split("\n\n")
+    for program_group in program_groups:
+        lines = program_group.split("\n")
+        # The first line is the program in old or new tracefiles
+        program = lines[0]
+        # Program has three parts, always
         program_quad = program.split(",", 3)
         runestone_id = program_quad[0]
-        visible_id = program_quad[1]
+        trace_filename = program_quad[1]
         language = program_quad[2]
+        # Newer trace files also specify extra lines with questions/start
+        questions = None
+        startingInstruction = 0
+        if len(lines) > 1:
+            # The second line looks like "startingInstruction:10", get the number
+            startingInstruction = int(lines[1].split(":")[1])
+            # Rest of lines are questions
+            questions = lines[2:]
+
         if language == 'python':
             url = url_string.format('py')
         else:
@@ -979,7 +1001,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # instead use  .decode('string_escape')  somehow
         # as part of reading the file?
         source = program_quad[3].replace("\\n", "\n")
-        log.info("converting {} source {} to a trace...".format(language, visible_id))
+        log.info("converting {} source {} to tracefile {}...".format(language, runestone_id, trace_filename))
 
         # success will replace this empty string
         trace = ""
@@ -990,7 +1012,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                     trace = r.text[r.text.find('{"code":') :]
             except Exception as e:
                 log.critical(traceback.format_exc())
-                log.critical(server_error_msg.format(url, visible_id))
+                log.critical(server_error_msg.format(url, trace_filename))
         elif language == "java":
             try:
                 r = requests.post(url, data=dict(src=source), timeout=30)
@@ -998,7 +1020,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                     trace = r.text
             except Exception as e:
                 log.critical(traceback.format_exc())
-                log.critical(server_error_msg.format(url, visible_id))
+                log.critical(server_error_msg.format(url, trace_filename))
         elif language == "python":
             try:
                 r = requests.post(url, data=dict(src=source), timeout=30)
@@ -1007,13 +1029,51 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             except Exception as e:
                 log.critical(traceback.format_exc())
                 log.critical(server_error_msg.format(url, visible_id))
+
         # should now have a trace, except for timing out
         # no trace, then do not even try to produce a file
         if trace:
-            script_leadin_string = 'if (allTraceData === undefined) {{\n var allTraceData = {{}};\n }}\n allTraceData["{}"] = '
-            script_leadin = script_leadin_string.format(runestone_id)
-            trace = script_leadin + trace
-            trace_file = os.path.join(dest_dir, "{}.js".format(visible_id))
+            import json
+            trace_dict = json.loads(trace)
+            # add startInstruction to the trace
+            trace_dict["startingInstruction"] = startingInstruction
+            # inject questions into trace
+            if questions:
+                trace_steps = trace_dict.get("trace")
+                for question in questions:
+                    question_line, answer_raw, feedback, prompt = question.split(":||:")
+                    question_line = int(question_line)
+                    answer_type, answer_value = answer_raw.split("-", 2)
+                    question_dict = {
+                      "text": prompt,
+                      ("correctText" if answer_type == "literal" else "correct"): answer_value
+                    }
+                    if feedback:
+                        question_dict['feedback'] = feedback
+
+                    for trace_step in trace_steps:
+                        if trace_step['line'] == question_line and trace_step['event'] == "step_line":
+                            trace_step['question'] = question_dict
+            trace = json.dumps(trace_dict)
+
+            # We will hardcode in the ID based on the runestone_id as built. It will be a fallback.
+            # But also try to dynamically grab the ID of the containing codelens so 
+            # Eventually we could maybe deprecate the hardcoded value.
+            script_template = """
+                if (allTraceData === undefined) {{
+                    var allTraceData = {{}};
+                }}
+                (function() {{ // IIFE to avoid variable collision
+                    let codelensID = "{}";  //fallback
+                    let partnerCodelens = document.currentScript.parentElement.querySelector(".pytutorVisualizer");
+                    if (partnerCodelens) {{
+                        codelensID = partnerCodelens.id;
+                    }}
+                    allTraceData[codelensID] = {};
+                }})();"""
+            script_template = textwrap.dedent(script_template)
+            trace = script_template.format(runestone_id, trace.rstrip())
+            trace_file = os.path.join(dest_dir, trace_filename)
             with open(trace_file, "w") as f:
                 f.write(trace)
 
