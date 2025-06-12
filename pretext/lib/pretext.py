@@ -1099,6 +1099,8 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
         stringparams["publisher"] = pub_file
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
+    # Always act as though web is the target
+    stringparams["host-platform"] = "web"
 
     tmp_dir = get_temporary_directory()
 
