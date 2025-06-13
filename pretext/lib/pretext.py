@@ -1094,19 +1094,22 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-dynamic.xsl")
     # Where to store the results
     dyn_subs_file = os.path.join(dest_dir, "dynamic_substitutions.xml")
+
+    # Make a copy of stringparams to modify
+    stringparams_copy = stringparams.copy()
     # support publisher file, subtree argument
     if pub_file:
-        stringparams["publisher"] = pub_file
+        stringparams_copy["publisher"] = pub_file
     if xmlid_root:
-        stringparams["subtree"] = xmlid_root
+        stringparams_copy["subtree"] = xmlid_root
     # Always act as though web is the target
-    stringparams["host-platform"] = "web"
+    stringparams_copy["host-platform"] = "web"
 
     tmp_dir = get_temporary_directory()
 
     # interrogate Runestone server (or debugging switches) and populate
     # NB: stringparams is augmented with Runestone Services information
-    _place_runestone_services(tmp_dir, stringparams, ext_rs_methods)
+    _place_runestone_services(tmp_dir, stringparams_copy, ext_rs_methods)
 
     generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
     if external_abs:
@@ -1120,7 +1123,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     log.debug("Dynamic exercise html files temporarily in {}".format(tmp_dir))
     # This next call outputs the list of ids
     # *and* produce a pile of files (the "standalone") pages
-    xsltproc(extraction_xslt, xml_source, id_filename, tmp_dir, stringparams)
+    xsltproc(extraction_xslt, xml_source, id_filename, tmp_dir, stringparams_copy)
     # read the list of exercise identifiers just generated
     id_file = open(id_filename, "r")
     dynamic_exercises = [f.strip() for f in id_file.readlines() if not f.isspace()]
