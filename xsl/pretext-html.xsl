@@ -1188,7 +1188,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- NB: interior of "website" is a "url" in author's -->
         <!-- source, but the pre-processor adds a footnote    -->
         <!-- Only one presumed, and thus enforced here        -->
-         <!-- Kill this? -->
         <xsl:apply-templates select="url[1]|fn[1]" />
     </div>
 </xsl:template>
