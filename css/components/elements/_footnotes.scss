@@ -5,6 +5,10 @@ $border-radius: 0px !default;
   position: relative;
 }
 
+.ptx-footnote.url-fn {
+  display: none;
+}
+
 .ptx-footnote[open] {
   display: contents;
 }
