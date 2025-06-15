@@ -150,7 +150,7 @@
         </p>
 
         <figure xml:id="img-author-interface">
-            <caption>The author interface main page</caption>                
+            <caption>The author interface main page</caption>
             <image source="author-interface.png" width="100%">
                 <description>The author interface lets you pull changes from GitHub and rebuild your book.</description>
             </image>
@@ -180,7 +180,7 @@
             <image source="edit-metadata.png" width="100%">
                 <description>Editing metatdata about a book</description>
             </image>
-        </figure>    
+        </figure>
         </subsection>
         <subsection xml:id="author-interface-advanced">
             <title>Advanced Author Interface</title>
