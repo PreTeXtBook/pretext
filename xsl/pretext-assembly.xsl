@@ -2848,7 +2848,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <image>
                         <xsl:attribute name="pi:generated">
                             <xsl:text>mermaid/</xsl:text>
-                            <xsl:apply-templates select="." mode="assembly-id"/>
+                            <xsl:apply-templates select="mermaid/@label"/>
                             <xsl:choose>
                                 <!-- latex-print will be B&W target -->
                                 <xsl:when test="$b-latex-print">
