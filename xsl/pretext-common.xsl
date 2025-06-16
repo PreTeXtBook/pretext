@@ -1708,6 +1708,31 @@ Book (with parts), "section" at level 3
 <!-- Preformatted Text -->
 <!-- ################# -->
 
+<!-- Inline "code" uses a "c" element and we want to be careful, so    -->
+<!-- we use a universal template here, while leaving peculiarities     -->
+<!-- of output formats to their respective stylesheets.  The "c"       -->
+<!-- element never has any elements as children, so we grab the        -->
+<!-- author's characters as their intent.  Output markup languages     -->
+<!-- Important: we use a "value-of" instruction so that the            -->
+<!-- text-manipulation routines do not get their hands on any          -->
+<!-- whitespace or anything else.  So the parameter $content is pure   -->
+<!-- character data.  A named template means no context, which is only -->
+<!-- a problem when WeBWorK PG formulation wants to provide a location -->
+<!-- report on a failure due to banned markup.                         -->
+<!-- NB: we could allow source to have newlines, and sanitize them here -->
+<xsl:template match="c">
+    <xsl:call-template name="code-wrapper">
+        <xsl:with-param name="content">
+            <xsl:value-of select="."/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="code-wrapper">
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "code-wrapper" template</xsl:message>
+</xsl:template>
+
+
 <!-- The content of a "pre" element is wrapped many ways, -->
 <!-- but the content itself is always strictly text       -->
 
