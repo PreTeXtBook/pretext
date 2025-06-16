@@ -62,7 +62,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </part>
 
         <part xml:id="part-algebra">
-            <title>Algebra</title>
+            <title>Algebra (and Runestone)</title>
             <xi:include href="./groups.xml" />                  <!-- Groups -->
             <xi:include href="./cyclic.xml" />                  <!-- Cyclic Groups -->
             <xi:include href="./rune.xml" />                    <!-- Runestone -->
