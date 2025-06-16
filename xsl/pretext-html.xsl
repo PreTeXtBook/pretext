@@ -11479,7 +11479,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="unique-id"/>
             </xsl:attribute>
             <xsl:attribute name="title">
-                <xsl:text>Copy permalink for </xsl:text>
+                <xsl:text>Copy heading and permalink for </xsl:text>
                 <xsl:apply-templates select="." mode="tooltip-text"/>
             </xsl:attribute>
             <xsl:text>🔗</xsl:text>
