@@ -2648,7 +2648,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 ]]></pre>
 
                 <pre><![CDATA[
-                <figure>
+                <figure xml:id="rna-codons-figure">
                     <caption>RNA Codons Table, by Florian Hollandt</caption>
                     <image width="100%">
                         <description>A table of the RNA codons.</description>
@@ -2693,7 +2693,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <p>This will result in:</p>
 
-                <figure>
+                <figure xml:id="rna-codons-figure">
                     <caption>RNA Codons Table, by Florian Hollandt, from <url href="https://texample.net/tikz/examples/rna-codons-table/" visual="texample.net/tikz/examples/rna-codons-table/"><tex/>ample.net</url></caption>
                     <image width="100%">
                         <description>A table of the RNA codons, together with the amino acids they encode.</description>
