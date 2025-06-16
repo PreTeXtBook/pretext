@@ -10544,7 +10544,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 <xsl:template match="biblio" mode="bibentry-wrapper">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "bibentry-wrappper" template</xsl:message>
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "bibentry-wrapper" template</xsl:message>
 </xsl:template>
 
 
