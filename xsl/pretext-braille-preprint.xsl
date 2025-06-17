@@ -1497,9 +1497,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     lenemphphrase trans1 3                                          -->
 <!--     begemphphrase trans1 4-3456-2356                                -->
 <!--     endemphphrase trans1 after 4-3456-3                             -->
-<xsl:template match="c">
+<xsl:template name="code-wrapper">
+    <xsl:param name="content"/>
+
     <code>
-        <xsl:apply-templates select="node()"/>
+        <xsl:value-of select="$content"/>
     </code>
 </xsl:template>
 
@@ -2136,6 +2138,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- We expect the simple template in -common to be active -->
 <xsl:template match="cline">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- We expect the simple template in -common to be active -->
+<xsl:template match="c">
     <xsl:apply-imports/>
 </xsl:template>
 
