@@ -3483,6 +3483,25 @@ TEST_CASE( "Test the add function" ) {
                 <response xml:id="math"><em>Some</em> "Math": <m>\sin(x^2)</m></response>
             </matching>
         </exercise>
+
+        <exercise xml:id="cardsort-basic" label="cardsort-basic">
+            <title>Cardsort Problem, Basic Arithmetic</title>
+            <idx>matching US dates</idx>
+            <statement>
+                <p>This is a simple exercise to test some grading behavior.</p>
+            </statement>
+            <cardsort>
+                <match>
+                    <premise order="1">2 + 3</premise>
+                    <premise order="3">4 + 1</premise>
+                    <response>5</response>
+                </match>
+                <match>
+                    <premise order="2"><m>12 + 2</m></premise>
+                    <response>14</response>
+                </match>
+            </cardsort>
+        </exercise>
     </exercises>
 
     <exercises xml:id="clickable-area-exercises">
