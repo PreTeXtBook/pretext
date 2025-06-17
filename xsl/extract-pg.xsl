@@ -2264,15 +2264,16 @@
 
 <!-- Verbatim Snippets, Code -->
 <!-- *Must* be "value-of" to avoid low-level text-processing template -->
-<xsl:template match="c">
+<xsl:template name="code-wrapper">
+    <xsl:param name="content"/>
+
     <xsl:choose>
-        <xsl:when test="contains(.,'[|') or contains(.,'|]')">
-            <xsl:message>PTX:ERROR:   the strings '[|' and '|]' are not supported within verbatim text in WeBWorK problems</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
+        <xsl:when test="contains($content,'[|') or contains($content,'|]')">
+            <xsl:message>PTX:ERROR:   the strings '[|' and '|]' are not supported within verbatim text ("<xsl:value-of select="$content"/>") in WeBWorK problems</xsl:message>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>[|</xsl:text>
-            <xsl:value-of select="."/>
+            <xsl:value-of select="$content"/>
             <xsl:text>|]*</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
