@@ -8698,14 +8698,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############# -->
 
 <!-- Code, inline -->
-<!-- PCDATA only, so drop non-text nodes -->
-<!-- NB: "code-block" class otherwise -->
-<xsl:template match="c">
+<!-- HTML "code" element, with classes -->
+<xsl:template name="code-wrapper">
+    <xsl:param name="content"/>
+
     <code class="code-inline tex2jax_ignore">
-        <xsl:value-of select="." />
+        <xsl:value-of select="$content"/>
     </code>
 </xsl:template>
-
 
 <!-- 100% analogue of LaTeX's verbatim            -->
 <!-- environment or HTML's <pre> element          -->
