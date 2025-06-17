@@ -8062,10 +8062,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We escape every possible problematic character before     -->
 <!-- applying a macro which will presumably apply a typewriter -->
 <!-- font (which is not presumed to get strict mono spacing).  -->
-<xsl:template match="c">
+<xsl:template name="code-wrapper">
+    <xsl:param name="content"/>
+
     <xsl:text>\mono{</xsl:text>
     <xsl:call-template name="escape-text-to-latex">
-        <xsl:with-param name="text" select="." />
+        <xsl:with-param name="text" select="$content" />
     </xsl:call-template>
     <xsl:text>}</xsl:text>
 </xsl:template>
