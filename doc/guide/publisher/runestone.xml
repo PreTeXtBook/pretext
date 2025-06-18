@@ -146,7 +146,7 @@
                 The author interface is a web-based interface that allows you to manage your book on Runestone Academy.  It is designed to be easy to use and provides a number of features to help you manage your book.
             </p>
         <p>
-            The author interface is available at <url href="https://author.runestone.academy" visual="author.runestone.academy"/>.  You can log in with your Runestone account.  Once you have logged in you will see a list of your books.  You can click on the book title to to edit metadata about your book.  The author interface is also where you can build a new version of your book, see some analytics about your book, and publish your book to the Runestone Academy servers.  You can even get an anonymized data set from a large sample of the classes using your book.
+            The author interface is available at <url href="https://author.runestone.academy/author" visual="author.runestone.academy/author"/>.  You can log in with your Runestone account.  Once you have logged in you will see a list of your books.  You can click on the book title to to edit metadata about your book.  The author interface is also where you can build a new version of your book, see some analytics about your book, and publish your book to the Runestone Academy servers.  You can even get an anonymized data set from a large sample of the classes using your book.
         </p>
 
         <figure xml:id="img-author-interface">
