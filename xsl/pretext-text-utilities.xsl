@@ -596,6 +596,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Strip whitespace after line break -->
+<!-- A hard line-break (newline) in authors' source will typically  -->
+<!-- introduce leading whitespace (spaces) prior to the next line.  -->
+<!-- This template scrubs the spaces, but leaves the newline (which -->
+<!-- can be dealt with by the consumer).  Strategy is to replace    -->
+<!-- <newline><space> by <newline> until it cannot be done anymore. -->
+<xsl:template name="reduce-line-break">
+    <xsl:param name="text"/>
+
+    <xsl:choose>
+        <xsl:when test="not(contains($text, '&#xa;&#x20;'))">
+            <xsl:value-of select="$text"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="reduce-line-break">
+                <xsl:with-param name="text" select="str:replace($text, '&#xa;&#x20;', '&#xa;')"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Sanitize Nemeth Braille -->
 <!-- We receive Nemeth braille from MathJax and Speech Rule Engine (SRE) as -->
 <!--                                                                        -->
