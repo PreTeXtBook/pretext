@@ -2653,6 +2653,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Characters, Symbols, and Constructions</title>
 
+                <p>Verbatim, inline text, is accomplished with the <tag>c</tag> element.  One special consideration: if your editor splits a line in the middle, we will fix it.  This sentence has <c>two
+                words</c> that we purposely split with a <q>newline</q> character in the middle.  In output you should see a space between the words.</p>
+
                 <p>Some keyboard characters are ambiguous.  Is the character <c>'</c> an apostrophe or a right single quote?  We presume the former, ', and provide markup as an alternative for the latter (described above).  Is <c>/</c> used to separate words, or to form a fraction?  We presume the former, /, and provide <tage>solidus</tage>, <solidus/>, for the latter.  We test some other characters straight from our US keyboard (with two being escape sequences).</p>
 
                 <p>~ ` ! @ # $ % ^ &amp; * ( ) _ - + = [ ] { } | \ ; : ' " , &lt; . > ? /</p>
