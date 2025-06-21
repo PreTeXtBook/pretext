@@ -542,6 +542,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </ul>
                 </nav>
                 <xsl:apply-templates select="conclusion|outcomes"/>
+                <!-- Insert permalink -->
+                <xsl:apply-templates select="." mode="permalink"/>
             </section>
         </xsl:with-param>
     </xsl:apply-templates>
