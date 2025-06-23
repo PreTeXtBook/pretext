@@ -273,6 +273,7 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     # outputs a list of ids, but we just loop over created files
     log.info("extracting PreFigure diagrams from {}".format(xml_source))
     log.info("string parameters passed to extraction stylesheet: {}".format(stringparams))
+
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
 
     # Resulting prefigure files are in tmp_dir, switch there to work
@@ -291,6 +292,14 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
             pf_source_files.remove('pf_publication.xml')
         except ValueError:
             pass
+
+        # Need to copy entire "external" directory
+        # Then files (like data for plots) can be available
+        # NB: we might really do this sooner, but then all
+        # the files in "external" get added into the list
+        # of source files, pf_source_files
+        _, external_dir = get_managed_directories(xml_source, pub_file)
+        copy_managed_directories(tmp_dir, external_abs=external_dir)
 
         # make output/tactile directory if the outformat is "all"
         # PreFigure makes 'output' but we also want to create 'output/tactile'
