@@ -4257,7 +4257,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 </p>
 
                 <p>
-                    An author or editor can also have an <tag>email</tag>, <tag>biographcy</tag>, or <tag>support</tag> element.  The <tag>support</tag> element can be used to describe funding sources particular to that author as required by some journals.  Notice that the <tag>support</tag> element could also be a child of <tag>bibinfo</tag> itself, in which case it would appear as applying to the entire document, not just an individual author.
+                    An author or editor can also have an <tag>email</tag>, <tag>biography</tag>, or <tag>support</tag> element.  The <tag>support</tag> element can be used to describe funding sources particular to that author as required by some journals.  Notice that the <tag>support</tag> element could also be a child of <tag>bibinfo</tag> itself, in which case it would appear as applying to the entire document, not just an individual author.
                 </p>
             </paragraphs>
 
