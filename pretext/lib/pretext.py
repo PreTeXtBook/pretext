@@ -5052,6 +5052,22 @@ def get_managed_directories(xml_source, pub_file):
 
     # prepare for relative paths later
     source_dir = get_source_path(xml_source)
+    # some parameterized error messages used later
+    pub_abs_path_error = " ".join(
+        [
+            "the directory path for a managed directory, given in the",
+            'publisher file as "source/directories/@{}" must be relative to',
+            'the PreTeXt source file location, and not the absolute path "{}"',
+        ]
+    )
+    pub_missing_dir_error = " ".join(
+        [
+            'the directory "{}" implied by the value "{}" in the',
+            '"source/directories/@{}" entry of the publisher file does not',
+            "exist. Check the spelling, create the necessary directory, or entirely",
+            'remove the whole "source/directories" element of the publisher file.'
+        ]
+    )
 
     # Unknown until running the gauntlet
     generated = None
@@ -5067,43 +5083,29 @@ def get_managed_directories(xml_source, pub_file):
         if element_list:
             attributes_dict = element_list[0].attrib
             # common error messages
-            abs_path_error = " ".join(
-                [
-                    "the directory path to data for images, given in the",
-                    'publisher file as "source/directories/@{}" must be relative to',
-                    'the PreTeXt source file location, and not the absolute path "{}"',
-                ]
-            )
-            missing_dir_error = " ".join(
-                [
-                    'the directory "{}" implied by the value "{}" in the',
-                    '"source/directories/@{}" entry of the publisher file does not',
-                    "exist. Check the spelling, create the necessary directory, or entirely",
-                    'remove the whole "source/directories" element of the publisher file.'
-                ]
-            )
             # attribute absent => None
             if gen_attr in attributes_dict.keys():
                 raw_path = attributes_dict[gen_attr]
                 if os.path.isabs(raw_path):
-                    raise ValueError(abs_path_error.format(gen_attr, raw_path))
+                    raise ValueError(pub_abs_path_error.format(gen_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
                 try:
                     generated = verify_input_directory(abs_path)
                 except:
-                    raise ValueError(missing_dir_error.format(abs_path, raw_path, gen_attr))
+                    raise ValueError(pub_missing_dir_error.format(abs_path, raw_path, gen_attr))
             # attribute absent => None
             if ext_attr in attributes_dict.keys():
                 raw_path = attributes_dict[ext_attr]
                 if os.path.isabs(raw_path):
-                    raise ValueError(abs_path_error.format(ext_attr, raw_path))
+                    raise ValueError(pub_abs_path_error.format(ext_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
                 try:
                     external = verify_input_directory(abs_path)
                 except:
-                    raise ValueError(missing_dir_error.format(abs_path, raw_path, ext_attr))
+                    raise ValueError(pub_missing_dir_error.format(abs_path, raw_path, ext_attr))
+
     # pair of discovered absolute paths
     return (generated, external)
 
