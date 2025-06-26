@@ -5191,7 +5191,7 @@ def get_platform_host(pub_file):
     return attrs['host']
 
 
-def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
+def copy_managed_directories(build_dir, external_abs=None, generated_abs=None, data_abs=None):
     # Copies external and generated directories from absolute paths set in external_abs
     # and generated_abs (unless set to None) into a build directory.  Since the
     # build directory is fresh for each build, these directories should not exist
@@ -5203,6 +5203,10 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
     if generated_abs is not None:
         generated_dir = os.path.join(build_dir, "generated")
         shutil.copytree(generated_abs, generated_dir)
+
+    if data_abs is not None:
+        generated_dir = os.path.join(build_dir, "data")
+        shutil.copytree(data_abs, generated_dir)
 
 
 def copy_html_js(work_dir):
