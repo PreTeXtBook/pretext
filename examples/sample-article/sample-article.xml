@@ -187,6 +187,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- <worksheet top="3cm" left="4cm" margin="12cm"/> -->
         </latex-output>
 
+        <!-- A *source* directory for files necessary to build   -->
+        <!-- certain items completely.  For example, a data file -->
+        <!-- for an plot image. Illustrated here, search for the -->
+        <!-- use of the translation, "external/"                 -->
+        <directories data="numerical"/>
+
     </docinfo>
 
     <!--
