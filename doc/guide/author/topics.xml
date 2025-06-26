@@ -2561,9 +2561,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <p>Authoring is straight-forward.  Inside an <tag>image</tag> include a child <tag>asymptote</tag> to hold the code.  For example:</p>
 
                 <pre>
-                &lt;image xml:id="gaussian-histogram"&gt;
+                &lt;image&gt;
                     &lt;description&gt;A histogram of Gaussian data.&lt;/description&gt;
-                    &lt;asymptote&gt;
+                    &lt;asymptote label="gaussian-histogram"&gt;
                     import graph;
                     import stats;
 
@@ -2589,9 +2589,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <p>Here is the result.  Look elsewhere for examples of 3-D output from Asymptote.</p>
 
-                <image xml:id="gaussian-histogram" width="60%">
+                <image width="60%">
                     <description>A histogram of Gaussian data.</description>
-                    <asymptote>
+                    <asymptote label="gaussian-histogram">
                     import graph;
                     import stats;
 
@@ -2616,7 +2616,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <p>Notes:<ul>
                     <li>Notice the necessity of escaping the less-than in the for-loop.  See <xref ref="topic-exceptional-characters"/>.</li>
-                    <li>Setting a <attr>xml:id</attr> is necessary to have a stable name for graphics files that will be generated.</li>
+                    <li>Setting a <attr>label</attr> on the <tag>asymptote</tag> tag is necessary to have a stable name for graphics files that will be generated.</li>
                     <li>The <tag>description</tag> is an important part of making your output accessible.</li>
                     <li>Notice the use of <latex/> for the label on the vertical axis.  All of your macros defined in <c>docinfo</c> are available for use, so you can keep notation consistent.</li>
                     <li>You need to produce <init>PDF</init> versions of your diagrams for use in a conversion to <latex/>.</li>
@@ -2652,7 +2652,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <p>For <latex/> output the procedure is transparent<mdash/><pretext/> simply incorporates the preamble information and the image's code in the correct places in the <latex/> output, scaled to fit whatever space is described on the <tag>image</tag> element.  Then traditional <latex/> processing will do the right thing.  For output to other non-<latex/> formats, such as <init>HTML</init> or <init>EPUB</init>, we need some help from the CLI to generate other formats.  This tool will isolate the image's code and bundle it up with the necessary preamble to make a complete single-purpose <latex/> file.  Once converted by <latex/> to a <init>PDF</init> version, other tools can convert the image into other formats, such as <init>SVG</init>.  In this way, you can use <latex/> packages for describing images, use mathematically-correct labels in <latex/> syntax, and use your own macros for consistency in notation, yet also employ the resulting images in more modern output formats.  Note that as of 2020-07-24, limited testing indicates that PSTricks needs to be processed with the <c>xelatex</c> engine, and the <c>pstricks-add</c> package might also be necessary.  Any updates, especially using <c>pdflatex</c> would be appreciated.  Finally, processing with <c>xelatex</c> might be necessary if your labels use Unicode characters.</p>
 
-                <p>Much like the <tag>asymptote</tag> tag, the <tag>latex-image</tag> tag is used as a child of <tag>image</tag> and can be thought of as an alternative to the <attr>source</attr> attribute of <tag>image</tag>.  The contents need to be a complete specification of the image.  For example, a TikZ image will typically begin with <c>\begin{tikzpicture}</c>.  Inside of your document's <tag>docinfo</tag> you will likely need to employ a <tag>latex-image-preamble</tag> element to hold necessary <c>\usepackage</c> commands and any global settings, such as the style for tick-marks and labels on axes of graphs.  The source code in this next example is greatly abbreviated and mildly edited, see the source for the complete example.</p>
+                <p>Much like the <tag>asymptote</tag> tag, the <tag>latex-image</tag> tag is used as a child of <tag>image</tag> and can be thought of as an alternative to the <attr>source</attr> attribute of <tag>image</tag>. Adding a <attr>label</attr> to the <tag>latex-image</tag> tag will ensure a stable file name for the graphics files that will be produced.  The contents need to be a complete specification of the image.  For example, a TikZ image will typically begin with <c>\begin{tikzpicture}</c>.  Inside of your document's <tag>docinfo</tag> you will likely need to employ a <tag>latex-image-preamble</tag> element to hold necessary <c>\usepackage</c> commands and any global settings, such as the style for tick-marks and labels on axes of graphs.  The source code in this next example is greatly abbreviated and mildly edited, see the source for the complete example.</p>
 
                 <pre><![CDATA[
                 <docinfo>
@@ -2663,11 +2663,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 ]]></pre>
 
                 <pre><![CDATA[
-                <figure>
+                <figure xml:id="rna-codons-figure">
                     <caption>RNA Codons Table, by Florian Hollandt</caption>
-                    <image xml:id="rna-codons-table" width="100%">
+                    <image width="100%">
                         <description>A table of the RNA codons.</description>
-                        <latex-image>
+                        <latex-image label="rna-codons-table">
                         \begin{tikzpicture}
                         \footnotesize
                         \tikzstyle{every node}=[inner sep=1.7pt,anchor=center]
@@ -2710,9 +2710,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <figure xml:id="rna-codons-figure">
                     <caption>RNA Codons Table, by Florian Hollandt, from <url href="https://texample.net/tikz/examples/rna-codons-table/" visual="texample.net/tikz/examples/rna-codons-table/"><tex/>ample.net</url></caption>
-                    <image xml:id="rna-codons-table" width="100%">
+                    <image width="100%">
                         <description>A table of the RNA codons, together with the amino acids they encode.</description>
-                        <latex-image>
+                        <latex-image label="rna-codons-figure">
                         \begin{tikzpicture}
                         \footnotesize
                         \tikzstyle{every node}=[inner sep=1.7pt,anchor=center]
@@ -3194,8 +3194,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     and we use that as the width of the image.</p>
 
                     <pre><![CDATA[
-                    <image xml:id="scaling-tikz" width="48.46%">
-                        <latex-image>
+                    <image width="48.46%">
+                        <latex-image label="scaling-tikz">
                         \begin{tikzpicture}
                         % 1 cm is default unit of length
                         % a rectangle: 8 cm wide, 6 cm tall
@@ -3212,8 +3212,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                     <p>Some characters for comparison: Foo<nbsp/><nbsp/>Bar<nbsp/><nbsp/>Baz<nbsp/><nbsp/>Qux</p>
 
-                    <image xml:id="scaling-tikz" width="48.46%">
-                        <latex-image>
+                    <image width="48.46%">
+                        <latex-image label="scaling-tikz">
                         \begin{tikzpicture}
                         % 1 cm is default unit of length
                         % a rectangle: 8 cm wide, 6 cm tall
@@ -3251,7 +3251,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <p>Sometimes the necessary computations for an image are not part of the capabilities of whatever system is actually realizing the image.  We have good support for Sage in other parts of your document, and Sage has an extremely wide variety of computational capabilities, in addition to letting you program your own computations in Python syntax with the full support of the Sage library.  Rather than translating Sage output as input to some other graphics program, we simply capture the graphics output from Sage.  So if your graphics are derived from non-standard, or intensive, computation this might be your best avenue.</p>
 
-                <p>Use the <tag>sageplot</tag> element, in a manner entirely similar to the <tag>asymptote</tag> element and the <tag>latex-image</tag> element, as a child of <tag>image</tag>, and containing the necessary Sage code to construct the image.  There is one very important twist.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object.  The <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) and <pretext/>-CLI (<xref ref="processing-CLI"/>) will isolate this last line, use it as the right-hand side of an assignment statement, and the Sage <c>.save()</c> method will automatically be called to generate the image in a file.  Note that there are four different file types, depending on if the graphic is 2D or 3D, and the output format of the conversion.</p>
+                <p>Use the <tag>sageplot</tag> element, in a manner entirely similar to the <tag>asymptote</tag> element and the <tag>latex-image</tag> element, as a child of <tag>image</tag>, and containing the necessary Sage code to construct the image.  There is one very important twist.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object.  The <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) and <pretext/>-CLI (<xref ref="processing-CLI"/>) will isolate this last line, use it as the right-hand side of an assignment statement, and the Sage <c>.save()</c> method will automatically be called to generate the image in a file.  Like <tag>asymptote</tag> and <tag>latex-image</tag>, putting a <attr>label</attr> on the <tag>sageplot</tag> tag will determine the name of this file.  Note that there are four different file types, depending on if the graphic is 2D or 3D, and the output format of the conversion.</p>
 
                 <p>The <attr>variant</attr> attribute of the <tag>sageplot</tag> element may be <c>2d</c> or <c>3d</c>, since <pretext/> is not capable of analyzing your Sage code.  The default value is <c>3d</c> so can be skipped for 2D plots.  For technical reasons, it is also necessary to specify the aspect ratio of a graphic for the 3D case using the <attr>aspect</attr> attribute.  The value can be a positive real number (decimal) or a ratio of two positive integers separated by a colon.  The default is a square (<c>1.0</c> or <c>1:1</c>).</p>
 
@@ -3287,9 +3287,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <pre><![CDATA[
                 <figure>
                     <caption>Negative multiple of a curve</caption>
-                    <image xml:id="negative-curve" width="65%">
+                    <image width="65%">
                         <description>Plot of x^4 - 1 and its negative.</description>
-                        <sageplot>
+                        <sageplot label="negative-curve">
                         f(x) = x^4 - 1
                         g(x) = -x^4 + 1
                         up = plot(f, (x, -1.5, 1.5), color='blue', thickness=2)
@@ -3304,9 +3304,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <figure>
                     <caption>Negative multiple of a curve</caption>
-                    <image xml:id="negative-curve" width="65%">
+                    <image width="65%">
                         <description>Plot of x^4 - 1 and its negative.</description>
-                        <sageplot>
+                        <sageplot label="negative-curve">
                         f(x) = x^4 - 1
                         g(x) = -x^4 + 1
                         up = plot(f, (x, -1.5, 1.5), color='blue', thickness=2)
@@ -3331,8 +3331,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <pre>
                 &lt;figure xml:id="figure-mermaid-git"&gt;
                     &lt;caption&gt;Mermaid Git Diagram&lt;/caption&gt;
-                    &lt;image xml:id="mermaid-git-image"&gt;
-                        &lt;mermaid&gt;
+                    &lt;image&gt;
+                        &lt;mermaid label="mermaid-git-image"&gt;
                     ---
                     title: Example Git diagram
                     ---
@@ -3354,8 +3354,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <figure xml:id="figure-mermaid-git">
                     <caption>Mermaid Git Diagram</caption>
-                    <image xml:id="mermaid-git-image">
-                        <mermaid>
+                    <image>
+                        <mermaid label="mermaid-git-image">
                             ---
                             title: Example Git diagram
                             ---
