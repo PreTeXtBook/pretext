@@ -10307,12 +10307,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- http://templates.openoffice.org/en/template/running-statistics-template -->
             <!-- http://templates.openoffice.org/template/download/1203 -->
 
-            <p>You can also provide a file yourself, but now it is your obligation to distribute the file with your document (<init>HTML</init>, <init>PDF</init>, <etc/>) and provide a relative link.  This creates some complications, such as making sure an electronic PDF has the associated file in the same place relative to the PDF file.  Of course, if you make a print PDF, this becomes impossible.  Here is a test example anyway, which is highly likely to be broken in a PDF (including at the <pretext/> project site) unless you build this example on your own computer, locally.  Here is a template from the Apache OpenOffice project, provided via the Public Documentation License (PDL):  <url href="external/data/runningstatisticstemplate.ots" visual="external/data/runningstatisticstemplate.ots">Running Statistics Template</url>.</p>
+            <p>You can also provide a file yourself, but now it is your obligation to distribute the file with your document (<init>HTML</init>, <init>PDF</init>, <etc/>) and provide a relative link.  This creates some complications, such as making sure an electronic PDF has the associated file in the same place relative to the PDF file.  Of course, if you make a print PDF, this becomes impossible.  Here is a test example anyway, which is highly likely to be broken in a PDF (including at the <pretext/> project site) unless you build this example on your own computer, locally.  Here is a template from the Apache OpenOffice project, provided via the Public Documentation License (PDL):  <url href="data/spreadsheet/runningstatisticstemplate.ots" visual="data/spreadsheet/runningstatisticstemplate.ots">Running Statistics Template</url>.</p>
             <p>The next four paragraphs are each a single <tag>dataurl</tag> element.  Explore the source and the output from different conversions.  Strictly for testing as of 2022-11-04.</p>
             <p>Foo <dataurl href="http://go.microsoft.com/fwlink/?LinkID=521962" visual="go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</dataurl> Bar</p>
-            <p>Foo <dataurl source="data/runningstatisticstemplate.ots" visual="http://example.com">Runners Template</dataurl> Bar</p>
+            <p>Foo <dataurl source="data/spreadsheet/runningstatisticstemplate.ots" visual="http://example.com">Runners Template</dataurl> Bar</p>
             <p>Foo <dataurl href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</dataurl> Bar</p>
-            <p>Foo <dataurl source="data/runningstatisticstemplate.ots">Runners Template</dataurl> Bar</p>
+            <p>Foo <dataurl source="data/spreadsheet/runningstatisticstemplate.ots">Runners Template</dataurl> Bar</p>
             <p>Testing of output positioning for xref's that are inside containers:</p>
             <table xml:id="self-referential-tabular-xref">
                 <title>Self-referential Xref In a table</title>
