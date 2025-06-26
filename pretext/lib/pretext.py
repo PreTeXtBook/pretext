@@ -616,7 +616,8 @@ def latex_image_conversion(
     # Making data files available for latex image compilation is
     # not supported outside of the managed directory scheme (2021-07-28)
     _, external_dir = get_managed_directories(xml_source, pub_file)
-    copy_managed_directories(tmp_dir, external_abs=external_dir)
+    data_dir = get_source_directories(xml_source)
+    copy_managed_directories(tmp_dir, external_abs=external_dir, data_abs=data_dir)
     # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-latex-image.xsl")
     # no output (argument 3), stylesheet writes out per-image file
