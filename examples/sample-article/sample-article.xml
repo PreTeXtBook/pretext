@@ -3922,7 +3922,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             xlabel={time (ms)},
                             ylabel={potential (V)},
                         ]
-                        \addplot[blue] table {external/data/hodgkin-huxley-data.dat};
+                        \addplot[blue] table {data/dataplot/hodgkin-huxley-data.dat};
                         \end{axis}
                         \end{tikzpicture}]]>
                         </latex-image>
@@ -4608,7 +4608,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             xlabel={time (ms)},
                             ylabel={potential (V)},
                         ]
-                        \addplot[blue] table {external/data/hodgkin-huxley-data.dat};
+                        \addplot[blue] table {data/dataplot/hodgkin-huxley-data.dat};
                         \end{axis}
                         \end{tikzpicture}]]>
                         </latex-image>
