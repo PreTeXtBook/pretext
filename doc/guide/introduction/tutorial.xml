@@ -15,7 +15,7 @@
         This chapter serves as a tutorial for quickly getting started with <pretext /> in your web browser
         using free services provided by <url href="https://github.com">GitHub</url>.
         (Advanced users who'd prefer to install our free and open-source software
-        to their own machine may choose to skip ahead to <xref ref="quickstart-example"/>.)
+        to their own machine may choose to skip ahead to <xref ref="tutorial-install"/>.)
       </p>
       <objectives>
         <introduction><p>At the end of this tutorial you will have...</p></introduction>
@@ -23,7 +23,7 @@
           <li><p>Created a free GitHub account.</p></li>
           <li><p>Created a GitHub Repository and Codespace for authoring <pretext/> in your web browser.</p></li>
           <li><p>Learned the first steps to editing a <pretext/> document.</p></li>
-          <li><p>Converted your document to both <latex/> and accessible <init>HTML</init>.</p></li>
+          <li><p>Converted your document to both <latex/>-generated PDF and accessible <init>HTML</init>.</p></li>
           <li><p>Deployed your <init>HTML</init> to the web via GitHub Pages.</p></li>
         </ul>
       </objectives>
@@ -35,13 +35,18 @@
       </p>
     </introduction>
 
-    <section xml:id="tutorial-github">
-      <title>Using GitHub</title>
-      <subsection>
-        <title>What is GitHub?</title>
+    <section xml:id="quickstart-example">
+      <title>Using <pretext /> online</title>
+      <introduction>
         <p>
-          <term>GitHub</term> is a freely-available service for authoring, sharing, and deploying
-          documents and source code, owned by Microsoft. It uses the free and open-source <term>Git</term>
+          It is possible to write <pretext /> documents using nothing more than a web browser.  This approach does not require you to install any software (other than a web browser), although it does require you have internet access.  Options for installing <pretext /> on your own computer are discussed in <xref ref="tutorial-install"/>.
+        </p>
+      </introduction>
+      <subsection>
+        <title>What is GitHub</title>
+        <p>
+          <term>GitHub</term> is a freely-available service owned by Microsoft for authoring, sharing, and deploying
+          documents and source code. It uses the free and open-source <term>Git</term>
           software for version management.
         </p>
         <p>
@@ -49,7 +54,7 @@
           <url href="https://about.gitlab.com/">GitLab</url> for managing <pretext/> documents
           online, as well as other ways to write <pretext/> that don't require anything
           besides installing the free and open-source <pretext/> software onto your own device
-          (see <xref ref="quickstart-example"/> to learn more).
+          (see <xref ref="tutorial-install"/> to learn more).
         </p>
         <p>
           We will use GitHub for this tutorial as it the most popular way to share and disseminate
@@ -60,7 +65,7 @@
           To create your free GitHub account,
           <url href="https://github.com/signup">
               follow the instructions on GitHub's
-              signup page
+              sign-up page
           </url>. You can also log into an existing GitHub account if you already have one.
           Be sure to note your GitHub username and password in your password manager
           (or however you usually keep track of login credentials).
@@ -70,7 +75,7 @@
           <p>
             Educators and non-profit researchers can get many of GitHub's paid features
             for free. While this is not strictly required for the rest of the tutorial, it's a
-            useful way to increase GitHub's free Codespaces usage quotas.
+            useful way to increase GitHub's free Codespaces usage quotas, and allows you to use GitHub's free web hosting even for private repositories.
           </p>
           <p>
             Apply at
@@ -154,14 +159,17 @@
           <c>Code</c> menu on the repository webpage to pull up the Codespace environment in
           your web browser if you haven't already.
         </p>
+
         <p>
-          The left-hand menu should display a file tree, containing a folder called <c>source</c>
-          with a file called <c>main.ptx</c>.  These files were created when you set up your Codespace,
-          and form a complete, albeit very short, <pretext /> document.
+          When you first created your repository from the template, there were very few files included.  The first thing you will do when you open your Codespace is to create a new <pretext /> project.  As the directions in the repository indicate, you can do this by selecting the <q>PreTeXt: New Project</q> command from the <term>command pallette</term> (which you can open with <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>, among other options).
         </p>
 
         <p>
-          Now you are ready to build it!
+          You should be presented with a dialog asking for what sort of project you would like to create (<c>article</c>, <c>book</c>, <c>course</c>, <c>slideshow</c>, etc.).  For purposes of this tutorial, you should select <c>article</c> or <c>book</c>.  You will then be asked where you would like to create the project, and selecting the default suggested location is fine.
+        </p>
+
+        <p>
+          The window should now refresh and you will see a bunch of new files, including a folder called <c>source</c> that contains your <c>main.ptx</c> file.  Now you are ready to build it!
         </p>
       </introduction>
       <subsection>
@@ -249,7 +257,7 @@
           As long as your Codespace is active, your files will be saved there
           for your private use. However, inactive Codespaces are periodically
           cleaned up by GitHub (as of writing, this happens after one month of
-          inactivity), so you'll need to periodally
+          inactivity), so you'll need to periodically
           <term>commit &amp; sync</term> your work to your repository
           where it will never be deleted.
         </p>
@@ -400,7 +408,150 @@
         </p>
       </subsection>
     </section>
-    <section xml:id="tutorial-videos">
+
+  <section xml:id="tutorial-install">
+    <title>Installing PreTeXt</title>
+
+    <introduction>
+      <p>
+        The browser-based GitHub Codespaces workflow described in <xref ref="quickstart-example"/> is a quick and easy way to use <pretext /> without needing to install any additional software.  If you prefer to have a local setup of PreTeXt, we recommend one of the following three setups.   
+      </p>
+    </introduction>
+
+    <subsection xml:id="subsec-installing-a-docker-container">
+      <title>Option 1: Installing a Docker container</title>
+
+      <p>
+        The closest thing we have to a single click installer is to use a <term>Docker container</term> that includes all the software needed to run PreTeXt.  In fact, the setup described in this section results in an identical environment to the one used in GitHub Codespaces, but it is all locally running on your own computer.  The directions for all operating systems are the same (since the two programs you need to download and install are available for Windows, Mac, and Linux).
+      </p>
+
+      <p>
+        The one downside to this approach is that you will need a fair amount of disk space (around 5 GB all together), and some of that space will be used to install tools like <latex /> and SageMath that you might already have installed anyway.
+      </p>
+
+      <p>
+        Here are the steps required to use this option.
+        <ol>
+          <li>
+            <p>
+              Download and install <url href="https://code.visualstudio.com/">Visual Studio Code</url>.  This is the desktop version of the text editor used in Codespaces (and is great for all your text editing needs, not just PreTeXt).
+            </p>
+          </li>
+          <li>
+            <p>
+              Download and install <url href="https://www.docker.com/products/docker-desktop">Docker Desktop</url>.  Once installed, start Docker Desktop and agree to the licensing terms.  You should not need to create an account.
+            </p>
+          </li>
+          <li>
+            <p>
+              Download the <url href="https://github.com/PreTeXtBook/pretext-codespace/archive/refs/heads/main.zip">PreTeXt Codespace</url> zip file and extract it to a location of your choice.
+            </p>
+          </li>
+          <li>
+            <p>
+              Launch Visual Studio Code.  Use the <q>File</q> menu to select <q>Open Folder...</q> and navigate to the folder where you extracted the zip file in the previous step.  Select that folder and click <q>Open</q>.
+            </p>
+          </li>
+          <li>
+            <p>
+              You will likely get a popup in the lower right corner of the window asking if you want to install the devcontainer extension, or if you want to open the current workspace in a devcontainer.  You do want to do both of these.  If you don't get this message, you can install the <q>Dev Containers</q> extension from the Extensions view (click the square icon on the left sidebar) and then use the Command Palette (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>) to run the command <q>Dev Containers: Reopen in Container</q>.
+            </p>
+          </li>
+        </ol>
+        
+        The last step will take a few minutes the first time since it must download the container image.
+      </p>
+
+      <p>
+        Upon completing the steps above, you can create a new project and build/view/deploy just like described in <xref ref="tutorial-first-document"/>.
+      </p>
+
+      <p>
+        Whenever you work on a project locally, you will want to open it in the container (but next time it will boot up much faster since you will already have the container image downloaded).
+      </p>
+    </subsection>
+
+    <subsection xml:id="subsec-installing-pretext-cli">
+      <title>Option 2: Installing the <pretext /> CLI and Additional Software</title>
+
+      <p>
+        The <pretext /> CLI is a Python package that can be installed on your computer.  This option is more lightweight than using a Docker container, but it does require you to install several prerequisite programs (including Python itself).  
+      </p>
+
+      <p>
+        Detailed instructions for installing the <pretext /> CLI with PIP are available in <xref ref="processing-CLI"/>. If you know what you are doing, you can just run `pip install pretext[all]` to get all the python and core parts of <pretext />.
+      </p>
+
+      <p>
+        This option is great if you already have a lot of the software that would be duplicated in the docker image from Option 1.  In the following list, only python is strictly required, but many features of <pretext /> will not work without the other software. 
+        <ul>
+          <li>
+            <p>
+              <term>Python</term> (version 3.10 or later); required.
+            </p>
+          </li>
+          <li>
+            <p>
+              <term>Node.js</term> (version 18 or later); required to build custom themes for HTML and to build Braille and some epub targets.
+            </p>
+          </li>
+          <li>
+            <p>
+              <term>Git</term>; required to store your project on GitHub and use the `pretext deploy` command to host your project on GitHub Pages.
+            </p>
+          </li>
+          <li>
+            <p>
+              <term>PreFigure</term>; required to build  <tag>prefigure</tag> images. You can get this as part of the <pretext /> CLI installation, if you install the cli with <c>pip install pretext[prefigure]</c>, although you might need some additional system libraries installed.  See <url href="https://prefigure.org/">PreFigure's website</url> for more information.
+            </p>
+          </li>
+          <li>
+            <p>
+              <term><latex /></term> (any standard distribution, including TeXLive, MiKTeX or TinyTex will work); required to build PDF output and if your document includes TiKz images (in a <tag>latex-image</tag> element).
+            </p>
+          </li>
+          <li>
+            <p>
+              <term>SageMath</term> (version 10.0 or later recommended); required to build SageMath output and if your document includes sageplots (in a <tag>sageplot</tag> element).
+            </p>
+          </li>
+        </ul>
+      </p>
+
+      <p>
+        While you can use any text editor you like for authoring <pretext /> documents, <term>Visual Studio Code</term> is highly recommended due to the availability of the <c>pretext-tools</c> extension which provides syntax highlighting, autocompletion, and other features that make authoring <pretext /> documents much easier.  You can install this extension from the Extensions view in Visual Studio Code (click the square icon on the left sidebar) or by searching for <c>pretext-tools</c> in the Extensions Marketplace (it is automatically installed if you use the Docker container from Option 1).
+      </p>
+    </subsection>
+
+    <subsection xml:id="subsec-installing-from-source">
+      <title>Option 3: Running <pretext /> <q>from source</q></title>
+      
+      <p>
+        For advanced users, especially if you want to contribute to the development of <pretext />, you can run <pretext /> without the CLI.  To do this, you will need to clone the <url href="https://github.com/PreTeXtBook/pretext">PreTeXt repository</url> and install the required dependencies manually.  This is required if you want to run the <xref ref="pretext-script"><pretext /> script</xref> or even just use <xref ref="xsltproc"><c>xsltproc</c></xref> to process your <pretext /> documents.  Additional information is available in the linked sections.
+      </p>
+
+      <p>
+        Some context for experienced Python developers: <pretext /> is an open-source <url href="https://en.wikipedia.org/wiki/XML">XML</url> language primarily powered by
+        <url href="https://en.wikipedia.org/wiki/XSLT">XSLT</url> and <url href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</url> tools.
+        PreTeXt development is primarily split over two GitHub repositories:
+        <url href="https://github.com/PreTeXtBook/pretext">PreTeXtBook/pretext</url>
+        for the <q>core</q> functionality of PreTeXt, and the more recent
+        <url href="https://github.com/PreTeXtBook/pretext-cli">PreTeXtBook/pretext-cli</url>
+        that packages up these resources into a Python package with several UX enhancements
+        such as a simplified command line interface and project management that does not require the use of custom makefiles.  Instructions for developing with the CLI are available in its repository's README file.
+      </p>
+
+      <p>
+        If you're interested in potentially contributing back to PreTeXt someday, please
+        feel free to request to join
+        <url href="https://groups.google.com/g/pretext-dev">our developer Google Group</url>
+        and say hello!
+      </p>
+    </subsection>
+
+  </section>    
+  
+  <section xml:id="tutorial-videos">
       <title>Videos</title>
 
       <p>
@@ -417,53 +568,4 @@
           <video xml:id="tutorial-videos-video" youtube="w_Wu5ysIiPQ" preview="getting-started-preview.png"/>
       </figure>
     </section>
-
-  <section xml:id="quickstart-example">
-    <title>For Advanced Users New to PreTeXt</title>
-
-    <p>
-      This section is intended for users who have read
-      <xref ref="start-here"/>
-      and are already experienced
-      with other open-source software projects
-      or command-line tools. If you're more
-      interested in a browser-based workflow to getting started with
-      PreTeXt, check out <xref ref="tutorial-github"/>.
-    </p>
-
-    <p>
-      PreTeXt is an open-source
-      <url href="https://en.wikipedia.org/wiki/XML">XML</url> language
-      primarily powered by
-      <url href="https://en.wikipedia.org/wiki/XSLT">XSLT</url> and
-      <url href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</url>
-      tools.
-    </p>
-
-    <p>
-      For new authors comfortable working on the command line who want to use their
-      favorite text editor or IDE, we recommend <c>pip install</c>ing the PreTeXt-CLI
-      from the Python Package Index. <xref ref="processing-CLI"/> has these details,
-      and <c>pretext -h</c> and <c>pretext CMD -h</c> are at your disposal as well
-      after installation.
-    </p>
-
-    <p>
-      Some context for experienced Python developers: PreTeXt development is primarily
-      split over two GitHub repositories:
-      <url href="https://github.com/PreTeXtBook/pretext">PreTeXtBook/pretext</url>
-      for the <q>core</q> functionality of PreTeXt, and the more recent
-      <url href="https://github.com/PreTeXtBook/pretext-cli">PreTeXtBook/pretext-cli</url>
-      that packages up these resources into a Python package with several UX enhancements
-      such as a simplified command line interface and project management that does not require
-      the use of custom makefiles.
-    </p>
-
-    <p>
-      If you're interested in potentially contributing back to PreTeXt someday, please
-      feel free to request to join
-      <url href="https://groups.google.com/g/pretext-dev">our developer Google Group</url>
-      and say hello!
-    </p>
-  </section>
 </chapter>
