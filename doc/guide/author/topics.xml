@@ -159,7 +159,9 @@
 
             <paragraphs>
                 <title><tag>c</tag>, code, verbatim text, literal text, <c>import</c></title>
-                <p>Short bursts of raw, or verbatim, text can be wrapped in the <tag>c</tag> element.  Strictly speaking, <q>code</q> is a misnomer, as the text may be anything you need to communicate exactly as one would type it at a keyboard or as input to a computer program.  Anything longer than a handful of characters, or needing accurate line breaks should consider the <tag>cd</tag>, <tag>pre</tag>, <tag>program</tag> or <tag>console</tag> tags.  Presentation is normally a monospaced sans serif font, perhaps of a slightly heavier weight, and designed for the job with features such as unambiguous zeros (versus the letter <sq>oh</sq>).  See <xref ref="topic-verbatim-literal" /> for details.</p>
+                <p>Short bursts of raw, or verbatim, text can be wrapped in the <tag>c</tag> element.  Strictly speaking, <q>code</q> is a misnomer, as the text may be anything you need to communicate exactly as one would type it at a keyboard or as input to a computer program.  Anything longer than a handful of characters, or needing accurate line breaks should consider the <tag>cd</tag>, <tag>pre</tag>, <tag>program</tag> or <tag>console</tag> tags.  If you like to have your source word-wrapped with hard line-breaks (newline characters), we will replace those for you with a space character.  This is the only modification made to the content of a <tag>c</tag> element.</p>
+
+                <p>Presentation is normally a monospaced sans serif font, perhaps of a slightly heavier weight, and designed for the job with features such as unambiguous zeros (versus the letter <sq>oh</sq>).  See <xref ref="topic-verbatim-literal" /> for details.</p>
             </paragraphs>
 
             <paragraphs>
@@ -4255,7 +4257,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 </p>
 
                 <p>
-                    An author or editor can also have an <tag>email</tag>, <tag>biographcy</tag>, or <tag>support</tag> element.  The <tag>support</tag> element can be used to describe funding sources particular to that author as required by some journals.  Notice that the <tag>support</tag> element could also be a child of <tag>bibinfo</tag> itself, in which case it would appear as applying to the entire document, not just an individual author.
+                    An author or editor can also have an <tag>email</tag>, <tag>biography</tag>, or <tag>support</tag> element.  The <tag>support</tag> element can be used to describe funding sources particular to that author as required by some journals.  Notice that the <tag>support</tag> element could also be a child of <tag>bibinfo</tag> itself, in which case it would appear as applying to the entire document, not just an individual author.
                 </p>
             </paragraphs>
 

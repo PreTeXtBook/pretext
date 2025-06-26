@@ -2145,7 +2145,11 @@
 <!--   think this is a bug and white space should not prevent        -->
 <!--   the action.                                                   -->
 <!--                                                                 -->
-<!-- * &, %, $, ^, ~  No need to escape in PGML                      -->
+<!-- * &, %, ^, ~  No need to escape in PGML                         -->
+<!--                                                                 -->
+<!-- * $  No need to escape dollar in PGML, however this needs to be -->
+<!--      escaped when in image descriptions. And harmless to escape -->
+<!--      in PGML.                                                   -->
 <!--                                                                 -->
 <!-- * _  If there are two of these in a line, the parts in          -->
 <!--      between are italicized.                                    -->
@@ -2227,7 +2231,8 @@
 
     <!-- Backslash first, since more will be introduced in other replacements -->
     <xsl:variable name="backslash-fixed" select="str:replace($text,            '\', '\\')"/>
-    <xsl:variable name="asterisk-fixed"  select="str:replace($backslash-fixed, '*', '\*')"/>
+    <xsl:variable name="dollar-fixed"    select="str:replace($backslash-fixed, '$', '\$')"/>
+    <xsl:variable name="asterisk-fixed"  select="str:replace($dollar-fixed,    '*', '\*')"/>
     <xsl:variable name="hash-fixed"      select="str:replace($asterisk-fixed,  '#', '\#')"/>
     <xsl:variable name="lbrace-fixed"    select="str:replace($hash-fixed,      '{', '\{')"/>
     <xsl:variable name="rbrace-fixed"    select="str:replace($lbrace-fixed,    '}', '\}')"/>
@@ -2264,15 +2269,16 @@
 
 <!-- Verbatim Snippets, Code -->
 <!-- *Must* be "value-of" to avoid low-level text-processing template -->
-<xsl:template match="c">
+<xsl:template name="code-wrapper">
+    <xsl:param name="content"/>
+
     <xsl:choose>
-        <xsl:when test="contains(.,'[|') or contains(.,'|]')">
-            <xsl:message>PTX:ERROR:   the strings '[|' and '|]' are not supported within verbatim text in WeBWorK problems</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
+        <xsl:when test="contains($content,'[|') or contains($content,'|]')">
+            <xsl:message>PTX:ERROR:   the strings '[|' and '|]' are not supported within verbatim text ("<xsl:value-of select="$content"/>") in WeBWorK problems</xsl:message>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>[|</xsl:text>
-            <xsl:value-of select="."/>
+            <xsl:value-of select="$content"/>
             <xsl:text>|]*</xsl:text>
         </xsl:otherwise>
     </xsl:choose>

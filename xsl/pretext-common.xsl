@@ -1708,6 +1708,54 @@ Book (with parts), "section" at level 3
 <!-- Preformatted Text -->
 <!-- ################# -->
 
+<!-- Inline "code" uses a "c" element and we want to be careful, so    -->
+<!-- we use a universal template here, while leaving peculiarities     -->
+<!-- of output formats to their respective stylesheets.  The "c"       -->
+<!-- element never has any elements as children, so we grab the        -->
+<!-- author's characters as their intent.  Output markup languages     -->
+<!-- Important: we use a "value-of" instruction so that the            -->
+<!-- text-manipulation routines do not get their hands on any          -->
+<!-- whitespace or anything else.  So the parameter $content is pure   -->
+<!-- character data.  A named template means no context, which is only -->
+<!-- a problem when WeBWorK PG formulation wants to provide a location -->
+<!-- report on a failure due to banned markup.                         -->
+<!-- NB: newlines are assumed to be an editing convenience (hard       -->
+<!-- line-breaks as part of word-wrapping, and not intended by the     -->
+<!-- author to be literal.  We have other devices for multi-line       -->
+<!-- verbatim text. -->
+<xsl:template match="c">
+    <!-- With no newlines, we use "value-of" to get the characters -->
+    <!-- precisely.  Otherwise, we have newlines and likely each   -->
+    <!-- will be followed by a run of spaces (indentation on the   -->
+    <!-- subsequent line of the source), so we use a recursive     -->
+    <!-- template to scrub the spaces.                             -->
+    <xsl:variable name="raw-content">
+        <xsl:choose>
+            <xsl:when test="not(contains(., '&#xa;'))">
+                <xsl:value-of select="."/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="reduce-line-break">
+                    <xsl:with-param name="text">
+                        <xsl:value-of select="."/>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- The newlines remain, but all trailing spaces have been -->
+    <!-- scrubbed, so we replace newlines with spaces as part   -->
+    <!-- of the application of the wrapper.                     -->
+    <xsl:call-template name="code-wrapper">
+        <xsl:with-param name="content" select="translate($raw-content, '&#xa;', '&#x20;')"/>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="code-wrapper">
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "code-wrapper" template</xsl:message>
+</xsl:template>
+
+
 <!-- The content of a "pre" element is wrapped many ways, -->
 <!-- but the content itself is always strictly text       -->
 
@@ -10544,7 +10592,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 <xsl:template match="biblio" mode="bibentry-wrapper">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "bibentry-wrappper" template</xsl:message>
+    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "bibentry-wrapper" template</xsl:message>
 </xsl:template>
 
 

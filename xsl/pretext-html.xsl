@@ -542,6 +542,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </ul>
                 </nav>
                 <xsl:apply-templates select="conclusion|outcomes"/>
+                <!-- Insert permalink -->
+                <xsl:apply-templates select="." mode="permalink"/>
             </section>
         </xsl:with-param>
     </xsl:apply-templates>
@@ -8698,14 +8700,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############# -->
 
 <!-- Code, inline -->
-<!-- PCDATA only, so drop non-text nodes -->
-<!-- NB: "code-block" class otherwise -->
-<xsl:template match="c">
+<!-- HTML "code" element, with classes -->
+<xsl:template name="code-wrapper">
+    <xsl:param name="content"/>
+
     <code class="code-inline tex2jax_ignore">
-        <xsl:value-of select="." />
+        <xsl:value-of select="$content"/>
     </code>
 </xsl:template>
-
 
 <!-- 100% analogue of LaTeX's verbatim            -->
 <!-- environment or HTML's <pre> element          -->
@@ -11479,7 +11481,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="unique-id"/>
             </xsl:attribute>
             <xsl:attribute name="title">
-                <xsl:text>Copy permalink for </xsl:text>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'permalink-tooltip'"/>
+                </xsl:apply-templates>
+                <xsl:text> </xsl:text>
                 <xsl:apply-templates select="." mode="tooltip-text"/>
             </xsl:attribute>
             <xsl:text>🔗</xsl:text>

@@ -609,16 +609,15 @@ TODO: (overall)
 <!-- Jupyter does a very good (but incomplete) job with inline -->
 <!-- verbatim text, requiring little care by authors.  But a   -->
 <!-- few gotchas need adjustment.  So we override.             -->
-<xsl:template match="c">
-    <!-- grab content literally -->
-    <xsl:variable name="text" select="string(.)"/>
+<xsl:template name="code-wrapper">
+    <xsl:param name="content"/>
 
     <!-- Jupyter notebook is careful about XML special characters, -->
     <!-- but if you want to write about the escaped versions, they -->
     <!-- just get converted to the real thing.  So in these five   -->
     <!-- very special situations we escape the leading ampersand   -->
     <!-- and whatever conversion is happening is satiated.         -->
-    <xsl:variable name="escaped-ampersand-fixed"    select="str:replace($text,                       '&amp;amp;',  '&amp;amp;amp;' )"/>
+    <xsl:variable name="escaped-ampersand-fixed"    select="str:replace($content,                    '&amp;amp;',  '&amp;amp;amp;' )"/>
     <xsl:variable name="escaped-leftbracket-fixed"  select="str:replace($escaped-ampersand-fixed,    '&amp;lt;',   '&amp;amp;lt;' )"/>
     <xsl:variable name="escaped-rightbracket-fixed" select="str:replace($escaped-leftbracket-fixed,  '&amp;gt;',   '&amp;amp;gt;' )"/>
     <xsl:variable name="escaped-apostrophe-fixed"   select="str:replace($escaped-rightbracket-fixed, '&amp;apos;', '&amp;amp;apos;' )"/>
@@ -876,5 +875,8 @@ TODO: (overall)
     <xsl:value-of select="$content" />
     <xsl:call-template name="end-code-cell" />
 </xsl:template>
+
+<!-- We don't want any permalinks -->
+<xsl:template match="*" mode="permalink"/>
 
 </xsl:stylesheet>

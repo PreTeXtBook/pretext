@@ -118,7 +118,7 @@
             <li>
                 <p>
                     With Runestone Academy and the author interface you can see a <c>draft</c> of your book on
-                        <cd>staging.runestoneacademy.org</cd>
+                        <cd>author.runestone.academy</cd>
                     When you are ready you can make a <c>published</c> version of your book available with the click of a button.
                     We can set up access to the author interface when you open an issue (in the next step) requesting that your book be added to Runestone Academy.
                 </p>
@@ -145,12 +145,15 @@
             <p>
                 The author interface is a web-based interface that allows you to manage your book on Runestone Academy.  It is designed to be easy to use and provides a number of features to help you manage your book.
             </p>
+            <p>When moving your book to Runestone Academy we will clone your repository to our server.  We do this one time, after that we use <c>git pull</c> to get the latest changes from your repository.  This means that you can make changes to your book on your local machine and push them to GitHub, then use the author interface to pull those changes into Runestone Academy and rebuild your book. Ideally your document-id and the name of your repository are the same.</p>
+            <warning><title>Configuration Tip</title><p>If your document-id and repository name do not match, then you will need to update the <q>Path to existing repo</q> in the author interface metadata before you build your book. This should not be a GitHub <init>URL</init>, it is just the name of your GitHub repository (see <xref ref="img-edit-metadata"/>).</p></warning>
+            <p>If your book has already been cloned on Runestone, then you cannot clone it again.  If you think you have a use case where this is absolutely necessary please reach out to someone on the team to talk about it.</p>
         <p>
-            The author interface is available at <url href="https://author.runestone.academy" visual="author.runestone.academy"/>.  You can log in with your Runestone account.  Once you have logged in you will see a list of your books.  You can click on the book title to to edit metadata about your book.  The author interface is also where you can build a new version of your book, see some analytics about your book, and publish your book to the Runestone Academy servers.  You can even get an anonymized data set from a large sample of the classes using your book.
+            The author interface is available at <url href="https://author.runestone.academy/author" visual="author.runestone.academy/author"/>.  You can log in with your Runestone account.  Once you have logged in you will see a list of your books.  You can click on the book title to to edit metadata about your book.  The author interface is also where you can build a new version of your book, see some analytics about your book, and publish your book to the Runestone Academy servers.  You can even get an anonymized data set from a large sample of the classes using your book.
         </p>
 
         <figure xml:id="img-author-interface">
-            <caption>The author interface main page</caption>                
+            <caption>The author interface main page</caption>
             <image source="author-interface.png" width="100%">
                 <description>The author interface lets you pull changes from GitHub and rebuild your book.</description>
             </image>
@@ -180,7 +183,7 @@
             <image source="edit-metadata.png" width="100%">
                 <description>Editing metatdata about a book</description>
             </image>
-        </figure>    
+        </figure>
         </subsection>
         <subsection xml:id="author-interface-advanced">
             <title>Advanced Author Interface</title>

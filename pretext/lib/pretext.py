@@ -273,6 +273,7 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     # outputs a list of ids, but we just loop over created files
     log.info("extracting PreFigure diagrams from {}".format(xml_source))
     log.info("string parameters passed to extraction stylesheet: {}".format(stringparams))
+
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
 
     # Resulting prefigure files are in tmp_dir, switch there to work
@@ -291,6 +292,15 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
             pf_source_files.remove('pf_publication.xml')
         except ValueError:
             pass
+
+        # Need to copy entire "external" directory
+        # Also data (e.g. for plots) is made available
+        # NB: we might really do this sooner, but then all
+        # the files in "external" and "data" get added
+        # into the list of source files, pf_source_files
+        _, external_dir = get_managed_directories(xml_source, pub_file)
+        data_dir = get_source_directories(xml_source)
+        copy_managed_directories(tmp_dir, external_abs=external_dir, data_abs=data_dir)
 
         # make output/tactile directory if the outformat is "all"
         # PreFigure makes 'output' but we also want to create 'output/tactile'
@@ -607,7 +617,8 @@ def latex_image_conversion(
     # Making data files available for latex image compilation is
     # not supported outside of the managed directory scheme (2021-07-28)
     _, external_dir = get_managed_directories(xml_source, pub_file)
-    copy_managed_directories(tmp_dir, external_abs=external_dir)
+    data_dir = get_source_directories(xml_source)
+    copy_managed_directories(tmp_dir, external_abs=external_dir, data_abs=data_dir)
     # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-latex-image.xsl")
     # no output (argument 3), stylesheet writes out per-image file
@@ -4124,6 +4135,8 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
 
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
+    # Consult source for additional files
+    data_dir = get_source_directories(xml)
 
     # names for scratch directories
     tmp_dir = get_temporary_directory()
@@ -4156,7 +4169,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
 
     # place managed directories - some of these (Asymptote HTML) are
     # consulted during the XSL run and so need to be placed beforehand
-    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
 
     if include_static_files:
         # Copy js and css, but only if not building portable html
@@ -5043,6 +5056,22 @@ def get_managed_directories(xml_source, pub_file):
 
     # prepare for relative paths later
     source_dir = get_source_path(xml_source)
+    # some parameterized error messages used later
+    pub_abs_path_error = " ".join(
+        [
+            "the directory path for a managed directory, given in the",
+            'publisher file as "source/directories/@{}" must be relative to',
+            'the PreTeXt source file location, and not the absolute path "{}"',
+        ]
+    )
+    pub_missing_dir_error = " ".join(
+        [
+            'the directory "{}" implied by the value "{}" in the',
+            '"source/directories/@{}" entry of the publisher file does not',
+            "exist. Check the spelling, create the necessary directory, or entirely",
+            'remove the whole "source/directories" element of the publisher file.'
+        ]
+    )
 
     # Unknown until running the gauntlet
     generated = None
@@ -5058,45 +5087,82 @@ def get_managed_directories(xml_source, pub_file):
         if element_list:
             attributes_dict = element_list[0].attrib
             # common error messages
-            abs_path_error = " ".join(
-                [
-                    "the directory path to data for images, given in the",
-                    'publisher file as "source/directories/@{}" must be relative to',
-                    'the PreTeXt source file location, and not the absolute path "{}"',
-                ]
-            )
-            missing_dir_error = " ".join(
-                [
-                    'the directory "{}" implied by the value "{}" in the',
-                    '"source/directories/@{}" entry of the publisher file does not',
-                    "exist. Check the spelling, create the necessary directory, or entirely",
-                    'remove the whole "source/directories" element of the publisher file.'
-                ]
-            )
             # attribute absent => None
             if gen_attr in attributes_dict.keys():
                 raw_path = attributes_dict[gen_attr]
                 if os.path.isabs(raw_path):
-                    raise ValueError(abs_path_error.format(gen_attr, raw_path))
+                    raise ValueError(pub_abs_path_error.format(gen_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
                 try:
                     generated = verify_input_directory(abs_path)
                 except:
-                    raise ValueError(missing_dir_error.format(abs_path, raw_path, gen_attr))
+                    raise ValueError(pub_missing_dir_error.format(abs_path, raw_path, gen_attr))
             # attribute absent => None
             if ext_attr in attributes_dict.keys():
                 raw_path = attributes_dict[ext_attr]
                 if os.path.isabs(raw_path):
-                    raise ValueError(abs_path_error.format(ext_attr, raw_path))
+                    raise ValueError(pub_abs_path_error.format(ext_attr, raw_path))
                 else:
                     abs_path = os.path.join(source_dir, raw_path)
                 try:
                     external = verify_input_directory(abs_path)
                 except:
-                    raise ValueError(missing_dir_error.format(abs_path, raw_path, ext_attr))
+                    raise ValueError(pub_missing_dir_error.format(abs_path, raw_path, ext_attr))
+
     # pair of discovered absolute paths
     return (generated, external)
+
+
+def get_source_directories(xml_source):
+    '''Directories given in source's "docinfo" element'''
+
+    # Examine <source>/docinfo/directories element carefully
+    # for attributes which we code here for convenience
+    data_attr = "data"
+
+    # prepare for relative paths later
+    source_dir = get_source_path(xml_source)
+
+    # some parameterized error messages used later
+    source_abs_path_error = " ".join(
+        [
+            "the directory path for a managed directory, given in the",
+            'source file as "docinfo/directories/@{}" must be relative to',
+            'the PreTeXt source file location, and not the absolute path "{}"',
+        ]
+    )
+    source_missing_dir_error = " ".join(
+        [
+            'the directory "{}" implied by the value "{}" in the',
+            '"docinfo/directories/@{}" entry of the source file does not',
+            "exist. Check the spelling, create the necessary directory, or entirely",
+            'remove the whole "docinfo/directories" element of the source file.'
+        ]
+    )
+
+    # Data holds files necessary for building parts
+    # of a project, and are only necessary for that role.
+    # As a component of the source it is given in the "docinfo"
+    data = None
+
+    src_tree = ET.parse(xml_source)
+    src_tree.xinclude()
+    directories_list = src_tree.xpath("/pretext/docinfo/directories")
+    if directories_list:
+        attributes_dict = directories_list[0].attrib
+        if data_attr in attributes_dict:
+            raw_path = attributes_dict[data_attr]
+            if os.path.isabs(raw_path):
+                raise ValueError(source_abs_path_error.format(data_attr, raw_path))
+            else:
+                abs_path = os.path.join(source_dir, raw_path)
+            try:
+                data = verify_input_directory(abs_path)
+            except:
+                raise ValueError(source_missing_dir_error.format(abs_path, raw_path, data_attr))
+
+    return data
 
 
 def get_platform_host(pub_file):
@@ -5129,7 +5195,7 @@ def get_platform_host(pub_file):
     return attrs['host']
 
 
-def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
+def copy_managed_directories(build_dir, external_abs=None, generated_abs=None, data_abs=None):
     # Copies external and generated directories from absolute paths set in external_abs
     # and generated_abs (unless set to None) into a build directory.  Since the
     # build directory is fresh for each build, these directories should not exist
@@ -5141,6 +5207,10 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None):
     if generated_abs is not None:
         generated_dir = os.path.join(build_dir, "generated")
         shutil.copytree(generated_abs, generated_dir)
+
+    if data_abs is not None:
+        generated_dir = os.path.join(build_dir, "data")
+        shutil.copytree(data_abs, generated_dir)
 
 
 def copy_html_js(work_dir):

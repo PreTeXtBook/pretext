@@ -253,6 +253,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>Permalink</localization>
     <localization string-id='incontext'>im Zusammenhang</localization>
+    <localization string-id='permalink-tooltip'>Kopiere Bezeichnung und Link zu</localization>
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->

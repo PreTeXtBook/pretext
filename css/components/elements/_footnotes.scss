@@ -41,6 +41,9 @@ $border-radius: 0px !default;
   width: fit-content;
   max-width: calc(100% - 60px);
   border: 2px solid var(--knowl-border-color);
-  // position: absolute;
-  // z-index: 10;
+  //reset color/weight/size in case used in block that changed them
+  // e.g. theorem title in denver
+  color: var(--body-text-color);
+  font-weight: normal;
+  font-size: var(1rem);
 }

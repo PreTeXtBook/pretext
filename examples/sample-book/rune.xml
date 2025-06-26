@@ -2712,6 +2712,46 @@ TEST_CASE( "Test the add function" ) {
             </hint>
         </exercise>
 
+        <exercise label="multiple-choice-randomized-forced-checkbox">
+            <title>Multiple-Choice, Randomized, One Answer but with Checkboxes</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>What color is a stop sign? [Static versions retain the order as authored.]</p>
+            </statement>
+            <choices randomize="yes" multiple-correct="yes">
+                <choice>
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Green means <q>go!</q>.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is universally used for prohibited activities or serious warnings.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>Yellow</p>
+                    </statement>
+                    <feedback>
+                        <p>Yellow means slow down.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>What did you see last time you went driving?</p>
+            </hint>
+            <hint>
+                <p>Maybe go out for a drive?</p>
+            </hint>
+        </exercise>
+
         <exercise label="multiple-choice-randomized-multiple-answers">
             <title>Multiple-Choice, Randomized, Multiple Answers</title>
             <idx>stop signs</idx>
@@ -3483,6 +3523,25 @@ TEST_CASE( "Test the add function" ) {
                 <response xml:id="math"><em>Some</em> "Math": <m>\sin(x^2)</m></response>
             </matching>
         </exercise>
+
+        <exercise xml:id="cardsort-basic" label="cardsort-basic">
+            <title>Cardsort Problem, Basic Arithmetic</title>
+            <idx>matching US dates</idx>
+            <statement>
+                <p>This is a simple exercise to test some grading behavior.</p>
+            </statement>
+            <cardsort>
+                <match>
+                    <premise order="1">2 + 3</premise>
+                    <premise order="3">4 + 1</premise>
+                    <response>5</response>
+                </match>
+                <match>
+                    <premise order="2"><m>12 + 2</m></premise>
+                    <response>14</response>
+                </match>
+            </cardsort>
+        </exercise>
     </exercises>
 
     <exercises xml:id="clickable-area-exercises">
@@ -3896,7 +3955,9 @@ TEST_CASE( "Test the add function" ) {
         <exercise label="fillin-strings-">
             <title>Fill-In, New Markup Strings</title>
             <statement>
-                <p>The word I'm thinking about is <q>magic</q>. What word am I thinking about? <fillin width="5" answer="magic"/> (Interactive feedback explores a variety of options: Try what happens if you mix the case, or type in a number, or include more than the word, or try <q>pizzazz</q>.")</p>
+                <p>The word I'm thinking about is hinted at by the image.</p>
+                <p><image source="cartoon-magic.jpg" width="50%"/></p>
+                <p>What word am I thinking about? <fillin width="5" answer="magic"/> (Interactive feedback explores a variety of options: Try what happens if you mix the case, or type in a number, or include more than the word, or try <q>pizzazz</q>.")</p>
             </statement>
             <evaluation>
                 <evaluate>

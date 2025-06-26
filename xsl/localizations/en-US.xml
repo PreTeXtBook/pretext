@@ -284,6 +284,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>permalink</localization>
     <localization string-id='incontext'>in-context</localization>
+    <!-- A permalink icon in HTML output will have a tooltip (on hover) -->
+    <!-- that says something like                                       -->
+    <!--                                                                -->
+    <!--    Copy heading and permalink for Theorem 5.8 The Chain Rule   -->
+    <!--    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                              -->
+    <!--                                                                -->
+    <!-- The indicated portion will be localized.  "heading" might be   -->
+    <!-- replaced by "description" if that is easier to translate.      -->
+    <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->

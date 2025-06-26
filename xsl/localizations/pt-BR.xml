@@ -251,6 +251,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>link permanente</localization>
     <localization string-id='incontext'>em contexto</localization>
+    <!-- Following is in ENGLISH and should be translated.  Due to its -->
+    <!-- ubiquitous nature we have not left it undefined.  See the     -->
+    <!-- "en-US" file for a more complete explanation of its use.      -->
+    <!-- Please remove this entire comment when translated.  Thanks.   -->
+    <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->

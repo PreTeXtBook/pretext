@@ -2374,6 +2374,9 @@ a[href^="mailto:"] {
   width: fit-content;
   max-width: calc(100% - 60px);
   border: 2px solid var(--knowl-border-color);
+  color: var(--body-text-color);
+  font-weight: normal;
+  font-size: var(1rem);
 }
 .navbar .indexnav {
   position: absolute;
