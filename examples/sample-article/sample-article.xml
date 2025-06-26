@@ -3902,9 +3902,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </image>
                 </figure>
 
-                <p>A plot might use a graphics language to draw the axes and grid, but the data might be from an experiment and live in an external file that you do not wish to place in your source.  Place such a file in a subdirectory directly below the directory where your master source file resides.  In the example below <c>data</c> is the directory and <c>hodgkin-huxley-data.dat</c> is the file with the data points.  You <em>must</em> place the file in a subdirectory (it cannot reside next to your source file), but that directory may have subdirectories if you have many such files and want to organize them that way.  Then the <c>--include</c> command-line argument to the <c>pretext</c> script will manage the external files properly as it creates individual image files.</p>
-
-                <p>It is still your responsibility to be sure this directory of external data files follows your <latex/> output to whatever directory you use to convert to a PDF and is in the right location for the relative path given in the XML source.  The discussion above only applies to generating individual image files, such as you would need for the HTML output.</p>
+                <p>A plot might use a graphics language to draw the axes and grid, but the data might be from an experiment and live in an external file that you do not wish to place in your source.  Place such a file in a subdirectory directly below the directory where your master source file resides.  Then indicate this directory in a <c>docinfo/directories/@data</c> attribute of your source.  But you <em>must</em> prefix the path with <c>data/</c> as in the source below.</p>
 
                 <figure xml:id="figure-pgfplots-data-demo">
                     <caption>External data in a pgfplots plot</caption>
