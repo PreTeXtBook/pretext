@@ -294,12 +294,13 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
             pass
 
         # Need to copy entire "external" directory
-        # Then files (like data for plots) can be available
+        # Also data (e.g. for plots) is made available
         # NB: we might really do this sooner, but then all
-        # the files in "external" get added into the list
-        # of source files, pf_source_files
+        # the files in "external" and "data" get added
+        # into the list of source files, pf_source_files
         _, external_dir = get_managed_directories(xml_source, pub_file)
-        copy_managed_directories(tmp_dir, external_abs=external_dir)
+        data_dir = get_source_directories(xml_source)
+        copy_managed_directories(tmp_dir, external_abs=external_dir, data_abs=data_dir)
 
         # make output/tactile directory if the outformat is "all"
         # PreFigure makes 'output' but we also want to create 'output/tactile'
