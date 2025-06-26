@@ -4135,6 +4135,8 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
 
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
+    # Consult source for additional files
+    data_dir = get_source_directories(xml)
 
     # names for scratch directories
     tmp_dir = get_temporary_directory()
@@ -4167,7 +4169,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
 
     # place managed directories - some of these (Asymptote HTML) are
     # consulted during the XSL run and so need to be placed beforehand
-    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
 
     if include_static_files:
         # Copy js and css, but only if not building portable html
