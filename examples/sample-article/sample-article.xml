@@ -101,6 +101,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         \usetikzlibrary{positioning}        % for Dave R's worksheet
         \usepackage{circuitikz}             % for Virgil P's worksheet
         \usepackage{nicematrix}             % for multi-run latex-image (label="latex-three-pass")
+        \usepackage{siunitx}                % swim speeds in shark attack image
         </latex-image-preamble>
         <!--
         The Sage Notebook has its own interface and worksheet list.
@@ -3923,6 +3924,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         \addplot[blue] table {data/dataplot/hodgkin-huxley-data.dat};
                         \end{axis}
                         \end{tikzpicture}]]>
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <p>The TikZ image in the next figure is made up from two <init>PNG</init> images (the shark and the swimmer), in addition to various TikZ commands.  The images reside in a source directory, <c>numerical/attack</c>, so the image files (<c>shark.png</c>, <c>swimmer.png</c>) are prefixed in the TikZ code with <c>data/attack</c> so the creation of the image will be successful.</p>
+
+                <figure xml:id="figure-shark-attack">
+                    <caption>An illustration of the shark trying to catch you as you swim to shore.</caption>
+                    <image label="shark-attack">
+                        <latex-image>
+                        \begin{tikzpicture}
+                            \tikzset{ ragged border/.style={ decoration={random steps, segment length=1mm, amplitude=0.5mm}, decorate, } }
+                            \fill[cyan!30] decorate[ragged border]{ (0,2) -- (8,2) } -- (8,0) -- (0,0) -- cycle;
+                            \fill[yellow!30] decorate[ragged border]{ (8,2) -- (8,0) } -- (9,0) -- (9,2) -- cycle;
+                            \draw (1.5,1) node {\scalebox{-0.2}[0.2]{\includegraphics{data/attack/shark.png}}};
+                            \draw (5,1) node {\includegraphics[scale=0.05]{data/attack/swimmer.png}};
+                            \draw[|-|] (1.5,3) node [above] {\(\SI{0}{m}\)} -- (5,3) node [above] {\(\SI{50}{m}\)};
+                            \draw[|-|] (5,3) -- (8,3) node [above] {\(\SI{70}{m}\)};
+                        \end{tikzpicture}
                         </latex-image>
                     </image>
                 </figure>
