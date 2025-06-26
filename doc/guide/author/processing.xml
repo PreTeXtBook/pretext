@@ -22,7 +22,7 @@
             <ol>
                 <li>
                     <p>
-                        The <pretext/>-CLI: very easy and friendly, but somewhat limited in customization.  Requires Python 3.8 or later.  Documentation appears in <xref ref="processing-CLI" />, and throughout the Guide as needed.
+                        The <pretext/>-CLI: very easy and friendly, but somewhat limited in customization.  Requires Python 3.10 or later.  Documentation appears in <xref ref="processing-CLI" />, and throughout the Guide as needed.
                     </p>
                 </li>
                 <li>
@@ -75,7 +75,12 @@
                 <ul>
                     <li>
                         <p>
-                            Python, version 3.8.5 or later. In a terminal, type <c>python --version</c> to ensure you are already set up. On MacOS or Linux, your command for python might be called <c>python3</c>, so also try <c>python3 --version</c>.
+                            Python, version 3.10 or later. In a terminal, type <c>python --version</c> to ensure you are already set up. On MacOS or Linux, your command for python might be called <c>python3</c>, so also try <c>python3 --version</c>.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            To use an HTML theme other than the default, you will need Node.js, version 18 or later.  You can check if you have it installed by running <c>node --version</c> in your terminal.
                         </p>
                     </li>
                     <li>
@@ -95,7 +100,7 @@
                 Now we can install <pretext />. Open a terminal and type the following:
             </p>
             <console>
-                <input>pip install pretext</input>
+                <input>pip install pretext[all]</input>
             </console>
 
             <p>
@@ -103,20 +108,24 @@
             </p>
 
             <console>
-                <input>python -m pip install pretext</input>
+                <input>python -m pip install pretext[all]</input>
             </console>
 
             <p>
-                (or, if <c>python3</c> worked above, do <c>python3 -m pip install pretext</c>.)
+                (or, if <c>python3</c> worked above, do <c>python3 -m pip install pretext[all]</c>.)
             </p>
 
             <p>
                 The <c>python -m</c> helps in case Python is on your <init>PATH</init> but <c>pip</c> is not. This is a useful fix for the rest of the commands listed for the <pretext />-CLI.
             </p>
 
+            <p>
+                Including the <c>[all]</c> at the end of the instillation command will install both optional dependencies with the CLI: <c>pelican</c> for generating a static landing page if you wish to deploy multiple targets, and <c>prefigure</c>, to include accessible prefigure graphics.  You could install just one of these using <c>pip install pretext[prefigure]</c>, for example.  If something goes wrong, you can always just include the required dependencies with <c>pip install pretext</c>.
+            </p>
+
             <note>
                 <p>
-                    Newer Linux distributions may give an error or warning when using <c>pip</c> outside of a virtual environment.  It is likely best practice to use a virtual environment, especially if you use python for other projects.  Some instructions are available in <xref ref="python-virtual"/>.
+                    Newer Linux distributions and MacOS versions may give an error or warning when using <c>pip</c> outside of a virtual environment.  It is likely best practice to use a virtual environment, especially if you use python for other projects.  Some instructions are available in <xref ref="python-virtual"/>.
                 </p>
                 <p>
                     Alternatively, you can use <c>pipx</c> to install the CLI with <c>pipx install pretext</c>, which will create and manage a virtual environment for you.
@@ -156,11 +165,11 @@
             </console>
 
             <p>
-                If you ever want to downgrade to previous version, you can do that with <c>pip</c> as well.  For example, to install version 2.13.5:
+                If you ever want to downgrade to previous version, you can do that with <c>pip</c> as well.  For example, to install version 2.20.1:
             </p>
 
             <console>
-                <input>pip install pretext=="2.13.5"</input>
+                <input>pip install pretext=="2.20.1"</input>
             </console>
             <warning>
                 <p>
@@ -434,7 +443,7 @@
             </p>
 
             <p>
-                With just these attributes, as with the manifest in <xref ref="cli-project-manifest-example"/>, the CLI assumes your project uses default values throughout. The following defaults are constucted from the default value for an attribute of the root <tag>project</tag> element with the default value for an attribute of a particular <tag>target</tag> element. Each of the two pieces can be overrided. The net default folders are:
+                With just these attributes, as with the manifest in <xref ref="cli-project-manifest-example"/>, the CLI assumes your project uses default values throughout. The following defaults are constructed from the default value for an attribute of the root <tag>project</tag> element with the default value for an attribute of a particular <tag>target</tag> element. Each of the two pieces can be overridden. The net default folders are:
                 <ul>
                     <li><p>The source is <c>source/main.ptx</c>.</p></li>
                     <li><p>The publication file is <c>publication/publication.ptx</c>.</p></li>
