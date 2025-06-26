@@ -4426,6 +4426,9 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     stringparams = stringparams.copy()
 
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
+    # Consult source for additional files
+    data_dir = get_source_directories(xml)
+
     # perhaps necessary (so drop "if"), but maybe not; needs to be supported
     if pub_file:
         stringparams["publisher"] = pub_file
@@ -4447,7 +4450,8 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method):
     # A "None" value will indicate there was no information
     # (an empty string is impossible due to a slash always being present?)
 
-    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    # Make data files available, such as for TikZ images
+    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
 
     # If we are building for a journal, we might need extra files
     pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
