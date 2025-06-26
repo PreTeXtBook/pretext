@@ -5110,6 +5110,57 @@ def get_managed_directories(xml_source, pub_file):
     return (generated, external)
 
 
+def get_source_directories(xml_source):
+    '''Directories given in source's "docinfo" element'''
+
+    # Examine <source>/docinfo/directories element carefully
+    # for attributes which we code here for convenience
+    data_attr = "data"
+
+    # prepare for relative paths later
+    source_dir = get_source_path(xml_source)
+
+    # some parameterized error messages used later
+    source_abs_path_error = " ".join(
+        [
+            "the directory path for a managed directory, given in the",
+            'source file as "docinfo/directories/@{}" must be relative to',
+            'the PreTeXt source file location, and not the absolute path "{}"',
+        ]
+    )
+    source_missing_dir_error = " ".join(
+        [
+            'the directory "{}" implied by the value "{}" in the',
+            '"docinfo/directories/@{}" entry of the source file does not',
+            "exist. Check the spelling, create the necessary directory, or entirely",
+            'remove the whole "docinfo/directories" element of the source file.'
+        ]
+    )
+
+    # Data holds files necessary for building parts
+    # of a project, and are only necessary for that role.
+    # As a component of the source it is given in the "docinfo"
+    data = None
+
+    src_tree = ET.parse(xml_source)
+    src_tree.xinclude()
+    directories_list = src_tree.xpath("/pretext/docinfo/directories")
+    if directories_list:
+        attributes_dict = directories_list[0].attrib
+        if data_attr in attributes_dict:
+            raw_path = attributes_dict[data_attr]
+            if os.path.isabs(raw_path):
+                raise ValueError(source_abs_path_error.format(data_attr, raw_path))
+            else:
+                abs_path = os.path.join(source_dir, raw_path)
+            try:
+                data = verify_input_directory(abs_path)
+            except:
+                raise ValueError(source_missing_dir_error.format(abs_path, raw_path, data_attr))
+
+    return data
+
+
 def get_platform_host(pub_file):
     '''Reports the html/platform/@host value from the publication file'''
 
