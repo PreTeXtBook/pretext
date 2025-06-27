@@ -54,9 +54,22 @@ function toggletoc() {
 }
 
 window.addEventListener("DOMContentLoaded",function(event) {
-       thetocbutton = document.getElementsByClassName("toc-toggle")[0];
-       thetocbutton.addEventListener('click', () => toggletoc() );
+    thetocbutton = document.getElementsByClassName("toc-toggle")[0];
+    thetocbutton.addEventListener("click", (e) => {
+        toggletoc();
+        e.stopPropagation(); // keep global click handler from immediately toggling it back
+    });
 });
+
+window.addEventListener("click", function(event) {
+    const sidebar = document.getElementById("ptx-sidebar");
+    if (sidebar.classList.contains("visible")) {
+        if (!event.composedPath().includes(sidebar)) {
+            toggletoc();
+        }
+    }
+});
+
 
 /* jump to next page if reader tries to scroll past the bottom */
 // var hitbottom = false;
