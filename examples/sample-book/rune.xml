@@ -3809,8 +3809,12 @@ TEST_CASE( "Test the add function" ) {
         </interactive>
     </section>
 
-    <exercises xml:id="fill-in-exercises">
-        <title>Fill-In Exercises</title>
+    <exercises xml:id="fill-in-exercises-old">
+        <title>Fill-In Exercises (Old Style)</title>
+
+        <introduction>
+            <p>This section has <term>fill-in-the-blank</term> (<init>FITB</init>) exercises that use an old syntax.  They were designed for projects transitioning from Runestone's ReST syntax to <pretext/>.  So they are really only here for testing, and not for any sort of documentation.  They will not receive support or enhancements.  <foreign>Caveat emptor</foreign>.</p>
+        </introduction>
 
         <exercise label="fillin-integer">
             <title>Fill-In, Integer Answer</title>
@@ -3915,6 +3919,14 @@ TEST_CASE( "Test the add function" ) {
                 </var>
             </setup>
         </exercise>
+    </exercises>
+
+    <exercises xml:id="fill-in-exercises">
+        <title>Fill-In Exercises</title>
+
+        <introduction>
+            <p>This section has <term>fill-in-the-blank</term> (<init>FITB</init>) exercises using newer syntax, and the subject of active development.</p>
+        </introduction>
 
         <exercise label="fillin-numbers-many-tests">
             <title>Fill-In, New Markup Numbers</title>
