@@ -11,6 +11,8 @@
     extension-element-prefixes="exsl date str"
 >
 
+<xsl:variable name="b-include-postContent" select="true()"/>
+
 <!-- ==================================================== -->
 <!-- Actual rules for substution when generating HTML     -->
 <!-- ==================================================== -->
@@ -266,7 +268,9 @@
         <!-- Prepare evaluation and feedback       -->
         <xsl:call-template name="setup-fillin-parsers"/>
         <!-- Create the call-back for post-render tasks -->
-        <xsl:call-template name="setup-postContent"/>
+        <xsl:if test="$b-include-postContent">
+            <xsl:call-template name="setup-postContent"/>
+        </xsl:if>
     </xsl:variable>
     <xsl:call-template name="escape-quote-string">
         <xsl:with-param name="text" select="$js_code"/>
