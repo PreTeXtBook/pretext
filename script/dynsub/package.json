@@ -1,0 +1,13 @@
+{
+  "name": "pretext-dynsub-extractor",
+  "version": "1.0.0",
+  "description": "PreTeXt Script to Evaluate Dynamic Substitutions",
+  "main": "dynamic_extract.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "btm-expressions": ">=0.1.12"
+  },
+  "license": "MIT"
+}
