@@ -59,17 +59,19 @@ window.addEventListener("DOMContentLoaded",function(event) {
         toggletoc();
         e.stopPropagation(); // keep global click handler from immediately toggling it back
     });
-});
 
-window.addEventListener("click", function(event) {
-    const sidebar = document.getElementById("ptx-sidebar");
-    if (sidebar.classList.contains("visible")) {
-        if (!event.composedPath().includes(sidebar)) {
-            toggletoc();
-        }
+    // For themes that want it, install a click handler to auto close the toc.
+    if (getComputedStyle(document.documentElement).getPropertyValue('--auto-collapse-toc') == "yes") {
+        window.addEventListener("click", function(event) {
+            const sidebar = document.getElementById("ptx-sidebar");
+            if (sidebar.classList.contains("visible")) {
+                if (!event.composedPath().includes(sidebar)) {
+                    toggletoc();
+                }
+            }
+        });
     }
 });
-
 
 /* jump to next page if reader tries to scroll past the bottom */
 // var hitbottom = false;
