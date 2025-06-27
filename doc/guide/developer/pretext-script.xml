@@ -248,7 +248,11 @@ The script should be run on the entire document, even if all the images are in o
 
                 <li>
                     <title><webwork/></title>
-                    <p>Various conversions of <webwork/> problems are facilitated through communication with a <webwork/> server.  This server is specified as an argument to the <c>-s</c> option.  See <xref ref="webwork-author"/> for the details of this procedure.</p>
+                    <p>
+                        Various conversions of <webwork/> problems are facilitated using either a
+                        <webwork/> server or a local copy of the PG repository.  See
+                        <xref ref="webwork-author"/> for the details of this procedure.
+                    </p>
                 </li>
             </dl>
         </list>
