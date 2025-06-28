@@ -7,7 +7,6 @@
 :root {
   --base-content-width: 725px;
   --content-padding: 48px;
-  --auto-collapse-toc: yes;
 }
 body {
   margin: 0;
@@ -3740,6 +3739,7 @@ body.pretext {
 }
 :root {
   --content-font-size: 1.1rem;
+  --auto-collapse-toc: yes;
 }
 @media screen and (width < 800px) {
   body.pretext {
