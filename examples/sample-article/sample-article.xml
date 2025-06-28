@@ -3928,7 +3928,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </image>
                 </figure>
 
-                <p>The TikZ image in the next figure is made up from two <init>PNG</init> images (the shark and the swimmer), in addition to various TikZ commands.  The images reside in a source directory, <c>numerical/attack</c>, so the image files (<c>shark.png</c>, <c>swimmer.png</c>) are prefixed in the TikZ code with <c>data/attack</c> so the creation of the image will be successful.</p>
+                <p>The TikZ image in the next figure is made up from two <init>PNG</init> images (the shark and the swimmer), in addition to various TikZ commands.  The images reside in a source directory, <c>numerical/attack</c>, so the image files (<c>shark.png</c>, <c>swimmer.png</c>) are prefixed in the TikZ code with <c>data/attack</c> so the creation of the image will be successful.  This example is courtesy of Stephen Brown.</p>
 
                 <figure xml:id="figure-shark-attack">
                     <caption>An illustration of the shark trying to catch you as you swim to shore.</caption>
