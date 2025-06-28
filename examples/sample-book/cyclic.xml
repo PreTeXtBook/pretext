@@ -368,6 +368,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <latex-image><xi:include href="tikz/cyclic-roots-unity.tex" parse="text" /></latex-image>
             </image>
         </figure>
+
+        <p>Another version of this diagram, authored in <prefigure/>, is also included in <xref ref="prefigure-rtsunity"/>.</p>
+
+        <figure xml:id="prefigure-rtsunity">
+            <caption>8th roots of unity, authored in <prefigure/></caption>
+            <image width="70%">
+                <prefigure xmlns="https://prefigure.org"
+                           label="prefigure-rtsunity">
+                    <diagram dimensions="(300,300)" margins="5">
+                        <definition>
+                            alignments=['se','ne','ne','nw','sw','sw','sw','se']
+                        </definition>
+                        <definition substitution="no">
+                            labels=['1',r'\omega','i',r'\omega^3','-1',r'\omega^5','-i',r'\omega^7']
+                        </definition>
+                        <definition>f(t)=(cos(pi*t/4),sin(pi*t/4))</definition>
+                        <coordinates bbox="[-1.4,-1.4,1.4,1.4]">
+                            <grid at="grid" />
+                            <axes at="axes" decorations="no" />
+                            <circle at="unit-circle" center="(0,0)" radius="1" stroke="blue"/>
+                            <repeat parameter="k=0..7">
+                                <point at="point" p="f(k)" alignment="alignments[k]">
+                                    <m>${labels[k]}</m>
+                                </point>
+                            </repeat>
+                        </coordinates>
+                    </diagram>
+                </prefigure>
+            </image>
+        </figure>
+
     </section>
 
     <section>
