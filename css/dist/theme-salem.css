@@ -3739,6 +3739,7 @@ body.pretext {
 }
 :root {
   --content-font-size: 1.1rem;
+  --auto-collapse-toc: yes;
 }
 @media screen and (width < 800px) {
   body.pretext {
