@@ -611,9 +611,11 @@ window.addEventListener("load",function(event) {
    }
 });
 
-/* .onepage  worksheets  adjust workspace to fit printed page length */
 
-function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
+
+/* .onepage  worksheets  adjust workspace to fit printed page length */
+// Preserve previous worksheet logic for inclusion on worksheets with authored pages
+function legacyScaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
     console.log("initial height", obj.clientHeight);
     these_workspaces = subobj.querySelectorAll('.workspace');
     if (obj != subobj) {
@@ -679,7 +681,7 @@ function scaleWorkspaceIn(obj, subobj, scale, tmporfinal) {
     return obj.clientHeight
 }
 
-function adjustWorkspace() {
+function legacyAdjustWorkspace() {
 
     console.log("adjusting workspace");
     $(".workspace").attr("contenteditable", "true");
@@ -728,8 +730,8 @@ function adjustWorkspace() {
        console.log("worksheetData", worksheetData, "pageData", pageData);
        console.log(i, "i", pageExtraHeight, "pageExtraHeight");
 
-       heightA = scaleWorkspaceIn(this_item, this_item, a, "tmp");
-       heightB = scaleWorkspaceIn(this_item, this_item, b, "tmp");
+       heightA = legacyScaleWorkspaceIn(this_item, this_item, a, "tmp");
+       heightB = legacyScaleWorkspaceIn(this_item, this_item, b, "tmp");
        console.log("heights", heightA, " xx ", heightB, "oo", this_item);
        console.log(i, "goal height", pageheight[i]);
        /* a magicscale makes the output the height of the minimum specified input */
@@ -739,7 +741,7 @@ function adjustWorkspace() {
          magicscale = (pageheight[i]*(a - b) + b*heightA - a*heightB)/(heightA - heightB);
        }
        console.log("magicscale", magicscale, "of", this_item);
-       scaleWorkspaceIn(this_item, this_item, magicscale, "final");
+       legacyScaleWorkspaceIn(this_item, this_item, magicscale, "final");
        all_pages[i].setAttribute("style", 'height: ' + pageheight[i].toString() + 'px');
 
        var this_height = this_item.clientHeight;
@@ -754,25 +756,299 @@ function adjustWorkspace() {
        console.log('are squashed by', magicscale);
        for (var j=0; j < these_squashed.length; ++j) {
            var this_q = these_squashed[j];
-           heightA = scaleWorkspaceIn(this_item, this_q, 12, "tmp");
+           heightA = legacyScaleWorkspaceIn(this_item, this_q, 12, "tmp");
            console.log("heightA", heightA);
            if (heightA <= this_height) {
-               scaleWorkspaceIn(this_item, this_q, 12, "final");
+               legacyScaleWorkspaceIn(this_item, this_q, 12, "final");
            } else {
-               scaleWorkspaceIn(this_item, this_q, magicscale, "final");
+               legacyScaleWorkspaceIn(this_item, this_q, magicscale, "final");
            }
        }
     }
     console.log("finished adjusting workspace");
 }
 
+
 function urlattribute() {
         var this_urlstub = window.location.hostname;
         document.body.setAttribute("data-urlstub", this_urlstub);
 }
 
-window.addEventListener("load",function(event) {
 
+// The new method for creating pages and adjusting workspace //
+
+// Assumptions: needs to work for both letter (8.5in x 11in) and a4 (210mm x 297mm) paper sizes.  We will work in pixels (96/in): those are 816px x 1056px and 794px x 1122.5px respectively (1 inch = 96 px, 1 cm = 37.8 px).  We assume that the printing interface of the browser will do the right thing with these.
+
+// For purposes of finding page breaks, we will use 794 as our width and 1056 as our height (so A4 width and letter height).  Then we will rescale workspace on each page to fit the actual paper size selected.
+
+// For now, these are the constant margins used in HTML to agree with the legacy worksheet layout.
+const topMargin = 40; // in pixels
+const bottomMargin = 45; // in pixels
+const leftMargin = 45; // in pixels
+const rightMargin = 55; // in pixels
+
+const conservativeContentHeight = 1056 - (topMargin + bottomMargin); // in pixels
+const conservativeContentWidth = 794 - (leftMargin + rightMargin); // in pixels
+
+// This is the main function we will call then a worksheet does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
+function layoutWorksheet() {
+    console.log("layoutWorksheet called");
+    const worksheet = document.querySelector('section.worksheet');
+    if (!worksheet) {
+        console.warn("No worksheet found, exiting layoutWorksheet.");
+        return;
+    }
+    console.log("Found worksheet:", worksheet);
+    worksheet.style.width = toString(conservativeContentWidth + leftMargin + rightMargin) + 'px'; // Set the width of the worksheet to 605px
+    console.log("The total height of the worksheet is", worksheet.offsetHeight, "(px?)");
+    // Set the height of each workspace based on its data-space attribute
+    const workspaces = worksheet.querySelectorAll('.workspace');
+    workspaces.forEach(ws => {
+        ws.style.height = ws.getAttribute('data-space') || '0px';
+        ws.setAttribute("contenteditable", "true");
+    });
+    // Temporarily set the width of the worksheet to 8.5 inches for layout purposes
+    console.log("Set workspace heights based on data-space attributes.");
+    worksheet.style.padding = '0 45px 0 55px'; // Set padding to match the page layout
+
+    // We want to consider each "block" of the worksheet.  Some of these will be direct children of the worksheet, some will be nested inside these children.  So first create a list of the elements that we consider blocks.
+    let rows = [];
+    for (const child of worksheet.children) {
+        if (child.classList.contains('sidebyside')) {
+            // sidebyside could have tasks, but we don't want to dive further into them.
+            rows.push(child);
+        } else if (child.querySelector('.task')) {
+            for (const row of child.children) {
+                rows.push(row);
+            }
+        // Skipping separate treatment of exercisegroups for now.
+        //} else if (child.classList.contains('exercisegroup')) {
+        //    for (const subChild of child.children) {
+        //        if (subChild.classList.contains('exercisegroup-exercises')){
+        //            for (const row of subChild.children){
+        //                rows.push(row);
+        //            }
+        //        } else {
+        //            rows.push(child);
+        //        }
+        //    }
+        } else {
+            rows.push(child);
+        }
+    }
+    // Loop through the blocks and create a list of objects including the block, its height, and its workspace height.  Only include blocks that have height (this will remove autopermalinks, as desired).
+    let blockList = [];
+    for (const row of rows) {
+        let blockHeight = getElementTotalHeight(row);
+        if (blockHeight === 0) {
+            console.log("Skipping row with zero height:", row);
+            continue;
+        }
+        let totalWorkspaceHeight = 0;
+        if (row.querySelector('.workspace')) {
+            // Workspace height is not just sum of workspace heights; we need to be careful with sidebyside and columns
+            totalWorkspaceHeight = getElemWorkspaceHeight(row);
+        }
+        blockList.push({elem: row, height: blockHeight, workspaceHeight: totalWorkspaceHeight});
+    }
+
+    // Now find pageBreaks so that extra workspace is as uniform as possible.
+    const pageBreaks = findPageBreaks(blockList, conservativeContentHeight);
+
+    // Create page divs and insert rows into them
+    for (let i = 0; i < pageBreaks.length; i++) {
+        const pageDiv = document.createElement('section');
+        pageDiv.classList.add('onepage');
+        if (i === 0) {
+            pageDiv.classList.add('firstpage');
+        } 
+        // A single page will be both first and last
+        if (i === pageBreaks.length - 1) {
+            pageDiv.classList.add('lastpage');
+        }
+        // The pageBreaks array gives the indices of blocks that should start a page.
+        // So we will want to look for go through the blocks selecting those starting with the previous index (or 0) up to but not including the current index.
+        const start = pageBreaks[i-1] || 0;
+        const end = pageBreaks[i];
+        for (let j = start; j < end; j++) {
+            const row = blockList[j].elem;
+            pageDiv.appendChild(row);
+        }
+        worksheet.appendChild(pageDiv);
+    }
+    
+    // remove any old content that is not in a page
+    for (const child of worksheet.children) {
+        if (!child.classList.contains('onepage')) {
+            console.log("Removing old child not in a page:", child);
+            worksheet.removeChild(child);
+        }
+    }
+
+    // Now we look at each page and adjust the heights of the workspaces to fit it nicely into the page.
+    // The width and height of the page will now depend on the letter or a4 setting.
+    const papersize = localStorage.getItem("papersize");
+    let paperWidth, paperHeight;
+    if (papersize === 'a4' || document.body.classList.contains('a4')) {
+        console.log("Setting page size to A4");
+        paperWidth = 794; // 210mm in px
+        paperHeight = 1122.5; // 297mm in px 794px x 1122.5px
+    } else {
+        console.log("Setting page size to Letter");
+        paperWidth = 816; // 8.5in in px
+        paperHeight = 1056; // 11in in px
+    }
+    const paperContentHeight = paperHeight - (topMargin + bottomMargin);
+
+    const pages = worksheet.querySelectorAll('.onepage');
+    pages.forEach(page => {
+        console.log("Adjusting workspace height for page:", page);
+        // Set width to get accurate calculations
+        page.style.width = paperWidth + 'px';
+        const rows = page.children;
+        let totalContentHeight = 0;
+        let totalWorkspaceHeight = 0;
+        for (const row of rows) {
+            totalContentHeight += getElementTotalHeight(row);
+            totalWorkspaceHeight += getElemWorkspaceHeight(row);
+            console.log("Adding workspace height for row:", row, "Total so far:", totalWorkspaceHeight, "px.");
+            console.log("The row has height ", row.offsetHeight, "px.");
+        }
+        if (totalWorkspaceHeight === 0) {
+            console.log("No workspaces on this page, skipping workspace adjustment.");
+            // Reset the style for the page
+            page.style.width = "";
+            // This is not quite right, but for now it will do.  Once margins for printing are set up better, come back to this.
+            page.style.minHeight = paperContentHeight + 'px';
+            return;
+        }
+        const extraHeight = paperContentHeight - totalContentHeight;
+        console.log("Extra height to distribute across workspaces:", extraHeight, "px.");
+        // Determine the factor by which to multiply each workspace to make the total height fit the paperContentHeight
+        const workspaceAdjustmentFactor = (totalWorkspaceHeight + extraHeight) / totalWorkspaceHeight;
+        console.log("Workspace adjustment factor for page:", workspaceAdjustmentFactor);
+        // Now adjust each workspace in the page by this factor
+        const pageWorkspaces = page.querySelectorAll('.workspace');
+        pageWorkspaces.forEach(ws => {
+            const originalHeight = ws.offsetHeight;
+            const newHeight = originalHeight * workspaceAdjustmentFactor;
+            ws.style.height = newHeight + "px";
+            // If we squashed the workspace, add a class to warn the user.
+            if (workspaceAdjustmentFactor < 1) {
+                ws.classList.add("squashed");
+                ws.classList.add("tight");
+            }
+        });
+        // Reset the style for the page
+        page.style.width = "";
+        // The following should go away when the CSS for print worksheets is fixed.
+        let renderedPageHeight = paperHeight;
+        if (page.classList.contains('firstpage')) {
+            renderedPageHeight -= topMargin;
+        }
+        if (page.classList.contains('lastpage')) {
+            renderedPageHeight -= bottomMargin;
+        }
+        page.style.height = renderedPageHeight + 'px';
+    });
+    console.log("Set page sizes to content area of paper size.");
+
+    // Reset the width of the worksheet to auto after layout
+    worksheet.style.padding = '';
+    worksheet.style.width = '';
+}
+
+// Helper functions for calculating heights and workspace sizes
+function getElementTotalHeight(elem) {
+    // Calculate the total height of the element, including padding, border, and top margin.
+    const style = getComputedStyle(elem);
+    const marginTop = parseFloat(style.marginTop);
+    const height = elem.offsetHeight;
+    return height + marginTop;
+}
+
+function getElemWorkspaceHeight(elem) {
+    // Calculate the total height of all workspaces in the element. 
+    // This is easy for elements stacked vertically, but we must be careful for side-by-side workspaces.  It is not obvious what we actually want here.  For now, we will just average the heights of the workspaces in each column.
+    let columns = 1;
+    if (elem.classList.contains('sidebyside')) {
+        const sbpanels = elem.querySelectorAll('.sbspanel');
+        columns = sbpanels.length;
+        console.log("Found sidebyside with columns:", columns);
+    } 
+    if (elem.classList.contains('exercisegroup')) {
+        // Check for column classes and set columns accordingly
+        for (let i = 2; i <= 6; i++) {
+            if (elem.querySelector(`.cols${i}`)) {
+            columns = i;
+            console.log("Found exercisegroup with columns:", columns);
+            break;
+            }
+        }
+    }
+    const workspaces = elem.querySelectorAll('.workspace');
+    let totalHeight = 0;
+    workspaces.forEach(ws => {
+        const workspaceHeight = ws.offsetHeight;
+        if (workspaceHeight) {
+            totalHeight += workspaceHeight;
+        }
+    });
+    return totalHeight / columns; // Divide by columns if sidebyside to get average height per column
+}
+
+// Functions for finding the optimal page breaks
+function findPageBreaks(rows, pageHeight) {
+    // An array for the page breaks.  The nth element will be the index of the last row on page n.
+    let pageBreaks = [];
+    // An array for the minimum cost possible for rows i to the end.
+    let minCost = Array(rows.length).fill(Infinity);
+    minCost[rows.length] = 0; // No cost for no rows
+    // An array to keep track of the next row to start a new page after i in minCost.
+    let nextPageBreak = Array(rows.length).fill(-1);
+
+    // Now loop through the rows in reverse order to find the optimal page breaks.
+    for (let i = rows.length - 1; i >= 0; i--) {
+        let cumulativeHeight = 0;
+        let cumulativeWorkspaceHeight = 0;
+        // Loop through the rows starting from i to find the best page break
+        for (let j = i; j < rows.length; j++) {
+            cumulativeHeight += rows[j].height;
+            cumulativeWorkspaceHeight += rows[j].workspaceHeight;
+            if (cumulativeHeight > pageHeight) {
+                if (j === i) {
+                    // The page height is too big for a single row.  We make this row its own page and move on.
+                    console.log("Row", i, "exceeds page height by itself, setting as its own page.");
+                    minCost[i] = 0; // No cost for a single row
+                    nextPageBreak[i] = i + 1; // The next page break is after this row
+                    break; // Move to the next row
+                } else {
+                    // We have already set minCost and NextPageBreak at an earlier point in the loop.  This means we have done the best we can for this row so we stop and move to the next earlier row.
+                    break; // Stop if we exceed the page height
+                }
+            }
+
+            const cost = (pageHeight - cumulativeHeight)**2 + minCost[j+1]; // Cost is how much space is left on the page, plus the cost of the following pages.
+            if (cost < minCost[i]) {
+                minCost[i] = cost;
+                nextPageBreak[i] = j+1; // Set the next page break to be after row j
+            }
+        }
+    }
+    // Backtrack to find the actual page breaks based on nextPageBreak
+    // Note: the nextPage = 1 is not an indexing mistake; we always assume that row 0 is a title and will go on the same page as row 1.
+    let nextPage = 1;
+    while (nextPage < rows.length) {
+        pageBreaks.push(nextPageBreak[nextPage]);
+        nextPage = nextPageBreak[nextPage];
+    }
+    return pageBreaks;
+}
+
+
+
+// Worksheet papersize toggle:
+window.addEventListener("load",function(event) {
   if (document.body.classList.contains("worksheet")) {
     const papersize = localStorage.getItem("papersize");
     if (papersize) {
@@ -835,9 +1111,20 @@ window.addEventListener("load",function(event) {
       for (var j=0; j < born_hidden_knowls.length; ++j) {
           born_hidden_knowls[j].click()
       }
-  /* not the right way:  need to figure out what this needs to wait for */
-      window.setTimeout(adjustWorkspace, 1000);
-
+    //  Use the legacy adjustWorkspace function when the original html contains a class="onepage" element:
+        if (document.querySelector('.onepage')) {
+            console.log("legacyAdjustWorkspace");
+            /* not the right way:  need to figure out what this needs to wait for */
+            window.setTimeout(legacyAdjustWorkspace, 1000);
+        } else {
+            console.log("creating pages and workspace with new method");
+            // Use the new method for adjusting workspace
+            window.setTimeout(layoutWorksheet, 1000);
+        }
+    
+        console.log("finished adjusting workspace");
+      
+        // Not sure why this is here:
       window.setTimeout(urlattribute, 1500);
   }
 });
