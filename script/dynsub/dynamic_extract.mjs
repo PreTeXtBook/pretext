@@ -42,7 +42,7 @@ const evaluate = function(setup, seed, substitutions) {
 try {
     const data = readFileSync(args.input, 'utf8');
     const dynamic_problems = JSON.parse(data);
-    var xmlResponse = "<xml>";
+    var xmlResponse = "<xml>\n";
     for (var i in dynamic_problems) {
         var prob = dynamic_problems[i];
         if (prob.exercise_id) {
@@ -51,13 +51,9 @@ try {
                 var obj = prob.exercise_evals[j];
                 substitutions[obj] = "";
             }
-            xmlResponse += "<dynamic-substitution id=\"" + prob.exercise_id + "\">";
+            xmlResponse += "  <dynamic-substitution id=\"" + prob.exercise_id + "\">\n";
             var dyn_vars = evaluate(prob.exercise_setup, prob.exercise_seed, substitutions);
             var subs_keys = Object.keys(substitutions);
-            // To compare old version to this version with diff, we need to create
-            // a substitution element for each occurrence in the problem.
-            // Remove this line to remove repeated elements.
-            subs_keys = prob.exercise_evals;  // <-- This line!
             for (var k in subs_keys) {
                 var key = subs_keys[k];
                 var obj = dyn_vars[key];
@@ -67,9 +63,9 @@ try {
                 } else {
                     obj_str = obj.toString();
                 }
-                xmlResponse += "<eval-subst obj=\"" + key + "\">" + obj_str + "</eval-subst>";
+                xmlResponse += "    <eval-subst obj=\"" + key + "\">" + obj_str + "</eval-subst>\n";
             }
-            xmlResponse += "</dynamic-substitution>";
+            xmlResponse += "  </dynamic-substitution>\n";
         }
     }
     xmlResponse += "</xml>";
