@@ -5862,7 +5862,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
     <!-- div is constraint/positioning for contained image -->
-    <div class="image-box">
+    <div>
+        <xsl:attribute name="class">
+            <xsl:text>image-box</xsl:text>
+            <xsl:if test="$layout/width-native = 'auto'">
+                <xsl:text> image-box__auto-width</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
         <xsl:attribute name="style">
             <xsl:text>width: </xsl:text>
             <xsl:value-of select="$layout/width"/>
