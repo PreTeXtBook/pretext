@@ -16,8 +16,18 @@ iframe.asymptote,
 
 // images in containers should grow to fit space
 .image-box img,
-img.contained {
+.image-box svg {
     width: 100%;
+}
+
+.image-box.image-box__auto-width img,
+.image-box.image-box__auto-width svg
+{
+    max-width: 100%;
+    width: auto;
+    margin-left: auto;
+    display: block;
+    margin-right: auto;
 }
 
 // ---------------------------------------------
