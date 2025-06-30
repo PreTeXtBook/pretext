@@ -2298,7 +2298,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="webwork and $b-extracting-pg">
                 <xsl:text>webwork-authored</xsl:text>
             </xsl:when>
-            <xsl:when test="webwork-reps and not(b-extracting-pg)">
+            <xsl:when test="webwork-reps and not($b-extracting-pg)">
                 <xsl:text>webwork-reps</xsl:text>
             </xsl:when>
             <xsl:when test="myopenmath">
