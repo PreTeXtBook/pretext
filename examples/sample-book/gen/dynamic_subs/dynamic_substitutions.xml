@@ -1,1 +1,26 @@
-<xml><dynamic-substitution id="fillin-random-simple"><eval-subst obj="myNum">7</eval-subst><eval-subst obj="mySquare">49</eval-subst></dynamic-substitution><dynamic-substitution id="fillin-math-solve-equation"><eval-subst obj="theFunction">-2 x-6</eval-subst><eval-subst obj="theAnswer">-3</eval-subst><eval-subst obj="theFunction">-2 x-6</eval-subst><eval-subst obj="b">-6</eval-subst><eval-subst obj="negB">6</eval-subst><eval-subst obj="m">-2</eval-subst><eval-subst obj="negB">6</eval-subst><eval-subst obj="m">-2</eval-subst><eval-subst obj="theAnswer">-3</eval-subst></dynamic-substitution><dynamic-substitution id="fillin-math-find-derivatives"><eval-subst obj="formula">-1 x^{5}-10</eval-subst><eval-subst obj="correctD1">-\left(5 x^{4}\right)</eval-subst><eval-subst obj="correctD2">-\left(20 x^{3}\right)</eval-subst><eval-subst obj="b">-10</eval-subst><eval-subst obj="n">5</eval-subst><eval-subst obj="n">5</eval-subst><eval-subst obj="n">5</eval-subst><eval-subst obj="nm1">4</eval-subst><eval-subst obj="correctD1">-\left(5 x^{4}\right)</eval-subst><eval-subst obj="correctD2">-\left(20 x^{3}\right)</eval-subst></dynamic-substitution><dynamic-substitution id="fillin-math-decompose-function"><eval-subst obj="composition">4 \left(-x-3\right)^{3}+5</eval-subst><eval-subst obj="outerFormula">4 x^{3}+5</eval-subst><eval-subst obj="innerFormula">-x-3</eval-subst><eval-subst obj="innerFormula">-x-3</eval-subst><eval-subst obj="innerFormula">-x-3</eval-subst><eval-subst obj="innerFormula">-x-3</eval-subst><eval-subst obj="outerFormula">4 x^{3}+5</eval-subst></dynamic-substitution></xml>
+<xml>
+  <dynamic-substitution id="fillin-random-simple">
+    <eval-subst obj="myNum">7</eval-subst>
+    <eval-subst obj="mySquare">49</eval-subst>
+  </dynamic-substitution>
+  <dynamic-substitution id="fillin-math-solve-equation">
+    <eval-subst obj="theFunction">-2 x-6</eval-subst>
+    <eval-subst obj="theAnswer">-3</eval-subst>
+    <eval-subst obj="b">-6</eval-subst>
+    <eval-subst obj="negB">6</eval-subst>
+    <eval-subst obj="m">-2</eval-subst>
+  </dynamic-substitution>
+  <dynamic-substitution id="fillin-math-find-derivatives">
+    <eval-subst obj="formula">-1 x^{5}-10</eval-subst>
+    <eval-subst obj="correctD1">-\left(5 x^{4}\right)</eval-subst>
+    <eval-subst obj="correctD2">-\left(20 x^{3}\right)</eval-subst>
+    <eval-subst obj="b">-10</eval-subst>
+    <eval-subst obj="n">5</eval-subst>
+    <eval-subst obj="nm1">4</eval-subst>
+  </dynamic-substitution>
+  <dynamic-substitution id="fillin-math-decompose-function">
+    <eval-subst obj="composition">4 \left(-x-3\right)^{3}+5</eval-subst>
+    <eval-subst obj="outerFormula">4 x^{3}+5</eval-subst>
+    <eval-subst obj="innerFormula">-x-3</eval-subst>
+  </dynamic-substitution>
+</xml>
