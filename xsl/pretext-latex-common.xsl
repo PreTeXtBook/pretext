@@ -405,6 +405,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="chapter-start-number"/>
     <xsl:call-template name="equation-numbering"/>
     <xsl:call-template name="image-tcolorbox"/>
+    <xsl:call-template name="image-sizing"/>
     <xsl:call-template name="tables"/>
     <xsl:call-template name="footnote-numbering"/>
     <xsl:call-template name="font-awesome"/>
@@ -1384,6 +1385,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- image sizing support -->
+<xsl:template name="image-sizing">
+    <xsl:if test="$document-root//image">
+        <xsl:text>%% Define maxwidth variable for includegraphics&#xa;</xsl:text>
+        <xsl:text>%% recipe from https://texfaq.org/FAQ-grmaxwidth &#xa;</xsl:text>
+        <xsl:text>\makeatletter&#xa;</xsl:text>
+        
+        <xsl:text>\def\maxwidth{%&#xa;</xsl:text>
+        <xsl:text>  \ifdim\Gin@nat@width&gt;\linewidth&#xa;</xsl:text>
+        <xsl:text>    \linewidth&#xa;</xsl:text>
+        <xsl:text>  \else&#xa;</xsl:text>
+        <xsl:text>    \Gin@nat@width&#xa;</xsl:text>
+        <xsl:text>  \fi&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\makeatother&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- tcolorbox for images -->
 <xsl:template name="image-tcolorbox">
     <xsl:if test="$document-root//image">
@@ -1391,7 +1410,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% arguments are left-margin, width, right-margin, as multiples of&#xa;</xsl:text>
         <xsl:text>%% \linewidth, and are guaranteed to be positive and sum to 1.0&#xa;</xsl:text>
         <xsl:text>\tcbset{ imagestyle/.style={bwminimalstyle} }&#xa;</xsl:text>
-        <xsl:text>\NewTColorBox{tcbimage}{mmm}{imagestyle,left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
+        <xsl:text>\NewTColorBox{tcbimage}{mmm}{imagestyle,left skip=#1\linewidth,width=#2\linewidth,halign=center}&#xa;</xsl:text>
         <xsl:text>%% Wrapper environment for tcbimage environment with a fourth argument&#xa;</xsl:text>
         <xsl:text>%% Fourth argument, if nonempty, is a vertical space adjustment&#xa;</xsl:text>
         <xsl:text>%% and implies image will be preceded by \leavevmode\nopagebreak&#xa;</xsl:text>
@@ -9294,7 +9313,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:variable>
-    <xsl:text>\includegraphics[width=\linewidth</xsl:text>
+    <xsl:text>\includegraphics[width=</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@width">
+            <xsl:text>\linewidth</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\maxwidth</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:if test="@rotate">
       <xsl:text>,angle=</xsl:text>
       <xsl:value-of select="@rotate"/>
