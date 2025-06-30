@@ -1,1 +1,17 @@
-<xml><dynamic-substitution id="dynamic-fitb-simple-formula"><eval-subst obj="x1">-5</eval-subst><eval-subst obj="x2">-2</eval-subst><eval-subst obj="x3">2</eval-subst><eval-subst obj="y0">5</eval-subst><eval-subst obj="x3">2</eval-subst><eval-subst obj="base_cubic">\left(x+5\right) \left(x+2\right) \left(x-2\right)</eval-subst><eval-subst obj="base_yint">-20</eval-subst><eval-subst obj="y0">5</eval-subst><eval-subst obj="base_cubic">\left(x+5\right) \left(x+2\right) \left(x-2\right)</eval-subst><eval-subst obj="y0">5</eval-subst><eval-subst obj="A">-\frac{1}{4}</eval-subst><eval-subst obj="cubic">-\frac{1}{4} \left(x+5\right) \left(x+2\right) \left(x-2\right)</eval-subst></dynamic-substitution><dynamic-substitution id="function-decomposition"><eval-subst obj="composition">4 \left(-x-3\right)^{3}+5</eval-subst><eval-subst obj="outerFormula">4*x^3+5</eval-subst><eval-subst obj="innerFormula">-1*x+-3</eval-subst><eval-subst obj="innerFormula">-1 x-3</eval-subst><eval-subst obj="innerFormula">-1 x-3</eval-subst><eval-subst obj="innerFormula">-1 x-3</eval-subst><eval-subst obj="outerFormula">4 x^{3}+5</eval-subst></dynamic-substitution></xml>
+<xml>
+  <dynamic-substitution id="dynamic-fitb-simple-formula">
+    <eval-subst obj="x1">-5</eval-subst>
+    <eval-subst obj="x2">-2</eval-subst>
+    <eval-subst obj="x3">2</eval-subst>
+    <eval-subst obj="y0">5</eval-subst>
+    <eval-subst obj="cubic">-\frac{1}{4} \left(x+5\right) \left(x+2\right) \left(x-2\right)</eval-subst>
+    <eval-subst obj="base_cubic">\left(x+5\right) \left(x+2\right) \left(x-2\right)</eval-subst>
+    <eval-subst obj="base_yint">-20</eval-subst>
+    <eval-subst obj="A">-\frac{1}{4}</eval-subst>
+  </dynamic-substitution>
+  <dynamic-substitution id="function-decomposition">
+    <eval-subst obj="composition">4 \left(-x-3\right)^{3}+5</eval-subst>
+    <eval-subst obj="outerFormula">4 x^{3}+5</eval-subst>
+    <eval-subst obj="innerFormula">-1 x-3</eval-subst>
+  </dynamic-substitution>
+</xml>
