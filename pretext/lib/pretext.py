@@ -1040,7 +1040,7 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
     ptx_xsl_dir = get_ptx_xsl_path()
     node_exec_cmd = get_executable_cmd("node")
     # Identify resource files to process dynamic exercises
-    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-dynamic-node.xsl")
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-dynamic.xsl")
     script = os.path.join(ptx_dir, "script", "dynsub", "dynamic_extract.mjs")
     # Where to store the results
     dyn_subs_file = os.path.join(dest_dir, "dynamic_substitutions.xml")
