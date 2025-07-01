@@ -780,7 +780,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="fillin[@ansobj]" mode="dynamic-substitution">
     <xsl:choose>
-        <xsl:when test="$exercise-style = 'static'">
+        <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
             <xsl:variable name="parent-id">
                 <xsl:apply-templates select="ancestor::statement/../@label" />
             </xsl:variable>
@@ -815,7 +815,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="eval[@obj]" mode="dynamic-substitution">
     <xsl:choose>
         <!-- static, for multiple conversions, but primarily LaTeX -->
-        <xsl:when test="$exercise-style = 'static'">
+        <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
             <xsl:variable name="parent-id">
                <xsl:apply-templates select="(ancestor::statement|ancestor::solution|ancestor::evaluation)/../@label" />
             </xsl:variable>
@@ -923,7 +923,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- "normally" not extracting to build PGML, it -->
         <!-- should be saved off in the representations  -->
         <!-- file and available for making replacements  -->
-        <xsl:when test="not($b-extracting-pg)">
+        <xsl:when test="not($b-extracting)">
             <!-- the "webwork-reps" element from the server for this "webwork" -->
             <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
             <xsl:choose>
@@ -956,7 +956,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:when>
         <!-- Now we are doing a pass to support extraction -->
-        <!-- of PGML, so $b-extracting-pg is true          -->
+        <!-- of PGML, so $b-extracting- is true            -->
         <!--                                               -->
         <!-- This is where we copy PTX source to prevent   -->
         <!-- multiple versions foating in around in an     -->
@@ -2840,7 +2840,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="@*" mode="representations"/>
         <!-- Now bifurcate on static/dynamic.  PG problem creation should not fall in here. -->
         <xsl:choose>
-            <xsl:when test="($exercise-style = 'static') and not($b-extracting-pg)">
+            <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
                 <!-- locate the static representation in a file, generated independently -->
                 <!-- NB: this filename is relative to the author's source                -->
                 <xsl:variable name="filename">
@@ -2868,10 +2868,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="$mom-static-rep/solution" mode="representations"/>
                 <!-- NB: the "myopenmath" element has been ignored is now gone -->
             </xsl:when>
-            <xsl:when test="($exercise-style = 'dynamic') or ($exercise-style = 'pg-problems')">
-                <!-- duplicate authored content for the non-static conversions -->
+            <xsl:otherwise>
+                <!-- Duplicate authored content for the non-static conversions   -->
+                <!-- and let the conversions handle dynamic content.  Also, when -->
+                <!-- extracting MOM we need the authored source unmolested.      -->
                 <xsl:apply-templates select="node()" mode="representations"/>
-            </xsl:when>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:copy>
 </xsl:template>
