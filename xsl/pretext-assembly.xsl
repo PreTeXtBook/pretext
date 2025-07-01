@@ -789,14 +789,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="substitution">
                 <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
             </xsl:variable>
-            <xsl:message>
-                <xsl:text>DYNAMIC SUBSTITUTION::</xsl:text>
-                <xsl:value-of select="$parent-id"/>
-                <xsl:text>$</xsl:text>
-                <xsl:value-of select="$object"/>
-                <xsl:text>=</xsl:text>
-                <xsl:value-of select="$substitution"/>
-            </xsl:message>
             <xsl:copy>
                 <xsl:attribute name="answer">
                     <xsl:value-of select="$substitution"/>
@@ -824,14 +816,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="substitution">
                 <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
             </xsl:variable>
-            <xsl:message>
-                <xsl:text>DYNAMIC SUBSTITUTION::</xsl:text>
-                <xsl:value-of select="$parent-id"/>
-                <xsl:text>$</xsl:text>
-                <xsl:value-of select="$object"/>
-                <xsl:text>=</xsl:text>
-                <xsl:value-of select="$substitution"/>
-            </xsl:message>
             <xsl:value-of select="$substitution"/>
         </xsl:when>
         <!-- dynamic (aka HTML), needs static previews, server base64, etc, -->
