@@ -10122,24 +10122,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- We need a Javascript identifier to name the applet -->
+    <!-- We need a Javascript identifier to name the applet.      -->
+    <!-- Other variables will use this as their root.  Need to    -->
+    <!-- ensure identifier does not lead with a digit, so "ggb_". -->
     <xsl:variable name="applet-name">
+        <xsl:text>ggb_</xsl:text>
         <xsl:apply-templates select="." mode="visible-id-no-dash" />
     </xsl:variable>
     <!-- And a Javascript identifier for the parameters -->
     <xsl:variable name="applet-parameters">
-        <xsl:apply-templates select="." mode="visible-id-no-dash" />
+        <xsl:value-of select="$applet-name"/>
         <xsl:text>_params</xsl:text>
     </xsl:variable>
     <!-- And a Javascript identifier for the onload function -->
     <xsl:variable name="applet-onload">
-        <xsl:apply-templates select="." mode="visible-id-no-dash" />
+        <xsl:value-of select="$applet-name"/>
         <xsl:text>_onload</xsl:text>
     </xsl:variable>
     <!-- And a Javascript identifier for the onload function argument -->
     <!-- not strictly necessary, but clarifies HTML                   -->
     <xsl:variable name="applet-onload-argument">
-        <xsl:apply-templates select="." mode="visible-id-no-dash" />
+        <xsl:value-of select="$applet-name"/>
         <xsl:text>_applet</xsl:text>
     </xsl:variable>
     <!-- And an HTML unique identifier -->
