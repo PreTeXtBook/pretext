@@ -42,11 +42,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" encoding="UTF-8"/>
 
-<!-- The default "exercise-style" is "static", but for MOM problems, this -->
-<!-- is when we look into the files of legal PreTeXt returned by a MOM    -->
-<!-- "endpoint" as part of the assembly process.  So we set to "dynamic", -->
-<!-- which is when these are left untouched by the "assembly" process.    -->
-<xsl:variable name="exercise-style" select="'dynamic'"/>
+<!-- We need to alert the pretext-assembly.xsl stylesheet     -->
+<!-- that it is being used in the very specific instance      -->
+<!-- of extracting these objects for processing externally,   -->
+<!-- with results collected in additional files, for          -->
+<!-- consultation/collection in a more general use of this    -->
+<!-- stylesheet for the purpose of actually building a useful -->
+<!-- output format.  This variable declaration here overrides -->
+<!-- the default setting of "false" in pretext-assembly.xsl.  -->
+<!-- Look there for a more comprehensive discussion of the    -->
+<!-- necessity of this scheme.                                -->
+<xsl:variable name="b-extracting-mom" select="true()"/>
 
 <!-- One problem id per line -->
 <xsl:template match="myopenmath[@problem]" mode="extraction">

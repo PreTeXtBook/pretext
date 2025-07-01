@@ -67,8 +67,16 @@
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
 
-<!-- Override the corresponding param in pretext-assembly so that webwork  -->
-<!-- copies can be made.                                                   -->
+<!-- We need to alert the pretext-assembly.xsl stylesheet     -->
+<!-- that it is being used in the very specific instance      -->
+<!-- of extracting these objects for processing externally,   -->
+<!-- with results collected in additional files, for          -->
+<!-- consultation/collection in a more general use of this    -->
+<!-- stylesheet for the purpose of actually building a useful -->
+<!-- output format.  This variable declaration here overrides -->
+<!-- the default setting of "false" in pretext-assembly.xsl.  -->
+<!-- Look there for a more comprehensive discussion of the    -->
+<!-- necessity of this scheme.                                -->
 <xsl:variable name="b-extracting-pg" select="true()"/>
 
 <!-- Output XML to be read in by Python -->

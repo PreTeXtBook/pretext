@@ -180,6 +180,56 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-version-only" select="$version-only = 'yes'"/>
 
+<!-- ################################################ -->
+<!-- Controlling Two-Pass Extraction and Substitution -->
+<!-- ################################################ -->
+
+<!-- Some objects are authored in their native source languages,     -->
+<!-- and after one application of this stylesheet, can be extracted, -->
+<!-- "compiled", and then automatically incorporated into output     -->
+<!-- formats.  An example is a "latex-image", which is extracted,    -->
+<!-- and compiled by LaTeX into an image, which can then simply be   -->
+<!-- pointed to reliably by the mechanisms of the various output     -->
+<!-- formats.  In other words, the result of this "compilation"      -->
+<!-- stands on its own, and is not brought back into the source.     -->
+<!--                                                                 -->
+<!-- Other objects are extracted, then processed (sent to a server   -->
+<!-- typically), and a "static" PreTeXt version, in valid PreTeXt    -->
+<!-- syntax, is returned and captured in files by the Python         -->
+<!-- extraction step.  Then in a general aplication of this          -->
+<!-- stylesheet to produce static output formats, those files are    -->
+<!-- read and the static versions are substituted into the eventual  -->
+<!-- source, for processing by stylesheets producing less-capable    -->
+<!-- output (less-capable than HTML).                                -->
+<!--                                                                 -->
+<!-- Such objects are:                                               -->
+<!--                                                                 -->
+<!--   WeBWorK (WW/PG), MyOpenMath (MOM),                            -->
+<!--   Dynamic Fill-in-the-Blank (FITB)                              -->
+<!--                                                                 -->
+<!-- But there is a "cicken-and-egg condition" if two such objects   -->
+<!-- are present in a fresh, un-processed, source document.  The     -->
+<!-- extraction of the first object will also try to "sub in" the    -->
+<!-- static versions of the second object from its                   -->
+<!-- extracted/generated files, which do not yet exist.  So we note  -->
+<!-- which extraction is happening *by a variable that is            -->
+<!-- over-ridden by the particular extraction stylesheet* and we     -->
+<!-- use this information to avoid the substitution.  We assume this -->
+<!-- does not disturb the identifiers in use to coordinate the       -->
+<!-- extraction and substitution.                                    -->
+<!--                                                                 -->
+<!-- At most, one of the following is true, and only if running      -->
+<!-- an extraction stylesheet.  In general use (producing useful     -->
+<!-- final output formats), they are all false.  The "extraction"    -->
+<!-- stylesheets for each type of object, will override exactly one  -->
+<!-- variable by setting it to "true()"                              -->
+<xsl:variable name="b-extracting-pg"   select="false()"/>
+<xsl:variable name="b-extracting-mom"  select="false()"/>
+<xsl:variable name="b-extracting-fitb" select="false()"/>
+
+<xsl:variable name="b-extracting" select="$b-extracting-pg or $b-extracting-mom or $b-extracting-fitb"/>
+
+
 <!-- ############################## -->
 <!-- Source Assembly Infrastructure -->
 <!-- ############################## -->
@@ -813,16 +863,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################### -->
 <!-- WeBWorK Manufacture -->
 <!-- ################### -->
-
-
-<!-- This pre-processing stylesheet will be run prior to isolating WW      -->
-<!-- problems for their eventual trip to a WW server ("extraction").       -->
-<!-- This is necessary so certain numbers are formed properly, etc.        -->
-<!-- In this phase we handle making copies of WW problems by duplicating   -->
-<!-- them.  This stylesheet is parameterized by the boolean variable       -->
-<!-- $b-extracting-pg, and is set by the stylesheet that actually harvests -->
-<!-- the WW problems and converts them to PG versions (extract-pg.xsl).    -->
-<xsl:variable name="b-extracting-pg" select="false()"/>
 
 <!-- Don't match on simple WeBWorK logo       -->
 <!-- But do match with a @copy attribute      -->
