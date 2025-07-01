@@ -8194,31 +8194,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- creates a knowl in the index whose "in-context" link is     -->
 <!-- incorrect.                                                  -->
 <xsl:template match="*" mode="url">
-    <xsl:variable name="intermediate">
-        <xsl:apply-templates select="." mode="is-intermediate" />
-    </xsl:variable>
-    <xsl:variable name="chunk">
-        <xsl:apply-templates select="." mode="is-chunk" />
-    </xsl:variable>
-    <xsl:apply-templates select="." mode="containing-filename" />
-    <xsl:if test="$intermediate='false' and $chunk='false'">
-        <!-- interior to a page, needs fragment identifier -->
-        <xsl:text>#</xsl:text>
-        <!-- All display math is in a  div.displaymath  with  -->
-        <!-- an HTML id.  An "mrow" can have an @xml:id, and  -->
-        <!-- we direct a URL (typically the "in-context" link -->
-        <!-- of a knowl) to the enclosing "md" or "mdn" (we   -->
-        <!-- can't know which in advance)                     -->
-        <xsl:choose>
-            <xsl:when test="self::mrow">
-                <xsl:apply-templates select="parent::*" mode="html-id"/>
-            </xsl:when>
-            <!-- an "men" is fine here, we do not need a parent -->
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="html-id"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="$chunk-level = 0">
+            <!-- When building a single page, we just want the     -->
+            <!-- fragment identifier since links should just jump  -->
+            <!-- around the page. Not including the filename makes -->
+            <!-- it easy for for a user to rename the file later.  -->
+            <xsl:apply-templates select="." mode="url-fragment"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- In other other cases, we want a filename plus a fragment -->
+            <!-- identifier if the link is to the interior of a page.     -->
+            <xsl:apply-templates select="." mode="containing-filename" />
+            <xsl:variable name="intermediate">
+                <xsl:apply-templates select="." mode="is-intermediate" />
+            </xsl:variable>
+            <xsl:variable name="chunk">
+                <xsl:apply-templates select="." mode="is-chunk" />
+            </xsl:variable>
+            <xsl:if test="$intermediate='false' and $chunk='false'">
+                <!-- interior to a page, needs fragment identifier -->
+                <xsl:apply-templates select="." mode="url-fragment"/>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="url-fragment">
+    <xsl:text>#</xsl:text>
+    <!-- All display math is in a  div.displaymath  with  -->
+    <!-- an HTML id.  An "mrow" can have an @xml:id, and  -->
+    <!-- we direct a URL (typically the "in-context" link -->
+    <!-- of a knowl) to the enclosing "md" or "mdn" (we   -->
+    <!-- can't know which in advance)                     -->
+    <xsl:choose>
+        <xsl:when test="self::mrow">
+            <xsl:apply-templates select="parent::*" mode="html-id"/>
+        </xsl:when>
+        <!-- an "men" is fine here, we do not need a parent -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="html-id"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- The @id attribute of an HTML element is critical.      -->
