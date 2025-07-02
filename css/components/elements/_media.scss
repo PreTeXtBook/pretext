@@ -20,6 +20,15 @@ img.contained {
     width: 100%;
 }
 
+.image-box.image-box__auto-width img
+{
+    max-width: 100%;
+    width: auto;
+    margin-left: auto;
+    display: block;
+    margin-right: auto;
+}
+
 // ---------------------------------------------
 // images
 .ptx-content img, .ptx-content svg {
