@@ -3023,7 +3023,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A figure wrapping the sidebyside could be knowled -->
 <!-- if they need to be hidden.                        -->
 <xsl:template match="sidebyside/figure|sidebyside/table|sidebyside/listing|sidebyside/list" mode="is-hidden">
-    <xsl:value-of select="false()" />
+    <xsl:value-of select="false()" /> 
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -11471,9 +11471,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ########## -->
 
 <xsl:template match="*" mode="permalink">
+    <xsl:variable name="tooltip-text">
+        <xsl:apply-templates select="." mode="tooltip-text"/>
+    </xsl:variable>
+    <xsl:variable name="permalink-description">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'permalink-tooltip'"/>
+        </xsl:apply-templates>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="tooltip-text"/>
+    </xsl:variable>
     <div class="autopermalink">
         <xsl:attribute name="data-description">
-            <xsl:apply-templates select="." mode="tooltip-text"/>
+            <xsl:value-of select="$tooltip-text"/>
         </xsl:attribute>
         <a>
             <xsl:attribute name="href">
@@ -11481,11 +11491,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="unique-id"/>
             </xsl:attribute>
             <xsl:attribute name="title">
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'permalink-tooltip'"/>
-                </xsl:apply-templates>
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates select="." mode="tooltip-text"/>
+                <xsl:value-of select="$permalink-description"/>
+            </xsl:attribute>
+            <xsl:attribute name="aria-label">
+                <xsl:value-of select="$permalink-description"/>
             </xsl:attribute>
             <xsl:text>🔗</xsl:text>
         </a>
