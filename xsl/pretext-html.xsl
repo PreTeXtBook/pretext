@@ -11487,6 +11487,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ########## -->
 
 <xsl:template match="*" mode="permalink">
+    <xsl:variable name="permalink-description">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'permalink-tooltip'"/>
+        </xsl:apply-templates>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="tooltip-text"/>
+    </xsl:variable>
     <div class="autopermalink">
         <xsl:attribute name="data-description">
             <xsl:apply-templates select="." mode="tooltip-text"/>
@@ -11497,11 +11504,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="unique-id"/>
             </xsl:attribute>
             <xsl:attribute name="title">
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'permalink-tooltip'"/>
-                </xsl:apply-templates>
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates select="." mode="tooltip-text"/>
+                <xsl:value-of select="$permalink-description"/>
+            </xsl:attribute>
+            <xsl:attribute name="aria-label">
+                <xsl:value-of select="$permalink-description"/>
             </xsl:attribute>
             <xsl:text>🔗</xsl:text>
         </a>
