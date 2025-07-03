@@ -1,14 +1,15 @@
 /*! Theme: print-worksheet */
 
-// Used for printing versions of worksheets for all themes
+// Used for print versions of worksheets (including their previews) for all themes
 
-// File is included into page with @media="print", so no need to use media query around rules
+// File is only included in standalone printable worksheet pages (the print preview pages).
+// Most rules apply to both screen and print; rules at the bottom of the file split into these two cases.
 
 // Also see:
 // components/_printing.scss : base rules for printing a standard PreTeXt page - removes UI
-// components/_worksheet.scss : worksheet specific rules to apply to screen AND print
+// components/_worksheet.scss : rules that apply to worksheets in context and in print/preview.
 
-// Current maintainer: ???
+// Current maintainer: Oscar Levin
 
 // ---------------------------------------------
 // Grouping containers - based off of those in default-modern
@@ -18,103 +19,305 @@
 @use 'components/pretext';
 
 // Use underline style headings
-@use 'components/elements/extras/heading-underlines';
+//@use 'components/elements/extras/heading-underlines';
 
 // Make sure fonts are available
 @use 'fonts/fonts-google';
 
+// For the print button
+@use 'components/helpers/buttons-default' as buttons;
+
+
+// We don't need specific colors, but the colors that get defined when most colors are set must still be set.
+// render the actual colors
+$palette: 'blue-red' !default;
+$primary-color: null !default;
+$secondary-color: null !default;
+$primary-color-dark: #698aa8 !default;
+$background-color-dark: #23241f !default;
+
+@use "sass:map";
+@use "colors/color-helpers" as colorHelpers;
+@use 'colors/palette-dual' as palette-dual with (
+  $palette: $palette,
+  $primary-color: $primary-color,
+  $secondary-color: $secondary-color,
+);
+
+// primary/secondary color defined as determined by palette-dual using
+// $palette, $primary-color, $secondary-color
+$primary-color: map.get(palette-dual.$colors, 'primary-color');
+$secondary-color: map.get(palette-dual.$colors, 'secondary-color');
+
+@use 'colors/palette-dark' as palette-dark with (
+  $primary-color: $primary-color-dark,
+  $background-color: $background-color-dark,
+);
+// render the actual colors
+@include colorHelpers.set-root-colors(palette-dual.$colors, palette-dark.$colors);
 
 // ---------------------------------------------
 // concrete rules / includes that generate CSS
 
+// Set variables for default width and margins
+:root {
+  --ws-width: 8.5in; // Default width for worksheets
+  --ws-height: 11in; // Default height for worksheets
+  --ws-top-margin: 40px; // Default top margin for worksheets
+  --ws-right-margin: 55px; // Default right margin for worksheets
+  --ws-bottom-margin: 45px; // Default bottom margin for worksheets
+  --ws-left-margin: 45px; // Default left margin for worksheets 
+
+  --ws-content-width: calc(var(--ws-width) - var(--ws-right-margin) - var(--ws-left-margin));
+  --ws-content-height: calc(var(--ws-height) - var(--ws-top-margin) - var(--ws-bottom-margin));
+}
 
 
-// Todo - review/refactor below
 
-.standalone.worksheet .print-button {
+
+// Remove surrounding UI elements
+  .pretext .ptx-masthead,
+  .pretext .ptx-navbar,
+  body.pretext > a.assistive,
+  .pretext .ptx-page > .ptx-sidebar,
+  .pretext  .ptx-page-footer,
+  .pretext .ptx-main > div.ptx-content-footer {
+    display:none;
+  }
+
+  // Remove the print preview link
+.heading .print-links {
   display: none;
 }
 
-.standalone.worksheet .papersize-select {
+ .autopermalink {
   display: none;
 }
 
 
-.standalone.worksheet [data-knowl]:hover,
-.standalone.worksheet [data-knowl]:active,
-.standalone.worksheet [data-knowl].active {
-  background: none;
-  color: black;
-}
-.standalone.worksheet [data-knowl]::after {
-  border: none;
+// Set font appropriate for printing
+section.worksheet {
+  font-size: 11pt;
+  font-family: var(--font-print);
 }
 
+// .onepage is the common class that wraps all content in a single worksheet page (often modified by the javascript)
+ .onepage > .heading {
+  margin-top: 0;
+  font-size: 1.3em;
+}
 
-
-body.standalone.worksheet .ptx-page > .ptx-main {
-  width: 820px;
-  max-width: 820px;
-  font-size: 12.5px;
-}
-body.standalone.worksheet {
-  margin: 0;
-}
-body.standalone section.worksheet {
-  border: none;
-}
-body.standalone.worksheet .ptx-masthead,
-body.standalone.worksheet .ptx-page-footer {
+.onepage .instructions {
   display: none;
 }
 
-body.standalone.worksheet.has-sidebar-left.mathbook-loaded .ptx-page .ptx-main {
-  margin: 0;
+
+// Try to make an open solution knowl look less strange.  Eventually the print version of worksheets should create HTML that isn't a details element.
+summary::marker {
+  content: "";
 }
 
-body.standalone.worksheet .ptx-page > .ptx-main {
-  margin: 0;
+summary {
+  font-weight: bolder;
+  display: inline;
 }
-body.standalone.worksheet section.onepage {
-  max-height: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  page-break-after: always;
-  /*
-  height: 1243px;
-  */
+
+details > div.knowl__content { 
+  display: inline;
+  margin: unset;
   border: none;
-  page-break-inside: avoid;
+  padding: 3px 0;
+  background-color: unset;
 }
-body.standalone.worksheet .onepage.lastpage {
-  margin-bottom: -2em;  /* to avoid blank space overflow causing an extra blank page */
-  page-break-after: auto;
+
+.knowl__link {
+  all: unset
 }
-body.standalone.worksheet.a4 .onepage {
-  /*
-  height: 1320px;
-  */
-}
-body.standalone.worksheet .onepage div.workspace,
-body.standalone.worksheet .onepage div.workspace.squashed.tight {
+
+.onepage article {
+  padding-left: 0;
   border: none;
-  padding: 0;
-  background: none !important;
-}
-body.standalone.worksheet a {
-  color: black;
 }
 
-body.standalone.worksheet .ptx-page  .ptx-main {
-  padding: 0;
+.onepage article::after {
+  all: unset;
 }
 
-body.standalone.worksheet.mathbook-loaded .ptx-page .ptx-main .ptx-contentsection.onepage {
-  padding-bottom: 20px;  /* to help prevent flow onto the next page, particularly in Safari */
-  /* the page is not full length, but what is missing was blank anyway */
-  /*
-  margin: 0;
-  */
+.onepage > .para:first-child,
+.onepage > article:first-child {
+  margin-top: 0;
 }
 
-@page { margin: 0 }
+
+// Some headings have larger top-margins than their parent section, so we fix that here.
+.onepage > section > .heading {
+  margin-top: 0;
+}
+
+ section article.task {
+  margin-left: 0;
+}
+
+section.worksheet > .heading {
+  display: inline;
+  font-size: 1.1em;
+}
+
+section.worksheet > .heading + .para {
+  display: inline;
+}
+
+.introduction, .conclusion {
+  > .heading {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 0;
+    border-bottom: none;
+    + .para {
+      margin-top: 0.5em;
+    }
+  }
+}
+
+
+// Note: leaving the following rules in place in anticipation of implementing a
+// workspace preview feature in the future.
+ .onepage .workspace.preview {
+  border: 1px dashed grey;
+  background: rgb(240, 255, 255);
+/*  Sally suggests light and dark blue
+  background: linear-gradient(
+      #eef 0px, #eef 200px,
+      #eef 200px, #99f 205px,
+      #99f 205px, #99f 100%)
+*/
+}
+.onepage .workspace.squashed.preview {
+  border: 2px dotted grey;
+  background: #ffe;
+}
+
+.onepage .workspace.squashed.tight.preview {
+  border: 15px solid;
+  border-image: repeating-linear-gradient(
+    -35deg,
+    #f33,
+    #f33 10px,
+    #000 10px,
+    #000 20px
+  ) 20;
+/*
+  background: linear-gradient(
+      #ff0 0%, #ff0 8%,
+      #000 8%, #000 9%,
+      #ff6 9%, #ff6 17%,
+      #555 17%, #555 19%,
+      #ff8 19%, #ff8 26%,
+      #777 26%, #777 29%,
+      #ffa 29%, #ffa 37%,
+      #aaa 37%, #aaa 41%,
+      #ffd 41%, #ffd 48%,
+      #ccc 48%, #ccc 52%,
+      #ffd 52%, #ffd 59%,
+      #aaa 59%, #aaa 63%,
+      #ffa 63%, #ffa 71%,
+      #777 71%, #777 74%,
+      #ff8 74%, #ff8 81%,
+      #555 81%, #555 83%,
+      #ff6 83%, #ff6 91%,
+      #000 91%, #000 92%,
+      #ff0 92%, #ff0 100%
+      );
+*/
+  background: yellow;
+}
+
+
+// Screen specific styles (mostly for showing the border around a worksheet with it's "margins" and for the print controls)
+@media screen {
+  .ptx-main {
+    max-width: var(--ws-width);
+    margin: 50px auto;
+  }
+
+  .worksheet {
+    max-width: var(--ws-width);
+    margin: 0 auto;
+  }
+  
+  .onepage {
+    width: 100%;
+    height: var(--ws-height);
+    padding: var(--ws-top-margin) var(--ws-right-margin) var(--ws-bottom-margin) var(--ws-left-margin);
+    box-shadow: 5px 10px 40px -10px;
+  }
+
+  // Set space between pages
+  .onepage + .onepage {
+    margin-top: 2.5em;
+  }
+
+  .print-button {
+  @include buttons.ptx-button;
+  }
+
+  .papersize-select {
+    z-index: 1;
+    .name::after {
+      content: ": ";
+    }
+  }
+
+  .print-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1em;
+  }
+}
+
+
+
+// Print specific styles
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    width: var(--ws-content-width);
+  }
+
+  .print-preview-header {
+    display: none;
+  }
+
+  section.worksheet {
+    border: none;
+  }
+  
+  .worksheet {
+    width: 100%;
+  }
+
+  .onepage {
+    width: 100%;
+    height: var(--ws-content-height);
+    overflow: hidden; 
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+
+  // Never show the workspace preview in print
+  .onepage div.workspace,
+  .onepage div.workspace.squashed.tight {
+    border: none;
+    padding: 0;
+    background: none !important;
+  }
+  a {
+    color: black;
+  }
+
+  @page { 
+    margin: var(--ws-top-margin) var(--ws-right-margin) var(--ws-bottom-margin) var(--ws-left-margin);
+  }
+}
