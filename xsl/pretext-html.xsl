@@ -793,10 +793,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="filename">
             <xsl:apply-templates select="." mode="standalone-worksheet-filename"/>
         </xsl:with-param>
-        <xsl:with-param name="extra-body-classes">
-            <!-- Hack, include necessary spaces; use letter as default -->
-            <xsl:text> standalone worksheet letter</xsl:text>
-        </xsl:with-param>
         <xsl:with-param name="content">
             <xsl:apply-templates select="." mode="structural-division-content">
                 <xsl:with-param name="heading-level" select="$heading-level"/>
@@ -10915,8 +10911,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- * page content (exclusive of banners, navigation etc) -->
 <xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
-    <!-- Hack, include leading space for now -->
-    <xsl:param name="extra-body-classes"/>
     <xsl:param name="filename" select="''"/>
     <xsl:param name="b-printable" select="false()"/>
 
@@ -10988,7 +10982,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:choose>
                 <!-- ignore MathJax signals everywhere, then enable selectively -->
                 <xsl:text> ignore-math</xsl:text>
-                <xsl:value-of select="$extra-body-classes"/>
             </xsl:attribute>
             <!-- assistive "Skip to main content" link    -->
             <!-- this *must* be first for maximum utility -->
@@ -11039,9 +11032,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:if>
                     <div id="ptx-content" class="ptx-content">
                         <xsl:if test="$b-printable">
-                            <div class="ws-page-controls">
-                                <xsl:apply-templates select="." mode="papersize-toggle"/>
-                                <xsl:apply-templates select="." mode="print-button"/>
+                            <div class="print-preview-header">
+                                <xsl:apply-templates select="." mode="print-preview-header"/>
+                                <div class="print-controls">
+                                    <xsl:apply-templates select="." mode="papersize-toggle"/>
+                                    <xsl:apply-templates select="." mode="print-button"/>
+                                </div>
                             </div>
                         </xsl:if>
                         <!-- Alternative to "copy-of": convert $content to a  -->
@@ -11779,6 +11775,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </span>
     </button>
 </xsl:template>
+
+<xsl:template match="*" mode="print-preview-header"/>
+
+<xsl:template match="worksheet" mode="print-preview-header">
+    <h2 class="print-preview">
+        <!-- TODO: add localization support-->
+        <xsl:text>Print Preview</xsl:text>
+    </h2>
+</xsl:template>
+    
 
 <xsl:template match="*" mode="papersize-toggle"/>
 
@@ -13521,10 +13527,10 @@ TODO:
     </xsl:if>
 </xsl:template>
 
+<!-- The worksheet previews get their own css target that controls both screen and print styles -->
 <xsl:template name="css-printable">
     <xsl:if test="not($b-debug-react)">
-        <link href="{$html.css.dir}/{$html-css-theme-file}" media="screen" rel="stylesheet" type="text/css"/>
-        <link href="{$html.css.dir}/print-worksheet.css" media="print" rel="stylesheet" type="text/css"/>
+        <link href="{$html.css.dir}/print-worksheet.css" rel="stylesheet" type="text/css"/>
     </xsl:if>
     <xsl:call-template name="css-common"/>
 </xsl:template>
