@@ -15,10 +15,23 @@
     display:none;
   }
 
-  .pretext .ptx-main .ptx-content {
-    margin-left: auto;
-    margin-right: auto;
-    border:none;
+  .ptx-page, .ptx-main, .ptx-main .ptx-content {
+    all: unset !important;
+    width: 100%;
+    border: none;
     padding: 0;
+    margin: 0;
+  }
+
+  .ptx-sagecell {
+    break-inside: avoid;
+  }
+
+  .heading {
+    break-after: avoid;
+  }
+
+  @page {
+    margin: 0.75in 0.75in 0.75in 0.75in;
   }
 }
