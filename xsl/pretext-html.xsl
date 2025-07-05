@@ -2592,6 +2592,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- be rendered, but perhaps not well. Caveat emptor.                    -->
 <xsl:template match="fn">
     <details class="ptx-footnote" aria-live="polite">
+        <!-- If the fn is for holding the content of a URL, then we add an additional class for the CSS to find -->
+        <xsl:if test="@pi:url">
+            <xsl:attribute name="class">
+                <xsl:text>ptx-footnote url-fn</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <!-- A superscript number, as the clickable content -->
         <summary class="ptx-footnote__number">
