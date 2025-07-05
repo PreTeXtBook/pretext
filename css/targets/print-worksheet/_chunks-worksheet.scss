@@ -14,26 +14,9 @@ $border-radius: 8px !default;
 @use 'components/chunks/discussion-inline';
 @use 'components/chunks/knowls' with ($border-radius: $border-radius);
 
-@use 'components/chunks/helpers/L-mixin';
-@use 'components/chunks/helpers/box-mixin' with ($border-radius: $border-radius);
-@use 'components/chunks/helpers/heading-box-mixin';
-@use 'components/chunks/helpers/sidebar-mixin';
 @use 'components/chunks/helpers/inline-heading-mixin';
 
-// rounded box
-.assemblage-like {
-  @include box-mixin.box($border-color: var(--assemblage-like-border-color), $background-color: var(--assemblage-like-body-background));
-}
 
-// box with title inset on top
-.goal-like {
-  @include heading-box-mixin.box(
-    $background-color: var(--goal-like-body-background),
-    $border-color: var(--goal-like-border-color)
-  );
-}
-
-// L-border
 .theorem-like,
 .definition-like,
 .example-like,
@@ -41,47 +24,45 @@ $border-radius: 8px !default;
 .remark-like,
 .openproblem-like,
 .computation-like {
-  @include L-mixin.border;
-}
-
-// projects get a dotted L
-.project-like:not(.knowl__content, .born-hidden-knowl) {
-  @include L-mixin.border($style: dotted);
-}
-
-/* proof gets a backwards facing L */
-.proof {
-  @include L-mixin.border(1px, $L-side: right);
-}
-
-/* No decorations/borders in knowls, to save space */
-.knowl__content {
-  .theorem-like,
-  .definition-like,
-  .example-like,
-  .project-like,
-  .remark-like,
-  .openproblem-like,
-  .computation-like,
-  .project-like {
-    padding-left: 0;
-    margin-left: 0;
-    border-left: none;
-
-    &::after {
-      border-bottom: none;
-      display: none;
-    }
+  > .heading {
+    display: block;
+    font-size: 1.1em;
   }
 }
 
-// wide sidebar on an entire section of solutions
-section.solutions:not(:is(:first-child)) {
-  @include sidebar-mixin.box(
-    $border-width: 10px,
+.proof {
+  padding-bottom: 1.5em;
+  &::after {
+    content: "□";
+    float: right;
+  }
 
-    $border-color: var(--page-border-color),
-  );
+  .heading {
+    font-size: unset;
+    font-weight: bold;
+    font-style: italic;
+  }
+}
+
+.solution-like {
+  .heading {
+    display: inline;
+    font-style: italic;
+    font-size: unset;
+  }
+}
+
+
+ .goal-like {
+  border: none;
+  padding: 0;
+}
+
+.goal-like > .heading {
+  margin-top: -0.5em;
+  padding: 0;
+  margin: 0;
+  font-size: 1.1em;
 }
 
 .paragraphs,

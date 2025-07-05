@@ -6,6 +6,7 @@
 $body: 'Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif' !default;
 $heading: 'PT Serif, Times New Roman, Times, serif' !default;
 $monospace: 'Inconsolata, Consolas, Monaco, monospace;' !default;
+$print: 'PT Serif, Times New Roman, Times, serif' !default;
 
 @function is-variable-font($font-name) {
   $static-fonts: ('PT Serif');  // list of known static fonts used by themes
@@ -47,6 +48,9 @@ $monospace-font: list.nth(string.split($monospace, ','), 1);
 }
 :root {
   --font-monospace: #{$monospace};
+}
+:root {
+  --font-print: #{$print};
 }
 
 // 9/5/24 ... TODO controlled list of fonts ... wait and explore later
