@@ -23,7 +23,7 @@
     margin: 0;
   }
 
-  .ptx-sagecell {
+  .ptx-sagecell, .tabular, .table-like, .figure-like, .exercise-like {
     break-inside: avoid;
   }
 
