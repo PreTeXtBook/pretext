@@ -324,9 +324,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='array'>array</localization>
     <!-- "paper size" toggle title                                -->
     <localization string-id="papersize">Paper size</localization>
+    <!-- "highlight workspace" toggle title                         -->
+    <localization string-id="highlight-workspace">Highlight workspace</localization>
     <!-- Print page button text                                   -->
     <localization string-id='print'>Print</localization>
-    <!-- Print preview tooltip text                               -->
+    <!-- Print preview tooltip/title text                         -->
     <localization string-id='print-preview'>Print preview</localization>
     <!-- Close something interactive                              -->
     <localization string-id='close'>Close</localization>
