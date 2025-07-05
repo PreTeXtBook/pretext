@@ -270,6 +270,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='reset'>Azzera</localization>
     <localization string-id='array'>tabella</localization>
     <localization string-id='papersize'>Formato carta</localization>
+    <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
     <localization string-id='print'>Stampa</localization>
     <localization string-id='print-preview'>Anteprima di stampa</localization>
     <localization string-id='close'>Chiudi</localization>

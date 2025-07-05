@@ -269,6 +269,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='reset'>Reset</localization>
     <localization string-id='array'>pole</localization>
     <!-- <localization string-id='papersize'>Paper size</localization> -->
+    <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
     <localization string-id='print'>Tisk</localization>
     <!--<localization string-id='print-preview'>Print preview</localization>-->
     <localization string-id='close'>Zavřít</localization>
