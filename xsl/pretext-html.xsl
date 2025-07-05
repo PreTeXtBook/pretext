@@ -11806,8 +11806,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="worksheet" mode="print-preview-header">
     <h2 class="print-preview">
-        <!-- TODO: add localization support-->
-        <xsl:text>Print Preview</xsl:text>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'print-preview'"/>
+        </xsl:apply-templates>
     </h2>
 </xsl:template>
 
