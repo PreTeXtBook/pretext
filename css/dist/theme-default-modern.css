@@ -2925,11 +2925,19 @@ article.theorem-like .emphasis {
     padding: 0;
     margin: 0;
   }
-  .ptx-sagecell {
+  .ptx-sagecell,
+  .tabular,
+  .table-like,
+  .figure-like,
+  .exercise-like {
     break-inside: avoid;
   }
   .heading {
     break-after: avoid;
+  }
+  .code-inline {
+    border: unset;
+    background: unset;
   }
   @page {
     margin: 0.75in 0.75in 0.75in 0.75in;
