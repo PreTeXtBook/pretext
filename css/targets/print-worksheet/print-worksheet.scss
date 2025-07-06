@@ -160,58 +160,11 @@ section.worksheet > .heading + .para {
   }
 }
 
-
-// Note: leaving the following rules in place in anticipation of implementing a
-// workspace preview feature in the future.
- .onepage .workspace.preview {
-  border: 1px dashed grey;
-  background: rgb(240, 255, 255);
-/*  Sally suggests light and dark blue
-  background: linear-gradient(
-      #eef 0px, #eef 200px,
-      #eef 200px, #99f 205px,
-      #99f 205px, #99f 100%)
-*/
-}
-.onepage .workspace.squashed.preview {
-  border: 2px dotted grey;
-  background: #ffe;
+form.papersize-select {
+  padding-bottom: 8px;
 }
 
-.onepage .workspace.squashed.tight.preview {
-  border: 15px solid;
-  border-image: repeating-linear-gradient(
-    -35deg,
-    #f33,
-    #f33 10px,
-    #000 10px,
-    #000 20px
-  ) 20;
-/*
-  background: linear-gradient(
-      #ff0 0%, #ff0 8%,
-      #000 8%, #000 9%,
-      #ff6 9%, #ff6 17%,
-      #555 17%, #555 19%,
-      #ff8 19%, #ff8 26%,
-      #777 26%, #777 29%,
-      #ffa 29%, #ffa 37%,
-      #aaa 37%, #aaa 41%,
-      #ffd 41%, #ffd 48%,
-      #ccc 48%, #ccc 52%,
-      #ffd 52%, #ffd 59%,
-      #aaa 59%, #aaa 63%,
-      #ffa 63%, #ffa 71%,
-      #777 71%, #777 74%,
-      #ff8 74%, #ff8 81%,
-      #555 81%, #555 83%,
-      #ff6 83%, #ff6 91%,
-      #000 91%, #000 92%,
-      #ff0 92%, #ff0 100%
-      );
-*/
-  background: yellow;
-}
+
 
 
 // Screen specific styles (mostly for showing the border around a worksheet with it's "margins" and for the print controls)
@@ -236,6 +189,36 @@ section.worksheet > .heading + .para {
   // Set space between pages
   .onepage + .onepage {
     margin-top: 2.5em;
+  }
+
+
+  .workspace-container {
+    display: flex;
+    overflow: visible;
+  }
+
+  .workspace {
+    width: 100%;
+  }
+
+  .highlight-workspace .onepage .workspace {
+    border: 1px dashed grey;
+    background: hsl(224, 100%, 95%);
+  }
+
+  // Normally, the .workspace.original is hidden in the print preview, but if the highlight-workspace checkbox is checked, it will be shown.
+  .onepage .original-workspace {
+    display: none;
+  }
+
+  .highlight-workspace .onepage .original-workspace {
+    display:block;
+    width: 10px;
+    background: hsl(152, 29%, 65%);
+  }
+
+  .highlight-workspace .onepage .warning {
+    background: hsl(36, 65%, 67%);
   }
 
   .print-button {
