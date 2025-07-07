@@ -5740,13 +5740,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each >
 </xsl:template>
 
-<xsl:template match="ol" mode="ol-marker-class">
-    <xsl:if test="@format-code = 'a' and @ordered-list-level = '1'">
-        <xsl:text>lower-alpha-level-1</xsl:text>
-    </xsl:if>
+<xsl:template match="ol[not(@marker) and @format-code = 'a' and @ordered-list-level = '1']" mode="ol-marker-class">
+    <xsl:text>lower-alpha-level-1</xsl:text>
 </xsl:template>
 
-<xsl:template match="ul" mode="ol-marker-class"/>
+<xsl:template match="ol|ul" mode="ol-marker-class"/>
 
 <xsl:template match="ol[@marker]" mode="ol-markers">
     <xsl:element name="ol-marker">
