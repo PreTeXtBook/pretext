@@ -22,13 +22,18 @@ function scrollTocToActive() {
         return; //complete failure, get out
     }
 
-    //See if we can also match fileName#hash
-    let tocEntryWHash = document.querySelector(
-        '#ptx-toc a[href="' + fileNameWHash + '"]'
-    );
-    if (tocEntryWHash) {
-        //Matched something below a subsection - activate the list item that contains it
-        tocEntryWHash.closest("li").classList.add("active");
+    //See if we can also match fileName#hash (assuming there is a fragment)
+    if (fileNameWHash.includes('#')) {
+        let tocEntryWHash = document.querySelector(
+            '#ptx-toc a[href="' + fileNameWHash + '"]'
+        );
+        if (tocEntryWHash) {
+            //Matched something below a subsection - activate the list item that contains it
+            tocEntry.closest("li").querySelectorAll("li").forEach(li => {
+                li.classList.remove("active");
+            });
+            tocEntryWHash.closest("li").classList.add("active");
+        }
     }
 
     //Now activate ToC item for fileName and scroll to it
