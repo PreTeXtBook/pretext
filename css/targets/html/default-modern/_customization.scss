@@ -25,3 +25,8 @@ $wide-rs-elements: ".parsons_section, .ac_section, .codelens";
 .ptx-runestone-container:has(#{$wide-rs-elements}) {
   @include expandable.expandable($always-expand: true);
 }
+
+// horizontal scroll for tabular boxes
+.tabular-box {
+  @include expandable.expandable;
+}
