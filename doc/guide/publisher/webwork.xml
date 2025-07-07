@@ -68,6 +68,17 @@
       paths in <c>externalPrograms:</c> as well. And maybe more...
     </p>
     <p>
+      For <pretext/> in general you should already have ImageMagick installed. Somewhere in your
+      file system is an XML file that ImageMagick uses to control permissions. The file is named
+      <c>policy.xml</c> and might be located in a place like <c>/etc/imagemagick/policy.xml</c>
+      or <c>/etc/ImageMagick-6/policy.xml</c>. (If your version of ImageMagick is not 6, it's
+      possible none of this is necessary. But also it should be harmless to continue.) In this file,
+      within the <tag>policymap</tag> element, add the element:
+      <cd>&lt;policy domain="coder" rights="read" pattern="PDF" /></cd>
+      Depending on your file, you may need to <em>replace</em> a similar line that is assigning
+      <c>rights="none"</c>. Make sure that this is not within a commented out portion of the file.
+    </p>
+    <p>
       You need to have a recent enough perl version. Version 5.32 is known to work, and versions as
       early as 5.26 may work, but have not been thoroughly tested.
     </p>
