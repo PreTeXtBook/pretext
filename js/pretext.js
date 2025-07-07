@@ -60,14 +60,30 @@ window.addEventListener("DOMContentLoaded",function(event) {
         e.stopPropagation(); // keep global click handler from immediately toggling it back
     });
 
-    // For themes that want it, install a click handler to auto close the toc.
+    // For themes that want it, install click handlers to auto close the toc
+    // when the reader clicks anywhere outside it or selects a subsection.
+    // (Selecting other sections or chapters navigates away from the page so
+    // effectively closes the TOC.)
     if (getComputedStyle(document.documentElement).getPropertyValue('--auto-collapse-toc') == "yes") {
+
+        const sidebar = document.getElementById("ptx-sidebar");
+
+        // Handle all clicks outside the sidebar
         window.addEventListener("click", function(event) {
-            const sidebar = document.getElementById("ptx-sidebar");
             if (sidebar.classList.contains("visible")) {
                 if (!event.composedPath().includes(sidebar)) {
                     toggletoc();
                 }
+            }
+        });
+
+        // Handle clicks inside the sidebar but on link within a subsection.
+        sidebar.addEventListener("click", function (event) {
+            if (event.target.closest('a') && event.target.closest(".toc-subsection")) {
+                toggletoc();
+            } else {
+                console.log('not a subsection');
+                console.log(event.target);
             }
         });
     }
