@@ -2,9 +2,27 @@
 
 @use 'components/page-parts/extras/toc-expand-chevrons';
 
+// used to expand math and RS blocks
+@use 'components/helpers/expandable';
+
 section>*:not(:first-child) {
   margin-top: 1.5em;
 }
 article>*:not(:first-child):has(.heading) {
   margin-top: 1.5em;
+}
+
+
+// let math stretch out to fill space on right
+.displaymath {
+  @include expandable.expandable;
+}
+
+.code-display {
+  @include expandable.expandable;
+}
+
+// horizontal scroll for tabular boxes
+.tabular-box {
+  @include expandable.expandable;
 }
