@@ -58,9 +58,7 @@ $page-width: $sidebar-total-width + $main-width + $main-right-margin;
   $navbar-breakpoint: $navbar-breakpoint,
 );
 
-@use 'rs-widen' with (
-  $content-width: 600px,
-);
+@use 'rs-widen';
 
 .ptx-main {
   margin-right: $sidebar-total-width;
