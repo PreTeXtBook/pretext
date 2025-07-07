@@ -54,12 +54,12 @@
       the <c>VERSION</c> file in the root of the repository.
     </p>
     <p>
-        Set the <c>PG_ROOT</c> environment variable to be the path to your copy of <c>pg</c>. If it
-        is at the default location, you could run:
-        <cd>export PG_ROOT=/opt/webwork/pg</cd>
-        This will only define <c>$PG_ROOT</c> for your current terminal session, so you might also
-        do whatever is appropriate on your system to set <c>PG_ROOT</c> each time a terminal session
-        begins.
+      Set the <c>PG_ROOT</c> environment variable to be the path to your copy of <c>pg</c>. If it is
+      at the default location, you could run:
+      <cd>export PG_ROOT=/opt/webwork/pg</cd>
+      This will only define <c>$PG_ROOT</c> for your current terminal session, so you might also do
+      whatever is appropriate on your system to set <c>PG_ROOT</c> each time a terminal session
+      begins.
     </p>
     <p>
       In <c>pg/conf/</c>, make a copy of <c>pg_config.dist.yml</c> called <c>pg_config.yml</c>. In
@@ -68,29 +68,80 @@
       paths in <c>externalPrograms:</c> as well. And maybe more...
     </p>
     <p>
-      You also need to have a recent enough perl version. Version 5.32 is known to work, and
-      versions as early as 5.26 may work, but have not been thoroughly tested. Later you may find
-      that you are missing certain perl packages for this process. Packages you will need include
-      <ul>
-        <li><c>Mojo::Base</c></li>
-        <li><c>Mojo::IOLoop</c></li>
-        <li><c>Mojo::DOM</c></li>
-        <li><c>Mojo::JSON</c></li>
-        <li><c>Getopt::Long</c></li>
-        <li><c>Locale::Maketext:Lexicon</c></li>
-        <li><c>YAML::XS</c></li>
-        <li><c>UUID::Tiny</c></li>
-        <li><c>Class::Tiny</c></li>
-        <li><c>DBI</c></li>
-      </ul>
-      And there may be more if needed by particular exercises. When a package is missing, an error
-      report should indicate what is missing. How you install perl packages will be system
-      dependent. The Ubuntu packages <c>libmojolicious-perl</c>, <c>libyaml-libyaml-perl</c>,
-      <c>liblocale-maketext-lexicon-perl</c>, <c>libuuid-tiny-perl</c>, <c>libclass-tiny-perl</c>,
-      <c>libdbi-perl</c>, and <c>libperl4-corelibs-perl</c> should provide these perl packages (and
-      one would expect the latter was installed with perl in the first place). Alternatively, on
-      many systems you can use <c>cpanm</c> to install perl packages, for example
-      <c>cpanm Mojo::Base</c>.
+      You need to have a recent enough perl version. Version 5.32 is known to work, and versions as
+      early as 5.26 may work, but have not been thoroughly tested.
+    </p>
+    <p>
+      PG also uses perl packages that you may not yet have and need to install. These may be
+      available from Linux package distributions, and the details differ from one flavor of Linux to
+      the next. Alternatively there is a utility called <c>cpanm</c> (cpanminus) that is supposed
+      to let you manage perl module installation across Linux flavors. One important difference is
+      that <c>cpanm</c> only mangages perl modules. And sometimes a perl module is actually an
+      interface between perl and some other system utility. <c>cpanm</c> will not actually install
+      that system utility that it depends on and will just quit. Whereas Linux package distributions
+      will have a more sophisticated dependency understanding, and try to install non-perl tools
+      when needed. So you want to try to use Linux package distributions where you can. Or else use
+      <c>cpanm</c> and perhaps be prepared to read the log if it fails and attempt to install some
+      non-perl tool that a particular module depends on.
+    </p>
+    <p>
+      Here is a list of all the perl modules you might need. Some are essential, and some are only
+      needed for tools that many exercises will not use. <c>Carp</c> <c>Class::Accessor</c>
+      <c>Class::Tiny</c> <c>Data::Dumper</c> <c>DBI</c> <c>Digest::MD5</c> <c>File::Copy</c>
+      <c>File::Find</c> <c>File::Path</c> <c>File::Spec</c> <c>GD</c> <c>Getopt::Long</c>
+      <c>HTML::Entities</c> <c>Locale::Maketext::Lexicon</c> <c>MIME::Base64</c> <c>Mojo::Base</c>
+      <c>Mojo::IOLoop</c> <c>Mojo::DOM Mojo::JSON</c> <c>Opcode</c> <c>Pandoc</c> <c>Perl::Tidy</c>
+      <c>Pod::Simple::Search</c> <c>Scalar::Util</c> <c>Socket</c> <c>Tie::IxHash</c>
+      <c>UUID::Tiny</c> <c>YAML::XS</c>. If you don't have one of these that is needed, and you
+      attempt to process <webwork/> problems using local PG processing, you will get a clear
+      message about which module is missing that you must pursue installing it.
+    </p>
+    <p>
+      Here are some Linux package collections that we think are sufficient (but please report if
+      you find them to be insufficient).
+      <dl>
+        <li>
+          <title>Debian/Ubuntu</title>
+          <p>
+              <c>liblocale-maketext-lexicon-perl</c>, <c>libyaml-libyaml-perl</c>,
+              <c>libuuid-tiny-perl</c>, <c>libclass-tiny-perl</c>, <c>libdbi-perl</c>,
+              <c>libgd-perl</c>, <c>libgd-text-perl</c>
+          </p>
+        </li>
+        <li>
+          <title>RedHat</title>
+          <p>
+              List not yet gathered. Please report if you put together a good list.
+          </p>
+        </li>
+      </dl>
+    </p>
+    <p>
+      To try to install using <c>cpanm</c>, of course first you must have <c>cpanm</c>. Try
+      <c>cpanm --version</c> to see if you have it. If not, follow installation instructions for
+      <url href="https://manpages.ubuntu.com/manpages/trusty/man3/App::cpanminus.3pm.html" visual="manpages.ubuntu.com/manpages/trusty/man3/App::cpanminus.3pm.html">Ubuntu</url>,
+      <url href="https://packages.debian.org/search?keywords=cpanminus" visual="packages.debian.org/search?keywords=cpanminus">Debian</url>
+      (<c>sudo apt install cpanminus</c>), RedHat (<c>sudo dnf install perl-CPAN</c>), or MacOS
+      (<c>brew install cpanminus</c>, requiring you first install
+      <url href="https://brew.sh/" visual="https://brew.sh/">Homebrew</url>). Or you could install
+      <c>cpanm</c> directly following
+      <url href="https://metacpan.org/pod/App::cpanminus" visual="metacpan.org/pod/App::cpanminus">these instruction</url>.
+    </p>
+    <p>
+      Once you have <c>cpanm</c>, you can opt to install the above modules one at a time, or all at
+      once. Either way, it is probably adequate to install the modules as your own user. And yet we
+      will recommend that you install the modules as root to avoid certain installation headaches
+      and so that your system is set up to use <c>webwork2</c> if that is ever desired. To install
+      one at time, run commands like: <c>sudo cpanm Carp</c>. But proceed through each module listed
+      above. This will help you clearly see if there was an issue during installation. To install
+      all at once: <c>sudo cpanm Carp Class::Accessor ... YAML::XS</c>, replacing the dots with the
+      full list of modules above.
+    </p>
+    <p>
+      One known bump in the road may come with the <c>GD</c> module. You may need to actually
+      install <c>gd</c> first, which is not a perl module. The perl <c>GD</c> module is the perl
+      bridge to <c>gd</c>. For Ubuntu/Debian, install these packages: <c>pkgconf</c>, <c>gdlib</c>
+      <c>libgd-dev</c>.
     </p>
     <p>
       Now in a publisher file, you can set the <tag>webwork</tag> element to have
