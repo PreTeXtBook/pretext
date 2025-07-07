@@ -5,3 +5,21 @@
     display: block;
   }
 }
+
+.interactive-iframe-container__open {
+  display: block;
+  margin-right: 5px;
+  margin-top: 11px;
+  margin-bottom: 5px;
+  font-size: 0.8rem;
+  & .icon {
+    font-size: 18px;
+  }
+
+  // if figcaption follows, this should float next to it
+  &:has(+ figcaption) {
+    float: left;
+    z-index: 1; // place above fig caption in render stack
+    position: relative;  // for z-index
+  }
+}
