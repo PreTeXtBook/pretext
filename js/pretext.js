@@ -81,9 +81,6 @@ window.addEventListener("DOMContentLoaded",function(event) {
         sidebar.addEventListener("click", function (event) {
             if (event.target.closest('a') && event.target.closest(".toc-subsection")) {
                 toggletoc();
-            } else {
-                console.log('not a subsection');
-                console.log(event.target);
             }
         });
     }
