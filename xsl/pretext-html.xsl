@@ -9748,7 +9748,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- rc = enable right click options       -->
     <!-- ld = enable label drag                -->
     <!-- ctl = click to launch                 -->
-    <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/{$ggbMaterialWidth}/height/{$ggbMaterialHeight}/border/888888/smb/false/stb/{$ggbToolBar}/stbh/{$ggbToolBar}/ai/{$ggbAlgebraInput}/asb/false/sri/{$ggbResetIcon}/rc/false/ld/false/sdz/{$ggbShiftDragZoom}/ctl/false">
+    <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/scaleContainerClass/interactive-iframe-container/width/{$ggbMaterialWidth}/height/{$ggbMaterialHeight}/allowUpscale/true/autoHeight/true/border/888888/smb/false/stb/{$ggbToolBar}/stbh/{$ggbToolBar}/ai/{$ggbAlgebraInput}/asb/false/sri/{$ggbResetIcon}/rc/false/ld/false/sdz/{$ggbShiftDragZoom}/ctl/false">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
         <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
