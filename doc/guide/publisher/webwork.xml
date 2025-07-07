@@ -35,7 +35,7 @@
   </introduction>
 
   <section xml:id="webwork-local-pg-static-processing">
-    <title>Using a local copy of PG</title>
+    <title>Using a Local Copy of PG</title>
     <p>
       <webwork/> problems can be processed using a local copy of the <c>pg</c> repository. This can
       siginificanlty speed up processing time, compared with the other options that use a network
