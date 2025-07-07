@@ -50,6 +50,8 @@
         <cline>cd webwork</cline>
         <cline>git clone https://github.com/openwebwork/pg</cline>
       </cd>
+      Note that you should end up with a verion of <c>pg</c> that is 2.19 or later. To check, examine
+      the <c>VERSION</c> file in the root of the repository.
     </p>
     <p>
         Set the <c>PG_ROOT</c> environment variable to be the path to your copy of <c>pg</c>. If it
