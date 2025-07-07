@@ -22,13 +22,18 @@ function scrollTocToActive() {
         return; //complete failure, get out
     }
 
-    //See if we can also match fileName#hash
-    let tocEntryWHash = document.querySelector(
-        '#ptx-toc a[href="' + fileNameWHash + '"]'
-    );
-    if (tocEntryWHash) {
-        //Matched something below a subsection - activate the list item that contains it
-        tocEntryWHash.closest("li").classList.add("active");
+    //See if we can also match fileName#hash (assuming there is a fragment)
+    if (fileNameWHash.includes('#')) {
+        let tocEntryWHash = document.querySelector(
+            '#ptx-toc a[href="' + fileNameWHash + '"]'
+        );
+        if (tocEntryWHash) {
+            //Matched something below a subsection - activate the list item that contains it
+            tocEntry.closest("li").querySelectorAll("li").forEach(li => {
+                li.classList.remove("active");
+            });
+            tocEntryWHash.closest("li").classList.add("active");
+        }
     }
 
     //Now activate ToC item for fileName and scroll to it
@@ -53,6 +58,26 @@ function toggletoc() {
    scrollTocToActive();
 }
 
+function samePageLink(a) {
+    if (!(a instanceof HTMLAnchorElement)) return false;
+
+    try {
+        const linkUrl = new URL(a.href, document.baseURI);
+        const currentUrl = new URL(window.location.href);
+
+        const sameDocument =
+              linkUrl.origin === currentUrl.origin &&
+              linkUrl.pathname === currentUrl.pathname &&
+              linkUrl.search === currentUrl.search;
+
+        return sameDocument && !!linkUrl.hash;
+    } catch (e) {
+        // Invalid URL
+        return false;
+    }
+}
+
+
 window.addEventListener("DOMContentLoaded",function(event) {
     thetocbutton = document.getElementsByClassName("toc-toggle")[0];
     thetocbutton.addEventListener("click", (e) => {
@@ -60,14 +85,27 @@ window.addEventListener("DOMContentLoaded",function(event) {
         e.stopPropagation(); // keep global click handler from immediately toggling it back
     });
 
-    // For themes that want it, install a click handler to auto close the toc.
+    // For themes that want it, install click handlers to auto close the toc
+    // when the reader clicks anywhere outside it or selects a subsection.
+    // (Selecting other sections or chapters navigates away from the page so
+    // effectively closes the TOC.)
     if (getComputedStyle(document.documentElement).getPropertyValue('--auto-collapse-toc') == "yes") {
+
+        const sidebar = document.getElementById("ptx-sidebar");
+
+        // Handle all clicks outside the sidebar
         window.addEventListener("click", function(event) {
-            const sidebar = document.getElementById("ptx-sidebar");
             if (sidebar.classList.contains("visible")) {
                 if (!event.composedPath().includes(sidebar)) {
                     toggletoc();
                 }
+            }
+        });
+
+        // Handle clicks inside the sidebar but on link within a subsection.
+        sidebar.addEventListener("click", function (event) {
+            if (samePageLink(event.target.closest('a'))) {
+                toggletoc();
             }
         });
     }
