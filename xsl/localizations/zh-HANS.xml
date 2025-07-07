@@ -312,4 +312,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Print page button text -->
     <localization string-id='print'>打印</localization>
     <!-- <localization string-id='close'>Close</localization> -->
+    <!-- <localization string-id='open-new-tab'>Open in new tab</localization> -->
 </locale>

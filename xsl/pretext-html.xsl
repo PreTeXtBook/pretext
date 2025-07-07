@@ -9600,7 +9600,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($b-portable-html)">
         <xsl:apply-templates select="." mode="standalone-page" >
             <xsl:with-param name="content">
-                <xsl:apply-templates select="." mode="interactive-core" />
+                <xsl:apply-templates select="." mode="interactive-core">
+                    <xsl:with-param name="is-standalone" select="true()"/>
+                </xsl:apply-templates>
             </xsl:with-param>
         </xsl:apply-templates>
     </xsl:if>
@@ -9614,6 +9616,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   1.  Instructions (paragraphs, etc)  -->
 <!--   2.  An iframe, via modal-template   -->
 <xsl:template match="interactive" mode="interactive-core">
+    <xsl:param name="is-standalone" select="false()"/>
     <!-- An iframe first -->
     <xsl:choose>
         <!-- A DoenetML interactive lives two lives.  Plain 'ol PreTeXt,  -->
@@ -9634,6 +9637,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="interactive-iframe-container">
                 <xsl:apply-templates select="." mode="iframe-interactive"/>
             </div>
+            <xsl:if test="$is-standalone = false()">
+                <div class="interactive-iframe-container__open">
+                    <xsl:variable name="if-filename">
+                        <xsl:apply-templates select="." mode="standalone-filename" />
+                    </xsl:variable>
+                    <xsl:variable name="label">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'open-new-tab'"/>
+                        </xsl:apply-templates>
+                    </xsl:variable>
+                    <a href="{$if-filename}" title="{$label}" aria-label="{$label}">
+                        <xsl:call-template name="insert-symbol">
+                            <xsl:with-param name="name" select="'open_in_new'"/>
+                        </xsl:call-template>
+                    </a>
+                </div>
+            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
     <!-- "instructions" next, *always* as a knowl -->
