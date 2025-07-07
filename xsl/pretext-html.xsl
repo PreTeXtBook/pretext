@@ -252,6 +252,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$document-root//ol[@marker and count(. | key('marker-key', @marker)[1]) = 1]" mode="ol-markers"/>
     </ol-markers>
 </xsl:variable>
+<!-- Following should be more efficient than 'select="boolean($document-root//ol[@marker])"' -->
+<xsl:variable name="b-needs-custom-marker-css" select="boolean(exsl:node-set($ol-markers)/ol-markers/ol-marker)"/>
 
 
 <!-- ######## -->
@@ -5775,8 +5777,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- CSS file for custom ol markers -->
 <xsl:template name="ol-marker-styles">
-    <xsl:variable name="ol-marker-nodes" select="exsl:node-set($ol-markers)" />
-    <xsl:if test="$ol-marker-nodes//ol-marker">
+    <!-- We don't produce a file if it will be empty. This would  -->
+    <!-- "naturally" be the case, but we have a boolean anyway.   -->
+    <xsl:if test="$b-needs-custom-marker-css">
+        <xsl:variable name="ol-marker-nodes" select="exsl:node-set($ol-markers)" />
         <exsl:document href="ol-markers.css" method="text">
             <xsl:apply-templates select="$ol-marker-nodes//ol-marker" mode="ol-marker-style" />
         </exsl:document>
@@ -13540,7 +13544,9 @@ TODO:
 <!-- CSS header -->
 <xsl:template name="css-common">
     <!-- Temporary until css handling overhaul by ascholer complete -->
-    <link href="{$html.css.dir}/ol-markers.css" rel="stylesheet" type="text/css"/>
+    <xsl:if test="$b-needs-custom-marker-css">
+        <link href="{$html.css.dir}/ol-markers.css" rel="stylesheet" type="text/css"/>
+    </xsl:if>
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
     <xsl:if test="not($html.css.extra = '')">
         <xsl:variable name="csses" select="str:tokenize($html.css.extra, ', ')"/>
