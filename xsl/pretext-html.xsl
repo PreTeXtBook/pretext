@@ -9666,8 +9666,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@desmos]" mode="iframe-interactive">
     <iframe src="https://www.desmos.com/calculator/{@desmos}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
     </iframe>
 </xsl:template>
 
@@ -9748,8 +9748,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- ctl = click to launch                 -->
     <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/{$ggbMaterialWidth}/height/{$ggbMaterialHeight}/border/888888/smb/false/stb/{$ggbToolBar}/stbh/{$ggbToolBar}/ai/{$ggbAlgebraInput}/asb/false/sri/{$ggbResetIcon}/rc/false/ld/false/sdz/{$ggbShiftDragZoom}/ctl/false">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
     </iframe>
 </xsl:template>
 
@@ -9783,7 +9783,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="full-url" select="concat($cp3d-endpoint, '?', @calcplot3d)" />
     <iframe src="{$full-url}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
@@ -9817,7 +9817,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <iframe src="https://www.falstad.com/circuit/circuitjs.html?cct='{$url-string}'">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
@@ -9840,7 +9840,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <iframe src="{$location}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
@@ -9849,7 +9849,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <iframe>
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
         </xsl:attribute>
@@ -10428,6 +10428,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </link>
     </xsl:for-each>
+</xsl:template>
+
+<!-- sizing styles for interactives that specify % width and an aspect ratio -->
+<!-- and may also specify a design-width.  -->
+<xsl:template match="*" mode="get-interactive-sizing-styles">
+    <xsl:variable name="has-design-width">
+        <xsl:value-of select="substring(@design-width, string-length(@design-width) - 1) = 'px'"/>
+    </xsl:variable>
+    <xsl:attribute name="style">
+        <xsl:choose>
+          <xsl:when test="$has-design-width = 'true'">
+              <xsl:text>max-width: </xsl:text>
+              <xsl:value-of select="@design-width"/>
+              <xsl:text>; </xsl:text>
+              <xsl:text>width: 100%; </xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:text>width:</xsl:text>
+              <xsl:apply-templates select="." mode="get-width-percentage" />
+              <xsl:text>; </xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>aspect-ratio:</xsl:text>
+            <xsl:apply-templates select="." mode="get-aspect-ratio">
+                <xsl:with-param name="default-aspect" select="'1:1'" />
+            </xsl:apply-templates>
+            <xsl:apply-templates select="." mode="get-style-attr-aspect" />
+        <xsl:text>;</xsl:text>
+    </xsl:attribute>
 </xsl:template>
 
 <!-- Next two utilities write attributes, so cannot go in -common -->
