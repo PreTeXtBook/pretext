@@ -37,6 +37,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         user="anonymous"
         userpassword="anonymous"
         task-reveal="preceding-correct"
+        static-processing="webwork2"
         />
 
 </publication>
