@@ -299,6 +299,8 @@ section.worksheet > .heading + .para {
   }
 
   @page {
-    margin: var(--ws-top-margin) var(--ws-right-margin) var(--ws-bottom-margin) var(--ws-left-margin);
+    // Note: when we allow custom margins, the javascript will need to change these defaults.
+    // Default margins appear to be necessary for Firefox and Safari (Chrome already works with the variable values).
+    margin: var(--ws-top-margin, 40px) var(--ws-right-margin, 55px) var(--ws-bottom-margin, 45px) var(--ws-left-margin, 45px);
   }
 }
