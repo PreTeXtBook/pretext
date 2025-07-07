@@ -28,33 +28,14 @@
 @use 'components/helpers/buttons-default' as buttons;
 
 
-// We don't need specific colors, but the colors that get defined when most colors are set must still be set.
-// render the actual colors
-$palette: 'blue-red' !default;
-$primary-color: null !default;
-$secondary-color: null !default;
-$primary-color-dark: #698aa8 !default;
-$background-color-dark: #23241f !default;
-
-@use "sass:map";
+// Make sure we are including the root colors using simple black-and-white palette
 @use "colors/color-helpers" as colorHelpers;
-@use 'colors/palette-dual' as palette-dual with (
-  $palette: $palette,
-  $primary-color: $primary-color,
-  $secondary-color: $secondary-color,
+@use 'colors/palette-single' as palette with (
+  $primary-color: black,
 );
 
-// primary/secondary color defined as determined by palette-dual using
-// $palette, $primary-color, $secondary-color
-$primary-color: map.get(palette-dual.$colors, 'primary-color');
-$secondary-color: map.get(palette-dual.$colors, 'secondary-color');
-
-@use 'colors/palette-dark' as palette-dark with (
-  $primary-color: $primary-color-dark,
-  $background-color: $background-color-dark,
-);
 // render the actual colors
-@include colorHelpers.set-root-colors(palette-dual.$colors, palette-dark.$colors);
+@include colorHelpers.set-root-colors(palette.$colors);
 
 // ---------------------------------------------
 // concrete rules / includes that generate CSS
