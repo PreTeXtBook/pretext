@@ -2757,6 +2757,9 @@ article.theorem-like .emphasis {
 .code-display {
   overflow-x: auto;
 }
+.booktitle {
+  font-style: oblique;
+}
 .latex-logo {
   font-family:
     "PT Serif",
