@@ -3306,6 +3306,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <image source="images/nz-landscape.jpg" width="80%"/>
                 </figure>
 
+                <p>Images that are given a <attr>width</attr> (always as a percentage) are scaled to that percentage of their container. Images without a <attr>width</attr> will be rendered at their natural size if possible and as large as possible if not. This can be seen in these three renderings of the same screenshot:</p>
+
+                <figure>
+                    <caption>A new folder with <c>width="100%"</c></caption>
+                    <image source="images/new-folder-screenshot.png" width="100%"/>
+                </figure>
+
+                <figure>
+                    <caption>A new folder with <c>width="50%"</c></caption>
+                    <image source="images/new-folder-screenshot.png" width="50%"/>
+                </figure>
+
+                <figure>
+                    <caption>A new folder with no <attr>width</attr></caption>
+                    <image source="images/new-folder-screenshot.png"/>
+                </figure>
+
                 <p>If you have existing images that are vector graphics, then PDF format works best for <latex/> output and SVG format works best for HTML.  The utility <c>pdf2svg</c> works well for converting PDF to SVG.  In this case, specify your source as a filename, but leave off the file extension, and the appropriate version will be used for the current output format.</p>
 
                 <p>The image below is provided from a PDF file in <latex/> output, and was converted to an SVG for use with the HTML output.  It has been explicitly scaled to a width of 65% of the text width.</p>
@@ -3347,7 +3364,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure>
                     <caption>Solution to a differential equation</caption>
-                    <image width="60%">
+                    <image>
                         <prefigure label="prefigure-diffeq"
                                    xmlns="https://prefigure.org">
                             <diagram dimensions="(300,300)" margins="5">
@@ -3375,7 +3392,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>This next diagram employs some <latex/> macros that are defined in the usual way in <tag>docinfo</tag> and are employed to produce the names of some vectors in the labels.  The blue line is colored blue by a global <prefigure/> declaration, also in <tag>docinfo</tag>.</p>
 
-                <image width="60%">
+                <image>
                     <prefigure label="prefigure-projection"
                                xmlns="https://prefigure.org">
                         <diagram dimensions="(300,300)" margins="5">
@@ -3418,7 +3435,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>The next <prefigure/> diagram is authored with annotations, arranged in a hierarchy of increasing refinement and detail.  Each identified graphical component will read its annotation and show it on the screen below the diagram.  When a reader clicks on the image, a high-level summary will be read using the author-provided annotation.  The down and up arrow keys enable a reader to explore the diagram in more or less detail while the right and left arrow keys reveal features at the same level of detail.  When the focus is on the graph, pressing "O" will produce a sonification of the graph.</p>
 
-                <image width="60%">
+                <image>
                     <prefigure label="prefigure-tangent"
                                xmlns="https://prefigure.org">
                         <diagram dimensions="(300,300)" margins="5">
