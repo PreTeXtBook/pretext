@@ -2915,7 +2915,7 @@ section.worksheet > .heading + .para {
     color: black;
   }
   @page {
-    margin: var(--ws-top-margin) var(--ws-right-margin) var(--ws-bottom-margin) var(--ws-left-margin);
+    margin: var(--ws-top-margin, 40px) var(--ws-right-margin, 55px) var(--ws-bottom-margin, 45px) var(--ws-left-margin, 45px);
   }
 }
 /*! Theme: print-worksheet */
