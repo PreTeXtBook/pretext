@@ -844,7 +844,7 @@ def main():
         elif args.format == "assembly-version":
             ptx.assembly(xml_source, publication_file, stringparams, out_file, dest_dir, "version" )
         elif args.format == "webwork-sets":
-            ptx.webwork_sets(xml_source, publication_file, stringparams, dest_dir, args.tgz)
+            ptx.webwork_sets(xml_source, publication_file, stringparams, dest_dir, args.tgz, True)
         # 2020-05-19 MathBookXMLtoSWS class removed
         elif args.format == "sagenb":
             raise NotImplementedError(
