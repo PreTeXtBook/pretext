@@ -972,11 +972,12 @@
             <p>
                 <webwork/> exercises in a <pretext/> project can be processed in two ways: using a
                 local copy of <c>pg</c>, or using a <c>webwork2</c> server. The variables here
-                control which method is used where, and how it is used. These are discussed again
-                in <xref ref="webwork-representations"/>.
+                control which method is used where, and how it is used. These are also discussed in
+                <xref ref="webwork-publisher"/>.
             </p>
             <p>
-                See <xref ref="online-webwork-dynamism"/> for publisher file attributes that control <webwork/>'s dynamic behavior in HTML.
+                See <xref ref="online-webwork-dynamism"/> for publisher file attributes that control
+                <webwork/>'s dynamic behavior in HTML.
             </p>
         </introduction>
 
@@ -989,8 +990,8 @@
                 can have value <c>webwork2</c> (the default) or <c>local</c>. When <webwork/>
                 exercises are processed to make static <pretext/> representations, this is the
                 method that will be used. Either communicating with a <c>webwork2</c> server or a
-                local copy of <c>pg</c>. The fastest processing happens if you use <c>local</c>.
-                See <xref ref="webwork-local-pg-static-processing"/>.
+                local copy of <c>pg</c>. The fastest processing happens if you use <c>local</c>. See
+                <xref ref="webwork-local-pg-static-processing"/>.
             </p>
         </subsection>
 
@@ -1001,7 +1002,8 @@
                     <cline>/publication/webwork/@pg-location</cline>
                 </cd>
                 gives the absolute file path to a local copy of the <c>pg</c> repository, for when
-                static processing is local. The default value is <c>/opt/webwork/pg</c>.
+                static processing is local. The default value is <c>/opt/webwork/pg</c>. See
+                <xref ref="webwork-local-pg-static-processing"/>.
             </p>
         </subsection>
 
@@ -1012,8 +1014,9 @@
                 <cd>
                     <cline>/publication/webwork/@server</cline>
                 </cd>
-                should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not include a trailing slash.
-                The server should be version 2.16 or later.
+                should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not include
+                a trailing slash. The server should be version 2.16 or later. See
+                <xref ref="webwork-representations"/>.
             </p>
         </subsection>
 
@@ -1024,16 +1027,19 @@
                 <cd>
                     <cline>/publication/webwork/@course</cline>
                 </cd>
+                See <xref ref="webwork-representations"/>.
             </p>
         </subsection>
 
         <subsection xml:id="publication-file-webwork-user">
             <title>User</title>
             <p>
-                The username that signs in to the host course to process exercises is in the attribute
+                The username that signs in to the host course to process exercises is in the
+                attribute
                 <cd>
                     <cline>/publication/webwork/@user</cline>
                 </cd>
+                See <xref ref="webwork-representations"/>.
             </p>
         </subsection>
 
@@ -1044,6 +1050,7 @@
                 <cd>
                     <cline>/publication/webwork/@password</cline>
                 </cd>
+                See <xref ref="webwork-representations"/>.
             </p>
         </subsection>
 
@@ -1054,13 +1061,17 @@
                 <cd>
                     <cline>/publication/webwork/@task-reveal</cline>
                 </cd>
-                attribute is used to control how tasks in a multi-task exercise are made available to the reader.
-                This applies to live interactive renderings of the exercises, either in HTML, in <webwork/>,
-                or otherwise. Possible values are:
+                attribute is used to control how tasks in a multi-task exercise are made available
+                to the reader. This applies to live interactive renderings of the exercises, either
+                in HTML, in <webwork/>, or otherwise. Possible values are:
                 <ul>
-                    <li><c>preceding-correct</c> (all preceding tasks must be correctly answered before the next is available)</li>
+                    <li>
+                        <c>preceding-correct</c> (all preceding tasks must be correctly answered
+                        before the next is available)
+                    </li>
                     <li><c>all</c> (all tasks are available)</li>
                 </ul>
+                See <xref ref="webwork-html-output"/>.
             </p>
         </subsection>
     </section>

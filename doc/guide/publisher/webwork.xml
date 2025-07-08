@@ -87,7 +87,7 @@
       available from Linux package distributions, and the details differ from one flavor of Linux to
       the next. Alternatively there is a utility called <c>cpanm</c> (cpanminus) that is supposed
       to let you manage perl module installation across Linux flavors. One important difference is
-      that <c>cpanm</c> only mangages perl modules. And sometimes a perl module is actually an
+      that <c>cpanm</c> only manages perl modules. And sometimes a perl module is actually an
       interface between perl and some other system utility. <c>cpanm</c> will not actually install
       that system utility that it depends on and will just quit. Whereas Linux package distributions
       will have a more sophisticated dependency understanding, and try to install non-perl tools
@@ -136,7 +136,7 @@
       (<c>brew install cpanminus</c>, requiring you first install
       <url href="https://brew.sh/" visual="https://brew.sh/">Homebrew</url>). Or you could install
       <c>cpanm</c> directly following
-      <url href="https://metacpan.org/pod/App::cpanminus" visual="metacpan.org/pod/App::cpanminus">these instruction</url>.
+      <url href="https://metacpan.org/pod/App::cpanminus" visual="metacpan.org/pod/App::cpanminus">these instructions</url>.
     </p>
     <p>
       Once you have <c>cpanm</c>, you can opt to install the above modules one at a time, or all at
@@ -156,12 +156,13 @@
     </p>
     <p>
       Now in a publisher file, you can set the <tag>webwork</tag> element to have
-      <attr>static-processing</attr> with value <c>local</c>. If you put the <c>pg</c> repository
+      <attr>static-processing</attr> with value <c>local</c> (see
+      <xref ref="publication-file-webwork-static-processing"/>). If you put the <c>pg</c> repository
       in the default location, this is all you need to do. Otherwise, you also need to add the
-      attribute <attr>pg-location</attr> with the absolute path, for example <c>/opt/webwork/pg</c>.
-      And when you process <webwork/> exercises for static representations (following
-      <xref ref="webwork-representations"/>) your local copy of PG will be used instead of some
-      remote server.
+      attribute <attr>pg-location</attr> with the absolute path, for example <c>/opt/webwork/pg</c>
+      (see <xref ref="publication-file-webwork-pg-location"/>). And when you process <webwork/>
+      exercises for static representations (following <xref ref="webwork-representations"/>) your
+      local copy of PG will be used instead of some remote server.
     </p>
     <p>
       Note that you will still need a network connection for problems in your HTML output to render
@@ -384,13 +385,18 @@
         <c>-c webwork</c> means you are processing the <webwork/> components.
       </p>
       <p>
-        <c>-p</c> specifies the publication file, as described in <xref ref="publication-file-reference"/>.
-        In the publication file, the element <tag>webwork</tag> may have attributes <attr>server</attr>,
-        <attr>course</attr>, <attr>user</attr>, and <attr>password</attr>.
-        If absent, these default to <c>https://webwork-ptx.aimath.org</c>, <c>anonymous</c>, <c>anonymous</c>,
-        <c>anonymous</c>, and <c>anonymous</c> respectively. If you specify a server, you must correctly
-        specify the protocol (<c>http</c> versus <c>https</c>). And it must be version 2.16 or later.
-        Do not include a trailing slash.
+        <c>-p</c> specifies the publication file (see <xref ref="publication-file-reference"/>).
+        In the publication file, the element <tag>webwork</tag> may have attributes:
+        <ul>
+          <li><attr>server</attr> (<xref ref="publication-file-webwork-server"/>)</li>
+          <li><attr>course</attr> (<xref ref="publication-file-webwork-course"/>)</li>
+          <li><attr>user</attr> (<xref ref="publication-file-webwork-user"/>)</li>
+          <li><attr>password</attr> (<xref ref="publication-file-webwork-password"/>)</li>
+        </ul>
+        If absent, these default to <c>https://webwork-ptx.aimath.org</c>, <c>anonymous</c>,
+        <c>anonymous</c>, <c>anonymous</c>, and <c>anonymous</c> respectively. If you specify a
+        server, you must correctly specify the protocol (<c>http</c> versus <c>https</c>). And it
+        must be version 2.16 or later. Do not include a trailing slash.
       </p>
     </subsection>
 
