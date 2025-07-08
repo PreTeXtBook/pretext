@@ -1233,7 +1233,7 @@ def webwork_to_xml(
         os.mkdir(ww_macros_dir)
 
     # construct the generated pg files, etc, which may need to be read later for rendering problems
-    webwork_sets(xml_source, pub_file, stringparams, ww_pg_dir, False)
+    webwork_sets(xml_source, pub_file, stringparams, ww_pg_dir, False, False)
     pg_macros(xml_source, pub_file, stringparams, ww_macros_dir)
 
     no_publication_file = False
@@ -2047,7 +2047,7 @@ def webwork_to_xml(
 ################################
 
 
-def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
+def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz, need_macros):
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -2064,7 +2064,8 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
     folder = os.path.join(tmp_dir, folder_name)
     macros_folder = os.path.join(folder, 'macros')
     os.mkdir(macros_folder)
-    pg_macros(xml_source, pub_file, stringparams, macros_folder)
+    if need_macros:
+        pg_macros(xml_source, pub_file, stringparams, macros_folder)
     if tgz:
         archive_file = os.path.join(tmp_dir, folder_name + ".tgz")
         targz(archive_file, folder)
