@@ -58,6 +58,26 @@ function toggletoc() {
    scrollTocToActive();
 }
 
+function samePageLink(a) {
+    if (!(a instanceof HTMLAnchorElement)) return false;
+
+    try {
+        const linkUrl = new URL(a.href, document.baseURI);
+        const currentUrl = new URL(window.location.href);
+
+        const sameDocument =
+              linkUrl.origin === currentUrl.origin &&
+              linkUrl.pathname === currentUrl.pathname &&
+              linkUrl.search === currentUrl.search;
+
+        return sameDocument && !!linkUrl.hash;
+    } catch (e) {
+        // Invalid URL
+        return false;
+    }
+}
+
+
 window.addEventListener("DOMContentLoaded",function(event) {
     thetocbutton = document.getElementsByClassName("toc-toggle")[0];
     thetocbutton.addEventListener("click", (e) => {
@@ -84,7 +104,7 @@ window.addEventListener("DOMContentLoaded",function(event) {
 
         // Handle clicks inside the sidebar but on link within a subsection.
         sidebar.addEventListener("click", function (event) {
-            if (event.target.closest('a') && event.target.closest(".toc-subsection")) {
+            if (samePageLink(event.target.closest('a'))) {
                 toggletoc();
             }
         });
