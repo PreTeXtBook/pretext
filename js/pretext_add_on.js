@@ -960,21 +960,22 @@ function toggleWorkspaceHighlight(isChecked) {
                 container.classList.add('workspace-container');
                 // Set the container height to the current workspace height
                 container.style.height = window.getComputedStyle(workspace).height;
-                // Move the workspace into the container
-                workspace.parentNode.insertBefore(container, workspace);
-                container.appendChild(workspace);
                 const original = document.createElement('div');
                 original.classList.add('original-workspace');
-                original.setAttribute('title', 'Author-specified workspace height');
+                const originalHeight = workspace.getAttribute('data-space') || '0px';
+                original.setAttribute('title', 'Author-specified workspace height (' + originalHeight + ')');
                 console.log("setting original workspace height for", workspace);
                 // Use the data-space attribute for height of original workspace
-                original.style.height = workspace.getAttribute('data-space') || '0px';;
-                // insert original div after the workspace content
+                original.style.height = originalHeight;
+                // insert original div before the workspace content
                 container.appendChild(original);
                 // Add a warning class if the original height is greater than the current height
                 if (original.offsetHeight > workspace.offsetHeight) {
                     original.classList.add('warning');
                 }
+                // Move the workspace into the container
+                workspace.parentNode.insertBefore(container, workspace);
+                container.appendChild(workspace);
             });
         }
     } else {
