@@ -897,8 +897,9 @@
 
             <p>The<cd>
                 <cline>/publication/revealjs/appearance</cline>
-            </cd>element can have the following attribute:<ul>
-                <li><attr>theme</attr>: the base name of a file that is a reveal.js theme.  For example if the desired theme/CSS file is <c>css/theme/solarized.css</c>, then set the value of this attribute to <c>solarized</c>.</li>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>theme</attr>: the base name of a file that is a reveal.js theme. (See the <url href="https://revealjs.com/themes/">reveal.js documentation</url> for available themes.)  For example if the desired theme/CSS file is <c>css/theme/solarized.css</c>, then set the value of this attribute to <c>solarized</c>.</li>
+                <li><attr>custom-css</attr>: a string separated list of custom css files to load. These may be local files or remote URLs. For local files, it is recommended to place them in the <term>external</term> files directory so that they are automatically copied from your source folder to the output directory. (Refer to <xref ref="processing-directory-management"/> for more information on external files.)</li>
             </ul></p>
         </subsection>
 
