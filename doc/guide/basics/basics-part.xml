@@ -1517,7 +1517,7 @@
         So we can type <tage>xref ref="basics-s-xref"</tage> to create a reference to this subsection:
         <xref ref="basics-s-xref"/>.
         There are lots of options to control what text and number appear when you use <tag>xref</tag>.
-        The default is <attr>text</attr> with value <c>type-gobal</c>,
+        The default is <attr>text</attr> with value <c>type-global</c>,
         which produces something like <q>Subsection 3.3</q> or <q>Theorem 3.1.4</q>.
         The type is <q>Subsection</q> or <q>Theorem</q>,
         and the <em>global</em> number is 3.3 or 3.1.4. (Global is in contrast to local,
