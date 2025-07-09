@@ -264,10 +264,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- inserted into the source by the pre-processor ("assembly") when     -->
 <!-- making dynamic exercises.                                           -->
 
-<xsl:variable name="webwork-major-version" select="$document-root//webwork-reps[1]/@ww_major_version"/>
-<xsl:variable name="webwork-minor-version" select="$document-root//webwork-reps[1]/@ww_minor_version"/>
-
-<xsl:variable name="webwork-domain" select="$document-root//webwork-reps[1]/server-data/@domain" />
+<xsl:variable name="webwork-major-version" select="$document-root//webwork-reps[1]/@webwork2_major_version"/>
+<xsl:variable name="webwork-minor-version" select="$document-root//webwork-reps[1]/@webwork2_minor_version"/>
 
 <!-- #### EXPERIMENTAL #### -->
 <!-- We allow for the HTML conversion to chunk output, starting  -->
@@ -10557,7 +10555,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="webwork-js">
     <xsl:if test="$b-has-webwork-reps">
         <script src="{$html.js.dir}/pretext-webwork/2.{$webwork-minor-version}/pretext-webwork.js"></script>
-        <script src="{$webwork-domain}/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.min.js"></script>
+        <script src="{$webwork-server}/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.min.js"></script>
     </xsl:if>
 </xsl:template>
 
@@ -10651,7 +10649,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <div id="{$inner-id}" class="exercise-wrapper">
         <xsl:attribute name="data-domain">
-            <xsl:value-of select="$webwork-domain"/>
+            <xsl:value-of select="$webwork-server"/>
         </xsl:attribute>
         <xsl:attribute name="data-seed" >
             <xsl:value-of select="static/@seed"/>
@@ -10706,32 +10704,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="string-id" select="'solution'"/>
             </xsl:apply-templates>
         </xsl:attribute>
+        <xsl:attribute name="data-origin">
+            <xsl:value-of select="rendering-data/@origin"/>
+        </xsl:attribute>
         <xsl:choose>
-            <xsl:when test="server-data/@problemSource">
+            <xsl:when test="rendering-data/@problemSource">
                 <xsl:attribute name="data-problemSource">
-                    <xsl:value-of select="server-data/@problemSource"/>
+                    <xsl:value-of select="rendering-data/@problemSource"/>
                 </xsl:attribute>
             </xsl:when>
-            <xsl:when test="server-data/@sourceFilePath">
+            <xsl:when test="rendering-data/@sourceFilePath">
                 <xsl:attribute name="data-sourceFilePath">
-                    <xsl:value-of select="server-data/@sourceFilePath"/>
+                    <xsl:value-of select="rendering-data/@sourceFilePath"/>
                 </xsl:attribute>
             </xsl:when>
         </xsl:choose>
         <xsl:attribute name="data-courseID">
-            <xsl:value-of select="server-data/@course-id"/>
+            <xsl:value-of select="rendering-data/@course-id"/>
         </xsl:attribute>
         <xsl:attribute name="data-userID">
-            <xsl:value-of select="server-data/@user-id"/>
+            <xsl:value-of select="rendering-data/@user-id"/>
         </xsl:attribute>
         <xsl:attribute name="data-coursePassword">
             <xsl:choose>
-                <xsl:when test="server-data/@password">
-                    <xsl:value-of select="server-data/@password"/>
+                <xsl:when test="rendering-data/@passwd">
+                    <xsl:value-of select="rendering-data/@passwd"/>
+                </xsl:when>
+                <!-- Old representations files will have one of the following @password -->
+                <xsl:when test="rendering-data/@password">
+                    <xsl:value-of select="rendering-data/@password"/>
                 </xsl:when>
                 <!-- Old representations files will have @course-password instead of @password -->
                 <xsl:otherwise>
-                    <xsl:value-of select="server-data/@course-password"/>
+                    <xsl:value-of select="rendering-data/@course-password"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
@@ -10784,7 +10789,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <iframe name="{@ww-id}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
     <script>
         <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
-        <xsl:value-of select="$webwork-domain" />
+        <xsl:value-of select="$webwork-server" />
         <xsl:text>"]})</xsl:text>
     </script>
 </xsl:template>
