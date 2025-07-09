@@ -946,9 +946,47 @@ function setPageGeometryCSS({paperSize="letter", wsTopMargin = "40px", wsRightMa
     document.head.appendChild(style);
 }
 
-// Worksheet papersize toggle:
+function toggleWorkspaceHighlight(isChecked) {
+    if (isChecked) {
+        // Toggle the highlight class on the body based on the checkbox state
+        document.body.classList.add("highlight-workspace");
+        // If we haven't already inserted divs to show the original workspace heights, do that now
+        if (!document.querySelector('.workspace-container')) {
+            console.log("adding original workspace divs");
+            // Insert divs to show the original workspace
+            document.querySelectorAll('.workspace').forEach(workspace => {
+                // Create a container div to hold the workspace div and the original div
+                const container = document.createElement('div');
+                container.classList.add('workspace-container');
+                // Set the container height to the current workspace height
+                container.style.height = window.getComputedStyle(workspace).height;
+                // Move the workspace into the container
+                workspace.parentNode.insertBefore(container, workspace);
+                container.appendChild(workspace);
+                const original = document.createElement('div');
+                original.classList.add('original-workspace');
+                original.setAttribute('title', 'Author-specified workspace height');
+                console.log("setting original workspace height for", workspace);
+                // Use the data-space attribute for height of original workspace
+                original.style.height = workspace.getAttribute('data-space') || '0px';;
+                // insert original div after the workspace content
+                container.appendChild(original);
+                // Add a warning class if the original height is greater than the current height
+                if (original.offsetHeight > workspace.offsetHeight) {
+                    original.classList.add('warning');
+                }
+            });
+        }
+    } else {
+        document.body.classList.remove("highlight-workspace");
+    }
+}
+
+// Worksheet print preview and page setup
 window.addEventListener("load",function(event) {
+  // We condition on the existence of the papersize radio buttons, which only appear in the worksheet print preview.
   if (document.querySelector('input[name="papersize"]')) {
+    // Get the papersize from localStorage or set it based on user's geographic region
     const papersize = localStorage.getItem("papersize");
     if (papersize) {
       const radio = document.querySelector(`input[name="papersize"][value="${papersize}"]`);
@@ -997,8 +1035,17 @@ window.addEventListener("load",function(event) {
           localStorage.setItem("papersize", this.value);
           console.log("Setting papersize to", this.value);
 
-          adjustWorkspaceToFitPage();
-          setPageGeometryCSS({paperSize: this.value});
+          // If the "highlight workspace" checkbox was already checked, then we should restart the process by reloading the page.  Specifically, we run into issues when there are .workspace-container divs already present.
+          if (document.querySelector(".workspace-container")) {
+            console.log("Reloading page to apply new papersize with workspace highlight enabled.");
+            window.location.reload();
+            return;
+          } else {
+            // Otherwise, we can just adjust the workspace heights to fit the new paper size.
+            console.log("Adjusting workspace heights to fit new papersize.");
+            adjustWorkspaceToFitPage();
+            setPageGeometryCSS({paperSize: this.value});
+          }
         }
       });
     });
@@ -1011,16 +1058,31 @@ window.addEventListener("load",function(event) {
     });
     // If the worksheet has authored pages, there will be at least one .onepage element.
     if (document.querySelector('.onepage')) {
+        adjustWorksheetPages();
         /* not the right way:  need to figure out what this needs to wait for */
-        window.setTimeout(adjustWorksheetPages, 1000);
+        //window.setTimeout(adjustWorksheetPages, 1000);
     } else {
-        // Otherwise we need to create the pages as best we can to normalize workspace heights.
-        window.setTimeout(createWorksheetPages, 1000);
+        createWorksheetPages();
     }
     // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size).
-    window.setTimeout(adjustWorkspaceToFitPage, 1500);
+    adjustWorkspaceToFitPage();
 
     console.log("finished adjusting workspace");
+
+
+    // Get the 'highlight workspace' checkbox state from localStorage or set it to false by default
+    const highlightWorkspaceCheckbox = document.getElementById("highlight-workspace-checkbox");
+    if (highlightWorkspaceCheckbox) {
+        highlightWorkspaceCheckbox.checked = localStorage.getItem("highlightWorkspace") === "true";
+        highlightWorkspaceCheckbox.addEventListener("change", function() {
+            localStorage.setItem("highlightWorkspace", this.checked);
+            toggleWorkspaceHighlight(this.checked);
+        });
+        // Initial toggle to apply the highlight class if checked
+        toggleWorkspaceHighlight(highlightWorkspaceCheckbox.checked);
+    }
+
+
 
         // Not sure why this is here:
       window.setTimeout(urlattribute, 1500);

@@ -11055,7 +11055,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <div class="print-preview-header">
                                 <xsl:apply-templates select="." mode="print-preview-header"/>
                                 <div class="print-controls">
-                                    <xsl:apply-templates select="." mode="papersize-toggle"/>
+                                    <div class="print-controls-toggles">
+                                        <xsl:apply-templates select="." mode="papersize-toggle"/>
+                                        <xsl:apply-templates select="." mode="highlight-workspace-toggle"/>
+                                    </div>
                                     <xsl:apply-templates select="." mode="print-button"/>
                                 </div>
                             </div>
@@ -11806,8 +11809,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="worksheet" mode="print-preview-header">
     <h2 class="print-preview">
-        <!-- TODO: add localization support-->
-        <xsl:text>Print Preview</xsl:text>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'print-preview'"/>
+        </xsl:apply-templates>
     </h2>
 </xsl:template>
 
@@ -11828,6 +11832,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <input type="radio" name="papersize" value="letter"/>Letter
         </label>
     </form>
+</xsl:template>
+
+<xsl:template match="*" mode="highlight-workspace-toggle"/>
+
+<xsl:template match="worksheet" mode="highlight-workspace-toggle">
+    <label for="highlight-workspace-checkbox">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'highlight-workspace'"/>
+        </xsl:apply-templates>
+    </label>
+    <input type="checkbox" id="highlight-workspace-checkbox"/>
 </xsl:template>
 
 <!-- Primary Navigation Panels -->
