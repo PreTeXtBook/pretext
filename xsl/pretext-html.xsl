@@ -252,7 +252,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$document-root//ol[@marker and count(. | key('marker-key', @marker)[1]) = 1]" mode="ol-markers"/>
     </ol-markers>
 </xsl:variable>
-<xsl:variable name="b-needs-custom-marker-css" select="boolean($document-root//ol[@marker])"/>
+<xsl:variable name="b-needs-custom-marker-css" select="boolean(exsl:node-set($ol-markers)/ol-markers/ol-marker)"/>
 
 
 <!-- ######## -->
