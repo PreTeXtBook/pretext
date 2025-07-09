@@ -3636,20 +3636,32 @@ TEST_CASE( "Test the add function" ) {
     <exercises xml:id="select-exercises">
         <title>Select Exercises</title>
 
-        <exercise>
-            <statement>
-                <p>Mock exercise, just to say this is all testing, 2023-05-19.</p>
-            </statement>
-        </exercise>
+        <introduction>
+            <p>These <term>select</term> questions give the reader a choice of several (related) extant questions to choose from.  They are only really functional with a database of students in a course, i.e.<nbsp/>when hosted on Runestone.</p>
+        </introduction>
 
         <!-- Select one at random -->
         <exercise label="question-select">
-            <select questions="true-false-one multiple-choice-one matching-one"/>
+            <title>Three-way Select Question</title>
+            <select grade="random" questions="true-false-one multiple-choice-one matching-one"/>
         </exercise>
 
         <!-- Select according to a student's group (A or B) -->
         <exercise label="ab-experiment">
-            <select ab-experiment="true-false-one multiple-choice-one" experiment-name="sample-book"/>
+            <title>A/B Experiment Select Question</title>
+            <select grade="ab-experiment" questions="true-false-one multiple-choice-one" experiment-name="sample-book"/>
+        </exercise>
+
+        <!-- Select grades first alwys, others to view -->
+        <exercise label="toggle-first">
+            <title>Grade First Question</title>
+            <select grade="first" questions="true-false-one multiple-choice-one"/>
+        </exercise>
+
+        <!-- Select grades any one reader chooses -->
+        <exercise label="toggle-any">
+            <title>Grade Any Question</title>
+            <select grade="any" questions="true-false-one multiple-choice-one"/>
         </exercise>
 
     </exercises>
