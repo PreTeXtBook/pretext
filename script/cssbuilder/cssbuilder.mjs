@@ -119,7 +119,7 @@ function getTargets(options) {
     { out: 'theme-tacoma', in: path.join(cssRoot, 'targets/html/tacoma/theme-tacoma.scss') },
     // -------------------------------------------------------------------------
     // Non-web targets
-    { out: 'reveal', in: path.join(cssRoot, 'targets/revealjs/reveal.scss')},
+    { out: 'pretext-reveal', in: path.join(cssRoot, 'targets/revealjs/reveal.scss')},
     { out: 'kindle', in: path.join(cssRoot, 'targets/ebook/kindle/kindle.scss')},
     { out: 'epub', in: path.join(cssRoot, 'targets/ebook/epub/epub.scss')},
   ]
@@ -157,8 +157,9 @@ function getTargets(options) {
           // Modules build directly to destination with no subfolder
           targets[0].out = targets[0].out.replace('modules/', '');
         } else {
-          // Others build as theme.css
-          targets[0].out = 'theme';
+          // Individual HTML theme files build as theme.css
+          if(targets[0].in.includes("theme-"))
+              targets[0].out = 'theme';
         }
       }
     }
