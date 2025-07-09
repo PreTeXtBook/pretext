@@ -1096,18 +1096,11 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
 def webwork_to_xml(
     xml_source, pub_file, stringparams, xmlid_root, abort_early, server_params, dest_dir
 ):
+    # import what we will need
     import urllib.parse  # urlparse()
     import base64  # b64encode()
     import copy
     import tarfile
-
-    # external module, often forgotten
-    # at least on Mac installations, requests module is not standard
-    try:
-        import requests  # webwork server
-    except ImportError:
-        global __module_warning
-        raise ImportError(__module_warning.format("requests"))
 
     # support publisher file, subtree argument
     if pub_file:
@@ -1118,10 +1111,17 @@ def webwork_to_xml(
         "string parameters passed to extraction stylesheet: {}".format(stringparams)
     )
 
-    # Either we have a "generated" directory, or we must assume placing everything in dest_dir
+    # Various directories need to be established
+    # These first two are the source folders which may not have the usual names
+    # "generated" and "external"
     generated_dir, external_dir = get_managed_directories(xml_source, pub_file)
     if generated_dir:
+        # create the generated_dir if it doesn't actually exist yet
+        if not (os.path.isdir(generated_dir)):
+            os.mkdir(generated_dir)
+        # where the representations file will live
         ww_reps_dir = os.path.join(generated_dir, "webwork")
+        # where generated images from webwork exercises will live
         ww_images_dir = os.path.join(ww_reps_dir, "images")
     else:
         msg = "".join(
@@ -1150,25 +1150,22 @@ def webwork_to_xml(
     # file path for the representations file
     ww_reps_file = os.path.join(ww_reps_dir, "webwork-representations.xml")
 
-    # execute XSL extraction to get back six dictionaries
-    # where the keys are the unique-id for the problems
-    # origin, copy, seed, source, pghuman, pgdense
-    # also get the localization as a string
-    # The XSL gets the problems in document order, and the
-    # Python dictionaries (v3.5+?) will maintain the order
-    # in which the problems are added, which aids in debugging
+    # execute XSL extraction to get back a tree with fundamental
+    # information about webwork exercises in the project
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-pg.xsl")
 
-    # Build dictionaries and localization string into a scratch directory/file
+    # Build the tree into a scratch file
     tmp_dir = get_temporary_directory()
-    ww_filename = os.path.join(tmp_dir, "webwork-dicts.xml")
-    log.debug("WeBWorK dictionaries temporarily in {}".format(ww_filename))
-    xsltproc(extraction_xslt, xml_source, ww_filename, None, stringparams)
+    extracted_pg_filename = os.path.join(tmp_dir, "extracted-pg.xml")
+    log.debug("Exctracted PG temporarily in {}".format(extracted_pg_filename))
+    xsltproc(extraction_xslt, xml_source, extracted_pg_filename, None, stringparams)
+
     # build necessary variables by reading xml with lxml
-    ww_xml = ET.parse(ww_filename).getroot()
-    localization = ww_xml.find("localization").text
-    numbered_title_filesafe = ww_xml.get("numbered-title-filesafe")
+    extracted_pg_xml = ET.parse(extracted_pg_filename).getroot()
+    localization = extracted_pg_xml.get("localization")
+    webwork2_server = extracted_pg_xml.find("server-params-pub").get("webwork2-server")
+    numbered_title_filesafe = extracted_pg_xml.get("numbered-title-filesafe")
     ww_project_dir = os.path.join(ww_reps_dir, "pg", numbered_title_filesafe)
     if not (os.path.isdir(ww_project_dir)):
         os.mkdir(ww_project_dir)
@@ -1180,88 +1177,93 @@ def webwork_to_xml(
     webwork_sets(xml_source, pub_file, stringparams, ww_pg_dir, False)
     pg_macros(xml_source, pub_file, stringparams, ww_macros_dir)
 
-    if ww_xml.find("server-params-pub").find("ww-domain") is not None:
+    no_publication_file = False
+    if webwork2_server is not None:
         server_params_pub = {
-            "ww_domain": ww_xml.find("server-params-pub").find("ww-domain").text,
-            "courseID": ww_xml.find("server-params-pub").find("course-id").text,
-            "userID": ww_xml.find("server-params-pub").find("user-id").text,
-            "password": ww_xml.find("server-params-pub").find("password").text,
+            "webwork2_domain": webwork2_server,
+            "courseID": extracted_pg_xml.find("server-params-pub").get("course-id"),
+            "user": extracted_pg_xml.find("server-params-pub").get("user-id"),
+            "passwd": extracted_pg_xml.find("server-params-pub").get("password"),
+            "disableCookies": '1',
         }
-        static_processing = ww_xml.find("processing").attrib["static"]
-        pg_location = ww_xml.find("processing").attrib["pg-location"]
+        static_processing = extracted_pg_xml.find("processing").attrib["static"]
+        pg_location = extracted_pg_xml.find("processing").attrib["pg-location"]
     else:
-        server_params_pub =  {}
+        no_publication_file = True
+        server_params_pub = {
+            "webwork2_domain": "https://webwork-ptx.aimath.org",
+            "courseID": "anonymous",
+            "user": "anonymous",
+            "passwd": "anonymous",
+            "disableCookies": '1',
+        }
         static_processing = 'webwork2'
         pg_location = '/opt/webwork/pg'
-    origin = {}
-    copiedfrom = {}
-    seed = {}
-    source = {}
-    pghuman = {}
-    pgdense = {}
-    for ele in ww_xml.iter("problem"):
-        origin[ele.get("id")] = ele.get("origin")
-        seed[ele.get("id")] = ele.get("seed")
-        source[ele.get("id")] = ele.get("source")
-        if ele.get("origin") == "ptx":
-            if ele.get("copied-from") is not None:
-                copiedfrom[ele.get("id")] = ele.get("copied-from")
-            pghuman[ele.get("id")] = ele.find("pghuman").text
-            pgdense[ele.get("id")] = ele.find("pgdense").text
 
     # ideally, pub_file is in use, in which case server_params_pub is nonempty.
-    # if no pub_file in use, rely on server_params.
+    # if no pub_file in use, rely on server_params argument.
     # if both present, use server_params_pub and give warning
     # if neither in use give warning and fail
-    if not(server_params_pub) and server_params is None:
-        raise ValueError("No WeBWorK server declared. Declare WeBWorK server in publication/webwork/@server.")
-    elif not(server_params_pub):
+    if no_publication_file and server_params is None:
+        raise ValueError("Either use a publication file or pass a --server argument")
+    elif no_publication_file:
         # We rely on the argument server_params
         # This is deprecated in favor of using a publication file
         log.warning("WeBWorK server declared using -s argument.\n" +
-              "              Please consider using a publication file with publication/webwork/@server instead.")
+              "              Please consider using a publication file with publication/webwork instead.")
         server_params = server_params.strip()
         if (server_params.startswith("(") and server_params.endswith(")")):
             server_params = server_params.strip("()")
             split_server_params = server_params.split(",")
-            ww_domain = sanitize_url(split_server_params[0])
+            webwork2_domain = sanitize_url(split_server_params[0])
             courseID = sanitize_alpha_num_underscore(split_server_params[1])
-            userID = sanitize_alpha_num_underscore(split_server_params[2])
-            password = sanitize_alpha_num_underscore(split_server_params[4])
+            user = sanitize_alpha_num_underscore(split_server_params[2])
+            passwd = sanitize_alpha_num_underscore(split_server_params[3])
         else:
-            ww_domain = sanitize_url(server_params)
-            courseID  = "anonymous"
-            userID    = "anonymous"
-            password  = "anonymous"
+            webwork2_domain = sanitize_url(server_params)
+            courseID        = "anonymous"
+            user            = "anonymous"
+            passwd          = "anonymous"
     else:
-        # Now we know server_params_pub is nonepty
+        # Now we know we had a publication file
         # Use it, and warn if server_params argument is also present
         if server_params is not None:
             log.warning("Publication file in use and -s argument passed for WeBWorK server.\n"
                   + "              -s argument will be ignored.\n"
                   + "              Using publication/webwork values (or defaults) instead.")
-        ww_domain = sanitize_url(server_params_pub["ww_domain"])
-        courseID  = server_params_pub["courseID"]
-        userID    = server_params_pub["userID"]
-        password  = server_params_pub["password"]
+        webwork2_domain = sanitize_url(server_params_pub["webwork2_domain"])
+        courseID        = server_params_pub["courseID"]
+        user            = server_params_pub["user"]
+        passwd          = server_params_pub["passwd"]
 
-    ww_domain_ww2 = ww_domain + "/webwork2/"
-    ww_domain_path = ww_domain_ww2 + "html2xml"
+    webwork2_domain_webwork2 = webwork2_domain + "/webwork2/"
+    webwork2_render_rpc = webwork2_domain_webwork2 + "render_rpc"
+    webwork2_html2xml = webwork2_domain_webwork2 + "html2xml"
+
+    webwork2_version = None
+    webwork2_major_version = None
+    webwork2_minor_version = None
 
     # Establish if there is any need to use webwork2
     need_for_webwork2 = (
         (static_processing == 'webwork2')
-        or (ww_xml.xpath("//problem[@origin='server']"))
+        or (extracted_pg_xml.xpath("//problem[@origin='webwork2']"))
     )
 
     # Establish if there is any need to use a socket
     need_for_socket = (
         (static_processing == 'local')
-        and (ww_xml.xpath("//problem[@origin!='server']"))
+        and (extracted_pg_xml.xpath("//problem[@origin!='webwork2']"))
     )
 
-    # Establish WeBWorK version
+    # at least on Mac installations, requests module is not standard
+    try:
+        import requests  # webwork server
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("requests"))
 
+    # Establish WW server version, for live rendering if nothing else
     # First try to identify the WW version according to what a response hash says it is.
     # This should work for 2.17 and beyond.
     try:
@@ -1269,43 +1271,45 @@ def webwork_to_xml(
             problemSeed=1,
             displayMode='PTX',
             courseID=courseID,
-            userID=userID,
-            course_password=password,
+            user=user,
+            userID=user,
+            passwd=passwd,
+            disableCookies='1',
             outputformat='raw'
         )
-        version_determination_json = requests.get(url=ww_domain_path, params=params_for_version_determination, timeout=10).json()
-        ww_version = ""
+        # Always use html2xml for this; we don't know the server version yet
+        version_determination_json = requests.get(url=webwork2_html2xml, params=params_for_version_determination).json()
         if "ww_version" in version_determination_json:
-            ww_version = version_determination_json["ww_version"]
-            ww_version_match = re.search(
-                r"((\d+)\.(\d+))", ww_version, re.I
+            webwork2_version = version_determination_json["ww_version"]
+            webwork2_version_match = re.search(
+                r"((\d+)\.(\d+)(\+develop)?)", webwork2_version, re.I
             )
     except Exception as e:
         root_cause = str(e)
         msg = ("PTX:ERROR:   There was a problem contacting the WeBWorK server.\n")
-        raise ValueError(msg.format(ww_domain_ww2) + root_cause)
+        raise ValueError(msg.format(webwork2_domain_webwork2) + root_cause)
 
     # Now if that failed, try to infer the version from what is printed on the landing page.
-    if ww_version == "":
+    if webwork2_version == None:
         try:
-            landing_page = requests.get(ww_domain_ww2, timeout=10)
+            landing_page = requests.get(webwork2_domain_webwork2)
         except Exception as e:
             root_cause = str(e)
             msg = (
                 "PTX:ERROR:   There was a problem contacting the WeBWorK server.\n"
                 + "             Is there a WeBWorK landing page at {}?\n"
             )
-            raise ValueError(msg.format(ww_domain_ww2) + root_cause)
+            raise ValueError(msg.format(webwork2_domain_webwork2) + root_cause)
         landing_page_text = landing_page.text
 
-        ww_version_match = re.search(
-            r"WW.VERSION:\s*((\d+)\.(\d+))", landing_page_text, re.I
+        webwork2_version_match = re.search(
+            r"WW.VERSION:\s*((\d+)\.(\d+)(\+develop)?)", landing_page_text, re.I
         )
 
     try:
-        ww_version = ww_version_match.group(1)
-        ww_major_version = int(ww_version_match.group(2))
-        ww_minor_version = int(ww_version_match.group(3))
+        webwork2_version = webwork2_version_match.group(1)
+        webwork2_major_version = int(webwork2_version_match.group(2))
+        webwork2_minor_version = int(webwork2_version_match.group(3))
     except AttributeError as e:
         root_cause = str(e)
         msg = (
@@ -1313,9 +1317,30 @@ def webwork_to_xml(
             + "                         Is there a WeBWorK landing page at {}?\n"
             + "                         And does it display the WeBWorK version?\n"
         )
-        raise ValueError(msg.format(ww_domain_ww2))
+        raise ValueError(msg.format(webwork2_version, webwork2_domain))
 
-    if ww_major_version != 2 or ww_minor_version < 16:
+    webwork2_path = webwork2_render_rpc if (webwork2_major_version == 2 and webwork2_minor_version >= 19) else webwork2_html2xml
+
+    # initialize dictionaries for all the problem features
+    origin = {}
+    copied_from = {}
+    seed = {}
+    path = {}
+    pghuman = {}
+    pgdense = {}
+    for problem in extracted_pg_xml.iter("problem"):
+        origin[problem.get("id")] = problem.get("origin")
+        seed[problem.get("id")]   = problem.get("seed")
+        path[problem.get("id")]   = problem.get("path")
+        if problem.get("copied-from") is not None:
+            copied_from[problem.get("id")] = problem.get("copied-from")
+        else:
+            copied_from[problem.get("id")] = None
+        if problem.get("origin") == "generated":
+            pghuman[problem.get("id")] = problem.find("pghuman").text
+            pgdense[problem.get("id")] = problem.find("pgdense").text
+
+    if webwork2_major_version != 2 or webwork2_minor_version < 16:
         msg = (
             "PTX:ERROR:   PreTeXt supports WeBWorK 2.16 and later, and it appears you are attempting to use version: {}\n"
             + "                         Server: {}\n"
@@ -1372,18 +1397,13 @@ def webwork_to_xml(
     webwork_representations = ET.Element("webwork-representations", nsmap=NSMAP)
     # Choose one of the dictionaries to take its keys as what to loop through
     for problem in origin:
-
-        # It is more convenient to identify server problems by file path,
-        # and PTX problems by internal ID
-        problem_identifier = problem if (origin[problem] == "ptx") else source[problem]
-
-        if origin[problem] == "server":
-            msg = "building representations of server-based WeBWorK problem"
-        elif origin[problem] == "ptx":
-            msg = "building representations of PTX-authored WeBWorK problem"
+        if origin[problem] == "webwork2":
+            msg = "building representations of webwork2-hosted WeBWorK problem"
+        elif origin[problem] == "generated":
+            msg = "building representations of generated WeBWorK problem"
         else:
             raise ValueError(
-                "PTX:ERROR: problem origin should be 'server' or 'ptx', not '{}'".format(
+                "PTX:ERROR: problem origin should be 'webwork2' or 'generated', not '{}'".format(
                     origin[problem]
                 )
             )
@@ -1391,7 +1411,7 @@ def webwork_to_xml(
 
         # If and only if the server is version 2.16, we adjust PG code to use PGtikz.pl
         # instead of PGlateximage.pl
-        if ww_major_version == 2 and ww_minor_version == 16 and origin[problem] == "ptx":
+        if webwork2_major_version == 2 and webwork2_minor_version == 16 and origin[problem] == "generated":
             pgdense[problem] = pgdense[problem].replace('PGlateximage.pl','PGtikz.pl')
             pgdense[problem] = pgdense[problem].replace('createLaTeXImage','createTikZImage')
             pgdense[problem] = pgdense[problem].replace('BEGIN_LATEX_IMAGE','BEGIN_TIKZ')
@@ -1413,25 +1433,22 @@ def webwork_to_xml(
         # But we can't literally just remove that, since an author may have used something
         # like `$refreshCachedImages  =  'true' ;` so instead, we change `$refreshCachedImages`
         # to something inert
-        if origin[problem] == "ptx":
-            embed_problem = re.sub(r'(\$refreshCachedImages)(?![\w\d])', r'\1Inert', pgdense[problem])
+        if origin[problem] == "generated":
+            embed_problem = re.sub(r'(refreshCachedImages)(?![\w\d])', r'\1Inert', pgdense[problem])
 
-        # make base64 for PTX problems
-        if origin[problem] == "ptx":
-            pgbase64 = base64.b64encode(bytes(pgdense[problem], "utf-8")).decode(
-                "utf-8"
-            )
-            embed_problem_base64 = base64.b64encode(bytes(embed_problem, "utf-8")).decode(
-                "utf-8"
-            )
+        # make base64 for PTX problems for webwork prior to 2.19
+        if origin[problem] == "generated":
+            if webwork2_minor_version < 19:
+                pgbase64 = base64.b64encode(bytes(pgdense[problem], "utf-8")).decode("utf-8")
+                embed_problem_base64 = base64.b64encode(bytes(embed_problem, "utf-8")).decode("utf-8")
 
-        if static_processing == 'local' and origin[problem] != 'server':
+        if static_processing == 'local' and origin[problem] != 'webwork2':
             socket_params = { "problemSeed": seed[problem], "problemUUID": problem }
 
-            if origin[problem] == 'ptx':
+            if origin[problem] == 'generated':
                 socket_params["source"] = pgdense[problem]
             else:
-                socket_params["sourceFilePath"] = os.path.join(external_dir, source[problem])
+                socket_params["sourceFilePath"] = os.path.join(external_dir, path[problem])
 
             msg = "sending {} to socket to save in {}: origin is '{}'"
             log.info(msg.format(problem, ww_reps_file, origin[problem]))
@@ -1443,71 +1460,97 @@ def webwork_to_xml(
                 if not received: break
                 buffer.extend(received)
                 if buffer.endswith(b'ENDOFSOCKETDATA'): break
-            response_t = buffer.decode().replace('ENDOFSOCKETDATA', '')
+
+            response = buffer.decode().replace('ENDOFSOCKETDATA', '')
 
         else:
             # Construct URL to get static version from server
-            # WW server can react to a
-            #   URL of a problem stored there already
-            #   or a base64 encoding of a problem
-            # server_params is tuple rather than dictionary to enforce consistent order in url parameters
-            server_params_source = (
-                ("sourceFilePath", source[problem])
-                if origin[problem] == "server"
-                else ("problemSource", pgbase64)
-            )
+            # First establish how the acctual problem code
+            # should be delivered to whatever will render it
+            if webwork2_minor_version >= 19:
+                if origin[problem] == "webwork2":
+                    server_params_source = {"sourceFilePath":path[problem]}
+                else:
+                    server_params_source = {"rawProblemSource":pgdense[problem]}
+            else:
+                # server_params_source is tuple rather than dictionary to enforce consistent order in url parameters
+                if origin[problem] == "webwork2":
+                    server_params_source = (("sourceFilePath", path[problem]))
+                else:
+                    server_params_source = (("problemSource", pgbase64))
 
-            server_params = (
-                ("answersSubmitted", "0"),
-                ("showSolutions", "1"),
-                ("showHints", "1"),
-                ("displayMode", "PTX"),
-                ("courseID", courseID),
-                ("userID", userID),
-                ("course_password", password),
-                ("outputformat", "ptx"),
-                server_params_source,
-                ("problemSeed", seed[problem]),
-                ("problemUUID", problem),
-            )
+            if webwork2_minor_version >= 19:
+                server_params = {
+                    "showSolutions": "1",
+                    "showHints": "1",
+                    "displayMode": "PTX",
+                    "courseID": courseID,
+                    "user": user,
+                    "passwd": passwd,
+                    "outputformat": "ptx",
+                    "disableCookies": '1',
+                    "problemSeed": seed[problem],
+                    "problemUUID": problem,
+                }
+                server_params.update(server_params_source)
+            else:
+                # server_params is tuple rather than dictionary to enforce consistent order in url parameters
+                server_params = (
+                    ("answersSubmitted", "0"),
+                    ("showSolutions", "1"),
+                    ("showHints", "1"),
+                    ("displayMode", "PTX"),
+                    ("courseID", courseID),
+                    ("userID", user),
+                    ("course_password", passwd),
+                    ("outputformat", "ptx"),
+                    server_params_source,
+                    ("problemSeed", seed[problem]),
+                    ("problemUUID", problem),
+                )
 
             msg = "sending {} to server to save in {}: origin is '{}'"
             log.info(msg.format(problem, ww_reps_file, origin[problem]))
-            if origin[problem] == "server":
+            if origin[problem] == "webwork2":
                 log.debug(
                     "server-to-ptx: {}\n{}\n{}\n{}".format(
-                        problem, ww_domain_path, source[problem], ww_reps_file
+                        problem, webwork2_path, path[problem], ww_reps_file
                     )
                 )
-            elif origin[problem] == "ptx":
+            elif origin[problem] == "generated":
                 log.debug(
                     "server-to-ptx: {}\n{}\n{}\n{}".format(
-                        problem, ww_domain_path, pgdense[problem], ww_reps_file
+                        problem, webwork2_path, pgdense[problem], ww_reps_file
                     )
                 )
 
             # Ready, go out on the wire
             try:
-                response = webwork2_session.get(ww_domain_path, params=server_params)
+                if webwork2_minor_version >= 19:
+                    response = webwork2_session.post(webwork2_path, data=server_params)
+                else:
+                    response = webwork2_session.get(webwork2_path, params=server_params)
                 log.debug("Getting problem response from: " + response.url)
-                response_t = response.text
 
             except requests.exceptions.RequestException as e:
                 root_cause = str(e)
                 msg = "PTX:ERROR: there was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
-                raise ValueError(msg.format(ww_domain_path, server_params) + root_cause)
+                raise ValueError(msg.format(webwork2_path, server_params) + root_cause)
 
-            # Check for errors with PG processing
-            # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
-        file_empty = "ERROR:  This problem file was empty!" in response_t
+            # TODO: Instead of this use a different variable shared by the local script approach.
+            response = response.text
+
+        # Check for errors with PG processing
+        # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
+        file_empty = "ERROR:  This problem file was empty!" in response
 
         no_compile = (
-            "ERROR caught by Translator while processing" in response_t
+            "ERROR caught by Translator while processing" in response
         )
 
         bad_xml = False
         try:
-            response_root = ET.fromstring(bytes(response_t, encoding='utf-8'))
+            response_root = ET.fromstring(bytes(response, encoding='utf-8'))
         except:
             response_root = ET.Element("webwork")
             bad_xml = True
@@ -1541,7 +1584,7 @@ def webwork_to_xml(
             )
             badness_tip = (
                 "  Use -a to halt with full PG and returned content"
-                if (origin[problem] == "ptx")
+                if (origin[problem] == "generated")
                 else "  Use -a to halt with returned content"
             )
             badness_type = "compile"
@@ -1560,12 +1603,12 @@ def webwork_to_xml(
         # If we are aborting upon recoverable errors...
         if abort_early:
             if badness:
-                debugging_help = response_t
-                if origin[problem] == "ptx" and no_compile:
+                debugging_help = response
+                if origin[problem] == "generated" and no_compile:
                     debugging_help += "\n" + pghuman[problem]
                 raise ValueError(
                     badness_msg.format(
-                        problem_identifier, seed[problem], debugging_help
+                        path[problem], seed[problem], debugging_help
                     )
                 )
 
@@ -1589,7 +1632,7 @@ def webwork_to_xml(
         # \r would be valid XML, but too unpredictable in translations
 
         verbatim_split = re.split(
-            r"(\\verb\x1F.*?\x1F|\\verb\r.*?\r)", response_t
+            r"(\\verb\x1F.*?\x1F|\\verb\r.*?\r)", response
         )
         response_text = ""
         for item in verbatim_split:
@@ -1637,12 +1680,12 @@ def webwork_to_xml(
         # replace filenames, download images with new filenames
         count = 0
         # ww_image_url will be the URL to an image file used by the problem on the ww server
-        for match in re.finditer(graphics_pattern, response_t):
+        for match in re.finditer(graphics_pattern, response_text):
             ww_image_full_path = match.group(1)
-            if static_processing == 'local' and origin[problem] != 'server':
+            if static_processing == 'local' and origin[problem] != 'webwork2':
                 ww_image_scheme = ''
             else:
-                ww_image_url = urllib.parse.urljoin(ww_domain, ww_image_full_path)
+                ww_image_url = urllib.parse.urljoin(webwork2_domain, ww_image_full_path)
                 # strip away the scheme and location, if present (e.g 'https://webwork-ptx.aimath.org/')
                 ww_image_url_parsed = urllib.parse.urlparse(ww_image_url)
                 ww_image_scheme = ww_image_url_parsed.scheme
@@ -1662,7 +1705,7 @@ def webwork_to_xml(
             if ww_image_scheme:
                 image_url = ww_image_url
             else:
-                image_url = urllib.parse.urljoin(ww_domain, ww_image_full_path)
+                image_url = urllib.parse.urljoin(webwork2_domain, ww_image_full_path)
             # modify PTX problem source to include local versions
             if generated_dir:
                 if "xmlns:pi=" not in response_text:
@@ -1689,9 +1732,10 @@ def webwork_to_xml(
                 response_text = response_text.replace(
                     ww_image_full_path, "images/" + ptx_image
                 )
-            if static_processing == 'local' and origin[problem] != 'server':
+            if static_processing == 'local' and origin[problem] != 'webwork2':
                 image_local_path = ww_image_full_path.replace('/pg_files/tmp', tmp_dir)
                 destination_image_file = os.path.join(ww_images_dir, ptx_image_filename)
+
                 try:
                     log.info(
                         "saving image file {} {} in {}".format(
@@ -1756,23 +1800,23 @@ def webwork_to_xml(
         # "version 1" is a thing of the past. We still mark the current representations file as
         # "version 2" here, but it has no effect as all the code elsewhere now assumes "version 2".
         webwork_reps.set("version", "2")
-        webwork_reps.set("ww_major_version", str(ww_major_version))
-        webwork_reps.set("ww_minor_version", str(ww_minor_version))
+        webwork_reps.set("webwork2_major_version", str(webwork2_major_version))
+        webwork_reps.set("webwork2_minor_version", str(webwork2_minor_version))
         webwork_reps.set("{%s}id" % (XML), "extracted-" + problem)
         webwork_reps.set("ww-id", problem)
         static = ET.SubElement(webwork_reps, "static")
         static.set("seed", seed[problem])
-        if origin[problem] == "server":
-            static.set("source", source[problem])
+        if origin[problem] == "webwork2":
+            static.set("source", path[problem])
 
         # If there is "badness"...
         # Build 'shell' problems to indicate failures
         if badness:
-            print(badness_msg.format(problem_identifier, seed[problem], badness_tip))
+            print(badness_msg.format(path[problem], seed[problem], badness_tip))
             static.set("failure", badness_type)
             statement = ET.SubElement(static, "statement")
             p = ET.SubElement(statement, "p")
-            p.text = badness_msg.format(problem_identifier, seed[problem], badness_tip)
+            p.text = badness_msg.format(path[problem], seed[problem], badness_tip)
             continue
 
         # Start appending XML children
@@ -1861,49 +1905,54 @@ def webwork_to_xml(
 
         static_webwork_level(static, response_root)
 
-        # Add elements for interactivity
+        # Add rendering-data element with attribute data for rendering a problem
+        if (badness or origin[problem] == "generated" or (webwork2_minor_version < 19 and origin[problem] != "webwork2")):
+            source_key = "problemSource"
+        else:
+            source_key = "sourceFilePath"
 
-        # Add server-data element with attribute data for rendering a problem
-        source_key = (
-            "problemSource"
-            if (badness or origin[problem] == "ptx")
-            else "sourceFilePath"
-        )
         if badness:
             source_value = badness_base64
         else:
-            if origin[problem] == "server":
-                source_value = source[problem]
+            if origin[problem] == "webwork2":
+                source_value = path[problem]
             else:
-                source_value = embed_problem_base64
+                if webwork2_minor_version < 19:
+                    source_value = embed_problem_base64
+                else:
+                    if copied_from[problem] is not None:
+                        source_value = path[copied_from[problem]]
+                    else:
+                        source_value = path[problem]
 
-        server_data = ET.SubElement(webwork_reps, "server-data")
-        server_data.set(source_key, source_value)
-        server_data.set("domain", ww_domain)
-        server_data.set("course-id", courseID)
-        server_data.set("user-id", userID)
-        server_data.set("password", password)
-        server_data.set("language", localization)
+        rendering_data = ET.SubElement(webwork_reps, "rendering-data")
+        rendering_data.set(source_key, source_value)
+        rendering_data.set("origin", origin[problem])
+        rendering_data.set("domain", webwork2_domain)
+        rendering_data.set("course-id", courseID)
+        rendering_data.set("user-id", user)
+        rendering_data.set("passwd", passwd)
+        rendering_data.set("language", localization)
 
         # Add PG for PTX-authored problems
         # Empty tag with @source for server problems
         pg = ET.SubElement(webwork_reps, "pg")
         try:
-            pg.set("copied-from", copiedfrom[problem])
+            pg.set("copied-from", copied_from[problem])
         except Exception:
             pass
 
-        if origin[problem] == "ptx":
+        if origin[problem] == "generated":
             if badness:
                 pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nTEXT(beginproblem());\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
                 formatted_pg = pg_shell.format(
-                    badness_msg.format(problem_identifier, seed[problem], badness_tip)
+                    badness_msg.format(path[problem], seed[problem], badness_tip)
                 )
             else:
                 formatted_pg = pghuman[problem]
             pg.text = ET.CDATA("\n" + formatted_pg)
-        elif origin[problem] == "server":
-            pg.set("source", source[problem])
+        elif origin[problem] == "webwork2":
+            pg.set("source", path[problem])
 
     # write to file
     include_file_name = os.path.join(ww_reps_file)

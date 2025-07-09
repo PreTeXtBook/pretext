@@ -2695,12 +2695,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- From the code comment when this was done with Python: "p with -->
 <!-- only a single fillin, not counting those inside an li without -->
 <!-- preceding siblings"                                           -->
+<!-- We likewise prune the "p" that only have a var with           -->
+<!-- @form="essay. These come from WeBWorK essay questions         -->
+<!-- starting with v2.19                                           -->
 <xsl:template match="p" mode="webwork-rep-to-static">
     <!-- Substantially faster to have a simple match and then selectively -->
     <!-- filter matched elements. Start with the tests that are cheapest  -->
     <!-- and hope short-circuit evaluation avoids expensive ones.         -->
     <xsl:variable name="prune">
-        <xsl:if test="count(fillin)=1 and 
+        <xsl:if test="(count(fillin)=1 or count(var[@form='essay'])=1) and
                       count(*)=1 and 
                       not(normalize-space(text())) and
                       (not(parent::li) or preceding-sibling::*)">
@@ -2718,6 +2721,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some answer forms return a default/initial choice that is -->
 <!-- simply a question-mark.  We scrub them here, with care.   -->
 <xsl:template match="statement//var[@form = 'popup']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
+<xsl:template match="statement//ul[@form = 'popup']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
 <!-- This may only be needed as support for older servers' generated PreTeXt. -->
 <xsl:template match="statement//var[@form = 'checkboxes']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
 

@@ -44,15 +44,15 @@
 
 <!-- Then for each exercise, we record:                                    -->
 <!-- 1.  origin: there are two possible values                             -->
-<!--        "ptx" (it was authored in PTX)                                 -->
-<!--        "server" (it is a pg file accessible from a webwork2 host      -->
+<!--        "generated" (it was authored in PTX)                           -->
+<!--        "webwork2" (it is a pg file accessible from a webwork2 host    -->
 <!--            course's templates folder indicated by @source on the      -->
 <!--            webwork element)                                           -->
 <!-- 1b. if it is copied, what is an id from which it was copied?          -->
 <!-- 2.  a seed for randomization                                          -->
 <!-- 3.  path: a file path to a .pg version of the problem                 -->
-<!--         ptx: path-defined-by-document-structure                       -->
-<!--         server: path-defined-by-@source                               -->
+<!--         path-defined-by-document-structure                            -->
+<!--         path-defined-by-@source                                       -->
 <!-- 4.  pghuman: human readable PG (for generated exercises only)         -->
 <!-- 5.  PG that is somewhat minimized (and less human-readable)           -->
 
@@ -108,6 +108,17 @@
 <!-- used in the formation of WeBWorK problems                             -->
 <xsl:variable name="design-width-pg" select="'600'" />
 
+<xsl:variable name="chunk-level">
+    <xsl:choose>
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--#######################################################################-->
 <!-- Dictionary Architecture                                               -->
 <!--#######################################################################-->
@@ -118,26 +129,23 @@
         <xsl:attribute name="numbered-title-filesafe">
             <xsl:apply-templates select="$document-root" mode="numbered-title-filesafe"/>
         </xsl:attribute>
-        <localization>
+        <xsl:attribute name="localization">
             <xsl:value-of select="$document-language"/>
-        </localization>
-        <!-- Record the server address and credentials from publisher variables -->
-        <!-- This will be an empty element if there was no publication file. -->
+        </xsl:attribute>
+        <!-- Record certain publisher variables for ease of access by pretext.py -->
         <server-params-pub>
-            <xsl:if test="$publisher">
-                <ww-domain>
-                    <xsl:value-of select="$webwork-server"/>
-                </ww-domain>
-                <course-id>
-                    <xsl:value-of select="$webwork-course"/>
-                </course-id>
-                <user-id>
-                    <xsl:value-of select="$webwork-user"/>
-                </user-id>
-                <password>
-                    <xsl:value-of select="$webwork-password"/>
-                </password>
-            </xsl:if>
+            <xsl:attribute name="webwork2-server">
+                <xsl:value-of select="$webwork-server"/>
+            </xsl:attribute>
+            <xsl:attribute name="course-id">
+                <xsl:value-of select="$webwork-course"/>
+            </xsl:attribute>
+            <xsl:attribute name="user-id">
+                <xsl:value-of select="$webwork-user"/>
+            </xsl:attribute>
+            <xsl:attribute name="password">
+                <xsl:value-of select="$webwork-password"/>
+            </xsl:attribute>
         </server-params-pub>
         <!-- Settings for how PG is processed -->
         <processing>
@@ -148,11 +156,23 @@
                 <xsl:value-of select="$webwork-pg-location"/>
             </xsl:attribute>
         </processing>
+        <!-- Will need to know the folder names for generated and external. -->
+        <!-- These are almost certainly "generated" and "external", but     -->
+        <!-- rather than hardcode them where we need them, we get them from -->
+        <!-- variables defined in publisher-variables.xsl                   -->
+        <directories>
+            <xsl:attribute name="generated-directory">
+                <xsl:value-of select="$generated-directory"/>
+            </xsl:attribute>
+            <xsl:attribute name="external-directory">
+                <xsl:value-of select="$external-directory"/>
+            </xsl:attribute>
+        </directories>
         <xsl:apply-imports/>
     </ww-extraction>
 </xsl:template>
 
-<xsl:template match="webwork[@source|@local|statement|task]" mode="extraction">
+<xsl:template match="webwork[@source|statement|task]" mode="extraction">
     <xsl:variable name="problem">
         <xsl:value-of select="@ww-id"/>
     </xsl:variable>
@@ -160,14 +180,14 @@
         <xsl:attribute name="id">
             <xsl:value-of select="$problem" />
         </xsl:attribute>
-        <!-- 1. a ptx|server flag                                                  -->
+        <!-- 1. a generated|webwork2 flag                                          -->
         <xsl:attribute name="origin">
             <xsl:choose>
                 <xsl:when test="statement|task">
-                    <xsl:text>ptx</xsl:text>
+                    <xsl:text>generated</xsl:text>
                 </xsl:when>
                 <xsl:when test="@source">
-                    <xsl:text>server</xsl:text>
+                    <xsl:text>webwork2</xsl:text>
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
@@ -179,10 +199,10 @@
         </xsl:if>
         <!-- 2. a seed for randomization (with a default explicitly declared)      -->
         <xsl:attribute name="seed">
-            <xsl:apply-templates select="." mode="get-seed" />
+            <xsl:apply-templates select="." mode="get-seed"/>
         </xsl:attribute>
         <!-- 3. file path                                                          -->
-        <xsl:attribute name="source">
+        <xsl:attribute name="path">
             <xsl:apply-templates select="." mode="filename"/>
         </xsl:attribute>
         <xsl:if test="statement|task">
@@ -208,13 +228,10 @@
 </xsl:template>
 
 <!-- Append a filename to the directory path              -->
-<xsl:template match="webwork[@source|@local|statement|task]" mode="filename">
+<xsl:template match="webwork[@source|statement|task]" mode="filename">
     <xsl:choose>
         <xsl:when test="@source">
             <xsl:value-of select="@source"/>
-        </xsl:when>
-        <xsl:when test="@local">
-            <xsl:value-of select="@local"/>
         </xsl:when>
         <xsl:when test="statement|task">
             <xsl:apply-templates select="." mode="directory-path" />
@@ -2697,7 +2714,7 @@
             <xsl:with-param name="percentage" select="@width"/>
         </xsl:call-template>
     </xsl:variable>
-    <xsl:value-of select="concat(number(substring-before($percent-width,'%')) div 100 * 6.25,in)"/>
+    <xsl:value-of select="concat(number(substring-before($percent-width,'%')) div 100 * 6.25, 'in')"/>
 </xsl:template>
 
 
