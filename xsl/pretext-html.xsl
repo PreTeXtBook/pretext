@@ -6153,7 +6153,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <iframe src="{$html-filename}" class="asymptote">
             <xsl:if test="shortdescription">
                 <xsl:attribute name="title">
-                    <xsl:apply-templates select="shortdescription"/>
+                    <xsl:value-of select="shortdescription"/>
                 </xsl:attribute>
             </xsl:if>
         </iframe>
