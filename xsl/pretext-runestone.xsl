@@ -1698,33 +1698,78 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     reader is assigned just one (good for exams)                  -->
 <!--   * A/B Experiment - two choices, experiment managed by Runestone -->
 <xsl:template match="*[@exercise-interactive = 'select']" mode="runestone-to-interactive">
-    <div class="runestone sqcontainer selectquestion_section">
-        <div data-component="selectquestion" data-points="1" data-limit-basecourse="false">
-            <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-            <!-- condition on an attribute of the "select" element -->
-            <xsl:choose>
-                <xsl:when test="select/@questions">
-                    <xsl:attribute name="data-questionlist">
-                        <xsl:call-template name="runestone-targets">
-                            <xsl:with-param name="id-list" select="select/@questions"/>
-                            <xsl:with-param name="separator" select="', '"/>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    <p>Loading a dynamic question-list question...</p>
-                </xsl:when>
-                <xsl:when test="select/@ab-experiment">
-                    <xsl:attribute name="data-ab">
-                        <xsl:value-of select="select/@experiment-name"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="data-questionlist">
-                        <xsl:call-template name="runestone-targets">
-                          <xsl:with-param name="id-list" select="select/@ab-experiment"/>
-                          <xsl:with-param name="separator" select="', '"/>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    <p>Loading a dynamic A/B question...</p>
-                </xsl:when>
-            </xsl:choose>
+    <!-- identify the type of "select" -->
+    <xsl:variable name="select-variant">
+        <xsl:choose>
+            <!-- Runestone JS picks a random problem from many-->
+            <xsl:when test="select/@grade='random'">
+                <xsl:text>random</xsl:text>
+            </xsl:when>
+            <!-- Two questions, split across roster into A, B groups. -->
+            <xsl:when test="select/@grade='ab-experiment'">
+                <xsl:text>ab-experiment</xsl:text>
+            </xsl:when>
+            <!-- Two questions (usually), the first will always be graded,  -->
+            <!-- while any others may be worked and may be helpful.         -->
+            <!-- Colloquially known as a "toggle lock" question.            -->
+            <xsl:when test="select/@grade='first'">
+                <xsl:text>first</xsl:text>
+            </xsl:when>
+            <!-- Two questions (usually), any one may be     -->
+            <!-- chosen by the reader to be graded.          -->
+            <!-- Colloquially known as a "toggle " question. -->
+            <xsl:when test="select/@grade='any'">
+                <xsl:text>any</xsl:text>
+            </xsl:when>
+            <!-- default to "random" selection -->
+            <xsl:otherwise>
+                <xsl:text>random</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!--  -->
+    <div class="ptx-runestone-container">
+        <div class="runestone sqcontainer selectquestion_section">
+            <div data-component="selectquestion" data-points="1" data-limit-basecourse="false">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <!-- attributes vary by type of select question -->
+                <xsl:choose>
+                    <!-- no attributes for generic selection -->
+                    <xsl:when test="$select-variant='random'"/>
+                    <!-- @experiment name is required (and is a signal) -->
+                    <xsl:when test="$select-variant='ab-experiment'">
+                         <xsl:attribute name="data-ab">
+                            <xsl:value-of select="select/@experiment-name"/>
+                        </xsl:attribute>
+                    </xsl:when>
+                    <!-- set lock on first question -->
+                    <xsl:when test="$select-variant='first'">
+                        <xsl:attribute name="data-toggleoptions">
+                            <xsl:text>toggle, lock</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="data-togglelabels">
+                            <xsl:text>togglelabels:</xsl:text>
+                        </xsl:attribute>
+                    </xsl:when>
+                    <!-- allow any question to be chosen by reader -->
+                    <xsl:when test="$select-variant='any'">
+                        <xsl:attribute name="data-toggleoptions">
+                            <xsl:text>toggle</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="data-togglelabels">
+                            <xsl:text>togglelabels:</xsl:text>
+                        </xsl:attribute>
+                    </xsl:when>
+                </xsl:choose>
+                <!-- always form the list of ids for the questions -->
+                <xsl:attribute name="data-questionlist">
+                    <xsl:call-template name="runestone-targets">
+                        <xsl:with-param name="id-list" select="select/@questions"/>
+                        <xsl:with-param name="separator" select="', '"/>
+                    </xsl:call-template>
+                </xsl:attribute>
+                <p>Loading a select question (grading type: <xsl:value-of select="$select-variant"/>)...</p>
+            </div>
         </div>
     </div>
 </xsl:template>
