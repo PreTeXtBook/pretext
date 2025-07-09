@@ -2454,7 +2454,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
@@ -2467,7 +2466,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
@@ -2480,7 +2478,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
@@ -2493,7 +2490,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
@@ -2506,7 +2502,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
@@ -2519,7 +2514,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'cardsort') or
                                (@exercise-interactive = 'matching') or
                                (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'select') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'fillin') or
                                (@exercise-interactive = 'coding') or
@@ -2541,6 +2535,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:copy>
 </xsl:template>
+
+<!-- A select question is only really capable on a Runestone server.  So when    -->
+<!-- assembling for dynamic exercises, and not hosting on Runestone, go instead  -->
+<!-- with the static version.  We have three scenarios, handled with variations. -->
+<!-- Note that these matches have been carved out from the above massive match.  -->
+<xsl:template match="exercise[(@exercise-interactive = 'select')]
+                   | project[(@exercise-interactive = 'select')]
+                   | activity[(@exercise-interactive = 'select')]
+                   | exploration[(@exercise-interactive = 'select')]
+                   | investigation[(@exercise-interactive = 'select')]" mode="representations">
+    <xsl:copy>
+        <xsl:choose>
+            <xsl:when test="($exercise-style = 'static') and not($b-host-runestone)">
+                <xsl:apply-templates select="@*" mode="representations"/>
+                <xsl:apply-templates select="." mode="runestone-to-static"/>
+            </xsl:when>
+            <!-- Use static version when making dynamic exercises *that are   -->
+            <!-- not hosted on Runestone*.  Scrub the indication that it is   -->
+            <!-- a particular type of interactive exercise, it isn't anymore. -->
+            <xsl:when test="($exercise-style = 'dynamic') and not($b-host-runestone)">
+                <xsl:apply-templates select="@*[not(local-name() = 'exercise-interactive')]" mode="representations"/>
+                <xsl:apply-templates select="." mode="runestone-to-static"/>
+            </xsl:when>
+            <!-- duplicate for a dynamic version -->
+            <xsl:when test="$exercise-style = 'dynamic'">
+                <xsl:apply-templates select="@*" mode="representations"/>
+                <xsl:apply-templates select="node()" mode="representations"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:copy>
+</xsl:template>
+
 
 <!-- Static (non-interactive) -->
 <!-- @exercise-interactive = 'static' needs no adjustments -->

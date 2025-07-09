@@ -30,7 +30,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="pi exsl"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="pi exsl str"
 >
 
 <!-- Conversion of author source for Runestone/interactive exercises  -->
@@ -935,6 +936,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="node()" mode="solution-areas"/>
     </delete>
 </xsl:template>
+
+
+<!-- Select -->
+
+<xsl:template match="*[@exercise-interactive = 'select']" mode="runestone-to-static">
+    <!-- metadata (idx, title) -->
+    <xsl:copy-of select="select/preceding-sibling::*"/>
+
+    <p>A Runestone select question goes here.  More detail coming soon.</p>
+
+</xsl:template>
+
 
 <!-- Fill-In the Blanks (Basic) -->
 
