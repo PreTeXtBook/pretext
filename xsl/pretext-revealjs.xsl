@@ -33,7 +33,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="exsl date"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="exsl date str"
 >
 
 <!-- Necessary to get some HTML constructions,    -->
@@ -119,6 +120,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
           <style>
           </style>
           <xsl:call-template name="diagcess-header"/>
+          
+          <!-- custom-css, if specified, should be last -->
+          <xsl:if test="not($reveal-custom-css = '')">
+              <xsl:variable name="csses" select="str:tokenize($reveal-custom-css, ', ')"/>
+              <xsl:for-each select="$csses">
+                  <link rel="stylesheet" type="text/css">
+                      <xsl:attribute name="href">
+                          <xsl:value-of select="." />
+                      </xsl:attribute>
+                  </link>
+              </xsl:for-each>
+          </xsl:if>
         </head>
 
         <body>

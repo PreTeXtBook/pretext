@@ -3043,6 +3043,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/revealjs/appearance/pi:pub-attribute[@name='theme']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- A space-separated list of CSS URLs (points to servers or local files) -->
+<xsl:variable name="reveal-custom-css">
+    <xsl:apply-templates select="$publisher-attribute-options/revealjs/appearance/pi:pub-attribute[@name='custom-css']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 <!-- Reveal.js Controls Back Arrows -->
 
 <xsl:variable name="reveal-control-backarrow">
@@ -3236,6 +3241,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <revealjs>
         <appearance>
             <pi:pub-attribute name="theme" default="simple" freeform="yes"/>
+            <pi:pub-attribute name="custom-css" default="" freeform="yes"/>
         </appearance>
         <controls>
             <pi:pub-attribute name="backarrows" default="faded" options="hidden visible"/>
