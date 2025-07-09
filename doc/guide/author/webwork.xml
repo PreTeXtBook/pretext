@@ -42,8 +42,10 @@
 
     <introduction>
       <p>
-        <alert>You must extract <webwork/> content as described in the <xref ref="webwork-publisher"/>
-        before you will be able to see any <webwork/> content in your output.  For most cases, you should be able to do this by running <c>pretext generate webwork</c> to process <webwork /> exercises.</alert>
+        <alert>You must extract <webwork/> content as described in <xref ref="webwork-publisher"/>
+        before you will be able to see any <webwork/> content in your output.  For most cases, you
+        should be able to do this by running <c>pretext generate webwork</c> to process <webwork/>
+        exercises.</alert>
       </p>
       <p>
         A <tag>webwork</tag> tag must be inside an <tag>exercise</tag> or a PROJECT-LIKE block,
@@ -52,7 +54,7 @@
       </p>
       <pre>
         <![CDATA[
-        <exercise>
+        <exercise label="mylabel">
           <introduction>
           </introduction>
 
@@ -65,35 +67,37 @@
         ]]>
       </pre>
       <p>
-        There are several methods for putting content into the <tag>webwork</tag>.
-        (Note that an empty <tag>webwork</tag> with no attributes will simply produce the camelcase <webwork/> logo.)
+        There are several methods for putting content into the <tage>webwork</tage>. (Note that an
+        empty <tag>webwork</tag> with no attributes will simply produce the camelcase <webwork/>
+        logo.)
       </p>
     </introduction>
 
     <subsection>
       <title>Using an Existing <webwork/> Problem</title>
       <p>
-        If a problem already exists and is accessible from the hosting course's <c>templates/</c> folder,
-        then you can try to simply include it as a <attr>source</attr> attribute.
-        For example if it is a problem in the Open Problem Library (OPL), then relative to the <c>templates/</c> folder,
-        its path is <c>Library/...</c> and you may use:
-        <cd>&lt;webwork source="Library/PCC/BasicAlgebra/Exponents/exponentsMultiplication0.pg" /></cd>
+        If a problem already exists and is accessible from the hosting course's <c>templates/</c>
+        folder, then you can try to simply include it with a <attr>source</attr> attribute. For
+        example if it is a problem in the Open Problem Library (OPL), then relative to the
+        <c>templates/</c> folder, its path is <c>Library/.../foo.pg</c> and you may use:
+        <cd>&lt;webwork source="Library/.../foo.pg"/></cd>
       </p>
       <p>
-        Or if you have a problem's PG file, you can upload it into the hosting course's <c>templates/local/</c> folder and use it with:
-        <cd>&lt;webwork source="local/my_problem.pg" /></cd>
+        Or if you have a problem's PG file, you can upload it into the hosting course's
+        <c>templates/local/</c> folder and use it with:
+        <cd>&lt;webwork source="local/my_problem.pg"/></cd>
       </p>
       <warning>
         <title>Not Every PG Problem is Compatible with <pretext/></title>
         <p>
           Some problems that work fine within <webwork/> are not compatible with <pretext/>.
-          Typically, these are exercises that use older PG coding techniques.
-          To be compatible with <pretext/>, all of the macros used by a problem must be updated to give <pretext/> output.
-          We have done this with modern PG macros and macros that are frequently used.
-          But still, not every OPL problem (for example) is compatible with <pretext/>.
-          In some cases, maybe it would be straightforward to train the macros to give <pretext/> output.
-          But in many cases, older macros and problem files are not structured well and <pretext/> is all about good structure.
-          So it could be a significant project to retrofit <pretext/> compatibility.
+          Typically, these are exercises that use older PG coding techniques. To be compatible with
+          <pretext/>, all of the macros used by a problem must be updated to give <pretext/> output.
+          We have done this with modern PG macros and macros that are frequently used. But still,
+          not every PG problem is compatible with <pretext/>. In some cases, maybe it would be
+          straightforward to train the macros to give <pretext/> output. But in many cases, older
+          macros and problem files are not structured well and <pretext/> is all about good
+          structure. So it could be a significant project to retrofit <pretext/> compatibility.
         </p>
         <p>
           If you elect to use a problem that is incompatible with <pretext/> but you don't yet know that,
@@ -107,15 +111,17 @@
           to be sure you are seeing the static version of the exercise.
         </p>
         <p>
-          If there is an incompatible OPL problem that you would really like to use,
-          you have three options:
+          If there is an incompatible problem that you would really like to use, you have three
+          options:
           <ul>
-            <li>Author the problem in <pretext/> from scratch as described elsewhere in this section.</li>
-            <li>Edit the code for that OPL problem to use compatible macros.</li>
+            <li>
+              Author the problem in <pretext/> from scratch as described elsewhere in this section.
+            </li>
+            <li>Edit the code for that problem to use compatible macros.</li>
             <li>Edit the incompatible macros to be compatible with <pretext/>.</li>
           </ul>
-          The last two options involve contributing to the OPL and PG repositories on GitHub,
-          so it is more expedient to use the first option.
+          The last two options may involve contributing to repositories such as the OPL and PG on
+          GitHub, so it is more expedient to use the first option.
         </p>
       </warning>
     </subsection>
@@ -127,10 +133,12 @@
       </p>
       <pre>
         <![CDATA[
-        <exercise>
+        <exercise label="mylabel">
           <webwork>
             <statement>
-              <p><m>1+2=</m><var name="'3'" width="5" /></p>
+              <p>
+                <m>1+2=</m><var name="'3'" width="5"/>
+              </p>
             </statement>
           </webwork>
         </exercise>
@@ -147,10 +155,11 @@
         would place a Perl variable answer.
       </p>
       <p>
-        So the above is how to create an answer blank that is expecting <m>3</m> as the answer.
-        What you give as a <attr>name</attr> attribute will be passed to PG's <c>Compute()</c> constructor,
-        so it needs to be valid input for <c>Compute()</c>.
-        Note that you could pass a string encased in quotes, or a perl expression. Just be mindful of the difference:
+        So the above is how to create an answer blank that is expecting <m>3</m> as the answer. What
+        you give as a <attr>name</attr> attribute will be passed to PG's <c>Compute()</c>
+        constructor, so it needs to be valid input for <c>Compute()</c>. Note that you could pass a
+        string encased in quotes, or a perl expression. Just be mindful of the differences. For
+        example:
         <ul>
           <li>
             <p>
@@ -176,14 +185,18 @@
       </p>
       <pre>
         <![CDATA[
-        <exercise>
+        <exercise label="mylabel">
           <webwork>
             <pg-code>
               Context("ImplicitPlane");
             </pg-code>
             <statement>
-              <p>The answer is <m>x+y=1</m>.</p>
-              <p><var name="'x+y=1'" width="8" /></p>
+              <p>
+                The answer is <m>x+y=1</m>.
+              </p>
+              <p>
+                <var name="'x+y=1'" width="8"/>
+              </p>
             </statement>
           </webwork>
         </exercise>
@@ -225,14 +238,13 @@
         ]]>
       </pre>
       <p>
-        If you are familiar with code for <webwork/> PG problems, the <tag>pg-code</tag> contains lines of PG code
-        that would appear in the <q>setup</q> portion of the problem.
-        Typically, this is the code that precedes the first <c>BEGIN_TEXT</c> or <c>BEGIN_PGML</c>.
-        If your code needs any special <webwork/> macro libraries,
-        you may load them in a <tag>pg-macros</tag> tag prior to <tag>pg-code</tag>,
-        with each such <c>.pl</c> file's name inside a <tag>macro-file</tag> tag.
-        However many of the most common macro libraries will be loaded automatically
-        based on the content and attributes you use in the rest of your problem.
+        If you are familiar with code for <webwork/> PG problems, the <tag>pg-code</tag> contains
+        lines of PG code that would appear in the <q>setup</q> portion of the problem. Typically,
+        this is the code that precedes the first <c>BEGIN_PGML</c>. If your code needs any special
+        <webwork/> macro libraries, you may load them in a <tag>pg-macros</tag> tag prior to
+        <tag>pg-code</tag>, with each such <c>.pl</c> file's name inside a <tag>macro-file</tag>
+        tag. However many of the most common macro libraries will be loaded automatically based on
+        the content and attributes you use in the rest of your problem.
       </p>
       <p>
         Here is a small example. Following the example, we'll continue discussing <tag>statement</tag> and <tag>solution</tag>.
@@ -242,25 +254,34 @@
         <webwork>
           <pg-code>
             Context("LimitedNumeric");
-            $a = Compute(random(1, 9, 1));
-            $b = Compute(random(1, 9, 1));
+            $a = Compute(random(1, 9));
+            $b = Compute(random(1, 9));
             $c = $a + $b;
           </pg-code>
 
           <statement>
-            <p>Compute <m><var name="$a"/> + <var name="$b"/></m>.</p>
-            <instruction>Type your answer without using the <c>+</c> sign.</instruction>
-            <p>The sum is <var name="$c" width="2"/>.</p>
+            <p>
+              Compute <m><var name="$a"/> + <var name="$b"/></m>.
+            </p>
+            <instruction>
+              Type your answer without using the <c>+</c> sign.
+            </instruction>
+            <p>
+              The sum is <var name="$c" width="2"/>.
+            </p>
           </statement>
 
           <solution>
-            <p><m><var name="$a"/> + <var name="$b"/> = <var name="$c"/></m>.</p>
+            <p>
+              <m><var name="$a"/> + <var name="$b"/> = <var name="$c"/></m>.
+            </p>
           </solution>
         </webwork>
         ]]>
       </pre>
       <p>
-        Within a <tag>statement</tag>, <tag>hint</tag>, or <tag>solution</tag>, reference <tag>var</tag> tags by <attr>name</attr>.
+        Within a <tag>statement</tag>, <tag>hint</tag>, or <tag>solution</tag>, reference perl
+        variables using <tag>var</tag> tags with <attr>name</attr>.
       </p>
       <p>
         Within the <tag>statement</tag>, a <tag>var</tag> tag with either a <attr>width</attr> or <attr>form</attr> attribute
@@ -274,9 +295,9 @@
         there will just be a message explaining that there is no place to enter an answer.
       </p>
       <p>
-        A <tag>var</tag> can have <attr>form</attr> with value <c>array</c>.
-        You would use this when the answer is a Matrix or Vector MathObject (a <webwork/> classification)
-        to cause the input form to be an array of smaller fields instead of one big field.
+        A <tag>var</tag> can have <attr>form</attr> with value <c>array</c>. You would use this
+        when the answer is a Point, Vector, ColumnVector, or Matrix MathObject to cause the input
+        form to be an array of smaller input fields instead of one big field.
       </p>
       <p>
         A <tag>var</tag> can have <attr>form</attr> with value <c>popup</c>, <c>buttons</c>, or <c>checkboxes</c> for multiple choice questions.
@@ -285,7 +306,7 @@
         If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator
         (a combination of a custom answer checker, post filters, pre filters, <etc/>).
         If you store this similar to
-        <cd>$my_evaluator = $answer -> cmp(...);</cd>
+        <cd>$my_evaluator = $answer->cmp(...);</cd>
         then the <tag>var</tag> can have <attr>evaluator</attr> with value <c>$my_evaluator</c>.
       </p>
       <p>
@@ -330,7 +351,6 @@
       <pre>
         <![CDATA[
         <webwork>
-
           <description>
             Add two fractions with distinct one-digit prime denominators.
           </description>
@@ -346,7 +366,6 @@
       <pre>
         <![CDATA[
         <webwork>
-
           <description>
             <line>
               Add two fractions with distinct one-digit prime denominators.
@@ -379,10 +398,10 @@
       </p>
       <pre>
         <![CDATA[
-        <exercise>
+        <exercise label="mylabel">
           <webwork xml:id="foo" seed="1">
             <pg-code>
-              $a = random(1,9,1);
+              $a = random(1, 9);
               $answer = $a+1;
             </pg-code>
             <statement>
@@ -393,7 +412,7 @@
           </webwork>
         </exercise>
 
-        <exercise>
+        <exercise label="myotherlabel">
           <webwork copy="foo" seed="2"/>
         </exercise>
         ]]>
@@ -409,15 +428,17 @@
       <title>Images</title>
       <subsubsection>
         <title>Using a Local image file</title>
-        <p>Planned.</p>
+        <p>
+          Planned, not implemented yet.
+        </p>
       </subsubsection>
 
       <subsubsection>
         <title>Using <c>TikZ</c></title>
         <p>
-          In a problem statement (or hint, or solution), you may use an <tag>image</tag> with a <tag>latex-image</tag> child,
-          as long as the host <webwork/> server is version 2.16 or later.
-          See <xref ref="topic-latex-images"/> for generalities about using <tag>latex-image</tag>.
+          In a problem statement (or hint, or solution), you may use an <tag>image</tag> with a
+          <tag>latex-image</tag> child. See <xref ref="topic-latex-images"/> for generalities
+          about using <tag>latex-image</tag>.
         </p>
         <p>
           However, if a <tag>latex-image</tag> is inside a <tag>webwork</tag>,
