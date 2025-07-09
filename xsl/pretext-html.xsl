@@ -208,6 +208,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.presentation" select="'no'" />
 <xsl:variable name="b-html-presentation" select="$html.presentation = 'yes'" />
 
+<!-- Used to identify if target is reveal.js instead of vanilla html -->
+<xsl:variable name="b-reveal-build" select="false()" />
+
 <!-- ############### -->
 <!-- Source Analysis -->
 <!-- ############### -->

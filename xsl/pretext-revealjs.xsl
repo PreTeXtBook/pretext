@@ -47,6 +47,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Disable clipboardable -->
 <xsl:template name="insert-clipboardable-class"/>
 
+<!-- Used to identify build target in templates shared with plain  -->
+<!-- HTML conversion (preferably avoid using this).                -->
+<xsl:variable name="b-reveal-build" select="true()" />
+
 <!-- HTML5 format -->
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 
