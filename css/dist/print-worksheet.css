@@ -2794,24 +2794,8 @@ section.worksheet > .heading + .para {
 .conclusion > .heading + .para {
   margin-top: 0.5em;
 }
-.onepage .workspace.preview {
-  border: 1px dashed grey;
-  background: rgb(240, 255, 255);
-}
-.onepage .workspace.squashed.preview {
-  border: 2px dotted grey;
-  background: #ffe;
-}
-.onepage .workspace.squashed.tight.preview {
-  border: 15px solid;
-  border-image:
-    repeating-linear-gradient(
-      -35deg,
-      #f33,
-      #f33 10px,
-      #000 10px,
-      #000 20px) 20;
-  background: yellow;
+form.papersize-select {
+  padding-bottom: 8px;
 }
 @media screen {
   .ptx-main {
@@ -2830,6 +2814,28 @@ section.worksheet > .heading + .para {
   }
   .onepage + .onepage {
     margin-top: 2.5em;
+  }
+  .workspace-container {
+    display: flex;
+    overflow: visible;
+  }
+  .workspace {
+    width: 100%;
+  }
+  .highlight-workspace .onepage .workspace {
+    border: 1px dashed grey;
+    background: hsl(224, 100%, 95%);
+  }
+  .onepage .original-workspace {
+    display: none;
+  }
+  .highlight-workspace .onepage .original-workspace {
+    display: block;
+    width: 10px;
+    background: hsl(152, 29%, 65%);
+  }
+  .highlight-workspace .onepage .warning {
+    background: hsl(36, 65%, 67%);
   }
   .print-button {
     font: inherit;
