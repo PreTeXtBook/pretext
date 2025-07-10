@@ -10,17 +10,16 @@
 //Styling:
 // TODO: Review all styling in all scenarios (staged/not, correct/partly-correct/incorrect/blank, single/multiple)
 
-function handleWW(ww_id, action) {
+async function handleWW(ww_id, action) {
     const ww_container = document.getElementById(ww_id);
     const ww_domain = ww_container.dataset.domain;
+    const ww_processing = 'webwork2';
+    const ww_origin = ww_container.dataset.origin;
     const ww_problemSource = ww_container.dataset.problemsource;
     const ww_sourceFilePath = ww_container.dataset.sourcefilepath;
     const ww_course_id = ww_container.dataset.courseid;
     const ww_user_id = ww_container.dataset.userid;
-    const ww_course_password = ww_container.dataset.coursepassword;
-    const localize_correct = ww_container.dataset.localizeCorrect || "Correct";
-    const localize_incorrect = ww_container.dataset.localizeIncorrect || "Incorrect";
-    const localize_blank = ww_container.dataset.localizeBlank || "Blank";
+    const ww_passwd = ww_container.dataset.coursepassword;
     const localize_submit = ww_container.dataset.localizeSubmit || "Submit";
     const localize_check_responses = ww_container.dataset.localizeCheckResponses || "Check Responses";
     const localize_reveal = ww_container.dataset.localizeReveal || "Reveal";
@@ -74,34 +73,71 @@ function handleWW(ww_id, action) {
     }
 
     let url;
-
-    if (action == 'check') {
-        const iframe = ww_container.querySelector('.problem-iframe');
-        const formData = new FormData(iframe.contentDocument.getElementById(ww_id + "-form"));
-        const params = new URLSearchParams(formData);
-        url = new URL(ww_domain + '/webwork2/render_rpc?' + params.toString())
-        url.searchParams.append("answersSubmitted", '1');
-        url.searchParams.append('WWsubmit', "1");
-    } else {
+    if (ww_processing == 'webwork2') {
         url = new URL(ww_domain + '/webwork2/render_rpc');
-        url.searchParams.append("problemSeed", ww_container.dataset.current_seed);
-        if (ww_problemSource) url.searchParams.append("problemSource", ww_problemSource);
-        else if (ww_sourceFilePath) url.searchParams.append("sourceFilePath", ww_sourceFilePath);
-        url.searchParams.append("answersSubmitted", '0');
-        url.searchParams.append("displayMode", "MathJax");
-        url.searchParams.append("courseID", ww_course_id);
-        url.searchParams.append("user", ww_user_id);
-        url.searchParams.append("passwd", ww_course_password);
-        url.searchParams.append("disableCookes", '1');
-        url.searchParams.append("outputformat", "raw");
+    }
+    let formData = new FormData();
+
+    if (action == 'check' || action =='reveal') {
+        const iframe = ww_container.querySelector('.problem-iframe');
+        formData = new FormData(iframe.contentDocument.getElementById(ww_id + "-form"));
+        formData.set("answersSubmitted", '1');
+        formData.set('WWsubmit', "1");
+        if (action == 'reveal' && ww_container.dataset.hasAnswer == 'true') {
+            formData.set('WWcorrectAnsOnly', "1");
+        }
+        if (ww_origin == 'generated') {
+            const rawProblemSource = await fetch('generated/webwork/pg/' + ww_problemSource).then((r) => r.text());
+            formData.set("rawProblemSource", rawProblemSource);
+        }
+        else if (ww_origin == 'webwork2') formData.set("sourceFilePath", ww_sourceFilePath);
+    } else {
+        formData.set("problemSeed", ww_container.dataset.current_seed);
+        if (ww_origin == 'generated') {
+            const rawProblemSource = await fetch('generated/webwork/pg/' + ww_problemSource).then((r) => r.text());
+            formData.set("rawProblemSource", rawProblemSource);
+        }
+        else if (ww_origin == 'webwork2') formData.set("sourceFilePath", ww_sourceFilePath);
+        formData.set("answersSubmitted", '0');
+        formData.set("displayMode", "MathJax");
+        formData.set("courseID", ww_course_id);
+        formData.set("user", ww_user_id);
+        formData.set("userID", ww_user_id);
+        formData.set("passwd", ww_passwd);
+        formData.set("disableCookies", '1');
+        formData.set("outputformat", "raw");
         // note ww_container.dataset.hasSolution is a string, possibly 'false' which is true
-        url.searchParams.append("showSolutions", ww_container.dataset.hasSolution == 'true' ? '1' : '0');
-        url.searchParams.append("showHints", ww_container.dataset.hasHint == 'true' ? '1' : '0');
-        url.searchParams.append("problemUUID",ww_id);
+        formData.set("showSolutions", ww_container.dataset.hasSolution == 'true' ? '1' : '0');
+        formData.set("showHints", ww_container.dataset.hasHint == 'true' ? '1' : '0');
+        formData.set("problemUUID",ww_id);
     }
 
-    // get the json and do stuff with what we get
-    $.getJSON(url.toString(), (data) => {
+    // If in Runestone, check if there are previous answer submissions and get them now to use in the form.
+    let checkboxesString = '';
+    if (runestone_logged_in && !action) {
+        const answersObject = (wwList[ww_id.replace(/-ww-rs$/,'')].answers ? wwList[ww_id.replace(/-ww-rs$/,'')].answers : {'answers' : [], 'mqAnswers' : []});
+        const previousAnswers = answersObject.answers;
+        if (previousAnswers !== null) {
+            formData.set('WWsubmit', 1);
+        }
+        for (const answer in previousAnswers) {
+            if (previousAnswers[answer].constructor === Array) {
+                for (const k in previousAnswers[answer]) {
+                    checkboxesString += '&';
+                    checkboxesString += answer;
+                    checkboxesString += '=';
+                    checkboxesString += previousAnswers[answer][k];
+                }
+            } else {
+                formData.set(answer, previousAnswers[answer]);
+            }
+        }
+    }
+    // Need to get form data as a string, including possible repeated checkbox names
+    // Do not pass post data as an object, or checkbox names will overwrite one another
+    const formString = new URLSearchParams(formData).toString();
+
+    $.post(url, formString + checkboxesString, (data) => {
         // Create the form that will contain the text and input fields of the interactive problem.
         const form = document.createElement("form");
         form.id = ww_id + "-form";
@@ -117,6 +153,29 @@ function handleWW(ww_id, action) {
         // Dump the problem text, answer blanks, etc.
         body_div.innerHTML = data.rh_result.text;
 
+        // If showPartialCorrectAnswers = 0, alter the feedback buttons according to whether or not the score is 100%.
+        if ('showPartialCorrectAnswers' in data.rh_result.flags && data.rh_result.flags.showPartialCorrectAnswers == 0) {
+            if ('score' in data.rh_result.problem_result && data.rh_result.problem_result.score >= 1) {
+                body_div.querySelectorAll('button.ww-feedback-btn').forEach(
+                    function(button) {
+                        button.classList.remove('btn-info');
+                        button.classList.add('btn-success');
+                        button.setAttribute('aria-label', 'Correct');
+                        button.dataset.bsCustomClass = button.dataset.bsCustomClass + ' correct';
+                        button.dataset.bsTitle = button.dataset.bsTitle.replace('Answer Preview', 'Correct');
+                        button.firstChild.classList.add('correct')
+                    }
+                );
+            } else {
+                body_div.querySelectorAll('button.ww-feedback-btn').forEach(
+                    function(button) {
+                        button.setAttribute('aria-label', 'One or more answers incorrect');
+                        button.dataset.bsTitle = button.dataset.bsTitle.replace('Answer Preview', 'One or more answers incorrect');
+                    }
+                );
+            }
+        }
+
         // Replace all hn headings with h6 headings.
         for (const tag_name of ['h6', 'h5', 'h4', 'h3', 'h2', 'h1']) {
             const headings = body_div.getElementsByTagName(tag_name);
@@ -127,6 +186,19 @@ function handleWW(ww_id, action) {
                 new_heading.classList.add('webwork-part');
                 heading.replaceWith(new_heading);
             }
+        }
+
+        // Hide textarea input and hide associated buttons
+        var textareas = body_div.getElementsByTagName("textarea");
+        for(var i = 0, max = textareas.length; i < max; i++)
+        {
+            textareas[i].style.display = "none";
+            textareas[i].className = '';
+        }
+        var textareabuttons = body_div.querySelectorAll(".latexentry-preview");
+        for(var i = 0, max = textareabuttons.length; i < max; i++)
+        {
+            textareabuttons[i].remove();
         }
 
         adjustSrcHrefs(body_div, ww_domain);
@@ -151,36 +223,6 @@ function handleWW(ww_id, action) {
                 if (input && input.value == '') {
                     input.setAttribute('value', answers[answer]);
                 }
-                if (input && input.type.toUpperCase() == 'RADIO') {
-                    const buttons = body_div.querySelectorAll('input[name=' + answer + ']');
-                    for (const button of buttons) {
-                        if (button.value == answers[answer]) {
-                            button.setAttribute('checked', 'checked');
-                        }
-                    }
-                }
-                if (input && input.type.toUpperCase() == 'CHECKBOX') {
-                    const checkboxes = body_div.querySelectorAll('input[name=' + answer + ']');
-                    for (const checkbox of checkboxes) {
-                        // This is not a bulletproof approach if the problem used input values that are weird
-                        // For example, with commas in them
-                        // However, we are stuck with WW providing answers[answer] as a string like `[value0, value1]`
-                        // and note that it is not `["value0", "value1"]`, so we cannot cleanly parse it into an array
-                        let checkbox_regex = new RegExp('(\\[|, )' + checkbox.value + '(, |\\])');
-                        if (answers[answer].match(checkbox_regex)) {
-                            checkbox.setAttribute('checked', 'checked');
-                        }
-                    }
-                }
-                var select = body_div.querySelector('select[id=' + answer + ']');
-                if (select && answers[answer]) {
-                    // answers[answer] may be wrapped in \text{...} that we want to remove, since value does not have this.
-                    let this_answer = answers[answer];
-                    if (/^\\text\{.*\}$/.test(this_answer)) {this_answer = this_answer.match(/^\\text\{(.*)\}$/)[1]};
-                    let quote_escaped_answer = this_answer.replace(/"/g, '\\"');
-                    const option = body_div.querySelector(`select[id="${answer}"] option[value="${quote_escaped_answer}"]`);
-                    if (option) {option.setAttribute('selected', 'selected')};
-                }
             }
         }
 
@@ -195,7 +237,7 @@ function handleWW(ww_id, action) {
             courseName:       ww_course_id,
             courseID:         ww_course_id,
             user:             ww_user_id,
-            passwd:           ww_course_password,
+            passwd:           ww_passwd,
             displayMode:      "MathJax",
             session_key:      data.rh_result.session_key,
             outputformat:     "raw",
@@ -209,7 +251,7 @@ function handleWW(ww_id, action) {
         };
 
         if (ww_sourceFilePath) wwInputs.sourceFilePath = ww_sourceFilePath;
-        else if (ww_problemSource) wwInputs.problemSource = ww_problemSource;
+        else if (ww_problemSource && ww_origin == 'webwork2') wwInputs.problemSource = ww_problemSource;
 
         for (const wwInputName of Object.keys(wwInputs)) {
             const input = document.createElement('input');
@@ -219,31 +261,11 @@ function handleWW(ww_id, action) {
             form.appendChild(input);
         }
 
-        // Prepare answers object
-        const answers = {};
-        // id the answers even if we won't populate them
-        Object.keys(data.rh_result.answers).forEach(function(id) {
-            answers[id] = {};
-        }, data.rh_result.answers);
-        if (ww_container.dataset.hasAnswer == 'true') {
-            // Update answer data
-            Object.keys(data.rh_result.answers).forEach(function(id) {
-                answers[id] = {
-                    correct_ans: this[id].correct_ans,
-                    correct_ans_latex_string: this[id].correct_ans_latex_string,
-                    correct_choice: this[id].correct_choice,
-                    correct_choices: this[id].correct_choices,
-                };
-            }, data.rh_result.answers);
-        }
-
         let buttonContainer = ww_container.querySelector('.problem-buttons.webwork');
         // Create the submission buttons if they have not yet been created.
         if (!buttonContainer) {
-            // Hide the original div that contains the old make active button.
-            ww_container.querySelector('.problem-buttons').classList.add('hidden-content');
-            // And the newer activate button if it is there
-            if (activate_button != null) {activate_button.classList.add('hidden-content');};
+            // Hide the original div that contains the Activate.
+            ww_container.querySelector('.problem-buttons').classList.add('hidden-content', 'hidden');
 
             // Create a new div for the webwork buttons.
             buttonContainer = document.createElement('div');
@@ -262,11 +284,8 @@ function handleWW(ww_id, action) {
             check.style.marginRight = "0.25rem";
             check.classList.add('webwork-button');
 
-            // Adjust if more than one answer to check
-            const answerCount = body_div.querySelectorAll("input:not([type=hidden])").length +
-                body_div.querySelectorAll("select:not([type=hidden])").length;
-
             check.textContent = runestone_logged_in ? localize_submit : localize_check_responses;
+
             check.addEventListener('click', () => handleWW(ww_id, "check"));
 
             buttonContainer.appendChild(check);
@@ -278,7 +297,7 @@ function handleWW(ww_id, action) {
                 correct.type = "button";
                 correct.style.marginRight = "0.25rem";
                 correct.textContent = localize_reveal;
-                correct.addEventListener('click', () => WWshowCorrect(ww_id, answers));
+                correct.addEventListener('click', () => handleWW(ww_id, 'reveal'));
                 buttonContainer.appendChild(correct);
             }
 
@@ -298,14 +317,11 @@ function handleWW(ww_id, action) {
             reset.textContent = localize_reset;
             reset.addEventListener('click', () => resetWW(ww_id));
             buttonContainer.appendChild(reset)
-        } else {
-            // Update the click handler for the show correct button.
-            if (ww_container.dataset.hasAnswer == 'true') {
-                const correct = buttonContainer.querySelector('.show-correct');
-                const correctNew = correct.cloneNode(true);
-                correctNew.addEventListener('click', () => WWshowCorrect(ww_id, answers));
-                correct.replaceWith(correctNew);
-            }
+        }
+
+        if (runestone_logged_in && action == 'check') {
+            // Runestone trigger
+            $("body").trigger('runestone_ww_check', data)
         }
 
         let iframeContents = '<!DOCTYPE html><head>' +
@@ -335,6 +351,7 @@ function handleWW(ww_id, action) {
                         }
                     },
                     options: {
+                        processHtmlClass: "process-math",
                         renderActions: {
                             findScript: [
                                 10,
@@ -398,7 +415,8 @@ function handleWW(ww_id, action) {
                 .graphtool-answer-container .graphtool-number-line { height: 57px; }
                 .quill-toolbar { scrollbar-width: thin; overflow-x: hidden; }
             </style>` +
-            '</head><body><main class="pretext-content problem-content">' + form.outerHTML + '</main></body>' +
+            '</head><body>' +
+            '<main class="pretext-content problem-content" data-iframe-height="1">' + form.outerHTML + '</main></body>' +
             '</html>';
 
         let iframe;
@@ -411,7 +429,7 @@ function handleWW(ww_id, action) {
             iframe.classList.add('problem-iframe');
 
             // Hide the static problem
-            ww_container.querySelector('.problem-contents').classList.add('hidden-content');
+            ww_container.querySelector('.problem-contents').classList.add('hidden-content', 'hidden');
 
             if (activate_button != null) {
                 // Make sure the iframe follows the activate button in the DOM
@@ -449,7 +467,7 @@ function handleWW(ww_id, action) {
 
         // Place focus on the problem.
         ww_container.focus()
-    });
+    }, "json");
 }
 
 function WWshowCorrect(ww_id, answers) {
@@ -495,7 +513,6 @@ function WWshowCorrect(ww_id, answers) {
             const correct_ans = answers[name].correct_choice || answers[name].correct_ans;
             if (input.value == correct_ans) {
                 input.checked = true;
-                //input.setAttribute('checked', 'checked');
             } else {
                 input.checked = false;
             }
@@ -505,10 +522,8 @@ function WWshowCorrect(ww_id, answers) {
             const correct_choices = answers[name].correct_choices;
             if (correct_choices.includes(input.value)) {
                 input.checked = true;
-            //  input.setAttribute('checked', 'checked');
             } else {
                 input.checked = false;
-            //   input.setAttribute('checked', false);
             }
         }
     }
@@ -564,12 +579,12 @@ function resetWW(ww_id) {
     iframe = ww_container.querySelector('.problem-iframe');
     iframe.remove();
 
-    ww_container.querySelector('.problem-contents').classList.remove('hidden-content');
+    ww_container.querySelector('.problem-contents').classList.remove('hidden-content', 'hidden');
 
     ww_container.querySelector('.problem-buttons.webwork').remove();
-    ww_container.querySelector('.problem-buttons').classList.remove('hidden-content');
+    ww_container.querySelector('.problem-buttons').classList.remove('hidden-content', 'hidden');
     // if the newer activate button is there (but hidden) bring it back too
-    if (activate_button != null) {activate_button.classList.remove('hidden-content');};
+    if (activate_button != null) {activate_button.classList.remove('hidden-content', 'hidden');};
 }
 
 function adjustSrcHrefs(container,ww_domain) {
@@ -632,7 +647,6 @@ function translateHintSol(ww_id, body_div, ww_domain, b_ptx_has_hint, b_ptx_has_
         hintSol.remove();
 
         const originalDetailsContent = knowlDetails.getElementsByTagName('div')[0];
-        // const newDetailsContent = originalDetailsContent.getElementsByTagName('div')[0].getElementsByTagName('div')[0];
         const newDetailsContent = originalDetailsContent.getElementsByTagName('div')[0];
         newDetailsContent.className = '';
         newDetailsContent.classList.add(hintSolType, 'solution-like', 'knowl__content');
