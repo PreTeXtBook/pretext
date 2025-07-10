@@ -3637,7 +3637,7 @@ TEST_CASE( "Test the add function" ) {
         <title>Select Exercises</title>
 
         <introduction>
-            <p>These <term>select</term> questions give the reader a choice of several (related) extant questions to choose from.  They are only really functional with a database of students in a course, i.e.<nbsp/>when hosted on Runestone.</p>
+            <p>These <term>select</term> questions specify a list of extant questions, and the reader, or Runestone, selects questions from the list to be graded (in different ways). They are only really functional with a database of students in a course, i.e.<nbsp/>when hosted on Runestone.</p>
         </introduction>
 
         <!-- Select one at random -->
