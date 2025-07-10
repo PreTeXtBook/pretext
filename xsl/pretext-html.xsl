@@ -5781,7 +5781,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "naturally" be the case, but we have a boolean anyway.   -->
     <xsl:if test="$b-needs-custom-marker-css">
         <xsl:variable name="ol-marker-nodes" select="exsl:node-set($ol-markers)" />
-        <exsl:document href="ol-markers.css" method="text">
+        <exsl:document href="{$html.css.dir}/ol-markers.css" method="text">
             <xsl:apply-templates select="$ol-marker-nodes//ol-marker" mode="ol-marker-style" />
         </exsl:document>
     </xsl:if>
