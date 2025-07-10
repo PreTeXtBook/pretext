@@ -126,6 +126,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- (The feedback element could be empty, we place text in a comment to  -->
         <!-- suggest how the text can be changed/specified.)                      -->
         <feedback href="http://example.com/not-implemented.html"><!-- My Button Text --></feedback>
+        <!-- A "portable" build is meant to be a single file that is transportable -->
+        <!-- <platform portable="yes"/> -->
     </html>
 
     <!-- 10pt font is the default   -->
