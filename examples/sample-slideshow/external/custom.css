@@ -1,0 +1,5 @@
+/* Sample of custom CSS to override/extend defaults */
+
+.reveal h4 {
+  color: #3b658f;
+}
