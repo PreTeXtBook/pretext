@@ -523,6 +523,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <title>
                             <xsl:apply-templates select="." mode="title-full"/>
                         </title>
+                        <number>
+                            <xsl:apply-templates select="." mode="number"/>
+                        </number>
                         <xsl:apply-templates select="*" mode="runestone-manifest"/>
                     </chapter>
                 </xsl:when>
@@ -539,6 +542,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
+        <number>
+            <xsl:apply-templates select="." mode="number"/>
+        </number>
     <!-- Recurse into PTX sections, or if the chapter is not structured, -->
     <!-- then pick up inline exercises directly within a chapter         -->
     <xsl:apply-templates select="*" mode="runestone-manifest"/>
@@ -557,6 +563,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
+        <number>
+            <xsl:apply-templates select="." mode="number"/>
+        </number>
         <!-- nearly a dead end, recurse into "exercise" and PROJECT-LIKE at *any* PTX -->
         <!-- depth, for example within a "subsection" (which Runestone does not have) -->
         <!-- If any of the next select are containers (full of "task") they will not  -->
