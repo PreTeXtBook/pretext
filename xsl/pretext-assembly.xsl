@@ -2544,10 +2544,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                    | project[(@exercise-interactive = 'select')]
                    | activity[(@exercise-interactive = 'select')]
                    | exploration[(@exercise-interactive = 'select')]
-                   | investigation[(@exercise-interactive = 'select')]" mode="representations">
+                   | investigation[(@exercise-interactive = 'select')]
+                   | task[(@exercise-interactive = 'select')]" mode="representations">
     <xsl:copy>
         <xsl:choose>
-            <xsl:when test="($exercise-style = 'static') and not($b-host-runestone)">
+            <xsl:when test="($exercise-style = 'static')">
                 <xsl:apply-templates select="@*" mode="representations"/>
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
             </xsl:when>
