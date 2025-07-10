@@ -1979,6 +1979,7 @@ a[href^="mailto:"] {
 }
 .tabular-box {
   margin-top: 0.5em;
+  overflow-x: auto;
 }
 .frontmatter > .heading {
   display: block;
@@ -3472,6 +3473,16 @@ section > h3.heading {
     --max-width: calc(min((100cqw - 2 * 48px), 900px));
     min-width: 100%;
     width: var(--max-width);
+    max-width: var(--max-width);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+}
+@container ptx-main (width > 696px) {
+  .tabular-box {
+    --max-width: calc(min((100cqw - 2 * 48px), 900px));
+    min-width: 100%;
+    width: fit-content;
     max-width: var(--max-width);
     overflow-x: auto;
     overflow-y: hidden;

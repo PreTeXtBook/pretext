@@ -565,6 +565,7 @@ a[href^="mailto:"] {
 }
 .tabular-box {
   margin-top: 0.5em;
+  overflow-x: auto;
 }
 .frontmatter > .heading {
   display: block;
