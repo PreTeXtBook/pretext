@@ -1698,7 +1698,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     reader is assigned just one (good for exams)                  -->
 <!--   * A/B Experiment - two choices, experiment managed by Runestone -->
 <xsl:template match="*[@exercise-interactive = 'select']" mode="runestone-to-interactive">
-    <!-- identify the type of "select" -->
+    <!-- identify the type of "select"                -->
+    <!-- duplicated in "pretext-runestone-static.xsl" -->
     <xsl:variable name="select-variant">
         <xsl:choose>
             <!-- Runestone JS picks a random problem from many-->

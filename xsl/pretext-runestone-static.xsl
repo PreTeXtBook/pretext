@@ -944,8 +944,109 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="select/preceding-sibling::*"/>
 
-    <p>A Runestone select question goes here.  More detail coming soon.</p>
-
+    <!-- identify the type of "select"                    -->
+    <!-- duplicated in "pretext-runestone.xsl"            -->
+    <!-- No good place to put this, since static versions -->
+    <!-- are forned in assembly phase and we do not want  -->
+    <!-- to introduce too many templates there.           -->
+    <!-- Save off which type, since context is lost looping over refs -->
+    <xsl:variable name="select-variant">
+        <xsl:choose>
+            <!-- Runestone JS picks a random problem from many-->
+            <xsl:when test="select/@grade='random'">
+                <xsl:text>random</xsl:text>
+            </xsl:when>
+            <!-- Two questions, split across roster into A, B groups. -->
+            <xsl:when test="select/@grade='ab-experiment'">
+                <xsl:text>ab-experiment</xsl:text>
+            </xsl:when>
+            <!-- Two questions (usually), the first will always be graded,  -->
+            <!-- while any others may be worked and may be helpful.         -->
+            <!-- Colloquially known as a "toggle lock" question.            -->
+            <xsl:when test="select/@grade='first'">
+                <xsl:text>first</xsl:text>
+            </xsl:when>
+            <!-- Two questions (usually), any one may be     -->
+            <!-- chosen by the reader to be graded.          -->
+            <!-- Colloquially known as a "toggle " question. -->
+            <xsl:when test="select/@grade='any'">
+                <xsl:text>any</xsl:text>
+            </xsl:when>
+            <!-- default to "random" selection -->
+            <xsl:otherwise>
+                <xsl:text>random</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- One simple sentence in a "p", typically presented -->
+    <!-- just after a lead-in title from "exercise"        -->
+    <p>
+        <!-- some lead-in explanation -->
+        <xsl:text>Runestone-only: </xsl:text>
+        <xsl:choose>
+            <xsl:when test="$select-variant = 'random'">
+                <xsl:text>exercise to grade will be automatically chosen by Runestone from </xsl:text>
+            </xsl:when>
+            <xsl:when test="$select-variant = 'ab-experiment'">
+                <xsl:text>an A/B experiment (named </xsl:text>
+                    <c>
+                        <xsl:value-of select="select/@experiment-name"/>
+                    </c>
+                <xsl:text>) with </xsl:text>
+            </xsl:when>
+            <xsl:when test="$select-variant = 'first'">
+                <xsl:text>a toggle question where the question graded is </xsl:text>
+                <em>always</em>
+                <xsl:text> the first of </xsl:text>
+            </xsl:when>
+            <xsl:when test="$select-variant = 'any'">
+                <xsl:text>a toggle question where the question graded is </xsl:text>
+                <em>any</em>
+                <xsl:text> question chosen by the reader from </xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <!-- list "xref" to questions -->
+        <xsl:for-each select="str:tokenize(select/@questions, ' ,')">
+            <!-- cross-reference, will be in default document style -->
+            <xref>
+                <xsl:attribute name="ref">
+                    <xsl:value-of select="."/>
+                </xsl:attribute>
+            </xref>
+            <!-- punctuation -->
+            <xsl:choose>
+                <xsl:when test="not($select-variant = 'ab-experiment')">
+                    <xsl:choose>
+                        <!-- penultimate; trailing comma, plus "or" -->
+                        <xsl:when test="count(following-sibling::token) = 1">
+                            <xsl:text>, or </xsl:text>
+                        </xsl:when>
+                        <!-- more, more coming; trailing comma -->
+                        <xsl:when test="following-sibling::token">
+                            <xsl:text>, </xsl:text>
+                        </xsl:when>
+                        <!-- done; need final period -->
+                        <xsl:otherwise>
+                            <xsl:text>.</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:choose>
+                        <!-- finish "A", and separate from "B" -->
+                        <xsl:when test="following-sibling::token">
+                            <xsl:text> as (A)</xsl:text>
+                            <xsl:text> and </xsl:text>
+                        </xsl:when>
+                        <!-- final period -->
+                        <xsl:otherwise>
+                            <xsl:text> as (B).</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
+    </p>
 </xsl:template>
 
 
