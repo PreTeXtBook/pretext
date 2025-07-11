@@ -864,7 +864,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- element ("pi:") for later consumption.  Review the destination for     -->
 <!-- similar notes about possible changes.                                  -->
 
-<xsl:template match="webwork[* or @copy or @source]" mode="webwork">
+<xsl:template match="webwork[* or @copy or @source or @local]" mode="webwork">
     <!-- Every "webwork" that is a problem (not a generator) gets a   -->
     <!-- lifetime identification in both passes through the source.   -->
     <!-- The first migrates through the "extract-pg.xsl" template,    -->
@@ -963,6 +963,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:when>
                     <xsl:when test="$target/self::webwork[@source]">
                         <xsl:text>the @copy attribute points a "webwork" with a @source attribute.  (Replace the @copy by the @source?)</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$target/self::webwork[@local]">
+                        <xsl:text>the @copy attribute points a "webwork" with a @local attribute.  (Replace the @copy by the @local?)</xsl:text>
                     </xsl:when>
                     <xsl:when test="$target/self::webwork[@copy]">
                         <xsl:text>the @copy attribute points to "webwork" with a @copy attribute. Sorry, we are not that sophisticated.</xsl:text>
@@ -2722,12 +2725,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- From the code comment when this was done with Python: "p with -->
 <!-- only a single fillin, not counting those inside an li without -->
 <!-- preceding siblings"                                           -->
+<!-- We likewise prune the "p" that only have a var with           -->
+<!-- @form="essay. These come from WeBWorK essay questions         -->
+<!-- starting with v2.19                                           -->
 <xsl:template match="p" mode="webwork-rep-to-static">
     <!-- Substantially faster to have a simple match and then selectively -->
     <!-- filter matched elements. Start with the tests that are cheapest  -->
     <!-- and hope short-circuit evaluation avoids expensive ones.         -->
     <xsl:variable name="prune">
-        <xsl:if test="count(fillin)=1 and 
+        <xsl:if test="(count(fillin)=1 or count(var[@form='essay'])=1) and
                       count(*)=1 and 
                       not(normalize-space(text())) and
                       (not(parent::li) or preceding-sibling::*)">
@@ -2745,6 +2751,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some answer forms return a default/initial choice that is -->
 <!-- simply a question-mark.  We scrub them here, with care.   -->
 <xsl:template match="statement//var[@form = 'popup']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
+<xsl:template match="statement//ul[@form = 'popup']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
 <!-- This may only be needed as support for older servers' generated PreTeXt. -->
 <xsl:template match="statement//var[@form = 'checkboxes']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
 

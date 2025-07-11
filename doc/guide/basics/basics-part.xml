@@ -901,20 +901,16 @@
     <idx><webwork/> exercise</idx>
     <idx><h sortby="exercise"><tag>exercise</tag></h><h><webwork/></h></idx>
     <p>
-      It is possible to embed
-      <webwork/> exercises into a <pretext/> document.
-      It is possible to build an <init>HTML</init> version in which
-      readers can answer these exercises and find out if their answer is correct or incorrect.
-      However, results of
-      <webwork/> exercises cannot yet be recorded to your gradebook.       Because <webwork /> content belongs inside an
-      <tag>exercise</tag>, you can include <webwork /> exercises in
-      any of the elements that can contain an <tag>exercise</tag> such
-      as a <tag>worksheet</tag> and <tag>reading-questions</tag>.
-      There's some configuration required use
-      <webwork/>.
-      Please see <xref ref="webwork-author"/> and <xref ref="webwork-publisher"/> for more details.
-      There is a <webwork/> <pubtitle>Sample Chapter</pubtitle> available elsewhere,
-      with copious examples and output in multiple formats.
+      It is possible to embed <webwork/> exercises into a <pretext/> document. It is possible to
+      build an <init>HTML</init> version in which readers can answer these exercises and find out if
+      their answer is correct or incorrect. And if the book is hosted by Runestone, the reader's
+      success can be recorded and incorporated into grades. Because <webwork/> content belongs
+      inside an <tag>exercise</tag>, you can include <webwork/> exercises in any of the elements
+      that can contain an <tag>exercise</tag> such as a <tag>worksheet</tag> and
+      <tag>reading-questions</tag>. There's some configuration required to use <webwork/>. Please
+      see <xref ref="webwork-author"/> and <xref ref="webwork-publisher"/> for more details. There
+      is a <webwork/> <pubtitle>Sample Chapter</pubtitle> available elsewhere, with copious
+      examples and output in multiple formats.
     </p>
   </section>
 
