@@ -7090,6 +7090,27 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- ################# -->
+<!-- Worksheet Margins -->
+<!-- ################# -->
+
+<xsl:template match="worksheet" mode="worksheet-margin">
+    <xsl:param name="author-side"/>
+    <xsl:param name="publisher-side"/>
+    <xsl:choose>
+        <xsl:when test="$author-side">
+            <xsl:value-of select="normalize-space($author-side)"/>
+        </xsl:when>
+        <xsl:when test="@margin">
+            <xsl:value-of select="normalize-space(@margin)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="normalize-space($publisher-side)"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- ##################-->
 <!-- Frontmatter Items -->
 <!-- ##################-->
@@ -12002,8 +12023,15 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
       <xsl:with-param name="occurrences" select="&quot;$document-root//datafile[@datafile]&quot;" />
       <xsl:with-param name="date-string" select="'2025-04-25'" />
       <xsl:with-param name="message" select="'the program@datafile attribute containing datafile@filename has been deprecated. You should change programs to use the @add-files attribute and use it specify the xml:id of datafiles to make available.'"/>
+    </xsl:call-template>
     <!--  -->
-  </xsl:call-template>
+    <!-- 2025-08-19  LaTeX front cover and back cover to publication file -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/latex-output/worksheet&quot;" />
+        <xsl:with-param name="date-string" select="'2025-08-19'" />
+        <xsl:with-param name="message" select="'Custom margin specification for worksheets (in both HTML and LaTeX) has moved to the publication file in &quot;/publication/common/worksheet&quot;.  Any margins specified in &quot;docinfo/latex-output/worksheet&quot; will be ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
