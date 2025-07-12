@@ -630,6 +630,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <!-- page-margins-attribute will be empty unless in a worksheet's standalone page -->
+        <xsl:apply-templates select="." mode="page-margins-attribute"/>
         <xsl:apply-templates select="." mode="section-heading">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
@@ -13860,9 +13862,37 @@ TODO:
     </xsl:if>
 </xsl:template>
 
-<!-- ############### -->
-<!-- Worksheet Pages -->
-<!-- ############### -->
+<!-- ########################### -->
+<!-- Worksheet Margins and Pages -->
+<!-- ########################### -->
+
+<!-- We put page-margins-attributes only on worksheet sections -->
+<xsl:template match="*" mode="page-margins-attribute"/>
+
+<xsl:template match="worksheet" mode="page-margins-attribute">
+    <xsl:attribute name="data-margins">
+        <!-- A space-separated list for top, right, bottom, and left margins -->
+        <xsl:apply-templates select="." mode="worksheet-margin">
+            <xsl:with-param name="author-side" select="@top"/>
+            <xsl:with-param name="publisher-side" select="$ws-margin-top"/>
+        </xsl:apply-templates>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="worksheet-margin">
+            <xsl:with-param name="author-side" select="@right"/>
+            <xsl:with-param name="publisher-side" select="$ws-margin-right"/>
+        </xsl:apply-templates>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="worksheet-margin">
+            <xsl:with-param name="author-side" select="@bottom"/>
+            <xsl:with-param name="publisher-side" select="$ws-margin-bottom"/>
+        </xsl:apply-templates>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="worksheet-margin">
+            <xsl:with-param name="author-side" select="@left"/>
+            <xsl:with-param name="publisher-side" select="$ws-margin-left"/>
+        </xsl:apply-templates>
+    </xsl:attribute>
+</xsl:template>
 
 <!-- A worksheet is (mostly) structured by "page", which translates    -->
 <!-- into an HTML section.onepage.  Note that an "introduction" and    -->
