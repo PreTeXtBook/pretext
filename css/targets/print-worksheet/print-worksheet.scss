@@ -256,27 +256,25 @@ form.papersize-select {
 
   section.worksheet {
     border: none;
-  }
-
-  .worksheet {
     width: 100%;
+
+    .onepage {
+      margin-top: 0;
+      width: 100%;
+      height: var(--ws-content-height);
+      overflow: hidden;
+      page-break-after: always;
+      page-break-inside: avoid;
+    }
+    // Never show the workspace preview in print
+    div.workspace,
+    div.workspace.squashed.tight {
+      border: none;
+      padding: 0;
+      background: none !important;
+    }
   }
 
-  .onepage {
-    width: 100%;
-    height: var(--ws-content-height);
-    overflow: hidden;
-    page-break-after: always;
-    page-break-inside: avoid;
-  }
-
-  // Never show the workspace preview in print
-  .onepage div.workspace,
-  .onepage div.workspace.squashed.tight {
-    border: none;
-    padding: 0;
-    background: none !important;
-  }
   a {
     color: black;
   }
