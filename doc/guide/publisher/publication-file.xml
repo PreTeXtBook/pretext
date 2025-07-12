@@ -190,6 +190,30 @@
                 be available in <xref ref="appendix-journals"/>.
             </p>
         </subsection>
+
+        <subsection xml:id="common-worksheet">
+            <title>Worksheet margins</title>
+            <idx><h>common option</h><h>worksheet</h></idx>
+            <idx><h>worksheet</h><h>common option</h></idx>
+
+            <p>
+                Margins for worksheets can be specified using a combination of attributes on the element
+                <cd>
+                    <cline>/publication/common/worksheet</cline>
+                </cd>
+                using attributes <attr>margin</attr>, <attr>top</attr>, <attr>right</attr>, <attr>bottom</attr>, and <attr>left</attr>.  The values of these attributes should include units, either <c>in</c> or <c>cm</c>.  Setting <attr>margin</attr> will set all four margins to its value, but this can be overridden by setting (some of) the other attributes.  The default margin is <c>0.75in</c>.
+            </p>
+
+            <p>
+                For example, setting <c>&lt;worksheet margin="1in" left="2in"/&gt;</c> will set the top, right, and bottom margins to <c>1in</c> and the left margin to <c>2in</c>.  Setting <c>&lt;worksheet top="1cm" bottom="2cm"/&gt;</c> will set the top margin to <c>1cm</c> and the bottom margin to <c>2cm</c>, while leaving the left and right margins at their default of <c>0.75in</c>.
+            </p>
+
+            <p>
+                These settings will be used for both the <latex /> and <init>HTML</init> conversions.
+                See also <xref ref="latex-worksheet-options"/> for more information on how these margins are used in the <latex/> conversion.
+            </p>
+
+        </subsection>
     </section>
 
     <section xml:id="publication-file-numbering">
@@ -340,6 +364,10 @@
                 By default, worksheets are formatted differently than other pages, including customizable margins, workspace between exercises, and on their own pages.  This separate formatting can be ignored, causing worksheets to be treated like any other division, using the<cd>
                 <cline>/publication/latex/worksheet/@formatted</cline>
              </cd>attribute, setting the value to <c>no</c>.  The default value is <c>yes</c>.
+            </p>
+
+            <p>
+                See also <xref ref="common-worksheet"/> for how to specify margins for formatted worksheets.
             </p>
         </subsection>
 
