@@ -131,9 +131,30 @@
             <attribute name="image"/>
           </element>
         </optional>
-        <element name="journal">
-          <attribute name="name"/>
-        </element>
+        <optional>
+          <element name="journal">
+            <attribute name="name"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="worksheet">
+            <optional>
+              <attribute name="margin"/>
+            </optional>
+            <optional>
+              <attribute name="top"/>
+            </optional>
+            <optional>
+              <attribute name="right"/>
+            </optional>
+            <optional>
+              <attribute name="bottom"/>
+            </optional>
+            <optional>
+              <attribute name="left"/>
+            </optional>
+          </element>
+        </optional>
       </interleave>
     </element>
   </define>
@@ -1033,13 +1054,10 @@
         <attribute name="course"/>
       </optional>
       <optional>
-        <attribute name="coursepassord"/>
-      </optional>
-      <optional>
         <attribute name="user"/>
       </optional>
       <optional>
-        <attribute name="userpassword"/>
+        <attribute name="password"/>
       </optional>
       <optional>
         <attribute name="task-reveal">

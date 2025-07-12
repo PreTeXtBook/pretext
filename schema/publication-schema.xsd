@@ -28,7 +28,16 @@
         <xs:element minOccurs="0" ref="watermark"/>
         <xs:element minOccurs="0" ref="mermaid"/>
         <xs:element minOccurs="0" ref="qrcode"/>
-        <xs:element ref="journal"/>
+        <xs:element minOccurs="0" ref="journal"/>
+        <xs:element minOccurs="0" name="worksheet">
+          <xs:complexType>
+            <xs:attribute name="margin"/>
+            <xs:attribute name="top"/>
+            <xs:attribute name="right"/>
+            <xs:attribute name="bottom"/>
+            <xs:attribute name="left"/>
+          </xs:complexType>
+        </xs:element>
       </xs:all>
     </xs:complexType>
   </xs:element>
@@ -963,9 +972,8 @@
         <xs:complexType>
           <xs:attribute name="server" use="required"/>
           <xs:attribute name="course"/>
-          <xs:attribute name="coursepassord"/>
           <xs:attribute name="user"/>
-          <xs:attribute name="userpassword"/>
+          <xs:attribute name="password"/>
           <xs:attribute name="task-reveal">
             <xs:simpleType>
               <xs:restriction base="xs:token">
