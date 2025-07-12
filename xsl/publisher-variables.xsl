@@ -243,6 +243,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/common/citation-stylesheet-language/pi:pub-attribute[@name='style']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- Worksheet margins.  Applies to both PDF and HTML. -->
+
+<xsl:variable name="ws-margin">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/pi:pub-attribute[@name='margin']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-margin-top">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/pi:pub-attribute[@name='top']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-margin-right">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/pi:pub-attribute[@name='right']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-margin-bottom">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/pi:pub-attribute[@name='bottom']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-margin-left">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/pi:pub-attribute[@name='left']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<!-- Set the default values of each directional margin to be the value of the ws-margin element -->
+<xsl:template match="common/worksheet/pi:pub-attribute[@name='top']" mode="get-default-pub-variable">
+    <xsl:value-of select="$ws-margin"/>
+</xsl:template>
+<xsl:template match="common/worksheet/pi:pub-attribute[@name='right']" mode="get-default-pub-variable">
+    <xsl:value-of select="$ws-margin"/>
+</xsl:template>
+<xsl:template match="common/worksheet/pi:pub-attribute[@name='bottom']" mode="get-default-pub-variable">
+    <xsl:value-of select="$ws-margin"/>
+</xsl:template>
+<xsl:template match="common/worksheet/pi:pub-attribute[@name='left']" mode="get-default-pub-variable">
+    <xsl:value-of select="$ws-margin"/>
+</xsl:template>
+
 
 <!-- ########################### -->
 <!-- Exercise component switches -->
@@ -3151,6 +3182,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <citation-stylesheet-language>
             <pi:pub-attribute name="style" default="harvard1" freeform="yes"/>
         </citation-stylesheet-language>
+        <worksheet>
+            <pi:pub-attribute name="margin" default="0.75in" freeform="yes"/>
+            <pi:pub-attribute name="top" freeform="yes"/>
+            <pi:pub-attribute name="right" freeform="yes"/>
+            <pi:pub-attribute name="bottom" freeform="yes"/>
+            <pi:pub-attribute name="left" freeform="yes"/>
+        </worksheet>
     </common>
     <html>
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
