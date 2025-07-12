@@ -159,7 +159,14 @@
                     }? &amp;
                     element journal {
                         attribute name {text}
-                    }
+                    }? &amp;
+                    element worksheet {
+                        attribute margin {text}?,
+                        attribute top {text}?,
+                        attribute right {text}?,
+                        attribute bottom {text}?,
+                        attribute left {text}?
+                    }?
                 }
 
             ExerciseAttributes =
