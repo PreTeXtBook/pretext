@@ -9917,7 +9917,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="latex-macros"/>
                 <div>
                     <!-- the actual interactive bit          -->
-                    <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
+                    <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
+                    <!-- <xsl:apply-templates select="." mode="size-pixels-style-attribute" /> -->
                     <!-- stack, else use a layout -->
                     <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
                     <!-- accumulate script tags *after* HTML elements -->
@@ -10078,6 +10079,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="@xml:id" />
         </xsl:attribute>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <!-- <xsl:apply-templates select="." mode="get-interactive-sizing-styles" /> -->
     </canvas>
 </xsl:template>
 
@@ -10476,7 +10478,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="get-aspect-ratio">
                 <xsl:with-param name="default-aspect" select="'1:1'" />
             </xsl:apply-templates>
-            <xsl:apply-templates select="." mode="get-style-attr-aspect" />
+            <!-- <xsl:apply-templates select="." mode="get-style-attr-aspect" /> -->
         <xsl:text>;</xsl:text>
     </xsl:attribute>
 </xsl:template>
