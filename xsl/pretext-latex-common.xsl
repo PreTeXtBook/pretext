@@ -5575,87 +5575,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- cm, in, pt).  This only produces text, so could go in -->
 <!-- -common, but is also only useful for LaTeX output.    -->
 <xsl:template match="worksheet" mode="new-geometry">
-    <!-- Roughly, skinny half-inch margins, -->
-    <!-- to use lots of the available space -->
-    <!-- Perhaps this should be global, but -->
-    <!-- no harm placing it here for now.   -->
-    <xsl:variable name="default-worksheet-margin" select="'1.25cm'"/>
     <!-- Four similar "choose" effect hierarchy/priority -->
     <!-- NB: a publisher string parameter to      -->
     <!-- *really* override (worksheet.left, etc.) -->
     <xsl:text>\newgeometry{</xsl:text>
     <xsl:text>left=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@left">
-            <xsl:value-of select="normalize-space(@left)"/>
-        </xsl:when>
-        <xsl:when test="@margin">
-            <xsl:value-of select="normalize-space(@margin)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@left">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@left)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$default-worksheet-margin"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="worksheet-margin">
+        <xsl:with-param name="author-side" select="@left"/>
+        <xsl:with-param name="publisher-side" select="$ws-margin-left"/>
+    </xsl:apply-templates>
     <xsl:text>, right=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@right">
-            <xsl:value-of select="normalize-space(@right)"/>
-        </xsl:when>
-        <xsl:when test="@margin">
-            <xsl:value-of select="normalize-space(@margin)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@right">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@right)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$default-worksheet-margin"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="worksheet-margin">
+        <xsl:with-param name="author-side" select="@right"/>
+        <xsl:with-param name="publisher-side" select="$ws-margin-right"/>
+    </xsl:apply-templates>
     <xsl:text>, top=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@top">
-            <xsl:value-of select="normalize-space(@top)"/>
-        </xsl:when>
-        <xsl:when test="@margin">
-            <xsl:value-of select="normalize-space(@margin)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@top">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@top)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$default-worksheet-margin"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="worksheet-margin">
+        <xsl:with-param name="author-side" select="@top"/>
+        <xsl:with-param name="publisher-side" select="$ws-margin-top"/>
+    </xsl:apply-templates>
     <xsl:text>, bottom=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@bottom">
-            <xsl:value-of select="normalize-space(@bottom)"/>
-        </xsl:when>
-        <xsl:when test="@margin">
-            <xsl:value-of select="normalize-space(@margin)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@bottom">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@bottom)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$default-worksheet-margin"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="worksheet-margin">
+        <xsl:with-param name="author-side" select="@bottom"/>
+        <xsl:with-param name="publisher-side" select="$ws-margin-bottom"/>
+    </xsl:apply-templates>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
