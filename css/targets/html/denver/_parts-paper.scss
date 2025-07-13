@@ -58,7 +58,13 @@ $page-width: $sidebar-total-width + $main-width + $main-right-margin;
   $navbar-breakpoint: $navbar-breakpoint,
 );
 
-@use 'rs-widen';
+@use '../salem/rs-widen';
+
+// now handle smaller screens for rs elements
+@media (width < 850px) {
+  @include rs-widen.smaller-screen-widening;
+}
+
 
 .ptx-main {
   margin-right: $sidebar-total-width;
