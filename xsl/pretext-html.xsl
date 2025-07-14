@@ -208,10 +208,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.presentation" select="'no'" />
 <xsl:variable name="b-html-presentation" select="$html.presentation = 'yes'" />
 
-<!-- "clipboardable" adds a clickable copy button to code chunks -->
-<!-- We disable this on derived HTML (epub etc) -->
-<xsl:variable name="b-add-clipboardable" select="true()"/>
-
 <!-- ############### -->
 <!-- Source Analysis -->
 <!-- ############### -->
@@ -8729,9 +8725,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="insert-clipboardable-class">
-    <xsl:if test="$b-add-clipboardable">
-        <xsl:text> clipboardable</xsl:text>
-    </xsl:if>
+    <xsl:text> clipboardable</xsl:text>
 </xsl:template>
 
 <!-- 100% analogue of LaTeX's verbatim            -->

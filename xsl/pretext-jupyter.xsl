@@ -57,7 +57,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="jupyter.kernel" select="''" />
 
 <!-- Disable clipboardable -->
-<xsl:variable name="b-add-clipboardable" select="false()"/>
+<xsl:template name="insert-clipboardable-class"></xsl:template>
 
 <!-- ############## -->
 <!-- Entry Template -->
