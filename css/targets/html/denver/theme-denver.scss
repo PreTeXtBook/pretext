@@ -21,6 +21,14 @@ $background-color-dark: #23241f !default;
 
 // ---------------------------------------------
 // components
+
+// set some default sizing variables - this will also set up
+// defaults for expandable mixin
+@use '../salem/sizing-globals' with (
+  $content-width: 600px,
+  $content-side-padding: 20px
+);
+
 @use 'parts-paper' with(
   $scrolling-toc: true,
 );
@@ -30,6 +38,8 @@ $background-color-dark: #23241f !default;
 @use 'components/pretext' with (
  $navbar-breakpoint: parts-paper.$navbar-breakpoint,
 );
+
+@use '../salem/other-widen';
 
 // ---------------------------------------------
 // fonts and colors
@@ -81,6 +91,7 @@ $dark-colors: map.merge(palette-dark.$colors, (
 
 // ---------------------------------------------
 // customizations
+
 // @use './shell';
 @use './customizations' with ($text-color: colorHelpers.text-contrast($primary-color));
 
@@ -90,3 +101,4 @@ $dark-colors: map.merge(palette-dark.$colors, (
 
 // render the actual colors
 @include colorHelpers.set-root-colors($light-colors, $dark-colors);
+

@@ -1,0 +1,23 @@
+// This file can be @use'd with overrides once
+// Then future @uses will get those overrides instead of the values listed here
+
+$content-width: 725px !default;
+$content-side-padding: 48px !default;
+$content-with-padding-width: $content-width + 2 * $content-side-padding;
+
+// rs components that should be wide
+$rs-wide-elements: ".ac_section, .codelens, .parsons_section, .hparsons_section, .datafile" !default;
+
+// grouping elements that may have wide elements and require different margins
+// need to make sure those elements have a consistent amount of (padding+border)
+$grouping-elements: ".timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content" !default;
+
+// import expandable helper and set some defaults
+// future @uses will get these defaults
+@use 'components/helpers/expandable' with (
+  $width-hard-cap: 10000px,  //no functional limit
+  $base-content-width: $content-width,
+  $content-padding: $content-side-padding,
+  $always-expand: true,
+  $centered: true
+);
