@@ -2674,6 +2674,9 @@ def mermaid_images(
     msg = 'converting Mermaid diagrams from {} to png graphics for placement in {}'
     log.info(msg.format(xml_source, dest_dir))
 
+    mmd_executable_cmd = get_executable_cmd("mermaid")
+    log.debug("Mermaid executable command: {}".format(mmd_executable_cmd))
+
     tmp_dir = get_temporary_directory()
     log.debug("temporary directory: {}".format(tmp_dir))
     ptx_xsl_dir = get_ptx_xsl_path()
@@ -2694,17 +2697,32 @@ def mermaid_images(
 
     pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
     mermaid_theme = get_publisher_variable(pub_vars, 'mermaid-theme')
+    mermaid_layout_engine = get_publisher_variable(pub_vars, 'mermaid-layout-engine')
 
     import glob
     # Resulting *.mmd files are in tmp_dir, switch there to work
     with working_directory(tmp_dir):
-        mmd_executable_cmd = get_executable_cmd("mermaid")
-        log.debug("Mermaid executable command: {}".format(mmd_executable_cmd))
+        import json
+        #write config files for base and bw versions as json files in working_directory
+        mmd_config = {
+            "theme": mermaid_theme,
+            "layout": mermaid_layout_engine
+        }
+        mmd_config_file = os.path.join(tmp_dir, "mermaid-config.json")
+        with open(mmd_config_file, 'w') as config_file:
+            json.dump(mmd_config, config_file, indent=4)
+        mmd_config_file_bw = os.path.join(tmp_dir, "mermaid-config-bw.json")
+        with open(mmd_config_file_bw, 'w') as config_file_bw:
+            mmd_config_bw = mmd_config.copy()
+            mmd_config_bw['theme'] = 'neutral'
+            json.dump(mmd_config_bw, config_file_bw, indent=4)
+        log.debug("Mermaid configuration files: {} and {}".format(mmd_config_file, mmd_config_file_bw))
+        
         for mmddiagram in glob.glob(os.path.join(tmp_dir, "*.mmd")):
             filebase, _ = os.path.splitext(mmddiagram)
             versions = [
-                {"name":"-color", "opts":["-s", "4", "-t", mermaid_theme]},
-                {"name":"-bw", "opts":["-s", "4", "-t", "neutral"]}
+                {"name":"-color", "opts":["-s", "4", "-c", "mermaid-config.json"]},
+                {"name":"-bw", "opts":["-s", "4", "-c", "mermaid-config-bw.json"]}
             ]
             for version in versions:
                 mmdout = "{}.{}".format(filebase + version['name'], 'png')
