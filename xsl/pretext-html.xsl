@@ -8787,6 +8787,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <pre>
         <xsl:attribute name="class">
             <xsl:text>code-block tex2jax_ignore</xsl:text>
+            <xsl:call-template name="insert-clipboardable-class" />
         </xsl:attribute>
         <xsl:apply-templates select="." mode="interior"/>
     </pre>
