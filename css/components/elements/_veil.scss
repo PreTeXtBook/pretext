@@ -1,0 +1,22 @@
+.veil-toggle {
+  background-color: #007bff;
+  color: white;
+  padding: 0.05rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.veil-toggle.slide-away {
+  display: none;
+}
+
+.veil-content {
+  display: none;
+}
+
+.veil-content.visible {
+  display: inline;
+}

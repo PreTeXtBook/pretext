@@ -8614,6 +8614,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<xsl:template match="veil[not(parent::m or parent::me or parent::men or parent::mrow)]">
+  <span class="veil-toggle">veil</span>
+  <span class="veil-content">
+    <xsl:apply-templates/>
+  </span>
+</xsl:template>
+
+<xsl:template match="veil[parent::m or parent::me or parent::men or parent::mrow]">
+    <xsl:text>\textcolor{gray}{\underline{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}}</xsl:text>
+</xsl:template>
+
 <!-- Implication Symbols -->
 <!-- TODO: better names! -->
 <xsl:template match="imply">

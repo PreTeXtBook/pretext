@@ -1755,6 +1755,9 @@ Book (with parts), "section" at level 3
     <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "code-wrapper" template</xsl:message>
 </xsl:template>
 
+<xsl:template match="veil">
+    <xsl:apply-templates/>
+</xsl:template>
 
 <!-- The content of a "pre" element is wrapped many ways, -->
 <!-- but the content itself is always strictly text       -->

@@ -10186,6 +10186,57 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
         </section>
 
+        <section xml:id="section-veil-testing">
+            <title><c>veil</c> Testing</title>
+            
+            <p>
+                The function <veil><m>f(t) = e^{-t}</m></veil> satisfies the differential equation 
+                <me>f'(t) = -f(t)</me>, 
+                which is characteristic of <veil>exponential</veil> decay.
+            </p>
+
+            <p>
+                This sentence contains a <veil>simple hidden phrase</veil> and continues normally.
+            </p>
+
+            <p>
+                Here is a veil wrapping <veil><em>emphasized hidden text</em></veil> within an emphasized span.
+            </p>
+
+            <p>
+                You can also hide <veil>inline math like <m>f(t) = e^{-t}</m></veil> without breaking the flow.
+            </p>
+
+            <p>
+                A slightly more complex example with a link:
+                <veil>
+                    Learn more at <a href="https://pretextbook.org">PreTeXt</a> or explore <m>g(x) = x^2 + 1</m>.
+                </veil>
+            </p>
+
+            <p>
+                Testing long hidden text: 
+                <veil>
+                    This is a very long phrase that includes <em>emphasis</em>, an <a href="https://example.com">external link</a>, 
+                    inline math <m>\int_0^1 x^2 dx = \frac{1}{3}</m>, and even a short sentence to see if line wrapping behaves properly.
+                </veil>
+            </p>
+
+            <p>
+                Multiple consecutive veils: <fillin> \cos(t) </fillin>
+                <veil>first hidden</veil>, then some regular text, and <veil>second hidden part</veil>.
+            </p>
+
+            <me>
+                h(t) = <fillin> \sin(t)</fillin> <veil>tiger</veil>
+            </me>
+
+            <p>
+                Final test: a veil at the <veil>end of the sentence</veil>.
+            </p>
+
+        </section>
+
         <!--
         Various author tools are planned.  Note the embedded "todo"
         elements above.  An XSL transform in-testing will extract them
