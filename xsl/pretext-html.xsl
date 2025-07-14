@@ -9638,7 +9638,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="iframe-interactive"/>
             </div>
             <xsl:if test="$is-standalone = false()">
-                <div class="interactive-iframe-container__open">
+                <div class="interactive-iframe-container__opener">
                     <xsl:variable name="if-filename">
                         <xsl:apply-templates select="." mode="standalone-filename" />
                     </xsl:variable>
