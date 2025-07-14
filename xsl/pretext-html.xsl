@@ -1363,15 +1363,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="heading-level"/>
     <xsl:param name="heading-stack" select="."/>
     <xsl:variable name="hN">
-        <xsl:text>h</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$heading-level > 6">
-                <xsl:text>6</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$heading-level"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="hN">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:element name="{$hN}">
         <xsl:attribute name="class">
@@ -1966,31 +1960,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- add 1 for the overall h1                                           -->
 <!-- add 1 for the section itself                                       -->
 <xsl:template match="*" mode="hN">
+    <xsl:param name="heading-level" />
     <xsl:variable name="chunk-level-zero-adjustment">
         <xsl:choose>
             <xsl:when test="$chunk-level = 0">1</xsl:when>
             <xsl:otherwise>0</xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="heading-level">
-        <xsl:value-of select="
-            count(ancestor::*[&STRUCTURAL-FILTER;])
-             - $chunk-level
-             - $chunk-level-zero-adjustment
-             - count(ancestor::*[self::backmatter or self::frontmatter])
-             + count(ancestor::*[&DEFINITION-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &OPENPROBLEM-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or self:: subexercises or self::exercise or self::task or self::exercisegroup])
-             - count(self::answer|self::hint|self::solution)
-             - count(self::*[&INNER-PROOF-FILTER;])
-             + count(ancestor::*[&ASIDE-FILTER; or self::introduction or self::conclusion or self::paragraphs or self::li][title])
-             + 2
-        "/>
+    <xsl:variable name="actual-heading-level">
+        <xsl:choose>
+            <xsl:when test="$heading-level">
+                <xsl:value-of select="$heading-level"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="
+                    count(ancestor::*[&STRUCTURAL-FILTER;])
+                    - $chunk-level
+                    - $chunk-level-zero-adjustment
+                    - count(ancestor::*[self::backmatter or self::frontmatter])
+                    + count(ancestor::*[&DEFINITION-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &OPENPROBLEM-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or self:: subexercises or self::exercise or self::task or self::exercisegroup])
+                    - count(self::answer|self::hint|self::solution)
+                    - count(self::*[&INNER-PROOF-FILTER;])
+                    + count(ancestor::*[&ASIDE-FILTER; or self::introduction or self::conclusion or self::paragraphs or self::li][title])
+                    + 2
+                "/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$heading-level > 6">
+        <xsl:when test="$actual-heading-level > 6">
             <xsl:text>h6</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="concat('h',$heading-level)"/>
+            <xsl:value-of select="concat('h',$actual-heading-level)"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -2000,17 +2002,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="heading-full">
     <xsl:param name="heading-level"/>
     <xsl:variable name="hN">
-        <xsl:choose>
-            <xsl:when test="$heading-level > 6">
-                <xsl:text>h6</xsl:text>
-            </xsl:when>
-            <xsl:when test="$heading-level">
-                <xsl:value-of select="concat('h',$heading-level)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="hN"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="hN">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:element name="{$hN}">
         <xsl:attribute name="class">
@@ -2101,17 +2095,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="heading-divisional-exercise">
     <xsl:param name="heading-level"/>
     <xsl:variable name="hN">
-        <xsl:choose>
-            <xsl:when test="$heading-level > 6">
-                <xsl:text>h6</xsl:text>
-            </xsl:when>
-            <xsl:when test="$heading-level">
-                <xsl:value-of select="concat('h',$heading-level)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="hN"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="hN">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:element name="{$hN}">
         <xsl:attribute name="class">
@@ -2123,9 +2109,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </span>
         <xsl:if test="title">
             <xsl:call-template name="space-styled"/>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full" />
-            </span>
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-full" />
+                </span>
         </xsl:if>
     </xsl:element>
 </xsl:template>
@@ -2298,17 +2284,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:if test="title/*|title/text() or $has-default-title = 'true'">
         <xsl:variable name="hN">
-            <xsl:choose>
-                <xsl:when test="$heading-level > 6">
-                    <xsl:text>h6</xsl:text>
-                </xsl:when>
-                <xsl:when test="$heading-level">
-                    <xsl:value-of select="concat('h',$heading-level)"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="hN"/>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="." mode="hN">
+                <xsl:with-param name="heading-level" select="$heading-level"/>
+            </xsl:apply-templates>
         </xsl:variable>
         <xsl:element name="{$hN}">
             <xsl:attribute name="class">
