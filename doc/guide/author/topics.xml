@@ -3324,7 +3324,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
                 <p><url href="https://mermaid.js.org/" visual="mermaid.js.org">Mermaid</url> is a Markdown-inspired tool for authoring various kinds of diagrams. One kind of diagram - a git commit visualization - is shown below. For a full listing of diagram types, see the <url href="https://mermaid.js.org/intro/#diagram-types">Mermaid Documentation</url>. The <url href="https://mermaid.live/" visual="mermaid.live">Mermaid live editor</url>is a great tool for testing the syntax of your mermaid diagrams.</p>
 
-                <p>In PreTeXt, you can specify a Mermaid theme via an entry in the publication files, see <xref ref="common-mermaid"/>.</p>
+                <p>You can specify global settings for diagrams using the <attr>theme</attr> and <attr>layout-engine</attr> attributes of <tag>publisher/common/mermaid</tag>. The available options are the same as the ones available in the <c>config</c> frontmatter section of a diagram.</p>
 
                 <p>To author a Mermaid diagram, use a <tag>image</tag> that contains a <tag>mermaid</tag> element.</p>
 
@@ -3335,6 +3335,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         &lt;mermaid&gt;
                     ---
                     title: Example Git diagram
+                    config:
+                        theme: default
+                        layout dagree
                     ---
                     gitGraph
                         commit
@@ -3373,6 +3376,48 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         </mermaid>
                     </image>
                 </figure>
+
+                <p>Mermaid has two layout engines<mdash/>the default and <c>elk</c>. The ELK engine often does a better job with complex diagrams. You can specify it as a default by setting <attr>common/mermaid/@layout-engine</attr> to <c>"elk"</c>, or by using standard Mermaid config frontmatter as shown in <xref ref="figure-mermaid-elk-layout"/> below.</p>
+
+                <figure xml:id="figure-mermaid-elk-layout">
+                    <caption>Mermaid Class Diagram using ELK layout engine</caption>
+                    <image>
+                        <mermaid><![CDATA[
+                ---
+                title: Mermaid layout using ELK
+                config:
+                  layout: elk
+                ---
+                classDiagram
+                          OrderMethod <|-- Phone
+                          OrderMethod <|-- Online
+                          OrderMethod <|-- InStore
+                          PaymentMethod <|-- Cash
+                          PaymentMethod <|-- Account
+                          PaymentMethod <|-- Credit
+                          Phone <|-- CashPhone
+                          Phone <|-- AccountPhone
+                          Phone <|-- CreditPhone
+                          Online <|-- CashOnline
+                          Online <|-- AccountOnline
+                          Online <|-- CreditOnline
+                          InStore <|-- CashInStore
+                          InStore <|-- AccountInStore
+                          InStore <|-- CreditInStore
+                          Cash <|-- CashPhone
+                          Account <|-- AccountPhone
+                          Credit <|-- CreditPhone
+                          Cash <|-- CashOnline
+                          Account <|-- AccountOnline
+                          Credit <|-- CreditOnline
+                          Cash <|-- CashInStore
+                          Account <|-- AccountInStore
+                          Credit <|-- CreditInStore
+                        ]]>
+                        </mermaid>
+                    </image>
+                </figure>
+
             </subsubsection>
         </subsection>
 
