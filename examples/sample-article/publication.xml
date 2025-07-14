@@ -62,6 +62,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- 2025-06-03: "chicago-fullnote" uses footnotes/endnotes, and       -->
         <!-- therefore should throw an error as an unsupported style, and halt -->
         <!-- <citation-stylesheet-language style="chicago-fullnote-bibliography-with-ibid"/> -->
+        <!-- If desired, defaults for mermaid theme and layout engine -->
+        <!-- can be specifed. These values can be overriden in a      -->
+        <!-- diagram using config: frontmatter                        -->
+        <!-- <mermaid theme="forest" layout-engine="elk"/> -->
     </common>
 
     <!-- we use customizations-two for the oscarlevin style example -->
