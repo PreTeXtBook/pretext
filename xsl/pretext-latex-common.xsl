@@ -63,7 +63,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- early or late                          -->
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
-
+<xsl:param name="veil-reveal-in-print" select="'false'"/>
 
 <!-- ############### -->
 <!-- Source Analysis -->
@@ -1154,6 +1154,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$document-root//m/fillin|$document-root//me/fillin|$document-root//men/fillin|$document-root//mrow/fillin">
         <xsl:call-template name="fillin-math"/>
+    </xsl:if>
+    <!-- <xsl:if test="$document-root//veil">
+        <xsl:text>%% Used for hidden/revealed text (veil)&#xa;</xsl:text>
+        <xsl:text>\newcommand{\veiltext}[1]{\underline{\phantom{#1}}}&#xa;</xsl:text>
+    </xsl:if> -->
+    <!-- <xsl:if test="$document-root//veil">
+        <xsl:text>%% Used for line-wrapping underlined revealed text (veil)&#xa;</xsl:text>
+        <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\veiltext}[1]{\uline{#1}}&#xa;</xsl:text>
+    </xsl:if> -->
+    <xsl:if test="$document-root//veil">
+        <xsl:text>%% Veil support: line-wrapping underline with optional visibility&#xa;</xsl:text>
+        <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
+        <xsl:text>\usepackage{xcolor}&#xa;</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$veil-reveal-in-print = 'true'">
+                <xsl:text>\newcommand{\veiltext}[1]{\uline{#1}}&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>\newcommand{\veiltext}[1]{\uline{{\color{white} #1}}}&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:if>
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
     <xsl:if test="$document-root//swungdash">
@@ -2633,8 +2655,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+  <!-- Veil output template -->
+  <xsl:template match="veil[not(parent::m or parent::me or parent::men or parent::mrow)]">
+    <xsl:choose>
+      <xsl:when test="descendant::me or descendant::p">
+        <xsl:text>\textcolor{white}{</xsl:text>
+        <xsl:apply-templates/>
+        <xsl:text>}</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>\veiltext{</xsl:text>
+        <xsl:apply-templates/>
+        <xsl:text>}</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
-
+  <!-- Veil in math environments -->
+  <xsl:template match="veil[parent::m or parent::me or parent::men or parent::mrow]">
+    <xsl:text>\underline{</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}</xsl:text>
+  </xsl:template>
 
 <!--##################################-->
 <!-- PTX Divisions to LaTeX Divisions -->

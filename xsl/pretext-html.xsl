@@ -8615,7 +8615,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="veil[not(parent::m or parent::me or parent::men or parent::mrow)]">
-  <span class="veil-toggle">veil</span>
+  <span class="veil-toggle">reveal</span>
   <span class="veil-content">
     <xsl:apply-templates/>
   </span>
