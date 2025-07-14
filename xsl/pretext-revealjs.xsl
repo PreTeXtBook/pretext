@@ -44,6 +44,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- entry template                               -->
 <xsl:import href="pretext-html.xsl" />
 
+<!-- Disable clipboardable -->
+<xsl:template name="insert-clipboardable-class"/>
+
 <!-- HTML5 format -->
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 

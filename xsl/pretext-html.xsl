@@ -8737,6 +8737,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </code>
 </xsl:template>
 
+<xsl:template name="insert-clipboardable-class">
+    <xsl:text> clipboardable</xsl:text>
+</xsl:template>
+
 <!-- 100% analogue of LaTeX's verbatim            -->
 <!-- environment or HTML's <pre> element          -->
 <!-- TODO: center on page?                        -->
@@ -8754,7 +8758,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:element name="pre">
         <xsl:attribute name="class">
-            <xsl:text>code-display tex2jax_ignore clipboardable</xsl:text>
+            <xsl:text>code-display tex2jax_ignore</xsl:text>
+            <xsl:call-template name="insert-clipboardable-class" />
         </xsl:attribute>
         <xsl:choose>
             <xsl:when test="not(@showspaces) or (@showspaces = 'none')">
@@ -8772,7 +8777,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:element name="pre">
         <xsl:attribute name="class">
-            <xsl:text>code-display tex2jax_ignore clipboardable</xsl:text>
+            <xsl:text>code-display tex2jax_ignore</xsl:text>
+            <xsl:call-template name="insert-clipboardable-class" />
         </xsl:attribute>
         <xsl:apply-templates select="cline" />
     </xsl:element>
@@ -8794,6 +8800,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <pre>
         <xsl:attribute name="class">
             <xsl:text>code-block tex2jax_ignore</xsl:text>
+            <xsl:call-template name="insert-clipboardable-class" />
         </xsl:attribute>
         <xsl:apply-templates select="." mode="interior"/>
     </pre>
@@ -9454,7 +9461,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <pre>
             <!-- always identify as coming from "program" -->
             <xsl:attribute name="class">
-                <xsl:text>program clipboardable</xsl:text>
+                <xsl:text>program</xsl:text>
+                <xsl:call-template name="insert-clipboardable-class" />
                 <!-- conditionally request line numbers -->
                 <xsl:if test="@line-numbers = 'yes'">
                     <xsl:text> line-numbers</xsl:text>
@@ -9549,7 +9557,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An interactive command-line session with a prompt, input and output -->
 <xsl:template match="console" mode="code-inclusion">
     <!-- ignore prompt, and pick it up in trailing input -->
-    <pre class="console clipboardable">
+    <pre>
+        <xsl:attribute name="class">
+            <xsl:text>console</xsl:text>
+            <xsl:call-template name="insert-clipboardable-class" />
+        </xsl:attribute>
         <xsl:apply-templates select="input|output"/>
     </pre>
 </xsl:template>

@@ -186,6 +186,9 @@
 
 <xsl:variable name="b-endnotes-have-math" select="$endnotes-have-math = 'true'"/>
 
+<!-- Disable clipboardable -->
+<xsl:template name="insert-clipboardable-class"/>
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
