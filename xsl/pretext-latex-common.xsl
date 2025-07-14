@@ -1155,15 +1155,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//m/fillin|$document-root//me/fillin|$document-root//men/fillin|$document-root//mrow/fillin">
         <xsl:call-template name="fillin-math"/>
     </xsl:if>
-    <!-- <xsl:if test="$document-root//veil">
-        <xsl:text>%% Used for hidden/revealed text (veil)&#xa;</xsl:text>
-        <xsl:text>\newcommand{\veiltext}[1]{\underline{\phantom{#1}}}&#xa;</xsl:text>
-    </xsl:if> -->
-    <!-- <xsl:if test="$document-root//veil">
-        <xsl:text>%% Used for line-wrapping underlined revealed text (veil)&#xa;</xsl:text>
-        <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\veiltext}[1]{\uline{#1}}&#xa;</xsl:text>
-    </xsl:if> -->
     <xsl:if test="$document-root//veil">
         <xsl:text>%% Veil support: line-wrapping underline with optional visibility&#xa;</xsl:text>
         <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
