@@ -10189,25 +10189,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-veil-testing">
             <title>Veil Element Testing</title>
             
-            <p>
-                The function <veil><m>f(t) = e^{-t}</m></veil> satisfies the differential equation 
-                <me>f'(t) = -f(t)</me>, 
-                which is characteristic of <veil>exponential</veil> decay.
-            </p>
+            <p>The function <veil><m>f(t) = e^{-t}</m></veil> satisfies the differential equation <me>f'(t) = -f(t)</me>, which is characteristic of <veil>exponential</veil> decay.</p>
+
+            <p>This sentence contains a <veil>simple hidden phrase</veil> and continues normally.</p>
+
+            <p>Here is a veil wrapping <veil><em>emphasized hidden text</em></veil> within an emphasized span.</p>
+
+            <p>You can also hide <veil>inline math like <m>f(t) = e^{-t}</m></veil> without breaking the flow.</p>
 
             <p>
-                This sentence contains a <veil>simple hidden phrase</veil> and continues normally.
-            </p>
-
-            <p>
-                Here is a veil wrapping <veil><em>emphasized hidden text</em></veil> within an emphasized span.
-            </p>
-
-            <p>
-                You can also hide <veil>inline math like <m>f(t) = e^{-t}</m></veil> without breaking the flow.
-            </p>
-
-            <p> 
                 Testing long text. Looks bad in print, but should be fine in HTML: 
                 <veil>
                     This is a very long phrase that includes <em>emphasis</em>, 
@@ -10225,20 +10215,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </veil>
             </p>
 
-            <p>
-                Multiple consecutive veils: <fillin> \cos(t) </fillin>
-                <veil>first hidden</veil>, then some regular text, and <veil>second hidden part</veil>.
-            </p>
+            <p>Multiple consecutive veils: <veil>first hidden</veil>, then some regular text, and <veil>second hidden part</veil>.</p>
 
-            <veil>
-                <me>
-                    h(t) = \int \sin(t)\ dt
-                </me>
-            </veil>
+            <veil><me>h(x) = \int_0^x \sin(t)\ dt</me></veil>
 
-            <p>
-                Final test: a veil at the <veil>end of the sentence</veil>.
-            </p>
+            <p>Final test: a veil at the <veil>end of the sentence</veil>.</p>
 
         </section>
 
