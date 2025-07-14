@@ -1227,16 +1227,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="html-id-attribute"/>
         </xsl:if>
         <xsl:if test="title">
-            <xsl:variable name="hN">
-                <xsl:apply-templates select="." mode="hN"/>
-            </xsl:variable>
-            <xsl:element name="{$hN}">
-                <xsl:attribute name="class">
-                    <xsl:text>heading</xsl:text>
-                </xsl:attribute>
-                <xsl:apply-templates select="." mode="title-full" />
-                <span> </span>
-            </xsl:element>
+            <xsl:apply-templates select="." mode="heading-generic">
+                <xsl:with-param name="heading-title">
+                    <xsl:apply-templates select="." mode="title-full" />
+                    <span> </span>
+                </xsl:with-param>
+            </xsl:apply-templates>
         </xsl:if>
         <xsl:apply-templates select="*">
             <xsl:with-param name="b-original" select="$b-original" />
@@ -1362,23 +1358,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="duplicate-heading">
     <xsl:param name="heading-level"/>
     <xsl:param name="heading-stack" select="."/>
-    <xsl:variable name="hN">
-        <xsl:apply-templates select="." mode="hN">
-            <xsl:with-param name="heading-level" select="$heading-level"/>
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="extra-heading-classes">
             <xsl:if test="not(self::chapter) or ($numbering-maxlevel = 0)">
                 <xsl:text> hide-type</xsl:text>
             </xsl:if>
-        </xsl:attribute>
-        <xsl:attribute name="title">
+        </xsl:with-param>
+        <xsl:with-param name="heading-attr-title">
             <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
-        <xsl:apply-templates select="$heading-stack" mode="duplicate-heading-content"/>
-    </xsl:element>
+        </xsl:with-param>
+        <xsl:with-param name="heading-title">
+            <xsl:apply-templates select="$heading-stack" mode="duplicate-heading-content"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="*" mode="duplicate-heading-content">
@@ -2001,47 +1994,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- E.g. Corollary 4.1 (Leibniz, Newton).  The fundamental theorem of calculus. -->
 <xsl:template match="*" mode="heading-full">
     <xsl:param name="heading-level"/>
-    <xsl:variable name="hN">
-        <xsl:apply-templates select="." mode="hN">
-            <xsl:with-param name="heading-level" select="$heading-level"/>
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <span class="type">
-            <xsl:apply-templates select="." mode="type-name"/>
-        </span>
-        <!--  -->
-        <xsl:variable name="the-number">
-            <xsl:apply-templates select="." mode="number" />
-        </xsl:variable>
-        <xsl:if test="not($the-number='')">
-            <xsl:call-template name="space-styled"/>
-            <span class="codenumber">
-                <xsl:value-of select="$the-number"/>
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="heading-title">
+            <span class="type">
+                <xsl:apply-templates select="." mode="type-name"/>
             </span>
-        </xsl:if>
-        <!--  -->
-        <xsl:if test="creator and (&THEOREM-FILTER; or &AXIOM-FILTER;)">
-            <xsl:call-template name="space-styled"/>
-            <span class="creator">
-                <xsl:text>(</xsl:text>
-                <xsl:apply-templates select="." mode="creator-full"/>
-                <xsl:text>)</xsl:text>
-            </span>
-        </xsl:if>
-        <!-- A period now, no matter which of 4 combinations we have above-->
-        <xsl:call-template name="period-styled"/>
-        <!-- A title carries its own punctuation -->
-        <xsl:if test="title">
-            <xsl:call-template name="space-styled"/>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full"/>
-            </span>
-        </xsl:if>
-    </xsl:element>
+            <!--  -->
+            <xsl:variable name="the-number">
+                <xsl:apply-templates select="." mode="number" />
+            </xsl:variable>
+            <xsl:if test="not($the-number='')">
+                <xsl:call-template name="space-styled"/>
+                <span class="codenumber">
+                    <xsl:value-of select="$the-number"/>
+                </span>
+            </xsl:if>
+            <!--  -->
+            <xsl:if test="creator and (&THEOREM-FILTER; or &AXIOM-FILTER;)">
+                <xsl:call-template name="space-styled"/>
+                <span class="creator">
+                    <xsl:text>(</xsl:text>
+                    <xsl:apply-templates select="." mode="creator-full"/>
+                    <xsl:text>)</xsl:text>
+                </span>
+            </xsl:if>
+            <!-- A period now, no matter which of 4 combinations we have above-->
+            <xsl:call-template name="period-styled"/>
+            <!-- A title carries its own punctuation -->
+            <xsl:if test="title">
+                <xsl:call-template name="space-styled"/>
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </span>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="figure|listing|table|list" mode="figure-caption">
@@ -2089,105 +2077,117 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </figcaption>
 </xsl:template>
 
-
-<!-- hN, no type name, full number, title (if exists)   -->
-<!-- divisional exercise, principally for solution list -->
-<xsl:template match="*" mode="heading-divisional-exercise">
+<!-- hN generic: Helper for other hN constructs.                                                    -->
+<!-- heading-level: Inherited from caller, determines the N                                         -->
+<!-- heading-title: The actual text, including any numbering                                        -->
+<!-- heading-attr-title: If provided, a title attribute will be created on the hN tag               -->
+<!-- extra-heading-classes: Added to the default "heading" class on the hN tag                      -->
+<xsl:template match="*" mode="heading-generic">
     <xsl:param name="heading-level"/>
+    <xsl:param name="heading-title"/>
+    <xsl:param name="heading-attr-title"/>
+    <xsl:param name="extra-heading-classes"/>
     <xsl:variable name="hN">
         <xsl:apply-templates select="." mode="hN">
-            <xsl:with-param name="heading-level" select="$heading-level"/>
+            <xsl:with-param name="heading-level" select="$heading-level" />
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:element name="{$hN}">
         <xsl:attribute name="class">
             <xsl:text>heading</xsl:text>
+            <xsl:value-of select="$extra-heading-classes"/>
         </xsl:attribute>
-        <span class="codenumber">
-            <xsl:apply-templates select="." mode="number" />
-            <xsl:call-template name="period-styled"/>
-        </span>
-        <xsl:if test="title">
-            <xsl:call-template name="space-styled"/>
+        <xsl:if test="$heading-attr-title">
+            <xsl:attribute name="title">
+                <xsl:value-of select="$heading-attr-title"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:copy-of select="$heading-title"/>
+    </xsl:element>
+</xsl:template>
+
+
+<!-- hN, no type name, full number, title (if exists)   -->
+<!-- divisional exercise, principally for solution list -->
+<xsl:template match="*" mode="heading-divisional-exercise">
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="heading-title">
+            <span class="codenumber">
+                <xsl:apply-templates select="." mode="number" />
+                <xsl:call-template name="period-styled"/>
+            </span>
+            <xsl:if test="title">
+                <xsl:call-template name="space-styled"/>
                 <span class="title">
                     <xsl:apply-templates select="." mode="title-full" />
                 </span>
-        </xsl:if>
-    </xsl:element>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- hN, no type name, serial number, title (if exists) -->
 <!-- divisional exercise, principally when born         -->
 <xsl:template match="*" mode="heading-divisional-exercise-serial">
-    <xsl:variable name="hN">
-        <xsl:apply-templates select="." mode="hN"/>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <span class="codenumber">
-            <xsl:apply-templates select="." mode="serial-number" />
-            <xsl:call-template name="period-styled"/>
-        </span>
-        <xsl:if test="title">
-            <xsl:call-template name="space-styled"/>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full" />
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-title">
+            <span class="codenumber">
+                <xsl:apply-templates select="." mode="serial-number" />
+                <xsl:call-template name="period-styled"/>
             </span>
-        </xsl:if>
-    </xsl:element>
+            <xsl:if test="title">
+                <xsl:call-template name="space-styled"/>
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-full" />
+                </span>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- hN, type name, serial number, title (if exists) -->
 <!-- exercise (divisional, xref-content)      -->
 <xsl:template match="*" mode="heading-divisional-exercise-typed">
-    <xsl:variable name="hN">
-        <xsl:apply-templates select="." mode="hN"/>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <span class="type">
-            <xsl:apply-templates select="." mode="type-name" />
-        </span>
-        <xsl:call-template name="space-styled"/>
-        <span class="codenumber">
-            <xsl:apply-templates select="." mode="serial-number" />
-            <xsl:call-template name="period-styled"/>
-        </span>
-        <xsl:if test="title">
-            <xsl:call-template name="space-styled"/>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full" />
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-title">
+            <span class="type">
+                <xsl:apply-templates select="." mode="type-name" />
             </span>
-        </xsl:if>
-    </xsl:element>
+            <xsl:call-template name="space-styled"/>
+            <span class="codenumber">
+                <xsl:apply-templates select="." mode="serial-number" />
+                <xsl:call-template name="period-styled"/>
+            </span>
+            <xsl:if test="title">
+                <xsl:call-template name="space-styled"/>
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-full" />
+                </span>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- hN, no type name, just simple list number, no title -->
 <!-- task (when born) -->
 <xsl:template match="*" mode="heading-list-number">
-    <xsl:variable name="hN">
-        <xsl:apply-templates select="." mode="hN"/>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <span class="codenumber">
-            <xsl:text>(</xsl:text>
-            <xsl:apply-templates select="." mode="list-number" />
-            <xsl:text>)</xsl:text>
-        </span>
-        <xsl:if test="title">
-            <xsl:call-template name="space-styled"/>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-title">
+            <span class="codenumber">
+                <xsl:text>(</xsl:text>
+                <xsl:apply-templates select="." mode="list-number" />
+                <xsl:text>)</xsl:text>
             </span>
-        </xsl:if>
-    </xsl:element>
+            <xsl:if test="title">
+                <xsl:call-template name="space-styled"/>
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </span>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- hN, type name, no number (even if exists), title (if exists)              -->
@@ -2195,80 +2195,68 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: rather specific to "objectives" and "outcomes", careful               -->
 <!-- objectives and outcomes (when born) -->
 <xsl:template match="*" mode="heading-full-implicit-number">
-    <xsl:variable name="hN">
-        <xsl:apply-templates select="." mode="hN"/>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <span class="type">
-            <xsl:apply-templates select="." mode="type-name" />
-            <xsl:if test="title">
-                <xsl:call-template name="dividing-string-styled">
-                    <xsl:with-param name="divider" select="':'"/>
-                    <xsl:with-param name="name" select="'colon'"/>
-                </xsl:call-template>
-            </xsl:if>
-        </span>
-        <!-- codenumber is implicit via placement -->
-        <xsl:if test="title">
-            <xsl:call-template name="space-styled"/>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full" />
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-title">
+            <span class="type">
+                <xsl:apply-templates select="." mode="type-name" />
+                <xsl:if test="title">
+                    <xsl:call-template name="dividing-string-styled">
+                        <xsl:with-param name="divider" select="':'"/>
+                        <xsl:with-param name="name" select="'colon'"/>
+                    </xsl:call-template>
+                </xsl:if>
             </span>
-        </xsl:if>
-    </xsl:element>
+            <!-- codenumber is implicit via placement -->
+            <xsl:if test="title">
+                <xsl:call-template name="space-styled"/>
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-full" />
+                </span>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Not normally titled, but knowl content gives some indication -->
 <!-- NB: no punctuation, intended only for xref knowl content     -->
 <!-- blockquote, exercisegroup, defined term -->
 <xsl:template match="*" mode="heading-type">
-    <xsl:variable name="hN">
-        <xsl:apply-templates select="." mode="hN"/>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <span class="type">
-            <xsl:apply-templates select="." mode="type-name" />
-        </span>
-    </xsl:element>
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-title">
+            <span class="type">
+                <xsl:apply-templates select="." mode="type-name" />
+            </span>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- A title or the type, with a period   -->
 <!-- PROOF-LIKE. interactive/instructions -->
 <xsl:template match="&PROOF-LIKE;|interactive/instructions" mode="heading-no-number">
-    <xsl:variable name="hN">
-        <xsl:apply-templates select="." mode="hN"/>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <xsl:choose>
-            <xsl:when test="title">
-                <!-- comes with punctuation -->
-                <span class="title">
-                    <xsl:apply-templates select="." mode="title-full"/>
-                </span>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- supply a period -->
-                <span class="type">
-                    <xsl:apply-templates select="." mode="type-name" />
-                    <xsl:call-template name="period-styled"/>
-                </span>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:if test="@ref">
-            <xsl:text>&#xa0;(</xsl:text>
-            <xsl:apply-templates select="." mode="proof-xref-theorem"/>
-            <xsl:text>)</xsl:text>
-        </xsl:if>
-    </xsl:element>
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-title">
+            <xsl:choose>
+                <xsl:when test="title">
+                    <!-- comes with punctuation -->
+                    <span class="title">
+                        <xsl:apply-templates select="." mode="title-full"/>
+                    </span>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- supply a period -->
+                    <span class="type">
+                        <xsl:apply-templates select="." mode="type-name" />
+                        <xsl:call-template name="period-styled"/>
+                    </span>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="@ref">
+                <xsl:text>&#xa0;(</xsl:text>
+                <xsl:apply-templates select="." mode="proof-xref-theorem"/>
+                <xsl:text>)</xsl:text>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Title only -->
@@ -2283,19 +2271,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="has-default-title"/>
     </xsl:variable>
     <xsl:if test="title/*|title/text() or $has-default-title = 'true'">
-        <xsl:variable name="hN">
-            <xsl:apply-templates select="." mode="hN">
-                <xsl:with-param name="heading-level" select="$heading-level"/>
-            </xsl:apply-templates>
-        </xsl:variable>
-        <xsl:element name="{$hN}">
-            <xsl:attribute name="class">
-                <xsl:text>heading</xsl:text>
-            </xsl:attribute>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full" />
-            </span>
-        </xsl:element>
+        <xsl:apply-templates select="." mode="heading-generic">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+            <xsl:with-param name="heading-title">
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-full" />
+                </span>
+            </xsl:with-param>
+        </xsl:apply-templates>
     </xsl:if>
 </xsl:template>
 
@@ -2304,17 +2287,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: titles will be mandatory sometime -->
 <xsl:template match="*" mode="heading-title-paragraphs">
     <xsl:if test="title/*|title/text()">
-        <xsl:variable name="hN">
-            <xsl:apply-templates select="." mode="hN"/>
-        </xsl:variable>
-        <xsl:element name="{$hN}">
-            <xsl:attribute name="class">
-                <xsl:text>heading</xsl:text>
-            </xsl:attribute>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full" />
-            </span>
-        </xsl:element>
+        <xsl:apply-templates select="." mode="heading-generic">
+            <xsl:with-param name="heading-title">
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-full" />
+                </span>
+            </xsl:with-param>
+        </xsl:apply-templates>
     </xsl:if>
 </xsl:template>
 
@@ -2359,40 +2338,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A title or the type, with a period, and an optional number -->
 <!-- &SOLUTION-LIKE;, when unknowled, is the only known case    -->
 <xsl:template match="*" mode="heading-non-singleton-number">
-    <xsl:variable name="hN">
-        <xsl:apply-templates select="." mode="hN"/>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <xsl:choose>
-            <xsl:when test="title">
-                <!-- comes with punctuation -->
-                <span class="title">
-                    <xsl:apply-templates select="." mode="title-full"/>
-                </span>
-            </xsl:when>
-            <xsl:otherwise>
-                <span class="type">
-                    <xsl:apply-templates select="." mode="type-name" />
-                </span>
-                <xsl:variable name="the-number">
-                    <xsl:apply-templates select="." mode="non-singleton-number" />
-                </xsl:variable>
-                <!-- An empty value means element is a singleton -->
-                <!-- else the serial number comes through        -->
-                <xsl:if test="not($the-number = '')">
-                    <xsl:call-template name="space-styled"/>
-                    <span class="codenumber">
-                        <xsl:apply-templates select="." mode="serial-number" />
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-title">
+            <xsl:choose>
+                <xsl:when test="title">
+                    <!-- comes with punctuation -->
+                    <span class="title">
+                        <xsl:apply-templates select="." mode="title-full"/>
                     </span>
-                </xsl:if>
-                <!-- supply a period -->
-                <xsl:call-template name="period-styled"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:element>
+                </xsl:when>
+                <xsl:otherwise>
+                    <span class="type">
+                        <xsl:apply-templates select="." mode="type-name" />
+                    </span>
+                    <xsl:variable name="the-number">
+                        <xsl:apply-templates select="." mode="non-singleton-number" />
+                    </xsl:variable>
+                    <!-- An empty value means element is a singleton -->
+                    <!-- else the serial number comes through        -->
+                    <xsl:if test="not($the-number = '')">
+                        <xsl:call-template name="space-styled"/>
+                        <span class="codenumber">
+                            <xsl:apply-templates select="." mode="serial-number" />
+                        </span>
+                    </xsl:if>
+                    <!-- supply a period -->
+                    <xsl:call-template name="period-styled"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- A case in a PROOF-LIKE, eg "(=>) Necessity." -->
@@ -2419,22 +2394,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- case -->
 <xsl:template match="*" mode="heading-case">
-    <xsl:variable name="hN">
-        <xsl:apply-templates select="." mode="hN"/>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <!-- optional direction, given by attribute -->
-        <xsl:apply-templates select="." mode="case-direction" />
-        <!-- If there is a title, the following will produce it. If -->
-        <!-- no title, and we don't have a direction already, the   -->
-        <!-- following will produce a default title, eg "Case."     -->
-        <xsl:if test="boolean(title) or not(@direction)">
-            <xsl:apply-templates select="." mode="title-full" />
-        </xsl:if>
-    </xsl:element>
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-title">
+            <!-- optional direction, given by attribute -->
+            <xsl:apply-templates select="." mode="case-direction" />
+            <!-- If there is a title, the following will produce it. If -->
+            <!-- no title, and we don't have a direction already, the   -->
+            <!-- following will produce a default title, eg "Case."     -->
+            <xsl:if test="boolean(title) or not(@direction)">
+                <xsl:apply-templates select="." mode="title-full" />
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading Utilities -->
@@ -4915,21 +4886,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="fragment" mode="heading-birth">
-    <xsl:variable name="hN">
-        <xsl:apply-templates select="." mode="hN"/>
-    </xsl:variable>
-    <xsl:element name="{$hN}">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
-        <xsl:call-template name="langle-character"/>
-        <xsl:apply-templates select="." mode="number"/>
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="." mode="title-full"/>
-        <xsl:call-template name="rangle-character"/>
-        <!--  U+2261 ≡ IDENTICAL TO -->
-        <xsl:text> &#x2261;</xsl:text>
-    </xsl:element>
+    <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-title">
+            <xsl:call-template name="langle-character"/>
+            <xsl:apply-templates select="." mode="number"/>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+            <xsl:call-template name="rangle-character"/>
+            <!--  U+2261 ≡ IDENTICAL TO -->
+            <xsl:text> &#x2261;</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
     <xsl:if test="@filename">
         <xsl:text>Root of file: </xsl:text>
         <xsl:value-of select="@filename"/>
@@ -5564,16 +5531,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="html-id-attribute"/>
         </xsl:if>
         <xsl:if test="title">
-            <xsl:variable name="hN">
-                <xsl:apply-templates select="." mode="hN"/>
-            </xsl:variable>
-            <xsl:element name="{$hN}">
-                <xsl:attribute name="class">
-                    <xsl:text>heading</xsl:text>
-                </xsl:attribute>
-                <xsl:apply-templates select="." mode="title-full" />
-                <span> </span>
-            </xsl:element>
+            <xsl:apply-templates select="." mode="heading-generic">
+                <xsl:with-param name="heading-title">
+                    <xsl:apply-templates select="." mode="title-full" />
+                    <span> </span>
+                </xsl:with-param>
+            </xsl:apply-templates>
         </xsl:if>
         <xsl:apply-templates select="*">
             <xsl:with-param name="b-original" select="$b-original" />
