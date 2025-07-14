@@ -2901,19 +2901,18 @@ form.papersize-select {
   }
   section.worksheet {
     border: none;
-  }
-  .worksheet {
     width: 100%;
   }
-  .onepage {
+  section.worksheet .onepage {
+    margin-top: 0;
     width: 100%;
     height: var(--ws-content-height);
     overflow: hidden;
     page-break-after: always;
     page-break-inside: avoid;
   }
-  .onepage div.workspace,
-  .onepage div.workspace.squashed.tight {
+  section.worksheet div.workspace,
+  section.worksheet div.workspace.squashed.tight {
     border: none;
     padding: 0;
     background: none !important;
