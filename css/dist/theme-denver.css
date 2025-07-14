@@ -740,29 +740,34 @@ body.pretext > a.assistive:focus {
     height: 2em;
   }
 }
-.ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile),
-.tabular-box {
-  width: calc(100cqw - 40px);
-  max-width: unset;
-  margin-left: calc(-0.5 * (100cqw - 640px));
+@container ptx-main (width > 640px) {
+  .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
+    --max-width: calc(min((100cqw - 2 * 20px), 10000px));
+    min-width: 100%;
+    width: var(--max-width);
+    max-width: var(--max-width);
+    margin-left: calc(-0.5 * (100cqw - 640px));
+  }
 }
-.ptx-runestone-container .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile),
-.ptx-runestone-container .tabular-box {
+.ptx-runestone-container .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
   width: 100%;
   min-width: 100%;
   margin-left: auto;
 }
-:is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .tabular-box) {
-  width: calc(100cqw - 40px);
-  max-width: unset;
-  margin-left: calc(-0.5 * (100cqw - 640px));
+@container ptx-main (width > 640px) {
+  :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
+    --max-width: calc(min((100cqw - 2 * 20px), 10000px));
+    min-width: 100%;
+    width: var(--max-width);
+    max-width: var(--max-width);
+    margin-left: calc(-0.5 * (100cqw - 640px));
+  }
 }
-:is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .tabular-box) :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .tabular-box) {
+:is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
   width: 100%;
   margin-left: auto;
 }
-:is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content) .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile),
-:is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content) .tabular-box {
+:is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content) .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
   width: 100%;
   margin-left: 0;
 }
@@ -800,18 +805,17 @@ body.pretext > a.assistive:focus {
   margin-right: auto;
 }
 @media (width < 850px) {
-  .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile),
-  .tabular-box {
+  .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
     width: 100cqw;
     margin-left: calc(-0.5 * (100cqw - 100%));
   }
-  :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .tabular-box) {
+  :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
     width: 100cqw;
     margin-left: calc(-0.5 * (100cqw - 100%));
   }
-  :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content, .tabular-box) .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, .tabular-box) {
-    width: calc(100% + 10px);
-    margin-left: -5px;
+  :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content) .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
+    width: 100%;
+    margin-left: 0px;
   }
 }
 .ptx-main {
@@ -3655,6 +3659,24 @@ label.incorrect .feedback {
   .calculator-container {
     bottom: 50px !important;
   }
+}
+:is(.chapter, .section, .subsection, .subsubsection) > .tabular-box,
+:is(.chapter, .section, .subsection, .subsubsection) > .table > .tabular-box {
+  overflow-x: auto;
+}
+@container ptx-main (width > 640px) {
+  :is(.chapter, .section, .subsection, .subsubsection) > .tabular-box,
+  :is(.chapter, .section, .subsection, .subsubsection) > .table > .tabular-box {
+    --max-width: calc(min((100cqw - 2 * 20px), 10000px));
+    min-width: 100%;
+    width: var(--max-width);
+    max-width: var(--max-width);
+    margin-left: calc(-0.5 * (100cqw - 640px));
+  }
+}
+figure.table-like {
+  margin-left: 0px;
+  margin-right: 0px;
 }
 :root {
   --font-body:

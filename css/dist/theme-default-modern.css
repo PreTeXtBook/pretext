@@ -3448,15 +3448,19 @@ section > h3.heading {
 :root.dark-mode section > .heading {
   border-bottom-color: var(--primary-color-black-30);
 }
+.displaymath {
+  overflow-x: auto;
+}
 @container ptx-main (width > 696px) {
   .displaymath {
     --max-width: calc(min((100cqw - 2 * 48px), 900px));
     min-width: 100%;
     width: fit-content;
     max-width: var(--max-width);
-    overflow-x: auto;
-    overflow-y: hidden;
   }
+}
+.code-display {
+  overflow-x: auto;
 }
 @container ptx-main (width > 696px) {
   .code-display {
@@ -3464,9 +3468,10 @@ section > h3.heading {
     min-width: 100%;
     width: fit-content;
     max-width: var(--max-width);
-    overflow-x: auto;
-    overflow-y: hidden;
   }
+}
+.ptx-runestone-container:has(.parsons_section, .ac_section, .codelens) {
+  overflow-x: auto;
 }
 @container ptx-main (width > 696px) {
   .ptx-runestone-container:has(.parsons_section, .ac_section, .codelens) {
@@ -3474,9 +3479,10 @@ section > h3.heading {
     min-width: 100%;
     width: var(--max-width);
     max-width: var(--max-width);
-    overflow-x: auto;
-    overflow-y: hidden;
   }
+}
+.tabular-box {
+  overflow-x: auto;
 }
 @container ptx-main (width > 696px) {
   .tabular-box {
@@ -3484,8 +3490,6 @@ section > h3.heading {
     min-width: 100%;
     width: fit-content;
     max-width: var(--max-width);
-    overflow-x: auto;
-    overflow-y: hidden;
   }
 }
 :root {

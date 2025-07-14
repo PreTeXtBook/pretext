@@ -3291,15 +3291,19 @@ section > *:not(:first-child) {
 article > *:not(:first-child):has(.heading) {
   margin-top: 1.5em;
 }
+.displaymath {
+  overflow-x: auto;
+}
 @container ptx-main (width > 696px) {
   .displaymath {
     --max-width: calc(min((100cqw - 2 * 48px), 900px));
     min-width: 100%;
     width: fit-content;
     max-width: var(--max-width);
-    overflow-x: auto;
-    overflow-y: hidden;
   }
+}
+.code-display {
+  overflow-x: auto;
 }
 @container ptx-main (width > 696px) {
   .code-display {
@@ -3307,9 +3311,10 @@ article > *:not(:first-child):has(.heading) {
     min-width: 100%;
     width: fit-content;
     max-width: var(--max-width);
-    overflow-x: auto;
-    overflow-y: hidden;
   }
+}
+.tabular-box {
+  overflow-x: auto;
 }
 @container ptx-main (width > 696px) {
   .tabular-box {
@@ -3317,8 +3322,6 @@ article > *:not(:first-child):has(.heading) {
     min-width: 100%;
     width: fit-content;
     max-width: var(--max-width);
-    overflow-x: auto;
-    overflow-y: hidden;
   }
 }
 :root {
