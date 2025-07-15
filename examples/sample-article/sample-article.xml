@@ -926,7 +926,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <case direction="cycle">
                         <p>Does the first statement imply the second?</p>
                         </case>
-                        
+
                     <case direction="cycle">
                         <title>The <q>middle</q> case</title>
                         <p>Does the second statement imply the third?</p>
@@ -15563,9 +15563,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <exercisegroup workspace="0.25in">
                     <introduction>
-                        <p>
-                            Now with one column, do things to the following.
-                        </p>
+                        <title>Title of introduction of an exercise group</title>
+                        <statement>
+                            <p>
+                                Now with one column, do things to the following.
+                            </p>
+                        </statement>
                     </introduction>
                     <exercise>
                         <statement>
