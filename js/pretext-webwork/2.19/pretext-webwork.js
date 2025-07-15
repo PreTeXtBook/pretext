@@ -401,8 +401,7 @@ async function handleWW(ww_id, action) {
         }
 
         iframeContents +=
-            '<link rel="stylesheet" href="_static/pretext/css/pretext_add_on.css"/>' +
-            '<link rel="stylesheet" href="_static/pretext/css/knowls_default.css"/>' +
+            '<link rel="stylesheet" href="_static/pretext/css/theme.css"/>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.contentWindow.min.js"></script>' +
             `<style>
                 html { overflow-y: hidden; }
