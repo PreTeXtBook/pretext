@@ -12924,6 +12924,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
+        <section xml:id="literate-programming" label="literate-programming">
+            <title>Literate Programming</title>
+            <p>There is support for literate programming using the <tag>fragment</tag> tag. It should always contain an <attr>@xml:id</attr> or a <attr>@filename</attr> attribute, and may contain <tag>code</tag> segments as well as <tag>fragref</tag> segments referencing other fragments. The final code is to be assembled starting from a fragment with a filename attribute and traversing the tree of fragment references.</p>
+            <p>For example here is the gcd algorithm in Python. Note that indentation is hard to get right at the moment.</p>
+            <fragment filename="gcd.py">
+                <title>The GCD algorithm</title>
+                <code>
+                    def gcd(a, b):
+                        while(b):
+                </code>
+                <fragref ref="gcd-loop" />
+                <code>                        return a</code>
+            </fragment>
+            <p>The key part is the inner part of the loop</p>:
+            <fragment xml:id="gcd-loop">
+                <title>The key loop part</title>
+                <code>
+                            a, b = b, a % b
+                </code>
+            </fragment>
+            <p>This double assignment changes both a and b.</p>
+        </section>
         <section xml:id="atomic-items" label="section-atomic-items">
             <title>Atomic Objects</title>
 
