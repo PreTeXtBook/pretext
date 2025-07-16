@@ -13617,6 +13617,11 @@ TODO:
             </xsl:choose>
         </xsl:attribute>
     </xsl:if>
+    <xsl:if test="not($b-theme-has-darkmode)">
+        <xsl:attribute name="data-darkmode">
+            <xsl:text>disabled</xsl:text>
+        </xsl:attribute>
+    </xsl:if>
 </xsl:template>
 
 <!-- Treated as characters, these could show up often, -->
