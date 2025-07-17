@@ -2576,8 +2576,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-managed-directories">
             <xsl:text>trace/</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="visible-id"/>
-        <xsl:text>.js</xsl:text>
+        <xsl:apply-templates select="." mode="runestone-codelens-trace-filename"/>
     </xsl:variable>
     <!-- the Runestone HTML -->
     <div class="ptx-runestone-container">
