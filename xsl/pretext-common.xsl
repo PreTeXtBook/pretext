@@ -3733,6 +3733,24 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- Need a unique filename for codelens traces                                -->
+<!-- visible-id can change if an xml:id is added to program for other reasons  -->
+<!-- Can't vary with build target (so no runestone-id)                         -->
+<!-- Should generally mirror rs-id but without prefix                          -->
+<xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens-trace-filename">
+    <xsl:choose>
+        <!-- If part of exercise-like, use that label, otherwise own                -->
+        <!-- This is an implicit use of &PROJECT-LIKE; and should be kept in sync   -->
+        <xsl:when test="parent::exercise|parent::task|parent::project|parent::activity|parent::exploration|parent::investigation">
+            <xsl:value-of select="../@unique-id"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@unique-id"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>.js</xsl:text>
+</xsl:template>
+
 <!--            -->
 <!-- Long Names -->
 <!--            -->
