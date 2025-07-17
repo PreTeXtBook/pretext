@@ -3703,7 +3703,8 @@ Book (with parts), "section" at level 3
 <!-- We want to associate those programs with the label on their container -->
 <!-- and NOT with an auto-generated label on the program itself that might -->
 <!-- come from an @xml:id.                                                 -->
-<xsl:template match="exercise/program" mode="runestone-id">
+<!-- This is an implicit use of &PROJECT-LIKE; and should be kept in sync  -->
+<xsl:template match="exercise/program|task/program|project/program|activity/program|exploration/program|investigation/program" mode="runestone-id">
     <xsl:variable name="label">
         <xsl:value-of select="../@label"/>
     </xsl:variable>
