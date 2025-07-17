@@ -1356,9 +1356,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- calls the "duplicate-heading" modal template.           -->
 
 <xsl:template match="*" mode="duplicate-heading">
+    <!-- If we default b-make-link to true() we could make -->
+    <!-- section headings that appear in solutions into    -->
+    <!-- backlinks to the corresponding sections. As it is -->
+    <!-- only exercises etc become backlinks.              -->
+    <xsl:param name="b-make-link" select="false()"/>
     <xsl:param name="heading-level"/>
     <xsl:param name="heading-stack" select="."/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="b-make-link" select="$b-make-link"/>
         <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="extra-heading-classes">
             <xsl:if test="not(self::chapter) or ($numbering-maxlevel = 0)">
@@ -1993,8 +1999,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- REMARK-LIKE, COMPUTATION-LIKE, DEFINITION-LIKE, SOLUTION-LIKE, objectives (xref-content), outcomes (xref-content), EXAMPLE-LIKE, PROJECT-LIKE, OPENPROBLEM-LIKE, exercise (inline), task (xref-content), fn (xref-content), biblio/note (xref-content)-->
 <!-- E.g. Corollary 4.1 (Leibniz, Newton).  The fundamental theorem of calculus. -->
 <xsl:template match="*" mode="heading-full">
+    <xsl:param name="b-make-link" select="false()"/>
     <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="b-make-link" select="$b-make-link"/>
         <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
             <span class="type">
@@ -2082,11 +2090,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- heading-title: The actual text, including any numbering                                        -->
 <!-- heading-attr-title: If provided, a title attribute will be created on the hN tag               -->
 <!-- extra-heading-classes: Added to the default "heading" class on the hN tag                      -->
+<!-- b-make-link: Whether to turn the heading into a link to its origin. Used in solutions sections -->
 <xsl:template match="*" mode="heading-generic">
     <xsl:param name="heading-level"/>
     <xsl:param name="heading-title"/>
     <xsl:param name="heading-attr-title"/>
     <xsl:param name="extra-heading-classes"/>
+    <xsl:param name="b-make-link" select="false()" />
     <xsl:variable name="hN">
         <xsl:apply-templates select="." mode="hN">
             <xsl:with-param name="heading-level" select="$heading-level" />
@@ -2102,7 +2112,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$heading-attr-title"/>
             </xsl:attribute>
         </xsl:if>
-        <xsl:copy-of select="$heading-title"/>
+        <xsl:choose>
+            <xsl:when test="$b-make-link">
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:apply-templates select="." mode="url"/>
+                    </xsl:attribute>
+                    <xsl:copy-of select="$heading-title"/>
+                </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="$heading-title"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:element>
 </xsl:template>
 
@@ -2110,8 +2132,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hN, no type name, full number, title (if exists)   -->
 <!-- divisional exercise, principally for solution list -->
 <xsl:template match="*" mode="heading-divisional-exercise">
+    <xsl:param name="b-make-link" select="false()" />
     <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="b-make-link" select="$b-make-link" />
         <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
             <span class="codenumber">
@@ -3594,6 +3618,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- Used when headings are created in solutions sections, to make them backlinks -->
+<xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="heading-solutions">
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="b-make-link" select="true()"/>
+    </xsl:apply-templates>
+</xsl:template>
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="heading-solutions">
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-divisional-exercise">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="b-make-link" select="true()"/>
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- Heading for interior of xref-knowl content  -->
 <!-- Note match first on inline, then divisional -->
 <xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="heading-xref-knowl">
@@ -3760,6 +3800,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- When used in solutions -->
+<xsl:template match="&PROJECT-LIKE;" mode="heading-solutions">
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="b-make-link" select="true()"/>
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&PROJECT-LIKE;" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
@@ -3855,27 +3904,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:choose>
             </xsl:attribute>
             <!-- A variety of headings -->
-            <xsl:choose>
-                <!-- inline can go with generic, which is switched on inline/divisional -->
-                <xsl:when test="boolean(&INLINE-EXERCISE-FILTER;)">
-                    <xsl:apply-templates select="." mode="heading-birth">
-                        <xsl:with-param name="heading-level" select="$heading-level"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <!-- with full number just for solution list -->
-                <!-- "exercise" must be divisional now -->
-                <xsl:when test="self::exercise">
-                    <xsl:apply-templates select="." mode="heading-divisional-exercise">
-                        <xsl:with-param name="heading-level" select="$heading-level"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <!-- now PROJECT-LIKE -->
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="heading-birth">
-                        <xsl:with-param name="heading-level" select="$heading-level"/>
-                    </xsl:apply-templates>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="." mode="heading-solutions">
+                <xsl:with-param name="heading-level" select="$heading-level"/>
+            </xsl:apply-templates>
+
             <xsl:choose>
                 <!-- structured version -->
                 <xsl:when test="task">
@@ -4105,6 +4137,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <article class="exercise-like">
             <xsl:apply-templates select="." mode="duplicate-heading">
                 <xsl:with-param name="heading-level" select="$heading-level"/>
+                <xsl:with-param name="b-make-link" select="true()"/>
             </xsl:apply-templates>
 
             <xsl:choose>
