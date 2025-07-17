@@ -2537,6 +2537,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="src">
                     <xsl:value-of select="$trace-file"/>
                 </xsl:attribute>
+                <!-- script tag MUST not be self closing. force content to prevent -->
+                <xsl:text> </xsl:text>
             </script>
         </div>
     </div>
