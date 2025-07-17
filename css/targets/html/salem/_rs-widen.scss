@@ -72,6 +72,15 @@ $small-nested-margin-offset: 0px !default;
   margin-right: auto;
 }
 
+/* same for exercise-statement in any runestone */
+.runestone {
+  .exercise-statement {
+    max-width: sizing.$content-width;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 /* limit width of statement and success/error message inside hparson */
 .hparsons_section .hp_question,
 .hparsons_section .hp_feedback {
