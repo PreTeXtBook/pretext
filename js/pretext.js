@@ -108,6 +108,14 @@ window.addEventListener("DOMContentLoaded",function(event) {
                 toggletoc();
             }
         });
+
+        // Handle persistent sidebar if the page is restored from cache on back/forward buttons.
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) {
+                sidebar.classList.remove('visible');
+                sidebar.classList.add('hidden');
+            }
+        });
     }
 });
 
