@@ -1010,12 +1010,13 @@
         <subsection xml:id="publication-file-webwork-server">
             <title>Server</title>
             <p>
-                The URL to the <webwork/> server is in the attribute
+                The URL to the <c>webwork2</c> server is in the attribute
                 <cd>
                     <cline>/publication/webwork/@server</cline>
                 </cd>
-                should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not include
-                a trailing slash. The server should be version 2.16 or later. See
+                It should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not
+                include a trailing slash. The server should be version 2.16 or later. The default
+                value is <c>https://webwork-ptx.aimath.org</c>. See
                 <xref ref="webwork-representations"/>.
             </p>
         </subsection>
@@ -1023,11 +1024,11 @@
         <subsection xml:id="publication-file-webwork-course">
             <title>Course</title>
             <p>
-                The name of the host course is in the attribute
+                The name of the host course on the <c>webwork2</c> server is in the attribute
                 <cd>
                     <cline>/publication/webwork/@course</cline>
                 </cd>
-                See <xref ref="webwork-representations"/>.
+                The default value is <c>anonymous</c>. See <xref ref="webwork-representations"/>.
             </p>
         </subsection>
 
@@ -1039,7 +1040,7 @@
                 <cd>
                     <cline>/publication/webwork/@user</cline>
                 </cd>
-                See <xref ref="webwork-representations"/>.
+                The default value is <c>anonymous</c>. See <xref ref="webwork-representations"/>.
             </p>
         </subsection>
 
@@ -1050,20 +1051,24 @@
                 <cd>
                     <cline>/publication/webwork/@password</cline>
                 </cd>
-                See <xref ref="webwork-representations"/>.
+                The default value is <c>anonymous</c>. See <xref ref="webwork-representations"/>.
+                (If the <c>webwork2</c> server is version 2.18 or earlier, instead of
+                <attr>password</attr>, there should be both <attr>coursepassword</attr>
+                and <attr>userpassword</attr>.)
             </p>
         </subsection>
 
         <subsection xml:id="publication-file-webwork-task-reveal">
             <title>Task Reveal</title>
 
-            <p>The
+            <p>
+                The attribute
                 <cd>
                     <cline>/publication/webwork/@task-reveal</cline>
                 </cd>
-                attribute is used to control how tasks in a multi-task exercise are made available
-                to the reader. This applies to live interactive renderings of the exercises, either
-                in HTML, in <webwork/>, or otherwise. Possible values are:
+                is used to control how tasks in a multi-task exercise are made available to the
+                reader. This applies to live interactive renderings of the exercises, either in
+                HTML, in <webwork/>, or otherwise. Possible values are:
                 <ul>
                     <li>
                         <c>preceding-correct</c> (all preceding tasks must be correctly answered
@@ -1075,5 +1080,4 @@
             </p>
         </subsection>
     </section>
-
 </chapter>
