@@ -108,6 +108,13 @@ window.addEventListener("DOMContentLoaded",function(event) {
                 toggletoc();
             }
         });
+
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) {
+                sidebar.classList.remove('visible');
+                sidebar.classList.add('hidden');
+            }
+        });
     }
 });
 
