@@ -855,7 +855,7 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Each file receives a single element as its root
     # element. These are templates for that entry
     image_info = '<pi:image-b64 xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:mime-type="{}" pi:base64="{}"/>'
-    text_info  = '<pi:text-file xmlns:pi="http://pretextbook.org/2020/pretext/internal">{}</pi:text-file>'
+    text_info  = '<pi:text-file xmlns:pi="http://pretextbook.org/2020/pretext/internal"><![CDATA[{}]]></pi:text-file>'
 
     # read lines, one-per-binary
     with open(the_files, "r") as datafile_list:
