@@ -25,7 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </common>
 
     <source>
-      <directories generated="generated" external="external"/>
+      <directories generated="my-generated" external="my-external"/>
     </source>
 
     <!-- These are the defaults but written explicitly here to serve as a model. -->

@@ -9,7 +9,7 @@ pretext/lib/__pycache__/**
 .error_schema.log
 # WW examples
 examples/webwork/Makefile.paths
-examples/webwork/sample-chapter/generated/*
+examples/webwork/sample-chapter/my-generated/*
 examples/webwork/minimal/generated/*
 # any file ending in ~ (backups, usually)
 *~
