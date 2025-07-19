@@ -63,7 +63,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- early or late                          -->
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
-<xsl:param name="veil-reveal-in-print" select="'false'"/>
 
 <!-- ############### -->
 <!-- Source Analysis -->
