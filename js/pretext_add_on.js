@@ -1233,6 +1233,19 @@ document.addEventListener("click", (ev) => {
     setTimeout(() => button.classList.toggle("copied"), 1000);
 });
 
+window.addEventListener("load", function() {
+    console.log("Initializing veil click interactions");
+    document.querySelectorAll('.veil-toggle').forEach(toggle => {
+        const content = toggle.nextElementSibling;
+        if (content && content.classList.contains('veil-content')) {
+            toggle.addEventListener('click', () => {
+                toggle.classList.add('slide-away');
+                content.classList.add('visible');
+            });
+        }
+    });
+});
+
 document.addEventListener("DOMContentLoaded", () => {
     const elements = document.querySelectorAll(".clipboardable");
     for (el of elements) {
