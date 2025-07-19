@@ -7090,6 +7090,27 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- ################# -->
+<!-- Worksheet Margins -->
+<!-- ################# -->
+
+<xsl:template match="*" mode="worksheet-margin">
+    <xsl:param name="direction"/>
+    <xsl:param name="pub-direction"/>
+    <xsl:choose>
+        <xsl:when test="$direction">
+            <xsl:value-of select="normalize-space($direction)"/>
+        </xsl:when>
+        <xsl:when test="@margin">
+            <xsl:value-of select="normalize-space(@margin)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="normalize-space($pub-direction)"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- ##################-->
 <!-- Frontmatter Items -->
 <!-- ##################-->
