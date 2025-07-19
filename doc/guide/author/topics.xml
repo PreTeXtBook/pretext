@@ -1809,7 +1809,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>An <term>unordered list</term> has items with markers that have no inherent order and so are usually symbols like circles, disks, squares, <etc/>  We borrow from <init>HTML</init>, and use the <tag>ul</tag> tag to construct an unordered list.</p>
 
-            <p>A <term>description</term> list has items that have <em>short</em> pieces of text as their markers.  We borrow from <init>HTML</init>, and use the <tag>dl</tag> tag to construct a description list.</p>
+            <p>A <term>description</term> list has items that have <em>short</em> pieces of text as their markers.  We borrow from <init>HTML</init>, and use the <tag>dl</tag> tag to construct a description list. However, unlike the <init>HTML</init> <tag>dl</tag>, the items in a description list are tagged with <ul>li</ul>. A <tag>title</tag> element within each <tag>li</tag> provides the term to be described (the <tag>dt</tag> in <init>HTML</init> terms) and the remaining elemens of the <tag>li</tag> provides the description (the <tag>dd</tag> in <init>HTML</init>.)</p>
 
             <p>Ordered lists are used as part of <tag>objectives</tag> (<xref provisional="topic-objectives" />) and exercises (<xref ref="topic-exercises-solutions" />).  Any of the three lists may occur inside the <tag>list</tag> element (below, <xref ref="topic-named-list" />).  Otherwise, a list must occur within a paragraph, <tag>p</tag>.  This means that to place a list within a list item of another list, the list item must contain a paragraph.</p>
         </subsection>
