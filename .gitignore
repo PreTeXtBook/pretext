@@ -10,7 +10,7 @@ pretext/lib/__pycache__/**
 # WW examples
 examples/webwork/Makefile.paths
 examples/webwork/sample-chapter/generated/*
-examples/webwork/minimal/generated/*
+examples/webwork/minimal/my-generated/*
 # any file ending in ~ (backups, usually)
 *~
 .vscode
