@@ -326,7 +326,7 @@ def get_cli_arguments():
         ("latex-image", "LaTeX pictures (method: [xelatex], pdflatex)"),
         (
             "webwork",
-            "WeBWorK problems in authored, PG, url, and static representations",
+            "WeBWorK problems in PG files and various representations",
         ),
         ("references", "References and citations via Citation Stylesheet Language"),
         ("pg-macros", "Server-side macros for WeBWorK problem generation"),

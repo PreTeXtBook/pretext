@@ -1328,6 +1328,8 @@ def webwork_to_xml(
     path = {}
     pghuman = {}
     pgdense = {}
+    pgbase64 = {}
+    embed_problem_base64 = {}
     for problem in extracted_pg_xml.iter("problem"):
         origin[problem.get("id")] = problem.get("origin")
         seed[problem.get("id")]   = problem.get("seed")
@@ -1397,13 +1399,15 @@ def webwork_to_xml(
     webwork_representations = ET.Element("webwork-representations", nsmap=NSMAP)
     # Choose one of the dictionaries to take its keys as what to loop through
     for problem in origin:
-        if origin[problem] == "webwork2":
+        if origin[problem] == "external":
+            msg = "building representations of external WeBWorK problem"
+        elif origin[problem] == "webwork2":
             msg = "building representations of webwork2-hosted WeBWorK problem"
         elif origin[problem] == "generated":
             msg = "building representations of generated WeBWorK problem"
         else:
             raise ValueError(
-                "PTX:ERROR: problem origin should be 'webwork2' or 'generated', not '{}'".format(
+                "PTX:ERROR: problem origin should be 'external', 'webwork2', or 'generated', not '{}'".format(
                     origin[problem]
                 )
             )
@@ -1436,11 +1440,14 @@ def webwork_to_xml(
         if origin[problem] == "generated":
             embed_problem = re.sub(r'(refreshCachedImages)(?![\w\d])', r'\1Inert', pgdense[problem])
 
-        # make base64 for PTX problems for webwork prior to 2.19
-        if origin[problem] == "generated":
-            if webwork2_minor_version < 19:
-                pgbase64 = base64.b64encode(bytes(pgdense[problem], "utf-8")).decode("utf-8")
-                embed_problem_base64 = base64.b64encode(bytes(embed_problem, "utf-8")).decode("utf-8")
+        # make base64 for generated and external problems for webwork prior to 2.19
+        if webwork2_minor_version < 19:
+            if origin[problem] == "generated":
+                pgbase64[problem] = base64.b64encode(bytes(pgdense[problem], "utf-8")).decode("utf-8")
+                embed_problem_base64[problem] = base64.b64encode(bytes(embed_problem, "utf-8")).decode("utf-8")
+            elif origin[problem] == "external":
+                with open(os.path.join(external_dir, path[problem])) as f: pgbase64[problem] = base64.b64encode(bytes(f.read(), "utf-8")).decode("utf-8")
+                embed_problem_base64[problem] = pgbase64[problem]
 
         if static_processing == 'local' and origin[problem] != 'webwork2':
             socket_params = { "problemSeed": seed[problem], "problemUUID": problem }
@@ -1470,6 +1477,9 @@ def webwork_to_xml(
             if webwork2_minor_version >= 19:
                 if origin[problem] == "webwork2":
                     server_params_source = {"sourceFilePath":path[problem]}
+                elif origin[problem] == "external":
+                    with open(os.path.join(external_dir, path[problem])) as f: rawProblemSource = f.read()
+                    server_params_source = {"rawProblemSource":rawProblemSource}
                 else:
                     server_params_source = {"rawProblemSource":pgdense[problem]}
             else:
@@ -1477,7 +1487,7 @@ def webwork_to_xml(
                 if origin[problem] == "webwork2":
                     server_params_source = (("sourceFilePath", path[problem]))
                 else:
-                    server_params_source = (("problemSource", pgbase64))
+                    server_params_source = (("problemSource", pgbase64[problem]))
 
             if webwork2_minor_version >= 19:
                 server_params = {
@@ -1511,7 +1521,7 @@ def webwork_to_xml(
 
             msg = "sending {} to server to save in {}: origin is '{}'"
             log.info(msg.format(problem, ww_reps_file, origin[problem]))
-            if origin[problem] == "webwork2":
+            if origin[problem] == "external" or origin[problem] == "webwork2":
                 log.debug(
                     "server-to-ptx: {}\n{}\n{}\n{}".format(
                         problem, webwork2_path, path[problem], ww_reps_file
@@ -1806,7 +1816,7 @@ def webwork_to_xml(
         webwork_reps.set("ww-id", problem)
         static = ET.SubElement(webwork_reps, "static")
         static.set("seed", seed[problem])
-        if origin[problem] == "webwork2":
+        if origin[problem] == "external" or origin[problem] == "webwork2":
             static.set("source", path[problem])
 
         # If there is "badness"...
@@ -1916,9 +1926,11 @@ def webwork_to_xml(
         else:
             if origin[problem] == "webwork2":
                 source_value = path[problem]
+            elif origin[problem] == "external" and webwork2_minor_version >= 19:
+                source_value = os.path.join('external', path[problem])
             else:
                 if webwork2_minor_version < 19:
-                    source_value = embed_problem_base64
+                    source_value = embed_problem_base64[problem]
                 else:
                     if copied_from[problem] is not None:
                         source_value = path[copied_from[problem]]
@@ -1951,7 +1963,7 @@ def webwork_to_xml(
             else:
                 formatted_pg = pghuman[problem]
             pg.text = ET.CDATA("\n" + formatted_pg)
-        elif origin[problem] == "webwork2":
+        elif origin[problem] == "external" or origin[problem] == "webwork2":
             pg.set("source", path[problem])
 
     # write to file

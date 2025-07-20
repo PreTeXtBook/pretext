@@ -90,11 +90,19 @@ async function handleWW(ww_id, action) {
             const rawProblemSource = await fetch('generated/webwork/pg/' + ww_problemSource).then((r) => r.text());
             formData.set("rawProblemSource", rawProblemSource);
         }
+        else if (ww_origin == 'external') {
+            const rawProblemSource = await fetch(ww_sourceFilePath).then((r) => r.text());
+            formData.set("rawProblemSource", rawProblemSource);
+        }
         else if (ww_origin == 'webwork2') formData.set("sourceFilePath", ww_sourceFilePath);
     } else {
         formData.set("problemSeed", ww_container.dataset.current_seed);
         if (ww_origin == 'generated') {
             const rawProblemSource = await fetch('generated/webwork/pg/' + ww_problemSource).then((r) => r.text());
+            formData.set("rawProblemSource", rawProblemSource);
+        }
+        else if (ww_origin == 'external') {
+            const rawProblemSource = await fetch(ww_sourceFilePath).then((r) => r.text());
             formData.set("rawProblemSource", rawProblemSource);
         }
         else if (ww_origin == 'webwork2') formData.set("sourceFilePath", ww_sourceFilePath);

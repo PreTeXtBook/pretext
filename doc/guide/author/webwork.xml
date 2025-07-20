@@ -87,6 +87,13 @@
         <c>templates/local/</c> folder and use it with:
         <cd>&lt;webwork source="local/my_problem.pg"/></cd>
       </p>
+      <p>
+        Alternatively, if you have a problem's PG file locally in your project's external folder,
+        for example in <c>external/pg/my_problem.pg</c>, you can use it with:
+        <cd>&lt;webwork local="pg/my_problem.pg"/></cd>
+        If the PG file relies on image files, data files, similar asset files, or nonstandard PG
+        macro files, this avenue is not likely to work as of the time of writing.
+      </p>
       <warning>
         <title>Not Every PG Problem is Compatible with <pretext/></title>
         <p>
@@ -493,12 +500,5 @@
         </p>
       </subsubsection>
     </subsection>
-
-    <subsection>
-      <title>Using a Local PG Problem File</title>
-      <p>Planned.</p>
-    </subsection>
-
   </section>
-
 </chapter>

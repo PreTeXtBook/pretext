@@ -535,7 +535,7 @@
 
         <p>
             It is possible to include <webwork/>/PG problems in your source. These can either be
-            authored using <pretext/> or referenced from a host
+            included from local PG files, authored using <pretext/>, or referenced from a host
             <webwork/> course. A static version of the exercise will be rendered in your static
             output formats such as <latex/>/PDF. A <q>live</q> version will be rendered in HTML
             output. If the HTML is hosted on a Runestone server, the student's progress completing
