@@ -189,7 +189,7 @@
       <webwork/> needs to be 2.16 or later for use with <pretext/>.
     </p>
     <p>
-      The only thing you need to do at the serverlevel is set the web server to use certain headers
+      The only thing you need to do at the server level is set the web server to use certain headers
       on content that is fetched. These headers tell a web browser that you are authorizing it to
       display content from this web server as embedded content inside pages from another web server
       (in particular, where you are hosting you <pretext/> book).
@@ -295,7 +295,7 @@
       <q>Allowed to view course home page</q> which should also be set to <c>login_proctor</c>.
     </p>
     <p>
-      In the Accounts Manager(Classlist Editor in older versions of <webwork/>), add a user named
+      In the Accounts Manager (Classlist Editor in older versions of <webwork/>), add a user named
       <c>anonymous</c> (again, you could use some other name), and set that user's permission level
       to <c>login_proctor</c>, the permission level one higher than <c>student</c>. Set that user's
       password to <c>anonymous</c> (again, you could use some other password). Note that because
@@ -535,7 +535,8 @@
         that you wrote, set defintion files corresponding to the sections (or other chunks) of your
         project, and header files for those sets. All of this was placed into your project's
         <c>generated/webwork/pg</c> folder when you executed <c>pretext -c webwork</c>, so you could
-        find it there and package it all up to send to your <webwork/> server.      </p>
+        find it there and package it all up to send to your <webwork/> server.
+      </p>
       <p>
         Alternativley, you may run the following:
       </p>
