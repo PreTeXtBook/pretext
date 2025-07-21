@@ -13,7 +13,8 @@
 async function handleWW(ww_id, action) {
     const ww_container = document.getElementById(ww_id);
     const ww_domain = ww_container.dataset.domain;
-    const ww_processing = 'webwork2';
+    const ww_renderer = ww_container.dataset.renderer;
+    const ww_processing = ww_container.dataset.processing;
     const ww_origin = ww_container.dataset.origin;
     const ww_problemSource = ww_container.dataset.problemsource;
     const ww_sourceFilePath = ww_container.dataset.sourcefilepath;
@@ -75,6 +76,8 @@ async function handleWW(ww_id, action) {
     let url;
     if (ww_processing == 'webwork2') {
         url = new URL(ww_domain + '/webwork2/render_rpc');
+    } else if (ww_processing == 'renderer') {
+        url = new URL(ww_renderer + '/renderer/render-api');
     }
     let formData = new FormData();
 
@@ -90,11 +93,19 @@ async function handleWW(ww_id, action) {
             const rawProblemSource = await fetch('generated/webwork/pg/' + ww_problemSource).then((r) => r.text());
             formData.set("rawProblemSource", rawProblemSource);
         }
+        else if (ww_origin == 'external') {
+            const rawProblemSource = await fetch(ww_sourceFilePath).then((r) => r.text());
+            formData.set("rawProblemSource", rawProblemSource);
+        }
         else if (ww_origin == 'webwork2') formData.set("sourceFilePath", ww_sourceFilePath);
     } else {
         formData.set("problemSeed", ww_container.dataset.current_seed);
         if (ww_origin == 'generated') {
             const rawProblemSource = await fetch('generated/webwork/pg/' + ww_problemSource).then((r) => r.text());
+            formData.set("rawProblemSource", rawProblemSource);
+        }
+        else if (ww_origin == 'external') {
+            const rawProblemSource = await fetch(ww_sourceFilePath).then((r) => r.text());
             formData.set("rawProblemSource", rawProblemSource);
         }
         else if (ww_origin == 'webwork2') formData.set("sourceFilePath", ww_sourceFilePath);
@@ -415,6 +426,9 @@ async function handleWW(ww_id, action) {
                 .quill-toolbar { scrollbar-width: thin; overflow-x: hidden; }
             </style>` +
             '</head><body>' +
+            '<div id="latex-macros" class="hidden-content process-math" style="display:none"><span class="process-math">\\(' +
+            document.getElementById('latex-macros-text').textContent +
+            '\\)</span></div>' +
             '<main class="pretext-content problem-content" data-iframe-height="1">' + form.outerHTML + '</main></body>' +
             '</html>';
 
