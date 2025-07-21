@@ -1,0 +1,21 @@
+# A local PG file
+
+DOCUMENT();
+loadMacros(qw(PGstandard.pl PGML.pl AnswerFormatHelp.pl PGcourse.pl));
+
+Context('Numeric');
+$a = Compute(random(1, 9, 1));
+$b = Compute(random(1, 9, 1));
+$c = $a + $b;
+
+BEGIN_PGML
+Compute the sum of [`[$a]`] and [`[$b]\text{:}`]
+
+[`[$a] + [$b] =`] [_]{$c}{5}
+END_PGML
+
+BEGIN_PGML_SOLUTION
+[`[$a] + [$b] = [$c]\text{.}`]
+END_PGML_SOLUTION
+
+ENDDOCUMENT();

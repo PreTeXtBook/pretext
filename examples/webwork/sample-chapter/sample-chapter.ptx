@@ -307,6 +307,17 @@
                     </conclusion>
                 </exercise>
 
+                <exercise label="local-pg-file">
+                    <title>Local PG File</title>
+                    <introduction>
+                        <p>
+                            This problem uses a local <c>.pg</c> file instead of authored <pretext/>
+                            source.
+                        </p>
+                    </introduction>
+                    <webwork local="pg/local_demo.pg"/>
+                </exercise>
+
                 <project label="copy-webwork-add-numbers">
                     <title>Inside a <tag>project</tag></title>
                     <introduction>

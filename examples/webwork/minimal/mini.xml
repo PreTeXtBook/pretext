@@ -71,6 +71,11 @@
       <exercise>
         <webwork source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg"/>
       </exercise>
+      <!-- An exercise with source from a local "external" asset file -->
+      <!-- The path is relative to the external assets folder         -->
+      <exercise>
+        <webwork local="pg/newProblem.pg"/>
+      </exercise>
     </section>
   </article>
 </pretext>
