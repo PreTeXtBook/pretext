@@ -54,7 +54,14 @@
                     }? &
                     element journal {
                         attribute name {text}
-                    }
+                    }? &
+                    element worksheet {
+                        attribute margin {text}?,
+                        attribute top {text}?,
+                        attribute right {text}?,
+                        attribute bottom {text}?,
+                        attribute left {text}?
+                    }?
                 }
 
             ExerciseAttributes =
@@ -329,9 +336,8 @@
                 element webwork {
                     attribute server { text },
                     attribute course { text }?,
-                    attribute coursepassord { text }?,
                     attribute user { text }?,
-                    attribute userpassword { text }?,
+                    attribute password { text }?,
                     attribute task-reveal { "preceding-correct" | "all" }?
                 }
             
