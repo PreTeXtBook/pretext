@@ -14801,7 +14801,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </worksheet>
 
 
-            <worksheet label="worksheet-networks" top="3cm" bottom="100pt">
+            <worksheet label="worksheet-networks" top="3cm" bottom="1.2in">
                 <title>Networks Worksheet (no authored pages)</title>
                 <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
 
@@ -15019,7 +15019,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
             </worksheet>
 
-            <worksheet label="worksheet-networks-pages" top="3cm" bottom="100pt">
+            <worksheet label="worksheet-networks-pages" top="3cm" bottom="1.2in">
                 <title>Networks Worksheet (with authored pages)</title>
                 <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
 
