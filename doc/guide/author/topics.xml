@@ -3542,7 +3542,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                   <ul>
                     <li>
                       <p>
-                        <attr>xml:id</attr>s are used to link to a program from other parts of the book source code. Anny program that you want to use as the target of an <attr>add-files</attr> or <attr>include</attr> attribute in some other program must have a unique (within the book) <attr>xml:id</attr>.
+                        <attr>xml:id</attr>s are used to link to a program from other parts of the book source code. Any program that you want to use as the target of an <attr>add-files</attr> or <attr>include</attr> attribute in some other program must have a unique (within the book) <attr>xml:id</attr>.
                       </p>
                     </li>
                     <li>
