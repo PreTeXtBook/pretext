@@ -14933,7 +14933,88 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <statement>
                         <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
 
-                        <p>2025-07-20: this exercise has been gutted so LaTeXt compilation will succeed.  It has likely lost some of its use as a test case.</p>
+                        <image xml:id="worksheet-street-network" width="65%">
+                            <latex-image>
+                            <![CDATA[
+                            \begin{tikzpicture}[>=stealth]
+                            \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
+                            \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
+                                \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
+                                \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
+                                \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
+                                \end{tikzpicture}
+                            ]]>
+                            </latex-image>
+                        </image>
+
+                        <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
+
+                        <table>
+                            <title>Estimated hourly traffic flow for the road network</title>
+                            <tabular row-headers="yes" halign="center">
+                                <row header="yes">
+                                    <cell>
+                                    </cell>
+                                    <cell>
+                                        EB Winooski
+                                    </cell>
+                                    <cell>
+                                        WB Winooski
+                                    </cell>
+                                    <cell>
+                                        Shelburne St
+                                    </cell>
+                                    <cell>
+                                        Willow
+                                    </cell>
+                                    <cell>
+                                        Jay
+                                    </cell>
+                                </row>
+                                <row>
+                                    <cell halign="left">
+                                        into
+                                    </cell>
+                                    <cell>
+                                        50
+                                    </cell>
+                                    <cell>
+                                        400
+                                    </cell>
+                                    <cell>
+                                        0
+                                    </cell>
+                                    <cell>
+                                        10
+                                    </cell>
+                                    <cell>
+                                        50
+                                    </cell>
+                                </row>
+                                <row>
+                                    <cell halign="left">
+                                        out of
+                                    </cell>
+                                    <cell>
+                                        55
+                                    </cell>
+                                    <cell>
+                                        390
+                                    </cell>
+                                    <cell>
+                                        20
+                                    </cell>
+                                    <cell>
+                                        15
+                                    </cell>
+                                    <cell>
+                                        30
+                                    </cell>
+                                </row>
+                            </tabular>
+                        </table>
+
+                        <p> Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow. Solve the system.  Note that you should not get a unique solution as traffic should be able to flow through the network in various ways. </p>
                     </statement>
                 </exercise>
             </worksheet>
