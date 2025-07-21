@@ -979,6 +979,10 @@ section dl dd .aside-like.front {
   border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
   padding: 0.0625em 0.125em;
   border-radius: 0.2em;
+  display: inline-block;
+  overflow-x: auto;
+  max-width: 100%;
+  vertical-align: middle;
 }
 .prompt.unselectable {
   user-select: none;
