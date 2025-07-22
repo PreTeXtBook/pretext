@@ -37,6 +37,7 @@ $overflow-y-scroll: hidden !default;
   @container ptx-main (width > #{$base-content-width + 2 * $content-padding}) {
     --max-width: calc(min((100cqw - 2 * #{$content-padding}), #{$width-hard-cap}));
     min-width: 100%;
+    clear: right; // clear any floats
     @if $always-expand {
       width: var(--max-width);
     } @else {

@@ -1,7 +1,7 @@
 $border-radius: 8px !default;
 
 // One stop include for default style content blocks
-@use 'components/chunks/asides-floating';
+@use 'components/chunks/asides-basic';
 @use 'components/chunks/codelike';
 @use 'components/chunks/exercises';
 @use 'components/chunks/solutions';

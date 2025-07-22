@@ -1,192 +1,35 @@
-// TODO - refactor
-// Address issues with asides getting cut off on bottom of page and breaking on narrow widths
+$float-width: 200px !default;
+$float-offset: -248px !default;
+$min-float-width: 1280px !default;
 
-/* Asides that appear in sidebar of default layout */
-.aside-like {
-  position: absolute;
-  margin-left: 45%;
-  max-width: 495px;
-  max-height: 7em;
-  overflow: hidden;
-  border: none;
-  padding: 4px 10px 0 10px;
-  background-color: var(--aside-like-body-background);
-  z-index: 100;
-  margin-bottom: 5px;
-}
-.example-like .aside-like {
-  margin-top: 0;
-  position: absolute;
-}
-.aside-like {
-  font-size: 90%;
-}
-.aside-like .para {
-  overflow-x: auto;
-}
-.aside-like:first-child {
-  margin-top: -2.25em;
-}
-.aside-like:after {
-  content  : "";
-  position : absolute;
-  z-index  : 1;
-  top   : 0em;  
-  bottom   : 0;
-  left     : 0;
-  pointer-events   : none;
-  background-image : linear-gradient(to bottom, 
-  rgba(255,255,255,0%), 
-  var(--content-background) 50%);
-  width    : 550px;
-  height   : 8em;
-}
-/* example of where the following is needed? */
-/*
-.aside-like * {
-background-color: #f5faff !important;
-}
-*/
-.aside-like.front, .example-like .aside-like.front {
-  position: relative;
-  z-index: 0;
-  padding: 8px 15px 10px 15px;
-  padding: 2px 10px;
-  margin: 5px 0px 5px 10px;
-  border: 2px solid var(--aside-like-border-color);
-  max-height: none;
-  max-width: 550px;
-  color: inherit;
-  font-size: 100%;
-  box-shadow: none;
-}
-.aside-like.front:after, .example-like .aside-like.front:after {
-  background-image: none;
-}
-.example-like .aside-like.front {
-  margin-top: 1.25em;
-}
+@use 'asides-basic';
 
-.aside-like.front + p{
-  margin-top: 1.25em !important;
-  padding-top: 0;
-}
-
-
-
-.aside-like .aside-like {
-  background-color: var(--aside-like-body-background);
-  border: 1px dotted var(--aside-like-border-color);
-}
-
-article.aside-like > p:first-child {
-  margin-top: 0;
-}
-
-.aside-like > .heading {
-  font-size: 95%;
-}
-
-.aside-like + *{
-  margin-top: 3em; /* !important; */
-  margin-right: 3em;
-}
-
-/* on sufficiently large screens, there is enough of a margin to see part of the aside */
-
-@media screen and (min-width: 943px) {
-  .aside-like + * {
-    margin-right: 0;
-  }
-}
-
-/* on a wide screen, asides should appear in the right margin */
-@media screen and (min-width: 1100px) {
-  .aside-like, .aside-like.front, .example-like .aside-like, .example-like .aside-like.front {
-    position: absolute;
-    margin-top: -2em;
-    margin-left: 660px;
-    max-width: 200px;  /* for some reason the width was too small, so I had to put width (next line) */
-    width: 200px;
-    color: inherit;
-  }
-  .aside-like.front, .example-like .aside-like.front {
-    max-height: none;
-    max-width: 223px;
-    border: 2px solid var(--aside-like-border-color);
-  }
-  .example-like .aside-like, .example-like .aside-like.front {
-    margin-left: 654px;  /* because .example-like has 6px of padding */
-  }
-  
-  .aside-like + * {
-    margin-top: 1.25em;
-    /*    background: none;  */
-    margin-right: 0;
-  }
-  /* previous and next point to the need to rethink asides:  structurally they are
-  in the midts of the other elements, so they affect neighbor selectors.
-  but visually they often are off to the side */
-  .aside-like + .solutions,
-  .aside-like + .instructions {
-    margin-top: 0;
-  }
-  
-  .aside-like.front:after, .example-like .aside-like.front:after {
-    background-image: none;
-  }
-  
-  .aside-like:nth-of-type(3n+1) {
-    margin-left: 660px;
-  }
-  .aside-like:nth-of-type(3n) {
-    margin-left: 680px;
-  }
-  .aside-like:nth-of-type(3n+2) {
-    margin-left: 640px;
-  }
-}
-
-.aside-like:hover:after, .aside-like:focus:after {
-  top: 3em;
-  height: auto;
-  background-image : none;
-}
-
-.aside-like:hover, .aside-like:focus {
-  color: inherit;
-  padding: 2px 8px 0 8px;
-  border: 2px solid var(--aside-like-border-color);
-  height: auto;
-  max-height: none;
-}
-.aside-like.front:hover, .aside-like.front:focus {
-  padding: 4px 10px;
-}
-
-/* find a better way to handle asides in content that has a wide left margin */
-/* see http://pretext.jahrme.com/aside-in-knowl/section-1.html */
-section dl dd .aside-like {
-  margin-top: 0 !important;
-  margin-left: 100px !important;
-}
-section dl dd .aside-like.front {
-  margin-left: -300px !important;
-}
-
-@media screen and (max-width: 1099px) {
-  .aside-like {
+@media screen and (min-width: $min-float-width) {
+  details.aside-like {
+    --floating-aside: true;
     position: relative;
+    margin-left: $float-offset;
+    width: $float-width;
+    right: $float-offset;
     float: right;
-    z-index: 0;
-    overflow-x: hidden;
-    margin-left: 1em;
-    margin-top: 1em;
-    max-width: 195px;
-    max-height: 4em;
-    margin-right: -8em;
+    clear: right;
   }
-  li > .aside-like:last-child {
-    position: absolute;
+
+  details.aside-like > .knowl__content {
+    margin-left:0;
+    margin-right:0;
+    background-color: var(--aside-like-body-background);
+    z-index: 100;
+  }
+
+  details.aside-like[data-locked-open] summary {
+    &::marker {
+      content: "";
+    }
+    &::before {
+      content: 'lock_open';
+      font-family: 'Material Symbols Outlined';
+      font-size: 13px;
+    }
   }
 }
