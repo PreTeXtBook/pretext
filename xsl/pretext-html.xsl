@@ -2286,7 +2286,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Title only -->
-<!-- ASIDE-LIKE, exercisegroup, dl/li -->
+<!-- exercisegroup, dl/li             -->
 <!-- PROOF-LIKE, when titled          -->
 <!-- Subsidiary to paragraphs,        -->
 <!-- and divisions of "exercises"     -->
@@ -2838,9 +2838,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ASIDE-LIKE -->
 <!-- A simple block with a title (no number) and generic contents -->
 
-<!-- Never born-hidden, other devices partially hide -->
+<!-- Rendered as a born hidden knowl -->
 <xsl:template match="&ASIDE-LIKE;" mode="is-hidden">
-    <xsl:text>false</xsl:text>
+    <xsl:text>true</xsl:text>
 </xsl:template>
 
 <!-- Overall enclosing element -->
@@ -2856,12 +2856,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&ASIDE-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-title" />
+    <xsl:apply-templates select="." mode="heading-full-implicit-number" />
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&ASIDE-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-title" />
+    <xsl:apply-templates select="." mode="heading-full-implicit-number" />
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
