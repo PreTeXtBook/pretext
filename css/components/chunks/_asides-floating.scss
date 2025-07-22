@@ -6,7 +6,6 @@ $min-float-width: 1280px !default;
 
 @media screen and (min-width: $min-float-width) {
   details.aside-like {
-    --floating-aside: true;
     position: relative;
     margin-left: $float-offset;
     width: $float-width;
@@ -20,16 +19,5 @@ $min-float-width: 1280px !default;
     margin-right:0;
     background-color: var(--aside-like-body-background);
     z-index: 100;
-  }
-
-  details.aside-like[data-locked-open] summary {
-    &::marker {
-      content: "";
-    }
-    &::before {
-      content: 'lock_open';
-      font-family: 'Material Symbols Outlined';
-      font-size: 13px;
-    }
   }
 }
