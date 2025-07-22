@@ -2,7 +2,11 @@ $border-radius: 0 !default;
 $chunk-heading-font-size: 1.125em !default;
 
 // One stop include for heading-box dominant content blocks
-@use 'components/chunks/asides-floating';
+@use 'components/chunks/asides-floating' with (
+  $float-width: 200px,
+  $float-offset: -365px,
+  $min-float-width: 1450px
+);
 @use 'components/chunks/codelike';
 @use 'components/chunks/exercises';
 @use 'components/chunks/solutions';

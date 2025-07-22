@@ -124,23 +124,7 @@ window.addEventListener("DOMContentLoaded", function() {
 
 
 window.addEventListener("load",function(event) {
-    $(".aside-like").click(function(){
-       $(this).toggleClass("front");
-    });
-/* if you click a knowl in an aside, the 'front' stays the
-   same because it toggles twice.  A more elegant solution is welcome */
-    $(".aside-like a").click(function(){
-       $(this).closest(".aside-like").toggleClass("front");
-    });
 
-/* temporary, so that aside-like knowls open in the body of the document */
-/* later the addafter will be inserted by PTX? */
-    $("a").each(function() {
-        if($(this).parents('.aside-like').length) {
-            $(this).attr("addafter", "#" + $(this).closest('.aside-like').attr('id') );
-            $(this).closest('.aside-like').attr("tabindex", "0");
-        }
-    });
 
     /* click an image to magnify */
     $('body').on('click','.image-box > img:not(.draw_on_me):not(.mag_popup), .sbspanel > img:not(.draw_on_me):not(.mag_popup), figure > img:not(.draw_on_me):not(.mag_popup), figure > div > img:not(.draw_on_me):not(.mag_popup)', function(){
@@ -408,9 +392,7 @@ window.addEventListener("load",function(event) {
         {
             case 13:  //CR
                  just_hit_escape = false;
-                 if($(document.activeElement).hasClass("aside-like")) {
-                    $(document.activeElement).toggleClass("front")
-                 } else if ($(document.activeElement).hasClass("workspace")) {
+                 if ($(document.activeElement).hasClass("workspace")) {
                     process_workspace()
                  }
             case 27: //esc
@@ -1276,4 +1258,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 // END Support for code-copy button functionality
-
