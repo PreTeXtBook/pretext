@@ -4,174 +4,30 @@
 @import "https://fonts.googleapis.com/css2?family=Inconsolata:ital,wght@0,400..700;1,400..700&display=swap";
 
 /* ../../css/targets/print-worksheet/print-worksheet.scss */
-.aside-like {
-  position: absolute;
-  margin-left: 45%;
-  max-width: 495px;
-  max-height: 7em;
-  overflow: hidden;
-  border: none;
-  padding: 4px 10px 0 10px;
-  background-color: var(--aside-like-body-background);
-  z-index: 100;
-  margin-bottom: 5px;
+.aside-like > .knowl__link {
+  color: var(--aside-like-link-color);
+  border-bottom-color: var(--aside-like-link-color);
 }
-.example-like .aside-like {
-  margin-top: 0;
-  position: absolute;
-}
-.aside-like {
-  font-size: 90%;
-}
-.aside-like .para {
-  overflow-x: auto;
-}
-.aside-like:first-child {
-  margin-top: -2.25em;
-}
-.aside-like:after {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  top: 0em;
-  bottom: 0;
-  left: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0),
-      var(--content-background) 50%);
-  width: 550px;
-  height: 8em;
-}
-.aside-like.front,
-.example-like .aside-like.front {
-  position: relative;
-  z-index: 0;
-  padding: 8px 15px 10px 15px;
-  padding: 2px 10px;
-  margin: 5px 0px 5px 10px;
+.aside-like > .knowl__content {
+  margin-left: 30px;
+  margin-right: 30px;
   border: 2px solid var(--aside-like-border-color);
-  max-height: none;
-  max-width: 550px;
-  color: inherit;
-  font-size: 100%;
-  box-shadow: none;
-}
-.aside-like.front:after,
-.example-like .aside-like.front:after {
-  background-image: none;
-}
-.example-like .aside-like.front {
-  margin-top: 1.25em;
-}
-.aside-like.front + p {
-  margin-top: 1.25em !important;
-  padding-top: 0;
-}
-.aside-like .aside-like {
   background-color: var(--aside-like-body-background);
-  border: 1px dotted var(--aside-like-border-color);
 }
-article.aside-like > p:first-child {
-  margin-top: 0;
-}
-.aside-like > .heading {
-  font-size: 95%;
-}
-.aside-like + * {
-  margin-top: 3em;
-  margin-right: 3em;
-}
-@media screen and (min-width: 943px) {
-  .aside-like + * {
-    margin-right: 0;
-  }
-}
-@media screen and (min-width: 1100px) {
-  .aside-like,
-  .aside-like.front,
-  .example-like .aside-like,
-  .example-like .aside-like.front {
-    position: absolute;
-    margin-top: -2em;
-    margin-left: 660px;
-    max-width: 200px;
-    width: 200px;
-    color: inherit;
-  }
-  .aside-like.front,
-  .example-like .aside-like.front {
-    max-height: none;
-    max-width: 223px;
-    border: 2px solid var(--aside-like-border-color);
-  }
-  .example-like .aside-like,
-  .example-like .aside-like.front {
-    margin-left: 654px;
-  }
-  .aside-like + * {
-    margin-top: 1.25em;
-    margin-right: 0;
-  }
-  .aside-like + .solutions,
-  .aside-like + .instructions {
-    margin-top: 0;
-  }
-  .aside-like.front:after,
-  .example-like .aside-like.front:after {
-    background-image: none;
-  }
-  .aside-like:nth-of-type(3n+1) {
-    margin-left: 660px;
-  }
-  .aside-like:nth-of-type(3n) {
-    margin-left: 680px;
-  }
-  .aside-like:nth-of-type(3n+2) {
-    margin-left: 640px;
-  }
-}
-.aside-like:hover:after,
-.aside-like:focus:after {
-  top: 3em;
-  height: auto;
-  background-image: none;
-}
-.aside-like:hover,
-.aside-like:focus {
-  color: inherit;
-  padding: 2px 8px 0 8px;
-  border: 2px solid var(--aside-like-border-color);
-  height: auto;
-  max-height: none;
-}
-.aside-like.front:hover,
-.aside-like.front:focus {
-  padding: 4px 10px;
-}
-section dl dd .aside-like {
-  margin-top: 0 !important;
-  margin-left: 100px !important;
-}
-section dl dd .aside-like.front {
-  margin-left: -300px !important;
-}
-@media screen and (max-width: 1099px) {
-  .aside-like {
+@media screen and (min-width: 1280px) {
+  details.aside-like {
     position: relative;
+    margin-left: -248px;
+    width: 200px;
+    right: -248px;
     float: right;
-    z-index: 0;
-    overflow-x: hidden;
-    margin-left: 1em;
-    margin-top: 1em;
-    max-width: 195px;
-    max-height: 4em;
-    margin-right: -8em;
+    clear: right;
   }
-  li > .aside-like:last-child {
-    position: absolute;
+  details.aside-like > .knowl__content {
+    margin-left: 0;
+    margin-right: 0;
+    background-color: var(--aside-like-body-background);
+    z-index: 100;
   }
 }
 .code-box {
@@ -2597,6 +2453,7 @@ label.incorrect .feedback {
   --block-body-background: var(--content-background);
   --block-border-color: var(--knowl-border-color);
   --block-head-color: white;
+  --aside-like-link-color: var(--link-text-color);
   --button-background: #ededed;
   --button-text-color: #333333;
   --button-border-color: #ccc;
