@@ -2481,7 +2481,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="dividing-string-styled">
     <xsl:param name="divider" select="' '"/>
     <xsl:param name="name" select="'space'"/>
-    <span class="{$name}">
+    <span class="{$name} heading-divison-mark heading-divison-mark__{$name}">
         <xsl:value-of select="$divider"/>
     </span>
 </xsl:template>
