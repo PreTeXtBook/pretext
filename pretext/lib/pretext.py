@@ -4590,7 +4590,14 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     huge_parser = ET.XMLParser(huge_tree=True)
     src_tree = ET.parse(xml, parser=huge_parser)
     try:
-        src_tree.xinclude()
+        # Build custom includer so we can check error log
+        # undefined namespace prefixes (e.g. xi:) go in error log of XInclude object
+        # but do not cause it to fail/throw
+        includer = ET.XInclude()
+        includer(src_tree.getroot())
+        if includer.error_log:
+            # intentionally trigger exception handler for its better message
+            raise ET.XIncludeError("unused")
     except ET.XIncludeError as e:
         # xinclude() does not show what file a parsing error occured in
         # So if there was an error, build a custom loader and redo with ElementInclude
