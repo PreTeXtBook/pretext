@@ -2219,7 +2219,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
             <xsl:if test="title">
-                <xsl:text>:</xsl:text>
+                <xsl:call-template name="dividing-string-styled">
+                    <xsl:with-param name="divider" select="':'"/>
+                    <xsl:with-param name="name" select="'colon'"/>
+                </xsl:call-template>
             </xsl:if>
         </span>
         <!-- codenumber is implicit via placement -->
@@ -2458,19 +2461,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Heading Utilities -->
 
-<!-- These two named templates create a space or a      -->
-<!-- period with enough HTML markup to allow for hiding -->
+<!-- These named templates create a dividing character  -->
+<!-- with enough HTML markup to allow for hiding        -->
 <!-- them if some other part of a heading is hidden.    -->
+<!-- space/period versions are convience wrappers for   -->
+<!-- commonly used characters.                          -->
 
 <xsl:template name="space-styled">
-    <span class="space">
-        <xsl:text> </xsl:text>
-    </span>
+    <xsl:call-template name="dividing-string-styled"/>
 </xsl:template>
 
 <xsl:template name="period-styled">
-    <span class="period">
-        <xsl:text>.</xsl:text>
+    <xsl:call-template name="dividing-string-styled">
+        <xsl:with-param name="divider" select="'.'"/>
+        <xsl:with-param name="name" select="'period'"/>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="dividing-string-styled">
+    <xsl:param name="divider" select="' '"/>
+    <xsl:param name="name" select="'space'"/>
+    <span class="{$name} heading-divison-mark heading-divison-mark__{$name}">
+        <xsl:value-of select="$divider"/>
     </span>
 </xsl:template>
 
