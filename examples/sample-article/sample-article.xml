@@ -2058,6 +2058,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13.</mrow>
                 </md>Beautiful.</p>
 
+                <aside>
+                    <title>Overlap Test</title>
+                    <p>This is simply to test what happens when an aside bumps into something like the content below that may extend past the normal right content boundary. It likely only is of interest with the theme <c>default-modern</c>.</p>
+                </aside>
+
                 <p>A long equation, to check layout on various screen sizes.  This is Weil's <q>explicit formula</q> for the
                    Riemann <m>\zeta</m>-function:
                   <men>
