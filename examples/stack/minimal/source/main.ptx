@@ -88,7 +88,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>The following illustrated embedding a STACK question.</p> 
 
-            <stack file="01_integration_with_feedback.xml" />
+            <stack source="questions/01_integration_with_feedback.xml" />
         </section>
 
     </article>

@@ -22,7 +22,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <publication>
 
     <source>
-      <directories generated="generated" external="external"/>
+      <directories generated="generated" external="../assets"/>
     </source>
 
     <!-- This public server is for testing and demonstration only. -->
