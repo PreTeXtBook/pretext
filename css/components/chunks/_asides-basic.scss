@@ -1,0 +1,15 @@
+$border-width: 2px !default;
+$side-margins: 30px !default;
+
+.aside-like {
+  & > .knowl__link {
+    color: var(--aside-like-link-color);
+    border-bottom-color: var(--aside-like-link-color);
+  }
+  & > .knowl__content{
+    margin-left: $side-margins;
+    margin-right: $side-margins;
+    border: $border-width solid var(--aside-like-border-color);
+    background-color: var(--aside-like-body-background);
+  }
+}
