@@ -390,6 +390,10 @@
                     </li>
                 </ul>
             </p>
+
+            <p>
+                Further information on <c>pretext generate</c> is available on <url href="https://github.com/PreTeXtBook/pretext-cli/blob/main/docs/asset-generation.md">the <c>pretext-cli</c> github repository.</url>
+            </p>
         </subsection>
 
         <subsection xml:id="cli-project-manifest">

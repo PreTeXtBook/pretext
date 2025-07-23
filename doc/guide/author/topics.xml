@@ -1140,7 +1140,108 @@
                         <cell><xref ref="topic-divisions" text="custom">Extra</xref></cell>
                     </row>
                 </tabular>
-            </table>
+            </table>            
+
+            <listing>
+                <caption>The <pretext/> code that generated this table</caption>
+                <program language="xml">
+                    <title>The <pretext/> code that generated this table</title>
+                    <code>
+                        <tabular>
+                            <row bottom="major">
+                                <cell><attr>text</attr></cell>
+                                <cell>Far Away</cell>
+                                <cell>Close By</cell>
+                                <cell>With Content</cell>
+                            </row>
+
+                            <row>
+                                <cell><c>type-local</c></cell>
+                                <cell><xref ref="overview-title"     text="type-local" /></cell>
+                                <cell><xref ref="topic-divisions" text="type-local" /></cell>
+                                <cell><xref ref="topic-divisions" text="type-local">Extra</xref></cell>
+                            </row>
+
+                            <row>
+                                <cell><c>type-global</c></cell>
+                                <cell><xref ref="overview-title"     text="type-global" /></cell>
+                                <cell><xref ref="topic-divisions" text="type-global" /></cell>
+                                <cell><xref ref="topic-divisions" text="type-global">Extra</xref></cell>
+                            </row>
+
+                            <row>
+                                <cell><c>type-hybrid</c></cell>
+                                <cell><xref ref="overview-title"     text="type-hybrid" /></cell>
+                                <cell><xref ref="topic-divisions" text="type-hybrid" /></cell>
+                                <cell><xref ref="topic-divisions" text="type-hybrid">Extra</xref></cell>
+                            </row>
+
+                            <row>
+                                <cell><c>local</c></cell>
+                                <cell><xref ref="overview-title"     text="local" /></cell>
+                                <cell><xref ref="topic-divisions" text="local" /></cell>
+                                <cell><xref ref="topic-divisions" text="local">Extra</xref></cell>
+                            </row>
+
+                            <row>
+                                <cell><c>global</c></cell>
+                                <cell><xref ref="overview-title"     text="global" /></cell>
+                                <cell><xref ref="topic-divisions" text="global" /></cell>
+                                <cell><xref ref="topic-divisions" text="global">Extra</xref></cell>
+                            </row>
+
+                            <row>
+                                <cell><c>hybrid</c></cell>
+                                <cell><xref ref="overview-title"     text="hybrid" /></cell>
+                                <cell><xref ref="topic-divisions" text="hybrid" /></cell>
+                                <cell><xref ref="topic-divisions" text="hybrid">Extra</xref></cell>
+                            </row>
+
+                            <row>
+                                <cell><c>type-local-title</c></cell>
+                                <cell><xref ref="overview-title"  text="type-local-title" /></cell>
+                                <cell><xref ref="topic-divisions" text="type-local-title" /></cell>
+                                <cell><xref ref="topic-divisions" text="type-local-title">Extra</xref></cell>
+                            </row>
+
+                            <row>
+                                <cell><c>type-global-title</c></cell>
+                                <cell><xref ref="overview-title"  text="type-global-title" /></cell>
+                                <cell><xref ref="topic-divisions" text="type-global-title" /></cell>
+                                <cell><xref ref="topic-divisions" text="type-global-title">Extra</xref></cell>
+                            </row>
+
+                            <row>
+                                <cell><c>phrase-global</c></cell>
+                                <cell><xref ref="overview-title"     text="phrase-global" /></cell>
+                                <cell><xref ref="topic-divisions" text="phrase-global" /></cell>
+                                <cell>Warning</cell>
+                            </row>
+
+                            <row>
+                                <cell><c>phrase-hybrid</c></cell>
+                                <cell><xref ref="overview-title"     text="phrase-hybrid" /></cell>
+                                <cell><xref ref="topic-divisions" text="phrase-hybrid" /></cell>
+                                <cell>Warning</cell>
+                            </row>
+
+                            <row>
+                                <cell><c>title</c></cell>
+                                <cell><xref ref="overview-title"     text="title" /></cell>
+                                <cell><xref ref="topic-divisions" text="title" /></cell>
+                                <cell>Warning</cell>
+                            </row>
+
+                            <row>
+                                <cell><c>custom</c></cell>
+                                <cell></cell>
+                                <cell></cell>
+                                <cell><xref ref="topic-divisions" text="custom">Extra</xref></cell>
+                            </row>
+                        </tabular>
+                    </code>
+                </program>
+            </listing>
 
             <p>Note that <c>local/global</c> describes the uniqueness of the number (and is affected by your choice of numbering schemes), while <c>type</c> refers to an automatic prefix of the number.  The text of the type will vary according to the document's language. If a cross-reference and its target are close to each other, a number like 5.8.2.4 might be overkill, when just a 4 would suffice.  A <c>hybrid</c> scheme will use the shorter number whenever it makes sense.  There are two <c>phrase</c> schemes, and it should be clear what text <c>title</c> will produce (though realize there must be a title for the object, possibly a default provided by <pretext />).  Finally, if desired, the text can be customized with any text you like.</p>
 
