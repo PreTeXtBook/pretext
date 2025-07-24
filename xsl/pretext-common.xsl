@@ -8145,6 +8145,15 @@ Book (with parts), "section" at level 3
     </xsl:for-each>
 </xsl:template>
 
+<!-- This works, without keys, and could be adapted to range over actual data in text -->
+<!-- For example, this approach is used for contributors to FCLA                      -->
+<!--
+<xsl:template match="*" mode="listings-language">
+    <xsl:variable name="language"><xsl:value-of select="@language" /></xsl:variable>
+    <xsl:value-of select="document('')/*/mb:programming/language[@ptx=$language]/listings"/>
+</xsl:template>
+-->
+
 <!-- A whole <program> node comes in,  -->
 <!-- text of prism name comes out -->
 <xsl:template match="program|pf" mode="prism-language">
@@ -8174,14 +8183,7 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
-<!-- This works, without keys, and could be adapted to range over actual data in text -->
-<!-- For example, this approach is used for contributors to FCLA                      -->
-<!--
-<xsl:template match="*" mode="listings-language">
-    <xsl:variable name="language"><xsl:value-of select="@language" /></xsl:variable>
-    <xsl:value-of select="document('')/*/mb:programming/language[@ptx=$language]/listings"/>
 </xsl:template>
--->
 
 <!-- ############################ -->
 <!-- Table construction utilities -->
