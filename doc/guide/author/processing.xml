@@ -392,7 +392,7 @@
             </p>
 
             <p>
-                Further information on <c>pretext generate</c> is available on <url href="https://github.com/PreTeXtBook/pretext-cli/blob/main/docs/asset-generation.md">the <c>pretext-cli</c> github repository.</url>
+                Further information on asset generation in the <pretext/> CLI, including some important pitfalls with the caching mechanism, can be found on <url href="https://github.com/PreTeXtBook/pretext-cli/blob/main/docs/asset-generation.md">the pretext-cli github repository.</url>
             </p>
         </subsection>
 
