@@ -55,18 +55,6 @@
         if the initialism is changed.
         -->
         <initialism>WWSC</initialism>
-        <!--
-        With a <feedback> element, in the HTML version, you get a button
-        for reporting typos and errors.  You might link to a Google Docs
-        spreadsheet or something similar.  Default is to get a button
-        labeled "Feedback", which will be localized to your target language.
-        You can override this with some text of your choosing, but then you
-        lose the localization feature.
-        -->
-        <feedback>
-            <url>not-implemented.html</url>
-            <!-- <text>My Button Text</text>  -->
-        </feedback>
 
         <latex-image-preamble>
             \usepackage{pgfplots}
