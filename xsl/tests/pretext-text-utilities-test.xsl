@@ -21,8 +21,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Standalone testbed for pretext-text-utilities templates        -->
 <!-- Invoke this stylesheet on null.xml in the same folder:         -->
-<!-- xsltproc -dd-xinclude pretext-text-utilities-test.xsl null.xml -->
-<!--          ^double dash there                                    -->
+<!-- xsltproc pretext-text-utilities-test.xsl null.xml              -->
 
 <!-- There are &LOWERCASE; and &UPPERCASE; entities  -->
 <!-- in the "file-extension" template (only?) -->
