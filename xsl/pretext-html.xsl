@@ -9535,33 +9535,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- build up full program text so we can apply sanitize-text to entire blob -->
                 <!-- and thus allow relative indentation for preamble/code/postamble         -->
                 <xsl:variable name="program-text">
-                    <!-- each section MUST end in a newline and author might not have provided one -->
-                    <!-- so first, remove up to one newline from front/back as appropriate         -->
-                    <!-- then add newline to end                                                   -->
-                    <!-- preamble - clean up end                                                   -->
                     <xsl:if test="preamble[not(@visible = 'no')]">
-                        <xsl:call-template name="trim-end">
-                            <xsl:with-param name="text" select="preamble" />
-                            <xsl:with-param name="preserve-intentional" select="true()" />
-                        </xsl:call-template>
+                        <xsl:apply-templates select="preamble" mode="program-part-processing"/>
                     </xsl:if>
-                    <!-- code - clean up start and end                                             -->
-                    <xsl:variable name="code-clean">
-                      <xsl:call-template name="trim-start-lines">
-                          <xsl:with-param name="text" select="code" />
-                          <xsl:with-param name="preserve-intentional" select="true()" />
-                      </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:call-template name="trim-end">
-                        <xsl:with-param name="text" select="$code-clean" />
-                        <xsl:with-param name="preserve-intentional" select="true()" />
-                    </xsl:call-template>
-                    <!-- postamble - clean up start                                               -->
+                    <xsl:apply-templates select="code" mode="program-part-processing"/>
                     <xsl:if test="postamble[not(@visible = 'no')]">
-                      <xsl:call-template name="trim-start-lines">
-                          <xsl:with-param name="text" select="postamble" />
-                          <xsl:with-param name="preserve-intentional" select="true()" />
-                      </xsl:call-template>
+                        <xsl:apply-templates select="postamble" mode="program-part-processing"/>
                     </xsl:if>
                 </xsl:variable>
                 <!-- now sanitize the whole blob -->
