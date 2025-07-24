@@ -23,7 +23,7 @@
 
 <!-- This is a skeleton file to hold WeBWorK problems authored in PreTeXt. -->
 
-<pretext>
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
   <article xml:id="webwork-mini">
     <title><webwork /> Minimal Example</title>
     <frontmatter>
@@ -70,6 +70,11 @@
       <!-- The path is relative to the host course's templates folder -->
       <exercise>
         <webwork source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg"/>
+      </exercise>
+      <!-- An exercise with source from a pg file. This is the default new problem file template -->
+      <!-- from a webwork2 server. The path is relative to this current file we are in.          -->
+      <exercise>
+        <webwork><xi:include parse="text" href="pg/newProblem.pg"/></webwork>
       </exercise>
     </section>
   </article>
