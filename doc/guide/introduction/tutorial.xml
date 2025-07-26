@@ -179,7 +179,7 @@
           <ul>
             <li>
               <p>
-                Click the <q>PreTeXt</q> button in the center left of the bottom toolbar of the VS Code window (see <xref ref="tutorial-figure-codespaces-pretext"/>). A dialog will pop up asking which <pretext /> command you want to run.  Select <c>Build</c> to get a menu of options to select a <term>target</term> to build: choose <c>web</c>.
+                Click the <q>PreTeXt</q> button in the center left of the bottom toolbar of the VS Code window (see <xref ref="tutorial-figure-codespaces-pretext"/>). A dialog will pop up asking which <pretext /> command you want to run.  Select <c>Build default target</c>, or choose <c>Build another target...</c> to get a menu of options to select a <term>target</term> to build (choose <c>web</c>).
               </p>
             </li>
             <li>
@@ -191,7 +191,7 @@
             <li>
               <p>
                 Select a <pretext /> command from the VS Code command palette, which you can access by clicking the icon in the bottom left of the VS Code window. You can also access this by typing <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>p</kbd> (again, replacing <kbd>CTRL</kbd> with <kbd>CMD</kbd> if you have a Mac).  Start typing <q>pretext</q> to get a list of commands available.
-              </p>  
+              </p>
             </li>
             <li>
               <p>
@@ -234,16 +234,13 @@
       <subsection xml:id="tutorial-pdf">
         <title>Building for print</title>
         <p>
-          The instructions above can be repeated to produce <latex /> code:
-          just choose <c>print-latex</c> instead of <c>web</c> as your target.
-          The resulting files are available in <c>output/print-latex</c>.
-        </p>
-        <p>
-          Of course, it'd be even more convenient to produce a PDF directly.
-          This requires software that can process <latex />, which should be installed in the <pretext/> Codespace by default. Repeat the above instructions
-          with the <c>print</c> target to produce a PDF. It can be downloaded by right-clicking
-          <c>output/print/main.pdf</c> in the VS Code file explorer, or previewed using
+          To produce a PDF from your <pretext /> source, repeat the above instructions
+          with the <c>print</c> target. If you use the <pretext /> button in the toolbar, select <c>Build another target...</c> and then <c>print</c>. Alternatively, you can enter <c>pretext build print</c> in a terminal. The resulting PDF will land in <c>output/print/main.pdf</c>, and can be downloaded by right-clicking in the VS Code file explorer, or previewed using
           a View command.
+        </p>
+
+        <p>
+          If you would like to see the intermediate <latex /> source files, you can add a new target to the project manifest (<c>project.ptx</c>) with a <attr>format</attr> of <c>latex</c>.  See <xref ref="cli-project-manifest"/>.
         </p>
 
       </subsection>
