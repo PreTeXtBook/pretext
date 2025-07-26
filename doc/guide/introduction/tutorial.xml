@@ -411,7 +411,7 @@
 
     <introduction>
       <p>
-        The browser-based GitHub Codespaces workflow described in <xref ref="quickstart-example"/> is a quick and easy way to use <pretext /> without needing to install any additional software.  If you prefer to have a local setup of PreTeXt, we recommend one of the following three setups.   
+        The browser-based GitHub Codespaces workflow described in <xref ref="quickstart-example"/> is a quick and easy way to use <pretext /> without needing to install any additional software.  If you prefer to have a local setup of PreTeXt, we recommend one of the following three setups.
       </p>
     </introduction>
 
@@ -455,7 +455,7 @@
             </p>
           </li>
         </ol>
-        
+
         The last step will take a few minutes the first time since it must download the container image.
       </p>
 
@@ -472,7 +472,7 @@
       <title>Option 2: Installing the <pretext /> CLI and Additional Software</title>
 
       <p>
-        The <pretext /> CLI is a Python package that can be installed on your computer.  This option is more lightweight than using a Docker container, but it does require you to install several prerequisite programs (including Python itself).  
+        The <pretext /> CLI is a Python package that can be installed on your computer.  This option is more lightweight than using a Docker container, but it does require you to install several prerequisite programs (including Python itself).
       </p>
 
       <p>
@@ -480,7 +480,7 @@
       </p>
 
       <p>
-        This option is great if you already have a lot of the software that would be duplicated in the docker image from Option 1.  In the following list, only python is strictly required, but many features of <pretext /> will not work without the other software. 
+        This option is great if you already have a lot of the software that would be duplicated in the docker image from Option 1.  In the following list, only python is strictly required, but many features of <pretext /> will not work without the other software.
         <ul>
           <li>
             <p>
@@ -522,7 +522,7 @@
 
     <subsection xml:id="subsec-installing-from-source">
       <title>Option 3: Running <pretext /> <q>from source</q></title>
-      
+
       <p>
         For advanced users, especially if you want to contribute to the development of <pretext />, you can run <pretext /> without the CLI.  To do this, you will need to clone the <url href="https://github.com/PreTeXtBook/pretext">PreTeXt repository</url> and install the required dependencies manually.  This is required if you want to run the <xref ref="pretext-script"><pretext /> script</xref> or even just use <xref ref="xsltproc"><c>xsltproc</c></xref> to process your <pretext /> documents.  Additional information is available in the linked sections.
       </p>
@@ -546,8 +546,8 @@
       </p>
     </subsection>
 
-  </section>    
-  
+  </section>
+
   <section xml:id="tutorial-videos">
       <title>Videos</title>
 
