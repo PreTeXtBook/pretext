@@ -410,6 +410,31 @@
                 <cline>/publication/latex/@snapshot</cline>
             </cd> to values <c>yes</c> or <c>no</c> to enable or disable the generation of a <q>snapshot</q> record of the LaTeX packages in use.  The default is <c>no</c>.  See <xref ref="latex-snapshot-record"/> for more detail.</p>
         </subsection>
+
+        <subsection xml:id="latex-insertions-pagebreaks-options">
+            <title>Page Breaks</title>
+            <idx><h>Page breaks</h><h>LaTeX, PDF</h></idx>
+            <idx><h>Pagebreaks</h><h>LaTeX, PDF</h></idx>
+            <idx><h>LaTeX</h><h>page breaks</h></idx>
+            <idx><h>LaTeX</h><h>pagebreaks</h></idx>
+            <idx><h>PDF</h><h>page breaks</h></idx>
+            <idx><h>PDF</h><h>pagebreaks</h></idx>
+
+            <p>
+                A publisher can declare <attr>xml:id</attr> values for which a pagebreak
+                (<c>\newpage</c>) will precede the corresponding element in output. This is only
+                valid for certain element types. Use
+                <cd>
+                    <cline>/publication/latex/insertions/@pagebreaks</cline>
+                </cd>
+                to provide a whitespace-separated list of <attr>xml:id</attr> values. You may use
+                multiple <tag>insertions</tag> elements, each with its own <attr>pagebreaks</attr>
+                to help organize pagebreaks by chapter, etc.
+            </p>
+            <p>
+                See <xref ref="page-breaks"/>.
+            </p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-online">
