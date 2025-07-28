@@ -413,7 +413,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-codelens-python">
             <title>A Python program, stepable with CodeLens</title>
-            <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
+            <program label="python-hello-world-code-lens" interactive="codelens" language="python">
                 <code>
                 print('Hello, World!')
                 </code>
@@ -422,7 +422,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-codelens-c">
             <title>An C program, stepable with CodeLens</title>
-            <program xml:id="c-hello-world-code-lens" interactive="codelens" language="c">
+            <program label="c-hello-world-code-lens" interactive="codelens" language="c">
                 <code>
                 #include &lt;stdio.h&gt;
 
@@ -436,7 +436,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-codelens-java">
             <title>A Java program, stepable with CodeLens</title>
-            <program xml:id="java-hello-world-code-lens" interactive="codelens" language="java">
+            <program label="java-hello-world-code-lens" interactive="codelens" language="java">
                 <code>
                 public class HelloWorld {
                     public static void main(String[] args) {
@@ -447,11 +447,69 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>Now some moderately more complicated programs to find teh prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
+        <p>Codelens interactives can be given one or more checkpoints where the user is asked a question as the code is executed:</p>
+
+        <listing xml:id="program-codelens-python-questions">
+            <title>A Python program, stepable with CodeLens, with questions</title>
+            <program label="python-code-lens-questions" interactive="codelens" language="python" include-source="yes">
+                <code>
+                def foo(n):
+                    n = n + 1
+                    return n
+                x = 7
+                y = x // 3
+                z = foo(y)
+                </code>
+                <checkpoint line="4" answer="x">
+                    <prompt>What variable is being assigned to?</prompt>
+                </checkpoint>
+                <checkpoint line="5" answer-variable="globals.y">
+                    <prompt>What value will be assigned to <c>y</c>?</prompt>
+                    <feedback><c>//</c> does integer division</feedback>
+                </checkpoint>
+                <checkpoint line="3" answer-variable="current_frame.n">
+                    <prompt>What value will be returned?</prompt>
+                    <feedback>What is <c>n</c> right now?</feedback>
+                </checkpoint>
+            </program>
+        </listing>
+
+        <p>If a Codelens contains checkpoints, it is also possible to make it into an exercise. For use on Runestone, there should be an <attr>label</attr> on the exercise:</p>
+
+        <exercise label="program-codelens-cpp-questions">
+            <title>A C++ program as CodeLens exercise</title>
+            <statement>Run the codelens and answer the questions it asks.</statement>
+            <program interactive="codelens" language="cpp" include-source="yes">
+                <code><![CDATA[
+                  int foo() {
+                      int x = 2;
+                      int y = ++x;
+                      return y;
+                  }
+                  int main() {
+                      int x = foo();
+                      while (x < 20) {
+                        x *= 2;
+                      }
+                  }
+                  ]]>
+                </code>
+                <checkpoint line="3" answer="3">
+                    <prompt>What value will be assigned to <c>y</c>?</prompt>
+                    <feedback><c>++</c> has precedence over <c>=</c></feedback>
+                </checkpoint>
+                <checkpoint line="9" answer-variable="current_frame.x">
+                    <prompt>What value will be assigned to <c>x</c>?</prompt>
+                    <feedback>We are doubling it</feedback>
+                </checkpoint>
+            </program>
+        </exercise>
+
+        <p>Now some moderately more complicated programs to find the prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
 
         <listing xml:id="sieve-python">
             <title><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</title>
-            <program xml:id="sieve-codelens-python" interactive="codelens" language="python">
+            <program label="sieve-codelens-python" interactive="codelens" language="python" starting-step="73" include-source="yes">
                 <code><![CDATA[
                 def SieveOfEratosthenes(n):
                    # array of type boolean with True values in it
@@ -482,7 +540,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="sieve-cpp">
             <title><url href="https://www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range" visual="www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range">Sieve of Eratosthenes</url>, C++</title>
-            <program xml:id="sieve-codelens-cpp" interactive="codelens" language="cpp">
+            <program label="sieve-codelens-cpp" interactive="codelens" language="cpp">
                 <code> <![CDATA[
                 #include <stdio.h>
                 const int len = 20;
@@ -505,7 +563,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="sieve-java">
             <title><url href="https://www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java" visual="www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java">Sieve of Eratosthenes</url>, Java</title>
-            <program xml:id="sieve-codelens-java" interactive="codelens" language="java">
+            <program label="sieve-codelens-java" interactive="codelens" language="java">
                 <code><![CDATA[
                 public class SievePrimeFactors  {
                    public static void main(String args[]) {
@@ -2470,13 +2528,13 @@ TEST_CASE( "Test the add function" ) {
 
             <p>An <tag>exploration</tag> next.</p>
 
-            <exploration xml:id="exploration-with-always-static-program">
+            <exploration label="exploration-with-always-static-program">
                 <title>Exploration in a Subsection</title>
 
                 <statement>
                     <p>We would suggest now that you explore something here.  In this case we simply provide a CodeLens, which would be graded as an <q>interaction</q>.</p>
                 </statement>
-                <program xml:id="python-count-10" interactive="codelens" language="python">
+                <program interactive="codelens" language="python">
                     <code>
                     for i in range(10):
                         print(i)
