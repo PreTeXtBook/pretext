@@ -9143,10 +9143,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>The shape of the material will be fixed, so guess (or measure with an on-screen ruler), the aspect ratio and use that in the <tag>interactive</tag> element. If the width of the original material is anything other than 800 pixels, you should add <attr>material-width</attr> with the actual material width (units are pixels).</p>
 
+                <p>Note that this first instance uses the <attr>width</attr>, which will be a percentage of the width of whatever contains it.</p>
+
                 <figure>
                     <caption>Right Triangle Paradox</caption>
                     <interactive xml:id="geogebra-right-triangle" geogebra="KGn2d4Qd" width="70%" aspect="9:5" reset-icon="yes"/>
                 </figure>
+
+                <p>This second instance uses <attr>design-width</attr>, which specifies a maximum size in pixels (<c>400px</c> in this case). In HTML format, this version will resize to use all of the available space up to that maximum. The difference between the two will be noticeable as you resize the window. This method of limiting the width is useful when the author wants to prevent an interactive from getting too large when rendered in a full-width window with vertical aspect ratio, but keep it as large as possible when the window is reduced. The <attr>width</attr> which is also specified is ignored for HTML, but will still be used for non-HTML output. (We also have omitted a surrounding figure for layout testing.)</p>
+
+                <interactive xml:id="geogebra-right-triangle-width" geogebra="KGn2d4Qd" design-width="400px" width="70%" aspect="9:5" reset-icon="yes"/>
 
                 <p>There are some optional control elements that Geogebra provides, such as the presence of the toolbar and the reset button. These can be controlled by adding the following additional attributes to the <c>interactive</c>.
                 <ul>
@@ -9164,13 +9170,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Desmos Graphs</title>
                 <idx>Desmos graphs</idx>
 
-                <p><term>Desmos</term> provides interactive graphing applications.  The following example was created by Ann Cary and made available via the <q>Share</q> function of Desmos.  You can make your own Desmos graph, choose the <q>Share</q> icon, and the <q>Embed</q> option, to get a <init>URL</init> such as <cd>https://www.desmos.com/calculator/ttox1bvxku</cd>  You want to pick off the identifier on the end, in this case <c>ttox1bvxku</c>, then author<cd>&lt;interactive desmos="ttox1bvxku" width="60%" aspect="2:3" /&gt;</cd> as we have done here.</p>
+                <p><term>Desmos</term> provides interactive graphing applications.  The following example was created by Ann Cary and made available via the <q>Share</q> function of Desmos.  You can make your own Desmos graph, choose the <q>Share</q> icon, and the <q>Embed</q> option, to get a <init>URL</init> such as <cd>https://www.desmos.com/calculator/ttox1bvxku</cd>  You want to pick off the identifier on the end, in this case <c>ttox1bvxku</c>, then author<cd>&lt;interactive desmos="ttox1bvxku" design-width="400px" aspect="2:3" /&gt;</cd> as we have done here.</p>
 
                 <p>The static image employed in the <latex/> version of this article was obtained by viewing the graph at the Desmos site (<ie/>, not the embedded version in the <pretext/> HTML version), and using the Share button to export a <init>PNG</init> image.  In this case, we used a <q>Medium Rectangle</q> and <q>Thick</q> lines.</p>
 
                 <figure>
                     <caption>Graph of <m>ln(x^2+5)-3</m></caption>
-                    <interactive xml:id="desmos-natural-log" desmos="ttox1bvxku" width="60%" aspect="2:3"/>
+                    <interactive xml:id="desmos-natural-log" desmos="ttox1bvxku" design-width="400px" aspect="2:3"/>
                 </figure>
 
                 <p>Note that Desmos has extensive <pubtitle>Terms of Service</pubtitle> which include restrictions on commercial uses.</p>
@@ -9213,7 +9219,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-phet-fourier">
                     <caption>Fourier: Making Waves <c>iframe</c></caption>
-                    <interactive xml:id="interactive-phet-fourier" iframe="https://phet.colorado.edu/sims/html/fourier-making-waves/latest/fourier-making-waves_en.html" preview="preview/phet-fourier-preview.png" width="95%" aspect="15:10"/>
+                    <interactive xml:id="interactive-phet-fourier" iframe="https://phet.colorado.edu/sims/html/fourier-making-waves/latest/fourier-making-waves_en.html" preview="preview/phet-fourier-preview.png" width="95%" design-width="1800px" aspect="15:10"/>
                 </figure>
 
                 <p>Anything that suggests you can <term>embed</term> an interactive widget via an iFrame is fair game for this feature.  This is a Google Map of the state of California, for use in a French language document, from Julien Giol.  The necessary <init>URL</init> is obtained by using the <q>Share</q> feature, and then the <q>Embed a map</q> option has <init>HTML</init> with the <init>URL</init> in a <attr>src</attr> attribute.</p>
