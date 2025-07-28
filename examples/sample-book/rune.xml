@@ -5184,4 +5184,66 @@ TEST_CASE( "Test the add function" ) {
         </figure>
 
     </section>
+
+    <exercises xml:id="chapter-exam" label="chapter-exam" time-limit="15" pause="yes">
+        <title>Timed Chapter Exam</title>
+
+        <introduction>
+            <p>This is an <tag>exercises</tag> division, as a peer of the <tag>section</tag> in this <tag>chapter</tag> of a <tag>book</tag>.  It is also setup as a Runestone timed exam.  So it is an example of how you might have a per-chapter exam.  This contrasts with an earlier timed exam which is constructed as a per-section exam (<xref ref="timing-exercises"/>).  The exercises are the same here, but in a different order.  As a test, this exam is <q>pauseable</q> and has a 15 minute time limit.</p>
+        </introduction>
+
+        <exercise label="multiple-choice-not-randomized-timed-two">
+            <title>Multiple-Choice, Not Randomized, One Answer</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>What color is a stop sign?</p>
+            </statement>
+            <choices>
+                <choice>
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Green means <q>go!</q>.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is universally used for prohibited activities or serious warnings.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>White</p>
+                    </statement>
+                    <feedback>
+                        <p>White might be hard to see.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>What did you see last time you went driving?</p>
+            </hint>
+            <hint>
+                <p>Maybe go out for a drive?</p>
+            </hint>
+        </exercise>
+
+        <exercise label="vector-space-dimension-timed-two">
+            <title>True/False</title>
+            <idx>vector space</idx>
+            <statement correct="no">
+                <p>Every vector space has finite dimension.</p>
+            </statement>
+            <feedback>
+                <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+            </feedback>
+            <hint>
+                <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+            </hint>
+        </exercise>
+    </exercises>
 </chapter>
