@@ -11,6 +11,13 @@
  *******************************************************************************
  */
 
+// from https://stackoverflow.com/questions/34422189/get-item-offset-from-the-top-of-page
+function getOffsetTop(e) {
+    // recursively walk up the DOM via offsetParent, accumulating offsetTop as we go
+    if (!e) return 0;
+    return getOffsetTop(e.offsetParent) + e.offsetTop;
+};
+
 function scrollTocToActive() {
     //Try to figure out current TocItem from URL
     let fileNameWHash = window.location.href.split("/").pop();
@@ -22,6 +29,7 @@ function scrollTocToActive() {
         return; //complete failure, get out
     }
 
+    let tocEntryTop = 0;
     //See if we can also match fileName#hash (assuming there is a fragment)
     if (fileNameWHash.includes('#')) {
         let tocEntryWHash = document.querySelector(
@@ -33,7 +41,11 @@ function scrollTocToActive() {
                 li.classList.remove("active");
             });
             tocEntryWHash.closest("li").classList.add("active");
+            tocEntryTop = getOffsetTop(tocEntryWHash);
         }
+    }
+    if (!tocEntryTop) {
+        tocEntryTop = getOffsetTop(tocEntry);
     }
 
     //Now activate ToC item for fileName and scroll to it
@@ -42,7 +54,9 @@ function scrollTocToActive() {
     tocEntry.closest("li").classList.add("active");
     // Scroll only if the tocEntry is below the bottom half of the window,
     // scrolling to that position.
-    document.querySelector("#ptx-toc").scrollTop = tocEntry.offsetTop - 0.4 * self.innerHeight;
+    let toc = document.querySelector("#ptx-toc");
+    let tocTop = getOffsetTop(toc);
+    toc.scrollTop = tocEntryTop - tocTop - 0.4 * self.innerHeight;
 }
 
 function toggletoc() {
@@ -239,3 +253,5 @@ window.addEventListener("DOMContentLoaded", function(event) {
 window.addEventListener("DOMContentLoaded",function(event) {
     scrollTocToActive();
 });
+
+window.onhashchange = scrollTocToActive;
