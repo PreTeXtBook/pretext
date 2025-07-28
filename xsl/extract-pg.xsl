@@ -760,35 +760,6 @@
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>TEXT(beginproblem());&#xa;</xsl:text>
-    <xsl:if test="not($b-human-readable)">
-        <!-- see select-latex-macros template -->
-        <xsl:variable name="macros">
-            <xsl:call-template name="select-latex-macros"/>
-        </xsl:variable>
-        <xsl:if test="$macros != ''">
-            <xsl:variable name="wrapped-macros">
-                <xsl:text>&lt;div style="display:none;">\(</xsl:text>
-                <xsl:value-of select="$macros" />
-                <xsl:text>\)&lt;/div></xsl:text>
-            </xsl:variable>
-            <xsl:variable name="delimiter">
-                <xsl:call-template name="find-unused-character">
-                    <xsl:with-param name="string" select="$wrapped-macros"/>
-                    <!-- https://stackoverflow.com/questions/43617820/what-are-the-legal-delimiters-for-perl-5s-pick-your-own-quotes-operators    -->
-                    <!-- NB: don't use (), <>, [], {}, because as perl delimiters, closer must be the right version; too complicated to check for -->
-                    <xsl:with-param name="charset" select="concat($apos,'|/?.,+-_~`!@$%^&amp;*')"/>
-                </xsl:call-template>
-            </xsl:variable>
-            <xsl:text>TEXT(MODES(PTX=&gt;'',HTML=&gt;</xsl:text>
-            <xsl:if test="$delimiter != $apos">
-                <xsl:text>q</xsl:text>
-            </xsl:if>
-            <xsl:value-of select="$delimiter"/>
-            <xsl:value-of select="$wrapped-macros"/>
-            <xsl:value-of select="$delimiter"/>
-            <xsl:text>));&#xa;</xsl:text>
-        </xsl:if>
-    </xsl:if>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
@@ -1668,40 +1639,6 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Inside math we need to print definitions for PTX author-defined      -->
-<!-- LaTeX macros to support WeBWorK's images display mode.               -->
-
-<!-- TODO: This named template examines the current context (see '.' in   -->
-<!-- contains() below), so should be a match template. But its recursive  -->
-<!-- implementation makes it a named template for now.                    -->
-<xsl:template name="select-latex-macros">
-    <xsl:param name="macros" select="$latex-macros" />
-    <xsl:variable name="trimmed-start">
-        <xsl:if test="contains($macros, '\newcommand{')">
-            <xsl:value-of select="substring-after($macros, '\newcommand{')"/>
-        </xsl:if>
-    </xsl:variable>
-    <xsl:variable name="macro-name">
-        <xsl:if test="contains($trimmed-start, '}')">
-            <xsl:value-of select="substring-before($trimmed-start, '}')"/>
-        </xsl:if>
-    </xsl:variable>
-    <xsl:variable name="macro-command">
-        <xsl:value-of select="substring-before($macros, '&#xa;')"/>
-    </xsl:variable>
-    <xsl:variable name="next-lines">
-        <xsl:value-of select="substring-after($macros, '&#xa;')"/>
-    </xsl:variable>
-    <xsl:if test="contains(., $macro-name)">
-        <xsl:value-of select="normalize-space($macro-command)"/>
-    </xsl:if>
-    <xsl:if test="not($next-lines = '')">
-        <xsl:call-template name="select-latex-macros">
-            <xsl:with-param name="macros" select="$next-lines"/>
-        </xsl:call-template>
-    </xsl:if>
-</xsl:template>
-
 <!-- ##################################################################### -->
 <!-- ##################################################################### -->
 <!-- Above: templates for elements that only ever apply within a webwork   -->
@@ -1800,9 +1737,6 @@
 <xsl:template match="m">
     <xsl:param name="b-human-readable" />
     <xsl:text>[`</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="select-latex-macros"/>
-    </xsl:if>
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
@@ -1817,9 +1751,6 @@
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>[```</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="select-latex-macros"/>
-    </xsl:if>
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
@@ -1902,9 +1833,6 @@
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:text>[```</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="select-latex-macros"/>
-    </xsl:if>
     <xsl:value-of select="$content" />
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
