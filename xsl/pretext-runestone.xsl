@@ -572,19 +572,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is a RS "subchapter"                   -->
 <xsl:template match="section|chapter/exercises|chapter/worksheet|chapter/reading-questions" mode="runestone-manifest">
     <subchapter>
-        <id>
-            <xsl:apply-templates select="." mode="html-id"/>
-        </id>
-        <title>
-            <xsl:apply-templates select="." mode="title-full"/>
-        </title>
-        <number>
-            <xsl:apply-templates select="." mode="number"/>
-        </number>
-        <division>
-            <xsl:value-of select="local-name()"/>
-        </division>
-        <!-- report the division type -->
+        <!-- some properties of the division -->
+        <xsl:apply-templates select="." mode="runestone-division-properties"/>
         <!-- nearly a dead end, recurse into "exercise" and PROJECT-LIKE at *any* PTX -->
         <!-- depth, for example within a "subsection" (which Runestone does not have) -->
         <!-- If any of the next select are containers (full of "task") they will not  -->
@@ -598,6 +587,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select=".//program[@xml:id = $linked-programs-list]" mode="runestone-manifest-source"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
+</xsl:template>
+
+<!-- Properties to report for each division -->
+<xsl:template match="*" mode="runestone-division-properties">
+    <id>
+        <xsl:apply-templates select="." mode="html-id"/>
+    </id>
+    <title>
+        <xsl:apply-templates select="." mode="title-full"/>
+    </title>
+    <number>
+        <xsl:apply-templates select="." mode="number"/>
+    </number>
+    <!-- report the division type -->
+    <division>
+        <xsl:value-of select="local-name()"/>
+    </division>
 </xsl:template>
 
 <!-- A Runestone exercise needs to identify itself when an instructor wants   -->
