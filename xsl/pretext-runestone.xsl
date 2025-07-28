@@ -566,11 +566,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </chapter>
 </xsl:template>
 
-<!-- Every division at PTX "section" level, -->
-<!-- potentially containing an "exercise",  -->
-<!-- e.g. "worksheet" but not "references", -->
-<!-- is a RS "subchapter"                   -->
-<xsl:template match="section|chapter/exercises|chapter/worksheet|chapter/reading-questions" mode="runestone-manifest">
+<!-- Every division at PreTeXt "section" level, potentially containing  -->
+<!-- an "exercise", e.g. a "worksheet", but not a "references", is a    -->
+<!-- Runestone "subchapter".  Runestone "timed exams" (on a per-chapter -->
+<!-- basis here), which are an "exercises" with a @time-limit, are      -->
+<!-- exceptional and have templates elsewhere.                          -->
+<xsl:template match="section|chapter/exercises[not(@time-limit)]|chapter/worksheet|chapter/reading-questions" mode="runestone-manifest">
     <subchapter>
         <!-- some properties of the division -->
         <xsl:apply-templates select="." mode="runestone-division-properties"/>
@@ -580,13 +581,50 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- meet the dead-end monster match below, and the default template will     -->
         <!-- recurse into non-container "task" eventually, so "task" do get           -->
         <!-- processed, even if they seem to be missing from this select.             -->
-        <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile|.//interactive[@platform = 'doenetml']" mode="runestone-manifest"/>
+        <!-- Exceptions (early in the select): we explicitly recurse into a           -->
+        <!-- "exercises" division at the PreTeXt "subsection" level that is a         -->
+        <!-- Runestone timed exam associated with some "section".  We also avoid      -->
+        <!-- collecting "exercise" at arbitrary depth for the timed exams, as the     -->
+        <!-- template for those divisions will do that collection.                    -->
+        <xsl:apply-templates select="exercises[@time-limit]|.//exercise[not(ancestor::exercises[@time-limit])]|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile|.//interactive[@platform = 'doenetml']" mode="runestone-manifest"/>
 
         <!-- Now check for programs that have been included elsewhere. They need      -->
         <!-- to be rendered into <source> elements.                                   -->
         <xsl:apply-templates select=".//program[@xml:id = $linked-programs-list]" mode="runestone-manifest-source"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
+</xsl:template>
+
+<!-- "exercises" divisions with @time-limit are Runestone "timed-exams".      -->
+<!-- They can be at the PreTeXt "section" level (as a Runestone "subchapter") -->
+<!-- or they are at the PreTeXt "subsection" level, which we report here as   -->
+<!-- a fictional Runestone "subsubchapter". Their contained "exercise" are    -->
+<!-- excluded previously, and are now collected here.                         -->
+<xsl:template match="chapter/exercises[@time-limit]|chapter/section/exercises[@time-limit]" mode="runestone-manifest">
+    <xsl:variable name="rs-division">
+        <xsl:choose>
+            <xsl:when test="parent::chapter">
+                <xsl:text>subchapter</xsl:text>
+            </xsl:when>
+            <xsl:when test="parent::section">
+                <xsl:text>subsubchapter</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="{$rs-division}">
+        <!-- Attributes are all mostly of the form "data-no-*", following   -->
+        <!-- Runestone conventions and thus utilizing a single template and -->
+        <!-- thus ensuring some consistency. This includes the mandatory    -->
+        <!-- attribute @data-time, which will be the signal for manifest    -->
+        <!-- processing that this is a timed exam.                          -->
+        <xsl:apply-templates select="." mode="runestone-timed-exam-attributes"/>
+        <!-- some properties of the division -->
+        <xsl:apply-templates select="." mode="runestone-division-properties"/>
+        <!-- Slim possibility "exercise" are buried within an       -->
+        <!-- "exercisegroup", though usually they are just children -->
+        <!-- of the "exercises", so this is not really overkill     -->
+        <xsl:apply-templates select=".//exercise" mode="runestone-manifest"/>
+    </xsl:element>
 </xsl:template>
 
 <!-- Properties to report for each division -->
