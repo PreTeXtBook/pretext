@@ -350,31 +350,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <ul data-component="timedAssessment" data-question_label="">
                 <!-- a Runestone id -->
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                <!-- one mandatory attribute -->
-                <xsl:attribute name="data-time">
-                    <xsl:value-of select="@time-limit"/>
-                </xsl:attribute>
-                <!-- result, timer, feedback, pause are *on* by  -->
-                <!-- default if a PreTeXt attribute is "no" then -->
-                <!-- issue empty "data-no-*" Runestone attribute -->
-                <xsl:if test="@results = 'no'">
-                    <xsl:attribute name="data-no-result"/>
-                </xsl:if>
-                <xsl:if test="@timer = 'no'">
-                    <xsl:attribute name="data-no-timer"/>
-                </xsl:if>
-                <xsl:if test="@feedback = 'no'">
-                    <xsl:attribute name="data-no-feedback"/>
-                </xsl:if>
-                <xsl:if test="@pause = 'no'">
-                    <xsl:attribute name="data-no-pause"/>
-                </xsl:if>
+                <xsl:apply-templates select="." mode="runestone-timed-exam-attributes"/>
                 <!-- the actual list of exercises -->
                 <xsl:copy-of select="$the-exercises"/>
                 <!-- only at "section" level. only when building for a Runestone server -->
                 <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
             </ul>
         </div>
+    </xsl:if>
+</xsl:template>
+
+<!-- These are the possible attributes the Runestone component -->
+<!-- expects for a timed exam, in a style that the Runestone   -->
+<!-- HTML uses.  We repeat them *verbatim* when the Runestone  -->
+<!-- manifect reports an "exercises" as a timed exam, as the   -->
+<!-- best way to endure some consistency in defaults, etc.     -->
+<xsl:template match="exercises" mode="runestone-timed-exam-attributes">
+    <!-- one mandatory attribute -->
+    <xsl:attribute name="data-time">
+        <xsl:value-of select="@time-limit"/>
+    </xsl:attribute>
+    <!-- result, timer, feedback, pause are *on* by  -->
+    <!-- default if a PreTeXt attribute is "no" then -->
+    <!-- issue empty "data-no-*" Runestone attribute -->
+    <xsl:if test="@results = 'no'">
+        <xsl:attribute name="data-no-result"/>
+    </xsl:if>
+    <xsl:if test="@timer = 'no'">
+        <xsl:attribute name="data-no-timer"/>
+    </xsl:if>
+    <xsl:if test="@feedback = 'no'">
+        <xsl:attribute name="data-no-feedback"/>
+    </xsl:if>
+    <xsl:if test="@pause = 'no'">
+        <xsl:attribute name="data-no-pause"/>
     </xsl:if>
 </xsl:template>
 
