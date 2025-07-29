@@ -4245,7 +4245,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>Bibliographic Information</title>
 
-            <p>Required. The <tag>bibinfo</tag> <idx><h>bibinfo</h></idx> element may contain metadata about your document, including <tag>author</tag>, <tag>editor</tag>, <tag>credit</tag>, <tag>date</tag>, <tag>keywords</tag>, <tag>edition</tag>, <tag>website</tag> and <tag>copyright</tag>.  Additional elements to capture bibliogrphic information are planned.</p>
+            <p>Required. The <tag>bibinfo</tag> <idx><h>bibinfo</h></idx> element may contain metadata about your document, including <tag>author</tag>, <tag>editor</tag>, <tag>credit</tag>, <tag>date</tag>, <tag>keywords</tag>, <tag>edition</tag>, <tag>website</tag> and <tag>copyright</tag>.  Additional elements to capture bibliographic information are planned.</p>
 
             <paragraphs>
                 <title>Authors and editors</title>
