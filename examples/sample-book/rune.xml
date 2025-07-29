@@ -4361,6 +4361,8 @@ TEST_CASE( "Test the add function" ) {
 
         <p>(Since this is an unstructured division, the number of the <tag>exercises</tag> is not displayed when born.  It does <em>have</em> a number, which is the same as the enclosing <tag>section</tag>.  To wit: <xref ref="exercises-timed"/> versus <xref ref="timing-exercises"/>.)</p>
 
+        <p>If you prefer that a given <tag>section</tag> has more than one <tag>exercises</tag> within it (timed or not), realize that you must then structure your <tag>section</tag> with a ssequence of <tag>subsection</tag> as peers of the multiple <tag>exercises</tag> you desire.</p>
+
         <exercises xml:id="timing-exercises" label="timed-exercises" time-limit="10" pause="no">
             <title>Timed Exercises</title>
 
