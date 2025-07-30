@@ -4688,16 +4688,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
-<!-- Special footnotes come from the "url" element with -->
-<!-- an internal/obsfucated attribute holding a URL     -->
-<!-- which we wrap as "code", just as when made visible -->
-<!-- in the case of a no-content "url" element.         -->
-<xsl:template match="fn[@pi:url]" mode="wrapped-content">
-    <xsl:param name="b-original" select="true()" />
-    <code class="code-inline tex2jax_ignore">
-        <xsl:value-of select="@pi:url"/>
-    </code>
-</xsl:template>
 
 
 <!-- Contributor -->
