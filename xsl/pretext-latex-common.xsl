@@ -7992,9 +7992,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{</xsl:text>
             <xsl:copy-of select="$visible-text"/>
             <xsl:text>}</xsl:text>
+            <!-- A content-full URL will have an authored @visual version,  -->
+            <!-- or the pre-processor will have manufactured a reasonable   -->
+            <!-- one.  Only if an author explicitly denies this option with -->
+            <!-- an empty string will this not be available/possible.  For  -->
+            <!-- print versions of a PDF we add this parenthetically.       -->
+            <xsl:if test="$b-latex-print and node() and not(@visual = '')">
+                <!-- space to separate -->
+                <xsl:text> </xsl:text>
+                <!-- parentheses, plus line-breakable monospace font -->
+                <xsl:text>(\nolinkurl{</xsl:text>
+                <xsl:call-template name="escape-url-to-latex">
+                    <xsl:with-param name="text">
+                        <xsl:value-of select="@visual" />
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:text>})</xsl:text>
+            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
-
 </xsl:template>
 
 <!-- ############# -->
