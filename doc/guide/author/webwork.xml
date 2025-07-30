@@ -83,9 +83,15 @@
         <cd>&lt;webwork source="Library/.../foo.pg"/></cd>
       </p>
       <p>
-        Or if you have a problem's PG file, you can upload it into the hosting course's
-        <c>templates/local/</c> folder and use it with:
-        <cd>&lt;webwork source="local/my_problem.pg"/></cd>
+        Or if you have a problem's PG file, you can place it in your project's folder tree and use
+        <tag>xi:include</tag> to insert the PG code as text into the <tag>webwork</tag> element:
+        <cd>&lt;webwork>&lt;xi:include parse="text" href="pg/my_problem.pg"/>&lt;/webwork></cd>
+        Two things to note. The file where you use <tag>xi:include</tag> has a root element, and
+        that root element needs to declare the <c>xi</c> namespace. So you need to have an attribute
+        <c>xmlns:xi="http://www.w3.org/2001/XInclude"</c> on that root element. Second, the
+        <attr>href</attr> specifying the path to the PG file needs to be relative to the file you
+        are working in. In the example, there is a folder named <c>pg</c> adjacent to the file we
+        are working in, and the PG file is within that folder.
       </p>
       <warning>
         <title>Not Every PG Problem is Compatible with <pretext/></title>
@@ -493,12 +499,5 @@
         </p>
       </subsubsection>
     </subsection>
-
-    <subsection>
-      <title>Using a Local PG Problem File</title>
-      <p>Planned.</p>
-    </subsection>
-
   </section>
-
 </chapter>

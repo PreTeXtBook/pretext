@@ -1,0 +1,75 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2025-07-23T21:53:19-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.1.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+COMMENT('Add two positive single-digit integers.');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$a = random(1, 9, 1);
+$b = random(1, 9, 1);
+$c = Compute($a + $b);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Compute the sum of [`[$a]`] and [`[$b]\text{:}`]
+
+[`[$a] + [$b] =`] [_]{$c}{5} [@AnswerFormatHelp('numbers')@]*
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+[`[$a] + [$b] = [$c]\text{.}`]
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
