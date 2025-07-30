@@ -11164,20 +11164,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="fn" mode="footnote-text">
-    <xsl:choose>
-        <xsl:when test="@pi:url">
-            <xsl:text>\nolinkurl{</xsl:text>
-            <xsl:call-template name="escape-url-to-latex">
-                <xsl:with-param name="text">
-                    <xsl:value-of select="@pi:url"/>
-                </xsl:with-param>
-            </xsl:call-template>
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- TEMPORARILY: render a glossary "headnote" as an "introduction" -->
