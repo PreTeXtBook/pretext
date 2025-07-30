@@ -514,12 +514,6 @@ div[style*="display:table-cell"] img {
     </div>
 </xsl:template>
 
-<!-- A "url" with content gets an automatic footnote with the @visual -->
-<!-- attribute value (if non-empty) or a mildly-sanitized version of  -->
-<!-- @href.  This template identifies and kills that special          -->
-<!-- construction, since a slideshow really doesn't need footnotes.   -->
-<xsl:template match="fn[@pi:url]"/>
-
 <!-- Side-By-Side -->
 <!-- Built by implementing two abstract   -->
 <!-- templates from the -common templates -->
