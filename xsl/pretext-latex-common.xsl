@@ -11124,7 +11124,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\footnote{</xsl:text>
-            <xsl:apply-templates select="." mode="footnote-text"/>
+            <xsl:apply-templates/>
             <xsl:apply-templates select="." mode="label" />
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
@@ -11156,15 +11156,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="serial-number"/>
             <xsl:text>]</xsl:text>
             <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="." mode="footnote-text"/>
+            <xsl:apply-templates/>
             <xsl:apply-templates select="." mode="label" />
             <xsl:text>}%&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:if>
-</xsl:template>
-
-<xsl:template match="fn" mode="footnote-text">
-    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- TEMPORARILY: render a glossary "headnote" as an "introduction" -->
