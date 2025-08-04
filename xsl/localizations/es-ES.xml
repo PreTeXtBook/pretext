@@ -85,6 +85,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'>Conclusión</localization>
     <localization string-id='exercises'>Ejercicios</localization>
     <localization string-id='worksheet'>Hoja de trabajo</localization>
+    <!-- <localization string-id='handout'>Handout</localization> -->
     <localization string-id='reading-questions'>Preguntas de comprensión</localization>
     <localization string-id='solutions'>Soluciones</localization>
     <localization string-id='glossary'>Glosario</localization>
