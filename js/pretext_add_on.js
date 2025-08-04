@@ -614,7 +614,7 @@ function setInitialWorkspaceHeights() {
 
 // If a worksheet includes authored pages, we only need to put content before the first page and after the last page into the first and last pages, respectively.
 function adjustWorksheetPages() {
-    const worksheet = document.querySelector('section.worksheet');
+    const worksheet = document.querySelector('section.worksheet, section.handout');
     if (!worksheet) {
         console.warn("No worksheet found, exiting adjustWorksheetPages.");
         return;
@@ -655,7 +655,7 @@ function createWorksheetPages(margins) {
     const conservativeContentHeight = 1056 - (margins.top + margins.bottom); // in pixels
     const conservativeContentWidth = 794 - (margins.left + margins.right); // in pixels
 
-    const worksheet = document.querySelector('section.worksheet');
+    const worksheet = document.querySelector('section.worksheet, section.handout');
     if (!worksheet) {
         console.warn("No worksheet found, exiting layoutWorksheet.");
         return;
@@ -968,7 +968,7 @@ window.addEventListener("load",function(event) {
   // We condition on the existence of the papersize radio buttons, which only appear in the worksheet print preview.
   if (document.querySelector('input[name="papersize"]')) {
     // First, get the margins for pages to be passed around as needed.
-    const marginList = document.querySelector('section.worksheet').getAttribute('data-margins').split(' ');
+    const marginList = document.querySelector('section.worksheet, section.handout').getAttribute('data-margins').split(' ');
     // Convert margin values to pixels if they are not already numbers
     function toPixels(value) {
         if (typeof value === "number") return value;
