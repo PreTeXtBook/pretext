@@ -145,3 +145,7 @@
 <!-- are added, then this need not change                              -->
 <!-- Typical use: self::exercise and boolean(&INLINE-EXERCISE-FILTER;) -->
 <!ENTITY INLINE-EXERCISE-FILTER "parent::article|parent::paragraphs|parent::chapter|parent::section|parent::subsection|parent::subsubsection">
+
+<!-- catch-alls for blocks -->
+<!ENTITY NUMBERED-BLOCK "&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&FIGURE-LIKE;|&DISCUSSION-LIKE;">
+<!ENTITY UNNUMBERED-BLOCK "&ASIDE-LIKE;|&SOLUTION-LIKE;|p|blockquote|pre|image|video|program|console|tabular|sidebyside|sbsgroup|sage|poem|assemblage|list-of|paragraphs">
