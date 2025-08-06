@@ -2633,6 +2633,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Vertical workspace for worksheets and handouts -->
+<xsl:template match="*" mode="workspace">
+    <xsl:variable name="vertical-space">
+        <xsl:apply-templates select="." mode="sanitize-workspace"/>
+    </xsl:variable>
+    <xsl:if test="not($vertical-space = '')">
+        <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
+        <xsl:value-of select="$vertical-space"/>
+        <xsl:text>}%&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- When workspace is requested, we call the modal "sanitize-workspace" which in -->
 <!-- pretext-common returns an empty string if the requested workspace is not in  -->
@@ -5786,6 +5798,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- explicitly ignore PROOF-LIKE and pickup just for theorems      -->
     <!-- Alternative: ocate first PROOF-LIKE, select only preceding:: ? -->
     <xsl:apply-templates select="*[not(&PROOF-FILTER;)]" />
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -5827,6 +5841,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}&#xa;</xsl:text>
@@ -5851,6 +5867,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}&#xa;</xsl:text>
@@ -5893,6 +5911,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{case}&#xa;</xsl:text>
 </xsl:template>
 
@@ -6299,6 +6319,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
         <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
     </xsl:apply-templates>
+    <!-- Currently inline exercises and project-like elements -->
+    <!-- are not getting workspace above, so we add it here.  -->
+    <xsl:if test="$inline or $project">
+        <xsl:apply-templates select="." mode="workspace"/>
+    </xsl:if>
     <!-- closing % necessary, as newline between adjacent environments -->
     <!-- will cause a slight indent on trailing exercise               -->
     <xsl:text>\end{</xsl:text>
@@ -6630,14 +6655,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
                 <!-- possibly add some workspace for items from a worksheet     -->
                 <!-- an empty result is a signal there is no workspace authored -->
-                <xsl:variable name="vertical-space">
-                    <xsl:apply-templates select="." mode="sanitize-workspace"/>
-                </xsl:variable>
-                <xsl:if test="not($vertical-space = '')">
-                    <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
-                    <xsl:value-of select="$vertical-space"/>
-                    <xsl:text>}%&#xa;</xsl:text>
-                </xsl:if>
+                <xsl:apply-templates select="." mode="workspace"/>
             </xsl:if>
         </xsl:for-each>
 
@@ -7010,6 +7028,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="*"/>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -7055,6 +7075,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <!-- Coordinate with schema, since we enforce it here -->
     <xsl:apply-templates select="p|blockquote|pre|image|video|program|console|tabular|sidebyside|sbsgroup" />
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -7085,6 +7107,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="introduction" />
     <xsl:apply-templates select="ol|ul|dl" />
     <xsl:apply-templates select="conclusion" />
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -7212,6 +7236,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:apply-templates/>
     <xsl:text>%&#xa;</xsl:text>
+    <!-- Add workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
 </xsl:template>
 
 <!-- For a memo, not indenting the first paragraph helps -->
@@ -7628,6 +7654,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(p)">
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="." mode="workspace"/>
 </xsl:template>
 
 <!-- In an unordered list, an item cannot be a target -->
@@ -7645,6 +7672,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(p)">
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="." mode="workspace"/>
 </xsl:template>
 
 <!-- Description lists always have title as additional -->
