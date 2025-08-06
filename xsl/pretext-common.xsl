@@ -6531,7 +6531,7 @@ Book (with parts), "section" at level 3
 <!-- workspace specified.  It is important that this sometimes returns -->
 <!-- an empty string, since that is a signal to not construct some     -->
 <!-- surrounding infrastructure to implement the necessary space.      -->
-<xsl:template match="&PROJECT-LIKE;|exercise|task" mode="sanitize-workspace">
+<xsl:template match="*" mode="sanitize-workspace">
     <!-- bail out quickly and empty if not on a worksheet    -->
     <!-- bail out if at a "task" that is not a terminal task -->
     <!-- we assume LaTeX will only request this template if  -->
@@ -6541,8 +6541,24 @@ Book (with parts), "section" at level 3
     <xsl:if test="ancestor::worksheet and not(child::task)">
         <!-- First element with @workspace, confined to the worksheet  -->
         <!-- Could be empty node-set, which will be empty string later -->
-        <xsl:variable name="workspaced" select="ancestor-or-self::*[@workspace and ancestor::worksheet][1]"/>
-        <xsl:variable name="raw-workspace" select="normalize-space($workspaced/@workspace)"/>
+        <xsl:variable name="raw-workspace">
+            <xsl:choose>
+                <!-- @workspace on the terminal task or exercise, if it has it. -->
+                <!-- NB can't have children tasks by conditional above. -->
+                <xsl:when test="self::task[@workspace] or self::exercise[@workspace]">
+                    <xsl:value-of select="normalize-space(@workspace)"/>
+                </xsl:when>
+                <!-- task/exercise w/out workspace but @workspace on the first ancestor with it, if any -->
+                <!-- This can happen for an exercise in an exercisegroup -->
+                <xsl:when test="(self::task or self::exercise) and ancestor::*[@workspace][1]">
+                    <xsl:value-of select="normalize-space(ancestor::*[@workspace][1]/@workspace)"/>
+                </xsl:when>
+                <!-- otherwise, @workspace on the element, if any -->
+                <xsl:otherwise>
+                    <xsl:value-of select="normalize-space(@workspace)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:choose>
             <!-- bail out empty if empty or absent -->
             <xsl:when test="$raw-workspace = ''"/>
@@ -6552,7 +6568,7 @@ Book (with parts), "section" at level 3
             <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 0) = '%'">
                 <xsl:variable name="approximate-inches" select="concat(substring($raw-workspace, 1, string-length($raw-workspace) - 1) div 10, 'in')"/>
                 <xsl:value-of select="$approximate-inches"/>
-                <xsl:message>PTX:ERROR:  as of 2020-03-17 worksheet exercises' workspace should be specified in 'in' or in 'cm'.  Approximating a page fraction of <xsl:value-of select="@workspace"/> by <xsl:value-of select="$approximate-inches"/>.</xsl:message>
+                <xsl:message>PTX:WARNING:  as of 2020-03-17 worksheet exercises' workspace should be specified in 'in' or in 'cm'.  Approximating a page fraction of <xsl:value-of select="@workspace"/> by <xsl:value-of select="$approximate-inches"/>.</xsl:message>
                 <xsl:apply-templates select="." mode="location-report"/>
             </xsl:when>
             <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 1) = 'in'">
@@ -6577,7 +6593,7 @@ Book (with parts), "section" at level 3
 <!-- A no-op, just remove to enable, but will need testing             -->
 <!-- EXAMPLE-LIKE look like things to do, but are not, and so do       -->
 <!-- not have @workspace inside a worksheet                            -->
-<xsl:template match="webwork-reps/static|webwork-reps/static/stage|&EXAMPLE-LIKE;" mode="sanitize-workspace"/>
+<xsl:template match="webwork-reps/static|webwork-reps/static/stage|exercisegroup|&SOLUTION-LIKE;" mode="sanitize-workspace"/>
 
 
 
