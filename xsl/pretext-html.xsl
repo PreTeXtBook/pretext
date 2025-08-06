@@ -4380,30 +4380,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
             </xsl:apply-templates>
-            <!-- optionally, an indication of workspace -->
-            <!-- for a print version of a worksheet     -->
-            <xsl:choose>
-                <xsl:when test="self::static">
-                    <xsl:apply-templates select="ancestor::exercise" mode="worksheet-workspace"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="worksheet-workspace"/>
-                </xsl:otherwise>
-            </xsl:choose>
         </xsl:when>
         <!-- TODO: contained "if" should just be a new "when"? (look around for similar)" -->
         <xsl:otherwise>
             <!-- no explicit "statement", so all content is the statement -->
             <!-- the "dry-run" templates should prevent an empty shell  -->
-            <xsl:if test="$b-has-statement" select="*">
+            <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="*">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="block-type" select="$block-type"/>
                 </xsl:apply-templates>
                 <!-- no separator, since no trailing components -->
-                <!-- optionally, an indication of workspace     -->
-                <!-- for a print version of a worksheet         -->
-                <xsl:apply-templates select="." mode="worksheet-workspace"/>
             </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
@@ -4474,7 +4461,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- prints invisible.  No @workspace attribute, nothing is added.     -->
 <!-- We rely on a template in -common to error-check the value of      -->
 <!-- the attribute.                                                    -->
-<xsl:template match="*" mode="worksheet-workspace">
+<xsl:template match="*" mode="workspace">
     <xsl:variable name="vertical-space">
         <xsl:apply-templates select="." mode="sanitize-workspace"/>
     </xsl:variable>
@@ -5030,6 +5017,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="block-type" select="$block-type" />
         </xsl:apply-templates>
+        <!-- Apply workspace div (but not in project, exercises or tasks, -->
+        <!-- since they get them applied in their exercise-content        -->
+        <!-- template). Unless the element is in a worksheet or handout,  -->
+        <!-- this div will be killed by the sanatize-workspace template.  -->
+        <!--<xsl:if test="not(&PROJECT-FILTER; or self::exercise or self::task)">-->
+            <xsl:apply-templates select="." mode="workspace"/>
+        <!--</xsl:if>-->
         <!-- Insert a permalink as the last child of the block, but only   -->
         <!-- if not FIGURE-LIKE (these get their permalink on the caption) -->
         <xsl:if test="not(&FIGURE-FILTER;)">
@@ -5104,6 +5098,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
+        <!-- Insert workspace (will only apply to p inside worksheet/handout -->
+        <xsl:apply-templates select="." mode="workspace"/>
         <!-- Insert permalink -->
         <xsl:apply-templates select="." mode="permalink"/>
     </div>
@@ -5197,6 +5193,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:for-each>
         <!-- INDENT ABOVE ON A WHITESPACE COMMIT -->
+    <!-- Insert workspace (will only apply to p inside worksheet/handout) -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <!-- Insert permalink -->
     <xsl:apply-templates select="." mode="permalink"/>
     </div>
@@ -5300,6 +5298,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </div>
                     </xsl:otherwise>
                 </xsl:choose>
+                <!-- Insert workspace (will only apply if in worksheet/handout) -->
+                <xsl:apply-templates select="." mode="workspace"/>
                 <!-- Insert permalink -->
                 <xsl:apply-templates select="." mode="permalink"/>
             </xsl:element>
@@ -5337,6 +5337,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
+                <!-- Insert workspace -->
+                <xsl:apply-templates select="." mode="workspace"/>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
