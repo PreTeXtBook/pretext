@@ -2634,6 +2634,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- When workspace is requested, we call the modal "sanitize-workspace" which in -->
+<!-- pretext-common returns an empty string if the requested workspace is not in  -->
+<!-- an appropriate division.  But we automatically want the empty string if the  -->
+<!-- publisher variable latex-worksheet-formatted is not set to "yes", so here we -->
+<!-- only apply the template in pretext-common if the variable is set to "yes".   -->
+<!-- NB: it is important to do this here and not in the pretext-common -->
+<!-- template since that is also used for HTML                         -->
+<xsl:template match="*" mode="sanitize-workspace">
+    <xsl:if test="$b-latex-worksheet-formatted">
+        <xsl:apply-imports />
+    </xsl:if>
+</xsl:template>
 
 
 <!--##################################-->
