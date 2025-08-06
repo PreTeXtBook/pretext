@@ -85,6 +85,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="handout">
+    <xsl:call-template name="banner-warning">
+        <xsl:with-param name="warning">Handouts are not yet supported in latex-classic conversions.  No content of such a division will be included in your output, and xref's to such divisions will be broken.</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- Defaults that can be overriden by style files -->
 <xsl:variable name="documentclass" select="'article'"/>
 <xsl:variable name="bibliographystyle" select="'amsplain'"/>
