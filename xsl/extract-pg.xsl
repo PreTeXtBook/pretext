@@ -172,7 +172,7 @@
     </ww-extraction>
 </xsl:template>
 
-<xsl:template match="webwork[@source|statement|task]" mode="extraction">
+<xsl:template match="webwork[@source|statement|task|text()]" mode="extraction">
     <xsl:variable name="problem">
         <xsl:value-of select="@ww-id"/>
     </xsl:variable>
@@ -183,7 +183,7 @@
         <!-- 1. a generated|webwork2 flag                                          -->
         <xsl:attribute name="origin">
             <xsl:choose>
-                <xsl:when test="statement|task">
+                <xsl:when test="statement|task|text()">
                     <xsl:text>generated</xsl:text>
                 </xsl:when>
                 <xsl:when test="@source">
@@ -205,35 +205,45 @@
         <xsl:attribute name="path">
             <xsl:apply-templates select="." mode="filename"/>
         </xsl:attribute>
-        <xsl:if test="statement|task">
-            <!-- 4. human readable PG (for PTX-authored)                           -->
-            <pghuman>
-                <xsl:variable name="pg">
+        <xsl:choose>
+            <xsl:when test="statement|task">
+                <!-- 4. human readable PG (for PTX-authored)                           -->
+                <pghuman>
+                    <xsl:variable name="pg">
+                        <xsl:apply-templates select=".">
+                            <xsl:with-param name="b-human-readable" select="true()"/>
+                        </xsl:apply-templates>
+                    </xsl:variable>
+                    <xsl:call-template name="consolidate-empty-lines">
+                        <xsl:with-param name="text" select="$pg"/>
+                    </xsl:call-template>
+                </pghuman>
+                <!-- 5. PG optimized (and less human-readable) for use in PTX output modes -->
+                <pgdense>
                     <xsl:apply-templates select=".">
-                        <xsl:with-param name="b-human-readable" select="true()"/>
+                        <xsl:with-param name="b-human-readable" select="false()"/>
                     </xsl:apply-templates>
-                </xsl:variable>
-                <xsl:call-template name="consolidate-empty-lines">
-                    <xsl:with-param name="text" select="$pg"/>
-                </xsl:call-template>
-            </pghuman>
-            <!-- 5. PG optimized (and less human-readable) for use in PTX output modes -->
-            <pgdense>
-                <xsl:apply-templates select=".">
-                    <xsl:with-param name="b-human-readable" select="false()"/>
-                </xsl:apply-templates>
-            </pgdense>
-        </xsl:if>
+                </pgdense>
+            </xsl:when>
+            <xsl:when test="text()">
+                <pghuman>
+                    <xsl:value-of select="text()"/>
+                </pghuman>
+                <pgdense>
+                    <xsl:value-of select="text()"/>
+                </pgdense>
+            </xsl:when>
+        </xsl:choose>
     </problem>
 </xsl:template>
 
 <!-- Append a filename to the directory path              -->
-<xsl:template match="webwork[@source|statement|task]" mode="filename">
+<xsl:template match="webwork[@source|statement|task|text()]" mode="filename">
     <xsl:choose>
         <xsl:when test="@source">
             <xsl:value-of select="@source"/>
         </xsl:when>
-        <xsl:when test="statement|task">
+        <xsl:when test="statement|task|text()">
             <xsl:apply-templates select="." mode="directory-path" />
             <xsl:if test="parent::project">
                 <xsl:text>Project-</xsl:text>
@@ -346,9 +356,10 @@
 <!-- A webwork element can either:                                         -->
 <!-- 1. be empty; just for printing "WeBWorK"                              -->
 <!-- 2. use an existing .pg problem from the server                        -->
-<!-- 3. have a single statement child                                      -->
-<!-- 4. have two or more task children (known in WW as "scaffolded")       -->
-<!-- What follows is not concerned with the first two. The latter two top  -->
+<!-- 3. have only one text() child, a fully intact .pg problem             -->
+<!-- 4. have a single statement child                                      -->
+<!-- 5. have two or more task children (known in WW as "scaffolded")       -->
+<!-- What follows is not concerned with the first three. The next two top  -->
 <!-- level templates follow.                                               -->
 
 

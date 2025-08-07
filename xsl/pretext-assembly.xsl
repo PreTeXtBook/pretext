@@ -864,7 +864,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- element ("pi:") for later consumption.  Review the destination for     -->
 <!-- similar notes about possible changes.                                  -->
 
-<xsl:template match="webwork[* or @copy or @source]" mode="webwork">
+<xsl:template match="webwork[* or @copy or @source or text()]" mode="webwork">
     <!-- Every "webwork" that is a problem (not a generator) gets a   -->
     <!-- lifetime identification in both passes through the source.   -->
     <!-- The first migrates through the "extract-pg.xsl" template,    -->
