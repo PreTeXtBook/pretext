@@ -1188,19 +1188,22 @@
                 }
             WebWorkAuthored =
                 element webwork {
-                    UniqueID?,
-                    LabelID?,
-                    Component?,
-                    attribute seed {xsd:integer}?,
-                    attribute copy {text}?,
-                    WWDescription?,
-                    WWMacros?,
-                    element pg-code {text}?,
                     (
-                        (StatementExerciseWW, HintWW?, SolutionWW?)
-                    |
-                        (IntroductionText?, TaskWW+, ConclusionText?)
-                    )
+                        UniqueID?,
+                        LabelID?,
+                        Component?,
+                        attribute seed {xsd:integer}?,
+                        attribute copy {text}?,
+                        WWDescription?,
+                        WWMacros?,
+                        element pg-code {text}?,
+                        (
+                            (StatementExerciseWW, HintWW?, SolutionWW?)
+                        |
+                            (IntroductionText?, TaskWW+, ConclusionText?)
+                        )
+                    ) |
+                    text
                 }
             BlockStatementWW =
                         Paragraph |
