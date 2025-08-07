@@ -1,0 +1,23 @@
+DOCUMENT();
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Add two positive single-digit integers.');
+
+Context('Numeric');
+$a = random(1, 9, 1);
+$b = random(1, 9, 1);
+$c = Compute($a + $b);
+
+BEGIN_PGML
+Compute the sum of [`[$a]`] and [`[$b]\text{:}`]
+
+[`[$a] + [$b] =`] [_]{$c}{5} [@AnswerFormatHelp('numbers')@]*
+
+END_PGML
+
+ENDDOCUMENT();
