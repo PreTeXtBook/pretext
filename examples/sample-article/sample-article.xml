@@ -3129,11 +3129,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <idx><h>link</h><h>external, url</h></idx>
                 <idx><h>reference</h><h>external, url</h></idx>
 
-                <p>The <tag>url</tag> element can be used to create an external reference.  The mandatory <attr>href</attr> attribute is the actual <init>URL</init> complete with the protocol (e.g. <c>https://</c>).  Content for the element is optional, and if provided will be the <q>clickable</q> text.  In this case, a <attr>visual</attr> attribute can be provided, and this will become a footnote with a more friendly version of the <init>URL</init>.  When no content is provided, the <q>clickable</q> will be the <init>URL</init> with a preference for an optional <attr>visual</attr>.  This subsection has some (extreme) tests and we leave complete documentation and full details for the <pretext/> Guide.</p>
+                <p>The <tag>url</tag> element can be used to create an external reference.  The mandatory <attr>href</attr> attribute is the actual <init>URL</init> complete with the protocol (e.g. <c>https://</c>).  Content for the element is optional, and if provided will be the <q>clickable</q> text.  In this case, a <attr>visual</attr> attribute can be provided. In producing the print version of a PDF, this will become a parenthetical with a more friendly version of the <init>URL</init>.  When no content is provided, the <q>clickable</q> will be the <init>URL</init> with a preference for an optional <attr>visual</attr>.  This subsection has some (extreme) tests and we leave complete documentation and full details for the <pretext/> Guide.</p>
 
                 <p>A long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw" visual="www.pcc.edu/enroll/registration/dropping.html#withdraw"/>.  Notice in the source that you <em>do not</em> put any tags inside the <attr>href</attr> or <attr>visual</attr> attributes, but you may need to provide XML escape sequences (see <xref ref="subsection-xml-escape" text="type-global"/>). </p>
 
-                <p>A <tag>url</tag> element with content will get a footnote, by containing the (simplified) URL in the highly-recommended <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you will get the <attr>href</attr> value repeated, possibly with some editing.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
+                <p>A <tag>url</tag> element in the print version of a PDF will get a trailing parenthetical containing the (simplified) URL in the highly-recommended <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you will get the <attr>href</attr> value repeated, possibly with some editing.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
                     <li><url href="http://example.com/" visual="example.com">With a useful <attr>visual</attr> attribute</url></li>
                     <li><url href="http://example.com/" visual="http://example.com/">With a duplicate <attr>visual</attr> attribute</url></li>
                     <li><url href="http://example.com/">With no <attr>visual</attr> attribute</url>, so an edited one is formulated (no protocol)</li>
@@ -3160,7 +3160,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>We are not fans of footnotes, they are totally unstructured.<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="">Carleson's Theorem</url></fn>
                 A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="/></fn>
                 This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite.
-                For good measure, we repeat the URL found in the first footnote (which lacks its own footnote by design<fn>And if you do provide a link like <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url> in a footnote you should see an  easy-to-read parenthetical version in some output formats, such as <c>en.wikipedia.org/wiki/Carleson%27s_theorem</c>.</fn>):
+                For good measure, we repeat the URL found in the first footnote<fn>And if you do provide a link like <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url> in a footnote you should see an  easy-to-read parenthetical version in some output formats, such as <c>en.wikipedia.org/wiki/Carleson%27s_theorem</c>.</fn>:
                 <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="">Carleson's Theorem</url>.
                 And we include a no-content version of the same link, with a visual version provided and employed:
                 <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="en.wikipedia.org/wiki/Carleson%27s_theorem"/>.</p>
@@ -8219,8 +8219,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p><init>HTML5</init> introduced the <tag>canvas</tag> element, which can be thought of a blank slate, a place to draw or write on.  So <pretext/> has the <tag>slate</tag> element for a similar purpose.  Generally, but not exclusively, <init>HTML5</init> writes on a <tag>canvas</tag> using the Javascript language.  We demonstrate this approach to interactive diagrams in this subsection.</p>
 
-                <p>The following examples are from David Austin's excellent <url href="http://merganser.math.gvsu.edu/david/linear.algebra/ula/index.html" visual="merganser.math.gvsu.edu/david/linear.algebra/ula/index.html"><pubtitle>Understanding Linear Algebra</pubtitle></url> textbook, which can be found at <cd>
-                    <cline>merganser.math.gvsu.edu/david/linear.algebra/ula/index.html</cline>
+                <p>The following examples are from David Austin's excellent <url href="https://understandinglinearalgebra.org/home.html" visual="understandinglinearalgebra.org"><pubtitle>Understanding Linear Algebra</pubtitle></url> textbook, which can be found at <cd>
+                    <cline>understandinglinearalgebra.org</cline>
                 </cd>David's contribution of examples, and assistance designing the <pretext/> elements is greatly appreciated.  Alright, let's learn some linear algebra.  Yes, there are some learning opportunities in this subsection.</p>
 
                 <figure xml:id="figure-simple-eigenvector">
@@ -14473,10 +14473,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>See also <custom ref="xref-to-result"/>.</p>
                 </blockquote>
 
-                <p>The URLs used as a replacement have the <attr>visual</attr> attribute which is also managed by the assembly pre-processor to provide a footnote.  So this is a good test of the organization of the multiple passes employed by the pre-processor.</p>
+                <p>The URLs used as a replacement have the <attr>visual</attr> attribute which is also managed by the assembly pre-processor to provide a parenthetical for print PDF production.  So this is a good test of the organization of the multiple passes employed by the pre-processor.</p>
 
                 <blockquote>
-                    <p>A <init>URL</init> that should have a footnote: <custom ref="a-URL"/>.</p>
+                    <p>A <init>URL</init> that should have a parenthetical in the print PDF version: <custom ref="a-URL"/>.</p>
                 </blockquote>
             </subsection>
 

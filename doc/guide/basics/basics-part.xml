@@ -1536,11 +1536,9 @@
         If you want to provide a link to a resource outside of your project,
         you will want the <tag>url</tag> tag.
         The code
-	<cd>&lt;url href="https://pretextbook.org" visual="pretextbook.org"&gt;PreTeXt&lt;/url&gt;</cd>
-	produces <url
-	href="https://pretextbook.org"
-	visual="pretextbook.org">PreTeXt</url>. Note that the footnote
-	is automatically created by the use of <attr>visual</attr>.
+        <cd>&lt;url href="https://pretextbook.org" visual="pretextbook.org"&gt;PreTeXt&lt;/url&gt;</cd>
+        produces <url href="https://pretextbook.org" visual="pretextbook.org">PreTeXt</url>.
+        Note that in a print PDF version, a trailing parenthetical with the content of <attr>visual</attr> is automatically created.
       </p>
 
       <p>

@@ -185,16 +185,8 @@
                 <title><tag>url</tag>, linking external resources</title>
                 <p>This is a cross-reference <em>to</em> some item separate and distinct for your document.</p>
 
-                <p>A Uniform Resource Locator (<init>URL</init>) is, loosely speaking, an Internet address for some item.  Presentation depends on the capabilities of the output format to serve the resource.  There is a mandatory attribute, <attr>href</attr>, that contains the full <init>URL</init>, including a protocol (such as <c>http://</c>).  Used as an empty tag, the visual text will be the exact contents of the <attr>href</attr> attribute.  So, <url href="http://www.example.com" /> can be achieved with
-                    <cd>&lt;url href="http://www.example.com"/&gt;</cd>
+                <p>A Uniform Resource Locator (<init>URL</init>) is, loosely speaking, an Internet address for some item.  Capabilities for providing links to such items are provided and take into account usability in different output formats.  See <xref ref="topic-url"/> for full details on how to use <tag>url</tag> for links to external resources.
                 </p>
-
-                <p>You may also wish to provide some text other than the actual <init>URL</init>, which you can specify as the content of the <tag>url</tag> element.  For example, <url href="http://www.example.com">IANA Test Site</url> can be achieved with
-                    <cd>&lt;url href="http://www.example.com"&gt;IANA Test Site&lt;/url&gt;</cd>
-                In order to have a URL occur in print output in a useful way, and in electronic output in an active way, the <attr>visual</attr> attribute can be used to display the visual portion as verbatim text in a footnote.
-                So illustrating again, we get <url href="http://www.example.com" visual="example.com"/> from
-                    <cd>&lt;url href="http://www.example.com" visual="example.com"/&gt;</cd>
-                Notice the necessity and/or desirability of marking the text in a way that distinguishes it as literal text.</p>
 
                 <p>Note also that this tag is meant for <em>external</em> resources, so see the <tag>xref</tag> element (below) or <xref ref="topic-cross-referencing" /> for ways to link internally (<ie /> within your document).</p>
             </paragraphs>
@@ -4744,7 +4736,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>The <tag>url</tag> element is used to point to <em>external</em> web pages, or other online resources  (as distinct from other internal portions of your current document, which is accomplished with the <tage>xref</tage> element, <xref ref="overview-cross-references"/>).  The <attr>href</attr> attribute is always necessary, as it contains the full and complete address of the external page or resource.  Include everything the <init>URL</init> needs, such as the protocol, since this will be most reliable, and as you will see it never needs to be visible.  The element always allows, and then employs, a <attr>visual</attr> attribute for a provided more-friendly version of the address.  Finally, the content of the element, which becomes the clickable text in electronic formats, can be authored with the full range of <pretext/> markup generally available in a title or sentence.  A typical use might look like<cd>
                 <cline>&lt;url href="https://example.com/" visual="example.com"&gt;Demo Site&lt;/url&gt;</cline>
-            </cd>This will render as <url href="https://example.com/" visual="example.com">Demo Site</url>.  Note the automatic footnote providing the visual version in a monospace font.  If a <tag>url</tag> has content, and no <attr>visual</attr> attribute is given, then the <attr>href</attr> will be placed in a footnote, though there will be an attempt to remove standard protocols.  Compare
+            </cd>This will render as <url href="https://example.com/" visual="example.com">Demo Site</url>.  If a <tag>url</tag> has content, and no <attr>visual</attr> attribute is given, then the <attr>href</attr> will be placed in a trailing parenthetical for print versions of PDF, though there will be an attempt to remove standard protocols.  Compare
             <cd>
                 <cline>&lt;url href="https://example.com/"&gt;Demo Site&lt;/url&gt;</cline>
             </cd>which will render as <url href="https://example.com/">Demo Site</url> versus<cd>
@@ -4753,11 +4745,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>If you do not provide any content for a <tage>url</tage> element, then the clickable text will be the actual <init>URL</init> with a preference for the (optional) <attr>visual</attr> attribute, rather than the mandatory <attr>href</attr> attribute.  This should be considered as disruptive to the flow of your text, and so a poor alternative to the content version just discussed (see <xref ref="best-practice-urls"/>).  But it might be a good choice in something like a list of interesting web sites.  Whether or not a simplified version of the address, via the <attr>visual</attr> attribute, is desirable will depend on the application.  As an example, using the optional <attr>visual</attr> attribute we have<cd>
                 <cline>&lt;url href="https://example.com/" visual="example.com"/&gt;</cline>
-            </cd>This will render as <url href="https://example.com/" visual="example.com"/>.  Note that there is no footnote since the visual version is already apparent.</p>
+            </cd>This will render as <url href="https://example.com/" visual="example.com"/>.  Note that for the print version of PDF, there is no trailing parenthetical since the visual version is already apparent.</p>
 
-            <p>If you want to squelch the automatic footnote on a <tag>url</tag> element with content, you can explicitly set the <attr>visual</attr> attribute to an empty string as <c>visual=""</c>.  This signal will inhibit the automatic footnote.  This should be a <em>very rare</em> occurence, since you are denying readers of some formats from seeing even a hint of the actual <init>URL</init>.</p>
-
-            <p>An extreme example of this behavior is a regular footnote which contains a <init>URL</init>.  Because an automatic footnote, inside another footnote, becomes problematic in some conversions, we squelch the footnote-within-a-footnote. A best practice here is to just list nearby a <init>URL</init>, likely using the <tag>c</tag> element to get a monospace font.</p>
+            <p>If you want to squelch the automatic trailing parenthetical for the print version of PDF on a <tag>url</tag> element with content, you can explicitly set the <attr>visual</attr> attribute to an empty string as <c>visual=""</c>.  This signal will inhibit the automatic trailing parenthetical.  This should be a <em>very rare</em> occurence, since you are denying readers of some formats from seeing even a hint of the actual <init>URL</init>.</p>
 
             <p>A <tag>url</tag> inside a <tag>title</tag> has been accounted for, but should be used with caution.</p>
 
@@ -4788,7 +4778,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <li>Experiment with dropping a trailing slash<mdash/>they are frequently unnecessary.</li>
                 <li>Often a leading <c>www.</c> in a domain name is not necessary.</li>
                 <li>Try providing just a domain name in place of a top-level landing page, it will often redirect to a longer <init>URL</init>.</li>
-                <li>You could use a <url href="https://en.wikipedia.org/wiki/Wikipedia:URLShortener" visual="https://w.wiki/4QA">URL shortener</url>, though some thought should be given to <url href="https://en.wikipedia.org/wiki/Google_URL_Shortener" visual="https://w.wiki/4eEM">its longevity</url>.  Will you remember where your short <init>URL</init>s point once they are no longer functional.  Safer to have your long <init>URL</init>s in an <attr>href</attr> in your source, and use <pretext/> to make them friendlier.</li>
+                <li>You could use a <url href="https://en.wikipedia.org/wiki/Wikipedia:URLShortener" visual="https://w.wiki/4QA">URL shortener</url>, though some thought should be given to <url href="https://en.wikipedia.org/wiki/Google_URL_Shortener" visual="https://w.wiki/4eEM">its longevity</url>.  Will you remember where your short <init>URL</init>s point once they are no longer functional?  Safer to have your long <init>URL</init>s in an <attr>href</attr> in your source, and use <pretext/> to make them friendlier.</li>
             </ul></p>
 
             <note xml:id="best-practice-urls">
@@ -5211,9 +5201,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <li>
                 <title>Link Text</title>
-                <p>Default link text, such as <q>Theorem 4.15</q> has been chosen to be informative.  But for internal links (<tag>xref</tag>) or external links (<tag>url</tag>) you can choose alternative content for the clickable portion of the text.  Think carefully about your choices here and try to avoid text like <q>here</q> or <q>click here.</q>  For a <tag>url</tag>, the default content is the <attr>href</attr>, which can always be improved by providing content.</p>
-
-                <p>Here is a device which we now use more frequently.  Despite our aversion to footnotes, create a <tag>url</tag> element and provide meaningful content, such as the title of the web page you are referencing.  Then immediately afterwards add a footnote (<tag>fn</tag>) which contains only the actual <init>URL</init>, perhaps wrapped in a <tag>c</tag> element.  Since this is mostly meant for print, it is safe to drop things like the <c>https://</c> protocol specification and therefore <em>not</em> make it active (for a second time).  This is in use within this section.</p>
+                <p>Default link text, such as <q>Theorem 4.15</q> has been chosen to be informative.  But for internal links (<tag>xref</tag>) or external links (<tag>url</tag>) you can choose alternative content for the clickable portion of the text.  Think carefully about your choices here and try to avoid text like <q>here</q> or <q>click here.</q>  For a <tag>url</tag>, the default content is the <attr>href</attr>, which can always be improved by providing content. For formats such as the print version of PDF, the <attr>visual</attr> is provided automatically as a trailing parenthetical.</p>
             </li>
 
             <li>
