@@ -89,6 +89,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='exercises'>Упражнения</localization>
 <!--
     <localization string-id='worksheet'>Worksheet</localization>
+    <localization string-id='handout'>Handout</localization>
     <localization string-id='reading-questions'>Reading Questions</localization>
 -->
     <localization string-id='solutions'>Решения</localization>

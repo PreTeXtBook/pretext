@@ -926,7 +926,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <case direction="cycle">
                         <p>Does the first statement imply the second?</p>
                         </case>
-                        
+
                     <case direction="cycle">
                         <title>The <q>middle</q> case</title>
                         <p>Does the second statement imply the third?</p>
@@ -15640,6 +15640,181 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </exercisegroup>
             </worksheet>
        </section>
+
+        <section xml:id="handouts" label="section-handouts">
+            <title>Handouts</title>
+
+            <introduction>
+                <title>About Handouts</title>
+                <p>
+                    Like worksheets, a <term>handout</term> is a division that is inteded to be printed for use in a classroom.
+                    In HTML output, you get the same print preview and page layout as you do with worksheets; in PDF, these will start on a new page with possibly different margins than the rest of the document.
+                </p>
+
+                <p>
+                    Unlike worksheets, handouts do not have a special class of exercises or activities (exercises in a handout are treated like an <em>inline</em> exercise).
+                    The other main distinction is that a handout lets workspace be specified on pretty much any block or paragraph element, not just exercises, tasks, and project-like elements.  This allows them to be used in the creation of guided notes containing some premade content with lots of space for students to fill in details during class.
+                </p>
+            </introduction>
+
+            <handout xml:id="handout-derivative-rules" label="handout-derivative-rules">
+                <title>Derivative Rules</title>
+                <page>
+                <paragraphs>
+                <title>Rules for specific types of functions</title>
+                <dl>
+                    <li>
+                        <title>Constant functions</title>
+                        <p>
+                            <m>(k)' = 0</m>
+                        </p>
+                    </li>
+
+                    <li>
+                    <title>Power functions</title>
+                    <p><m>(x^{n})' = nx^{n-1}</m></p>
+                    </li>
+
+                    <li>
+                        <title>Exponential functions</title>
+                        <p>
+                            <m>(a^{x})' = \ln(a) a^{x} \text{ (for } a>0\text{)}</m>
+                        </p>
+                        <p>
+                                <m>(e^{x})' = e^{x}</m>
+                        </p>
+                    </li>
+
+                    <li>
+                        <title>Logarithmic functions</title>
+                        <p><m>(\ln(x))' = \frac{1}{x}</m></p>
+                    </li>
+
+                <li>
+                    <title>Trigonometric functions</title>
+                    <p><m>(\sin(x))' = \cos(x)</m>.</p>
+                    <p> <m>(\cos(x))' = -\sin(x)</m>.</p>
+                    <p><m>(\tan(x))' = \sec^{2}(x) = \frac{1}{\cos^{2}(x)}</m>.</p>
+                    <p><m>(\arcsin(x))' = \frac{1}{\sqrt{1-x^{2}}}</m>.</p>
+                    <p><m>(\arctan(x))' = \frac{1}{1+x^{2}}</m>.</p>
+                </li>
+                </dl>
+                </paragraphs>
+
+                <paragraphs>
+                <title>Rules for combinations of functions</title>
+                <dl>
+                    <li>
+                        <title>Constant multiples</title>
+                        <p>
+                            <m>(k\cdot f(x))' = k\cdot f'(x)</m>
+                        </p>
+                    </li>
+
+                    <li>
+                        <title>Sum and difference</title>
+                        <p>
+                            <m>(f(x) \pm g(x))' = f'(x) \pm g'(x)</m>
+                        </p>
+                    </li>
+
+                    <li>
+                        <title>Products (the product rule)</title>
+                        <p>
+                            <m>(f(x)\cdot g(x))' = f'(x)g(x) + f(x)g'(x)</m>
+                        </p>
+                    </li>
+
+                    <li>
+                        <title>Quotients (the quotient rule)</title>
+                        <p>
+                            <m>\left(\frac{f(x)}{g(x)}\right)' = \frac{f'(x)g(x) - f(x)g'(x)}{(g(x))^{2}}</m>
+                        </p>
+                    </li>
+
+                <li>
+                    <title>Compositions (the chain rule)</title>
+                    <p>
+                        <m>(f(g(x)))' = f'(g(x))\cdot g'(x)</m>
+                    </p>
+                </li>
+            </dl>
+                </paragraphs>
+            </page>
+        </handout>
+
+        <handout>
+            <title>Guided Notes: Derivatives of sums</title>
+            <page>
+                <p workspace="1in">
+                    Today we will explore how to take the derivative of the sum of two functions.  For example, if <me>f(x) = x^2 + 3x</me>, what is <m>f'(x)</m>?  What two functions is this the sum of?  What are the derivatives of each of those functions?
+                </p>
+
+                <p>
+                    To be sure of the derivative of the sum, we should use the definition of the derivative.
+                </p>
+
+                <definition workspace=".75in">
+                    <title>Definition of the Derivative</title>
+                    <statement>
+                    <p>
+                        The derivative of a function <m>f(x)</m> at any point <m>x</m> is defined as...
+                    </p>
+                    </statement>
+                </definition>
+
+                <p workspace="2in">
+                    Now let's apply this definition to the function <m>f(x) = x^2 + 3x</m>. We have:
+                </p>
+
+                <p workspace="0.25in">
+                    What should the general rule be?
+                </p>
+            </page>
+
+            <page>
+                <theorem workspace="0.5in">
+                    <statement>
+                        <p>
+                            For any two differentiable functions <m>f(x)</m> and <m>g(x)</m>, the derivative of their sum <m>h(x) = f(x) + g(x)</m> is given by:
+                        </p>
+                    </statement>
+                    <proof workspace="3in">
+                        <p>
+                            Let <m>f(x)</m> and <m>g(x)</m> be differentiable functions and let <m>h(x) = f(x) + g(x)</m>.  Then by the limit definition of the derivative,
+                        </p>
+
+                    </proof>
+
+                </theorem>
+
+                <example workspace="1in">
+                    <statement>
+                        <p>
+                            Find the derivative of <m>f(x) = x^5 + e^x</m>.
+                        </p>
+                    </statement>
+                </example>
+
+                <example workspace="1in">
+                    <statement>
+                        <p>
+                            Find the derivative of <m>f(x) = \sqrt{x} + x^3 + 7x</m>.
+                        </p>
+                    </statement>
+                </example>
+
+                <example workspace="1in">
+                    <statement>
+                        <p>
+                            Find the derivative of <m>f(x) = 5x^4</m>.
+                        </p>
+                    </statement>
+                </example>
+            </page>
+        </handout>
+        </section>
+
 
         <section xml:id="exercises-single" label="section-exercises-single">
             <title>Exercises, One Subsection</title>

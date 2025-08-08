@@ -77,7 +77,7 @@
 
 
 // Set font appropriate for printing
-section.worksheet {
+section.worksheet, section.handout {
   font-size: 11pt;
   font-family: var(--font-print);
 }
@@ -103,7 +103,7 @@ summary {
   display: inline;
 }
 
-details > div.knowl__content {
+.knowl__content {
   display: inline;
   margin: unset;
   border: none;
@@ -113,6 +113,11 @@ details > div.knowl__content {
 
 .knowl__link {
   all: unset
+}
+
+.code-inline {
+  border: unset;
+  background: unset;
 }
 
 .onepage article {
@@ -139,12 +144,12 @@ details > div.knowl__content {
   margin-left: 0;
 }
 
-section.worksheet > .heading {
+section.worksheet > .heading, section.handout > .heading {
   display: inline;
   font-size: 1.1em;
 }
 
-section.worksheet > .heading + .para {
+section.worksheet > .heading + .para, section.handout > .heading + .para {
   display: inline;
 }
 
@@ -174,7 +179,7 @@ form.papersize-select {
     margin: 50px auto;
   }
 
-  .worksheet {
+  .worksheet, .handout {
     max-width: var(--ws-width);
     margin: 0 auto;
   }
@@ -254,7 +259,7 @@ form.papersize-select {
     display: none;
   }
 
-  section.worksheet {
+  section.worksheet, section.handout {
     border: none;
     width: 100%;
 

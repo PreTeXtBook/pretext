@@ -85,7 +85,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisions -->
 <!-- ######### -->
 
-<xsl:template match="part|chapter|section|subsection|subsubsection|exercises|reading-questions|worksheet|glossary|references|solutions">
+<xsl:template match="part|chapter|section|subsection|subsubsection|exercises|reading-questions|worksheet|handout|glossary|references|solutions">
     <!-- empty line prior -->
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>

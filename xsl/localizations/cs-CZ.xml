@@ -82,6 +82,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'>Závěr</localization>
     <localization string-id='exercises'>Cvičení</localization>
     <localization string-id='worksheet'>Pracovní list</localization>
+    <!-- <localization string-id='handout'>Handout</localization> -->
     <localization string-id='reading-questions'>Otázky ze čtení</localization>
     <localization string-id='solutions'>Řešení</localization>
     <localization string-id='glossary'>Vysvětlivky</localization>

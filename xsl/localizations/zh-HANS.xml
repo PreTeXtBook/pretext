@@ -94,6 +94,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'>结论</localization>
     <localization string-id='exercises'>练习</localization>
     <localization string-id='worksheet'>工作单</localization>
+    <!-- <localization string-id='handout'>Handout</localization> -->
     <localization string-id='reading-questions'>问题</localization>
     <localization string-id='solutions'>解答</localization>
     <localization string-id='glossary'>术语</localization>
