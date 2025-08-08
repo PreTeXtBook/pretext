@@ -53,7 +53,7 @@ $border-radius: 0 !default;
   position: relative;
 
   .dropdown-content {
-    display: hidden;
+    display: none;
     position: absolute;
     background-color: var(--dropdown-background);
     min-width: 160px;
