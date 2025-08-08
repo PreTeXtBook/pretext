@@ -8219,8 +8219,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p><init>HTML5</init> introduced the <tag>canvas</tag> element, which can be thought of a blank slate, a place to draw or write on.  So <pretext/> has the <tag>slate</tag> element for a similar purpose.  Generally, but not exclusively, <init>HTML5</init> writes on a <tag>canvas</tag> using the Javascript language.  We demonstrate this approach to interactive diagrams in this subsection.</p>
 
-                <p>The following examples are from David Austin's excellent <url href="http://merganser.math.gvsu.edu/david/linear.algebra/ula/index.html" visual="merganser.math.gvsu.edu/david/linear.algebra/ula/index.html"><pubtitle>Understanding Linear Algebra</pubtitle></url> textbook, which can be found at <cd>
-                    <cline>merganser.math.gvsu.edu/david/linear.algebra/ula/index.html</cline>
+                <p>The following examples are from David Austin's excellent <url href="https://understandinglinearalgebra.org/home.html" visual="understandinglinearalgebra.org"><pubtitle>Understanding Linear Algebra</pubtitle></url> textbook, which can be found at <cd>
+                    <cline>understandinglinearalgebra.org</cline>
                 </cd>David's contribution of examples, and assistance designing the <pretext/> elements is greatly appreciated.  Alright, let's learn some linear algebra.  Yes, there are some learning opportunities in this subsection.</p>
 
                 <figure xml:id="figure-simple-eigenvector">
