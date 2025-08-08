@@ -181,7 +181,7 @@ $center-content: true !default;
     }
 
     .dropdown-content {
-      top: unset;
+      top: unset !important; // to override more specific selector inside .runestone-profile
       bottom: $nav-height;
     }
 
