@@ -534,14 +534,14 @@
         <idx><h><webwork/></h><h><webwork/> exercise</h></idx>
 
         <p>
-            It is possible to include <webwork/>/PG problems in your source. These can either be
-            authored using <pretext/> or referenced from a host
-            <webwork/> course. A static version of the exercise will be rendered in your static
-            output formats such as <latex/>/PDF. A <q>live</q> version will be rendered in HTML
-            output. If the HTML is hosted on a Runestone server, the student's progress completing
-            the live exercises can be tracked. You can also extract the problems into a single
-            archive suitable for uploading into a <webwork/> course. This is a big topic, so see the
-            dedicated <xref ref="webwork-author"/> for details.
+            It is possible to include <webwork/>/PG problems in your source. These can be authored
+            using <pretext/>, included from local PG files, or referenced from a host <webwork/>
+            course. A static version of the exercise will be rendered in your static output formats
+            such as <latex/>/PDF. A <q>live</q> version will be rendered in HTML output. If the HTML
+            is hosted on a Runestone server, the student's progress completing the live exercises
+            can be tracked. You can also extract the problems into a single archive suitable for
+            uploading into a <webwork/> course. This is a big topic, so see the dedicated
+            <xref ref="webwork-author"/> for details.
         </p>
     </section>
 

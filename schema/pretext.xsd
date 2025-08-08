@@ -2626,8 +2626,8 @@
   <xs:group name="WebWorkAuthored">
     <xs:sequence>
       <xs:element name="webwork">
-        <xs:complexType>
-          <xs:sequence>
+        <xs:complexType mixed="true">
+          <xs:sequence minOccurs="0">
             <xs:group minOccurs="0" ref="WWDescription"/>
             <xs:element minOccurs="0" ref="pg-macros"/>
             <xs:element minOccurs="0" ref="pg-code"/>

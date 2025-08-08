@@ -3015,55 +3015,60 @@
   </define>
   <define name="WebWorkAuthored">
     <element name="webwork">
-      <optional>
-        <ref name="UniqueID"/>
-      </optional>
-      <optional>
-        <ref name="LabelID"/>
-      </optional>
-      <optional>
-        <ref name="Component"/>
-      </optional>
-      <optional>
-        <attribute name="seed">
-          <data type="integer"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="copy"/>
-      </optional>
-      <optional>
-        <ref name="WWDescription"/>
-      </optional>
-      <optional>
-        <ref name="WWMacros"/>
-      </optional>
-      <optional>
-        <element name="pg-code">
-          <text/>
-        </element>
-      </optional>
       <choice>
         <group>
-          <ref name="StatementExerciseWW"/>
           <optional>
-            <ref name="HintWW"/>
+            <ref name="UniqueID"/>
           </optional>
           <optional>
-            <ref name="SolutionWW"/>
+            <ref name="LabelID"/>
           </optional>
+          <optional>
+            <ref name="Component"/>
+          </optional>
+          <optional>
+            <attribute name="seed">
+              <data type="integer"/>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="copy"/>
+          </optional>
+          <optional>
+            <ref name="WWDescription"/>
+          </optional>
+          <optional>
+            <ref name="WWMacros"/>
+          </optional>
+          <optional>
+            <element name="pg-code">
+              <text/>
+            </element>
+          </optional>
+          <choice>
+            <group>
+              <ref name="StatementExerciseWW"/>
+              <optional>
+                <ref name="HintWW"/>
+              </optional>
+              <optional>
+                <ref name="SolutionWW"/>
+              </optional>
+            </group>
+            <group>
+              <optional>
+                <ref name="IntroductionText"/>
+              </optional>
+              <oneOrMore>
+                <ref name="TaskWW"/>
+              </oneOrMore>
+              <optional>
+                <ref name="ConclusionText"/>
+              </optional>
+            </group>
+          </choice>
         </group>
-        <group>
-          <optional>
-            <ref name="IntroductionText"/>
-          </optional>
-          <oneOrMore>
-            <ref name="TaskWW"/>
-          </oneOrMore>
-          <optional>
-            <ref name="ConclusionText"/>
-          </optional>
-        </group>
+        <text/>
       </choice>
     </element>
   </define>
