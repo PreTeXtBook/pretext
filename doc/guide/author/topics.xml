@@ -185,16 +185,8 @@
                 <title><tag>url</tag>, linking external resources</title>
                 <p>This is a cross-reference <em>to</em> some item separate and distinct for your document.</p>
 
-                <p>A Uniform Resource Locator (<init>URL</init>) is, loosely speaking, an Internet address for some item.  Presentation depends on the capabilities of the output format to serve the resource.  There is a mandatory attribute, <attr>href</attr>, that contains the full <init>URL</init>, including a protocol (such as <c>http://</c>).  Used as an empty tag, the visual text will be the exact contents of the <attr>href</attr> attribute.  So, <url href="http://www.example.com" /> can be achieved with
-                    <cd>&lt;url href="http://www.example.com"/&gt;</cd>
+                <p>A Uniform Resource Locator (<init>URL</init>) is, loosely speaking, an Internet address for some item.  Capabilities for providing links to such items are provided and take into account usability in different output formats.  See <xref ref="topic-url"/> for full details on how to use <tag>url</tag> for links to external resources.
                 </p>
-
-                <p>You may also wish to provide some text other than the actual <init>URL</init>, which you can specify as the content of the <tag>url</tag> element.  For example, <url href="http://www.example.com">IANA Test Site</url> can be achieved with
-                    <cd>&lt;url href="http://www.example.com"&gt;IANA Test Site&lt;/url&gt;</cd>
-                In order to have a URL occur in print output in a useful way, and in electronic output in an active way, the <attr>visual</attr> attribute can be used to display the visual portion as verbatim text in a footnote.
-                So illustrating again, we get <url href="http://www.example.com" visual="example.com"/> from
-                    <cd>&lt;url href="http://www.example.com" visual="example.com"/&gt;</cd>
-                Notice the necessity and/or desirability of marking the text in a way that distinguishes it as literal text.</p>
 
                 <p>Note also that this tag is meant for <em>external</em> resources, so see the <tag>xref</tag> element (below) or <xref ref="topic-cross-referencing" /> for ways to link internally (<ie /> within your document).</p>
             </paragraphs>
