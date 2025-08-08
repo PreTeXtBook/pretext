@@ -5201,9 +5201,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <li>
                 <title>Link Text</title>
-                <p>Default link text, such as <q>Theorem 4.15</q> has been chosen to be informative.  But for internal links (<tag>xref</tag>) or external links (<tag>url</tag>) you can choose alternative content for the clickable portion of the text.  Think carefully about your choices here and try to avoid text like <q>here</q> or <q>click here.</q>  For a <tag>url</tag>, the default content is the <attr>href</attr>, which can always be improved by providing content.</p>
-
-                <p>Here is a device which we now use more frequently.  Despite our aversion to footnotes, create a <tag>url</tag> element and provide meaningful content, such as the title of the web page you are referencing.  Then immediately afterwards add a footnote (<tag>fn</tag>) which contains only the actual <init>URL</init>, perhaps wrapped in a <tag>c</tag> element.  Since this is mostly meant for print, it is safe to drop things like the <c>https://</c> protocol specification and therefore <em>not</em> make it active (for a second time).  This is in use within this section.</p>
+                <p>Default link text, such as <q>Theorem 4.15</q> has been chosen to be informative.  But for internal links (<tag>xref</tag>) or external links (<tag>url</tag>) you can choose alternative content for the clickable portion of the text.  Think carefully about your choices here and try to avoid text like <q>here</q> or <q>click here.</q>  For a <tag>url</tag>, the default content is the <attr>href</attr>, which can always be improved by providing content. For formats such as the print version of PDF, the <attr>visual</attr> is provided automatically as a trailing parenthetical.</p>
             </li>
 
             <li>
