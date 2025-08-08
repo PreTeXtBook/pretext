@@ -4596,8 +4596,16 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
         includer = ET.XInclude()
         includer(src_tree.getroot())
         if includer.error_log:
-            # intentionally trigger exception handler for its better message
-            raise ET.XIncludeError("unused")
+            namespace_xi_error = False
+            log.debug("XInclude error(s) found:")
+            for line in includer.error_log:
+                log.debug(f"* {line.message}")
+                if "Namespace prefix xi on include is not defined" in line.message:
+                    log.error("You are trying to use 'xi:include' in a file that does not contain 'xmlns:xi=\"http://www.w3.org/2001/XInclude\"' in its root element.")
+                    namespace_xi_error = True
+            # If the error was due to an undefined namespace prefix, raise an error
+            if namespace_xi_error:
+                raise ET.XIncludeError("Missing namespace declaration for 'xi'")
     except ET.XIncludeError as e:
         # xinclude() does not show what file a parsing error occured in
         # So if there was an error, build a custom loader and redo with ElementInclude
@@ -4613,6 +4621,7 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
 
         # Reparse the tree (was modified in try clause) and run ElementInclude
         # This should also fail, but will give a better error message
+        # NB this might report false positives (duplicate xml:id even if controlled by versions)
         src_tree = ET.parse(xml, parser=huge_parser)
         ElementInclude.include(src_tree, loader=my_loader, max_depth=100)
 
