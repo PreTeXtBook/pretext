@@ -245,10 +245,11 @@
         </xsl:when>
         <xsl:when test="statement|task|text()">
             <xsl:apply-templates select="." mode="directory-path" />
-            <xsl:if test="parent::project">
-                <xsl:text>Project-</xsl:text>
+            <xsl:if test="parent::*[&PROJECT-FILTER;]">
+                <xsl:apply-templates select="parent::*" mode="type-name"/>
+                <xsl:text>-</xsl:text>
             </xsl:if>
-            <xsl:apply-templates select="parent::exercise" mode="numbered-title-filesafe" />
+            <xsl:apply-templates select="parent::*" mode="numbered-title-filesafe" />
             <xsl:text>.pg</xsl:text>
         </xsl:when>
     </xsl:choose>
@@ -750,10 +751,12 @@
     <xsl:text>## Section1(not reported</xsl:text>
         <!-- <xsl:apply-templates select="ancestor::exercise" mode="structure-number" /> -->
     <xsl:text>)&#xa;</xsl:text>
-    <!-- WW problem is always enclosed directly by an PTX exercise -->
-    <xsl:text>## Problem1(</xsl:text>
-        <xsl:apply-templates select="parent::exercise" mode="number" />
-    <xsl:text>)&#xa;</xsl:text>
+    <!-- WW problem is always enclosed directly by a PTX exercise or PROJECT-LIKE -->
+    <xsl:if test="parent::exercise">
+        <xsl:text>## Problem1(</xsl:text>
+            <xsl:apply-templates select="parent::exercise" mode="number" />
+        <xsl:text>)&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>## Author(</xsl:text>
     <xsl:text>)&#xa;</xsl:text>
     <xsl:text>## Institution(</xsl:text>
