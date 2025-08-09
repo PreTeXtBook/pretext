@@ -343,17 +343,32 @@ ENDDOCUMENT();
                     <webwork><xi:include parse="text" href="pg/Adding_SingleDigit_Integers.pg"/></webwork>
                 </exercise>
 
-                <project label="copy-webwork-add-numbers">
-                    <title>Inside a <tag>project</tag></title>
-                    <introduction>
-                        <p>
-                            If you like, you can have a <webwork/> inside a PROJECT-LIKE block.
-                            Just like with an <tag>exercise</tag>, it can be preceded with an optional <tag>introduction</tag>
-                            and followed by an optional <tag>conclusion</tag>.
-                        </p>
-                    </introduction>
-                    <webwork copy="webwork-add-numbers" seed="511"/>
-                </project>
+                <subsection>
+                    <title><webwork/> inside PROJECT-LIKE</title>
+                    <project label="copy-webwork-add-numbers">
+                        <title>Inside a <tag>project</tag></title>
+                        <introduction>
+                            <p>
+                                If you like, you can have a <webwork/> inside a <tag>project</tag>.
+                                Just like with an <tag>exercise</tag>, it can be preceded with an
+                                optional <tag>introduction</tag> and followed by an optional
+                                <tag>conclusion</tag>.
+                            </p>
+                        </introduction>
+                        <webwork copy="webwork-add-numbers" seed="511"/>
+                    </project>
+
+                    <exploration label="copy-webwork-add-numbers-exploration">
+                        <title>Inside an <tag>exploration</tag></title>
+                        <introduction>
+                            <p>
+                                There are other <q>project-like</q> tags besides <tag>project</tag>.
+                                Here, we use an <tag>exploration</tag>.
+                            </p>
+                        </introduction>
+                        <webwork copy="webwork-add-numbers" seed="512"/>
+                    </exploration>
+                </subsection>
 
             </section>
 
