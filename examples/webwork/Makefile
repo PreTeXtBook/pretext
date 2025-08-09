@@ -106,7 +106,7 @@ PGOUT      = $(SCRATCH)/pg
 #########################################################################
 #  Construct macros file. This must be uploaded into the macros folder
 #  of the server's host course before building representations below.
-#  This file will be built inside a folder tree in generated/webwork/pg
+#  This file will be built inside a folder tree in my-generated/webwork/pg
 #  or if there is no generated folder, into the destination folder. The
 #  folder tree will be in the form PROJECT_TITLE/macros/INITIALISM.pl.
 #  If building representations locally, this must be run first and
@@ -169,14 +169,14 @@ mini-latex:
 # or best practice for a real PreTeXt project using WeBWorK problems.
 
 sample-chapter-html:
-	-rm -r $(WWEXAMPLE)/sample-chapter/generated/latex-image
+	-rm -r $(WWEXAMPLE)/sample-chapter/my-generated/latex-image
 	$(PTX)/pretext/pretext -vv -c latex-image -f svg -p $(SMPCPUB) $(SMPC)
 	-rm -r $(HTMLOUT)
 	install -d $(HTMLOUT)
 	$(PTX)/pretext/pretext -vv -c all -f html -p $(SMPCPUB) -x debug.datedfiles no -d $(HTMLOUT) $(SMPC); \
 
 sample-chapter-runestone:
-	-rm -r $(WWEXAMPLE)/sample-chapter/generated/latex-image
+	-rm -r $(WWEXAMPLE)/sample-chapter/my-generated/latex-image
 	$(PTX)/pretext/pretext -c latex-image -f svg -p $(SMPRSPUB) $(SMPC)
 	-rm -r $(RSOUT)
 	install -d $(RSOUT)
