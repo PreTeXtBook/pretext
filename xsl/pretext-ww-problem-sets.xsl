@@ -127,8 +127,9 @@
 <!-- Append a filename to the directory path              -->
 <xsl:template match="webwork[statement|task]" mode="relative-filename">
     <xsl:apply-templates select="." mode="directory-path" />
-    <xsl:if test="parent::project">
-        <xsl:text>Project-</xsl:text>
+    <xsl:if test="parent::*[&PROJECT-FILTER;]">
+        <xsl:apply-templates select="parent::*" mode="type-name"/>
+        <xsl:text>-</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="parent::*" mode="numbered-title-filesafe" />
     <xsl:text>.pg</xsl:text>
