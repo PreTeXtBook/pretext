@@ -43,10 +43,8 @@
 <!-- The top of the ephemeral XML tree has some global attributes.         -->
 
 <!-- Then for each exercise, we record:                                    -->
-<!-- 1.  origin: there are three possible values                           -->
+<!-- 1.  origin: there are two possible values                             -->
 <!--        "generated" (it was authored in PTX)                           -->
-<!--        "external" (it is a local .pg file within the external folder  -->
-<!--            indicated by @local on the webwork element)                -->
 <!--        "webwork2" (it is a pg file accessible from a webwork2 host    -->
 <!--            course's templates folder indicated by @source on the      -->
 <!--            webwork element)                                           -->
@@ -54,7 +52,6 @@
 <!-- 2.  a seed for randomization                                          -->
 <!-- 3.  path: a file path to a .pg version of the problem                 -->
 <!--         path-defined-by-document-structure                            -->
-<!--         path-defined-by-@local                                        -->
 <!--         path-defined-by-@source                                       -->
 <!-- 4.  pghuman: human readable PG (for generated exercises only)         -->
 <!-- 5.  PG that is somewhat minimized (and less human-readable)           -->
@@ -186,14 +183,11 @@
         <xsl:attribute name="id">
             <xsl:value-of select="$problem" />
         </xsl:attribute>
-        <!-- 1. a generated|external|webwork2 flag                                 -->
+        <!-- 1. a generated|webwork2 flag                                          -->
         <xsl:attribute name="origin">
             <xsl:choose>
                 <xsl:when test="statement|task|text()">
                     <xsl:text>generated</xsl:text>
-                </xsl:when>
-                <xsl:when test="@local">
-                    <xsl:text>external</xsl:text>
                 </xsl:when>
                 <xsl:when test="@source">
                     <xsl:text>webwork2</xsl:text>

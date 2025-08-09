@@ -964,9 +964,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="$target/self::webwork[@source]">
                         <xsl:text>the @copy attribute points a "webwork" with a @source attribute.  (Replace the @copy by the @source?)</xsl:text>
                     </xsl:when>
-                    <xsl:when test="$target/self::webwork[@local]">
-                        <xsl:text>the @copy attribute points a "webwork" with a @local attribute.  (Replace the @copy by the @local?)</xsl:text>
-                    </xsl:when>
                     <xsl:when test="$target/self::webwork[@copy]">
                         <xsl:text>the @copy attribute points to "webwork" with a @copy attribute. Sorry, we are not that sophisticated.</xsl:text>
                     </xsl:when>

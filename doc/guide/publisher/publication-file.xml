@@ -1116,6 +1116,7 @@
 
         <subsection xml:id="publication-file-webwork-task-reveal">
             <title>Task Reveal</title>
+
             <p>
                 The attribute
                 <cd>

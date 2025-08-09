@@ -1123,7 +1123,6 @@ def webwork_to_xml(
         ww_reps_dir = os.path.join(generated_dir, "webwork")
         # where generated images from webwork exercises will live
         ww_images_dir = os.path.join(ww_reps_dir, "images")
-
     else:
         msg = "".join(
             [
@@ -1168,8 +1167,6 @@ def webwork_to_xml(
     webwork2_server = extracted_pg_xml.find("server-params-pub").get("webwork2-server")
     renderer_server = extracted_pg_xml.find("server-params-pub").get("renderer")
     numbered_title_filesafe = extracted_pg_xml.get("numbered-title-filesafe")
-    generated_dir_source = extracted_pg_xml.find("directories").get("generated-directory-source")
-    external_dir_source = extracted_pg_xml.find("directories").get("external-directory-source")
     ww_project_dir = os.path.join(ww_reps_dir, "pg", numbered_title_filesafe)
     if not (os.path.isdir(ww_project_dir)):
         os.mkdir(ww_project_dir)
@@ -1336,14 +1333,6 @@ def webwork_to_xml(
         )
         raise ValueError(msg.format(webwork2_domain_webwork2))
 
-    if webwork2_major_version != 2 or webwork2_minor_version < 16:
-        msg = (
-            "PTX:ERROR:   PreTeXt supports WeBWorK 2.16 and later, and it appears you are attempting to use version: {}\n"
-            + "                         Server: {}\n"
-            + "                         You may want to use the AIM WeBWorK server at webwork-ptx.aimath.org.\n"
-        )
-        raise ValueError(msg.format(webwork2_version, webwork2_domain))
-
     webwork2_path = webwork2_render_rpc if (webwork2_major_version == 2 and webwork2_minor_version >= 19) else webwork2_html2xml
 
     # initialize dictionaries for all the problem features
@@ -1364,6 +1353,14 @@ def webwork_to_xml(
         if problem.get("origin") == "generated":
             pghuman[problem.get("id")] = problem.find("pghuman").text
             pgdense[problem.get("id")] = problem.find("pgdense").text
+
+    if webwork2_major_version != 2 or webwork2_minor_version < 16:
+        msg = (
+            "PTX:ERROR:   PreTeXt supports WeBWorK 2.16 and later, and it appears you are attempting to use version: {}\n"
+            + "                         Server: {}\n"
+            + "                         You may want to use the AIM WeBWorK server at webwork-ptx.aimath.org.\n"
+        )
+        raise ValueError(msg.format(webwork2_version, webwork2_domain))
 
     # using a "Session()" will pool connection information
     # since we always hit the same server, this should increase performance
@@ -1417,15 +1414,13 @@ def webwork_to_xml(
     webwork_representations = ET.Element("webwork-representations", nsmap=NSMAP)
     # Choose one of the dictionaries to take its keys as what to loop through
     for problem in origin:
-        if origin[problem] == "external":
-            msg = "building representations of external WeBWorK problem"
-        elif origin[problem] == "webwork2":
+        if origin[problem] == "webwork2":
             msg = "building representations of webwork2-hosted WeBWorK problem"
         elif origin[problem] == "generated":
             msg = "building representations of generated WeBWorK problem"
         else:
             raise ValueError(
-                "PTX:ERROR: problem origin should be 'external', 'webwork2', or 'generated', not '{}'".format(
+                "PTX:ERROR: problem origin should be 'webwork2' or 'generated', not '{}'".format(
                     origin[problem]
                 )
             )
@@ -1482,6 +1477,7 @@ def webwork_to_xml(
                 if not received: break
                 buffer.extend(received)
                 if buffer.endswith(b'ENDOFSOCKETDATA'): break
+
             response = buffer.decode().replace('ENDOFSOCKETDATA', '')
 
         elif static_processing == 'renderer' and origin[problem] != 'webwork2':
@@ -1517,9 +1513,6 @@ def webwork_to_xml(
             if webwork2_minor_version >= 19:
                 if origin[problem] == "webwork2":
                     server_params_source = {"sourceFilePath":path[problem]}
-                elif origin[problem] == "external":
-                    with open(os.path.join(external_dir, path[problem])) as f: rawProblemSource = f.read()
-                    server_params_source = {"rawProblemSource":rawProblemSource}
                 else:
                     server_params_source = {"rawProblemSource":pgdense[problem]}
             else:
@@ -1561,7 +1554,7 @@ def webwork_to_xml(
 
             msg = "sending {} to server to save in {}: origin is '{}'"
             log.info(msg.format(problem, ww_reps_file, origin[problem]))
-            if origin[problem] == "external" or origin[problem] == "webwork2":
+            if origin[problem] == "webwork2":
                 log.debug(
                     "server-to-ptx: {}\n{}\n{}\n{}".format(
                         problem, webwork2_path, path[problem], ww_reps_file
@@ -1862,7 +1855,7 @@ def webwork_to_xml(
         webwork_reps.set("ww-id", problem)
         static = ET.SubElement(webwork_reps, "static")
         static.set("seed", seed[problem])
-        if origin[problem] == "external" or origin[problem] == "webwork2":
+        if origin[problem] == "webwork2":
             static.set("source", path[problem])
 
         # If there is "badness"...
@@ -1972,8 +1965,6 @@ def webwork_to_xml(
         else:
             if origin[problem] == "webwork2":
                 source_value = path[problem]
-            elif origin[problem] == "external" and webwork2_minor_version >= 19:
-                source_value = os.path.join(external_dir, path[problem])
             else:
                 if webwork2_minor_version < 19:
                     source_value = embed_problem_base64
@@ -2010,7 +2001,7 @@ def webwork_to_xml(
             else:
                 formatted_pg = pghuman[problem]
             pg.text = ET.CDATA("\n" + formatted_pg)
-        elif origin[problem] == "external" or origin[problem] == "webwork2":
+        elif origin[problem] == "webwork2":
             pg.set("source", path[problem])
 
     # write to file
@@ -2039,10 +2030,6 @@ def webwork_to_xml(
         renderer_session.close()
     except:
         pass
-
-    # close the socket
-    if clientsocket:
-        clientsocket.send(b'quit')
 
     # close the socket
     if clientsocket:
@@ -2099,7 +2086,6 @@ def pg_macros(xml_source, pub_file, stringparams, dest_dir):
 
     if pub_file:
         stringparams["publisher"] = pub_file
-
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "support", "pretext-pg-macros.xsl")
     tmp_dir = get_temporary_directory()
