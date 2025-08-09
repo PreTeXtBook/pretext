@@ -78,7 +78,7 @@
 <!-- Then chunk the document to write reasonable problem definition files     -->
 <xsl:template match="/">
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$document-root//exercise/webwork[statement|task]" mode="write-file"/>
+    <xsl:apply-templates select="$document-root//exercise/webwork[statement|task|text()]" mode="write-file"/>
     <xsl:apply-templates select="$document-root" mode="chunking"/>
 </xsl:template>
 
@@ -169,24 +169,31 @@
 <!-- ################## -->
 
 <!-- Extract an authored problem into its own file, flush left -->
-<xsl:template match="webwork[statement|task]" mode="write-file">
+<xsl:template match="webwork[statement|task|text()]" mode="write-file">
     <xsl:variable name="filename">
         <xsl:apply-templates select="." mode="filename" />
     </xsl:variable>
     <exsl:document href="{$filename}" method="text">
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text">
-                <xsl:call-template name="consolidate-empty-lines">
+        <xsl:choose>
+            <xsl:when test="statement|task">
+                <xsl:call-template name="sanitize-text">
                     <xsl:with-param name="text">
-                        <xsl:apply-templates select=".">
-                            <xsl:with-param name="b-hint" select="true()" />
-                            <xsl:with-param name="b-solution" select="true()" />
-                            <xsl:with-param name="b-human-readable" select="true()" />
-                        </xsl:apply-templates>
+                        <xsl:call-template name="consolidate-empty-lines">
+                            <xsl:with-param name="text">
+                                <xsl:apply-templates select=".">
+                                    <xsl:with-param name="b-hint" select="true()" />
+                                    <xsl:with-param name="b-solution" select="true()" />
+                                    <xsl:with-param name="b-human-readable" select="true()" />
+                                </xsl:apply-templates>
+                            </xsl:with-param>
+                        </xsl:call-template>
                     </xsl:with-param>
                 </xsl:call-template>
-            </xsl:with-param>
-        </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="."/>
+            </xsl:otherwise>
+        </xsl:choose>
     </exsl:document>
 </xsl:template>
 
