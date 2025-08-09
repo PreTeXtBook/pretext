@@ -78,7 +78,7 @@
 <!-- Then chunk the document to write reasonable problem definition files     -->
 <xsl:template match="/">
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$document-root//exercise/webwork[statement|task]" mode="write-file"/>
+    <xsl:apply-templates select="$document-root//webwork[statement|task]" mode="write-file"/>
     <xsl:apply-templates select="$document-root" mode="chunking"/>
 </xsl:template>
 
@@ -127,8 +127,9 @@
 <!-- Append a filename to the directory path              -->
 <xsl:template match="webwork[statement|task]" mode="relative-filename">
     <xsl:apply-templates select="." mode="directory-path" />
-    <xsl:if test="parent::project">
-        <xsl:text>Project-</xsl:text>
+    <xsl:if test="parent::*[&PROJECT-FILTER;]">
+        <xsl:apply-templates select="parent::*" mode="type-name"/>
+        <xsl:text>-</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="parent::*" mode="numbered-title-filesafe" />
     <xsl:text>.pg</xsl:text>
