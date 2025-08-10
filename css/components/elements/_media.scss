@@ -39,6 +39,9 @@ img.contained {
 .image-archive {
   margin: 0.75em auto 0;
   font-family: var(--font-monospace);
+  justify-content: center;
+  display: flex;
+  gap: 0.5em;
 }
 
 // TODO - refactor mag_popup JS and CSS
