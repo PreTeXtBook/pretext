@@ -6619,13 +6619,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:attribute>
         <xsl:attribute name="style">
-            <xsl:text>width:</xsl:text>
-            <xsl:call-template name="relative-width">
-                <xsl:with-param name="width" select="$width" />
-                <xsl:with-param name="left-margin"  select="$left-margin" />
-                <xsl:with-param name="right-margin" select="$right-margin" />
-            </xsl:call-template>
-            <xsl:text>;</xsl:text>
             <xsl:if test="$sbsdebug">
                 <xsl:text>box-sizing: border-box;</xsl:text>
                 <xsl:text>-moz-box-sizing: border-box;</xsl:text>
@@ -6652,6 +6645,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:variable name="left-margin"  select="$layout/left-margin" />
     <xsl:variable name="right-margin" select="$layout/right-margin" />
+
+    <xsl:variable name="column-widths">
+        <xsl:for-each select="$layout/width">
+            <xsl:call-template name="relative-width">
+                <xsl:with-param name="width" select="." />
+                <xsl:with-param name="left-margin"  select="$left-margin" />
+                <xsl:with-param name="right-margin" select="$right-margin" />
+            </xsl:call-template>
+            <xsl:if test="position() != last()">
+                <xsl:text> </xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:variable>
 
     <!-- A "sidebyside" div, to contain headers, -->
     <!-- panels, captions rows as "sbsrow" divs  -->
@@ -6680,6 +6686,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>;</xsl:text>
                 <xsl:text>margin-right:</xsl:text>
                 <xsl:value-of select="$right-margin" />
+                <xsl:text>;</xsl:text>
+                <xsl:text>grid-template-columns:</xsl:text>
+                <xsl:value-of select="$column-widths" />
+                <xsl:text>;</xsl:text>
+                <xsl:text>column-gap:</xsl:text>
+                <xsl:value-of select="$layout/space-width" />
                 <xsl:text>;</xsl:text>
                 <xsl:if test="$sbsdebug">
                     <xsl:text>box-sizing: border-box;</xsl:text>
