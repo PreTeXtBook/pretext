@@ -829,8 +829,16 @@ body.pretext > a.assistive:focus {
 .ptx-main {
   box-shadow: 5px 10px 40px -10px var(--primary-color-gray-80);
 }
+@media (prefers-color-scheme: dark) {
+  .ptx-main {
+    box-shadow: 5px 10px 40px -10px black;
+  }
+}
 .ptx-sidebar {
   margin-right: 80px;
+}
+.ptx-navbar {
+  border: none;
 }
 .ptx-navbar .toc-toggle {
   transform: translateX(-320px);
@@ -839,7 +847,6 @@ body.pretext > a.assistive:focus {
   justify-content: left;
 }
 .ptx-toc {
-  padding-top: 36px;
   border: none;
   position: sticky;
   top: 36px;
@@ -847,6 +854,10 @@ body.pretext > a.assistive:focus {
 .toc-item.visible {
   font-size: 0.95em;
   padding-left: 8px;
+}
+.ptx-page {
+  margin-top: 36px;
+  margin-bottom: 36px;
 }
 @media screen and (width <= 1480px) {
   .ptx-page {
@@ -884,6 +895,13 @@ body.pretext > a.assistive:focus {
   .ptx-navbar .toc-toggle {
     transform: translateX(-240px);
     justify-content: center;
+  }
+  .ptx-page {
+    margin-top: unset;
+    margin-bottom: unset;
+  }
+  .ptx-toc {
+    padding-top: 36px;
   }
 }
 @media screen and (width <= 880px) {
@@ -1346,11 +1364,10 @@ summary.knowl__link {
   padding-right: 1em;
 }
 .proof::after {
-  content: "QED";
-  font-size: smaller;
-  font-style: oblique;
-  font-variant: small-caps;
-  float: right;
+  content: "\220e";
+  position: absolute;
+  right: 0;
+  bottom: 1.5em;
 }
 .proof .heading {
   display: inline;
@@ -3586,6 +3603,26 @@ figure.table-like {
 .hide-type .codenumber:not(:empty)::after {
   content: " ";
 }
+.ptx-navbar {
+  background:
+    linear-gradient(
+      to bottom,
+      var(--banner-background),
+      var(--navbar-background));
+}
+.ptx-navbar .button {
+  background:
+    linear-gradient(
+      to bottom,
+      var(--banner-background),
+      var(--navbar-background));
+}
+.ptx-navbar .button:hover:not(.disabled) {
+  background-image: none;
+}
+.ptx-navbar .button.open {
+  background-image: none;
+}
 :root {
   color-scheme: light;
 }
@@ -3771,7 +3808,7 @@ figure.table-like {
   --page-border-color: var(--background-color-white-25);
   --doc-title-color: var(--primary-color);
   --byline-color: var(--background-color-white-50);
-  --banner-background: #23241f;
+  --banner-background: hsl(210, 10%, 10%);
   --navbar-background: var(--background-color-gray-15);
   --footer-background: var(--background-color-black-10);
   --toc-border-color: #555;
@@ -3820,7 +3857,7 @@ figure.table-like {
   --button-background: var(--background-color-gray-15);
   --button-text-color: var(--body-text-color);
   --button-border-color: var(--background-color-white-25);
-  --button-hover-background: var(--primary-color);
+  --button-hover-background: var(--primary-color-black-50);
   --button-hover-text-color: var(--button-text-color);
   --code-inline: var(--background-color-gray-20);
   --dropdown-background: var(--content-background);
@@ -3854,8 +3891,8 @@ figure.table-like {
   --goal-like-border-color: var(--block-border-color);
   --solution-like-body-background: var(--block-body-background);
   --solution-like-border-color: var(--block-border-color);
-  --primary-color: #9db9d3;
-  --background-color: #23241f;
+  --primary-color: hsl(210, 50%, 50%);
+  --background-color: hsl(210, 10%, 10%);
   --background-color-white-1: color-mix(in oklab, var(--background-color), white 1%);
   --background-color-white-2: color-mix(in oklab, var(--background-color), white 2%);
   --background-color-white-3: color-mix(in oklab, var(--background-color), white 3%);
