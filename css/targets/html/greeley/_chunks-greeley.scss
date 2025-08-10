@@ -52,9 +52,13 @@ $border-radius: 8px !default;
 
 .proof {
   padding-bottom: 1.5em;
+  padding-left: 1em;
+  padding-right: 1em;
   &::after {
     content: "□";
-    float: right;
+    position: absolute;
+    right: 0;
+    bottom: 1.5em;
   }
 
   .heading {

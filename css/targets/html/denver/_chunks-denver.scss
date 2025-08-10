@@ -80,11 +80,10 @@ $chunk-heading-font-size: 1.125em !default;
   padding-right: 1em;
 
   &::after {
-    content: "QED";
-    font-size: smaller;
-    font-style: oblique;
-    font-variant: small-caps;
-    float: right;
+    content: "\220E";
+    position: absolute;
+    right: 0;
+    bottom: 1.5em;
   }
 
   .heading {
