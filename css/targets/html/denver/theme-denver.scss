@@ -12,8 +12,8 @@ $color-main: null !default;
 $color-do: null !default;
 $color-fact: null !default;
 $color-meta: null !default;
-$primary-color-dark: #9db9d3 !default;
-$background-color-dark: #23241f !default;
+$primary-color-dark: hsl(210, 50%, 50%) !default;
+$background-color-dark: hsl(210, 10%, 10%) !default;
 
 @use "sass:map";
 @use 'sass:color';

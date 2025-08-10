@@ -7,10 +7,10 @@
 // different definitions for these variables to this file before the theme
 // is compiled.
 $palette: 'grays' !default;
-$primary-color: null !default;
+$primary-color: hsl(214, 59%, 40%) !default;
 $secondary-color: null !default;
-$primary-color-dark: #829ab1 !default;
-$background-color-dark: #23241f !default;
+$primary-color-dark: hsl(214, 50%, 50%) !default;
+$background-color-dark: hsl(214, 20%, 10%) !default;
 
 @use "sass:map";
 
