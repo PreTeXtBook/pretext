@@ -6608,13 +6608,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- the CSS class equals the source attribute, but that may change -->
             <xsl:choose>
                 <xsl:when test="$valign = 'top'">
-                    <xsl:text> top</xsl:text>
+                    <xsl:text> sbspanel--top top</xsl:text>
                 </xsl:when>
                 <xsl:when test="$valign = 'middle'">
-                    <xsl:text> middle</xsl:text>
+                    <xsl:text> sbspanel--middle middle</xsl:text>
                 </xsl:when>
                 <xsl:when test="$valign = 'bottom'">
-                    <xsl:text> bottom</xsl:text>
+                    <xsl:text> sbspanel--bottom bottom</xsl:text>
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
