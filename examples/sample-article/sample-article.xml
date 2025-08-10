@@ -15657,7 +15657,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </exercise>
                 </exercisegroup>
             </worksheet>
-       </section>
+        </section>
 
         <section xml:id="handouts" label="section-handouts">
             <title>Handouts</title>
@@ -15834,7 +15834,144 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </section>
 
 
-        <section xml:id="exercises-single" label="section-exercises-single">
+        <section xml:id="worksheet-solution-testing" label="section-worksheet-solutions-testing">
+            <title>Worksheet Solution Testing</title>
+            <introduction>
+                <p>
+                    Solutions to projects and worksheets can both be selected independently for the auto-generated solutions divisions.  What happens when a worksheet contains a project?  Here we explore the various combinations.
+                </p>
+            </introduction>
+
+            <subsection>
+               <title>Subsection with only exercise</title>
+               <exercise>
+                   <statement>
+                        <p>This is an exercise's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is an exercise's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the exercise's solution.</p>
+                    </solution>
+                </exercise>
+            </subsection>
+            <subsection>
+                <title>Subsection with only project</title>
+                <project>
+                    <statement>
+                        <p>This is a project's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is a project's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the project's solution.</p>
+                    </solution>
+                </project>
+            </subsection>
+            <subsection>
+                <title>Subsection with both exercise and project</title>
+                <exercise>
+                    <statement>
+                        <p>This is an exercise's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is an exercise's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the exercise's solution.</p>
+                    </solution>
+                </exercise>
+                <project>
+                    <statement>
+                        <p>This is a project's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is a project's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the project's solution.</p>
+                    </solution>
+                </project>
+            </subsection>
+            <worksheet>
+               <title>Worksheet with only exercise</title>
+               <exercise>
+                   <statement>
+                       <p>This is an exercise's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is an exercise's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the exercise's solution.</p>
+                    </solution>
+                </exercise>
+            </worksheet>
+            <worksheet>
+                <title>Worksheet with only project</title>
+                <project>
+                    <statement>
+                        <p>This is a project's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is a project's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the project's solution.</p>
+                    </solution>
+                </project>
+            </worksheet>
+            <worksheet>
+                <title>Worksheet with both exercise and project</title>
+                <exercise>
+                    <statement>
+                        <p>This is an exercise's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is an exercise's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the exercise's solution.</p>
+                    </solution>
+                </exercise>
+                <project>
+                    <statement>
+                        <p>This is a project's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is a project's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the project's solution.</p>
+                    </solution>
+                </project>
+            </worksheet>
+            <solutions inline="answer">
+                <title>Inline answers only</title>
+            </solutions>
+            <solutions project="answer">
+                <title>Project answers only</title>
+            </solutions>
+            <solutions worksheet="answer">
+                <title>Worksheet answers only</title>
+            </solutions>
+            <solutions inline="answer" project="statement">
+                <title>Inline answers, project statement</title>
+            </solutions>
+            <solutions inline="answer" worksheet="statement">
+                <title>Inline answers, worksheet statement</title>
+            </solutions>
+            <solutions project="answer" worksheet="statement">
+                <title>Project answers, worksheet statement</title>
+            </solutions>
+            <solutions inline="answer" project="statement" worksheet="solution">
+                <title>Inline answers, project statement, worksheet solution</title>
+            </solutions>
+        </section>
+
+       <section xml:id="exercises-single" label="section-exercises-single">
             <title>Exercises, One Subsection</title>
 
             <p>This <tag>section</tag> of the sample article demonstrates an <q>unstructured division.</q>  There are no <tag>subsection</tag>, you are just reading the first two paragraphs, followed by some nonsense text.  Then there is a <em>single</em> <tag>exercises</tag> division.  Note that this division is not numbered (since it is unique within the <tag>section</tag>).  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered as a member of the <tag>section</tag>, <xref ref="exercise-challenging-one-unstructured" text="type-global"/>.</p>
