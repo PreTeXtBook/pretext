@@ -8,6 +8,27 @@ $text-color: white !default;
     content: " ";
 }
 
+
+//Give navbar a gradient background
+.ptx-navbar {
+    background: linear-gradient(to bottom, var(--banner-background), var(--navbar-background));
+
+    .button {
+        background: linear-gradient(to bottom, var(--banner-background), var(--navbar-background));
+
+        // Turn off background-image (linear gradient) on hover so it behaves like a solid color button
+        &:hover:not(.disabled) {
+            background-image: none;
+        }
+
+        &.open {
+            background-image: none;
+        }
+
+    }
+}
+
+
 // Apply blocks of colors to headings when not in dark mode
 //:root {
 //  &:not(.dark-mode) {
