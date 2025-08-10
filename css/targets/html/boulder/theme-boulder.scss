@@ -8,8 +8,8 @@
 // different definitions for these variables to this file before the theme
 // is compiled.
 $primary-color: hsl(270, 40%, 15%) !default;
-$primary-color-dark: hsl(270, 40%, 70%) !default;
-$background-color-dark: hsl(270, 5%, 5%) !default;
+$primary-color-dark: hsl(270, 50%, 50%) !default;
+$background-color-dark: hsl(270, 10%, 5%) !default;
 
 @use "sass:map";
 
