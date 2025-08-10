@@ -1,0 +1,39 @@
+## DESCRIPTION
+## Give a value for pi
+## ENDDESCRIPTION
+
+## KEYWORDS('template', 'pi')
+
+## DBsubject('Algebra')
+## DBchapter('Fundamentals')
+## DBsection('Real Numbers')
+## Date('')
+## Author('')
+## Institution('')
+
+DOCUMENT();
+
+loadMacros(
+    "PGstandard.pl",    # Standard macros for PG language
+    "PGML.pl",          # PGML markup and Math Objects
+    "PGcourse.pl",      # Customization file for the course
+);
+
+# Uncomment the following if you don't want to show which
+# answers are correct and which are incorrect
+#$showPartialCorrectAnswers = 0;
+
+$pi = Real("pi");
+
+BEGIN_PGML
+Enter a value for [`\pi`].
+
+[_]{$pi}{5}
+END_PGML
+
+BEGIN_PGML_SOLUTION
+You could type [|pi|]* or [|3.14|]*, or [|22/7|]*,
+among other options.
+END_PGML_SOLUTION
+
+ENDDOCUMENT();
