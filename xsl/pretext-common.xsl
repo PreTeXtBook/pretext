@@ -6444,6 +6444,10 @@ Book (with parts), "section" at level 3
     <xsl:param name="b-worksheet-hint" />
     <xsl:param name="b-worksheet-answer" />
     <xsl:param name="b-worksheet-solution" />
+    <xsl:param name="b-project-statement" />
+    <xsl:param name="b-project-hint" />
+    <xsl:param name="b-project-answer" />
+    <xsl:param name="b-project-solution" />
 
     <xsl:apply-templates select=".//exercise" mode="dry-run">
         <xsl:with-param name="admit"           select="$admit"/>
@@ -6452,6 +6456,14 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="b-has-answer"    select="$b-worksheet-answer" />
         <xsl:with-param name="b-has-solution"  select="$b-worksheet-solution" />
     </xsl:apply-templates>
+    <xsl:apply-templates select=".//activity|.//exploration|.//investigation|.//project" mode="dry-run">
+        <xsl:with-param name="admit"           select="$admit"/>
+        <xsl:with-param name="b-has-statement" select="$b-project-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
+    </xsl:apply-templates>
+
 </xsl:template>
 
 <xsl:template match="reading-questions" mode="dry-run">
@@ -6957,7 +6969,7 @@ Book (with parts), "section" at level 3
                 <!-- N.B.: inline exercises and PROJECT-LIKE can be   -->
                 <!-- "hidden" inside the "paragraphs" pseudo-division -->
                 <!-- Everything below is 1 deeper than the division's heading -->
-                <xsl:for-each select="exercise|subexercises|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|paragraphs/*[&PROJECT-FILTER;]|self::worksheet//exercise">
+                <xsl:for-each select="exercise|subexercises|exercisegroup|&PROJECT-LIKE;|paragraphs/*[self::exercise or &PROJECT-FILTER;]|self::worksheet//*[self::exercise or &PROJECT-FILTER;]">
                      <xsl:choose>
                         <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
                             <xsl:apply-templates select="." mode="solutions">
