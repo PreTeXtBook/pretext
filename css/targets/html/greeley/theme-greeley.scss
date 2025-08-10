@@ -17,8 +17,18 @@ $background-color-dark: #23241f !default;
 // Imports in this file can be either relative to this file or 
 // relative to css/ directory
 // Basic components: 
-//@use 'components/pretext';// with ($inline-section-headings: false);
-@use 'components/pretext'; 
+
+// set some default sizing variables - this will also set up
+// defaults for expandable mixin
+@use '../salem/sizing-globals' with (
+  $content-width: 600px,
+  $content-side-padding: 20px
+);
+
+@use 'components/pretext';
+
+@use '../salem/other-widen';
+
 @use '../denver/parts-paper';
 //@use 'shell';
 @use 'customization';
