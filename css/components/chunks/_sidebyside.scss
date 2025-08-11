@@ -4,50 +4,96 @@
     margin-top: 1.5em;
 }
 
-.sidebyside {
 
-  .sbsrow {
-    display: flex;
-    justify-content: space-between;
+// sidebysides get laid out into a grid with two rows. "Plain panels" without
+// a caption are in the first row. Panels with things like tables/figures with
+// captions we want to align are decomposed across two rows.
+// If there is no content (no captions) in a second row, it will collapse.
+
+// 1| plain panel | figure-like/table-like
+// 2|             | figcaption
+.sbsrow {
+  display: grid;
+  grid-template-rows: auto auto;
+}
+
+.sbspanel {
+  // most sbspanels are in the first row
+  grid-row: 1; 
+
+  // tables and their captions get centered when in panels
+  & > .table > figcaption {
+    text-align: center;
   }
+  .tabular {
+    overflow-x: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
 
-  /* containers of desired width for actual content */
-  .sbspanel {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
 
-    // &.top is default
+// panel content alignment options
+.sbspanel--top {
+  align-self: start;
+}
 
-    &.middle {
-      justify-content: center;
-      /* should that be space-between? */
-    }
-  
-    &.bottom {
-      justify-content: flex-end;
-    }
+.sbspanel--middle {
+  align-self: center;
+}
 
-    /* fixed-width items are centered horizontally in their panel */
-    &.fixed-width {
-      align-items: center;
-    }
+.sbspanel--bottom {
+  align-self: end;
+}
 
-    // no top-margin for first items inside the panel
-    & > *:first-child {
-      margin-top: 0;
-    }
 
-    table {
-      /* see Sec 23.12 of sample article */
-      overflow-x: auto;
-      margin-left: auto;
-      margin-right: auto;
-    }
+// sbspanels with figures or tables get decomposed into two rows
+// both the panel and the figure-like/table-like element should
+// be ignored by the grid layout so we can place the items inside
+// the *-like into the grid
+.sbspanel:has(.figure-like, .table-like),
+.sbspanel > :is(.figure-like, .table-like) {
+  display: contents;
+}
 
-    // make sure programs don't break containment while in sbs
-    .program {
-      max-width: 100%;
-    }
+
+// first child of decomposed *-like goes to the first row
+.sbspanel > :is(.figure-like, .table-like) > *:first-child {
+  grid-row: 1;
+  align-items: start;
+  align-self: start;
+}
+
+// and gets alignment info
+.sbspanel--top > :is(.figure-like, .table-like) > *:first-child {
+  align-items: start;
+  align-self: start;
+}
+
+.sbspanel--middle > :is(.figure-like, .table-like) > *:first-child {
+  align-items: center;
+  align-self: center;
+}
+
+.sbspanel--bottom > :is(.figure-like, .table-like) > *:first-child {
+  align-items: end;
+  align-self: end;
+}
+
+
+// second child of decomposed *-like goes to the second row
+.sbspanel > :is(.figure-like, .table-like) > *:nth-child(2) {
+  margin-top: 0.5em;
+  grid-row: 2;
+  width: 100%;
+}
+
+
+// make sure content for a panel stays in the correct column
+// otherwise captions may shift left into columns that do not have
+// second row content
+@for $col from 2 through 10 {
+  .sbspanel:nth-of-type(#{$col}) * {
+    grid-column: #{$col};
   }
 }
