@@ -78,7 +78,7 @@
 <!-- Then chunk the document to write reasonable problem definition files     -->
 <xsl:template match="/">
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$document-root//exercise/webwork[statement|task|text()]" mode="write-file"/>
+    <xsl:apply-templates select="$document-root//webwork[statement|task|text()]" mode="write-file"/>
     <xsl:apply-templates select="$document-root" mode="chunking"/>
 </xsl:template>
 
