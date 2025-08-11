@@ -2329,26 +2329,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                              -->
 
 <xsl:variable name="html-theme-name">
+    <xsl:variable name="warning-message">PTX:WARNING: The "FROMSTYLE" style requested in publication/html/css is deprecated. Your book will be built with theme="TOSTYLE". See the PreTeXt Guide for options for the newer HTML themes and their specification .</xsl:variable>
     <xsl:choose>
         <xsl:when test="$publication/html/css/@theme">
             <xsl:value-of select="$publication/html/css/@theme"/>
         </xsl:when>
         <xsl:otherwise>
-            <!-- legacy style detection -->
+            <!-- legacy style detection and overriding -->
             <xsl:choose>
                 <!-- crc and min are best detected via @shell -->
                 <xsl:when test="contains($publication/html/css/@shell, 'crc')">
-                    <xsl:text>crc-legacy</xsl:text>
+                    <xsl:message><xsl:value-of select="str:replace(str:replace($warning-message, 'FROMSTYLE', 'crc'), 'TOSTYLE', 'denver')"/></xsl:message>
+                    <xsl:text>denver</xsl:text>
                 </xsl:when>
                 <xsl:when test="contains($publication/html/css/@shell, 'min')">
-                    <xsl:text>min-legacy</xsl:text>
+                    <xsl:message><xsl:value-of select="str:replace(str:replace($warning-message, 'FROMSTYLE', 'min'), 'TOSTYLE', 'tacoma')"/></xsl:message>
+                    <xsl:text>tacoma</xsl:text>
                 </xsl:when>
                 <!-- others by @style                         -->
-                <xsl:when test="$publication/html/css/@style">
-                    <xsl:value-of select="$publication/html/css/@style"/>
-                    <xsl:text>-legacy</xsl:text>
+                <xsl:when test="contains($publication/html/css/@style, 'wide')">
+                    <xsl:message><xsl:value-of select="str:replace(str:replace($warning-message, 'FROMSTYLE', 'wide'), 'TOSTYLE', 'salem')"/></xsl:message>
+                    <xsl:text>salem</xsl:text>
                 </xsl:when>
-                <xsl:otherwise><xsl:text>default-modern</xsl:text></xsl:otherwise>
+                <xsl:when test="contains($publication/html/css/@style, 'oscarlevin')">
+                    <xsl:message><xsl:value-of select="str:replace(str:replace($warning-message, 'FROMSTYLE', 'oscarlevin'), 'TOSTYLE', 'denver')"/></xsl:message>
+                    <xsl:text>denver</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:variable name="legacy-style">
+                    <xsl:value-of select="$publication/html/css/@style"/>
+                  </xsl:variable>
+                  <xsl:message><xsl:value-of select="str:replace(str:replace($warning-message, 'FROMSTYLE', $legacy-style), 'TOSTYLE', 'default-modern')"/></xsl:message>
+                  <xsl:text>default-modern</xsl:text>
+                </xsl:otherwise>
             </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
