@@ -340,11 +340,11 @@ body.pretext > a.assistive:focus {
 .ptx-navbar .index-button {
   min-width: 70px;
 }
-.ptx-navbar .runestone-profile {
+.runestone-profile {
   position: relative;
 }
-.ptx-navbar .runestone-profile .dropdown-content {
-  display: hidden;
+.runestone-profile .dropdown-content {
+  display: none;
   position: absolute;
   background-color: var(--dropdown-background);
   min-width: 160px;
@@ -355,24 +355,24 @@ body.pretext > a.assistive:focus {
   text-align: start;
   padding: 0;
 }
-.ptx-navbar .runestone-profile .dropdown-content a {
+.runestone-profile .dropdown-content a {
   display: block;
   text-decoration: none;
   color: var(--dropdown-text-color);
   padding: 2px 8px;
 }
-.ptx-navbar .runestone-profile .dropdown-content a:is(:hover, :focus-visible) {
+.runestone-profile .dropdown-content a:is(:hover, :focus-visible) {
   background-color: var(--dropdown-hover-background);
   color: var(--dropdown-hover-text-color);
 }
-.ptx-navbar .runestone-profile .dropdown-content hr {
+.runestone-profile .dropdown-content hr {
   color: var(--dropdown-border-color);
   margin: 4px 0;
 }
-.ptx-navbar .runestone-profile:is(:hover, :focus-visible, :focus-within) {
+.runestone-profile:is(:hover, :focus-visible, :focus-within) {
   overflow: visible;
 }
-.ptx-navbar .runestone-profile:is(:hover, :focus-visible, :focus-within) .dropdown-content {
+.runestone-profile:is(:hover, :focus-visible, :focus-within) .dropdown-content {
   display: block;
 }
 @media screen and (max-width: 800px) {
