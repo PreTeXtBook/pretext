@@ -10521,37 +10521,34 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- A tag, with angle brackets and monospace font -->
 <xsl:template match="tag">
-    <xsl:variable name="the-element">
-        <c>
+    <xsl:call-template name="code-wrapper">
+        <xsl:with-param name="content">
             <xsl:text>&lt;</xsl:text>
-            <xsl:apply-templates/>
+            <xsl:value-of select="."/>
             <xsl:text>&gt;</xsl:text>
-        </c>
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($the-element)/*" />
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- An empty tag, with angle brackets and monospace font -->
 <xsl:template match="tage">
-    <xsl:variable name="the-element">
-        <c>
+    <xsl:call-template name="code-wrapper">
+        <xsl:with-param name="content">
             <xsl:text>&lt;</xsl:text>
-            <xsl:apply-templates/>
+            <xsl:value-of select="."/>
             <xsl:text>/&gt;</xsl:text>
-        </c>
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($the-element)/*" />
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- An attribute, with @ and monospace font -->
 <xsl:template match="attr">
-    <xsl:variable name="the-attribute">
-        <c>
+    <xsl:call-template name="code-wrapper">
+        <xsl:with-param name="content">
             <xsl:text>@</xsl:text>
-            <xsl:apply-templates/>
-        </c>
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($the-attribute)/*" />
+            <xsl:value-of select="."/>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- ################### -->
