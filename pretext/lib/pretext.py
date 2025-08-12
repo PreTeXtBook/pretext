@@ -2854,7 +2854,11 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
 #####################################
 
 
-def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, method):
+    """
+    Generate preview images for interactive elements using playwright.
+    'method' is expected to be "fast" or "slow", corresponding to a 5000 or 10000 ms timeout.
+    """
     import asyncio  # get_event_loop()
 
     # external module, often forgotten
@@ -2868,11 +2872,12 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # Interior asynchronous routine to manage the Chromium headless browser.
     # Use the same page instance for the generation of all interactive previews
-    async def generate_previews(interactives, baseurl, dest_dir):
+    async def generate_previews(interactives, baseurl, dest_dir, timeout):
 
         # interactives:  list containing the interactive hash/fragment ids [1:]
         # baseurl:       local server's base url (includes local port)
         # dest_dir:      folder where images are saved
+        # timeout:       delay in milliseconds to wait for the interactive to load
 
         # Open playwright's asynchronous api to load a browser and page
         async with playwright.async_api.async_playwright() as pw:
@@ -2894,8 +2899,9 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
                 # goto page and wait for content to load
                 await page.goto(input_page, wait_until='domcontentloaded')
-                # wait again, 5 seconds, for more than just splash screens, etc
-                await page.wait_for_timeout(5000)
+                # wait again, according to the value of the timeout,
+                # for more than just splash screens, etc
+                await page.wait_for_timeout(timeout)
                 # list of locations, need first (and only) one
                 elt = page.locator(xpath)
                 await elt.screenshot(path=filename, scale="css")
@@ -2956,6 +2962,9 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         )
     )
 
+    # Translate the fast/slow timeout to a time in milliseconds
+    timeout = 10000 if method == "slow" else 5000
+
     # Identify interactives that will be processed
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-interactive.xsl")
@@ -2992,7 +3001,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             port, server = start_server()
             baseurl = "http://localhost:{}".format(port)
             asyncio.get_event_loop().run_until_complete(
-                generate_previews(interactives, baseurl, dest_dir)
+                generate_previews(interactives, baseurl, dest_dir, timeout)
             )
             # if this blows up, search for 'asyncio.get_event_loop() warning' in this file
         finally:
