@@ -3501,6 +3501,11 @@ figure.table-like {
   margin-left: auto;
   margin-right: auto;
 }
+.runestone .exercise-statement {
+  max-width: 725px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .hparsons_section .hp_question,
 .hparsons_section .hp_feedback {
   max-width: 725px;

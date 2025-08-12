@@ -778,6 +778,11 @@ body.pretext > a.assistive:focus {
   margin-left: auto;
   margin-right: auto;
 }
+.runestone .exercise-statement {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .hparsons_section .hp_question,
 .hparsons_section .hp_feedback {
   max-width: 600px;
