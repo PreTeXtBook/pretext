@@ -1534,13 +1534,13 @@ summary.knowl__link {
 .exercise-like.born-hidden-knowl > .heading {
   font-size: 1.125em;
 }
-.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like):not(.knowl__content, .born-hidden-knowl) {
+.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like, .problem-content .exercise-like):not(.knowl__content, .born-hidden-knowl) {
   border-left: 3px solid var(--exercise-like-border-color);
   border-bottom: 3px solid var(--exercise-like-border-color);
   background-color: var(--content-background-background);
   padding: 0 20px 20px 20px;
 }
-.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like):not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
+.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like, .problem-content .exercise-like):not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   background-color: var(--exercise-like-border-color);
   display: inline-block;
   color: var(--block-head-color);
@@ -1548,16 +1548,16 @@ summary.knowl__link {
   margin-left: -20px;
   margin-top: 0;
 }
-.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like):not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after {
+.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like, .problem-content .exercise-like):not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after {
   display: none;
 }
-.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like):not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
+.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like, .problem-content .exercise-like):not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   margin-bottom: 20px;
 }
-.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like):not(.knowl__content, .born-hidden-knowl) > .heading:first-child + * {
+.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like, .problem-content .exercise-like):not(.knowl__content, .born-hidden-knowl) > .heading:first-child + * {
   margin-top: 0;
 }
-.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like) > .heading {
+.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like, .problem-content .exercise-like) > .heading {
   font-size: 1.125em;
 }
 .computation-like:not(.knowl__content, .born-hidden-knowl) {
