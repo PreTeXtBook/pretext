@@ -10598,6 +10598,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- ########### -->
+<!-- Insertions -->
+<!-- ########### -->
+ <xsl:template match="pi:pagebreak">
+    <xsl:text>\newpage%&#xa;</xsl:text>
+ </xsl:template>
+
+
 <!-- ################ -->
 <!-- Cross-References -->
 <!-- ################ -->

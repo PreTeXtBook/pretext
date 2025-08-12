@@ -299,6 +299,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- The "insertions" pass is for publisher managed insertions -->
+<!-- such as page breaks identified by an element's xml:id     -->
+<xsl:template match="node()|@*" mode="insertions">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="insertions"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="labels">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="labels"/>
@@ -474,6 +482,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="enrichment" select="exsl:node-set($enrichment-rtf)"/>
 
+<xsl:variable name="insertions-rtf">
+    <xsl:apply-templates select="$enrichment" mode="insertions"/>
+</xsl:variable>
+<xsl:variable name="insertions" select="exsl:node-set($insertions-rtf)"/>
+
 <!-- 2024-02-08: the construction of @label from @xml:id was split  -->
 <!-- out of the "identification" pass, so is located here.  Perhaps -->
 <!-- it can/should move earlier, maybe not.                         -->
@@ -481,16 +494,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- pass in all elements with authored @xml:id -->
     <!-- to look for authored duplicates            -->
     <xsl:call-template name="duplication-check-xmlid">
-        <xsl:with-param name="nodes" select="$enrichment//*[@xml:id]"/>
+        <xsl:with-param name="nodes" select="$insertions//*[@xml:id]"/>
         <xsl:with-param name="purpose" select="'authored'"/>
     </xsl:call-template>
     <!-- pass in all elements with authored @label -->
     <!-- to look for authored duplicates           -->
     <xsl:call-template name="duplication-check-label">
-        <xsl:with-param name="nodes" select="$enrichment//*[@label]"/>
+        <xsl:with-param name="nodes" select="$insertions//*[@label]"/>
         <xsl:with-param name="purpose" select="'authored'"/>
     </xsl:call-template>
-    <xsl:apply-templates select="$enrichment" mode="labels"/>
+    <xsl:apply-templates select="$insertions" mode="labels"/>
 </xsl:variable>
 <xsl:variable name="labels" select="exsl:node-set($labels-rtf)"/>
 
@@ -1126,6 +1139,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- ########## -->
+<!-- Insertions -->
+<!-- ########## -->
+
+<xsl:template match="&TRADITIONAL-DIVISION;|&SPECIALIZED-DIVISION;|&NUMBERED-BLOCK;|&UNNUMBERED-BLOCK;" mode="insertions">
+    <!-- If we try to store str:tokenize($latex-pagebreaks-string) as a variable,   -->
+    <!-- we have a cryptic warning from the XSLT processor when that variable would -->
+    <!-- be compared against @xml:id below. Directly using str:tokenize(...)        -->
+    <!-- below seems to work, although at some cost in efficiency                   -->
+    <xsl:if test="@xml:id = str:tokenize($latex-pagebreaks-string)">
+        <pi:pagebreak/>
+    </xsl:if>
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="insertions"/>
+    </xsl:copy>
+</xsl:template>
 
 <!-- ############# -->
 <!-- Source Repair -->
