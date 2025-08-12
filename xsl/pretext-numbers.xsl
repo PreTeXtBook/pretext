@@ -19,6 +19,11 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -118,6 +123,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- as an appendix when present in the backmatter, see above        -->
 <xsl:template match="backmatter/solutions" mode="division-serial-number">
     <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
+</xsl:template>
+
+<!-- "augment" may ask about any structural elements.  -->
+<!-- this is included as a low-priority catch-all for  -->
+<!-- anything not captured above.                      -->
+<xsl:template match="&STRUCTURAL;" mode="division-serial-number" priority="-1">
+    <xsl:value-of select="''"/>
+</xsl:template>
+
+<!-- final catch all to flag anything unexpected       -->
+<xsl:template match="*" mode="division-serial-number" priority="-1">
+    <xsl:message>PTX:BUG  the "division-serial-number" was applied to an element <xsl:value-of select="name(.)"/>. That is unexpected, please report it.</xsl:message>
+    <xsl:value-of select="''"/>
 </xsl:template>
 
 </xsl:stylesheet>

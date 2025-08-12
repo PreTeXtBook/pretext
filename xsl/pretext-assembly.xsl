@@ -324,7 +324,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="node()|@*" mode="augment">
     <xsl:param name="parent-struct" select="''"/>
-    <xsl:param name="level" select="0"/>
+    <xsl:param name="level" select="-1"/>
     <xsl:param name="ordered-list-level" select="0"/>
 
     <xsl:copy>
@@ -1993,8 +1993,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- modal template will return a count of preceding peers at that level.   -->
 <!-- The @struct attribute is the structure number of the *parent*          -->
 <!-- (container), which seems odd here, but fits the general scheme better. -->
-<!-- The @level attribute is helpful, and trvislly to compute here.         -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="augment">
+<!-- The @level attribute is helpful, and trivial to compute here.          -->
+<!-- Use &STRUCTURAL; here for easier maintenance, but some templates will  -->
+<!-- override with priority (e.g. frontmatter|backmatter)                   -->
+<xsl:template match="&STRUCTURAL;" mode="augment" priority="0">
     <xsl:param name="parent-struct"/>
     <xsl:param name="level"/>
     <xsl:param name="ordered-list-level" />
@@ -2057,7 +2059,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- backmatter.  So we need to increment the level in this case, only. -->
 <!-- NB: this might consolidate with above, but seems better solo.      -->
 <!-- NB: with some study and work, this situation might be improved?    -->
-<xsl:template match="frontmatter|backmatter" mode="augment">
+<xsl:template match="frontmatter|backmatter" mode="augment" priority="1">
     <xsl:param name="parent-struct"/>
     <xsl:param name="level"/>
 

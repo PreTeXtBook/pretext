@@ -523,37 +523,58 @@ Book (with parts), "section" at level 3
 <!-- use of levels computed during the "assembly" phase.  So we use careful  -->
 <!-- matches and we use careful choices for application.  At every           -->
 <!-- application we compute the "old" level to test for consistency.         -->
+<!-- 2024-12-19: next step - use "safe" version of level for now and watch   -->
+<!-- for issues. The safe version tests "new-level" for all uses of "level"  -->
 
 <!-- ####################################################################### -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="new-level">
+<!-- temporary "level" entry point                                           -->
+<xsl:template match="&STRUCTURAL;" mode="level">
     <xsl:variable name="old-level">
-        <xsl:apply-templates select="." mode="level"/>
+        <xsl:apply-templates select="." mode="level-expensive"/>
     </xsl:variable>
-    <xsl:if test="not($old-level = @level)">
-        <xsl:message>PTX:BUG:  development bug, new level does not match old level for "<xsl:value-of select="local-name(.)"/>"</xsl:message>
+    <xsl:variable name="new-level">
+        <xsl:apply-templates select="." mode="new-level"/>
+    </xsl:variable>
+    <xsl:if test="not($old-level = $new-level)">
+        <xsl:message>PTX:BUG:  development bug, new level (<xsl:value-of select="$new-level"/>) does not match old level (<xsl:value-of select="$old-level"/>) for "<xsl:value-of select="local-name(.)"/>"</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
-    <!-- actual value here, above is debugging -->
+    <!-- trust the old value -->
+    <xsl:value-of select="$old-level"/>
+</xsl:template>
+
+<!-- ####################################################################### -->
+<!-- These "new-level" eventually become "level"                             -->
+<xsl:template match="&STRUCTURAL;" mode="new-level">
     <xsl:value-of select="@level"/>
 </xsl:template>
 
-<xsl:template match="*" mode="new-level">
-    <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") does not know its *new* level</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
+<!-- Safety catch all -->
+<xsl:template match="*" mode="new-level" priority="-1">
+    <xsl:choose>
+        <xsl:when test="@level">
+            <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") thinks it doesn't do *new* level but does </xsl:message>
+            <xsl:value-of select="@level"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") does not know its *new* level</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 <!-- ####################################################################### -->
-
- <!-- Specific top-level divisions -->
+<!-- These "level-expensive" go away once there is confidence in "new-level" -->
+<!-- Specific top-level divisions -->
 <!-- article/frontmatter, article/backmatter are faux divisions, but   -->
 <!-- will function as a terminating condition in recursive count below -->
-<xsl:template match="book|article|slideshow|letter|memo|article/frontmatter|article/backmatter" mode="level">
+<xsl:template match="book|article|slideshow|letter|memo|article/frontmatter|article/backmatter" mode="level-expensive">
     <xsl:value-of select="0"/>
 </xsl:template>
 
 <!-- A book/part will divide the mainmatter, so a "chapter" is at -->
 <!-- level 2, so we also put the faux divisions at level 1 in the -->
 <!-- case of parts, to again terminate recursive count            -->
-<xsl:template match="book/part|book/frontmatter|book/backmatter" mode="level">
+<xsl:template match="book/part|book/frontmatter|book/backmatter" mode="level-expensive">
     <xsl:choose>
         <xsl:when test="$b-has-parts">
             <xsl:value-of select="1"/>
@@ -575,14 +596,14 @@ Book (with parts), "section" at level 3
 <!-- chapters of books, sections of articles, or in the case of         -->
 <!-- solutions or references, children of an appendix.                  -->
 
-<xsl:template match="colophon|biography|dedication|acknowledgement|preface|chapter|section|subsection|subsubsection|slide|appendix|index|colophon|exercises|reading-questions|references|solutions|glossary|worksheet" mode="level">
+<xsl:template match="colophon|biography|dedication|acknowledgement|preface|chapter|section|subsection|subsubsection|slide|appendix|index|colophon|exercises|reading-questions|references|solutions|glossary|worksheet" mode="level-expensive">
     <xsl:variable name="level-above">
-        <xsl:apply-templates select="parent::*" mode="level"/>
+        <xsl:apply-templates select="parent::*" mode="level-expensive"/>
     </xsl:variable>
     <xsl:value-of select="$level-above + 1"/>
 </xsl:template>
 
-<xsl:template match="*" mode="level">
+<xsl:template match="*" mode="level-expensive">
     <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") does not know its level</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
