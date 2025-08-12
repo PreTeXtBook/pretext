@@ -366,7 +366,7 @@
     <p>
       The project's <webwork/> exercises may rely on PG macros that are written into the project's
       source. For example, the exercises might have TikZ images that rely on
-      <tag>docinfo/latex-image-preamble</tag>.
+      <c>docinfo/latex-image-preamble</c>.
     </p>
     <p>
       For this, a PG macro library file must be built and placed in the host course's
