@@ -2003,8 +2003,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- unless one of the two tests below is true -->
     <xsl:choose>
         <xsl:when test="program/@interactive = 'codelens'">
-            <xsl:apply-templates select="statement"/>
-            <xsl:apply-templates select="program" mode="runestone-codelens"/>
+            <xsl:apply-templates select="program" mode="runestone-codelens">
+                <xsl:with-param name="exercise-statement" select="statement"/>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:when test="program/@interactive = 'activecode'">
             <xsl:apply-templates select="program" mode="runestone-activecode">
@@ -2557,6 +2558,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######## -->
 
 <xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens">
+    <xsl:param name="exercise-statement" select="/.."/>
     <xsl:variable name="active-language">
       <xsl:apply-templates select="." mode="active-language"/>
     </xsl:variable>
@@ -2576,14 +2578,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-managed-directories">
             <xsl:text>trace/</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="visible-id"/>
-        <xsl:text>.js</xsl:text>
+        <xsl:apply-templates select="." mode="runestone-codelens-trace-filename"/>
     </xsl:variable>
     <!-- the Runestone HTML -->
     <div class="ptx-runestone-container">
         <div class="runestone codelens">
             <div class="cd_section" data-component="codelens" data-question_label="">
-                <div class="pytutorVisualizer">
+                <xsl:if test="$exercise-statement">
+                    <div class="exercise-statement">
+                        <xsl:apply-templates select="$exercise-statement"/>
+                    </div>
+                </xsl:if>
+                <div class="pytutorVisualizer exercise-interactive">
                     <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                     <xsl:attribute name="data-params">
                         <xsl:value-of select="$parameter-dictionary"/>
@@ -2597,6 +2603,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="src">
                     <xsl:value-of select="$trace-file"/>
                 </xsl:attribute>
+                <!-- script tag MUST not be self closing. force content to prevent -->
+                <xsl:text> </xsl:text>
             </script>
         </div>
     </div>

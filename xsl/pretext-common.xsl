@@ -3703,7 +3703,8 @@ Book (with parts), "section" at level 3
 <!-- We want to associate those programs with the label on their container -->
 <!-- and NOT with an auto-generated label on the program itself that might -->
 <!-- come from an @xml:id.                                                 -->
-<xsl:template match="exercise/program" mode="runestone-id">
+<!-- This is an implicit use of &PROJECT-LIKE; and should be kept in sync  -->
+<xsl:template match="exercise/program|task/program|project/program|activity/program|exploration/program|investigation/program" mode="runestone-id">
     <xsl:variable name="label">
         <xsl:value-of select="../@label"/>
     </xsl:variable>
@@ -3731,6 +3732,24 @@ Book (with parts), "section" at level 3
             <xsl:text>rs-</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Need a unique filename for codelens traces                                -->
+<!-- visible-id can change if an xml:id is added to program for other reasons  -->
+<!-- Can't vary with build target (so no runestone-id)                         -->
+<!-- Should generally mirror rs-id but without prefix                          -->
+<xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens-trace-filename">
+    <xsl:choose>
+        <!-- If part of exercise-like, use that label, otherwise own                -->
+        <!-- This is an implicit use of &PROJECT-LIKE; and should be kept in sync   -->
+        <xsl:when test="parent::exercise|parent::task|parent::project|parent::activity|parent::exploration|parent::investigation">
+            <xsl:value-of select="../@unique-id"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@unique-id"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>.js</xsl:text>
 </xsl:template>
 
 <!--            -->
@@ -11098,7 +11117,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- prompt, input, output for sage, console, program  -->
 <!-- NB: cline/area is used in Clickable Area problems -->
 <xsl:template match="mathbook|pretext" mode="text-element-warning">
-    <xsl:variable name="bad-elements" select=".//c/*|.//cline/*[not(self::area)]|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt/*|.//input/*|.//output/*" />
+    <xsl:variable name="bad-elements" select=".//c/*|.//cline/*[not(self::area)]|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt[not(parent::checkpoint)]/*|.//input/*|.//output/*" />
     <xsl:if test="$bad-elements">
         <xsl:message>
             <xsl:text>PTX:WARNING: </xsl:text>
