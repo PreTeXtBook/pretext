@@ -125,7 +125,7 @@
 </xsl:template>
 
 <!-- Append a filename to the directory path              -->
-<xsl:template match="webwork[statement|task]" mode="relative-filename">
+<xsl:template match="webwork[statement|task|text()]" mode="relative-filename">
     <xsl:apply-templates select="." mode="directory-path" />
     <xsl:if test="parent::*[&PROJECT-FILTER;]">
         <xsl:apply-templates select="parent::*" mode="type-name"/>
@@ -134,7 +134,7 @@
     <xsl:apply-templates select="parent::*" mode="numbered-title-filesafe" />
     <xsl:text>.pg</xsl:text>
 </xsl:template>
-<xsl:template match="webwork[statement|task]" mode="filename">
+<xsl:template match="webwork[statement|task|text()]" mode="filename">
     <xsl:apply-templates select="." mode="relative-filename"/>
 </xsl:template>
 
@@ -210,13 +210,13 @@
     <!-- Separate webwork within any exercises into their own set. -->
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">
-            <xsl:apply-templates select=".//webwork[statement|task|@source|@local|@copy and not(ancestor::exercises)]" mode="def-info-v2" />
+            <xsl:apply-templates select=".//webwork[statement|task|text()|@source|@local|@copy and not(ancestor::exercises)]" mode="def-info-v2" />
         </xsl:with-param>
     </xsl:apply-templates>
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="exercises" select="true()" />
         <xsl:with-param name="content">
-            <xsl:apply-templates select=".//webwork[statement|task|@source|@local|@copy and ancestor::exercises]" mode="def-info-v2" />
+            <xsl:apply-templates select=".//webwork[statement|task|text()|@source|@local|@copy and ancestor::exercises]" mode="def-info-v2" />
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -228,7 +228,7 @@
 <xsl:template match="&STRUCTURAL;" mode="intermediate">
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">
-            <xsl:apply-templates select="*[not(&STRUCTURAL-FILTER;)]//webwork[statement|task|@source|@local|@copy]" mode="def-info-v2" />
+            <xsl:apply-templates select="*[not(&STRUCTURAL-FILTER;)]//webwork[statement|task|text()|@source|@local|@copy]" mode="def-info-v2" />
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
