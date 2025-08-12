@@ -1224,6 +1224,7 @@ def webwork_to_xml(
     extracted_pg_xml = ET.parse(extracted_pg_filename).getroot()
     localization = extracted_pg_xml.get("localization")
     webwork2_server = extracted_pg_xml.find("server-params-pub").get("webwork2-server")
+    renderer_server = extracted_pg_xml.find("server-params-pub").get("renderer")
     numbered_title_filesafe = extracted_pg_xml.get("numbered-title-filesafe")
     ww_project_dir = os.path.join(ww_reps_dir, "pg", numbered_title_filesafe)
     if not (os.path.isdir(ww_project_dir)):
@@ -1233,7 +1234,7 @@ def webwork_to_xml(
         os.mkdir(ww_macros_dir)
 
     # construct the generated pg files, etc, which may need to be read later for rendering problems
-    webwork_sets(xml_source, pub_file, stringparams, ww_pg_dir, False)
+    webwork_sets(xml_source, pub_file, stringparams, ww_pg_dir, False, False)
     pg_macros(xml_source, pub_file, stringparams, ww_macros_dir)
 
     no_publication_file = False
@@ -1244,6 +1245,7 @@ def webwork_to_xml(
             "user": extracted_pg_xml.find("server-params-pub").get("user-id"),
             "passwd": extracted_pg_xml.find("server-params-pub").get("password"),
             "disableCookies": '1',
+            "renderer": renderer_server
         }
         static_processing = extracted_pg_xml.find("processing").attrib["static"]
         pg_location = extracted_pg_xml.find("processing").attrib["pg-location"]
@@ -1255,8 +1257,10 @@ def webwork_to_xml(
             "user": "anonymous",
             "passwd": "anonymous",
             "disableCookies": '1',
+            "renderer": "https://webwork-dev.aimath.org"
         }
         static_processing = 'webwork2'
+        interactive_processing = 'webwork2'
         pg_location = '/opt/webwork/pg'
 
     # ideally, pub_file is in use, in which case server_params_pub is nonempty.
@@ -1294,6 +1298,8 @@ def webwork_to_xml(
         courseID        = server_params_pub["courseID"]
         user            = server_params_pub["user"]
         passwd          = server_params_pub["passwd"]
+        if static_processing == "renderer":
+            renderer       = sanitize_url(server_params_pub["renderer"])
 
     webwork2_domain_webwork2 = webwork2_domain + "/webwork2/"
     webwork2_render_rpc = webwork2_domain_webwork2 + "render_rpc"
@@ -1307,6 +1313,12 @@ def webwork_to_xml(
     need_for_webwork2 = (
         (static_processing == 'webwork2')
         or (extracted_pg_xml.xpath("//problem[@origin='webwork2']"))
+    )
+
+    # Establish if there is any need to use renderer
+    need_for_renderer = (
+        (static_processing == 'renderer')
+        and (extracted_pg_xml.xpath("//problem[@origin!='webwork2']"))
     )
 
     # Establish if there is any need to use a socket
@@ -1323,6 +1335,8 @@ def webwork_to_xml(
         raise ImportError(__module_warning.format("requests"))
 
     # Establish WW server version, for live rendering if nothing else
+    # Note: if the renderer is doing live rendering there may be no need for a WW server and
+    # this entire block can be conditioned on need_for_webwork2
     # First try to identify the WW version according to what a response hash says it is.
     # This should work for 2.17 and beyond.
     try:
@@ -1376,7 +1390,7 @@ def webwork_to_xml(
             + "                         Is there a WeBWorK landing page at {}?\n"
             + "                         And does it display the WeBWorK version?\n"
         )
-        raise ValueError(msg.format(webwork2_version, webwork2_domain))
+        raise ValueError(msg.format(webwork2_domain_webwork2))
 
     webwork2_path = webwork2_render_rpc if (webwork2_major_version == 2 and webwork2_minor_version >= 19) else webwork2_html2xml
 
@@ -1405,12 +1419,15 @@ def webwork_to_xml(
             + "                         Server: {}\n"
             + "                         You may want to use the AIM WeBWorK server at webwork-ptx.aimath.org.\n"
         )
-        raise ValueError(msg.format(ww_version, ww_domain))
+        raise ValueError(msg.format(webwork2_version, webwork2_domain))
 
     # using a "Session()" will pool connection information
     # since we always hit the same server, this should increase performance
     if need_for_webwork2:
         webwork2_session = requests.Session()
+
+    if need_for_renderer:
+        renderer_session = requests.Session()
 
     clientsocket = None
 
@@ -1490,7 +1507,7 @@ def webwork_to_xml(
         # but kill this for the code that is used repeatedly by embedded problems in HTML
         # So here we branch a copy for embedding where we kill `$refreshCachedImages=1;`
         # But we can't literally just remove that, since an author may have used something
-        # like `$refreshCachedImages  =  'true' ;` so instead, we change `$refreshCachedImages`
+        # like `$refreshCachedImages  =  'true' ;` so instead, we change `refreshCachedImages`
         # to something inert
         if origin[problem] == "generated":
             embed_problem = re.sub(r'(refreshCachedImages)(?![\w\d])', r'\1Inert', pgdense[problem])
@@ -1521,6 +1538,32 @@ def webwork_to_xml(
                 if buffer.endswith(b'ENDOFSOCKETDATA'): break
 
             response = buffer.decode().replace('ENDOFSOCKETDATA', '')
+
+        elif static_processing == 'renderer' and origin[problem] != 'webwork2':
+            if origin[problem] == "external":
+                with open(os.path.join(external_dir, path[problem])) as f: rawProblemSource = f.read()
+                server_params_source = {"rawProblemSource":rawProblemSource}
+            else:
+                server_params_source = {"rawProblemSource":pgdense[problem]}
+
+            server_params = {
+                "showSolutions": "1",
+                "showHints": "1",
+                "displayMode": "PTX",
+                "courseID": courseID,
+                "user": user,
+                "passwd": passwd,
+                "outputformat": "ptx",
+                "problemSeed": seed[problem],
+                "problemUUID": problem,
+            }
+            server_params.update(server_params_source)
+
+            msg = "sending {} to renderer to save in {}: origin is '{}'"
+            log.info(msg.format(problem, ww_reps_file, origin[problem]))
+
+            response = renderer_session.post(renderer + '/renderer/render-ptx', data=server_params)
+            response = response.text
 
         else:
             # Construct URL to get static version from server
@@ -1744,7 +1787,10 @@ def webwork_to_xml(
             if static_processing == 'local' and origin[problem] != 'webwork2':
                 ww_image_scheme = ''
             else:
-                ww_image_url = urllib.parse.urljoin(webwork2_domain, ww_image_full_path)
+                if static_processing == 'renderer' and origin[problem] != 'webwork2':
+                    ww_image_url = urllib.parse.urljoin(renderer, ww_image_full_path)
+                else:
+                    ww_image_url = urllib.parse.urljoin(webwork2_domain, ww_image_full_path)
                 # strip away the scheme and location, if present (e.g 'https://webwork-ptx.aimath.org/')
                 ww_image_url_parsed = urllib.parse.urlparse(ww_image_url)
                 ww_image_scheme = ww_image_url_parsed.scheme
@@ -1812,7 +1858,10 @@ def webwork_to_xml(
                 # download actual image files
                 # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
                 try:
-                    image_response = webwork2_session.get(image_url)
+                    if static_processing == 'renderer' and origin[problem] != 'webwork2':
+                        image_response = renderer_session.get(image_url)
+                    else:
+                        image_response = webwork2_session.get(image_url)
                 except requests.exceptions.RequestException as e:
                     root_cause = str(e)
                     msg = "PTX:ERROR: there was a problem downloading an image file,\n URL: {}\n"
@@ -1988,6 +2037,7 @@ def webwork_to_xml(
         rendering_data.set(source_key, source_value)
         rendering_data.set("origin", origin[problem])
         rendering_data.set("domain", webwork2_domain)
+        rendering_data.set("renderer", renderer_server)
         rendering_data.set("course-id", courseID)
         rendering_data.set("user-id", user)
         rendering_data.set("passwd", passwd)
@@ -2035,6 +2085,10 @@ def webwork_to_xml(
         webwork2_session.close()
     except:
         pass
+    try:
+        renderer_session.close()
+    except:
+        pass
 
     # close the socket
     if clientsocket:
@@ -2047,7 +2101,7 @@ def webwork_to_xml(
 ################################
 
 
-def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
+def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz, need_macros=True):
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -2064,7 +2118,8 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz):
     folder = os.path.join(tmp_dir, folder_name)
     macros_folder = os.path.join(folder, 'macros')
     os.mkdir(macros_folder)
-    pg_macros(xml_source, pub_file, stringparams, macros_folder)
+    if need_macros:
+        pg_macros(xml_source, pub_file, stringparams, macros_folder)
     if tgz:
         archive_file = os.path.join(tmp_dir, folder_name + ".tgz")
         targz(archive_file, folder)
@@ -2092,7 +2147,12 @@ def pg_macros(xml_source, pub_file, stringparams, dest_dir):
         stringparams["publisher"] = pub_file
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "support", "pretext-pg-macros.xsl")
-    xsltproc(extraction_xslt, xml_source, None, output_dir=dest_dir, stringparams=stringparams)
+    tmp_dir = get_temporary_directory()
+    xsltproc(extraction_xslt, xml_source, None, output_dir=tmp_dir, stringparams=stringparams)
+    copy_build_directory(tmp_dir, dest_dir)
+    #folder_name = os.listdir(tmp_dir)[0]
+    #folder = os.path.join(tmp_dir, folder_name)
+    #copy_build_directory(folder, os.path.join(dest_dir,folder_name))
 
 ############################################################
 #
