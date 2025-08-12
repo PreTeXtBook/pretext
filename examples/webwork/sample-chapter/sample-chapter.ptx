@@ -353,7 +353,29 @@ ENDDOCUMENT();
                             <tag>conclusion</tag>.
                         </p>
                     </introduction>
-                    <webwork copy="webwork-add-numbers" seed="511"/>
+                    <webwork seed="511">
+                        <description>
+                            Add two positive single-digit integers.
+                        </description>
+                        <pg-code>
+                            $a = random(1, 9, 1);
+                            $b = random(1, 9, 1);
+                            $c = Compute($a + $b);
+                        </pg-code>
+                        <statement>
+                            <p>
+                                Compute the sum of <m><var name="$a" /></m> and
+                                <m><var name="$b" /></m>:
+                            </p>
+                            <p>
+                                <m><var name="$a" /> + <var name="$b" /> =</m>
+                                <var name="$c" width="5" category="integer" />
+                            </p>
+                        </statement>
+                        <solution>
+                            <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
+                        </solution>
+                    </webwork>
                 </project>
 
                 <exploration label="copy-webwork-add-numbers-exploration">
@@ -364,9 +386,30 @@ ENDDOCUMENT();
                             Here, we use an <tag>exploration</tag>.
                         </p>
                     </introduction>
-                    <webwork copy="webwork-add-numbers" seed="512"/>
+                    <webwork seed="512">
+                        <description>
+                            Add two positive single-digit integers.
+                        </description>
+                        <pg-code>
+                            $a = random(1, 9, 1);
+                            $b = random(1, 9, 1);
+                            $c = Compute($a + $b);
+                        </pg-code>
+                        <statement>
+                            <p>
+                                Compute the sum of <m><var name="$a" /></m> and
+                                <m><var name="$b" /></m>:
+                            </p>
+                            <p>
+                                <m><var name="$a" /> + <var name="$b" /> =</m>
+                                <var name="$c" width="5" category="integer" />
+                            </p>
+                        </statement>
+                        <solution>
+                            <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
+                        </solution>
+                    </webwork>
                 </exploration>
-
             </section>
 
             <section xml:id="section-the-quadratic-formula">
