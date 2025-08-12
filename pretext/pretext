@@ -215,6 +215,23 @@ def sanitize_method(method, component, format):
         # set correctly
         else:
             return method
+    elif component == "preview":
+        # unset by command-line, use default
+        if not (method):
+            return "fast"
+        # set, but illegal
+        elif not (method in ["fast", "slow"]):
+            msg = "\n".join(
+                [
+                    'the method given for generating preview images ("{}") is not "fast" or "slow",',
+                    '             so using the default method instead ("fast")',
+                ]
+            )
+            log.warning(msg.format(method))
+            return "fast"
+        # set correctly
+        else:
+            return method
     # inappropriate attempt to use this argument
     elif method:
         msg = "".join(
@@ -707,7 +724,7 @@ def main():
         )
     elif args.component == "preview":
         ptx.preview_images(
-            xml_source, publication_file, stringparams, args.xmlid, dest_dir
+            xml_source, publication_file, stringparams, args.xmlid, dest_dir, method
         )
     elif args.component == "mom":
         ptx.mom_static_problems(
