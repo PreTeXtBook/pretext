@@ -10458,7 +10458,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and may also specify a design-width.  -->
 <xsl:template match="*" mode="get-interactive-sizing-styles">
     <xsl:variable name="has-design-width">
-        <xsl:value-of select="substring(@design-width, string-length(@design-width) - 1) = 'px'"/>
+        <xsl:choose>
+            <xsl:when test="@design-width">
+                <xsl:choose>
+                    <xsl:when test="substring(@design-width, string-length(@design-width) - 1) = 'px'">
+                        <xsl:value-of select="true()"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message>PTX:WARNING:  "design-width" attribute on "interactive" element must end with "px"</xsl:message>
+                        <xsl:value-of select="false()"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <xsl:attribute name="style">
         <xsl:choose>
