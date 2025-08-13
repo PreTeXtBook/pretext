@@ -244,6 +244,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <!-- global indication of if a publisher has opted in -->
 <xsl:variable name="b-using-csl-styles" select="not(normalize-space($csl-style-file) = '')"/>
+<!-- if using styles we form the filename of generated references and citations -->
+<xsl:variable name="csl-file">
+    <xsl:choose>
+        <xsl:when test="$b-using-csl-styles">
+            <xsl:value-of select="$generated-directory-source"/>
+            <xsl:text>references/csl-bibliography.xml</xsl:text>
+        </xsl:when>
+        <!-- explicitly empty/null if not using CSL styles -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- Worksheet margins.  Applies to both PDF and HTML. -->
 
