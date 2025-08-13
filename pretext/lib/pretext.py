@@ -2152,7 +2152,7 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         return
 
     ### Imports, Constants, Helpers ###
-
+    #
     import json  # parse JSON CSL for cite
 
     # Requires the "citeproc-py" Python package to do
@@ -2164,12 +2164,12 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # Necessary namespace information for creating
     # a file of bibliographic information later
-    # CSL is not used, except in an example
+    # "cs"/CSL might be avoided when we better
+    #   understand querying the style with CiteProc
     XML = "http://www.w3.org/XML/1998/namespace"
     PI = "http://pretextbook.org/2020/pretext/internal"
-    NSMAP = {"xml": XML, "pi": PI}
-    # CSL = "http://purl.org/net/xbiblio/csl"
-    # NSMAP = {"xml": XML, "pi": PI, "cs": CSL}
+    CSL = "http://purl.org/net/xbiblio/csl"
+    NSMAP = {"xml": XML, "pi": PI, "cs": CSL}
 
     # callback for non-existent citation
     # copied from citeproc-py example
@@ -2230,8 +2230,64 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # else:
     #     prefix = ""
 
-    ### Import JSON References to CiteProc ###
+    # Some aspects of styles are not supported
+    # and some influence behavior later.
 
+    # style/@class: "in-text" or "note"
+    style_class = style.root.get("class")
+    # Bail-out on a value we do not know
+    if not(style_class in ["in-text", "note"]):
+        msg = " ".join(['The requested CSL style file ("{}") has a /style/@class',
+                        'attribute value ("{}") we do not recognize.',
+                        'No action is being taken.'])
+        log.error(msg.format(csl_style, style_class))
+        return
+    # Bail-out for footnote/endnote styles
+    if style_class == "note":
+        msg = " ".join(['The requested CSL style file ("{}") uses a footnote/endnote',
+                        'style for citations, which PreTeXt does not yet support.',
+                        'No action is being taken.'])
+        log.error(msg.format(csl_style))
+        return
+
+
+    # We need to know about a "numeric" style later
+    # style/info/category/@citation-format: "numeric", "author-date", "note"
+    style_citation_format = style.root.info.category.get("citation-format")
+    # Bail-out on a value we do not know
+    if not(style_citation_format in ["numeric", "author-date", "note"]):
+        msg = " ".join(['The requested CSL style file ("{}") has a'
+                        '/style/info/category/@citation-format',
+                        'attribute value ("{}") we do not recognize.',
+                        'No action is being taken.'])
+        log.error(msg.format(csl_style, style_citation_format))
+        return
+    is_numeric = (style_citation_format == "numeric")
+
+    """
+    Typical CSL XML structure for the suffix used with numeric
+    identification, for example
+        "6. "    ->  ". "
+        "[6]"    ->  "]"
+        "(6)  "  ->  ")  "
+
+    <bibliography entry-spacing="0" second-field-align="flush">
+        <layout suffix=".">
+            <text variable="citation-number" prefix="[" suffix="]"/>
+    """
+
+    # Assume reference is identified numerically until shown otherwise.
+    # If numeric, grab the "suffix" to help with parsing out numeric
+    # identification is loosely structured/formatted output from the
+    # cite processor.
+    numeric_suffix = None
+    if is_numeric:
+        layout_element  = style.xml.xpath("/cs:style/cs:bibliography/cs:layout/cs:text[@variable = 'citation-number']", namespaces=NSMAP)[0]
+        numeric_suffix = layout_element.get("suffix")
+
+
+    ### Import JSON References to CiteProc ###
+    #
     # "references" collects a single overall JSON blob of the
     # PTX "references" backmatter division. We "load" the json
     # and feed it to the CiteProcJSON constructor
@@ -2303,20 +2359,30 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Here is the formatted version: a string representation of each reference
     # Author's XML is here still and is still text.
     # Note: attributes the pre-processor added are being capitalized?
-    # str() is necessary here, and results are srrings, not objects [checked]
+    # str() is necessary here, and results are strings, not objects [checked]
     # Note markup conversion from CiteProc HTML to "internal" PreTeXt (mostly)
     references.sort()
     references_formatted = [_pretextify(str(item)) for item in references.bibliography()]
+
+
     # references.keys gets sorted along, since these are the biblio/@xml:id,
     # so we can continue to track the sorted version of the references
+    # for references with numeric identifiers, we split that identifier
+    # off as an attribute, which presumes it has no markup
     references_wrapped = []
-    biblio_pattern = '<pi:csl-biblio xml:id="{}" xmlns:{}="{}">{}</pi:csl-biblio>'
+    biblio_pattern = '<pi:csl-biblio numeric="{}" xml:id="{}" xmlns:{}="{}">{}</pi:csl-biblio>'
     for k, rf in zip(references.keys, references_formatted):
+        numeric = ""
+        if numeric_suffix:
+            numeric, rf = rf.split(numeric_suffix, 1)
+            numeric = numeric + numeric_suffix
+            #(strip down numeric trailing whitespace?)
+
         # references are text right now, we make a proper
         # snippet of XML that can be parsed by the lxml
         # "fromstring()" function into an ET element object.
         # "xml" namespace seems to be known to lxml anyway
-        references_wrapped.append(biblio_pattern.format(k, "pi", PI, rf))
+        references_wrapped.append(biblio_pattern.format(numeric, k, "pi", PI, rf))
 
     ### Citations formatted ###
     #
