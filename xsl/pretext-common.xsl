@@ -8758,6 +8758,8 @@ Book (with parts), "section" at level 3
     <xsl:variable name="error-message">
         <xsl:apply-templates select="." mode="error-check-xref"/>
     </xsl:variable>
+    <xsl:variable name="b-custom-biblio-text" select="@pi:custom-text = 'yes'"/>
+
     <xsl:choose>
         <xsl:when test="not($error-message = '')">
             <xsl:variable name="warning-rtf">
@@ -8784,7 +8786,7 @@ Book (with parts), "section" at level 3
                 <xsl:if test="parent::mrow">
                     <xsl:text>\text{</xsl:text>
                 </xsl:if>
-                <xsl:if test="$b-is-biblio-target">
+                <xsl:if test="$b-is-biblio-target and not($b-custom-biblio-text)">
                     <xsl:text>[</xsl:text>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="xref-text" >
@@ -8811,7 +8813,7 @@ Book (with parts), "section" at level 3
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:if>
-                <xsl:if test="$b-is-biblio-target">
+                <xsl:if test="$b-is-biblio-target and not($b-custom-biblio-text)">
                     <xsl:text>]</xsl:text>
                 </xsl:if>
                 <xsl:if test="parent::mrow">
@@ -9418,9 +9420,16 @@ Book (with parts), "section" at level 3
         <!-- number only, consumer wraps -->
         <!-- warn about useless content override (use as @detail?) -->
         <xsl:when test="$b-is-biblio-target">
-            <xsl:apply-templates select="$target" mode="xref-number">
-                <xsl:with-param name="xref" select="." />
-            </xsl:apply-templates>
+            <xsl:choose>
+                <xsl:when test="$custom-text = ''">
+                    <xsl:apply-templates select="$target" mode="xref-number">
+                        <xsl:with-param name="xref" select="." />
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$custom-text"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <!-- now not an equation or bibliography target -->
         <!-- custom text is additional, as prefix, with no type -->
@@ -10641,6 +10650,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Raw Bibliographic Entry Formatting              -->
 <!-- Markup really, not full-blown data preservation -->
+
+<xsl:template match="pi:csl-citation">
+    <!-- Some citations have titles, some titles have  -->
+    <!-- math, and so cannot just select "text + xref" -->
+    <xsl:apply-templates select="node()"/>
+</xsl:template>
 
 <!-- Title in italics -->
 <xsl:template match="biblio[@type='raw']/title">
