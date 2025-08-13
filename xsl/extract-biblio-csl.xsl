@@ -49,7 +49,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- In "normal" circumstances, this variable is   -->
 <!-- set to "false()", but when employing this     -->
 <!-- specialized stylesheet, we override to "true" -->
-<xsl:variable name="b-biblio-csl-extracting" select="true()"/>
+<xsl:variable name="b-extracting-biblio" select="true()"/>
 
 <!-- We create a structured file of bibliographic and citation  -->
 <!-- information from the document.  Following is an outline of -->

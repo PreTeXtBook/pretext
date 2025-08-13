@@ -226,8 +226,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-extracting-pg"   select="false()"/>
 <xsl:variable name="b-extracting-mom"  select="false()"/>
 <xsl:variable name="b-extracting-fitb" select="false()"/>
+<xsl:variable name="b-extracting-biblio" select="false()"/>
 
-<xsl:variable name="b-extracting" select="$b-extracting-pg or $b-extracting-mom or $b-extracting-fitb"/>
+<xsl:variable name="b-extracting" select="$b-extracting-pg or $b-extracting-mom or $b-extracting-fitb or $b-extracting-biblio"/>
 
 
 <!-- ############################## -->
