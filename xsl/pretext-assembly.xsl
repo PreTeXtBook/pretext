@@ -725,6 +725,103 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- ########################################################## -->
+<!-- ########################################################## -->
+<!-- 2025-08-13: these error checks are not really right.       -->
+<!-- Testing for existence of the file of references seems      -->
+<!-- to be the big problem?  If it does not exist, the          -->
+<!-- processor just fails altogether?  Further, these variables -->
+<!-- might be renamed as positive events, to ease the logic.    -->
+<!-- ########################################################## -->
+<!-- ########################################################## -->
+
+<!-- To use CSL styles, we need to determine if a few things are in place -->
+<!-- (a)  are we even using CSL style files at all                        -->
+<!-- (b)  if we are extracting or not                                     -->
+<!-- (c)  if the desired generated references and citations exist         -->
+<!-- (d)  if the generated file exists, built with the same style file?   -->
+<!-- Without everything in place, we just copy references/"biblio".        -->
+<!-- Here comes the gauntlet -->
+
+<!-- $b-using-csl-styles: a consequence of opting in via publisher file         -->
+<!-- $b-extracting-biblio: set here and overridden in the extraction stylesheet -->
+
+<!-- two error conditions -->
+<!-- 2025-08-13: this variable is always false -->
+<xsl:variable name="missing-csl-file">
+    <xsl:choose>
+        <!-- can't be missing if we don't need it, and we   -->
+        <!-- don't induce panic by looking for it, when it  -->
+        <!-- isn't called for, and getting ominous warnings -->
+        <xsl:when test="not($b-using-csl-styles)">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+            <!-- this is only a test, variable is local and not retained -->
+            <!-- <xsl:variable name="the-references" -->
+                <!-- select="document($csl-file, $original)/pi:csl-references"/> -->
+            <!-- since we build the file, condiition on the size of -->
+            <!-- this node-set:  one (good) or none (bad, missing)  -->
+            <!-- <xsl:choose> -->
+                <!-- file looks good -->
+                <!-- <xsl:when test="count($the-references) = 1"> -->
+                    <!-- <xsl:text>no</xsl:text> -->
+                <!-- </xsl:when> -->
+                <!-- nothing came of document() -->
+                <!-- <xsl:otherwise> -->
+                    <!-- <xsl:text>yes</xsl:text> -->
+                    <!-- and we take the opportunity to say so, just once, and early on -->
+                    <!-- <xsl:message>PTX:ERROR:     your publisher file indicates the use of a Citation Stylesheet Language (CSL) specification for references, but we have not located your file of generated references and citations at "<xsl:value-of select="$csl-file"/>".  We will fall back to default processing in order to proceed.</xsl:message> -->
+                <!-- </xsl:otherwise> -->
+            <!-- </xsl:choose> -->
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-missing-csl-file" select="$missing-csl-file = 'yes'"/>
+
+<!-- This is the case of having a style file specified in    -->
+<!-- the publisher file AND having a generated file of       -->
+<!-- references and citations AND the two versions of the    -->
+<!-- style file used do not match.  The first two conditions -->
+<!-- should always be consulted.                             -->
+<xsl:variable name="style-file-mismatch">
+    <xsl:choose>
+        <!-- we do not warning at the end of this template, -->
+        <!-- just because the file itself does not exist    -->
+        <xsl:when test="not($b-using-csl-styles) or $missing-csl-file">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- now we are using CSL styles and we do have a file to interrogate -->
+        <xsl:otherwise>
+            <!-- this is only a test, variable is local and not retained -->
+            <xsl:variable name="the-references"
+                select="document($csl-file, $original)/pi:csl-references"/>
+            <!-- attribute in generated file saying which style file was used -->
+            <xsl:variable name="csl-style-file-for-generated">
+                <xsl:value-of select="$the-references/@csl-style-file"/>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$csl-style-file = $csl-style-file-for-generated">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>yes</xsl:text>
+                    <!-- and we take the opportunity to say so, just once, and early on -->
+                    <xsl:message>PTX:ERROR:     your publisher file indicates the use of one Citation Stylesheet Language (CSL) specification for references ("<xsl:value-of select="$csl-style-file"/>"), but your file of generated references and citations at "<xsl:value-of select="$csl-file"/>" was built using a different CSL style file ("<xsl:value-of select="$csl-style-file-for-generated"/>").  We will fall back to default processing in order to proceed.</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-style-file-mismatch" select="$style-file-mismatch = 'yes'"/>
+
+<!-- ########################################################## -->
+<!-- ########################################################## -->
+<!-- 2025-08-13: end of incomplete error logic.                 -->
+<!-- ########################################################## -->
+<!-- ########################################################## -->
+
 <xsl:template match="backmatter/references[not(@source)]" mode="assembly">
     <xsl:choose>
         <!-- duplicate for biblio extraction process or if using -->
