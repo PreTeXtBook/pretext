@@ -2467,6 +2467,14 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # Root element of produced XML file, "pi:csl-references"
     csl_references = ET.Element(ET.QName(NSMAP["pi"], "csl-references"), nsmap=NSMAP)
+    # Somewhat like "versioning" a file, set an attribute
+    # (@csl-style-file) on the root element of the file.
+    # In the XSL processing this can be compared to the
+    # value from the current publication file as a check
+    # that production and consumption are in-sync at the
+    # time of consumption.  The Python string here was
+    # determined at the time of production (i.e. now).
+    csl_references.set("csl-style-file", csl_style)
 
     index = 1
     for rw in references_wrapped:
