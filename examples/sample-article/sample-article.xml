@@ -16430,7 +16430,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <title>Abstract Algebra: Theory and Applications</title>
                     <!-- "note" element not supported yet for CSL processing,     -->
                     <!-- makes bad JSON. Add an @xml:id to test cross-referencing -->
-                    <note><p>Another online, open-source offering.</p></note>
+                    <!-- <note><p>Another online, open-source offering.</p></note> -->
                 </biblio>
 
                 <biblio xml:id="biblio-lay-article" type="article">
