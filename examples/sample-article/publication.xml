@@ -44,11 +44,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- This is the minimum information to locate a     -->
         <!-- Citation Stylesheet Language (CSL) style file   -->
         <!-- in the CSL repository.  It is not expected to   -->
-        <!-- have the ".csl" suffix, but should have partial -->
-        <!-- path names, such as "dependent/"                -->
-        <!-- The default is "harvard1"                       -->
-        <!-- 2025-05-10: this is not being employed yet      -->
-        <citation-stylesheet-language style="harvard1"/>
+        <!-- have the ".csl" suffix.  Default is "harvard1". -->
+        <!-- Note: "harvard1" might be best first use.       -->
+        <!-- 2025-08-13: this is experimental and opt-in.    -->
+        <!--  -->
+        <!-- "harvard1" style available in CiteProcPy code?  -->
+        <!-- <citation-stylesheet-language style="harvard1"/> -->
+        <!--  -->
+        <!-- numeric style, ". " for suffix -->
+        <!-- <citation-stylesheet-language style="vancouver-brackets"/> -->
+        <!--  -->
+        <!-- "elsevier-with-titles" is a "numeric" style, [6] -->
+        <!-- <citation-stylesheet-language style="elsevier-with-titles"/> -->
+        <!--  -->
+        <!-- <citation-stylesheet-language style="taylor-and-francis-chicago-author-date"/> -->
+        <!--  -->
+        <!-- 2025-06-03: "chicago-fullnote" uses footnotes/endnotes, and       -->
+        <!-- therefore should throw an error as an unsupported style, and halt -->
+        <!-- <citation-stylesheet-language style="chicago-fullnote-bibliography-with-ibid"/> -->
     </common>
 
     <!-- we use customizations-two for the oscarlevin style example -->
