@@ -4836,9 +4836,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- ignoring original flag at first, -->
     <!-- nothing interior gets duplicated -->
     <div class="bibitem">
-        <xsl:text>[</xsl:text>
-        <xsl:apply-templates select="." mode="serial-number" />
-        <xsl:text>]</xsl:text>
+        <xsl:choose>
+            <!-- CSL not active, PreTeXt numbers and brackets -->
+            <xsl:when test="not(@numeric)">
+                <xsl:text>[</xsl:text>
+                <xsl:apply-templates select="." mode="serial-number" />
+                <xsl:text>]</xsl:text>
+            </xsl:when>
+            <!-- CSL provided, with formatting -->
+            <xsl:otherwise>
+                <xsl:value-of select="@numeric"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </div>
     <div class="bibentry">
         <xsl:choose>
