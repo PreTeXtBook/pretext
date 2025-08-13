@@ -725,6 +725,121 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<xsl:template match="backmatter/references[not(@source)]" mode="assembly">
+    <xsl:choose>
+        <!-- duplicate for biblio extraction process or if using -->
+        <!-- default (simplistic) PreTeXt bibliography support   -->
+        <xsl:when test="$b-extracting-biblio or not($b-using-csl-styles)">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="assembly"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- not extracting, so doing a conversion, and also     -->
+        <!-- must be using CSL styles, so a collection of        -->
+        <!-- processed references and citations should exist     -->
+        <!-- but maybe not (this "when" is separate for clarity) -->
+        <xsl:when test="$b-missing-csl-file or $b-style-file-mismatch">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="assembly"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- not extracting, using CSL, have a generated file,  -->
+        <!-- matching styles in publihser file and in generated -->
+        <!-- file.  We can just do it.                          -->
+        <xsl:otherwise>
+            <!-- $csl-file is defined in the publisher-variables stylesheet, -->
+            <xsl:variable name="the-references"
+                select="document($csl-file, $original)/pi:csl-references"/>
+            <!-- Now, a "choose" within the above "otherwise".  If the file -->
+            <!-- is missing or mis-matched, we just duplicate.  Otherwise,  -->
+            <!-- we finally make replacment entries in the "references".    -->
+            <xsl:copy>
+                <!-- duplicate attributes on "references" -->
+                <xsl:apply-templates select="@*" mode="assembly"/>
+                <!-- duplicate/massage each bibliographic entry   -->
+                <!-- realize as a standard "raw" type reference,  -->
+                <!-- though make take this tyepe private some day -->
+                <xsl:for-each select="$the-references/pi:csl-biblio">
+                    <biblio type="raw">
+                        <!-- preserve @xml:id through the process -->
+                        <xsl:attribute name="xml:id">
+                            <xsl:value-of select="@xml:id"/>
+                        </xsl:attribute>
+                        <!-- preserve numeric identification -->
+                        <xsl:attribute name="numeric">
+                            <xsl:value-of select="@numeric"/>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="node()" mode="assembly"/>
+                    </biblio>
+                </xsl:for-each>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="xref" mode="assembly">
+    <!-- determine if this "xref" points to a "biblio",  -->
+    <!-- and really just a backmatter/references/biblio, -->
+    <!-- plus using CSL styles for citations             -->
+    <xsl:variable name="is-biblio-target">
+        <xsl:choose>
+            <!-- not doing styles, target is not of interest -->
+            <!-- to us anyway and we want to bail out as     -->
+            <!-- quickly and as easily as possible           -->
+            <xsl:when test="not($b-using-csl-styles)">
+                <xsl:text>no</xsl:text>
+            </xsl:when>
+            <!-- first/last page-range device -->
+            <xsl:when test="@first">
+                <xsl:text>no</xsl:text>
+            </xsl:when>
+            <xsl:when test="@provisional">
+                <xsl:text>no</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="tokenized-refs" select="str:tokenize(@ref, ' ,')"/>
+                <xsl:variable name="first-ref">
+                    <xsl:value-of select="$tokenized-refs[1]"/>
+                </xsl:variable>
+                <!-- context switch -->
+                <xsl:for-each select="$original">
+                    <xsl:choose>
+                        <xsl:when test="id($first-ref)/self::biblio/parent::references/parent::backmatter">
+                            <xsl:text>yes</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>no</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="b-is-biblio-target" select="$is-biblio-target = 'yes'"/>
+    <!--  -->
+    <xsl:choose>
+        <!-- duplicate for biblio extraction process or if the "xref"  -->
+        <!-- is not a candidate for replacement by a CSL citation      -->
+        <!-- Note: not using CSL styles immediately determines that    -->
+        <!-- this "xrref" is not a "biblio target" and a copy is       -->
+        <!-- made here, immediately as well                            -->
+        <xsl:when test="not($b-is-biblio-target) or $b-extracting-biblio">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="assembly"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- a candidate for replacement  -->
+        <xsl:otherwise>
+            <xsl:variable name="the-xref-id">
+                <xsl:value-of select="@original-id"/>
+            </xsl:variable>
+            <xsl:variable name="matched-citation" select="document('gen/references/csl-bibliography.xml', $original)/pi:csl-references/pi:csl-citation[@xml:id = $the-xref-id]"/>
+            <xsl:copy-of select="$matched-citation"/>
+            <!-- WARN ON UNMATCHED -->
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- We cosmetically change a "drag-n-drop" style matching problem from    -->
 <!-- being signaled by "matches" and instead call it a "cardsort" problem, -->
 <!-- which is a more accurate description of the interface from Runestoone -->
