@@ -127,6 +127,14 @@
             <paragraphs>
                 <title><tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>, tag, empty tag, attribute, <tag>section</tag>, <tage>hash</tage>, <attr>width</attr></title>
                 <p>These are <pretext /> tags for when we write about <pretext /> and need to discuss tags, empty tags, and attributes.  Given how we design <pretext /> tags the content of these elements should only be the 26 lower-case letters and a dash/hyphen.  These should render in ways that make the three types of language elements obvious without much further discussion.  Just a bit self-serving, but not unjustified.</p>
+
+                <p>These are not meant for more elaborate constructions.  For example, an attribute-value pair should not be authored as
+                    <cd>&lt;attr&gt;data="/home/data"&lt;/attr&gt;</cd>
+                and instead I would write
+                    <cd>set the &lt;attr&gt;data&lt;/attr&gt; attribute to the value &lt;c&gt;/home/data&lt;/c&gt;</cd>
+                Similarly, do not use the <tag>tag</tag> element for long XPath constructions like
+                    <cd>&lt;tag&gt;docinfo/prefigure-preamble/line&lt;/tag&gt;</cd>
+                The <tag>c</tag> or <tag>cd</tag> element will likely work better.</p>
             </paragraphs>
 
             <!-- Scientific names -->
