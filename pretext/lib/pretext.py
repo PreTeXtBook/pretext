@@ -1871,7 +1871,7 @@ def webwork_to_xml(
         # If there is "badness"...
         # Build 'shell' problems to indicate failures
         if badness:
-            print(badness_msg.format(path[problem], seed[problem], badness_tip))
+            log.error(badness_msg.format(path[problem], seed[problem], badness_tip))
             static.set("failure", badness_type)
             statement = ET.SubElement(static, "statement")
             p = ET.SubElement(statement, "p")
@@ -2173,9 +2173,8 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # callback for non-existent citation
     # copied from citeproc-py example
-    # TODO: convert to log() message
     def warn(citation_item):
-        print("WARNING: Reference with key '{}' not found in the bibliography."
+        log.warning("PTX:WARNING: Reference with key '{}' not found in the bibliography."
           .format(citation_item.key))
 
     ### XSL Stylesheet To Analyze Author's Source Bibliography ###
