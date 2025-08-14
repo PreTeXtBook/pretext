@@ -2,11 +2,11 @@ const timeOutHandler = new Object();
 const inputPrefix = 'stackapi_input_';
 const feedbackPrefix = 'stackapi_fb_';
 const validationPrefix = 'stackapi_val_';
-// The api URL should be pulled from the publication file, but for now
-// it is hardcoded until I figure out how to do that.
+// const xmlfiles = ['questions/calc.xml', 'questions/stack_jxg.binding-demo-4.4.xml'];
+// const apiurl = '/stack-api';
 const apiurl = 'https://stackapi-1-43834256136.europe-west1.run.app/';
-// This is the official demo api server, but it's a bit temperamental
 // const apiurl = 'https://stack-api.maths.ed.ac.uk';
+// const apiurl = 'http://localhost:3080';
 
 const stackstring = {
   "teacheranswershow_mcq":"A correct answer is: {$a->display}",
@@ -25,6 +25,7 @@ const stackstring = {
 async function collectData(qfile, qname, qprefix) {
   let res = "";
 
+  // for (const file of xmlfiles) {
     await getQuestionFile(qfile, qname).then((response)=>{
       if (response.questionxml != "<quiz>\nnull\n</quiz>") {
         res = {
@@ -72,6 +73,7 @@ function processNodes(res, nodes, qprefix) {
 // Display rendered question and solution.
 function send(qfile, qname, qprefix) {
   const http = new XMLHttpRequest();
+  // const url = window.location.origin + '/render';
   const url = apiurl + '/render';
   http.open("POST", url, true);
   http.setRequestHeader('Content-Type', 'application/json');
@@ -188,6 +190,7 @@ function send(qfile, qname, qprefix) {
 // Validate an input. Called a set amount of time after an input is last updated.
 function validate(element, qfile, qname, qprefix) {
   const http = new XMLHttpRequest();
+  // const url = window.location.origin + '/validate';
   const url = apiurl + '/validate';
   http.open("POST", url, true);
   // Remove API prefix and subanswer id.
@@ -232,6 +235,7 @@ function validate(element, qfile, qname, qprefix) {
 // Submit answers.
 function answer(qfile, qname, qprefix, seed) {
   const http = new XMLHttpRequest();
+  // const url = window.location.origin + '/grade';
   const url = apiurl + '/grade';
   http.open("POST", url, true);
 
@@ -354,7 +358,8 @@ function renameIframeHolders() {
 }
 
 function createIframes (iframes) {
-  for (const iframe of iframes) {
+  for (let iframe of iframes) {
+    iframe[1] = iframe[1].replaceAll("/cors.php", apiurl + "cors.php");
     create_iframe(...iframe);
   }
 }
@@ -362,7 +367,7 @@ function createIframes (iframes) {
 // Replace feedback tags in some text with an approproately named HTML div.
 function replaceFeedbackTags(text, qprefix) {
   let result = text;
-  const feedbackTags = text.match(/\[\[feedback:.*\]\]/g);
+  const feedbackTags = text.match(/\[\[feedback:.*?\]\]/g);
   if (feedbackTags) {
     for (const tag of feedbackTags) {
       // Part name is between '[[feedback:' and ']]'.
