@@ -71,6 +71,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- <directories external="media" generated="../../../altgen"/> -->
     </source>
 
+    <!-- Server to process STACK problems embedded in HTML -->
+    <stack server="https://stackapi-1-43834256136.europe-west1.run.app/"/>
+
     <!-- For an "article" with "section" we can only go 3 levels    -->
     <!-- deep (section > subsection > subsubsection) and this is    -->
     <!-- the default for divisions' levels.  For numbers on smaller -->
