@@ -10886,7 +10886,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: use an "edit" template to scrub junk from assembly -->
     <!--       Note: @xml:base might be worth keeping/adjusting   -->
     <exsl:document href="{$the-filename}" method="xml" indent="yes" encoding="UTF-8">
-        <xsl:copy-of select="."/>
+        <!-- don't copy the "stack" element, just children -->
+        <xsl:copy-of select="node()"/>
     </exsl:document>
 
     <!-- Replace the source by a bit of HTML -->
