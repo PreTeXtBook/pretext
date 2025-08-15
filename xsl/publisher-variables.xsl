@@ -3309,6 +3309,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <pi:pub-attribute name="password" default="anonymous" freeform="yes"/>
         <pi:pub-attribute name="task-reveal" default="all" options="preceding-correct"/>
     </webwork>
+    <stack>
+        <pi:pub-attribute name="server" default="" freeform="yes"/>
+    </stack>
     <revealjs>
         <appearance>
             <pi:pub-attribute name="theme" default="simple" freeform="yes"/>
