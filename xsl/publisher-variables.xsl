@@ -119,7 +119,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$version-root/book/chapter/section">2</xsl:when>
         <xsl:when test="$version-root/book/chapter">1</xsl:when>
         <xsl:when test="$version-root/article/section/subsection">2</xsl:when>
-        <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
+        <xsl:when test="$version-root/article/section|$version-root/article/worksheet|$version-root/article/handout">1</xsl:when>
         <xsl:when test="$version-root/article">0</xsl:when>
         <xsl:when test="$version-root/slideshow">0</xsl:when>
         <xsl:when test="$version-root/letter">0</xsl:when>

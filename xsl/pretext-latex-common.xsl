@@ -1029,6 +1029,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($document-root//section/worksheet)[1]|
         ($document-root//subsection/worksheet)[1]|
         ($document-root//subsubsection/worksheet)[1]|
+        ($document-root//chapter/handout|$root/article/handout)[1]|
+        ($document-root//section/handout)[1]|
+        ($document-root//subsection/handout)[1]|
+        ($document-root//subsubsection/handout)[1]|
         ($document-root//chapter/reading-questions|$root/article/reading-questions)[1]|
         ($document-root//section/reading-questions)[1]|
         ($document-root//subsection/reading-questions)[1]|
@@ -2305,8 +2309,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
     <!-- INTRODUCTION, CONCLUSION (divisional) -->
     <xsl:variable name="introduction-reps" select="
-        ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//reading-questions/introduction|$document-root//glossary/introduction|$document-root//references/introduction)[1]|
-        ($root/article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//reading-questions/conclusion|$document-root//glossary/conclusion|$document-root//references/conclusion)[1]"/>
+        ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//handout/introduction|$document-root//reading-questions/introduction|$document-root//glossary/introduction|$document-root//references/introduction)[1]|
+        ($root/article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//handout/conclusion|$document-root//handout/conclusion|$document-root//reading-questions/conclusion|$document-root//glossary/conclusion|$document-root//references/conclusion)[1]"/>
     <xsl:if test="$introduction-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% xparse environments for introductions and conclusions of divisions&#xa;</xsl:text>
@@ -2633,6 +2637,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Vertical workspace for worksheets and handouts -->
+<xsl:template match="*" mode="workspace">
+    <xsl:variable name="vertical-space">
+        <xsl:apply-templates select="." mode="sanitize-workspace"/>
+    </xsl:variable>
+    <xsl:if test="not($vertical-space = '')">
+        <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
+        <xsl:value-of select="$vertical-space"/>
+        <xsl:text>}%&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- When workspace is requested, we call the modal "sanitize-workspace" which in -->
 <!-- pretext-common returns an empty string if the requested workspace is not in  -->
@@ -2674,7 +2690,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisions in the back matter vary between books and articles -->
 <!--     Book:    children of backmatter -> chapter               -->
 <!--     Article: children of backmatter -> section               -->
-<xsl:template match="exercises|solutions|worksheet|reading-questions|references|glossary|appendix|index" mode="division-name">
+<xsl:template match="exercises|solutions|worksheet|handout|reading-questions|references|glossary|appendix|index" mode="division-name">
     <xsl:choose>
         <xsl:when test="parent::article">
             <xsl:text>section</xsl:text>
@@ -2878,7 +2894,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Pervasive -->
 <!-- Specialized divisions                         -->
 <!-- Product of PTX name with LaTeX level/division -->
-<xsl:template match="exercises|solutions|worksheet|reading-questions|glossary|references|index" mode="division-environment-name">
+<xsl:template match="exercises|solutions|worksheet|handout|reading-questions|glossary|references|index" mode="division-environment-name">
     <xsl:value-of select="local-name(.)"/>
     <xsl:text>-</xsl:text>
     <xsl:apply-templates select="." mode="division-name"/>
@@ -2892,7 +2908,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- division should be numberless at birth.  This needs to be broken  -->
 <!-- out since when we *create* the environments in the preamble we    -->
 <!-- just make "regular" and "numberless" variants, always.            -->
-<xsl:template match="exercises|worksheet|references|glossary|reading-questions|solutions" mode="division-environment-name-suffix">
+<xsl:template match="exercises|worksheet|handout|references|glossary|reading-questions|solutions" mode="division-environment-name-suffix">
     <xsl:variable name="is-numbered">
         <xsl:apply-templates select="." mode="is-specialized-own-number"/>
     </xsl:variable>
@@ -2906,7 +2922,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- specialized divisions improperly                       -->
 <xsl:template match="*" mode="division-environment-name-suffix"/>
 
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|index|exercises|solutions|worksheet|reading-questions|glossary|references" mode="environment">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|index|exercises|solutions|worksheet|handout|reading-questions|glossary|references" mode="environment">
     <!-- for specialized divisions we always make a numbered -->
     <!-- and unnumbered version, with the latter happening   -->
     <!-- on a second trip through the template               -->
@@ -2969,7 +2985,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- close the environment definition, no finish -->
     <xsl:text>}{}%&#xa;</xsl:text>
     <!-- send specialized division back through a second time -->
-    <xsl:if test="not($second-trip) and boolean(self::exercises|self::solutions|self::worksheet|self::reading-questions|self::glossary|self::references)">
+    <xsl:if test="not($second-trip) and boolean(self::exercises|self::solutions|self::worksheet|self::handout|self::reading-questions|self::glossary|self::references)">
         <xsl:apply-templates select="." mode="environment">
             <xsl:with-param name="second-trip" select="true()"/>
         </xsl:apply-templates>
@@ -5437,7 +5453,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################ -->
 
 <!-- Divisions, "part" to "subsubsection", and specialized -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|worksheet|reading-questions|solutions|glossary|references">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|worksheet|handout|reading-questions|solutions|glossary|references">
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:apply-templates select="." mode="begin-language" />
     <xsl:apply-templates select="." mode="latex-division-heading" />
@@ -5507,12 +5523,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX chapter for a "book" and a LaTeX "section" for an "article". -->
 <!-- Specialized Divisions: we do not implement "author", "subtitle",   -->
 <!-- or "epigraph" yet.  These may be added/supported later.            -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet" mode="latex-division-heading">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet|handout" mode="latex-division-heading">
     <!-- NB: could be obsoleted, see single use -->
-    <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet|self::index)"/>
+    <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet|self::handout|self::index)"/>
 
     <!-- change geometry if worksheet should be formatted -->
-    <xsl:if test="self::worksheet and $b-latex-worksheet-formatted">
+    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
         <!-- \newgeometry includes a \clearpage -->
         <xsl:apply-templates select="." mode="new-geometry"/>
     </xsl:if>
@@ -5586,7 +5602,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the four margins, in units LaTeX understands (such as -->
 <!-- cm, in, pt).  This only produces text, so could go in -->
 <!-- -common, but is also only useful for LaTeX output.    -->
-<xsl:template match="worksheet" mode="new-geometry">
+<xsl:template match="worksheet|handout" mode="new-geometry">
     <!-- Four similar "choose" effect hierarchy/priority -->
     <!-- NB: a publisher string parameter to      -->
     <!-- *really* override (worksheet.left, etc.) -->
@@ -5615,7 +5631,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Footings are straightforward -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet" mode="latex-division-footing">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet|handout" mode="latex-division-footing">
     <!-- For references we close a list holding "biblio"    -->
     <!-- unless we already added it before the "conclusion" -->
     <xsl:if test="self::references and not(conclusion)">
@@ -5627,7 +5643,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- possibly numberless -->
     <xsl:apply-templates select="." mode="division-environment-name-suffix" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="self::worksheet and $b-latex-worksheet-formatted">
+    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
         <!-- \restoregeometry includes a \clearpage -->
         <xsl:text>\restoregeometry&#xa;</xsl:text>
     </xsl:if>
@@ -5639,7 +5655,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Title optional (and discouraged), in argument    -->
 <!-- typically just a few paragraphs                  -->
 <!-- NB: a glossary has a "headnote" (elsewhere) and does not have a "conclusion" -->
-<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|reading-questions/introduction|references/introduction">
+<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|handout/introduction|reading-questions/introduction|references/introduction">
     <xsl:text>\begin{introduction}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
@@ -5654,7 +5670,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|reading-questions/conclusion|references/conclusion">
+<xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|handout/conclusion|reading-questions/conclusion|references/conclusion">
     <!-- We will not close the list of references when -->
     <!-- it has an "introduction".  Now is the time.   -->
     <xsl:if test="parent::references">
@@ -5684,7 +5700,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Produce a  \clearpage  indicating the end -->
 <!-- of a page, but not for the last page.     -->
 
-<xsl:template match="worksheet/page">
+<xsl:template match="worksheet/page|handout/page">
     <xsl:apply-templates select="*"/>
     <xsl:if test="following-sibling::page and $b-latex-worksheet-formatted">
         <xsl:text>\clearpage&#xa;</xsl:text>
@@ -5786,6 +5802,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- explicitly ignore PROOF-LIKE and pickup just for theorems      -->
     <!-- Alternative: ocate first PROOF-LIKE, select only preceding:: ? -->
     <xsl:apply-templates select="*[not(&PROOF-FILTER;)]" />
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -5827,6 +5845,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}&#xa;</xsl:text>
@@ -5851,6 +5871,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}&#xa;</xsl:text>
@@ -5893,6 +5915,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{case}&#xa;</xsl:text>
 </xsl:template>
 
@@ -6299,6 +6323,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
         <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
     </xsl:apply-templates>
+    <!-- Currently inline exercises and project-like elements -->
+    <!-- are not getting workspace above, so we add it here.  -->
+    <xsl:if test="$inline or $project">
+        <xsl:apply-templates select="." mode="workspace"/>
+    </xsl:if>
     <!-- closing % necessary, as newline between adjacent environments -->
     <!-- will cause a slight indent on trailing exercise               -->
     <xsl:text>\end{</xsl:text>
@@ -6630,14 +6659,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
                 <!-- possibly add some workspace for items from a worksheet     -->
                 <!-- an empty result is a signal there is no workspace authored -->
-                <xsl:variable name="vertical-space">
-                    <xsl:apply-templates select="." mode="sanitize-workspace"/>
-                </xsl:variable>
-                <xsl:if test="not($vertical-space = '')">
-                    <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
-                    <xsl:value-of select="$vertical-space"/>
-                    <xsl:text>}%&#xa;</xsl:text>
-                </xsl:if>
+                <xsl:apply-templates select="." mode="workspace"/>
             </xsl:if>
         </xsl:for-each>
 
@@ -7010,6 +7032,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="*"/>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -7055,6 +7079,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <!-- Coordinate with schema, since we enforce it here -->
     <xsl:apply-templates select="p|blockquote|pre|image|video|program|console|tabular|sidebyside|sbsgroup" />
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -7085,6 +7111,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="introduction" />
     <xsl:apply-templates select="ol|ul|dl" />
     <xsl:apply-templates select="conclusion" />
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -7212,6 +7240,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:apply-templates/>
     <xsl:text>%&#xa;</xsl:text>
+    <!-- Add workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
 </xsl:template>
 
 <!-- For a memo, not indenting the first paragraph helps -->
@@ -7540,7 +7570,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{enumerate}</xsl:text>
     <!-- override LaTeX defaults as indicated -->
-    <xsl:if test="@marker or ($format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
+    <xsl:if test="@marker or ($format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::handout or ancestor::reading-questions or ancestor::references">
         <xsl:text>[label={</xsl:text>
         <xsl:apply-templates select="." mode="latex-list-label" />
         <xsl:if test="$format-code = '0'">
@@ -7628,6 +7658,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(p)">
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="." mode="workspace"/>
 </xsl:template>
 
 <!-- In an unordered list, an item cannot be a target -->
@@ -7645,6 +7676,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(p)">
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="." mode="workspace"/>
 </xsl:template>
 
 <!-- Description lists always have title as additional -->
@@ -10550,7 +10582,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- not be numbered correctly via LaTeX's label/ref system, -->
 <!-- so we will use the hypertarget/hyperlink system         -->
 <!-- NB: template returns strings "true" or "false"          -->
-<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|solutions" mode="xref-as-ref">
+<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|handout|solutions" mode="xref-as-ref">
     <xsl:apply-templates select="." mode="is-specialized-own-number"/>
 </xsl:template>
 
@@ -10698,7 +10730,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This template just copies the gut of two above, perhaps -->
 <!-- there should be two utility templates that each get     -->
 <!-- called twice overall.                                   -->
-<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|solutions" mode="xref-number">
+<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|handout|solutions" mode="xref-number">
     <xsl:param name="xref" select="/.." />
 
     <xsl:variable name="is-numbered">

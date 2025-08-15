@@ -141,6 +141,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
       $document-root//subsubsection
     | $document-root//subsection/exercises
     | $document-root//subsection/worksheet
+    | $document-root//subsection/handout
     | $document-root//subsection/reading-questions
     | $document-root//subsection/solutions
     | $document-root//subsection/references
@@ -149,6 +150,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-level-five" select="boolean(
       $document-root//subsubsection/exercises
     | $document-root//subsubsection/worksheet
+    | $document-root//subsubsection/handout
     | $document-root//subsubsection/reading-questions
     | $document-root//subsubsection/solutions
     | $document-root//subsubsection/references
@@ -344,7 +346,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 5 (specialized)                     cell-7                      cell-7 -->
 
 <!-- Divisions apparent in a rendered BRF. -->
-<xsl:template match="chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary">
+<xsl:template match="chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|handout|reading-questions|solutions|references|glossary">
 
     <!-- Determine: newpage, centered, cell5, cell7 -->
     <xsl:variable name="heading-style">
@@ -484,7 +486,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- True divisions, +1 from parent -->
-<xsl:template match="part|chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary" mode="braille-level">
+<xsl:template match="part|chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|handout|reading-questions|solutions|references|glossary" mode="braille-level">
     <xsl:variable name="parent-level">
         <xsl:apply-templates select="parent::*" mode="braille-level"/>
     </xsl:variable>
@@ -496,7 +498,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Specialized divisions can appear at many levels, but will -->
 <!-- be formatted according to their level in the hierarchy.   -->
 <!-- See table above for explanation of choices here.          -->
-<xsl:template match="chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary" mode="heading-style">
+<xsl:template match="chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|handout|reading-questions|solutions|references|glossary" mode="heading-style">
     <xsl:variable name="braille-level">
         <xsl:apply-templates select="." mode="braille-level"/>
     </xsl:variable>

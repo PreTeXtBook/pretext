@@ -80,6 +80,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'>Päätäntä</localization>
     <localization string-id='exercises'>Harjoitustehtävät</localization>
     <localization string-id='worksheet'>Tehtävämoniste</localization>
+    <!-- <localization string-id='handout'>Handout</localization> -->
     <localization string-id='reading-questions'>Luetun ymmärtäminen</localization>
     <localization string-id='solutions'>Ratkaisut</localization>
     <localization string-id='glossary'>Sanasto</localization>

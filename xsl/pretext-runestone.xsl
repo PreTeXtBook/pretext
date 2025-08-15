@@ -571,7 +571,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Runestone "subchapter".  Runestone "timed exams" (on a per-chapter -->
 <!-- basis here), which are an "exercises" with a @time-limit, are      -->
 <!-- exceptional and have templates elsewhere.                          -->
-<xsl:template match="section|chapter/exercises[not(@time-limit)]|chapter/worksheet|chapter/reading-questions" mode="runestone-manifest">
+<xsl:template match="section|chapter/exercises[not(@time-limit)]|chapter/worksheet|chapter/handout|chapter/reading-questions" mode="runestone-manifest">
     <subchapter>
         <!-- some properties of the division -->
         <xsl:apply-templates select="." mode="runestone-division-properties"/>

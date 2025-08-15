@@ -596,7 +596,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- For a "worksheet" (only), we do it again, to generate -->
     <!-- a standalone printable and editable version.          -->
     <!-- NB we don't produce these for portable html.          -->
-    <xsl:if test="self::worksheet and not($b-portable-html)">
+    <xsl:if test="(self::worksheet or self::handout) and not($b-portable-html)">
         <xsl:apply-templates select="." mode="standalone-worksheet">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
@@ -785,7 +785,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Worksheets generate one additional version     -->
 <!-- designed for printing, on Letter or A4 paper.  -->
-<xsl:template match="worksheet" mode="standalone-worksheet">
+<xsl:template match="worksheet|handout" mode="standalone-worksheet">
     <xsl:param name="heading-level"/>
 
     <xsl:variable name="base-filename">
@@ -910,7 +910,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- *display* a number at birth is therefore more complicated    -->
 <!-- than *having* a number or not.                               -->
 <!-- NB: We sneak in links for standalone versions of worksheets. -->
-<xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="heading-content">
+<xsl:template match="exercises|solutions|glossary|references|worksheet|handout|reading-questions" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name"/>
     </span>
@@ -933,7 +933,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- $paper is LOWER CASE "a4" and "letter"                         -->
     <!-- NB until worksheet printing can be done without extra files,   -->
     <!-- we omit this for portable html.                                -->
-    <xsl:if test="self::worksheet and not($b-portable-html)">
+    <xsl:if test="(self::worksheet or self::handout) and not($b-portable-html)">
         <xsl:apply-templates select="." mode="standalone-worksheet-links"/>
     </xsl:if>
 </xsl:template>
@@ -945,7 +945,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- worksheet instead of linking to separate file.                 -->
 <!-- We isolate link creation, so we can kill it simply in          -->
 <!-- derivative  conversions                                        -->
-<xsl:template match="worksheet" mode="standalone-worksheet-links">
+<xsl:template match="worksheet|handout" mode="standalone-worksheet-links">
     <xsl:variable name="filename">
         <xsl:apply-templates select="." mode="standalone-worksheet-filename"/>
     </xsl:variable>
@@ -4380,30 +4380,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
             </xsl:apply-templates>
-            <!-- optionally, an indication of workspace -->
-            <!-- for a print version of a worksheet     -->
-            <xsl:choose>
-                <xsl:when test="self::static">
-                    <xsl:apply-templates select="ancestor::exercise" mode="worksheet-workspace"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="worksheet-workspace"/>
-                </xsl:otherwise>
-            </xsl:choose>
         </xsl:when>
         <!-- TODO: contained "if" should just be a new "when"? (look around for similar)" -->
         <xsl:otherwise>
             <!-- no explicit "statement", so all content is the statement -->
             <!-- the "dry-run" templates should prevent an empty shell  -->
-            <xsl:if test="$b-has-statement" select="*">
+            <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="*">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="block-type" select="$block-type"/>
                 </xsl:apply-templates>
                 <!-- no separator, since no trailing components -->
-                <!-- optionally, an indication of workspace     -->
-                <!-- for a print version of a worksheet         -->
-                <xsl:apply-templates select="." mode="worksheet-workspace"/>
             </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
@@ -4474,7 +4461,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- prints invisible.  No @workspace attribute, nothing is added.     -->
 <!-- We rely on a template in -common to error-check the value of      -->
 <!-- the attribute.                                                    -->
-<xsl:template match="*" mode="worksheet-workspace">
+<xsl:template match="*" mode="workspace">
     <xsl:variable name="vertical-space">
         <xsl:apply-templates select="." mode="sanitize-workspace"/>
     </xsl:variable>
@@ -5039,6 +5026,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="block-type" select="$block-type" />
         </xsl:apply-templates>
+        <!-- Apply workspace div (but not in project, exercises or tasks, -->
+        <!-- since they get them applied in their exercise-content        -->
+        <!-- template). Unless the element is in a worksheet or handout,  -->
+        <!-- this div will be killed by the sanatize-workspace template.  -->
+        <!--<xsl:if test="not(&PROJECT-FILTER; or self::exercise or self::task)">-->
+            <xsl:apply-templates select="." mode="workspace"/>
+        <!--</xsl:if>-->
         <!-- Insert a permalink as the last child of the block, but only   -->
         <!-- if not FIGURE-LIKE (these get their permalink on the caption) -->
         <xsl:if test="not(&FIGURE-FILTER;)">
@@ -5113,6 +5107,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
+        <!-- Insert workspace (will only apply to p inside worksheet/handout -->
+        <xsl:apply-templates select="." mode="workspace"/>
         <!-- Insert permalink -->
         <xsl:apply-templates select="." mode="permalink"/>
     </div>
@@ -5206,6 +5202,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:for-each>
         <!-- INDENT ABOVE ON A WHITESPACE COMMIT -->
+    <!-- Insert workspace (will only apply to p inside worksheet/handout) -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <!-- Insert permalink -->
     <xsl:apply-templates select="." mode="permalink"/>
     </div>
@@ -5309,6 +5307,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </div>
                     </xsl:otherwise>
                 </xsl:choose>
+                <!-- Insert workspace (will only apply if in worksheet/handout) -->
+                <xsl:apply-templates select="." mode="workspace"/>
                 <!-- Insert permalink -->
                 <xsl:apply-templates select="." mode="permalink"/>
             </xsl:element>
@@ -5346,6 +5346,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
+                <!-- Insert workspace -->
+                <xsl:apply-templates select="." mode="workspace"/>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
@@ -11847,7 +11849,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="print-button"/>
 
-<xsl:template match="worksheet" mode="print-button">
+<xsl:template match="worksheet|handout" mode="print-button">
     <xsl:variable name="print-text">
         <xsl:apply-templates select="." mode="type-name">
             <xsl:with-param name="string-id" select="'print'"/>
@@ -11865,7 +11867,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="print-preview-header"/>
 
-<xsl:template match="worksheet" mode="print-preview-header">
+<xsl:template match="worksheet|handout" mode="print-preview-header">
     <h2 class="print-preview">
         <xsl:apply-templates select="." mode="type-name">
             <xsl:with-param name="string-id" select="'print-preview'"/>
@@ -11875,7 +11877,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="papersize-toggle"/>
 
-<xsl:template match="worksheet" mode="papersize-toggle">
+<xsl:template match="worksheet|handout" mode="papersize-toggle">
     <xsl:variable name="papersize">
         <xsl:apply-templates select="." mode="type-name">
             <xsl:with-param name="string-id" select="'papersize'"/>
@@ -11894,7 +11896,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="highlight-workspace-toggle"/>
 
-<xsl:template match="worksheet" mode="highlight-workspace-toggle">
+<xsl:template match="worksheet|handout" mode="highlight-workspace-toggle">
     <label for="highlight-workspace-checkbox">
         <xsl:apply-templates select="." mode="type-name">
             <xsl:with-param name="string-id" select="'highlight-workspace'"/>
@@ -12113,11 +12115,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- NB no "book", "article" -->
-<xsl:template match="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon" mode="toc-item">
+<xsl:template match="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout|backmatter|appendix|index|backmatter/colophon" mode="toc-item">
     <li>
         <xsl:apply-templates select="." mode="toc-item-properties"/>
         <!-- Recurse into children divisions (if any)-->
-        <xsl:variable name="child-list" select="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon"/>
+        <xsl:variable name="child-list" select="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout|backmatter|appendix|index|backmatter/colophon"/>
         <xsl:if test="$child-list">
             <ul>
                 <!-- copy id of this ui for use in customization pass, will remove there -->
@@ -12337,7 +12339,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Every item that could be a TOC entry, mined from the schema. -->
-<xsl:template match="frontmatter|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|backmatter|appendix|index|backmatter/colophon" mode="toc-item-list">
+<xsl:template match="frontmatter|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout|backmatter|appendix|index|backmatter/colophon" mode="toc-item-list">
     <division>
         <xsl:apply-templates select="." mode="doc-manifest-division-attributes"/>
         <!-- Recurse into children divisions (if any)                 -->
@@ -13906,7 +13908,7 @@ TODO:
 <!-- We put page-margins-attributes only on worksheet sections -->
 <xsl:template match="*" mode="page-margins-attribute"/>
 
-<xsl:template match="worksheet" mode="page-margins-attribute">
+<xsl:template match="worksheet|handout" mode="page-margins-attribute">
     <xsl:attribute name="data-margins">
         <!-- A space-separated list for top, right, bottom, and left margins -->
         <xsl:apply-templates select="." mode="worksheet-margin">
@@ -13935,7 +13937,7 @@ TODO:
 <!-- into an HTML section.onepage.  Note that an "introduction" and    -->
 <!-- "objectives" can precede the first "page" as HTML output, and the -->
 <!-- final "page" may be followed by a "conclusion" and "outcomes"     -->
-<xsl:template match="worksheet/page">
+<xsl:template match="worksheet/page|handout/page">
     <section class="onepage">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:apply-templates select="*"/>
@@ -13944,7 +13946,7 @@ TODO:
 
 <!-- A template ensures standalone page creation, -->
 <!-- and links to same, are consistent            -->
-<xsl:template match="worksheet" mode="standalone-worksheet-filename">
+<xsl:template match="worksheet|handout" mode="standalone-worksheet-filename">
     <xsl:apply-templates select="." mode="visible-id"/>
     <xsl:text>-printable</xsl:text>
     <xsl:text>.html</xsl:text>

@@ -88,13 +88,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- we might enforce some assumptions here, and elsewhere, by only   -->
 <!-- including predecessors in the @count attribute.                  -->
 <xsl:template match="section" mode="division-serial-number">
-    <xsl:number count="section|exercises|reading-questions|solutions|references|glossary|worksheet" format="1" />
+    <xsl:number count="section|exercises|reading-questions|solutions|references|glossary|worksheet|handout" format="1" />
 </xsl:template>
 <xsl:template match="subsection" mode="division-serial-number">
-    <xsl:number count="subsection|exercises|reading-questions|solutions|references|glossary|worksheet" format="1" />
+    <xsl:number count="subsection|exercises|reading-questions|solutions|references|glossary|worksheet|handout" format="1" />
 </xsl:template>
 <xsl:template match="subsubsection" mode="division-serial-number">
-    <xsl:number count="subsubsection|exercises|reading-questions|solutions|references|glossary|worksheet" format="1" />
+    <xsl:number count="subsubsection|exercises|reading-questions|solutions|references|glossary|worksheet|handout" format="1" />
 </xsl:template>
 
 <!-- Specialized Divisions -->
@@ -110,8 +110,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- peer is listed here in the "match", but only one  -->
 <!-- type will actually be present in the structured   -->
 <!-- division.                                         -->
-<xsl:template match="exercises|reading-questions|solutions|references|glossary|worksheet" mode="division-serial-number">
-    <xsl:number count="chapter|section|subsection|subsubsection|exercises|reading-questions|solutions|references|glossary|worksheet" format="1" />
+<xsl:template match="exercises|reading-questions|solutions|references|glossary|worksheet|handout" mode="division-serial-number">
+    <xsl:number count="chapter|section|subsection|subsubsection|exercises|reading-questions|solutions|references|glossary|worksheet|handout" format="1" />
 </xsl:template>
 <!-- Following "backmatter" matches will be more specific than above -->
 <!-- A "solutions" is a specialized division, but is numbered        -->

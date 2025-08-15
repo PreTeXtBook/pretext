@@ -86,6 +86,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'>Schluss</localization>
     <localization string-id='exercises'>Übungen</localization>
     <localization string-id='worksheet'>Arbeitsblatt</localization>
+    <!-- <localization string-id='handout'>Handout</localization>-->
     <localization string-id='reading-questions'>Lesefragen</localization>
     <localization string-id='solutions'>Lösungen</localization>
     <!-- Wörterverzeichnis scheint viel weniger benutzt zu sein, s. Google ngram -->

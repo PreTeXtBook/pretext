@@ -2207,7 +2207,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The @struct attribute is the structure number of the *parent*          -->
 <!-- (container), which seems odd here, but fits the general scheme better. -->
 <!-- The @level attribute is helpful, and trvislly to compute here.         -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="augment">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout" mode="augment">
     <xsl:param name="parent-struct"/>
     <xsl:param name="level"/>
     <xsl:param name="ordered-list-level" />
@@ -2239,7 +2239,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="next-level" select="$level + 1"/>
     <xsl:variable name="next-ordered-list-level">
         <xsl:choose>
-            <xsl:when test="self::exercises or self::worksheet or self::reading-questions or self::references">
+            <xsl:when test="self::exercises or self::worksheet or self::handout or self::reading-questions or self::references">
                 <xsl:number value="1" />
             </xsl:when>
             <xsl:otherwise>
