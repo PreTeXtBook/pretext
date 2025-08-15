@@ -10857,6 +10857,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="stack">
+    <xsl:variable name="location">
+        <xsl:value-of select="$external-directory"/>
+        <xsl:value-of select="@source"/>
+    </xsl:variable>
+
+    <div class="container-fluid que stack">
+        <xsl:attribute name="data-qfile">
+            <xsl:value-of select="$location" />
+        </xsl:attribute>
+        <xsl:if test="@qname != ''">
+            <xsl:attribute name="data-qname">
+                <xsl:value-of select="@qname" />
+            </xsl:attribute>
+        </xsl:if>
+    </div>
+</xsl:template>
+
 <!-- ############################# -->
 <!-- MyOpenMath Embedded Exercises -->
 <!-- ############################# -->
