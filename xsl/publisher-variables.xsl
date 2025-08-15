@@ -1269,6 +1269,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- ############### -->
+<!-- STACK Options -->
+<!-- ############### -->
+
+<!-- STACK server location -->
+<xsl:variable name="stack-server">
+    <xsl:apply-templates select="$publisher-attribute-options/stack/pi:pub-attribute[@name='server']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
+<!-- ############### -->
 <!-- WeBWorK Options -->
 <!-- ############### -->
 
