@@ -409,7 +409,8 @@ summary.knowl__link {
 .project-like > .heading,
 .remark-like > .heading,
 .openproblem-like > .heading,
-.computation-like > .heading {
+.computation-like > .heading,
+.assemblage-like > .heading {
   display: block;
   font-size: 1.1em;
 }
@@ -2642,7 +2643,8 @@ body.pretext > a.assistive,
 .autopermalink {
   display: none;
 }
-section.worksheet {
+section.worksheet,
+section.handout {
   font-size: 11pt;
   font-family: var(--font-print);
 }
@@ -2660,7 +2662,7 @@ summary {
   font-weight: bolder;
   display: inline;
 }
-details > div.knowl__content {
+.knowl__content {
   display: inline;
   margin: unset;
   border: none;
@@ -2669,6 +2671,10 @@ details > div.knowl__content {
 }
 .knowl__link {
   all: unset;
+}
+.code-inline {
+  border: unset;
+  background: unset;
 }
 .onepage article {
   padding-left: 0;
@@ -2687,11 +2693,13 @@ details > div.knowl__content {
 section article.task {
   margin-left: 0;
 }
-section.worksheet > .heading {
+section.worksheet > .heading,
+section.handout > .heading {
   display: inline;
   font-size: 1.1em;
 }
-section.worksheet > .heading + .para {
+section.worksheet > .heading + .para,
+section.handout > .heading + .para {
   display: inline;
 }
 .introduction > .heading,
@@ -2713,7 +2721,8 @@ form.papersize-select {
     max-width: var(--ws-width);
     margin: 50px auto;
   }
-  .worksheet {
+  .worksheet,
+  .handout {
     max-width: var(--ws-width);
     margin: 0 auto;
   }
@@ -2809,11 +2818,13 @@ form.papersize-select {
   .print-preview-header {
     display: none;
   }
-  section.worksheet {
+  section.worksheet,
+  section.handout {
     border: none;
     width: 100%;
   }
-  section.worksheet .onepage {
+  section.worksheet .onepage,
+  section.handout .onepage {
     margin-top: 0;
     width: 100%;
     height: var(--ws-content-height);
@@ -2822,7 +2833,9 @@ form.papersize-select {
     page-break-inside: avoid;
   }
   section.worksheet div.workspace,
-  section.worksheet div.workspace.squashed.tight {
+  section.worksheet div.workspace.squashed.tight,
+  section.handout div.workspace,
+  section.handout div.workspace.squashed.tight {
     border: none;
     padding: 0;
     background: none !important;
