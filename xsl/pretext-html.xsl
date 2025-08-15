@@ -3711,6 +3711,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
+        <!-- STACK case -->
+        <xsl:when test="stack">
+            <xsl:apply-templates select="introduction|stack|conclusion">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
+        </xsl:when>
         <!-- structured by "task" so let templates for tasks work -->
         <!-- down to terminal task with SOLUTION-LIKE appendages  -->
         <xsl:when test="task">
