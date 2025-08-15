@@ -226,6 +226,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-icon"         select="boolean($document-root//icon)"/>
 <xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)"/>
 <xsl:variable name="b-has-myopenmath"   select="boolean($document-root//myopenmath)"/>
+<xsl:variable name="b-has-stack"        select="boolean($document-root//stack)"/>
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)"/>
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)"/>
 <!-- 2023-10-18: this is a bit buggy, as it ignores the "men" element.  -->
@@ -10836,6 +10837,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- ############################# -->
+<!-- STACK Embedded Exercises -->
+<!-- ############################# -->
+
+<!-- STACK Javascript header -->
+<xsl:template name="stack-js">
+    <xsl:if test="$b-has-stack">
+        <xsl:variable name="stack-domain" select="$document-root//publication/stack/@server" />
+        <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"
+        type="text/javascript"></script>
+        <script src="{$html.js.dir}/pretext-stack/stackjsvle.js" type="text/javascript"></script>
+        <script src="{$html.js.dir}/pretext-stack/stackapicalls.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            function docHasLoaded() {
+                stackSetup();
+            }
+        </script>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="stack">
+    <xsl:variable name="location">
+        <xsl:value-of select="$external-directory"/>
+        <xsl:value-of select="@source"/>
+    </xsl:variable>
+
+    <div class="container-fluid que stack">
+        <xsl:attribute name="data-qfile">
+            <xsl:value-of select="$location" />
+        </xsl:attribute>
+        <xsl:if test="@qname != ''">
+            <xsl:attribute name="data-qname">
+                <xsl:value-of select="@qname" />
+            </xsl:attribute>
+        </xsl:if>
+    </div>
+</xsl:template>
+
+<!-- ############################# -->
 <!-- MyOpenMath Embedded Exercises -->
 <!-- ############################# -->
 
@@ -10905,6 +10945,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="sagecell-code" />
     <xsl:call-template name="favicon"/>
     <xsl:call-template name="webwork-js"/>
+    <xsl:call-template name="stack-js"/>
     <xsl:call-template name="lti-iframe-resizer"/>
     <xsl:call-template name="syntax-highlight"/>
     <xsl:call-template name="hypothesis-annotation" />
@@ -10940,6 +10981,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="sagecell-code" />
     <xsl:call-template name="favicon"/>
     <xsl:call-template name="webwork-js"/>
+    <xsl:call-template name="stack-js"/>
     <xsl:call-template name="lti-iframe-resizer"/>
     <xsl:call-template name="syntax-highlight"/>
     <xsl:call-template name="hypothesis-annotation" />
@@ -11050,6 +11092,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="sagecell" />
         </head>
         <body>
+            <xsl:if test="$b-has-stack">
+                <xsl:attribute name="onload">
+                    <xsl:text>docHasLoaded()</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
+
             <!-- potential document-id per-page -->
             <xsl:call-template name="document-id"/>
             <!-- React flag -->
