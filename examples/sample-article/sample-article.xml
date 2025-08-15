@@ -22,7 +22,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Overall element for a Mathbook XML document; mandatory, always  -->
 <!-- Experiment with the "xml:lang" attribute to see localization    -->
 <!-- changes, the  xsl/localizations  directory has more information -->
-<pretext>
+<!-- Note: unwind xi:include use once STACK questions settle down -->
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
 <!-- <pretext xml:lang="ku-CKB"> -->    <!-- an RTL language -->
 <!-- <pretext xml:lang="pt-BR"> -->
 <!-- <pretext xml:lang="fr-FR"> -->
@@ -1463,6 +1464,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <task>
                             <p>And the other thing.</p>
                         </task>
+                    </exercise>
+
+                    <!-- Note: a new section with a few problemns will be -->
+                    <!-- better than this addition for initial testing.   -->
+                    <exercise>
+                        <title>STACK integration question</title>
+
+                        <introduction>
+                            <p>A test question. (2025-08-15: you may need to ask for a "new" question to make this render.)</p>
+                        </introduction>
+
+                        <!-- A @label is required, becomes a filename in output -->
+                        <stack label="stack-integration">
+                            <xi:include href="stack/01_integration_with_feedback.xml"/>
+                        </stack>
                     </exercise>
                 </exercises>
 
