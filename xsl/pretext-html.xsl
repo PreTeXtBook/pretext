@@ -10863,15 +10863,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="stack">
-    <xsl:variable name="location">
-        <xsl:value-of select="$external-directory"/>
-        <xsl:value-of select="@source"/>
+<!-- Not to be confused with  sidebyside/stack  panel -->
+<xsl:template match="exercise/stack">
+
+    <!-- The location in HTML output where files of STACK -->
+    <!-- questions live, ready to be fed into Javascript  -->
+    <!-- and servers. Analagous to where xref knowl files -->
+    <!-- live, a production as part of an HTML build.     -->
+    <xsl:variable name="stack-dir">
+        <xsl:text>stack/</xsl:text>
     </xsl:variable>
 
+    <!-- the file we build and the file we serve up -->
+    <xsl:variable name="the-filename">
+        <xsl:value-of select="$stack-dir"/>
+        <xsl:value-of select="@label"/>
+        <xsl:text>.xml</xsl:text>
+    </xsl:variable>
+
+    <!-- Write out the STACK (XML) source as a file in the HTML output -->
+    <!-- TODO: make this a general purpose templare (in -common)  -->
+    <!-- TODO: use an "edit" template to scrub junk from assembly -->
+    <!--       Note: @xml:base might be worth keeping/adjusting   -->
+    <exsl:document href="{$the-filename}" method="xml" indent="yes" encoding="UTF-8">
+        <xsl:copy-of select="."/>
+    </exsl:document>
+
+    <!-- Replace the source by a bit of HTML -->
+    <!-- for Javascript to find and act on   -->
     <div class="container-fluid que stack">
         <xsl:attribute name="data-qfile">
-            <xsl:value-of select="$location" />
+            <xsl:value-of select="$the-filename"/>
         </xsl:attribute>
         <xsl:if test="@qname != ''">
             <xsl:attribute name="data-qname">
