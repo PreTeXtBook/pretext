@@ -1965,6 +1965,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- for the election of a feedback button         -->
 <xsl:variable name="b-has-feedback-button" select="not($feedback-button-href = '')"/>
 
+
+
 <!--                       -->
 <!-- HTML WeBWorK Dynamism -->
 <!--                       -->
@@ -2696,6 +2698,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-portable-html" select="$portable-html = 'yes'"/>
 
+<!-- Which interactive platforms default to responsive -->
+<xsl:variable name="html-interactive-responsive-geogebra">
+    <xsl:apply-templates select="$publisher-attribute-options/html/interactives/responsive/pi:pub-attribute[@name='geogebra']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
+
 <!--                            -->
 <!-- HTML Favicon Specification -->
 <!--                            -->
@@ -3279,6 +3287,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="host" default="web" options="runestone" legacy-options="aim"/>
             <pi:pub-attribute name="portable" default="no" options="yes"/>
         </platform>
+        <interactives>
+            <responsive>
+                <pi:pub-attribute name="geogebra" default="no" options="yes"/>
+            </responsive>
+        </interactives>
     </html>
     <epub>
         <cover>

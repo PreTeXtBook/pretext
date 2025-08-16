@@ -6989,7 +6989,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- This seemed to not be enough, until Google Search went away  -->
                     <!-- <xsl:apply-templates select="." mode="primary-navigation" /> -->
                 </header> <!-- masthead -->
-                <div class="ptx-page">
+                <div class="ptx-page" style="max-width: 1600px">
                     <!-- With sidebars killed, this stuff is extraneous     -->
                     <!-- <xsl:apply-templates select="." mode="sidebars" /> -->
                     <main class="ptx-main">
@@ -9673,7 +9673,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($b-portable-html)">
         <xsl:apply-templates select="." mode="standalone-page" >
             <xsl:with-param name="content">
-                <xsl:apply-templates select="." mode="interactive-core" />
+                <xsl:apply-templates select="." mode="interactive-core">
+                    <xsl:with-param name="is-standalone" select="true()"/>
+                </xsl:apply-templates>
             </xsl:with-param>
         </xsl:apply-templates>
     </xsl:if>
@@ -9687,6 +9689,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   1.  Instructions (paragraphs, etc)  -->
 <!--   2.  An iframe, via modal-template   -->
 <xsl:template match="interactive" mode="interactive-core">
+    <xsl:param name="is-standalone" select="false()"/>
     <!-- An iframe first -->
     <xsl:choose>
         <!-- A DoenetML interactive lives two lives.  Plain 'ol PreTeXt,  -->
@@ -9704,7 +9707,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="." mode="iframe-interactive"/>
+            <div class="interactive-iframe-container">
+                <xsl:apply-templates select="." mode="iframe-interactive"/>
+            </div>
+            <xsl:if test="$is-standalone = false()">
+                <div class="interactive-iframe-container__opener">
+                    <xsl:variable name="if-filename">
+                        <xsl:apply-templates select="." mode="standalone-filename" />
+                    </xsl:variable>
+                    <xsl:variable name="label">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'open-new-tab'"/>
+                        </xsl:apply-templates>
+                    </xsl:variable>
+                    <a href="{$if-filename}" title="{$label}" aria-label="{$label}">
+                        <xsl:call-template name="insert-symbol">
+                            <xsl:with-param name="name" select="'open_in_new'"/>
+                        </xsl:call-template>
+                    </a>
+                </div>
+            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
     <!-- "instructions" next, *always* as a knowl -->
@@ -9739,8 +9761,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@desmos]" mode="iframe-interactive">
     <iframe src="https://www.desmos.com/calculator/{@desmos}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
     </iframe>
 </xsl:template>
 
@@ -9819,10 +9841,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- rc = enable right click options       -->
     <!-- ld = enable label drag                -->
     <!-- ctl = click to launch                 -->
-    <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/{$ggbMaterialWidth}/height/{$ggbMaterialHeight}/border/888888/smb/false/stb/{$ggbToolBar}/stbh/{$ggbToolBar}/ai/{$ggbAlgebraInput}/asb/false/sri/{$ggbResetIcon}/rc/false/ld/false/sdz/{$ggbShiftDragZoom}/ctl/false">
+    <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/scaleContainerClass/interactive-iframe-container/width/{$ggbMaterialWidth}/height/{$ggbMaterialHeight}/allowUpscale/true/autoHeight/true/border/888888/smb/false/stb/{$ggbToolBar}/stbh/{$ggbToolBar}/ai/{$ggbAlgebraInput}/asb/false/sri/{$ggbResetIcon}/rc/false/ld/false/sdz/{$ggbShiftDragZoom}/ctl/false">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
     </iframe>
 </xsl:template>
 
@@ -9856,7 +9878,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="full-url" select="concat($cp3d-endpoint, '?', @calcplot3d)" />
     <iframe src="{$full-url}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
@@ -9890,7 +9912,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <iframe src="https://www.falstad.com/circuit/circuitjs.html?cct='{$url-string}'">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
@@ -9913,7 +9935,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <iframe src="{$location}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
@@ -9922,7 +9944,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <iframe>
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
         </xsl:attribute>
@@ -9968,7 +9990,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="latex-macros"/>
                 <div>
                     <!-- the actual interactive bit          -->
-                    <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
+                    <xsl:apply-templates select="." mode="get-interactive-sizing-styles" />
+                    <!-- <xsl:apply-templates select="." mode="size-pixels-style-attribute" /> -->
                     <!-- stack, else use a layout -->
                     <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
                     <!-- accumulate script tags *after* HTML elements -->
@@ -10129,6 +10152,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="@xml:id" />
         </xsl:attribute>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <!-- <xsl:apply-templates select="." mode="get-interactive-sizing-styles" /> -->
     </canvas>
 </xsl:template>
 
@@ -10504,6 +10528,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </link>
     </xsl:for-each>
+</xsl:template>
+
+<!-- sizing styles for interactives that specify % width and an aspect ratio -->
+<!-- and may also specify a design-width.  -->
+<xsl:template match="*" mode="get-interactive-sizing-styles">
+    <xsl:variable name="has-design-width">
+        <xsl:choose>
+            <xsl:when test="@design-width">
+                <xsl:choose>
+                    <xsl:when test="substring(@design-width, string-length(@design-width) - 1) = 'px'">
+                        <xsl:value-of select="true()"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message>PTX:WARNING:  "design-width" attribute on "interactive" element must end with "px"</xsl:message>
+                        <xsl:value-of select="false()"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:attribute name="style">
+        <xsl:choose>
+          <xsl:when test="$has-design-width = 'true'">
+              <xsl:text>max-width: </xsl:text>
+              <xsl:value-of select="@design-width"/>
+              <xsl:text>; </xsl:text>
+              <xsl:text>width: 100%; </xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:text>width:</xsl:text>
+              <xsl:apply-templates select="." mode="get-width-percentage" />
+              <xsl:text>; </xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>aspect-ratio:</xsl:text>
+            <xsl:apply-templates select="." mode="get-aspect-ratio">
+                <xsl:with-param name="default-aspect" select="'1:1'" />
+            </xsl:apply-templates>
+            <!-- <xsl:apply-templates select="." mode="get-style-attr-aspect" /> -->
+        <xsl:text>;</xsl:text>
+    </xsl:attribute>
 </xsl:template>
 
 <!-- Next two utilities write attributes, so cannot go in -common -->

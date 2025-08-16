@@ -40,5 +40,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <pretext>
     <article xml:id="hello-world">
        <p>Hello, World!</p>
+
+    <interactive xml:id="sage_div_interact1" platform="sage" width="90%" aspect="540:753">
+      <slate surface="sage">
+        var('t,x,y')
+        F=(x,y)
+        @interact
+        def _(a=input_box(default=1,label="x-coordinate",width=30),b=input_box(default=-1,label="y-coordinate",width=30),r=input_box(default=0.5,label="radius of region",width=30)):
+          plot1=plot_vector_field(F,(x,a-3*r,a+3*r),(y,b-3*r,b+3*r),color='blue')
+          plot1+=point((a,b),color='black',size=30)+parametric_plot((a+r*cos(t),b+r*sin(t)),(t,0,2*pi), color='black',thickness=2)
+          show(plot1)
+      </slate>
+    </interactive>
     </article>
 </pretext>
