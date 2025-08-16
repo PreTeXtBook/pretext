@@ -2524,6 +2524,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="myopenmath">
                 <xsl:text>myopenmath</xsl:text>
             </xsl:when>
+            <xsl:when test="stack">
+                <xsl:text>stack</xsl:text>
+            </xsl:when>
             <!-- hack for temporary demo HTML versions -->
             <xsl:when test="@runestone">
                 <xsl:text>htmlhack</xsl:text>
@@ -3040,6 +3043,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- as a "generated" component of a project.  We meld with a      -->
 <!-- PreTeXt introduction and conclusion, into a "regular" PreTeXt -->
 <!-- format, for any conversion to a static format to use.         -->
+<!-- NB: very similar to STACK template below                      -->
 <xsl:template match="exercise[(@exercise-interactive = 'myopenmath')]
                    | project[(@exercise-interactive = 'myopenmath')]
                    | activity[(@exercise-interactive = 'myopenmath')]
@@ -3083,6 +3087,61 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Duplicate authored content for the non-static conversions   -->
                 <!-- and let the conversions handle dynamic content.  Also, when -->
                 <!-- extracting MOM we need the authored source unmolested.      -->
+                <xsl:apply-templates select="node()" mode="representations"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:copy>
+</xsl:template>
+
+<!-- STACK questions to static -->
+
+<!-- Static versions crom a STACK server, and have been stored     -->
+<!-- as a "generated" component of a project.  We meld with a      -->
+<!-- PreTeXt introduction and conclusion, into a "regular" PreTeXt -->
+<!-- format, for any conversion to a static format to use.         -->
+<!-- NB: very similar to MyOpenMath template above                 -->
+<xsl:template match="exercise[(@exercise-interactive = 'stack')]
+                   | project[(@exercise-interactive = 'stack')]
+                   | activity[(@exercise-interactive = 'stack')]
+                   | exploration[(@exercise-interactive = 'stack')]
+                   | investigation[(@exercise-interactive = 'stack')]" mode="representations">
+    <!-- duplicate the exercise/project -->
+    <xsl:copy>
+        <!-- and preserve attributes on the exercise/project -->
+        <xsl:apply-templates select="@*" mode="representations"/>
+        <!-- Now bifurcate on static/dynamic.  PG problem creation should not fall in here. -->
+        <xsl:choose>
+            <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
+                <!-- locate the static representation in a file, generated independently -->
+                <!-- NB: this filename is relative to the author's source                -->
+                <xsl:variable name="filename">
+                    <xsl:if test="$b-managed-directories">
+                        <xsl:value-of select="$generated-directory-source"/>
+                    </xsl:if>
+                    <xsl:text>stack/</xsl:text>
+                    <xsl:apply-templates select="stack" mode="assembly-id"/>
+                    <xsl:text>.ptx</xsl:text>
+                </xsl:variable>
+                <xsl:variable name="stack-static-rep" select="document($filename, $original)/stack-static"/>
+                <!-- duplicate metadata first -->
+                <xsl:apply-templates select="title|idx" mode="representations"/>
+                <!-- Meld PreTeXt introduction, conclusion with STACK statement. We      -->
+                <!-- could duplicate stack/statement attributes here, if there were any. -->
+                <statement>
+                    <xsl:apply-templates select="introduction/node()" mode="representations"/>
+                    <xsl:apply-templates select="$stack-static-rep/statement/node()" mode="representations"/>
+                    <xsl:apply-templates select="conclusion/node()" mode="representations"/>
+                </statement>
+                <!-- these might not all be present, ever, but just to be safe -->
+                <xsl:apply-templates select="$stack-static-rep/hint" mode="representations"/>
+                <xsl:apply-templates select="$stack-static-rep/answer" mode="representations"/>
+                <xsl:apply-templates select="$stack-static-rep/solution" mode="representations"/>
+                <!-- NB: the "stack" element has been ignored is now gone -->
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- Duplicate authored content for the non-static conversions   -->
+                <!-- and let the conversions handle dynamic content.  Also, when -->
+                <!-- extracting STACK we need the authored source unmolested.    -->
                 <xsl:apply-templates select="node()" mode="representations"/>
             </xsl:otherwise>
         </xsl:choose>
