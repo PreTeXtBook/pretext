@@ -2771,6 +2771,77 @@ def _stack_process_response(qdict):
     <solution>{soltext}</solution>
     ''' + "\n".join(f"<answer>{ans}</answer>" for ans in answers)
 
+def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
+    '''Convert a STACK question to a static PreTeXt version via a STACK server'''
+
+    import json
+
+    try:
+        import requests  # to access STACK server
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("requests"))
+
+    # TODO: get this from a publisher variable
+    api_url = 'https://stack-api.maths.ed.ac.uk/render'
+    # api_url = 'http://127.0.0.1:3080/render'  # for local docker setup
+
+    msg = 'converting STACK exercises from {} to static forms for placement in {}'
+    log.info(msg.format(xml_source, dest_dir))
+
+    tmp_dir = get_temporary_directory()
+    log.debug("temporary directory: {}".format(tmp_dir))
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-stack.xsl")
+
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+
+    log.info("extracting STACK exercises from {}".format(xml_source))
+    log.info("string parameters passed to extraction stylesheet: {}".format(stringparams) )
+    # place verbatim copies of STACK XML into a temporary directory
+    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+
+    # Course over files in temporary directory,
+    # converting to PreTeXt XML. Innermosat loop
+    # is modeled after work provided in
+    #   https://github.com/PreTeXtBook/pretext/pull/2576
+    with working_directory(tmp_dir):
+        for stack_file in os.listdir(tmp_dir):
+            # form output file now, for diagnostic
+            # message before it is needed
+            # just change extension, easy
+            pretext_file = os.path.join(dest_dir, stack_file.replace('.xml', '.ptx'))
+            msg = 'converting STACK question file "{}/{}" to static PreTeXt XML file "{}"'
+            log.debug(msg.format(tmp_dir, stack_file, pretext_file))
+
+            # Open STACK XML file, send to server, unravel JSON response into
+            # a text version of the static PreTeXt XML question
+            question_data = open(stack_file).read()
+            # JSON blob for STACK API server request
+            # TODO: accomodate per-question seed somehow (interrogate XML?)
+            request_data = {"questionDefinition": question_data, "seed": None}
+            question_json = requests.post(api_url, json=request_data)
+            question_dict = json.loads(question_json.text)
+            response = _stack_process_response(question_dict)
+            # response needs to be a single element, XSL uses it
+            # TODO: maybe STACK server can provide this wrapper
+            wrap_response = "<stack-static>\n{}\n</stack-static>"
+            question_pretext = wrap_response.format(response)
+
+            # PreTeXt filename formed above, write result into dest_dir
+            # This well-formed XML file will get picked up by the
+            # pretext-assembly.xsl stylesheet as part of forming a version
+            # of source suitable for static output formats (that are not
+            # as capable as HTML)
+            with open(pretext_file, 'w', encoding='utf-8') as ptxfile:
+                ptxfile.write(question_pretext)
+                ptxfile.close()
+
+
 #####################################
 #
 #  Interactive preview screenshotting

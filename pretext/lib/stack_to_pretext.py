@@ -3,19 +3,6 @@ import json
 import re
 
 
-def process_stack_XML(filename, api_url, seed=None):
-    qdata = open(filename).read()
-    req_data = {
-        "questionDefinition": qdata,
-        "seed": seed,
-    }
-
-    x = requests.post(api_url, json=req_data)
-    qdict = json.loads(x.text)
-    # print(json.dumps(qdict, indent=4))
-    return process_response(qdict)
-
-
 if __name__ == "__main__":
     # This is for demonstration purposes and will be removed when integrating
     # this functionality into pretext.
