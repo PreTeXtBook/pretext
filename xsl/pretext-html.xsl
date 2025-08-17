@@ -226,7 +226,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-icon"         select="boolean($document-root//icon)"/>
 <xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)"/>
 <xsl:variable name="b-has-myopenmath"   select="boolean($document-root//myopenmath)"/>
-<xsl:variable name="b-has-stack"        select="boolean($document-root//stack)"/>
+<xsl:variable name="b-has-stack"        select="boolean($document-root//exercise/stack)"/>
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)"/>
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)"/>
 <!-- 2023-10-18: this is a bit buggy, as it ignores the "men" element.  -->
@@ -10848,6 +10848,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- STACK Javascript header -->
 <xsl:template name="stack-js">
+
     <xsl:if test="$b-has-stack">
         <xsl:variable name="stack-domain" select="$document-root//publication/stack/@server" />
         <script
