@@ -10460,6 +10460,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
+<xsl:template match="interactive" mode="get-resize-behavior">
+    <xsl:variable name="platform" select="@interactive-platform"/>
+    <xsl:choose>
+        <xsl:when test="@resize-behavior != ''">
+            <xsl:value-of select="@resize-behavior"/>
+        </xsl:when>
+        <xsl:when test="$publication/html/interactives/*[local-name()=$platform and @resize-behavior != '']">
+            <xsl:apply-templates select="$publisher-attribute-options/html/interactives/*[local-name()=$platform]/pi:pub-attribute[@name='resize-behavior']" mode="set-pubfile-variable"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$publisher-attribute-options/html/interactives/pi:pub-attribute[@name='resize-behavior']" mode="set-pubfile-variable"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="slate" mode="get-resize-behavior">
+    <xsl:choose>
+        <xsl:when test="@resize-behavior != ''">
+            <xsl:value-of select="@resize-behavior"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="container" select="ancestor::interactive"/>
+            <xsl:apply-templates select="$container" mode="get-resize-behavior"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Next two utilities write attributes, so cannot go in -common -->
 
 <!-- iframes, etc, need size as a pair of attributes in pixels -->
