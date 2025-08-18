@@ -2443,15 +2443,17 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 </tabular>
             </table>
 
+            <p>Note that the <attr>worksheet</attr> filter only refers to <tag>exercise</tag> within any <tag>worksheet</tag>.  This is because worksheets are built around <tag>exercise</tag> that are slightly different than others, such as allowing <attr>workspace</attr>, and being allowed in a <tag>sidebyside</tag> for layout purposes.  Similarly, a <tag>project</tag> (or more precisely PROJECT-LIKE) is a child of a division, and so can appear inside a <tag>worksheet</tag>, or outside of a <tag>worksheet</tag>.  The <attr>project</attr> filter applies equally to both instances.</p>
+
             <p>So, <pretext/> source like<cd>
                 <cline>&lt;section&gt;</cline>
                 <cline>  &lt;title&gt;Tropical Bird of Paradise&lt;title&gt;</cline>
                 <cline>  ...</cline>
-                <cline>  &lt;solutions worksheet="hint solution" project="hint solution"&gt;</cline>
+                <cline>  &lt;solutions worksheet="hint solution" project="hint answer"&gt;</cline>
                 <cline>    &lt;title&gt;Hints and Solutions to Worksheets and Projects&lt;title&gt;</cline>
                 <cline>  &lt;/solutions&gt;</cline>
                 <cline>&lt;/section&gt;</cline>
-            </cd>would generate an entire subsection with hints and solutions to every worksheet and every project, located anywhere (including in subsections and subsubsections) in the section on Birds of Paradise.</p>
+            </cd>would generate an entire subsection in the section on Birds of Paradise, containing with hints and solutions to every <tag>exercise</tag> in any worksheet in the section, and hints and answers for every project, located anywhere (including in subsections, subsubsections, and worksheets).  There is a great deal of flexibility, though not every imaginable scenario may be possible.</p>
 
             <p>
                 An <attr>admit</attr> attribute specifies some feature of an exercise's serial number
