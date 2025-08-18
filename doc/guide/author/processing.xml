@@ -490,8 +490,14 @@
                     <row>
                         <cell><attr>asy-method</attr></cell><cell><p>Optional, default: <c>server</c>.  Valid values: <c>server</c> or <c>local</c>. Used to specify whether asymptote images should be generated using the <c>server</c> asymptote version or a <c>local</c> asymptote install.</p></cell>
                     </row>
+                    <row>
+                        <cell><attr>generated-cache</attr></cell><cell><p>Optional, default: <c>.cache</c>.  Path to folder holding cached versions of some generated assets.</p></cell>
+                    </row>
+                    <row>
+                        <cell><attr>cname</attr></cell><cell><p>Optional, default: None.  The custom domain you want to use for a deployed target through github pages. Only needed if you set a custom domain.</p></cell>
+                    </row>
                 </tabular>
-            </table>`
+            </table>
 
             <p>Any file paths described in attributes of a <tag>target</tag> element are relative to a corresponding attribute value from the root <tag>project</tag> element.</p>
 
