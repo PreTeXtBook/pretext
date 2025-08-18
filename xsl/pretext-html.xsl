@@ -10525,24 +10525,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
 </xsl:template>
 
-<!-- div's need size in a style attribute -->
+<!-- various elements need size in a style attribute -->
 <xsl:template match="*" mode="size-pixels-style-attribute">
+    <xsl:attribute name="style">
+        <xsl:apply-templates select="." mode="size-pixels-style-attribute-core" />
+    </xsl:attribute>
+</xsl:template>
+
+<xsl:template match="*" mode="size-pixels-style-attribute-core">
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-pixels" />
     </xsl:variable>
     <xsl:variable name="height">
         <xsl:apply-templates select="." mode="get-height-pixels" />
     </xsl:variable>
-    <xsl:attribute name="style">
-        <xsl:text>width:</xsl:text>
-        <xsl:value-of select="$width" />
-        <xsl:text>px; </xsl:text>
-        <xsl:text>height:</xsl:text>
-        <xsl:value-of select="$height" />
-        <xsl:text>px; </xsl:text>
-        <xsl:text>display: block; </xsl:text>
-        <xsl:text>box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;</xsl:text>
-    </xsl:attribute>
+    <xsl:text>width:</xsl:text>
+    <xsl:value-of select="$width" />
+    <xsl:text>px; </xsl:text>
+    <xsl:text>height:</xsl:text>
+    <xsl:value-of select="$height" />
+    <xsl:text>px; </xsl:text>
+    <xsl:text>display: block; </xsl:text>
 </xsl:template>
 
 <!-- Add js from script elemenets inside interactives     -->
