@@ -10462,6 +10462,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
+
+<xsl:template match="interactive" mode="get-design-width">
+    <xsl:choose>
+        <xsl:when test="@design-width != ''">
+            <xsl:value-of select="@design-width"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- global value set by stylesheet -->
+            <xsl:value-of select="$design-width"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="slate" mode="get-design-width">
+    <xsl:choose>
+        <xsl:when test="@design-width != ''">
+            <xsl:value-of select="@design-width"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="ancestor::interactive" mode="get-design-width"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <xsl:template match="interactive" mode="get-resize-behavior">
     <xsl:variable name="platform" select="@interactive-platform"/>
     <xsl:choose>
