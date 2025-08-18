@@ -6924,7 +6924,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- This seemed to not be enough, until Google Search went away  -->
                     <!-- <xsl:apply-templates select="." mode="primary-navigation" /> -->
                 </header> <!-- masthead -->
-                <div class="ptx-page">
+                <div class="ptx-page" style="max-width: 1600px">
                     <!-- With sidebars killed, this stuff is extraneous     -->
                     <!-- <xsl:apply-templates select="." mode="sidebars" /> -->
                     <main class="ptx-main">
