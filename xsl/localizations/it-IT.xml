@@ -279,4 +279,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='print'>Stampa</localization>
     <localization string-id='print-preview'>Anteprima di stampa</localization>
     <localization string-id='close'>Chiudi</localization>
+    <!-- <localization string-id='open-new-tab'>Open in new tab</localization> -->
 </locale>

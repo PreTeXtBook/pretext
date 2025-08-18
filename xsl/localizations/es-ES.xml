@@ -281,6 +281,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='reset'>Reiniciar</localization>
     <localization string-id='array'>Arreglo</localization>
     <localization string-id='papersize'>Tamaño del papel</localization>
+    <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
+    <!-- <localization string-id='print'>Print</localization> -->
+    <!--<localization string-id='print-preview'>Print preview</localization>-->
+    <!-- <localization string-id='close'>Close</localization> -->
+    <!-- <localization string-id='open-new-tab'>Open in new tab</localization> -->
     <!-- Additional printing options -->
     <localization string-id="printing-options">Opciones de impresión adicionales</localization>
     <!-- "hide hint/answer/solutions" toggle title                         -->
