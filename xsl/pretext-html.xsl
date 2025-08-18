@@ -169,12 +169,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- global variable, which is discussed in    -->
 <!-- closer proximity to its application.      -->
 
-<!-- This is cribbed from the CSS "max-width"-->
-<!-- Design width, measured in pixels        -->
-<!-- NB: the exact same value, for similar,  -->
-<!-- but not identical, reasons is used in   -->
-<!-- the formation of WeBWorK problems       -->
-<xsl:variable name="design-width" select="'600'" />
+<!-- Various components need to be built with pixel widths from % based widths -->
+<!-- design-width is the 100% value. We override the -common value here,       -->
+<!-- possibly getting a value defined in the pub file. If not, this should get -->
+<!-- set to the value from -common                                             -->
+<xsl:variable name="design-width">
+    <xsl:value-of select="$html-design-width"/>
+</xsl:variable>
 
 <!-- We generally want to chunk longer HTML output -->
 <xsl:variable name="chunk-level">
