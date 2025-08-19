@@ -7,3 +7,28 @@
     display: block;
   }
 }
+
+.interactive-iframe-container__opener {
+  display: block;
+  margin-right: 5px;
+  margin-top: 11px;
+  margin-bottom: 5px;
+  font-size: 0.8rem;
+  & .icon {
+    font-size: 18px;
+  }
+
+  // if figcaption or instructions follow, this should float next to that
+  &:has(+ figcaption, + .instructions) {
+    float: left;
+    z-index: 1; // place above fig caption in render stack
+    position: relative;  // for z-index
+  }
+
+  // and if both, the figcaption should clear
+  + .instructions + figcaption {
+    clear: left;
+  }
+  
+  + .instructions { margin-top: .5em; }
+}
