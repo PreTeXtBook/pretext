@@ -6852,7 +6852,7 @@ Book (with parts), "section" at level 3
             <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
             <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
             <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
-            <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
+            <xsl:with-param name="b-reading-solution"     select="$b-reading-solution" />
             <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
             <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
             <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
@@ -6882,7 +6882,7 @@ Book (with parts), "section" at level 3
             <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
             <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
             <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
-            <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
+            <xsl:with-param name="b-reading-solution"     select="$b-reading-solution" />
             <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
             <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
             <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
@@ -7077,7 +7077,7 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
         <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
         <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
-        <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
+        <xsl:with-param name="b-reading-solution"     select="$b-reading-solution" />
         <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
         <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
         <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
