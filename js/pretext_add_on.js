@@ -612,16 +612,16 @@ function setInitialWorkspaceHeights() {
     });
 }
 
-// If a worksheet includes authored pages, we only need to put content before the first page and after the last page into the first and last pages, respectively.
-function adjustWorksheetPages() {
-    const worksheet = document.querySelector('section.worksheet, section.handout');
-    if (!worksheet) {
-        console.warn("No worksheet found, exiting adjustWorksheetPages.");
+// If a printout (worksheet or handout) includes authored pages, we only need to put content before the first page and after the last page into the first and last pages, respectively.
+function adjustPrintoutPages() {
+    const printout = document.querySelector('section.worksheet, section.handout');
+    if (!printout) {
+        console.warn("No printout found, exiting adjustPrintoutPages.");
         return;
     }
-    const pages = worksheet.querySelectorAll('.onepage');
+    const pages = printout.querySelectorAll('.onepage');
     if (pages.length === 0) {
-        console.warn("No pages found in worksheet, exiting adjustWorksheetPages.");
+        console.warn("No pages found in printout, exiting adjustPrintoutPages.");
         return;
     }
     // Find all children before the first .onepage element:
@@ -629,7 +629,7 @@ function adjustWorksheetPages() {
     const lastPage = pages[pages.length - 1];
     // Move all children before the first page into the first page
     const pageFirstChild = firstPage.firstChild;
-    let currentChild = worksheet.firstChild;
+    let currentChild = printout.firstChild;
     while (currentChild && currentChild !== firstPage) {
         const nextChild = currentChild.nextSibling; // Save the next sibling before removing
         firstPage.insertBefore(currentChild, pageFirstChild); // Move to the first page
@@ -645,8 +645,8 @@ function adjustWorksheetPages() {
     console.log("Moved all content before the first page and after the last page into the respective pages.");
 }
 
-// This is the main function we will call then a worksheet does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
-function createWorksheetPages(margins) {
+// This is the main function we will call then a printout does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
+function createPrintoutPages(margins) {
 
     // Assumptions: needs to work for both letter (8.5in x 11in) and a4 (210mm x 297mm) paper sizes.  We will work in pixels (96/in): those are 816px x 1056px and 794px x 1122.5px respectively (1 inch = 96 px, 1 cm = 37.8 px).  We assume that the printing interface of the browser will do the right thing with these.
 
@@ -655,18 +655,18 @@ function createWorksheetPages(margins) {
     const conservativeContentHeight = 1056 - (margins.top + margins.bottom); // in pixels
     const conservativeContentWidth = 794 - (margins.left + margins.right); // in pixels
 
-    const worksheet = document.querySelector('section.worksheet, section.handout');
-    if (!worksheet) {
-        console.warn("No worksheet found, exiting layoutWorksheet.");
+    const printout = document.querySelector('section.worksheet, section.handout');
+    if (!printout) {
+        console.warn("No printout found, exiting createPrintoutPages.");
         return;
     }
-    worksheet.style.width = toString(conservativeContentWidth + margins.left + margins.right) + 'px';
+    printout.style.width = toString(conservativeContentWidth + margins.left + margins.right) + 'px';
     // Set the height of each workspace based on its data-space attribute
-    setInitialWorkspaceHeights(worksheet);
+    setInitialWorkspaceHeights(printout);
 
-    // We want to consider each "block" of the worksheet.  Some of these will be direct children of the worksheet, some will be nested inside these children.  So first create a list of the elements that we consider blocks.
+    // We want to consider each "block" of the printout.  Some of these will be direct children of the printout, some will be nested inside these children.  So first create a list of the elements that we consider blocks.
     let rows = [];
-    for (const child of worksheet.children) {
+    for (const child of printout.children) {
         if (child.classList.contains('sidebyside')) {
             // sidebyside could have tasks, but we don't want to dive further into them.
             rows.push(child);
@@ -727,14 +727,14 @@ function createWorksheetPages(margins) {
             const row = blockList[j].elem;
             pageDiv.appendChild(row);
         }
-        worksheet.appendChild(pageDiv);
+        printout.appendChild(pageDiv);
     }
 
     // remove any old content that is not in a page
-    for (const child of worksheet.children) {
+    for (const child of printout.children) {
         if (!child.classList.contains('onepage')) {
             console.log("Removing old child not in a page:", child);
-            worksheet.removeChild(child);
+            printout.removeChild(child);
         }
     }
 }
@@ -963,9 +963,9 @@ function toggleWorkspaceHighlight(isChecked) {
     }
 }
 
-// Worksheet print preview and page setup
+// Printout print preview and page setup
 window.addEventListener("load",function(event) {
-  // We condition on the existence of the papersize radio buttons, which only appear in the worksheet print preview.
+  // We condition on the existence of the papersize radio buttons, which only appear in the printout print preview.
   if (document.querySelector('input[name="papersize"]')) {
     // First, get the margins for pages to be passed around as needed.
     const marginList = document.querySelector('section.worksheet, section.handout').getAttribute('data-margins').split(' ');
@@ -1065,13 +1065,13 @@ window.addEventListener("load",function(event) {
     born_hidden_knowls.forEach(function(detail) {
         detail.open = true;
     });
-    // If the worksheet has authored pages, there will be at least one .onepage element.
+    // If the printout has authored pages, there will be at least one .onepage element.
     if (document.querySelector('.onepage')) {
-        adjustWorksheetPages();
+        adjustPrintoutPages();
         /* not the right way:  need to figure out what this needs to wait for */
-        //window.setTimeout(adjustWorksheetPages, 1000);
+        //window.setTimeout(adjustPrintoutPages, 1000);
     } else {
-        createWorksheetPages(margins);
+        createPrintoutPages(margins);
     }
     // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size).
     adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});

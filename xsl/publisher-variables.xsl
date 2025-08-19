@@ -256,7 +256,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- Worksheet margins.  Applies to both PDF and HTML. -->
+<!-- Printout margins.  Applies to both PDF and HTML. -->
 
 <xsl:variable name="ws-margin">
     <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/pi:pub-attribute[@name='margin']" mode="set-pubfile-variable"/>

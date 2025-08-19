@@ -2176,10 +2176,11 @@ Book (with parts), "section" at level 3
         <xsl:when test="part or chapter or section or subsection or subsubsection">
             <xsl:value-of select="false()" />
         </xsl:when>
-        <!-- One exception, a division full of only "worksheet" (as a subdivision, -->
-        <!-- there could be metadata, "introduction", etc.)  We know there are no  -->
-        <!-- traditional divisions as subdiivisions at this point.  So we test for -->
-        <!-- at least one worksheet and no other specialized divisions.            -->
+        <!-- One exception, a division full of only "worksheet" or "handout"     -->
+        <!-- (as a subdivision, there could be metadata, "introduction", etc.)   -->
+        <!-- We know there are no traditional divisions as subdiivisions at this -->
+        <!-- point.  So we test for at least one worksheet or handout and no     -->
+        <!-- other specialized divisions.                                        -->
         <xsl:when test="(worksheet or handout) and not(exercises|references|glossary|reading-questions|solutions)">
             <xsl:value-of select="false()" />
         </xsl:when>
@@ -2199,8 +2200,8 @@ Book (with parts), "section" at level 3
 <!-- There are two models for most of the divisions (part -->
 <!-- through subsubsection, plus appendix).  One has      -->
 <!-- subdivisions, and possibly multiple "exercises", or  -->
-<!-- other specialized subdivisions.  (Namely             -->
-<!-- "worksheet", "exercises", "solutions", and not       -->
+<!-- other specialized subdivisions.  (Namely "worksheet",-->
+<!-- "handout", "exercises", "solutions", and not         -->
 <!-- "references", "glossary", nor "reading-questions".)  -->
 <!-- The other has no subdivisions, and then at most one  -->
 <!-- of each type of specialized subdivision, which       -->
@@ -2214,6 +2215,7 @@ Book (with parts), "section" at level 3
 <!-- An exception is a division of *only* worksheets.     -->
 <!-- Although there could be titles and the like.         -->
 <!-- So we compare all-children to  metadata + worksheet. -->
+<!-- TODO: should there be a similar exception for handouts? -->
 <xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
     <xsl:variable name="has-traditional" select="boolean(&TRADITIONAL-DIVISION;)"/>
     <xsl:variable name="all-children" select="*"/>
@@ -3866,8 +3868,8 @@ Book (with parts), "section" at level 3
     <xsl:param name="numbering-items" />
     <!-- determine enclosing level of numbered item -->
 
-    <!-- determine if the object being numbered is inside  -->
-    <!-- a decorative "exercises" or "worksheet" -->
+    <!-- determine if the object being numbered is inside    -->
+    <!-- a decorative "exercises", "worksheet", or "handout" -->
     <xsl:variable name="inside-decorative">
         <xsl:if test="ancestor::*[self::exercises or self::reading-questions or self::worksheet or self::handout]">
             <xsl:variable name="is-numbered">
@@ -6558,12 +6560,12 @@ Book (with parts), "section" at level 3
 <!-- the element from this template would be useful.                       -->
 <xsl:template match="*" mode="dry-run"/>
 
-<!-- This template is called for items in a worksheet that can have a  -->
+<!-- This template is called for items in a printout that can have a   -->
 <!-- workspace specified.  It is important that this sometimes returns -->
 <!-- an empty string, since that is a signal to not construct some     -->
 <!-- surrounding infrastructure to implement the necessary space.      -->
 <xsl:template match="*" mode="sanitize-workspace">
-    <!-- bail out quickly and empty if not on a worksheet    -->
+    <!-- bail out quickly and empty if not on a printout     -->
     <!-- bail out if at a "task" that is not a terminal task -->
     <!-- we assume LaTeX will only request this template if  -->
     <!-- the publisher file allows it.                       -->
@@ -6571,7 +6573,7 @@ Book (with parts), "section" at level 3
     <!--     in LaTeX conversion, via parameter #3 of the  environment   -->
 
     <xsl:if test="(ancestor::worksheet or ancestor::handout) and not(child::task)">
-        <!-- First element with @workspace, confined to the worksheet  -->
+        <!-- First element with @workspace, confined to the printout   -->
         <!-- Could be empty node-set, which will be empty string later -->
         <xsl:variable name="raw-workspace">
             <xsl:choose>
@@ -6623,8 +6625,6 @@ Book (with parts), "section" at level 3
 <!-- We kill the worksheet @workspace option for WW exercises until    -->
 <!-- we have a better understanding of just how this will be specified -->
 <!-- A no-op, just remove to enable, but will need testing             -->
-<!-- EXAMPLE-LIKE look like things to do, but are not, and so do       -->
-<!-- not have @workspace inside a worksheet                            -->
 <xsl:template match="webwork-reps/static|webwork-reps/static/stage|exercisegroup|&SOLUTION-LIKE;" mode="sanitize-workspace"/>
 
 
@@ -7139,11 +7139,11 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
-<!-- ################# -->
-<!-- Worksheet Margins -->
-<!-- ################# -->
+<!-- ################ -->
+<!-- Printout Margins -->
+<!-- ################ -->
 
-<xsl:template match="worksheet|handout" mode="worksheet-margin">
+<xsl:template match="worksheet|handout" mode="printout-margin">
     <xsl:param name="author-side"/>
     <xsl:param name="publisher-side"/>
     <xsl:choose>

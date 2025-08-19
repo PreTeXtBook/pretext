@@ -585,7 +585,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- worth, or just a subdivision within a page    -->
 <!-- Increment $heading-level via this template    -->
 <!-- We use a modal template, so it can be called  -->
-<!-- two more times for a worksheet to make        -->
+<!-- one more time for a printout to make          -->
 <!-- printable standalone versions.                -->
 <xsl:template match="&STRUCTURAL;">
     <xsl:param name="heading-level"/>
@@ -594,11 +594,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 
-    <!-- For a "worksheet" (only), we do it again, to generate -->
-    <!-- a standalone printable and editable version.          -->
-    <!-- NB we don't produce these for portable html.          -->
+    <!-- For a printout (worksheet or handout), we do it again,   -->
+    <!-- to generate a standalone printable and editable version. -->
+    <!-- NB we don't produce these for portable html.             -->
     <xsl:if test="(self::worksheet or self::handout) and not($b-portable-html)">
-        <xsl:apply-templates select="." mode="standalone-worksheet">
+        <xsl:apply-templates select="." mode="standalone-printout">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </xsl:if>
@@ -631,7 +631,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <!-- page-margins-attribute will be empty unless in a worksheet's standalone page -->
+        <!-- page-margins-attribute will be empty unless in a printout's standalone page -->
         <xsl:apply-templates select="." mode="page-margins-attribute"/>
         <xsl:apply-templates select="." mode="section-heading">
             <xsl:with-param name="heading-level" select="$heading-level"/>
@@ -786,7 +786,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Worksheets generate one additional version     -->
 <!-- designed for printing, on Letter or A4 paper.  -->
-<xsl:template match="worksheet|handout" mode="standalone-worksheet">
+<xsl:template match="worksheet|handout" mode="standalone-printout">
     <xsl:param name="heading-level"/>
 
     <xsl:variable name="base-filename">
@@ -794,7 +794,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="filename">
-            <xsl:apply-templates select="." mode="standalone-worksheet-filename"/>
+            <xsl:apply-templates select="." mode="standalone-printout-filename"/>
         </xsl:with-param>
         <xsl:with-param name="content">
             <xsl:apply-templates select="." mode="structural-division-content">
@@ -910,7 +910,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (backmatter/references is a singleton).  Whether or not to   -->
 <!-- *display* a number at birth is therefore more complicated    -->
 <!-- than *having* a number or not.                               -->
-<!-- NB: We sneak in links for standalone versions of worksheets. -->
+<!-- NB: We sneak in links for standalone versions of printouts.  -->
 <xsl:template match="exercises|solutions|glossary|references|worksheet|handout|reading-questions" mode="heading-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name"/>
@@ -930,25 +930,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="title-full" />
     </span>
     <!-- Links to the "printable" version(s), meant only for "viewable" -->
-    <!-- worksheet, so CSS can kill on the "printable" versions         -->
+    <!-- printout, so CSS can kill on the "printable" versions          -->
     <!-- $paper is LOWER CASE "a4" and "letter"                         -->
-    <!-- NB until worksheet printing can be done without extra files,   -->
+    <!-- NB until printout printing can be done without extra files,    -->
     <!-- we omit this for portable html.                                -->
     <xsl:if test="(self::worksheet or self::handout) and not($b-portable-html)">
-        <xsl:apply-templates select="." mode="standalone-worksheet-links"/>
+        <xsl:apply-templates select="." mode="standalone-printout-links"/>
     </xsl:if>
 </xsl:template>
 
 <!-- Links to the "printable" version(s), meant only for "viewable" -->
-<!-- worksheet, so CSS can kill on the "printable" versions         -->
+<!-- printout, so CSS can kill on the "printable" versions          -->
 <!-- As of 2025-05-31, this is changing to a single print button    -->
 <!-- and will later change to have the button to popout printable   -->
-<!-- worksheet instead of linking to separate file.                 -->
+<!-- printout instead of linking to separate file.                  -->
 <!-- We isolate link creation, so we can kill it simply in          -->
 <!-- derivative  conversions                                        -->
-<xsl:template match="worksheet|handout" mode="standalone-worksheet-links">
+<xsl:template match="worksheet|handout" mode="standalone-printout-links">
     <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="standalone-worksheet-filename"/>
+        <xsl:apply-templates select="." mode="standalone-printout-filename"/>
     </xsl:variable>
     <xsl:variable name="print-preview-text">
         <xsl:apply-templates select="." mode="type-name">
@@ -4459,11 +4459,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- All of the items matching the template two above (except perhaps  -->
-<!-- the WW exercises) can appear in a worksheet with some room to     -->
+<!-- the WW exercises) can appear in a printout with some room to      -->
 <!-- work a problem given by a @workspace attribute.  (But we are not  -->
 <!-- careful with the match, given the limited reach here.)  The "div" -->
 <!-- we drop here is controlled by the Javascript - on a "normal" page -->
-<!-- displaying a worksheet it is ineffective, and on a printable,     -->
+<!-- displaying a printout it is ineffective, and on a printable,      -->
 <!-- standalone page it produces space that is visually apparent, but  -->
 <!-- prints invisible.  No @workspace attribute, nothing is added.     -->
 <!-- We rely on a template in -common to error-check the value of      -->
@@ -5114,7 +5114,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-        <!-- Insert workspace (will only apply to p inside worksheet/handout -->
+        <!-- Insert workspace (will only apply to p inside worksheet or handout) -->
         <xsl:apply-templates select="." mode="workspace"/>
         <!-- Insert permalink -->
         <xsl:apply-templates select="." mode="permalink"/>
@@ -5209,7 +5209,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:for-each>
         <!-- INDENT ABOVE ON A WHITESPACE COMMIT -->
-    <!-- Insert workspace (will only apply to p inside worksheet/handout) -->
+    <!-- Insert workspace (will only apply to p inside worksheet or handout) -->
     <xsl:apply-templates select="." mode="workspace"/>
     <!-- Insert permalink -->
     <xsl:apply-templates select="." mode="permalink"/>
@@ -5314,7 +5314,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </div>
                     </xsl:otherwise>
                 </xsl:choose>
-                <!-- Insert workspace (will only apply if in worksheet/handout) -->
+                <!-- Insert workspace (will only apply if in worksheet or handout) -->
                 <xsl:apply-templates select="." mode="workspace"/>
                 <!-- Insert permalink -->
                 <xsl:apply-templates select="." mode="permalink"/>
@@ -10991,9 +10991,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="native-search-box-js" />
 </xsl:variable>
 
-<!-- Generate a version of file-wrap-full-head-cache customized for  -->
-<!-- use in printable worksheets. There does not seem to be a better -->
-<!-- (and straightforward) method other than duplicating above work. -->
+<!-- Generate a version of file-wrap-full-head-cache customized for use in -->
+<!-- printable worksheets and handouts. There does not seem to be a better -->
+<!-- (and straightforward) method other than duplicating above work.       -->
 <xsl:variable name="file-wrap-full-head-cache-printable">
     <!-- file-wrap-iframe-head-cache -->
     <xsl:call-template name="fonts"/>
@@ -13707,7 +13707,7 @@ TODO:
     </xsl:if>
 </xsl:template>
 
-<!-- The worksheet previews get their own css target that controls both screen and print styles -->
+<!-- The printout previews get their own css target that controls both screen and print styles -->
 <xsl:template name="css-printable">
     <xsl:if test="not($b-debug-react)">
         <link href="{$html.css.dir}/print-worksheet.css" rel="stylesheet" type="text/css"/>
@@ -13983,35 +13983,35 @@ TODO:
 <!-- Worksheet Margins and Pages -->
 <!-- ########################### -->
 
-<!-- We put page-margins-attributes only on worksheet sections -->
+<!-- We put page-margins-attributes only on printout sections -->
 <xsl:template match="*" mode="page-margins-attribute"/>
 
 <xsl:template match="worksheet|handout" mode="page-margins-attribute">
     <xsl:attribute name="data-margins">
         <!-- A space-separated list for top, right, bottom, and left margins -->
-        <xsl:apply-templates select="." mode="worksheet-margin">
+        <xsl:apply-templates select="." mode="printout-margin">
             <xsl:with-param name="author-side" select="@top"/>
             <xsl:with-param name="publisher-side" select="$ws-margin-top"/>
         </xsl:apply-templates>
         <xsl:text> </xsl:text>
-        <xsl:apply-templates select="." mode="worksheet-margin">
+        <xsl:apply-templates select="." mode="printout-margin">
             <xsl:with-param name="author-side" select="@right"/>
             <xsl:with-param name="publisher-side" select="$ws-margin-right"/>
         </xsl:apply-templates>
         <xsl:text> </xsl:text>
-        <xsl:apply-templates select="." mode="worksheet-margin">
+        <xsl:apply-templates select="." mode="printout-margin">
             <xsl:with-param name="author-side" select="@bottom"/>
             <xsl:with-param name="publisher-side" select="$ws-margin-bottom"/>
         </xsl:apply-templates>
         <xsl:text> </xsl:text>
-        <xsl:apply-templates select="." mode="worksheet-margin">
+        <xsl:apply-templates select="." mode="printout-margin">
             <xsl:with-param name="author-side" select="@left"/>
             <xsl:with-param name="publisher-side" select="$ws-margin-left"/>
         </xsl:apply-templates>
     </xsl:attribute>
 </xsl:template>
 
-<!-- A worksheet is (mostly) structured by "page", which translates    -->
+<!-- A printout is (mostly) structured by "page", which translates    -->
 <!-- into an HTML section.onepage.  Note that an "introduction" and    -->
 <!-- "objectives" can precede the first "page" as HTML output, and the -->
 <!-- final "page" may be followed by a "conclusion" and "outcomes"     -->
@@ -14024,7 +14024,7 @@ TODO:
 
 <!-- A template ensures standalone page creation, -->
 <!-- and links to same, are consistent            -->
-<xsl:template match="worksheet|handout" mode="standalone-worksheet-filename">
+<xsl:template match="worksheet|handout" mode="standalone-printout-filename">
     <xsl:apply-templates select="." mode="visible-id"/>
     <xsl:text>-printable</xsl:text>
     <xsl:text>.html</xsl:text>

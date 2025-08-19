@@ -98,8 +98,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Specialized Divisions -->
-<!-- "exercises", "solutions", references,             -->
-<!-- "worksheet", "reading-questions", "glossary"      -->
+<!-- "exercises", "solutions", references, "worksheet",-->
+<!-- "handout", "reading-questions", "glossary"        -->
 <!-- This is the case of a "structured" division,      -->
 <!-- where we use the resulting number for the         -->
 <!-- division. (In the unstructured case, the number   -->
