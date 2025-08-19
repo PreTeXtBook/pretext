@@ -6210,6 +6210,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="(@cols = 2) or (@cols = 3) or (@cols = 4) or (@cols = 5) or (@cols = 6)">
             <xsl:text>cols</xsl:text>
             <xsl:value-of select="@cols" />
+            <xsl:text> multicolumn</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:ERROR:   @cols attribute of lists or exercise groups, must be between 1 and 6 (inclusive), not "cols=<xsl:value-of select="@cols" />"</xsl:message>
