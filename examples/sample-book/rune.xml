@@ -4405,6 +4405,10 @@ TEST_CASE( "Test the add function" ) {
                 </statement>
                 <response/>
             </task>
+
+            <conclusion>
+                <p>A sequence of <tag>task</tag> can have a <tag>conclusion</tag>, like this one, even if they do not see much use in practice.</p>
+            </conclusion>
         </exercise>
     </exercises>
 
@@ -4546,7 +4550,7 @@ TEST_CASE( "Test the add function" ) {
         <exercise label="true-false-exercise-with-tasks">
             <title>True/False and Explain</title>
             <introduction>
-                <p>Structured with task, we can have an introduction, but this does not migrate with the interactive portions.</p>
+                <p>Structured with <tag>task</tag>, we can have an <tag>introduction</tag>.  If you are viewing this <tag>exercise</tag> in the Runestone assignment builder, you will notice that each of these three <tag>task</tag> appears as its own problem and therefore each one gets its own copy of this <tag>introduction</tag> you are reading right now.</p>
             </introduction>
 
             <task label="true-false-task">
@@ -4598,6 +4602,10 @@ TEST_CASE( "Test the add function" ) {
                     </match>
                 </cardsort>
             </task>
+
+            <conclusion>
+                <p>A <tag>conclusion</tag> is possible and will be replicated after each of the three <tag>task</tag> when they are viewed individually in the Runestone assignment builder.</p>
+            </conclusion>
         </exercise>
 
         <p>Now an <tag>exploration</tag> nested two-deep with <em>the same two questions</em>, two times each, just for testing purposes.</p>
@@ -4605,8 +4613,16 @@ TEST_CASE( "Test the add function" ) {
         <exploration label="exploration-two-deep">
             <title>Exploring Two-Deep</title>
 
+            <introduction>
+                <p>This is a top-level introduction.</p>
+            </introduction>
+
             <task>
                 <title>First Iterations of Each</title>
+
+                <introduction>
+                    <p>This is an introduction to the first iterations, at the second level.</p>
+                </introduction>
 
                 <task label="task-multiple-choice-first">
                     <title>Multiple-Choice, Not Randomized, One Answer (First Copy)</title>
@@ -4661,10 +4677,18 @@ TEST_CASE( "Test the add function" ) {
                     </program>
                     <answer><p>We're still not really sure.</p></answer>
                 </task>
+
+                <conclusion>
+                    <p>We include a conclusion to the first iterations, at the second level (with no conclusion at the top-level).</p>
+                </conclusion>
             </task>
 
             <task>
                 <title>Second Iterations of Each</title>
+
+                <introduction>
+                    <p>This is an introduction to the second iterations, at the second level.</p>
+                </introduction>
 
                 <task label="task-multiple-choice-second">
                     <title>Multiple-Choice, Not Randomized, One Answer (Second Copy)</title>
@@ -4728,7 +4752,12 @@ TEST_CASE( "Test the add function" ) {
                     </program>
                     <answer><p>We're still not really sure.</p></answer>
                 </task>
+
+                <conclusion>
+                    <p>We include a conclusion to the first iterations, at the second level (with no conclusion at the top-level).</p>
+                </conclusion>
             </task>
+            <!-- An overall conclusion would go here, which we omit for testing purposes -->
         </exploration>
 
         <p>This is an <tag>exercise</tag> which has been structured deeply with <tag>task</tag>.  It is here to allow for testing a tabbed viewer presentation in online outputs.</p>
