@@ -9634,7 +9634,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- no more special situations for Runestone exercises -->
         <xsl:otherwise>
-            <xsl:apply-templates select="." mode="iframe-interactive"/>
+            <div class="interactive-iframe-container">
+                <xsl:apply-templates select="." mode="iframe-interactive"/>
+            </div>
         </xsl:otherwise>
     </xsl:choose>
     <!-- "instructions" next, *always* as a knowl -->
