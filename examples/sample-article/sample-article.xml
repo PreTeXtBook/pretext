@@ -5422,10 +5422,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <title>List Spacing, II</title>
 
                 <p>This is another short list that ends a subsection, so can be used to address the necessary spacing.<ul cols="2">
-                    <li>Uno item.</li>
-                    <li>Dos items.</li>
-                    <li>Tres item.</li>
-                    <li>Quattro items.</li>
+                    <li>
+                      <p>Uno item.</p>
+                      <aside>
+                          <title>List column test</title>
+                          <p>An aside in a multi-column list. We don't want this to float away from its context and/or break the layout. This also tests if list title formatting affects things inside the list.</p>
+                      </aside>
+                    </li>
+                    <li><p>Dos items.</p></li>
+                    <li><p>Tres item.</p></li>
+                    <li><p>Quattro items.</p></li>
                 </ul></p>
 
                 <p>And a paragraph after that list so that spacing can be checked.</p>
@@ -16206,6 +16212,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </introduction>
                     <exercise>
                         <statement>
+                            <aside>
+                                <title>Column test</title>
+                                <p>An aside in a multi-column container.</p>
+                            </aside>
                             <md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
