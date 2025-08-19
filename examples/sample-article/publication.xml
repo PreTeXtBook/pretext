@@ -152,6 +152,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Banner options, these default to "yes" but can be set to -->
         <!-- "no" toremove the indicated element from the top banner  -->
         <banner byline="yes" subtitle="yes"/>
+        <interactives resize-behavior="responsive">
+            <javascript resize-behavior="fixed-height"/>
+            <jsxgraph resize-behavior="fixed-height"/>
+            <sage resize-behavior="fixed-height"/>
+            <circuitjs resize-behavior="fixed-height"/>
+            <d3 resize-behavior="fixed-height"/>
+        </interactives>
     </html>
 
     <!-- 10pt font is the default   -->
