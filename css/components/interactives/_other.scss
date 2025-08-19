@@ -1,0 +1,9 @@
+.interactive-iframe-container {
+  max-width: 100%;
+  overflow: auto;
+  & > iframe {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+}
