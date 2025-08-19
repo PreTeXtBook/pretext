@@ -1333,7 +1333,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\hypertarget{#4}{}}, after upper={\notblank{#3}{\par\rule{\workspacestrutwidth}{#3}\par\vfill}{\par}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//@workspace">
-        <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
+        <xsl:text>%% Worksheets and handouts children may have workspaces&#xa;</xsl:text>
         <xsl:text>\newlength{\workspacestrutwidth}&#xa;</xsl:text>
         <xsl:choose>
             <xsl:when test="$b-latex-draft-mode">
@@ -5509,8 +5509,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A typical division has 5 arguments (below).  For specialized       -->
 <!-- divisions we need to adjust the environment name for numbered      -->
-<!-- v. unnumbered instances.  Worksheets are exception with a          -->
-<!-- page layout change.                                                -->
+<!-- v. unnumbered instances.  Worksheets and handouts are exception    -->
+<!-- with a page layout change.                                         -->
 <!--                                                                    -->
 <!--    1. title                                                        -->
 <!--    2. subtitle                                                     -->
@@ -5527,7 +5527,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- NB: could be obsoleted, see single use -->
     <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet|self::handout|self::index)"/>
 
-    <!-- change geometry if worksheet should be formatted -->
+    <!-- change geometry if worksheet or handout should be formatted -->
     <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
         <!-- \newgeometry includes a \clearpage -->
         <xsl:apply-templates select="." mode="new-geometry"/>
@@ -5597,7 +5597,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Exceptional, for a worksheet only, we clear the page  -->
+<!-- Exceptional, for a printouts only, we clear the page  -->
 <!-- at the start and provide many options for specifying  -->
 <!-- the four margins, in units LaTeX understands (such as -->
 <!-- cm, in, pt).  This only produces text, so could go in -->
@@ -5608,22 +5608,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- *really* override (worksheet.left, etc.) -->
     <xsl:text>\newgeometry{</xsl:text>
     <xsl:text>left=</xsl:text>
-    <xsl:apply-templates select="." mode="worksheet-margin">
+    <xsl:apply-templates select="." mode="printout-margin">
         <xsl:with-param name="author-side" select="@left"/>
         <xsl:with-param name="publisher-side" select="$ws-margin-left"/>
     </xsl:apply-templates>
     <xsl:text>, right=</xsl:text>
-    <xsl:apply-templates select="." mode="worksheet-margin">
+    <xsl:apply-templates select="." mode="printout-margin">
         <xsl:with-param name="author-side" select="@right"/>
         <xsl:with-param name="publisher-side" select="$ws-margin-right"/>
     </xsl:apply-templates>
     <xsl:text>, top=</xsl:text>
-    <xsl:apply-templates select="." mode="worksheet-margin">
+    <xsl:apply-templates select="." mode="printout-margin">
         <xsl:with-param name="author-side" select="@top"/>
         <xsl:with-param name="publisher-side" select="$ws-margin-top"/>
     </xsl:apply-templates>
     <xsl:text>, bottom=</xsl:text>
-    <xsl:apply-templates select="." mode="worksheet-margin">
+    <xsl:apply-templates select="." mode="printout-margin">
         <xsl:with-param name="author-side" select="@bottom"/>
         <xsl:with-param name="publisher-side" select="$ws-margin-bottom"/>
     </xsl:apply-templates>
@@ -5696,7 +5696,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
-<!-- Pages in a Worksheet -->
+<!-- Pages in a worksheet or handout-->
 <!-- Produce a  \clearpage  indicating the end -->
 <!-- of a page, but not for the last page.     -->
 

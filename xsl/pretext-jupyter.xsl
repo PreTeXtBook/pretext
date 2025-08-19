@@ -113,7 +113,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- a specialized division, but we would always like to have them as -->
     <!-- standalone worksheets, not matter the chunking level in effect.  -->
     <xsl:if test="self::worksheet">
-        <xsl:apply-templates select="." mode="standalone-worksheet"/>
+        <xsl:apply-templates select="." mode="standalone-printout"/>
     </xsl:if>
 </xsl:template>
 
@@ -196,7 +196,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Worksheets are a great feature for a Jupyter notebook.  But we need -->
 <!-- to adjust the page-oriented flavor of the base HTML (which exists   -->
-<!-- as part of accomodating printing from a web browser). All children  -->
+<!-- as part of accommodating printing from a web browser). All children  -->
 <!-- of a "page" get processed, and elsewhere get recognized as items    -->
 <!-- deserving of their own cells.                                       -->
 <xsl:template match="worksheet/page">
@@ -205,7 +205,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A template ensures standalone page creation, -->
 <!-- and links to same, are consistent (*.ipynb)  -->
-<xsl:template match="worksheet" mode="standalone-worksheet-filename">
+<xsl:template match="worksheet" mode="standalone-printout-filename">
     <xsl:param name="paper"/>
 
     <xsl:apply-templates select="." mode="visible-id"/>

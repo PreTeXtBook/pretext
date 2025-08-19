@@ -135,7 +135,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We need to determine "how deep" the division hierarchy goes, so       -->
 <!-- we probe for depths of four and five.  Note how specialized           -->
 <!-- divisions result in additional depth beyond traditional divisions.    -->
-<!-- (exercises|worksheet|reading-questions|solutions|references|glossary) -->
+<!-- (exercises|worksheet|handout|reading-questions|solutions|references|glossary) -->
 
 <xsl:variable name="b-has-level-four" select="boolean(
       $document-root//subsubsection

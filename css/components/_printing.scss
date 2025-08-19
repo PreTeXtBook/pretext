@@ -3,7 +3,7 @@
 // Get rid of UI elements.
 // Leave margin fiddling for system print dialog.
 
-// Worksheet printing is handled in print-worksheet.scss
+// Worksheet and handout printing is handled in print-worksheet.scss
 
 @media print {
   .pretext .ptx-masthead,
