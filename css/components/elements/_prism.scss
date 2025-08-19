@@ -1,3 +1,5 @@
+@use '../chunks/codelike';
+
 // Prism stylesheets built locally as default ones don't support light/dark switching
 // this is a merged version of the default and dark themes
 
@@ -30,12 +32,17 @@ pre[class*="language-"] {
   line-height: 1.2;
   tab-size: 4;
   hyphens: none;
-  
+
+  &.code-inline {
+    // unclobber some inline code styles
+    @include codelike.code-inline-spacing();
+  }
+
   &::selection,
   & ::selection {
     background: #b3d4fc;
   }
-  
+
   .token {
     
     &:is(.comment,
