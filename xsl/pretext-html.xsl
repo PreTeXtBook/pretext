@@ -5277,8 +5277,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
                 <!-- "title" only possible for structured version of a list item -->
                 <xsl:if test="title">
-                    <span class="heading">
-                        <span class="title">
+                    <span class="heading li--heading">
+                        <span class="title li--heading-title">
                             <xsl:apply-templates select="." mode="title-full"/>
                         </span>
                     </span>
