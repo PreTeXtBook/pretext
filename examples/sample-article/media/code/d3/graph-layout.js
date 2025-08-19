@@ -14,19 +14,24 @@
     main()
 
     function main() {
-        var range = 50
+        setSize(data)
+
+        // Add more data when we have a larger canvas
+        var range = Math.pow(width, 1.3) / 50
         var data = {
             nodes:d3.range(0, range).map(function(d){ return {label: "l"+d ,r:~~d3.randomUniform(4, 16)()}}),
             links:d3.range(0, range).map(function(){ return {source:~~d3.randomUniform(range)(), target:~~d3.randomUniform(range)()} })        
         }
 
-        setSize(data)
         drawChart(data)
     }
 
     function setSize(data) {
-        width = document.querySelector("#d3-graph-layout").clientWidth
-        height = document.querySelector("#d3-graph-layout").clientHeight
+        // boundingRect provides true decimal values for dimensions.
+        // clientWidth/clientHeight are integer values that may have been rounded up
+        let boundingRect = document.querySelector("#d3-graph-layout").getBoundingClientRect()
+        width = Math.floor(boundingRect.width)
+        height = Math.floor(boundingRect.height)
 
         margin = {top:0, left:0, bottom:0, right:0 }
 
@@ -34,7 +39,7 @@
         chartWidth = width - (margin.left+margin.right)
         chartHeight = height - (margin.top+margin.bottom)
 
-        svg.attr("width", width).attr("height", height)
+        svg.attr("width", width).attr("height", height).attr("display", "block")
 
 
         chartLayer

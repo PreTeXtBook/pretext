@@ -14,6 +14,7 @@
     // document.body.appendChild( renderer.domElement );
     var renderDiv = document.getElementById("threejs-saddle");
     renderDiv.appendChild( renderer.domElement );
+    renderer.domElement.style.display = 'block'; // Prevents scroll bars
 
     var b = [{"x":-1.0, "y":-1.0, "z":-0.9993425378040762}, {"x":1.0, "y":1.0, "z":0.9993425378040762}]; // bounds
 
