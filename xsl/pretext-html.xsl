@@ -9669,8 +9669,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@desmos]" mode="iframe-interactive">
     <iframe src="https://www.desmos.com/calculator/{@desmos}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
+        <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
     </iframe>
 </xsl:template>
 
@@ -9749,10 +9749,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- rc = enable right click options       -->
     <!-- ld = enable label drag                -->
     <!-- ctl = click to launch                 -->
-    <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/{$ggbMaterialWidth}/height/{$ggbMaterialHeight}/border/888888/smb/false/stb/{$ggbToolBar}/stbh/{$ggbToolBar}/ai/{$ggbAlgebraInput}/asb/false/sri/{$ggbResetIcon}/rc/false/ld/false/sdz/{$ggbShiftDragZoom}/ctl/false">
+    <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/scaleContainerClass/interactive-iframe-container/width/{$ggbMaterialWidth}/height/{$ggbMaterialHeight}/allowUpscale/true/autoHeight/true/border/888888/smb/false/stb/{$ggbToolBar}/stbh/{$ggbToolBar}/ai/{$ggbAlgebraInput}/asb/false/sri/{$ggbResetIcon}/rc/false/ld/false/sdz/{$ggbShiftDragZoom}/ctl/false">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
+        <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
     </iframe>
 </xsl:template>
 
@@ -9786,7 +9786,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="full-url" select="concat($cp3d-endpoint, '?', @calcplot3d)" />
     <iframe src="{$full-url}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
@@ -9820,7 +9820,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <iframe src="https://www.falstad.com/circuit/circuitjs.html?cct='{$url-string}'">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+        <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
@@ -9843,7 +9843,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <iframe src="{$location}">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+        <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
 </xsl:template>
@@ -9852,7 +9852,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <iframe>
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
         </xsl:attribute>
@@ -9915,8 +9915,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- know globally available macros from the author -->
                 <xsl:call-template name="latex-macros"/>
                 <div>
-                    <!-- the actual interactive bit          -->
-                    <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
+                    <!-- aspect ratio will force the proper height for wrapper div                           -->
+                    <!-- don't want to mess with width as iframe has applied any % width and px is redundant -->
+                    <xsl:attribute name="style">
+                        <xsl:text>aspect-ratio: </xsl:text>
+                        <xsl:apply-templates select="." mode="get-aspect-ratio"/>
+                        <xsl:text>;</xsl:text>
+                    </xsl:attribute>
+                    
                     <!-- stack, else use a layout -->
                     <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
                     <!-- accumulate script tags *after* HTML elements -->
@@ -10046,7 +10052,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:value-of select="@xml:id" />
         </xsl:attribute>
-        <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
+        <!-- aspect ratio will force the proper height for wrapper div -->
+        <xsl:attribute name="style">
+            <xsl:text>aspect-ratio: </xsl:text>
+            <xsl:apply-templates select="." mode="get-aspect-ratio"/>
+            <xsl:text>;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="interactive-slate-sizing-style-attributes" />
     </div>
 </xsl:template>
 
@@ -10064,19 +10076,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:value-of select="@xml:id" />
         </xsl:attribute>
-        <!-- <xsl:apply-templates select="." mode="size-pixels-style-attribute" /> -->
+        <xsl:apply-templates select="." mode="interactive-slate-sizing-style-attributes" />
     </svg>
 </xsl:template>
 
 <xsl:template match="slate[@surface = 'canvas']">
-    <!-- display:block allows precise sizes, without   -->
-    <!-- having inline content with extra line height, -->
-    <!-- or whatever, inducing scroll bars             -->
-    <canvas style="display:block">
+    <canvas>
         <xsl:attribute name="id">
             <xsl:value-of select="@xml:id" />
         </xsl:attribute>
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:apply-templates select="." mode="interactive-slate-sizing-style-attributes" />
     </canvas>
 </xsl:template>
 
@@ -10269,9 +10278,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>},&#xa;</xsl:text>
         <xsl:text>(error) => {console.log('GGB applet load failure.', error)});&#xa;</xsl:text>
     </script>
-    <!-- build a container div with the right shape -->
-    <div class="geogebra-applet" id="{$applet-container}">
-        <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
+    <!-- Force line-height 0 to prevent scroll bars -->
+    <div style="line-height: 0;">
+        <!-- build a container div with the right shape -->
+        <div class="geogebra-applet" id="{$applet-container}">
+            <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
+        </div>
     </div>
 </xsl:template>
 
@@ -10460,6 +10472,111 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
+<!-- Sizing styles for interactives                                       -->
+<!-- Two major modes based on how to resize: responsive or fixed-height   -->
+<!-- fixed-height applies aspect ratio at build as css height             -->
+<!-- responsive dynamically applies aspect ratio via css                  -->
+
+<xsl:template name="responsive-height-style-rules">
+    <!-- max-width should already have px or % -->
+    <xsl:param name="max-width"/>
+    <xsl:param name="aspect-ratio"/>
+    <xsl:text>max-width: </xsl:text>
+    <xsl:value-of select="$max-width"/>
+    <xsl:text>; </xsl:text>
+    <xsl:text>width: 100%; </xsl:text>
+    <xsl:text>aspect-ratio:</xsl:text>
+    <xsl:value-of select="$aspect-ratio"/>
+</xsl:template> 
+
+<xsl:template match="interactive" mode="interactive-sizing-style-attribute">
+    <xsl:param name="default-aspect" select="'1:1'" />
+    <xsl:variable name="resize-behavior">
+        <xsl:apply-templates select="." mode="get-resize-behavior"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$resize-behavior = 'responsive'">
+            <xsl:attribute name="style">
+                <xsl:variable name="max-width">
+                      <xsl:choose>
+                          <xsl:when test="@design-width != ''">
+                              <xsl:value-of select="@design-width"/>
+                              <xsl:text>px</xsl:text>
+                          </xsl:when>
+                          <xsl:otherwise>
+                              <xsl:apply-templates select="." mode="get-width-percentage"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                </xsl:variable>
+                <xsl:variable name="aspect-ratio">
+                    <xsl:apply-templates select="." mode="get-aspect-ratio">
+                        <xsl:with-param name="default-aspect" select="'1:1'" />
+                    </xsl:apply-templates>
+                </xsl:variable>
+                <xsl:text>max-width: </xsl:text>
+                <xsl:value-of select="$max-width"/>
+                <xsl:text>; </xsl:text>
+                <xsl:text>width: 100%; </xsl:text>
+                <xsl:text>aspect-ratio:</xsl:text>
+                <xsl:value-of select="$aspect-ratio"/>
+            </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- resize-behavior: fixed-height -->
+            <xsl:apply-templates select="." mode="size-pixels-style-attribute"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Existing -common template handles if we have slate@aspect. But if attr -->
+<!-- is missing, look to parent interactive for an aspect and use that      -->
+<xsl:template match="slate[not(@aspect)]" mode="get-aspect-ratio">
+    <xsl:param name="default-aspect" select="'1:1'"/>
+    <xsl:apply-templates select="ancestor::interactive" mode="get-aspect-ratio">
+        <xsl:with-param name="default-aspect" select="$default-aspect" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="slate" mode="interactive-slate-sizing-style-attributes">
+    <xsl:variable name="resize-behavior">
+        <xsl:apply-templates select="ancestor::interactive" mode="get-resize-behavior"/>
+    </xsl:variable>
+    <xsl:variable name="aspect-ratio">
+        <xsl:apply-templates select="." mode="get-aspect-ratio">
+            <xsl:with-param name="default-aspect" select="'1:1'" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$resize-behavior = 'responsive'">
+            <xsl:attribute name="style">
+                <!-- size is already constrained by interactive... only need max here -->
+                <!-- if there is a specific design width                              -->
+                <xsl:if test="@design-width != ''">
+                    <xsl:text>max-width: </xsl:text>
+                    <xsl:value-of select="@design-width"/>
+                    <xsl:text>px; </xsl:text>
+                </xsl:if>
+                <xsl:text>width: 100%; </xsl:text>
+                <xsl:text>aspect-ratio:</xsl:text>
+                <xsl:value-of select="$aspect-ratio"/>
+                <xsl:text>;</xsl:text>
+            </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- fixed height -->
+            <xsl:attribute name="style">
+                <xsl:apply-templates select="." mode="size-pixels-style-attribute-core"/>
+                <!-- May or may not need aspect ratio. Usually height overrides    -->
+                <!-- but can help for elements that are in a flex layout container -->
+                <xsl:text>aspect-ratio:</xsl:text>
+                <xsl:value-of select="$aspect-ratio"/>
+                <xsl:text>;</xsl:text>
+            </xsl:attribute>
+            <!-- may or may not need width/height attributes, but won't hurt if not needed-->
+            <xsl:apply-templates select="." mode="size-pixels-attributes"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <xsl:template match="interactive" mode="get-design-width">
     <xsl:choose>
