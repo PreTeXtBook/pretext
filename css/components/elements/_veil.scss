@@ -38,7 +38,8 @@
   background: var(--veil-btn-bg);
   color: var(--veil-primary);
   padding: 0.06rem 0.35rem;
-  border: 1px solid color-mix(in srgb, var(--veil-primary) 35%, transparent);
+  // border: 1px solid color-mix(in srgb, var(--veil-primary) 35%, transparent);
+  border: 1px solid currentColor;
   border-radius: 0.25rem;
   font-size: 0.85rem;
   line-height: 1.2;

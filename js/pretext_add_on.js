@@ -1294,6 +1294,7 @@ document.addEventListener("click", (ev) => {
 
     container.classList.add('revealed');
     if (toggle) toggle.setAttribute('aria-expanded', 'true');
+    content.removeAttribute('hidden');
 
     // Move focus into content for keyboard users
     content.focus({ preventScroll: true });
@@ -1308,6 +1309,7 @@ document.addEventListener("click", (ev) => {
 
     container.classList.remove('revealed');
     if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    if (content) content.setAttribute('hidden', 'hidden');
 
     // Return focus to the toggle for predictable keyboard flow
     if (toggle) toggle.focus({ preventScroll: true });

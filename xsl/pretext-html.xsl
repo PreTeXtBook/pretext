@@ -8631,6 +8631,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
       id="veil-content-{$vid}"
       tabindex="-1"
       role="button"
+      hidden="hidden"
       aria-label="Revealed content (click to hide)"
       data-veil-id="{$vid}"
     >
@@ -8656,6 +8657,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
       id="veil-content-{$vid}"
       tabindex="-1"
       role="button"
+      hidden="hidden"
       aria-label="Revealed content (click to hide)"
       data-veil-id="{$vid}"
     >

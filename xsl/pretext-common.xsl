@@ -1756,7 +1756,9 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <xsl:template match="veil">
-    <xsl:apply-templates/>
+  <xsl:message>PTX:WARNING: &lt;veil&gt; encountered but this conversion has no implementation; content suppressed.</xsl:message>
+  <!-- no output by default in -common -->
+  <xsl:text></xsl:text>
 </xsl:template>
 
 <!-- The content of a "pre" element is wrapped many ways, -->

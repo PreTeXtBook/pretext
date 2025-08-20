@@ -1164,13 +1164,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>% \PTXVeilRevealInPrintfalse   % default could be set in publisher later&#xa;</xsl:text>
 
         <!-- Inline/short veil (revealed by underlining, line-wrap aware) -->
-        <xsl:text>\newcommand{\PTXveil}[1]{\uline{\,#1\,}}&#xa;</xsl:text>
-        <!-- Hidden veil variant for blocky/long content (print white text, no underline) -->
-        <xsl:text>\newcommand{\PTXveilhidden}[1]{{\color{white}\,#1\,}}&#xa;</xsl:text>
-
-        <!-- Multiline veil (revealed by underlining, line-wrap aware) -->
-        <xsl:text>\newcommand{\PTXveilblock}[1]{\,#1\,}&#xa;</xsl:text>
-
+        <xsl:text>\newcommand{\PTXveil}[1]{\uline{#1}}&#xa;</xsl:text>
+        <!-- Block/multiline: show content plainly (no underline) -->
+        <xsl:text>\newcommand{\PTXveilblock}[1]{#1}&#xa;</xsl:text>
     </xsl:if>
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
     <xsl:if test="$document-root//swungdash">
