@@ -2763,7 +2763,7 @@ def _stack_process_response(qdict):
         width = ansconfig["boxWidth"]
 
         answers.append(f'<p><m>{ansdata["samplesolutionrender"]}</m></p>') # still need to wrap into <answer></answer>
-        qtext = qtext.replace(f"[[input:{ansid}]]", f'<fillin characters="{width}" name="{ansid}">')
+        qtext = qtext.replace(f"[[input:{ansid}]]", f'<fillin characters="{width}" name="{ansid}"/>')
 
     qtext = _stack_replace_latex(qtext)
     soltext = _stack_replace_latex(soltext)
