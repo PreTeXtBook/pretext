@@ -1234,37 +1234,18 @@ document.addEventListener("click", (ev) => {
 });
 
 /**
- * PreTeXt <veil> interaction layer
- * --------------------------------
- * Purpose:
- *   Provide accessible show/hide behavior for <veil> in HTML:
- *     - When hidden: show a small chip-like button (.veil-toggle)
- *     - When revealed: show bordered content (.veil-content) that can be clicked to hide
+ * <veil> interaction
+ * ------------------
+ * Purpose: Provide show/hide behavior for <veil> in HTML:
+ *   - When hidden: show a small button (.veil-toggle)
+ *   - When revealed: show bordered content (.veil-content) that can be clicked to hide
  *
- * Expected markup (emitted by XSL):
- *   Inline:
- *     <span class="veil veil--inline">
- *       <button class="veil-toggle" aria-expanded="false" aria-controls="veil-content-...">reveal</button>
- *       <span class="veil-content" id="veil-content-..." tabindex="-1" role="button" aria-label="Revealed content (click to hide)">…</span>
- *     </span>
- *   Block:
- *     <div class="veil veil--block">
- *       <button class="veil-toggle" ...>reveal</button>
- *       <div class="veil-content" id="veil-content-..." tabindex="-1" role="button" aria-label="Revealed content (click to hide)">…</div>
- *     </div>
- *
- * Accessibility:
+ * Notes:
  *   - Real <button> for the toggle, with aria-expanded kept in sync
  *   - Focus moves into revealed content; hiding returns focus to the toggle
  *   - Enter/Space work on both the toggle and the revealed content
  *   - Clicks on interactive descendants (<a>, <input>, etc.) do not hide
- *
- * MathJax:
- *   - On first reveal, request typesetting of the revealed node (v3, with v2 fallback)
- *
- * Notes:
- *   - Delegated listeners (document-level) = no per-instance handlers and works for dynamic content
- *   - Idempotent init guard prevents double-binding if script is loaded twice
+ *   - MathJax: On first reveal, request typesetting of the revealed node
  */
 (function () {
   'use strict';
