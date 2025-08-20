@@ -2377,6 +2377,14 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
             <p>A publisher can control when a response area is created in <init>HTML</init> output (<xref ref="online-short-answer-responses"/>).  The default is to only have this area present when it is possible for a response to be graded and scored.  However, an option will cause a response box to be created always.   A reader can reflect on the question by typing in a response, and the text will be saved <em>on that particular device</em> only.  When it is impossible for a response to be graded, placeholder text will warn the reader.</p>
         </subsection>
 
+        <subsection xml:id="timed-assessments">
+            <title>Timed Assessments</title>
+            <idx>timed assessments</idx>
+
+            <p>A collection of <tag>exercise</tag> may be optionally selected to be part of a timed assessment.  A timed assessment will show each <tag>exercise</tag> separately with a navigation mechanism to allow the student to move from exercise to exercise.  A student may <q>flag</q> an exercise for later review if they are unsure of their answer.  When a student completes the assessment they will receive varying amounts of feedback on their performance, depending on how the assessment is configured.</p>
+
+            <p>To enable this behavior, place a <attr>time-limit</attr> attribute on the <tag>exercises</tag> element, with a value indicating the time limit in seconds.  In addition you can allow the student to pause the timer by including <attr>pause</attr> attribute on the <tag>exercises</tag> element with a value of <q>yes</q>, You can control the amount of feedback provided to the student with two additional attributes.  <attr>results</attr> and <attr>feedback</attr>.  If the <attr>results</attr> attribute is set to <q>yes</q>, the student will receive a summary of their performance after completing the assessment.  If the <attr>feedback</attr> attribute is set to <q>yes</q>, the student will receive feedback on their answers.</p>
+        </subsection>
         <subsection xml:id="group-work-exercises">
             <title>Group Work Exercises</title>
             <idx>group work exercises</idx>
