@@ -8663,15 +8663,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
   </div>
 </xsl:template>
-
-<!-- <xsl:template match="veil[descendant::p or descendant::ul or descendant::ol or descendant::me]">
-  <div class="ptx-veil">
-    <button type="button" class="ptx-veil-toggle" aria-expanded="false">Reveal</button>
-    <div class="ptx-veil-content" hidden="hidden">
-      <xsl:apply-templates/>
-    </div>
-  </div>
-</xsl:template> -->
  
 <!-- Implication Symbols -->
 <!-- TODO: better names! -->

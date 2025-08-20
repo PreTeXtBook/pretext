@@ -1172,19 +1172,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\PTXveilblock}[1]{\,#1\,}&#xa;</xsl:text>
 
     </xsl:if>
-    <!-- <xsl:if test="$document-root//veil">
-        <xsl:text>%% Veil support: line-wrapping underline with optional visibility&#xa;</xsl:text>
-        <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
-        <xsl:text>\usepackage{xcolor}&#xa;</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$veil-reveal-in-print = 'true'">
-                <xsl:text>\newcommand{\veiltext}[1]{\uline{#1}}&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>\newcommand{\veiltext}[1]{{\color{white}\uline{#1}}}&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if> -->
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
     <xsl:if test="$document-root//swungdash">
         <xsl:text>%% A character like a tilde, but different&#xa;</xsl:text>
@@ -2662,22 +2649,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
-
-<!-- Veil output template -->
-<!-- <xsl:template match="veil[not(parent::m or parent::me or parent::men or parent::mrow)]">
-    <xsl:choose>
-      <xsl:when test="descendant::me or descendant::p">
-        <xsl:text>\textcolor{white}{</xsl:text>
-        <xsl:apply-templates/>
-        <xsl:text>}</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>\veiltext{</xsl:text>
-        <xsl:apply-templates/>
-        <xsl:text>}</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-</xsl:template> -->
 
 <!-- Veil inside math: currently unsupported; warn and print content -->
 <xsl:template match="veil[parent::m or parent::me or parent::men or parent::mrow]">
