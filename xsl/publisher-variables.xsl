@@ -3314,7 +3314,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <pi:pub-attribute name="task-reveal" default="all" options="preceding-correct"/>
     </webwork>
     <stack>
-        <pi:pub-attribute name="server" default="" freeform="yes"/>
+        <pi:pub-attribute name="server" default="https://stack-api.maths.ed.ac.uk" freeform="yes"/>
     </stack>
     <revealjs>
         <appearance>
