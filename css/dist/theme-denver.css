@@ -952,6 +952,14 @@ body.pretext > a.assistive:focus {
     float: right;
     clear: right;
   }
+  .multicolumn details.aside-like {
+    position: relative;
+    margin-left: inherit;
+    width: auto;
+    right: 0;
+    float: none;
+    clear: none;
+  }
   details.aside-like > .knowl__content {
     margin-left: 0;
     margin-right: 0;
@@ -1820,7 +1828,7 @@ dl.description-list dl dd {
 .ptx-content li {
   margin-top: 0.5em;
 }
-.ptx-content li .title {
+.ptx-content li .li--heading-title {
   font-size: 100%;
   font-weight: normal;
   font-style: italic;
