@@ -119,7 +119,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$version-root/book/chapter/section">2</xsl:when>
         <xsl:when test="$version-root/book/chapter">1</xsl:when>
         <xsl:when test="$version-root/article/section/subsection">2</xsl:when>
-        <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
+        <xsl:when test="$version-root/article/section|$version-root/article/worksheet|$version-root/article/handout">1</xsl:when>
         <xsl:when test="$version-root/article">0</xsl:when>
         <xsl:when test="$version-root/slideshow">0</xsl:when>
         <xsl:when test="$version-root/letter">0</xsl:when>
@@ -242,6 +242,50 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="csl-style-file">
     <xsl:apply-templates select="$publisher-attribute-options/common/citation-stylesheet-language/pi:pub-attribute[@name='style']" mode="set-pubfile-variable"/>
 </xsl:variable>
+<!-- global indication of if a publisher has opted in -->
+<xsl:variable name="b-using-csl-styles" select="not(normalize-space($csl-style-file) = '')"/>
+<!-- if using styles we form the filename of generated references and citations -->
+<xsl:variable name="csl-file">
+    <xsl:choose>
+        <xsl:when test="$b-using-csl-styles">
+            <xsl:value-of select="$generated-directory-source"/>
+            <xsl:text>references/csl-bibliography.xml</xsl:text>
+        </xsl:when>
+        <!-- explicitly empty/null if not using CSL styles -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Printout margins.  Applies to both PDF and HTML. -->
+
+<xsl:variable name="ws-margin">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/pi:pub-attribute[@name='margin']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-margin-top">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/pi:pub-attribute[@name='top']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-margin-right">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/pi:pub-attribute[@name='right']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-margin-bottom">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/pi:pub-attribute[@name='bottom']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-margin-left">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/pi:pub-attribute[@name='left']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<!-- Set the default values of each directional margin to be the value of the ws-margin element -->
+<xsl:template match="common/worksheet/pi:pub-attribute[@name='top']" mode="get-default-pub-variable">
+    <xsl:value-of select="$ws-margin"/>
+</xsl:template>
+<xsl:template match="common/worksheet/pi:pub-attribute[@name='right']" mode="get-default-pub-variable">
+    <xsl:value-of select="$ws-margin"/>
+</xsl:template>
+<xsl:template match="common/worksheet/pi:pub-attribute[@name='bottom']" mode="get-default-pub-variable">
+    <xsl:value-of select="$ws-margin"/>
+</xsl:template>
+<xsl:template match="common/worksheet/pi:pub-attribute[@name='left']" mode="get-default-pub-variable">
+    <xsl:value-of select="$ws-margin"/>
+</xsl:template>
 
 
 <!-- ########################### -->
@@ -1223,6 +1267,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-private-solutions" select="not($private-solutions-file = '')"/>
 
+
+<!-- ############### -->
+<!-- STACK Options -->
+<!-- ############### -->
+
+<!-- STACK server location -->
+<xsl:variable name="stack-server">
+    <xsl:apply-templates select="$publisher-attribute-options/stack/pi:pub-attribute[@name='server']" mode="set-pubfile-variable"/>
+</xsl:variable>
 
 <!-- ############### -->
 <!-- WeBWorK Options -->
@@ -2298,26 +2351,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                              -->
 
 <xsl:variable name="html-theme-name">
+    <xsl:variable name="warning-message">PTX:WARNING: The "FROMSTYLE" style requested in publication/html/css is deprecated. Your book will be built with theme="TOSTYLE". See the PreTeXt Guide for options for the newer HTML themes and their specification .</xsl:variable>
     <xsl:choose>
         <xsl:when test="$publication/html/css/@theme">
             <xsl:value-of select="$publication/html/css/@theme"/>
         </xsl:when>
         <xsl:otherwise>
-            <!-- legacy style detection -->
+            <!-- legacy style detection and overriding -->
             <xsl:choose>
                 <!-- crc and min are best detected via @shell -->
                 <xsl:when test="contains($publication/html/css/@shell, 'crc')">
-                    <xsl:text>crc-legacy</xsl:text>
+                    <xsl:message><xsl:value-of select="str:replace(str:replace($warning-message, 'FROMSTYLE', 'crc'), 'TOSTYLE', 'denver')"/></xsl:message>
+                    <xsl:text>denver</xsl:text>
                 </xsl:when>
                 <xsl:when test="contains($publication/html/css/@shell, 'min')">
-                    <xsl:text>min-legacy</xsl:text>
+                    <xsl:message><xsl:value-of select="str:replace(str:replace($warning-message, 'FROMSTYLE', 'min'), 'TOSTYLE', 'tacoma')"/></xsl:message>
+                    <xsl:text>tacoma</xsl:text>
                 </xsl:when>
                 <!-- others by @style                         -->
-                <xsl:when test="$publication/html/css/@style">
-                    <xsl:value-of select="$publication/html/css/@style"/>
-                    <xsl:text>-legacy</xsl:text>
+                <xsl:when test="contains($publication/html/css/@style, 'wide')">
+                    <xsl:message><xsl:value-of select="str:replace(str:replace($warning-message, 'FROMSTYLE', 'wide'), 'TOSTYLE', 'salem')"/></xsl:message>
+                    <xsl:text>salem</xsl:text>
                 </xsl:when>
-                <xsl:otherwise><xsl:text>default-modern</xsl:text></xsl:otherwise>
+                <xsl:when test="contains($publication/html/css/@style, 'oscarlevin')">
+                    <xsl:message><xsl:value-of select="str:replace(str:replace($warning-message, 'FROMSTYLE', 'oscarlevin'), 'TOSTYLE', 'denver')"/></xsl:message>
+                    <xsl:text>denver</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:variable name="legacy-style">
+                    <xsl:value-of select="$publication/html/css/@style"/>
+                  </xsl:variable>
+                  <xsl:message><xsl:value-of select="str:replace(str:replace($warning-message, 'FROMSTYLE', $legacy-style), 'TOSTYLE', 'default-modern')"/></xsl:message>
+                  <xsl:text>default-modern</xsl:text>
+                </xsl:otherwise>
             </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
@@ -3145,12 +3211,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <journal>
             <pi:pub-attribute name="name" default="" freeform="yes"/>
         </journal>
-        <!-- default CSL style file is "harvard1" since it is  -->
-        <!-- copied into the right place in the citeproc-py    -->
-        <!-- distribution and should be present out-of-the-box -->
+        <!-- The default CSL style file is empty so that this  -->
+        <!-- feature can be "opt in", initially, and perhaps   -->
+        <!-- forever.  A good first choice for a CSL style is  -->
+        <!-- the "harvard1" style since it is copied into the  -->
+        <!-- right place in the citeproc-py distribution and   -->
+        <!-- should be present out-of-the-box.                 -->
         <citation-stylesheet-language>
-            <pi:pub-attribute name="style" default="harvard1" freeform="yes"/>
+            <pi:pub-attribute name="style" default="" freeform="yes"/>
         </citation-stylesheet-language>
+        <worksheet>
+            <pi:pub-attribute name="margin" default="0.75in" freeform="yes"/>
+            <pi:pub-attribute name="top" freeform="yes"/>
+            <pi:pub-attribute name="right" freeform="yes"/>
+            <pi:pub-attribute name="bottom" freeform="yes"/>
+            <pi:pub-attribute name="left" freeform="yes"/>
+        </worksheet>
     </common>
     <html>
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
@@ -3233,6 +3309,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <pi:pub-attribute name="password" default="anonymous" freeform="yes"/>
         <pi:pub-attribute name="task-reveal" default="all" options="preceding-correct"/>
     </webwork>
+    <stack>
+        <pi:pub-attribute name="server" default="" freeform="yes"/>
+    </stack>
     <revealjs>
         <appearance>
             <pi:pub-attribute name="theme" default="simple" freeform="yes"/>

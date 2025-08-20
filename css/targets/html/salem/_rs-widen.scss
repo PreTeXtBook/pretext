@@ -1,57 +1,90 @@
-
 // --------------------------------------------------------------------------
-// Flexible / centered widening of rs elements
+// Flexible / centered widening of rs elements and other components
 
-$content-width: 725px !default;
-$content-side-padding: 48px !default;
+$small-nested-margin-offset: 0px !default;
 
-$content-with-padding-width: $content-width + 2 * $content-side-padding;
+// These will have defaults that have possibly been overridden by @use in main theme file
+@use 'sizing-globals' as sizing;
+@use 'components/helpers/expandable';
 
-// core logic
-@use "rs-widen-base" as rs-widen-base with (
-  $content-width: $content-width,
-  $content-side-padding: $content-side-padding
-);
 
-// access the variables from rs-widen-base
-$rs-wide-elements: rs-widen-base.$rs-wide-elements;
-$grouping-elements: rs-widen-base.$grouping-elements;
-$wide-elements: rs-widen-base.$wide-elements;
 
-//--------------------------------------------------------
-// code that is salem specific - not used by denver
-
-// now handle smaller screens
-@container ptx-main (width < 850px) {
-  .ptx-runestone-container:has(#{$rs-wide-elements}), #{$wide-elements} {
+// designed to be used with a @container/media query by file using this
+// left to user to include in a media query
+// e.g. @container ptx-main (width < 850px) { @include smaller-screen-widening; }
+@mixin smaller-screen-widening {
+  .ptx-runestone-container:has(#{sizing.$rs-wide-elements}) {
     width: calc(100cqw);
     margin-left: calc(-0.5*(100cqw - 100%));
   }
-  :is(#{$grouping-elements}):has(#{$rs-wide-elements}, #{$wide-elements}) {
+  :is(#{sizing.$grouping-elements}):has(#{sizing.$rs-wide-elements}) {
     width: calc(100cqw);
     margin-left: calc(-0.5*(100cqw - 100%));
   }
-  :is(#{$grouping-elements}, #{$wide-elements}) .ptx-runestone-container:has(#{$rs-wide-elements}, #{$wide-elements}) {
-    width: calc(100% + 10px);  //cheat into padding
-    margin-left: -5px;
+  :is(#{sizing.$grouping-elements}) .ptx-runestone-container:has(#{sizing.$rs-wide-elements}) {
+    width: 100%;
+    margin-left: $small-nested-margin-offset;  //cheat into padding
   }
 }
 
+
+
+// widen all runestone elements that should be wide
+.ptx-runestone-container:has(#{sizing.$rs-wide-elements}){
+  @include expandable.responsive;
+}
+
+// unless nested in other runestones
+.ptx-runestone-container {
+  .ptx-runestone-container:has(#{sizing.$rs-wide-elements})
+  {
+    width: 100%;
+    min-width: 100%;
+    margin-left: auto;
+  }
+}
+
+// also wide grouping elements that have wide elements
+:is(#{sizing.$grouping-elements}):has(#{sizing.$rs-wide-elements}) {
+  @include expandable.responsive;
+}
+// unless nested in other wide elements
+:is(#{sizing.$grouping-elements}):has(#{sizing.$rs-wide-elements}) {
+  :is(#{sizing.$grouping-elements}):has(#{sizing.$rs-wide-elements}) {
+    width: 100%;
+    margin-left: auto;
+  }
+}
+
+// which simplifies the nested wide elements
+:is(#{sizing.$grouping-elements}) .ptx-runestone-container:has(#{sizing.$rs-wide-elements}) {
+  width: 100%;
+  margin-left: 0;
+}
 
 /* limit width of content inside ac except for actual activecode */
 .runestone.ac_section
   > div
   > div
   > *:not(.ac_code_div):not(.ac_output):not(.codelens):not(.ac_actions) {
-  max-width: $content-width;
+  max-width: sizing.$content-width;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* same for exercise-statement in any runestone */
+.runestone {
+  .exercise-statement {
+    max-width: sizing.$content-width;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 /* limit width of statement and success/error message inside hparson */
 .hparsons_section .hp_question,
 .hparsons_section .hp_feedback {
-  max-width: $content-width;
+  max-width: sizing.$content-width;
   margin-left: auto;
   margin-right: auto;
 }
@@ -78,7 +111,7 @@ $wide-elements: rs-widen-base.$wide-elements;
   }
 
   & > div > *:not(.sortable-code-container) {
-    max-width: $content-width;
+    max-width: sizing.$content-width;
     margin-left: auto;
     margin-right: auto;
   }

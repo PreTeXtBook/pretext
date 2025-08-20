@@ -4,27 +4,71 @@
 // Assumes that $content-padding is set to the padding of ptx-content
 // and that element normally takes up 100% of parent width. (Like display-math)
 
+// for responsive elements
 $width-hard-cap: 900px !default;
 $base-content-width: 600px !default;
 $content-padding: 48px !default;
-$always-expand: false !default;
+$always-expand: false !default;  // whether to always expand to the max width
+$centered: false !default;  // whether to center the content if not max width
+$content-with-padding-width: $base-content-width + 2 * $content-padding;
 
-@mixin expandable(
-  $base-content-width: $base-content-width, 
+// for scrollable
+$overflow-y-scroll: hidden !default;
+
+
+// An element that has some minimum authored width which may be larger
+// than the available width. We want it to scroll horizontally.
+@mixin scrollable(
+  $overflow-y-scroll: $overflow-y-scroll
+) {
+  overflow-x: auto;
+  $overflow-y: $overflow-y-scroll;
+}
+
+// An element with no minimum width that we want to allow to expand
+// to whatever width is available to maximize the display area.
+@mixin responsive(
+  $base-content-width: $base-content-width,
   $width-hard-cap: $width-hard-cap,
   $content-padding: $content-padding,
   $always-expand: $always-expand,
+  $centered: $centered
 ) {
   @container ptx-main (width > #{$base-content-width + 2 * $content-padding}) {
     --max-width: calc(min((100cqw - 2 * #{$content-padding}), #{$width-hard-cap}));
     min-width: 100%;
+    clear: right; // clear any floats
     @if $always-expand {
       width: var(--max-width);
     } @else {
       width: fit-content;      //grow if space needed
     }
     max-width: var(--max-width);
-    overflow-x: auto;
-    overflow-y: hidden;
+    @if $centered {
+      margin-left: calc(-0.5 * (100cqw - #{$content-with-padding-width}));
+    }
   }
+}
+
+// An element that has some minimum authored width which we want to allow to expand
+// to whatever width is available to maximize visible content.
+// Content that is still not visible will be scrollable.
+@mixin expandable(
+  $base-content-width: $base-content-width,
+  $width-hard-cap: $width-hard-cap,
+  $content-padding: $content-padding,
+  $always-expand: $always-expand,
+  $centered: $centered,
+  $overflow-y-scroll: $overflow-y-scroll
+) {
+  @include scrollable(
+    $overflow-y-scroll: $overflow-y-scroll
+  );
+  @include responsive(
+    $base-content-width: $base-content-width,
+    $width-hard-cap: $width-hard-cap,
+    $content-padding: $content-padding,
+    $always-expand: $always-expand,
+    $centered: $centered
+  );
 }

@@ -350,31 +350,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <ul data-component="timedAssessment" data-question_label="">
                 <!-- a Runestone id -->
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                <!-- one mandatory attribute -->
-                <xsl:attribute name="data-time">
-                    <xsl:value-of select="@time-limit"/>
-                </xsl:attribute>
-                <!-- result, timer, feedback, pause are *on* by  -->
-                <!-- default if a PreTeXt attribute is "no" then -->
-                <!-- issue empty "data-no-*" Runestone attribute -->
-                <xsl:if test="@results = 'no'">
-                    <xsl:attribute name="data-no-result"/>
-                </xsl:if>
-                <xsl:if test="@timer = 'no'">
-                    <xsl:attribute name="data-no-timer"/>
-                </xsl:if>
-                <xsl:if test="@feedback = 'no'">
-                    <xsl:attribute name="data-no-feedback"/>
-                </xsl:if>
-                <xsl:if test="@pause = 'no'">
-                    <xsl:attribute name="data-no-pause"/>
-                </xsl:if>
+                <xsl:apply-templates select="." mode="runestone-timed-exam-attributes"/>
                 <!-- the actual list of exercises -->
                 <xsl:copy-of select="$the-exercises"/>
                 <!-- only at "section" level. only when building for a Runestone server -->
                 <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
             </ul>
         </div>
+    </xsl:if>
+</xsl:template>
+
+<!-- These are the possible attributes the Runestone component -->
+<!-- expects for a timed exam, in a style that the Runestone   -->
+<!-- HTML uses.  We repeat them *verbatim* when the Runestone  -->
+<!-- manifect reports an "exercises" as a timed exam, as the   -->
+<!-- best way to endure some consistency in defaults, etc.     -->
+<xsl:template match="exercises" mode="runestone-timed-exam-attributes">
+    <!-- one mandatory attribute -->
+    <xsl:attribute name="data-time">
+        <xsl:value-of select="@time-limit"/>
+    </xsl:attribute>
+    <!-- result, timer, feedback, pause are *on* by  -->
+    <!-- default if a PreTeXt attribute is "no" then -->
+    <!-- issue empty "data-no-*" Runestone attribute -->
+    <xsl:if test="@results = 'no'">
+        <xsl:attribute name="data-no-result"/>
+    </xsl:if>
+    <xsl:if test="@timer = 'no'">
+        <xsl:attribute name="data-no-timer"/>
+    </xsl:if>
+    <xsl:if test="@feedback = 'no'">
+        <xsl:attribute name="data-no-feedback"/>
+    </xsl:if>
+    <xsl:if test="@pause = 'no'">
+        <xsl:attribute name="data-no-pause"/>
     </xsl:if>
 </xsl:template>
 
@@ -557,38 +566,82 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </chapter>
 </xsl:template>
 
-<!-- Every division at PTX "section" level, -->
-<!-- potentially containing an "exercise",  -->
-<!-- e.g. "worksheet" but not "references", -->
-<!-- is a RS "subchapter"                   -->
-<xsl:template match="section|chapter/exercises|chapter/worksheet|chapter/reading-questions" mode="runestone-manifest">
+<!-- Every division at PreTeXt "section" level, potentially containing  -->
+<!-- an "exercise", e.g. a "worksheet", but not a "references", is a    -->
+<!-- Runestone "subchapter".  Runestone "timed exams" (on a per-chapter -->
+<!-- basis here), which are an "exercises" with a @time-limit, are      -->
+<!-- exceptional and have templates elsewhere.                          -->
+<xsl:template match="section|chapter/exercises[not(@time-limit)]|chapter/worksheet|chapter/handout|chapter/reading-questions" mode="runestone-manifest">
     <subchapter>
-        <id>
-            <xsl:apply-templates select="." mode="html-id"/>
-        </id>
-        <title>
-            <xsl:apply-templates select="." mode="title-full"/>
-        </title>
-        <number>
-            <xsl:apply-templates select="." mode="number"/>
-        </number>
-        <division>
-            <xsl:value-of select="local-name()"/>
-        </division>
-        <!-- report the division type -->
+        <!-- some properties of the division -->
+        <xsl:apply-templates select="." mode="runestone-division-properties"/>
         <!-- nearly a dead end, recurse into "exercise" and PROJECT-LIKE at *any* PTX -->
         <!-- depth, for example within a "subsection" (which Runestone does not have) -->
         <!-- If any of the next select are containers (full of "task") they will not  -->
         <!-- meet the dead-end monster match below, and the default template will     -->
         <!-- recurse into non-container "task" eventually, so "task" do get           -->
         <!-- processed, even if they seem to be missing from this select.             -->
-        <xsl:apply-templates select=".//exercise|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile|.//interactive[@platform = 'doenetml']" mode="runestone-manifest"/>
+        <!-- Exceptions (early in the select): we explicitly recurse into a           -->
+        <!-- "exercises" division at the PreTeXt "subsection" level that is a         -->
+        <!-- Runestone timed exam associated with some "section".  We also avoid      -->
+        <!-- collecting "exercise" at arbitrary depth for the timed exams, as the     -->
+        <!-- template for those divisions will do that collection.                    -->
+        <xsl:apply-templates select="exercises[@time-limit]|.//exercise[not(ancestor::exercises[@time-limit])]|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile|.//interactive[@platform = 'doenetml']" mode="runestone-manifest"/>
 
         <!-- Now check for programs that have been included elsewhere. They need      -->
         <!-- to be rendered into <source> elements.                                   -->
         <xsl:apply-templates select=".//program[@xml:id = $linked-programs-list]" mode="runestone-manifest-source"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
+</xsl:template>
+
+<!-- "exercises" divisions with @time-limit are Runestone "timed-exams".      -->
+<!-- They can be at the PreTeXt "section" level (as a Runestone "subchapter") -->
+<!-- or they are at the PreTeXt "subsection" level, which we report here as   -->
+<!-- a fictional Runestone "subsubchapter". Their contained "exercise" are    -->
+<!-- excluded previously, and are now collected here.                         -->
+<xsl:template match="chapter/exercises[@time-limit]|chapter/section/exercises[@time-limit]" mode="runestone-manifest">
+    <xsl:variable name="rs-division">
+        <xsl:choose>
+            <xsl:when test="parent::chapter">
+                <xsl:text>subchapter</xsl:text>
+            </xsl:when>
+            <xsl:when test="parent::section">
+                <xsl:text>subsubchapter</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="{$rs-division}">
+        <!-- Attributes are all mostly of the form "data-no-*", following   -->
+        <!-- Runestone conventions and thus utilizing a single template and -->
+        <!-- thus ensuring some consistency. This includes the mandatory    -->
+        <!-- attribute @data-time, which will be the signal for manifest    -->
+        <!-- processing that this is a timed exam.                          -->
+        <xsl:apply-templates select="." mode="runestone-timed-exam-attributes"/>
+        <!-- some properties of the division -->
+        <xsl:apply-templates select="." mode="runestone-division-properties"/>
+        <!-- Slim possibility "exercise" are buried within an       -->
+        <!-- "exercisegroup", though usually they are just children -->
+        <!-- of the "exercises", so this is not really overkill     -->
+        <xsl:apply-templates select=".//exercise" mode="runestone-manifest"/>
+    </xsl:element>
+</xsl:template>
+
+<!-- Properties to report for each division -->
+<xsl:template match="*" mode="runestone-division-properties">
+    <id>
+        <xsl:apply-templates select="." mode="html-id"/>
+    </id>
+    <title>
+        <xsl:apply-templates select="." mode="title-full"/>
+    </title>
+    <number>
+        <xsl:apply-templates select="." mode="number"/>
+    </number>
+    <!-- report the division type -->
+    <division>
+        <xsl:value-of select="local-name()"/>
+    </division>
 </xsl:template>
 
 <!-- A Runestone exercise needs to identify itself when an instructor wants   -->
@@ -727,6 +780,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:apply-templates>
                     </xsl:when>
                     <xsl:otherwise>
+                        <!-- next template collects "introduction" preceding a "task" -->
+                        <!-- Note: we are explicitly dodging webwork/task             -->
+                        <xsl:apply-templates select="." mode="task-introductions"/>
+
                         <xsl:apply-templates select="."  mode="exercise-components">
                             <xsl:with-param name="b-original" select="true()"/>
                             <xsl:with-param name="block-type" select="'visible'"/>
@@ -735,6 +792,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:with-param name="b-has-answer"    select="false()" />
                             <xsl:with-param name="b-has-solution"  select="false()" />
                         </xsl:apply-templates>
+
+                        <!-- next template collects "conclusion" preceding a "task" -->
+                        <!-- Note: we are explicitly dodging webwork/task           -->
+                        <xsl:apply-templates select="." mode="task-conclusions"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </htmlsrc>
@@ -759,6 +820,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercisegroup/exercise" mode="eg-introduction">
     <xsl:apply-templates select="parent::exercisegroup/introduction"/>
 </xsl:template>
+
+<!-- Next two templates replicate all ancestral "introduction"   -->
+<!-- and "conclusion" on a per-task basis so that when a "task"  -->
+<!-- is viewed in the Runestone assignment builder, any overall  -->
+<!-- explanatory text is available.                              -->
+
+<xsl:template match="task" mode="task-introductions">
+    <!-- collect in a variable, so processing is subsequently in document order -->
+    <xsl:variable name="introductions" select="ancestor-or-self::task/preceding-sibling::introduction"/>
+    <xsl:apply-templates select="$introductions"/>
+</xsl:template>
+
+<xsl:template match="*" mode="task-introductions"/>
+
+<xsl:template match="task" mode="task-conclusions">
+    <!-- collect in a variable, so processing is subsequently in document order -->
+    <xsl:variable name="conclusions" select="ancestor-or-self::task/following-sibling::conclusion"/>
+    <xsl:apply-templates select="$conclusions"/>
+</xsl:template>
+
+<xsl:template match="*" mode="task-conclusions"/>
 
 <!-- TODO: by renaming/refactoring the templates inside of   -->
 <!-- "htmlsrc" then perhaps several of these templates with  -->
@@ -1950,8 +2032,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- unless one of the two tests below is true -->
     <xsl:choose>
         <xsl:when test="program/@interactive = 'codelens'">
-            <xsl:apply-templates select="statement"/>
-            <xsl:apply-templates select="program" mode="runestone-codelens"/>
+            <xsl:apply-templates select="program" mode="runestone-codelens">
+                <xsl:with-param name="exercise-statement" select="statement"/>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:when test="program/@interactive = 'activecode'">
             <xsl:apply-templates select="program" mode="runestone-activecode">
@@ -2152,28 +2235,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:value-of select="str:padding($program-left-margin, ' ')" />
                             </xsl:variable>
                             <xsl:variable name="program-text">
+                                <!-- each section MUST end in a newline and author might not have provided one -->
+                                <!-- so first, remove up to one newline from front/back as appropriate         -->
+                                <!-- then add newline to end                                                   -->
+                                <!-- preamble - clean up end                                                   -->
                                 <xsl:for-each select="preamble">
                                     <!-- only expect one, for-each just for binding -->
-                                    <xsl:call-template name="substring-before-last">
-                                        <xsl:with-param name="input" select="." />
-                                        <xsl:with-param name="substr" select="'&#xA;'" />
+                                    <xsl:call-template name="trim-end">
+                                        <xsl:with-param name="text" select="." />
+                                        <xsl:with-param name="preserve-intentional" select="true()" />
                                     </xsl:call-template>
-                                    <xsl:text>&#xa;</xsl:text>
                                     <xsl:value-of select="$left-margin-string"/>
                                     <xsl:choose>
                                         <xsl:when test='@visible = "no"'>
-                                            <xsl:text>^^^^</xsl:text>
+                                            <xsl:text>^^^^&#xa;</xsl:text>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <xsl:text>^^^!</xsl:text>
+                                            <xsl:text>^^^!&#xa;</xsl:text>
                                         </xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:for-each>
-                                <xsl:call-template name="substring-before-last">
-                                    <xsl:with-param name="input" select="code" />
-                                    <xsl:with-param name="substr" select="'&#xA;'" />
+                                <!-- code - clean up start and end                                             -->
+                                <xsl:variable name="code-clean">
+                                  <xsl:call-template name="trim-start-lines">
+                                      <xsl:with-param name="text" select="code" />
+                                      <xsl:with-param name="preserve-intentional" select="true()" />
+                                  </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:call-template name="trim-end">
+                                    <xsl:with-param name="text" select="$code-clean" />
+                                    <xsl:with-param name="preserve-intentional" select="true()" />
                                 </xsl:call-template>
-                                <xsl:text>&#xA;</xsl:text>
+                                <!-- postamble - clean up start                                               -->
                                 <xsl:for-each select="postamble">
                                     <!-- only expect one, for-each just for binding -->
                                     <xsl:value-of select="$left-margin-string"/>
@@ -2185,10 +2278,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                             <xsl:text>===!&#xa;</xsl:text>
                                         </xsl:otherwise>
                                     </xsl:choose>
-                                    <xsl:value-of select="substring-after(.,'&#xA;')" />
+                                    <xsl:call-template name="trim-start-lines">
+                                        <xsl:with-param name="text" select="." />
+                                        <xsl:with-param name="preserve-intentional" select="true()" />
+                                    </xsl:call-template>
                                 </xsl:for-each>
                             </xsl:variable>
-                            <!-- assembled code as text -->
+                            <!-- now sanitize the whole blob -->
                             <xsl:call-template name="sanitize-text">
                                 <xsl:with-param name="text" select="$program-text" />
                             </xsl:call-template>
@@ -2491,6 +2587,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######## -->
 
 <xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens">
+    <xsl:param name="exercise-statement" select="/.."/>
     <xsl:variable name="active-language">
       <xsl:apply-templates select="." mode="active-language"/>
     </xsl:variable>
@@ -2510,14 +2607,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-managed-directories">
             <xsl:text>trace/</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="visible-id"/>
-        <xsl:text>.js</xsl:text>
+        <xsl:apply-templates select="." mode="runestone-codelens-trace-filename"/>
     </xsl:variable>
     <!-- the Runestone HTML -->
     <div class="ptx-runestone-container">
         <div class="runestone codelens">
             <div class="cd_section" data-component="codelens" data-question_label="">
-                <div class="pytutorVisualizer">
+                <xsl:if test="$exercise-statement">
+                    <div class="exercise-statement">
+                        <xsl:apply-templates select="$exercise-statement"/>
+                    </div>
+                </xsl:if>
+                <div class="pytutorVisualizer exercise-interactive">
                     <xsl:apply-templates select="." mode="runestone-id-attribute"/>
                     <xsl:attribute name="data-params">
                         <xsl:value-of select="$parameter-dictionary"/>
@@ -2531,6 +2632,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="src">
                     <xsl:value-of select="$trace-file"/>
                 </xsl:attribute>
+                <!-- script tag MUST not be self closing. force content to prevent -->
+                <xsl:text> </xsl:text>
             </script>
         </div>
     </div>

@@ -1,7 +1,11 @@
 $border-radius: 8px !default;
 
 // One stop include for default style content blocks
-@use 'components/chunks/asides-floating';
+@use 'components/chunks/asides-floating' with (
+  $float-width: 200px,
+  $float-offset: -365px,
+  $min-float-width: 1450px
+);
 @use 'components/chunks/codelike';
 @use 'components/chunks/exercises';
 @use 'components/chunks/solutions';
@@ -48,9 +52,13 @@ $border-radius: 8px !default;
 
 .proof {
   padding-bottom: 1.5em;
+  padding-left: 1em;
+  padding-right: 1em;
   &::after {
     content: "□";
-    float: right;
+    position: absolute;
+    right: 0;
+    bottom: 1.5em;
   }
 
   .heading {

@@ -226,8 +226,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-extracting-pg"   select="false()"/>
 <xsl:variable name="b-extracting-mom"  select="false()"/>
 <xsl:variable name="b-extracting-fitb" select="false()"/>
+<xsl:variable name="b-extracting-biblio" select="false()"/>
+<xsl:variable name="b-extracting-stack" select="false()"/>
 
-<xsl:variable name="b-extracting" select="$b-extracting-pg or $b-extracting-mom or $b-extracting-fitb"/>
+<xsl:variable name="b-extracting" select="$b-extracting-pg or $b-extracting-mom or $b-extracting-fitb or $b-extracting-biblio or $b-extracting-stack"/>
 
 
 <!-- ############################## -->
@@ -724,6 +726,218 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- ########################################################## -->
+<!-- ########################################################## -->
+<!-- 2025-08-13: these error checks are not really right.       -->
+<!-- Testing for existence of the file of references seems      -->
+<!-- to be the big problem?  If it does not exist, the          -->
+<!-- processor just fails altogether?  Further, these variables -->
+<!-- might be renamed as positive events, to ease the logic.    -->
+<!-- ########################################################## -->
+<!-- ########################################################## -->
+
+<!-- To use CSL styles, we need to determine if a few things are in place -->
+<!-- (a)  are we even using CSL style files at all                        -->
+<!-- (b)  if we are extracting or not                                     -->
+<!-- (c)  if the desired generated references and citations exist         -->
+<!-- (d)  if the generated file exists, built with the same style file?   -->
+<!-- Without everything in place, we just copy references/"biblio".        -->
+<!-- Here comes the gauntlet -->
+
+<!-- $b-using-csl-styles: a consequence of opting in via publisher file         -->
+<!-- $b-extracting-biblio: set here and overridden in the extraction stylesheet -->
+
+<!-- two error conditions -->
+<!-- 2025-08-13: this variable is always false -->
+<xsl:variable name="missing-csl-file">
+    <xsl:choose>
+        <!-- can't be missing if we don't need it, and we   -->
+        <!-- don't induce panic by looking for it, when it  -->
+        <!-- isn't called for, and getting ominous warnings -->
+        <xsl:when test="not($b-using-csl-styles)">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+            <!-- this is only a test, variable is local and not retained -->
+            <!-- <xsl:variable name="the-references" -->
+                <!-- select="document($csl-file, $original)/pi:csl-references"/> -->
+            <!-- since we build the file, condiition on the size of -->
+            <!-- this node-set:  one (good) or none (bad, missing)  -->
+            <!-- <xsl:choose> -->
+                <!-- file looks good -->
+                <!-- <xsl:when test="count($the-references) = 1"> -->
+                    <!-- <xsl:text>no</xsl:text> -->
+                <!-- </xsl:when> -->
+                <!-- nothing came of document() -->
+                <!-- <xsl:otherwise> -->
+                    <!-- <xsl:text>yes</xsl:text> -->
+                    <!-- and we take the opportunity to say so, just once, and early on -->
+                    <!-- <xsl:message>PTX:ERROR:     your publisher file indicates the use of a Citation Stylesheet Language (CSL) specification for references, but we have not located your file of generated references and citations at "<xsl:value-of select="$csl-file"/>".  We will fall back to default processing in order to proceed.</xsl:message> -->
+                <!-- </xsl:otherwise> -->
+            <!-- </xsl:choose> -->
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-missing-csl-file" select="$missing-csl-file = 'yes'"/>
+
+<!-- This is the case of having a style file specified in    -->
+<!-- the publisher file AND having a generated file of       -->
+<!-- references and citations AND the two versions of the    -->
+<!-- style file used do not match.  The first two conditions -->
+<!-- should always be consulted.                             -->
+<xsl:variable name="style-file-mismatch">
+    <xsl:choose>
+        <!-- we do not warning at the end of this template, -->
+        <!-- just because the file itself does not exist    -->
+        <xsl:when test="not($b-using-csl-styles) or $missing-csl-file">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- now we are using CSL styles and we do have a file to interrogate -->
+        <xsl:otherwise>
+            <!-- this is only a test, variable is local and not retained -->
+            <xsl:variable name="the-references"
+                select="document($csl-file, $original)/pi:csl-references"/>
+            <!-- attribute in generated file saying which style file was used -->
+            <xsl:variable name="csl-style-file-for-generated">
+                <xsl:value-of select="$the-references/@csl-style-file"/>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$csl-style-file = $csl-style-file-for-generated">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>yes</xsl:text>
+                    <!-- and we take the opportunity to say so, just once, and early on -->
+                    <xsl:message>PTX:ERROR:     your publisher file indicates the use of one Citation Stylesheet Language (CSL) specification for references ("<xsl:value-of select="$csl-style-file"/>"), but your file of generated references and citations at "<xsl:value-of select="$csl-file"/>" was built using a different CSL style file ("<xsl:value-of select="$csl-style-file-for-generated"/>").  We will fall back to default processing in order to proceed.</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-style-file-mismatch" select="$style-file-mismatch = 'yes'"/>
+
+<!-- ########################################################## -->
+<!-- ########################################################## -->
+<!-- 2025-08-13: end of incomplete error logic.                 -->
+<!-- ########################################################## -->
+<!-- ########################################################## -->
+
+<xsl:template match="backmatter/references[not(@source)]" mode="assembly">
+    <xsl:choose>
+        <!-- duplicate for biblio extraction process or if using -->
+        <!-- default (simplistic) PreTeXt bibliography support   -->
+        <xsl:when test="$b-extracting-biblio or not($b-using-csl-styles)">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="assembly"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- not extracting, so doing a conversion, and also     -->
+        <!-- must be using CSL styles, so a collection of        -->
+        <!-- processed references and citations should exist     -->
+        <!-- but maybe not (this "when" is separate for clarity) -->
+        <xsl:when test="$b-missing-csl-file or $b-style-file-mismatch">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="assembly"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- not extracting, using CSL, have a generated file,  -->
+        <!-- matching styles in publihser file and in generated -->
+        <!-- file.  We can just do it.                          -->
+        <xsl:otherwise>
+            <!-- $csl-file is defined in the publisher-variables stylesheet, -->
+            <xsl:variable name="the-references"
+                select="document($csl-file, $original)/pi:csl-references"/>
+            <!-- Now, a "choose" within the above "otherwise".  If the file -->
+            <!-- is missing or mis-matched, we just duplicate.  Otherwise,  -->
+            <!-- we finally make replacment entries in the "references".    -->
+            <xsl:copy>
+                <!-- duplicate attributes on "references" -->
+                <xsl:apply-templates select="@*" mode="assembly"/>
+                <!-- duplicate/massage each bibliographic entry   -->
+                <!-- realize as a standard "raw" type reference,  -->
+                <!-- though make take this tyepe private some day -->
+                <xsl:for-each select="$the-references/pi:csl-biblio">
+                    <biblio type="raw">
+                        <!-- preserve @xml:id through the process -->
+                        <xsl:attribute name="xml:id">
+                            <xsl:value-of select="@xml:id"/>
+                        </xsl:attribute>
+                        <!-- preserve numeric identification -->
+                        <xsl:attribute name="numeric">
+                            <xsl:value-of select="@numeric"/>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="node()" mode="assembly"/>
+                    </biblio>
+                </xsl:for-each>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="xref" mode="assembly">
+    <!-- determine if this "xref" points to a "biblio",  -->
+    <!-- and really just a backmatter/references/biblio, -->
+    <!-- plus using CSL styles for citations             -->
+    <xsl:variable name="is-biblio-target">
+        <xsl:choose>
+            <!-- not doing styles, target is not of interest -->
+            <!-- to us anyway and we want to bail out as     -->
+            <!-- quickly and as easily as possible           -->
+            <xsl:when test="not($b-using-csl-styles)">
+                <xsl:text>no</xsl:text>
+            </xsl:when>
+            <!-- first/last page-range device -->
+            <xsl:when test="@first">
+                <xsl:text>no</xsl:text>
+            </xsl:when>
+            <xsl:when test="@provisional">
+                <xsl:text>no</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="tokenized-refs" select="str:tokenize(@ref, ' ,')"/>
+                <xsl:variable name="first-ref">
+                    <xsl:value-of select="$tokenized-refs[1]"/>
+                </xsl:variable>
+                <!-- context switch -->
+                <xsl:for-each select="$original">
+                    <xsl:choose>
+                        <xsl:when test="id($first-ref)/self::biblio/parent::references/parent::backmatter">
+                            <xsl:text>yes</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>no</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="b-is-biblio-target" select="$is-biblio-target = 'yes'"/>
+    <!--  -->
+    <xsl:choose>
+        <!-- duplicate for biblio extraction process or if the "xref"  -->
+        <!-- is not a candidate for replacement by a CSL citation      -->
+        <!-- Note: not using CSL styles immediately determines that    -->
+        <!-- this "xrref" is not a "biblio target" and a copy is       -->
+        <!-- made here, immediately as well                            -->
+        <xsl:when test="not($b-is-biblio-target) or $b-extracting-biblio">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="assembly"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- a candidate for replacement  -->
+        <xsl:otherwise>
+            <xsl:variable name="the-xref-id">
+                <xsl:value-of select="@original-id"/>
+            </xsl:variable>
+            <xsl:variable name="matched-citation" select="document('gen/references/csl-bibliography.xml', $original)/pi:csl-references/pi:csl-citation[@xml:id = $the-xref-id]"/>
+            <xsl:copy-of select="$matched-citation"/>
+            <!-- WARN ON UNMATCHED -->
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- We cosmetically change a "drag-n-drop" style matching problem from    -->
 <!-- being signaled by "matches" and instead call it a "cardsort" problem, -->
 <!-- which is a more accurate description of the interface from Runestoone -->
@@ -864,7 +1078,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- element ("pi:") for later consumption.  Review the destination for     -->
 <!-- similar notes about possible changes.                                  -->
 
-<xsl:template match="webwork[* or @copy or @source]" mode="webwork">
+<xsl:template match="webwork[* or @copy or @source or text()]" mode="webwork">
     <!-- Every "webwork" that is a problem (not a generator) gets a   -->
     <!-- lifetime identification in both passes through the source.   -->
     <!-- The first migrates through the "extract-pg.xsl" template,    -->
@@ -1060,92 +1274,70 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is useless in print.  And maybe a reader really would like to see the  -->
 <!-- actual URL.  So "@visual" is a version of the URL that is pleasing to  -->
 <!-- look at, maybe just a TLD, no protocol (e.g "https://"), no "www."     -->
-<!-- if unnecessary, etc.  Here it becomes a special variant of a footnote, -->
-<!-- which allows for numbering and special-handling in LaTeX, based        -->
-<!-- strictly on the element itself.  But placing the URL in an attribute   -->
-<!-- signals this is an exceptional footnote, so the URL can be handled     -->
-<!-- specially, say in a monospace font, or in the LaTeX case, treatment    -->
-<!-- like \nolinkurl{}. This is great in print, and is a knowl in HTML.     -->
-<!--                                                                        -->
-<!-- Advantages: however a conversion does footnotes, this will be the      -->
-<!-- right markup for that conversion.  Note that LaTeX pulls footnotes     -->
-<!-- out of "tcolorbox" environments, which is based on the *context*,      -->
-<!-- so a result-tree fragment implementation is doomed to fail.            -->
-<!--                                                                        -->
-<!-- N.B.  We are only interpreting the "content" form here by simply       -->
-<!-- adding the footnote element.  This leaves various decisions about      -->
-<!-- formatting to the subsequent conversion.                               -->
-<!--                                                                        -->
-<!-- N.B. the automatic "fn/@pi:url" creates a *new* element that is not    -->
-<!-- in an author's source.  When we annotate source (as a form of perfect  -->
-<!-- documentation) we take care to not annotate these elements which  have -->
-<!-- no source to show.                                                     -->
-
-<xsl:template match="url[node()]|dataurl[node()]" mode="enrichment">
-    <xsl:copy>
-        <!-- we drop the @visual attribute, a decision we might revisit -->
-        <xsl:apply-templates select="node()|@*[not(local-name(.) = 'visual')]" mode="enrichment"/>
-    </xsl:copy>
-    <!-- Now make footnote, as long as we don't create a footnote in a footnote -->
-    <xsl:if test="not(self::url and ancestor::fn)">
-        <!-- manufacture a footnote with (private) attribute -->
-        <!-- as a signal to conversions as to its origin     -->
+<!-- if unnecessary, etc.  This "visual URL"  may be provided by an author  -->
+<!-- through a @visual attribute.  When this attribute is not provided, we  -->
+<!-- manufacture a reasonable version from the real, actual URL that must   -->
+<!-- necessarily be given.  To prevent consideration of a visual version,   -->
+<!-- an author can set @visual="" and no manufactured version will be made. -->
+<xsl:template match="url[node() and not(@visual)]|dataurl[node() and not(@visual)]" mode="enrichment">
+    <!-- We create a new "default-ish" visual URL for a  -->
+    <!-- content-full "url" when none has been authored -->
+    <!--  -->
+    <!-- We get a candidate visual URI             -->
+    <!--   @href: external link/reference/location -->
+    <!--   dataurl[@source]:  internal link        -->
+    <xsl:variable name="uri">
         <xsl:choose>
-            <!-- explicitly opt-out, so no footnote -->
-            <xsl:when test="@visual = ''"/>
-            <!-- go for it, as requested by author -->
-            <xsl:when test="@visual">
-                <fn pi:url="{@visual}"/>
+            <!-- "url" and "dataurl" both support external @href -->
+            <xsl:when test="@href">
+                <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- a "dataurl" might be local, @source is         -->
+            <!-- indication, so prefix with a base URL,         -->
+            <!-- add "external" directory, via template useful  -->
+            <!-- also for visual URL formulation in -assembly   -->
+            <!-- N.B. we are using the base URL, since this is  -->
+            <!-- the most likely need by employing conversions. -->
+            <!-- It would eem duplicative in a conversion to    -->
+            <!-- HTML, so could perhaps be killed in that case. -->
+            <!-- But it is what we want for LaTeX, and perhaps  -->
+            <!-- for EPUB, etc.                                 -->
+            <xsl:when test="self::dataurl and @source">
+                <xsl:apply-templates select="." mode="static-url"/>
+            </xsl:when>
+            <!-- empty will be non-functional -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- And clean-up automatically in the prevalent cases -->
+    <xsl:variable name="truncated-href">
+        <xsl:choose>
+            <xsl:when test="substring(@href, 1, 8) = 'https://'">
+                <xsl:value-of select="substring($uri, 9)"/>
+            </xsl:when>
+            <xsl:when test="substring(@href, 1, 7) = 'http://'">
+                <xsl:value-of select="substring($uri, 8)"/>
             </xsl:when>
             <xsl:otherwise>
-                <!-- When an author has not made an effort to provide a visual   -->
-                <!-- alternative, then attempt some obvious clean-up of the      -->
-                <!-- default, and if not possible, settle for an ugly visual URL -->
-                <!--                                                             -->
-                <!-- We get a candidate visual URI from the @href attribute      -->
-                <!-- link/reference/location may be external -->
-                <!-- (@href) or internal (dataurl[@source]) -->
-                <xsl:variable name="uri">
-                    <xsl:choose>
-                        <!-- "url" and "dataurl" both support external @href -->
-                        <xsl:when test="@href">
-                            <xsl:value-of select="@href"/>
-                        </xsl:when>
-                        <!-- a "dataurl" might be local, @source is         -->
-                        <!-- indication, so prefix with a base URL,         -->
-                        <!-- add "external" directory, via template useful  -->
-                        <!-- also for visual URL formulation in -assembly   -->
-                        <!-- N.B. we are using the base URL, since this is  -->
-                        <!-- the most likely need by employing conversions. -->
-                        <!-- It would eem duplicative in a conversion to    -->
-                        <!-- HTML, so could perhaps be killed in that case. -->
-                        <!-- But it is what we want for LaTeX, and perhaps  -->
-                        <!-- for EPUB, etc.                                 -->
-                        <xsl:when test="self::dataurl and @source">
-                            <xsl:apply-templates select="." mode="static-url"/>
-                        </xsl:when>
-                        <!-- empty will be non-functional -->
-                        <xsl:otherwise/>
-                    </xsl:choose>
-                </xsl:variable>
-                <!-- And clean-up automatically in the prevalent cases -->
-                <xsl:variable name="truncated-href">
-                    <xsl:choose>
-                        <xsl:when test="substring(@href, 1, 8) = 'https://'">
-                            <xsl:value-of select="substring($uri, 9)"/>
-                        </xsl:when>
-                        <xsl:when test="substring(@href, 1, 7) = 'http://'">
-                            <xsl:value-of select="substring($uri, 8)"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="$uri"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <fn pi:url="{$truncated-href}"/>
+                <xsl:value-of select="$uri"/>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:if>
+    </xsl:variable>
+    <!--  -->
+    <xsl:copy>
+        <!-- copy all the attributes, which might include a @visual,      -->
+        <!-- and that @visual could be empty (a signal it is not desired) -->
+        <xsl:apply-templates select="@*" mode="enrichment"/>
+        <!-- Provide the "missing" @visual (see match above),  -->
+        <!-- so now *every* content-full "url" has an @visual, -->
+        <!-- either authored or provided automatically here.   -->
+        <!-- Conversions decide what to do with it.            -->
+        <xsl:attribute name="visual">
+            <xsl:value-of select="$truncated-href"/>
+        </xsl:attribute>
+        <!-- done with attributes, copy the content -->
+        <xsl:apply-templates select="node()" mode="enrichment"/>
+    </xsl:copy>
 </xsl:template>
 
 
@@ -1709,6 +1901,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
+<xsl:template match="exercise/stack" mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+
 <xsl:template match="*" mode="assembly-id">
     <xsl:message>
         <xsl:text>PTX:BUG:  the "assembly-id" template was applied to an element it did not expect--</xsl:text>
@@ -2016,7 +2212,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The @struct attribute is the structure number of the *parent*          -->
 <!-- (container), which seems odd here, but fits the general scheme better. -->
 <!-- The @level attribute is helpful, and trvislly to compute here.         -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="augment">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout" mode="augment">
     <xsl:param name="parent-struct"/>
     <xsl:param name="level"/>
     <xsl:param name="ordered-list-level" />
@@ -2048,7 +2244,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="next-level" select="$level + 1"/>
     <xsl:variable name="next-ordered-list-level">
         <xsl:choose>
-            <xsl:when test="self::exercises or self::worksheet or self::reading-questions or self::references">
+            <xsl:when test="self::exercises or self::worksheet or self::handout or self::reading-questions or self::references">
                 <xsl:number value="1" />
             </xsl:when>
             <xsl:otherwise>
@@ -2327,6 +2523,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:when test="myopenmath">
                 <xsl:text>myopenmath</xsl:text>
+            </xsl:when>
+            <xsl:when test="stack">
+                <xsl:text>stack</xsl:text>
             </xsl:when>
             <!-- hack for temporary demo HTML versions -->
             <xsl:when test="@runestone">
@@ -2722,12 +2921,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- From the code comment when this was done with Python: "p with -->
 <!-- only a single fillin, not counting those inside an li without -->
 <!-- preceding siblings"                                           -->
+<!-- We likewise prune the "p" that only have a var with           -->
+<!-- @form="essay. These come from WeBWorK essay questions         -->
+<!-- starting with v2.19                                           -->
 <xsl:template match="p" mode="webwork-rep-to-static">
     <!-- Substantially faster to have a simple match and then selectively -->
     <!-- filter matched elements. Start with the tests that are cheapest  -->
     <!-- and hope short-circuit evaluation avoids expensive ones.         -->
     <xsl:variable name="prune">
-        <xsl:if test="count(fillin)=1 and 
+        <xsl:if test="(count(fillin)=1 or count(var[@form='essay'])=1) and
                       count(*)=1 and 
                       not(normalize-space(text())) and
                       (not(parent::li) or preceding-sibling::*)">
@@ -2745,6 +2947,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some answer forms return a default/initial choice that is -->
 <!-- simply a question-mark.  We scrub them here, with care.   -->
 <xsl:template match="statement//var[@form = 'popup']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
+<xsl:template match="statement//ul[@form = 'popup']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
 <!-- This may only be needed as support for older servers' generated PreTeXt. -->
 <xsl:template match="statement//var[@form = 'checkboxes']/li[(p[. = '?']) or (normalize-space(.) = '?')]" mode="webwork-rep-to-static"/>
 
@@ -2840,6 +3043,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- as a "generated" component of a project.  We meld with a      -->
 <!-- PreTeXt introduction and conclusion, into a "regular" PreTeXt -->
 <!-- format, for any conversion to a static format to use.         -->
+<!-- NB: very similar to STACK template below                      -->
 <xsl:template match="exercise[(@exercise-interactive = 'myopenmath')]
                    | project[(@exercise-interactive = 'myopenmath')]
                    | activity[(@exercise-interactive = 'myopenmath')]
@@ -2883,6 +3087,61 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Duplicate authored content for the non-static conversions   -->
                 <!-- and let the conversions handle dynamic content.  Also, when -->
                 <!-- extracting MOM we need the authored source unmolested.      -->
+                <xsl:apply-templates select="node()" mode="representations"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:copy>
+</xsl:template>
+
+<!-- STACK questions to static -->
+
+<!-- Static versions crom a STACK server, and have been stored     -->
+<!-- as a "generated" component of a project.  We meld with a      -->
+<!-- PreTeXt introduction and conclusion, into a "regular" PreTeXt -->
+<!-- format, for any conversion to a static format to use.         -->
+<!-- NB: very similar to MyOpenMath template above                 -->
+<xsl:template match="exercise[(@exercise-interactive = 'stack')]
+                   | project[(@exercise-interactive = 'stack')]
+                   | activity[(@exercise-interactive = 'stack')]
+                   | exploration[(@exercise-interactive = 'stack')]
+                   | investigation[(@exercise-interactive = 'stack')]" mode="representations">
+    <!-- duplicate the exercise/project -->
+    <xsl:copy>
+        <!-- and preserve attributes on the exercise/project -->
+        <xsl:apply-templates select="@*" mode="representations"/>
+        <!-- Now bifurcate on static/dynamic.  PG problem creation should not fall in here. -->
+        <xsl:choose>
+            <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
+                <!-- locate the static representation in a file, generated independently -->
+                <!-- NB: this filename is relative to the author's source                -->
+                <xsl:variable name="filename">
+                    <xsl:if test="$b-managed-directories">
+                        <xsl:value-of select="$generated-directory-source"/>
+                    </xsl:if>
+                    <xsl:text>stack/</xsl:text>
+                    <xsl:apply-templates select="stack" mode="assembly-id"/>
+                    <xsl:text>.ptx</xsl:text>
+                </xsl:variable>
+                <xsl:variable name="stack-static-rep" select="document($filename, $original)/stack-static"/>
+                <!-- duplicate metadata first -->
+                <xsl:apply-templates select="title|idx" mode="representations"/>
+                <!-- Meld PreTeXt introduction, conclusion with STACK statement. We      -->
+                <!-- could duplicate stack/statement attributes here, if there were any. -->
+                <statement>
+                    <xsl:apply-templates select="introduction/node()" mode="representations"/>
+                    <xsl:apply-templates select="$stack-static-rep/statement/node()" mode="representations"/>
+                    <xsl:apply-templates select="conclusion/node()" mode="representations"/>
+                </statement>
+                <!-- these might not all be present, ever, but just to be safe -->
+                <xsl:apply-templates select="$stack-static-rep/hint" mode="representations"/>
+                <xsl:apply-templates select="$stack-static-rep/answer" mode="representations"/>
+                <xsl:apply-templates select="$stack-static-rep/solution" mode="representations"/>
+                <!-- NB: the "stack" element has been ignored is now gone -->
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- Duplicate authored content for the non-static conversions   -->
+                <!-- and let the conversions handle dynamic content.  Also, when -->
+                <!-- extracting STACK we need the authored source unmolested.    -->
                 <xsl:apply-templates select="node()" mode="representations"/>
             </xsl:otherwise>
         </xsl:choose>

@@ -534,14 +534,14 @@
         <idx><h><webwork/></h><h><webwork/> exercise</h></idx>
 
         <p>
-            It is possible to include <webwork/>/PG problems in your source. These can either be
-            authored using <pretext/> or referenced from a host
-            <webwork/> course. A static version of the exercise will be rendered in your static
-            output formats such as <latex/>/PDF. A <q>live</q> version will be rendered in HTML
-            output. If the HTML is hosted on a Runestone server, the student's progress completing
-            the live exercises can be tracked. You can also extract the problems into a single
-            archive suitable for uploading into a <webwork/> course. This is a big topic, so see the
-            dedicated <xref ref="webwork-author"/> for details.
+            It is possible to include <webwork/>/PG problems in your source. These can be authored
+            using <pretext/>, included from local PG files, or referenced from a host <webwork/>
+            course. A static version of the exercise will be rendered in your static output formats
+            such as <latex/>/PDF. A <q>live</q> version will be rendered in HTML output. If the HTML
+            is hosted on a Runestone server, the student's progress completing the live exercises
+            can be tracked. You can also extract the problems into a single archive suitable for
+            uploading into a <webwork/> course. This is a big topic, so see the dedicated
+            <xref ref="webwork-author"/> for details.
         </p>
     </section>
 
@@ -564,9 +564,9 @@
         <idx>URL</idx>
         <idx>external reference</idx><idx><h>external reference</h><seealso>URL</seealso></idx>
 
-        <p>The <tag>url</tag> tag always requires an <attr>href</attr> attribute.  Usually this will be a complete address for some external web page, or other external resource.  The <attr>@visual</attr> attribute is sometimes mandatory, but sometimes optional.  It should provide a simplified version of the <init>URL</init> for use in print, or similar situations.  Finally, you can provide content for the <tag>url</tag> element, which will become the clickable text in most realizations.</p>
+        <p>The <tag>url</tag> tag always requires an <attr>href</attr> attribute.  Usually this will be a complete address for some external web page, or other external resource.  The <attr>visual</attr> attribute is sometimes mandatory, but sometimes optional.  It should provide a simplified version of the <init>URL</init> for use in print, or similar situations.  Finally, you can provide content for the <tag>url</tag> element, which will become the clickable text in most realizations.</p>
 
-        <p>If the <tag>url</tag> element is empty (no content), then the value of the <attr>href</attr> attribute or the optional <attr>visual</attr> attribute will be the link text, with a preference for the latter.  When you instead provide content, you can use <pretext/> elements much like any other piece of text that would occur in a paragraph.  In this case, a <attr>visual</attr> attribute is now highly recommended, as an alternative to the content, providing information about the actual <init>URL</init> for non-electronic formats like print.  A default version of the value of the <attr>href</attr> attribute will be used in its absence.  This visual version of the <init>URL</init> will appear in a footnote.</p>
+        <p>If the <tag>url</tag> element is empty (no content), then the value of the <attr>href</attr> attribute or the optional <attr>visual</attr> attribute will be the link text, with a preference for the latter.  When you instead provide content, you can use <pretext/> elements much like any other piece of text that would occur in a paragraph.  In this case, a <attr>visual</attr> attribute is now highly recommended, as an alternative to the content, providing information about the actual <init>URL</init> for non-electronic formats like print.  A default version of the value of the <attr>href</attr> attribute will be used in its absence.  This visual version of the <init>URL</init> will appear in a trailing parenthetical for print PDF versions.</p>
 
         <p>See <xref ref="topic-url"/> for an example and full details.  There is a similar <tag>dataurl</tag> element for pointing to supporting files, see <xref ref="topic-dataurl"/>.</p>
     </section>

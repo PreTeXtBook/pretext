@@ -20,7 +20,7 @@
 <!-- along with PreTeXt. If not, see <http://www.gnu.org/licenses/>.       -->
 <!-- ********************************************************************* -->
 
-<pretext>
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en-US">
     <!-- Other languages can be used to internationalize parts of a document -->
     <!-- <pretext xml:lang="pt-BR"> -->
 
@@ -55,18 +55,6 @@
         if the initialism is changed.
         -->
         <initialism>WWSC</initialism>
-        <!--
-        With a <feedback> element, in the HTML version, you get a button
-        for reporting typos and errors.  You might link to a Google Docs
-        spreadsheet or something similar.  Default is to get a button
-        labeled "Feedback", which will be localized to your target language.
-        You can override this with some text of your choosing, but then you
-        lose the localization feature.
-        -->
-        <feedback>
-            <url>not-implemented.html</url>
-            <!-- <text>My Button Text</text>  -->
-        </feedback>
 
         <latex-image-preamble>
             \usepackage{pgfplots}
@@ -307,18 +295,121 @@
                     </conclusion>
                 </exercise>
 
+                <exercise label="local-pg">
+                    <title>Local PG</title>
+                    <introduction>
+                        <p>
+                            The complete text of a <c>.pg</c> file can be used as the content of a
+                            <tag>webwork</tag>. Attention should be given to newlines and white
+                            space within the <tag>webwork</tag>, as they will be included in the PG
+                            problem that is rendered.
+                        </p>
+                    </introduction>
+                    <webwork><![CDATA[DOCUMENT();
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Add two positive single-digit integers.');
+
+Context('Numeric');
+$a = random(1, 9, 1);
+$b = random(1, 9, 1);
+$c = Compute($a + $b);
+
+BEGIN_PGML
+Compute the sum of [`[$a]`] and [`[$b]\text{:}`]
+
+[`[$a] + [$b] =`] [_]{$c}{5} [@AnswerFormatHelp('numbers')@]*
+
+END_PGML
+
+ENDDOCUMENT();
+]]></webwork>
+                </exercise>
+
+                <exercise label="local-pg-file">
+                    <title>Local PG File</title>
+                    <introduction>
+                        <p>
+                            It is convenient to get the text of a <c>.pg</c> file using
+                            <c>xi:include</c>. This may help with file management and management of
+                            to not have to manage whitespace.
+                        </p>
+                    </introduction>
+                    <webwork><xi:include parse="text" href="pg/Adding_SingleDigit_Integers.pg"/></webwork>
+                </exercise>
+
                 <project label="copy-webwork-add-numbers">
                     <title>Inside a <tag>project</tag></title>
                     <introduction>
                         <p>
-                            If you like, you can have a <webwork/> inside a PROJECT-LIKE block.
-                            Just like with an <tag>exercise</tag>, it can be preceded with an optional <tag>introduction</tag>
-                            and followed by an optional <tag>conclusion</tag>.
+                            If you like, you can have a <webwork/> inside a <tag>project</tag>.
+                            Just like with an <tag>exercise</tag>, it can be preceded with an
+                            optional <tag>introduction</tag> and followed by an optional
+                            <tag>conclusion</tag>.
                         </p>
                     </introduction>
-                    <webwork copy="webwork-add-numbers" seed="511"/>
+                    <webwork seed="511">
+                        <description>
+                            Add two positive single-digit integers.
+                        </description>
+                        <pg-code>
+                            $a = random(1, 9, 1);
+                            $b = random(1, 9, 1);
+                            $c = Compute($a + $b);
+                        </pg-code>
+                        <statement>
+                            <p>
+                                Compute the sum of <m><var name="$a" /></m> and
+                                <m><var name="$b" /></m>:
+                            </p>
+                            <p>
+                                <m><var name="$a" /> + <var name="$b" /> =</m>
+                                <var name="$c" width="5" category="integer" />
+                            </p>
+                        </statement>
+                        <solution>
+                            <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
+                        </solution>
+                    </webwork>
                 </project>
 
+                <exploration label="copy-webwork-add-numbers-exploration">
+                    <title>Inside an <tag>exploration</tag></title>
+                    <introduction>
+                        <p>
+                            There are other <q>project-like</q> tags besides <tag>project</tag>.
+                            Here, we use an <tag>exploration</tag>.
+                        </p>
+                    </introduction>
+                    <webwork seed="512">
+                        <description>
+                            Add two positive single-digit integers.
+                        </description>
+                        <pg-code>
+                            $a = random(1, 9, 1);
+                            $b = random(1, 9, 1);
+                            $c = Compute($a + $b);
+                        </pg-code>
+                        <statement>
+                            <p>
+                                Compute the sum of <m><var name="$a" /></m> and
+                                <m><var name="$b" /></m>:
+                            </p>
+                            <p>
+                                <m><var name="$a" /> + <var name="$b" /> =</m>
+                                <var name="$c" width="5" category="integer" />
+                            </p>
+                        </statement>
+                        <solution>
+                            <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
+                        </solution>
+                    </webwork>
+                </exploration>
             </section>
 
             <section xml:id="section-the-quadratic-formula">

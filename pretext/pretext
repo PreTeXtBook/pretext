@@ -129,12 +129,14 @@ def get_destination_directory(directory, xml_source, pub_file, component):
         "preview": "preview",
         "sageplot": "sageplot",
         "mermaid": "mermaid",
+        "stack": "stack",
         "trace": "trace",
         "youtube": "youtube",
         "qrcode": "qrcode",
         "datafile": "datafile",
         "play-button": "play-button",
         "latex-package": "latex-packages",
+        "references" : "references",
     }
     # if specified, check, sanitize, return absolute path
     if directory:
@@ -328,6 +330,7 @@ def get_cli_arguments():
             "webwork",
             "WeBWorK problems in authored, PG, url, and static representations",
         ),
+        ("stack", "STACK exercises (static representations)"),
         ("references", "References and citations via Citation Stylesheet Language"),
         ("pg-macros", "Server-side macros for WeBWorK problem generation"),
         ("dynamic", "Expression subsitutions for dynamically generated exercises"),
@@ -691,6 +694,8 @@ def main():
             args.server,
             dest_dir,
         )
+    elif args.component == "stack":
+        ptx.stack_extraction(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
     elif args.component == "references":
         ptx.references(xml_source, publication_file, stringparams, args.xmlid, dest_dir)
     elif args.component == "pg-macros":

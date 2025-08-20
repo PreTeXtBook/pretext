@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<worksheet label="worksheet-networks" top="3cm" bottom="100pt">
+<worksheet label="worksheet-networks" top="3cm" bottom="1.2in">
   <title>Networks Worksheet</title>
   <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
 

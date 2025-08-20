@@ -7,18 +7,28 @@
 // different definitions for these variables to this file before the theme
 // is compiled.
 $palette: 'grays' !default;
-$primary-color: null !default;
+$primary-color: hsl(214, 59%, 40%) !default;
 $secondary-color: null !default;
-$primary-color-dark: #829ab1 !default;
-$background-color-dark: #23241f !default;
+$primary-color-dark: hsl(214, 50%, 50%) !default;
+$background-color-dark: hsl(214, 20%, 10%) !default;
 
 @use "sass:map";
 
 // Imports in this file can be either relative to this file or 
 // relative to css/ directory
 // Basic components: 
-//@use 'components/pretext';// with ($inline-section-headings: false);
-@use 'components/pretext'; 
+
+// set some default sizing variables - this will also set up
+// defaults for expandable mixin
+@use '../salem/sizing-globals' with (
+  $content-width: 600px,
+  $content-side-padding: 20px
+);
+
+@use 'components/pretext';
+
+@use '../salem/other-widen';
+
 @use '../denver/parts-paper';
 //@use 'shell';
 @use 'customization';

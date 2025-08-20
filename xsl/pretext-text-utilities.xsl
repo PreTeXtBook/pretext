@@ -41,6 +41,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     xsl/pretext-common.xsl (2022-03-27)                               -->
 <!--     xsl/pretext/pretext-runestone-static.xsl (2022-03-28)             -->
 
+<!-- "unit" tests for these templates are (partially) implemented in       -->
+<!-- xsl/tests/pretext-text-utilities-test.xsl                             -->
+<!-- Before modifying any templates in this file, you are encouraged to    -->
+<!-- make sure there is a set of tests for the template(s) and use those   -->
+<!-- to verify changes allong with diffs of sample-book/sample-article     -->
+
 <!-- There are &LOWERCASE; and &UPPERCASE; entities  -->
 <!-- in the "file-extension" template (only?) -->
 <!DOCTYPE xsl:stylesheet [
@@ -403,6 +409,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+
+<!-- substring from $input after first instance of $substr         -->
+<!-- if no match, returns original string                          -->
+<!-- similar to substring-after() function but preserves original  -->
+<xsl:template name="substring-after-preserve">
+    <xsl:param name="input"/>
+    <xsl:param name="substr"/>
+    <!-- Extract the string which comes after the first occurrence -->
+    <xsl:variable name="temp" select="substring-after($input,$substr)"/>
+    <xsl:choose>
+        <xsl:when test="$temp = ''">
+            <xsl:value-of select="$input"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$temp"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- If the substring is not contained, the first substring-after()   -->
 <!-- will return empty and entire template will return empty.  To     -->
@@ -879,30 +903,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- if empty, quit -->
         <xsl:when test="not($last-char)" />
-        <!-- if last character is whitespace, drop it -->
-        <xsl:when test="contains($whitespaces, $last-char)">
-            <xsl:call-template name="strip-trailing-whitespace">
-                <xsl:with-param name="text" select="substring($text, 1, string-length($text)-1)" />
-            </xsl:call-template>
-        </xsl:when>
-        <!-- else finished stripping, output as-is -->
-        <xsl:otherwise>
-            <xsl:value-of select="$text" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Working from end, remove whitespace back to and including last newline -->
-<xsl:template name="strip-trailing-whitespace-line">
-    <xsl:param name="text" />
-    <xsl:variable name="last-char" select="substring($text, string-length($text), 1)" />
-    <xsl:choose>
-        <!-- if empty, quit -->
-        <xsl:when test="not($last-char)" />
-        <!-- if last character is newline, return everything else -->
-        <xsl:when test="$last-char = '&#xa;'">
-            <xsl:value-of select="substring($text, 1, string-length($text)-1)" />
-        </xsl:when>
         <!-- if last character is whitespace, drop it -->
         <xsl:when test="contains($whitespaces, $last-char)">
             <xsl:call-template name="strip-trailing-whitespace">

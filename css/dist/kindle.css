@@ -190,7 +190,7 @@ dl.description-list dl dd {
 .ptx-content li {
   margin-top: 0.5em;
 }
-.ptx-content li .title {
+.ptx-content li .li--heading-title {
   font-size: 100%;
   font-weight: normal;
   font-style: italic;
@@ -891,6 +891,9 @@ img.contained {
 .image-archive {
   margin: 0.75em auto 0;
   font-family: var(--font-monospace);
+  justify-content: center;
+  display: flex;
+  gap: 0.5em;
 }
 .image-box > img:not(.mag_popup) {
   cursor: zoom-in;
@@ -951,7 +954,7 @@ figure.table-like .list {
 }
 .poem {
   display: table;
-  margin: 1.5em auto 0;
+  margin: 0 auto;
   width: auto;
   max-width: 90%;
 }
@@ -1009,6 +1012,98 @@ section article.poem > .heading::after {
 .poem .tab {
   margin-left: 2em;
 }
+.code-box {
+  overflow-x: auto;
+}
+.console,
+.program {
+  border: 1px solid var(--page-border-color);
+  padding: 5px 15px;
+  overflow-x: auto;
+  font-family: var(--font-monospace);
+  font-size: 0.93rem;
+  line-height: 1.2;
+}
+.code-inline {
+  font-family: var(--font-monospace);
+  white-space: pre;
+  color: var(--body-text-color);
+  background: var(--code-inline);
+  border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+  border-radius: 0.2em;
+  display: inline-block;
+  overflow-x: auto;
+  max-width: 100%;
+  vertical-align: middle;
+  line-height: normal;
+  padding: 0.0625em 0.15em;
+}
+.prompt.unselectable {
+  user-select: none;
+}
+.code-block {
+  border-left: 1px solid #aaa;
+  padding: 0 15px 5px;
+  overflow-x: auto;
+  font-family: var(--font-monospace);
+  font-size: 0.93rem;
+  line-height: 1.2;
+}
+.code-block::before {
+  content: " ";
+  font-size: 50%;
+  border-top: 1px solid #aaa;
+  display: block;
+  margin-right: auto;
+  margin-left: -15px;
+  width: 3em;
+}
+.clipboardable {
+  position: relative;
+  display: flow-root;
+}
+.clipboardable .console + .code-copy {
+  top: 1em;
+}
+.clipboardable .program + .code-copy {
+  top: 0.5em;
+}
+.clipboardable .code-copy {
+  position: absolute;
+  right: 0;
+  top: 0;
+  opacity: 0.25;
+  border-width: 0;
+  background: none;
+  cursor: pointer;
+  z-index: 1;
+  white-space-collapse: collapse;
+  padding: 1px;
+  scale: 0.85;
+}
+.clipboardable .code-copy:hover {
+  opacity: 0.7;
+}
+.clipboardable .code-copy .checkmark {
+  display: none;
+}
+.clipboardable .code-copy.copied {
+  opacity: 1;
+  color: mediumseagreen;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.clipboardable .code-copy.copied .copyicon {
+  display: none;
+}
+.clipboardable .code-copy.copied .checkmark {
+  display: inline;
+}
+@media print {
+  .code-copy {
+    display: none;
+  }
+}
 pre[class*=language-] {
   margin: 0.5em 0;
   overflow: auto;
@@ -1033,6 +1128,11 @@ pre[class*=language-] {
   line-height: 1.2;
   tab-size: 4;
   hyphens: none;
+}
+code[class*=language-].code-inline,
+pre[class*=language-].code-inline {
+  line-height: normal;
+  padding: 0.0625em 0.15em;
 }
 code[class*=language-]::selection,
 code[class*=language-] ::selection,

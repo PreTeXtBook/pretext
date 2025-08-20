@@ -169,7 +169,7 @@
     </console>
 
     <p>
-                    Note that using this method, it is necessary to import the stock <init>XSL</init> using the <attr>href</attr> instead of <attr>pretext-href</attr>, as in <tage>xsl:import href="path/to/pretext/xsl/pretext-latex.xsl"</tage>.  You need to specify the full path to the <c>pretext/xsl</c> directory, or else put your custom <init>XSL</init> in the <c>pretext/user</c> directory and use a relative path (<c>../xsl/pretext-latex.xsl</c>).
+                    Note that using this method, it is necessary to import the stock <init>XSL</init> using the <attr>href</attr> instead of <attr>pretext-href</attr>, as in <cd>xsl:import href="path/to/pretext/xsl/pretext-latex.xsl"</cd>.  You need to specify the full path to the <c>pretext/xsl</c> directory, or else put your custom <init>XSL</init> in the <c>pretext/user</c> directory and use a relative path (<c>../xsl/pretext-latex.xsl</c>).
     </p>
     </section>
     <section>

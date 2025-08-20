@@ -124,23 +124,7 @@ window.addEventListener("DOMContentLoaded", function() {
 
 
 window.addEventListener("load",function(event) {
-    $(".aside-like").click(function(){
-       $(this).toggleClass("front");
-    });
-/* if you click a knowl in an aside, the 'front' stays the
-   same because it toggles twice.  A more elegant solution is welcome */
-    $(".aside-like a").click(function(){
-       $(this).closest(".aside-like").toggleClass("front");
-    });
 
-/* temporary, so that aside-like knowls open in the body of the document */
-/* later the addafter will be inserted by PTX? */
-    $("a").each(function() {
-        if($(this).parents('.aside-like').length) {
-            $(this).attr("addafter", "#" + $(this).closest('.aside-like').attr('id') );
-            $(this).closest('.aside-like').attr("tabindex", "0");
-        }
-    });
 
     /* click an image to magnify */
     $('body').on('click','.image-box > img:not(.draw_on_me):not(.mag_popup), .sbspanel > img:not(.draw_on_me):not(.mag_popup), figure > img:not(.draw_on_me):not(.mag_popup), figure > div > img:not(.draw_on_me):not(.mag_popup)', function(){
@@ -408,9 +392,7 @@ window.addEventListener("load",function(event) {
         {
             case 13:  //CR
                  just_hit_escape = false;
-                 if($(document.activeElement).hasClass("aside-like")) {
-                    $(document.activeElement).toggleClass("front")
-                 } else if ($(document.activeElement).hasClass("workspace")) {
+                 if ($(document.activeElement).hasClass("workspace")) {
                     process_workspace()
                  }
             case 27: //esc
@@ -621,19 +603,6 @@ function urlattribute() {
 
 // The new method for creating pages and adjusting workspace //
 
-// Assumptions: needs to work for both letter (8.5in x 11in) and a4 (210mm x 297mm) paper sizes.  We will work in pixels (96/in): those are 816px x 1056px and 794px x 1122.5px respectively (1 inch = 96 px, 1 cm = 37.8 px).  We assume that the printing interface of the browser will do the right thing with these.
-
-// For purposes of finding page breaks, we will use 794 as our width and 1056 as our height (so A4 width and letter height).  Then we will rescale workspace on each page to fit the actual paper size selected.
-
-// For now, these are the constant margins used in HTML to agree with the legacy worksheet layout.
-const topMargin = 40; // in pixels
-const bottomMargin = 45; // in pixels
-const leftMargin = 45; // in pixels
-const rightMargin = 55; // in pixels
-
-const conservativeContentHeight = 1056 - (topMargin + bottomMargin); // in pixels
-const conservativeContentWidth = 794 - (leftMargin + rightMargin); // in pixels
-
 // This is used multiple places to set height of workspace divs to their author-provided heights
 function setInitialWorkspaceHeights() {
     const workspaces = document.querySelectorAll('.workspace');
@@ -643,16 +612,16 @@ function setInitialWorkspaceHeights() {
     });
 }
 
-// If a worksheet includes authored pages, we only need to put content before the first page and after the last page into the first and last pages, respectively.
-function adjustWorksheetPages() {
-    const worksheet = document.querySelector('section.worksheet');
-    if (!worksheet) {
-        console.warn("No worksheet found, exiting adjustWorksheetPages.");
+// If a printout (worksheet or handout) includes authored pages, we only need to put content before the first page and after the last page into the first and last pages, respectively.
+function adjustPrintoutPages() {
+    const printout = document.querySelector('section.worksheet, section.handout');
+    if (!printout) {
+        console.warn("No printout found, exiting adjustPrintoutPages.");
         return;
     }
-    const pages = worksheet.querySelectorAll('.onepage');
+    const pages = printout.querySelectorAll('.onepage');
     if (pages.length === 0) {
-        console.warn("No pages found in worksheet, exiting adjustWorksheetPages.");
+        console.warn("No pages found in printout, exiting adjustPrintoutPages.");
         return;
     }
     // Find all children before the first .onepage element:
@@ -660,7 +629,7 @@ function adjustWorksheetPages() {
     const lastPage = pages[pages.length - 1];
     // Move all children before the first page into the first page
     const pageFirstChild = firstPage.firstChild;
-    let currentChild = worksheet.firstChild;
+    let currentChild = printout.firstChild;
     while (currentChild && currentChild !== firstPage) {
         const nextChild = currentChild.nextSibling; // Save the next sibling before removing
         firstPage.insertBefore(currentChild, pageFirstChild); // Move to the first page
@@ -676,20 +645,28 @@ function adjustWorksheetPages() {
     console.log("Moved all content before the first page and after the last page into the respective pages.");
 }
 
-// This is the main function we will call then a worksheet does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
-function createWorksheetPages() {
-    const worksheet = document.querySelector('section.worksheet');
-    if (!worksheet) {
-        console.warn("No worksheet found, exiting layoutWorksheet.");
+// This is the main function we will call then a printout does not come from the XSL with pages already defined (for now, the XSL will keep the <page> behavior as an option).
+function createPrintoutPages(margins) {
+
+    // Assumptions: needs to work for both letter (8.5in x 11in) and a4 (210mm x 297mm) paper sizes.  We will work in pixels (96/in): those are 816px x 1056px and 794px x 1122.5px respectively (1 inch = 96 px, 1 cm = 37.8 px).  We assume that the printing interface of the browser will do the right thing with these.
+
+    // For purposes of finding page breaks, we will use 794 as our width and 1056 as our height (so A4 width and letter height).  Then we will rescale workspace on each page to fit the actual paper size selected.
+
+    const conservativeContentHeight = 1056 - (margins.top + margins.bottom); // in pixels
+    const conservativeContentWidth = 794 - (margins.left + margins.right); // in pixels
+
+    const printout = document.querySelector('section.worksheet, section.handout');
+    if (!printout) {
+        console.warn("No printout found, exiting createPrintoutPages.");
         return;
     }
-    worksheet.style.width = toString(conservativeContentWidth + leftMargin + rightMargin) + 'px';
+    printout.style.width = toString(conservativeContentWidth + margins.left + margins.right) + 'px';
     // Set the height of each workspace based on its data-space attribute
-    setInitialWorkspaceHeights(worksheet);
+    setInitialWorkspaceHeights(printout);
 
-    // We want to consider each "block" of the worksheet.  Some of these will be direct children of the worksheet, some will be nested inside these children.  So first create a list of the elements that we consider blocks.
+    // We want to consider each "block" of the printout.  Some of these will be direct children of the printout, some will be nested inside these children.  So first create a list of the elements that we consider blocks.
     let rows = [];
-    for (const child of worksheet.children) {
+    for (const child of printout.children) {
         if (child.classList.contains('sidebyside')) {
             // sidebyside could have tasks, but we don't want to dive further into them.
             rows.push(child);
@@ -750,14 +727,14 @@ function createWorksheetPages() {
             const row = blockList[j].elem;
             pageDiv.appendChild(row);
         }
-        worksheet.appendChild(pageDiv);
+        printout.appendChild(pageDiv);
     }
 
     // remove any old content that is not in a page
-    for (const child of worksheet.children) {
+    for (const child of printout.children) {
         if (!child.classList.contains('onepage')) {
             console.log("Removing old child not in a page:", child);
-            worksheet.removeChild(child);
+            printout.removeChild(child);
         }
     }
 }
@@ -765,10 +742,9 @@ function createWorksheetPages() {
 
     // We look at each page and adjust the heights of the workspaces to fit it nicely into the page.
     // The width and height of the page will now depend on the letter or a4 setting.
-function adjustWorkspaceToFitPage() {
-    const papersize = localStorage.getItem("papersize");
+function adjustWorkspaceToFitPage({paperSize, margins}) {
     let paperWidth, paperHeight;
-    if (papersize === 'a4' || document.body.classList.contains('a4')) {
+    if (paperSize === 'a4' || document.body.classList.contains('a4')) {
         console.log("Setting page size to A4");
         paperWidth = 794; // 210mm in px
         paperHeight = 1122.5; // 297mm in px 794px x 1122.5px
@@ -777,7 +753,7 @@ function adjustWorkspaceToFitPage() {
         paperWidth = 816; // 8.5in in px
         paperHeight = 1056; // 11in in px
     }
-    const paperContentHeight = paperHeight - (topMargin + bottomMargin);
+    const paperContentHeight = paperHeight - (margins.top + margins.bottom);
 
     // Reset the heights of workspace divs to their author-provided heights
     setInitialWorkspaceHeights();
@@ -921,7 +897,7 @@ function findPageBreaks(rows, pageHeight) {
     return pageBreaks;
 }
 
-function setPageGeometryCSS({paperSize="letter", wsTopMargin = "40px", wsRightMargin = "55px", wsBottomMargin = "45px", wsLeftMargin = "45px"}) {
+function setPageGeometryCSS({paperSize, margins}) {
     // Remove any existing geometry CSS to avoid duplicates
     const existingStyle = document.getElementById("page-geometry-css");
     if (existingStyle) {
@@ -933,14 +909,18 @@ function setPageGeometryCSS({paperSize="letter", wsTopMargin = "40px", wsRightMa
     const style = document.createElement("style");
     // Add an identifier to the style element to avoid conflicts
     style.id = "page-geometry-css";
+    // NB we need to add the fallback values for the margins in @page because some browsers do not support CSS variables in @page rules.
     style.textContent = `
         :root {
             --ws-width: ${wsWidth};
             --ws-height: ${wsHeight};
-            --ws-top-margin: ${wsTopMargin};
-            --ws-right-margin: ${wsRightMargin};
-            --ws-bottom-margin: ${wsBottomMargin};
-            --ws-left-margin: ${wsLeftMargin};
+            --ws-top-margin: ${margins.top}px;
+            --ws-right-margin: ${margins.right}px;
+            --ws-bottom-margin: ${margins.bottom}px;
+            --ws-left-margin: ${margins.left}px;
+        }
+        @page {
+            margin: var(--ws-top-margin, ${margins.top}px) var(--ws-right-margin, ${margins.right}px) var(--ws-bottom-margin, ${margins.bottom}px) var(--ws-left-margin, ${margins.left}px);
         }
     `;
     document.head.appendChild(style);
@@ -983,21 +963,49 @@ function toggleWorkspaceHighlight(isChecked) {
     }
 }
 
-// Worksheet print preview and page setup
+// Printout print preview and page setup
 window.addEventListener("load",function(event) {
-  // We condition on the existence of the papersize radio buttons, which only appear in the worksheet print preview.
+  // We condition on the existence of the papersize radio buttons, which only appear in the printout print preview.
   if (document.querySelector('input[name="papersize"]')) {
+    // First, get the margins for pages to be passed around as needed.
+    const marginList = document.querySelector('section.worksheet, section.handout').getAttribute('data-margins').split(' ');
+    // Convert margin values to pixels if they are not already numbers
+    function toPixels(value) {
+        if (typeof value === "number") return value;
+        if (typeof value !== "string") return 0;
+        value = value.trim();
+        if (value.endsWith("px")) {
+            return parseFloat(value);
+        } else if (value.endsWith("in")) {
+            return Math.floor(parseFloat(value) * 96);
+        } else if (value.endsWith("cm")) {
+            return Math.floor(parseFloat(value) * 37.8);
+        } else if (value.endsWith("mm")) {
+            return Math.floor(parseFloat(value) * 3.78);
+        } else if (value.endsWith("pt")) {
+            return Math.floor(parseFloat(value) * (96 / 72));
+        } else {
+            // fallback: try to parse as px
+            return parseFloat(value) || 0;
+        }
+    }
+    const margins = {
+        top: toPixels(marginList[0] || "0.75in"), // Default to 0.75in if not specified
+        right: toPixels(marginList[1] || "0.75in"),
+        bottom: toPixels(marginList[2] || "0.75in"),
+        left: toPixels(marginList[3] || "0.75in")
+    }
     // Get the papersize from localStorage or set it based on user's geographic region
-    const papersize = localStorage.getItem("papersize");
-    if (papersize) {
-      const radio = document.querySelector(`input[name="papersize"][value="${papersize}"]`);
+    let paperSize = localStorage.getItem("papersize");
+    if (paperSize) {
+      const radio = document.querySelector(`input[name="papersize"][value="${paperSize}"]`);
       if (radio) {
         radio.checked = true;
       }
       // Set the papersize class on body
       document.body.classList.remove("a4", "letter");
-      document.body.classList.add(papersize);
-      setPageGeometryCSS({paperSize: papersize});
+      document.body.classList.add(paperSize);
+      setPageGeometryCSS({paperSize: paperSize, margins: margins});
     } else {
       // Try to set papersize based on user's geographic region
       // Default to 'letter' for North and South America, 'a4' elsewhere
@@ -1006,15 +1014,15 @@ window.addEventListener("load",function(event) {
             .then(response => response.json())
             .then(data => {
           let continent = data && data.continent_code ? data.continent_code : "";
-          let papersize = (continent === "NA" || continent === "SA") ? "letter" : "a4";
-          const radio = document.querySelector(`input[name="papersize"][value="${papersize}"]`);
+          paperSize = (continent === "NA" || continent === "SA") ? "letter" : "a4";
+          const radio = document.querySelector(`input[name="papersize"][value="${paperSize}"]`);
           if (radio) {
             radio.checked = true;
-            localStorage.setItem("papersize", papersize);
+            localStorage.setItem("papersize", paperSize);
           }
           document.body.classList.remove("a4", "letter");
-          document.body.classList.add(papersize);
-          console.log("Setting papersize to", papersize);
+          document.body.classList.add(paperSize);
+          console.log("Setting papersize to", paperSize);
             })
             .catch((err) => {
             // rethrow to be caught by the outer catch
@@ -1044,8 +1052,8 @@ window.addEventListener("load",function(event) {
           } else {
             // Otherwise, we can just adjust the workspace heights to fit the new paper size.
             console.log("Adjusting workspace heights to fit new papersize.");
-            adjustWorkspaceToFitPage();
-            setPageGeometryCSS({paperSize: this.value});
+            adjustWorkspaceToFitPage({paperSize: this.value, margins: margins});
+            setPageGeometryCSS({paperSize: this.value, margins: margins});
           }
         }
       });
@@ -1057,16 +1065,16 @@ window.addEventListener("load",function(event) {
     born_hidden_knowls.forEach(function(detail) {
         detail.open = true;
     });
-    // If the worksheet has authored pages, there will be at least one .onepage element.
+    // If the printout has authored pages, there will be at least one .onepage element.
     if (document.querySelector('.onepage')) {
-        adjustWorksheetPages();
+        adjustPrintoutPages();
         /* not the right way:  need to figure out what this needs to wait for */
-        //window.setTimeout(adjustWorksheetPages, 1000);
+        //window.setTimeout(adjustPrintoutPages, 1000);
     } else {
-        createWorksheetPages();
+        createPrintoutPages(margins);
     }
     // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size).
-    adjustWorkspaceToFitPage();
+    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
 
     console.log("finished adjusting workspace");
 
@@ -1391,4 +1399,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 // END Support for code-copy button functionality
-

@@ -2,7 +2,11 @@ $border-radius: 0 !default;
 $chunk-heading-font-size: 1.125em !default;
 
 // One stop include for heading-box dominant content blocks
-@use 'components/chunks/asides-floating';
+@use 'components/chunks/asides-floating' with (
+  $float-width: 200px,
+  $float-offset: -365px,
+  $min-float-width: 1450px
+);
 @use 'components/chunks/codelike';
 @use 'components/chunks/exercises';
 @use 'components/chunks/solutions';
@@ -76,11 +80,10 @@ $chunk-heading-font-size: 1.125em !default;
   padding-right: 1em;
 
   &::after {
-    content: "QED";
-    font-size: smaller;
-    font-style: oblique;
-    font-variant: small-caps;
-    float: right;
+    content: "\220E";
+    position: absolute;
+    right: 0;
+    bottom: 1.5em;
   }
 
   .heading {
@@ -143,7 +146,9 @@ $chunk-heading-font-size: 1.125em !default;
 }
 
 
-.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like) {
+// Inline exercises get C-box styling.  But we don't want this on any other exercise-like
+// Last one captures exercise-like in activated webwork.
+.exercise-like:not(.project-like .exercise-like, .exercise-like .exercise-like, .exercises .exercise-like, .reading-questions .exercise-like, .task, .worksheet .exercise-like, .problem-content .exercise-like) {
   @include C-box-mixin.box(
     $border-color: var(--exercise-like-border-color),
     $heading-background: var(--exercise-like-border-color)

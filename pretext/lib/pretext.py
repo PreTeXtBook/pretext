@@ -91,6 +91,9 @@ import re
 # contextmanager tools
 import contextlib
 
+# cleanup multiline strings used as source code
+import textwrap
+
 # * For non-standard packages (such as those installed via PIP) try to keep
 #   dependencies to a minimum by *not* importing at the module-level
 #   (with justified exceptions)
@@ -973,15 +976,31 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     code_filename = os.path.join(tmp_dir, "codelens.txt")
     log.debug("Program sources for traces temporarily in {}".format(code_filename))
     xsltproc(extraction_xslt, xml_source, code_filename, None, stringparams)
-    # read lines, one-per-program
+    # get trace file contents minus trailing blank line
     with open(code_filename, "r") as code_file:
-        programs = code_file.readlines()
-    for program in programs:
-        # three parts, always
-        program_quad = program.split(",", 3)
-        runestone_id = program_quad[0]
-        visible_id = program_quad[1]
-        language = program_quad[2]
+        contents = code_file.read().rstrip()
+
+    if contents == "":
+        log.info("no traces found to generate in {}".format(code_filename))
+        return
+
+    # special line separates groups
+    program_groups = contents.split("!end_codelens_trace_group!")
+    # will be one extra empty group, remove it
+    program_groups.pop()
+    for program_group in program_groups:
+        lines = program_group.split("\n")
+        visible_id = lines[0]
+        runestone_id = lines[1]
+        if runestone_id.strip() == "":
+            log.error("No runestone_id found for visible_id {}. Codelens must have a label or be the child of exercise like element with a label.".format(visible_id))
+            continue
+        trace_filename = lines[2]
+        language = lines[3]
+        source = lines[4]
+        starting_instruction = int(lines[5])
+        questions = lines[6:]
+
         if language == 'python':
             url = url_string.format('py')
         else:
@@ -989,8 +1008,8 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             url = url_string.format(language)
         # instead use  .decode('string_escape')  somehow
         # as part of reading the file?
-        source = program_quad[3].replace("\\n", "\n")
-        log.info("converting {} source {} to a trace...".format(language, visible_id))
+        source = source.replace("\\n", "\n")
+        log.info("converting {} source {} to tracefile {}...".format(language, visible_id, trace_filename))
 
         # success will replace this empty string
         trace = ""
@@ -1018,13 +1037,53 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             except Exception as e:
                 log.critical(traceback.format_exc())
                 log.critical(server_error_msg.format(url, visible_id))
+
         # should now have a trace, except for timing out
         # no trace, then do not even try to produce a file
         if trace:
-            script_leadin_string = 'if (allTraceData === undefined) {{\n var allTraceData = {{}};\n }}\n allTraceData["{}"] = '
-            script_leadin = script_leadin_string.format(runestone_id)
-            trace = script_leadin + trace
-            trace_file = os.path.join(dest_dir, "{}.js".format(visible_id))
+            import json
+            trace_dict = json.loads(trace)
+            # add startingInstruction to the trace
+            trace_dict["startingInstruction"] = starting_instruction
+            # inject questions into trace
+            if questions:
+                trace_steps = trace_dict.get("trace")
+                for question in questions:
+                    if question.strip() == '':
+                        continue
+                    question_line, answer_raw, feedback, prompt = question.split(":||:")
+                    question_line = int(question_line)
+                    answer_type, answer_value = answer_raw.split("-", 2)
+                    question_dict = {
+                      "text": prompt,
+                      ("correctText" if answer_type == "literal" else "correct"): answer_value
+                    }
+                    if feedback:
+                        question_dict['feedback'] = feedback
+
+                    for trace_step in trace_steps:
+                        if trace_step['line'] == question_line and trace_step['event'] == "step_line":
+                            trace_step['question'] = question_dict
+            trace = json.dumps(trace_dict)
+
+            # We will hardcode in the ID based on the runestone_id as built. It will be a fallback.
+            # But also try to dynamically grab the ID of the containing codelens so
+            # Eventually we could maybe deprecate the hardcoded value.
+            script_template = """
+                if (allTraceData === undefined) {{
+                    var allTraceData = {{}};
+                }}
+                (function() {{ // IIFE to avoid variable collision
+                    let codelensID = "{}";  //fallback
+                    let partnerCodelens = document.currentScript.parentElement.querySelector(".pytutorVisualizer");
+                    if (partnerCodelens) {{
+                        codelensID = partnerCodelens.id;
+                    }}
+                    allTraceData[codelensID] = {};
+                }})();"""
+            script_template = textwrap.dedent(script_template)
+            trace = script_template.format(runestone_id, trace.rstrip())
+            trace_file = os.path.join(dest_dir, trace_filename)
             with open(trace_file, "w") as f:
                 f.write(trace)
 
@@ -1096,18 +1155,11 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
 def webwork_to_xml(
     xml_source, pub_file, stringparams, xmlid_root, abort_early, server_params, dest_dir
 ):
+    # import what we will need
     import urllib.parse  # urlparse()
     import base64  # b64encode()
     import copy
     import tarfile
-
-    # external module, often forgotten
-    # at least on Mac installations, requests module is not standard
-    try:
-        import requests  # webwork server
-    except ImportError:
-        global __module_warning
-        raise ImportError(__module_warning.format("requests"))
 
     # support publisher file, subtree argument
     if pub_file:
@@ -1118,10 +1170,17 @@ def webwork_to_xml(
         "string parameters passed to extraction stylesheet: {}".format(stringparams)
     )
 
-    # Either we have a "generated" directory, or we must assume placing everything in dest_dir
+    # Various directories need to be established
+    # These first two are the source folders which may not have the usual names
+    # "generated" and "external"
     generated_dir, external_dir = get_managed_directories(xml_source, pub_file)
     if generated_dir:
+        # create the generated_dir if it doesn't actually exist yet
+        if not (os.path.isdir(generated_dir)):
+            os.mkdir(generated_dir)
+        # where the representations file will live
         ww_reps_dir = os.path.join(generated_dir, "webwork")
+        # where generated images from webwork exercises will live
         ww_images_dir = os.path.join(ww_reps_dir, "images")
     else:
         msg = "".join(
@@ -1150,25 +1209,22 @@ def webwork_to_xml(
     # file path for the representations file
     ww_reps_file = os.path.join(ww_reps_dir, "webwork-representations.xml")
 
-    # execute XSL extraction to get back six dictionaries
-    # where the keys are the unique-id for the problems
-    # origin, copy, seed, source, pghuman, pgdense
-    # also get the localization as a string
-    # The XSL gets the problems in document order, and the
-    # Python dictionaries (v3.5+?) will maintain the order
-    # in which the problems are added, which aids in debugging
+    # execute XSL extraction to get back a tree with fundamental
+    # information about webwork exercises in the project
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-pg.xsl")
 
-    # Build dictionaries and localization string into a scratch directory/file
+    # Build the tree into a scratch file
     tmp_dir = get_temporary_directory()
-    ww_filename = os.path.join(tmp_dir, "webwork-dicts.xml")
-    log.debug("WeBWorK dictionaries temporarily in {}".format(ww_filename))
-    xsltproc(extraction_xslt, xml_source, ww_filename, None, stringparams)
+    extracted_pg_filename = os.path.join(tmp_dir, "extracted-pg.xml")
+    log.debug("Exctracted PG temporarily in {}".format(extracted_pg_filename))
+    xsltproc(extraction_xslt, xml_source, extracted_pg_filename, None, stringparams)
+
     # build necessary variables by reading xml with lxml
-    ww_xml = ET.parse(ww_filename).getroot()
-    localization = ww_xml.find("localization").text
-    numbered_title_filesafe = ww_xml.get("numbered-title-filesafe")
+    extracted_pg_xml = ET.parse(extracted_pg_filename).getroot()
+    localization = extracted_pg_xml.get("localization")
+    webwork2_server = extracted_pg_xml.find("server-params-pub").get("webwork2-server")
+    numbered_title_filesafe = extracted_pg_xml.get("numbered-title-filesafe")
     ww_project_dir = os.path.join(ww_reps_dir, "pg", numbered_title_filesafe)
     if not (os.path.isdir(ww_project_dir)):
         os.mkdir(ww_project_dir)
@@ -1180,88 +1236,93 @@ def webwork_to_xml(
     webwork_sets(xml_source, pub_file, stringparams, ww_pg_dir, False)
     pg_macros(xml_source, pub_file, stringparams, ww_macros_dir)
 
-    if ww_xml.find("server-params-pub").find("ww-domain") is not None:
+    no_publication_file = False
+    if webwork2_server is not None:
         server_params_pub = {
-            "ww_domain": ww_xml.find("server-params-pub").find("ww-domain").text,
-            "courseID": ww_xml.find("server-params-pub").find("course-id").text,
-            "userID": ww_xml.find("server-params-pub").find("user-id").text,
-            "password": ww_xml.find("server-params-pub").find("password").text,
+            "webwork2_domain": webwork2_server,
+            "courseID": extracted_pg_xml.find("server-params-pub").get("course-id"),
+            "user": extracted_pg_xml.find("server-params-pub").get("user-id"),
+            "passwd": extracted_pg_xml.find("server-params-pub").get("password"),
+            "disableCookies": '1',
         }
-        static_processing = ww_xml.find("processing").attrib["static"]
-        pg_location = ww_xml.find("processing").attrib["pg-location"]
+        static_processing = extracted_pg_xml.find("processing").attrib["static"]
+        pg_location = extracted_pg_xml.find("processing").attrib["pg-location"]
     else:
-        server_params_pub =  {}
+        no_publication_file = True
+        server_params_pub = {
+            "webwork2_domain": "https://webwork-ptx.aimath.org",
+            "courseID": "anonymous",
+            "user": "anonymous",
+            "passwd": "anonymous",
+            "disableCookies": '1',
+        }
         static_processing = 'webwork2'
         pg_location = '/opt/webwork/pg'
-    origin = {}
-    copiedfrom = {}
-    seed = {}
-    source = {}
-    pghuman = {}
-    pgdense = {}
-    for ele in ww_xml.iter("problem"):
-        origin[ele.get("id")] = ele.get("origin")
-        seed[ele.get("id")] = ele.get("seed")
-        source[ele.get("id")] = ele.get("source")
-        if ele.get("origin") == "ptx":
-            if ele.get("copied-from") is not None:
-                copiedfrom[ele.get("id")] = ele.get("copied-from")
-            pghuman[ele.get("id")] = ele.find("pghuman").text
-            pgdense[ele.get("id")] = ele.find("pgdense").text
 
     # ideally, pub_file is in use, in which case server_params_pub is nonempty.
-    # if no pub_file in use, rely on server_params.
+    # if no pub_file in use, rely on server_params argument.
     # if both present, use server_params_pub and give warning
     # if neither in use give warning and fail
-    if not(server_params_pub) and server_params is None:
-        raise ValueError("No WeBWorK server declared. Declare WeBWorK server in publication/webwork/@server.")
-    elif not(server_params_pub):
+    if no_publication_file and server_params is None:
+        raise ValueError("Either use a publication file or pass a --server argument")
+    elif no_publication_file:
         # We rely on the argument server_params
         # This is deprecated in favor of using a publication file
         log.warning("WeBWorK server declared using -s argument.\n" +
-              "              Please consider using a publication file with publication/webwork/@server instead.")
+              "              Please consider using a publication file with publication/webwork instead.")
         server_params = server_params.strip()
         if (server_params.startswith("(") and server_params.endswith(")")):
             server_params = server_params.strip("()")
             split_server_params = server_params.split(",")
-            ww_domain = sanitize_url(split_server_params[0])
+            webwork2_domain = sanitize_url(split_server_params[0])
             courseID = sanitize_alpha_num_underscore(split_server_params[1])
-            userID = sanitize_alpha_num_underscore(split_server_params[2])
-            password = sanitize_alpha_num_underscore(split_server_params[4])
+            user = sanitize_alpha_num_underscore(split_server_params[2])
+            passwd = sanitize_alpha_num_underscore(split_server_params[3])
         else:
-            ww_domain = sanitize_url(server_params)
-            courseID  = "anonymous"
-            userID    = "anonymous"
-            password  = "anonymous"
+            webwork2_domain = sanitize_url(server_params)
+            courseID        = "anonymous"
+            user            = "anonymous"
+            passwd          = "anonymous"
     else:
-        # Now we know server_params_pub is nonepty
+        # Now we know we had a publication file
         # Use it, and warn if server_params argument is also present
         if server_params is not None:
             log.warning("Publication file in use and -s argument passed for WeBWorK server.\n"
                   + "              -s argument will be ignored.\n"
                   + "              Using publication/webwork values (or defaults) instead.")
-        ww_domain = sanitize_url(server_params_pub["ww_domain"])
-        courseID  = server_params_pub["courseID"]
-        userID    = server_params_pub["userID"]
-        password  = server_params_pub["password"]
+        webwork2_domain = sanitize_url(server_params_pub["webwork2_domain"])
+        courseID        = server_params_pub["courseID"]
+        user            = server_params_pub["user"]
+        passwd          = server_params_pub["passwd"]
 
-    ww_domain_ww2 = ww_domain + "/webwork2/"
-    ww_domain_path = ww_domain_ww2 + "html2xml"
+    webwork2_domain_webwork2 = webwork2_domain + "/webwork2/"
+    webwork2_render_rpc = webwork2_domain_webwork2 + "render_rpc"
+    webwork2_html2xml = webwork2_domain_webwork2 + "html2xml"
+
+    webwork2_version = None
+    webwork2_major_version = None
+    webwork2_minor_version = None
 
     # Establish if there is any need to use webwork2
     need_for_webwork2 = (
         (static_processing == 'webwork2')
-        or (ww_xml.xpath("//problem[@origin='server']"))
+        or (extracted_pg_xml.xpath("//problem[@origin='webwork2']"))
     )
 
     # Establish if there is any need to use a socket
     need_for_socket = (
         (static_processing == 'local')
-        and (ww_xml.xpath("//problem[@origin!='server']"))
+        and (extracted_pg_xml.xpath("//problem[@origin!='webwork2']"))
     )
 
-    # Establish WeBWorK version
+    # at least on Mac installations, requests module is not standard
+    try:
+        import requests  # webwork server
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("requests"))
 
+    # Establish WW server version, for live rendering if nothing else
     # First try to identify the WW version according to what a response hash says it is.
     # This should work for 2.17 and beyond.
     try:
@@ -1269,43 +1330,45 @@ def webwork_to_xml(
             problemSeed=1,
             displayMode='PTX',
             courseID=courseID,
-            userID=userID,
-            course_password=password,
+            user=user,
+            userID=user,
+            passwd=passwd,
+            disableCookies='1',
             outputformat='raw'
         )
-        version_determination_json = requests.get(url=ww_domain_path, params=params_for_version_determination, timeout=10).json()
-        ww_version = ""
+        # Always use html2xml for this; we don't know the server version yet
+        version_determination_json = requests.get(url=webwork2_html2xml, params=params_for_version_determination).json()
         if "ww_version" in version_determination_json:
-            ww_version = version_determination_json["ww_version"]
-            ww_version_match = re.search(
-                r"((\d+)\.(\d+))", ww_version, re.I
+            webwork2_version = version_determination_json["ww_version"]
+            webwork2_version_match = re.search(
+                r"((\d+)\.(\d+)(\+develop)?)", webwork2_version, re.I
             )
     except Exception as e:
         root_cause = str(e)
         msg = ("PTX:ERROR:   There was a problem contacting the WeBWorK server.\n")
-        raise ValueError(msg.format(ww_domain_ww2) + root_cause)
+        raise ValueError(msg.format(webwork2_domain_webwork2) + root_cause)
 
     # Now if that failed, try to infer the version from what is printed on the landing page.
-    if ww_version == "":
+    if webwork2_version == None:
         try:
-            landing_page = requests.get(ww_domain_ww2, timeout=10)
+            landing_page = requests.get(webwork2_domain_webwork2)
         except Exception as e:
             root_cause = str(e)
             msg = (
                 "PTX:ERROR:   There was a problem contacting the WeBWorK server.\n"
                 + "             Is there a WeBWorK landing page at {}?\n"
             )
-            raise ValueError(msg.format(ww_domain_ww2) + root_cause)
+            raise ValueError(msg.format(webwork2_domain_webwork2) + root_cause)
         landing_page_text = landing_page.text
 
-        ww_version_match = re.search(
-            r"WW.VERSION:\s*((\d+)\.(\d+))", landing_page_text, re.I
+        webwork2_version_match = re.search(
+            r"WW.VERSION:\s*((\d+)\.(\d+)(\+develop)?)", landing_page_text, re.I
         )
 
     try:
-        ww_version = ww_version_match.group(1)
-        ww_major_version = int(ww_version_match.group(2))
-        ww_minor_version = int(ww_version_match.group(3))
+        webwork2_version = webwork2_version_match.group(1)
+        webwork2_major_version = int(webwork2_version_match.group(2))
+        webwork2_minor_version = int(webwork2_version_match.group(3))
     except AttributeError as e:
         root_cause = str(e)
         msg = (
@@ -1313,9 +1376,30 @@ def webwork_to_xml(
             + "                         Is there a WeBWorK landing page at {}?\n"
             + "                         And does it display the WeBWorK version?\n"
         )
-        raise ValueError(msg.format(ww_domain_ww2))
+        raise ValueError(msg.format(webwork2_version, webwork2_domain))
 
-    if ww_major_version != 2 or ww_minor_version < 16:
+    webwork2_path = webwork2_render_rpc if (webwork2_major_version == 2 and webwork2_minor_version >= 19) else webwork2_html2xml
+
+    # initialize dictionaries for all the problem features
+    origin = {}
+    copied_from = {}
+    seed = {}
+    path = {}
+    pghuman = {}
+    pgdense = {}
+    for problem in extracted_pg_xml.iter("problem"):
+        origin[problem.get("id")] = problem.get("origin")
+        seed[problem.get("id")]   = problem.get("seed")
+        path[problem.get("id")]   = problem.get("path")
+        if problem.get("copied-from") is not None:
+            copied_from[problem.get("id")] = problem.get("copied-from")
+        else:
+            copied_from[problem.get("id")] = None
+        if problem.get("origin") == "generated":
+            pghuman[problem.get("id")] = problem.find("pghuman").text
+            pgdense[problem.get("id")] = problem.find("pgdense").text
+
+    if webwork2_major_version != 2 or webwork2_minor_version < 16:
         msg = (
             "PTX:ERROR:   PreTeXt supports WeBWorK 2.16 and later, and it appears you are attempting to use version: {}\n"
             + "                         Server: {}\n"
@@ -1372,18 +1456,13 @@ def webwork_to_xml(
     webwork_representations = ET.Element("webwork-representations", nsmap=NSMAP)
     # Choose one of the dictionaries to take its keys as what to loop through
     for problem in origin:
-
-        # It is more convenient to identify server problems by file path,
-        # and PTX problems by internal ID
-        problem_identifier = problem if (origin[problem] == "ptx") else source[problem]
-
-        if origin[problem] == "server":
-            msg = "building representations of server-based WeBWorK problem"
-        elif origin[problem] == "ptx":
-            msg = "building representations of PTX-authored WeBWorK problem"
+        if origin[problem] == "webwork2":
+            msg = "building representations of webwork2-hosted WeBWorK problem"
+        elif origin[problem] == "generated":
+            msg = "building representations of generated WeBWorK problem"
         else:
             raise ValueError(
-                "PTX:ERROR: problem origin should be 'server' or 'ptx', not '{}'".format(
+                "PTX:ERROR: problem origin should be 'webwork2' or 'generated', not '{}'".format(
                     origin[problem]
                 )
             )
@@ -1391,7 +1470,7 @@ def webwork_to_xml(
 
         # If and only if the server is version 2.16, we adjust PG code to use PGtikz.pl
         # instead of PGlateximage.pl
-        if ww_major_version == 2 and ww_minor_version == 16 and origin[problem] == "ptx":
+        if webwork2_major_version == 2 and webwork2_minor_version == 16 and origin[problem] == "generated":
             pgdense[problem] = pgdense[problem].replace('PGlateximage.pl','PGtikz.pl')
             pgdense[problem] = pgdense[problem].replace('createLaTeXImage','createTikZImage')
             pgdense[problem] = pgdense[problem].replace('BEGIN_LATEX_IMAGE','BEGIN_TIKZ')
@@ -1413,25 +1492,22 @@ def webwork_to_xml(
         # But we can't literally just remove that, since an author may have used something
         # like `$refreshCachedImages  =  'true' ;` so instead, we change `$refreshCachedImages`
         # to something inert
-        if origin[problem] == "ptx":
-            embed_problem = re.sub(r'(\$refreshCachedImages)(?![\w\d])', r'\1Inert', pgdense[problem])
+        if origin[problem] == "generated":
+            embed_problem = re.sub(r'(refreshCachedImages)(?![\w\d])', r'\1Inert', pgdense[problem])
 
-        # make base64 for PTX problems
-        if origin[problem] == "ptx":
-            pgbase64 = base64.b64encode(bytes(pgdense[problem], "utf-8")).decode(
-                "utf-8"
-            )
-            embed_problem_base64 = base64.b64encode(bytes(embed_problem, "utf-8")).decode(
-                "utf-8"
-            )
+        # make base64 for PTX problems for webwork prior to 2.19
+        if origin[problem] == "generated":
+            if webwork2_minor_version < 19:
+                pgbase64 = base64.b64encode(bytes(pgdense[problem], "utf-8")).decode("utf-8")
+                embed_problem_base64 = base64.b64encode(bytes(embed_problem, "utf-8")).decode("utf-8")
 
-        if static_processing == 'local' and origin[problem] != 'server':
+        if static_processing == 'local' and origin[problem] != 'webwork2':
             socket_params = { "problemSeed": seed[problem], "problemUUID": problem }
 
-            if origin[problem] == 'ptx':
+            if origin[problem] == 'generated':
                 socket_params["source"] = pgdense[problem]
             else:
-                socket_params["sourceFilePath"] = os.path.join(external_dir, source[problem])
+                socket_params["sourceFilePath"] = os.path.join(external_dir, path[problem])
 
             msg = "sending {} to socket to save in {}: origin is '{}'"
             log.info(msg.format(problem, ww_reps_file, origin[problem]))
@@ -1443,71 +1519,97 @@ def webwork_to_xml(
                 if not received: break
                 buffer.extend(received)
                 if buffer.endswith(b'ENDOFSOCKETDATA'): break
-            response_t = buffer.decode().replace('ENDOFSOCKETDATA', '')
+
+            response = buffer.decode().replace('ENDOFSOCKETDATA', '')
 
         else:
             # Construct URL to get static version from server
-            # WW server can react to a
-            #   URL of a problem stored there already
-            #   or a base64 encoding of a problem
-            # server_params is tuple rather than dictionary to enforce consistent order in url parameters
-            server_params_source = (
-                ("sourceFilePath", source[problem])
-                if origin[problem] == "server"
-                else ("problemSource", pgbase64)
-            )
+            # First establish how the acctual problem code
+            # should be delivered to whatever will render it
+            if webwork2_minor_version >= 19:
+                if origin[problem] == "webwork2":
+                    server_params_source = {"sourceFilePath":path[problem]}
+                else:
+                    server_params_source = {"rawProblemSource":pgdense[problem]}
+            else:
+                # server_params_source is tuple rather than dictionary to enforce consistent order in url parameters
+                if origin[problem] == "webwork2":
+                    server_params_source = (("sourceFilePath", path[problem]))
+                else:
+                    server_params_source = (("problemSource", pgbase64))
 
-            server_params = (
-                ("answersSubmitted", "0"),
-                ("showSolutions", "1"),
-                ("showHints", "1"),
-                ("displayMode", "PTX"),
-                ("courseID", courseID),
-                ("userID", userID),
-                ("course_password", password),
-                ("outputformat", "ptx"),
-                server_params_source,
-                ("problemSeed", seed[problem]),
-                ("problemUUID", problem),
-            )
+            if webwork2_minor_version >= 19:
+                server_params = {
+                    "showSolutions": "1",
+                    "showHints": "1",
+                    "displayMode": "PTX",
+                    "courseID": courseID,
+                    "user": user,
+                    "passwd": passwd,
+                    "outputformat": "ptx",
+                    "disableCookies": '1',
+                    "problemSeed": seed[problem],
+                    "problemUUID": problem,
+                }
+                server_params.update(server_params_source)
+            else:
+                # server_params is tuple rather than dictionary to enforce consistent order in url parameters
+                server_params = (
+                    ("answersSubmitted", "0"),
+                    ("showSolutions", "1"),
+                    ("showHints", "1"),
+                    ("displayMode", "PTX"),
+                    ("courseID", courseID),
+                    ("userID", user),
+                    ("course_password", passwd),
+                    ("outputformat", "ptx"),
+                    server_params_source,
+                    ("problemSeed", seed[problem]),
+                    ("problemUUID", problem),
+                )
 
             msg = "sending {} to server to save in {}: origin is '{}'"
             log.info(msg.format(problem, ww_reps_file, origin[problem]))
-            if origin[problem] == "server":
+            if origin[problem] == "webwork2":
                 log.debug(
                     "server-to-ptx: {}\n{}\n{}\n{}".format(
-                        problem, ww_domain_path, source[problem], ww_reps_file
+                        problem, webwork2_path, path[problem], ww_reps_file
                     )
                 )
-            elif origin[problem] == "ptx":
+            elif origin[problem] == "generated":
                 log.debug(
                     "server-to-ptx: {}\n{}\n{}\n{}".format(
-                        problem, ww_domain_path, pgdense[problem], ww_reps_file
+                        problem, webwork2_path, pgdense[problem], ww_reps_file
                     )
                 )
 
             # Ready, go out on the wire
             try:
-                response = webwork2_session.get(ww_domain_path, params=server_params)
+                if webwork2_minor_version >= 19:
+                    response = webwork2_session.post(webwork2_path, data=server_params)
+                else:
+                    response = webwork2_session.get(webwork2_path, params=server_params)
                 log.debug("Getting problem response from: " + response.url)
-                response_t = response.text
 
             except requests.exceptions.RequestException as e:
                 root_cause = str(e)
                 msg = "PTX:ERROR: there was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
-                raise ValueError(msg.format(ww_domain_path, server_params) + root_cause)
+                raise ValueError(msg.format(webwork2_path, server_params) + root_cause)
 
-            # Check for errors with PG processing
-            # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
-        file_empty = "ERROR:  This problem file was empty!" in response_t
+            # TODO: Instead of this use a different variable shared by the local script approach.
+            response = response.text
+
+        # Check for errors with PG processing
+        # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
+        file_empty = "ERROR:  This problem file was empty!" in response
 
         no_compile = (
-            "ERROR caught by Translator while processing" in response_t
+            "ERROR caught by Translator while processing" in response
         )
 
         bad_xml = False
         try:
-            response_root = ET.fromstring(bytes(response_t, encoding='utf-8'))
+            response_root = ET.fromstring(bytes(response, encoding='utf-8'))
         except:
             response_root = ET.Element("webwork")
             bad_xml = True
@@ -1541,7 +1643,7 @@ def webwork_to_xml(
             )
             badness_tip = (
                 "  Use -a to halt with full PG and returned content"
-                if (origin[problem] == "ptx")
+                if (origin[problem] == "generated")
                 else "  Use -a to halt with returned content"
             )
             badness_type = "compile"
@@ -1560,12 +1662,12 @@ def webwork_to_xml(
         # If we are aborting upon recoverable errors...
         if abort_early:
             if badness:
-                debugging_help = response_t
-                if origin[problem] == "ptx" and no_compile:
+                debugging_help = response
+                if origin[problem] == "generated" and no_compile:
                     debugging_help += "\n" + pghuman[problem]
                 raise ValueError(
                     badness_msg.format(
-                        problem_identifier, seed[problem], debugging_help
+                        path[problem], seed[problem], debugging_help
                     )
                 )
 
@@ -1589,7 +1691,7 @@ def webwork_to_xml(
         # \r would be valid XML, but too unpredictable in translations
 
         verbatim_split = re.split(
-            r"(\\verb\x1F.*?\x1F|\\verb\r.*?\r)", response_t
+            r"(\\verb\x1F.*?\x1F|\\verb\r.*?\r)", response
         )
         response_text = ""
         for item in verbatim_split:
@@ -1637,12 +1739,12 @@ def webwork_to_xml(
         # replace filenames, download images with new filenames
         count = 0
         # ww_image_url will be the URL to an image file used by the problem on the ww server
-        for match in re.finditer(graphics_pattern, response_t):
+        for match in re.finditer(graphics_pattern, response_text):
             ww_image_full_path = match.group(1)
-            if static_processing == 'local' and origin[problem] != 'server':
+            if static_processing == 'local' and origin[problem] != 'webwork2':
                 ww_image_scheme = ''
             else:
-                ww_image_url = urllib.parse.urljoin(ww_domain, ww_image_full_path)
+                ww_image_url = urllib.parse.urljoin(webwork2_domain, ww_image_full_path)
                 # strip away the scheme and location, if present (e.g 'https://webwork-ptx.aimath.org/')
                 ww_image_url_parsed = urllib.parse.urlparse(ww_image_url)
                 ww_image_scheme = ww_image_url_parsed.scheme
@@ -1662,7 +1764,7 @@ def webwork_to_xml(
             if ww_image_scheme:
                 image_url = ww_image_url
             else:
-                image_url = urllib.parse.urljoin(ww_domain, ww_image_full_path)
+                image_url = urllib.parse.urljoin(webwork2_domain, ww_image_full_path)
             # modify PTX problem source to include local versions
             if generated_dir:
                 if "xmlns:pi=" not in response_text:
@@ -1689,9 +1791,10 @@ def webwork_to_xml(
                 response_text = response_text.replace(
                     ww_image_full_path, "images/" + ptx_image
                 )
-            if static_processing == 'local' and origin[problem] != 'server':
+            if static_processing == 'local' and origin[problem] != 'webwork2':
                 image_local_path = ww_image_full_path.replace('/pg_files/tmp', tmp_dir)
                 destination_image_file = os.path.join(ww_images_dir, ptx_image_filename)
+
                 try:
                     log.info(
                         "saving image file {} {} in {}".format(
@@ -1756,23 +1859,23 @@ def webwork_to_xml(
         # "version 1" is a thing of the past. We still mark the current representations file as
         # "version 2" here, but it has no effect as all the code elsewhere now assumes "version 2".
         webwork_reps.set("version", "2")
-        webwork_reps.set("ww_major_version", str(ww_major_version))
-        webwork_reps.set("ww_minor_version", str(ww_minor_version))
+        webwork_reps.set("webwork2_major_version", str(webwork2_major_version))
+        webwork_reps.set("webwork2_minor_version", str(webwork2_minor_version))
         webwork_reps.set("{%s}id" % (XML), "extracted-" + problem)
         webwork_reps.set("ww-id", problem)
         static = ET.SubElement(webwork_reps, "static")
         static.set("seed", seed[problem])
-        if origin[problem] == "server":
-            static.set("source", source[problem])
+        if origin[problem] == "webwork2":
+            static.set("source", path[problem])
 
         # If there is "badness"...
         # Build 'shell' problems to indicate failures
         if badness:
-            print(badness_msg.format(problem_identifier, seed[problem], badness_tip))
+            log.error(badness_msg.format(path[problem], seed[problem], badness_tip))
             static.set("failure", badness_type)
             statement = ET.SubElement(static, "statement")
             p = ET.SubElement(statement, "p")
-            p.text = badness_msg.format(problem_identifier, seed[problem], badness_tip)
+            p.text = badness_msg.format(path[problem], seed[problem], badness_tip)
             continue
 
         # Start appending XML children
@@ -1861,49 +1964,54 @@ def webwork_to_xml(
 
         static_webwork_level(static, response_root)
 
-        # Add elements for interactivity
+        # Add rendering-data element with attribute data for rendering a problem
+        if (badness or origin[problem] == "generated" or (webwork2_minor_version < 19 and origin[problem] != "webwork2")):
+            source_key = "problemSource"
+        else:
+            source_key = "sourceFilePath"
 
-        # Add server-data element with attribute data for rendering a problem
-        source_key = (
-            "problemSource"
-            if (badness or origin[problem] == "ptx")
-            else "sourceFilePath"
-        )
         if badness:
             source_value = badness_base64
         else:
-            if origin[problem] == "server":
-                source_value = source[problem]
+            if origin[problem] == "webwork2":
+                source_value = path[problem]
             else:
-                source_value = embed_problem_base64
+                if webwork2_minor_version < 19:
+                    source_value = embed_problem_base64
+                else:
+                    if copied_from[problem] is not None:
+                        source_value = path[copied_from[problem]]
+                    else:
+                        source_value = path[problem]
 
-        server_data = ET.SubElement(webwork_reps, "server-data")
-        server_data.set(source_key, source_value)
-        server_data.set("domain", ww_domain)
-        server_data.set("course-id", courseID)
-        server_data.set("user-id", userID)
-        server_data.set("password", password)
-        server_data.set("language", localization)
+        rendering_data = ET.SubElement(webwork_reps, "rendering-data")
+        rendering_data.set(source_key, source_value)
+        rendering_data.set("origin", origin[problem])
+        rendering_data.set("domain", webwork2_domain)
+        rendering_data.set("course-id", courseID)
+        rendering_data.set("user-id", user)
+        rendering_data.set("passwd", passwd)
+        rendering_data.set("language", localization)
 
         # Add PG for PTX-authored problems
         # Empty tag with @source for server problems
         pg = ET.SubElement(webwork_reps, "pg")
         try:
-            pg.set("copied-from", copiedfrom[problem])
+            pg.set("copied-from", copied_from[problem])
         except Exception:
             pass
 
-        if origin[problem] == "ptx":
+        if origin[problem] == "generated":
             if badness:
                 pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nTEXT(beginproblem());\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
                 formatted_pg = pg_shell.format(
-                    badness_msg.format(problem_identifier, seed[problem], badness_tip)
+                    badness_msg.format(path[problem], seed[problem], badness_tip)
                 )
             else:
                 formatted_pg = pghuman[problem]
             pg.text = ET.CDATA("\n" + formatted_pg)
-        elif origin[problem] == "server":
-            pg.set("source", source[problem])
+        elif origin[problem] == "webwork2":
+            pg.set("source", path[problem])
 
     # write to file
     include_file_name = os.path.join(ww_reps_file)
@@ -1992,8 +2100,59 @@ def pg_macros(xml_source, pub_file, stringparams, dest_dir):
 #
 ############################################################
 
+# A helper function to clean up references and Citations
+# Likely preferable to use a CiteProc formatter object
+def _pretextify(biblio):
+    """Convert a string from CiteProc light HTML markup to PreTeXt internal markup"""
+
+    # biblio: some string formated by the CiteProc HTML formatter
+    # Return: string with better PreTeXt (internal) markup
+
+    # italics
+    biblio = re.sub(r'<i>', r'<pi:italic>', biblio)
+    biblio = re.sub(r'</i>', r'</pi:italic>', biblio)
+    # bold
+    biblio = re.sub(r'<b>', r'<pi:bold>', biblio)
+    biblio = re.sub(r'</b>', r'</pi:bold>', biblio)
+    # Unicode en dash, U+2013, e.g. for date ranges
+    # Escape sequence only, not "raw" r
+    biblio = re.sub('\u2013', r'<ndash/>', biblio)
+    # TODO: curly quotes as left/right pair/group
+    # THEN as left/right characters, U+201C, U+201D
+    biblio = re.sub('\u201C', r'<lq/>', biblio)
+    biblio = re.sub('\u201D', r'<rq/>', biblio)
+
+    return biblio
+
+
 def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
+    ### Verify need for CSL processing ###
+    #
+    # * Examine publisher file, get string for CSL file name
+    # * Use of CSL styles in "opt-in", condition here
+    # * Abandon with an error message if not possible
+
+    # Compute publisher variable report one time, collecting results
+    pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
+    # style file name selected by the publisher, no path information
+    # citeproc-py looks in their DATAPATH/STYLES_PATH = data/styles
+    # so place by a given style file by hand right now
+    # Call below does not need an extension, so we do not supply it
+    csl_style = get_publisher_variable(pub_vars, 'csl-style-file')
+    # XSL "value-of" for boolean reports strings "true" or "false"
+    using_csl_styles = get_publisher_variable(pub_vars, 'b-using-csl-styles')
+
+    if using_csl_styles == "false":
+        msg = " ".join(["requesting formatted references and citations is not possible",
+              "without a CSL style file specified in the publication file.",
+              "No action is being taken."])
+        log.error(msg)
+        # bail out and do not do *anything*
+        return
+
+    ### Imports, Constants, Helpers ###
+    #
     import json  # parse JSON CSL for cite
 
     # Requires the "citeproc-py" Python package to do
@@ -2003,9 +2162,31 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import citeproc.source.json  # CiteProcJSON
     import citeproc  # CitationStylesStyle, CitationStylesBibliography, formatter, CitationItem, Citation
 
-    stringparams = stringparams.copy()
+    # Necessary namespace information for creating
+    # a file of bibliographic information later
+    # "cs"/CSL might be avoided when we better
+    #   understand querying the style with CiteProc
+    XML = "http://www.w3.org/XML/1998/namespace"
+    PI = "http://pretextbook.org/2020/pretext/internal"
+    CSL = "http://purl.org/net/xbiblio/csl"
+    NSMAP = {"xml": XML, "pi": PI, "cs": CSL}
 
-    NSMAP = {"pi": "http://pretextbook.org/2020/pretext/internal"}
+    # callback for non-existent citation
+    # copied from citeproc-py example
+    def warn(citation_item):
+        log.warning("PTX:WARNING: Reference with key '{}' not found in the bibliography."
+          .format(citation_item.key))
+
+    ### XSL Stylesheet To Analyze Author's Source Bibliography ###
+    #
+    # * xsl/extract-biblio-csl.xsl
+    # * JSON blob of "biblio" information, indexed by biblio/@xml:id
+    # * Note that author's markup (e.g. "m" in a title) was converted
+    #   to text as it entered the JSON blob
+    # * Space separated list of xref/@ref, indexed by xref/@xml:id,
+    #   only when the xref/@ref points to backmatter/references/biblio
+
+    stringparams = stringparams.copy()
 
     if pub_file:
         stringparams["publisher"] = pub_file
@@ -2019,89 +2200,304 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Harvest bibliographic items and citations, converted to JSON
     xsltproc(extraction_xslt, xml_source, biblio_xml, None, stringparams)
 
-    # Compute publisher variable report one time, collecting results
-    pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
-    # style file name selected by the publisher, no path information
-    # citeproc-py looks in their DATAPATH/STYLES_PATH = data/styles
-    # so place by a given style file by hand right now
-    # Call below does not need an extension, so we do not supply it
-    csl_style = get_publisher_variable(pub_vars, 'csl-style-file')
+    # parse for lxml access
+    biblio_tree = ET.parse(biblio_xml)
+
+    ### Initialize CSL Style File ###
+    #
+    # * Examine publisher file, get string for CSL file name
+    # * Needs to be moved manually to <cite-proc>/data/styles
+    # * Need to automate placing the style file
+    # * We interrogate the punctuation of citations
+
     # Initialize use of the chosen style
     style = citeproc.CitationStylesStyle(csl_style, validate=False)
 
-    biblio_tree = ET.parse(biblio_xml)
+    # The citepoc-py "CitationStylesStyle" object is derived ultimately
+    # from an lxml Element Tree in a "xml" property of the object.  We
+    # can inspect this as needed, but there are better ways provided by
+    # the package.  Still, we preserve a bit of code that was functional
+    # on 2025-05-29 in case an example is useful later.  The
+    # CSL  /style/citation/layout  XML element has children that describe
+    # how a citation is rendered.  Compare this with ways to access
+    # (and manipulate!) these elements below.
+    #
+    # style_layout = style.xml.xpath("/cs:style/cs:citation/cs:layout", namespaces=NSMAP)[0]
+    # citation_punct = style_layout.attrib
+    # if "prefix" in citation_punct:
+    #     prefix = citation_punct["prefix"]
+    # else:
+    #     prefix = ""
 
-    # references collects an overall JSON blob of the PTX "references"
+    # Some aspects of styles are not supported
+    # and some influence behavior later.
+
+    # style/@class: "in-text" or "note"
+    style_class = style.root.get("class")
+    # Bail-out on a value we do not know
+    if not(style_class in ["in-text", "note"]):
+        msg = " ".join(['The requested CSL style file ("{}") has a /style/@class',
+                        'attribute value ("{}") we do not recognize.',
+                        'No action is being taken.'])
+        log.error(msg.format(csl_style, style_class))
+        return
+    # Bail-out for footnote/endnote styles
+    if style_class == "note":
+        msg = " ".join(['The requested CSL style file ("{}") uses a footnote/endnote',
+                        'style for citations, which PreTeXt does not yet support.',
+                        'No action is being taken.'])
+        log.error(msg.format(csl_style))
+        return
+
+
+    # We need to know about a "numeric" style later
+    # style/info/category/@citation-format: "numeric", "author-date", "note"
+    style_citation_format = style.root.info.category.get("citation-format")
+    # Bail-out on a value we do not know
+    if not(style_citation_format in ["numeric", "author-date", "note"]):
+        msg = " ".join(['The requested CSL style file ("{}") has a'
+                        '/style/info/category/@citation-format',
+                        'attribute value ("{}") we do not recognize.',
+                        'No action is being taken.'])
+        log.error(msg.format(csl_style, style_citation_format))
+        return
+    is_numeric = (style_citation_format == "numeric")
+
+    """
+    Typical CSL XML structure for the suffix used with numeric
+    identification, for example
+        "6. "    ->  ". "
+        "[6]"    ->  "]"
+        "(6)  "  ->  ")  "
+
+    <bibliography entry-spacing="0" second-field-align="flush">
+        <layout suffix=".">
+            <text variable="citation-number" prefix="[" suffix="]"/>
+    """
+
+    # Assume reference is identified numerically until shown otherwise.
+    # If numeric, grab the "suffix" to help with parsing out numeric
+    # identification is loosely structured/formatted output from the
+    # cite processor.
+    numeric_suffix = None
+    if is_numeric:
+        layout_element  = style.xml.xpath("/cs:style/cs:bibliography/cs:layout/cs:text[@variable = 'citation-number']", namespaces=NSMAP)[0]
+        numeric_suffix = layout_element.get("suffix")
+
+
+    ### Import JSON References to CiteProc ###
+    #
+    # "references" collects a single overall JSON blob of the
+    # PTX "references" backmatter division. We "load" the json
+    # and feed it to the CiteProcJSON constructor
     # lxml makes a list of length 1, which we massage some
-    references = biblio_tree.xpath("/pi:pretext-biblio-csl/pi:biblio-csl", namespaces=NSMAP)
-    json_raw = references[0].text
-    json_parsed = json.loads(json_raw)
-    print("Raw JSON:\n", json_parsed)
 
+    references_blob = biblio_tree.xpath("/pi:pretext-biblio-csl/pi:biblio-csl", namespaces=NSMAP)
+    json_raw = references_blob[0].text
+    json_parsed = json.loads(json_raw)
     # Process the JSON data to generate a citeproc-py BibliographySource.
     references_source = citeproc.source.json.CiteProcJSON(json_parsed)
-
-    # CiteProc source JSON structure
-    # Appears to be a dictionary, organized by IDs
-    # Fields/entries are dictionaries?  JSON arrays, ?
-    print("\n\nCiteProc internalized JSON source (reported):\n")
-    for key, entry in references_source.items():
-        print(key)
-        for name, value in entry.items():
-            print('   {}: {}'.format(name, value))
-
-    # Formatted references
-    # Note the use of an "HTML" formatter in last argument
-    # Now blindly following repository JSON example
+    # Initialize a CitationStylesBibliography with a style,
+    # the internalized source, and a formatter.  You would think
+    # we had nicely formatted reference items now. No, we need
+    # to supply the actual citations
     references = citeproc.CitationStylesBibliography(style, references_source, citeproc.formatter.html)
+    # You would think we had nicely formatted reference items now.
+    # No, we need to supply the actual citations since their
+    # appearance and order affects the references.  For example,
+    # if a reference is never cited, it does not appear in the
+    # references.
 
-    # Singleton (faux) citations
-    # Seems necessary to have at least one citation before
-    #   anything will appear in the bibliography
-    # Printing each "citation" is not very informative,
-    # They just look look like "Citation(key-list)"
-    singletons = biblio_tree.xpath("/pi:pretext-biblio-csl/pi:all-biblio-id/pi:biblio-id", namespaces=NSMAP)
-    for single in singletons:
-        citation = citeproc.Citation([citeproc.CitationItem(single.text)])
-        references.register(citation)
+    ### Citations ###
+    #
+    # * Retrieve citations/xref from analysis of author's source,
+    #   as a space separated list of @ref that point to "biblio"
+    # * Per citation/xref make a list of CitationItem that
+    #   correspond to the @ref values/ids.
+    # * Wrap as a Citation object representing a multi-target
+    #   citation from the author.
+    # * Register each one with the CiteProc references (bibliography)
 
-    # Now we have something we can work with
-    # We make a formatted display
-    # Note the HTML italic markup
-    print('')
-    print('Bibliography')
-    print('------------')
-    for item in references.bibliography():
-        print(str(item))
+    citation_xref = biblio_tree.xpath("/pi:pretext-biblio-csl/pi:xref-csl", namespaces=NSMAP)
 
-    # Following is a list of lists, each inner list is a reference
-    # and it is a collection of strings.  These pieces might be easier
-    # to manipulate: such as removing numbering or changing markup
-    print("\n\nPython list/strings exploded bibliography:")
-    print(references.style.render_bibliography(references.items))
+    # citations/xref never get sorted until part of a
+    # multi-part overall citation.  Here are two useful
+    # parallel Python lists we can make now and use later
+
+    # A citation has an @xml:id on an originating xref, it is
+    # the @id attribute in the XML derived from the author's source
+    xref_ids = [c.attrib["id"] for c in citation_xref]
+
+    # Each citation is a list, @ref in author's source of the
+    # values of @xml:id on the biblio.  XML has a space-separated list
+    xref_refs = [c.text.split() for c in citation_xref]
+
+    # Now make CiteProc objects, and register
+    citeproc_citations = []
+    for ref_list in xref_refs:
+        citeproc_citation_items = []
+        for ref in ref_list:
+            citeproc_citation_items.append(citeproc.CitationItem(ref))
+        citeproc_citation = citeproc.Citation(citeproc_citation_items)
+        citeproc_citations.append(citeproc_citation)
+        # CiteProc *must* see a Citation() being registered.
+        references.register(citeproc_citation)
+
+    ### References formatted ###
+    #
+    # * Sort the references since we will eventually absorb "biblio"
+    #   from an external BibTeX-like file. And have no real control
+    #   over ordering.  Presumably different styles will have different
+    #   sort orders.
+    # * Replace resuts of HTML formatter with PreTeXt internal
+    #   non-semantic font-changing markup.  And other sensible
+    #   PreTeXt markup.
+    # * Eventually we will have an integrated formatter
+    # * Wrap up as "csl-biblio" elements to pass into PreTeXt
+
+    # Here is the formatted version: a string representation of each reference
+    # Author's XML is here still and is still text.
+    # Note: attributes the pre-processor added are being capitalized?
+    # str() is necessary here, and results are strings, not objects [checked]
+    # Note markup conversion from CiteProc HTML to "internal" PreTeXt (mostly)
+    references.sort()
+    references_formatted = [_pretextify(str(item)) for item in references.bibliography()]
 
 
-    # Now messing about to xee what we can discern/manipulate
-    # from the formatted information.  Mostly a lot of chasing
-    # through source code to findf undocumented methods of
-    # accessing internal representations.
+    # references.keys gets sorted along, since these are the biblio/@xml:id,
+    # so we can continue to track the sorted version of the references
+    # for references with numeric identifiers, we split that identifier
+    # off as an attribute, which presumes it has no markup
+    references_wrapped = []
+    biblio_pattern = '<pi:csl-biblio numeric="{}" xml:id="{}" xmlns:{}="{}">{}</pi:csl-biblio>'
+    for k, rf in zip(references.keys, references_formatted):
+        numeric = ""
+        if numeric_suffix:
+            numeric, rf = rf.split(numeric_suffix, 1)
+            numeric = numeric + numeric_suffix
+            #(strip down numeric trailing whitespace?)
 
-    # Triple ### are erroneous commands
+        # references are text right now, we make a proper
+        # snippet of XML that can be parsed by the lxml
+        # "fromstring()" function into an ET element object.
+        # "xml" namespace seems to be known to lxml anyway
+        references_wrapped.append(biblio_pattern.format(numeric, k, "pi", PI, rf))
 
-    # print("#######################")
+    ### Citations formatted ###
+    #
+    # Now the formatted versions of the citations.  These are multi-part,
+    # which is going to be a big problem, as we want each part to be
+    # realized as a cross-refeence in various outputs as hyperlinks, knowls, etc.
 
-    # print(references.keys) # the ids (in order?)
-    # print(references.items) # CitationItem
-    # print(references._cites) # empty now
+    #  Strategy
+    #  We will get back from CiteProc citations that might look like
+    #
+    #    (Brown, et al. 2025, Blue 1933)
+    #
+    #  and we want to turn them into PreTeXt source that looks like
+    #
+    #    (<xref ref="brown-paper">Brown, et al. 2025</xref>, <xref ref="blue-book">Grey 1933</xref>)
+    #
+    #  Not only is it hard to reliably find the separator (", ") but
+    #  the actual citations get re-ordered from whatever order the
+    #  actual "xref" are made.  So..
+    #
+    #  We first *replace* the separator, so we can reliably split
+    #  the multi-part citation, and then we mimic the sorting operation
 
-    # keys from items
-    for a in references.items:
-         # print("K", a.key, a.get_field('type'))
-         ### print("T", a.bibliography.formatter.get_field('type'))
-         ### print("T", a.bibliography.formatter.get_field('type'))
-         # print(references.style.render_bibliography([a]))
-         ### CitationStylesElement.render()
-         pass
+    # A faux separator on citations, which should be so rare
+    # that we can reliably match it.  Linux mkpasswd of "beezer"
+    rare = "P1zXvPN5SACeY"
+
+    # citeproc.py has a slew of objects that encapsulate parts of
+    # the CSL XML specification. These can be located from our
+    # style variable via a hierarchy from the root. Here we get
+    # the layout for citations, to retrieve the overall formatting
+    # of citation AND we make a change, by *inserting* our rare
+    # separator (delimiter).
+    layout = style.root.citation.layout
+    prefix = layout.get("prefix", "")
+    real_delimiter = layout.get("delimiter", "")
+    suffix = layout.get("suffix", "")
+    layout.set("delimiter", rare)
+
+    # Similarly citeproc-py has a "sort" *object* inside
+    # "citation" which in turn has an optional "sort" object,
+    # which has a "sort" method
+    citation = style.root.citation
+    sorter = citation.sort
+
+    # Here we go, we collect formatted citations
+    citations_wrapped = []
+    solo_xref_pattern = '<xref ref="{}" pi:custom-text="yes" xmlns:{}="{}">{}</xref>'
+    citation_pattern = '<pi:csl-citation xml:id="{}" xmlns:{}="{}">{}</pi:csl-citation>'
+    for c, xref_id in zip(citeproc_citations, xref_ids) :
+        # version with rare separator
+        # strip the prefix and suffix,
+        # and blow it up into pieces
+        rough = references.cite(c, warn)
+        rough = rough[len(prefix):-len(suffix)]
+        rough = rough.split(rare)
+
+        # get the permutation from the re-ordering
+        # this is all borrowed from the Layout Class
+        # and its render_citation() method
+        cites = c.cites
+        # generic sort on keys, this is the "natural" order
+        # of the appearnce in the sorted bibliography
+        cites.sort(key=lambda x: references.keys.index(x.key))
+        # but if there is a sorting specified, do that
+        if sorter is not None:
+            cites = sorter.sort(cites, layout)
+        one_citation = []
+        for text_cite, cite_cite in zip(rough, cites):
+            ptx_cite = solo_xref_pattern.format(cite_cite.key, "pi", PI, text_cite)
+            one_citation.append(ptx_cite)
+        a_cite = _pretextify(prefix + real_delimiter.join(one_citation) + suffix)
+        a_cite = citation_pattern.format(xref_id, "pi", PI, a_cite)
+        citations_wrapped.append(a_cite)
+
+    ### Produce Useful XML ###
+    #
+    # * Build up a simple XML tree from pieces above
+    # * Make available as a generated product to be saved
+    # * Components will be assembled into source, as
+    #   replacements of backmatter/references and xref
+
+    # Root element of produced XML file, "pi:csl-references"
+    csl_references = ET.Element(ET.QName(NSMAP["pi"], "csl-references"), nsmap=NSMAP)
+    # Somewhat like "versioning" a file, set an attribute
+    # (@csl-style-file) on the root element of the file.
+    # In the XSL processing this can be compared to the
+    # value from the current publication file as a check
+    # that production and consumption are in-sync at the
+    # time of consumption.  The Python string here was
+    # determined at the time of production (i.e. now).
+    csl_references.set("csl-style-file", csl_style)
+
+    index = 1
+    for rw in references_wrapped:
+        biblio_tree = ET.fromstring(rw)
+        csl_references.insert(index, biblio_tree)
+        index = index + 1
+    # not sure how to *start* with next_child,
+    # so keep index running for more insertions
+    for cw in citations_wrapped:
+        xref_tree = ET.fromstring(cw)
+        csl_references.insert(index, xref_tree)
+        index = index + 1
+
+    # Fill an XML file with the  csl_references  tree
+    bib_file = os.path.join(dest_dir, "csl-bibliography.xml")
+
+    try:
+        with open(bib_file, "wb") as f:
+            f.write(ET.tostring(csl_references, encoding="utf-8",
+                    xml_declaration=True, pretty_print=True))
+    except Exception as e:
+        root_cause = str(e)
+        msg = "PTX:ERROR: there was a problem writing a references file: {}\n"
+        raise ValueError(msg.format(f) + root_cause)
 
 
 ##############################
@@ -2322,6 +2718,129 @@ def mermaid_images(
                         "the Mermaid output {} was not built".format(mmdout),
                     ]
                     log.warning("\n".join(msg))
+
+
+#####################################
+#
+#  STACK exercises (static)
+#
+#####################################
+
+# 2025-08-16: verbatim from
+#   https://github.com/PreTeXtBook/pretext/pull/2576
+# procedure name modified
+def _stack_replace_latex(text):
+    text = re.sub(r"\\\((.*?[^\\])\\\)", r"<m>\1</m>", text)
+    text = re.sub(r"\\\[(.*?[^\\])\\]", r"<me>\1</me>", text)
+    # We may want to detect align/similar environments inside \[\] and replace them with
+    # <md></md> using <mrow></mrow> for each row and \amp for alignment (also \lt, \gt)
+    return text
+
+# 2025-08-16: verbatim from
+#   https://github.com/PreTeXtBook/pretext/pull/2576
+# procedure name modified
+def _stack_process_response(qdict):
+    # This is a new feature not yet available at https://stack-api.maths.ed.ac.uk/render
+    # if qdict["isinteractive"]:
+    #     # We could generate a QR code to an online version in the future
+    #     return "<statement><p>This question contains interactive elements.</p></statement>"
+    qtext = qdict["questionrender"]
+    soltext = qdict["questionsamplesolutiontext"]
+
+    # Strip validation and specific feedback
+    qtext = re.sub("\[\[validation:(\w+)\]\]", "", qtext)
+    qtext = re.sub("\[\[feedback:(\w+)\]\]", "", qtext)
+
+    # Iterate over inputs. For each input with ID ansid:
+    ansids = re.findall("\[\[input:(\w+)\]\]", qtext)
+    answers = []
+    for ansid in ansids:
+        ansdata = qdict["questioninputs"][ansid]
+
+        ansconfig = ansdata["configuration"]
+        width = ansconfig["boxWidth"]
+
+        answers.append(f'<p><m>{ansdata["samplesolutionrender"]}</m></p>') # still need to wrap into <answer></answer>
+        qtext = qtext.replace(f"[[input:{ansid}]]", f'<fillin characters="{width}" name="{ansid}">')
+
+    qtext = _stack_replace_latex(qtext)
+    soltext = _stack_replace_latex(soltext)
+
+    return f'''
+    <statement>{qtext}</statement>
+    <solution>{soltext}</solution>
+    ''' + "\n".join(f"<answer>{ans}</answer>" for ans in answers)
+
+def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
+    '''Convert a STACK question to a static PreTeXt version via a STACK server'''
+
+    import json
+
+    try:
+        import requests  # to access STACK server
+    except ImportError:
+        global __module_warning
+        raise ImportError(__module_warning.format("requests"))
+
+    # TODO: get this from a publisher variable
+    api_url = 'https://stack-api.maths.ed.ac.uk/render'
+    # api_url = 'http://127.0.0.1:3080/render'  # for local docker setup
+
+    msg = 'converting STACK exercises from {} to static forms for placement in {}'
+    log.info(msg.format(xml_source, dest_dir))
+
+    tmp_dir = get_temporary_directory()
+    log.debug("temporary directory: {}".format(tmp_dir))
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-stack.xsl")
+
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+
+    log.info("extracting STACK exercises from {}".format(xml_source))
+    log.info("string parameters passed to extraction stylesheet: {}".format(stringparams) )
+    # place verbatim copies of STACK XML into a temporary directory
+    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+
+    # Course over files in temporary directory,
+    # converting to PreTeXt XML. Innermosat loop
+    # is modeled after work provided in
+    #   https://github.com/PreTeXtBook/pretext/pull/2576
+    with working_directory(tmp_dir):
+        for stack_file in os.listdir(tmp_dir):
+            # form output file now, for diagnostic
+            # message before it is needed
+            # just change extension, easy
+            pretext_file = os.path.join(dest_dir, stack_file.replace('.xml', '.ptx'))
+            msg = 'converting STACK question file "{}/{}" to static PreTeXt XML file "{}"'
+            log.debug(msg.format(tmp_dir, stack_file, pretext_file))
+
+            # Open STACK XML file, send to server, unravel JSON response into
+            # a text version of the static PreTeXt XML question
+            question_data = open(stack_file).read()
+            # JSON blob for STACK API server request
+            # TODO: accomodate per-question seed somehow (interrogate XML?)
+            request_data = {"questionDefinition": question_data, "seed": None}
+            question_json = requests.post(api_url, json=request_data)
+            question_dict = json.loads(question_json.text)
+            response = _stack_process_response(question_dict)
+            # response needs to be a single element, XSL uses it
+            # TODO: maybe STACK server can provide this wrapper
+            wrap_response = "<stack-static>\n{}\n</stack-static>"
+            question_pretext = wrap_response.format(response)
+
+            # PreTeXt filename formed above, write result into dest_dir
+            # This well-formed XML file will get picked up by the
+            # pretext-assembly.xsl stylesheet as part of forming a version
+            # of source suitable for static output formats (that are not
+            # as capable as HTML)
+            with open(pretext_file, 'w', encoding='utf-8') as ptxfile:
+                ptxfile.write(question_pretext)
+                ptxfile.close()
+
 
 #####################################
 #
@@ -4541,7 +5060,22 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     huge_parser = ET.XMLParser(huge_tree=True)
     src_tree = ET.parse(xml, parser=huge_parser)
     try:
-        src_tree.xinclude()
+        # Build custom includer so we can check error log
+        # undefined namespace prefixes (e.g. xi:) go in error log of XInclude object
+        # but do not cause it to fail/throw
+        includer = ET.XInclude()
+        includer(src_tree.getroot())
+        if includer.error_log:
+            namespace_xi_error = False
+            log.debug("XInclude error(s) found:")
+            for line in includer.error_log:
+                log.debug(f"* {line.message}")
+                if "Namespace prefix xi on include is not defined" in line.message:
+                    log.error("You are trying to use 'xi:include' in a file that does not contain 'xmlns:xi=\"http://www.w3.org/2001/XInclude\"' in its root element.")
+                    namespace_xi_error = True
+            # If the error was due to an undefined namespace prefix, raise an error
+            if namespace_xi_error:
+                raise ET.XIncludeError("Missing namespace declaration for 'xi'")
     except ET.XIncludeError as e:
         # xinclude() does not show what file a parsing error occured in
         # So if there was an error, build a custom loader and redo with ElementInclude
@@ -4557,6 +5091,7 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
 
         # Reparse the tree (was modified in try clause) and run ElementInclude
         # This should also fail, but will give a better error message
+        # NB this might report false positives (duplicate xml:id even if controlled by versions)
         src_tree = ET.parse(xml, parser=huge_parser)
         ElementInclude.include(src_tree, loader=my_loader, max_depth=100)
 

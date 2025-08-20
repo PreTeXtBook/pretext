@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- To process this file with PreTeXt-CLI do                                                     -->
+<!--                                                                                              -->
+<!-- (1) HTML:                                                                                    -->
+<!--     pretext build html                                                                       -->
+<!--                                                                                              -->
+<!-- (2) LaTeX:                                                                                   -->
+<!--     pretext build latex                                                                      -->
+<!--                                                                                              -->
+<!-- (3) PDF:                                                                                     -->
+<!--     pretext build pdf                                                                        -->
+
+
+<!-- To process this file with xsltproc do                                                        -->
+<!--                                                                                              -->
+<!-- (1) LaTeX/PDF:                                                                               -->
+<!--     xsltproc -o minimal.tex PATH_TO/mathbook/xsl/pretext-latex.xsl source/main.ptx           -->
+<!--     pdflatex minimal.tex                                                                     -->
+<!--     xelatex minimal.tex                                                                      -->
+<!--                                                                                              -->
+<!-- (2) HTML:                                                                                    -->
+<!--     xsltproc PATH_TO/mathbook/xsl/pretext-html.xsl source/main.ptx                           -->
+<!--     <browser>  minimal.html                                                                  -->
+<!--                                                                                              -->
+<!-- (3) CoCalc worksheet (parameter causes a single file for output)                             -->
+<!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
+<!--     xsltproc -X-stringparam chunk.level 0 PATH_TO/mathbook/xsl/pretext-smc.xsl source/main.ptx   -->
+<!--     <CoCalc> minimal.sagews                                                                  -->
+<!--                                                                                              -->
+<!-- (4) Sage doctesting                                                                          -->
+<!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
+<!--     xsltproc -X-stringparam chunk.level 0 PATH_TO/mathbook/xsl/pretext-sage-doctest.xsl source/main.ptx  -->
+<!--     <read further instructions in> minimal.py                                                -->
+
+<pretext>
+
+    <docinfo>
+        <macros>
+        \newcommand{\doubler}[1]{2#1}
+        </macros>
+    </docinfo>
+
+    <article xml:id="minimal">
+        <title>A minimal article containing a STACK question</title>
+
+        <frontmatter>
+
+            <bibinfo>
+                <author>
+                    <personname>Chris Sangwin</personname>
+                    <institution>University of Edinburgh</institution>
+                </author>
+                <date><today /></date>
+            </bibinfo>
+
+            <abstract>
+                <p>This is a very short article, illustrating the use of STACK questions within PreTeXt.</p>
+            </abstract>
+
+        </frontmatter>
+
+        <introduction>
+            <p>This is a very short article, illustrating the use of STACK questions within PreTeXt.</p>
+        </introduction>
+
+        <section xml:id="section-stack">
+            <title>STACK question</title>
+
+            <p>The following illustrated embedding a STACK question.</p>
+
+            <stack source="questions/01_integration_with_feedback.xml" />
+        </section>
+
+    </article>
+
+</pretext>

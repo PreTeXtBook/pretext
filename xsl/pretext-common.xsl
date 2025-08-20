@@ -525,7 +525,7 @@ Book (with parts), "section" at level 3
 <!-- application we compute the "old" level to test for consistency.         -->
 
 <!-- ####################################################################### -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet" mode="new-level">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout" mode="new-level">
     <xsl:variable name="old-level">
         <xsl:apply-templates select="." mode="level"/>
     </xsl:variable>
@@ -575,7 +575,7 @@ Book (with parts), "section" at level 3
 <!-- chapters of books, sections of articles, or in the case of         -->
 <!-- solutions or references, children of an appendix.                  -->
 
-<xsl:template match="colophon|biography|dedication|acknowledgement|preface|chapter|section|subsection|subsubsection|slide|appendix|index|colophon|exercises|reading-questions|references|solutions|glossary|worksheet" mode="level">
+<xsl:template match="colophon|biography|dedication|acknowledgement|preface|chapter|section|subsection|subsubsection|slide|appendix|index|colophon|exercises|reading-questions|references|solutions|glossary|worksheet|handout" mode="level">
     <xsl:variable name="level-above">
         <xsl:apply-templates select="parent::*" mode="level"/>
     </xsl:variable>
@@ -2181,11 +2181,12 @@ Book (with parts), "section" at level 3
         <xsl:when test="part or chapter or section or subsection or subsubsection">
             <xsl:value-of select="false()" />
         </xsl:when>
-        <!-- One exception, a division full of only "worksheet" (as a subdivision, -->
-        <!-- there could be metadata, "introduction", etc.)  We know there are no  -->
-        <!-- traditional divisions as subdiivisions at this point.  So we test for -->
-        <!-- at least one worksheet and no other specialized divisions.            -->
-        <xsl:when test="worksheet and not(exercises|references|glossary|reading-questions|solutions)">
+        <!-- One exception, a division full of only "worksheet" or "handout"     -->
+        <!-- (as a subdivision, there could be metadata, "introduction", etc.)   -->
+        <!-- We know there are no traditional divisions as subdiivisions at this -->
+        <!-- point.  So we test for at least one worksheet or handout and no     -->
+        <!-- other specialized divisions.                                        -->
+        <xsl:when test="(worksheet or handout) and not(exercises|references|glossary|reading-questions|solutions)">
             <xsl:value-of select="false()" />
         </xsl:when>
         <xsl:otherwise>
@@ -2204,8 +2205,8 @@ Book (with parts), "section" at level 3
 <!-- There are two models for most of the divisions (part -->
 <!-- through subsubsection, plus appendix).  One has      -->
 <!-- subdivisions, and possibly multiple "exercises", or  -->
-<!-- other specialized subdivisions.  (Namely             -->
-<!-- "worksheet", "exercises", "solutions", and not       -->
+<!-- other specialized subdivisions.  (Namely "worksheet",-->
+<!-- "handout", "exercises", "solutions", and not         -->
 <!-- "references", "glossary", nor "reading-questions".)  -->
 <!-- The other has no subdivisions, and then at most one  -->
 <!-- of each type of specialized subdivision, which       -->
@@ -2219,10 +2220,11 @@ Book (with parts), "section" at level 3
 <!-- An exception is a division of *only* worksheets.     -->
 <!-- Although there could be titles and the like.         -->
 <!-- So we compare all-children to  metadata + worksheet. -->
+<!-- TODO: should there be a similar exception for handouts? -->
 <xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
     <xsl:variable name="has-traditional" select="boolean(&TRADITIONAL-DIVISION;)"/>
     <xsl:variable name="all-children" select="*"/>
-    <xsl:variable name="all-worksheet" select="title|shorttitle|plaintitle|idx|introduction|worksheet|conclusion"/>
+    <xsl:variable name="all-worksheet" select="title|shorttitle|plaintitle|idx|introduction|worksheet|handout|conclusion"/>
     <xsl:variable name="only-worksheets" select="count($all-children) = count($all-worksheet)"/>
 
     <xsl:value-of select="$has-traditional or $only-worksheets"/>
@@ -2237,7 +2239,7 @@ Book (with parts), "section" at level 3
 <!-- they do not even have a number (singleton "references" as    -->
 <!-- child of "backmatter").  This template returns "true" if a   -->
 <!-- specialized division "owns" its "own" number.                -->
-<xsl:template match="exercises|worksheet|references|glossary|reading-questions|solutions" mode="is-specialized-own-number">
+<xsl:template match="exercises|worksheet|handout|references|glossary|reading-questions|solutions" mode="is-specialized-own-number">
     <xsl:choose>
         <!-- *Some* specialized divisions can appear as a child of the    -->
         <!-- "backmatter" too.  But only those below.  The rest are       -->
@@ -2589,7 +2591,7 @@ Book (with parts), "section" at level 3
 <!-- Some items have default titles that make sense         -->
 <!-- Typically these are one-off subdivisions (eg preface), -->
 <!-- or repeated generic divisions (eg exercises)           -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|abstract|references|glossary|exercises|worksheet|reading-questions|exercisegroup|solutions|backmatter|index|case|interactive/instructions|keywords" mode="has-default-title">
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|abstract|references|glossary|exercises|worksheet|handout|reading-questions|exercisegroup|solutions|backmatter|index|case|interactive/instructions|keywords" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -2880,7 +2882,7 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Introductions and Conclusions -->
-<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|reading-questions/introduction|glossary/introduction|references/introduction|article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|reading-questions/conclusion|glossary/conclusion|references/conclusion" mode="title-wants-punctuation">
+<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|handout/introduction|reading-questions/introduction|glossary/introduction|references/introduction|article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|handout/conclusion|reading-questions/conclusion|glossary/conclusion|references/conclusion" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <xsl:template match="*" mode="title-wants-punctuation">
@@ -3708,7 +3710,8 @@ Book (with parts), "section" at level 3
 <!-- We want to associate those programs with the label on their container -->
 <!-- and NOT with an auto-generated label on the program itself that might -->
 <!-- come from an @xml:id.                                                 -->
-<xsl:template match="exercise/program" mode="runestone-id">
+<!-- This is an implicit use of &PROJECT-LIKE; and should be kept in sync  -->
+<xsl:template match="exercise/program|task/program|project/program|activity/program|exploration/program|investigation/program" mode="runestone-id">
     <xsl:variable name="label">
         <xsl:value-of select="../@label"/>
     </xsl:variable>
@@ -3736,6 +3739,24 @@ Book (with parts), "section" at level 3
             <xsl:text>rs-</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Need a unique filename for codelens traces                                -->
+<!-- visible-id can change if an xml:id is added to program for other reasons  -->
+<!-- Can't vary with build target (so no runestone-id)                         -->
+<!-- Should generally mirror rs-id but without prefix                          -->
+<xsl:template match="program[@interactive = 'codelens']" mode="runestone-codelens-trace-filename">
+    <xsl:choose>
+        <!-- If part of exercise-like, use that label, otherwise own                -->
+        <!-- This is an implicit use of &PROJECT-LIKE; and should be kept in sync   -->
+        <xsl:when test="parent::exercise|parent::task|parent::project|parent::activity|parent::exploration|parent::investigation">
+            <xsl:value-of select="../@unique-id"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@unique-id"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>.js</xsl:text>
 </xsl:template>
 
 <!--            -->
@@ -3805,7 +3826,7 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- Serial Numbers: Specialized Divisions -->
-<xsl:template match="exercises|solutions|worksheet|reading-questions|references|glossary" mode="serial-number">
+<xsl:template match="exercises|solutions|worksheet|handout|reading-questions|references|glossary" mode="serial-number">
     <xsl:variable name="is-numbered">
         <xsl:apply-templates select="." mode="is-specialized-own-number"/>
     </xsl:variable>
@@ -3852,12 +3873,12 @@ Book (with parts), "section" at level 3
     <xsl:param name="numbering-items" />
     <!-- determine enclosing level of numbered item -->
 
-    <!-- determine if the object being numbered is inside  -->
-    <!-- a decorative "exercises" or "worksheet" -->
+    <!-- determine if the object being numbered is inside    -->
+    <!-- a decorative "exercises", "worksheet", or "handout" -->
     <xsl:variable name="inside-decorative">
-        <xsl:if test="ancestor::*[self::exercises or self::reading-questions or self::worksheet]">
+        <xsl:if test="ancestor::*[self::exercises or self::reading-questions or self::worksheet or self::handout]">
             <xsl:variable name="is-numbered">
-                <xsl:apply-templates select="ancestor::*[self::exercises or self::worksheet or self::reading-questions]" mode="is-specialized-own-number"/>
+                <xsl:apply-templates select="ancestor::*[self::exercises or self::worksheet or self::handout or self::reading-questions]" mode="is-specialized-own-number"/>
             </xsl:variable>
             <xsl:if test="not($is-numbered ='true')">
                 <xsl:text>true</xsl:text>
@@ -4012,13 +4033,13 @@ Book (with parts), "section" at level 3
             <xsl:number from="chapter|book/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/reading-questions" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout|chapter/reading-questions" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet|section/reading-questions" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout|section/reading-questions" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout|subsection/reading-questions" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:ERROR: Subtree level for atomic block number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4053,13 +4074,13 @@ Book (with parts), "section" at level 3
             <xsl:number from="chapter|book/backmatter/appendix" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/reading-questions" level="any" count="&PROJECT-LIKE;" />
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout|chapter/reading-questions" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet|section/reading-questions" level="any" count="&PROJECT-LIKE;" />
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout|section/reading-questions" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="&PROJECT-LIKE;" />
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout|subsection/reading-questions" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:ERROR: Subtree level for project number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4111,21 +4132,21 @@ Book (with parts), "section" at level 3
                 list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/reading-questions" level="any"
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout|chapter/reading-questions" level="any"
                 count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet|section/reading-questions" level="any"
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout|section/reading-questions" level="any"
                 count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any"
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout|subsection/reading-questions" level="any"
                 count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
@@ -4167,15 +4188,15 @@ Book (with parts), "section" at level 3
                 count="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any"
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout" level="any"
                 count="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet" level="any"
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout" level="any"
                 count="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any"
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout" level="any"
                 count="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" />
         </xsl:when>
         <xsl:otherwise>
@@ -4212,13 +4233,13 @@ Book (with parts), "section" at level 3
             <xsl:number from="chapter|book/backmatter/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/reading-questions" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout|chapter/reading-questions" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet|section/reading-questions" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout|section/reading-questions" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout|subsection/reading-questions" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:ERROR: Subtree level for equation number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4322,13 +4343,13 @@ Book (with parts), "section" at level 3
             <xsl:number from="chapter|book/backmatter/appendix" level="any" count="fn" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/reading-questions" level="any" count="fn" />
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout|chapter/reading-questions" level="any" count="fn" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet|section/reading-questions" level="any" count="fn" />
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout|section/reading-questions" level="any" count="fn" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="fn" />
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout|subsection/reading-questions" level="any" count="fn" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:ERROR: Subtree level for footnote number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4575,14 +4596,14 @@ Book (with parts), "section" at level 3
 <!-- level when passed recursively.                            -->
 
 <xsl:template match="*" mode="multi-number">
-    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::reading-questions or self::solutions or self::references or self::glossary or self::worksheet or self::backmatter[$b-has-parts]]"/>
+    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::reading-questions or self::solutions or self::references or self::glossary or self::worksheet or self::handout or self::backmatter[$b-has-parts]]"/>
     <xsl:param name="levels" />
     <xsl:param name="pad" />
 
     <!-- Test if last node is unnumbered specialized division -->
     <!-- we do not want to duplicate the serial number, which is from the containing division -->
     <xsl:variable name="decorative-division">
-        <xsl:if test="$nodes[last()][self::exercises or self::worksheet or self::reading-questions]">
+        <xsl:if test="$nodes[last()][self::exercises or self::worksheet or self::handout or self::reading-questions]">
             <xsl:variable name="is-numbered">
                 <xsl:apply-templates select="$nodes[last()]" mode="is-specialized-own-number"/>
             </xsl:variable>
@@ -4678,7 +4699,7 @@ Book (with parts), "section" at level 3
 <!-- the serial-numer and the structure-number, so that other -->
 <!-- devices (like local numbers) will behave correctly.      -->
 <!-- Serial numbers are computed elsewhere, but in tandem.    -->
-<xsl:template match="exercises|solutions[not(parent::backmatter)]|worksheet|reading-questions|references[not(parent::backmatter)]|glossary[not(parent::backmatter)]" mode="structure-number">
+<xsl:template match="exercises|solutions[not(parent::backmatter)]|worksheet|handout|reading-questions|references[not(parent::backmatter)]|glossary[not(parent::backmatter)]" mode="structure-number">
     <xsl:variable name="is-numbered">
         <xsl:apply-templates select="." mode="is-specialized-own-number"/>
     </xsl:variable>
@@ -6097,7 +6118,7 @@ Book (with parts), "section" at level 3
         <!-- Since exercises divisions and references are top-level -->
         <!-- ordered lists, when these are the only interesting     -->
         <!-- ancestor, we add one to the level and return           -->
-        <xsl:when test="(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references) and not(ancestor::ol)">
+        <xsl:when test="(ancestor::exercises or ancestor::worksheet or ancestor::handout or ancestor::reading-questions or ancestor::references) and not(ancestor::ol)">
             <xsl:value-of select="$level + 1" />
         </xsl:when>
         <xsl:when test="ancestor::ol">
@@ -6113,7 +6134,7 @@ Book (with parts), "section" at level 3
 
 <!-- Exercises and References are        -->
 <!-- specialized top-level ordered lists -->
-<xsl:template match="exercises|worksheet|reading-questions|references" mode="ordered-list-level">
+<xsl:template match="exercises|worksheet|handout|reading-questions|references" mode="ordered-list-level">
     <xsl:value-of select="0" />
 </xsl:template>
 
@@ -6194,6 +6215,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="(@cols = 2) or (@cols = 3) or (@cols = 4) or (@cols = 5) or (@cols = 6)">
             <xsl:text>cols</xsl:text>
             <xsl:value-of select="@cols" />
+            <xsl:text> multicolumn</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:ERROR:   @cols attribute of lists or exercise groups, must be between 1 and 6 (inclusive), not "cols=<xsl:value-of select="@cols" />"</xsl:message>
@@ -6430,6 +6452,10 @@ Book (with parts), "section" at level 3
     <xsl:param name="b-worksheet-hint" />
     <xsl:param name="b-worksheet-answer" />
     <xsl:param name="b-worksheet-solution" />
+    <xsl:param name="b-project-statement" />
+    <xsl:param name="b-project-hint" />
+    <xsl:param name="b-project-answer" />
+    <xsl:param name="b-project-solution" />
 
     <xsl:apply-templates select=".//exercise" mode="dry-run">
         <xsl:with-param name="admit"           select="$admit"/>
@@ -6438,6 +6464,14 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="b-has-answer"    select="$b-worksheet-answer" />
         <xsl:with-param name="b-has-solution"  select="$b-worksheet-solution" />
     </xsl:apply-templates>
+    <xsl:apply-templates select=".//activity|.//exploration|.//investigation|.//project" mode="dry-run">
+        <xsl:with-param name="admit"           select="$admit"/>
+        <xsl:with-param name="b-has-statement" select="$b-project-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
+    </xsl:apply-templates>
+
 </xsl:template>
 
 <xsl:template match="reading-questions" mode="dry-run">
@@ -6532,21 +6566,39 @@ Book (with parts), "section" at level 3
 <!-- the element from this template would be useful.                       -->
 <xsl:template match="*" mode="dry-run"/>
 
-<!-- This template is called for items in a worksheet that can have a  -->
+<!-- This template is called for items in a printout that can have a   -->
 <!-- workspace specified.  It is important that this sometimes returns -->
 <!-- an empty string, since that is a signal to not construct some     -->
 <!-- surrounding infrastructure to implement the necessary space.      -->
-<xsl:template match="&PROJECT-LIKE;|exercise|task" mode="sanitize-workspace">
-    <!-- bail out quickly and empty if not on a worksheet    -->
+<xsl:template match="*" mode="sanitize-workspace">
+    <!-- bail out quickly and empty if not on a printout     -->
     <!-- bail out if at a "task" that is not a terminal task -->
-    <!-- bail out if publisher file says to not format worksheets        -->
+    <!-- we assume LaTeX will only request this template if  -->
+    <!-- the publisher file allows it.                       -->
     <!-- NB: a blank workspace is used as a signal in "divisionexercise" -->
     <!--     in LaTeX conversion, via parameter #3 of the  environment   -->
-    <xsl:if test="ancestor::worksheet and not(child::task) and ($latex-worksheet-formatted = 'yes')">
-        <!-- First element with @workspace, confined to the worksheet  -->
+
+    <xsl:if test="(ancestor::worksheet or ancestor::handout) and not(child::task)">
+        <!-- First element with @workspace, confined to the printout   -->
         <!-- Could be empty node-set, which will be empty string later -->
-        <xsl:variable name="workspaced" select="ancestor-or-self::*[@workspace and ancestor::worksheet][1]"/>
-        <xsl:variable name="raw-workspace" select="normalize-space($workspaced/@workspace)"/>
+        <xsl:variable name="raw-workspace">
+            <xsl:choose>
+                <!-- @workspace on the terminal task or exercise, if it has it. -->
+                <!-- NB can't have children tasks by conditional above. -->
+                <xsl:when test="self::task[@workspace] or self::exercise[@workspace]">
+                    <xsl:value-of select="normalize-space(@workspace)"/>
+                </xsl:when>
+                <!-- task/exercise w/out workspace but @workspace on the first ancestor with it, if any -->
+                <!-- This can happen for an exercise in an exercisegroup -->
+                <xsl:when test="(self::task or self::exercise) and ancestor::*[@workspace][1]">
+                    <xsl:value-of select="normalize-space(ancestor::*[@workspace][1]/@workspace)"/>
+                </xsl:when>
+                <!-- otherwise, @workspace on the element, if any -->
+                <xsl:otherwise>
+                    <xsl:value-of select="normalize-space(@workspace)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:choose>
             <!-- bail out empty if empty or absent -->
             <xsl:when test="$raw-workspace = ''"/>
@@ -6556,7 +6608,7 @@ Book (with parts), "section" at level 3
             <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 0) = '%'">
                 <xsl:variable name="approximate-inches" select="concat(substring($raw-workspace, 1, string-length($raw-workspace) - 1) div 10, 'in')"/>
                 <xsl:value-of select="$approximate-inches"/>
-                <xsl:message>PTX:ERROR:  as of 2020-03-17 worksheet exercises' workspace should be specified in 'in' or in 'cm'.  Approximating a page fraction of <xsl:value-of select="@workspace"/> by <xsl:value-of select="$approximate-inches"/>.</xsl:message>
+                <xsl:message>PTX:WARNING:  as of 2020-03-17 worksheet exercises' workspace should be specified in 'in' or in 'cm'.  Approximating a page fraction of <xsl:value-of select="@workspace"/> by <xsl:value-of select="$approximate-inches"/>.</xsl:message>
                 <xsl:apply-templates select="." mode="location-report"/>
             </xsl:when>
             <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 1) = 'in'">
@@ -6579,9 +6631,7 @@ Book (with parts), "section" at level 3
 <!-- We kill the worksheet @workspace option for WW exercises until    -->
 <!-- we have a better understanding of just how this will be specified -->
 <!-- A no-op, just remove to enable, but will need testing             -->
-<!-- EXAMPLE-LIKE look like things to do, but are not, and so do       -->
-<!-- not have @workspace inside a worksheet                            -->
-<xsl:template match="webwork-reps/static|webwork-reps/static/stage|&EXAMPLE-LIKE;" mode="sanitize-workspace"/>
+<xsl:template match="webwork-reps/static|webwork-reps/static/stage|exercisegroup|&SOLUTION-LIKE;" mode="sanitize-workspace"/>
 
 
 
@@ -6808,7 +6858,7 @@ Book (with parts), "section" at level 3
             <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
             <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
             <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
-            <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
+            <xsl:with-param name="b-reading-solution"     select="$b-reading-solution" />
             <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
             <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
             <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
@@ -6838,7 +6888,7 @@ Book (with parts), "section" at level 3
             <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
             <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
             <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
-            <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
+            <xsl:with-param name="b-reading-solution"     select="$b-reading-solution" />
             <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
             <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
             <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
@@ -6925,7 +6975,7 @@ Book (with parts), "section" at level 3
                 <!-- N.B.: inline exercises and PROJECT-LIKE can be   -->
                 <!-- "hidden" inside the "paragraphs" pseudo-division -->
                 <!-- Everything below is 1 deeper than the division's heading -->
-                <xsl:for-each select="exercise|subexercises|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|paragraphs/*[&PROJECT-FILTER;]|self::worksheet//exercise">
+                <xsl:for-each select="exercise|subexercises|exercisegroup|&PROJECT-LIKE;|paragraphs/*[self::exercise or &PROJECT-FILTER;]|self::worksheet//*[self::exercise or &PROJECT-FILTER;]">
                      <xsl:choose>
                         <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
                             <xsl:apply-templates select="." mode="solutions">
@@ -7033,7 +7083,7 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
         <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
         <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
-        <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
+        <xsl:with-param name="b-reading-solution"     select="$b-reading-solution" />
         <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
         <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
         <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
@@ -7094,6 +7144,27 @@ Book (with parts), "section" at level 3
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- ################ -->
+<!-- Printout Margins -->
+<!-- ################ -->
+
+<xsl:template match="worksheet|handout" mode="printout-margin">
+    <xsl:param name="author-side"/>
+    <xsl:param name="publisher-side"/>
+    <xsl:choose>
+        <xsl:when test="$author-side">
+            <xsl:value-of select="normalize-space($author-side)"/>
+        </xsl:when>
+        <xsl:when test="@margin">
+            <xsl:value-of select="normalize-space(@margin)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="normalize-space($publisher-side)"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ##################-->
 <!-- Frontmatter Items -->
@@ -8129,6 +8200,17 @@ Book (with parts), "section" at level 3
     </xsl:for-each>
 </xsl:template>
 
+<!-- This works, without keys, and could be adapted to range over actual data in text -->
+<!-- For example, this approach is used for contributors to FCLA                      -->
+<!--
+<xsl:template match="*" mode="listings-language">
+    <xsl:variable name="language">
+        <xsl:value-of select="@language"/>
+    </xsl:variable>
+    <xsl:value-of select="document('')/*/mb:programming/language[@ptx=$language]/listings"/>
+</xsl:template>
+-->
+
 <!-- A whole <program> node comes in,  -->
 <!-- text of prism name comes out -->
 <xsl:template match="program|pf" mode="prism-language">
@@ -8157,15 +8239,6 @@ Book (with parts), "section" at level 3
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-
-<!-- This works, without keys, and could be adapted to range over actual data in text -->
-<!-- For example, this approach is used for contributors to FCLA                      -->
-<!--
-<xsl:template match="*" mode="listings-language">
-    <xsl:variable name="language"><xsl:value-of select="@language" /></xsl:variable>
-    <xsl:value-of select="document('')/*/mb:programming/language[@ptx=$language]/listings"/>
-</xsl:template>
--->
 
 <!-- ############################ -->
 <!-- Table construction utilities -->
@@ -8720,6 +8793,8 @@ Book (with parts), "section" at level 3
     <xsl:variable name="error-message">
         <xsl:apply-templates select="." mode="error-check-xref"/>
     </xsl:variable>
+    <xsl:variable name="b-custom-biblio-text" select="@pi:custom-text = 'yes'"/>
+
     <xsl:choose>
         <xsl:when test="not($error-message = '')">
             <xsl:variable name="warning-rtf">
@@ -8746,7 +8821,7 @@ Book (with parts), "section" at level 3
                 <xsl:if test="parent::mrow">
                     <xsl:text>\text{</xsl:text>
                 </xsl:if>
-                <xsl:if test="$b-is-biblio-target">
+                <xsl:if test="$b-is-biblio-target and not($b-custom-biblio-text)">
                     <xsl:text>[</xsl:text>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="xref-text" >
@@ -8773,7 +8848,7 @@ Book (with parts), "section" at level 3
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:if>
-                <xsl:if test="$b-is-biblio-target">
+                <xsl:if test="$b-is-biblio-target and not($b-custom-biblio-text)">
                     <xsl:text>]</xsl:text>
                 </xsl:if>
                 <xsl:if test="parent::mrow">
@@ -9380,9 +9455,16 @@ Book (with parts), "section" at level 3
         <!-- number only, consumer wraps -->
         <!-- warn about useless content override (use as @detail?) -->
         <xsl:when test="$b-is-biblio-target">
-            <xsl:apply-templates select="$target" mode="xref-number">
-                <xsl:with-param name="xref" select="." />
-            </xsl:apply-templates>
+            <xsl:choose>
+                <xsl:when test="$custom-text = ''">
+                    <xsl:apply-templates select="$target" mode="xref-number">
+                        <xsl:with-param name="xref" select="." />
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$custom-text"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <!-- now not an equation or bibliography target -->
         <!-- custom text is additional, as prefix, with no type -->
@@ -10474,37 +10556,34 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- A tag, with angle brackets and monospace font -->
 <xsl:template match="tag">
-    <xsl:variable name="the-element">
-        <c>
+    <xsl:call-template name="code-wrapper">
+        <xsl:with-param name="content">
             <xsl:text>&lt;</xsl:text>
-            <xsl:apply-templates/>
+            <xsl:value-of select="."/>
             <xsl:text>&gt;</xsl:text>
-        </c>
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($the-element)/*" />
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- An empty tag, with angle brackets and monospace font -->
 <xsl:template match="tage">
-    <xsl:variable name="the-element">
-        <c>
+    <xsl:call-template name="code-wrapper">
+        <xsl:with-param name="content">
             <xsl:text>&lt;</xsl:text>
-            <xsl:apply-templates/>
+            <xsl:value-of select="."/>
             <xsl:text>/&gt;</xsl:text>
-        </c>
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($the-element)/*" />
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- An attribute, with @ and monospace font -->
 <xsl:template match="attr">
-    <xsl:variable name="the-attribute">
-        <c>
+    <xsl:call-template name="code-wrapper">
+        <xsl:with-param name="content">
             <xsl:text>@</xsl:text>
-            <xsl:apply-templates/>
-        </c>
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($the-attribute)/*" />
+            <xsl:value-of select="."/>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- ################### -->
@@ -10603,6 +10682,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Raw Bibliographic Entry Formatting              -->
 <!-- Markup really, not full-blown data preservation -->
+
+<xsl:template match="pi:csl-citation">
+    <!-- Some citations have titles, some titles have  -->
+    <!-- math, and so cannot just select "text + xref" -->
+    <xsl:apply-templates select="node()"/>
+</xsl:template>
 
 <!-- Title in italics -->
 <xsl:template match="biblio[@type='raw']/title">
@@ -11017,10 +11102,10 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:text>Your &lt;book&gt; does not have any chapters.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
         </xsl:message>
     </xsl:if>
-    <xsl:if test="article and not(article/p) and not(article/section) and not(article/worksheet)">
+    <xsl:if test="article and not(article/p) and not(article/section) and not(article/worksheet) and not(article/handout)">
         <xsl:message>
             <xsl:text>PTX:WARNING:    </xsl:text>
-            <xsl:text>Your &lt;article&gt; does not have any sections or worksheets, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
+            <xsl:text>Your &lt;article&gt; does not have any sections, worksheets, or handouts, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
         </xsl:message>
     </xsl:if>
 </xsl:template>
@@ -11079,7 +11164,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- prompt, input, output for sage, console, program  -->
 <!-- NB: cline/area is used in Clickable Area problems -->
 <xsl:template match="mathbook|pretext" mode="text-element-warning">
-    <xsl:variable name="bad-elements" select=".//c/*|.//cline/*[not(self::area)]|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt/*|.//input/*|.//output/*" />
+    <xsl:variable name="bad-elements" select=".//c/*|.//cline/*[not(self::area)]|.//cd[not(cline)]/*|.//pre[not(cline)]/*|.//prompt[not(parent::checkpoint)]/*|.//input/*|.//output/*" />
     <xsl:if test="$bad-elements">
         <xsl:message>
             <xsl:text>PTX:WARNING: </xsl:text>
@@ -12007,8 +12092,15 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
       <xsl:with-param name="occurrences" select="&quot;$document-root//datafile[@datafile]&quot;" />
       <xsl:with-param name="date-string" select="'2025-04-25'" />
       <xsl:with-param name="message" select="'the program@datafile attribute containing datafile@filename has been deprecated. You should change programs to use the @add-files attribute and use it specify the xml:id of datafiles to make available.'"/>
+    </xsl:call-template>
     <!--  -->
-  </xsl:call-template>
+    <!-- 2025-07-19  Docinfo worksheet margins for LaTeX now ignored -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/latex-output/worksheet&quot;" />
+        <xsl:with-param name="date-string" select="'2025-07-19'" />
+        <xsl:with-param name="message" select="'Custom margin specification for worksheets (in both HTML and LaTeX) has moved to the publication file in &quot;/publication/common/worksheet&quot;.  Any margins specified in &quot;docinfo/latex-output/worksheet&quot; will be ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

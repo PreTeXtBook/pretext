@@ -1028,6 +1028,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($document-root//section/worksheet)[1]|
         ($document-root//subsection/worksheet)[1]|
         ($document-root//subsubsection/worksheet)[1]|
+        ($document-root//chapter/handout|$root/article/handout)[1]|
+        ($document-root//section/handout)[1]|
+        ($document-root//subsection/handout)[1]|
+        ($document-root//subsubsection/handout)[1]|
         ($document-root//chapter/reading-questions|$root/article/reading-questions)[1]|
         ($document-root//section/reading-questions)[1]|
         ($document-root//subsection/reading-questions)[1]|
@@ -1308,7 +1312,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\par\rule{\workspacestrutwidth}{#3}\par\vfill}{\par}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group -->
     <!-- The exercise itself carries the indentation, hence we can use breakable -->
@@ -1324,7 +1328,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\par\rule{\workspacestrutwidth}{#3}\par\vfill}{\par}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group, Columnar -->
     <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
@@ -1339,10 +1343,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after upper={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3}\newline\vfill}{\par}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}, after upper={\notblank{#3}{\par\rule{\workspacestrutwidth}{#3}\par\vfill}{\par}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//@workspace">
-        <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
+        <xsl:text>%% Worksheets and handouts children may have workspaces&#xa;</xsl:text>
         <xsl:text>\newlength{\workspacestrutwidth}&#xa;</xsl:text>
         <xsl:choose>
             <xsl:when test="$b-latex-draft-mode">
@@ -2318,8 +2322,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
     <!-- INTRODUCTION, CONCLUSION (divisional) -->
     <xsl:variable name="introduction-reps" select="
-        ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//reading-questions/introduction|$document-root//glossary/introduction|$document-root//references/introduction)[1]|
-        ($root/article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//reading-questions/conclusion|$document-root//glossary/conclusion|$document-root//references/conclusion)[1]"/>
+        ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//handout/introduction|$document-root//reading-questions/introduction|$document-root//glossary/introduction|$document-root//references/introduction)[1]|
+        ($root/article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//handout/conclusion|$document-root//handout/conclusion|$document-root//reading-questions/conclusion|$document-root//glossary/conclusion|$document-root//references/conclusion)[1]"/>
     <xsl:if test="$introduction-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% xparse environments for introductions and conclusions of divisions&#xa;</xsl:text>
@@ -2646,6 +2650,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Vertical workspace for worksheets and handouts -->
+<xsl:template match="*" mode="workspace">
+  <xsl:variable name="vertical-space">
+    <xsl:apply-templates select="." mode="sanitize-workspace"/>
+  </xsl:variable>
+  <xsl:if test="not($vertical-space = '')">
+    <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
+    <xsl:value-of select="$vertical-space"/>
+    <xsl:text>}%&#xa;</xsl:text>
+  </xsl:if>
+</xsl:template>
+  
+<!-- When workspace is requested, we call the modal "sanitize-workspace" which in -->
+<!-- pretext-common returns an empty string if the requested workspace is not in  -->
+<!-- an appropriate division.  But we automatically want the empty string if the  -->
+<!-- publisher variable latex-worksheet-formatted is not set to "yes", so here we -->
+<!-- only apply the template in pretext-common if the variable is set to "yes".   -->
+<!-- NB: it is important to do this here and not in the  pretext-common           -->
+<!-- stylesheet's template since that is also used for HTML                       -->
+<xsl:template match="*" mode="sanitize-workspace">
+  <xsl:if test="$b-latex-worksheet-formatted">
+    <xsl:apply-imports/>
+  </xsl:if>
+</xsl:template>
+
 <!-- Veil inside math: currently unsupported; warn and print content -->
 <xsl:template match="veil[parent::m or parent::me or parent::men or parent::mrow]">
   <xsl:message>PTX:WARNING: Veil inside math is not supported in LaTeX; content will be printed as-is.</xsl:message>
@@ -2696,7 +2725,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisions in the back matter vary between books and articles -->
 <!--     Book:    children of backmatter -> chapter               -->
 <!--     Article: children of backmatter -> section               -->
-<xsl:template match="exercises|solutions|worksheet|reading-questions|references|glossary|appendix|index" mode="division-name">
+<xsl:template match="exercises|solutions|worksheet|handout|reading-questions|references|glossary|appendix|index" mode="division-name">
     <xsl:choose>
         <xsl:when test="parent::article">
             <xsl:text>section</xsl:text>
@@ -2900,7 +2929,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Pervasive -->
 <!-- Specialized divisions                         -->
 <!-- Product of PTX name with LaTeX level/division -->
-<xsl:template match="exercises|solutions|worksheet|reading-questions|glossary|references|index" mode="division-environment-name">
+<xsl:template match="exercises|solutions|worksheet|handout|reading-questions|glossary|references|index" mode="division-environment-name">
     <xsl:value-of select="local-name(.)"/>
     <xsl:text>-</xsl:text>
     <xsl:apply-templates select="." mode="division-name"/>
@@ -2914,7 +2943,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- division should be numberless at birth.  This needs to be broken  -->
 <!-- out since when we *create* the environments in the preamble we    -->
 <!-- just make "regular" and "numberless" variants, always.            -->
-<xsl:template match="exercises|worksheet|references|glossary|reading-questions|solutions" mode="division-environment-name-suffix">
+<xsl:template match="exercises|worksheet|handout|references|glossary|reading-questions|solutions" mode="division-environment-name-suffix">
     <xsl:variable name="is-numbered">
         <xsl:apply-templates select="." mode="is-specialized-own-number"/>
     </xsl:variable>
@@ -2928,7 +2957,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- specialized divisions improperly                       -->
 <xsl:template match="*" mode="division-environment-name-suffix"/>
 
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|index|exercises|solutions|worksheet|reading-questions|glossary|references" mode="environment">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|index|exercises|solutions|worksheet|handout|reading-questions|glossary|references" mode="environment">
     <!-- for specialized divisions we always make a numbered -->
     <!-- and unnumbered version, with the latter happening   -->
     <!-- on a second trip through the template               -->
@@ -2991,7 +3020,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- close the environment definition, no finish -->
     <xsl:text>}{}%&#xa;</xsl:text>
     <!-- send specialized division back through a second time -->
-    <xsl:if test="not($second-trip) and boolean(self::exercises|self::solutions|self::worksheet|self::reading-questions|self::glossary|self::references)">
+    <xsl:if test="not($second-trip) and boolean(self::exercises|self::solutions|self::worksheet|self::handout|self::reading-questions|self::glossary|self::references)">
         <xsl:apply-templates select="." mode="environment">
             <xsl:with-param name="second-trip" select="true()"/>
         </xsl:apply-templates>
@@ -5459,7 +5488,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################ -->
 
 <!-- Divisions, "part" to "subsubsection", and specialized -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|worksheet|reading-questions|solutions|glossary|references">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|worksheet|handout|reading-questions|solutions|glossary|references">
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:apply-templates select="." mode="begin-language" />
     <xsl:apply-templates select="." mode="latex-division-heading" />
@@ -5515,8 +5544,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A typical division has 5 arguments (below).  For specialized       -->
 <!-- divisions we need to adjust the environment name for numbered      -->
-<!-- v. unnumbered instances.  Worksheets are exception with a          -->
-<!-- page layout change.                                                -->
+<!-- v. unnumbered instances.  Worksheets and handouts are exception    -->
+<!-- with a page layout change.                                         -->
 <!--                                                                    -->
 <!--    1. title                                                        -->
 <!--    2. subtitle                                                     -->
@@ -5529,12 +5558,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX chapter for a "book" and a LaTeX "section" for an "article". -->
 <!-- Specialized Divisions: we do not implement "author", "subtitle",   -->
 <!-- or "epigraph" yet.  These may be added/supported later.            -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet" mode="latex-division-heading">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet|handout" mode="latex-division-heading">
     <!-- NB: could be obsoleted, see single use -->
-    <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet|self::index)"/>
+    <xsl:variable name="b-is-specialized" select="boolean(self::exercises|self::solutions[not(parent::backmatter)]|self::reading-questions|self::glossary|self::references|self::worksheet|self::handout|self::index)"/>
 
-    <!-- change geometry if worksheet should be formatted -->
-    <xsl:if test="self::worksheet and $b-latex-worksheet-formatted">
+    <!-- change geometry if worksheet or handout should be formatted -->
+    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
         <!-- \newgeometry includes a \clearpage -->
         <xsl:apply-templates select="." mode="new-geometry"/>
     </xsl:if>
@@ -5603,98 +5632,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Exceptional, for a worksheet only, we clear the page  -->
+<!-- Exceptional, for a printouts only, we clear the page  -->
 <!-- at the start and provide many options for specifying  -->
 <!-- the four margins, in units LaTeX understands (such as -->
 <!-- cm, in, pt).  This only produces text, so could go in -->
 <!-- -common, but is also only useful for LaTeX output.    -->
-<xsl:template match="worksheet" mode="new-geometry">
-    <!-- Roughly, skinny half-inch margins, -->
-    <!-- to use lots of the available space -->
-    <!-- Perhaps this should be global, but -->
-    <!-- no harm placing it here for now.   -->
-    <xsl:variable name="default-worksheet-margin" select="'1.25cm'"/>
+<xsl:template match="worksheet|handout" mode="new-geometry">
     <!-- Four similar "choose" effect hierarchy/priority -->
     <!-- NB: a publisher string parameter to      -->
     <!-- *really* override (worksheet.left, etc.) -->
     <xsl:text>\newgeometry{</xsl:text>
     <xsl:text>left=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@left">
-            <xsl:value-of select="normalize-space(@left)"/>
-        </xsl:when>
-        <xsl:when test="@margin">
-            <xsl:value-of select="normalize-space(@margin)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@left">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@left)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$default-worksheet-margin"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="printout-margin">
+        <xsl:with-param name="author-side" select="@left"/>
+        <xsl:with-param name="publisher-side" select="$ws-margin-left"/>
+    </xsl:apply-templates>
     <xsl:text>, right=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@right">
-            <xsl:value-of select="normalize-space(@right)"/>
-        </xsl:when>
-        <xsl:when test="@margin">
-            <xsl:value-of select="normalize-space(@margin)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@right">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@right)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$default-worksheet-margin"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="printout-margin">
+        <xsl:with-param name="author-side" select="@right"/>
+        <xsl:with-param name="publisher-side" select="$ws-margin-right"/>
+    </xsl:apply-templates>
     <xsl:text>, top=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@top">
-            <xsl:value-of select="normalize-space(@top)"/>
-        </xsl:when>
-        <xsl:when test="@margin">
-            <xsl:value-of select="normalize-space(@margin)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@top">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@top)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$default-worksheet-margin"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="printout-margin">
+        <xsl:with-param name="author-side" select="@top"/>
+        <xsl:with-param name="publisher-side" select="$ws-margin-top"/>
+    </xsl:apply-templates>
     <xsl:text>, bottom=</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@bottom">
-            <xsl:value-of select="normalize-space(@bottom)"/>
-        </xsl:when>
-        <xsl:when test="@margin">
-            <xsl:value-of select="normalize-space(@margin)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@bottom">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@bottom)"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
-            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$default-worksheet-margin"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="printout-margin">
+        <xsl:with-param name="author-side" select="@bottom"/>
+        <xsl:with-param name="publisher-side" select="$ws-margin-bottom"/>
+    </xsl:apply-templates>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Footings are straightforward -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet" mode="latex-division-footing">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|solutions|reading-questions|glossary|references|index|worksheet|handout" mode="latex-division-footing">
     <!-- For references we close a list holding "biblio"    -->
     <!-- unless we already added it before the "conclusion" -->
     <xsl:if test="self::references and not(conclusion)">
@@ -5706,7 +5678,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- possibly numberless -->
     <xsl:apply-templates select="." mode="division-environment-name-suffix" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="self::worksheet and $b-latex-worksheet-formatted">
+    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
         <!-- \restoregeometry includes a \clearpage -->
         <xsl:text>\restoregeometry&#xa;</xsl:text>
     </xsl:if>
@@ -5718,7 +5690,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Title optional (and discouraged), in argument    -->
 <!-- typically just a few paragraphs                  -->
 <!-- NB: a glossary has a "headnote" (elsewhere) and does not have a "conclusion" -->
-<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|reading-questions/introduction|references/introduction">
+<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|handout/introduction|reading-questions/introduction|references/introduction">
     <xsl:text>\begin{introduction}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
@@ -5733,7 +5705,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|reading-questions/conclusion|references/conclusion">
+<xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|handout/conclusion|reading-questions/conclusion|references/conclusion">
     <!-- We will not close the list of references when -->
     <!-- it has an "introduction".  Now is the time.   -->
     <xsl:if test="parent::references">
@@ -5759,11 +5731,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
-<!-- Pages in a Worksheet -->
+<!-- Pages in a worksheet or handout-->
 <!-- Produce a  \clearpage  indicating the end -->
 <!-- of a page, but not for the last page.     -->
 
-<xsl:template match="worksheet/page">
+<xsl:template match="worksheet/page|handout/page">
     <xsl:apply-templates select="*"/>
     <xsl:if test="following-sibling::page and $b-latex-worksheet-formatted">
         <xsl:text>\clearpage&#xa;</xsl:text>
@@ -5865,6 +5837,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- explicitly ignore PROOF-LIKE and pickup just for theorems      -->
     <!-- Alternative: ocate first PROOF-LIKE, select only preceding:: ? -->
     <xsl:apply-templates select="*[not(&PROOF-FILTER;)]" />
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -5906,9 +5880,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}&#xa;</xsl:text>
+    <!-- A standalone proof may need to have its footnote text popped,     -->
+    <!-- rather than waiting for a container like "theorem" to do the job. -->
+    <xsl:if test="not(parent::*[&THEOREM-FILTER;])">
+        <xsl:apply-templates select="." mode="pop-footnote-text"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- PROOF-LIKE (solutions, minor) -->
@@ -5925,6 +5906,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}&#xa;</xsl:text>
@@ -5967,6 +5950,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{case}&#xa;</xsl:text>
 </xsl:template>
 
@@ -6373,6 +6358,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
         <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
     </xsl:apply-templates>
+    <!-- Currently inline exercises and project-like elements -->
+    <!-- are not getting workspace above, so we add it here.  -->
+    <xsl:if test="$inline or $project">
+        <xsl:apply-templates select="." mode="workspace"/>
+    </xsl:if>
     <!-- closing % necessary, as newline between adjacent environments -->
     <!-- will cause a slight indent on trailing exercise               -->
     <xsl:text>\end{</xsl:text>
@@ -6704,14 +6694,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
                 <!-- possibly add some workspace for items from a worksheet     -->
                 <!-- an empty result is a signal there is no workspace authored -->
-                <xsl:variable name="vertical-space">
-                    <xsl:apply-templates select="." mode="sanitize-workspace"/>
-                </xsl:variable>
-                <xsl:if test="not($vertical-space = '')">
-                    <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
-                    <xsl:value-of select="$vertical-space"/>
-                    <xsl:text>}%&#xa;</xsl:text>
-                </xsl:if>
+                <xsl:apply-templates select="." mode="workspace"/>
             </xsl:if>
         </xsl:for-each>
 
@@ -7084,6 +7067,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="*"/>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -7129,6 +7114,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <!-- Coordinate with schema, since we enforce it here -->
     <xsl:apply-templates select="p|blockquote|pre|image|video|program|console|tabular|sidebyside|sbsgroup" />
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -7159,6 +7146,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="introduction" />
     <xsl:apply-templates select="ol|ul|dl" />
     <xsl:apply-templates select="conclusion" />
+    <!-- Apply workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -7286,6 +7275,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:apply-templates/>
     <xsl:text>%&#xa;</xsl:text>
+    <!-- Add workspace if appropriate -->
+    <xsl:apply-templates select="." mode="workspace"/>
 </xsl:template>
 
 <!-- For a memo, not indenting the first paragraph helps -->
@@ -7614,7 +7605,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{enumerate}</xsl:text>
     <!-- override LaTeX defaults as indicated -->
-    <xsl:if test="@marker or ($format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
+    <xsl:if test="@marker or ($format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::handout or ancestor::reading-questions or ancestor::references">
         <xsl:text>[label={</xsl:text>
         <xsl:apply-templates select="." mode="latex-list-label" />
         <xsl:if test="$format-code = '0'">
@@ -7702,6 +7693,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(p)">
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="." mode="workspace"/>
 </xsl:template>
 
 <!-- In an unordered list, an item cannot be a target -->
@@ -7719,6 +7711,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(p)">
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="." mode="workspace"/>
 </xsl:template>
 
 <!-- Description lists always have title as additional -->
@@ -8083,9 +8076,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{</xsl:text>
             <xsl:copy-of select="$visible-text"/>
             <xsl:text>}</xsl:text>
+            <!-- A content-full URL will have an authored @visual version,  -->
+            <!-- or the pre-processor will have manufactured a reasonable   -->
+            <!-- one.  Only if an author explicitly denies this option with -->
+            <!-- an empty string will this not be available/possible.  For  -->
+            <!-- print versions of a PDF we add this parenthetically.       -->
+            <xsl:if test="$b-latex-print and node() and not(@visual = '')">
+                <!-- space to separate -->
+                <xsl:text> </xsl:text>
+                <!-- parentheses, plus line-breakable monospace font -->
+                <xsl:text>(\nolinkurl{</xsl:text>
+                <xsl:call-template name="escape-url-to-latex">
+                    <xsl:with-param name="text">
+                        <xsl:value-of select="@visual" />
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:text>})</xsl:text>
+            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
-
 </xsl:template>
 
 <!-- ############# -->
@@ -10608,7 +10617,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- not be numbered correctly via LaTeX's label/ref system, -->
 <!-- so we will use the hypertarget/hyperlink system         -->
 <!-- NB: template returns strings "true" or "false"          -->
-<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|solutions" mode="xref-as-ref">
+<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|handout|solutions" mode="xref-as-ref">
     <xsl:apply-templates select="." mode="is-specialized-own-number"/>
 </xsl:template>
 
@@ -10756,7 +10765,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This template just copies the gut of two above, perhaps -->
 <!-- there should be two utility templates that each get     -->
 <!-- called twice overall.                                   -->
-<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|solutions" mode="xref-number">
+<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|handout|solutions" mode="xref-number">
     <xsl:param name="xref" select="/.." />
 
     <xsl:variable name="is-numbered">
@@ -11202,7 +11211,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- present as part of processing  biblio/note.             -->
 <xsl:template match="fn">
     <xsl:choose>
-        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &OPENPROBLEM-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl)] and not(ancestor::note/parent::biblio)">
+        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &OPENPROBLEM-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl) or self::proof[not(parent::*[&THEOREM-FILTER;])] or self::argument[not(parent::*[&THEOREM-FILTER;])] or self::justification[not(parent::*[&THEOREM-FILTER;])] or self::reasoning[not(parent::*[&THEOREM-FILTER;])] or self::explanation[not(parent::*[&THEOREM-FILTER;])]] and not(ancestor::note/parent::biblio)">
             <!-- a footnote in the text of a caption will migrate to -->
             <!-- the auxiliary file for use in the "list of figures" -->
             <!-- and there is some confusion of braces and the use   -->
@@ -11215,7 +11224,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\footnote{</xsl:text>
-            <xsl:apply-templates select="." mode="footnote-text"/>
+            <xsl:apply-templates/>
             <xsl:apply-templates select="." mode="label" />
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
@@ -11240,35 +11249,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no ancestors are implmented by tcolorbox.  Otherwise, we      -->
 <!-- "wait" and pop all interior footnotes later.                  -->
 <!-- NB: these templates could be improved with an entity          -->
-<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|tabular|list|sidebyside|gi|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise|dl/li" mode="pop-footnote-text">
-    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl)]) = 0">
+<!-- NB: "detached" proofs require a proliferation of              -->
+<!-- complicated constructions                                     -->
+<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|tabular|list|sidebyside|gi|&GOAL-LIKE;|backmatter/colophon|assemblage|exercise|dl/li|proof[not(parent::*[&THEOREM-FILTER;])]|argument[not(parent::*[&THEOREM-FILTER;])]|justification[not(parent::*[&THEOREM-FILTER;])]|reasoning[not(parent::*[&THEOREM-FILTER;])]|explanation[not(parent::*[&THEOREM-FILTER;])]" mode="pop-footnote-text">
+    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or &FIGURE-FILTER; or self::tabular or self::list or self::sidebyside or self::gi or self::colophon/parent::backmatter or self::assemblage or self::exercise or (self::li and parent::dl) or self::proof[not(parent::*[&THEOREM-FILTER;])] or self::argument[not(parent::*[&THEOREM-FILTER;])] or self::justification[not(parent::*[&THEOREM-FILTER;])] or self::reasoning[not(parent::*[&THEOREM-FILTER;])] or self::explanation[not(parent::*[&THEOREM-FILTER;])]]) = 0">
         <xsl:for-each select=".//fn">
             <xsl:text>\footnotetext[</xsl:text>
             <xsl:apply-templates select="." mode="serial-number"/>
             <xsl:text>]</xsl:text>
             <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="." mode="footnote-text"/>
+            <xsl:apply-templates/>
             <xsl:apply-templates select="." mode="label" />
             <xsl:text>}%&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:if>
-</xsl:template>
-
-<xsl:template match="fn" mode="footnote-text">
-    <xsl:choose>
-        <xsl:when test="@pi:url">
-            <xsl:text>\nolinkurl{</xsl:text>
-            <xsl:call-template name="escape-url-to-latex">
-                <xsl:with-param name="text">
-                    <xsl:value-of select="@pi:url"/>
-                </xsl:with-param>
-            </xsl:call-template>
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates/>
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <!-- TEMPORARILY: render a glossary "headnote" as an "introduction" -->

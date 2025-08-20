@@ -1271,6 +1271,26 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="stdin" type="xs:string"/>
+  <xs:element name="checkpoint">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="prompt"/>
+        <xs:element minOccurs="0" name="feedback">
+          <xs:complexType>
+            <xs:group maxOccurs="unbounded" ref="BlockText"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="line" use="required"/>
+      <xs:attribute name="answer"/>
+      <xs:attribute name="answer-variable"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="prompt">
+    <xs:complexType>
+      <xs:group maxOccurs="unbounded" ref="BlockText"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="program">
     <xs:complexType mixed="true">
       <xs:sequence minOccurs="0">
@@ -1279,6 +1299,7 @@
         <xs:element minOccurs="0" ref="postamble"/>
         <xs:element minOccurs="0" ref="tests"/>
         <xs:element minOccurs="0" ref="stdin"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="checkpoint"/>
       </xs:sequence>
       <xs:attribute name="component"/>
       <xs:attribute name="label"/>
@@ -1302,6 +1323,14 @@
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="codelens">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="starting-step">
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="yes"/>
@@ -2626,8 +2655,8 @@
   <xs:group name="WebWorkAuthored">
     <xs:sequence>
       <xs:element name="webwork">
-        <xs:complexType>
-          <xs:sequence>
+        <xs:complexType mixed="true">
+          <xs:sequence minOccurs="0">
             <xs:group minOccurs="0" ref="WWDescription"/>
             <xs:element minOccurs="0" ref="pg-macros"/>
             <xs:element minOccurs="0" ref="pg-code"/>

@@ -114,11 +114,12 @@ $center-content: true !default;
     min-width: 70px;
   }
 
-  .runestone-profile {
-    @include buttons.ptx-dropdown-button;
-  }
 }
 
+// Button in the navbar, but needs to be less specific so not nested in previous
+.runestone-profile {
+  @include buttons.ptx-dropdown-button;
+}
 
 @if $max-width > 0 {
   @media screen and (min-width: $max-width) {

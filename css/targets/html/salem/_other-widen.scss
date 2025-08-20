@@ -1,0 +1,18 @@
+// --------------------------------------------------------------------------
+// Flexible / centered widening of other components
+
+// options should already be set in a previous @use
+@use 'components/helpers/expandable';
+
+$top-level-containers: ".chapter, .section, .subsection, .subsubsection" !default;
+
+:is(#{$top-level-containers}) > .tabular-box,
+:is(#{$top-level-containers}) > .table > .tabular-box {
+  @include expandable.expandable;
+}
+
+// get rid of indentation for tablular figures, interferes with centering wide elements
+figure.table-like {
+  margin-left: 0px;
+  margin-right: 0px;
+}

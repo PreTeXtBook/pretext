@@ -78,7 +78,7 @@
 <!-- Then chunk the document to write reasonable problem definition files     -->
 <xsl:template match="/">
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$document-root//exercise/webwork[statement|task]" mode="write-file"/>
+    <xsl:apply-templates select="$document-root//webwork[statement|task|text()]" mode="write-file"/>
     <xsl:apply-templates select="$document-root" mode="chunking"/>
 </xsl:template>
 
@@ -125,15 +125,16 @@
 </xsl:template>
 
 <!-- Append a filename to the directory path              -->
-<xsl:template match="webwork[statement|task]" mode="relative-filename">
+<xsl:template match="webwork[statement|task|text()]" mode="relative-filename">
     <xsl:apply-templates select="." mode="directory-path" />
-    <xsl:if test="parent::project">
-        <xsl:text>Project-</xsl:text>
+    <xsl:if test="parent::*[&PROJECT-FILTER;]">
+        <xsl:apply-templates select="parent::*" mode="type-name"/>
+        <xsl:text>-</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="parent::*" mode="numbered-title-filesafe" />
     <xsl:text>.pg</xsl:text>
 </xsl:template>
-<xsl:template match="webwork[statement|task]" mode="filename">
+<xsl:template match="webwork[statement|task|text()]" mode="filename">
     <xsl:apply-templates select="." mode="relative-filename"/>
 </xsl:template>
 
@@ -169,24 +170,31 @@
 <!-- ################## -->
 
 <!-- Extract an authored problem into its own file, flush left -->
-<xsl:template match="webwork[statement|task]" mode="write-file">
+<xsl:template match="webwork[statement|task|text()]" mode="write-file">
     <xsl:variable name="filename">
         <xsl:apply-templates select="." mode="filename" />
     </xsl:variable>
     <exsl:document href="{$filename}" method="text">
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text">
-                <xsl:call-template name="consolidate-empty-lines">
+        <xsl:choose>
+            <xsl:when test="statement|task">
+                <xsl:call-template name="sanitize-text">
                     <xsl:with-param name="text">
-                        <xsl:apply-templates select=".">
-                            <xsl:with-param name="b-hint" select="true()" />
-                            <xsl:with-param name="b-solution" select="true()" />
-                            <xsl:with-param name="b-human-readable" select="true()" />
-                        </xsl:apply-templates>
+                        <xsl:call-template name="consolidate-empty-lines">
+                            <xsl:with-param name="text">
+                                <xsl:apply-templates select=".">
+                                    <xsl:with-param name="b-hint" select="true()" />
+                                    <xsl:with-param name="b-solution" select="true()" />
+                                    <xsl:with-param name="b-human-readable" select="true()" />
+                                </xsl:apply-templates>
+                            </xsl:with-param>
+                        </xsl:call-template>
                     </xsl:with-param>
                 </xsl:call-template>
-            </xsl:with-param>
-        </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="."/>
+            </xsl:otherwise>
+        </xsl:choose>
     </exsl:document>
 </xsl:template>
 
@@ -202,13 +210,13 @@
     <!-- Separate webwork within any exercises into their own set. -->
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">
-            <xsl:apply-templates select=".//webwork[statement|task|@source|@local|@copy and not(ancestor::exercises)]" mode="def-info-v2" />
+            <xsl:apply-templates select=".//webwork[statement|task|text()|@source|@local|@copy and not(ancestor::exercises)]" mode="def-info-v2" />
         </xsl:with-param>
     </xsl:apply-templates>
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="exercises" select="true()" />
         <xsl:with-param name="content">
-            <xsl:apply-templates select=".//webwork[statement|task|@source|@local|@copy and ancestor::exercises]" mode="def-info-v2" />
+            <xsl:apply-templates select=".//webwork[statement|task|text()|@source|@local|@copy and ancestor::exercises]" mode="def-info-v2" />
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -220,7 +228,7 @@
 <xsl:template match="&STRUCTURAL;" mode="intermediate">
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">
-            <xsl:apply-templates select="*[not(&STRUCTURAL-FILTER;)]//webwork[statement|task|@source|@local|@copy]" mode="def-info-v2" />
+            <xsl:apply-templates select="*[not(&STRUCTURAL-FILTER;)]//webwork[statement|task|text()|@source|@local|@copy]" mode="def-info-v2" />
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>

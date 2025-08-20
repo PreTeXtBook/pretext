@@ -1477,6 +1477,27 @@
       <text/>
     </element>
   </define>
+  <define name="CodelensCheckpoint">
+    <element name="checkpoint">
+      <attribute name="line"/>
+      <choice>
+        <attribute name="answer"/>
+        <attribute name="answer-variable"/>
+      </choice>
+      <element name="prompt">
+        <oneOrMore>
+          <ref name="BlockText"/>
+        </oneOrMore>
+      </element>
+      <optional>
+        <element name="feedback">
+          <oneOrMore>
+            <ref name="BlockText"/>
+          </oneOrMore>
+        </element>
+      </optional>
+    </element>
+  </define>
   <define name="Program">
     <element name="program">
       <optional>
@@ -1512,6 +1533,14 @@
       </optional>
       <optional>
         <attribute name="codelens">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="starting-step">
           <choice>
             <value>yes</value>
             <value>no</value>
@@ -1602,6 +1631,9 @@
           <optional>
             <ref name="ProgramStdin"/>
           </optional>
+          <zeroOrMore>
+            <ref name="CodelensCheckpoint"/>
+          </zeroOrMore>
         </group>
       </choice>
     </element>
@@ -3015,55 +3047,60 @@
   </define>
   <define name="WebWorkAuthored">
     <element name="webwork">
-      <optional>
-        <ref name="UniqueID"/>
-      </optional>
-      <optional>
-        <ref name="LabelID"/>
-      </optional>
-      <optional>
-        <ref name="Component"/>
-      </optional>
-      <optional>
-        <attribute name="seed">
-          <data type="integer"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="copy"/>
-      </optional>
-      <optional>
-        <ref name="WWDescription"/>
-      </optional>
-      <optional>
-        <ref name="WWMacros"/>
-      </optional>
-      <optional>
-        <element name="pg-code">
-          <text/>
-        </element>
-      </optional>
       <choice>
         <group>
-          <ref name="StatementExerciseWW"/>
           <optional>
-            <ref name="HintWW"/>
+            <ref name="UniqueID"/>
           </optional>
           <optional>
-            <ref name="SolutionWW"/>
+            <ref name="LabelID"/>
           </optional>
+          <optional>
+            <ref name="Component"/>
+          </optional>
+          <optional>
+            <attribute name="seed">
+              <data type="integer"/>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="copy"/>
+          </optional>
+          <optional>
+            <ref name="WWDescription"/>
+          </optional>
+          <optional>
+            <ref name="WWMacros"/>
+          </optional>
+          <optional>
+            <element name="pg-code">
+              <text/>
+            </element>
+          </optional>
+          <choice>
+            <group>
+              <ref name="StatementExerciseWW"/>
+              <optional>
+                <ref name="HintWW"/>
+              </optional>
+              <optional>
+                <ref name="SolutionWW"/>
+              </optional>
+            </group>
+            <group>
+              <optional>
+                <ref name="IntroductionText"/>
+              </optional>
+              <oneOrMore>
+                <ref name="TaskWW"/>
+              </oneOrMore>
+              <optional>
+                <ref name="ConclusionText"/>
+              </optional>
+            </group>
+          </choice>
         </group>
-        <group>
-          <optional>
-            <ref name="IntroductionText"/>
-          </optional>
-          <oneOrMore>
-            <ref name="TaskWW"/>
-          </oneOrMore>
-          <optional>
-            <ref name="ConclusionText"/>
-          </optional>
-        </group>
+        <text/>
       </choice>
     </element>
   </define>

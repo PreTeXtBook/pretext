@@ -58,7 +58,13 @@ $page-width: $sidebar-total-width + $main-width + $main-right-margin;
   $navbar-breakpoint: $navbar-breakpoint,
 );
 
-@use 'rs-widen';
+@use '../salem/rs-widen';
+
+// now handle smaller screens for rs elements
+@media (width < 850px) {
+  @include rs-widen.smaller-screen-widening;
+}
+
 
 .ptx-main {
   margin-right: $sidebar-total-width;
@@ -74,6 +80,14 @@ $page-width: $sidebar-total-width + $main-width + $main-right-margin;
   // The color of the shadow is mostly gray, but with a slight tint of the primary color
   box-shadow: 5px 10px 40px -10px var(--primary-color-gray-80);
 }
+@media (prefers-color-scheme: dark) {
+  .ptx-main {
+    // Dark mode shadow is just black
+    box-shadow: 5px 10px 40px -10px black;
+  }
+}
+
+
 
 // visually shift the sidebar off the page
 .ptx-sidebar {
@@ -81,16 +95,19 @@ $page-width: $sidebar-total-width + $main-width + $main-right-margin;
   margin-right: $sidebar-right-margin;
 }
 
-// move contents button out of navbar-contents and align with sidebar
-.ptx-navbar .toc-toggle {
-  transform: translateX(-$sidebar-total-width);
-  position: absolute;
-  left: 0;
-  justify-content: left;
+.ptx-navbar {
+  border: none;
+
+  // move contents button out of navbar-contents and align with sidebar
+  .toc-toggle {
+    transform: translateX(-$sidebar-total-width);
+    position: absolute;
+    left: 0;
+    justify-content: left;
+  }
 }
 
 .ptx-toc {
-  padding-top: 36px;
   border: none;
   position: sticky;
   top: $nav-height;
@@ -102,6 +119,10 @@ $page-width: $sidebar-total-width + $main-width + $main-right-margin;
   padding-left: 8px;
 }
 
+.ptx-page {
+    margin-top: 36px;
+    margin-bottom: 36px;
+}
 
 // Sidebar hits the left side of page - need to lock it in place
 $sidebar-lock-breakpoint: $main-width + 2 * $sidebar-total-width;
@@ -155,6 +176,19 @@ $page-border-breakpoint: $main-width + $sidebar-width + 2 * $sidebar-right-margi
     transform: translateX(-$sidebar-width);
     justify-content: center;
   }
+
+  // Reset margins for page now that we don't show box-shadow
+  .ptx-page {
+    margin-top: unset;
+    margin-bottom: unset;
+  }
+
+  // And lower TOC accordingly
+  .ptx-toc {
+    padding-top: 36px;
+
+  }
+
 }
 
 

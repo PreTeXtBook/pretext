@@ -22,7 +22,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Overall element for a Mathbook XML document; mandatory, always  -->
 <!-- Experiment with the "xml:lang" attribute to see localization    -->
 <!-- changes, the  xsl/localizations  directory has more information -->
-<pretext>
+<!-- Note: unwind xi:include use once STACK questions settle down -->
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
 <!-- <pretext xml:lang="ku-CKB"> -->    <!-- an RTL language -->
 <!-- <pretext xml:lang="pt-BR"> -->
 <!-- <pretext xml:lang="fr-FR"> -->
@@ -334,7 +335,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><idx><h>test: buried in theorem/statement/p</h></idx></p>
                 </statement>
                 <proof>
-                    <p>Left to the reader.</p>
+                    <p>Left to the reader.<fn>This is a footnote in a <tag>proof</tag> that is inside a <tag>theorem</tag>.</fn></p>
                 </proof>
             </theorem>
             <!--
@@ -926,7 +927,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <case direction="cycle">
                         <p>Does the first statement imply the second?</p>
                         </case>
-                        
+
                     <case direction="cycle">
                         <title>The <q>middle</q> case</title>
                         <p>Does the second statement imply the third?</p>
@@ -1464,6 +1465,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p>And the other thing.</p>
                         </task>
                     </exercise>
+
+                    <!-- Note: a new section with a few problemns will be -->
+                    <!-- better than this addition for initial testing.   -->
+                    <!-- 2025-08-16: commented-out (in two pieces) since duplicate  -->
+                    <!-- MathJax causes unreliable behavior.  Remains for testing.  -->
+                    <!-- <exercise>
+                        <title>STACK integration question</title>
+
+                        <introduction>
+                            <p>A test question. (2025-08-15: you may need to ask for a "new" question to make this render.)</p>
+                        </introduction> -->
+
+                        <!-- A @label is required, becomes a filename in output -->
+                        <!-- <stack label="stack-integration">
+                            <xi:include href="stack/01_integration_with_feedback.xml"/>
+                        </stack>
+                    </exercise> -->
                 </exercises>
 
                 <reading-questions>
@@ -2057,6 +2075,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
                     <mrow>x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13.</mrow>
                 </md>Beautiful.</p>
+
+                <aside>
+                    <title>Overlap Test</title>
+                    <p>This is simply to test what happens when an aside bumps into something like the content below that may extend past the normal right content boundary. It likely only is of interest with the theme <c>default-modern</c>.</p>
+                </aside>
 
                 <p>A long equation, to check layout on various screen sizes.  This is Weil's <q>explicit formula</q> for the
                    Riemann <m>\zeta</m>-function:
@@ -3124,11 +3147,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <idx><h>link</h><h>external, url</h></idx>
                 <idx><h>reference</h><h>external, url</h></idx>
 
-                <p>The <tag>url</tag> element can be used to create an external reference.  The mandatory <attr>href</attr> attribute is the actual <init>URL</init> complete with the protocol (e.g. <c>https://</c>).  Content for the element is optional, and if provided will be the <q>clickable</q> text.  In this case, a <attr>visual</attr> attribute can be provided, and this will become a footnote with a more friendly version of the <init>URL</init>.  When no content is provided, the <q>clickable</q> will be the <init>URL</init> with a preference for an optional <attr>visual</attr>.  This subsection has some (extreme) tests and we leave complete documentation and full details for the <pretext/> Guide.</p>
+                <p>The <tag>url</tag> element can be used to create an external reference.  The mandatory <attr>href</attr> attribute is the actual <init>URL</init> complete with the protocol (e.g. <c>https://</c>).  Content for the element is optional, and if provided will be the <q>clickable</q> text.  In this case, a <attr>visual</attr> attribute can be provided. In producing the print version of a PDF, this will become a parenthetical with a more friendly version of the <init>URL</init>.  When no content is provided, the <q>clickable</q> will be the <init>URL</init> with a preference for an optional <attr>visual</attr>.  This subsection has some (extreme) tests and we leave complete documentation and full details for the <pretext/> Guide.</p>
 
                 <p>A long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw" visual="www.pcc.edu/enroll/registration/dropping.html#withdraw"/>.  Notice in the source that you <em>do not</em> put any tags inside the <attr>href</attr> or <attr>visual</attr> attributes, but you may need to provide XML escape sequences (see <xref ref="subsection-xml-escape" text="type-global"/>). </p>
 
-                <p>A <tag>url</tag> element with content will get a footnote, by containing the (simplified) URL in the highly-recommended <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you will get the <attr>href</attr> value repeated, possibly with some editing.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
+                <p>A <tag>url</tag> element in the print version of a PDF will get a trailing parenthetical containing the (simplified) URL in the highly-recommended <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you will get the <attr>href</attr> value repeated, possibly with some editing.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
                     <li><url href="http://example.com/" visual="example.com">With a useful <attr>visual</attr> attribute</url></li>
                     <li><url href="http://example.com/" visual="http://example.com/">With a duplicate <attr>visual</attr> attribute</url></li>
                     <li><url href="http://example.com/">With no <attr>visual</attr> attribute</url>, so an edited one is formulated (no protocol)</li>
@@ -3155,7 +3178,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>We are not fans of footnotes, they are totally unstructured.<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="">Carleson's Theorem</url></fn>
                 A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="/></fn>
                 This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite.
-                For good measure, we repeat the URL found in the first footnote (which lacks its own footnote by design<fn>And if you do provide a link like <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url> in a footnote, provide an easy-to-read reference, such as <c>en.wikipedia.org/wiki/Carleson%27s_theorem</c> since the extra footnote and any visual will be squelched.</fn>):
+                For good measure, we repeat the URL found in the first footnote<fn>And if you do provide a link like <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url> in a footnote you should see an  easy-to-read parenthetical version in some output formats, such as <c>en.wikipedia.org/wiki/Carleson%27s_theorem</c>.</fn>:
                 <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="">Carleson's Theorem</url>.
                 And we include a no-content version of the same link, with a visual version provided and employed:
                 <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="en.wikipedia.org/wiki/Carleson%27s_theorem"/>.</p>
@@ -4267,7 +4290,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p><url href="https://mermaid.js.org/" visual="mermaid.js.org">Mermaid</url> is a Markdown-inspired tool for authoring various kinds of diagrams. Below, three of the available diagram types are demonstrated. For a full listing of diagram types, see the <url href="https://mermaid.js.org/intro/#diagram-types">Mermaid Documentation</url>. The <url href="https://mermaid.live/" visual="mermaid.live">Mermaid live editor</url>is a great tool for testing the syntax of your mermaid diagrams.</p>
 
-                <p>In PreTeXt, you can specify a Mermaid theme via <attr>common/mermaid/@theme</attr></p>
+                <p>In PreTeXt, you can specify a Mermaid theme using an entry in the publication file.</p>
 
                 <figure xml:id="figure-mermaid-git">
                     <caption>Mermaid Git Diagram</caption>
@@ -5399,10 +5422,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <title>List Spacing, II</title>
 
                 <p>This is another short list that ends a subsection, so can be used to address the necessary spacing.<ul cols="2">
-                    <li>Uno item.</li>
-                    <li>Dos items.</li>
-                    <li>Tres item.</li>
-                    <li>Quattro items.</li>
+                    <li>
+                      <p>Uno item.</p>
+                      <aside>
+                          <title>List column test</title>
+                          <p>An aside in a multi-column list. We don't want this to float away from its context and/or break the layout. This also tests if list title formatting affects things inside the list.</p>
+                      </aside>
+                    </li>
+                    <li><p>Dos items.</p></li>
+                    <li><p>Tres item.</p></li>
+                    <li><p>Quattro items.</p></li>
                 </ul></p>
 
                 <p>And a paragraph after that list so that spacing can be checked.</p>
@@ -8214,8 +8243,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p><init>HTML5</init> introduced the <tag>canvas</tag> element, which can be thought of a blank slate, a place to draw or write on.  So <pretext/> has the <tag>slate</tag> element for a similar purpose.  Generally, but not exclusively, <init>HTML5</init> writes on a <tag>canvas</tag> using the Javascript language.  We demonstrate this approach to interactive diagrams in this subsection.</p>
 
-                <p>The following examples are from David Austin's excellent <url href="http://merganser.math.gvsu.edu/david/linear.algebra/ula/index.html" visual="merganser.math.gvsu.edu/david/linear.algebra/ula/index.html"><pubtitle>Understanding Linear Algebra</pubtitle></url> textbook, which can be found at <cd>
-                    <cline>merganser.math.gvsu.edu/david/linear.algebra/ula/index.html</cline>
+                <p>The following examples are from David Austin's excellent <url href="https://understandinglinearalgebra.org/home.html" visual="understandinglinearalgebra.org"><pubtitle>Understanding Linear Algebra</pubtitle></url> textbook, which can be found at <cd>
+                    <cline>understandinglinearalgebra.org</cline>
                 </cd>David's contribution of examples, and assistance designing the <pretext/> elements is greatly appreciated.  Alright, let's learn some linear algebra.  Yes, there are some learning opportunities in this subsection.</p>
 
                 <figure xml:id="figure-simple-eigenvector">
@@ -10983,7 +11012,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>And this is a spurious paragraph to prove that the theorem beforehand, and the proof following, are distinct from one another.</p>
 
             <proof ref="theorem-detached" text="type-global">
-                <p>This is a proof that is authored <q>detached.</q>  It is not associated with the theorem above in a way other than simply following it.</p>
+                <p>This is a proof that is authored <q>detached.</q>  It is not associated with the theorem above in a way other than simply following it.<fn>Footnotes once behaved badly in a detached <tag>proof</tag>.</fn></p>
             </proof>
 
             <p>A specialized version of a program listing is an interactive command/response session at a command-line, where differing fonts are used to differentiate the system prompt, the user's commands, and the system's reaction.  A   <c>console</c> session may be used by itself inside a <c>sidebyside</c>, or it can be wrapped in a listing to get a number and a caption.  As elsewhere, you will need to escape ampersands and angle brackets (such as if you have a command using redirection), using <c>&amp;amp;</c>, <c>&amp;lt;</c>, and <c>&amp;gt;</c> in your source.</p>
@@ -14568,10 +14597,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>See also <custom ref="xref-to-result"/>.</p>
                 </blockquote>
 
-                <p>The URLs used as a replacement have the <attr>visual</attr> attribute which is also managed by the assembly pre-processor to provide a footnote.  So this is a good test of the organization of the multiple passes employed by the pre-processor.</p>
+                <p>The URLs used as a replacement have the <attr>visual</attr> attribute which is also managed by the assembly pre-processor to provide a parenthetical for print PDF production.  So this is a good test of the organization of the multiple passes employed by the pre-processor.</p>
 
                 <blockquote>
-                    <p>A <init>URL</init> that should have a footnote: <custom ref="a-URL"/>.</p>
+                    <p>A <init>URL</init> that should have a parenthetical in the print PDF version: <custom ref="a-URL"/>.</p>
                 </blockquote>
             </subsection>
 
@@ -14901,7 +14930,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </worksheet>
 
 
-            <worksheet label="worksheet-networks" top="3cm" bottom="100pt">
+            <worksheet label="worksheet-networks" top="3cm" bottom="1.2in">
                 <title>Networks Worksheet (no authored pages)</title>
                 <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
 
@@ -14953,7 +14982,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p> Kirchoffs Current Law and Kirkoffs Voltage Law combined with Ohms Law gives for any circuit of resistors and sources a linear system that may (or may not) determine the currents.
                     </p>
                 </introduction>
-
 
                 <sidebyside width="45%" margins="0%">
                     <exercise workspace="1.5in">
@@ -15120,7 +15148,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
             </worksheet>
 
-            <worksheet label="worksheet-networks-pages" top="3cm" bottom="100pt">
+            <worksheet label="worksheet-networks-pages" top="3cm" bottom="1.2in">
                 <title>Networks Worksheet (with authored pages)</title>
                 <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
 
@@ -15735,9 +15763,321 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </exercise>
                 </exercisegroup>
             </worksheet>
-       </section>
+        </section>
 
-        <section xml:id="exercises-single" label="section-exercises-single">
+        <section xml:id="handouts" label="section-handouts">
+            <title>Handouts</title>
+
+            <introduction>
+                <title>About Handouts</title>
+                <p>
+                    Like worksheets, a <term>handout</term> is a division that is inteded to be printed for use in a classroom.
+                    In HTML output, you get the same print preview and page layout as you do with worksheets; in PDF, these will start on a new page with possibly different margins than the rest of the document.
+                </p>
+
+                <p>
+                    Unlike worksheets, handouts do not have a special class of exercises or activities (exercises in a handout are treated like an <em>inline</em> exercise).
+                    The other main distinction is that a handout lets workspace be specified on pretty much any block or paragraph element, not just exercises, tasks, and project-like elements.  This allows them to be used in the creation of guided notes containing some premade content with lots of space for students to fill in details during class.
+                </p>
+            </introduction>
+
+            <handout xml:id="handout-derivative-rules" label="handout-derivative-rules">
+                <title>Derivative Rules</title>
+                <page>
+                <paragraphs>
+                <title>Rules for specific types of functions</title>
+                <dl>
+                    <li>
+                        <title>Constant functions</title>
+                        <p>
+                            <m>(k)' = 0</m>
+                        </p>
+                    </li>
+
+                    <li>
+                    <title>Power functions</title>
+                    <p><m>(x^{n})' = nx^{n-1}</m></p>
+                    </li>
+
+                    <li>
+                        <title>Exponential functions</title>
+                        <p>
+                            <m>(a^{x})' = \ln(a) a^{x} \text{ (for } a>0\text{)}</m>
+                        </p>
+                        <p>
+                                <m>(e^{x})' = e^{x}</m>
+                        </p>
+                    </li>
+
+                    <li>
+                        <title>Logarithmic functions</title>
+                        <p><m>(\ln(x))' = \frac{1}{x}</m></p>
+                    </li>
+
+                <li>
+                    <title>Trigonometric functions</title>
+                    <p><m>(\sin(x))' = \cos(x)</m>.</p>
+                    <p> <m>(\cos(x))' = -\sin(x)</m>.</p>
+                    <p><m>(\tan(x))' = \sec^{2}(x) = \frac{1}{\cos^{2}(x)}</m>.</p>
+                    <p><m>(\arcsin(x))' = \frac{1}{\sqrt{1-x^{2}}}</m>.</p>
+                    <p><m>(\arctan(x))' = \frac{1}{1+x^{2}}</m>.</p>
+                </li>
+                </dl>
+                </paragraphs>
+
+                <paragraphs>
+                <title>Rules for combinations of functions</title>
+                <dl>
+                    <li>
+                        <title>Constant multiples</title>
+                        <p>
+                            <m>(k\cdot f(x))' = k\cdot f'(x)</m>
+                        </p>
+                    </li>
+
+                    <li>
+                        <title>Sum and difference</title>
+                        <p>
+                            <m>(f(x) \pm g(x))' = f'(x) \pm g'(x)</m>
+                        </p>
+                    </li>
+
+                    <li>
+                        <title>Products (the product rule)</title>
+                        <p>
+                            <m>(f(x)\cdot g(x))' = f'(x)g(x) + f(x)g'(x)</m>
+                        </p>
+                    </li>
+
+                    <li>
+                        <title>Quotients (the quotient rule)</title>
+                        <p>
+                            <m>\left(\frac{f(x)}{g(x)}\right)' = \frac{f'(x)g(x) - f(x)g'(x)}{(g(x))^{2}}</m>
+                        </p>
+                    </li>
+
+                <li>
+                    <title>Compositions (the chain rule)</title>
+                    <p>
+                        <m>(f(g(x)))' = f'(g(x))\cdot g'(x)</m>
+                    </p>
+                </li>
+            </dl>
+                </paragraphs>
+            </page>
+        </handout>
+
+        <handout>
+            <title>Guided Notes: Derivatives of sums</title>
+            <page>
+                <p workspace="1in">
+                    Today we will explore how to take the derivative of the sum of two functions.  For example, if <me>f(x) = x^2 + 3x</me>, what is <m>f'(x)</m>?  What two functions is this the sum of?  What are the derivatives of each of those functions?
+                </p>
+
+                <p>
+                    To be sure of the derivative of the sum, we should use the definition of the derivative.
+                </p>
+
+                <definition workspace=".75in">
+                    <title>Definition of the Derivative</title>
+                    <statement>
+                    <p>
+                        The derivative of a function <m>f(x)</m> at any point <m>x</m> is defined as...
+                    </p>
+                    </statement>
+                </definition>
+
+                <p workspace="2in">
+                    Now let's apply this definition to the function <m>f(x) = x^2 + 3x</m>. We have:
+                </p>
+
+                <p workspace="0.25in">
+                    What should the general rule be?
+                </p>
+            </page>
+
+            <page>
+                <theorem workspace="0.5in">
+                    <statement>
+                        <p>
+                            For any two differentiable functions <m>f(x)</m> and <m>g(x)</m>, the derivative of their sum <m>h(x) = f(x) + g(x)</m> is given by:
+                        </p>
+                    </statement>
+                    <proof workspace="3in">
+                        <p>
+                            Let <m>f(x)</m> and <m>g(x)</m> be differentiable functions and let <m>h(x) = f(x) + g(x)</m>.  Then by the limit definition of the derivative,
+                        </p>
+
+                    </proof>
+
+                </theorem>
+
+                <example workspace="1in">
+                    <statement>
+                        <p>
+                            Find the derivative of <m>f(x) = x^5 + e^x</m>.
+                        </p>
+                    </statement>
+                </example>
+
+                <example workspace="1in">
+                    <statement>
+                        <p>
+                            Find the derivative of <m>f(x) = \sqrt{x} + x^3 + 7x</m>.
+                        </p>
+                    </statement>
+                </example>
+
+                <example workspace="1in">
+                    <statement>
+                        <p>
+                            Find the derivative of <m>f(x) = 5x^4</m>.
+                        </p>
+                    </statement>
+                </example>
+            </page>
+        </handout>
+        </section>
+
+
+        <section xml:id="worksheet-solution-testing" label="section-worksheet-solutions-testing">
+            <title>Worksheet Solution Testing</title>
+            <introduction>
+                <p>
+                    Solutions to projects and worksheets can both be selected independently for the auto-generated solutions divisions.  What happens when a worksheet contains a project?  Here we explore the various combinations.
+                </p>
+            </introduction>
+
+            <subsection>
+               <title>Subsection with only exercise</title>
+               <exercise>
+                   <statement>
+                        <p>This is an exercise's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is an exercise's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the exercise's solution.</p>
+                    </solution>
+                </exercise>
+            </subsection>
+            <subsection>
+                <title>Subsection with only project</title>
+                <project>
+                    <statement>
+                        <p>This is a project's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is a project's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the project's solution.</p>
+                    </solution>
+                </project>
+            </subsection>
+            <subsection>
+                <title>Subsection with both exercise and project</title>
+                <exercise>
+                    <statement>
+                        <p>This is an exercise's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is an exercise's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the exercise's solution.</p>
+                    </solution>
+                </exercise>
+                <project>
+                    <statement>
+                        <p>This is a project's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is a project's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the project's solution.</p>
+                    </solution>
+                </project>
+            </subsection>
+            <worksheet>
+               <title>Worksheet with only exercise</title>
+               <exercise>
+                   <statement>
+                       <p>This is an exercise's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is an exercise's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the exercise's solution.</p>
+                    </solution>
+                </exercise>
+            </worksheet>
+            <worksheet>
+                <title>Worksheet with only project</title>
+                <project>
+                    <statement>
+                        <p>This is a project's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is a project's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the project's solution.</p>
+                    </solution>
+                </project>
+            </worksheet>
+            <worksheet>
+                <title>Worksheet with both exercise and project</title>
+                <exercise>
+                    <statement>
+                        <p>This is an exercise's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is an exercise's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the exercise's solution.</p>
+                    </solution>
+                </exercise>
+                <project>
+                    <statement>
+                        <p>This is a project's statement.</p>
+                    </statement>
+                    <answer>
+                        <p>This is a project's answer.</p>
+                    </answer>
+                    <solution>
+                        <p>This is the project's solution.</p>
+                    </solution>
+                </project>
+            </worksheet>
+            <solutions inline="answer">
+                <title>Inline answers only</title>
+            </solutions>
+            <solutions project="answer">
+                <title>Project answers only</title>
+            </solutions>
+            <solutions worksheet="answer">
+                <title>Worksheet answers only</title>
+            </solutions>
+            <solutions inline="answer" project="statement">
+                <title>Inline answers, project statement</title>
+            </solutions>
+            <solutions inline="answer" worksheet="statement">
+                <title>Inline answers, worksheet statement</title>
+            </solutions>
+            <solutions project="answer" worksheet="statement">
+                <title>Project answers, worksheet statement</title>
+            </solutions>
+            <solutions inline="answer" project="statement" worksheet="solution">
+                <title>Inline answers, project statement, worksheet solution</title>
+            </solutions>
+        </section>
+
+       <section xml:id="exercises-single" label="section-exercises-single">
             <title>Exercises, One Subsection</title>
 
             <p>This <tag>section</tag> of the sample article demonstrates an <q>unstructured division.</q>  There are no <tag>subsection</tag>, you are just reading the first two paragraphs, followed by some nonsense text.  Then there is a <em>single</em> <tag>exercises</tag> division.  Note that this division is not numbered (since it is unique within the <tag>section</tag>).  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered as a member of the <tag>section</tag>, <xref ref="exercise-challenging-one-unstructured" text="type-global"/>.</p>
@@ -16109,6 +16449,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </introduction>
                     <exercise>
                         <statement>
+                            <aside>
+                                <title>Column test</title>
+                                <p>An aside in a multi-column container.</p>
+                            </aside>
                             <md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
@@ -16526,7 +16870,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <title>Abstract Algebra: Theory and Applications</title>
                     <!-- "note" element not supported yet for CSL processing,     -->
                     <!-- makes bad JSON. Add an @xml:id to test cross-referencing -->
-                    <note><p>Another online, open-source offering.</p></note>
+                    <!-- <note><p>Another online, open-source offering.</p></note> -->
                 </biblio>
 
                 <biblio xml:id="biblio-lay-article" type="article">

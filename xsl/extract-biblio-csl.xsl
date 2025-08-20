@@ -26,9 +26,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
                 xmlns:xml="http://www.w3.org/XML/1998/namespace"
                 xmlns:pi="http://pretextbook.org/2020/pretext/internal"
+                xmlns:str="http://exslt.org/strings"
+                exclude-result-prefixes="str"
 >
-
 <!-- exclude-result-prefixes="pi" -->
+
 
 <!-- Get internal ID's for filenames, etc -->
 <!-- Standard conversion groundwork       -->
@@ -44,9 +46,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
-<xsl:variable name="biblio-csl-extracting">
-    <xsl:value-of select="true()"/>
-</xsl:variable>
+<!-- In "normal" circumstances, this variable is   -->
+<!-- set to "false()", but when employing this     -->
+<!-- specialized stylesheet, we override to "true" -->
+<xsl:variable name="b-extracting-biblio" select="true()"/>
 
 <!-- We create a structured file of bibliographic and citation  -->
 <!-- information from the document.  Following is an outline of -->
@@ -58,9 +61,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--       <biblio-csl>                                         -->
 <!--          [JSON in CSL-JSON format, per "references"]       -->
 <!--      </biblio-csl>                                         -->
-<!--      <all-biblio-id>                                       -->
-<!--          [collection of #biblio-id in use in the document] -->
-<!--      </all-biblio-id>                                      -->
+<!--      <xref-csl>                                            -->
+<!--          [list of ref pointing to biblio, per xref]        -->
+<!--      </xref-csl>                                           -->
 <!--   </pretext-biblio-csl>                                    -->
 
 <xsl:template match="/">
@@ -69,28 +72,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- multiple "references" divisions, each with their own element -->
         <!-- only considering backmatter references now                   -->
         <xsl:apply-templates select="$document-root//backmatter/references" mode="biblio-to-json"/>
-        <!-- single container of *every* biblio in the document -->
-        <xsl:element name="all-biblio-id" namespace="http://pretextbook.org/2020/pretext/internal">
-            <xsl:apply-templates select="$document-root//biblio" mode="biblio-singleton"/>
-        </xsl:element>
+        <!-- Examine every "xref" looking for citations;  -->
+        <!-- a pointer, or pointers to "biblio".  Record. -->
+        <xsl:apply-templates select="$document-root//xref" mode="citations"/>
     </xsl:element>
 </xsl:template>
 
-<!-- Eventually we want to identify citations, that is "xref"    -->
-<!-- that point to a "biblio".  Unclear if this list is a start, -->
-<!-- or neessary, or helpful.  Not much is invested here.        -->
-<xsl:template match="biblio" mode="biblio-singleton">
-    <xsl:choose>
-        <xsl:when test="not(@xml:id)">
-            <xsl:message>A "biblio" without an "@xml:id"</xsl:message>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:element name="biblio-id" namespace="http://pretextbook.org/2020/pretext/internal">
-                <xsl:value-of select="@xml:id"/>
-            </xsl:element>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
 
 
 <!-- The "biblio-to-json" template will convert a single "references" division (just the           -->
@@ -172,7 +159,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: simple fields for parts of a name are later, and grouped together.           -->
 <!-- NB: simple fields for alternate date model are at the end, and grouped together. -->
 <!-- TODO: many more, from "abstract" to "year-suffix", plus for names and dates.     -->
-<xsl:template match="publisher|publisher-place|page|title|URL|name/family|name/given|name/static-ordering|season|circa" mode="biblio-to-json">
+<xsl:template match="publisher|publisher-place|page|volume|title|collection-title|page-first|number-of-pages|URL|name/family|name/given|name/static-ordering|season|circa" mode="biblio-to-json">
     <xsl:text>"</xsl:text>
     <xsl:value-of select="local-name()"/>
     <xsl:text>"</xsl:text>
@@ -183,7 +170,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- apply-templates for math in titles??? -->
     <xsl:call-template name="escape-json-string">
         <xsl:with-param name="text">
-            <xsl:value-of select="."/>
+            <!-- convert to a textual representation -->
+            <xsl:apply-templates select="node()" mode="xml-to-string"/>
         </xsl:with-param>
     </xsl:call-template>
     <xsl:text>"</xsl:text>
@@ -287,6 +275,52 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
     <xsl:if test="following-sibling::date">
         <xsl:text>, </xsl:text>
+    </xsl:if>
+</xsl:template>
+
+
+<!-- ######### -->
+<!-- Citations -->
+<!-- ######### -->
+
+<xsl:template match="xref" mode="citations">
+    <!-- xref/@ref may point to a (backmatter) "biblio" -->
+    <!-- Or it may point to *several* "biblio"          -->
+    <!-- Allow commas or spaces for separators          -->
+    <!-- tokenize() has no root; a sequence of "token"  -->
+    <xsl:variable name="tokenized-biblio-ref" select="str:tokenize(@ref, ' ,')"/>
+    <!-- list of @ref values that have been vetted         -->
+    <!-- preliminary, may be null, may have trailing space -->
+    <xsl:variable name="citation-item-list-prelim">
+        <xsl:for-each select="$tokenized-biblio-ref">
+            <xsl:variable name="the-ref">
+                <xsl:value-of select="."/>
+            </xsl:variable>
+            <!-- context switch so id() function works -->
+            <xsl:for-each select="$original">
+                <xsl:variable name="target" select="id($the-ref)"/>
+                <!-- vet each @ref value, only backmatter is considered -->
+                <xsl:if test="$target/self::biblio/parent::references/parent::backmatter">
+                    <xsl:value-of select="$the-ref"/>
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:for-each>
+    </xsl:variable>
+    <!-- normalizing will scrub final space, if non-empty -->
+    <xsl:variable name="citation-item-list"
+                  select="normalize-space($citation-item-list-prelim)"/>
+    <!-- the "xref" might be some other cross-reference -->
+    <xsl:if test="not($citation-item-list = '')">
+        <!-- only visual, for debugging, etc. -->
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:element name="xref-csl" namespace="http://pretextbook.org/2020/pretext/internal">
+            <!-- namespacing the attribute is sort of ugly -->
+            <xsl:attribute name="id">
+                <xsl:value-of select="@assembly-id"/>
+            </xsl:attribute>
+            <xsl:value-of select="$citation-item-list"/>
+        </xsl:element>
     </xsl:if>
 </xsl:template>
 

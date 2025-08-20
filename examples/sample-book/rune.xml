@@ -413,7 +413,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-codelens-python">
             <title>A Python program, stepable with CodeLens</title>
-            <program xml:id="python-hello-world-code-lens" interactive="codelens" language="python">
+            <program label="python-hello-world-code-lens" interactive="codelens" language="python">
                 <code>
                 print('Hello, World!')
                 </code>
@@ -422,7 +422,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-codelens-c">
             <title>An C program, stepable with CodeLens</title>
-            <program xml:id="c-hello-world-code-lens" interactive="codelens" language="c">
+            <program label="c-hello-world-code-lens" interactive="codelens" language="c">
                 <code>
                 #include &lt;stdio.h&gt;
 
@@ -436,7 +436,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="program-codelens-java">
             <title>A Java program, stepable with CodeLens</title>
-            <program xml:id="java-hello-world-code-lens" interactive="codelens" language="java">
+            <program label="java-hello-world-code-lens" interactive="codelens" language="java">
                 <code>
                 public class HelloWorld {
                     public static void main(String[] args) {
@@ -447,11 +447,69 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>Now some moderately more complicated programs to find teh prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
+        <p>Codelens interactives can be given one or more checkpoints where the user is asked a question as the code is executed:</p>
+
+        <listing xml:id="program-codelens-python-questions">
+            <title>A Python program, stepable with CodeLens, with questions</title>
+            <program label="python-code-lens-questions" interactive="codelens" language="python" include-source="yes">
+                <code>
+                def foo(n):
+                    n = n + 1
+                    return n
+                x = 7
+                y = x // 3
+                z = foo(y)
+                </code>
+                <checkpoint line="4" answer="x">
+                    <prompt>What variable is being assigned to?</prompt>
+                </checkpoint>
+                <checkpoint line="5" answer-variable="globals.y">
+                    <prompt>What value will be assigned to <c>y</c>?</prompt>
+                    <feedback><c>//</c> does integer division</feedback>
+                </checkpoint>
+                <checkpoint line="3" answer-variable="current_frame.n">
+                    <prompt>What value will be returned?</prompt>
+                    <feedback>What is <c>n</c> right now?</feedback>
+                </checkpoint>
+            </program>
+        </listing>
+
+        <p>If a Codelens contains checkpoints, it is also possible to make it into an exercise. For use on Runestone, there should be an <attr>label</attr> on the exercise:</p>
+
+        <exercise label="program-codelens-cpp-questions">
+            <title>A C++ program as CodeLens exercise</title>
+            <statement>Run the codelens and answer the questions it asks.</statement>
+            <program interactive="codelens" language="cpp" include-source="yes">
+                <code><![CDATA[
+                  int foo() {
+                      int x = 2;
+                      int y = ++x;
+                      return y;
+                  }
+                  int main() {
+                      int x = foo();
+                      while (x < 20) {
+                        x *= 2;
+                      }
+                  }
+                  ]]>
+                </code>
+                <checkpoint line="3" answer="3">
+                    <prompt>What value will be assigned to <c>y</c>?</prompt>
+                    <feedback><c>++</c> has precedence over <c>=</c></feedback>
+                </checkpoint>
+                <checkpoint line="9" answer-variable="current_frame.x">
+                    <prompt>What value will be assigned to <c>x</c>?</prompt>
+                    <feedback>We are doubling it</feedback>
+                </checkpoint>
+            </program>
+        </exercise>
+
+        <p>Now some moderately more complicated programs to find the prime numbers less than <m>20</m>.  We do not vouch for the quality of these, or even their correctness!</p>
 
         <listing xml:id="sieve-python">
             <title><url href="https://www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes" visual="www.tutorialspoint.com/python-program-for-sieve-of-eratosthenes">Sieve of Eratosthenes</url>, Java</title>
-            <program xml:id="sieve-codelens-python" interactive="codelens" language="python">
+            <program label="sieve-codelens-python" interactive="codelens" language="python" starting-step="73" include-source="yes">
                 <code><![CDATA[
                 def SieveOfEratosthenes(n):
                    # array of type boolean with True values in it
@@ -482,7 +540,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="sieve-cpp">
             <title><url href="https://www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range" visual="www.tutorialspoint.com/cplusplus-program-to-implement-sieve-of-eratosthenes-to-generate-prime-numbers-between-given-range">Sieve of Eratosthenes</url>, C++</title>
-            <program xml:id="sieve-codelens-cpp" interactive="codelens" language="cpp">
+            <program label="sieve-codelens-cpp" interactive="codelens" language="cpp">
                 <code> <![CDATA[
                 #include <stdio.h>
                 const int len = 20;
@@ -505,7 +563,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <listing xml:id="sieve-java">
             <title><url href="https://www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java" visual="www.tutorialspoint.com/Sieve-of-Eratosthenes-in-java">Sieve of Eratosthenes</url>, Java</title>
-            <program xml:id="sieve-codelens-java" interactive="codelens" language="java">
+            <program label="sieve-codelens-java" interactive="codelens" language="java">
                 <code><![CDATA[
                 public class SievePrimeFactors  {
                    public static void main(String args[]) {
@@ -2470,13 +2528,13 @@ TEST_CASE( "Test the add function" ) {
 
             <p>An <tag>exploration</tag> next.</p>
 
-            <exploration xml:id="exploration-with-always-static-program">
+            <exploration label="exploration-with-always-static-program">
                 <title>Exploration in a Subsection</title>
 
                 <statement>
                     <p>We would suggest now that you explore something here.  In this case we simply provide a CodeLens, which would be graded as an <q>interaction</q>.</p>
                 </statement>
-                <program xml:id="python-count-10" interactive="codelens" language="python">
+                <program interactive="codelens" language="python">
                     <code>
                     for i in range(10):
                         print(i)
@@ -4347,6 +4405,10 @@ TEST_CASE( "Test the add function" ) {
                 </statement>
                 <response/>
             </task>
+
+            <conclusion>
+                <p>A sequence of <tag>task</tag> can have a <tag>conclusion</tag>, like this one, even if they do not see much use in practice.</p>
+            </conclusion>
         </exercise>
     </exercises>
 
@@ -4360,6 +4422,8 @@ TEST_CASE( "Test the add function" ) {
         <p>Of course, if you are not viewing this while online and hosted on a Runestone server, then these exercises will not look any different than in other places.</p>
 
         <p>(Since this is an unstructured division, the number of the <tag>exercises</tag> is not displayed when born.  It does <em>have</em> a number, which is the same as the enclosing <tag>section</tag>.  To wit: <xref ref="exercises-timed"/> versus <xref ref="timing-exercises"/>.)</p>
+
+        <p>If you prefer that a given <tag>section</tag> has more than one <tag>exercises</tag> within it (timed or not), realize that you must then structure your <tag>section</tag> with a ssequence of <tag>subsection</tag> as peers of the multiple <tag>exercises</tag> you desire.</p>
 
         <exercises xml:id="timing-exercises" label="timed-exercises" time-limit="10" pause="no">
             <title>Timed Exercises</title>
@@ -4486,7 +4550,7 @@ TEST_CASE( "Test the add function" ) {
         <exercise label="true-false-exercise-with-tasks">
             <title>True/False and Explain</title>
             <introduction>
-                <p>Structured with task, we can have an introduction, but this does not migrate with the interactive portions.</p>
+                <p>Structured with <tag>task</tag>, we can have an <tag>introduction</tag>.  If you are viewing this <tag>exercise</tag> in the Runestone assignment builder, you will notice that each of these three <tag>task</tag> appears as its own problem and therefore each one gets its own copy of this <tag>introduction</tag> you are reading right now.</p>
             </introduction>
 
             <task label="true-false-task">
@@ -4538,6 +4602,10 @@ TEST_CASE( "Test the add function" ) {
                     </match>
                 </cardsort>
             </task>
+
+            <conclusion>
+                <p>A <tag>conclusion</tag> is possible and will be replicated after each of the three <tag>task</tag> when they are viewed individually in the Runestone assignment builder.</p>
+            </conclusion>
         </exercise>
 
         <p>Now an <tag>exploration</tag> nested two-deep with <em>the same two questions</em>, two times each, just for testing purposes.</p>
@@ -4545,8 +4613,16 @@ TEST_CASE( "Test the add function" ) {
         <exploration label="exploration-two-deep">
             <title>Exploring Two-Deep</title>
 
+            <introduction>
+                <p>This is a top-level introduction.</p>
+            </introduction>
+
             <task>
                 <title>First Iterations of Each</title>
+
+                <introduction>
+                    <p>This is an introduction to the first iterations, at the second level.</p>
+                </introduction>
 
                 <task label="task-multiple-choice-first">
                     <title>Multiple-Choice, Not Randomized, One Answer (First Copy)</title>
@@ -4601,10 +4677,18 @@ TEST_CASE( "Test the add function" ) {
                     </program>
                     <answer><p>We're still not really sure.</p></answer>
                 </task>
+
+                <conclusion>
+                    <p>We include a conclusion to the first iterations, at the second level (with no conclusion at the top-level).</p>
+                </conclusion>
             </task>
 
             <task>
                 <title>Second Iterations of Each</title>
+
+                <introduction>
+                    <p>This is an introduction to the second iterations, at the second level.</p>
+                </introduction>
 
                 <task label="task-multiple-choice-second">
                     <title>Multiple-Choice, Not Randomized, One Answer (Second Copy)</title>
@@ -4668,7 +4752,12 @@ TEST_CASE( "Test the add function" ) {
                     </program>
                     <answer><p>We're still not really sure.</p></answer>
                 </task>
+
+                <conclusion>
+                    <p>We include a conclusion to the first iterations, at the second level (with no conclusion at the top-level).</p>
+                </conclusion>
             </task>
+            <!-- An overall conclusion would go here, which we omit for testing purposes -->
         </exploration>
 
         <p>This is an <tag>exercise</tag> which has been structured deeply with <tag>task</tag>.  It is here to allow for testing a tabbed viewer presentation in online outputs.</p>
@@ -5184,4 +5273,66 @@ TEST_CASE( "Test the add function" ) {
         </figure>
 
     </section>
+
+    <exercises xml:id="chapter-exam" label="chapter-exam" time-limit="15" pause="yes">
+        <title>Timed Chapter Exam</title>
+
+        <introduction>
+            <p>This is an <tag>exercises</tag> division, as a peer of the <tag>section</tag> in this <tag>chapter</tag> of a <tag>book</tag>.  It is also setup as a Runestone timed exam.  So it is an example of how you might have a per-chapter exam.  This contrasts with an earlier timed exam which is constructed as a per-section exam (<xref ref="timing-exercises"/>).  The exercises are the same here, but in a different order.  As a test, this exam is <q>pauseable</q> and has a 15 minute time limit.</p>
+        </introduction>
+
+        <exercise label="multiple-choice-not-randomized-timed-two">
+            <title>Multiple-Choice, Not Randomized, One Answer</title>
+            <idx>stop signs</idx>
+            <statement>
+                <p>What color is a stop sign?</p>
+            </statement>
+            <choices>
+                <choice>
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Green means <q>go!</q>.</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Red is universally used for prohibited activities or serious warnings.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>White</p>
+                    </statement>
+                    <feedback>
+                        <p>White might be hard to see.</p>
+                    </feedback>
+                </choice>
+            </choices>
+            <hint>
+                <p>What did you see last time you went driving?</p>
+            </hint>
+            <hint>
+                <p>Maybe go out for a drive?</p>
+            </hint>
+        </exercise>
+
+        <exercise label="vector-space-dimension-timed-two">
+            <title>True/False</title>
+            <idx>vector space</idx>
+            <statement correct="no">
+                <p>Every vector space has finite dimension.</p>
+            </statement>
+            <feedback>
+                <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
+            </feedback>
+            <hint>
+                <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-exponent-laws"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+            </hint>
+        </exercise>
+    </exercises>
 </chapter>

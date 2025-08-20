@@ -561,6 +561,17 @@
                 element stdin {
                     text
                 }
+            CodelensCheckpoint =
+                element checkpoint {
+                    attribute line {text},
+                    (
+                        attribute answer {text}
+                    |
+                        attribute answer-variable {text}
+                    ),
+                    element prompt {BlockText+},
+                    element feedback {BlockText+}?
+                }
             Program =
                 element program {
                     Component?,
@@ -571,6 +582,7 @@
                     attribute autorun {"yes"|"no"}?,
                     attribute chatcodes {"yes"|"no"}?,
                     attribute codelens {"yes"|"no"}?,
+                    attribute starting-step {"yes"|"no"}?,
                     attribute compiler-args {text}?,
                     attribute extra-compiler-args {text}?,
                     attribute database {text}?,
@@ -595,7 +607,8 @@
                             ProgramCode,
                             ProgramPostamble?,
                             ProgramTests?,
-                            ProgramStdin?
+                            ProgramStdin?,
+                            CodelensCheckpoint*
                         )
                     )
                 }
@@ -1188,19 +1201,22 @@
                 }
             WebWorkAuthored =
                 element webwork {
-                    UniqueID?,
-                    LabelID?,
-                    Component?,
-                    attribute seed {xsd:integer}?,
-                    attribute copy {text}?,
-                    WWDescription?,
-                    WWMacros?,
-                    element pg-code {text}?,
                     (
-                        (StatementExerciseWW, HintWW?, SolutionWW?)
-                    |
-                        (IntroductionText?, TaskWW+, ConclusionText?)
-                    )
+                        UniqueID?,
+                        LabelID?,
+                        Component?,
+                        attribute seed {xsd:integer}?,
+                        attribute copy {text}?,
+                        WWDescription?,
+                        WWMacros?,
+                        element pg-code {text}?,
+                        (
+                            (StatementExerciseWW, HintWW?, SolutionWW?)
+                        |
+                            (IntroductionText?, TaskWW+, ConclusionText?)
+                        )
+                    ) |
+                    text
                 }
             BlockStatementWW =
                         Paragraph |
