@@ -14,6 +14,16 @@ $min-float-width: 1280px !default;
     clear: right;
   }
 
+  /* disable in any multicolumn list/exercisegroup */
+  .multicolumn details.aside-like {
+    position: relative;
+    margin-left: inherit;
+    width: auto;
+    right: 0;
+    float: none;
+    clear: none;
+  }
+
   details.aside-like > .knowl__content {
     margin-left:0;
     margin-right:0;
