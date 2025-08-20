@@ -28,17 +28,6 @@
   --veil-pressed-shadow: rgba(245, 158, 11, 0.16);
 }
 
-/* Optional fallback if a system-dark page lacks the .dark-mode class */
-/* @media (prefers-color-scheme: dark) {
-  :root:not(.dark-mode) {
-    --veil-primary:        #f59e0b;
-    --veil-btn-bg:         rgba(245, 158, 11, 0.12);
-    --veil-focus-ring:     rgba(245, 158, 11, 0.45);
-    --veil-hover-ring:     rgba(245, 158, 11, 0.22);
-    --veil-pressed-shadow: rgba(245, 158, 11, 0.16);
-  }
-} */
-
 /* ---------------- Containers -------------------------------------------- */
 .veil--inline { display: inline; }
 .veil--block  { margin: 0.25rem 0; }
