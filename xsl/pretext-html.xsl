@@ -8614,19 +8614,65 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="veil[not(parent::m or parent::me or parent::men or parent::mrow)]">
-  <span class="veil-toggle">reveal</span>
-  <span class="veil-content">
-    <xsl:apply-templates/>
+<!-- Inline veil (no block-level descendants) -->
+<xsl:template match="veil[
+  not(descendant::p or descendant::ul or descendant::ol or descendant::table or descendant::figure or descendant::me or descendant::md or descendant::blockquote)
+]">
+  <xsl:variable name="vid" select="generate-id()"/>
+  <span class="veil veil--inline" id="veil-{$vid}">
+    <button
+      class="veil-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="veil-content-{$vid}"
+    >reveal</button>
+    <span
+      class="veil-content"
+      id="veil-content-{$vid}"
+      tabindex="-1"
+      role="button"
+      aria-label="Revealed content (click to hide)"
+      data-veil-id="{$vid}"
+    >
+      <xsl:apply-templates/>
+    </span>
   </span>
 </xsl:template>
 
-<xsl:template match="veil[parent::m or parent::me or parent::men or parent::mrow]">
-    <xsl:text>\textcolor{gray}{\underline{</xsl:text>
-    <xsl:apply-templates/>
-    <xsl:text>}}</xsl:text>
+<!-- Block/multiline veil (has block-level descendants) -->
+<xsl:template match="veil[
+  descendant::p or descendant::ul or descendant::ol or descendant::table or descendant::figure or descendant::me or descendant::md or descendant::blockquote
+]">
+  <xsl:variable name="vid" select="generate-id()"/>
+  <div class="veil veil--block" id="veil-{$vid}">
+    <button
+      class="veil-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="veil-content-{$vid}"
+    >reveal</button>
+    <div
+      class="veil-content"
+      id="veil-content-{$vid}"
+      tabindex="-1"
+      role="button"
+      aria-label="Revealed content (click to hide)"
+      data-veil-id="{$vid}"
+    >
+      <xsl:apply-templates/>
+    </div>
+  </div>
 </xsl:template>
 
+<!-- <xsl:template match="veil[descendant::p or descendant::ul or descendant::ol or descendant::me]">
+  <div class="ptx-veil">
+    <button type="button" class="ptx-veil-toggle" aria-expanded="false">Reveal</button>
+    <div class="ptx-veil-content" hidden="hidden">
+      <xsl:apply-templates/>
+    </div>
+  </div>
+</xsl:template> -->
+ 
 <!-- Implication Symbols -->
 <!-- TODO: better names! -->
 <xsl:template match="imply">

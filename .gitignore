@@ -23,3 +23,6 @@ examples/webwork/minimal/generated/*
 
 # cssbuilder output
 css/dist/*.map
+
+# don't track changes to examples
+examples/*
