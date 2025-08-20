@@ -841,12 +841,13 @@ body.pretext > a.assistive:focus {
   color: var(--body-text-color);
   background: var(--code-inline);
   border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
-  padding: 0.0625em 0.125em;
   border-radius: 0.2em;
   display: inline-block;
   overflow-x: auto;
   max-width: 100%;
   vertical-align: middle;
+  line-height: normal;
+  padding: 0.0625em 0.15em;
 }
 .prompt.unselectable {
   user-select: none;
@@ -2479,6 +2480,11 @@ pre[class*=language-] {
   line-height: 1.2;
   tab-size: 4;
   hyphens: none;
+}
+code[class*=language-].code-inline,
+pre[class*=language-].code-inline {
+  line-height: normal;
+  padding: 0.0625em 0.15em;
 }
 code[class*=language-]::selection,
 code[class*=language-] ::selection,
