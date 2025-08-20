@@ -2777,6 +2777,7 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
     '''Convert a STACK question to a static PreTeXt version via a STACK server'''
 
     import json
+    import urllib
 
     try:
         import requests  # to access STACK server
@@ -2784,10 +2785,16 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
         global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
-    # TODO: get this from a publisher variable
-    api_url = 'https://stack-api.maths.ed.ac.uk/render'
-    # api_url = 'http://127.0.0.1:3080/render'  # for local docker setup
+    pub_tree = ET.parse(pub_file)
+    stack_server = pub_tree.xpath("stack/@server")
+    if stack_server:
+        api_url = urllib.parse.urljoin(stack_server[0], 'render')
+    else:
+        log.warn("No STACK server found in publication file, using default")
+        api_url = 'https://stack-api.maths.ed.ac.uk/render'
+    log.info(f"Using STACK API at {api_url}")
 
+    os.makedirs(dest_dir, exist_ok=True)
     msg = 'converting STACK exercises from {} to static forms for placement in {}'
     log.info(msg.format(xml_source, dest_dir))
 
