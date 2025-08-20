@@ -10219,7 +10219,70 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <veil><me>h(x) = \int_0^x \sin(t)\ dt</me></veil>
 
-            <p>Final test: a veil at the <veil>end of the sentence</veil>.</p>
+            <p>A veil at the <veil>end of the sentence</veil>.</p>
+
+            <p>A hidden external link: <veil><url href="https://pretextbook.org">PreTeXt website</url></veil> is a great resource.</p>
+
+            <p>The command is <veil><c>pip install pretext</c></veil>, which installs the toolkit.</p>
+
+            <p>Two quick reveals: <veil>first</veil>,<veil>second</veil>.</p>
+
+            <p>The derivative of <m>e^{kt}</m> is <veil><m>k\,e^{kt}</m></veil>.</p>
+
+            <p>The identity <m>\sin^2\theta + \cos^2\theta =</m> <veil><m>1</m></veil> is fundamental.</p>
+
+            <ul>
+                <li>The capital of France is <veil>Paris</veil>.</li>
+                <li><m>\int_0^1 x^2\,dx =</m> <veil><m>\tfrac{1}{3}</m></veil>.</li>
+            </ul>
+
+            <ol>
+                <li>Differentiate: <veil><m>\frac{d}{dx}\big(x^3\big)=3x^2</m></veil></li>
+                <li>Evaluate: <m>f(2) = </m> <veil><m>12</m></veil></li>
+            </ol>
+
+            <table>
+                <title>A tiny table with veiled entries</title>
+                <tabular>
+                    <row>
+                        <cell><em>Quantity</em></cell>
+                        <cell><em>Value</em></cell>
+                    </row>
+                    <row>
+                        <cell>Slope</cell>
+                        <cell><veil><m>\frac{\Delta y}{\Delta x}</m></veil></cell>
+                    </row>
+                    <row>
+                        <cell>Secret code</cell>
+                        <cell><veil><c>AX-42</c></veil></cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <figure>
+                <caption>Just some <veil>cubic</veil> functions.</caption>
+                <image source="images/cubic-function.png" />
+            </figure>
+
+            <veil>
+                <p><term>Hint.</term> Use an integrating factor <m>\mu(x)=e^{\int p(x)\,dx}</m> to solve <m>y'+p(x)y=q(x)</m>.</p>
+            </veil>
+
+            <veil>
+                <me>\int_0^{2\pi}\sin(x)\,dx = 0</me>
+            </veil>
+
+            <theorem>
+                <title>Geometric Series</title>
+                <statement>
+                    For <m>|r| &lt; 1</m>, <m>\sum_{k=0}^{\infty} r^k =</m> <veil><m>\frac{1}{1-r}</m></veil>.
+                </statement>
+                <proof>
+                    <p><veil>Consider the partial sums <m>S_n = \sum_{k=0}^{n} r^k</m> and compute <m>(1-r)S_n</m>, then take <m>n\to\infty</m>.</veil></p>
+                </proof>
+            </theorem>
+
+            <p>The eigenvalues of <m>\begin{pmatrix}2 \amp 0\\0 \amp 3\end{pmatrix}</m> are <veil><m>2, 3</m></veil>.</p>
 
         </section>
 

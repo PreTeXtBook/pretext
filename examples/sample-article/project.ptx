@@ -24,7 +24,7 @@
       <publication>publication.xml</publication>
       <output-dir>output/latex</output-dir>
     </target>
-    <target name="pdf" pdf-method="pdflatex">
+    <target name="pdf" pdf-method="xelatex">
       <format>pdf</format>
       <source>sample-article.xml</source>
       <publication>publication.xml</publication>

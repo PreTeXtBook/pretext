@@ -1233,119 +1233,160 @@ document.addEventListener("click", (ev) => {
     setTimeout(() => button.classList.toggle("copied"), 1000);
 });
 
-// window.addEventListener("load", function() {
-//     console.log("Initializing veil click interactions");
-//     document.querySelectorAll('.veil-toggle').forEach(toggle => {
-//         const content = toggle.nextElementSibling;
-//         if (content && content.classList.contains('veil-content')) {
-//             toggle.addEventListener('click', () => {
-//                 toggle.classList.add('slide-away');
-//                 content.classList.add('visible');
-//             });
-//         }
-//     });
-// });
-
-// window.addEventListener('load', () => {
-//   const LABEL_REVEAL = document.documentElement.getAttribute('data-veil-reveal') || 'Reveal';
-//   const LABEL_HIDE   = document.documentElement.getAttribute('data-veil-hide')   || 'Hide';
-
-//   document.addEventListener('click', async (ev) => {
-//     const btn = ev.target.closest('.ptx-veil-toggle');
-//     if (!btn) return;
-//     const content = btn.nextElementSibling;
-//     if (!content || !content.classList.contains('ptx-veil-content')) return;
-
-//     const once = btn.classList.contains('once');
-//     const expanded = btn.getAttribute('aria-expanded') === 'true';
-//     const next = once ? true : !expanded;
-
-//     btn.setAttribute('aria-expanded', String(next));
-//     if (!once) btn.textContent = next ? LABEL_HIDE : LABEL_REVEAL;
-
-//     content.hidden = !next;
-//     if (once) btn.classList.add('slide-away');
-
-//     // MathJax on demand
-//     if (next && window.MathJax?.typesetPromise) {
-//       try { await MathJax.typesetPromise([content]); } catch {}
-//     }
-//   });
-// });
-
+/**
+ * PreTeXt <veil> interaction layer
+ * --------------------------------
+ * Purpose:
+ *   Provide accessible show/hide behavior for <veil> in HTML:
+ *     - When hidden: show a small chip-like button (.veil-toggle)
+ *     - When revealed: show bordered content (.veil-content) that can be clicked to hide
+ *
+ * Expected markup (emitted by XSL):
+ *   Inline:
+ *     <span class="veil veil--inline">
+ *       <button class="veil-toggle" aria-expanded="false" aria-controls="veil-content-...">reveal</button>
+ *       <span class="veil-content" id="veil-content-..." tabindex="-1" role="button" aria-label="Revealed content (click to hide)">…</span>
+ *     </span>
+ *   Block:
+ *     <div class="veil veil--block">
+ *       <button class="veil-toggle" ...>reveal</button>
+ *       <div class="veil-content" id="veil-content-..." tabindex="-1" role="button" aria-label="Revealed content (click to hide)">…</div>
+ *     </div>
+ *
+ * Accessibility:
+ *   - Real <button> for the toggle, with aria-expanded kept in sync
+ *   - Focus moves into revealed content; hiding returns focus to the toggle
+ *   - Enter/Space work on both the toggle and the revealed content
+ *   - Clicks on interactive descendants (<a>, <input>, etc.) do not hide
+ *
+ * MathJax:
+ *   - On first reveal, request typesetting of the revealed node (v3, with v2 fallback)
+ *
+ * Notes:
+ *   - Delegated listeners (document-level) = no per-instance handlers and works for dynamic content
+ *   - Idempotent init guard prevents double-binding if script is loaded twice
+ */
 (function () {
-  function isInteractive(el) {
-    return el.closest('a, button, input, textarea, select, label, summary, details');
+  'use strict';
+
+  // Prevent double-initialization if this script runs more than once
+  if (window.__PTX_VEIL_INIT__) return;
+  window.__PTX_VEIL_INIT__ = true;
+
+  // Centralized selectors
+  const SEL = {
+    container: '.veil',
+    toggle: '.veil .veil-toggle',
+    revealedContent: '.veil.revealed .veil-content',
+    pressed: '.veil.revealed .veil-content.is-pressed',
+  };
+
+  // Elements considered "interactive" inside .veil-content: don't toggle on them
+  const INTERACTIVE = 'a, button, input, textarea, select, label, summary, details';
+
+  function isInteractive(target) {
+    return !!target.closest(INTERACTIVE);
+  }
+
+  function parts(container) {
+    return {
+      toggle: container.querySelector('.veil-toggle'),
+      content: container.querySelector('.veil-content'),
+    };
+  }
+
+  function typesetMath(node) {
+    // MathJax v3
+    if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+      window.MathJax.typesetPromise([node]).catch(() => {});
+    }
+    // Fallback: MathJax v2
+    else if (window.MathJax && window.MathJax.Hub && typeof window.MathJax.Hub.Queue === 'function') {
+      try { window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, node]); } catch (_) {}
+    }
   }
 
   function reveal(container) {
     if (!container || container.classList.contains('revealed')) return;
-    const toggle = container.querySelector('.veil-toggle');
-    const content = container.querySelector('.veil-content');
+    const { toggle, content } = parts(container);
     if (!content) return;
+
     container.classList.add('revealed');
     if (toggle) toggle.setAttribute('aria-expanded', 'true');
+
+    // Move focus into content for keyboard users
     content.focus({ preventScroll: true });
-    // MathJax typeset on first reveal
-    if (window.MathJax?.typesetPromise) {
-      try { window.MathJax.typesetPromise([content]); } catch {}
-    }
+
+    // Typeset any newly-visible math
+    typesetMath(content);
   }
 
   function hide(container) {
     if (!container || !container.classList.contains('revealed')) return;
-    const toggle = container.querySelector('.veil-toggle');
-    const content = container.querySelector('.veil-content');
+    const { toggle, content } = parts(container);
+
     container.classList.remove('revealed');
     if (toggle) toggle.setAttribute('aria-expanded', 'false');
+
+    // Return focus to the toggle for predictable keyboard flow
     if (toggle) toggle.focus({ preventScroll: true });
+
+    // Clear pressed visual if present
     if (content) content.classList.remove('is-pressed');
   }
 
-  // Toggle via click
-  window.addEventListener('click', (evt) => {
-    const toggle = evt.target.closest('.veil .veil-toggle');
-    if (toggle) { reveal(toggle.closest('.veil')); return; }
+  // Click: reveal via chip, hide by clicking inside revealed content (except on interactive children)
+  document.addEventListener('click', (evt) => {
+    const btn = evt.target.closest(SEL.toggle);
+    if (btn) {
+      reveal(btn.closest(SEL.container));
+      return;
+    }
 
-    const content = evt.target.closest('.veil.revealed .veil-content');
+    const content = evt.target.closest(SEL.revealedContent);
     if (content) {
-      if (isInteractive(evt.target)) return;
-      hide(content.closest('.veil'));
+      if (isInteractive(evt.target)) return; // allow links/inputs to work normally
+      hide(content.closest(SEL.container));
     }
   });
 
-  // Keyboard toggle on Enter/Space
-  window.addEventListener('keydown', (evt) => {
-    if (evt.key !== 'Enter' && evt.key !== ' ') return;
-    const toggle = evt.target.closest('.veil .veil-toggle');
-    if (toggle) { evt.preventDefault(); reveal(toggle.closest('.veil')); return; }
-    const content = evt.target.closest('.veil.revealed .veil-content');
-    if (content) { evt.preventDefault(); hide(content.closest('.veil')); }
+  // Keyboard: Enter/Space on either the chip or the revealed content
+  document.addEventListener('keydown', (evt) => {
+    const key = evt.key;
+    if (key !== 'Enter' && key !== ' ') return;
+
+    const btn = evt.target.closest(SEL.toggle);
+    if (btn) {
+      evt.preventDefault();
+      reveal(btn.closest(SEL.container));
+      return;
+    }
+
+    const content = evt.target.closest(SEL.revealedContent);
+    if (content) {
+      evt.preventDefault();
+      hide(content.closest(SEL.container));
+    }
   });
 
-  // “Pressed” visual feedback for revealed content
-  window.addEventListener('pointerdown', (evt) => {
-    const content = evt.target.closest('.veil.revealed .veil-content');
+  // Pressed visual: add on pointerdown; remove on any pointerup/cancel anywhere
+  document.addEventListener('pointerdown', (evt) => {
+    const content = evt.target.closest(SEL.revealedContent);
     if (!content || isInteractive(evt.target)) return;
     content.classList.add('is-pressed');
   });
-  window.addEventListener('pointerup', (evt) => {
-    const content = evt.target.closest('.veil.revealed .veil-content');
-    if (content) content.classList.remove('is-pressed');
-  });
-  window.addEventListener('pointercancel', () => {
-    document.querySelectorAll('.veil.revealed .veil-content.is-pressed')
-      .forEach(el => el.classList.remove('is-pressed'));
-  });
-  window.addEventListener('pointerleave', (evt) => {
-    const content = evt.target.closest?.('.veil.revealed .veil-content');
-    if (content) content.classList.remove('is-pressed');
-  });
 
-  // Initialize aria state
-  window.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.veil .veil-toggle')
-      .forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+  function clearPressed() {
+    document.querySelectorAll(SEL.pressed).forEach((el) => el.classList.remove('is-pressed'));
+  }
+  document.addEventListener('pointerup', clearPressed);
+  document.addEventListener('pointercancel', clearPressed);
+
+  // Initialize ARIA explicitly (useful if HTML was serialized without it)
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll(SEL.toggle).forEach((btn) => {
+      if (!btn.hasAttribute('aria-expanded')) btn.setAttribute('aria-expanded', 'false');
+    });
   });
 })();
 
