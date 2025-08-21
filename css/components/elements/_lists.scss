@@ -11,8 +11,6 @@
 .ptx-content {
   ol,
   ul {
-    // margin-top: 0.75em;
-    margin-bottom: 0;
 
     ol,
     ul {
@@ -35,6 +33,12 @@
     }
   }
 }   // .ptx-content
+
+.para > :is(ol, ul) {
+  // add some space when inside a .para
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
 
 // provide space for custom markers
 ol > li {
