@@ -14,11 +14,17 @@
   overflow-x: auto;
 }
 
+.code-display {
+  overflow-x: auto;      //scroll if overflowing
+  font-family: var(--font-monospace);
+}
+
 .console,
 .program {
   border: 1px solid var(--page-border-color);
   padding: 5px 15px;
   overflow-x: auto;
+  margin: 0;
   @include code-text();
 }
 
@@ -46,6 +52,8 @@
   border-left: 1px solid #aaa;
   padding: 0 15px 5px;
   overflow-x: auto;
+  margin-top: 0;
+  margin-bottom: 0;
   @include code-text();
 }
 
@@ -59,17 +67,26 @@
   width: 3.0em;
 }
 
+// special handling for code-display as it appears inside .paras
+// and may need space around it
+.code-display {
+  margin: 0.5em 0;
+}
+// if inside clipboardable, move margin to that container and turn some into padding
+// to help make sure clipboard icon is contained inside the code-display in dark mode
+.clipboardable:has(.code-display) {
+  margin: 0.25em 0;
+
+  .code-display {
+    margin: 0;
+    padding: 0.25em 0;
+  }
+}
+
+
 .clipboardable {
   position: relative;  // To anchor the code-copy button
   display: flow-root;
-
-  .console + .code-copy {
-    top: 1em;
-  }
-
-  .program + .code-copy {
-    top: 0.5em;
-  }
 
   .code-copy {
     position: absolute;
