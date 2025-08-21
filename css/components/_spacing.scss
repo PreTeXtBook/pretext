@@ -26,21 +26,6 @@ article > *:not(:first-child) {
 }
 
 // tighten up spacing slightly for adjacent paragraphs in a section
-section > .para + .para {
+:is(section, article, .knowl__content) > .para + .para {
   margin-top: 1em;
 }
-
-// base spacing for paras
-.para:not(:first-child) {
-  margin-top: 1em;
-}
-//tighten up things after a paragraph unless something more specific overrides
-.para + *:not(:first-child) {
-  margin-top: 1em;
-}
-
-// make sure first para child of logical paragraphs doesn't get extra space
-.para.logical > .para:first-child {
-  display: inline;
-}
-

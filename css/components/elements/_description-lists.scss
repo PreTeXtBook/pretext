@@ -15,9 +15,7 @@
  */
 
 dl:is(.description-list, .glossary) {
-  margin-top: 1em;
-  margin-left: 0;
-  margin-bottom: 0;
+  margin: 0;
   //overflow: hidden; // Removed to show permalinks
 
   dt {
@@ -30,6 +28,12 @@ dl:is(.description-list, .glossary) {
     display: block;
     clear: both;
   }
+}
+
+.para > dl:is(.description-list) {
+  // add some space when inside a .para
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 dl.glossary {
