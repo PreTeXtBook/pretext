@@ -93,7 +93,11 @@ $colors: map.merge(
   "button-border-color": var(--background-color-white-25),
   "button-hover-background": var(--primary-color-black-50),
   "button-text-color": var(--body-text-color),
-  "code-inline": var(--background-color-gray-20),
+
+  // ------------------------------------------------------------------------------
+  // Other
+  "code-background": var(--background-color-gray-20),
+  "code-inline-background": var(--background-color-gray-20),
   )
 );
 

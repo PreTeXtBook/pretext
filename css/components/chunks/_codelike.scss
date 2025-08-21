@@ -1,5 +1,6 @@
 @mixin code-text {
   font-family: var(--font-monospace);
+  background: var(--code-background);
   font-size: .93rem;
   line-height: 1.2;
 }
@@ -32,8 +33,8 @@
   font-family: var(--font-monospace);
   white-space: pre;
   color: var(--body-text-color);
-  background: var(--code-inline);
-  border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+  background: var(--code-inline-background);
+  border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
   border-radius: 0.2em;
   display: inline-block;
   overflow-x: auto;
@@ -52,6 +53,7 @@
   border-left: 1px solid #aaa;
   padding: 0 15px 5px;
   overflow-x: auto;
+  background: var(--code-background);
   margin-top: 0;
   margin-bottom: 0;
   @include code-text();

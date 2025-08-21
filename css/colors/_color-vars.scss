@@ -125,13 +125,17 @@ $colors: (
   "button-border-color": #ccc,
   "button-hover-background": #c7c7c7,
   "button-hover-text-color": var(--button-text-color),
-  "code-inline": #ededed,
 
   "dropdown-background": var(--content-background),
   "dropdown-border-color": var(--toc-border-color),
   "dropdown-text-color": var(--toc-text-color),
   "dropdown-hover-background": var(--tocitem-active-background),
   "dropdown-hover-text-color": var(--tocitem-active-text-color),
+
+  // ------------------------------------------------------------------------------
+  // Other
+  "code-background": #fdfdfd,
+  "code-inline-background": #ededed,
 );
 
 // ==============================================================================

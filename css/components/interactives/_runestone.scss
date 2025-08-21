@@ -52,8 +52,8 @@
 //Fixup datafile captions
 .runestone.datafile {
   .datafile_caption {
-    background: var(--code-inline);
-    border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+    background: var(--code-inline-background);
+    border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
     display: block;
     width: fit-content;
     margin: 0 auto;
@@ -61,11 +61,11 @@
   img {
     margin: 0 auto;
     display: block;
-    border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+    border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
   }
   pre, textarea {
     margin: 0 auto;
-    border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+    border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
     background-color: var(--page-color);
   }
 }
