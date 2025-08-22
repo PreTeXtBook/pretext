@@ -145,3 +145,6 @@
 <!-- are added, then this need not change                              -->
 <!-- Typical use: self::exercise and boolean(&INLINE-EXERCISE-FILTER;) -->
 <!ENTITY INLINE-EXERCISE-FILTER "parent::article|parent::paragraphs|parent::chapter|parent::section|parent::subsection|parent::subsubsection|parent::handout">
+
+<!-- interactive elements that need a QR code generated -->
+<!ENTITY QRCODE-INTERACTIVES "audio[@source|@href]|video[@source|@href|@youtube|@youtubeplaylist|@vimeo]|interactive|program[@interactive != '' and @interactive != 'no']">
