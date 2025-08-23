@@ -1350,6 +1350,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:copy-of select="program/node()"/>
             </xsl:element>
         </xsl:if>
+        <!-- bring up the program as part of the problem statement -->
+        <!-- copy via representations to get possible qrcode       -->
+        <xsl:apply-templates select="program" mode="representations"/>
     </statement>
     <xsl:copy-of select="hint"/>
     <xsl:copy-of select="answer"/>
