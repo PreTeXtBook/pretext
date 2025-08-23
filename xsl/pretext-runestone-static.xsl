@@ -1339,7 +1339,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- duplicate the authored prompt/statement -->
         <xsl:copy-of select="statement/node()"/>
         <!-- bring up the program as part of the problem statement -->
-        <xsl:copy-of select="program"/>
+        <!-- copy via representations to get possible qrcode       -->
+        <xsl:apply-templates select="program" mode="representations"/>
     </statement>
     <xsl:copy-of select="hint"/>
     <xsl:copy-of select="answer"/>
