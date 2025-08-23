@@ -2931,14 +2931,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Grab the URLs for all interactives and construct an index -->
+<xsl:variable name="interactive-urls-file" select="concat($generated-directory-source,'qrcode/interactive-urls.xml')"/>
+<xsl:variable name="interactive-urls" select="exsl:node-set(document($interactive-urls-file, $original)/interactive-urls)"/>
+
+<!-- Utility to search $interactive-urls for a given @assembly-id          -->
+<!-- Could be a key() lookup, but that would require injecting contents of -->
+<!-- interactive-urls-file into a previous assembly pass.                  -->
+<xsl:template match="*" mode="get-interactive-url">
+    <xsl:variable name="the-id" select="@assembly-id"/>
+    <xsl:value-of select="$interactive-urls/interactive-url[@id = $the-id]/@url"/>
+</xsl:template>
+
 <!-- Form a PreTeXt side-by-side with an image, a QR code and links -->
 
 <xsl:template match="audio|video|interactive[not(static)]" mode="representations">
-    <xsl:variable name="the-url">
-        <xsl:apply-templates select="." mode="static-url"/>
-    </xsl:variable>
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
+            <xsl:variable name="the-url">
+                <xsl:apply-templates select="." mode="get-interactive-url"/>
+            </xsl:variable>
             <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
                 <xsl:choose>
