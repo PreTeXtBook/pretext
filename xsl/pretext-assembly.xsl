@@ -3244,6 +3244,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="@source" />
 </xsl:template>
 
+<!--  interactive programs  -->
+<xsl:template match="program[@interactive != '' and @interactive != 'no']" mode="static-url">
+    <xsl:value-of select="$baseurl"/>
+    <xsl:apply-templates select="." mode="containing-filename" />
+</xsl:template>
+
 <!-- The contents of a datafile may be encoded as text in an XML   -->
 <!-- file within the generated/datafile directory.  The filename   -->
 <!-- has this construction, even if we do not always consult it.   -->
