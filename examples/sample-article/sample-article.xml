@@ -10982,6 +10982,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Notice in the HTML version of the above example that when you highlight all, or a portion, of the listing for a cut-and-paste that the prompts are not included.</p>
 
+            <p>Now a test of some listings (and pre-formatted text) in a block that likely has a background color in an HTML version.</p>
+
+            <exercise>
+                <title>Code in a colored(?) container</title>
+                <statement>
+                <p>Not really much of an exercise, but it should force a colored box.</p>
+                <p>Running a program in a console:</p>
+                <console>
+                    <input>
+                    ./program
+                    </input>
+                </console>
+                <pre>
+                    A pre
+                </pre>
+                </statement>
+            </exercise>
+
             <p>The next listing is just absurdity, to check various characters from <latex/> that are otherwise employed by the code supporting consoles, and some Latin-1 characters.  We test each in a prompt, input, and output.  We use <c>(*</c> and <c>*)</c> as sequences used to escape embedded <latex/> commands, so we test those also.</p>
 
             <listing>
