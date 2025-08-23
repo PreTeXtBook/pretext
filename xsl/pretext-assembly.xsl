@@ -1683,6 +1683,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
+<xsl:template match="program[@interactive]" mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+
 <xsl:template match="datafile" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
@@ -3052,6 +3056,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <!--  -->
                 </stack>
             </sidebyside>
+        </xsl:when>
+        <xsl:when test="($exercise-style = 'dynamic') or ($exercise-style = 'pg-problems')">
+            <!-- duplicate authored content for the non-static conversions -->
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="program[@interactive != '' and @interactive != 'no']" mode="representations">:message>
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'static'">
+            <!-- first the static program -->
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+            <!-- then a qr assemblage if desired -->
+            <xsl:if test="$b-program-static-qrcodes">
+                <xsl:variable name="static-url">
+                    <xsl:apply-templates select="." mode="get-interactive-url"/>
+                </xsl:variable>
+                <assemblage>
+                    <title>
+                        <xsl:value-of select="$interactive-urls/@localized-link-description"/>
+                    </title>
+                    <sidebyside margins="0%" widths="70% 25%" valign="top" halign="center">
+                        <p>
+                            <!-- Kill the automatic footnote    -->
+                            <url href="{$static-url}" visual="">
+                                <xsl:value-of select="$static-url"/>
+                            </url>
+                        </p>
+                        <image>
+                            <xsl:attribute name="pi:generated">
+                                <xsl:text>qrcode/</xsl:text>
+                                <xsl:apply-templates select="." mode="assembly-id"/>
+                                <xsl:text>.png</xsl:text>
+                            </xsl:attribute>
+                        </image>
+                    </sidebyside>
+                </assemblage>
+            </xsl:if>
         </xsl:when>
         <xsl:when test="($exercise-style = 'dynamic') or ($exercise-style = 'pg-problems')">
             <!-- duplicate authored content for the non-static conversions -->
