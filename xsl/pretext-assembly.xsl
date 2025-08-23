@@ -3225,11 +3225,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Form a PreTeXt side-by-side with an image, a QR code and links -->
 
 <xsl:template match="audio|video|interactive[not(static)]" mode="representations">
-    <xsl:variable name="the-url">
-        <xsl:apply-templates select="." mode="static-url"/>
-    </xsl:variable>
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
+            <xsl:variable name="the-url">
+                <xsl:apply-templates select="." mode="get-interactive-url-from-file"/>
+            </xsl:variable>
             <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
                 <xsl:choose>
@@ -3581,4 +3581,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Get interactive URL from sidecar file produced with QRcode image -->
+<xsl:template match="&QRCODE-INTERACTIVES;" mode="get-interactive-url-from-file">
+    <xsl:variable name="interactive-url-file" select="concat($generated-directory-source,'qrcode/', @assembly-id, '-url.xml')"/>
+    <xsl:value-of select="document($interactive-url-file, $original)/interactive-url/@url"/>
+</xsl:template>
 </xsl:stylesheet>
