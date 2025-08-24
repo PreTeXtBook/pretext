@@ -73,33 +73,23 @@ dl.description-list {
     margin-left: 22ex;
   }
 
-  .narrow {
+  &.narrow {
     dt {
-      margin-top: 0;
-      width: unset;
-      max-width: 55ex;
-      text-align: left;
+      width: 11ex;
     }
 
     dd {
-      margin-left: 12ex;
-      margin-left: 0;
-      margin-top: 0;
-      width: 31em;
-      max-width: calc(100% - 12ex);
-      float: right;
-      clear: right;
+      margin-left: 15ex;
+    }
+  }
+
+  &.wide {
+    dt {
+      width: 25ex;
     }
 
-    dd::after {
-      content: "";
-      display: block;
-      height: 1em;
-      clear: left;
-    }
-
-    dd:last-child::after {
-      height: 0;
+    dd {
+      margin-left: 29ex;
     }
   }
 }
@@ -134,7 +124,8 @@ dl.description-list dl dd {
   }
 
   dl.description-list dd,
-  dl.description-list.narrow dd {
+  dl.description-list.narrow dd,
+  dl.description-list.wide dd {
     margin-top: 0.5em;
     margin-left: 3em;
     max-width: calc(100% - 3em);
