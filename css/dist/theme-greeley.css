@@ -19,17 +19,8 @@ article > *:not(:first-child) {
 .knowl__content > *:not(:first-child) {
   margin-top: 1.5em;
 }
-section > .para + .para {
+:is(section, article, .knowl__content) > .para + .para {
   margin-top: 1em;
-}
-.para:not(:first-child) {
-  margin-top: 1em;
-}
-.para + *:not(:first-child) {
-  margin-top: 1em;
-}
-.para.logical > .para:first-child {
-  display: inline;
 }
 ol.no-marker,
 ul.no-marker,
@@ -64,9 +55,7 @@ ul.circle {
   list-style-type: circle;
 }
 dl:is(.description-list, .glossary) {
-  margin-top: 1em;
-  margin-left: 0;
-  margin-bottom: 0;
+  margin: 0;
 }
 dl:is(.description-list, .glossary) dt {
   font-weight: bold;
@@ -76,6 +65,10 @@ dl:is(.description-list, .glossary) dd::after {
   content: "";
   display: block;
   clear: both;
+}
+.para > dl:is(.description-list) {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 dl.glossary dt {
   margin-top: 1.25em;
@@ -186,10 +179,6 @@ dl.description-list dl dd {
   width: min-content;
   margin-right: 2em;
 }
-.ptx-content ol,
-.ptx-content ul {
-  margin-bottom: 0;
-}
 .ptx-content li {
   margin-top: 0.5em;
 }
@@ -197,6 +186,10 @@ dl.description-list dl dd {
   font-size: 100%;
   font-weight: normal;
   font-style: italic;
+}
+.para > :is(ol, ul) {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 ol > li {
   padding-left: 0.25em;
@@ -1018,12 +1011,18 @@ section article.poem > .heading::after {
 .code-box {
   overflow-x: auto;
 }
+.code-display {
+  overflow-x: auto;
+  font-family: var(--font-monospace);
+}
 .console,
 .program {
   border: 1px solid var(--page-border-color);
   padding: 5px 15px;
   overflow-x: auto;
+  margin: 0;
   font-family: var(--font-monospace);
+  background: var(--code-background);
   font-size: 0.93rem;
   line-height: 1.2;
 }
@@ -1031,8 +1030,8 @@ section article.poem > .heading::after {
   font-family: var(--font-monospace);
   white-space: pre;
   color: var(--body-text-color);
-  background: var(--code-inline);
-  border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+  background: var(--code-inline-background);
+  border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
   border-radius: 0.2em;
   display: inline-block;
   overflow-x: auto;
@@ -1048,7 +1047,11 @@ section article.poem > .heading::after {
   border-left: 1px solid #aaa;
   padding: 0 15px 5px;
   overflow-x: auto;
+  background: var(--code-background);
+  margin-top: 0;
+  margin-bottom: 0;
   font-family: var(--font-monospace);
+  background: var(--code-background);
   font-size: 0.93rem;
   line-height: 1.2;
 }
@@ -1061,15 +1064,19 @@ section article.poem > .heading::after {
   margin-left: -15px;
   width: 3em;
 }
+.code-display {
+  margin: 0.5em 0;
+}
+.clipboardable:has(.code-display) {
+  margin: 0.25em 0;
+}
+.clipboardable:has(.code-display) .code-display {
+  margin: 0;
+  padding: 0.25em 0;
+}
 .clipboardable {
   position: relative;
   display: flow-root;
-}
-.clipboardable .console + .code-copy {
-  top: 1em;
-}
-.clipboardable .program + .code-copy {
-  top: 0.5em;
 }
 .clipboardable .code-copy {
   position: absolute;
@@ -1108,7 +1115,7 @@ section article.poem > .heading::after {
   }
 }
 pre[class*=language-] {
-  margin: 0.5em 0;
+  margin: 0;
   overflow: auto;
   border: 1px solid #e1e1e1;
 }
@@ -1574,9 +1581,6 @@ article.theorem-like .emphasis {
   padding-right: 10px;
   margin-bottom: 1em;
 }
-.code-display {
-  overflow-x: auto;
-}
 .booktitle {
   font-style: oblique;
 }
@@ -1835,8 +1839,8 @@ article.theorem-like .emphasis {
   background: #fdfdfd;
 }
 .runestone.datafile .datafile_caption {
-  background: var(--code-inline);
-  border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+  background: var(--code-inline-background);
+  border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
   display: block;
   width: fit-content;
   margin: 0 auto;
@@ -1844,12 +1848,12 @@ article.theorem-like .emphasis {
 .runestone.datafile img {
   margin: 0 auto;
   display: block;
-  border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+  border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
 }
 .runestone.datafile pre,
 .runestone.datafile textarea {
   margin: 0 auto;
-  border: 1px solid color-mix(in oklab, var(--code-inline) 50%, #888);
+  border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
   background-color: var(--page-color);
 }
 .runestone.datafile + .program {
@@ -3535,12 +3539,13 @@ article > .heading:first-child + .introduction > .para:first-child {
   --button-border-color: #3a3a3a;
   --button-hover-background: #3a3a3a;
   --button-hover-text-color: var(--button-text-color);
-  --code-inline: #ededed;
   --dropdown-background: var(--content-background);
   --dropdown-border-color: var(--toc-border-color);
   --dropdown-text-color: var(--toc-text-color);
   --dropdown-hover-background: var(--tocitem-active-background);
   --dropdown-hover-text-color: var(--tocitem-active-text-color);
+  --code-background: #fdfdfd;
+  --code-inline-background: #ededed;
   --assemblage-like-body-background: var(--block-body-background);
   --assemblage-like-border-color: var(--block-border-color);
   --definition-like-body-background: var(--block-body-background);
@@ -3703,12 +3708,13 @@ article > .heading:first-child + .introduction > .para:first-child {
   --button-border-color: var(--background-color-white-25);
   --button-hover-background: var(--primary-color-black-50);
   --button-hover-text-color: var(--button-text-color);
-  --code-inline: var(--background-color-gray-20);
   --dropdown-background: var(--content-background);
   --dropdown-border-color: var(--toc-border-color);
   --dropdown-text-color: var(--toc-text-color);
   --dropdown-hover-background: var(--tocitem-active-background);
   --dropdown-hover-text-color: var(--tocitem-active-text-color);
+  --code-background: var(--background-color-gray-20);
+  --code-inline-background: var(--background-color-gray-20);
   --assemblage-like-body-background: var(--block-body-background);
   --assemblage-like-border-color: var(--block-border-color);
   --definition-like-body-background: var(--block-body-background);
