@@ -5818,7 +5818,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="@width = 'narrow'">
                     <xsl:text>description-list narrow</xsl:text>
                 </xsl:when>
-                <!-- 'medium', 'wide', and any typo (let DTD check) -->
+                <xsl:when test="@width = 'wide'">
+                    <xsl:text>description-list wide</xsl:text>
+                </xsl:when>
+                <!-- 'medium' and any typo (let DTD check) -->
                 <xsl:otherwise>
                     <xsl:text>description-list</xsl:text>
                 </xsl:otherwise>
