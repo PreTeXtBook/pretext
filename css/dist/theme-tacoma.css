@@ -1844,6 +1844,7 @@ a[href^="mailto:"] {
   border-radius: 3px;
   position: relative;
   display: block;
+  font-weight: unset;
 }
 .ptx-content .summary-links a .title {
   font-style: normal;
