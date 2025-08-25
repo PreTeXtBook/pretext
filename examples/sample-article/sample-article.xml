@@ -10987,6 +10987,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <proof ref="theorem-detached" text="type-global">
                 <p>This is a proof that is authored <q>detached.</q>  It is not associated with the theorem above in a way other than simply following it.<fn>Footnotes once behaved badly in a detached <tag>proof</tag>.</fn></p>
+
+                <p>Notice that this proof has a <attr>ref</attr> attribute that points to the theorem being proved.  In this way, the <tag>proof</tag> element doubles as an <tag>xref</tag>.  So the <attr>text</attr> attribute is also available to fashion how the cross-reference appears.  Options are basically the same as for <tag>xref</tag>, though some things are not possible, such as custom text.</p>
             </proof>
 
             <p>A specialized version of a program listing is an interactive command/response session at a command-line, where differing fonts are used to differentiate the system prompt, the user's commands, and the system's reaction.  A   <c>console</c> session may be used by itself inside a <c>sidebyside</c>, or it can be wrapped in a listing to get a number and a caption.  As elsewhere, you will need to escape ampersands and angle brackets (such as if you have a command using redirection), using <c>&amp;amp;</c>, <c>&amp;lt;</c>, and <c>&amp;gt;</c> in your source.</p>
