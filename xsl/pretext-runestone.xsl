@@ -856,7 +856,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </question>
 </xsl:template>
 
-<xsl:template match="program[(@interactive = 'codelens') and not(parent::exercise)]" mode="runestone-manifest">
+<xsl:template match="program[(@interactive = 'codelens') and not(parent::*[self::exercise or &PROJECT-FILTER;])]" mode="runestone-manifest">
     <question>
         <!-- label is from the "program", or enclosing "listing" -->
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
@@ -866,7 +866,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </question>
 </xsl:template>
 
-<xsl:template match="program[(@interactive = 'activecode') and not(parent::exercise)]" mode="runestone-manifest">
+<xsl:template match="program[(@interactive = 'activecode') and not(parent::*[self::exercise or &PROJECT-FILTER;])]" mode="runestone-manifest">
     <!-- verify that program is in a language that can be made active -->
     <xsl:variable name="active-language">
         <xsl:apply-templates select="." mode="active-language"/>
