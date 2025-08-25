@@ -36,7 +36,8 @@ h1 {
 svg {
 	background: white;
 	border: 1px solid darkslategray;
-	margin: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .function_radio_container {

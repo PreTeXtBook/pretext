@@ -1,7 +1,7 @@
     var scene = new THREE.Scene();
 
     var renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth, window.innerHeight - 5 );
     renderer.setClearColor( 0xfff000, 1 );
     // RAB edit 2021-08-10
     // document.body.appendChild( renderer.domElement );
