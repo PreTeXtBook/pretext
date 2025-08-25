@@ -2296,13 +2296,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Whether or not to tag TOC as focused -->
 <xsl:variable name="html-toc-focused_value">
     <xsl:choose>
-        <xsl:when test="$html-theme-name = 'custom' or $b-html-theme-legacy">
-            <!-- legacy/custom themes can pick whether to use a focused toc or not -->
+        <xsl:when test="$publication/html/tableofcontents/@focused != ''">
             <xsl:apply-templates select="$publisher-attribute-options/html/tableofcontents/pi:pub-attribute[@name='focused']" mode="set-pubfile-variable"/>
         </xsl:when>
         <xsl:otherwise>
-            <!-- newer ones determined by theme                                -->
-            <xsl:if test="$html-theme/@focused-toc"><xsl:value-of select="$html-theme/@focused-toc"/></xsl:if>
+            <!-- check the theme for a default  -->
+            <xsl:if test="$html-theme/@focused-toc">
+                <xsl:value-of select="$html-theme/@focused-toc"/>
+            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
