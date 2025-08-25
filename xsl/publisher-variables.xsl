@@ -2356,7 +2356,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$publication/html/css/@theme">
             <xsl:value-of select="$publication/html/css/@theme"/>
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="$publication/html/css/@style or $publication/html/css/@shell">
             <!-- legacy style detection and overriding -->
             <xsl:choose>
                 <!-- crc and min are best detected via @shell -->
@@ -2385,6 +2385,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                   <xsl:text>default-modern</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>default-modern</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
