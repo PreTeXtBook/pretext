@@ -1711,8 +1711,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:variable name="all-xref" select="$document-root//xref"/>
         <!-- Rund up all "fragref" elements, which are very similar -->
         <xsl:variable name="all-fragref" select="$document-root//fragref"/>
+        <!-- A "proof" (or similar) with a @ref attribute doubles as  -->
+        <!-- an "xref" to the theorem it proves.  This should only be -->
+        <!-- a "detached" proof, not living inside a THEOREM-LIKE,    -->
+        <!-- nor inside a SOLUTION-LIKE. An author's attempt to put a -->
+        <!-- @ref on a non-detached proof will not create a knowl     -->
+        <!-- clickable and so will be unavailable. We make the knowl  -->
+        <!-- content here anyway, which does no real harm and should  -->
+        <!-- stop once the author mends their ways.                   -->
+        <!-- NB: there is an implicit PROOF-LIKE here.                -->
+        <xsl:variable name="all-proofref" select="$document-root//proof[@ref]|$document-root//argument[@ref]|$document-root//justification[@ref]|$document-root//reasoning[@ref]|$document-root//explanation[@ref]"/>
         <!-- Consider all "xref-like" together as a group -->
-        <xsl:for-each select="$all-xref|$all-fragref">
+        <xsl:for-each select="$all-xref|$all-fragref|$all-proofref">
             <xsl:choose>
                 <!-- ignore, no-op -->
                 <xsl:when test="@provisional"/>
