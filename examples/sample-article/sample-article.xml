@@ -5738,7 +5738,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </li>
                 </dl></p>
 
-                <p>Some presentations can be assisted by a hint from the author about the lengths of the titles.  You can choose to provide a <c>width</c> attribute on a <c>dl</c> element with possible values <c>narrow</c> and <c>medium</c>. The value refers (somewhat confusingly) to the distance between the left margin and the description.  The default is <c>medium</c>, which is illustrated above. Conversion to <latex/> ignores the attribute.  An example with <c>narrow</c>:
+                <p>Some presentations can be assisted by a hint from the author about the lengths of the titles.  You can choose to provide a <c>width</c> attribute on a <c>dl</c> element with possible values <c>narrow</c>, <c>medium</c>, and <c>wide</c>. The value refers (somewhat confusingly) to the distance between the left margin and the description.  The default is <c>medium</c>, which is illustrated above.  An example with <c>narrow</c>:
                 <dl width="narrow">
                     <li>
                         <title>Red</title>
@@ -5810,7 +5810,81 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <title><c>main()</c> is a void function</title>
                         <p>A <c>dl</c> with <c>width="narrow"</c> might be a useful way to give commentary on a program listing.</p>
                     </li>
-                </dl></p>
+                </dl>
+                And the same example with <c>wide</c>:
+                <dl width="wide">
+                    <li>
+                        <title>Red</title>
+                        <p>The color of the sun at sunset.</p>
+                    </li>
+                    <li>
+                        <title>Blue</title>
+                        <p>The color of a clear sky. Also a synonym for <q>depressed or sad</q>, the title of a 1971 Joni Mitchell album (and more than a dozen other musical albums), the period of Picasso's work between 1901 and 1904, and much more!</p>
+                    </li>
+                    <li>
+                        <title>Aqua</title>
+                        <p>The color of shallow tropical waters.<fn>On a sunny day! (Testing footnotes in description lists for <latex/> output.)</fn></p>
+                    </li>
+                    <li xml:id="description-list-math-title-wide">
+                        <title>Math <m>x^2</m></title>
+                        <!-- this is a candidate for a "plaintitle" but the schema limits -->
+                        <!-- the element to divisions, figures and named lists            -->
+                        <p>Sorry, not a color but testing titles with math in them.</p>
+                    </li>
+                    <li>
+                       <title><q>i</q> before <q>e</q> except after <q>c,</q> unless it sounds like <q>a</q> as in <q>neighbor</q> and <q>weigh</q></title>
+                        <p>Get feisty about that weird counterfeit rule: seize the day and don't have a heifer, man.</p>
+                       </li>
+                    <li>
+                        <title>Avocado</title>
+                        <p>Avocado is the the color with hex code <c>#568203</c>, and also the main ingredient in guacamole.</p>
+                     </li>
+                    <li>
+                        <title>Magenta</title>
+                        <p>Magenta is a color, and a character in Rocky Horror.</p>
+                     </li>
+                    <li>
+                        <title>Zymurgist</title>
+                        <p>A scientist who studies the chemical process of fermentation in brewing and distilling.  Also the alphabetically last 9-letter word in the English language.</p>
+                     </li>
+                    <li>
+                        <title>Byzantium</title>
+                        <p>Byzantium is the the color with hex code <c>#702963</c>, and also an ancient Greek city which later became known as Constantinople, and today is called Istanbul.</p>
+                     </li>
+                    <li>
+                        <title>Convection</title>
+                        <p>Circulating motion in a fluid.</p>
+                     </li>
+                    <li>
+                        <title>Elementary</title>
+                        <p>No literary detective ever said <q>Elementary my dear Watson.</q>  In particular, Sherlock Holmes never said that.</p>
+                     </li>
+                    <li>
+                        <title>Understand</title>
+                        <p>Perceive the intended meaning of.</p>
+                     </li>
+                    <li>
+                        <title>Washington</title>
+                        <p>A state, a district, the man on the US $1 bill and on the US quarter. Did you ever notice that on the US dime, the value is stated as <q>one dime</q>? But how is one to know that a dime is worth 10 cents?</p>
+                     </li>
+                    <li>
+                        <title>Aquamarine</title>
+                        <p>Aquamarine is a color, and a mineral.</p>
+                    </li>
+                    <li>
+                        <title>Those who cannot remember the past are condemned to repeat it.</title>
+                        <p>George Santayana wrote those words in 1905.  A similar aphorism is misattributed to Winston Churchill.  The idea is embodied in the 4th principle: <pretext/> respects the good design practices which have been developed over the past centuries.</p>
+                    </li>
+                    <li>
+                        <title><m>\displaystyle \zeta(s) = \sum_{n=1}^\infty n^{-s} </m></title>
+                        <p>The Riemann <m>\zeta</m>-function is defined by a Dirichlet series, valid for <m> \Re(s) > 1</m>.</p>
+                     </li>
+                    <li>
+                        <title><c>main()</c> is a void function</title>
+                        <p>A <c>dl</c> with <c>width="narrow"</c> might be a useful way to give commentary on a program listing.</p>
+                    </li>
+                </dl>
+                </p>
 
                 <p>You can nest description lists, though items might get crowded horizontally.  We expand our computer list a bit.
                 <dl>
