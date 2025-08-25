@@ -166,8 +166,6 @@
     <section>
         <title>Lists</title>
 
-        <p>On a description list (<tag>dl</tag>), only <attr>width</attr> values of <c>narrow</c> and <c>medium</c> are implemented. (2018-03-28)</p>
-
         <p>Lists with several columns are rendered in row-major order, as of 2018-02-28.  In other words, the first list items (<tag>li</tag>) in your source will populate the first row.</p>
 
     </section>
