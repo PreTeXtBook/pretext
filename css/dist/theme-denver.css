@@ -1752,29 +1752,17 @@ dl.description-list dt {
 dl.description-list dd {
   margin-left: 22ex;
 }
-dl.description-list .narrow dt {
-  margin-top: 0;
-  width: unset;
-  max-width: 55ex;
-  text-align: left;
+dl.description-list.narrow dt {
+  width: 11ex;
 }
-dl.description-list .narrow dd {
-  margin-left: 12ex;
-  margin-left: 0;
-  margin-top: 0;
-  width: 31em;
-  max-width: calc(100% - 12ex);
-  float: right;
-  clear: right;
+dl.description-list.narrow dd {
+  margin-left: 15ex;
 }
-dl.description-list .narrow dd::after {
-  content: "";
-  display: block;
-  height: 1em;
-  clear: left;
+dl.description-list.wide dt {
+  width: 25ex;
 }
-dl.description-list .narrow dd:last-child::after {
-  height: 0;
+dl.description-list.wide dd {
+  margin-left: 29ex;
 }
 dl.description-list dt:first-of-type {
   clear: none;
@@ -1798,7 +1786,8 @@ dl.description-list dl dd {
     text-align: left;
   }
   dl.description-list dd,
-  dl.description-list.narrow dd {
+  dl.description-list.narrow dd,
+  dl.description-list.wide dd {
     margin-top: 0.5em;
     margin-left: 3em;
     max-width: calc(100% - 3em);
