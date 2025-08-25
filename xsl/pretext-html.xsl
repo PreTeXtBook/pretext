@@ -4590,9 +4590,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:if test="@ref">
-        <xsl:apply-templates select="." mode="proof-xref-theorem"/>
-    </xsl:if>
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
