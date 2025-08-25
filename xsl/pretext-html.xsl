@@ -1707,7 +1707,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- multiple locations.                                           -->
 <xsl:template match="*" mode="make-xref-knowls">
     <xsl:variable name="xref-ids">
-        <xsl:for-each select="$document-root//xref|$document-root//fragref">
+        <!-- Round up all "xref" elements -->
+        <xsl:variable name="all-xref" select="$document-root//xref"/>
+        <!-- Rund up all "fragref" elements, which are very similar -->
+        <xsl:variable name="all-fragref" select="$document-root//fragref"/>
+        <!-- Consider all "xref-like" together as a group -->
+        <xsl:for-each select="$all-xref|$all-fragref">
             <xsl:choose>
                 <!-- ignore, no-op -->
                 <xsl:when test="@provisional"/>
