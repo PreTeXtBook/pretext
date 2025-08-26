@@ -2136,7 +2136,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- empty node-set.                                       -->
 <xsl:template match="program" mode="runestone-activecode">
     <xsl:param name="exercise-statement" select="/.."/>
-
     <xsl:variable name="active-language">
         <xsl:apply-templates select="." mode="active-language"/>
     </xsl:variable>
@@ -2209,42 +2208,46 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:with-param name="active-language" select="$active-language"/>
                                 <xsl:with-param name="hosting" select="$hosting"/>
                             </xsl:call-template>
-                            <!-- this is a bit awful, but we need to figure out how much margin -->
-                            <!-- to add to runestone dividers. So preassemble program for       -->
-                            <!-- computation and then discard                                   -->
+                            <!-- This is a bit awful, but we need to figure out how much margin     -->
+                            <!-- to add to runestone dividers. It must match indentation used for   -->
+                            <!-- the overall program.                                               -->
+                            <!-- To avoid as much as possible of the duplicate work, clean each     -->
+                            <!-- part and store those for reuse later.                              -->
+                            <xsl:variable name="program-preamble-trimmed">
+                                <xsl:apply-templates select="preamble" mode="program-part-processing"/>
+                            </xsl:variable>
+                            <xsl:variable name="program-code-trimmed">
+                                <xsl:apply-templates select="code" mode="program-part-processing"/>
+                            </xsl:variable>
+                            <xsl:variable name="program-postamble-trimmed">
+                                <xsl:apply-templates select="postamble" mode="program-part-processing"/>
+                            </xsl:variable>
+                            <!-- Now temporarily assemble to count left margin spaces                -->
                             <xsl:variable name="program-left-margin">
-                                <xsl:variable name="raw-program-text">
-                                    <xsl:value-of select="preamble"/>
-                                    <xsl:value-of select="code"/>
-                                    <xsl:value-of select="postamble"/>
-                                </xsl:variable>
-                                <xsl:variable name="trimmed-program-text">
-                                    <xsl:call-template name="trim-start-lines">
-                                        <xsl:with-param name="text">
-                                            <xsl:call-template name="trim-end">
-                                                <xsl:with-param name="text" select="$raw-program-text" />
-                                            </xsl:call-template>
-                                        </xsl:with-param>
-                                    </xsl:call-template>
-                                </xsl:variable>
-                                <xsl:call-template name="left-margin">
-                                  <xsl:with-param name="text" select="$trimmed-program-text" />
+                                <xsl:call-template name="count-pad-length">
+                                    <xsl:with-param name="text">
+                                        <!-- need to clear any blank line left by empty preamble and/or -->
+                                        <!-- leading blank lines at the start of code if no preamble    -->
+                                        <xsl:call-template name="trim-start-lines">
+                                            <xsl:with-param name="text">
+                                                <xsl:value-of select="$program-preamble-trimmed"/>
+                                                <xsl:value-of select="$program-code-trimmed"/>
+                                                <xsl:value-of select="$program-postamble-trimmed"/>
+                                            </xsl:with-param>
+                                        </xsl:call-template>
+                                    </xsl:with-param>
                                 </xsl:call-template>
                             </xsl:variable>
+                            <!-- Build actual string we will prepend to magic dividers -->
                             <xsl:variable name="left-margin-string">
                                 <xsl:value-of select="str:padding($program-left-margin, ' ')" />
                             </xsl:variable>
+                            <!-- Now we are ready to build the real program text.                       -->
+                            <!-- For historical reasons, this does not include potential <tests> child. -->
                             <xsl:variable name="program-text">
-                                <!-- each section MUST end in a newline and author might not have provided one -->
-                                <!-- so first, remove up to one newline from front/back as appropriate         -->
-                                <!-- then add newline to end                                                   -->
-                                <!-- preamble - clean up end                                                   -->
                                 <xsl:for-each select="preamble">
                                     <!-- only expect one, for-each just for binding -->
-                                    <xsl:call-template name="trim-end">
-                                        <xsl:with-param name="text" select="." />
-                                        <xsl:with-param name="preserve-intentional" select="true()" />
-                                    </xsl:call-template>
+                                    <xsl:value-of select="$program-preamble-trimmed"/>
                                     <xsl:value-of select="$left-margin-string"/>
                                     <xsl:choose>
                                         <xsl:when test='@visible = "no"'>
@@ -2256,17 +2259,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                     </xsl:choose>
                                 </xsl:for-each>
                                 <!-- code - clean up start and end                                             -->
-                                <xsl:variable name="code-clean">
-                                  <xsl:call-template name="trim-start-lines">
-                                      <xsl:with-param name="text" select="code" />
-                                      <xsl:with-param name="preserve-intentional" select="true()" />
-                                  </xsl:call-template>
-                                </xsl:variable>
-                                <xsl:call-template name="trim-end">
-                                    <xsl:with-param name="text" select="$code-clean" />
-                                    <xsl:with-param name="preserve-intentional" select="true()" />
-                                </xsl:call-template>
-                                <!-- postamble - clean up start                                               -->
+                                <xsl:value-of select="$program-code-trimmed"/>
+                                <!-- postamble - clean up start                                                -->
                                 <xsl:for-each select="postamble">
                                     <!-- only expect one, for-each just for binding -->
                                     <xsl:value-of select="$left-margin-string"/>
@@ -2278,10 +2272,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                             <xsl:text>===!&#xa;</xsl:text>
                                         </xsl:otherwise>
                                     </xsl:choose>
-                                    <xsl:call-template name="trim-start-lines">
-                                        <xsl:with-param name="text" select="." />
-                                        <xsl:with-param name="preserve-intentional" select="true()" />
-                                    </xsl:call-template>
+                                    <xsl:value-of select="$program-postamble-trimmed"/>
                                 </xsl:for-each>
                             </xsl:variable>
                             <!-- now sanitize the whole blob -->
@@ -2324,7 +2315,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                             </xsl:if>
                                         </xsl:otherwise>
                                     </xsl:choose>
-                                    <!-- historical behavior is to use sanitized version -->
                                     <xsl:value-of select="$tests-content"/>
                                 </xsl:if>
                                 <xsl:if test="tests/iotest">
