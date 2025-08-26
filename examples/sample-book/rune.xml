@@ -308,7 +308,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </exercise>
 
-        <p>Exact same exercise again, but now we include <em>two</em> programs.  We first get the simple <q>Hello, world!</q> program at <xref ref="program-activecode-python"/> and then the same program defining the variables with lists of statistics at <xref ref="listing-python-included"/>.  So the output just includes the extra result from the <c>print()</c> statement.</p>
+        <p>Exact same exercise again, but now we include <em>three</em> programs.  We first get the simple <q>Hello, world!</q> program at <xref ref="program-activecode-python"/>, then the program defining the variables with lists of statistics at <xref ref="listing-python-included"/>, and finally the program from the appendix just to test linking to material there.</p>
 
         <p>This program also makes use of <attr>hidecode</attr> to initially keep the code hidden and <attr>download</attr> to enable a file download of the program (that includes all the included code).</p>
 
@@ -317,7 +317,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <statement>
                 <p>Compute the total amount of money loaned and store it in the variable <c>loan_total</c>.</p>
             </statement>
-            <program xml:id="python-summation-two" interactive='activecode' language="python" label="python-sum-total-two" include="python-hello-world python-statistics " hidecode="yes" download="yes">
+            <program xml:id="python-summation-two" interactive='activecode' language="python" label="python-sum-total-two" include="python-hello-world python-statistics program-appendix" hidecode="yes" download="yes">
                 <code>
                 loan_total = 0
                 for loan in loan_amount:

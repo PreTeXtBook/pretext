@@ -81,6 +81,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </section>
     </appendix>
 
+    <appendix>
+        <title>Some Runestone Elements</title>
+        <p>These elements should end up in the Runestone manifest.</p>
+        <datafile filename="datafile-appendix.txt" xml:id="datafile-appendix" label="datafile-appendix">
+            <pre>
+            Ipsum lorem...
+            </pre>
+        </datafile>
+
+        <program language="py" xml:id="program-appendix" label="program-appendix">
+            print("Hello from the appendix!")
+        </program>
+    </appendix>
+
     <xi:include href="./gfdl-mathbook.xml" />           <!-- GFDL License text -->
 
     <!-- Index follows appendices, preceded only colophon -->
