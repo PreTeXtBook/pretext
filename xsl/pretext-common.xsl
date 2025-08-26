@@ -3154,12 +3154,18 @@ Book (with parts), "section" at level 3
 <!-- hardcode a string (like "Chapter") once                    -->
 <!-- Template is intentionally modal.                           -->
 <xsl:template match="*" mode="type-name">
-    <xsl:param name="string-id" select="''"/>
     <!-- The $string-id parameter allows for an override on        -->
     <!-- semi-automatic determination of the object being named    -->
     <!-- (see the modal "string-id" templates).  This is necessary -->
     <!-- for items like the names of interface buttons that are    -->
     <!-- not associated closely with a certain PreTeXt element.    -->
+    <xsl:param name="string-id" select="''"/>
+    <!-- The $force-language parameter allows for forcibly         -->
+    <!-- specifying the language to use. Used for calls during     -->
+    <!-- "language" pass of assembly. Necessarily will skip        -->
+    <!-- processing renames and other $docinfo dependent items     -->
+    <xsl:param name="force-language" select="''"/>
+
     <xsl:variable name="str-id">
         <xsl:choose>
             <xsl:when test="not($string-id = '')">
@@ -3171,24 +3177,39 @@ Book (with parts), "section" at level 3
         </xsl:choose>
     </xsl:variable>
 
-    <!-- Look up the tree for the "closest" indication of a language  -->
-    <!-- for localization. The  @locale-lang  attribute is set by the -->
-    <!-- -assembly  stylesheet, and guarantees the language is        -->
-    <!-- supported by an extant localization file.                    -->
-    <!--                                                              -->
-    <!-- Tip: To get the "document-language" as the in-force          -->
-    <!-- language, *only* for the case of setting a string-id         -->
-    <!-- override, set the context to $root in the employing @select, -->
-    <!-- then $lang-element *will* be $root and $lang *will* be the   -->
-    <!-- overall, document-wide, language (set by -assembly).         -->
-    <xsl:variable name="lang-element" select="ancestor-or-self::*[@locale-lang][1]"/>
     <xsl:variable name="lang">
-        <xsl:value-of select="$lang-element/@locale-lang"/>
+        <xsl:choose>
+            <xsl:when test="not($force-language = '')">
+                <xsl:value-of select="$force-language"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- Look up the tree for the "closest" indication of a language  -->
+                <!-- for localization. The  @locale-lang  attribute is set by the -->
+                <!-- -assembly  stylesheet, and guarantees the language is        -->
+                <!-- supported by an extant localization file.                    -->
+                <!--                                                              -->
+                <!-- Tip: To get the "document-language" as the in-force          -->
+                <!-- language, *only* for the case of setting a string-id         -->
+                <!-- override, set the context to $root in the employing @select, -->
+                <!-- then $lang-element *will* be $root and $lang *will* be the   -->
+                <!-- overall, document-wide, language (set by -assembly).         -->
+                <xsl:variable name="lang-element" select="ancestor-or-self::*[@locale-lang][1]"/>
+                <xsl:value-of select="$lang-element/@locale-lang"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
 
     <!-- Now, build the actual translation via a lookup -->
     <xsl:variable name="lookup">
         <xsl:choose>
+            <!-- Special case for force-language, need to immediately just use specified   -->
+            <!-- language. We likely do not even have a $docinfo at this point.            -->
+            <xsl:when test="$force-language != ''">
+                <xsl:for-each select="$localizations/locale[@language = $force-language]">
+                    <xsl:value-of select="key('localization-key', $str-id)"/>
+                </xsl:for-each>
+            </xsl:when>
+            <!-- Normal lookup that may depend on a rename or locale info                  -->
             <!-- First, look in docinfo for document-specific rename with correct language -->
             <xsl:when test="$docinfo/rename[@element=$str-id and @xml:lang=$lang]">
                 <xsl:apply-templates select="$docinfo/rename[@element=$str-id and @xml:lang=$lang]"/>
