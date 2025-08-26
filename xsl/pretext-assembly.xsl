@@ -648,6 +648,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- We use various ad-hoc, non-author elements in lots of places.     -->
+<!-- Best to prefix them all with a namespace and keep them separate   -->
+<!-- from author-land.  Thus, the "pretext internal" namespace with    -->
+<!-- prefix/alias "pi". But we don't want authors to use some of       -->
+<!-- these elements, like the presentational "pi:bold"!                -->
+<!--                                                                   -->
+<!-- So we kill these elements (and attributes) early.  So this is     -->
+<!-- really unrelated to versions, but tere should be little danger in -->
+<!-- doing in here and now.  The "private-solutions" pass is a place   -->
+<!-- where files use this prefix, so maybe best not to do it there.    -->
+
+<xsl:template match="pi:*" mode="version"/>
+<xsl:template match="@pi:*" mode="version"/>
+
 <!-- The "custom" element, with a @name in an auxiliary file,     -->
 <!-- and a @ref in a source file, allows for custom substitutions -->
 
