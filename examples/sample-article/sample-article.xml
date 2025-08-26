@@ -4290,7 +4290,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p><url href="https://mermaid.js.org/" visual="mermaid.js.org">Mermaid</url> is a Markdown-inspired tool for authoring various kinds of diagrams. Below, three of the available diagram types are demonstrated. For a full listing of diagram types, see the <url href="https://mermaid.js.org/intro/#diagram-types">Mermaid Documentation</url>. The <url href="https://mermaid.live/" visual="mermaid.live">Mermaid live editor</url>is a great tool for testing the syntax of your mermaid diagrams.</p>
 
-                <p>In PreTeXt, you can specify a Mermaid theme using an entry in the publication file.</p>
+                <p>In PreTeXt, you can specify a Mermaid theme via the <attr>theme</attr> in the <c>common/mermaid/</c> publisher variable.</p>
 
                 <figure xml:id="figure-mermaid-git">
                     <caption>Mermaid Git Diagram</caption>
@@ -4370,6 +4370,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </mermaid>
                     </image>
                 </figure>
+
+                <p>Mermaid has two layout engines<mdash/>the default and <c>elk</c>. The ELK engine often does a better job with complex diagrams. You can specify it as a default by setting the publisher variable <tag
+                  >common/mermaid/@layout-engine</tag> to <c>"elk"</c>, or specify it in a single diagram by using standard Mermaid config frontmatter as shown in <xref ref="figure-mermaid-elk-layout"/> below.</p>
+
+                <figure xml:id="figure-mermaid-elk-layout">
+                    <caption>Mermaid Class Diagram using ELK layout engine</caption>
+                    <image>
+                        <mermaid><![CDATA[
+                ---
+                config:
+                  layout: elk
+                ---
+                classDiagram
+                          OrderMethod <|-- Phone
+                          OrderMethod <|-- Online
+                          OrderMethod <|-- InStore
+                          PaymentMethod <|-- Cash
+                          PaymentMethod <|-- Account
+                          PaymentMethod <|-- Credit
+                          Phone <|-- CashPhone
+                          Phone <|-- AccountPhone
+                          Phone <|-- CreditPhone
+                          Online <|-- CashOnline
+                          Online <|-- AccountOnline
+                          Online <|-- CreditOnline
+                          InStore <|-- CashInStore
+                          InStore <|-- AccountInStore
+                          InStore <|-- CreditInStore
+                          Cash <|-- CashPhone
+                          Account <|-- AccountPhone
+                          Credit <|-- CreditPhone
+                          Cash <|-- CashOnline
+                          Account <|-- AccountOnline
+                          Credit <|-- CreditOnline
+                          Cash <|-- CashInStore
+                          Account <|-- AccountInStore
+                          Credit <|-- CreditInStore
+                        ]]>
+                        </mermaid>
+                    </image>
+                </figure>
+
             </subsection>
 
             <subsection>
