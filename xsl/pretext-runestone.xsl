@@ -918,18 +918,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- In database with the same structure as an exercise/question. -->
+<!-- In database with the same structure as an exercise/question.     -->
+<!-- When datafile is in appendix, we want to wrap it with <datafile> -->
+<!-- and not write it as a question, which are expected to be in      -->
+<!-- numbered chapters.                                               -->
 <xsl:template match="datafile" mode="runestone-manifest">
-    <question>
-    <xsl:attribute name="optional">
-        <xsl:text>yes</xsl:text>
-    </xsl:attribute>
+    <xsl:variable name="container-name">
+        <xsl:choose>
+            <xsl:when test="ancestor::appendix">
+                <xsl:text>datafile</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>question</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="{$container-name}">
+        <xsl:attribute name="optional">
+            <xsl:text>yes</xsl:text>
+        </xsl:attribute>
         <!-- label is from the "program", or enclosing "listing" -->
         <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <htmlsrc>
             <xsl:apply-templates select="." mode="runestone-to-interactive"/>
         </htmlsrc>
-    </question>
+    </xsl:element>
 </xsl:template>
 
 <xsl:template match="interactive[@platform = 'doenetml']" mode="runestone-manifest">
@@ -941,8 +954,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </question>
 </xsl:template>
 
-<!-- Appendix is explicitly no-op, so we do not recurse into "section"  -->
-<xsl:template match="appendix" mode="runestone-manifest"/>
+<!-- Appendix is currently not allowed to have "questions" as Runestone  -->
+<!-- requires those to have a chapter with an integer number             -->
+<!-- But look for code and datafiles that should go in source_code table --> 
+<xsl:template match="appendix" mode="runestone-manifest">
+    <appendix>
+        <!-- Check for programs that have been included elsewhere.           -->
+        <xsl:apply-templates select=".//program[@xml:id = $linked-programs-list]" mode="runestone-manifest-source"/>
+        <!-- Check for datafiles, and write them as "<datafile>"s            -->
+        <xsl:apply-templates select=".//datafile" mode="runestone-manifest"/>
+    </appendix>
+</xsl:template>
 
 <!-- Traverse the tree,looking for things to do          -->
 <!-- http://stackoverflow.com/questions/3776333/         -->
