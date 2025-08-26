@@ -318,9 +318,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- current-lang used for push processing of  pi:localize elements -->
+<!-- during the language pass                                       -->
 <xsl:template match="node()|@*" mode="language">
+    <xsl:param name="current-lang"/>
     <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="language"/>
+        <xsl:apply-templates select="node()|@*" mode="language">
+            <xsl:with-param name="current-lang" select="$current-lang"/>
+        </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
 
@@ -504,6 +509,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
 
+<!-- record language attributes and localize pi:localize elements -->
 <xsl:variable name="language-rtf">
     <xsl:apply-templates select="$identification" mode="language"/>
 </xsl:variable>
@@ -2138,31 +2144,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- information since it will be the fail-safe node on a query up the tree. -->
 <!-- Earlier "repair" pass eliminates "mathbook".                            -->
 <xsl:template match="/pretext" mode="language">
+    <xsl:param name="current-lang"/>
     <!-- see above description of $locales, false if missing -->
     <xsl:variable name="b-is-supported" select="@xml:lang = $locales"/>
+    <xsl:variable name="base-lang">
+        <xsl:choose>
+            <xsl:when test="$b-is-supported">
+                <xsl:value-of select="@xml:lang"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>en-US</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <!-- duplicate with better language information -->
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="language"/>
+        <xsl:attribute name="locale-lang">
+            <xsl:value-of select="$base-lang"/>
+        </xsl:attribute>
         <xsl:choose>
-            <xsl:when test="$b-is-supported">
-                <!-- if supported, it was just duplicated, save off a -->
-                <!-- new attribute indicating use for localizations   -->
-                <xsl:attribute name="locale-lang">
-                    <xsl:value-of select="@xml:lang"/>
-                </xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- if missing we add the default          -->
-                <!-- if unsupported, overwrite with default -->
+            <xsl:when test="not($b-is-supported)">
+                <!-- if unsupported, add default xml:lang -->
                 <xsl:attribute name="xml:lang">
                     <xsl:text>en-US</xsl:text>
                 </xsl:attribute>
-                <xsl:attribute name="locale-lang">
-                    <xsl:text>en-US</xsl:text>
-                </xsl:attribute>
-            </xsl:otherwise>
+            </xsl:when>
         </xsl:choose>
-        <xsl:apply-templates select="node()" mode="language"/>
+        <xsl:apply-templates select="node()" mode="language">
+            <xsl:with-param name="current-lang" select="$base-lang"/>
+        </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
 
@@ -2170,18 +2181,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- If so, we augment the elment with an internal attribute.  If not,     -->
 <!-- we just leave a copy alone, it might be relevant for future features. -->
 <xsl:template match="*[@xml:lang]" mode="language">
+    <xsl:param name="current-lang"/>
     <!-- see above description of $locales -->
     <xsl:variable name="b-is-supported" select="@xml:lang = $locales"/>
     <!-- duplicate with additional language information -->
     <xsl:copy>
-        <xsl:apply-templates select="@*" mode="language"/>
-        <xsl:if test="$b-is-supported">
-            <xsl:attribute name="locale-lang">
-                <xsl:value-of select="@xml:lang"/>
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="node()" mode="language"/>
+        <xsl:apply-templates select="@*" mode="language">
+            <xsl:with-param name="current-lang" select="$current-lang"/>
+        </xsl:apply-templates>
+        <xsl:choose>
+            <xsl:when test="$b-is-supported">
+                <xsl:attribute name="locale-lang">
+                    <xsl:value-of select="@xml:lang"/>
+                </xsl:attribute>
+                <xsl:apply-templates select="node()" mode="language">
+                    <xsl:with-param name="current-lang" select="@xml:lang"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="node()" mode="language">
+                    <xsl:with-param name="current-lang" select="$current-lang"/>
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:copy>
+</xsl:template>
+
+<!-- Localize anything that was deferred from earlier in assembly -->
+<xsl:template match="pi:localize" mode="language">
+    <xsl:param name="current-lang"/>
+    <xsl:apply-templates select="." mode="type-name">
+        <xsl:with-param name="string-id" select="@string-id"/>
+        <xsl:with-param name="force-language" select="$current-lang"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 
