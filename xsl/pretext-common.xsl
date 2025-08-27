@@ -11230,18 +11230,25 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Deprecations -->
 <!-- ############ -->
 
+<!-- Locating all instances of a deprecated element looks  -->
+<!-- expensive. (Turns out it might be less than 1% of the -->
+<!-- time to build a full book.) But we have a scheme to   -->
+<!-- only look back a limited time period (two years),     -->
+<!-- controlled by a string parameter (not a publisher     -->
+<!-- switch).  The default is to perform a full search     -->
+<!-- of all such deprecations.                             -->
 <xsl:param name="author.deprecations.all" select="''" />
 <xsl:variable name="deprecation-max-age">
     <xsl:choose>
-        <xsl:when test="$author.deprecations.all = 'yes'">
+        <xsl:when test="($author.deprecations.all = 'yes') or ($author.deprecations.all = '')">
             <xsl:text>P100Y</xsl:text>
         </xsl:when>
-        <xsl:when test="($author.deprecations.all = 'no') or ($author.deprecations.all = '')">
+        <xsl:when test="$author.deprecations.all = 'no'">
             <xsl:text>P2Y</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>P2Y</xsl:text>
-            <xsl:message>PTX:ERROR:   "author.deprecations.all" should be "yes" or "no", not "<xsl:value-of select="$author.deprecations.all"/>", using the default value of "no"</xsl:message>
+            <xsl:text>P100Y</xsl:text>
+            <xsl:message>PTX:ERROR:   "author.deprecations.all" should be "yes" or "no", not "<xsl:value-of select="$author.deprecations.all"/>", using the default value of "yes"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
