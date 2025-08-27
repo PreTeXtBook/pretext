@@ -11233,7 +11233,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Locating all instances of a deprecated element looks  -->
 <!-- expensive. (Turns out it might be less than 1% of the -->
 <!-- time to build a full book.) But we have a scheme to   -->
-<!-- only look back a limited time period (two years),     -->
+<!-- only look back a limited time period (four years),    -->
 <!-- controlled by a string parameter (not a publisher     -->
 <!-- switch).  The default is to perform a full search     -->
 <!-- of all such deprecations.                             -->
@@ -11244,7 +11244,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:text>P100Y</xsl:text>
         </xsl:when>
         <xsl:when test="$author.deprecations.all = 'no'">
-            <xsl:text>P2Y</xsl:text>
+            <xsl:text>P4Y</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>P100Y</xsl:text>
@@ -11333,8 +11333,8 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:when test="$deprecation-max-age = 'P100Y'">
             <xsl:message>PTX:INFO:   checking all deprecated elements.</xsl:message>
         </xsl:when>
-        <xsl:when test="$deprecation-max-age = 'P2Y'">
-            <xsl:message>PTX:INFO:   checking ONLY the last TWO YEARS of element deprecations.&#xa;Rerun with the string parameter "author.deprecations.all" set to "yes" to check your source against all deprecations.</xsl:message>
+        <xsl:when test="$deprecation-max-age = 'P4Y'">
+            <xsl:message>PTX:INFO:   checking ONLY the last FOUR YEARS of element deprecations.&#xa;Rerun with the string parameter "author.deprecations.all" set to "yes" to check your source against all deprecations.</xsl:message>
         </xsl:when>
         <xsl:otherwise/>
     </xsl:choose>
