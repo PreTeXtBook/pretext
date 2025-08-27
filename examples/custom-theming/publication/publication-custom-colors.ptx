@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<publication>
+  <!-- Set where external assets and generated assets will be   -->
+  <!-- stored or created.  Directories are relative to the main -->
+  <!-- source PreTeXt file                                      -->
+  <source>
+    <!-- Paths to folders containing external assets and generated assets -->
+    <!-- relative to your main source file.                               -->
+    <!-- the @external value is where any file specified by               -->
+    <!--  html.css.extra CSS should be                                    -->
+    <directories external="../assets" generated="../generated-assets" />
+  </source>
+
+  <html>
+    <!-- specify custom colors to use in the theme as described here: -->
+    <!-- https://pretextbook.org/doc/guide/html/publication-file-online.html#online-style-options -->
+    <css theme="default-modern" primary-color="#361c65" secondary-color="#904619" primary-color-dark="#f2a0c2"/>
+  </html>
+
+</publication>

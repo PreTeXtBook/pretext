@@ -1,0 +1,50 @@
+// A custom theme that is a modified version of the tacoma theme
+
+// This will get compiled into "theme.css" and placed into the output directory
+// of your project
+
+$primary-color: #2a5ea4 !default;
+$primary-color-dark: #829ab1 !default;
+$background-color-dark: #23241f !default;
+
+@use "sass:map";
+
+// Any @use path is checked relative to this file first, then
+// relative to the css directory in the pretext core.
+// https://github.com/PreTeXtBook/pretext/tree/master/css
+@use "colors/color-helpers" as colorHelpers;
+
+// ---------------------------------------------
+// components
+
+// To borrow a file from tacoma, we must do an @use with the
+// full path from the css directory:
+@use 'targets/html/tacoma/_parts-tacoma' as parts;
+
+// Underscores indicate files designed to be included in other files
+// you do not need to include the underscore in the filename in the @use
+// chunks-customized exists in the same directory as this file, so that
+// will be found/used.
+@use 'chunks-customized';
+
+
+@use 'components/pretext';
+
+// ---------------------------------------------
+// fonts and colors
+@use 'fonts/fonts-google';
+
+@use 'colors/palette-single-muted' as palette-light with (
+  $primary-color: $primary-color,
+);
+
+@use 'colors/palette-dark' as palette-dark with (
+  $primary-color: $primary-color-dark,
+  $background-color: $background-color-dark,
+);
+
+// ---------------------------------------------
+// concrete rules / includes that generate CSS
+
+// render the actual colors
+@include colorHelpers.set-root-colors(palette-light.$colors, palette-dark.$colors);

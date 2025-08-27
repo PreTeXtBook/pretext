@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project ptx-version="2">
+    <targets>
+        <!-- default web styling -->
+        <target name="web" format="html"/>
+
+        <!-- customized colors for a theme -->
+        <target name="web-custom-colors" format="html" publication="publication-custom-colors.ptx"/>
+
+        <!-- use custom css files -->
+        <target name="web-extra-css" format="html">
+            <!-- stringparams must be specified per build target                                  -->
+            <!-- html.css.extra can have multiple file names, space separated                     -->
+            <!-- css files should be placed in the assets/external folder so                      -->
+            <!-- are copied to the output directory on build.                                     -->
+            <!-- see: https://pretextbook.org/doc/guide/html/processing-directory-management.html -->
+            <stringparams html.css.extra="external/css/my-styles.css external/css/more-styles.css" />
+        </target>
+
+        <!-- use the salem theme with the leaves color palette -->
+        <target name="web-salem" format="html" publication="publication-salem.ptx"/>
+        
+        <!-- use the salem theme with the leaves color palette and custom css -->
+        <target name="web-salem-extra-css" format="html" publication="publication-salem.ptx">
+            <stringparams html.css.extra="external/css/salem-color-vars.css" />
+        </target>
+
+        <!-- use a custom theme -->
+        <target name="web-custom-theme" format="html" publication="publication-custom-theme.ptx"/>
+
+
+    </targets>
+</project>
