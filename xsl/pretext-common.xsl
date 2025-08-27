@@ -11235,11 +11235,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:choose>
         <xsl:when test="$author.deprecations.all = 'yes'">
             <xsl:text>P100Y</xsl:text>
-            <xsl:message>PTX:INFO:   checking all deprecated elements.</xsl:message>
         </xsl:when>
         <xsl:when test="($author.deprecations.all = 'no') or ($author.deprecations.all = '')">
             <xsl:text>P2Y</xsl:text>
-            <xsl:message>PTX:INFO:   checking ONLY the last TWO YEARS of element deprecations.&#xa;Rerun with the string parameter "author.deprecations.all" set to "yes" to check your source against all deprecations.</xsl:message>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>P2Y</xsl:text>
@@ -11316,6 +11314,24 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- all not worth the danger that authors and publishers could "turn off"   -->
 <!-- deprecation warnings. (2023-05-11)                                      -->
 <xsl:template match="mathbook|pretext" mode="element-deprecation-warnings">
+
+    <!-- Element deprecation checks can be limited by time   -->
+    <!-- and we want to issue an informational warning about -->
+    <!-- the (possibly limited) time coverage:               -->
+    <!--   * once only, per output build                     -->
+    <!--   * only if a stylesheet actually does the checks   -->
+    <!-- So this is the spot, right before launcing into     -->
+    <!-- the actual checks.                                  -->
+    <xsl:choose>
+        <xsl:when test="$deprecation-max-age = 'P100Y'">
+            <xsl:message>PTX:INFO:   checking all deprecated elements.</xsl:message>
+        </xsl:when>
+        <xsl:when test="$deprecation-max-age = 'P2Y'">
+            <xsl:message>PTX:INFO:   checking ONLY the last TWO YEARS of element deprecations.&#xa;Rerun with the string parameter "author.deprecations.all" set to "yes" to check your source against all deprecations.</xsl:message>
+        </xsl:when>
+        <xsl:otherwise/>
+    </xsl:choose>
+
     <!-- Older deprecations at the top of this list, -->
     <!-- so author will see new at the tail end.     -->
     <!-- NB: XPath expressions to select "problem"   -->
