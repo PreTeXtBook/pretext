@@ -957,7 +957,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Appendix is currently not allowed to have "questions" as Runestone  -->
 <!-- requires those to have a chapter with an integer number             -->
 <!-- But look for code and datafiles that should go in source_code table --> 
-<xsl:template match="appendix" mode="runestone-manifest">
+<xsl:template match="appendix[.//program or .//datafile]" mode="runestone-manifest">
     <appendix>
         <!-- Check for programs that have been included elsewhere.           -->
         <xsl:apply-templates select=".//program[@xml:id = $linked-programs-list]" mode="runestone-manifest-source"/>
@@ -965,6 +965,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select=".//datafile" mode="runestone-manifest"/>
     </appendix>
 </xsl:template>
+<!-- If no programs or datafiles, do nothing -->
+<xsl:template match="appendix" mode="runestone-manifest"/>
 
 <!-- Traverse the tree,looking for things to do          -->
 <!-- http://stackoverflow.com/questions/3776333/         -->
