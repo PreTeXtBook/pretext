@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The docinfo block is the analogue to the latex preamble -->
+<!-- This is where you can define macros and other book-wide -->
+<!-- settings. -->
+<docinfo xmlns:xi="http://www.w3.org/2001/XInclude">
+
+
+  <!-- brandlogo is the image that may appear next to the title in the banner -->
+  <!-- <brandlogo url="" source="images/cover.png"/> -->
+
+  <!-- It is possible to rename elements: -->
+  <rename element="observation" xml:lang="en-US">Danger</rename>
+
+</docinfo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<publication>
+  <!-- Set where external assets and generated assets will be   -->
+  <!-- stored or created.  Directories are relative to the main -->
+  <!-- source PreTeXt file                                      -->
+  <source>
+    <!-- Paths to folders containing external assets and generated assets -->
+    <!-- relative to your main source file.                               -->
+    <directories external="../assets" generated="../generated-assets" />
+  </source>
+
+  <html>
+    <!-- specify building a custom theme                    -->
+    <!-- entry-point must be relative to your document root -->
+    <css theme="custom" entry-point="../mytheme/mytheme.scss"/>
+  </html>
+
+</publication>

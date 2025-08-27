@@ -1,0 +1,10 @@
+.ptx-masthead {
+    background-color: #e4e5e6;
+}
+
+/* styles to apply in dark mode */
+:root.dark-mode {
+    .ptx-masthead {
+        background-color: #000000;
+    }
+}
