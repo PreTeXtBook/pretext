@@ -9413,37 +9413,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- EXPERIMENTAL -->
-<!-- We allow some mark-up inside the "latex-image" element, -->
-<!-- which was formerly assumed to be purely text.  Then we  -->
-<!-- sanitize it.                                            -->
-<!-- NB: the only experimental aspect here is the use of a   -->
-<!-- "label" element mixed in with text nodes of a           -->
-<!-- "latex-image".  This was deprecated on 2024-07-29 and   -->
-<!-- that suggests manual replacement.  We *could* move the  -->
-<!-- templates supporting this to the "repair" phase of      -->
-<!-- pretext-assembly.xsl  or just remove these templates.   -->
-
-<!-- This template (and those it employs) are also used  -->
-<!-- in "extract-latex-image.xsl" so check consequences  -->
-<!-- there if this changes.                              -->
+<!-- This template is also used in "extract-latex-image.xsl" -->
+<!-- so check consequences there if this changes.            -->
 <xsl:template match="latex-image">
     <xsl:variable name="latex-code">
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text">
-                <!-- we need to copy text bits verbatim (value-of), -->
-                <!-- versus applying templates to "label" elements  -->
-                <!-- (could match on, e.g., latex-image/text() )    -->
-                <xsl:for-each select="text()|label">
-                    <xsl:choose>
-                        <xsl:when test="self::text()">
-                            <xsl:value-of select="."/>
-                        </xsl:when>
-                        <xsl:when test="self::label">
-                            <xsl:apply-templates select="."/>
-                        </xsl:when>
-                    </xsl:choose>
-                </xsl:for-each>
+                <!-- 2025-08-27: we once considered a mix of text() -->
+                <!-- and "label" here.  Now we ignore the "label"   -->
+                <!-- and only use a "value-of" to get the LaTeX     -->
+                <!-- code describing the image.                     -->
+                <xsl:value-of select="."/>
             </xsl:with-param>
         </xsl:call-template>
     </xsl:variable>
