@@ -12119,6 +12119,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'Custom margin specification for worksheets (in both HTML and LaTeX) has moved to the publication file in &quot;/publication/common/worksheet&quot;.  Any margins specified in &quot;docinfo/latex-output/worksheet&quot; will be ignored.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2025-08-27  "label" element in "latex-image" is no longer functional -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//latex-image/label&quot;" />
+        <xsl:with-param name="date-string" select="'2025-08-27'" />
+        <xsl:with-param name="message" select="'use of a &quot;label&quot; element inside a &quot;latex-image&quot; was deprecated on 2024-07-29.  It is no longer functional, so you must formulate the appropriate LaTeX code (TikZ) as a replacement.  If the &quot;label&quot; element remains, results could be unpredictable.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
