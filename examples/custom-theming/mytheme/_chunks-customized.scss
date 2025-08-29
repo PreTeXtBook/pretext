@@ -1,0 +1,19 @@
+// Grab everything from tacoma's chunks but tell it to use 0 border radius
+@use 'targets/html/tacoma/chunks-minimal' with (
+  $border-radius: 0
+);
+
+// Now add to that
+// @use statements must come before any actual CSS rules
+@use 'components/chunks/helpers/heading-box-mixin';
+
+.project-like {
+  @include heading-box-mixin.box;
+}
+
+.remark-like
+{
+  > .heading {
+    color: var(--primary-color);
+  }
+}

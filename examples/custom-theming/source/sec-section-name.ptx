@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<section xml:id="sec-section-name" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title>Section Title</title>
+
+    <activity><p>Here is an activity.</p></activity>
+
+    <project><p>Here is a project.</p></project>
+
+    <p> Text of section. </p>
+
+    <convention><p>Here is a note.</p></convention>
+
+    <warning><p>Here is a warning.</p></warning>
+
+    <observation><p>Here is an observation that was renamed into a <q>danger</q>.</p></observation>
+</section>

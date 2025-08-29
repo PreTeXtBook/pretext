@@ -1,0 +1,36 @@
+/* Many colors in your output are controlled by CSS variables.
+   You can override these variables to override the appearance 
+   of all items that use that color.
+   You need to define the colors in a container that is at least
+   as specific as the default definition.
+   The default definitions for light mode are in 
+   :root:not(.dark-mode) { ... }
+   The default definitions for dark mode are in
+   :root.dark-mode { ... }
+   */
+:root:not(.dark-mode) {
+    --body-title-color: #573c13;
+}
+
+section>.heading {
+    /* you can use color variables defined in themes in your own rules to match existing colors */
+    background: var(--primary-color-white-95);
+    color: var(--primary-color);
+}
+
+/* Normally, all remark-likes are the same color in salem. Let's customize some. */
+/* observations are the classname used for the renamed "danger" blocks */
+.remark-like.observation {
+    border-color: #c72a36;
+    background-color: #f9d6d5;
+}
+
+.remark-like.convention {
+    border-color: #4CAF50;
+    background-color: #edfcee;
+}
+
+.remark-like.warning {
+    border-color: #e7d322;
+    background-color: #fbf8e6;
+}
