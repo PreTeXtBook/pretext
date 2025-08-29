@@ -86,15 +86,19 @@ async function handleWW(ww_id, action) {
         if (action == 'reveal' && ww_container.dataset.hasAnswer == 'true') {
             formData.set('WWcorrectAnsOnly', "1");
         }
+        let urlString = 'generated/webwwork/pg';
+        if (typeof eBookConfig !== 'undefined' && eBookConfig.useRunestoneServices) {
+            urlString = `/ns/books/published/${eBookConfig.basecourse}/generated/webwork/pg`;
+        }
         if (ww_origin == 'generated') {
-            const rawProblemSource = await fetch('generated/webwork/pg/' + ww_problemSource).then((r) => r.text());
+            const rawProblemSource = await fetch(urlString + ww_problemSource).then((r) => r.text());
             formData.set("rawProblemSource", rawProblemSource);
         }
         else if (ww_origin == 'webwork2') formData.set("sourceFilePath", ww_sourceFilePath);
     } else {
         formData.set("problemSeed", ww_container.dataset.current_seed);
         if (ww_origin == 'generated') {
-            const rawProblemSource = await fetch('generated/webwork/pg/' + ww_problemSource).then((r) => r.text());
+            const rawProblemSource = await fetch(urlString + ww_problemSource).then((r) => r.text());
             formData.set("rawProblemSource", rawProblemSource);
         }
         else if (ww_origin == 'webwork2') formData.set("sourceFilePath", ww_sourceFilePath);
