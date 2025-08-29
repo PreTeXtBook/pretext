@@ -2643,8 +2643,9 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # rather than cropping (ala https://stackoverflow.com/questions/9870876)
         # Simple version: qr_image = qrcode.make(url), has border
         if has_image:
-            # error correction up to 25%
-            error_correction = qrcode.constants.ERROR_CORRECT_Q
+            # error correction up to 30%
+            # 2025-08-29: upgraded, as "Q" produces fatal errors
+            error_correction = qrcode.constants.ERROR_CORRECT_H
         else:
             # error correction up to 7%
             error_correction = qrcode.constants.ERROR_CORRECT_L
