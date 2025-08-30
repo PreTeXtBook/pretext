@@ -3252,6 +3252,17 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- In the assembly pass, we sometimes need to postpone localization, -->
+<!-- since we have not analyzed languages and we maybe don't have the  -->
+<!-- $docinfo element needed for renaming.  So we emit a placeholder,  -->
+<!-- in a "pi:localize" element with the "string-id" as an attribute.  -->
+<!-- Now, as part of a conversion, the substitution can be made.       -->
+<xsl:template match="pi:localize">
+    <xsl:apply-templates select="." mode="type-name">
+        <xsl:with-param name="string-id" select="@string-id"/>
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- Most PreTeXt elements have names, and their localizations, indexed   -->
 <!-- by a "string-id" that is simply their local name.  However, others   -->
 <!-- ("exercise" is archetypical) have names that vary according to their -->
