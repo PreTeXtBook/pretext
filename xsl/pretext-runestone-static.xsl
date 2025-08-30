@@ -88,7 +88,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="statement/preceding-sibling::*"/>
     <!-- prompt, followed by ordered list of choices -->
     <statement>
-        <p>True or False?</p>
         <xsl:copy-of select="statement/node()"/>
     </statement>
     <!-- Hints are authored, not derived from problem formulation -->
@@ -101,10 +100,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <answer>
         <xsl:choose>
             <xsl:when test="statement/@correct = 'yes'">
-                <p>True.</p>
+                <p>
+                    <xsl:element name="pi:localize">
+                        <xsl:attribute name="string-id">true</xsl:attribute>
+                    </xsl:element>
+                    <xsl:text>.</xsl:text>
+                </p>
             </xsl:when>
             <xsl:when test="statement/@correct = 'no'">
-                <p>False.</p>
+                <p>
+                    <xsl:element name="pi:localize">
+                        <xsl:attribute name="string-id">false</xsl:attribute>
+                    </xsl:element>
+                    <xsl:text>.</xsl:text>
+                </p>
             </xsl:when>
             <xsl:otherwise/>
         </xsl:choose>
@@ -119,10 +128,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <solution>
         <xsl:choose>
             <xsl:when test="statement/@correct = 'yes'">
-                <p>True.</p>
+                <p>
+                    <xsl:element name="pi:localize">
+                        <xsl:attribute name="string-id">true</xsl:attribute>
+                    </xsl:element>
+                    <xsl:text>.</xsl:text>
+                </p>
             </xsl:when>
             <xsl:when test="statement/@correct = 'no'">
-                <p>False.</p>
+                <p>
+                    <xsl:element name="pi:localize">
+                        <xsl:attribute name="string-id">false</xsl:attribute>
+                    </xsl:element>
+                    <xsl:text>.</xsl:text>
+                </p>
             </xsl:when>
             <xsl:otherwise/>
         </xsl:choose>
@@ -178,10 +197,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <title>
                         <xsl:choose>
                             <xsl:when test="@correct = 'yes'">
-                                <xsl:text>Correct</xsl:text>
+                                <xsl:element name="pi:localize">
+                                    <xsl:attribute name="string-id">correct</xsl:attribute>
+                                </xsl:element>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:text>Incorrect</xsl:text>
+                                <xsl:element name="pi:localize">
+                                    <xsl:attribute name="string-id">incorrect</xsl:attribute>
+                                </xsl:element>
                             </xsl:otherwise>
                         </xsl:choose>
                     </title>
@@ -256,10 +279,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                             <xsl:if test="$list-type = 'ul'">
                                                 <xsl:choose>
                                                     <xsl:when test="not(preceding-sibling::choice)">
-                                                        <p>Either:</p>
+                                                        <p>
+                                                            <xsl:element name="pi:localize">
+                                                                <xsl:attribute name="string-id">either</xsl:attribute>
+                                                            </xsl:element>
+                                                            <xsl:text>:</xsl:text>
+                                                        </p>
                                                     </xsl:when>
                                                     <xsl:otherwise>
-                                                        <p>Or:</p>
+                                                        <p>
+                                                            <xsl:element name="pi:localize">
+                                                                <xsl:attribute name="string-id">or</xsl:attribute>
+                                                            </xsl:element>
+                                                            <xsl:text>:</xsl:text>
+                                                        </p>
                                                     </xsl:otherwise>
                                                 </xsl:choose>
                                             </xsl:if>
@@ -698,7 +731,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:copy-of select="response"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:text>(uncategorized)</xsl:text>
+                            <xsl:text>(</xsl:text>
+                            <xsl:element name="pi:localize">
+                                <xsl:attribute name="string-id">uncategorized</xsl:attribute>
+                            </xsl:element>
+                            <xsl:text>)</xsl:text>
                         </xsl:otherwise>
                     </xsl:choose>
                     <xsl:if test="premise">
@@ -771,7 +808,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- and populate it with a sub-list of all the premise  -->
         <!-- that do not get matched with anything               -->
         <xsl:if test="$unmatched-premises/li">
-            <li><p>(uncategorized)
+            <li><p>
+                <xsl:text>(</xsl:text>
+                <xsl:element name="pi:localize">
+                    <xsl:attribute name="string-id">uncategorized</xsl:attribute>
+                </xsl:element>
+                <xsl:text>)</xsl:text>
                 <ul>
                     <xsl:copy-of select="$unmatched-premises/li"/>
                 </ul>
@@ -798,7 +840,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="answer"/>
     <answer>
         <p>
-            <xsl:text>Correct: </xsl:text>
+            <xsl:element name="pi:localize">
+                <xsl:attribute name="string-id">correct</xsl:attribute>
+            </xsl:element>
+            <xsl:text>: </xsl:text>
             <xsl:for-each select="areas//area[not(@correct = 'no')]">
                 <xsl:apply-templates select="." mode="answer-areas"/>
                 <xsl:if test="not(position() = last())">
@@ -807,7 +852,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
             <xsl:text>.</xsl:text>
             <xsl:text> </xsl:text>
-            <xsl:text>Incorrect: </xsl:text>
+            <xsl:element name="pi:localize">
+                <xsl:attribute name="string-id">incorrect</xsl:attribute>
+            </xsl:element>
+            <xsl:text>: </xsl:text>
             <xsl:for-each select="areas//area[@correct = 'no']">
                 <xsl:apply-templates select="." mode="answer-areas"/>
                 <xsl:if test="not(position() = last())">
@@ -1223,8 +1271,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="query" mode="runestone-to-static">
     <paragraphs>
         <!-- no period, it is supplied by conversions -->
-        <!-- TODO: internationalize the term -->
-        <title>Query</title>
+        <title>
+            <xsl:element name="pi:localize">
+                <xsl:attribute name="string-id">query</xsl:attribute>
+            </xsl:element>
+        </title>
         <!-- reproduce structured statement's pieces -->
         <xsl:copy-of select="statement/*"/>
         <xsl:choose>
@@ -1299,52 +1350,67 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="datafile" mode="runestone-to-static">
     <!-- Some templates and variables are defined in -common for consistency -->
 
-    <!-- A faux automatic title of sorts, careful about whitespace for mixed content -->
-    <!-- TODO: localize "Data" (or "Data file"?), but too early in pre-processor,  -->
-    <!-- there is no $docinfo to consult for renames, etc. -->
-    <pre>Data: <xsl:value-of select="@filename"/></pre>
-
-    <xsl:choose>
-        <xsl:when test="image">
-            <xsl:copy-of select="image"/>
-        </xsl:when>
-        <xsl:when test="pre">
-            <!-- provide default rows and cols, sync with dynamic version -->
-            <xsl:variable name="desired-rows">
-                <xsl:choose>
-                    <xsl:when test="@rows">
-                        <xsl:value-of select="@rows"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$datafile-default-rows"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <xsl:variable name="desired-cols">
-                <xsl:choose>
-                    <xsl:when test="@cols">
-                        <xsl:value-of select="@cols"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$datafile-default-cols"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <pre>
-                <!-- form an "upper-left-corner" view -->
-                <xsl:call-template name="text-viewport">
-                    <xsl:with-param name="nrows" select="$desired-rows"/>
-                    <xsl:with-param name="ncols" select="$desired-cols"/>
-                    <xsl:with-param name="text">
-                        <!-- defined in -common -->
-                        <xsl:apply-templates select="." mode="datafile-text-contents"/>
-                    </xsl:with-param>
-                </xsl:call-template>
-            </pre>
-        </xsl:when>
-        <!-- no other source/PTX element is supported , bail out-->
-        <xsl:otherwise/>
-    </xsl:choose>
+    <!-- Mostly the data file is a "pre", or an "image", but we -->
+    <!-- want to have a title of sorts indicating the filename. -->
+    <!-- To accomplish an overall element that won't disrupt    -->
+    <!-- subsequent automatic ids, we do a bit of a hack: a     -->
+    <!-- "sidebyside" as the overall element with a "stack".    -->
+    <sidebyside>
+        <stack>
+            <!-- faux title -->
+            <p>
+                <xsl:element name="pi:localize">
+                    <xsl:attribute name="string-id">data</xsl:attribute>
+                </xsl:element>
+                <xsl:text>: </xsl:text>
+                <c>
+                    <xsl:value-of select="@filename"/>
+                </c>
+            </p>
+            <!-- image or code, one panel -->
+            <xsl:choose>
+                <xsl:when test="image">
+                    <xsl:copy-of select="image"/>
+                </xsl:when>
+                <xsl:when test="pre">
+                    <!-- provide default rows and cols, sync with dynamic version -->
+                    <xsl:variable name="desired-rows">
+                        <xsl:choose>
+                            <xsl:when test="@rows">
+                                <xsl:value-of select="@rows"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$datafile-default-rows"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:variable name="desired-cols">
+                        <xsl:choose>
+                            <xsl:when test="@cols">
+                                <xsl:value-of select="@cols"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$datafile-default-cols"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <pre>
+                        <!-- form an "upper-left-corner" view -->
+                        <xsl:call-template name="text-viewport">
+                            <xsl:with-param name="nrows" select="$desired-rows"/>
+                            <xsl:with-param name="ncols" select="$desired-cols"/>
+                            <xsl:with-param name="text">
+                                <!-- defined in -common -->
+                                <xsl:apply-templates select="." mode="datafile-text-contents"/>
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </pre>
+                </xsl:when>
+                <!-- no other source/PTX element is supported , bail out-->
+                <xsl:otherwise/>
+            </xsl:choose>
+        </stack>
+    </sidebyside>
 </xsl:template>
 
 </xsl:stylesheet>
