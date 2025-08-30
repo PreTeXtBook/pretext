@@ -77,6 +77,10 @@ async function handleWW(ww_id, action) {
         url = new URL(ww_domain + '/webwork2/render_rpc');
     }
     let formData = new FormData();
+    let generatedPG = 'generated/webwork/pg/';
+    if (runestone_logged_in) {
+        generatedPG = `/ns/books/published/${eBookConfig.basecourse}/${generatedPG}`;
+    }
 
     if (action == 'check' || action =='reveal') {
         const iframe = ww_container.querySelector('.problem-iframe');
@@ -85,10 +89,6 @@ async function handleWW(ww_id, action) {
         formData.set('WWsubmit', "1");
         if (action == 'reveal' && ww_container.dataset.hasAnswer == 'true') {
             formData.set('WWcorrectAnsOnly', "1");
-        }
-        let generatedPG = 'generated/webwork/pg';
-        if (runestone_logged_in) {
-            generatedPG = `/ns/books/published/${eBookConfig.basecourse}/${generatedPG}`;
         }
         if (ww_origin == 'generated') {
             const rawProblemSource = await fetch(generatedPG + ww_problemSource).then((r) => r.text());
@@ -327,7 +327,10 @@ async function handleWW(ww_id, action) {
             // Runestone trigger
             $("body").trigger('runestone_ww_check', data)
         }
-
+        let courseUrlBase = '';
+        if (runestone_logged_in){
+            courseUrlBase = '/ns/books/published/' + eBookConfig.basecourse + '/';
+        }
         let iframeContents = '<!DOCTYPE html><head>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/jquery/dist/jquery.min.js"></script>' +
             `<script>
@@ -381,7 +384,7 @@ async function handleWW(ww_id, action) {
                 };
             </script>` +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/mathjax/es5/tex-chtml.js" id="MathJax-script" defer></script>' +
-            '<script src="_static/pretext/js/lib/knowl.js" defer></script>' +
+            `<script src="${courseUrlBase}_static/pretext/js/lib/knowl.js" defer></script>` +
             '<link rel="stylesheet" href="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/css/bootstrap.min.css"/>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>';
 
@@ -405,7 +408,7 @@ async function handleWW(ww_id, action) {
         }
 
         iframeContents +=
-            '<link rel="stylesheet" href="_static/pretext/css/theme.css"/>' +
+            `<link rel="stylesheet" href="${courseUrlBase}_static/pretext/css/theme.css"/>` +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/iframe-resizer/js/iframeResizer.contentWindow.min.js"></script>' +
             `<style>
                 html { overflow-y: hidden; }
