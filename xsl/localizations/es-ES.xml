@@ -197,6 +197,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Runestone Activities -->
     <!-- <localization string-id='video'>Video</localization> -->
     <!-- <localization string-id='program'>Program</localization> -->
+    <!-- <localization string-id='true'>True</localization> -->
+    <!-- <localization string-id='false'>False</localization> -->
+    <!-- <localization string-id='or'>Or</localization> -->
+    <!-- <localization string-id='either'>Either</localization> -->
+    <!-- <localization string-id='uncategorized'>Uncategorized</localization> -->
+    <!-- <localization string-id='query'>Query</localization> -->
     <localization string-id='program-activecode'>ActiveCode</localization>
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
