@@ -152,6 +152,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/common/qrcode/pi:pub-attribute[@name='image']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- Should QR codes be built for program[@interactive]s in static -->
+<xsl:variable name="program-static-qrcodes">
+    <xsl:apply-templates select="$publisher-attribute-options/common/program/pi:pub-attribute[@name='static-qrcodes']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-program-static-qrcodes" select="$program-static-qrcodes = 'yes'"/>
+
 <!-- Em dash Width -->
 
 <xsl:variable name="emdash-space">
@@ -3209,6 +3215,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <qrcode>
             <pi:pub-attribute name="image" default="" freeform="yes"/>
         </qrcode>
+        <program>
+            <pi:pub-attribute name="static-qrcodes" default="yes" options="no"/>
+        </program>
         <mermaid>
             <pi:pub-attribute name="theme" default="default" options="dark forest light"/>
         </mermaid>

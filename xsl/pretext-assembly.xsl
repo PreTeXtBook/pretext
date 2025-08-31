@@ -1911,6 +1911,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
+<xsl:template match="program[@interactive]" mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+
 <xsl:template match="datafile" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
@@ -3225,11 +3229,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Form a PreTeXt side-by-side with an image, a QR code and links -->
 
 <xsl:template match="audio|video|interactive[not(static)]" mode="representations">
-    <xsl:variable name="the-url">
-        <xsl:apply-templates select="." mode="static-url"/>
-    </xsl:variable>
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
+            <xsl:variable name="the-url">
+                <xsl:apply-templates select="." mode="get-interactive-url-from-file"/>
+            </xsl:variable>
             <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
                 <xsl:choose>
@@ -3535,6 +3539,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="@source" />
 </xsl:template>
 
+<!-- interactive programs need to point to page in book -->
+<xsl:template match="program[@interactive = 'codelens' or @interactive = 'activecode']" mode="static-url">
+    <xsl:value-of select="$baseurl"/>
+    <xsl:apply-templates select="." mode="containing-filename" />
+</xsl:template>
+
 <!-- The contents of a datafile may be encoded as text in an XML   -->
 <!-- file within the generated/datafile directory.  The filename   -->
 <!-- has this construction, even if we do not always consult it.   -->
@@ -3578,6 +3588,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Get interactive URL from sidecar file produced with QRcode image -->
+<xsl:template match="&QRCODE-INTERACTIVES;" mode="get-interactive-url-from-file">
+    <xsl:variable name="interactive-url-file" select="concat($generated-directory-source,'qrcode/', @assembly-id, '-url.xml')"/>
+    <xsl:value-of select="document($interactive-url-file, $original)/interactive-url/@url"/>
+</xsl:template>
+
+<xsl:template match="program[@interactive = 'codelens' or @interactive = 'activecode']" mode="representations">
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'static'">
+            <!-- first the static program -->
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+            <!-- then a qr assemblage if desired -->
+            <xsl:if test="$b-program-static-qrcodes">
+                <xsl:variable name="static-url">
+                    <xsl:apply-templates select="." mode="get-interactive-url-from-file"/>
+                </xsl:variable>
+                <assemblage>
+                    <title>
+                        <xsl:element name="pi:localize">
+                            <xsl:attribute name="string-id">program-interactive-available</xsl:attribute>
+                        </xsl:element>
+                    </title>
+                    <sidebyside margins="0%" widths="70% 25%" valign="top" halign="center">
+                        <p>
+                            <!-- Kill the automatic footnote    -->
+                            <url href="{$static-url}" visual="">
+                                <xsl:value-of select="$static-url"/>
+                            </url>
+                        </p>
+                        <image>
+                            <xsl:attribute name="pi:generated">
+                                <xsl:text>qrcode/</xsl:text>
+                                <xsl:apply-templates select="." mode="assembly-id"/>
+                                <xsl:text>.png</xsl:text>
+                            </xsl:attribute>
+                        </image>
+                    </sidebyside>
+                </assemblage>
+            </xsl:if>
+        </xsl:when>
+        <xsl:when test="($exercise-style = 'dynamic')">
+            <!-- duplicate authored content for the non-static conversions -->
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:when>
     </xsl:choose>
 </xsl:template>
 

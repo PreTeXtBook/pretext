@@ -229,6 +229,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- and so really *should not* be translated.            -->
     <localization string-id='program-activecode'>ActiveCode</localization>
     <localization string-id='program-codelens'>CodeLens</localization>
+    <!-- <localization string-id='program-interactive-available'>Interactive program</localization> -->
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
