@@ -4253,19 +4253,19 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <title>Front Matter</title>
 
          <introduction>
-            <p>A single <tag>frontmatter</tag> element can be placed early in your <tag>book</tag> or <tag>article</tag>, after some metadata, such as the overall <tag>title</tag>.  It is optional, but likely highly desirable.  The following subsections describe the items that may be employed within the <tag>frontmatter</tag>.  Most are optional, and some may be repeated.  An <tag>article</tag> differs in that it must contain a <tag>bibinfo</tag> and <tag>titlepage</tag> and then may <em>only</em> contain an <tag>abstract</tag>.  Generally, these will get default titles, localized in the language of your document, but these defaults may also be replaced by giving a <tag>title</tag> element.  None of these divisions themselves is numbered, precluding any content within that is numbered.  So, for example, no <tag>figure</tag> may be included.  But you could choose to include an <tag>image</tag>, perhaps within a <tag>biography</tag>.</p>
+            <p>A single <tag>frontmatter</tag> element can be placed early in your <tag>book</tag> or <tag>article</tag>.  It is optional, but likely highly desirable.  The following subsections describe the items that may be employed within the <tag>frontmatter</tag>.  Most are optional, and some may be repeated.  An <tag>article</tag> differs in that it must contain a <tag>bibinfo</tag> and <tag>titlepage</tag> and then may <em>only</em> contain an <tag>abstract</tag>.  Generally, these divisions will get default titles, localized in the language of your document, but these defaults may also be replaced by giving a <tag>title</tag> element.  None of these divisions themselves is numbered, so precluding any content within that might normally be numbered.  So, for example, no <tag>figure</tag> may be included.  But you could choose to include an <tag>image</tag>, perhaps within a <tag>biography</tag>.</p>
 
             <p>If a component of the front matter cannot be numbered, how best to subdivide something like a <tag>preface</tag>?  This is a good use of the <tag>paragraphs</tag> element.  It allows for a (minimal) title, but cannot be subdivided further.  See the later part of <xref ref="topic-divisions"/> for more about this exceptional element.</p>
 
             <p>These elements must appear in your source in the order given below, and will appear in your ouput in the same order, which is a generally accepted order used in the production of books.  So, for example, even if you author an <tag>acknowledgement</tag> between two <tag>preface</tag>, your output may (will?) place the Acknowledgement before the first Preface.</p>
 
-            <p>(We have not yet described the contents of these various elements in full detail.)</p>
+            <p>Exceptions to the above general information are noted below.</p>
         </introduction>
 
         <subsection>
             <title>Bibliographic Information</title>
 
-            <p>Required. The <tag>bibinfo</tag> <idx><h>bibinfo</h></idx> element may contain metadata about your document, including <tag>author</tag>, <tag>editor</tag>, <tag>credit</tag>, <tag>date</tag>, <tag>keywords</tag>, <tag>edition</tag>, <tag>website</tag> and <tag>copyright</tag>.  Additional elements to capture bibliographic information are planned.</p>
+            <p>Required. The <tag>bibinfo</tag> <idx><h>bibinfo</h></idx> element may contain metadata about your document, including <tag>author</tag>, <tag>editor</tag>, <tag>credit</tag>, <tag>date</tag>, <tag>keywords</tag>, <tag>edition</tag>, <tag>website</tag> and <tag>copyright</tag>.  Additional elements to capture bibliographic information are planned.  This is an exception to the divisions described next, as this is a mini-database of sorts, which contains various pieces of information which get used different ways, but primarly via the <tag>titlepage</tag> element.</p>
 
             <paragraphs>
                 <title>Authors and editors</title>
@@ -4324,11 +4324,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>Title Page</title>
 
-            <p>Optional.  When present, the <tag>titlepage</tag> should contain a single empty element <tage>titlepage-items</tage>, that will collect the appropriate elements from <tag>bibinfo</tag> to generate a titlepage.</p>
+            <p>Optional, but usually desirable.  When present, the <tag>titlepage</tag> should contain a single empty element <tage>titlepage-items</tage>, that will collect the appropriate elements from <tag>bibinfo</tag> to generate a titlepage.  So, this is an exception to the following list of divisions, as its production is automatic.</p>
         </subsection>
 
         <subsection>
-            <title>(*) Abstract</title>
+            <title>Abstract</title>
 
             <p>Optional, and only available for an <tag>article</tag>.</p>
         </subsection>
@@ -4336,37 +4336,37 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection xml:id="topic-front-colophon">
             <title>Colophon</title>
 
-            <p>Optional; only available within a <tag>book</tag>.  The <em>front</em> colophon. (There is also a <em>back</em> colophon, see <xref ref="topic-back-colophon"/>).  Sometimes this is also called the <term>copyright page</term>.  The <tag>colophon</tag> element can be given a <attr>label</attr> to produce a specific file name in HTML builds.  The only allowable (and required) child of the <tag>colophon</tag> is the empty element <tage>colophon-items</tage>, which will automatically bring in appropriate elements from <tag>bibinfo</tag>.</p>
+            <p>Optional; only available within a <tag>book</tag>.  The <em>front</em> colophon. (There is also a <em>back</em> colophon, see <xref ref="topic-back-colophon"/>).  Sometimes this is also called the <term>copyright page</term>.  The <tag>colophon</tag> element can be given a <attr>label</attr> to produce a specific file name in HTML builds.  The only allowable (and required) child of the <tag>colophon</tag> is the empty element <tage>colophon-items</tage>, which will automatically bring in appropriate elements from <tag>bibinfo</tag>.  So, like the <tag>titlepage</tag>, this is an exception due to its automatic production.</p>
         </subsection>
 
         <subsection>
-            <title>(*) Biographies</title>
+            <title>Biographies</title>
 
-            <p>Multiple <tag>biography</tag> elements, one per author.</p>
+            <p>Multiple <tag>biography</tag> elements, perhaps one per author.  The <tag>title</tag> can be used in the case of multiple authors to distinguish one from another.</p>
         </subsection>
 
         <subsection>
-            <title>(*) Dedication</title>
+            <title>Dedication</title>
 
-            <p>A single <tag>dedication</tag> element, that might include multiple dedications (perhaps by different authors).</p>
+            <p>A single <tag>dedication</tag> element, that might include multiple dedications (perhaps by different authors).  The content is simply a sequence of <tag>p</tag>, with multiple elementts for multiple dedications.</p>
         </subsection>
 
         <subsection>
-            <title>(*) Acknowledgements</title>
+            <title>Acknowledgements</title>
 
             <p>A single <tag>acknowledgement</tag> element (note spelling), that becomes a division, and so can contain paragraphs, lists, etc.  The Chicago Manual of Style  <xref ref="cmos" detail="1.52"/> suggests that if these are short, they may be contained in a preface.</p>
         </subsection>
 
         <subsection>
-            <title>(*) Forewords</title>
+            <title>Forewords</title>
 
             <p>As of 2021-07-16 the <tag>foreword</tag> element is not fully implemented.  Please make a feature request if you need it.</p>
 
-            <p>A <tag>foreword</tag> is written by somebody other than the author.  The name of the writer of the foreword need to be included<mdash/>at the end is a good location.</p>
+            <p>A <tag>foreword</tag> is written by somebody other than the author.  The name of the writer of the foreword needs to be included<mdash/>at the end is a good location.</p>
         </subsection>
 
         <subsection>
-            <title>(*) Prefaces</title>
+            <title>Prefaces</title>
 
             <p>Multiple prefaces are a distinct possibility, and in this case providing a different <tag>title</tag> for each would be essential.  Examples might include:  <articletitle>Preface to the Third Edition</articletitle>, <articletitle>How to Use this Book</articletitle>, or <articletitle>To the Student</articletitle>.  More ad-hoc material, such as a translator's note, can be handled as a preface.</p>
 
