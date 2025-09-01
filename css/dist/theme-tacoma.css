@@ -1055,13 +1055,13 @@ section.solutions section > h6.heading {
 .discussion-like > .heading:first-child:after {
   content: "\2009";
 }
-.discussion-like > .heading:first-child + .para {
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction) {
   display: inline;
 }
-.discussion-like > .heading:first-child + .introduction {
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction) > .para:first-child {
   display: inline;
 }
-.discussion-like > .heading:first-child + .introduction > .para:first-child {
+.discussion-like > .heading:first-child + :is(.para, .para.logical, .introduction) > .para.logical:first-child > .para:first-child {
   display: inline;
 }
 .discussion-like > .heading ::after {
@@ -1186,13 +1186,13 @@ summary.knowl__link {
 .paragraphs > .heading:first-child:after {
   content: "\2009";
 }
-.paragraphs > .heading:first-child + .para {
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction) {
   display: inline;
 }
-.paragraphs > .heading:first-child + .introduction {
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction) > .para:first-child {
   display: inline;
 }
-.paragraphs > .heading:first-child + .introduction > .para:first-child {
+.paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction) > .para.logical:first-child > .para:first-child {
   display: inline;
 }
 * {
