@@ -9,16 +9,20 @@
       content: "\2009";
     }
 
-    & + .para {
+    // Following sibling also needs to be inline for heading to line up correctly
+    // For now limit to logical paragraphs and introductions as they seem to cover
+    // the plain text cases. Not clear we would want same treatment for other
+    // kinds of content
+    & + :is(.para, .para.logical, .introduction) {
       display: inline;
-    }
-
-    & + .introduction {
-      display: inline;
-    }
-
-    & + .introduction > .para:first-child {
-      display: inline;
+      // possible first child that is the actual text
+      & > .para:first-child {
+        display: inline;
+        }
+      // an introduction could have a para.logical with a para
+      & > .para.logical:first-child > .para:first-child {
+        display: inline;
+      }
     }
   }
 }
