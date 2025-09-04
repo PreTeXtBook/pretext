@@ -8148,12 +8148,16 @@ Book (with parts), "section" at level 3
 
 <!-- Define the key for indexing into the data list -->
 <xsl:key name="proglang" match="language" use="@ptx" />
+<!-- And make a variable with the context for key lookups useing that key -->
+<!-- doing the 'document('')/*/mb:programming' repeatedly is expensive.   -->
+<!-- (Especially in program|pf[prism-language]                            -->
+<xsl:variable name="proglang-key-context" select="exsl:node-set(document('')/*/mb:programming)"/>
 
 <!-- Define variables for default active language - will be picked up by -->
 <!-- RS manifest and can be a different string than the raw language. -->
 <xsl:variable name="default-active-programming-language">
     <xsl:if test="$version-docinfo/programs/@language">
-        <xsl:for-each select="document('')/*/mb:programming">
+        <xsl:for-each select="$proglang-key-context">
             <xsl:value-of select="key('proglang', $version-docinfo/programs/@language)/@active" />
         </xsl:for-each>
     </xsl:if>
@@ -8190,7 +8194,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
-    <xsl:for-each select="document('')/*/mb:programming">
+    <xsl:for-each select="$proglang-key-context">
         <xsl:value-of select="key('proglang', $language)/@active" />
     </xsl:for-each>
 </xsl:template>
@@ -8201,7 +8205,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
-    <xsl:for-each select="document('')/*/mb:programming">
+    <xsl:for-each select="$proglang-key-context">
         <xsl:value-of select="key('proglang', $language)/@listings" />
     </xsl:for-each>
 </xsl:template>
@@ -8223,7 +8227,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
-    <xsl:for-each select="document('')/*/mb:programming">
+    <xsl:for-each select="$proglang-key-context">
         <xsl:value-of select="key('proglang', $language)/@prism" />
     </xsl:for-each>
 </xsl:template>
