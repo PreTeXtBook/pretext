@@ -144,6 +144,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <feedback href="http://example.com/not-implemented.html"><!-- My Button Text --></feedback>
         <!-- A "portable" build is meant to be a single file that is transportable -->
         <!-- <platform portable="yes"/> -->
+        <!-- Banner options, these default to "yes" but can be set to -->
+        <!-- "no" toremove the indicated element from the top banner  -->
+        <banner byline="yes" subtitle="yes"/>
     </html>
 
     <!-- 10pt font is the default   -->
