@@ -45,14 +45,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="mermaid-extracting"><xsl:value-of select="true()"/></xsl:variable>
 
-<xsl:template match="image[mermaid]" mode="extraction">
+<xsl:template match="image/mermaid" mode="extraction">
     <xsl:variable name="filebase">
-        <xsl:apply-templates select="." mode="assembly-id"/>
+        <xsl:apply-templates select="@label"/>
     </xsl:variable>
 
     <exsl:document href="{$filebase}.mmd" method="text">
         <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="./mermaid" />
+            <xsl:with-param name="text" select="." />
         </xsl:call-template>
     </exsl:document>
 </xsl:template>
