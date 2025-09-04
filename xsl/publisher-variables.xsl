@@ -2718,6 +2718,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-embed-button" select="$embed-button = 'yes'"/>
 
 
+<!--                            -->
+<!-- HTML Banner options        -->
+<!--                            -->
+<xsl:variable name="html-banner-subtitle">
+    <xsl:apply-templates select="$publisher-attribute-options/html/banner/pi:pub-attribute[@name='subtitle']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-html-banner-subtitle" select="$html-banner-subtitle = 'yes'"/>
+
+<xsl:variable name="html-banner-byline">
+    <xsl:apply-templates select="$publisher-attribute-options/html/banner/pi:pub-attribute[@name='byline']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-html-banner-byline" select="$html-banner-byline = 'yes'"/>
+
+
 <!-- ##################### -->
 <!-- EPUB-Specific Options -->
 <!-- ##################### -->
@@ -3276,6 +3290,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <analytics>
             <pi:pub-attribute name="google-gst" freeform="yes"/>
         </analytics>
+        <banner>
+            <pi:pub-attribute name="byline" default="yes" options="no"/>
+            <pi:pub-attribute name="subtitle" default="yes" options="no"/>
+        </banner>
         <video>
             <pi:pub-attribute name="privacy" default="yes" options="no"/>
         </video>
