@@ -6986,7 +6986,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         <!-- which is much like cover of a book  -->
                                         <xsl:apply-templates select="$document-root" mode="title-simple" />
                                     </span>
-                                    <xsl:if test="$b-has-subtitle">
+                                    <xsl:if test="$b-has-subtitle and $b-html-banner-subtitle">
                                         <xsl:text> </xsl:text>
                                         <span class="subtitle">
                                             <xsl:apply-templates select="$document-root" mode="subtitle" />
@@ -6995,10 +6995,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 </a>
                             </h1>
                             <!-- Serial list of authors/editors -->
-                            <p class="byline">
-                                <xsl:apply-templates select="$bibinfo/author" mode="name-list"/>
-                                <xsl:apply-templates select="$bibinfo/editor" mode="name-list"/>
-                            </p>
+                            <xsl:if test="$b-html-banner-byline">
+                                <p class="byline">
+                                    <xsl:apply-templates select="$bibinfo/author" mode="name-list"/>
+                                    <xsl:apply-templates select="$bibinfo/editor" mode="name-list"/>
+                                </p>
+                            </xsl:if>
                         </div>  <!-- title-container -->
                     </div> <!-- banner -->
                     <!-- This seemed to not be enough, until Google Search went away  -->
@@ -11175,7 +11177,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <!-- which is much like cover of a book  -->
                                     <xsl:apply-templates select="$document-root" mode="title-simple" />
                                 </span>
-                                <xsl:if test="$b-has-subtitle">
+                                <xsl:if test="$b-has-subtitle and $b-html-banner-subtitle">
                                     <xsl:text> </xsl:text>
                                     <span class="subtitle">
                                         <xsl:apply-templates select="$document-root" mode="subtitle" />
@@ -11184,10 +11186,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </a>
                         </h1>
                         <!-- Serial list of authors/editors -->
-                        <p class="byline">
-                            <xsl:apply-templates select="$bibinfo/author" mode="name-list"/>
-                            <xsl:apply-templates select="$bibinfo/editor" mode="name-list"/>
-                        </p>
+                        <xsl:if test="$b-html-banner-byline">
+                            <p class="byline">
+                                <xsl:apply-templates select="$bibinfo/author" mode="name-list"/>
+                                <xsl:apply-templates select="$bibinfo/editor" mode="name-list"/>
+                            </p>
+                        </xsl:if>
                     </div>  <!-- title-container -->
                 </div>  <!-- banner -->
             </header>  <!-- masthead -->
