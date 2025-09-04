@@ -8932,9 +8932,14 @@ Book (with parts), "section" at level 3
             </xsl:if>
             <!-- courtesy check that range is not out-of-order               -->
             <!-- NB: different schemes for "exercise" can make this look odd -->
+            <!-- Disabled but left as an idea to reimplement. Currenlty      -->
+            <!-- very inefficient due to preceeding:: counts (in SA,         -->
+            <!-- 7 instances account for ~6% total processing time).         -->
+            <!-- 
             <xsl:if test="count($target-one/preceding::*) > count($target-two/preceding::*)">
                 <xsl:message>PTX:WARNING: &lt;xref @first="<xsl:value-of select="@first" />" @last="<xsl:value-of select="@last" />" /&gt; references two elements that appear to be in the wrong order</xsl:message>
             </xsl:if>
+            -->
             <!-- Biblio check assumes targets are equal       -->
             <!-- If target is a bibliography item, generic    -->
             <!-- text template only makes numbers, we add     -->
