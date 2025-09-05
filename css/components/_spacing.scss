@@ -1,6 +1,4 @@
-// Entry point for common web styling
-
-// Spacing for content
+// Basic spacing for content
 
 // Breakpoint at which the navbar moves to the bottom of the screen
 $navbar-breakpoint: 800px !default;
@@ -10,22 +8,30 @@ $navbar-breakpoint: 800px !default;
   box-sizing: border-box;
 }
 
-// minimal spacing around items in a section or article
-// unspecific selectors - just about anything will override them
-section > *:not(:first-child) {
-  margin-top: 1.5em;
-}
-article > *:not(:first-child):has(.heading) {
-  margin-top: 1.5em;
-}
-article > *:not(:first-child) {
-  margin-top: 1.5em;
-}
-.knowl__content > *:not(:first-child) {
-  margin-top: 1.5em;
-}
+//----------------------------------------------------------
+// Inter item vertical spacing
+//
+// Set some baseline minimal inter-item vertical spacings
+//
+// Individual items can override this with their own margin. The
+// user of @layer here forces these rules to all have less precedence
+// than any rules not in a layer.
+// Most spacing should be done with margin-top.
 
-// tighten up spacing slightly for adjacent paragraphs in a section
-:is(section, article, .knowl__content) > .para + .para {
-  margin-top: 1em;
+@layer spacing {
+  // inter-item spacing high level containers
+  :is(section, article, .knowl__content) > *:not(:first-child) {
+    margin-top: 1.5em;
+  }
+
+  // but tighten up spacing slightly for adjacent paragraphs in a section
+  :is(section, article, .knowl__content) > .para + .para {
+    margin-top: 1em;
+  }
+
+  // lower-level container elements that are expected to contain sequences of items
+  // tighter spacing here to avoid visually breaking up the minor container
+  .ptx-content :is(ul, td, li, dd, .blockquote, .sbspanel, .para.logical) > *:not(:first-child) {
+    margin-top: 0.5em;
+  }
 }
