@@ -2,11 +2,7 @@ const timeOutHandler = new Object();
 const inputPrefix = 'stackapi_input_';
 const feedbackPrefix = 'stackapi_fb_';
 const validationPrefix = 'stackapi_val_';
-// The api URL should be pulled from the publication file, but for now
-// it is hardcoded until I figure out how to do that.
-const apiurl = 'https://stackapi-1-43834256136.europe-west1.run.app/';
-// This is the official demo api server, but it's a bit temperamental
-// const apiurl = 'https://stack-api.maths.ed.ac.uk';
+// const stack_api_url = // This is pulled from the publication file
 
 const stackstring = {
   "teacheranswershow_mcq":"A correct answer is: {$a->display}",
@@ -72,7 +68,7 @@ function processNodes(res, nodes, qprefix) {
 // Display rendered question and solution.
 function send(qfile, qname, qprefix) {
   const http = new XMLHttpRequest();
-  const url = apiurl + '/render';
+  const url = stack_api_url + '/render';
   http.open("POST", url, true);
   http.setRequestHeader('Content-Type', 'application/json');
   http.onreadystatechange = function() {
@@ -188,7 +184,7 @@ function send(qfile, qname, qprefix) {
 // Validate an input. Called a set amount of time after an input is last updated.
 function validate(element, qfile, qname, qprefix) {
   const http = new XMLHttpRequest();
-  const url = apiurl + '/validate';
+  const url = stack_api_url + '/validate';
   http.open("POST", url, true);
   // Remove API prefix and subanswer id.
   const answerNamePrefixTrim = (qprefix+inputPrefix).length;
@@ -232,7 +228,7 @@ function validate(element, qfile, qname, qprefix) {
 // Submit answers.
 function answer(qfile, qname, qprefix, seed) {
   const http = new XMLHttpRequest();
-  const url = apiurl + '/grade';
+  const url = stack_api_url + '/grade';
   http.open("POST", url, true);
 
   if (!document.getElementById(`${qprefix+'output'}`).innerText) {
@@ -394,9 +390,7 @@ function loadQuestionFromFile(fileContents, questionName) {
     if (question.getAttribute('type').toLowerCase() === 'stack' && (!questionName || question.querySelectorAll("name text")[0].textContent === questionName)) {
       thequestion = question.outerHTML;
       let seeds = question.querySelectorAll('deployedseed');
-      console.log(seeds);
       if (seeds.length) {
-        console.log(seeds.length);
         randSeed = parseInt(seeds[Math.floor(Math.random()*seeds.length)].textContent);
       }
       break;
