@@ -75,6 +75,17 @@
   display: none;
 }
 
+// Some elements don't make sense to print: 
+//   image descriptions
+//   webwork "activate" buttons
+//   buttons in general (to remove Runestone "Check Me" button)
+// We remove these here.
+details.image-description,
+.ptx-content .webwork-button,
+.ptx-runestone-container button.btn {
+  display: none;
+}
+
 
 // Set font appropriate for printing
 section.worksheet, section.handout {
