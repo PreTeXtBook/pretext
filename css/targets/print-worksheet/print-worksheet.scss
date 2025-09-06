@@ -151,8 +151,9 @@ summary {
   margin-top: 0;
 }
 
+// tasks might be "free-floating" articles, in which case they should get the same indenting as tasks inside exercises.
  section article.task {
-  margin-left: 0;
+  margin-left: 20px;
 }
 
 section.worksheet > .heading, section.handout > .heading {

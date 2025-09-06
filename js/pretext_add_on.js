@@ -671,8 +671,11 @@ function createPrintoutPages(margins) {
             // sidebyside could have tasks, but we don't want to dive further into them.
             rows.push(child);
         } else if (child.querySelector('.task')) {
-            for (const row of child.children) {
-                rows.push(row);
+            // Keep the child as a block, but put each task after the first one as its own row:
+            rows.push(child);
+            const tasks = child.querySelectorAll('.task');
+            for (let i = 1; i < tasks.length; i++) {
+                rows.push(tasks[i]);
             }
         // Skipping separate treatment of exercisegroups for now.
         //} else if (child.classList.contains('exercisegroup')) {
