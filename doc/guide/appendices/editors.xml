@@ -919,5 +919,28 @@
             </subsubsection>
         </subsection>
     </section>
-
+    <section xml:id="subsection-spellchecking-output">
+        <title>Spell Checking Output</title>
+        <p>
+            While browsing your HTML output, it is possible to have the web browser's native
+            spell checker highlight spelling errors. Create a bookmark with the following for
+            its URL (all at once on one line, there are three lines here just for clarity):
+            <cd>
+                <cline>javascript:document.body.contentEditable=!document.body.isContentEditable;</cline>
+                <cline>document.designMode=(document.designMode === 'on') ? 'off' : 'on';</cline>
+                <cline>void 0</cline>
+            </cd>
+            Now when viewing a page and you click this bookmarklet, JavaScript will change
+            browser settings so that the native spell checker highlights spelling errors. This
+            is done by making the text content of the page editable, which is normally what is
+            needed for the browser's spell checker to kick in. While this is active, you will
+            not be able to click most links and buttons. Click the bookmarklet again to toggle
+            things back to how they were.
+        </p>
+        <p>
+            Some browsers may have extensions that you can install for spell checking the
+            content of a page. For example, Chrome has
+            <url href="https://chromewebstore.google.com/detail/webpage-spell-check/mgdhaoimpabdhmacaclbbjddhngchjik">Webpage Spell-Check</url>.
+        </p>
+    </section>
 </appendix>
