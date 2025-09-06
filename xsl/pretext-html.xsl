@@ -10865,12 +10865,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="stack-js">
 
     <xsl:if test="$b-has-stack">
-        <xsl:variable name="stack-domain" select="$document-root//publication/stack/@server" />
         <script
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"
         type="text/javascript"></script>
         <script src="{$html.js.dir}/pretext-stack/stackjsvle.js" type="text/javascript"></script>
         <script src="{$html.js.dir}/pretext-stack/stackapicalls.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            const stack_api_url = "<xsl:value-of select="$stack-server"/>";
+        </script>
         <script type="text/javascript">
             function docHasLoaded() {
                 stackSetup();
