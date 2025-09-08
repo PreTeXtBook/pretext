@@ -2648,6 +2648,11 @@ body.pretext > a.assistive,
 .autopermalink {
   display: none;
 }
+details.image-description,
+.ptx-content .webwork-button,
+.ptx-runestone-container button.btn {
+  display: none;
+}
 section.worksheet,
 section.handout {
   font-size: 11pt;
@@ -2696,7 +2701,7 @@ summary {
   margin-top: 0;
 }
 section article.task {
-  margin-left: 0;
+  margin-left: 20px;
 }
 section.worksheet > .heading,
 section.handout > .heading {
