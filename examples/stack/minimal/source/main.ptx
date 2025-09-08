@@ -52,7 +52,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     xsltproc -X-stringparam chunk.level 0 PATH_TO/mathbook/xsl/pretext-sage-doctest.xsl source/main.ptx  -->
 <!--     <read further instructions in> minimal.py                                                -->
 
-<pretext>
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <docinfo>
         <macros>
@@ -88,7 +88,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>The following illustrated embedding a STACK question.</p>
 
-            <stack source="questions/01_integration_with_feedback.xml" />
+            <!-- <stack source="questions/01_integration_with_feedback.xml" /> -->
+
+            <exercise>
+                <title>STACK integration question</title>
+
+                <introduction>
+                    <p>A test question. (2025-08-15: you may need to ask for a "new" question to make this render.)</p>
+                </introduction>
+
+                <!-- A @label is required, becomes a filename in output -->
+                <stack label="stack-integration">
+                    <xi:include href="stack/01_integration_with_feedback.xml"/>
+                </stack>
+            </exercise>
+
+
         </section>
 
     </article>
