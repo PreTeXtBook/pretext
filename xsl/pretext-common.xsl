@@ -8939,6 +8939,11 @@ Book (with parts), "section" at level 3
             <!-- to two uses of the "preceeding::" axis. Seven    -->
             <!-- instances in the sample article accounted for    -->
             <!-- ~6% of processing time.                          -->
+            <!-- For the old code, see commit                     -->
+            <!--     05c88bb632e1d232a46955f4e3552494c3219cdc     -->
+            <!-- Testing @last target in the nodes preceeding the -->
+            <!-- first target might cut the time in half, which   -->
+            <!-- is still not great.                              -->
             <!--  -->
             <!-- Biblio check assumes targets are equal       -->
             <!-- If target is a bibliography item, generic    -->
