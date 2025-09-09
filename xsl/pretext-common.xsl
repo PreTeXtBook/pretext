@@ -8934,11 +8934,12 @@ Book (with parts), "section" at level 3
             <xsl:if test="not(local-name($target-one) = local-name($target-two))">
                 <xsl:message>PTX:ERROR:   &lt;xref @first="<xsl:value-of select="@first" />" @last="<xsl:value-of select="@last" />" /&gt; references two elements with different tags (<xsl:value-of select="local-name($target-one)" /> vs. <xsl:value-of select="local-name($target-two)" />), so are incompatible as endpoints of a range.  Rewrite using two &lt;xref&gt; elements</xsl:message>
             </xsl:if>
-            <!-- courtesy check that range is not out-of-order               -->
-            <!-- NB: different schemes for "exercise" can make this look odd -->
-            <xsl:if test="count($target-one/preceding::*) > count($target-two/preceding::*)">
-                <xsl:message>PTX:WARNING: &lt;xref @first="<xsl:value-of select="@first" />" @last="<xsl:value-of select="@last" />" /&gt; references two elements that appear to be in the wrong order</xsl:message>
-            </xsl:if>
+            <!-- Once there was a courtesy check here that range  -->
+            <!-- is not out-of-order. It was very inefficient due -->
+            <!-- to two uses of the "preceeding::" axis. Seven    -->
+            <!-- instances in the sample article accounted for    -->
+            <!-- ~6% of processing time.                          -->
+            <!--  -->
             <!-- Biblio check assumes targets are equal       -->
             <!-- If target is a bibliography item, generic    -->
             <!-- text template only makes numbers, we add     -->
