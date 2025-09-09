@@ -11107,10 +11107,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </console>
             </listing>
 
-            <p>A program can also have <tag>preamble</tag> and <tag>postamble</tag>. They are tested here mostly just for their handling of leading/trailing whitespace. Note that the indentation of the start/end tags for the subelements is intentionally chaotic. There is even trailing whitespace after some of the start tags. That should not affect the indentation of the output. (However, the actual contents of the various parts of the program must all be indented to a similar degree in the source.)</p>
+            <p>A program can also have <tag>preamble</tag> and <tag>postamble</tag>. They are tested here mostly just for their handling of leading/trailing whitespace. Note that the indentation of the start/end tags for the subelements is intentionally chaotic, that should not affect the indentation of the output. (However, the actual contents of the various parts of the program must all be indented to a similar degree in the source.)</p>
 
             <program language="python" line-numbers="yes">
-                <preamble>  
+                <preamble>
                     # meta: text in preamble with one trailing authored blank line
                     def foo():
                         return 42
@@ -11134,7 +11134,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>An interactive rendering of the same program should produce the same visible code. Both samples should end in a newline. There will be a visible difference between how this the empty line created by that newline rendered in plain HTML (the empty line is not included) and Runestone (the empty line is visible).</p>
 
             <program language="python" line-numbers="yes" interactive="activecode">
-                <preamble>  
+                <preamble>
                     # meta: text in preamble with one trailing authored blank line
                     def foo():
                         return 42
