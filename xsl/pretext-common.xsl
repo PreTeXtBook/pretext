@@ -8250,6 +8250,53 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- Helper templates to ensure consistent processing of whitespace in programs. -->
+<!-- Leading lines are always cleaned up. non-authored trailing line is cleared  -->
+<xsl:template match="preamble" mode="program-part-processing">
+    <xsl:call-template name="trim-start-lines">
+        <xsl:with-param name="text">
+            <xsl:call-template name="trim-end">
+                <xsl:with-param name="text" select="." />
+                <xsl:with-param name="preserve-intentional" select="true()" />
+            </xsl:call-template>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<!-- non-authored start/end lines are cleared                                    -->
+<xsl:template match="code" mode="program-part-processing">
+    <xsl:call-template name="trim-start-lines">
+        <xsl:with-param name="text">
+            <xsl:call-template name="trim-end">
+                <xsl:with-param name="text" select="." />
+                <xsl:with-param name="preserve-intentional" select="true()" />
+            </xsl:call-template>
+        </xsl:with-param>
+        <xsl:with-param name="preserve-intentional" select="true()" />
+    </xsl:call-template>
+</xsl:template>
+<!-- Trailing lines are always cleaned up. non-authored leading line is cleared  -->
+<xsl:template match="postamble" mode="program-part-processing">
+    <xsl:call-template name="trim-start-lines">
+        <xsl:with-param name="text">
+            <xsl:call-template name="trim-end">
+                <xsl:with-param name="text" select="." />
+            </xsl:call-template>
+        </xsl:with-param>
+        <xsl:with-param name="preserve-intentional" select="true()" />
+    </xsl:call-template>
+</xsl:template>
+<!-- Trailing lines are always cleaned up. non-authored leading line is cleared  -->
+<xsl:template match="tests" mode="program-part-processing">
+    <xsl:call-template name="trim-start-lines">
+        <xsl:with-param name="text">
+            <xsl:call-template name="trim-end">
+                <xsl:with-param name="text" select="." />
+            </xsl:call-template>
+        </xsl:with-param>
+        <xsl:with-param name="preserve-intentional" select="true()" />
+    </xsl:call-template>
+</xsl:template>
+
 <!-- ############################ -->
 <!-- Table construction utilities -->
 <!-- ############################ -->
