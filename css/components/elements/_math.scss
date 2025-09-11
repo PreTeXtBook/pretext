@@ -10,6 +10,11 @@
   padding-top: 2px; // Chrome sometimes clips the top 1-2 pixels of math after it has been scaled - provide room for that content
 }
 
+.displaymath mjx-container svg {
+  // remove the background that is normally applied to svg's by PreTeXt CSS
+  background: none;
+}
+
 // ?
 [data-knowl] > mjx-mrow .TEX-I {
   font-family: MJXZERO !important;
