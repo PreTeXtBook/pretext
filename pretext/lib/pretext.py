@@ -5056,46 +5056,7 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
 
     # Parse source, no harm to assume
     # xinclude modularization is necessary.
-    # We build a custom parser without limitations
-    # Seems a depth of 256 was exceeded for an SVG image:
-    # lxml.etree.XMLSyntaxError: Excessive depth in document: 256 use XML_PARSE_HUGE option
-    huge_parser = ET.XMLParser(huge_tree=True)
-    src_tree = ET.parse(xml, parser=huge_parser)
-    try:
-        # Build custom includer so we can check error log
-        # undefined namespace prefixes (e.g. xi:) go in error log of XInclude object
-        # but do not cause it to fail/throw
-        includer = ET.XInclude()
-        includer(src_tree.getroot())
-        if includer.error_log:
-            namespace_xi_error = False
-            log.debug("XInclude error(s) found:")
-            for line in includer.error_log:
-                log.debug(f"* {line.message}")
-                if "Namespace prefix xi on include is not defined" in line.message:
-                    log.error("You are trying to use 'xi:include' in a file that does not contain 'xmlns:xi=\"http://www.w3.org/2001/XInclude\"' in its root element.")
-                    namespace_xi_error = True
-            # If the error was due to an undefined namespace prefix, raise an error
-            if namespace_xi_error:
-                raise ET.XIncludeError("Missing namespace declaration for 'xi'")
-    except ET.XIncludeError as e:
-        # xinclude() does not show what file a parsing error occured in
-        # So if there was an error, build a custom loader and redo with ElementInclude
-        # which will include the file name in the stack dump.
-        # ElementInclude is a limited version of xinclude(), so can't rely
-        # on it for the real include process.
-
-        # Generate custom loader
-        from lxml import ElementInclude
-        def my_loader(href, parse, encoding=None, parser=None):
-            ret = ElementInclude._lxml_default_loader(href, parse, encoding, parser)
-            return ret
-
-        # Reparse the tree (was modified in try clause) and run ElementInclude
-        # This should also fail, but will give a better error message
-        # NB this might report false positives (duplicate xml:id even if controlled by versions)
-        src_tree = ET.parse(xml, parser=huge_parser)
-        ElementInclude.include(src_tree, loader=my_loader, max_depth=100)
+    src_tree = guarded_xml_include_parser(xml)
 
     # parse xsl, and build a transformation object
     # allow writing if an output directory is given
@@ -5294,6 +5255,61 @@ def validate(xml_source, out_file, dest_dir):
 #
 ###################
 
+
+def guarded_xml_include_parser(xml):
+    """
+    Attempt parsing of XML including xi:includes processing.
+    Returns an lxml element tree.
+    On error, generate readable exception trace.
+    """
+
+    # Seems a depth of 256 was exceeded for an SVG image:
+    # lxml.etree.XMLSyntaxError: Excessive depth in document: 256 use XML_PARSE_HUGE option
+    huge_parser = ET.XMLParser(huge_tree=True)
+    src_tree = ET.parse(xml, parser=huge_parser)
+    try:
+        # Try using default xinclude() first. But it does not generate good error messages.
+        # So on exception, we redo with a custom loader that will give better error messages.
+        # Undefined namespace prefixes (e.g. xi:) go in error log of XInclude object
+        # but do not cause it to fail/throw
+        includer = ET.XInclude()
+        includer(src_tree.getroot())
+        if includer.error_log:
+            namespace_xi_error = False
+            log.debug("XInclude error(s) found:")
+            for line in includer.error_log:
+                log.debug(f"* {line.message}")
+                if "Namespace prefix xi on include is not defined" in line.message:
+                    log.error("You are trying to use 'xi:include' in a file that does not contain 'xmlns:xi=\"http://www.w3.org/2001/XInclude\"' in its root element.")
+                    namespace_xi_error = True
+            # If the error was due to an undefined namespace prefix, raise an error
+            if namespace_xi_error:
+                raise ET.XIncludeError("Missing namespace declaration for 'xi'")
+        return src_tree
+    except ET.XIncludeError as e:
+        # xinclude() does not show what file a parsing error occured in
+        # So if there was an error, build a custom loader and redo with ElementInclude
+        # which will include the file name in the stack dump.
+        # ElementInclude is a limited version of xinclude(), so can't rely
+        # on it for the real include process.
+
+        # Generate custom loader
+        from lxml import ElementInclude
+        def my_loader(href, parse, encoding=None, parser=None):
+            try:
+                ret = ElementInclude._lxml_default_loader(href, parse, encoding, parser)
+            except Exception as e:
+                log.error(f"Error loading {href}: {e}")
+                raise
+            return ret
+
+        # Reparse the tree (was modified in try clause) and run ElementInclude
+        # This should also fail, but will give a better error message
+        # NB this might report false positives (duplicate xml:id even if controlled by versions)
+        src_tree = ET.parse(xml, parser=huge_parser)
+        ElementInclude.include(src_tree, loader=my_loader, max_depth=100)
+        return src_tree # should never actually reach
+        
 
 def python_version():
     """Return 'major.minor' version number as string/info"""
@@ -5689,8 +5705,7 @@ def get_source_directories(xml_source):
     # As a component of the source it is given in the "docinfo"
     data = None
 
-    src_tree = ET.parse(xml_source)
-    src_tree.xinclude()
+    src_tree = guarded_xml_include_parser(xml_source)
     directories_list = src_tree.xpath("/pretext/docinfo/directories")
     if directories_list:
         attributes_dict = directories_list[0].attrib
