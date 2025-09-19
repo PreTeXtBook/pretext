@@ -73,6 +73,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <date><today /></date>
             </bibinfo>
 
+            <titlepage>
+                <titlepage-items/>
+            </titlepage>
+
             <abstract>
                 <p>This is a very short article, but it still exercises some advanced features of MathBook XML.</p>
             </abstract>
