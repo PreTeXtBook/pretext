@@ -422,6 +422,9 @@ async function handleWW(ww_id, action) {
                 .quill-toolbar { scrollbar-width: thin; overflow-x: hidden; }
             </style>` +
             '</head><body>' +
+            '<div id="latex-macros" class="hidden-content process-math" style="display:none"><span class="process-math">\\(' +
+            document.getElementById('latex-macros-text').textContent +
+            '\\)</span></div>' +
             '<main class="pretext-content problem-content" data-iframe-height="1">' + form.outerHTML + '</main></body>' +
             '</html>';
 

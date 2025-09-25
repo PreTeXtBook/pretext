@@ -476,7 +476,11 @@ function handleWW(ww_id, action) {
                  max-width:100%;
             }
             </style>` +
-            '</head><body><main class="pretext-content">' + form.outerHTML + '</main></body>' +
+            '</head><body>' +
+            '<div id="latex-macros" class="hidden-content process-math" style="display:none"><span class="process-math">\\(' +
+            document.getElementById('latex-macros-text').textContent +
+            '\\)</span></div>' +
+            '<main class="pretext-content">' + form.outerHTML + '</main></body>' +
             '</html>';
 
         let iframe;
