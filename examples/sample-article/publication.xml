@@ -144,6 +144,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <feedback href="http://example.com/not-implemented.html"><!-- My Button Text --></feedback>
         <!-- A "portable" build is meant to be a single file that is transportable -->
         <!-- <platform portable="yes"/> -->
+        <interactives resize-behavior="responsive">
+            <javascript resize-behavior="fixed-height"/>
+            <jsxgraph resize-behavior="fixed-height"/>
+            <sage resize-behavior="fixed-height"/>
+            <circuitjs resize-behavior="fixed-height"/>
+            <d3 resize-behavior="fixed-height"/>
+        </interactives>
     </html>
 
     <!-- 10pt font is the default   -->

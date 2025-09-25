@@ -4,7 +4,7 @@
 
 var body_width = 600;
 $("body").css("width", body_width);
-var svg_width = 580, svg_height = 400, graph_padding = 20;
+var svg_width = 600, svg_height = 400, graph_padding = 20;
 $("#the_graph").css("margin-left", (body_width-svg_width)/2);
 var svg = d3.select("#the_graph")
 	.attr("width", svg_width)

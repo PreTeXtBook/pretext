@@ -21,7 +21,8 @@ force.start();
 
 var svg = d3.select("#d3-collision").append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+    .attr("display", "block");
 
 svg.selectAll("circle")
     .data(nodes.slice(1))
