@@ -175,8 +175,14 @@ The script should be run on the entire document, even if all the images are in o
                     <cell><c>-c doc -f pdf</c></cell>
                     <cell>[<c>xelatex</c>], <c>pdflatex</c></cell>
                 </row>
+                <row>
+                    <cell><c>-c preview</c></cell>
+                    <cell>[<c>fast</c>], <c>slow</c></cell>
+                </row>
             </tabular>
         </table>
+
+        <p>For generation of preview images for interactive elements, <c>fast</c> is the default of a 5 second timeout to allow the page to load; if the interactive element is taking longer to load, using <c>slow</c> will double the timeout.</p>
     </section>
 
     <section xml:id="pretext-output">
