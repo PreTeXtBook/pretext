@@ -13,11 +13,6 @@
           max-width: 200px;
           margin-right: 30px;
         }
-
-        span.decimal {
-          float: left;
-          text-align: right;
-        }
       }
 
       th {
@@ -54,89 +49,6 @@
 
       td.m {
         vertical-align: middle;
-      }
-
-      td.vv {
-        border-left: 2px solid var(--body-text-color);
-        border-right: 2px solid var(--body-text-color);
-      }
-
-      td.vcv {
-        border-left: 2px solid var(--body-text-color);
-        border-right: 2px solid var(--body-text-color);
-        text-align: center;
-      }
-
-      td.vcvv {
-        border-left: 2px solid var(--body-text-color);
-        border-right: 4px solid var(--body-text-color);
-        text-align: center;
-      }
-
-      td.vlv {
-        border-left: 2px solid var(--body-text-color);
-        border-right: 2px solid var(--body-text-color);
-        text-align: left;
-      }
-
-      td.vrv {
-        border-left: 2px solid var(--body-text-color);
-        border-right: 2px solid var(--body-text-color);
-        text-align: right;
-      }
-
-      td.rv {
-        border-right: 2px solid var(--body-text-color);
-        text-align: right;
-      }
-
-      td.vr {
-        border-left: 2px solid var(--body-text-color);
-        text-align: right;
-      }
-
-      td.lv {
-        border-right: 2px solid var(--body-text-color);
-        text-align: left;
-      }
-
-      td.vl {
-        border-left: 2px solid var(--body-text-color);
-        text-align: left;
-      }
-
-      td.cv {
-        border-right: 2px solid var(--body-text-color);
-        text-align: center;
-      }
-
-      td.Xv {
-        border-right: 2px solid var(--body-text-color);
-        text-align: left;
-      }
-
-      td.vc {
-        border-left: 2px solid var(--body-text-color);
-        text-align: center;
-      }
-
-      td.hline {
-        padding: 0;
-
-        hr {
-          margin-top: 0 -1px;
-          border: 1px solid rgb(0, 0, 0);
-        }
-      }
-
-      td.hlinethick {
-        padding-left: 0;
-        padding-right: 0;
-
-        hr {
-          margin-top: 0 -1px;
-          border: 2px solid var(--body-text-color);
-        }
       }
 
       th.b1 {
