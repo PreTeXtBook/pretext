@@ -16,6 +16,7 @@ async function handleWW(ww_id, action) {
     const ww_processing = 'webwork2';
     const ww_origin = ww_container.dataset.origin;
     const ww_problemSource = ww_container.dataset.problemsource;
+    const ww_baseCourse = ww_container.dataset.basecourse;
     const ww_sourceFilePath = ww_container.dataset.sourcefilepath;
     const ww_course_id = ww_container.dataset.courseid;
     const ww_user_id = ww_container.dataset.userid;
@@ -79,7 +80,13 @@ async function handleWW(ww_id, action) {
     let formData = new FormData();
     let generatedPG = 'generated/webwork/pg/';
     if (runestone_logged_in) {
-        generatedPG = `/ns/books/published/${eBookConfig.basecourse}/${generatedPG}`;
+        if (!ww_baseCourse) {
+            // Try to parse the baseCourse from ww_id which has form <baseCourse>_*-ww-rs
+            const match = ww_id.match(/^([a-zA-Z0-9_\-]+?)_/);
+            ww_baseCourse = match ? match[1] : eBookConfig.basecourse;
+        }
+        console.log("using the base course " + ww_baseCourse);
+        generatedPG = `/ns/books/published/${ww_baseCourse}/${generatedPG}`;
     }
 
     if (action == 'check' || action =='reveal') {
