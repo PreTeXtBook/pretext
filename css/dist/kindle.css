@@ -1278,6 +1278,9 @@ pre[class*=language-] .line-highlight {
   margin: 0 0 0 0;
   padding-top: 2px;
 }
+.process-math mjx-container svg {
+  background: none;
+}
 [data-knowl] > mjx-mrow .TEX-I {
   font-family: MJXZERO !important;
   font-style: normal !important;
