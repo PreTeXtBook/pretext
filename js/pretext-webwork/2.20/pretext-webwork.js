@@ -16,6 +16,7 @@ async function handleWW(ww_id, action) {
     const ww_processing = 'webwork2';
     const ww_origin = ww_container.dataset.origin;
     const ww_problemSource = ww_container.dataset.problemsource;
+    const ww_baseCourse = ww_container.dataset.documentid;
     const ww_sourceFilePath = ww_container.dataset.sourcefilepath;
     const ww_course_id = ww_container.dataset.courseid;
     const ww_user_id = ww_container.dataset.userid;
@@ -78,8 +79,15 @@ async function handleWW(ww_id, action) {
     }
     let formData = new FormData();
     let generatedPG = 'generated/webwork/pg/';
+    // For Runestone, we specify where to find the generated problems.
     if (runestone_logged_in) {
-        generatedPG = `/ns/books/published/${eBookConfig.basecourse}/${generatedPG}`;
+        if (!ww_baseCourse) {
+            // WeBWorK generated after 2025/10/15-ish should have a baseCourse specified. We fall back to parsing the baseCourse from ww_id, which *should* always start with the base course prior to the first underscore (although this is not guaranteed). If no underscore is found, we fall back to eBookConfig.basecourse.
+            const parts = ww_id.split('_');
+            ww_baseCourse = parts.length > 1 ? parts[0] : eBookConfig.basecourse;
+        }
+        console.log("using the base course " + ww_baseCourse);
+        generatedPG = `/ns/books/published/${ww_baseCourse}/${generatedPG}`;
     }
 
     if (action == 'check' || action =='reveal') {

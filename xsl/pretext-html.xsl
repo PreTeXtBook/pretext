@@ -10754,6 +10754,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="data-problemSource">
                     <xsl:value-of select="rendering-data/@problemSource"/>
                 </xsl:attribute>
+                <!-- When rendering a problem with problemSource, we want to know the base course id -->
+                <xsl:attribute name="data-documentID">
+                    <xsl:value-of select="$document-id"/>
+                </xsl:attribute>
             </xsl:when>
             <xsl:when test="rendering-data/@sourceFilePath">
                 <xsl:attribute name="data-sourceFilePath">
