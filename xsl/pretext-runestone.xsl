@@ -746,6 +746,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- efficient but has proven to be a popular spot for bugs.             -->
 <xsl:template match="exercise|&PROJECT-LIKE;|task" mode="runestone-manifest">
     <xsl:variable name="manifestable-interactives-fenced">|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|select|fillin-basic|fillin|coding|shortanswer|webwork-reps|</xsl:variable>
+
     <xsl:if test="contains($manifestable-interactives-fenced, concat('|', @exercise-interactive, '|'))">
         <question>
             <!-- A divisional exercise ("exercises/../exercise") is not really   -->
@@ -784,13 +785,47 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- Note: we are explicitly dodging webwork/task             -->
                         <xsl:apply-templates select="." mode="task-introductions"/>
 
+                        <!-- We identify the container, in order to classify the    -->
+                        <!-- group of switches that will control visibility of      -->
+                        <!-- hints/solutions.                                       -->
+                        <xsl:variable name="project-container" select="&PROJECT-FILTER; or task"/>
+                        <xsl:message>Project container: <xsl:value-of select="$project-container"/></xsl:message>
+                        <!-- Now identify which of the 5 types of exercises this is -->
+                        <!-- inline should catch anything not caught by the others  -->
+                        <xsl:variable name="project" select="boolean($project-container)"/>
+                        <xsl:variable name="divisional" select="boolean(ancestor::exercises)"/>
+                        <xsl:variable name="worksheet" select="boolean(ancestor::worksheet)"/>
+                        <xsl:variable name="reading" select="boolean(ancestor::reading-questions)"/>
+                        <xsl:variable name="inline" select="not($divisional or $worksheet or $reading)"/>
+                        <xsl:message>Exercise classification: inline=<xsl:value-of select="$inline"/>, project=<xsl:value-of select="$project"/>, divisional=<xsl:value-of select="$divisional"/>, worksheet=<xsl:value-of select="$worksheet"/>, reading=<xsl:value-of select="$reading"/></xsl:message>
+                        <!-- Use those and publisher settings to determine if -->
+                        <!-- various components are to be shown.              -->
+                        <xsl:variable name="b-has-hint"
+                            select="($inline and $b-has-inline-hint)  or
+                                    ($project and $b-has-project-hint)  or
+                                    ($divisional and $b-has-divisional-hint) or
+                                    ($worksheet and $b-has-worksheet-hint)  or
+                                    ($reading and $b-has-reading-hint)"/>
+                        <xsl:variable name="b-has-answer"
+                            select="($inline and $b-has-inline-answer)  or
+                                    ($project and $b-has-project-answer)  or
+                                    ($divisional and $b-has-divisional-answer) or
+                                    ($worksheet and $b-has-worksheet-answer)  or
+                                    ($reading and $b-has-reading-answer)"/>
+                        <xsl:variable name="b-has-solution"
+                            select="($inline and $b-has-inline-solution)  or
+                                    ($project and $b-has-project-solution)  or
+                                    ($divisional and $b-has-divisional-solution) or
+                                    ($worksheet and $b-has-worksheet-solution)  or
+                                    ($reading and $b-has-reading-solution)"/>
+
                         <xsl:apply-templates select="."  mode="exercise-components">
                             <xsl:with-param name="b-original" select="true()"/>
                             <xsl:with-param name="block-type" select="'visible'"/>
                             <xsl:with-param name="b-has-statement" select="true()" />
-                            <xsl:with-param name="b-has-hint"      select="true()" />
-                            <xsl:with-param name="b-has-answer"    select="false()" />
-                            <xsl:with-param name="b-has-solution"  select="false()" />
+                            <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                            <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                            <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
                         </xsl:apply-templates>
 
                         <!-- next template collects "conclusion" preceding a "task" -->
