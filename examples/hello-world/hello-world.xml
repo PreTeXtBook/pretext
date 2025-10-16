@@ -55,6 +55,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <program interactive="activecode" language="python">
             </program>
             <hint><p>Try harder.</p></hint>
+            <answer><p>Yes.</p></answer>
+            <solution><p>Step 1....</p></solution>
           </exercise>
         </section>
 
@@ -68,6 +70,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <program interactive="activecode" language="python">
             </program>
             <hint><p>Try harder.</p></hint>
+            <answer><p>Yes.</p></answer>
+            <solution><p>Step 1....</p></solution>
           </exercise>
         </exercises>
       </chapter>

@@ -23,11 +23,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Common Options -->
     <common>
-        <exercise-inline hint="yes"/>
-        <exercise-divisional hint="yes"/>
-        <exercise-worksheet hint="yes"/>
-        <exercise-reading hint="yes"/>
-        <exercise-project hint="yes"/>
+        <exercise-inline hint="no" solution="no" answer="no"/>
+        <!-- <exercise-divisional hint="no" solution="no" answer="no"/> -->
+        <!-- <exercise-worksheet hint="no" solution="no" answer="no"/>
+        <exercise-reading hint="no" solution="no" answer="no"/>
+        <exercise-project hint="no" solution="no" answer="no"/> -->
+
+        <!-- <exercise-inline hint="yes" solution="yes" answer="yes"/>
+        <exercise-divisional hint="yes" solution="yes" answer="yes"/>
+        <exercise-worksheet hint="yes" solution="yes" answer="yes"/>
+        <exercise-reading hint="yes" solution="yes" answer="yes"/>
+        <exercise-project hint="yes" solution="yes" answer="yes"/> -->
     </common>
     <html>
         <platform host="runestone"/>
