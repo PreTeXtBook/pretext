@@ -6640,6 +6640,46 @@ Book (with parts), "section" at level 3
 <xsl:template match="webwork-reps/static|webwork-reps/static/stage|exercisegroup|&SOLUTION-LIKE;" mode="sanitize-workspace"/>
 
 
+<!-- We define five types or exercises: project, divisional, worksheet, reading, inline -->
+<!-- This determines what type a given exercise is                                      -->
+<xsl:template match="exercise|&PROJECT-LIKE;|task" mode="get-exercise-type">
+    <xsl:choose>
+        <xsl:when test="boolean(&PROJECT-FILTER;) or self::task">project</xsl:when>
+        <xsl:when test="boolean(ancestor::exercises)">divisional</xsl:when>
+        <xsl:when test="boolean(ancestor::worksheet)">worksheet</xsl:when>
+        <xsl:when test="boolean(ancestor::reading-questions)">reading</xsl:when>
+        <xsl:when test="boolean(&INLINE-EXERCISE-FILTER;)">inline</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:ERROR: can't determine exercise type</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Get an RTF element containing information about what omponents of an exercise -->
+<!-- should be rendered based on its type and publisher settings                   -->
+<xsl:template match="exercise|&PROJECT-LIKE;|task" mode="exercise-components-report">
+    <xsl:variable name="exercise-type">
+        <xsl:apply-templates select="." mode="get-exercise-type"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$exercise-type = 'inline'">
+            <exercise-component-report has-hint="{$b-has-inline-hint}" has-answer="{$b-has-inline-answer}" has-solution="{$b-has-inline-solution}"/>
+        </xsl:when>
+        <xsl:when test="$exercise-type = 'project'">
+            <exercise-component-report has-hint="{$b-has-project-hint}" has-answer="{$b-has-project-answer}" has-solution="{$b-has-project-solution}"/>
+        </xsl:when>
+        <xsl:when test="$exercise-type = 'divisional'">
+            <exercise-component-report has-hint="{$b-has-divisional-hint}" has-answer="{$b-has-divisional-answer}" has-solution="{$b-has-divisional-solution}"/>
+        </xsl:when>
+        <xsl:when test="$exercise-type = 'worksheet'">
+            <exercise-component-report has-hint="{$b-has-worksheet-hint}" has-answer="{$b-has-worksheet-answer}" has-solution="{$b-has-worksheet-solution}"/>
+        </xsl:when>
+        <xsl:when test="$exercise-type = 'reading'">
+            <exercise-component-report has-hint="{$b-has-reading-hint}" has-answer="{$b-has-reading-answer}" has-solution="{$b-has-reading-solution}"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
 
 
 <!-- ####################################### -->

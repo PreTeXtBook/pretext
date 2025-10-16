@@ -746,6 +746,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- efficient but has proven to be a popular spot for bugs.             -->
 <xsl:template match="exercise|&PROJECT-LIKE;|task" mode="runestone-manifest">
     <xsl:variable name="manifestable-interactives-fenced">|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|select|fillin-basic|fillin|coding|shortanswer|webwork-reps|</xsl:variable>
+
     <xsl:if test="contains($manifestable-interactives-fenced, concat('|', @exercise-interactive, '|'))">
         <question>
             <!-- A divisional exercise ("exercises/../exercise") is not really   -->
@@ -784,13 +785,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- Note: we are explicitly dodging webwork/task             -->
                         <xsl:apply-templates select="." mode="task-introductions"/>
 
-                        <xsl:apply-templates select="."  mode="exercise-components">
+                        <!-- determine which components publisher wants rendered-->
+                        <xsl:variable name="ex-components-rtf">
+                            <xsl:apply-templates select="." mode="exercise-components-report"/>
+                        </xsl:variable>
+                        <xsl:variable name="ex-components-report" select="exsl:node-set($ex-components-rtf)/exercise-component-report"/>
+
+                        <xsl:apply-templates select="." mode="exercise-components">
                             <xsl:with-param name="b-original" select="true()"/>
                             <xsl:with-param name="block-type" select="'visible'"/>
-                            <xsl:with-param name="b-has-statement" select="true()" />
-                            <xsl:with-param name="b-has-hint"      select="false()" />
-                            <xsl:with-param name="b-has-answer"    select="false()" />
-                            <xsl:with-param name="b-has-solution"  select="false()" />
+                            <xsl:with-param name="b-has-statement" select="true()"/>
+                            <xsl:with-param name="b-has-hint" select="$ex-components-report/@has-hint = 'true'"/>
+                            <xsl:with-param name="b-has-answer" select="$ex-components-report/@has-answer = 'true'"/>
+                            <xsl:with-param name="b-has-solution" select="$ex-components-report/@has-solution = 'true'"/>
                         </xsl:apply-templates>
 
                         <!-- next template collects "conclusion" preceding a "task" -->
