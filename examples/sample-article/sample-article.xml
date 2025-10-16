@@ -2346,6 +2346,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </md>.  There should not be anything to see in <latex/>/<init>PDF</init> output. (2021-10-21)</p>
 
             </subsection>
+
+            <subsection xml:id="testing-math" label="testing-math">
+                <title>Testing Mathematics</title>
+
+                <p>This subsection is strictly about testing the five different elements used for mathematics (i.e. designed to hold <latex/> syntax).  It only varies the elements employed and the options for numbering displayed equations.  And not local tags or page breaks, or other less-critical features.  There will not be much here for the interested reader to learn from.</p>
+
+                <p>First a bit of token inline mathematics, via the <tag>m</tag> element, where numbering is not an option.  Consider <m>x+y</m> as an expression.</p>
+
+                <p>Now single-line displayed equations.  First, the <tag>me</tag> element. Which will not be numbered,
+                    <me>x^{1} + y^{1} = z^{1}</me>.
+                 Second, the <tag>men</tag> element. Which will always be numbered,
+                    <men>x^{2} + y^{2} = z^{2}</men>.
+                </p>
+
+                <p>The remainder has three displayed equations each.  The first <tag>mrow</tag> has no <attr>number</attr> attribute, the second sets the attribute to <c>no</c> and the third sets the attribute to <c>yes</c>.  The numbering of the first case is determined by the variant of the element, the latter two provide explicit control.</p>
+
+                <p>The <tag>md</tag> element.<md>
+                    <mrow>x^{3} + y^{3} = z^{3}</mrow>.
+                    <mrow number="no">x^{4} + y^{4} = z^{4}</mrow>.
+                    <mrow number="yes">x^{5} + y^{5} = z^{5}</mrow>.
+                </md></p>
+
+                <p>The <tag>mdn</tag> element.<mdn>
+                    <mrow>x^{6} + y^{6} = z^{6}</mrow>.
+                    <mrow number="no">x^{7} + y^{7} = z^{7}</mrow>.
+                    <mrow number="yes">x^{8} + y^{8} = z^{8}</mrow>.
+                </mdn></p>
+
+            </subsection>
         </section>
 
         <section xml:id="block-samples">
