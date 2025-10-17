@@ -117,6 +117,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$csl-style-file"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2025-09-18 Server to call for STACK question rendering -->
+    <xsl:text>stack-server</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$stack-server"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- -->
 
     <!--
