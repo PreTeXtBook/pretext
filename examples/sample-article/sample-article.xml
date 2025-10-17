@@ -1468,20 +1468,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                     <!-- Note: a new section with a few problemns will be -->
                     <!-- better than this addition for initial testing.   -->
-                    <!-- 2025-08-16: commented-out (in two pieces) since duplicate  -->
-                    <!-- MathJax causes unreliable behavior.  Remains for testing.  -->
-                    <!-- <exercise>
+                    <exercise>
                         <title>STACK integration question</title>
 
                         <introduction>
-                            <p>A test question. (2025-08-15: you may need to ask for a "new" question to make this render.)</p>
-                        </introduction> -->
+                            <p>A test question. (2025-10-17: you will need to ask for a <q>new</q> question to make this render.)</p>
+                        </introduction>
 
                         <!-- A @label is required, becomes a filename in output -->
-                        <!-- <stack label="stack-integration">
+                        <stack label="stack-integration">
                             <xi:include href="stack/01_integration_with_feedback.xml"/>
                         </stack>
-                    </exercise> -->
+                    </exercise>
                 </exercises>
 
                 <reading-questions>
