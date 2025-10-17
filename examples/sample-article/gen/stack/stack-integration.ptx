@@ -1,0 +1,6 @@
+<stack-static>
+
+    <statement><p>Find <me> \int {{\left(x-3\right)}^6} d{x}</me> <fillin characters="20" name="ans1"/> </p></statement>
+    <solution><p>We can either do this question by inspection (i.e. spot the answer) or in a more formal manner by using the substitution <me> u = ({x}-{3}).</me> Then, since <m>\frac{d}{d{x}}u=1</m> we have <me> \int {{\left(x-3\right)}^6} d{x} = \int u^{6} du = \frac{u^{7}}{7}+c = {\frac{{\left(x-3\right)}^7}{7}}+c.</me></p></solution>
+    <answer><p><m>\frac{{\left(x-3\right)}^7}{7}+c</m></p></answer>
+</stack-static>
