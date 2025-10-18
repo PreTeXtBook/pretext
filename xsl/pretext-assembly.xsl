@@ -30,6 +30,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:pf="https://prefigure.org"
+    xmlns:stk="http://stack-assesment.org/2025/moodle-question"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
@@ -2055,7 +2056,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- There is no real purpose to put identification onto an     -->
 <!-- (X)HTML element floating around as part of an interactive. -->
-<xsl:template match="pf:*|xhtml:*" mode="id-attribute">
+<xsl:template match="pf:*|xhtml:*|stk:*" mode="id-attribute">
     <xsl:copy>
         <xsl:apply-templates select="@*|node()" mode="id-attribute"/>
     </xsl:copy>
