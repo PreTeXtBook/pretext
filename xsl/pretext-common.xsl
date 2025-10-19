@@ -6640,6 +6640,39 @@ Book (with parts), "section" at level 3
 <xsl:template match="webwork-reps/static|webwork-reps/static/stage|exercisegroup|&SOLUTION-LIKE;" mode="sanitize-workspace"/>
 
 
+<!-- Get an RTF element containing information about what components of an exercise -->
+<!-- should be rendered based on its type and publisher settings                    -->
+<xsl:template match="exercise|&PROJECT-LIKE;|task" mode="exercise-components-report">
+    <xsl:variable name="exercise-type">
+        <xsl:choose>
+            <xsl:when test="self::task">project</xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="./@exercise-customization"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$exercise-type = 'inline'">
+            <exercise-component-report has-hint="{$b-has-inline-hint}" has-answer="{$b-has-inline-answer}" has-solution="{$b-has-inline-solution}"/>
+        </xsl:when>
+        <xsl:when test="$exercise-type = 'project'">
+            <exercise-component-report has-hint="{$b-has-project-hint}" has-answer="{$b-has-project-answer}" has-solution="{$b-has-project-solution}"/>
+        </xsl:when>
+        <xsl:when test="$exercise-type = 'divisional'">
+            <exercise-component-report has-hint="{$b-has-divisional-hint}" has-answer="{$b-has-divisional-answer}" has-solution="{$b-has-divisional-solution}"/>
+        </xsl:when>
+        <xsl:when test="$exercise-type = 'worksheet'">
+            <exercise-component-report has-hint="{$b-has-worksheet-hint}" has-answer="{$b-has-worksheet-answer}" has-solution="{$b-has-worksheet-solution}"/>
+        </xsl:when>
+        <xsl:when test="$exercise-type = 'reading'">
+            <exercise-component-report has-hint="{$b-has-reading-hint}" has-answer="{$b-has-reading-answer}" has-solution="{$b-has-reading-solution}"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:ERROR: can't determine exercise type</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 
 <!-- ####################################### -->
