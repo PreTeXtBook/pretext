@@ -784,13 +784,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- Note: we are explicitly dodging webwork/task             -->
                         <xsl:apply-templates select="." mode="task-introductions"/>
 
-                        <xsl:apply-templates select="."  mode="exercise-components">
+                        <!-- determine which components publisher wants rendered-->
+                        <xsl:variable name="ex-components-rtf">
+                            <xsl:apply-templates select="." mode="exercise-components-report"/>
+                        </xsl:variable>
+                        <xsl:variable name="ex-components-report" select="exsl:node-set($ex-components-rtf)/exercise-component-report"/>
+
+                        <xsl:apply-templates select="." mode="exercise-components">
                             <xsl:with-param name="b-original" select="true()"/>
                             <xsl:with-param name="block-type" select="'visible'"/>
-                            <xsl:with-param name="b-has-statement" select="true()" />
-                            <xsl:with-param name="b-has-hint"      select="false()" />
-                            <xsl:with-param name="b-has-answer"    select="false()" />
-                            <xsl:with-param name="b-has-solution"  select="false()" />
+                            <xsl:with-param name="b-has-statement" select="true()"/>
+                            <xsl:with-param name="b-has-hint" select="$ex-components-report/@has-hint = 'true'"/>
+                            <xsl:with-param name="b-has-answer" select="$ex-components-report/@has-answer = 'true'"/>
+                            <xsl:with-param name="b-has-solution" select="$ex-components-report/@has-solution = 'true'"/>
                         </xsl:apply-templates>
 
                         <!-- next template collects "conclusion" preceding a "task" -->
