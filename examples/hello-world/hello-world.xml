@@ -38,7 +38,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 6.  Experiment with other available conversions                                    -->
 
 <pretext>
-    <article xml:id="hello-world">
-       <p>Hello, World!</p>
-    </article>
+    <book xml:id="hello-world">
+
+      <chapter>
+        <title>Hello World</title>
+
+        <section>
+          <title>First Section</title>
+          <p>This is a bare minimum example of MathBook XML.  It has a chapter, a section, and a paragraph.</p>
+          <exercise label="inline-ex">
+            <statement>
+              <p>
+                Do something.
+              </p>
+            </statement>
+            <hint><p>Try harder.</p></hint>
+            <answer><p>Yes.</p></answer>
+            <solution><p>Step 1....</p></solution>
+          </exercise>
+        </section>
+
+        <exercises>
+          <exercise label="division-ex">
+            <statement>
+              <p>
+                Statement
+              </p>
+            </statement>
+            <program interactive="activecode" language="python">
+            </program>
+            <hint><p>Try harder.</p></hint>
+            <answer><p>Yes.</p></answer>
+            <solution><p>Step 1....</p></solution>
+          </exercise>
+        </exercises>
+      </chapter>
+
+    </book>
 </pretext>
