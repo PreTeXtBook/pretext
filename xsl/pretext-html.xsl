@@ -11666,6 +11666,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- appear at  https://github.com/PreTeXtBook/pretext/pull/2534    -->
 <xsl:template match="feedback/p" mode="permalink"/>
 
+<!-- 2025-10-19: "p" in the label for a multiple choice option overlaps -->
+<!-- the label itself, obscuring the content.  This will suppress most  -->
+<!-- of the "choice", but not everything.                               -->
+<xsl:template match="exercise/choices/choice/statement/p" mode="permalink"/>
+
 
 <!--                     -->
 <!-- Navigation Sections -->
