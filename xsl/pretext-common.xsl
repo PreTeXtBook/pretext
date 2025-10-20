@@ -5354,7 +5354,7 @@ Book (with parts), "section" at level 3
         <xsl:apply-templates select="." mode="location-report" />
     </xsl:if>
     <xsl:if test="$normalized-aspect = 0">
-        <xsl:message>PTX:ERROR:   an @aspect attribute equal to zero will cause serious errors.</xsl:message>
+        <xsl:message>PTX:FATAL:   an @aspect attribute equal to zero will cause serious errors.</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
         <xsl:message terminate="yes">Quitting...</xsl:message>
     </xsl:if>

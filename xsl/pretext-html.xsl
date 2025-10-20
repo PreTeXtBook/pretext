@@ -342,10 +342,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- and maybe there is a fallback to full processing?   -->
             <xsl:choose>
                 <xsl:when test="not($subtree-node)">
-                    <xsl:message terminate="yes">PTX:ERROR:  the @xml:id given as a subtree root ("<xsl:value-of select="$subtree"/>") does not specify any element.  (Check spelling?)  Quitting...</xsl:message>
+                    <xsl:message terminate="yes">PTX:FATAL:  the @xml:id given as a subtree root ("<xsl:value-of select="$subtree"/>") does not specify any element.  (Check spelling?)  Quitting...</xsl:message>
                 </xsl:when>
                 <xsl:when test="not($subtree-node[&STRUCTURAL-FILTER;])">
-                    <xsl:message terminate="yes">PTX:ERROR:  the element with the @xml:id given as a subtree root ("<xsl:value-of select="$subtree"/>") is not division that can be chunked into HTML page(s).  Quitting...</xsl:message>
+                    <xsl:message terminate="yes">PTX:FATAL:  the element with the @xml:id given as a subtree root ("<xsl:value-of select="$subtree"/>") is not division that can be chunked into HTML page(s).  Quitting...</xsl:message>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:variable name="current-level">
@@ -354,7 +354,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:variable>
                     <!-- too deep to chunk into a page (or pages) -->
                     <xsl:if test="$current-level > $chunk-level">
-                        <xsl:message terminate="yes">PTX:ERROR:  the element with @xml:id given as a subtree root ("<xsl:value-of select="$subtree"/>") is only a partial HTML page at the current chunking level.  Quitting...</xsl:message>
+                        <xsl:message terminate="yes">PTX:FATAL:  the element with @xml:id given as a subtree root ("<xsl:value-of select="$subtree"/>") is only a partial HTML page at the current chunking level.  Quitting...</xsl:message>
                     </xsl:if>
                 </xsl:otherwise>
             </xsl:choose>

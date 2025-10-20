@@ -201,7 +201,7 @@
     <!-- no hope for an "article" so fail immediately, with warning -->
     <xsl:if test="not($b-is-book)">
         <xsl:call-template name="banner-warning">
-            <xsl:with-param name="warning">EPUB creation is only implemented for a "book",&#xa;not a "<xsl:value-of select="local-name($document-root)"/>", and we cannot recover</xsl:with-param>
+            <xsl:with-param name="warning">PTX:FATAL: EPUB creation is only implemented for a "book",&#xa;not a "<xsl:value-of select="local-name($document-root)"/>", and we cannot recover</xsl:with-param>
         </xsl:call-template>
         <xsl:message terminate="yes">Quitting...</xsl:message>
     </xsl:if>

@@ -1146,10 +1146,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- presence of the publisher file specification.                     -->
 <xsl:variable name="managed-directories">
     <xsl:if test="$publication/source/directories/@external = ''">
-        <xsl:message terminate="yes">PTX:ERROR:   the value of source/directories/@external in the publisher file must be nonempty</xsl:message>
+        <xsl:message terminate="yes">PTX:FATAL:   the value of source/directories/@external in the publisher file must be nonempty</xsl:message>
     </xsl:if>
     <xsl:if test="$publication/source/directories/@generated = ''">
-        <xsl:message terminate="yes">PTX:ERROR:   the value of source/directories/@generated in the publisher file must be nonempty</xsl:message>
+        <xsl:message terminate="yes">PTX:FATAL:   the value of source/directories/@generated in the publisher file must be nonempty</xsl:message>
     </xsl:if>
     <xsl:choose>
         <xsl:when test="$publication/source/directories/@external and $publication/source/directories/@generated">

@@ -82,7 +82,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="/">
     <!-- Fail if a scratch directory is set -->
     <xsl:if test="not($scratch = '')">
-        <xsl:message terminate="yes">PTX:BUG:     scratch directory provided ("<xsl:value-of select="$scratch" />") which is not supported.  Please report the circumstances revealing this mistake.  Quitting...</xsl:message>
+        <xsl:message terminate="yes">PTX:FATAL:   scratch directory provided ("<xsl:value-of select="$scratch" />") which is not supported.  Please report the circumstances revealing this mistake.  Quitting...</xsl:message>
     </xsl:if>
     <xsl:choose>
         <xsl:when test="$subtree=''">
