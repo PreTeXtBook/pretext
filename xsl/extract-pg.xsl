@@ -1843,14 +1843,14 @@
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="md">
+<xsl:template match="md[mrow]">
     <xsl:param name="b-human-readable" />
     <xsl:apply-templates select="." mode="body">
         <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
     </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="md" mode="body">
+<xsl:template match="md[mrow]" mode="body">
     <xsl:param name="b-human-readable"/>
     <xsl:variable name="complete-latex">
         <xsl:if test="$b-human-readable">
@@ -1881,7 +1881,7 @@
 </xsl:template>
 
 <!-- Within a WeBWorK, md and rows are never numbered -->
-<xsl:template match="md" mode="displaymath-alignment">
+<xsl:template match="md[mrow]" mode="displaymath-alignment">
     <xsl:choose>
         <!-- look for @alignment override, possibly bad -->
         <xsl:when test="@alignment='gather'">
@@ -1908,7 +1908,7 @@
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="md" mode="display-math-wrapper">
+<xsl:template match="md[mrow]" mode="display-math-wrapper">
     <xsl:param name="b-human-readable" />
     <xsl:param name="content" />
     <xsl:text>&#xa;&#xa;</xsl:text>
@@ -1938,7 +1938,7 @@
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
         <!-- look ahead to absorb immediate clause-ending punctuation -->
         <!-- pass the enclosing environment (md) as the context       -->
-        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
+        <xsl:apply-templates select="parent::md[mrow]" mode="get-clause-punctuation" />
     </xsl:if>
     <!-- PG cannot actually mirror LaTeX intertext functionality. As  -->
     <!-- a consequence, we should not line break an mrow that         -->
@@ -2539,7 +2539,7 @@
                     (child::p[1]/child::*|child::p[1]/child::text())[normalize-space()][1][self::ol] or
                     (child::p[1]/child::*|child::p[1]/child::text())[normalize-space()][1][self::ul] or
                     (child::p[1]/child::*|child::p[1]/child::text())[normalize-space()][1][self::me] or
-                    (child::p[1]/child::*|child::p[1]/child::text())[normalize-space()][1][self::md]
+                    (child::p[1]/child::*|child::p[1]/child::text())[normalize-space()][1][self::md[mrow]]
                   )">
         <xsl:text>[$NBSP]*&#xa;</xsl:text>
     </xsl:if>
