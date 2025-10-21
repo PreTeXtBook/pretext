@@ -981,12 +981,12 @@ Book (with parts), "section" at level 3
 <!-- All displayed mathematics gets wrapped by  -->
 <!-- an abstract template, a necessity for HTML -->
 <!-- output.  Otherwise, just a copy machine.   -->
-<xsl:template match="md|mdn" mode="display-math-wrapper">
+<xsl:template match="md[mrow]|mdn[mrow]" mode="display-math-wrapper">
     <xsl:param name="content" />
     <xsl:value-of select="$content" />
 </xsl:template>
 
-<xsl:template match="md|mdn" mode="body">
+<xsl:template match="md[mrow]|mdn[mrow]" mode="body">
     <!-- block-type parameter is ignored, since the          -->
     <!-- representation never varies, no heading, no wrapper -->
     <xsl:param name="block-type" />
@@ -1042,7 +1042,7 @@ Book (with parts), "section" at level 3
 <!-- AMSMath has no easy way to make a one-off number within      -->
 <!-- the *-form, so we lean toward always using the un-starred    -->
 <!-- versions, except when we flag 100% no numbers inside an "md" -->
-<xsl:template match="md|mdn" mode="displaymath-alignment">
+<xsl:template match="md[mrow]|mdn[mrow]" mode="displaymath-alignment">
     <xsl:param name="b-nonumbers" select="false()" />
     <xsl:choose>
         <!-- look for @alignment override, possibly bad -->
@@ -1078,9 +1078,9 @@ Book (with parts), "section" at level 3
 <!-- With alignment="alignat" we need the number of columns     -->
 <!-- as an argument, complete with the LaTeX group (braces)     -->
 <!-- Mostly we call this regularly, and it usually does nothing -->
-<xsl:template match="me|men|md|mdn" mode="alignat-columns" />
+<xsl:template match="me|men|md[mrow]|mdn[mrow]" mode="alignat-columns" />
 
-<xsl:template match="md[@alignment='alignat']|mdn[@alignment='alignat']" mode="alignat-columns">
+<xsl:template match="md[mrow and (@alignment='alignat')]|mdn[mrow and @alignment='alignat']" mode="alignat-columns">
     <xsl:variable name="number-equation-columns">
         <xsl:choose>
             <!-- override first -->
@@ -1230,7 +1230,7 @@ Book (with parts), "section" at level 3
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
-        <xsl:when test="parent::md">
+        <xsl:when test="parent::md[mrow]">
             <xsl:choose>
                 <xsl:when test="@number='yes'">
                     <xsl:apply-templates select="." mode="tag">
@@ -1242,7 +1242,7 @@ Book (with parts), "section" at level 3
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
-        <xsl:when test="parent::mdn">
+        <xsl:when test="parent::mdn[mrow]">
             <xsl:choose>
                 <xsl:when test="@number='no'">
                     <xsl:text>\notag</xsl:text>
@@ -1882,8 +1882,8 @@ Book (with parts), "section" at level 3
 
 <!-- Sometimes we just need the mark itself (e.g. braille).  Note -->
 <!-- that the "mark" could well be plural, but usuually is not.   -->
-<xsl:template match="m|me|men|md|mdn" mode="get-clause-punctuation-mark">
-    <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md|self::mdn) and $b-include-display)">
+<xsl:template match="m|me|men|md[mrow]|mdn[mrow]" mode="get-clause-punctuation-mark">
+    <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md[mrow]|self::mdn[mrow]) and $b-include-display)">
         <xsl:variable name="trailing-text" select="following-sibling::node()[1]/self::text()" />
         <xsl:call-template name="leading-clause-punctuation">
             <xsl:with-param name="text" select="$trailing-text" />
@@ -1895,8 +1895,8 @@ Book (with parts), "section" at level 3
 <!-- inside LaTeX rendering.                                -->
 <!-- NB: this mode name is not great, but we leave it as-is -->
 <!-- from a refactor. A cosmetic refactor could improve it. -->
-<xsl:template match="m|me|men|md|mdn" mode="get-clause-punctuation">
-    <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md|self::mdn) and $b-include-display)">
+<xsl:template match="m|me|men|md[mrow]|mdn[mrow]" mode="get-clause-punctuation">
+    <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md[mrow]|self::mdn[mrow]) and $b-include-display)">
         <xsl:variable name="punctuation">
             <xsl:apply-templates select="." mode="get-clause-punctuation-mark"/>
         </xsl:variable>
@@ -1949,7 +1949,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="math-punctuation">
         <xsl:choose>
             <!-- drop punctuation after display math, if moving to math -->
-            <xsl:when test="$b-include-display and contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::me|self::men|self::md|self::mdn]">
+            <xsl:when test="$b-include-display and contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::me|self::men|self::md[mrow]|self::mdn[mrow]]">
                 <xsl:call-template name="strip-leading-whitespace">
                     <xsl:with-param name="text">
                         <xsl:call-template name="drop-clause-punctuation">
@@ -2022,7 +2022,7 @@ Book (with parts), "section" at level 3
             <xsl:variable name="original" select="$text-processed" />
             <xsl:variable name="front-cleaned">
                 <xsl:choose>
-                    <xsl:when test="not(preceding-sibling::node()[self::*|self::text()]) or preceding-sibling::node()[self::*|self::text()][1][self::me|self::men|self::md|self::mdn|self::cd|self::pre|self::ol/parent::p|self::ul/parent::p|self::dl/parent::p]">
+                    <xsl:when test="not(preceding-sibling::node()[self::*|self::text()]) or preceding-sibling::node()[self::*|self::text()][1][self::me|self::men|self::md[mrow]|self::mdn[mrow]|self::cd|self::pre|self::ol/parent::p|self::ul/parent::p|self::dl/parent::p]">
                         <xsl:call-template name="strip-leading-whitespace">
                             <xsl:with-param name="text" select="$original" />
                         </xsl:call-template>
@@ -2034,7 +2034,7 @@ Book (with parts), "section" at level 3
             </xsl:variable>
             <xsl:variable name="back-cleaned">
                 <xsl:choose>
-                    <xsl:when test="not(following-sibling::node()[self::*|self::text()])  or following-sibling::node()[self::*|self::text()][1][self::me|self::men|self::md|self::mdn|self::cd|self::pre|self::ol/parent::p|self::ul/parent::p|self::dl/parent::p]">
+                    <xsl:when test="not(following-sibling::node()[self::*|self::text()])  or following-sibling::node()[self::*|self::text()][1][self::me|self::men|self::md[mrow]|self::mdn[mrow]|self::cd|self::pre|self::ol/parent::p|self::ul/parent::p|self::dl/parent::p]">
                         <xsl:call-template name="strip-trailing-whitespace">
                             <xsl:with-param name="text" select="$front-cleaned" />
                         </xsl:call-template>
@@ -2294,7 +2294,7 @@ Book (with parts), "section" at level 3
 <!-- descended introduction or conclusion .                          -->
 <!-- Also, list items are considered blocks.                         -->
 <!-- NB: we don't point to a sidebyside, so not included here        -->
-<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|exercise|li" mode="is-block">
+<xsl:template match="md[mrow]|mdn[mrow]|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|exercise|li" mode="is-block">
     <xsl:value-of select="true()" />
 </xsl:template>
 
