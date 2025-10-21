@@ -6231,46 +6231,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "subexercises", "exercisegroup" or "sidebyside"            -->
 <!-- (worksheet), so we match with a //                         -->
 <xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]|&PROJECT-LIKE;|exercises//exercise|worksheet//exercise|reading-questions//exercise">
-    <!-- Four types of exercises, we use local variables when we -->
-    <!-- need to condition.  Exactly one of these is true, which -->
-    <!-- is important in the more complicated booleans below.    -->
-    <xsl:variable name="inline" select="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)"/>
-    <xsl:variable name="project" select="boolean(&PROJECT-FILTER;)"/>
-    <xsl:variable name="divisional" select="boolean(ancestor::exercises)"/>
-    <xsl:variable name="worksheet" select="boolean(ancestor::worksheet)"/>
-    <xsl:variable name="reading" select="boolean(ancestor::reading-questions)"/>
-    <!-- TODO: check that at least one is true? -->
+    <!-- Five types of exercise... determine which we are in    -->
+    <xsl:variable name="exercise-type">
+        <xsl:apply-templates select="." mode="get-exercise-type"/>
+    </xsl:variable>
 
     <!-- This template is for exercises when born and so should always -->
     <!-- include the statement, so we set this parameter to true.      -->
     <xsl:variable name="b-has-statement" select="true()"/>
 
-    <!-- There are five sets of switches, so we build a single set,  -->
-    <!-- depending on what type of location the "exercise" lives in. -->
-    <!-- For each, exactly one location is true, and then the        -->
-    <!-- expression will evaluate to the corresponding global switch -->
-    <xsl:variable name="b-has-hint"
-        select="($inline and $b-has-inline-hint)  or
-                ($project and $b-has-project-hint)  or
-                ($divisional and $b-has-divisional-hint) or
-                ($worksheet and $b-has-worksheet-hint)  or
-                ($reading and $b-has-reading-hint)"/>
-    <xsl:variable name="b-has-answer"
-        select="($inline and $b-has-inline-answer)  or
-                ($project and $b-has-project-answer)  or
-                ($divisional and $b-has-divisional-answer) or
-                ($worksheet and $b-has-worksheet-answer)  or
-                ($reading and $b-has-reading-answer)"/>
-    <xsl:variable name="b-has-solution"
-        select="($inline and $b-has-inline-solution)  or
-                ($project and $b-has-project-solution)  or
-                ($divisional and $b-has-divisional-solution) or
-                ($worksheet and $b-has-worksheet-solution)  or
-                ($reading and $b-has-reading-solution)"/>
+    <!-- determine which components publisher wants rendered-->
+    <xsl:variable name="ex-components-rtf">
+        <xsl:apply-templates select="." mode="exercise-components-report"/>
+    </xsl:variable>
+    <xsl:variable name="ex-components-report" select="exsl:node-set($ex-components-rtf)/exercise-component-report"/>
 
     <!-- structured version of a project-like may contain a     -->
     <!-- prelude, which is rendered *before* environment begins -->
-    <xsl:if test="$project and (statement or task)">
+    <xsl:if test="$exercise-type = 'project' and (statement or task)">
         <xsl:apply-templates select="prelude" />
     </xsl:if>
     <!-- The exact environment depends on the placement of the -->
@@ -6282,11 +6260,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$env-name"/>
     <xsl:text>}</xsl:text>
     <xsl:choose>
-        <xsl:when test="$inline or $project">
+        <xsl:when test="$exercise-type = 'inline' or $exercise-type = 'project'">
             <!-- Looks like lots of other environments -->
             <xsl:apply-templates select="." mode="block-options"/>
         </xsl:when>
-        <xsl:when test="$divisional or $worksheet or $reading">
+        <xsl:when test="$exercise-type = 'divisional' or $exercise-type = 'worksheet' or $exercise-type = 'reading'">
             <!-- just a shortened number, since in a division -->
             <xsl:text>{</xsl:text>
             <xsl:apply-templates select="." mode="serial-number" />
@@ -6325,13 +6303,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-original" select="true()" />
         <xsl:with-param name="b-component-heading" select="true()"/>
         <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+        <xsl:with-param name="b-has-hint" select="$ex-components-report/@has-hint = 'true'"/>
+        <xsl:with-param name="b-has-answer" select="$ex-components-report/@has-answer = 'true'"/>
+        <xsl:with-param name="b-has-solution" select="$ex-components-report/@has-solution = 'true'"/>
     </xsl:apply-templates>
     <!-- Currently inline exercises and project-like elements -->
     <!-- are not getting workspace above, so we add it here.  -->
-    <xsl:if test="$inline or $project">
+    <xsl:if test="$exercise-type = 'inline' or $exercise-type = 'project'">
         <xsl:apply-templates select="." mode="workspace"/>
     </xsl:if>
     <!-- closing % necessary, as newline between adjacent environments -->
@@ -6342,7 +6320,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
     <!-- structured version of a project may contain a postlude, -->
     <!-- which is rendered *after* environment ends              -->
-    <xsl:if test="$project and (statement or task)">
+    <xsl:if test="$exercise-type = 'project' and (statement or task)">
         <xsl:apply-templates select="postlude" />
     </xsl:if>
 </xsl:template>
