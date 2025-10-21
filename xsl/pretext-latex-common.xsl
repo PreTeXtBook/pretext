@@ -1370,7 +1370,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- NB: global numbering is level 0 and "level-to-name" is (a) incorrect,     -->
     <!-- and (b) not useful (\numberwithin will fail)                              -->
     <!-- NB: perhaps the chngcntr package should/could be used here                -->
-    <xsl:if test="$document-root//men|$document-root//mdn|$document-root//md">
+    <xsl:if test="$document-root//men|$document-root//mdn[mrow]|$document-root//md[mrow]">
         <xsl:text>%% Equation Numbering&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.equations.level  processing parameter&#xa;</xsl:text>
         <xsl:text>%% No adjustment here implies document-wide numbering&#xa;</xsl:text>
@@ -7333,7 +7333,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- knowl production scheme. The variables in the "body"     -->
 <!-- template have the right defaults for this application    -->
 
-<xsl:template match="md|mdn">
+<xsl:template match="md[mrow]|mdn[mrow]">
     <xsl:apply-templates select="." mode="body" />
 </xsl:template>
 
