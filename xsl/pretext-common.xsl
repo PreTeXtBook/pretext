@@ -1882,8 +1882,8 @@ Book (with parts), "section" at level 3
 
 <!-- Sometimes we just need the mark itself (e.g. braille).  Note -->
 <!-- that the "mark" could well be plural, but usuually is not.   -->
-<xsl:template match="m|me|men|md[mrow]|mdn[mrow]" mode="get-clause-punctuation-mark">
-    <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md[mrow]|self::mdn[mrow]) and $b-include-display)">
+<xsl:template match="m|me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]" mode="get-clause-punctuation-mark">
+    <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md[not(mrow)]|self::mdn[not(mrow)]|self::md[mrow]|self::mdn[mrow]) and $b-include-display)">
         <xsl:variable name="trailing-text" select="following-sibling::node()[1]/self::text()" />
         <xsl:call-template name="leading-clause-punctuation">
             <xsl:with-param name="text" select="$trailing-text" />
@@ -1895,8 +1895,8 @@ Book (with parts), "section" at level 3
 <!-- inside LaTeX rendering.                                -->
 <!-- NB: this mode name is not great, but we leave it as-is -->
 <!-- from a refactor. A cosmetic refactor could improve it. -->
-<xsl:template match="m|me|men|md[mrow]|mdn[mrow]" mode="get-clause-punctuation">
-    <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md[mrow]|self::mdn[mrow]) and $b-include-display)">
+<xsl:template match="m|me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]" mode="get-clause-punctuation">
+    <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md[not(mrow)]|self::mdn[not(mrow)]|self::md[mrow]|self::mdn[mrow]) and $b-include-display)">
         <xsl:variable name="punctuation">
             <xsl:apply-templates select="." mode="get-clause-punctuation-mark"/>
         </xsl:variable>
@@ -1949,7 +1949,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="math-punctuation">
         <xsl:choose>
             <!-- drop punctuation after display math, if moving to math -->
-            <xsl:when test="$b-include-display and contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::me|self::men|self::md[mrow]|self::mdn[mrow]]">
+            <xsl:when test="$b-include-display and contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::me|self::men|self::md[not(mrow)]|self::mdn[not(mrow)]|self::md[mrow]|self::mdn[mrow]]">
                 <xsl:call-template name="strip-leading-whitespace">
                     <xsl:with-param name="text">
                         <xsl:call-template name="drop-clause-punctuation">
