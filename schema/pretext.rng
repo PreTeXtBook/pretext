@@ -9,6 +9,7 @@
       <ref name="Section"/>
       <ref name="Subsection"/>
       <ref name="Subsubsection"/>
+      <ref name="Printout"/>
       <ref name="Paragraphs"/>
       <ref name="ReadingQuestions"/>
       <ref name="Exercises"/>
@@ -64,6 +65,9 @@
           </oneOrMore>
           <interleave>
             <optional>
+              <ref name="Printout"/>
+            </optional>
+            <optional>
               <ref name="ReadingQuestions"/>
             </optional>
             <optional>
@@ -92,10 +96,14 @@
               <ref name="IntroductionDivision"/>
             </optional>
           </interleave>
-          <ref name="Section"/>
+          <choice>
+            <ref name="Section"/>
+            <ref name="Printout"/>
+          </choice>
           <zeroOrMore>
             <choice>
               <ref name="Section"/>
+              <ref name="Printout"/>
               <ref name="ReadingQuestions"/>
               <ref name="Exercises"/>
               <ref name="Solutions"/>
@@ -131,6 +139,9 @@
         </oneOrMore>
         <oneOrMore>
           <ref name="Chapter"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="Printout"/>
         </oneOrMore>
       </choice>
       <optional>
@@ -175,6 +186,9 @@
           </oneOrMore>
           <interleave>
             <optional>
+              <ref name="Printout"/>
+            </optional>
+            <optional>
               <ref name="ReadingQuestions"/>
             </optional>
             <optional>
@@ -203,10 +217,14 @@
               <ref name="IntroductionDivision"/>
             </optional>
           </interleave>
-          <ref name="Section"/>
+          <choice>
+            <ref name="Section"/>
+            <ref name="Printout"/>
+          </choice>
           <zeroOrMore>
             <choice>
               <ref name="Section"/>
+              <ref name="Printout"/>
               <ref name="ReadingQuestions"/>
               <ref name="Exercises"/>
               <ref name="Solutions"/>
@@ -245,6 +263,9 @@
           </oneOrMore>
           <interleave>
             <optional>
+              <ref name="Printout"/>
+            </optional>
+            <optional>
               <ref name="ReadingQuestions"/>
             </optional>
             <optional>
@@ -273,10 +294,14 @@
               <ref name="IntroductionDivision"/>
             </optional>
           </interleave>
-          <ref name="Subsection"/>
+          <choice>
+            <ref name="Subsection"/>
+            <ref name="Printout"/>
+          </choice>
           <zeroOrMore>
             <choice>
               <ref name="Subsection"/>
+              <ref name="Printout"/>
               <ref name="ReadingQuestions"/>
               <ref name="Exercises"/>
               <ref name="Solutions"/>
@@ -315,6 +340,9 @@
           </oneOrMore>
           <interleave>
             <optional>
+              <ref name="Printout"/>
+            </optional>
+            <optional>
               <ref name="ReadingQuestions"/>
             </optional>
             <optional>
@@ -343,10 +371,14 @@
               <ref name="IntroductionDivision"/>
             </optional>
           </interleave>
-          <ref name="Subsubsection"/>
+          <choice>
+            <ref name="Subsubsection"/>
+            <ref name="Printout"/>
+          </choice>
           <zeroOrMore>
             <choice>
               <ref name="Subsubsection"/>
+              <ref name="Printout"/>
               <ref name="ReadingQuestions"/>
               <ref name="Exercises"/>
               <ref name="Solutions"/>
@@ -382,6 +414,9 @@
         </choice>
       </oneOrMore>
       <interleave>
+        <optional>
+          <ref name="Printout"/>
+        </optional>
         <optional>
           <ref name="ReadingQuestions"/>
         </optional>
@@ -423,6 +458,9 @@
           </oneOrMore>
           <interleave>
             <optional>
+              <ref name="Printout"/>
+            </optional>
+            <optional>
               <ref name="ReadingQuestions"/>
             </optional>
             <optional>
@@ -451,10 +489,14 @@
               <ref name="IntroductionDivision"/>
             </optional>
           </interleave>
-          <ref name="Subsection"/>
+          <choice>
+            <ref name="Subsection"/>
+            <ref name="Printout"/>
+          </choice>
           <zeroOrMore>
             <choice>
               <ref name="Subsection"/>
+              <ref name="Printout"/>
               <ref name="ReadingQuestions"/>
               <ref name="Exercises"/>
               <ref name="Solutions"/>
@@ -494,6 +536,9 @@
           </oneOrMore>
           <interleave>
             <optional>
+              <ref name="Printout"/>
+            </optional>
+            <optional>
               <ref name="ReadingQuestions"/>
             </optional>
             <optional>
@@ -522,10 +567,14 @@
               <ref name="IntroductionDivision"/>
             </optional>
           </interleave>
-          <ref name="Section"/>
+          <choice>
+            <ref name="Section"/>
+            <ref name="Printout"/>
+          </choice>
           <zeroOrMore>
             <choice>
               <ref name="Section"/>
+              <ref name="Printout"/>
               <ref name="ReadingQuestions"/>
               <ref name="Exercises"/>
               <ref name="Solutions"/>
@@ -1123,6 +1172,194 @@
         <ref name="GlossaryItem"/>
       </oneOrMore>
     </element>
+  </define>
+  <define name="PrintoutAttributes">
+    <optional>
+      <attribute name="margin"/>
+    </optional>
+    <optional>
+      <attribute name="top"/>
+    </optional>
+    <optional>
+      <attribute name="bottom"/>
+    </optional>
+    <optional>
+      <attribute name="right"/>
+    </optional>
+    <optional>
+      <attribute name="left"/>
+    </optional>
+  </define>
+  <define name="PrintoutBlock">
+    <choice>
+      <ref name="BlockStatement"/>
+      <ref name="Remark"/>
+      <ref name="Computation"/>
+      <ref name="Theorem"/>
+      <ref name="Proof"/>
+      <ref name="Definition"/>
+      <ref name="Axiom"/>
+      <ref name="Example"/>
+      <ref name="PrintoutExercise"/>
+      <ref name="Project"/>
+      <ref name="Poem"/>
+      <ref name="Assemblage"/>
+      <ref name="ListGenerator"/>
+      <ref name="Fragment"/>
+      <ref name="PrintoutSideBySide"/>
+    </choice>
+  </define>
+  <!-- Allow exercise in sidebyside -->
+  <define name="PrintoutSideBySide">
+    <element name="sidebyside">
+      <ref name="SidebySideAttributes"/>
+      <oneOrMore>
+        <choice>
+          <ref name="Figure"/>
+          <ref name="Poem"/>
+          <ref name="Tabular"/>
+          <ref name="Image"/>
+          <ref name="Video"/>
+          <ref name="Program"/>
+          <ref name="Console"/>
+          <ref name="Paragraph"/>
+          <ref name="Preformatted"/>
+          <ref name="List"/>
+          <ref name="Stack"/>
+          <ref name="PrintoutExercise"/>
+          <ref name="PrintoutTask"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <!-- Exercises and tasks can have workspace: -->
+  <define name="PrintoutExercise">
+    <element name="exercise">
+      <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <attribute name="number"/>
+      </optional>
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
+      <choice>
+        <ref name="ExerciseBody"/>
+        <group>
+          <ref name="StatementExercise"/>
+          <zeroOrMore>
+            <ref name="Hint"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="Answer"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="Solution"/>
+          </zeroOrMore>
+        </group>
+        <group>
+          <optional>
+            <ref name="IntroductionText"/>
+          </optional>
+          <ref name="WebWork"/>
+          <optional>
+            <ref name="ConclusionText"/>
+          </optional>
+        </group>
+        <group>
+          <optional>
+            <ref name="IntroductionStatement"/>
+          </optional>
+          <oneOrMore>
+            <ref name="PrintoutTask"/>
+          </oneOrMore>
+          <optional>
+            <ref name="ConclusionStatement"/>
+          </optional>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="PrintoutTask">
+    <element name="task">
+      <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
+      <choice>
+        <oneOrMore>
+          <ref name="BlockStatement"/>
+        </oneOrMore>
+        <group>
+          <ref name="Statement"/>
+          <zeroOrMore>
+            <ref name="Hint"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="Answer"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="Solution"/>
+          </zeroOrMore>
+        </group>
+        <group>
+          <optional>
+            <ref name="IntroductionStatement"/>
+          </optional>
+          <oneOrMore>
+            <ref name="PrintoutTask"/>
+          </oneOrMore>
+          <optional>
+            <ref name="ConclusionStatement"/>
+          </optional>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <!-- Page can contain a printout block or be empty -->
+  <define name="Page">
+    <element name="page">
+      <choice>
+        <oneOrMore>
+          <ref name="PrintoutBlock"/>
+        </oneOrMore>
+        <empty/>
+      </choice>
+    </element>
+  </define>
+  <!-- Main worksheet definition -->
+  <define name="Worksheet">
+    <element name="worksheet">
+      <ref name="PrintoutAttributes"/>
+      <ref name="MetaDataAltTitleOptional"/>
+      <interleave>
+        <optional>
+          <ref name="Objectives"/>
+        </optional>
+        <optional>
+          <ref name="IntroductionDivision"/>
+        </optional>
+      </interleave>
+      <choice>
+        <oneOrMore>
+          <ref name="Page"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="PrintoutBlock"/>
+        </oneOrMore>
+      </choice>
+      <interleave>
+        <optional>
+          <ref name="Outcomes"/>
+        </optional>
+        <optional>
+          <ref name="ConclusionDivision"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <!-- Printout currently just means a Worksheet, but could be extended later. -->
+  <define name="Printout">
+    <ref name="Worksheet"/>
   </define>
   <define name="BlockText">
     <choice>

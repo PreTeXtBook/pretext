@@ -1,7 +1,7 @@
 
                     grammar {
                 
-            start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
+            start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Printout | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
             
             PretextRoot =
                 element pretext {
@@ -18,15 +18,15 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (ReadingQuestions? & Exercises? &
+                            (Printout? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? & IntroductionDivision?),
-                            Section,
-                            (Section | ReadingQuestions | Exercises |
+                            (Section | Printout),
+                            (Section | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?),
                             ArticleBackMatter?
@@ -38,7 +38,7 @@
                 element book {
                     MetaDataLinedSubtitle,
                     BookFrontMatter?,
-                    (Part+ | Chapter+ ),
+                    (Part+ | Chapter+ | Printout+),
                     BookBackMatter?
                 }
             Letter =
@@ -58,15 +58,15 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (ReadingQuestions? & Exercises? &
+                            (Printout? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? & IntroductionDivision?),
-                            Section,
-                            (Section | ReadingQuestions | Exercises |
+                            (Section | Printout),
+                            (Section | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?)
                         )
@@ -80,15 +80,15 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (ReadingQuestions? & Exercises? &
+                            (Printout? &ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? & IntroductionDivision?),
-                            Subsection,
-                            (Subsection | ReadingQuestions | Exercises |
+                            (Subsection | Printout),
+                            (Subsection | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?)
                         )
@@ -102,15 +102,15 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (ReadingQuestions? & Exercises? &
+                            (Printout? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? & IntroductionDivision?),
-                            Subsubsection,
-                            (Subsubsection | ReadingQuestions | Exercises |
+                            (Subsubsection | Printout),
+                            (Subsubsection | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?)
                         )
@@ -122,7 +122,7 @@
                     AuthorByline*,
                     Objectives?,
                     (BlockDivision | Paragraphs)+,
-                    (ReadingQuestions? & Exercises? &
+                    (Printout? & ReadingQuestions? & Exercises? &
                      Solutions? & References? & Glossary?),
                     Outcomes?
                 }
@@ -134,15 +134,15 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | NotationList)+,
-                            (ReadingQuestions? & Exercises? &
+                            (Printout? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? & IntroductionDivision?),
-                            Subsection,
-                            (Subsection | ReadingQuestions | Exercises |
+                            (Subsection | Printout),
+                            (Subsection | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?)
                         )
@@ -156,15 +156,16 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | NotationList)+,
-                            (ReadingQuestions? & Exercises? &
+                            (Printout? & ReadingQuestions? & Exercises? &
                              Solutions? & References? & Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? & IntroductionDivision?),
-                            Section,
-                            (Section | ReadingQuestions | Exercises | Solutions | References | Glossary)*,
+                            (Section | Printout),
+                            (Section | Printout | ReadingQuestions | Exercises |
+                             Solutions | References | Glossary)*,
                             (Outcomes? & ConclusionDivision?)
                         )
                     )
@@ -405,6 +406,82 @@
                     HeadNote?,
                     GlossaryItem+
                 }
+            
+            PrintoutAttributes =
+                attribute margin { text }?,
+                attribute top { text }?,
+                attribute bottom { text }?,
+                attribute right { text }?,
+                attribute left { text }?
+
+            PrintoutBlock =
+                BlockStatement | Remark | Computation | Theorem | Proof | Definition |
+                Axiom | Example | PrintoutExercise | Project |
+                Poem | Assemblage | ListGenerator | Fragment |
+                PrintoutSideBySide
+
+            # Allow exercise in sidebyside
+            PrintoutSideBySide =
+                element sidebyside {
+                    SidebySideAttributes,
+                    (
+                        Figure |
+                        Poem |
+                        Tabular |
+                        Image |
+                        Video |
+                        Program |
+                        Console |
+                        Paragraph |
+                        Preformatted |
+                        List |
+                        Stack |
+                        PrintoutExercise |
+                        PrintoutTask
+                    )+
+                }
+            # Exercises and tasks can have workspace:
+            PrintoutExercise =
+                element exercise {
+                    MetaDataTitleOptional,
+                    attribute number {text}?,
+                    attribute workspace {text}?,
+                    (
+                    ExerciseBody |
+                    (StatementExercise, Hint*, Answer*, Solution*) |
+                    (IntroductionText?, WebWork, ConclusionText?) |
+                    (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
+                    )
+                }
+            PrintoutTask =
+                element task {
+                    MetaDataTitleOptional,
+                    attribute workspace {text}?,
+                    (
+                        BlockStatement+ |
+                        (Statement, Hint*, Answer*, Solution*) |
+                        (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
+                    )
+                }
+
+            # Page can contain a printout block or be empty
+            Page =
+                element page {
+                    PrintoutBlock+ | empty
+                }
+            # Main worksheet definition
+            Worksheet =
+                element worksheet {
+                    PrintoutAttributes,
+                    MetaDataAltTitleOptional,
+                    (Objectives? & IntroductionDivision?),
+                    (Page+ | PrintoutBlock+),
+                    (Outcomes? & ConclusionDivision?)
+                }
+
+            # Printout currently just means a Worksheet, but could be extended later.
+            Printout =
+                Worksheet
             
             BlockText =
                 Paragraph | BlockQuote | Preformatted |
