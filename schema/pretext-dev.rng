@@ -297,6 +297,41 @@
       <ref name="Tabular"/>
     </element>
   </define>
+  <!-- Main handout definition -->
+  <define name="Handout">
+    <element name="handout">
+      <ref name="PrintoutAttributes"/>
+      <ref name="MetaDataAltTitleOptional"/>
+      <interleave>
+        <optional>
+          <ref name="Objectives"/>
+        </optional>
+        <optional>
+          <ref name="IntroductionDivision"/>
+        </optional>
+      </interleave>
+      <choice>
+        <oneOrMore>
+          <ref name="Page"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="PrintoutBlock"/>
+        </oneOrMore>
+      </choice>
+      <interleave>
+        <optional>
+          <ref name="Outcomes"/>
+        </optional>
+        <optional>
+          <ref name="ConclusionDivision"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <!-- Add Handout to Printout options -->
+  <define name="Printout" combine="choice">
+    <ref name="Handout"/>
+  </define>
   <define name="Solutions" combine="choice">
     <element name="solutions">
       <ref name="MetaDataAltTitleOptional"/>
