@@ -33,6 +33,7 @@
                   <xs:group ref="Paragraphs"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:group ref="Printout"/>
                   <xs:element ref="reading-questions"/>
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
@@ -46,9 +47,13 @@
                   <xs:element ref="objectives"/>
                   <xs:group ref="IntroductionDivision"/>
                 </xs:choice>
-                <xs:element ref="section"/>
+                <xs:choice>
+                  <xs:element ref="section"/>
+                  <xs:group ref="Printout"/>
+                </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="section"/>
+                  <xs:group ref="Printout"/>
                   <xs:element ref="reading-questions"/>
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
@@ -79,6 +84,7 @@
             <xs:choice>
               <xs:element maxOccurs="unbounded" ref="part"/>
               <xs:element maxOccurs="unbounded" ref="chapter"/>
+              <xs:group maxOccurs="unbounded" ref="Printout"/>
             </xs:choice>
             <xs:group minOccurs="0" ref="BookBackMatter"/>
           </xs:sequence>
@@ -117,6 +123,7 @@
                   <xs:group ref="Paragraphs"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:group ref="Printout"/>
                   <xs:element ref="reading-questions"/>
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
@@ -130,9 +137,13 @@
                   <xs:element ref="objectives"/>
                   <xs:group ref="IntroductionDivision"/>
                 </xs:choice>
-                <xs:element ref="section"/>
+                <xs:choice>
+                  <xs:element ref="section"/>
+                  <xs:group ref="Printout"/>
+                </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="section"/>
+                  <xs:group ref="Printout"/>
                   <xs:element ref="reading-questions"/>
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
@@ -164,6 +175,7 @@
                   <xs:group ref="Paragraphs"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:group ref="Printout"/>
                   <xs:element ref="reading-questions"/>
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
@@ -177,9 +189,13 @@
                   <xs:element ref="objectives"/>
                   <xs:group ref="IntroductionDivision"/>
                 </xs:choice>
-                <xs:element ref="subsection"/>
+                <xs:choice>
+                  <xs:element ref="subsection"/>
+                  <xs:group ref="Printout"/>
+                </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="subsection"/>
+                  <xs:group ref="Printout"/>
                   <xs:element ref="reading-questions"/>
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
@@ -211,6 +227,7 @@
                   <xs:group ref="Paragraphs"/>
                 </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:group ref="Printout"/>
                   <xs:element ref="reading-questions"/>
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
@@ -224,9 +241,13 @@
                   <xs:element ref="objectives"/>
                   <xs:group ref="IntroductionDivision"/>
                 </xs:choice>
-                <xs:element ref="subsubsection"/>
+                <xs:choice>
+                  <xs:element ref="subsubsection"/>
+                  <xs:group ref="Printout"/>
+                </xs:choice>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:element ref="subsubsection"/>
+                  <xs:group ref="Printout"/>
                   <xs:element ref="reading-questions"/>
                   <xs:element ref="exercises"/>
                   <xs:element ref="solutions"/>
@@ -256,6 +277,7 @@
               <xs:group ref="Paragraphs"/>
             </xs:choice>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:group ref="Printout"/>
               <xs:element ref="reading-questions"/>
               <xs:element ref="exercises"/>
               <xs:element ref="solutions"/>
@@ -285,6 +307,7 @@
                       <xs:element ref="notation-list"/>
                     </xs:choice>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
+                      <xs:group ref="Printout"/>
                       <xs:element ref="reading-questions"/>
                       <xs:element ref="exercises"/>
                       <xs:element ref="solutions"/>
@@ -298,9 +321,13 @@
                       <xs:element ref="objectives"/>
                       <xs:group ref="IntroductionDivision"/>
                     </xs:choice>
-                    <xs:element ref="subsection"/>
+                    <xs:choice>
+                      <xs:element ref="subsection"/>
+                      <xs:group ref="Printout"/>
+                    </xs:choice>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
                       <xs:element ref="subsection"/>
+                      <xs:group ref="Printout"/>
                       <xs:element ref="reading-questions"/>
                       <xs:element ref="exercises"/>
                       <xs:element ref="solutions"/>
@@ -337,6 +364,7 @@
                       <xs:element ref="notation-list"/>
                     </xs:choice>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
+                      <xs:group ref="Printout"/>
                       <xs:element ref="reading-questions"/>
                       <xs:element ref="exercises"/>
                       <xs:element ref="solutions"/>
@@ -350,9 +378,13 @@
                       <xs:element ref="objectives"/>
                       <xs:group ref="IntroductionDivision"/>
                     </xs:choice>
-                    <xs:element ref="section"/>
+                    <xs:choice>
+                      <xs:element ref="section"/>
+                      <xs:group ref="Printout"/>
+                    </xs:choice>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
                       <xs:element ref="section"/>
+                      <xs:group ref="Printout"/>
                       <xs:element ref="reading-questions"/>
                       <xs:element ref="exercises"/>
                       <xs:element ref="solutions"/>
@@ -834,7 +866,7 @@
         <xs:extension base="MetaDataAltTitleOptional">
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionDivision"/>
-            <xs:element maxOccurs="unbounded" ref="exercise"/>
+            <xs:group maxOccurs="unbounded" ref="Exercise"/>
             <xs:group minOccurs="0" ref="ConclusionDivision"/>
           </xs:sequence>
         </xs:extension>
@@ -849,7 +881,7 @@
             <xs:group minOccurs="0" ref="IntroductionDivision"/>
             <xs:choice>
               <xs:choice maxOccurs="unbounded">
-                <xs:element ref="exercise"/>
+                <xs:group ref="Exercise"/>
                 <xs:element ref="exercisegroup"/>
               </xs:choice>
               <xs:element maxOccurs="unbounded" ref="subexercises"/>
@@ -867,7 +899,7 @@
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionDivision"/>
             <xs:choice maxOccurs="unbounded">
-              <xs:element ref="exercise"/>
+              <xs:group ref="Exercise"/>
               <xs:element ref="exercisegroup"/>
             </xs:choice>
             <xs:group minOccurs="0" ref="ConclusionDivision"/>
@@ -925,6 +957,154 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:attributeGroup name="PrintoutAttributes">
+    <xs:attribute name="margin"/>
+    <xs:attribute name="top"/>
+    <xs:attribute name="bottom"/>
+    <xs:attribute name="right"/>
+    <xs:attribute name="left"/>
+  </xs:attributeGroup>
+  <xs:group name="PrintoutBlock">
+    <xs:choice>
+      <xs:group ref="BlockStatement"/>
+      <xs:group ref="Remark"/>
+      <xs:group ref="Computation"/>
+      <xs:group ref="Theorem"/>
+      <xs:element ref="proof"/>
+      <xs:element ref="definition"/>
+      <xs:group ref="Axiom"/>
+      <xs:group ref="Example"/>
+      <xs:group ref="PrintoutExercise"/>
+      <xs:group ref="Project"/>
+      <xs:element ref="poem"/>
+      <xs:element ref="assemblage"/>
+      <xs:element ref="list-of"/>
+      <xs:element ref="fragment"/>
+      <xs:group ref="PrintoutSideBySide"/>
+    </xs:choice>
+  </xs:group>
+  <!-- Allow exercise in sidebyside -->
+  <xs:group name="PrintoutSideBySide">
+    <xs:sequence>
+      <xs:element name="sidebyside">
+        <xs:complexType>
+          <xs:choice maxOccurs="unbounded">
+            <xs:group ref="Figure"/>
+            <xs:element ref="poem"/>
+            <xs:element ref="tabular"/>
+            <xs:group ref="Image"/>
+            <xs:element ref="video"/>
+            <xs:element ref="program"/>
+            <xs:element ref="console"/>
+            <xs:group ref="Paragraph"/>
+            <xs:element ref="pre"/>
+            <xs:group ref="List"/>
+            <xs:element ref="stack"/>
+            <xs:group ref="PrintoutExercise"/>
+            <xs:group ref="PrintoutTask"/>
+          </xs:choice>
+          <xs:attributeGroup ref="SidebySideAttributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <!-- Exercises and tasks can have workspace: -->
+  <xs:group name="PrintoutExercise">
+    <xs:sequence>
+      <xs:element name="exercise">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:choice>
+              <xs:group ref="ExerciseBody"/>
+              <xs:sequence>
+                <xs:group ref="StatementExercise"/>
+                <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
+                <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+              </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionText"/>
+                <xs:group ref="WebWork"/>
+                <xs:group minOccurs="0" ref="ConclusionText"/>
+              </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionStatement"/>
+                <xs:group maxOccurs="unbounded" ref="PrintoutTask"/>
+                <xs:group minOccurs="0" ref="ConclusionStatement"/>
+              </xs:sequence>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+          <xs:attribute name="number"/>
+          <xs:attribute name="workspace"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="PrintoutTask">
+    <xs:sequence>
+      <xs:element name="task">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:choice>
+              <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+              <xs:sequence>
+                <xs:group ref="Statement"/>
+                <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
+                <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+              </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionStatement"/>
+                <xs:group maxOccurs="unbounded" ref="PrintoutTask"/>
+                <xs:group minOccurs="0" ref="ConclusionStatement"/>
+              </xs:sequence>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+          <xs:attribute name="workspace"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <!-- Page can contain a printout block or be empty -->
+  <xs:element name="page">
+    <xs:complexType>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="PrintoutBlock"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Main worksheet definition -->
+  <xs:element name="worksheet">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataAltTitleOptional">
+          <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="objectives"/>
+              <xs:group ref="IntroductionDivision"/>
+            </xs:choice>
+            <xs:choice>
+              <xs:element maxOccurs="unbounded" ref="page"/>
+              <xs:group maxOccurs="unbounded" ref="PrintoutBlock"/>
+            </xs:choice>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="outcomes"/>
+              <xs:group ref="ConclusionDivision"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attributeGroup ref="PrintoutAttributes"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- Printout currently just means a Worksheet, but could be extended later. -->
+  <xs:group name="Printout">
+    <xs:sequence>
+      <xs:element ref="worksheet"/>
+    </xs:sequence>
+  </xs:group>
   <xs:group name="BlockText">
     <xs:choice>
       <xs:group ref="Paragraph"/>
@@ -971,7 +1151,7 @@
       <xs:element ref="definition"/>
       <xs:group ref="Axiom"/>
       <xs:group ref="Example"/>
-      <xs:element ref="exercise"/>
+      <xs:group ref="Exercise"/>
       <xs:group ref="Project"/>
       <xs:element ref="poem"/>
       <xs:element ref="assemblage"/>
@@ -2367,40 +2547,44 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:element name="exercise">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:group ref="MetaDataTitleOptional"/>
-        <xs:choice>
-          <xs:group ref="ExerciseBody"/>
+  <xs:group name="Exercise">
+    <xs:sequence>
+      <xs:element name="exercise">
+        <xs:complexType>
           <xs:sequence>
-            <xs:group ref="StatementExercise"/>
-            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
-            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:choice>
+              <xs:group ref="ExerciseBody"/>
+              <xs:sequence>
+                <xs:group ref="StatementExercise"/>
+                <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
+                <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+              </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionStatement"/>
+                <xs:group maxOccurs="unbounded" ref="Task"/>
+                <xs:group minOccurs="0" ref="ConclusionStatement"/>
+              </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionText"/>
+                <xs:group ref="WebWork"/>
+                <xs:group minOccurs="0" ref="ConclusionText"/>
+              </xs:sequence>
+            </xs:choice>
           </xs:sequence>
-          <xs:sequence>
-            <xs:group minOccurs="0" ref="IntroductionStatement"/>
-            <xs:group maxOccurs="unbounded" ref="Task"/>
-            <xs:group minOccurs="0" ref="ConclusionStatement"/>
-          </xs:sequence>
-          <xs:sequence>
-            <xs:group minOccurs="0" ref="IntroductionText"/>
-            <xs:group ref="WebWork"/>
-            <xs:group minOccurs="0" ref="ConclusionText"/>
-          </xs:sequence>
-        </xs:choice>
-      </xs:sequence>
-      <xs:attributeGroup ref="MetaDataTitleOptional"/>
-      <xs:attribute name="number"/>
-    </xs:complexType>
-  </xs:element>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+          <xs:attribute name="number"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:element name="exercisegroup">
     <xs:complexType>
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
         <xs:group ref="IntroductionStatementNoCaption"/>
-        <xs:element maxOccurs="unbounded" ref="exercise"/>
+        <xs:group maxOccurs="unbounded" ref="Exercise"/>
         <xs:group minOccurs="0" ref="ConclusionStatementNoCaption"/>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>

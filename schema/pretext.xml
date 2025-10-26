@@ -74,7 +74,7 @@
         <fragment xml:id="start-elements">
             <title>Start elements</title>
             <code>
-            start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
+            start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Printout | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
             </code>
         </fragment>
     </section>
@@ -113,15 +113,15 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (ReadingQuestions? &amp; Exercises? &amp;
+                            (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
-                            Section,
-                            (Section | ReadingQuestions | Exercises |
+                            (Section | Printout),
+                            (Section | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?),
                             ArticleBackMatter?
@@ -133,7 +133,7 @@
                 element book {
                     MetaDataLinedSubtitle,
                     BookFrontMatter?,
-                    (Part+ | Chapter+ ),
+                    (Part+ | Chapter+ | Printout+),
                     BookBackMatter?
                 }
             Letter =
@@ -168,15 +168,15 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (ReadingQuestions? &amp; Exercises? &amp;
+                            (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
-                            Section,
-                            (Section | ReadingQuestions | Exercises |
+                            (Section | Printout),
+                            (Section | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
@@ -190,15 +190,15 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (ReadingQuestions? &amp; Exercises? &amp;
+                            (Printout? &amp;ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
-                            Subsection,
-                            (Subsection | ReadingQuestions | Exercises |
+                            (Subsection | Printout),
+                            (Subsection | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
@@ -212,15 +212,15 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs)+,
-                            (ReadingQuestions? &amp; Exercises? &amp;
+                            (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
-                            Subsubsection,
-                            (Subsubsection | ReadingQuestions | Exercises |
+                            (Subsubsection | Printout),
+                            (Subsubsection | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
@@ -232,7 +232,7 @@
                     AuthorByline*,
                     Objectives?,
                     (BlockDivision | Paragraphs)+,
-                    (ReadingQuestions? &amp; Exercises? &amp;
+                    (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                      Solutions? &amp; References? &amp; Glossary?),
                     Outcomes?
                 }
@@ -244,15 +244,15 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | NotationList)+,
-                            (ReadingQuestions? &amp; Exercises? &amp;
+                            (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
-                            Subsection,
-                            (Subsection | ReadingQuestions | Exercises |
+                            (Subsection | Printout),
+                            (Subsection | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
@@ -266,15 +266,16 @@
                         (
                             Objectives?,
                             (BlockDivision | Paragraphs | NotationList)+,
-                            (ReadingQuestions? &amp; Exercises? &amp;
+                            (Printout? &amp; ReadingQuestions? &amp; Exercises? &amp;
                              Solutions? &amp; References? &amp; Glossary?),
                             Outcomes?
                         )
                     |
                         (
                             (Objectives? &amp; IntroductionDivision?),
-                            Section,
-                            (Section | ReadingQuestions | Exercises | Solutions | References | Glossary)*,
+                            (Section | Printout),
+                            (Section | Printout | ReadingQuestions | Exercises |
+                             Solutions | References | Glossary)*,
                             (Outcomes? &amp; ConclusionDivision?)
                         )
                     )
@@ -404,30 +405,31 @@
     </section>
 
     <section>
-        <title>Worksheets (experimental)</title>
+        <title>Printout Divisions</title>
 
-        <p>A worksheet is a specialized division, allowing for some additional control of spacing, to allow for workspace.</p>
+        <p>A printout division (currently only a <tag>worksheet</tag>) is a specialized division, allowing for some additional control of spacing and page delineation, to allow for workspace.</p>
 
-        <p>The attributes on a worksheet include margin information to control layout.  Inside a worksheet we can have either a number of <tag>page</tag> elements that holding the content or just the content itself.</p>
+        <p>The attributes on a printout include margin information to control layout.  Inside a printout we can have either a number of <tag>page</tag> elements that holding the content or just the content itself.</p>
 
-        <p>The contents of a worksheet can include the same blocks as a division, namely BlockDivision.</p>
-        <fragment xml:id="worksheet">
-            <title>Worksheets (experimental)</title>
+        <p>The contents of a printout can include the same blocks as a division, namely BlockDivision.</p>
+        <fragment xml:id="printout">
+            <title>Printout</title>
             <code>
-            WorksheetAttributes =
+            PrintoutAttributes =
                 attribute margin { text }?,
                 attribute top { text }?,
                 attribute bottom { text }?,
                 attribute right { text }?,
                 attribute left { text }?
 
-            WorksheetBlock =
+            PrintoutBlock =
                 BlockStatement | Remark | Computation | Theorem | Proof | Definition |
-                Axiom | Example | WorksheetExercise | Project |
+                Axiom | Example | PrintoutExercise | Project |
                 Poem | Assemblage | ListGenerator | Fragment |
-                WorksheetSideBySide
+                PrintoutSideBySide
+
             # Allow exercise in sidebyside
-            WorksheetSideBySide =
+            PrintoutSideBySide =
                 element sidebyside {
                     SidebySideAttributes,
                     (
@@ -442,12 +444,12 @@
                         Preformatted |
                         List |
                         Stack |
-                        WorksheetExercise |
-                        WorksheetTask
+                        PrintoutExercise |
+                        PrintoutTask
                     )+
                 }
-            # Exercises and tasks can have workspace if they don't contain additional tasks:
-            WorksheetExercise =
+            # Exercises and tasks can have workspace:
+            PrintoutExercise =
                 element exercise {
                     MetaDataTitleOptional,
                     attribute number {text}?,
@@ -455,162 +457,39 @@
                     (
                     ExerciseBody |
                     (StatementExercise, Hint*, Answer*, Solution*) |
-                    (IntroductionText?, WebWork, ConclusionText?)
+                    (IntroductionText?, WebWork, ConclusionText?) |
+                    (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
                     )
                 }
-            WorksheetExercise |=
-                element exercise {
-                    MetaDataTitleOptional,
-                    attribute number {text}?,
-                    attribute workspace {text}?,
-                    (IntroductionStatement?, WorksheetTask+, ConclusionStatement?)
-                }
-            WorksheetTask =
+            PrintoutTask =
                 element task {
                     MetaDataTitleOptional,
                     attribute workspace {text}?,
                     (
                         BlockStatement+ |
-                        (Statement, Hint*, Answer*, Solution*)
+                        (Statement, Hint*, Answer*, Solution*) |
+                        (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
                     )
                 }
-            WorksheetTask |=
-                element task {
-                    MetaDataTitleOptional,
-                    attribute workspace {text}?,
-                    (IntroductionStatement?, WorksheetTask+, ConclusionStatement?)
+
+            # Page can contain a printout block or be empty
+            Page =
+                element page {
+                    PrintoutBlock+ | empty
                 }
             # Main worksheet definition
             Worksheet =
                 element worksheet {
-                    WorksheetAttributes,
+                    PrintoutAttributes,
                     MetaDataAltTitleOptional,
                     (Objectives? &amp; IntroductionDivision?),
-                    (
-                    element page {WorksheetBlock+|empty}+ | WorksheetBlock+),
+                    (Page+ | PrintoutBlock+),
                     (Outcomes? &amp; ConclusionDivision?)
                 }
 
-            # Insert worksheets into divisions (merge with division when adopted)
-            Chapter |=
-                element chapter {
-                    MetaDataLinedTitle,
-                    AuthorByline*,
-                    (
-                        (
-                            Objectives?,
-                            (BlockDivision | Paragraphs)+,
-                            (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
-                             Solutions? &amp; References? &amp; Glossary?),
-                            Outcomes?
-                        )
-                    |
-                        (
-                            (Objectives? &amp; IntroductionDivision?),
-                            (Section | Worksheet),
-                            (Section | Worksheet | ReadingQuestions | Exercises |
-                             Solutions | References | Glossary)*,
-                            (Outcomes? &amp; ConclusionDivision?)
-                        )
-                    )
-                }
-            Section |=
-                element section {
-                    MetaDataLinedTitle,
-                    AuthorByline*,
-                    (
-                        (
-                            Objectives?,
-                            (BlockDivision | Paragraphs)+,
-                            (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
-                             Solutions? &amp; References? &amp; Glossary?),
-                            Outcomes?
-                        )
-                    |
-                        (
-                            (Objectives? &amp; IntroductionDivision?),
-                            (Subsection | Worksheet),
-                            (Subsection | Worksheet | ReadingQuestions | Exercises |
-                             Solutions | References | Glossary)*,
-                            (Outcomes? &amp; ConclusionDivision?)
-                        )
-                    )
-                }
-            Subsection |=
-                element subsection {
-                    MetaDataAltTitle,
-                    AuthorByline*,
-                    (
-                        (
-                            Objectives?,
-                            (BlockDivision | Paragraphs)+,
-                            (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
-                             Solutions? &amp; References? &amp; Glossary?),
-                            Outcomes?
-                        )
-                    |
-                        (
-                            (Objectives? &amp; IntroductionDivision?),
-                            (Subsubsection | Worksheet),
-                            (Subsubsection | Worksheet | ReadingQuestions | Exercises |
-                             Solutions | References | Glossary)*,
-                            (Outcomes? &amp; ConclusionDivision?)
-                        )
-                    )
-                }
-            Subsubsection |=
-                element subsubsection {
-                    MetaDataAltTitle,
-                    AuthorByline*,
-                    Objectives?,
-                    (BlockDivision | Paragraphs)+,
-                    (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
-                     Solutions? &amp; References? &amp; Glossary?),
-                    Outcomes?
-                }
-            ArticleAppendix |=
-                element appendix {
-                    MetaDataAltTitle,
-                    AuthorByline*,
-                    (
-                        (
-                            Objectives?,
-                            (BlockDivision | Paragraphs | NotationList)+,
-                            (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
-                             Solutions? &amp; References? &amp; Glossary?),
-                            Outcomes?
-                        )
-                    |
-                        (
-                            (Objectives? &amp; IntroductionDivision?),
-                            (Subsection | Worksheet),
-                            (Subsection | Worksheet | ReadingQuestions | Exercises |
-                             Solutions | References | Glossary)*,
-                            (Outcomes? &amp; ConclusionDivision?)
-                        )
-                    )
-                }
-            BookAppendix |=
-                element appendix {
-                    MetaDataAltTitle,
-                    AuthorByline*,
-                    (
-                        (
-                            Objectives?,
-                            (BlockDivision | Paragraphs | NotationList)+,
-                            (Worksheet? &amp; ReadingQuestions? &amp; Exercises? &amp;
-                             Solutions? &amp; References? &amp; Glossary?),
-                            Outcomes?
-                        )
-                    |
-                        (
-                            (Objectives? &amp; IntroductionDivision?),
-                            (Section | Worksheet),
-                            (Section | Worksheet | ReadingQuestions | Exercises | Solutions | References | Glossary)*,
-                            (Outcomes? &amp; ConclusionDivision?)
-                        )
-                    )
-                }
+            # Printout currently just means a Worksheet, but could be extended later.
+            Printout =
+                Worksheet
             </code>
         </fragment>
     </section>
@@ -3500,6 +3379,7 @@
             <fragref ref="backmatter" />
             <fragref ref="paragraphs" />
             <fragref ref="universal" />
+            <fragref ref="printout" />
             <fragref ref="block" />
             <fragref ref="block-component" />
             <fragref ref="introduction-conclusion-headnote" />
@@ -3572,7 +3452,6 @@
             <fragref ref="docinfo-dev"/>
             <fragref ref="proof-like"/>
             <fragref ref="figure-dev"/>
-            <fragref ref="worksheet"/>
             <fragref ref="solutions-dev"/>
             <fragref ref="reference-dev"/>
             <fragref ref="mathematics-dev"/>
