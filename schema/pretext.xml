@@ -495,6 +495,36 @@
     </section>
 
     <section>
+        <title>Handouts (experimental)</title>
+
+        <p>A handout is a specialized division very similar to a worksheet, allowing for some additional control of spacing, to allow for workspace.</p>
+
+        <p>The attributes on a handout include margin information to control layout, just like worksheets.  Also like worksheets, a handout we can contain either a number of <tag>page</tag> elements that holding the content or just the content itself.</p>
+
+        <p>The contents of a handout can include the same blocks as a division, namely BlockDivision.  Any such division can get a <attr>workspace</attr> attribute.  This is currently not implemented in the schema (stable or experimental), but the plan is to allow <attr>workspace</attr> to be placed on any element that will be respected inside a handout, treating this as a hint that will be ignored when not inside a printout.</p>
+
+        <p>Note: when handouts moves to the stable schema, we will need to go to every division and for the option of an unstructured division, include Worksheet and Handout as separate elements so an unstructured division can have one of each.</p>
+
+        <fragment xml:id="handout">
+            <title>Handouts (experimental)</title>
+            <code>
+            # Main handout definition
+            Handout =
+                element handout {
+                    PrintoutAttributes,
+                    MetaDataAltTitleOptional,
+                    (Objectives? &amp; IntroductionDivision?),
+                    (Page+ | PrintoutBlock+),
+                    (Outcomes? &amp; ConclusionDivision?)
+                }
+            # Add Handout to Printout options
+            Printout |=
+                Handout
+            </code>
+        </fragment>
+    </section>
+
+    <section>
         <title>Paragraphs</title>
 
         <p>Most <pretext/> elements are about delineating structure.  What you actually write happens in very few places.  Principally paragraphs, but also titles, captions, index headings, and other short bursts.  The shorter the burst, the more likely the text will be recycled in other places (Table of Contents, List of Figures, or Index perhaps).  And the more text gets re-purposed, the more care we need to take with its contents.</p>
@@ -3452,6 +3482,7 @@
             <fragref ref="docinfo-dev"/>
             <fragref ref="proof-like"/>
             <fragref ref="figure-dev"/>
+            <fragref ref="handout"/>
             <fragref ref="solutions-dev"/>
             <fragref ref="reference-dev"/>
             <fragref ref="mathematics-dev"/>

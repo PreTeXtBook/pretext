@@ -157,6 +157,19 @@
                 }
 
             
+            # Main handout definition
+            Handout =
+                element handout {
+                    PrintoutAttributes,
+                    MetaDataAltTitleOptional,
+                    (Objectives? & IntroductionDivision?),
+                    (Page+ | PrintoutBlock+),
+                    (Outcomes? & ConclusionDivision?)
+                }
+            # Add Handout to Printout options
+            Printout |=
+                Handout
+            
             Solutions |=
                 element solutions {
                     MetaDataAltTitleOptional,
