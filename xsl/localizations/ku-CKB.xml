@@ -58,13 +58,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='assumption'>گریمانکردن</localization>
     <!-- Definitions -->
     <localization string-id='definition'>پێناسە</localization>
-    <!-- Single Line Mathematics -->
-    <localization string-id='me'>هاوکێشە</localization>
-    <localization string-id='men'>هاوکیشە</localization>
-    <localization string-id='mrow'>هاوکیشە</localization>
-    <!-- Display Mathematics -->
-    <localization string-id='md'>بیرکاری پیشانبدە</localization>
-    <localization string-id='mdn'>بیرکاری پیشانبدە</localization>
+    <!--Mathematics -->
+    <!-- "equation" is a string signaling one line of displayed mathematics         -->
+    <!-- "displaymath" is a string signaling several lines of displayed mathematics -->
+    <localization string-id='equation'>هاوکێشە</localization>
+    <localization string-id='displaymath'>بیرکاری پیشانبدە</localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'>بەرگ</localization>
     <localization string-id='book'>کتێب</localization>

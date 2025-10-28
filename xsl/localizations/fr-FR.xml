@@ -53,13 +53,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='assumption'>Supposition</localization>
     <!-- Definitions -->
     <localization string-id='definition'>Définition</localization>
-    <!-- Single Line Mathematics -->
-    <localization string-id='me'>Équation</localization>
-    <localization string-id='men'>Équation</localization>
-    <localization string-id='mrow'>Équation</localization>
-    <!-- Display Mathematics -->
-    <localization string-id='md'>Mathématiques en évidence</localization>
-    <localization string-id='mdn'>Mathématiques en évidence</localization>
+    <!--Mathematics -->
+    <!-- "equation" is a string signaling one line of displayed mathematics         -->
+    <!-- "displaymath" is a string signaling several lines of displayed mathematics -->
+    <localization string-id='equation'>Équation</localization>
+    <localization string-id='displaymath'>Mathématiques en évidence</localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'>Volume</localization>
     <localization string-id='book'>Livre</localization>

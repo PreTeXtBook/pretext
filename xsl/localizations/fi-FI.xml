@@ -48,13 +48,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='assumption'>Oletus</localization>
     <!-- Definitions -->
     <localization string-id='definition'>Määritelmä</localization>
-    <!-- Single Line Mathematics -->
-    <localization string-id='me'>Yhtälö</localization>
-    <localization string-id='men'>Numeroitu yhtälö</localization>
-    <localization string-id='mrow'>Yhtälö</localization>
-    <!-- Display Mathematics -->
-    <localization string-id='md'>Rivitetty yhtälö</localization>
-    <localization string-id='mdn'>Numeroitu rivitetty yhtälö</localization>
+    <!--Mathematics -->
+    <!-- "equation" is a string signaling one line of displayed mathematics         -->
+    <!-- "displaymath" is a string signaling several lines of displayed mathematics -->
+    <localization string-id='equation'>Yhtälö</localization>
+    <localization string-id='displaymath'>Rivitetty yhtälö</localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'>Osa</localization>
     <localization string-id='book'>Kirja</localization>

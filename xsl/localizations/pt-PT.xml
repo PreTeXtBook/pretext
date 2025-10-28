@@ -53,14 +53,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='assumption'>Assumption</localization> -->
     <!-- Definitions -->
     <localization string-id='definition'>Definição</localization>
-    <!-- Single Line Mathematics -->
-    <localization string-id='me'>Equação</localization>
-    <localization string-id='men'>Equação</localization>
-    <localization string-id='mrow'>Equação</localization>
-    <!-- Display Mathematics -->
+    <!--Mathematics -->
+    <!-- "equation" is a string signaling one line of displayed mathematics         -->
+    <!-- "displaymath" is a string signaling several lines of displayed mathematics -->
+    <localization string-id='equation'>Equação</localization>
     <!-- the translations for 'display mathematics' need revision! -->
-    <localization string-id='md'>Equação</localization>
-    <localization string-id='mdn'>Equação</localization>
+    <localization string-id='displaymath'>Equação</localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'>Volume</localization>
     <localization string-id='book'>Livro</localization>

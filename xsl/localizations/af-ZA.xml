@@ -54,13 +54,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='assumption'>Aanname</localization>
     <!-- Definitions -->
     <localization string-id='definition'>Definisie</localization>
-    <!-- Single Line Mathematics -->
-    <localization string-id='me'>Vergelyking</localization>
-    <localization string-id='men'>Vergelyking</localization>
-    <localization string-id='mrow'>Vergelyking</localization>
-    <!-- Display Mathematics -->
-    <localization string-id='md'>Vertoon Wiskunde</localization>
-    <localization string-id='mdn'>Vertoon Wiskunde</localization>
+    <!--Mathematics -->
+    <!-- "equation" is a string signaling one line of displayed mathematics         -->
+    <!-- "displaymath" is a string signaling several lines of displayed mathematics -->
+    <localization string-id='equation'>Vergelyking</localization>
+    <localization string-id='displaymath'>Vertoon Wiskunde</localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'>Volume</localization>
     <localization string-id='book'>Boek</localization>

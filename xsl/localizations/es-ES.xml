@@ -54,13 +54,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='assumption'>Hipótesis</localization>
     <!-- Definitions -->
     <localization string-id='definition'>Definición</localization>
-    <!-- Single Line Mathematics -->
-    <localization string-id='me'>Ecuación</localization>
-    <localization string-id='men'>Ecuación</localization>
-    <localization string-id='mrow'>Ecuación</localization>
-    <!-- Display Mathematics -->
-    <localization string-id='md'>Ecuación resaltada</localization>
-    <localization string-id='mdn'>Ecuación resaltada</localization>
+    <!--Mathematics -->
+    <!-- "equation" is a string signaling one line of displayed mathematics         -->
+    <!-- "displaymath" is a string signaling several lines of displayed mathematics -->
+    <localization string-id='equation'>Ecuación</localization>
+    <localization string-id='displaymath'>Ecuación resaltada</localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'>Volumen</localization>
     <localization string-id='book'>Libro</localization>
