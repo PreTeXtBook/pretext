@@ -3319,6 +3319,18 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- Display Mathematics can be a single line or multiple      -->
+<!-- lines and the two do not always align with element names, -->
+<!-- so we use two strings to signal the two situations.       -->
+
+<xsl:template match="me|men|mrow" mode="string-id">
+    <xsl:text>equation</xsl:text>
+</xsl:template>
+
+<xsl:template match="md[mrow]|mdn[mrow]" mode="string-id">
+    <xsl:text>displaymath</xsl:text>
+</xsl:template>
+
 <!-- And with no better match, the default is  -->
 <!-- the PreTeXt name for the element itself. -->
 <xsl:template match="*" mode="string-id">
