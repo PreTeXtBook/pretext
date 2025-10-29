@@ -33,8 +33,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </epub>
 
     <!-- HTML-Specific Options -->
+    <!-- Useful for certain tests of common features, like numbering -->
     <html>
-        <css theme="default-modern" palette="blue-gray"/>
+        <css theme="default-modern" palette="blue-red"/>
     </html>
 
 </publication>
