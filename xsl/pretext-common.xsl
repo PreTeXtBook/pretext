@@ -822,6 +822,14 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- Displayed Single-Line Math ("me", "men") -->
+<!--  -->
+<!-- TRANSITION: (2025-10-29) an unstructured ("bare") "md" or "mdn" -->
+<!-- element will now be recognized as a single displayed equation,  -->
+<!-- so see matches on "md[not(mrow)]" and "mdn[not(mrow)]".  This   -->
+<!-- will make "me" and "men" obsolete at a later time.  Note that   -->
+<!-- structured versions (with an "mrow") child are not changing and -->
+<!-- should all be recognized now with more careful matches.         -->
+<!--  -->
 <!-- Single equations ("math equation"), contained within paragraphs -->
 <!-- or captions, but not in titles, or other places a 2-D layout    -->
 <!-- would be a problem.  Some vertical spacing above and below,     -->
@@ -861,12 +869,12 @@ Book (with parts), "section" at level 3
 <!-- All displayed mathematics gets wrapped by  -->
 <!-- an abstract template, a necessity for HTML -->
 <!-- output.  Otherwise, just a copy machine.   -->
-<xsl:template match="me|men" mode="display-math-wrapper">
+<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]" mode="display-math-wrapper">
     <xsl:param name="content" />
     <xsl:value-of select="$content" />
 </xsl:template>
 
-<xsl:template match="me|men" mode="body">
+<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]" mode="body">
     <!-- block-type parameter is ignored, since the          -->
     <!-- representation never varies, no heading, no wrapper -->
     <xsl:param name="block-type" />
@@ -948,11 +956,11 @@ Book (with parts), "section" at level 3
 <!-- *Extensive* discussion at                     -->
 <!-- http://tex.stackexchange.com/questions/40492/ -->
 
-<xsl:template match="me" mode="displaymath-alignment">
+<xsl:template match="me|md[not(mrow)]" mode="displaymath-alignment">
     <xsl:text>equation*</xsl:text>
 </xsl:template>
 
-<xsl:template match="men" mode="displaymath-alignment">
+<xsl:template match="men|mdn[not(mrow)]" mode="displaymath-alignment">
     <xsl:text>equation</xsl:text>
 </xsl:template>
 
@@ -1078,7 +1086,7 @@ Book (with parts), "section" at level 3
 <!-- With alignment="alignat" we need the number of columns     -->
 <!-- as an argument, complete with the LaTeX group (braces)     -->
 <!-- Mostly we call this regularly, and it usually does nothing -->
-<xsl:template match="me|men|md[mrow]|mdn[mrow]" mode="alignat-columns" />
+<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]" mode="alignat-columns" />
 
 <xsl:template match="md[mrow and (@alignment='alignat')]|mdn[mrow and @alignment='alignat']" mode="alignat-columns">
     <xsl:variable name="number-equation-columns">
