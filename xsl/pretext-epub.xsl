@@ -155,6 +155,8 @@
             <xsl:when test="$document-root//aside//m or
                             $document-root//aside//me or
                             $document-root//aside//men or
+                            $document-root//aside//md[not(mrow)] or
+                            $document-root//aside//mdn[not(mrow)] or
                             $document-root//aside//md[mrow] or
                             $document-root//aside//mdn[mrow]">
                 <xsl:text>true</xsl:text>
@@ -162,6 +164,8 @@
             <xsl:when test="$document-root//biographical//m or
                             $document-root//biographical//me or
                             $document-root//biographical//men or
+                            $document-root//biographical//md[not(mrow)] or
+                            $document-root//biographical//mdn[not(mrow)] or
                             $document-root//biographical//md[mrow] or
                             $document-root//biographical//mdn[mrow]">
                 <xsl:text>true</xsl:text>
@@ -169,6 +173,8 @@
             <xsl:when test="$document-root//historical//m or
                             $document-root//historical//me or
                             $document-root//historical//men or
+                            $document-root//historical//md[not(mrow)] or
+                            $document-root//historical//mdn[not(mrow)] or
                             $document-root//historical//md[mrow] or
                             $document-root//historical//mdn[mrow]">
                 <xsl:text>true</xsl:text>
@@ -176,6 +182,8 @@
             <xsl:when test="$document-root//hint//m or
                             $document-root//hint//me or
                             $document-root//hint//men or
+                            $document-root//hint//md[not(mrow)] or
+                            $document-root//hint//mdn[not(mrow)] or
                             $document-root//hint//md[mrow] or
                             $document-root//hint//mdn[mrow]">
                 <xsl:text>true</xsl:text>
@@ -1317,7 +1325,7 @@ width: 100%
 <!-- #### -->
 
 <!-- Pluck SVGs from the file full of them, with matching IDs -->
-<xsl:template match="m|me|men|md[mrow]|mdn[mrow]">
+<xsl:template match="m|me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]">
     <!-- NB: math-representation file writes with "visible-id" -->
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="unique-id"/>
