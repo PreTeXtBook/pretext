@@ -2372,6 +2372,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow number="yes">x^{8} + y^{8} = z^{8}</mrow>.
                 </mdn></p>
 
+                <p>TRANSITION (2025-10-29) The next paragraph is identical to a previous one, but it tests a construction currently under development.  Do not yet use this in your own work, it is subject to change.  The construction is using <q>bare</q> <tage>md</tage> and <tag>mdn</tag> elements without any <tag>mrow</tag> children.  They are isomorphic to the current <tag>me</tag> and <tag>men</tag> elements.</p>
+
+                <p>Now single-line displayed equations.  First, the <tag>me</tag> element. Which will not be numbered,
+                    <me>x^{1} + y^{1} = z^{1}</me>.
+                 Second, the <tag>men</tag> element. Which will always be numbered,
+                    <men>x^{2} + y^{2} = z^{2}</men>.
+                </p>
             </subsection>
         </section>
 
