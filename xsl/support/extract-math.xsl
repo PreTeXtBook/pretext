@@ -104,7 +104,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- No special wrapping needed for display  -->
 <!-- mathematics, so just copy the content   -->
-<xsl:template match="me|men|md[mrow]|mdn[mrow]" mode="display-math-wrapper">
+<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]" mode="display-math-wrapper">
     <xsl:param name="content" />
     <xsl:copy-of select="$content" />
 </xsl:template>
@@ -145,8 +145,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Associate IDs with the LaTeX so we -->
 <!-- know where the results belong      -->
-<xsl:template match="m|me|men|md[mrow]|mdn[mrow]" mode="extraction">
-    <div context="{local-name(.)}">
+<!-- TRANSITION: (2025-10-29) Now a bare "md" or "mdn" is   -->
+<!-- going to be equivalent to a "me" or "mdn".  So we      -->
+<!-- retain the old names for the context (the element      -->
+<!-- names), so consumers do not need to adjust.  After     -->
+<!-- the transition, a more careful set of identifiers      -->
+<!-- should communicate the context and consumption should  -->
+<!-- be adjusted.                                           -->
+<xsl:template match="m|me|men|md[mrow]|mdn[mrow]|md[not(mrow)]|mdn[not(mrow)]" mode="extraction">
+    <xsl:variable name="context">
+        <xsl:choose>
+            <xsl:when test="self::me or self::md[not(mrow)]">
+                <xsl:text>me</xsl:text>
+            </xsl:when>
+            <xsl:when test="self::men or self::mdn[not(mrow)]">
+                <xsl:text>men</xsl:text>
+            </xsl:when>
+            <!-- else m, md[mrow], mdn[mrow] as element name -->
+            <xsl:otherwise>
+                <xsl:value-of select="local-name(.)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <div context="{$context}">
         <!-- NB: stylesheets receiving these representations will  -->
         <!-- want to *also* mark math bits via the "unique-id"   -->
         <!-- The speed of the "unique-id" is critical here       -->
