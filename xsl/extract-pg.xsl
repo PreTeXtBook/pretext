@@ -1824,7 +1824,7 @@
 </xsl:template>
 
 <!-- PGML [```...```] creates display math -->
-<xsl:template match="me">
+<xsl:template match="me|md[not(mrow)]">
     <xsl:param name="b-human-readable" />
     <xsl:text>&#xa;&#xa;</xsl:text>
     <xsl:if test="ancestor::ul|ancestor::ol">
@@ -2539,6 +2539,7 @@
                     (child::p[1]/child::*|child::p[1]/child::text())[normalize-space()][1][self::ol] or
                     (child::p[1]/child::*|child::p[1]/child::text())[normalize-space()][1][self::ul] or
                     (child::p[1]/child::*|child::p[1]/child::text())[normalize-space()][1][self::me] or
+                    (child::p[1]/child::*|child::p[1]/child::text())[normalize-space()][1][self::md[not(mrow)]] or
                     (child::p[1]/child::*|child::p[1]/child::text())[normalize-space()][1][self::md[mrow]]
                   )">
         <xsl:text>[$NBSP]*&#xa;</xsl:text>
