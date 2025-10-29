@@ -1666,7 +1666,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which is not a cross-reference target (it originates  -->
 <!-- in PG-code), and an error results when the heading in -->
 <!-- the knowl content tries to compute a number           -->
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|men|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|men|mdn[not(mrow)]|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
     <xsl:param name="link" select="/.." />
     <xsl:choose>
         <xsl:when test="$b-skip-knowls or $html-xref-knowled = 'never' or $b-portable-html">
@@ -2552,7 +2552,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (6) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md[mrow]|mdn[mrow]|fragment">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]|fragment">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -5139,14 +5139,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and so should not be within an HTML paragraph.      -->
 <!-- We bust them out, and put the id for the paragraph  -->
 <!-- on the first one, even if empty.                    -->
-<xsl:template match="p[ol|ul|dl|me|men|md[mrow]|mdn[mrow]|cd]" mode="body">
+<xsl:template match="p[ol|ul|dl|me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]|cd]" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <xsl:if test="$block-type = 'xref'">
         <xsl:apply-templates select="." mode="heading-xref-knowl" />
     </xsl:if>
     <!-- will later loop over displays within paragraph -->
-    <xsl:variable name="displays" select="ul|ol|dl|me|men|md[mrow]|mdn[mrow]|cd" />
+    <xsl:variable name="displays" select="ul|ol|dl|me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]|cd" />
     <!-- content prior to first display is exceptional, but if empty,   -->
     <!-- as indicated by $initial, we do not produce an empty paragraph -->
     <!--                                                                -->
@@ -5180,7 +5180,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
         <!-- look through remainder, all element and text nodes, and the next display -->
         <xsl:variable name="rightward" select="following-sibling::*|following-sibling::text()" />
-        <xsl:variable name="next-display" select="following-sibling::*[self::ul or self::ol or self::dl or self::me or self::men or self::md[mrow] or self::mdn[mrow] or self::cd][1]" />
+        <xsl:variable name="next-display" select="following-sibling::*[self::ul or self::ol or self::dl or self::me or self::men or self::md[not(mrow)] or self::mdn[not(mrow)] or self::md[mrow] or self::mdn[mrow] or self::cd][1]" />
         <xsl:choose>
             <xsl:when test="$next-display">
                 <xsl:variable name="leftward" select="$next-display/preceding-sibling::*|$next-display/preceding-sibling::text()" />
@@ -5419,19 +5419,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- paragraph into several HTML block level items     -->
 <!-- NB: displaymath might have an intertext           -->
 <!-- becoming "p", thus the necessity of "copy-of"     -->
-<xsl:template match="me|men|md[mrow]|mdn[mrow]" mode="display-math-wrapper">
+<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]" mode="display-math-wrapper">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="content" />
     <div class="displaymath process-math">
         <xsl:apply-templates select="." mode="knowl-urls"/>
-        <xsl:if test="$b-original and not(self::me)">
+        <xsl:if test="$b-original and not(self::me|self::md[not(mrow)])">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
         </xsl:if>
         <xsl:copy-of select="$content" />
     </div>
 </xsl:template>
 
-<xsl:template match="me|men|md[mrow]|mdn[mrow]" mode="knowl-urls">
+<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]" mode="knowl-urls">
     <xsl:variable name="display-math-cross-references" select="..//xref"/>
     <!-- don't add such an attribute if there is nothing happening -->
     <xsl:if test="$display-math-cross-references">
@@ -5460,15 +5460,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- but generally they do nothing                 -->
 
 <!-- always visible -->
-<xsl:template match="me|men" mode="is-hidden">
+<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]" mode="is-hidden">
     <xsl:text>false</xsl:text>
 </xsl:template>
 
-<xsl:template match="me|men" mode="body-element" />
-<xsl:template match="me|men" mode="body-css-class" />
+<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]" mode="body-element" />
+<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]" mode="body-css-class" />
 
 <!-- No title; type and number obvious from content -->
-<xsl:template match="me|men" mode="heading-xref-knowl" />
+<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]" mode="heading-xref-knowl" />
 
 <!-- We need this so a % is used only on the LaTeX side -->
 <xsl:template name="display-math-visual-blank-line">
@@ -5489,7 +5489,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Identification and cross-references are managed   -->
 <!-- by HTML id on enclosing HTML elements.            -->
 
-<xsl:template match="men|mrow" mode="tag">
+<xsl:template match="men|mdn[not(mrow)]|mrow" mode="tag">
     <xsl:text>\tag{</xsl:text>
     <xsl:apply-templates select="." mode="number" />
     <xsl:text>}</xsl:text>
@@ -8124,7 +8124,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- 2nd exceptional case, xref in mrow of display math  -->
         <!--   with Javascript (pure HTML) we can make knowls    -->
         <!--   without Javascript (EPUB) we use plain text       -->
-        <xsl:when test="parent::mrow or parent::me or parent::men">
+        <xsl:when test="parent::mrow or parent::me or parent::men or parent::md[not(mrow)] or parent::mdn[not(mrow)]">
             <xsl:apply-templates select="." mode="xref-link-display-math">
                 <xsl:with-param name="target" select="$target"/>
                 <xsl:with-param name="origin" select="'xref'"/>
@@ -8627,7 +8627,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- height and depth of the rule"                                        -->
 <!-- Davide Cervone                                                       -->
 <!-- https://groups.google.com/forum/#!topic/mathjax-users/IEivs1D7ntM    -->
-<xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
+<xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::md[not(mrow)] or parent::mdn[not(mrow)] or parent::mrow)]">
     <xsl:choose>
         <xsl:when test="ancestor::statement/../@exercise-interactive='fillin'">
             <xsl:apply-imports />
@@ -12764,7 +12764,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Examples have included: "\subset" in math and "limits"   -->
 <!-- in a WW problem to specify a domain.  So we kill stuff.  -->
 
-<xsl:template match="m|me|men|md[mrow]|mdn[mrow]" mode="search-node-text"/>
+<xsl:template match="m|me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]" mode="search-node-text"/>
 <xsl:template match="latex-image|asymptote|sageplot" mode="search-node-text"/>
 <xsl:template match="sage" mode="search-node-text"/>
 <!-- "slate" in an "interactive" can have JS code, GeoGebra too, etc -->
