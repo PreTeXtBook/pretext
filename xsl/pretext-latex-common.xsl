@@ -7299,7 +7299,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- template needed for the HTML knowl production scheme. -->
 <!-- The variables in the "body" template have the right   -->
 <!-- defaults for this application                         -->
-<xsl:template match="me|men">
+<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]">
     <xsl:apply-templates select="." mode="body" />
 </xsl:template>
 
@@ -7309,7 +7309,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Simply apply modal "label" template,  -->
 <!-- to allow for LaTeX equation numbering -->
-<xsl:template match="men|mrow" mode="tag">
+<xsl:template match="men|mdn[not(mrow)]|mrow" mode="tag">
     <xsl:apply-templates select="." mode="label" />
 </xsl:template>
 
@@ -8403,7 +8403,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Fill-in blank -->
 <!-- \fillintext{} defined in preamble as semantic macro   -->
 <!-- Argument is intended number of characters             -->
-<xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
+<xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::md[not(mrow)] or parent::mdn[not(mrow)] or parent::mrow)]">
     <xsl:variable name="characters">
         <xsl:choose>
             <xsl:when test="@characters">
