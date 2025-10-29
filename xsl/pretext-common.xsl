@@ -860,9 +860,9 @@ Book (with parts), "section" at level 3
 <!-- Default implementations of specialized templates -->
 <xsl:template name="display-math-visual-blank-line"/>
 
-<xsl:template match="me" mode="tag"/>
+<xsl:template match="me|md[not(mrow)]" mode="tag"/>
 
-<xsl:template match="men" mode="tag">
+<xsl:template match="men|mdn[not(mrow)]" mode="tag">
     <xsl:message>PTX:ERROR:   the modal "tag" template needs an implementation for "men" in the current conversion</xsl:message>
 </xsl:template>
 
@@ -1500,7 +1500,7 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="m/fillin|me/fillin|men/fillin|mrow/fillin">
+<xsl:template match="m/fillin|me/fillin|men/fillin|md[not(mrow)]/fillin|mdn[not(mrow)]/fillin|mrow/fillin">
     <xsl:choose>
         <xsl:when test="@fill">
             <xsl:text>\fillinmath{</xsl:text>
@@ -3331,7 +3331,7 @@ Book (with parts), "section" at level 3
 <!-- lines and the two do not always align with element names, -->
 <!-- so we use two strings to signal the two situations.       -->
 
-<xsl:template match="me|men|mrow" mode="string-id">
+<xsl:template match="me|men|mrow|md[not(mrow)]|mdn[not(mrow)]" mode="string-id">
     <xsl:text>equation</xsl:text>
 </xsl:template>
 
@@ -9421,7 +9421,7 @@ Book (with parts), "section" at level 3
     <xsl:param name="text-style" />
     <xsl:param name="custom-text" select="''" />
     <!-- an equation target is exceptional -->
-    <xsl:variable name="b-is-equation-target" select="$target/self::mrow or $target/self::men" />
+    <xsl:variable name="b-is-equation-target" select="$target/self::mrow or $target/self::men or $target/self::mdn[not(mrow)]" />
     <!-- a bibliography target is exceptional -->
     <xsl:variable name="b-is-biblio-target" select="boolean($target/self::biblio)" />
     <!-- a contributor target is exceptional -->
