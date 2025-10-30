@@ -1006,7 +1006,7 @@ Book (with parts), "section" at level 3
     <xsl:param name="b-top-level" select="false()" />
     <!-- Look across all mrow for 100% no-number rows              -->
     <!-- This just allows for slightly nicer human-readable source -->
-    <xsl:variable name="b-nonumbers" select="self::md and not(mrow[@number='yes' or @tag])" />
+    <xsl:variable name="b-nonumbers" select="self::md and not(mrow[@numbered = 'yes' or @tag])" />
     <xsl:variable name="complete-latex">
         <!-- we provide a newline for visual appeal -->
         <xsl:call-template name="display-math-visual-blank-line" />
@@ -1233,35 +1233,15 @@ Book (with parts), "section" at level 3
     <!-- The @tag attribute trumps almost everything                     -->
     <xsl:choose>
         <xsl:when test="$b-nonumbers" />
-        <xsl:when test="@tag">
+        <!-- "local" tag is not numbered, but needs treatment -->
+        <xsl:when test="(@numbered = 'yes') or @tag">
             <xsl:apply-templates select="." mode="tag">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
-        <xsl:when test="parent::md[mrow]">
-            <xsl:choose>
-                <xsl:when test="@number='yes'">
-                    <xsl:apply-templates select="." mode="tag">
-                <xsl:with-param name="b-original" select="$b-original" />
-            </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>\notag</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="parent::mdn[mrow]">
-            <xsl:choose>
-                <xsl:when test="@number='no'">
-                    <xsl:text>\notag</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="tag">
-                        <xsl:with-param name="b-original" select="$b-original" />
-                    </xsl:apply-templates>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\notag</xsl:text>
+        </xsl:otherwise>
     </xsl:choose>
     <!-- we have a discretionary page break scheme for LaTeX -->
     <xsl:if test="following-sibling::mrow">
