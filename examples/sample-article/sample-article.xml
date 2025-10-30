@@ -2090,7 +2090,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <example>
                     <title>Excessive Display Mathematics</title>
 
-                    <p>In print versions, a long run of displayed equations often needs to be broken across pages.  If you are reading some other version of this, then there is nothing to see here.  But for <latex/> output it could be interesting.  First, with no extra effort, this page-long display should break naturally, no matter how the preceding material changes.<md number="yes">
+                    <p>In print versions, a long run of displayed equations often needs to be broken across pages.  If you are reading some other version of this, then there is nothing to see here.  But for <latex/> output it could be interesting.  First, with no extra effort, this page-long display should break naturally, no matter how the preceding material changes.<md>
                         <mrow>x^2+y^2=z^2</mrow>
                         <mrow>a^2+b^2=c^2</mrow>
                         <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
