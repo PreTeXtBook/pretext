@@ -2412,6 +2412,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- An "mrow" can be numbered or not.  A @number attribute on the   -->
+<!-- "mrow" itself takes precedence.  Then we look to the parent     -->
+<!-- container, be it "md" (no number) or "mdn" (with numbers).      -->
+<!-- The @tag attribute is a "local tag" formed with symbols,        -->
+<!-- and precludes a number.                                         -->
+<!-- None of the template's arguments are needed, or passed through. -->
+<xsl:template match="mrow" mode="augment">
+    <xsl:copy>
+        <!-- existing attributes first -->
+        <xsl:apply-templates select="@*" mode="augment"/>
+        <!-- @numbered as a boolean flag -->
+        <xsl:attribute name="numbered">
+            <xsl:choose>
+                <xsl:when test="@tag">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="@number = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="@number = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="parent::mdn">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="parent::md">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:attribute>
+        <!-- children -->
+        <xsl:apply-templates select="node()" mode="augment"/>
+    </xsl:copy>
+</xsl:template>
 
 <!-- ######### -->
 <!-- Exercises -->
