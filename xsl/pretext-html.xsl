@@ -226,7 +226,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-icon"         select="boolean($document-root//icon)"/>
 <xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)"/>
 <xsl:variable name="b-has-myopenmath"   select="boolean($document-root//myopenmath)"/>
-<xsl:variable name="b-has-stack"        select="boolean($document-root//exercise/stack)"/>
+<xsl:variable name="b-has-stack"        select="boolean($document-root//exercise/stack-moodle)"/>
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)"/>
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)"/>
 <!-- 2023-10-18: this is a bit buggy, as it ignores the "men" element.  -->
@@ -3727,8 +3727,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:when>
         <!-- STACK case -->
-        <xsl:when test="stack">
-            <xsl:apply-templates select="introduction|stack|conclusion">
+        <xsl:when test="stack-moodle">
+            <xsl:apply-templates select="introduction|stack-moodle|conclusion">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
@@ -10865,7 +10865,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Not to be confused with  sidebyside/stack  panel -->
-<xsl:template match="exercise/stack">
+<xsl:template match="exercise/stack-moodle">
 
     <!-- The location in HTML output where files of STACK -->
     <!-- questions live, ready to be fed into Javascript  -->
@@ -10887,7 +10887,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: use an "edit" template to scrub junk from assembly -->
     <!--       Note: @xml:base might be worth keeping/adjusting   -->
     <exsl:document href="{$the-filename}" method="xml" indent="yes" encoding="UTF-8">
-        <!-- don't copy the "stack" element, just children -->
+        <!-- don't copy the "stack-moodle" element, just children -->
         <xsl:copy-of select="node()"/>
     </exsl:document>
 

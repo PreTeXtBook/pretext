@@ -2056,11 +2056,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- There is no real purpose to put identification onto an     -->
 <!-- (X)HTML element floating around as part of an interactive. -->
-<xsl:template match="pf:*|xhtml:*|stk:*" mode="id-attribute">
+<xsl:template match="pf:*|xhtml:*|stk:*//*" mode="id-attribute">
     <xsl:copy>
         <xsl:apply-templates select="@*|node()" mode="id-attribute"/>
     </xsl:copy>
 </xsl:template>
+
 
 <!-- We look for duplicate identifiers both right after    -->
 <!-- assembly and right after automatic generation.  The   -->

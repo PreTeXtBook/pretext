@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This stylesheet locates all  exercise/stack  elements  -->
+<!-- This stylesheet locates all  exercise/stack-moodle  elements  -->
 <!-- and written out a single file for each one (these will -->
 <!-- be sent to a server for conversion to static forms)    -->
 
@@ -46,7 +46,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Flag an extraction pass, so pretext-assembly does not get confused -->
 <xsl:variable name="b-extracting-stack" select="true()"/>
 
-<xsl:template match="exercise/stack" mode="extraction">
+<xsl:template match="exercise/stack-moodle" mode="extraction">
     <xsl:variable name="filebase">
         <xsl:apply-templates select="." mode="assembly-id"/>
     </xsl:variable>
@@ -56,7 +56,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: use an "edit" template to scrub junk from assembly -->
     <!--       Note: @xml:base might be worth keeping/adjusting   -->
     <exsl:document href="{$filebase}.xml" method="xml" encoding="UTF-8">
-        <!-- don't copy the "stack" element, just children -->
+        <!-- don't copy the "stack-moodle" element, just children -->
         <xsl:copy-of select="node()"/>
     </exsl:document>
 </xsl:template>

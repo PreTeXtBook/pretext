@@ -1476,9 +1476,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </introduction>
 
                         <!-- A @label is required, becomes a filename in output -->
-                        <stack label="stack-integration">
+                        <stack-moodle label="stack-integration">
                             <xi:include href="stack/01_integration_with_feedback.xml"/>
-                        </stack>
+                        </stack-moodle>
                     </exercise>
                 </exercises>
 
