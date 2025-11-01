@@ -1916,7 +1916,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
-<xsl:template match="exercise/stack" mode="assembly-id">
+<xsl:template match="exercise/*[local-name()='stack-moodle']" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 

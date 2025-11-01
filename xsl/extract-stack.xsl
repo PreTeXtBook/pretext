@@ -46,7 +46,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Flag an extraction pass, so pretext-assembly does not get confused -->
 <xsl:variable name="b-extracting-stack" select="true()"/>
 
-<xsl:template match="exercise/stack-moodle" mode="extraction">
+<xsl:template match="exercise/*[local-name()='stack-moodle']" mode="extraction">
     <xsl:variable name="filebase">
         <xsl:apply-templates select="." mode="assembly-id"/>
     </xsl:variable>
