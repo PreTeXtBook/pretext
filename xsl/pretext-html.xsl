@@ -11671,6 +11671,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of the "choice", but not everything.                               -->
 <xsl:template match="exercise/choices/choice/statement/p" mode="permalink"/>
 
+<!-- 2025-11-1: "p" inside Parsons problem should not get permalinks -->
+<xsl:template match="exercise/blocks//p" mode="permalink"/>
 
 <!--                     -->
 <!-- Navigation Sections -->
