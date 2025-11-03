@@ -4239,7 +4239,7 @@ Book (with parts), "section" at level 3
 <!-- Note: @numbered attribute provided by the pre-processor. -->
 <!-- Note: numbered/unnumbered accounted for here             -->
 <!-- Note: presence of a local tag (@tag) is unnumbered       -->
-<xsl:template match="men|mdn[not(mrow)]|mrow[@numbered = 'yes']" mode="serial-number">
+<xsl:template match="men|md[not(mrow) and (@numbered = 'yes')]|mdn[not(mrow)]|mrow[@numbered = 'yes']" mode="serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-equations" />
@@ -4247,21 +4247,21 @@ Book (with parts), "section" at level 3
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$subtree-level=-1">
-            <xsl:number from="book|article|letter|memo" level="any" count="men|mdn[not(mrow)]|mrow[@numbered = 'yes']"/>
+            <xsl:number from="book|article|letter|memo" level="any" count="men|md[not(mrow) and (@numbered = 'yes')]|mdn[not(mrow)]|mrow[@numbered = 'yes']"/>
         </xsl:when>
         <xsl:when test="$subtree-level=0">
-            <xsl:number from="part" level="any" count="men|mdn[not(mrow)]|mrow[@numbered = 'yes']"/></xsl:when>
+            <xsl:number from="part" level="any" count="men|md[not(mrow) and (@numbered = 'yes')]|mdn[not(mrow)]|mrow[@numbered = 'yes']"/></xsl:when>
         <xsl:when test="$subtree-level=1">
-            <xsl:number from="chapter|book/backmatter/appendix" level="any" count="men|mdn[not(mrow)]|mrow[@numbered = 'yes']"/>
+            <xsl:number from="chapter|book/backmatter/appendix" level="any" count="men|md[not(mrow) and (@numbered = 'yes')]|mdn[not(mrow)]|mrow[@numbered = 'yes']"/>
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout|chapter/reading-questions" level="any" count="men|mdn[not(mrow)]|mrow[@numbered = 'yes']"/>
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout|chapter/reading-questions" level="any" count="men|md[not(mrow) and (@numbered = 'yes')]|mdn[not(mrow)]|mrow[@numbered = 'yes']"/>
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout|section/reading-questions" level="any" count="men|mdn[not(mrow)]|mrow[@numbered = 'yes']"/>
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout|section/reading-questions" level="any" count="men|md[not(mrow) and (@numbered = 'yes')]|mdn[not(mrow)]|mrow[@numbered = 'yes']"/>
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout|subsection/reading-questions" level="any" count="men|mdn[not(mrow)]|mrow[@numbered = 'yes']"/>
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout|subsection/reading-questions" level="any" count="men|md[not(mrow) and (@numbered = 'yes')]|mdn[not(mrow)]|mrow[@numbered = 'yes']"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:ERROR: Subtree level for equation number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4515,7 +4515,7 @@ Book (with parts), "section" at level 3
 <!-- Various displayed equations are not numbered.     -->
 <!-- We do not consider the local @tag to be a number, -->
 <!-- as it is more a string, formed from symbols       -->
-<xsl:template match="me|md[not(mrow)]|mrow[@numbered = 'no']" mode="serial-number" />
+<xsl:template match="me|md[not(mrow) and (@numbered = 'no')]|mrow[@numbered = 'no']" mode="serial-number" />
 
 <!-- WeBWorK problems are never numbered, because they live    -->
 <!-- in (numbered) exercises.  But they have identically named -->
@@ -4798,7 +4798,7 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- Structure Numbers: Equations -->
-<xsl:template match="mrow|men|mdn[not(mrow)]" mode="structure-number">
+<xsl:template match="mrow|men|md[not(mrow) and (@numbered = 'yes')]|mdn[not(mrow)]" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-equations" />
         <xsl:with-param name="pad" select="'yes'" />
