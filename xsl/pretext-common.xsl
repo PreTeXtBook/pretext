@@ -9417,7 +9417,8 @@ Book (with parts), "section" at level 3
     <xsl:param name="text-style" />
     <xsl:param name="custom-text" select="''" />
     <!-- an equation target is exceptional -->
-    <xsl:variable name="b-is-equation-target" select="$target/self::mrow or $target/self::men or $target/self::mdn[not(mrow)]" />
+    <!-- may simplify to just a (numbered) "mrow" as only possibility -->
+    <xsl:variable name="b-is-equation-target" select="$target/self::mrow or $target/self::men or $target/self::mdn[not(mrow)] or $target/self::md[not(mrow) and (@number = 'yes')]" />
     <!-- a bibliography target is exceptional -->
     <xsl:variable name="b-is-biblio-target" select="boolean($target/self::biblio)" />
     <!-- a contributor target is exceptional -->
