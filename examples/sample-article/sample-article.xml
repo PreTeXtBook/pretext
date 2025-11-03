@@ -2379,6 +2379,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                  Second, the <tag>men</tag> element. Which will always be numbered,
                     <men>x^{2} + y^{2} = z^{2}</men>.
                 </p>
+
+                 <p>TRANSITION (2025-10-30) Two displays with <tag>md</tag> element, now controlled by an experimental numbering switch</p>
+
+                <p>The <tag>md</tag> element, with <attr>number</attr> set to <c>yes</c>.<md number="yes">
+                    <mrow>x^{9} + y^{9} = z^{9}</mrow>.
+                    <mrow number="no">x^{10} + y^{10} = z^{10}</mrow>.
+                    <mrow number="yes">x^{11} + y^{11} = z^{11}</mrow>.
+                </md></p>
+
+                <p>The <tag>md</tag> element, with <attr>number</attr> set to <c>no</c>.<md number="no">
+                    <mrow>x^{12} + y^{12} = z^{12}</mrow>.
+                    <mrow number="no">x^{13} + y^{13} = z^{13}</mrow>.
+                    <mrow number="yes">x^{14} + y^{14} = z^{14}</mrow>.
+                </md></p>
+
+                <p>The <tag>md</tag> element, with <attr>number</attr> set to <c>yes</c>, and no overrides, so a simulation of the old <tag>mdn</tag>.<md number="yes">
+                    <mrow>x^{16} + y^{16} = z^{16}</mrow>.
+                    <mrow>x^{17} + y^{17} = z^{17}</mrow>.
+                    <mrow>x^{18} + y^{18} = z^{18}</mrow>.
+                </md></p>
+
+                <p>TRANSITION (2025-10-31) Three forms of a <q>bare</q> <tag>md</tag> element, meaning it has no <tag>mrow</tag> children.  These are new constructions.</p>
+
+                <p>A bare <tag>md</tag> with no attributes <md>x^{19} + y^{19} = z^{19}</md>.</p>
+
+                <p>A bare <tag>md</tag> with the <attr>number</attr> attribute set to <c>no</c>, which mimics the <tag>me</tag> element,
+                <md number="no">x^{20} + y^{20} = z^{20}</md>.</p>
+
+                <p>A bare <tag>md</tag> with the <attr>number</attr> attribute set to <c>yes</c>, which mimics the <tag>men</tag> element,
+                <md number="yes">x^{21} + y^{21} = z^{21}</md>.</p>
             </subsection>
         </section>
 
