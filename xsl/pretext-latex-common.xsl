@@ -7309,6 +7309,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Simply apply modal "label" template,  -->
 <!-- to allow for LaTeX equation numbering -->
+<xsl:template match="md[not(mrow)]" mode="tag">
+    <xsl:if test="@numbered = 'yes'">
+        <xsl:apply-templates select="." mode="label" />
+    </xsl:if>
+</xsl:template>
+
 <xsl:template match="men|mdn[not(mrow)]|mrow" mode="tag">
     <xsl:apply-templates select="." mode="label" />
 </xsl:template>
