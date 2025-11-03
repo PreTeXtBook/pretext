@@ -2457,6 +2457,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- The display math "md" element, without "mrow" children, needs to  -->
+<!-- allow a @number attribute so that it can impersonate the old "me" -->
+<!-- AND "men" elements.  Note: this will be obsolete if we just       -->
+<!-- "repair" a "bare" "md" or "mdn" into a single "mrow" variant.     -->
+<xsl:template match="md[not(mrow)]" mode="augment">
+    <xsl:copy>
+        <!-- existing attributes first -->
+        <xsl:apply-templates select="@*" mode="augment"/>
+        <!-- @numbered as a boolean flag -->
+        <xsl:attribute name="numbered">
+            <xsl:choose>
+                <!-- @tag is not yet implemented! -->
+                <xsl:when test="@tag">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="@number = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="@number = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- now the global default, which is no numbering  -->
+                <xsl:otherwise>
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()" mode="augment"/>
+    </xsl:copy>
+</xsl:template>
+
 <!-- ######### -->
 <!-- Exercises -->
 <!-- ######### -->
