@@ -2199,6 +2199,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- Note: the $language tree is accessed (repeatedly) in the  -->
+<!-- $augment pass in order to determine the global default for  -->
+<!-- numbering equations.  So the order of these two must be  -->
+<!-- preserved.  See notes below for more explanation. -->
+
 
 <!-- ######### -->
 <!-- Numbering -->
@@ -2446,10 +2451,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="parent::md[@number = 'no']">
                     <xsl:text>no</xsl:text>
                 </xsl:when>
-                <!-- now the global default, which is no numbering  -->
-                <xsl:when test="parent::md">
+                <!-- Now the global default set in "docinfo".  It would be -->
+                <!-- nice to store this choice in a global variable, but   -->
+                <!-- the mechanics of that result in erroneous recursion.  -->
+                <!-- So we simply repeatedly consult the "docinfo" built   -->
+                <!-- in the previous tree.                                 -->
+                <xsl:when test="$language/pretext/docinfo/numbering/@equations = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$language/pretext/docinfo/numbering/@equations = 'no'">
                     <xsl:text>no</xsl:text>
                 </xsl:when>
+                <!-- the default default is to not number equations -->
+                <xsl:otherwise>
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
         <!-- children -->
@@ -2478,7 +2494,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="@number = 'no'">
                     <xsl:text>no</xsl:text>
                 </xsl:when>
-                <!-- now the global default, which is no numbering  -->
+                <!-- Now the global default set in "docinfo".  It would be -->
+                <!-- nice to store this choice in a global variable, but   -->
+                <!-- the mechanics of that result in erroneous recursion.  -->
+                <!-- So we simply repeatedly consult the "docinfo" built   -->
+                <!-- in the previous tree.                                 -->
+                <xsl:when test="$language/pretext/docinfo/numbering/@equations = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$language/pretext/docinfo/numbering/@equations = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- the default default is to not number equations -->
                 <xsl:otherwise>
                     <xsl:text>no</xsl:text>
                 </xsl:otherwise>
