@@ -2434,9 +2434,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="@number = 'no'">
                     <xsl:text>no</xsl:text>
                 </xsl:when>
+                <!-- now the "mrow" has no special indications, look to containers -->
+                <!-- "mdn" will be obsolete, we do not expend any extra effort     -->
                 <xsl:when test="parent::mdn">
                     <xsl:text>yes</xsl:text>
                 </xsl:when>
+                <!-- now examine the "md" element as the container -->
+                <xsl:when test="parent::md[@number = 'yes']">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="parent::md[@number = 'no']">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- now the global default, which is no numbering  -->
                 <xsl:when test="parent::md">
                     <xsl:text>no</xsl:text>
                 </xsl:when>
