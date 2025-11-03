@@ -11326,6 +11326,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:param name="occurrences" />
     <xsl:param name="date-string" />
     <xsl:param name="message" />
+    <xsl:param name="b-bulk" select="false()"/>
 
     <!-- These apparent re-definitions are local to this template -->
     <!-- Reasons are historical, so to be a convenience           -->
@@ -11359,9 +11360,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <!-- once verbosity is implemented -->
                 <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
             </xsl:message>
-            <xsl:for-each select="$occurrences-rtf">
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:for-each>
+            <!-- Give location reports, except optionally, when the $occurences -->
+            <!-- are so pervasive, squelch a (useless) long list of instances   -->
+            <!-- that nobody would really want to see.                        . -->
+            <xsl:if test="not($b-bulk)">
+                <xsl:for-each select="$occurrences-rtf">
+                    <xsl:apply-templates select="." mode="location-report" />
+                </xsl:for-each>
+            </xsl:if>
             <xsl:message>
                 <xsl:text>--------------</xsl:text>
             </xsl:message>
