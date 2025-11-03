@@ -12146,6 +12146,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'PDF front and back covers via a &quot;docinfo/covers&quot; element has moved to the publication file with some small changes.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2024-07-24 @permid abolished (bulk message added 2025-11-03) -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//@permid&quot;"/>
+        <xsl:with-param name="date-string" select="'2024-07-24'" />
+        <xsl:with-param name="b-bulk" select="true()" />
+        <xsl:with-param name="message" select="'Experiments using the @permid attribute have concluded, and the attribute is now being ignored.  You can safely remove them all and then this message will stop.'"/>
+    </xsl:call-template>
+    <!--  -->
     <!-- 2024-11-19 listing no longer has caption, uses title only -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$document-root//listing/caption"/>
