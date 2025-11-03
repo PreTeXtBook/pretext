@@ -860,7 +860,11 @@ Book (with parts), "section" at level 3
 <!-- Default implementations of specialized templates -->
 <xsl:template name="display-math-visual-blank-line"/>
 
-<xsl:template match="me|md[not(mrow)]" mode="tag"/>
+<xsl:template match="me" mode="tag"/>
+
+<xsl:template match="md[not(mrow)]" mode="tag">
+    <xsl:message>PTX:ERROR:   the modal "tag" template needs an implementation for "md[not(mrow)]" in the current conversion</xsl:message>
+</xsl:template>
 
 <xsl:template match="men|mdn[not(mrow)]" mode="tag">
     <xsl:message>PTX:ERROR:   the modal "tag" template needs an implementation for "men" in the current conversion</xsl:message>
@@ -956,7 +960,18 @@ Book (with parts), "section" at level 3
 <!-- *Extensive* discussion at                     -->
 <!-- http://tex.stackexchange.com/questions/40492/ -->
 
-<xsl:template match="me|md[not(mrow)]" mode="displaymath-alignment">
+<xsl:template match="md[not(mrow)]" mode="displaymath-alignment">
+    <xsl:choose>
+        <xsl:when test="@numbered = 'no'">
+            <xsl:text>equation*</xsl:text>
+        </xsl:when>
+        <xsl:when test="@numbered = 'yes'">
+            <xsl:text>equation</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="me" mode="displaymath-alignment">
     <xsl:text>equation*</xsl:text>
 </xsl:template>
 
