@@ -442,6 +442,17 @@
             </cd>attribute may be given as a complete <init>URL</init> for the top-level of where <init>HTML</init> output is hosted.  Of course, this may be different for different publishers.  The value is a directory, and so should end with a slash (path separator).  See <xref ref="online-base-url"/> for reasons why you might want to specify this.</p>
         </subsection>
 
+        <subsection xml:id="online-banner">
+            <title>HTML Banner Options</title>
+            <idx><h>HTML</h><h>banner content options</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/banner/@subtitle</cline>
+            </cd> and <cd>
+                <cline>/publication/html/banner/@byline</cline>
+            </cd>attributes may be specified as either <c>yes</c> (the default) or <c>no</c> to control whether the subtitle and author byline are displayed in the banner. See <xref ref="online-banner-options"/> for reasons why you might want to specify this.</p>
+        </subsection>
+
         <subsection xml:id="online-calculator">
             <title>HTML Embedded Calculator</title>
             <idx><h>calculator</h><h>embedded in <init>HTML</init></h></idx>
