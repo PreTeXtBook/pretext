@@ -2744,6 +2744,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
+                <!-- and duplicate the @exercise-customization (not gracefully) -->
+                <xsl:attribute name="exercise-customization">
+                    <xsl:value-of select="@exercise-customization"/>
+                </xsl:attribute>
                 <statement>
                     <p>An interactive Runestone problem goes here, but there is not yet a static representation.</p>
                 </statement>
