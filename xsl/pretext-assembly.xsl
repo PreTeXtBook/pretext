@@ -2739,6 +2739,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$exercise-style = 'static'">
             <!-- punt for static versions, we have nothing -->
             <exercise>
+                <!-- need to replace the classification as an interactive exercise -->
+                <!-- to reflect a non-interative version for static outputs        -->
+                <xsl:attribute name="exercise-interactive">
+                    <xsl:text>static</xsl:text>
+                </xsl:attribute>
                 <statement>
                     <p>An interactive Runestone problem goes here, but there is not yet a static representation.</p>
                 </statement>
