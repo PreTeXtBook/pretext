@@ -37,6 +37,13 @@
             <p>The default is to first have <c>index.html</c> redirect to a page for the <tag>frontmatter</tag>, and if this is not possible, then it will redirect to a page for the top-level of your content.  If your document is short or simple, you may just have a single web page.  You could choose to not distribute the <c>index.html</c> file and then just use a concise and descriptive <attr>xml:id</attr> for your top-level element (e.g. <tag>article</tag>) to fashion an attractive URL that points to your shorter work.</p>
         </subsection>
 
+        <subsection xml:id="online-banner-options">
+            <title>Banner Contents</title>
+            <idx><h>HTML</h><h>banner content</h></idx>
+
+            <p>The top of page banner normally features the title, subtitle, and author. If the subtitle or author list are long, or not particularly relevant for a given work, the publisher may wish to not render them at the top of each page. See <xref ref="online-banner"/> for details on specifying what to display.</p>
+        </subsection>
+
         <subsection xml:id="online-embedded-calculator">
             <title>Embedded Calculator</title>
             <idx><h>calculator</h><h>embedded in <init>HTML</init></h></idx>
