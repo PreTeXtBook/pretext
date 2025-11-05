@@ -19,14 +19,15 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This stylesheet locates all  exercise/stack  elements  -->
-<!-- and written out a single file for each one (these will -->
-<!-- be sent to a server for conversion to static forms)    -->
+<!-- This stylesheet locates all  exercise/stack-moodle  elements   -->
+<!-- and writtes out a single file for each one (these will be sent -->
+<!-- to a server for conversion to static forms)                    -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
-    xmlns:str="http://exslt.org/strings"
+    xmlns:stk="http://stack-assessment.org/2025/moodle-question"
+    exclude-result-prefixes="stk"
     extension-element-prefixes="exsl"
 >
 
@@ -46,7 +47,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Flag an extraction pass, so pretext-assembly does not get confused -->
 <xsl:variable name="b-extracting-stack" select="true()"/>
 
-<xsl:template match="exercise/stack" mode="extraction">
+<xsl:template match="exercise/stk:stack-moodle" mode="extraction">
     <xsl:variable name="filebase">
         <xsl:apply-templates select="." mode="assembly-id"/>
     </xsl:variable>
