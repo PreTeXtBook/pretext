@@ -15832,6 +15832,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </exercise>
                 </exercisegroup>
             </worksheet>
+
+            <worksheet>
+                <title>Worksheet with an exercise with tasks</title>
+                <introduction>
+                    <p>
+                        Page breaking between tasks in a single exercise can be tricky.  This is a test for that.
+                    </p>
+                </introduction>
+                <exercise>
+                    <introduction>
+                        <p>
+                            Here are multiple tasks with just enough workspace to cause a page break after the third one.
+                        </p>
+                    </introduction>
+                    <task workspace="2in">
+                        <statement>
+                            <p>
+                                The first tasks.
+                            </p>
+                        </statement>
+                    </task>
+                    <task workspace="2in">
+                        <statement>
+                            <p>
+                                The second task.
+                            </p>
+                        </statement>
+                    </task>
+                    <task workspace="2in">
+                        <statement>
+                            <p>
+                                The third task.
+                            </p>
+                        </statement>
+                    </task>
+                    <task workspace="2in">
+                        <statement>
+                            <p>
+                                The fourth task.
+                            </p>
+                        </statement>
+                    </task>
+                </exercise>
+                <exercise workspace="3in">
+                    <statement>
+                        <p>
+                            An exercise without any tasks but some workspace.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+
         </section>
 
         <section xml:id="handouts" label="section-handouts">
