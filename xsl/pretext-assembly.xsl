@@ -2756,35 +2756,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which is handled by templates elsewhere, applied in the HTML         -->
 <!-- conversion itself.                                                   -->
 
-<!-- Hacked -->
-<!-- Will eventually be obsolete -->
-
-<xsl:template match="exercise[@exercise-interactive = 'htmlhack']" mode="representations">
-    <xsl:choose>
-        <xsl:when test="$exercise-style = 'static'">
-            <!-- punt for static versions, we have nothing -->
-            <exercise>
-                <!-- need to replace the classification as an interactive exercise -->
-                <!-- to reflect a non-interative version for static outputs        -->
-                <xsl:attribute name="exercise-interactive">
-                    <xsl:text>static</xsl:text>
-                </xsl:attribute>
-                <!-- and duplicate the @exercise-customization (not gracefully) -->
-                <xsl:attribute name="exercise-customization">
-                    <xsl:value-of select="@exercise-customization"/>
-                </xsl:attribute>
-                <statement>
-                    <p>An interactive Runestone problem goes here, but there is not yet a static representation.</p>
-                </statement>
-            </exercise>
-        </xsl:when>
-        <xsl:when test="$exercise-style = 'dynamic'">
-            <!-- pass on to the HTML conversion -->
-            <xsl:copy-of select="."/>
-        </xsl:when>
-    </xsl:choose>
-</xsl:template>
-
 <!-- True/False        -->
 <!-- Multiple Choice   -->
 <!-- Parson problems   -->

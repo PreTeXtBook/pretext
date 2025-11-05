@@ -4328,11 +4328,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-solution" />
 
     <xsl:choose>
-        <!-- signal on intentional, temporary, hack      -->
-        <!-- simply duplicated in assembly, no solutions -->
-        <xsl:when test="@exercise-interactive = 'htmlhack'">
-            <xsl:apply-templates select="." mode="runestone-to-interactive"/>
-        </xsl:when>
         <!-- Select -->
         <!-- Largely a Runestone/database operation referencing -->
         <!-- existing questions supplied by the manifest,       -->
