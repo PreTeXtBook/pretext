@@ -12229,6 +12229,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'use of a &quot;label&quot; element inside a &quot;latex-image&quot; was deprecated on 2024-07-29.  It is no longer functional, so you must formulate the appropriate LaTeX code (TikZ) as a replacement.  If the &quot;label&quot; element remains, results could be unpredictable.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2025-11-04  @runestone attribute signals obsolete "htmlhack" exercises -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//@runestone&quot;" />
+        <xsl:with-param name="date-string" select="'2025-11-04'" />
+        <xsl:with-param name="message" select="'the temporary &quot;@runestone&quot; attribute was used to temporarily specify a raw HTML version of a Runestone problem.  That device is now obsolete.  The exercise remains, but its contents have been neutered to form an informational message.  Consider authoring the exercise using supported PreTeXt syntax.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
