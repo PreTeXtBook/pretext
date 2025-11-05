@@ -34,7 +34,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="exsl date str"
+    extension-element-prefixes="exsl date str stk"
     exclude-result-prefixes="pi"
 >
 
@@ -1934,7 +1934,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
-<xsl:template match="exercise/stack" mode="assembly-id">
+<xsl:template match="exercise/stk:stack-moodle" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
@@ -2074,7 +2074,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- There is no real purpose to put identification onto an     -->
 <!-- (X)HTML element floating around as part of an interactive. -->
-<xsl:template match="pf:*|xhtml:*|stk:*" mode="id-attribute">
+<!-- The "stack-moodle" element marks the transition to a new   -->
+<!-- namespace.  We do not generally need id's on its children, -->
+<!-- but we do need an "assembly-id" so we can extract the      -->
+<!-- question source for processing into static forms.          -->
+<xsl:template match="pf:*|xhtml:*|stk:*[not(self::stk:stack-moodle)]" mode="id-attribute">
     <xsl:copy>
         <xsl:apply-templates select="@*|node()" mode="id-attribute"/>
     </xsl:copy>
@@ -2659,7 +2663,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="myopenmath">
                 <xsl:text>myopenmath</xsl:text>
             </xsl:when>
-            <xsl:when test="stack">
+            <xsl:when test="stk:stack-moodle">
                 <xsl:text>stack</xsl:text>
             </xsl:when>
             <!-- @runestone was once used to signify a Runestone exercise given  -->
@@ -3235,13 +3239,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
                 <!-- locate the static representation in a file, generated independently -->
-                <!-- NB: this filename is relative to the author's source                -->
+                <!-- NB: this filename is relative to the author's source in "generated" -->
                 <xsl:variable name="filename">
                     <xsl:if test="$b-managed-directories">
                         <xsl:value-of select="$generated-directory-source"/>
                     </xsl:if>
                     <xsl:text>stack/</xsl:text>
-                    <xsl:apply-templates select="stack" mode="assembly-id"/>
+                    <xsl:apply-templates select="stk:stack-moodle" mode="assembly-id"/>
                     <xsl:text>.ptx</xsl:text>
                 </xsl:variable>
                 <xsl:variable name="stack-static-rep" select="document($filename, $original)/stack-static"/>
