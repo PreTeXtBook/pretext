@@ -4864,21 +4864,6 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </section>
 
-    <section>
-        <title>Expedited Samples</title>
-
-        <p>We hack in various interactive Runestone exercise types while <pretext/> markup evolves to cover more of Runestone's repertoire.  In static output these will just produce a message.  In <init>HTML</init> they may be interactive simply in a browser, or they may require being hosted on a Runestone server in order to perform.</p>
-
-        <p>CodeLens for a Python program:</p>
-
-        <exercise runestone='over_codelens1' />
-
-        <p>CodeLens for a Java program.  Supplied in source with trace data built beforehand on a Runestone server:</p>
-
-        <exercise runestone='asgn_viz1' />
-
-    </section>
-
     <reading-questions>
 
         <exercise label="simple-reading-question">
