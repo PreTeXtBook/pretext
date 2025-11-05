@@ -1814,6 +1814,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- 2025-11-04: a @runestone attribute was used to point into a file      -->
+<!-- of raw HTML versions of Runestone exercises.  This was a              -->
+<!-- transitional device to allow conversions of Runestone books into      -->
+<!-- PreTeXt books as work progressed on better integration of Runestone.  -->
+<!-- We make a dead simple replacment exercise, so numbering is preserved, -->
+<!-- etc, and authors can adapt at their leisure.  We remove the offending -->
+<!-- @runestone attribute via a very specialized template.                 -->
+
+<!-- applies to exercise, PROJECT-LIKE, task -->
+<xsl:template match="exercise[@runestone]|project[@runestone]|activity[@runestone]|exploration[@runestone]|investigation[@runestone]|task[@runestone]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <p>There was once a (temporary) Runestone exercise here, which would only render in <init>HTML</init> output, and never in static output forms.  That (temporary) device is no longer supported as of 2025-11-04, since the exercise should now be authored in supported <pretext/> syntax.  You might alert the author to this situation.</p>
+    </xsl:copy>
+</xsl:template>
+
+<!-- remove the @runestone, just in case -->
+<xsl:template match="@runestone" mode="repair"/>
 
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
@@ -2644,9 +2662,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="stack">
                 <xsl:text>stack</xsl:text>
             </xsl:when>
-            <!-- hack for temporary demo HTML versions -->
+            <!-- @runestone was once used to signify a Runestone exercise given  -->
+            <!-- just by raw HTML.  The  @exercise-interactive  value uses was,  -->
+            <!-- appropriately, "htmlhack".  We now replace it with an old-time, -->
+            <!-- static PreTeXt style (dumb) exercise.  Changing the value here  -->
+            <!-- is a quick way to nullify activity in later passes.   See below -->
+            <!-- where the "repair" phase removes the  @runestone  attribute and -->
+            <!-- creates the (dumb) exercise, in order to understand more fully. -->
+            <!-- The commit with these changes might also help. (2025-11-04)     -->
             <xsl:when test="@runestone">
-                <xsl:text>htmlhack</xsl:text>
+                <xsl:text>static</xsl:text>
             </xsl:when>
             <!-- true/false -->
             <xsl:when test="statement/@correct">
