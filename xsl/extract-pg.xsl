@@ -1824,7 +1824,7 @@
 </xsl:template>
 
 <!-- PGML [```...```] creates display math -->
-<xsl:template match="me|md[not(mrow)]">
+<xsl:template match="md[@authored-one-line]">
     <xsl:param name="b-human-readable" />
     <xsl:text>&#xa;&#xa;</xsl:text>
     <xsl:if test="ancestor::ul|ancestor::ol">
@@ -1834,7 +1834,8 @@
     <xsl:if test="$b-human-readable">
         <xsl:call-template name="select-latex-macros"/>
     </xsl:if>
-    <xsl:apply-templates select="text()|var" />
+    <!-- only a single mrow as a child (transition from old "me") -->
+    <xsl:apply-templates select="mrow/text()|mrow/var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
     <xsl:text>```]&#xa;&#xa;</xsl:text>
@@ -1843,14 +1844,14 @@
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="md[mrow]">
+<xsl:template match="md[not(@authored-one-line)]">
     <xsl:param name="b-human-readable" />
     <xsl:apply-templates select="." mode="body">
         <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
     </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="md[mrow]" mode="body">
+<xsl:template match="md[not(@authored-one-line)]" mode="body">
     <xsl:param name="b-human-readable"/>
     <xsl:variable name="complete-latex">
         <xsl:if test="$b-human-readable">
@@ -1881,7 +1882,7 @@
 </xsl:template>
 
 <!-- Within a WeBWorK, md and rows are never numbered -->
-<xsl:template match="md[mrow]" mode="displaymath-alignment">
+<xsl:template match="md[not(@authored-one-line)]" mode="displaymath-alignment">
     <xsl:choose>
         <!-- look for @alignment override, possibly bad -->
         <xsl:when test="@alignment='gather'">
