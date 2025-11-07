@@ -1082,6 +1082,11 @@ Book (with parts), "section" at level 3
             <xsl:message>PTX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
+        <!-- perhaps authored as obviously one-line (no alignment) -->
+        <!-- and manipulated into an  md/@mrow  form               -->
+        <xsl:when test="@authored-one-line">
+            <xsl:text>equation</xsl:text>
+        </xsl:when>
         <!-- sniff for alignment specifications    -->
         <!-- this can be easily fooled, eg matrices-->
         <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
@@ -3326,11 +3331,11 @@ Book (with parts), "section" at level 3
 <!-- lines and the two do not always align with element names, -->
 <!-- so we use two strings to signal the two situations.       -->
 
-<xsl:template match="me|men|mrow|md[not(mrow)]|mdn[not(mrow)]" mode="string-id">
+<xsl:template match="me|men|mrow|md[@authored-one-line]|mdn[not(mrow)]" mode="string-id">
     <xsl:text>equation</xsl:text>
 </xsl:template>
 
-<xsl:template match="md[mrow]|mdn[mrow]" mode="string-id">
+<xsl:template match="md[not(@authored-one-line)]|mdn[mrow]" mode="string-id">
     <xsl:text>displaymath</xsl:text>
 </xsl:template>
 
@@ -9450,8 +9455,8 @@ Book (with parts), "section" at level 3
     <xsl:param name="text-style" />
     <xsl:param name="custom-text" select="''" />
     <!-- an equation target is exceptional -->
-    <!-- may simplify to just a (numbered) "mrow" as only possibility -->
-    <xsl:variable name="b-is-equation-target" select="$target/self::mrow or $target/self::men or $target/self::mdn[not(mrow)] or $target/self::md[not(mrow) and (@number = 'yes')]" />
+    <!-- Targets are "mrow" or bare "md" -->
+    <xsl:variable name="b-is-equation-target" select="$target/self::mrow or $target/self::md[@authored-one-line]" />
     <!-- a bibliography target is exceptional -->
     <xsl:variable name="b-is-biblio-target" select="boolean($target/self::biblio)" />
     <!-- a contributor target is exceptional -->
