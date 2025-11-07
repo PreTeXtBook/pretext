@@ -1833,6 +1833,101 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- remove the @runestone, just in case -->
 <xsl:template match="@runestone" mode="repair"/>
 
+
+<!-- Deprecate "me", "men", "mdn" in favor of "md" (w/ "mrow" or bare) -->
+
+<!-- Strategy: only two forms may be authored:                       -->
+<!--                                                                 -->
+<!--   Regular "md" with (multiple) "mrow" children                  -->
+<!--     - @xml:id goes on the "mrow"                                -->
+<!--     - @number may go on individual "mrow"                       -->
+<!--     - @number may go on overall "md" (to mimic "mdn")           -->
+<!--                                                                 -->
+<!--   Bare "md" with content (like old "me" and "men")              -->
+<!--     - @xml:id goes on the "md"                                  -->
+<!--     - md/@number allows for me/men dichotomy                    -->
+<!--     - md/@number is not assumed                                 -->
+<!--                                                                 -->
+<!-- Conversion here makes every existing display math construction  -->
+<!-- look like the "regular" version described above.  A bare "mdn"  -->
+<!-- had partial support during the transition.                      -->
+
+<!-- Note: placement of @numbered in the "augment" pass should be done  -->
+<!-- here, so actual numering of equations can be done in "augment"     -->
+
+<!-- Replace "me" and "me" by an "md" with one "mrow"    -->
+<!--   - @xml:id will live on the "md" (new)             -->
+<!--   - forcible  @number  override for each, since we  -->
+<!--       don't know global default status              -->
+<!--   - @authored-one-line as empty sentinel, to        -->
+<!--       distinguish from an *authored* single "mrow"  -->
+<xsl:template match="me|men" mode="repair">
+    <xsl:element name="md">
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:attribute name="number">
+            <xsl:choose>
+                <xsl:when test="self::me">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="self::men">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:attribute>
+        <!-- note origin as single-line display math -->
+        <xsl:attribute name="authored-one-line"/>
+        <xsl:element name="mrow">
+            <xsl:apply-templates select="node()" mode="repair"/>
+        </xsl:element>
+    </xsl:element>
+</xsl:template>
+
+<!-- Replace "mdn" with "mrow" to an "md" with @number      -->
+<!--   - forcible  @number  override , since we don't know   -->
+<!--       global default status.  "mrow" may override       -->
+<!--   - @xml:id  was only ever allowed on individual "mrow" -->
+<xsl:template match="mdn[mrow]" mode="repair">
+    <xsl:element name="md">
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:attribute name="number">
+            <xsl:text>yes</xsl:text>
+        </xsl:attribute>
+        <!-- copy the mrows -->
+        <xsl:apply-templates select="node()" mode="repair"/>
+    </xsl:element>
+</xsl:template>
+
+<!-- Replace bare "md" and bare "mdn" by "md" with one "mrow"  -->
+<!--   - @xml:id will live on the "md" (new)                   -->
+<!--   - only limited support for "mdn" during transition      -->
+<!--   - md/@number  introduced in transition, respected first -->
+<xsl:template match="md[not(mrow)]|mdn[not(mrow)]" mode="repair">
+    <xsl:element name="md">
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:attribute name="number">
+            <xsl:choose>
+                <!-- duplicate for (new) authored version -->
+                <xsl:when test="self::md and @number">
+                    <xsl:value-of select="@number"/>
+                </xsl:when>
+                <!-- historical defaults from md/mdn dichotomy -->
+                <xsl:when test="self::md">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="self::mdn">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:attribute>
+        <!-- note origin as single-line display math -->
+        <xsl:attribute name="authored-one-line"/>
+        <xsl:element name="mrow">
+            <xsl:apply-templates select="node()" mode="repair"/>
+        </xsl:element>
+    </xsl:element>
+</xsl:template>
+
+
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
 <!-- ############################## -->
