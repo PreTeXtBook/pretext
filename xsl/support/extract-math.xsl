@@ -143,28 +143,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </html>
 </xsl:template>
 
-<!-- Associate IDs with the LaTeX so we -->
-<!-- know where the results belong      -->
-<!-- TRANSITION: (2025-10-29) Now a bare "md" or "mdn" is   -->
-<!-- going to be equivalent to a "me" or "mdn".  So we      -->
-<!-- retain the old names for the context (the element      -->
-<!-- names), so consumers do not need to adjust.  After     -->
-<!-- the transition, a more careful set of identifiers      -->
-<!-- should communicate the context and consumption should  -->
-<!-- be adjusted.                                           -->
-<xsl:template match="m|me|men|md[mrow]|mdn[mrow]|md[not(mrow)]|mdn[not(mrow)]" mode="extraction">
+<!-- Associate IDs with the LaTeX so we know where     -->
+<!-- the processed results belong when reinserted.     -->
+<!-- Flag the context as "inline" v. "displaymath"     -->
+<!-- so that we can do things like place a CSS class   -->
+<!-- for MathJax to see when processing the math bits. -->
+<xsl:template match="m|md" mode="extraction">
     <xsl:variable name="context">
         <xsl:choose>
-            <xsl:when test="self::me or self::md[not(mrow)]">
-                <xsl:text>me</xsl:text>
+            <xsl:when test="self::m">
+                <xsl:text>inline</xsl:text>
             </xsl:when>
-            <xsl:when test="self::men or self::mdn[not(mrow)]">
-                <xsl:text>men</xsl:text>
+            <xsl:when test="self::md">
+                <xsl:text>displaymath</xsl:text>
             </xsl:when>
-            <!-- else m, md[mrow], mdn[mrow] as element name -->
-            <xsl:otherwise>
-                <xsl:value-of select="local-name(.)"/>
-            </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
     <div context="{$context}">

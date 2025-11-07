@@ -34,7 +34,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                  -->
 <!-- The multiple  pi:math  elements have                             -->
 <!--   @id: matches the id of its progenitor in the source            -->
-<!--   @context: element of progenitor (m|me|men|md|mdn)              -->
+<!--   @context: category of progenitor ("inline" v. "displaymath")   -->
 <!--       div: one to four, with classes indicating content          -->
 <!--           MathML and/or SVG (structured)                         -->
 <!--           braille, speech (raw content)                          -->
