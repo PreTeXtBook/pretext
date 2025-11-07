@@ -7310,6 +7310,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label" />
 </xsl:template>
 
+<!-- When tagging the manufactured "mrow" of a bare "md" we -->
+<!-- get the identification from the containing parent "md" -->
+<xsl:template match="mrow[parent::md[@authored-one-line]]" mode="tag">
+    <xsl:apply-templates select="parent::md" mode="label" />
+</xsl:template>
+
 <!-- An mrow with a \label{} can be cross-referenced    -->
 <!-- md/mdn and \notag in -common control much of this  -->
 <!-- For a local tag, we need to provide the symbol AND -->
