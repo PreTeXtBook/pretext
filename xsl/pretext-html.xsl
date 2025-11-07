@@ -1667,7 +1667,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which is not a cross-reference target (it originates  -->
 <!-- in PG-code), and an error results when the heading in -->
 <!-- the knowl content tries to compute a number           -->
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|men|mdn[not(mrow)]|mrow|md[not(mrow) and (@numbered = 'yes')]|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|md[@authored-one-line]|men|mdn[not(mrow)]|mrow|md[not(mrow) and (@numbered = 'yes')]|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
     <xsl:param name="link" select="/.." />
     <xsl:choose>
         <xsl:when test="$b-skip-knowls or $html-xref-knowled = 'never' or $b-portable-html">
@@ -5420,7 +5420,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content" />
     <div class="displaymath process-math">
         <xsl:apply-templates select="." mode="knowl-urls"/>
-        <xsl:if test="$b-original and not(self::me|self::md[not(mrow) and (@numbered = 'no')])">
+        <!-- Historical: skip "me" (never a target), skip bare "md" that are not numbered (does an "md" get @numbered at all?) -->
+        <!-- <xsl:if test="$b-original and not(self::me|self::md[not(mrow) and (@numbered = 'no')])"> -->
+
+        <!-- Future commented-out version seems to use fewer @id attributes, by removing some  -->
+        <!-- that are not necessary (check in-context links of knowls for xref to numbered equations). -->
+        <!-- <xsl:if test="$b-original and mrow[@numbered = 'yes']"> -->
+
+        <!-- Current: conditional is a no-change refactor, better identifies bare "md"  -->
+        <!-- whose resulting single "mrow" is not numbered, which is like the old "me" -->
+
+        <xsl:if test="$b-original and not(self::me|self::md[@authored-one-line]/mrow[@numbered = 'no'])">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
         </xsl:if>
         <xsl:copy-of select="$content" />
