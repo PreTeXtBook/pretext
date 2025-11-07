@@ -1332,24 +1332,27 @@ width: 100%
     </xsl:variable>
     <xsl:variable name="math" select="$math-repr/pi:math[@id = $id]"/>
     <xsl:variable name="speech" select="$speech-repr/pi:math[@id = $id]"/>
-    <xsl:variable name="context" select="string($math/@context)"/>
     <!-- <xsl:message>C:<xsl:value-of select="$math/@context"/>:C</xsl:message> -->
     <!-- <xsl:copy-of select="$math-repr[../@id = $id]"/> -->
+    <!-- Wrap with a CSS class for MathJax to see before/during processing -->
+    <!-- as to whether or not the math is inline or display.               -->
     <span>
         <xsl:attribute name="class">
             <xsl:choose>
-                <xsl:when test="$context = 'm'">
+                <xsl:when test="$math/@context = 'inline'">
                     <xsl:text>mjpage</xsl:text>
                 </xsl:when>
-                <xsl:when test="($context = 'me') or ($context = 'men') or ($context = 'md') or ($context = 'mdn')">
+                <xsl:when test="$math/@context = 'displaymath'">
                     <xsl:text>mjpage mjpage__block</xsl:text>
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
-        <!-- Can only "xref" to an "men" or an "md/mrow" or an "mdn/mrow" -->
-        <!-- As a target of a cross-reference URL/hyperlink, the base     -->
-        <!-- HTML modal "url" template uses the HTML id                   -->
-        <xsl:if test="$context = 'men' or $context = 'md' or $context = 'mdn'">
+        <!-- Cannot "xref" to inline math, so we only put HTML id attributes   -->
+        <!-- onto display math.  This is overkill, we do not examine what is,  -->
+        <!-- or is not numbered, to make a finer distinction.  An "xref" to a  -->
+        <!-- target without a number is likely to fail in other ways.  An      -->
+        <!--"xref" will not be a knowl, but a URL with fragment being this id. -->
+        <xsl:if test="$math/@context = 'displaymath'">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
         </xsl:if>
         <!-- Finally, drop a "svg" element, "math" element, or ASCII speech -->
