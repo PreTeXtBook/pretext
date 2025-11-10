@@ -179,6 +179,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
+        <p>Likewise, a Kotlin program will only be interactive if hosted on a Runestone server.</p>
+
+        <listing xml:id="program-activecode-kotlin">
+            <title>A simple Kotlin program</title>
+            <program xml:id="kotlin-hello-world" interactive='activecode' language="kotlin" include-source="yes">
+                <code>
+                fun main() {
+                    println("Hello, world!!")
+                }
+                </code>
+            </program>
+        </listing>
+
         <p>A language not supported by Runestone Services will always be rendered static.</p>
 
         <listing xml:id="program-mistake-pascal">
