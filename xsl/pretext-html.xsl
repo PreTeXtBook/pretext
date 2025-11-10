@@ -11684,6 +11684,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2025-11-1: "p" inside Parsons problem should not get permalinks -->
 <xsl:template match="blocks//p" mode="permalink"/>
 
+<!-- 2025-11-9: no permalink for "p" inside cardsort/matching/clickable -->
+<xsl:template match="cardsort//p" mode="permalink"/>
+<xsl:template match="matching//p" mode="permalink"/>
+<xsl:template match="areas//p" mode="permalink"/>
+
+
 <!--                     -->
 <!-- Navigation Sections -->
 <!--                     -->
