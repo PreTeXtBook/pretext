@@ -11679,10 +11679,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2025-10-19: "p" in the label for a multiple choice option overlaps -->
 <!-- the label itself, obscuring the content.  This will suppress most  -->
 <!-- of the "choice", but not everything.                               -->
-<xsl:template match="exercise/choices/choice/statement/p" mode="permalink"/>
+<xsl:template match="choices//p" mode="permalink"/>
 
 <!-- 2025-11-1: "p" inside Parsons problem should not get permalinks -->
-<xsl:template match="exercise/blocks//p" mode="permalink"/>
+<xsl:template match="blocks//p" mode="permalink"/>
 
 <!--                     -->
 <!-- Navigation Sections -->
