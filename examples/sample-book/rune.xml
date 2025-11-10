@@ -3406,7 +3406,7 @@ TEST_CASE( "Test the add function" ) {
             </feedback>
             <cardsort>
                 <match>
-                    <premise order="4">Monroe Doctrine</premise>
+                    <premise order="4"><p>Monroe Doctrine</p></premise>
                     <response>1823</response>
                 </match>
                 <match>
@@ -3533,7 +3533,7 @@ TEST_CASE( "Test the add function" ) {
               <image source="datafiles/golden-gate-bridge.png" width="50%"/>
             </feedback>
             <matching>
-                <premise ref="jack heart">Jack of Hearts</premise>
+                <premise ref="jack heart"><p>Jack of Hearts</p></premise>
                 <premise ref="ace spade">Ace of Spades</premise>
                 <premise ref="queen spade">Queen of Spades</premise>
                 <premise ref="king club">King of Clubs</premise>
