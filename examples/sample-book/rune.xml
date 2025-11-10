@@ -2580,7 +2580,7 @@ TEST_CASE( "Test the add function" ) {
             <p>When this <tag>exercises</tag> division is hosted on Runestone Academy, it will be enabled for group work.  See group selection and submission features are at the end of the division.  See <xref ref="worksheet-groupwork"/> for more detail.  (2024-07-24: experimental.)</p>
         </introduction>
 
-        <exercise xml:id="multiple-choice-one" label="multiple-choice-not-randomized">
+        <activity xml:id="multiple-choice-one" label="multiple-choice-not-randomized">
             <title>Multiple-Choice, Not Randomized, One Answer</title>
             <idx>stop signs</idx>
             <statement>
@@ -2623,7 +2623,7 @@ TEST_CASE( "Test the add function" ) {
             <hint>
                 <p>Maybe go out for a drive?</p>
             </hint>
-        </exercise>
+        </activity>
 
         <exercise label="multiple-choice-feedback-math">
             <title>Multiple-Choice, Math in Feedback</title>
@@ -2966,7 +2966,7 @@ TEST_CASE( "Test the add function" ) {
     <exercises xml:id="parsons-exercises">
         <title>Parsons Exercises</title>
 
-        <exercise label="number-theory-proof" adaptive="yes">
+        <activity label="number-theory-proof" adaptive="yes">
             <title>Parsons Problem, Mathematical Proof</title>
             <idx>even numbers</idx>
             <statement>
@@ -3002,7 +3002,7 @@ TEST_CASE( "Test the add function" ) {
                 </block>
             </blocks>
             <hint><p>Dorothy will not be much help with this proof.</p></hint>
-        </exercise>
+        </activity>
 
         <exercise label="parsons-with-partial-order" adaptive="yes" indentation="hide" language="python">
             <title>Parsons Problem, Partial Ordering</title>
