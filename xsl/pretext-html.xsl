@@ -4343,6 +4343,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Clickable Area    -->
         <!-- Fill-In (Basic)   -->
         <!-- Coding Exercise   -->
+        <!-- Dual Form Exercise-->
         <!-- Short Answer      -->
         <!-- The "runestone-to-interactive" templates will combine a   -->
         <!-- "regular" PreTeXt statement together with some additional -->
@@ -4356,6 +4357,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                (@exercise-interactive = 'clickablearea') or
                                (@exercise-interactive = 'fillin-basic') or
                                (@exercise-interactive = 'coding') or
+                               (@exercise-interactive = 'dual') or
                                (@exercise-interactive = 'shortanswer')"
                                >
             <xsl:if test="$b-has-statement">

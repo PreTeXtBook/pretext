@@ -2048,6 +2048,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- Dual Form exercise (dynamic/static)-->
+
+<!-- 2025-11-11: Runestone HTML is speculative -->
+<xsl:template match="*[@exercise-interactive = 'dual']" mode="runestone-to-interactive">
+    <div class="ptx-runestone-container">
+        <div class="runestone dualquestion_section">
+            <div data-component="dual">
+                <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                <xsl:apply-templates select="statement"/>
+            </div>
+        </div>
+    </div>
+</xsl:template>
+
+
 <!-- Short Answer problem -->
 
 <!-- Traditional form, but not converted like other interactive exercises -->
