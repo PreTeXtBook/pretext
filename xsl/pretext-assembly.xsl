@@ -2812,6 +2812,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="statement and program[(@interactive = 'codelens') or (@interactive = 'activecode')]">
                 <xsl:text>coding</xsl:text>
             </xsl:when>
+            <xsl:when test="dynamic and static">
+                <xsl:text>dual</xsl:text>
+            </xsl:when>
             <xsl:when test="statement and response">
                 <xsl:text>shortanswer</xsl:text>
             </xsl:when>
@@ -2983,6 +2986,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$exercise-style = 'dynamic'">
                 <xsl:apply-templates select="@*" mode="representations"/>
                 <xsl:apply-templates select="node()" mode="representations"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:copy>
+</xsl:template>
+
+<!-- dual copy (not copy-of) -->
+
+<xsl:template match="exercise[(@exercise-interactive = 'dual')]
+                   | project[(@exercise-interactive = 'dual')]
+                   | activity[(@exercise-interactive = 'dual')]
+                   | exploration[(@exercise-interactive = 'dual')]
+                   | investigation[(@exercise-interactive = 'dual')]
+                   | task[(@exercise-interactive = 'dual')]" mode="representations">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="representations"/>
+        <xsl:choose>
+            <xsl:when test="($exercise-style = 'static')">
+                <!-- make a "static" classification, over-writing a "dual" -->
+                <xsl:attribute name="exercise-interative">
+                    <xsl:text>static</xsl:text>
+                </xsl:attribute>
+                <!-- copy overall title and idx, METADATA-FILTER feels too broad  -->
+                <xsl:apply-templates select="title|idx" mode="representations"/>
+                <xsl:apply-templates select="static/*" mode="representations"/>
+            </xsl:when>
+            <xsl:when test="($exercise-style = 'dynamic')">
+                <!-- copy overall title and idx, METADATA-FILTER feels too broad  -->
+                <xsl:apply-templates select="title|idx" mode="representations"/>
+                <xsl:apply-templates select="dynamic/*" mode="representations"/>
             </xsl:when>
         </xsl:choose>
     </xsl:copy>
