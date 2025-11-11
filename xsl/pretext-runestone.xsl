@@ -311,7 +311,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- To enforce this, we *could* make a no-op, plus warning,      -->
 <!-- template in the "pretext-html" stylesheet, with this         -->
 <!-- implementation doing an overide.                             -->
-<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet|interactive[@platform = 'doenetml']" mode="runestone-id-attribute">
+<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet" mode="runestone-id-attribute">
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="runestone-id"/>
     </xsl:variable>
@@ -586,7 +586,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Runestone timed exam associated with some "section".  We also avoid      -->
         <!-- collecting "exercise" at arbitrary depth for the timed exams, as the     -->
         <!-- template for those divisions will do that collection.                    -->
-        <xsl:apply-templates select="exercises[@time-limit]|.//exercise[not(ancestor::exercises[@time-limit])]|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile|.//interactive[@platform = 'doenetml']" mode="runestone-manifest"/>
+        <xsl:apply-templates select="exercises[@time-limit]|.//exercise[not(ancestor::exercises[@time-limit])]|.//project|.//activity|.//exploration|.//investigation|.//video[@youtube]|.//program[(@interactive = 'codelens') and not(parent::exercise)]|.//program[(@interactive = 'activecode') and not(parent::exercise)]|.//datafile" mode="runestone-manifest"/>
 
         <!-- Now check for programs that have been included elsewhere. They need      -->
         <!-- to be rendered into <source> elements.                                   -->
@@ -662,15 +662,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="datafile" mode="runestone-manifest-label">
     <label>
         <xsl:value-of select="@filename"/>
-    </label>
-</xsl:template>
-
-<xsl:template match="interactive[@platform = 'doenetml']" mode="runestone-manifest-label">
-    <label>
-        <!-- This is not very informative.  Perhaps look up     -->
-        <!-- the tree to find a containing figure with a title  -->
-        <!-- TODO: perhaps via a type name -->
-        <xsl:text>DoenetML Interactive</xsl:text>
     </label>
 </xsl:template>
 
@@ -949,15 +940,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="runestone-to-interactive"/>
         </htmlsrc>
     </xsl:element>
-</xsl:template>
-
-<xsl:template match="interactive[@platform = 'doenetml']" mode="runestone-manifest">
-    <question>
-        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
-        <htmlsrc>
-            <xsl:apply-templates select="." mode="interactive-core"/>
-        </htmlsrc>
-    </question>
 </xsl:template>
 
 <!-- Appendix is currently not allowed to have "questions" as Runestone  -->
