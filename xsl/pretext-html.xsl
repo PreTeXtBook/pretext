@@ -11686,18 +11686,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- appear at  https://github.com/PreTeXtBook/pretext/pull/2534    -->
 <xsl:template match="feedback/p" mode="permalink"/>
 
-<!-- 2025-10-19: "p" in the label for a multiple choice option overlaps -->
-<!-- the label itself, obscuring the content.  This will suppress most  -->
-<!-- of the "choice", but not everything.                               -->
-<xsl:template match="choices//p" mode="permalink"/>
+<!-- 2025-10-19: elements in the label for a multiple choice  -->
+<!-- option overlaps the label itself, obscuring the content. -->
+<xsl:template match="choices//*" mode="permalink"/>
 
-<!-- 2025-11-1: "p" inside Parsons problem should not get permalinks -->
-<xsl:template match="blocks//p" mode="permalink"/>
+<!-- 2025-11-1: elements inside Parsons problem should not get permalinks -->
+<xsl:template match="blocks//*" mode="permalink"/>
 
-<!-- 2025-11-9: no permalink for "p" inside cardsort/matching/clickable -->
-<xsl:template match="cardsort//p" mode="permalink"/>
-<xsl:template match="matching//p" mode="permalink"/>
-<xsl:template match="areas//p" mode="permalink"/>
+<!-- 2025-11-9: no permalink for elements inside cardsort/matching/clickable -->
+<xsl:template match="cardsort//*" mode="permalink"/>
+<xsl:template match="matching//*" mode="permalink"/>
+<xsl:template match="areas//*" mode="permalink"/>
 
 
 <!--                     -->
