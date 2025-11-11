@@ -5257,6 +5257,192 @@ TEST_CASE( "Test the add function" ) {
             />
         </figure>
 
+        <!-- Following exercises should go into their own section, but that -->
+        <!-- messes up numbering and it is hard to see changes.  Wait until -->
+        <!-- this settles down some, and then split these off.              -->
+
+        <p>(2025-11-05) The following two exercises are <alert>strictly EXPERIMENTAL</alert>.  Do not incorporate them into your projects as they are likely to change dramatically.</p>
+
+        <!-- 2025-11-05: Donated by Matt Boelkins from Active Calculus  -->
+        <!-- where it has @xml:id "doenet-interactive-exercise-1-1-1" -->
+        <exercise>
+            <title>Finding the average velocity of a moving object from data (dual, Doenet)</title>
+            <dynamic>
+                <statement>
+                    <interactive label="doenet-velocity" platform="doenetml">
+                        <slate surface="doenetml">
+                            <![CDATA[
+                              <setup>
+                                <math name="a"><selectFromSequence from="0.3" to="0.5" step="0.1"/></math>
+                                <math name="b"><selectFromSequence from="1.3" to="1.8" step="0.1"/></math>
+                                <math name="c"><selectFromSequence from="1" to="3" step="1"/></math>
+                                <function name="s" symbolic="false" >
+                                  $b*x^2
+                                </function>
+                              </setup>
+
+                            <!--
+                              <p><m>a=$a</m>, <m>b=$b</m>, <m>c=$c</m></p>
+                            -->
+
+                              <p>
+                                Consider a car whose position <m>s</m> (in feet) at time <m>t</m> (in seconds) is given by the table:
+                              </p>
+
+                              <table suppressTableNameInTitle="true">
+                                <tabular top="minor" bottom="minor" left="minor" right="minor">
+                                  <row>
+                                    <cell><m>t</m> (sec)</cell>
+                                    <cell><m>0</m></cell>
+                                    <cell><math simplify>$a</math></cell>
+                                    <cell><math simplify>2$a</math></cell>
+                                    <cell><math simplify>3$a</math></cell>
+                                    <cell><math simplify>4$a</math></cell>
+                                    <cell><math simplify>5$a</math></cell>
+                                  </row>
+                                  <row>
+                                    <cell><m>s</m> (feet)</cell>
+                                    <cell><math simplify displayDigits="4">$$s(0)</math></cell>
+                                    <cell><math simplify displayDigits="4">$$s($a)</math></cell>
+                                    <cell><math simplify displayDigits="4">$$s(2$a)</math></cell>
+                                    <cell><math simplify displayDigits="4">$$s(3$a)</math></cell>
+                                    <cell><math simplify displayDigits="4">$$s(4$a)</math></cell>
+                                    <cell><math simplify displayDigits="4">$$s(5$a)</math></cell>
+                                  </row>
+                                </tabular>
+                              </table>
+
+                              <p>
+                                <ol marker="a">
+                                  <li>
+                                    <p> What are the units on the average velocity of the car? </p>
+                                      <answer>
+                                        <choiceInput name="choice1" inline>
+                                          <choice>miles per hour</choice>
+                                          <choice>feet</choice>
+                                          <choice credit="1">feet per second</choice>
+                                          <choice>seconds</choice>
+                                        </choiceInput>
+                                      </answer>
+                                  </li>
+                                  <li>
+                                    <p>Find the average velocity of the car on the interval <m>0 \le t \le <math simplify>3*$a</math>.</m> </p>
+                                  </li>
+                                  <answer allowedErrorInNumbers="0.05" allowedErrorIsAbsolute="true">
+                                      ($$s(3*$a)-$$s(0*$a))/(3$a)
+                                  </answer>
+                                  <!--
+                                  <math simplify displayDigits="8"> ($$s(3*$a)-$$s(0*$a))/(3$a) </math>, <math displayDigits="8"> ($$s(3*$a)-$$s(0*$a))/(3$a) </math>
+                                  -->
+                                  <li>
+                                    <p>
+                                      Find the average velocity of the car on the interval <m>[<math simplify>$c*$a</math>, <math simplify>($c+2)*$a</math>]</m>.
+                                    </p>
+                                  </li>
+                                  <answer allowedErrorInNumbers="0.05" allowedErrorIsAbsolute="true">
+                                      ($$s(($c+2)*$a)-$$s($c*$a))/(2$a)
+                                  </answer>
+                                </ol>
+                              </p>
+                            ]]>
+                        </slate>
+                    </interactive>
+                </statement>
+            </dynamic>
+            <static>
+                <introduction>
+                  <p>
+                    Consider a car whose position <m>s</m> (in feet) at time <m>t</m> (in seconds) is given by the table:
+                  </p>
+                  <!-- $a = 0.3, $$s(x) = 1.3*x^2 -->
+                  <tabular top="minor" bottom="minor" left="minor" right="minor">
+                    <row>
+                      <cell><m>t</m> (sec)</cell>
+                      <cell><m>0</m></cell>
+                      <cell><m>0.3</m></cell>
+                      <cell><m>0.6</m></cell>
+                      <cell><m>0.9</m></cell>
+                      <cell><m>1.2</m></cell>
+                      <cell><m>1.5</m></cell>
+                    </row>
+                    <row>
+                      <cell><m>s</m> (feet)</cell>
+                      <cell><m>0</m></cell>
+                      <cell><m>0.117</m></cell>
+                      <cell><m>0.468</m></cell>
+                      <cell><m>1.053</m></cell>
+                      <cell><m>1.872</m></cell>
+                      <cell><m>2.925</m></cell>
+                    </row>
+                  </tabular>
+                </introduction>
+                <task>
+                  <statement>
+                    <p>
+                      What are the units on the average velocity of the car?
+                    </p>
+                  </statement>
+                  <hint>
+                    <p>
+                      Consider possibilities such as <q>feet</q>, <q>seconds</q>, <q>feet per second</q>, or <q>seconds per foot</q>.
+                    </p>
+                  </hint>
+                  <answer>
+                    <p>
+                      feet per second
+                    </p>
+                  </answer>
+                </task>
+                <task>
+                  <statement>
+                    <p>
+                      Find the average velocity of the car on the interval <m>0 \le t \le 0.9</m>.
+                    </p>
+                  </statement>
+                  <hint>
+                    <p>
+                      Recall that average velocity is <q>change in position divided by change in time</q>.
+                    </p>
+                  </hint>
+                  <answer>
+                    <p>
+                      The average velocity of the car on the interval <m>0 \le t \le 0.9</m> is <m>1.17</m> feet per second.
+                    </p>
+                  </answer>
+                </task>
+                <task>
+                  <statement>
+                    <p>
+                      <!-- $c = 3 -->
+                      Find the average velocity of the car on the interval <m>[0.9, 1.5]</m>.
+                    </p>
+                  </statement>
+                  <answer>
+                    <p>
+                      The average velocity of the car on the interval <m>[0.9,1.5]</m> is <m>3.12</m> feet per second.
+                    </p>
+                  </answer>
+                </task>
+            </static>
+        </exercise>
+
+        <exercise>
+            <title>OpenDSA List Insertion (Dual)</title>
+            <dynamic>
+                <statement>
+                    <p>Work this following problem. Note that this is really just a test to see if additional text (beyond an <tag>interactive</tag>) will show up.</p>
+                    <interactive label="OpenDSA-list-insertion-exercise"
+                        iframe="https://opendsax.cs.vt.edu/OpenDSA/Exercises/List/AlistInsertPRO.html"
+                        width="100%"/>
+                </statement>
+            </dynamic>
+            <static>
+                <statement>
+                    <p>An exercise about array-based list insertion goes here.</p>
+                </statement>
+            </static>
+        </exercise>
+
     </section>
 
     <exercises xml:id="chapter-exam" label="chapter-exam" time-limit="15" pause="yes">
