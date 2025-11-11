@@ -11688,6 +11688,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- 2025-10-19: elements in the label for a multiple choice  -->
 <!-- option overlaps the label itself, obscuring the content. -->
+<!-- NB: "choices" are in multiple-choice exercises, and in   -->
+<!-- "query" polling-like elements.                           -->
 <xsl:template match="choices//*" mode="permalink"/>
 
 <!-- 2025-11-1: elements inside Parsons problem should not get permalinks -->
