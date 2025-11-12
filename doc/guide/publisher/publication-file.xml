@@ -519,6 +519,7 @@
                         <li><c>c</c> (C, Runestone server only)</li>
                         <li><c>cpp</c> (C++, Runestone server only)</li>
                         <li><c>java</c> (Java, Runestone server only)</li>
+                        <li><c>kotlin</c> (Kotlin, Runestone server only)</li>
                         <li><c>python3</c> (Python 3, Runestone server only)</li>
                         <li><c>octave</c> (Octave, Runestone server only)</li>
                         <li><c>none</c></li>

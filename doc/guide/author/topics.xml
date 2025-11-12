@@ -3760,6 +3760,12 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                         <cell>AC + CL + IO + UT</cell>
                     </row>
                     <row>
+                        <cell>Kotlin</cell>
+                        <cell><c>kotlin</c></cell>
+                        <cell></cell>
+                        <cell>AC</cell>
+                    </row>
+                    <row>
                         <cell>C</cell>
                         <cell><c>c</c></cell>
                         <cell>CL</cell>
