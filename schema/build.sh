@@ -33,6 +33,18 @@
 #  from the PreTeXt schema.  So make a copy and adjust paths
 #  to suit your particular purposes.
 
+#  Prerequites
+#
+#  1.  PreTeXt repository (where this file lives)
+#  2.  "trang" conversion tool, on your $PATH
+#       a.  "trang" package for Debian
+#       b.  "jing-trang" package for Ubuntu
+
+# Usage
+#
+# 1.  Assumes  ${PTX}/schema  is current working directory
+# 2.  No arguments, just "./build.sh"
+
 shopt -s -o nounset
 
 # ***********
