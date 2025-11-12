@@ -2556,11 +2556,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="@number = 'no'">
                     <xsl:text>no</xsl:text>
                 </xsl:when>
-                <!-- now the "mrow" has no special indications, look to containers -->
-                <!-- "mdn" will be obsolete, we do not expend any extra effort     -->
-                <xsl:when test="parent::mdn">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
                 <!-- now examine the "md" element as the container -->
                 <xsl:when test="parent::md[@number = 'yes']">
                     <xsl:text>yes</xsl:text>
@@ -2586,48 +2581,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:attribute>
         <!-- children -->
-        <xsl:apply-templates select="node()" mode="augment"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- The display math "md" element, without "mrow" children, needs to  -->
-<!-- allow a @number attribute so that it can impersonate the old "me" -->
-<!-- AND "men" elements.  Note: this will be obsolete if we just       -->
-<!-- "repair" a "bare" "md" or "mdn" into a single "mrow" variant.     -->
-<xsl:template match="md[not(mrow)]" mode="augment">
-    <xsl:copy>
-        <!-- existing attributes first -->
-        <xsl:apply-templates select="@*" mode="augment"/>
-        <!-- @numbered as a boolean flag -->
-        <xsl:attribute name="numbered">
-            <xsl:choose>
-                <!-- @tag is not yet implemented! -->
-                <xsl:when test="@tag">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:when test="@number = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="@number = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- Now the global default set in "docinfo".  It would be -->
-                <!-- nice to store this choice in a global variable, but   -->
-                <!-- the mechanics of that result in erroneous recursion.  -->
-                <!-- So we simply repeatedly consult the "docinfo" built   -->
-                <!-- in the previous tree.                                 -->
-                <xsl:when test="$language/pretext/docinfo/numbering/@equations = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$language/pretext/docinfo/numbering/@equations = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- the default default is to not number equations -->
-                <xsl:otherwise>
-                    <xsl:text>no</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
         <xsl:apply-templates select="node()" mode="augment"/>
     </xsl:copy>
 </xsl:template>
