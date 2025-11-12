@@ -40,21 +40,23 @@ shopt -s -o nounset
 # ***********
 
 # PreTeXt distribution
-declare MB=${HOME}/mathbook/mathbook
+# Likely "/path/to/pretext"
+# RAB's path is historical
+declare PTX=${HOME}/mathbook/mathbook
 
 # *************
 # Derived paths
 # *************
 
 # XSL for literate programming tool
-declare MBXSL=${MB}/xsl
+declare XSL=${PTX}/xsl
 
 # ******************
 # Grammar generation
 # ******************
 
 # PreTeXt extraction of RELAX-NG compact schema
-xsltproc ${MBXSL}/pretext-litprog.xsl pretext.xml
+xsltproc ${XSL}/pretext-litprog.xsl pretext.xml
 
 # System trang conversion to RELAX-NG XML schema
 trang -I rnc -O rng pretext.rnc pretext.rng
@@ -65,7 +67,7 @@ trang -I rnc -O rng pretext-dev.rnc pretext-dev.rng
 trang -o disable-abstract-elements -I rnc -O xsd pretext.rnc pretext.xsd
 
 # And the same steps for the publication-schema
-xsltproc ${MBXSL}/pretext-litprog.xsl publication-schema.xml
+xsltproc ${XSL}/pretext-litprog.xsl publication-schema.xml
 trang -I rnc -O rng publication-schema.rnc publication-schema.rng
 trang -o disable-abstract-elements -I rnc -O xsd publication-schema.rnc publication-schema.xsd
 
