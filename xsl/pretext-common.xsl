@@ -3174,11 +3174,11 @@ Book (with parts), "section" at level 3
 <!-- lines and the two do not always align with element names, -->
 <!-- so we use two strings to signal the two situations.       -->
 
-<xsl:template match="me|men|mrow|md[@authored-one-line]|mdn[not(mrow)]" mode="string-id">
+<xsl:template match="mrow|md[@authored-one-line]" mode="string-id">
     <xsl:text>equation</xsl:text>
 </xsl:template>
 
-<xsl:template match="md[not(@authored-one-line)]|mdn[mrow]" mode="string-id">
+<xsl:template match="md[not(@authored-one-line)]" mode="string-id">
     <xsl:text>displaymath</xsl:text>
 </xsl:template>
 
