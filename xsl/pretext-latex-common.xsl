@@ -85,11 +85,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-console"      select="boolean($document-root//console)" />
 <xsl:variable name="b-has-sidebyside"   select="boolean($document-root//sidebyside)" />
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)" />
-<!-- 2023-10-18: this is a bit buggy, as it ignores the "men" element.  -->
-<!-- And it examines the "md" element which will never be true. It has  -->
-<!-- been fine for years, and it hopefully will go away some day, so no -->
-<!-- fix right now.                                                     -->
-<xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//md[contains(text(),'sfrac')] or $document-root//me[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
+<xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
 <!-- These are *significant*, *intentional* source elements requiring a monospace font   -->
 <!-- (and not incindentals like an email address which could just be the default tt font -->
 <xsl:variable name="b-needs-mono-font" select="$b-has-program or $b-has-sage or $b-has-console or $document-root//c or $document-root//cd or $document-root//pre or $document-root//tag or $document-root//tage or $document-root//attr"/>
@@ -1153,10 +1149,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
+    <xsl:if test="$document-root//fillin[not(parent::m or parent::mrow)]">
         <xsl:call-template name="fillin-text"/>
     </xsl:if>
-    <xsl:if test="$document-root//m/fillin|$document-root//me/fillin|$document-root//men/fillin|$document-root//mrow/fillin">
+    <xsl:if test="$document-root//m/fillin|$document-root//mrow/fillin">
         <xsl:call-template name="fillin-math"/>
     </xsl:if>
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
@@ -2470,9 +2466,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- We could use contains() on the 5 types of arrows  -->
     <!-- to really defend against this problematic package -->
-    <!-- 2023-10-19: this test is buggy, there is no consideration -->
-    <!-- of "men", while "md" and "mrow" are duplicative           -->
-    <xsl:if test="$document-root//m|$document-root//md|$document-root//mrow">
+    <xsl:if test="$document-root//m|$document-root//md">
         <xsl:choose>
             <xsl:when test="contains($latex-packages, '\usepackage{extpfeil}')">
                 <xsl:text>%% You have elected to load the LaTeX "extpfeil" package&#xa;</xsl:text>
@@ -7286,27 +7280,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Displayed Single-Line Math ("me", "men") -->
 
-<!-- The default template just calls the modal "body"      -->
-<!-- template needed for the HTML knowl production scheme. -->
-<!-- The variables in the "body" template have the right   -->
-<!-- defaults for this application                         -->
-<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]">
-    <xsl:apply-templates select="." mode="body" />
-</xsl:template>
-
 <xsl:template name="display-math-visual-blank-line">
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Simply apply modal "label" template,  -->
-<!-- to allow for LaTeX equation numbering -->
-<xsl:template match="md[not(mrow)]" mode="tag">
-    <xsl:if test="@numbered = 'yes'">
-        <xsl:apply-templates select="." mode="label" />
-    </xsl:if>
-</xsl:template>
-
-<xsl:template match="men|mdn[not(mrow)]|mrow" mode="tag">
+<xsl:template match="mrow" mode="tag">
     <xsl:apply-templates select="." mode="label" />
 </xsl:template>
 
@@ -7336,7 +7314,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- knowl production scheme. The variables in the "body"     -->
 <!-- template have the right defaults for this application    -->
 
-<xsl:template match="md[mrow]|mdn[mrow]">
+<xsl:template match="md[mrow]">
     <xsl:apply-templates select="." mode="body" />
 </xsl:template>
 
@@ -8406,7 +8384,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Fill-in blank -->
 <!-- \fillintext{} defined in preamble as semantic macro   -->
 <!-- Argument is intended number of characters             -->
-<xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::md[not(mrow)] or parent::mdn[not(mrow)] or parent::mrow)]">
+<xsl:template match="fillin[not(parent::m or parent::mrow)]">
     <xsl:variable name="characters">
         <xsl:choose>
             <xsl:when test="@characters">
@@ -10776,7 +10754,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- and the number should suffice on its own               -->
         <xsl:when test="$target/self::biblio"/>
         <!-- and trailing a () for an equation number is overkill -->
-        <xsl:when test="$target/self::mrow|$target/self::men"/>
+        <xsl:when test="$target/self::mrow|$target/self::md"/>
         <!-- and it is really bad for an xref inside a title -->
         <xsl:when test="ancestor::title"/>
         <!-- off by default electronic PDF, -->

@@ -245,15 +245,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the templates for hard-coded equation numbers are     -->
 <!-- from the HTML conversion.                             -->
 
-<xsl:template match="md[not(mrow)]" mode="tag">
-    <xsl:if test="@numbered = 'yes'">
-        <xsl:text>\tag{</xsl:text>
-        <xsl:apply-templates select="." mode="number" />
-        <xsl:text>}</xsl:text>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template match="men|mrow" mode="tag">
+<xsl:template match="mrow" mode="tag">
     <xsl:text>\tag{</xsl:text>
     <xsl:apply-templates select="." mode="number" />
     <xsl:text>}</xsl:text>
