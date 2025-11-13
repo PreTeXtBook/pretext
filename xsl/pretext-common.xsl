@@ -1733,8 +1733,8 @@ Book (with parts), "section" at level 3
 
 <!-- Sometimes we just need the mark itself (e.g. braille).  Note -->
 <!-- that the "mark" could well be plural, but usuually is not.   -->
-<xsl:template match="m|md[mrow]" mode="get-clause-punctuation-mark">
-    <xsl:if test="(self::m and $b-include-inline) or (self::md[mrow] and $b-include-display)">
+<xsl:template match="m|md" mode="get-clause-punctuation-mark">
+    <xsl:if test="(self::m and $b-include-inline) or (self::md and $b-include-display)">
         <xsl:variable name="trailing-text" select="following-sibling::node()[1]/self::text()" />
         <xsl:call-template name="leading-clause-punctuation">
             <xsl:with-param name="text" select="$trailing-text" />
@@ -1746,8 +1746,8 @@ Book (with parts), "section" at level 3
 <!-- inside LaTeX rendering.                                -->
 <!-- NB: this mode name is not great, but we leave it as-is -->
 <!-- from a refactor. A cosmetic refactor could improve it. -->
-<xsl:template match="m|md[mrow]" mode="get-clause-punctuation">
-    <xsl:if test="(self::m and $b-include-inline) or (self::md[mrow] and $b-include-display)">
+<xsl:template match="m|md" mode="get-clause-punctuation">
+    <xsl:if test="(self::m and $b-include-inline) or (self::md and $b-include-display)">
         <xsl:variable name="punctuation">
             <xsl:apply-templates select="." mode="get-clause-punctuation-mark"/>
         </xsl:variable>
