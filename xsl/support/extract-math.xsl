@@ -104,7 +104,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- No special wrapping needed for display  -->
 <!-- mathematics, so just copy the content   -->
-<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]" mode="display-math-wrapper">
+<xsl:template match="md[mrow]" mode="display-math-wrapper">
     <xsl:param name="content" />
     <xsl:copy-of select="$content" />
 </xsl:template>
