@@ -97,7 +97,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--         examining simple situations which do not require a -->
 <!--         switch to Nemeth, or use simpler indicators        -->
 <!--     math-nemeth: unicode from SRE                          -->
-<xsl:template match="m|me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]" mode="meld-math">
+<!-- NB: after a  md[mrow]  goes through MathJax/SRE there is   -->
+<!-- no "mrow" left.  So they are absent in "math-nemeth".  They -->
+<!-- *are* present in "math-original" but that introduces a new  -->
+<!-- element in-between "md" and "mrow", so matches on           -->
+<!-- "md[mrow]" can be problematic here (and perhaps elsewhere). -->
+<xsl:template match="m|md" mode="meld-math">
     <!-- preserve author's element -->
     <xsl:copy>
         <!-- preserve attributes -->
@@ -1605,7 +1610,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="m[contains(math-nemeth, '&#xa;')]|me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]">
+<xsl:template match="m[contains(math-nemeth, '&#xa;')]|md">
     <xsl:variable name="nemeth">
         <xsl:value-of select="math-nemeth"/>
         <xsl:text>&#xa;</xsl:text>
@@ -1963,7 +1968,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- moot and not necessary.                                  -->
 <!-- [BANA, 2016] 10.6.2 and Michael Cantino: an underscore   -->
 <!-- Seems to translate as a "sign": 46-36 in liblouis table  -->
-<xsl:template match="fillin[not(parent::m or parent::me or parent::men or parent::md[not(mrow)] or parent::mdn[not(mrow)] or parent::mrow)]">
+<xsl:template match="fillin[not(parent::m or parent::mrow)]">
     <xsl:text>_</xsl:text>
 </xsl:template>
 
@@ -1988,10 +1993,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: leading with a display in a "p" means no indentation.      -->
 <!-- Note: this is derived from a similar template in the HTML        -->
 <!-- conversion.                                                      -->
-<xsl:template match="p[ol|ul|dl|m[contains(math-nemeth, '&#xa;')]|me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]|cd]">
+<xsl:template match="p[ol|ul|dl|m[contains(math-nemeth, '&#xa;')]|md|cd]">
     <!-- will later loop over displays within paragraph      -->
     <!-- match guarantees at least one for $initial variable -->
-    <xsl:variable name="displays" select="ul|ol|dl|m[contains(math-nemeth, '&#xa;')]|me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]|cd" />
+    <xsl:variable name="displays" select="ul|ol|dl|m[contains(math-nemeth, '&#xa;')]|md|cd" />
     <!-- content prior to first display is exceptional, but if empty,   -->
     <!-- as indicated by $initial, we do not produce an empty paragraph -->
     <!--                                                                -->
@@ -2011,7 +2016,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="."/>
         <!-- look through remainder, all element and text nodes, and the next display -->
         <xsl:variable name="rightward" select="following-sibling::node()" />
-        <xsl:variable name="next-display" select="following-sibling::*[self::ul or self::ol or self::dl or self::m[contains(math-nemeth, '&#xa;')] or self::me or self::men or self::md[not(mrow)] or self::mdn[not(mrow)] or self::md[mrow] or self::mdn[mrow] or self::cd][1]" />
+        <xsl:variable name="next-display" select="following-sibling::*[self::ul or self::ol or self::dl or self::m[contains(math-nemeth, '&#xa;')] or self::md or self::cd][1]" />
         <xsl:choose>
             <xsl:when test="$next-display">
                 <xsl:variable name="leftward" select="$next-display/preceding-sibling::node()" />
