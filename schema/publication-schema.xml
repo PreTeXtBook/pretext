@@ -362,7 +362,7 @@
             Calculator =
                 element calculator {
                     attribute model { "geogebra-classic" | "geogebra-graphing" | "geogebra-geometry" | "geogebra-3d" | "none "}?,
-                    attribute activecode { "python" | "javascript" | "html" | "sql" | "c" | "cpp" | "java" | "python3" | "octave" | "none"}?
+                    attribute activecode { "python" | "javascript" | "html" | "sql" | "c" | "cpp" | "java" | "kotlin" | "python3" | "octave" | "none"}?
                 }
 
             Crossreferences =
