@@ -847,20 +847,20 @@ Book (with parts), "section" at level 3
 <!-- All displayed mathematics gets wrapped by  -->
 <!-- an abstract template, a necessity for HTML -->
 <!-- output.  Otherwise, just a copy machine.   -->
-<xsl:template match="md[mrow]|mdn[mrow]" mode="display-math-wrapper">
+<xsl:template match="md[mrow]" mode="display-math-wrapper">
     <xsl:param name="content" />
     <xsl:value-of select="$content" />
 </xsl:template>
 
-<xsl:template match="md[mrow]|mdn[mrow]" mode="body">
+<xsl:template match="md[mrow]" mode="body">
     <!-- block-type parameter is ignored, since the          -->
     <!-- representation never varies, no heading, no wrapper -->
     <xsl:param name="block-type" />
     <!-- If original content, or a duplication -->
     <xsl:param name="b-original" select="true()" />
-    <!-- If the only content of a knowl ("men") then we  -->
-    <!-- do not include adjacent (trailing) punctuation, -->
-    <!-- since it is meaningless                         -->
+    <!-- If the only content of a knowl then we do not -->
+    <!-- include adjacent (trailing) punctuation,      -->
+    <!-- since it is meaningless                       -->
     <xsl:param name="b-top-level" select="false()" />
     <!-- Look across all mrow for 100% no-number rows              -->
     <!-- This just allows for slightly nicer human-readable source -->
@@ -908,7 +908,7 @@ Book (with parts), "section" at level 3
 <!-- AMSMath has no easy way to make a one-off number within      -->
 <!-- the *-form, so we lean toward always using the un-starred    -->
 <!-- versions, except when we flag 100% no numbers inside an "md" -->
-<xsl:template match="md[mrow]|mdn[mrow]" mode="displaymath-alignment">
+<xsl:template match="md[mrow]" mode="displaymath-alignment">
     <xsl:param name="b-nonumbers" select="false()" />
     <xsl:choose>
         <!-- look for @alignment override, possibly bad -->
@@ -949,9 +949,9 @@ Book (with parts), "section" at level 3
 <!-- With alignment="alignat" we need the number of columns     -->
 <!-- as an argument, complete with the LaTeX group (braces)     -->
 <!-- Mostly we call this regularly, and it usually does nothing -->
-<xsl:template match="me|men|md[not(mrow)]|mdn[not(mrow)]|md[mrow]|mdn[mrow]" mode="alignat-columns" />
+<xsl:template match="md[mrow]" mode="alignat-columns" />
 
-<xsl:template match="md[mrow and (@alignment='alignat')]|mdn[mrow and @alignment='alignat']" mode="alignat-columns">
+<xsl:template match="md[mrow and (@alignment='alignat')]" mode="alignat-columns">
     <xsl:variable name="number-equation-columns">
         <xsl:choose>
             <!-- override first -->
@@ -993,8 +993,8 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="$amp-char + $amp-macro" />
 </xsl:template>
 
-<!-- Recurse through "mrow"s of a presumed "md" or "mdn" -->
-<!-- counting ampersands and tracking the maximum        -->
+<!-- Recurse through "mrow"s of a presumed "md"   -->
+<!-- counting ampersands and tracking the maximum -->
 <xsl:template match="mrow" mode="max-ampersands">
     <xsl:param name="max" select="0"/>
     <!-- build string/text content -->
@@ -1045,7 +1045,7 @@ Book (with parts), "section" at level 3
 <!-- (1) display-page-break                                    -->
 <!--       LaTeX scheme, no-op here as base                    -->
 <!-- (2) tag                                                   -->
-<!--       similar to for "men", but on *rows* of multiline    -->
+<!--       on *rows* of multiline                              -->
 
 <!-- Default implementations of specialized templates -->
 <xsl:template match="mrow" mode="display-page-break"/>
@@ -1062,7 +1062,7 @@ Book (with parts), "section" at level 3
     <!-- save for minor manipulation later.          -->
     <!-- Note: generic text() template here in       -->
     <!-- -common should always pass through the text -->
-    <!-- nodes within "me" and "men" with no changes -->
+    <!-- nodes within "mrow" with no changes         -->
     <xsl:variable name="raw-latex">
         <xsl:choose>
             <xsl:when test="ancestor::webwork">
@@ -1343,7 +1343,7 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="m/fillin|me/fillin|men/fillin|md[not(mrow)]/fillin|mdn[not(mrow)]/fillin|mrow/fillin">
+<xsl:template match="m/fillin|mrow/fillin">
     <xsl:choose>
         <xsl:when test="@fill">
             <xsl:text>\fillinmath{</xsl:text>
@@ -1827,7 +1827,7 @@ Book (with parts), "section" at level 3
     <!-- A math element that allows XML elements within will         -->
     <!-- be hit with "xsl:apply-templates" and arrive here,          -->
     <!-- so we need to guard against "text()" with parents:          -->
-    <!-- "fillin", "xref", "var"   inside   "m", "me", "men", "mrow" -->
+    <!-- "fillin", "xref", "var"   inside   "m",  "mrow"             -->
     <!-- The default behavior is a straight copy, with no changes.   -->
     <!-- NB: We defer WW-specific work for now.                      -->
     <xsl:variable name="text-processed">
@@ -2145,7 +2145,7 @@ Book (with parts), "section" at level 3
 <!-- descended introduction or conclusion .                          -->
 <!-- Also, list items are considered blocks.                         -->
 <!-- NB: we don't point to a sidebyside, so not included here        -->
-<xsl:template match="md[mrow]|mdn[mrow]|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|exercise|li" mode="is-block">
+<xsl:template match="md[mrow]|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|exercise|li" mode="is-block">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -9127,7 +9127,11 @@ Book (with parts), "section" at level 3
 <!-- yes/no boolean for valid targets of an "xref"         -->
 <!-- Initial list from entities file as of 2021-02-10      -->
 <!-- Others from test docs, public testing via pretext-dev -->
-<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|subexercises|exercisegroup|poem|assemblage|paragraphs|li|fn|men|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
+<!-- NB: "men" is historical.  This element gets repaired  -->
+<!-- to a one-line "md" but the target is found in the     -->
+<!-- original source and is identified as an "men" element, -->
+<!-- which really *should not* be not on this list.         -->
+<xsl:template match="&STRUCTURAL;|&DEFINITION-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&GOAL-LIKE;|&FIGURE-LIKE;|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercise|task|subexercises|exercisegroup|poem|assemblage|paragraphs|li|fn|men|md|mrow|biblio|interactive/instructions|case|contributor|gi" mode="is-xref-target">
     <xsl:value-of select="'yes'"/>
 </xsl:template>
 
