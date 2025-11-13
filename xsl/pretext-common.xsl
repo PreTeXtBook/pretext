@@ -8029,6 +8029,7 @@ Book (with parts), "section" at level 3
     <language ptx="go"          active=""            listings="C"                prism="go"/>
     <language ptx="java"        active="java"        listings="Java"             prism="java"/>
     <language ptx="javascript"  active="javascript"  listings=""                 prism="javascript"/>
+    <language ptx="kotlin"      active="kotlin"      listings=""                 prism="kotlin"/>
     <language ptx="lua"         active=""            listings="Lua"              prism="lua"/>
     <language ptx="pascal"      active=""            listings="Pascal"           prism="pascal"/>
     <language ptx="perl"        active=""            listings="Perl"             prism="perl"/>
