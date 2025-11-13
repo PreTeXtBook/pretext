@@ -196,7 +196,7 @@
 <xsl:template match="eval[@obj]">
     <xsl:text>[%= </xsl:text>
     <xsl:choose>
-        <xsl:when test="ancestor::m|ancestor::me|ancestor::md[not(mrow)]|ancestor::mrow">
+        <xsl:when test="ancestor::m|ancestor::mrow">
             <xsl:text>toTeX(</xsl:text>
             <xsl:value-of select="@obj"/>
             <xsl:text>)</xsl:text>
