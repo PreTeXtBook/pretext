@@ -12102,6 +12102,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the temporary &quot;@runestone&quot; attribute was used to temporarily specify a raw HTML version of a Runestone problem.  That device is now obsolete.  The exercise remains, but its contents have been neutered to form an informational message.  Consider authoring the exercise using supported PreTeXt syntax.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2025-11-14  bare "mdn" construction was only ever temporary/transitional -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//mdn[not(mrow)]&quot;" />
+        <xsl:with-param name="date-string" select="'2025-11-14'" />
+        <xsl:with-param name="message" select="'an &quot;mdn&quot; element without any &quot;mrow&quot; children (&quot;bare&quot;) was only implemented briefly and was never supported.  Your instance is being ignored and will not be visible in output.  You can switch it to the supported bare &quot;md&quot; element with a &quot;@number&quot; attribute set to &quot;yes&quot;.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

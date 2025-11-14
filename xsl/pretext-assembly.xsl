@@ -1906,12 +1906,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- Replace bare "md" and bare "mdn" by "md" with one "mrow"  -->
-<!--   - @xml:id will live on the "md" (new)                   -->
-<!--   - only limited support for "mdn" during transition      -->
-<!--   - md/@number  introduced in transition, respected first -->
-<xsl:template match="md[not(mrow)]|mdn[not(mrow)]" mode="repair">
-    <xsl:element name="md">
+<!-- A bare "mdn" was just a transitional device during all    -->
+<!-- the deprecation of the majority of math display elements  -->
+<!-- and the introduction of more robust numbering options.    -->
+<!-- It *never* enjoyed full support and was only in the wild  -->
+<!-- for a couple of weeks.  We warn about this removal (as a  -->
+<!-- deprecation) and suggest the "md" replacement.            -->
+<xsl:template match="mdn[not(mrow)]" mode="repair"/>
+
+<!-- Replace bare "md" by "md" with one "mrow"  -->
+<!--   - @xml:id will live on the "md" (new)    -->
+<!--   - md/@number             respected first -->
+<xsl:template match="md[not(mrow)]" mode="repair">
+    <xsl:copy>
         <xsl:apply-templates select="@*" mode="repair"/>
         <!-- note origin as single-line display math -->
         <xsl:attribute name="authored-one-line"/>
@@ -1919,11 +1926,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:element name="mrow">
             <xsl:attribute name="numbered">
                 <xsl:choose>
-                    <!-- @number not supported on bare "mdn" -->
-                    <xsl:when test="self::mdn">
-                        <xsl:text>yes</xsl:text>
-                    </xsl:when>
-                    <!-- now must be an md, which was possibly authored with @number -->
+                    <!-- possibly authored with @number -->
                     <xsl:when test="@number = 'yes'">
                         <xsl:text>yes</xsl:text>
                     </xsl:when>
@@ -1949,7 +1952,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
             <xsl:apply-templates select="node()" mode="repair"/>
         </xsl:element>
-    </xsl:element>
+    </xsl:copy>
 </xsl:template>
 
 <!-- Authored "mrow", inside "md" or "mdn", get a @numbered -->
