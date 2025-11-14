@@ -218,7 +218,7 @@
 <!-- Structural Nodes -->
 <!-- ################ -->
 
-<!-- Read the code and documentation for "chunking" in xsl/mathbook-common.xsl -->
+<!-- Read the code and documentation for "chunking" in xsl/pretext-common.xsl -->
 
 <!-- Normally a "conclusion" would be on a "summary" page, or a -->
 <!-- component of the page for its containing division.  In the -->
@@ -699,7 +699,7 @@
 
 <!-- MathJax CSS, which is placed on enclosing span elements      -->
 <!--   mjpage:        for all math, so only class on online math  -->
-<!--   mjpage__block: for display math, so additional on "md" etc -->
+<!--   mjpage__block: for display math, so additional on "md"     -->
 <!-- Removed as EPUB 3.0 violation: .mjpage direction: ltr;       -->
 <xsl:template name="mathjax-css">
 <style type="text/css">
