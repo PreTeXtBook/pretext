@@ -7273,25 +7273,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This template wraps inline math in delimiters -->
 <xsl:template name="inline-math-wrapper">
     <xsl:param name="math"/>
+
     <xsl:text>\(</xsl:text>
     <xsl:value-of select="$math"/>
     <xsl:text>\)</xsl:text>
 </xsl:template>
 
-<!-- Displayed Single-Line Math ("me", "men") -->
+<!-- Displayed Multi-Line Math ("md", with "mrow" children) -->
 
+<!-- Additional blank-ish line for LaTeX source readability -->
 <xsl:template name="display-math-visual-blank-line">
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="mrow" mode="tag">
-    <xsl:apply-templates select="." mode="label" />
+<!-- The default template for the "md" container just      -->
+<!-- calls the modal "body" template needed for the HTML   -->
+<!-- knowl production scheme. The variables in the "body"  -->
+<!-- template have the right defaults for this application -->
+
+<xsl:template match="md[mrow]">
+    <xsl:apply-templates select="." mode="body" />
 </xsl:template>
 
-<!-- When tagging the manufactured "mrow" of a bare "md" we -->
-<!-- get the identification from the containing parent "md" -->
-<xsl:template match="mrow[parent::md[@authored-one-line]]" mode="tag">
-    <xsl:apply-templates select="parent::md" mode="label" />
+<xsl:template match="mrow" mode="tag">
+    <xsl:apply-templates select="." mode="label" />
 </xsl:template>
 
 <!-- An mrow with a \label{} can be cross-referenced    -->
@@ -7306,22 +7311,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label" />
 </xsl:template>
 
-
-<!-- Displayed Multi-Line Math ("md", "mdn") -->
-
-<!-- The default template for the "md" and "mdn" containers   -->
-<!-- just calls the modal "body" template needed for the HTML -->
-<!-- knowl production scheme. The variables in the "body"     -->
-<!-- template have the right defaults for this application    -->
-
-<xsl:template match="md[mrow]">
-    <xsl:apply-templates select="." mode="body" />
+<!-- When tagging the manufactured "mrow" of a bare "md" we -->
+<!-- get the identification from the containing parent "md" -->
+<xsl:template match="mrow[parent::md/@authored-one-line]" mode="tag">
+    <xsl:apply-templates select="parent::md" mode="label" />
 </xsl:template>
-
-<!-- Rows of Displayed Multi-Line Math ("mrow") -->
-<!-- Template in -common is sufficient with abstract templates -->
-<!--                                                           -->
-<!-- (1) "display-page-break"                                  -->
 
 <!-- Page Breaks within Display Math -->
 <!-- \allowdisplaybreaks is on globally always          -->
@@ -7330,7 +7324,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- no-op for the base version, where it is irrelevant -->
 
 <xsl:template match="mrow" mode="display-page-break">
-    <xsl:if test="parent::*/@break='no' and not(@break='yes')">
+    <xsl:if test="parent::md/@break='no' and not(@break='yes')">
         <xsl:text>*</xsl:text>
     </xsl:if>
 </xsl:template>
@@ -7339,8 +7333,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An <mrow> will provide trailing newline, -->
 <!-- so we do the same here for visual source -->
 <!-- We need to do this very differently for  -->
-<!-- HTML (we fake it), so there is no        -->
-<!-- implementation in the -common scheme     -->
+<!-- HTML (we fake it).                       -->
 <xsl:template match="intertext">
     <xsl:text>\intertext{</xsl:text>
     <xsl:apply-templates/>
