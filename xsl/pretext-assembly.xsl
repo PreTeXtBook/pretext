@@ -1850,48 +1850,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                 -->
 <!-- Conversion here makes every existing display math construction  -->
 <!-- look like the "regular" version described above.  A bare "mdn"  -->
-<!-- had partial support during the transition.                      -->
+<!-- had partial support during the transition (remove it!).         -->
 
-<!-- Note: placement of @numbered in the "augment" pass should be done  -->
-<!-- here, so actual numering of equations can be done in "augment"     -->
+<!-- Not always a "repair" function, but we take the opportunity to  -->
+<!-- record if an "mrow" is numbered or not, via a  @numbered        -->
+<!-- attribute, which maybe should be namespaced.  For deprecations, -->
+<!-- we just do it.  For authored forms, we interpret an authored    -->
+<!-- @number attribute on authored "mrow" (status quo), on a regular -->
+<!-- or bare "md" (new), and a global specification in "docinfo"     -->
+<!-- (new).  These new features compensate for the deprecation       -->
+<!-- of the "n"-series elements.                                     -->
+<!-- The @tag attribute is a "local tag" formed with symbols,        -->
+<!-- and precludes a number.                                         -->
 
 <!-- Replace "me" and "me" by an "md" with one "mrow"    -->
 <!--   - @xml:id will live on the "md" (new)             -->
-<!--   - forcible  @number  override for each, since we  -->
-<!--       don't know global default status              -->
+<!--   - forcible  @numbered  attribute for each,        -->
+<!--       to preserve old behavior                      -->
 <!--   - @authored-one-line as empty sentinel, to        -->
 <!--       distinguish from an *authored* single "mrow"  -->
 <xsl:template match="me|men" mode="repair">
     <xsl:element name="md">
         <xsl:apply-templates select="@*" mode="repair"/>
-        <xsl:attribute name="number">
-            <xsl:choose>
-                <xsl:when test="self::me">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:when test="self::men">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:attribute>
         <!-- note origin as single-line display math -->
         <xsl:attribute name="authored-one-line"/>
+        <!-- manufacture an "mrow" to hold content -->
         <xsl:element name="mrow">
+            <xsl:attribute name="numbered">
+                <xsl:choose>
+                    <xsl:when test="self::me">
+                        <xsl:text>no</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="self::men">
+                        <xsl:text>yes</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:attribute>
             <xsl:apply-templates select="node()" mode="repair"/>
         </xsl:element>
     </xsl:element>
 </xsl:template>
 
-<!-- Replace "mdn" with "mrow" to an "md" with @number      -->
-<!--   - forcible  @number  override , since we don't know   -->
-<!--       global default status.  "mrow" may override       -->
+<!-- "md" with "mrow" needs no adjustment (status quo), -->
+<!-- the default "repair" templates are correct.  But   -->
+<!-- see "mrow" template below for @numbered behavior.  -->
+
+<!-- Replace "mdn" with "mrow" , by an "md" with @number     -->
+<!--   - see "mrow" template below for @numbered behavior    -->
 <!--   - @xml:id  was only ever allowed on individual "mrow" -->
 <xsl:template match="mdn[mrow]" mode="repair">
     <xsl:element name="md">
         <xsl:apply-templates select="@*" mode="repair"/>
-        <xsl:attribute name="number">
-            <xsl:text>yes</xsl:text>
-        </xsl:attribute>
         <!-- copy the mrows -->
         <xsl:apply-templates select="node()" mode="repair"/>
     </xsl:element>
@@ -1904,27 +1913,94 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md[not(mrow)]|mdn[not(mrow)]" mode="repair">
     <xsl:element name="md">
         <xsl:apply-templates select="@*" mode="repair"/>
-        <xsl:attribute name="number">
-            <xsl:choose>
-                <!-- duplicate for (new) authored version -->
-                <xsl:when test="self::md and @number">
-                    <xsl:value-of select="@number"/>
-                </xsl:when>
-                <!-- historical defaults from md/mdn dichotomy -->
-                <xsl:when test="self::md">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:when test="self::mdn">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:attribute>
         <!-- note origin as single-line display math -->
         <xsl:attribute name="authored-one-line"/>
+        <!-- manufacture an "mrow" to hold content -->
         <xsl:element name="mrow">
+            <xsl:attribute name="numbered">
+                <xsl:choose>
+                    <!-- @number not supported on bare "mdn" -->
+                    <xsl:when test="self::mdn">
+                        <xsl:text>yes</xsl:text>
+                    </xsl:when>
+                    <!-- now must be an md, which was possibly authored with @number -->
+                    <xsl:when test="@number = 'yes'">
+                        <xsl:text>yes</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="@number = 'no'">
+                        <xsl:text>no</xsl:text>
+                    </xsl:when>
+                    <!-- Now the global default set in "docinfo".  It would be -->
+                    <!-- nice to store this choice in a global variable, but   -->
+                    <!-- the mechanics of that result in erroneous recursion.  -->
+                    <!-- So we simply repeatedly consult the "docinfo" built   -->
+                    <!-- in the previous tree.                                 -->
+                    <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'yes'">
+                        <xsl:text>yes</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'no'">
+                        <xsl:text>no</xsl:text>
+                    </xsl:when>
+                    <!-- the default default is to not number equations -->
+                    <xsl:otherwise>
+                        <xsl:text>no</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
             <xsl:apply-templates select="node()" mode="repair"/>
         </xsl:element>
     </xsl:element>
+</xsl:template>
+
+<!-- Authored "mrow", inside "md" or "mdn", get a @numbered -->
+<!-- attribute, according to hierarchy of specifications.   -->
+<!-- ("md" and "mdn" parents in "match" could be overkill.) -->
+<xsl:template match="md/mrow|mdn/mrow" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:attribute name="numbered">
+            <xsl:choose>
+                <xsl:when test="@tag">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="@number = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="@number = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- now look to a (possible) "mdn" element as the      -->
+                <!-- container, the @number attribute is not supported, -->
+                <!-- the "n" implies a number by default                -->
+                <xsl:when test="parent::mdn">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <!-- now look to the (certain) "md" element as the container -->
+                <xsl:when test="parent::md[@number = 'yes']">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="parent::md[@number = 'no']">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- Now the global default set in "docinfo".  It would be -->
+                <!-- nice to store this choice in a global variable, but   -->
+                <!-- the mechanics of that result in erroneous recursion.  -->
+                <!-- So we simply repeatedly consult the "docinfo" built   -->
+                <!-- in the previous tree.                                 -->
+                <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- the default default is to not number equations -->
+                <xsl:otherwise>
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()" mode="repair"/>
+    </xsl:copy>
 </xsl:template>
 
 
@@ -2531,57 +2607,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="ordered-list-level" select="$next-level"/>
         </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
-
-<!-- An "mrow" can be numbered or not.  A @number attribute on the   -->
-<!-- "mrow" itself takes precedence.  Then we look to the parent     -->
-<!-- container, be it "md" (no number) or "mdn" (with numbers).      -->
-<!-- The @tag attribute is a "local tag" formed with symbols,        -->
-<!-- and precludes a number.                                         -->
-<!-- None of the template's arguments are needed, or passed through. -->
-<xsl:template match="mrow" mode="augment">
-    <xsl:copy>
-        <!-- existing attributes first -->
-        <xsl:apply-templates select="@*" mode="augment"/>
-        <!-- @numbered as a boolean flag -->
-        <xsl:attribute name="numbered">
-            <xsl:choose>
-                <xsl:when test="@tag">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:when test="@number = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="@number = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- now examine the "md" element as the container -->
-                <xsl:when test="parent::md[@number = 'yes']">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="parent::md[@number = 'no']">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- Now the global default set in "docinfo".  It would be -->
-                <!-- nice to store this choice in a global variable, but   -->
-                <!-- the mechanics of that result in erroneous recursion.  -->
-                <!-- So we simply repeatedly consult the "docinfo" built   -->
-                <!-- in the previous tree.                                 -->
-                <xsl:when test="$language/pretext/docinfo/numbering/@equations = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$language/pretext/docinfo/numbering/@equations = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- the default default is to not number equations -->
-                <xsl:otherwise>
-                    <xsl:text>no</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-        <!-- children -->
-        <xsl:apply-templates select="node()" mode="augment"/>
     </xsl:copy>
 </xsl:template>
 
