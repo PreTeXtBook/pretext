@@ -5398,6 +5398,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This template wraps inline math in delimiters -->
 <xsl:template name="inline-math-wrapper">
     <xsl:param name="math"/>
+
     <span class="process-math">
         <xsl:text>\(</xsl:text>
         <xsl:value-of select="$math"/>
@@ -5416,19 +5417,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="md[mrow]" mode="display-math-wrapper">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="content" />
+
     <div class="displaymath process-math">
         <xsl:apply-templates select="." mode="knowl-urls"/>
-        <!-- Historical: skip "me" (never a target), skip bare "md" that are not numbered (does an "md" get @numbered at all?) -->
-        <!-- <xsl:if test="$b-original and not(self::me|self::md[not(mrow) and (@numbered = 'no')])"> -->
-
-        <!-- Future commented-out version seems to use fewer @id attributes, by removing some  -->
-        <!-- that are not necessary (check in-context links of knowls for xref to numbered equations). -->
-        <!-- <xsl:if test="$b-original and mrow[@numbered = 'yes']"> -->
-
-        <!-- Current: conditional is a no-change refactor, better identifies bare "md"  -->
-        <!-- whose resulting single "mrow" is not numbered, which is like the old "me" -->
-
-        <xsl:if test="$b-original and not(self::me|self::md[@authored-one-line]/mrow[@numbered = 'no'])">
+        <!-- Following is overkill.  Not every bit of math needs -->
+        <!-- to be referenced, but we err on the side of always  -->
+        <!-- supplying an HTML @id attribute.  Amending the test -->
+        <!-- with "and mrow[(@numbered = 'yes') or @tag]" seems  -->
+        <!-- to be fairly accurate, without being gross excess.  -->
+        <xsl:if test="$b-original">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
         </xsl:if>
         <xsl:copy-of select="$content" />
@@ -5453,7 +5450,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- We need this so a % is used only on the LaTeX side -->
+<!-- No "%" like on the LaTeX side -->
 <xsl:template name="display-math-visual-blank-line">
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
@@ -5484,13 +5481,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-
-<!-- Displayed Multi-Line Math ("md", "mdn") -->
-
-<!-- The default template for the "md" and "mdn" containers   -->
-<!-- just calls the modal "body" template needed for the HTML -->
-<!-- knowl production scheme.                                 -->
-
 <!-- We need a few templates for knowl production, -->
 <!-- but generally they do nothing                 -->
 
@@ -5504,11 +5494,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- No title; type and number obvious from content -->
 <xsl:template match="md[mrow]" mode="heading-xref-knowl" />
-
-<!-- Rows of Displayed Multi-Line Math ("mrow") -->
-<!-- Template in -common is sufficient with base templates     -->
-<!--                                                           -->
-<!-- (1) "display-page-break" (LaTeX only)                     -->
 
 <!-- Intertext -->
 <!-- A LaTeX construct really, we just jump out/in of    -->
