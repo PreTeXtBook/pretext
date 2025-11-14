@@ -903,137 +903,6 @@ Book (with parts), "section" at level 3
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- We sniff around for ampersands, to decide between "align"    -->
-<!-- and "gather", plus an asterisk for the unnumbered version    -->
-<!-- AMSMath has no easy way to make a one-off number within      -->
-<!-- the *-form, so we lean toward always using the un-starred    -->
-<!-- versions, except when we flag 100% no numbers inside an "md" -->
-<xsl:template match="md[mrow]" mode="displaymath-alignment">
-    <xsl:param name="b-nonumbers" select="false()" />
-    <xsl:choose>
-        <!-- look for @alignment override, possibly bad -->
-        <xsl:when test="@alignment='gather'">
-            <xsl:text>gather</xsl:text>
-        </xsl:when>
-        <xsl:when test="@alignment='alignat'">
-            <xsl:text>alignat</xsl:text>
-        </xsl:when>
-        <xsl:when test="@alignment='align'">
-            <xsl:text>align</xsl:text>
-        </xsl:when>
-        <xsl:when test="@alignment">
-            <xsl:message>PTX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
-        </xsl:when>
-        <!-- perhaps authored as obviously one-line (no alignment) -->
-        <!-- and manipulated into an  md/@mrow  form               -->
-        <xsl:when test="@authored-one-line">
-            <xsl:text>equation</xsl:text>
-        </xsl:when>
-        <!-- sniff for alignment specifications    -->
-        <!-- this can be easily fooled, eg matrices-->
-        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>align</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>gather</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- if absolutely no numbers, we'll economize -->
-    <!-- in favor of human-readability             -->
-    <xsl:if test="$b-nonumbers">
-        <xsl:text>*</xsl:text>
-    </xsl:if>
-</xsl:template>
-
-<!-- With alignment="alignat" we need the number of columns     -->
-<!-- as an argument, complete with the LaTeX group (braces)     -->
-<!-- Mostly we call this regularly, and it usually does nothing -->
-<xsl:template match="md[mrow]" mode="alignat-columns" />
-
-<xsl:template match="md[mrow and (@alignment='alignat')]" mode="alignat-columns">
-    <xsl:variable name="number-equation-columns">
-        <xsl:choose>
-            <!-- override first -->
-            <xsl:when test="@alignat-columns">
-                <!-- MathJax chokes on spaces here -->
-                <xsl:value-of select="normalize-space(@alignat-columns)" />
-            </xsl:when>
-            <!-- count ampersands, compute columns -->
-            <xsl:otherwise>
-                <xsl:variable name="number-ampersands">
-                    <xsl:apply-templates select="mrow[1]" mode="max-ampersands" />
-                </xsl:variable>
-                <!-- amps + 1, divide by 2, round up; 0.5 becomes 0.25, round behaves -->
-                <xsl:value-of select="round(($number-ampersands + 1.5) div 2)" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:text>{</xsl:text>
-    <xsl:value-of select="$number-equation-columns" />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- count ampersands in a string              -->
-<!-- both as LaTeX macro and as bare character -->
-<xsl:template name="count-ampersands">
-    <xsl:param name="text" />
-    <xsl:variable name="amp-char">
-        <xsl:call-template name="count-substring">
-            <xsl:with-param name="text" select="$text" />
-            <xsl:with-param name="word" select="'&amp;'" />
-        </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="amp-macro">
-        <xsl:call-template name="count-substring">
-            <xsl:with-param name="text" select="$text" />
-            <xsl:with-param name="word" select="'\amp'" />
-        </xsl:call-template>
-    </xsl:variable>
-    <xsl:value-of select="$amp-char + $amp-macro" />
-</xsl:template>
-
-<!-- Recurse through "mrow"s of a presumed "md"   -->
-<!-- counting ampersands and tracking the maximum -->
-<xsl:template match="mrow" mode="max-ampersands">
-    <xsl:param name="max" select="0"/>
-    <!-- build string/text content -->
-    <xsl:variable name="row-content">
-        <xsl:for-each select="text()">
-            <xsl:value-of select="." />
-        </xsl:for-each>
-    </xsl:variable>
-    <!-- count row's ampersands -->
-    <xsl:variable name="ampersands">
-        <xsl:call-template name="count-ampersands">
-            <xsl:with-param name="text" select="$row-content" />
-        </xsl:call-template>
-    </xsl:variable>
-    <!-- recalculate maximum -->
-    <xsl:variable name="new-max">
-        <xsl:choose>
-            <xsl:when test="$ampersands > $max">
-                <xsl:value-of select="$ampersands" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$max" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- recurse or report -->
-    <xsl:variable name="following-mrows" select="following-sibling::mrow" />
-    <xsl:choose>
-        <xsl:when test="$following-mrows">
-            <xsl:apply-templates select="$following-mrows[1]" mode="max-ampersands">
-                <xsl:with-param name="max" select="$new-max" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="$new-max" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!-- Rows of Displayed Multi-Line Math ("mrow") -->
 <!-- Each mrow finishes with a newline, for visual output      -->
 <!-- We perform LaTeX sanitization on each "mrow" here;        -->
@@ -1193,6 +1062,141 @@ Book (with parts), "section" at level 3
             <xsl:call-template name="tag-maltese"/>
             <xsl:call-template name="tag-maltese"/>
         </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- ####################### -->
+<!-- Display Math Alignments -->
+<!-- ####################### -->
+
+<!-- We sniff around for ampersands, to decide between "align"    -->
+<!-- and "gather", plus an asterisk for the unnumbered version    -->
+<!-- AMSMath has no easy way to make a one-off number within      -->
+<!-- the *-form, so we lean toward always using the un-starred    -->
+<!-- versions, except when we flag 100% no numbers inside an "md" -->
+<xsl:template match="md[mrow]" mode="displaymath-alignment">
+    <xsl:param name="b-nonumbers" select="false()" />
+    <xsl:choose>
+        <!-- look for @alignment override, possibly bad -->
+        <xsl:when test="@alignment='gather'">
+            <xsl:text>gather</xsl:text>
+        </xsl:when>
+        <xsl:when test="@alignment='alignat'">
+            <xsl:text>alignat</xsl:text>
+        </xsl:when>
+        <xsl:when test="@alignment='align'">
+            <xsl:text>align</xsl:text>
+        </xsl:when>
+        <xsl:when test="@alignment">
+            <xsl:message>PTX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
+        <!-- perhaps authored as obviously one-line (no alignment) -->
+        <!-- and manipulated into an  md/@mrow  form               -->
+        <xsl:when test="@authored-one-line">
+            <xsl:text>equation</xsl:text>
+        </xsl:when>
+        <!-- sniff for alignment specifications    -->
+        <!-- this can be easily fooled, eg matrices-->
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
+            <xsl:text>align</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>gather</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- if absolutely no numbers, we'll economize -->
+    <!-- in favor of human-readability             -->
+    <xsl:if test="$b-nonumbers">
+        <xsl:text>*</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- With alignment="alignat" we need the number of columns     -->
+<!-- as an argument, complete with the LaTeX group (braces)     -->
+<!-- Mostly we call this regularly, and it usually does nothing -->
+<xsl:template match="md[mrow]" mode="alignat-columns" />
+
+<xsl:template match="md[mrow and (@alignment='alignat')]" mode="alignat-columns">
+    <xsl:variable name="number-equation-columns">
+        <xsl:choose>
+            <!-- override first -->
+            <xsl:when test="@alignat-columns">
+                <!-- MathJax chokes on spaces here -->
+                <xsl:value-of select="normalize-space(@alignat-columns)" />
+            </xsl:when>
+            <!-- count ampersands, compute columns -->
+            <xsl:otherwise>
+                <xsl:variable name="number-ampersands">
+                    <xsl:apply-templates select="mrow[1]" mode="max-ampersands" />
+                </xsl:variable>
+                <!-- amps + 1, divide by 2, round up; 0.5 becomes 0.25, round behaves -->
+                <xsl:value-of select="round(($number-ampersands + 1.5) div 2)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$number-equation-columns" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- count ampersands in a string              -->
+<!-- both as LaTeX macro and as bare character -->
+<xsl:template name="count-ampersands">
+    <xsl:param name="text" />
+    <xsl:variable name="amp-char">
+        <xsl:call-template name="count-substring">
+            <xsl:with-param name="text" select="$text" />
+            <xsl:with-param name="word" select="'&amp;'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="amp-macro">
+        <xsl:call-template name="count-substring">
+            <xsl:with-param name="text" select="$text" />
+            <xsl:with-param name="word" select="'\amp'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="$amp-char + $amp-macro" />
+</xsl:template>
+
+<!-- Recurse through "mrow"s of a presumed "md"   -->
+<!-- counting ampersands and tracking the maximum -->
+<xsl:template match="mrow" mode="max-ampersands">
+    <xsl:param name="max" select="0"/>
+    <!-- build string/text content -->
+    <xsl:variable name="row-content">
+        <xsl:for-each select="text()">
+            <xsl:value-of select="." />
+        </xsl:for-each>
+    </xsl:variable>
+    <!-- count row's ampersands -->
+    <xsl:variable name="ampersands">
+        <xsl:call-template name="count-ampersands">
+            <xsl:with-param name="text" select="$row-content" />
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- recalculate maximum -->
+    <xsl:variable name="new-max">
+        <xsl:choose>
+            <xsl:when test="$ampersands > $max">
+                <xsl:value-of select="$ampersands" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$max" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- recurse or report -->
+    <xsl:variable name="following-mrows" select="following-sibling::mrow" />
+    <xsl:choose>
+        <xsl:when test="$following-mrows">
+            <xsl:apply-templates select="$following-mrows[1]" mode="max-ampersands">
+                <xsl:with-param name="max" select="$new-max" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$new-max" />
+        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
