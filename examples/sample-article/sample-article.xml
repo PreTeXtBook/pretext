@@ -293,7 +293,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             example near the discussion of Asymptote.
             -->
 
-            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="https://pretextbook.org" visual="pretextbook.org"><pretext/></url>.<notation>
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <md>\definiteintegral{0}{2}{\sin^2(x)}{x}</md>.  This is also a demonstration of the capabilities of <url href="https://pretextbook.org" visual="pretextbook.org"><pretext/></url>.<notation>
                 <usage><m>\int_a^b\,f(x)\,dx</m></usage>
                 <description>definite integral of <m>f(x)</m></description>
             </notation></p>
@@ -332,7 +332,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <idx><h>Fundamental Theorem of Calculus</h></idx>
 
                 <statement>
-                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><idx><h>test: buried in theorem/statement/p</h></idx></p>
+                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <md>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</md><idx><h>test: buried in theorem/statement/p</h></idx></p>
                 </statement>
                 <proof>
                     <p>Left to the reader.<fn>This is a footnote in a <tag>proof</tag> that is inside a <tag>theorem</tag>.</fn></p>
@@ -380,7 +380,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <description>indefinite integral of <m>f(x)</m></description>
                 </notation>
                 <statement>
-                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me>.</p>
+                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <md>\int\,f(x)\,dx=F(x)</md>.</p>
                 </statement>
             </definition>
         </section>
@@ -683,14 +683,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <creator>Leibniz, Newton</creator>
                     <idx><h>Fundamental Theorem of Calculus</h><h>Corollary</h></idx>
                     <statement>
-                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men>.</p>
+                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <md number="yes" xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</md>.</p>
                     </statement>
                     <proof xml:id="proof-FTC-corollary">
-                        <p>We simply take the indicated derivative, applying Theorem<nbsp/><xref ref="theorem-FTC"/> at <xref ref="equation-use-FTC"/><mdn>
+                        <p>We simply take the indicated derivative, applying Theorem<nbsp/><xref ref="theorem-FTC"/> at <xref ref="equation-use-FTC"/><md number="yes">
                             <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
                             <mrow xml:id="equation-conclude">&amp;=f(x)-0 = f(x)</mrow>
-                        </mdn>.</p>
+                        </md>.</p>
                     </proof>
                     <justification>
                         <p>A justification, which is one of the variants of a proof.</p>
@@ -722,7 +722,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <example xml:id="example-mysterious">
                     <title>A Mysterious Derivative!</title>
-                    <p>So if we define a function with its variable employed as a limit of integration, like so <me>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</me> then we get the derivative of that function so easily it seems like a mystery, <me>\frac{d}{dz}K(z)=z^4\sin(z^2)</me>. That's it.</p>
+                    <p>So if we define a function with its variable employed as a limit of integration, like so <md>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</md> then we get the derivative of that function so easily it seems like a mystery, <md>\frac{d}{dz}K(z)=z^4\sin(z^2)</md>. That's it.</p>
 
                     <p>For testing purposes, there is a simple Sage Cell here, buried inside an example that should be a knowl (embedded in the page).</p>
 
@@ -1935,13 +1935,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p><latex/> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on either side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)</p>
 
-            <p>Aligned and numbered first.<mdn>
+            <p>Aligned and numbered first.<md number="yes">
                 <mrow>{\mathcal L}(y')(s)  &amp;= s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) &amp;= s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
                 <intertext>And so it follows that,</intertext>
                 <mrow>{\mathcal L}(y')(s)^{++}  &amp;= s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s)^{5} &amp;= s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
-            </mdn></p>
+            </md></p>
 
             <p>Now with no numbers and no alignment.  We include two cross-references in the <c>intertext</c> portion for testing.<md>
                 <mrow>{\mathcal L}(y')(s)  = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
@@ -2011,7 +2011,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Basic Mathematics</title>
 
-                <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/" visual="www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
+                <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/" visual="www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<md>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</md></p>
 
                 <p>And again, from the MathJax demonstration page, Maxwell's equations:<idx>Maxwell's equations</idx><md>
                     <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
@@ -2020,7 +2020,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
                 </md><notation><usage><m>\nabla</m></usage><description>gradient operator</description></notation></p>
 
-                <p>Historically, we provided internal support for the <latex/> package <c>extpfeil</c>.  As of 2023-10-19 this has become an author election (see the <tag>docinfo</tag> section in the source of this document).  We preeserve a small test that this extensible arrows library is being included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
+                <p>Historically, we provided internal support for the <latex/> package <c>extpfeil</c>.  As of 2023-10-19 this has become an author election (see the <tag>docinfo</tag> section in the source of this document).  We preeserve a small test that this extensible arrows library is being included properly:<md>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</md></p>
 
                 <p>Look back at the top of the source file of this document to see how to include your <tex/> macros just once.  For best results keep your macros simple and semantic.</p>
 
@@ -2028,10 +2028,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <cline>&lt;math-package latex-name="xfrac" mathjax-name=""/&gt;</cline>
                 </cd>which is what we have done here as a test.  See the Guide for more details.</p>
 
-                <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <c>xml:id</c> on each.  We reference the whole system later as the range of equations from the first to the last.<mdn>
+                <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <c>xml:id</c> on each.  We reference the whole system later as the range of equations from the first to the last.<md number="yes">
                     <mrow xml:id="equation-system-begin">\frac{dx}{dt} \amp = x^2 - 4x - y + 4</mrow>
                     <mrow xml:id="equation-system-end">\frac{dy}{dt} \amp = x^3 - y.</mrow>
-                </mdn></p>
+                </md></p>
 
             </subsection>
 
@@ -2081,11 +2081,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>A long equation, to check layout on various screen sizes.  This is Weil's <q>explicit formula</q> for the
                    Riemann <m>\zeta</m>-function:
-                  <men>
+                  <md number="yes">
         \sum_\gamma S_-(\gamma) = \frac{\log Q}{\pi} \hat S_-(0)
         + \frac{1}{2\pi} \sum_{j=1}^d \Re\left\{ \int_{-\infty}^\infty \frac{\Gamma'}{\Gamma}\left(\frac{1}{4} + \frac{it}{2} + \mu_j\right)S_-(t) dt\right\}
         - \frac{d}{2\pi}\hat S_-(0)\log \pi
-                  </men>.
+                  </md>.
                 </p>
                 <example>
                     <title>Excessive Display Mathematics</title>
@@ -2152,7 +2152,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <mrow>m^2+n^2=p^2</mrow>
                         <!--  -->
                     </md>.</p>
-                    <p>In this version we have turned off page breaking for the entire display, but then allowed a break at every fourth equation, so you should see a reasonably attractive page break right after one of the <m>m^2+n^2=p^2</m> equations.<mdn break="no">
+                    <p>In this version we have turned off page breaking for the entire display, but then allowed a break at every fourth equation, so you should see a reasonably attractive page break right after one of the <m>m^2+n^2=p^2</m> equations.<md number="yes" break="no">
                         <mrow>x^2+y^2=z^2</mrow>
                         <mrow>a^2+b^2=c^2</mrow>
                         <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
@@ -2213,11 +2213,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
                         <mrow break="yes">m^2+n^2=p^2</mrow>
                         <!--  -->
-                    </mdn>.</p>
+                    </md>.</p>
                     <p>So.  Do not take any extra steps and let <latex/> figure out the breaks.  If you do not like a break, modify the <c>md</c> or <c>mdn</c> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <c>mrow</c> to suggest that it is a good place for a break.</p>
                 </example>
 
-                <p>This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <me>z+y = z</me>.  <me>a + b = c</me>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
+                <p>This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <md>z+y = z</md>.  <md>a + b = c</md>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
             </subsection>
 
             <subsection>
@@ -2225,7 +2225,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>If you would like to enhance your mathematics by using a macro from a <latex/> package <em>and</em> there is a MathJax extension <em>which implements the same macro</em>, then you may use this with your mathematics as we demonstrate here.</p>
 
-                <p>This example is from Jason Underdown.<idx><h>Underdown, Jason</h></idx>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <me>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</me>.   Look at the source of this article to see the package name being supplied in a <tag>math-package</tag> element within the <tag>docinfo</tag> section.  That is the only setup required to make the macro usable in <latex/> and <init>HTML</init> output.<idx><h>canceling a term</h></idx><idx sortby="cancelto macro"><c>cancelto</c> macro</idx></p>
+                <p>This example is from Jason Underdown.<idx><h>Underdown, Jason</h></idx>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <md>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</md>.   Look at the source of this article to see the package name being supplied in a <tag>math-package</tag> element within the <tag>docinfo</tag> section.  That is the only setup required to make the macro usable in <latex/> and <init>HTML</init> output.<idx><h>canceling a term</h></idx><idx sortby="cancelto macro"><c>cancelto</c> macro</idx></p>
 
                 <p>See the <pubtitle><pretext/> Guide</pubtitle> subsection about <q>MathJax Extensions</q> for more detail.</p>
             </subsection>
@@ -2254,14 +2254,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </md>.</p>
 
                 <p>Scott Beaver likes to write short chains of equalities all in one line, with the cross-references sitting on each equals sign.  Here we test the <latex/> <c>\overset</c> and <c>\underset</c> macros wrapping a <pretext/> <tag>xref</tag>, with and without content, inside an <tag>me</tag> element.  Note that  <c>\stackrel</c> is obsolete, and <c>\overunderset</c> is not yet supported by MathJax (but see <url href="https://github.com/mathjax/MathJax/issues/2704" visual="github.com/mathjax/MathJax/issues/2704">GitHub #2704</url>).  The mathematics is Scott's, the reasons are totally unrelated to the math.
-                    <me>AC-AD
+                    <md>AC-AD
                         \overset{<xref ref="theorem-FTC" text="global"/>}{=}
                         A(C-D)
                         \underset{<xref ref="definition-indefinite-integral" text="global"/>}{=}
                         A0_{n\times p}
                         \overset{<xref ref="theorem-FTC" text="global">Thm.</xref>}{=}
                         0_{m\times p}
-                    </me>
+                    </md>
                 We suggest using cross-references that only display numbers (<tag>xref</tag> with <attr>text</attr> set to <c>global</c>) since if you stick to elements like <tag>theorem</tag>, <tag>lemma</tag>, <tag>definition</tag>, or <tag>axiom</tag>, then the numbers will be unambiguous and the target of the cross-reference will contain full information.  But note that if you mix in divisions, or perhaps figures, as reasons then there is a possibility that numbers will need to be qualified by their type.  We have provided an abbreviation for one cross-reference to <xref ref="theorem-FTC" text="type-global"/> (which will not benefit from automatic translation to other languages).
                 </p>
             </subsection>
@@ -2277,27 +2277,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <cline>daggerdbl, ddaggerdbl, tdaggerdbl</cline>
                     <cline>hash, dhash, thash</cline>
                     <cline>maltese, dmaltese, tmaltese</cline>
-                </cd>Cross-references to these tagged equations happens in the usual way and should behave as expected.  We test the double versions to make sure the symbols render properly in various output formats.<mdn>
+                </cd>Cross-references to these tagged equations happens in the usual way and should behave as expected.  We test the double versions to make sure the symbols render properly in various output formats.<md number="yes">
                     <mrow xml:id="equation-local-star"      tag="dstar">c^2 \amp = a^2+b^2</mrow>
                     <mrow xml:id="equation-local-dagger"    tag="ddagger">c^2 \amp = a^2+b^2</mrow>
                     <mrow xml:id="equation-local-daggerdbl" tag="ddaggerdbl">c^2 \amp = a^2+b^2</mrow>
                     <mrow xml:id="equation-local-hash"      tag="dhash">c^2 \amp = a^2+b^2</mrow>
                     <mrow xml:id="equation-local-maltese"   tag="dmaltese">c^2 \amp = a^2+b^2</mrow>
                     <mrow>z^2 \amp = x^2+y^2</mrow>
-                </mdn>Here are the local cross-references: <xref ref="equation-local-star"/>, <xref ref="equation-local-dagger"/>, <xref ref="equation-local-daggerdbl"/>, <xref ref="equation-local-hash"/>, <xref ref="equation-local-maltese"/>.  We test another farther away in <xref ref="section-cross-referencing" text="type-global"/>, contrary to our advice above.</p>
+                </md>Here are the local cross-references: <xref ref="equation-local-star"/>, <xref ref="equation-local-dagger"/>, <xref ref="equation-local-daggerdbl"/>, <xref ref="equation-local-hash"/>, <xref ref="equation-local-maltese"/>.  We test another farther away in <xref ref="section-cross-referencing" text="type-global"/>, contrary to our advice above.</p>
             </subsection>
 
             <subsection xml:id="commutative-diagrams">
                 <title>Commutative Diagrams</title>
 
                 <p>This diagram is authored by Tom Judson using the syntax of the <init>AMS</init> <latex/> <q>CD</q> package.  Inside of a <tag>me</tag> element start with <c>\begin{CD}</c>.  Remember to escape the less-than character.
-                    <me>\begin{CD}
+                    <md>\begin{CD}
                     E[x]/\langle p(x) \rangle    @>\psi>>  F[x]/\langle q(x) \rangle\\
                     @VV{\sigma}V        @VV{\tau}V\\
                     E(\alpha)     @>\overline{\phi}>>  F(\beta)\\
                     @VVV        @VVV\\
                     E     @>\phi>>  F
-                    \end{CD}</me>
+                    \end{CD}</md>
                 While this package is not as flexible as some generic drawing packages, it has the advantage of full support by MathJax, and thus the <init>HTML</init> version will be more accessible.</p>
             </subsection>
 
@@ -2314,7 +2314,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>This section is about testing types and sizes of fonts, not so much about using different typefaces.  First, one long displayed equation, which is designed to be full-width for <latex/> output when using defaults as of 2020-01-29 (commit <c>defd4bffd462e7ea</c>).</p>
 
-                <p>Start paragraph.<me>a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2</me>End paragraph.</p>
+                <p>Start paragraph.<md>a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2</md>End paragraph.</p>
 
                 <p>The next paragraph has five ways to write the sine of <m>x</m>, bracketed by plain text versions.  This tests font size and the fonts employed.  The raw source of this paragraph is (spread over two lines)<cd>
                     <cline>sin x | &lt;m&gt;\sin x&lt;/m&gt; | &lt;m&gt;\text{sin}\ x&lt;/m&gt; | &lt;m&gt;\mathrm{sin}\ x&lt;/m&gt; |</cline>
@@ -2353,9 +2353,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>First a bit of token inline mathematics, via the <tag>m</tag> element, where numbering is not an option.  Consider <m>x+y</m> as an expression.</p>
 
                 <p>Now single-line displayed equations.  First, the <tag>me</tag> element. Which will not be numbered,
-                    <me>x^{1} + y^{1} = z^{1}</me>.
+                    <md>x^{1} + y^{1} = z^{1}</md>.
                  Second, the <tag>men</tag> element. Which will always be numbered,
-                    <men>x^{2} + y^{2} = z^{2}</men>.
+                    <md number="yes">x^{2} + y^{2} = z^{2}</md>.
                 </p>
 
                 <p>The remainder has three displayed equations each.  The first <tag>mrow</tag> has no <attr>number</attr> attribute, the second sets the attribute to <c>no</c> and the third sets the attribute to <c>yes</c>.  The numbering of the first case is determined by the variant of the element, the latter two provide explicit control.</p>
@@ -2366,18 +2366,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow number="yes">x^{5} + y^{5} = z^{5}</mrow>.
                 </md></p>
 
-                <p>The <tag>mdn</tag> element.<mdn>
+                <p>The <tag>mdn</tag> element.<md number="yes">
                     <mrow>x^{6} + y^{6} = z^{6}</mrow>.
                     <mrow number="no">x^{7} + y^{7} = z^{7}</mrow>.
                     <mrow number="yes">x^{8} + y^{8} = z^{8}</mrow>.
-                </mdn></p>
+                </md></p>
 
                 <p>TRANSITION (2025-10-29) The next paragraph is identical to a previous one, but it tests a construction currently under development.  Do not yet use this in your own work, it is subject to change.  The construction is using <q>bare</q> <tage>md</tage> and <tag>mdn</tag> elements without any <tag>mrow</tag> children.  They are isomorphic to the current <tag>me</tag> and <tag>men</tag> elements.</p>
 
                 <p>Now single-line displayed equations.  First, the <tag>me</tag> element. Which will not be numbered,
-                    <me>x^{1} + y^{1} = z^{1}</me>.
+                    <md>x^{1} + y^{1} = z^{1}</md>.
                  Second, the <tag>men</tag> element. Which will always be numbered,
-                    <men>x^{2} + y^{2} = z^{2}</men>.
+                    <md number="yes">x^{2} + y^{2} = z^{2}</md>.
                 </p>
 
                  <p>TRANSITION (2025-10-30) Two displays with <tag>md</tag> element, now controlled by an experimental numbering switch</p>
@@ -4530,7 +4530,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </figure>
                 </sidebyside>
 
-                <p>From the Sage documentation, with slight modifications, credited to Douglas Summers-Stay.  A plot of the implicity defined surface <me>2 = \cos(x + ty) + \cos(x - ty) + \cos(y + tz) + \cos(y - tz) + \cos(z - tx) + \cos(z + tx)</me> in rectangular <m>xyz</m> coordinates, with <m>t</m> equal to the golden ratio.  If you set <c>plot_points=100</c> in the Sage code, you will get a very smooth rendering, but also a quite large <init>HTML</init> file.  We have used <c>plot_points=50</c> to reduce the file size by a factor of four.  Note the need for a value of <c>3d</c> for the <attr>variant</attr> attribute, and an explicit aspect ratio with <attr>aspect</attr>.  Arrow keys, a mouse scroll wheel, plus grabbing with a left or a right mouse button, can be used to manipulate the image.</p>
+                <p>From the Sage documentation, with slight modifications, credited to Douglas Summers-Stay.  A plot of the implicity defined surface <md>2 = \cos(x + ty) + \cos(x - ty) + \cos(y + tz) + \cos(y - tz) + \cos(z - tx) + \cos(z + tx)</md> in rectangular <m>xyz</m> coordinates, with <m>t</m> equal to the golden ratio.  If you set <c>plot_points=100</c> in the Sage code, you will get a very smooth rendering, but also a quite large <init>HTML</init> file.  We have used <c>plot_points=50</c> to reduce the file size by a factor of four.  Note the need for a value of <c>3d</c> for the <attr>variant</attr> attribute, and an explicit aspect ratio with <attr>aspect</attr>.  Arrow keys, a mouse scroll wheel, plus grabbing with a left or a right mouse button, can be used to manipulate the image.</p>
 
                 <figure xml:id="figure-sage-implicit-surface">
                     <caption>A Sage implicitly defined 3D surface</caption>
@@ -5043,7 +5043,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                             <li><p>Inside inline math (too long for this line probably, 40 characters long): <m>\tan(<fillin fill="Mxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>)</m></p></li>
 
-                            <li><p>So use inside a displayed equation<me>16\log\space<fillin fill="1-x^2"/></me>like this one.</p></li>
+                            <li><p>So use inside a displayed equation<md>16\log\space<fillin fill="1-x^2"/></md>like this one.</p></li>
 
                             <li><p>Inside the second line of a multi-line display:<md>
                                 <mrow>y &amp;= x^7\,x^8</mrow>
@@ -5455,7 +5455,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <li>There is a binary operation, denoted <q><m>\cdot</m></q>.</li>
                             <li>The operation is associative.</li>
                             <li>There is an identity element, <m>e</m>.</li>
-                            <li><p>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <me>b\cdot c=c\cdot b = e</me>.</p></li>
+                            <li><p>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <md>b\cdot c=c\cdot b = e</md>.</p></li>
                         </ol></p>
                         <p>If these conditions are met for a set <m>G</m>, then we say <m>G</m> is a <term>group</term>.</p>
                     </statement>
@@ -8446,7 +8446,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </sbsgroup>
                         <instructions>
                             <title>Flipping Woody</title>
-                            <p>Parameters <m>a</m>, <m>b</m>, <m>d</m>, and <m>e</m>, form a <m>2\times 2</m> matrix <m>A</m>, while <m>c</m> and <m>f</m> form a vector <m>\vec{b}</m>.  The two views of Woody shows the effect of the mapping <me>\vec{x}\mapsto A\vec{x} + \vec{b}</me>.</p>
+                            <p>Parameters <m>a</m>, <m>b</m>, <m>d</m>, and <m>e</m>, form a <m>2\times 2</m> matrix <m>A</m>, while <m>c</m> and <m>f</m> form a vector <m>\vec{b}</m>.  The two views of Woody shows the effect of the mapping <md>\vec{x}\mapsto A\vec{x} + \vec{b}</md>.</p>
                         </instructions>
                     </interactive>
                 </figure>
@@ -9490,7 +9490,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p>Click the heels of your ruby slippers together three times.</p>
                         </block>
                         <block order="5">
-                            <p>So we have the displayed equation: <me>n = 2m + 0</me>.</p>
+                            <p>So we have the displayed equation: <md>n = 2m + 0</md>.</p>
                             <p>This is a superfluous second paragraph in this block.</p>
                         </block>
                         <block order="4">
@@ -9791,19 +9791,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <solution>
                         <p>
                             Knowing the roots of a polynomial allows us to write down the formula of <m>f(x)</m> in factored form,
-                            <me>f(x) = A <eval obj="base_cubic"/></me>
+                            <md>f(x) = A <eval obj="base_cubic"/></md>
                             with an unknown scaling multiple <m>A</m>.
                         </p>
                         <p>
                             When we evaluate <m>f(x)</m> at <m>x=0</m> using this formula, we find
-                            <me>f(0) = <eval obj="base_yint"/>A</me>.
+                            <md>f(0) = <eval obj="base_yint"/>A</md>.
                             Since we also know <m>f(0)=<eval obj="y0"/></m>, we can write down the equation
-                            <me>A <eval obj="base_cubic"/> = <eval obj="y0"/></me>
+                            <md>A <eval obj="base_cubic"/> = <eval obj="y0"/></md>
                             and find that <m>A=<eval obj="A"/></m>.
                         </p>
                         <p>
                             Consequently, we can write our function in the form
-                            <me>f(x)=<eval obj="cubic"/></me>.
+                            <md>f(x)=<eval obj="cubic"/></md>.
                         </p>
                     </solution>
                     <setup seed="314159">
@@ -9853,7 +9853,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <title>Decompose the Function</title>
                     <statement>
                         <p>
-                        Consider the function <me>h(x)=<eval obj="composition"/></me>.
+                        Consider the function <md>h(x)=<eval obj="composition"/></md>.
                         Find two nontrivial functions <m>f(x)</m> and <m>g(x)</m> so that <m>h(x) = f(g(x))</m>.
                         </p>
                         <p>
@@ -11039,7 +11039,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </proof>
             </algorithm>
 
-            <p>If you are writing about system-level software, you may need to write numbers in hexadecimal or binary.  Here we use a numbered, displayed equation (mathematics) and <latex/> macros such as <c>\texttt</c> for a monospace text font, and <c>\;</c> for spacing/grouping the bits of the binary number. <men>\texttt{6C2A}_{16} = \texttt{0110}\;\texttt{1100}\;\texttt{0010}\;\texttt{1010}_{2}</men>  If you use these constructions repeatedly, then some <latex/> macros might be useful.  It might also be beneficial for us to add some <pretext/> markup for such numbers used in a paragraph<mdash/>send us a feature request.</p>
+            <p>If you are writing about system-level software, you may need to write numbers in hexadecimal or binary.  Here we use a numbered, displayed equation (mathematics) and <latex/> macros such as <c>\texttt</c> for a monospace text font, and <c>\;</c> for spacing/grouping the bits of the binary number. <md number="yes">\texttt{6C2A}_{16} = \texttt{0110}\;\texttt{1100}\;\texttt{0010}\;\texttt{1010}_{2}</md>  If you use these constructions repeatedly, then some <latex/> macros might be useful.  It might also be beneficial for us to add some <pretext/> markup for such numbers used in a paragraph<mdash/>send us a feature request.</p>
 
             <theorem xml:id="theorem-detached">
                 <statement>
@@ -12684,51 +12684,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <sbsgroup>
                         <sidebyside>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|c}
                                 + \amp \class[1]{0} \\
                                 \hline
                                 \class[1]{0} \amp \class[1]{0}
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|c}
                                 \cdot \amp \class[1]{0} \\
                                 \hline
                                 \class[1]{0} \amp \class[1]{0}
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                         </sidebyside>
 
                         <sidebyside>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|cc}
                                 + \amp \class[2]{0} \amp \class[2]{1} \\
                                 \hline
                                 \class[2]{0} \amp \class[2]{0} \amp \class[2]{1}\\
                                 \class[2]{1} \amp \class[2]{1} \amp \class[2]{0}
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|cc}
                                 \cdot \amp \class[2]{0} \amp \class[2]{1} \\
                                 \hline
                                 \class[2]{0} \amp \class[2]{0} \amp \class[2]{0}\\
                                 \class[2]{1} \amp \class[2]{0} \amp \class[2]{1}
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                         </sidebyside>
 
                         <sidebyside>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|ccc}
                                 + \amp \class[3]{0} \amp \class[3]{1} \amp \class[3]{2} \\
                                 \hline
@@ -12736,10 +12736,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 \class[3]{1} \amp \class[3]{1} \amp \class[3]{2} \amp \class[3]{0} \\
                                 \class[3]{2} \amp \class[3]{2} \amp \class[3]{0} \amp \class[3]{1} \\
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|ccc}
                                 \cdot \amp \class[3]{0} \amp \class[3]{1} \amp \class[3]{2} \\
                                 \hline
@@ -12747,13 +12747,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 \class[3]{1} \amp \class[3]{0} \amp \class[3]{1} \amp \class[3]{2} \\
                                 \class[3]{2} \amp \class[3]{0} \amp \class[3]{2} \amp \class[3]{1} \\
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                         </sidebyside>
 
                         <sidebyside>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|cccc}
                               + \amp \class[4]{0} \amp \class[4]{1} \amp \class[4]{2} \amp \class[4]{3} \\
                               \hline
@@ -12762,10 +12762,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                               \class[4]{2} \amp \class[4]{2} \amp \class[4]{3} \amp \class[4]{0} \amp \class[4]{1} \\
                               \class[4]{3} \amp \class[4]{3} \amp \class[4]{0} \amp \class[4]{1} \amp \class[4]{2} \\
                             \end{array}
-                            </me>
+                            </md>
                           </p>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|cccc}
                                 \cdot \amp \class[4]{0} \amp \class[4]{1} \amp \class[4]{2} \amp \class[4]{3} \\
                                 \hline
@@ -12774,7 +12774,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 \class[4]{2} \amp \class[4]{0} \amp \class[4]{2} \amp \class[4]{0} \amp \class[4]{2} \\
                                 \class[4]{3} \amp \class[4]{0} \amp \class[4]{3} \amp \class[4]{2} \amp \class[4]{1} \\
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                         </sidebyside>
                     </sbsgroup>
@@ -14889,9 +14889,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
                 <exercise workspace="2in">
                   <statement>
-                    <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
+                    <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <md>
                       \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin fill="\frac{2}{3} \vec{M}_{1}-\vec{C}"/>
-                    </me>.</p>
+                    </md>.</p>
                   </statement>
                 </exercise>
               </sidebyside>
@@ -15018,9 +15018,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
                 <exercise workspace="2in">
                   <statement>
-                    <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
+                    <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <md>
                       \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin fill="\frac{2}{3} \vec{M}_{1}-\vec{C}"/>
-                    </me>.</p>
+                    </md>.</p>
                   </statement>
                 </exercise>
               </sidebyside>
@@ -15048,16 +15048,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <theorem>
                         <title> Ohms Law </title>
                         <p> The current through a resistor is proportional to the ratio of the <em> Voltage </em> to the <em> Resistance </em>
-                            <me> I = \frac{V}{R} </me>
+                            <md> I = \frac{V}{R} </md>
                             Or for our purposes
-                            <me> I R = V </me>
+                            <md> I R = V </md>
                         </p>
                     </theorem>
 
                     <theorem>
                         <title>Kirchoffs Current Law</title>
                         <p> The sum of the currents in a network meeting at a point is zero.
-                            <me> \sum_{k=1}^n I_k = 0 </me>
+                            <md> \sum_{k=1}^n I_k = 0 </md>
                         </p>
                     </theorem>
 
@@ -15081,7 +15081,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <theorem>
                         <title> Kirchoffs Voltage Law </title>
                         <p> The sum of the voltages around any closed circuit (or subcircuit) is zero.
-                            <me> \sum_{k=1}^n V_k = 0 </me>
+                            <md> \sum_{k=1}^n V_k = 0 </md>
                         </p>
                     </theorem>
 
@@ -15266,16 +15266,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <theorem>
                         <title> Ohms Law </title>
                         <p> The current through a resistor is proportional to the ratio of the <em> Voltage </em> to the <em> Resistance </em>
-                            <me> I = \frac{V}{R} </me>
+                            <md> I = \frac{V}{R} </md>
                             Or for our purposes
-                            <me> I R = V </me>
+                            <md> I R = V </md>
                         </p>
                     </theorem>
 
                     <theorem>
                         <title>Kirchoffs Current Law</title>
                         <p> The sum of the currents in a network meeting at a point is zero.
-                            <me> \sum_{k=1}^n I_k = 0 </me>
+                            <md> \sum_{k=1}^n I_k = 0 </md>
                         </p>
                     </theorem>
 
@@ -15299,7 +15299,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <theorem>
                         <title> Kirchoffs Voltage Law </title>
                         <p> The sum of the voltages around any closed circuit (or subcircuit) is zero.
-                            <me> \sum_{k=1}^n V_k = 0 </me>
+                            <md> \sum_{k=1}^n V_k = 0 </md>
                         </p>
                     </theorem>
 
@@ -15608,9 +15608,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <exercise workspace="1.25in">
                         <introduction>
                             <p>Consider the vector equation
-                            <me>
+                            <md>
                             m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
-                            </me>.</p>
+                            </md>.</p>
                         </introduction>
                         <task>
                             <p>Check that there is no solution <m>m</m> that makes the equation true.</p>
@@ -16029,7 +16029,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Guided Notes: Derivatives of sums</title>
             <page>
                 <p workspace="1in">
-                    Today we will explore how to take the derivative of the sum of two functions.  For example, if <me>f(x) = x^2 + 3x</me>, what is <m>f'(x)</m>?  What two functions is this the sum of?  What are the derivatives of each of those functions?
+                    Today we will explore how to take the derivative of the sum of two functions.  For example, if <md>f(x) = x^2 + 3x</md>, what is <m>f'(x)</m>?  What two functions is this the sum of?  What are the derivatives of each of those functions?
                 </p>
 
                 <p>
@@ -16794,7 +16794,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Compute the definite integral <m>\definiteintegral{2}{4}{x^2}{x}</m>, not as an approximate value from a Riemann sum, but as an exact value based of the limit by using the Fundamental Theorem.</p>
                 </statement>
                 <solution xml:id="solution-antiderivative">
-                    <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<me>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}</me>!?!      This is indeed an exciting result, but we are mostly interested in seeing that the sentence-ending punctuation is absorbed properly into the displayed equation.</p>
+                    <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<md>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}</md>!?!      This is indeed an exciting result, but we are mostly interested in seeing that the sentence-ending punctuation is absorbed properly into the displayed equation.</p>
                 </solution>
             </exercise>
 
