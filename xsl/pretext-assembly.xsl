@@ -1849,8 +1849,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     - md/@number is not assumed                                 -->
 <!--                                                                 -->
 <!-- Conversion here makes every existing display math construction  -->
-<!-- look like the "regular" version described above.  A bare "mdn"  -->
-<!-- had partial support during the transition (remove it!).         -->
+<!-- look like the "regular" version described above.                -->
 
 <!-- Not always a "repair" function, but we take the opportunity to  -->
 <!-- record if an "mrow" is numbered or not, via a  @numbered        -->
