@@ -1866,13 +1866,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   - @xml:id will live on the "md" (new)             -->
 <!--   - forcible  @numbered  attribute for each,        -->
 <!--       to preserve old behavior                      -->
-<!--   - @authored-one-line as empty sentinel, to        -->
+<!--   - @pi:authored-one-line as empty sentinel, to     -->
 <!--       distinguish from an *authored* single "mrow"  -->
 <xsl:template match="me|men" mode="repair">
     <xsl:element name="md">
         <xsl:apply-templates select="@*" mode="repair"/>
         <!-- note origin as single-line display math -->
-        <xsl:attribute name="authored-one-line"/>
+        <xsl:attribute name="pi:authored-one-line"/>
         <!-- manufacture an "mrow" to hold content -->
         <xsl:element name="mrow">
             <xsl:attribute name="numbered">
@@ -1913,14 +1913,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- deprecation) and suggest the "md" replacement.            -->
 <xsl:template match="mdn[not(mrow)]" mode="repair"/>
 
-<!-- Replace bare "md" by "md" with one "mrow"  -->
-<!--   - @xml:id will live on the "md" (new)    -->
-<!--   - md/@number             respected first -->
+<!-- Replace bare "md" by "md" with one "mrow"          -->
+<!--   - @xml:id will live on the "md" (new)            -->
+<!--   - md/@number  respected first                    -->
+<!--   - @pi:authored-one-line as empty sentinel, to    -->
+<!--       distinguish from an *authored* single "mrow" -->
 <xsl:template match="md[not(mrow)]" mode="repair">
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="repair"/>
         <!-- note origin as single-line display math -->
-        <xsl:attribute name="authored-one-line"/>
+        <xsl:attribute name="pi:authored-one-line"/>
         <!-- manufacture an "mrow" to hold content -->
         <xsl:element name="mrow">
             <xsl:attribute name="numbered">
