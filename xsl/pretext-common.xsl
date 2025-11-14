@@ -822,36 +822,34 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 
-<!-- Displayed Multi-Line Math ("md",with "mrow" children) -->
-<!-- These are containers for "mrow" and intermediate "intertext".  -->
-<!-- The containers are fairly simple, are similar to above,        -->
-<!-- and only use one abstract template.                            -->
+<!-- Displayed Multi-Line Math ("md", with "mrow" children)         -->
+<!-- "md" is a container for  "mrow" and intermediate "intertext".  -->
+<!-- Note that the pre-processor guarantees that every "md"         -->
+<!-- is structured with "mrow" and optionally "intertext".          -->
 <!--                                                                -->
 <!-- Abstract Templates                                             -->
 <!--                                                                -->
-<!-- (1) display-math-visual-blank-line                             -->
+<!-- (1) display-math-visual-blank-line, a named template           -->
 <!--       Just a line in source to help visually (% for LaTeX)     -->
-<!--       named template, defined earlier                          -->
 <!--                                                                -->
 <!-- (2) display-math-wrapper                                       -->
 <!--       An enclosing environment for any displayed mathematics   -->
 <!--       Necessary for HTML, no-op for LaTeX                      -->
-<!--                                                                -->
-<!-- This is the HTML "body" template, which other conversions      -->
-<!-- can just call trivially with some implementations of the       -->
-<!-- abstract templates                                             -->
 
-<!-- Default implementations of specialized templates -->
+<!-- Default implementationis a no-op, can be overidden -->
 <xsl:template name="display-math-visual-blank-line"/>
 
 <!-- All displayed mathematics gets wrapped by  -->
 <!-- an abstract template, a necessity for HTML -->
-<!-- output.  Otherwise, just a copy machine.   -->
+<!-- output.  By default, just a copy machine.  -->
 <xsl:template match="md[mrow]" mode="display-math-wrapper">
     <xsl:param name="content" />
     <xsl:value-of select="$content" />
 </xsl:template>
 
+<!-- The HTML conversion accomodates duplicated content (i.e. knowls) -->
+<!-- with an elaborate scheme.  The mode="body" template is central,  -->
+<!-- so we run with that here.                                        -->
 <xsl:template match="md[mrow]" mode="body">
     <!-- block-type parameter is ignored, since the          -->
     <!-- representation never varies, no heading, no wrapper -->
@@ -862,9 +860,11 @@ Book (with parts), "section" at level 3
     <!-- include adjacent (trailing) punctuation,      -->
     <!-- since it is meaningless                       -->
     <xsl:param name="b-top-level" select="false()" />
-    <!-- Look across all mrow for 100% no-number rows              -->
-    <!-- This just allows for slightly nicer human-readable source -->
-    <xsl:variable name="b-nonumbers" select="self::md and not(mrow[@numbered = 'yes' or @tag])" />
+    <!-- Look across all mrow for 100% no-number rows.  We do not -->
+    <!-- flag local tags as being numbered, but this affects        -->
+    <!-- LaTeX environment construction, so we need to consider it. -->
+    <!-- This just allows for slightly nicer human-readable source. -->
+    <xsl:variable name="b-nonumbers" select="not(mrow[@numbered = 'yes' or @tag])" />
     <xsl:variable name="complete-latex">
         <!-- we provide a newline for visual appeal -->
         <xsl:call-template name="display-math-visual-blank-line" />
@@ -876,9 +876,6 @@ Book (with parts), "section" at level 3
         <xsl:apply-templates select="." mode="alignat-columns" />
         <!-- leading whitespace not present, or stripped -->
         <xsl:text>&#xa;</xsl:text>
-        <!-- We don't sanitize, but instead sanitize text versions of  -->
-        <!-- each individual "mrow", while not sanitizing "intertext", -->
-        <!-- which may be a non-text format (eg HTML).                 -->
         <xsl:apply-templates select="mrow|intertext">
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="b-top-level" select="$b-top-level" />
@@ -906,8 +903,6 @@ Book (with parts), "section" at level 3
 <!-- Rows of Displayed Multi-Line Math ("mrow") -->
 <!-- Each mrow finishes with a newline, for visual output      -->
 <!-- We perform LaTeX sanitization on each "mrow" here;        -->
-<!-- "intertext" will have HTML output that might get          -->
-<!-- stripped out in generic text processing.                  -->
 <!--                                                           -->
 <!-- Abstract Templates                                        -->
 <!--                                                           -->
@@ -918,6 +913,7 @@ Book (with parts), "section" at level 3
 
 <!-- Default implementations of specialized templates -->
 <xsl:template match="mrow" mode="display-page-break"/>
+
 <xsl:template match="mrow" mode="tag">
      <xsl:message>PTX:ERROR:   the modal "tag" template needs an implementation for "mrow" in the current conversion</xsl:message>
 </xsl:template>
@@ -1074,6 +1070,8 @@ Book (with parts), "section" at level 3
 <!-- AMSMath has no easy way to make a one-off number within      -->
 <!-- the *-form, so we lean toward always using the un-starred    -->
 <!-- versions, except when we flag 100% no numbers inside an "md" -->
+<!-- Template is applied twice (begin/end) and its use ensures    -->
+<!-- consistency.                                                 -->
 <xsl:template match="md[mrow]" mode="displaymath-alignment">
     <xsl:param name="b-nonumbers" select="false()" />
     <xsl:choose>
@@ -1090,6 +1088,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="@alignment">
             <xsl:message>PTX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
+            <xsl:text>bad-alignment-choice</xsl:text>
         </xsl:when>
         <!-- perhaps authored as obviously one-line (no alignment) -->
         <!-- and manipulated into an  md/@mrow  form               -->
@@ -1105,8 +1104,8 @@ Book (with parts), "section" at level 3
             <xsl:text>gather</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <!-- if absolutely no numbers, we'll economize -->
-    <!-- in favor of human-readability             -->
+    <!-- if absolutely no numbers and no local tags,   -->
+    <!-- we'll economize in favor of human-readability -->
     <xsl:if test="$b-nonumbers">
         <xsl:text>*</xsl:text>
     </xsl:if>
@@ -1200,10 +1199,14 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- ######### -->
 <!-- Intertext -->
-<!-- "intertext" needs wildly different implementations, -->
-<!-- so we do not even try to provide a base             -->
-<!-- implementation with abstract portions.              -->
+<!-- ######### -->
+
+<!-- Treatment of "intetext" varies, so no base implementation will suffice -->
+<xsl:template match="intertext">
+     <xsl:message>PTX:ERROR:   the template for LaTeX "intertext" needs an implementation in the current conversion</xsl:message>
+</xsl:template>
 
 <!-- #################### -->
 <!-- LaTeX Image Preamble -->
