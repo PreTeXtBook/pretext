@@ -864,7 +864,7 @@ Book (with parts), "section" at level 3
     <!-- flag local tags as being numbered, but this affects        -->
     <!-- LaTeX environment construction, so we need to consider it. -->
     <!-- This just allows for slightly nicer human-readable source. -->
-    <xsl:variable name="b-nonumbers" select="not(mrow[@numbered = 'yes' or @tag])" />
+    <xsl:variable name="b-nonumbers" select="not(mrow[@pi:numbered = 'yes' or @tag])" />
     <xsl:variable name="complete-latex">
         <!-- we provide a newline for visual appeal -->
         <xsl:call-template name="display-math-visual-blank-line" />
@@ -962,7 +962,7 @@ Book (with parts), "section" at level 3
     <xsl:choose>
         <xsl:when test="$b-nonumbers" />
         <!-- "local" tag is not numbered, but needs treatment -->
-        <xsl:when test="(@numbered = 'yes') or @tag">
+        <xsl:when test="(@pi:numbered = 'yes') or @tag">
             <xsl:apply-templates select="." mode="tag">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
@@ -4091,11 +4091,11 @@ Book (with parts), "section" at level 3
 <!-- Serial Numbers: Equations -->
 <!-- We determine the appropriate subtree to count within   -->
 <!-- given the document root and the configured depth       -->
-<!-- Pre-processor supplies  @numbered  onto every "mrow"   -->
+<!-- Pre-processor supplies @pi:numbered onto every "mrow"  -->
 <!-- and every displayed equation is eventually held in an  -->
 <!-- "mrow", so counting is straightforward.  Presence of a -->
 <!-- local tag (@tag) is considered to be unnumbered.       -->
-<xsl:template match="mrow[@numbered = 'yes']" mode="serial-number">
+<xsl:template match="mrow[@pi:numbered = 'yes']" mode="serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-equations" />
@@ -4103,22 +4103,22 @@ Book (with parts), "section" at level 3
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$subtree-level=-1">
-            <xsl:number from="book|article|letter|memo" level="any" count="mrow[@numbered = 'yes']"/>
+            <xsl:number from="book|article|letter|memo" level="any" count="mrow[@pi:numbered = 'yes']"/>
         </xsl:when>
         <xsl:when test="$subtree-level=0">
-            <xsl:number from="part" level="any" count="mmrow[@numbered = 'yes']"/>
+            <xsl:number from="part" level="any" count="mmrow[@pi:numbered = 'yes']"/>
             </xsl:when>
         <xsl:when test="$subtree-level=1">
-            <xsl:number from="chapter|book/backmatter/appendix" level="any" count="mrow[@numbered = 'yes']"/>
+            <xsl:number from="chapter|book/backmatter/appendix" level="any" count="mrow[@pi:numbered = 'yes']"/>
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout|chapter/reading-questions" level="any" count="mrow[@numbered = 'yes']"/>
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout|chapter/reading-questions" level="any" count="mrow[@pi:numbered = 'yes']"/>
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout|section/reading-questions" level="any" count="mrow[@numbered = 'yes']"/>
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout|section/reading-questions" level="any" count="mrow[@pi:numbered = 'yes']"/>
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout|subsection/reading-questions" level="any" count="mrow[@numbered = 'yes']"/>
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout|subsection/reading-questions" level="any" count="mrow[@pi:numbered = 'yes']"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:ERROR: Subtree level for equation number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4381,7 +4381,7 @@ Book (with parts), "section" at level 3
 <!-- the pre-processor identifies it as numbered or not, so the      -->
 <!-- unnumbered ones are straightforward.  A local tag (@tag)        -->
 <!-- authored on an "mrow" is considered an unnumbered equation.     -->
-<xsl:template match="mrow[@numbered = 'no']" mode="serial-number"/>
+<xsl:template match="mrow[@pi:numbered = 'no']" mode="serial-number"/>
 
 <!-- WeBWorK problems are never numbered, because they live    -->
 <!-- in (numbered) exercises.  But they have identically named -->
