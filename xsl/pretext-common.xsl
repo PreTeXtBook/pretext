@@ -1092,7 +1092,7 @@ Book (with parts), "section" at level 3
         </xsl:when>
         <!-- perhaps authored as obviously one-line (no alignment) -->
         <!-- and manipulated into an  md/@mrow  form               -->
-        <xsl:when test="@authored-one-line">
+        <xsl:when test="@pi:authored-one-line">
             <xsl:text>equation</xsl:text>
         </xsl:when>
         <!-- sniff for alignment specifications    -->
@@ -3181,11 +3181,11 @@ Book (with parts), "section" at level 3
 <!-- lines and the two do not always align with element names, -->
 <!-- so we use two strings to signal the two situations.       -->
 
-<xsl:template match="mrow|md[@authored-one-line]" mode="string-id">
+<xsl:template match="mrow|md[@pi:authored-one-line]" mode="string-id">
     <xsl:text>equation</xsl:text>
 </xsl:template>
 
-<xsl:template match="md[not(@authored-one-line)]" mode="string-id">
+<xsl:template match="md[not(@pi:authored-one-line)]" mode="string-id">
     <xsl:text>displaymath</xsl:text>
 </xsl:template>
 
@@ -4130,7 +4130,7 @@ Book (with parts), "section" at level 3
 <!-- We consider its number, as a target of a cross-reference to be that of the  -->
 <!-- contained, single "mrow".  This may be an actual number or may be an empty  -->
 <!-- string, depending on how the "md" was meant to be numbered.                 -->
-<xsl:template match="md[@authored-one-line]" mode="serial-number">
+<xsl:template match="md[@pi:authored-one-line]" mode="serial-number">
     <xsl:apply-templates select="mrow" mode="serial-number"/>
 </xsl:template>
 
@@ -4667,7 +4667,7 @@ Book (with parts), "section" at level 3
 <!-- "mrow" may be numbered, and bare "md" inherit a number from their  -->
 <!-- manufactured single "mrow".  So we need a structure number for the -->
 <!-- numbered versions of these elements.                               -->
-<xsl:template match="mrow|md[@authored-one-line]" mode="structure-number">
+<xsl:template match="mrow|md[@pi:authored-one-line]" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-equations" />
         <xsl:with-param name="pad" select="'yes'" />
@@ -9324,7 +9324,7 @@ Book (with parts), "section" at level 3
     <xsl:param name="custom-text" select="''" />
     <!-- an equation target is exceptional -->
     <!-- Targets are "mrow" or bare "md" -->
-    <xsl:variable name="b-is-equation-target" select="$target/self::mrow or $target/self::md[@authored-one-line]" />
+    <xsl:variable name="b-is-equation-target" select="$target/self::mrow or $target/self::md[@pi:authored-one-line]" />
     <!-- a bibliography target is exceptional -->
     <xsl:variable name="b-is-biblio-target" select="boolean($target/self::biblio)" />
     <!-- a contributor target is exceptional -->
