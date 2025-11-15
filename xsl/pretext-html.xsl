@@ -1663,7 +1663,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which is not a cross-reference target (it originates  -->
 <!-- in PG-code), and an error results when the heading in -->
 <!-- the knowl content tries to compute a number           -->
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|md[@authored-one-line]|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|interactive/instructions|gi|&DEFINITION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|&PROOF-LIKE;|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|&GOAL-LIKE;|exercise|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|md[@pi:authored-one-line]|mrow|li[not(parent::var)]|contributor|fragment" mode="xref-as-knowl">
     <xsl:param name="link" select="/.." />
     <xsl:choose>
         <xsl:when test="$b-skip-knowls or $html-xref-knowled = 'never' or $b-portable-html">
