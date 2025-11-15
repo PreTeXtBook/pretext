@@ -1858,6 +1858,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="($entered-lang = 'c') or
                         ($entered-lang = 'cpp') or
                         ($entered-lang = 'java') or
+                        ($entered-lang = 'kotlin') or
                         ($entered-lang = 'python3') or
                         ($entered-lang = 'octave')">
             <xsl:choose>
