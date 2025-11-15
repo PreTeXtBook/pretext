@@ -5423,7 +5423,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Following is overkill.  Not every bit of math needs -->
         <!-- to be referenced, but we err on the side of always  -->
         <!-- supplying an HTML @id attribute.  Amending the test -->
-        <!-- with "and mrow[(@numbered = 'yes') or @tag]" seems  -->
+        <!-- by "and mrow[(@pi:numbered = 'yes') or @tag]" seems -->
         <!-- to be fairly accurate, without being gross excess.  -->
         <xsl:if test="$b-original">
             <xsl:apply-templates select="." mode="html-id-attribute"/>
