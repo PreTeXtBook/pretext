@@ -29,7 +29,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:str="http://exslt.org/strings"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     extension-element-prefixes="str"
+    exclude-result-prefixes="pi"
 >
 
 <!-- This style sheet is intended to be used by pretext.py. It makes an    -->
@@ -1824,7 +1826,7 @@
 </xsl:template>
 
 <!-- PGML [```...```] creates display math -->
-<xsl:template match="md[@authored-one-line]">
+<xsl:template match="md[@pi:authored-one-line]">
     <xsl:param name="b-human-readable" />
     <xsl:text>&#xa;&#xa;</xsl:text>
     <xsl:if test="ancestor::ul|ancestor::ol">
@@ -1844,14 +1846,14 @@
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="md[not(@authored-one-line)]">
+<xsl:template match="md[not(@pi:authored-one-line)]">
     <xsl:param name="b-human-readable" />
     <xsl:apply-templates select="." mode="body">
         <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
     </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="md[not(@authored-one-line)]" mode="body">
+<xsl:template match="md[not(@pi:authored-one-line)]" mode="body">
     <xsl:param name="b-human-readable"/>
     <xsl:variable name="complete-latex">
         <xsl:if test="$b-human-readable">
@@ -1882,7 +1884,7 @@
 </xsl:template>
 
 <!-- Within a WeBWorK, md and rows are never numbered -->
-<xsl:template match="md[not(@authored-one-line)]" mode="displaymath-alignment">
+<xsl:template match="md[not(@pi:authored-one-line)]" mode="displaymath-alignment">
     <xsl:choose>
         <!-- look for @alignment override, possibly bad -->
         <xsl:when test="@alignment='gather'">
