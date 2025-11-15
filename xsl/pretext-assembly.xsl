@@ -1852,8 +1852,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- look like the "regular" version described above.                -->
 
 <!-- Not always a "repair" function, but we take the opportunity to  -->
-<!-- record if an "mrow" is numbered or not, via a  @numbered        -->
-<!-- attribute, which maybe should be namespaced.  For deprecations, -->
+<!-- record if an "mrow" is numbered or not, via a  @pi:numbered     -->
+<!-- attribute, which is in our private namespace. For deprecations, -->
 <!-- we just do it.  For authored forms, we interpret an authored    -->
 <!-- @number attribute on authored "mrow" (status quo), on a regular -->
 <!-- or bare "md" (new), and a global specification in "docinfo"     -->
@@ -1864,7 +1864,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Replace "me" and "me" by an "md" with one "mrow"    -->
 <!--   - @xml:id will live on the "md" (new)             -->
-<!--   - forcible  @numbered  attribute for each,        -->
+<!--   - forcible  @npi:umbered  attribute for each,     -->
 <!--       to preserve old behavior                      -->
 <!--   - @pi:authored-one-line as empty sentinel, to     -->
 <!--       distinguish from an *authored* single "mrow"  -->
@@ -1875,7 +1875,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="pi:authored-one-line"/>
         <!-- manufacture an "mrow" to hold content -->
         <xsl:element name="mrow">
-            <xsl:attribute name="numbered">
+            <xsl:attribute name="pi:numbered">
                 <xsl:choose>
                     <xsl:when test="self::me">
                         <xsl:text>no</xsl:text>
@@ -1890,12 +1890,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- "md" with "mrow" needs no adjustment (status quo), -->
-<!-- the default "repair" templates are correct.  But   -->
-<!-- see "mrow" template below for @numbered behavior.  -->
+<!-- "md" with "mrow" needs no adjustment (status quo),   -->
+<!-- the default "repair" templates are correct.  But     -->
+<!-- see "mrow" template below for @pi:numbered behavior. -->
 
 <!-- Replace "mdn" with "mrow" , by an "md" with @number     -->
-<!--   - see "mrow" template below for @numbered behavior    -->
+<!--   - see "mrow" template below for @pi:numbered behavior -->
 <!--   - @xml:id  was only ever allowed on individual "mrow" -->
 <xsl:template match="mdn[mrow]" mode="repair">
     <xsl:element name="md">
@@ -1925,7 +1925,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="pi:authored-one-line"/>
         <!-- manufacture an "mrow" to hold content -->
         <xsl:element name="mrow">
-            <xsl:attribute name="numbered">
+            <xsl:attribute name="pi:numbered">
                 <xsl:choose>
                     <!-- possibly authored with @number -->
                     <xsl:when test="@number = 'yes'">
@@ -1956,13 +1956,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- Authored "mrow", inside "md" or "mdn", get a @numbered -->
-<!-- attribute, according to hierarchy of specifications.   -->
-<!-- ("md" and "mdn" parents in "match" could be overkill.) -->
+<!-- Authored "mrow", inside "md" or "mdn", get a @pi: numbered -->
+<!-- attribute, according to hierarchy of specifications.       -->
+<!-- ("md" and "mdn" parents in "match" could be overkill.)     -->
 <xsl:template match="md/mrow|mdn/mrow" mode="repair">
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="repair"/>
-        <xsl:attribute name="numbered">
+        <xsl:attribute name="pi:numbered">
             <xsl:choose>
                 <xsl:when test="@tag">
                     <xsl:text>no</xsl:text>
