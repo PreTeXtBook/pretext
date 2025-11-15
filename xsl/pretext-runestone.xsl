@@ -1155,6 +1155,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
+                    <!-- do not confuse this attribute with the  @pi:numbered -->
+                    <!-- attribute for numbered equations                     -->
                     <xsl:variable name="numbered" select="blocks/@numbered"/>
                     <xsl:choose>
                         <xsl:when test="($numbered = 'left') or ($numbered = 'right')">

@@ -229,6 +229,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="b-indent" select="@indentation = 'hide'"/>
     <!-- we use numbers in static versions, if requested, but ignore left/right distinction -->
     <!-- default for @numbered is "no" -->
+    <!-- do not confuse this attribute with the  @pi:numbered  attribute for numbered equations -->
     <xsl:variable name="b-numbered" select="(blocks/@numbered = 'left') or (blocks/@numbered = 'right')"/>
     <!-- metadata (idx, title) -->
     <xsl:copy-of select="statement/preceding-sibling::*"/>
