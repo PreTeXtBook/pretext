@@ -2028,7 +2028,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <cline>&lt;math-package latex-name="xfrac" mathjax-name=""/&gt;</cline>
                 </cd>which is what we have done here as a test.  See the Guide for more details.</p>
 
-                <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <c>xml:id</c> on each.  We reference the whole system later as the range of equations from the first to the last.<md number="yes">
+                <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <attr>xml:id</attr> attribute on each.  We reference the whole system later as the range of equations from the first to the last.<md number="yes">
                     <mrow xml:id="equation-system-begin">\frac{dx}{dt} \amp = x^2 - 4x - y + 4</mrow>
                     <mrow xml:id="equation-system-end">\frac{dy}{dt} \amp = x^3 - y.</mrow>
                 </md></p>
@@ -2038,19 +2038,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Displayed Mathematics</title>
 
-                <p>Multi-line displays of mathematics are achieved with the <c>md</c> tag (<q>math display</q>), and the variant that produces numbers on each line, <c>mdn</c> (<q>math display numbered</q>), used within a paragraph (<c>p</c>).  As a good example of how XML syntax is superior, you author <m>n</m> lines of equations by enclosing each line inside of a <c>mrow</c> tag, rather than using <m>n-1</m> separators (such as <c>\\</c>).</p>
+                <p>Display mathematics is achieved with the <tag>md</tag> tag (<q>math display</q>), always used within a paragraph (<tag>p</tag>).  As a good example of how XML syntax is superior, you author <m>n</m> lines of equations by enclosing each line inside of a <tag>mrow</tag> tag, rather than using <m>n-1</m> separators (such as <c>\\</c>).</p>
 
                 <p>If you use no ampersands to express alignment (read ahead), then each equation is centered independently on the width of the text.  This is implemented according to the AMSmath <latex/> package's <c>gather</c> environment.  Example:<md>
                     <mrow>\frac{dx}{dt} = x^2 - 4x - y + 4</mrow>
                     <mrow>\frac{dy}{dt} = x^3 - y.</mrow>
                 </md></p>
 
-                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We have created the pre-defined <latex/> macro <c>\amp</c> as one way specify these, but the escape sequence <c>&amp;amp;</c> may be used also.  The second, fourth, sixth, <ellipsis/> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis/> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of ampersands in each <c>mrow</c>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <c>m</c> tag will be ineffective).<md>
+                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We have created the pre-defined <latex/> macro <c>\amp</c> as one way specify these, but the escape sequence <c>&amp;amp;</c> may be used also.  The second, fourth, sixth, <ellipsis/> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis/> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of ampersands in each <tag>mrow</tag>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <tag>m</tag> tag will be ineffective).<md>
                     <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
                     <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
                 </md></p>
 
-                <p><pretext/> will automatically detect the presence or absence of ampersands, but by defining macros for entire aligned equations, you can effectively hide the ampersands.  So the <c>@alignment</c> attribute can override automatic detection.  We use a simple <latex/> macro to demonstrate setting <c>alignment='align'</c> to override the use of a <c>gather</c> environment and use a <c>align</c> environment instead.  Example:<md alignment="align">
+                <p><pretext/> will automatically detect the presence or absence of ampersands, but by defining macros for entire aligned equations, you can effectively hide the ampersands.  So the <attr>alignment</attr> attribute can override automatic detection.  We use a simple <latex/> macro to demonstrate setting <c>alignment='align'</c> to override the use of a <c>gather</c> environment and use a <c>align</c> environment instead.  Example:<md alignment="align">
                     <mrow>\myequation{\frac{dx}{dt}}{x^2 - 4x - y + 4}</mrow>
                     <mrow>\myequation{\frac{dy}{dt}}{x^3 - y}.</mrow>
                 </md></p>
@@ -2058,7 +2058,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>The AMSmath <latex/> package's <c>alignat</c> environment is a third variant of alignment.  It never happens automatically, you need to ask for it with <c>alignment="alignat"</c>.  It is very similar to <c>align</c> but adds no space between the equation columns.  So you can leave it that way, or you can add your own <q>extra</q> space to suit.  Here is a previous example with no inter-column space:<md alignment="alignat">
                     <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
                     <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
-                </md>.  This modified example has a middle row with three columns, while the other rows have just one column, as a test of our routines for determining the <c>mrow</c> with the greatest number of ampersands (and how many there are),<md alignment="alignat">
+                </md>.  This modified example has a middle row with three columns, while the other rows have just one column, as a test of our routines for determining the <tag>mrow</tag> with the greatest number of ampersands (and how many there are),<md alignment="alignat">
                     <mrow>\frac{dw}{dt} &amp;= z^3 - w</mrow>
                     <mrow>\frac{dx}{dt} &amp;= x^2 - 4x - y + 4 &amp; \frac{dy}{dt} &amp;= x^3 - y&amp;&amp; x, y\text{ third column}</mrow>
                     <mrow>\frac{dw}{dt} &amp; = z^3 - w</mrow>
@@ -2214,7 +2214,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <mrow break="yes">m^2+n^2=p^2</mrow>
                         <!--  -->
                     </md>.</p>
-                    <p>So.  Do not take any extra steps and let <latex/> figure out the breaks.  If you do not like a break, modify the <c>md</c> or <c>mdn</c> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <c>mrow</c> to suggest that it is a good place for a break.</p>
+                    <p>So.  Do not take any extra steps and let <latex/> figure out the breaks.  If you do not like a break, modify the <tag>md</tag> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <tag>mrow</tag> to suggest that it is a good place for a break.</p>
                 </example>
 
                 <p>This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <md>z+y = z</md>.  <md>a + b = c</md>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
@@ -2247,13 +2247,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>\zeta(1)=\sum_{n=1}^{\infty}\frac{1}{n}\mathrel{\text{ &#x201c;}\mathord{=}{\text{&#x201d; }}}\prod_{p}\left(\frac{1}{1-1/p}\right)=\prod_{p}\left(\frac{1}{1-p^{-1}}\right)</mrow>
                 </md></p>
 
-                <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <c>xref</c> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
+                <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <tag>xref</tag> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
                     <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global"/></mrow>
                     <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" text="title"/></mrow>
                     <mrow>&amp;=F+G&amp;&amp;<xref ref="theorem-number-01" text="custom">A nice result</xref></mrow>
                 </md>.</p>
 
-                <p>Scott Beaver likes to write short chains of equalities all in one line, with the cross-references sitting on each equals sign.  Here we test the <latex/> <c>\overset</c> and <c>\underset</c> macros wrapping a <pretext/> <tag>xref</tag>, with and without content, inside an <tag>me</tag> element.  Note that  <c>\stackrel</c> is obsolete, and <c>\overunderset</c> is not yet supported by MathJax (but see <url href="https://github.com/mathjax/MathJax/issues/2704" visual="github.com/mathjax/MathJax/issues/2704">GitHub #2704</url>).  The mathematics is Scott's, the reasons are totally unrelated to the math.
+                <p>Scott Beaver likes to write short chains of equalities all in one line, with the cross-references sitting on each equals sign.  Here we test the <latex/> <c>\overset</c> and <c>\underset</c> macros wrapping a <pretext/> <tag>xref</tag>, with and without content, inside an <tag>md</tag> element.  Note that  <c>\stackrel</c> is obsolete, and <c>\overunderset</c> is not yet supported by MathJax (but see <url href="https://github.com/mathjax/MathJax/issues/2704" visual="github.com/mathjax/MathJax/issues/2704">GitHub #2704</url>).  The mathematics is Scott's, the reasons are totally unrelated to the math.
                     <md>AC-AD
                         \overset{<xref ref="theorem-FTC" text="global"/>}{=}
                         A(C-D)
@@ -2284,9 +2284,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Local Tags on Equations</title>
 
-                <p>If you are not writing a research monograph, maybe (a) you will not use many numbered equations, or do not like the looks of them, or feel they scare your readers, and (b) maybe your cross-references are always local-ish, like strictly within an <c>example</c> or a <c>proof</c>.  For this situation you can create, and employ, a <q>local</q> tag on a displayed equation.  Nothing enforces the idea of what constitutes local, and there is nothing to stop you from using the same symbols more than once.  With freedom comes responsibility.</p>
+                <p>If you are not writing a research monograph, maybe (a) you will not use many numbered equations, or do not like the looks of them, or feel they scare your readers, and (b) maybe your cross-references are always local-ish, like strictly within an <tag>example</tag> or a <tag>proof</tag>.  For this situation you can create, and employ, a <q>local</q> tag on a displayed equation.  Nothing enforces the idea of what constitutes local, and there is nothing to stop you from using the same symbols more than once.  With freedom comes responsibility.</p>
 
-                <p>Use the <c>@tag</c> attribute on an <c>mrow</c>, only.  (Remember, you can have just one <c>mrow</c>.)  The behavior is identical within an <c>md</c> or <c>mdn</c>.  The value of the <c>@tag</c> attribute is a symbol name.  The prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  So allowed values are<cd>
+                <p>Use the <attr>tag</attr> attribute on an <tag>mrow</tag>, only.  (Remember, you can have just one <tag>mrow</tag>.)  The value of the <attr>tag</attr> attribute is a symbol name.  The prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  So allowed values are<cd>
                     <cline>star, dstar, tstar</cline>
                     <cline>dagger, ddagger, tdagger</cline>
                     <cline>daggerdbl, ddaggerdbl, tdaggerdbl</cline>
@@ -2305,7 +2305,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection xml:id="commutative-diagrams">
                 <title>Commutative Diagrams</title>
 
-                <p>This diagram is authored by Tom Judson using the syntax of the <init>AMS</init> <latex/> <q>CD</q> package.  Inside of a <tag>me</tag> element start with <c>\begin{CD}</c>.  Remember to escape the less-than character.
+                <p>This diagram is authored by Tom Judson using the syntax of the <init>AMS</init> <latex/> <q>CD</q> package.  Inside of a <tag>md</tag> element start with <c>\begin{CD}</c>.  Remember to escape the less-than character.
                     <md>\begin{CD}
                     E[x]/\langle p(x) \rangle    @>\psi>>  F[x]/\langle q(x) \rangle\\
                     @VV{\sigma}V        @VV{\tau}V\\
