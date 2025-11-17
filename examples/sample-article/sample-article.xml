@@ -2267,6 +2267,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </subsection>
 
             <subsection>
+                <title>Numbered Equations</title>
+
+                <p>There is flexible control for numbering displayed equations, largely provided by the <attr>number</attr> attribute on the <tag>md</tag> and <tag>mrow</tag> elements, taking values of <c>yes</c> or <c>no</c>.  First, a single displayed equation, with a number: <md number="yes">x^{2} + y^2 = z^2</md>.  Now several displayed equations, all numbered.<md number="yes">
+                    <mrow>x^{3} + y^{3} = z^{3}</mrow>
+                    <mrow>x^{4} + y^{4} = z^{4}</mrow>
+                    <mrow>x^{5} + y^{5} = z^{5}</mrow>
+                </md>.
+                Similar, but now the first equation's numbering is controlled by the global default value, the second is explicitly not numbered, and the third is explicitly numbered.<md>
+                    <mrow>x^{6} + y^{6} = z^{6}</mrow>
+                    <mrow number="no">x^{7} + y^{7} = z^{7}</mrow>
+                    <mrow number="yes">x^{8} + y^{8} = z^{8}</mrow>
+                </md>.  The global default numbering choice is set in <tag>docinfo</tag>.</p>
+            </subsection>
+
+            <subsection>
                 <title>Local Tags on Equations</title>
 
                 <p>If you are not writing a research monograph, maybe (a) you will not use many numbered equations, or do not like the looks of them, or feel they scare your readers, and (b) maybe your cross-references are always local-ish, like strictly within an <c>example</c> or a <c>proof</c>.  For this situation you can create, and employ, a <q>local</q> tag on a displayed equation.  Nothing enforces the idea of what constitutes local, and there is nothing to stop you from using the same symbols more than once.  With freedom comes responsibility.</p>
