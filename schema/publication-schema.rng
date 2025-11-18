@@ -614,6 +614,7 @@
             <value>c</value>
             <value>cpp</value>
             <value>java</value>
+            <value>kotlin</value>
             <value>python3</value>
             <value>octave</value>
             <value>none</value>

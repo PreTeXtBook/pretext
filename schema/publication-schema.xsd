@@ -527,6 +527,7 @@
             <xs:enumeration value="c"/>
             <xs:enumeration value="cpp"/>
             <xs:enumeration value="java"/>
+            <xs:enumeration value="kotlin"/>
             <xs:enumeration value="python3"/>
             <xs:enumeration value="octave"/>
             <xs:enumeration value="none"/>
