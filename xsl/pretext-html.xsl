@@ -10392,6 +10392,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="slate[@surface = 'doenetml']">
     <div class="doenetml-applet" data-doenet-add-virtual-keyboard="false" data-doenet-send-resize-events="true">
+        <!-- on Runestone builds, enable SPLICE messaging to the parent -->
+        <xsl:if test="$b-host-runestone">
+            <xsl:attribute name="data-doenet-message-parent">
+                <xsl:text>true</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <div class="doenetml-loading" style="text-align:center">
             <p><img src="https://www.doenet.org/Doenet_Logo_Frontpage.png"/></p>
             <p><xsl:text>Waiting on the page to load...</xsl:text></p>
