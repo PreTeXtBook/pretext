@@ -4099,6 +4099,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>Asymptote Lever Demonstration</caption>
                     <image xml:id="asymptote-lever">
                         <shortdescription>moments on a lever</shortdescription>
+                        <description>
+                            <p>This diagram has two masses at either end of a lever, namely <m>m</m> and <m>M</m>.  They are located at distance <m>x</m> and <m>X</m> on an axis.  The resulting center-of-mass is at a point <m>\bar{x}</m>.</p>
+                        </description>
                         <asymptote>
                         size(200,0);
 
