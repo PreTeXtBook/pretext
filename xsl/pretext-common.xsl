@@ -3478,7 +3478,7 @@ Book (with parts), "section" at level 3
 <!-- the province of the @label attribute.  So this is the preference  -->
 <!-- from approximately 2023-08-12.  Looking to the enclosing (parent) -->
 <!-- "image" is historical, preserving backward-compatibility.         -->
-<xsl:template match="asymptote|sageplot|latex-image" mode="image-source-basename">
+<xsl:template match="asymptote|sageplot|mermaid|latex-image" mode="image-source-basename">
     <xsl:choose>
         <!-- 2023-08-12: new behavior, prefer a @label (not @xml:id) -->
         <!-- on the source code element to provide the filename      -->
