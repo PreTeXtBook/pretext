@@ -4310,11 +4310,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-mermaid-git">
                     <caption>Mermaid Git Diagram</caption>
-                    <image xml:id="mermaid-git-image">
+                    <image>
                         <shortdescription>
                             A git diagram in Mermaid
                         </shortdescription>
-                        <mermaid>
+                        <mermaid label="mermaid-git-image">
                             ---
                             title: Example Git diagram
                             ---
@@ -4335,11 +4335,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-mermaid-class">
                     <caption>Mermaid Class Diagram</caption>
-                    <image xml:id="mermaid-class-image">
+                    <image>
                         <shortdescription>
                             A class diagram in Mermaid
                         </shortdescription>
-                        <mermaid>
+                        <mermaid label="mermaid-class-image">
                         classDiagram
                             Animal &lt;|-- Duck
                             Animal &lt;-- Fish
@@ -4367,11 +4367,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-mermaid-sequence">
                     <caption>Mermaid Seuqnece Diagram</caption>
-                    <image xml:id="mermaid-sequence-image">
+                    <image>
                         <shortdescription>
                             A sequence diagram in Mermaid
                         </shortdescription>
-                        <mermaid>
+                        <mermaid label="mermaid-sequence-image">
                         sequenceDiagram
                             participant Alice
                             participant Bob
