@@ -43,8 +43,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" encoding="UTF-8"/>
 
-<xsl:variable name="mermaid-extracting"><xsl:value-of select="true()"/></xsl:variable>
-
 <xsl:template match="image[mermaid]" mode="extraction">
     <xsl:variable name="filebase">
         <xsl:apply-templates select="." mode="assembly-id"/>
