@@ -2670,11 +2670,9 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 #
 #####################################
 
-def mermaid_images(
-    xml_source, pub_file, stringparams, xmlid_root, dest_dir
-):
-    msg = 'converting Mermaid diagrams from {} to png graphics for placement in {}'
-    log.info(msg.format(xml_source, dest_dir))
+def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
+    msg = 'converting Mermaid diagrams from {} to {} graphics for placement in {}'
+    log.info(msg.format(xml_source, outformat, dest_dir))
 
     tmp_dir = get_temporary_directory()
     log.debug("temporary directory: {}".format(tmp_dir))
@@ -2704,22 +2702,20 @@ def mermaid_images(
         log.debug("Mermaid executable command: {}".format(mmd_executable_cmd))
         for mmddiagram in glob.glob(os.path.join(tmp_dir, "*.mmd")):
             filebase, _ = os.path.splitext(mmddiagram)
-            versions = [
-                {"name":"-color", "opts":["-s", "4", "-t", mermaid_theme]},
-                {"name":"-bw", "opts":["-s", "4", "-t", "neutral"]}
-            ]
-            for version in versions:
-                mmdout = "{}.{}".format(filebase + version['name'], 'png')
-                mmd_cmd = mmd_executable_cmd + ["-i", mmddiagram, "-o", mmdout] + version['opts']
-                log.debug("mermaid conversion {}".format(" ".join(mmd_cmd)))
-                subprocess.call(mmd_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-                if os.path.exists(mmdout):
-                    shutil.copy2(mmdout, dest_dir)
-                else:
-                    msg = [
-                        "the Mermaid output {} was not built".format(mmdout),
-                    ]
-                    log.warning("\n".join(msg))
+            # file format PNG or SVG
+            # mmdc executable just switches on filename extension
+            if outformat in ["png", "svg"]:
+                mmdout = "{}.{}".format(filebase, outformat)
+            else:
+                log.error("cannot make Mermaid diagrams in {} file format".format(outformat))
+            mmd_cmd = mmd_executable_cmd + ["-i", mmddiagram, "-o", mmdout, "-s", "4", "-t"]
+            log.debug("mermaid conversion command: {}".format(" ".join(mmd_cmd)))
+            subprocess.call(mmd_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+            if os.path.exists(mmdout):
+                shutil.copy2(mmdout, dest_dir)
+            else:
+                msg = "the Mermaid output {} was not built"
+                log.warning(msg.format(mmdout))
 
 
 #####################################
