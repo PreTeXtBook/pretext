@@ -4628,8 +4628,11 @@ def get_web_asset(url):
         log.debug(msg)
         raise Exception(msg)
 
+    # Set a user-agent to mimic a browser. This is what chrome on windows sends as of 2025-11-19.
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36'}
+
     try:
-        services_response = requests.get(url, timeout=(1,10))
+        services_response = requests.get(url, timeout=(1,10), headers=headers)
     except requests.exceptions.RequestException as e:
         msg = '\n'.join(['There was a network problem while trying to download "{}"',
                             'and the reported problem is:',
