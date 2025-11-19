@@ -341,7 +341,7 @@ def get_cli_arguments():
         ("prefigure", "PreFigure graphics"),
         ("asy", "Asymptote diagrams (method: [server], local)"),
         ("sageplot", "Sage graphics"),
-        ("mermaid", "Mermaid diagrams (PNG only)"),
+        ("mermaid", "Mermaid diagrams (PNG, SVG)"),
         ("latex-image", "LaTeX pictures (method: [xelatex], pdflatex)"),
         (
             "webwork",
@@ -668,12 +668,18 @@ def main():
                 'cannot make Sage graphics in "{}" format'.format(args.format)
             )
     elif args.component == "mermaid":
-        ptx.mermaid_images(
-                xml_source,
-                publication_file,
-                stringparams,
-                args.xmlid,
-                dest_dir,
+        if args.format in ["svg", "png"]:
+            ptx.mermaid_images(
+                    xml_source,
+                    publication_file,
+                    stringparams,
+                    args.xmlid,
+                    dest_dir,
+                    args.format
+                )
+        else:
+            raise NotImplementedError(
+                'cannot make Mermaid graphics in "{}" format'.format(args.format)
             )
     elif args.component == "latex-image":
         if args.format in ["pdf", "svg", "png", "eps", "source", "all"]:
