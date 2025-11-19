@@ -3401,48 +3401,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Static versions of Audio, Video, Interactives -->
 
-<!-- This variable will be overriden during an extraction used to write image files -->
-<xsl:variable name="mermaid-extracting"><xsl:value-of select="false()"/></xsl:variable>
-<xsl:template match="image[mermaid]" mode="representations">
-    <xsl:choose>
-        <xsl:when test="$mermaid-extracting = 'false'">
-            <!-- Generating document -->
-            <xsl:choose>
-                <xsl:when test="$exercise-style = 'dynamic'">
-                    <!-- interactive target -->
-                    <xsl:copy>
-                        <xsl:apply-templates select="node()|@*" mode="representations"/>
-                    </xsl:copy>
-                </xsl:when>
-                <xsl:when test="$exercise-style = 'static'">
-                    <!-- static target -->
-                    <image>
-                        <xsl:attribute name="pi:generated">
-                            <xsl:text>mermaid/</xsl:text>
-                            <xsl:apply-templates select="." mode="assembly-id"/>
-                            <xsl:choose>
-                                <!-- latex-print will be B&W target -->
-                                <xsl:when test="$b-latex-print">
-                                    <xsl:text>-bw.png</xsl:text>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:text>-color.png</xsl:text>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:attribute>
-                    </image>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- Extracting Mermaid -->
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="representations"/>
-            </xsl:copy>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!-- Form a PreTeXt side-by-side with an image, a QR code and links -->
 
 <xsl:template match="audio|video|interactive[not(static)]" mode="representations">
