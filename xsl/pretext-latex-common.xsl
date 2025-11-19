@@ -9359,6 +9359,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Mermaid images                       -->
+<!-- PNGs produced by extraction process  -->
+<!-- into -bw and -color versions, hence  -->
+<!-- vary by print, or not                -->
+<xsl:template match="image[mermaid]" mode="image-inclusion">
+    <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$generated-directory"/>
+    <xsl:if test="$b-managed-directories">
+        <xsl:text>mermaid/</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="mermaid" mode="image-source-basename"/>
+    <xsl:text>.png</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
+</xsl:template>
+
 <!-- PreFigure diagrams always produced as PDF for LaTeX -->
 <xsl:template match="image[pf:prefigure]" mode="image-inclusion">
     <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
