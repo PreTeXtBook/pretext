@@ -989,7 +989,7 @@ width: 100%
                 </xsl:choose>
             </xsl:if>
         </xsl:when>
-        <xsl:when test="latex-image|sageplot|asymptote|pf:prefigure">
+        <xsl:when test="latex-image|sageplot|asymptote|mermaid|pf:prefigure">
             <xsl:choose>
                 <xsl:when test="$purpose = 'read'">
                     <xsl:value-of select="$generated-directory-source"/>
@@ -1010,6 +1010,10 @@ width: 100%
                 <xsl:when test="asymptote">
                     <xsl:text>asymptote/</xsl:text>
                     <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
+                </xsl:when>
+                <xsl:when test="mermaid">
+                    <xsl:text>mermaid/</xsl:text>
+                    <xsl:apply-templates select="mermaid" mode="image-source-basename"/>
                 </xsl:when>
                 <xsl:when test="pf:prefigure">
                     <xsl:text>prefigure/</xsl:text>
@@ -1068,7 +1072,7 @@ width: 100%
                 <xsl:when test="@source and ($extension='svg' or $extension='')">
                     <xsl:text>image/svg+xml</xsl:text>
                 </xsl:when>
-                <xsl:when test="latex-image|sageplot|asymptote|pf:prefigure">
+                <xsl:when test="latex-image|sageplot|asymptote|mermaid|pf:prefigure">
                     <xsl:text>image/svg+xml</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
