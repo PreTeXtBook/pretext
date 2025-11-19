@@ -43,14 +43,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text" encoding="UTF-8"/>
 
-<xsl:template match="image[mermaid]" mode="extraction">
+<xsl:template match="mermaid" mode="extraction">
     <xsl:variable name="filebase">
-        <xsl:apply-templates select="." mode="assembly-id"/>
+        <xsl:apply-templates select="." mode="image-source-basename"/>
     </xsl:variable>
 
     <exsl:document href="{$filebase}.mmd" method="text">
         <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="./mermaid" />
+            <xsl:with-param name="text" select="." />
         </xsl:call-template>
     </exsl:document>
 </xsl:template>
