@@ -367,6 +367,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     ]]></latex-image>
                     </image>
                 </figure>
+                <p>A diagram of some git commits, authored in Mermaid.</p>
+                <figure xml:id="figure-mermaid-git">
+                    <caption>Mermaid Git Diagram</caption>
+                    <image xml:id="mermaid-git-image">
+                        <shortdescription>
+                            A git diagram in Mermaid
+                        </shortdescription>
+                        <mermaid>
+                            ---
+                            title: Example Git diagram
+                            ---
+                            gitGraph
+                                commit
+                                commit
+                                branch develop
+                                checkout develop
+                                commit
+                                commit
+                                checkout main
+                                merge develop
+                                commit
+                                commit
+                        </mermaid>
+                    </image>
+                </figure>
             </section>
             <section>
                 <title>Additional stress testing</title>
