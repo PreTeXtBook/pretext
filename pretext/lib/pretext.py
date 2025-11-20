@@ -2671,8 +2671,15 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 #####################################
 
 def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
+
+    import glob  # locate *.mmd files
+    import json  # Mermaid configuration files
+
     msg = 'converting Mermaid diagrams from {} to {} graphics for placement in {}'
     log.info(msg.format(xml_source, outformat, dest_dir))
+
+    mmd_executable_cmd = get_executable_cmd("mermaid")
+    log.debug("Mermaid executable command: {}".format(mmd_executable_cmd))
 
     tmp_dir = get_temporary_directory()
     log.debug("temporary directory: {}".format(tmp_dir))
@@ -2694,12 +2701,20 @@ def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, out
 
     pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
     mermaid_theme = get_publisher_variable(pub_vars, 'mermaid-theme')
+    mermaid_layout_engine = get_publisher_variable(pub_vars, 'mermaid-layout-engine')
 
-    import glob
     # Resulting *.mmd files are in tmp_dir, switch there to work
     with working_directory(tmp_dir):
-        mmd_executable_cmd = get_executable_cmd("mermaid")
-        log.debug("Mermaid executable command: {}".format(mmd_executable_cmd))
+        # Write a config file as JSON in working directory
+        mmd_config = {
+            "theme": mermaid_theme,
+            "layout": mermaid_layout_engine
+        }
+        mmd_config_file = os.path.join(tmp_dir, "mermaid-config.json")
+        with open(mmd_config_file, 'w') as config_file:
+            json.dump(mmd_config, config_file, indent=4)
+        log.debug("Mermaid configuration file: {}".format(mmd_config_file))
+        # loop over each diagram
         for mmddiagram in glob.glob(os.path.join(tmp_dir, "*.mmd")):
             filebase, _ = os.path.splitext(mmddiagram)
             # file format PNG or SVG
@@ -2708,7 +2723,7 @@ def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, out
                 mmdout = "{}.{}".format(filebase, outformat)
             else:
                 log.error("cannot make Mermaid diagrams in {} file format".format(outformat))
-            mmd_cmd = mmd_executable_cmd + ["-i", mmddiagram, "-o", mmdout, "-s", "4", "-t"]
+            mmd_cmd = mmd_executable_cmd + ["-i", mmddiagram, "-o", mmdout, "-s", "4", "-c", "mermaid-config.json"]
             log.debug("mermaid conversion command: {}".format(" ".join(mmd_cmd)))
             subprocess.call(mmd_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
             if os.path.exists(mmdout):
