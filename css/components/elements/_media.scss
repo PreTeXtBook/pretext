@@ -27,6 +27,10 @@ img.contained {
   // as most transparent images will assume that the background is white
   background: var(--ptx-image-bg);
 }
+// but mermaid svg should always have a transparent background
+.mermaid > svg {
+  background: none;
+}
 
 .image-description {
   summary {
