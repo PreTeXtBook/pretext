@@ -2671,8 +2671,15 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 #####################################
 
 def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
+
+    import glob  # locate *.mmd files
+    import json  # Mermaid configuration files
+
     msg = 'converting Mermaid diagrams from {} to {} graphics for placement in {}'
     log.info(msg.format(xml_source, outformat, dest_dir))
+
+    mmd_executable_cmd = get_executable_cmd("mermaid")
+    log.debug("Mermaid executable command: {}".format(mmd_executable_cmd))
 
     tmp_dir = get_temporary_directory()
     log.debug("temporary directory: {}".format(tmp_dir))
@@ -2695,11 +2702,8 @@ def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, out
     pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
     mermaid_theme = get_publisher_variable(pub_vars, 'mermaid-theme')
 
-    import glob
     # Resulting *.mmd files are in tmp_dir, switch there to work
     with working_directory(tmp_dir):
-        mmd_executable_cmd = get_executable_cmd("mermaid")
-        log.debug("Mermaid executable command: {}".format(mmd_executable_cmd))
         for mmddiagram in glob.glob(os.path.join(tmp_dir, "*.mmd")):
             filebase, _ = os.path.splitext(mmddiagram)
             # file format PNG or SVG
