@@ -3,9 +3,9 @@
   <p>
     Here is some text inside a sample aside.
     I'm going to put the Pythagorean identity below:
-    <me>
+    <md>
       \sin^2(x) + \cos^2(x) = 1
-    </me>.
+    </md>.
   </p>
 
   <p>

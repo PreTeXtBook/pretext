@@ -1,9 +1,9 @@
 <p>
-  <me>
+  <md>
     \frac{d}{dx} \int_1^x \frac{1}{t}\, dt = \frac{1}{x}
-  </me>
-  <men xml:id="eqn-ftc">
+  </md>
+  <md xml:id="eqn-ftc" number="yes">
     \int_a^b f(x)\, dx = F(b) - F(a)
-  </men>
+  </md>
 </p>
 

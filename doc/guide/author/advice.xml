@@ -53,13 +53,13 @@
 
             <p>Instead of opening your textbook with a <q>Chapter 0</q> type catalog of all the notation and terminology needed in the entire book, it would be kinder to students to introduce new notation and terminology as needed. Also, it is not necessary to front-load all the information about a topic at one time; let students absorb and practice the fundamental ideas, then return later to elaborate, generalize, or present exceptions. Resist the temptation to proceed too quickly to general or abstract statements. Most people grasp abstract ideas more easily if they first see specific and concrete examples.</p>
 
-            <p>Choosing effective examples helps make your text student-friendly. A simple example has greater impact than a complicated one. If you are introducing asymptotes, the graph of<me>
+            <p>Choosing effective examples helps make your text student-friendly. A simple example has greater impact than a complicated one. If you are introducing asymptotes, the graph of<md>
                 y=\dfrac{x-3}{x-2}
-            </me>is a better example than<me>
+            </md>is a better example than<md>
                 y=\dfrac{x^2-9}{x^2-x-2}
-            </me>. It is also better than<me>
+            </md>. It is also better than<md>
                 y=\dfrac{1}{x}
-            </me>because the latter may lead students to believe that asymptotes are identified with the coordinate axes. If you are introducing subgroups, do not limit your examples to subgroups of cyclic groups. Always consider your example from the students' point of view! Is your example too general or too specific? Are there confounding features that may distract from the intended message?</p>
+            </md>because the latter may lead students to believe that asymptotes are identified with the coordinate axes. If you are introducing subgroups, do not limit your examples to subgroups of cyclic groups. Always consider your example from the students' point of view! Is your example too general or too specific? Are there confounding features that may distract from the intended message?</p>
 
             <p>What about proofs? These days a good background in mathematics is necessary for a wide variety of occupations, so that only a small number of your students may be headed to graduate school in mathematics, even in junior or senior level classes. Here is a good place to strive for <q>illuminating</q> rather than <q>elegant.</q></p>
         </paragraphs>

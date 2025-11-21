@@ -234,7 +234,7 @@
 
             <paragraphs>
                 <title>Display Mathematics</title>
-                <p>Displayed mathematics, which is a single equation or a sequence of (aligned) equations, can only be placed within a paragraph.  The relevant tags are <tag>me</tag>, <tag>men</tag>, <tag>md</tag>, and <tag>mdn</tag>, with the latter two necessarily structured with <tag>mrow</tag> elements.  See <xref ref="overview-math" /> for an introduction and <xref ref="topic-mathematics" /> for precise details.</p>
+                <p>Displayed mathematics, which is a single equation or a sequence of (aligned) equations, can only be placed within a paragraph.  The relevant tag is <tag>md</tag>.  It can hold a single expression or be structured with <tag>mrow</tag> elements.  See <xref ref="overview-math" /> for an introduction and <xref ref="topic-mathematics" /> for precise details.</p>
             </paragraphs>
 
             <paragraphs>
@@ -1202,7 +1202,7 @@
         <subsection>
             <title>Equations</title>
 
-            <p>Similar to citations, references to equations (<tag>men</tag> and <tag>mrow</tag> elements) will visually look like (4.2), where the type name is implied by the parentheses.  Notice that you cannot cross-reference an <tag>me</tag> element (it has no number) or an <tag>md</tag> element (it is just a container, filled with <tag>mrow</tag> that you can target if you give them numbers).  Consult <xref ref="topic-display-math" /> for details about controlling the numbering of equations within an <tag>md</tag> or <tag>mdn</tag> element.</p>
+            <p>Similar to citations, references to equations (<tag>md</tag> and <tag>mrow</tag> elements) will visually look like (4.2), where the type name is implied by the parentheses.  Notice that you cannot cross-reference a bare <tag>md</tag> element that is not numbered nor an <tag>md</tag> element structured with <tag>mrow</tag> (it is just a container, filled with <tag>mrow</tag> that you can target if you give them numbers).  Consult <xref ref="topic-display-math" /> for details about controlling the numbering of equations within an <tag>md</tag>.</p>
         </subsection>
 
 
@@ -1448,7 +1448,7 @@
         <subsection>
             <title>Inline Mathematics</title>
 
-            <p>Use the <tag>m</tag> to place variables or very short expressions within a sentence of a paragraph, the content of a <tag>title</tag>, a <tag>cell</tag> of a table, a footnote, or other similar locations of sentence-like text.  You can't cross-reference this text, nor make a knowl with it.  Though you can typically cross-reference a containing element.</p>
+            <p>Use the <tag>m</tag> to place variables or very short expressions within a sentence of a paragraph, the content of a <tag>title</tag>, a <tag>cell</tag> of a table, a footnote, or other similar locations of sentence-like text.  You cannot cross-reference this text, nor make a knowl with it.  Though you can typically cross-reference a containing element.</p>
 
             <p>Do not use <latex />-isms like <c>\displaystyle</c> to try to end-run the inline nature.  It will just lead to poor results.</p>
 
@@ -1458,26 +1458,23 @@
                 <p>Longer mathematical expressions in an <tag>m</tag> element can lead to awkward line breaks, both in <init>HTML</init> output, and especially in <init>PDF</init> generated from <latex/>.  And complicated fractions or integrals can introduce abnormal line-spacing that is distracting to a reader.  As a rough rule-of-thumb, keep an inline expression shorter than a moderately-long regular word and avoid tall constructions.  This should allow <latex/>'s line-breaking algorithms the best chance of success.</p>
 
                 <p>So a simple, short equality such as <m>x=2</m> should not cause a problem, but if you want to claim that the probability distribution of the normal distribution has the right scaling factors, <m>\int_{-\infty}^{\infty}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\frac{\left(x-\mu\right)^2}{\sigma}} dx = 1</m>, there is a good chance it will do less harm to your paragraph of you display it
-                <me>\int_{-\infty}^{\infty}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\frac{\left(x-\mu\right)^2}{\sigma}} dx = 1</me>
-                using the <tag>me</tag> element described next.</p>
+                <md>\int_{-\infty}^{\infty}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\frac{\left(x-\mu\right)^2}{\sigma}} dx = 1</md>
+                using the <tag>md</tag> element described next.</p>
             </note>
         </subsection>
 
         <subsection>
             <title>One-Line Display Mathematics</title>
 
-            <p>The <tag>me</tag> element can be used for longer expressions or a single equation.  Typically you will get vertical separation above and below, and the contents will be centered.  See below about concluding periods (and other punctuation), and alignment.  The <tag>men</tag> variant will produce a numbered equation, and therefore with a provided <attr>xml:id</attr> attribute, can be the target of a cross-reference (<tag>xref</tag>).</p>
+            <p>The <tag>md</tag> element can be used for longer expressions or a single equation.  Typically you will get vertical separation above and below, and the contents will be centered.  See below about concluding periods (and other punctuation), and alignment.  To number the expression, use the <attr>number</attr> attribute with the value set to <c>yes</c>.  And once numbered, the expression can be the target of a cross-reference (<tag>xref</tag>), if you also add a <attr>xml:id</attr> attribute.</p>
         </subsection>
 
         <subsection xml:id="topic-display-math">
             <title>Multi-line Display Mathematics</title>
 
-            <p>We begin with a pure container, either <tag>md</tag> or <tag>mdn</tag>.  The former numbers no lines, the latter numbers every line.  Within the container, content, on a per-line basis, goes into a <tag>mrow</tag> element.  You can think of <tag>mrow</tag> as being very similar to <tag>me</tag>.
-In a <latex/> <c>align</c> the <c>\\</c> mark the end of a displayed line.  In <pretext/> each <tag>mrow</tag> delimits a
-displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignment point.
-<idx>aligned math</idx><idx>\amp, math alignment</idx></p>
+            <p>We begin with the <tag>md</tag> element, but now used as a container.  Within the container, content, on a per-line basis, goes into a <tag>mrow</tag> element.  You can think of <tag>mrow</tag> as being very similar to a one-line <tag>md</tag> that does not have additional structure.  In a <latex/> <c>align</c> environment, the <c>\\</c> marks the end of a displayed line.  In <pretext/> each <tag>mrow</tag> delimits a displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignment point. <idx>aligned math</idx><idx>\amp, math alignment</idx></p>
 
-            <p>On any given <tag>mrow</tag> you can place the <attr>number</attr> attribute, with allowable values of <c>yes</c> and <c>no</c>.  These will typically be used to override the behavior inherited by the container, but there is no harm if they are redundant.  A given line of the display may be the target of a cross-reference, though the numbering flexibility means you can try (and fail) to target an unnumbered equation.</p>
+            <p>On any given <tag>mrow</tag> you can place the <attr>number</attr> attribute, with allowable values of <c>yes</c> and <c>no</c>.  These will typically be used to override the behavior you might place on the <tag>md</tag> container, via an overall <attr>number attribute</attr>, but there is no harm if they are redundant.  A given line of the display may be the target of a cross-reference (<tag>xref</tag>) via an <attr>xml:id</attr> attribute, though the numbering flexibility means you can try (and fail) to target an unnumbered equation.</p>
 
             <p>An <tag>mrow</tag> may have a <attr>tag</attr> attribute in place of a <attr>number</attr> attribute.  This will create a <q>number</q> on the equation which is just a symbol.  This is meant for situations where you do not want to use numbers, and the resulting cross-reference is <q>local.</q>  In other words, the <tag>xref</tag> and its target are not far apart, such as maybe within the same <tag>example</tag> or the same <tag>proof</tag>.  Allowable values for the attribute are:<cd>
                 <cline>star, dstar, tstar,</cline>
@@ -1486,6 +1483,8 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <cline>hash, dhash, thash,</cline>
                 <cline>maltese, dmaltese, tmaltese</cline>
             </cd>These are the names of symbols, with prefixes where the prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  Cross-references to these tagged equations happens in the usual way and should behave as expected.  See <xref ref="overview-cross-references" /> and <xref ref="topic-cross-referencing" /> for more on cross-references.</p>
+
+            <p>Finally, the default is to not number displayed expressions.  If you want every displayed expression numbered, or you find yourself electing to number the majority of the displayed expressions, then there is a global default.  In your <tag>docinfo</tag> element, put a <attr>equations</attr> attribute on the <tag>numbering</tag> element, and set its value to <c>yes</c>, rather than the default <c>no</c>.</p>
         </subsection>
 
         <subsection xml:id="mathematics-xml-characters">
@@ -1508,7 +1507,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <cline>&lt;me&gt;f(x) = \begin{cases} x^2 \amp \text{if } x\gt 0\\</cline>
                 <cline>           -7 \amp \text{otherwise} \end{cases}&lt;/me&gt;</cline>
             </cd>produces
-            <me>f(x) = \begin{cases}x^2\amp\text{if }x\gt 0\\-7\amp\text{otherwise}\end{cases}</me>.  This example amply illustrates the use of macros for XML exceptional characters (twice), appropriate use of the <c>\text{}</c> macro (twice), spaces in the <c>\text{}</c> macro (once), sentence-ending punctuation (see the source, the period is <em>not</em> inside the <tag>me</tag> element) and yes, we did think twice about the <c>\\</c> (an exception to the rule).</p>
+            <md>f(x) = \begin{cases}x^2\amp\text{if }x\gt 0\\-7\amp\text{otherwise}\end{cases}</md>.  This example amply illustrates the use of macros for XML exceptional characters (twice), appropriate use of the <c>\text{}</c> macro (twice), spaces in the <c>\text{}</c> macro (once), sentence-ending punctuation (see the source, the period is <em>not</em> inside the <tag>md</tag> element) and yes, we did think twice about the <c>\\</c> (an exception to the rule).</p>
         </subsection>
 
         <subsection xml:id="color-in-math">
@@ -1543,11 +1542,11 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                 <mrow>  \amp = C \amp   \amp = F \amp \amp<xref ref="txo" /></mrow>
             </md>.</p>
 
-            <p>Sometimes you want several short equations on one line.  Do not use <tag>me</tag>.  Instead use a single <tag>mrow</tag> inside an <tag>md</tag>, and use alignment to spread them out evenly.</p>
+            <p>Sometimes you want several short equations on one line.  Do not use the bare <tag>md</tag>.  Instead use a single <tag>mrow</tag> inside an <tag>md</tag>, and use alignment to spread them out evenly.</p>
 
             <p>For multi-line display mathematics with no ampersands present, each line will be centered.  This is implemented with the AMS-<latex /> <c>gather</c> environment.</p>
 
-            <p>You can fool the alignment behavior by hiding all your ampersands in macro definitions, so there is the optional <attr>alignment</attr> attribute for the <tag>md</tag> or <tag>mdn</tag> element, in order to force the right kind of alignment.  Allowable values are <c>gather</c>, <c>align</c>, and <c>alignat</c>.  The latter is similar to <c>align</c>, but no space is automatically provided between columns.  You can leave it that way, or explicitly add your own.  For example, this allows you to precisely arrange individual terms of a system of linear equations, especially when terms with zero coefficients are omitted.  When using the <c>alignat</c> option <pretext /> tries to count ampersands to see how many columns you intend, since <latex /> needs this number (we are not sure why).  This detection can be fooled too, especially if you have something like a matrix with lots of ampersands for other purposes.  So set the <attr>alignat-columns</attr> attribute to the <em>number of intended columns</em>, if necessary.</p>
+            <p>You can fool the alignment behavior by hiding all your ampersands in macro definitions, so there is the optional <attr>alignment</attr> attribute for the <tag>md</tag> element, in order to force the right kind of alignment.  Allowable values are <c>gather</c>, <c>align</c>, and <c>alignat</c>.  The latter is similar to <c>align</c>, but no space is automatically provided between columns.  You can leave it that way, or explicitly add your own.  For example, this allows you to precisely arrange individual terms of a system of linear equations, especially when terms with zero coefficients are omitted.  When using the <c>alignat</c> option <pretext /> tries to count ampersands to see how many columns you intend, since <latex /> needs this number (we are not sure why).  This detection can be fooled too, especially if you have something like a matrix with lots of ampersands for other purposes.  So set the <attr>alignat-columns</attr> attribute to the <em>number of intended columns</em>, if necessary.</p>
         </subsection>
 
         <subsection xml:id="commutative-diagrams">
@@ -1555,7 +1554,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Commutative diagrams may be authored using the <init>AMS</init> <latex/> <url href="https://ctan.org/pkg/amscd" visual="ctan.org/pkg/amscd"><c>amscd</c></url> package.  While restricted in some ways, such as the lack of sloped or curved arrows, it has one important advantage over more general drawing tools.  Support for <init>HTML</init> output comes from MathJax, and hence has accessible versions included in the output.</p>
 
-            <p>Typical use would be within an <tag>me</tag> element, so starting with <c>\begin{CD}</c>.  Despite this being multi-line output, we have not chosen to integrate it within the more general <c>md/mrow</c> structure, but that decision can be revisited.</p>
+            <p>Typical use would be within an <tag>md</tag> element, so starting with <c>\begin{CD}</c>.  Despite this being multi-line output, we have not chosen to integrate it within the more general <c>md/mrow</c> structure, but that decision can be revisited.</p>
         </subsection>
 
         <subsection>
@@ -1567,7 +1566,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
         <subsection>
             <title>Page Breaks for Tall Display Mathematics</title>
 
-            <p>For print output, do nothing additional and <latex /> will do its best to break your display between lines.  You can turn this behavior off by setting the <attr>break</attr> attribute on the <tag>md</tag> or <tag>mdn</tag> to the value <c>no</c>.  Once you do this, you can then selectively allow a page break after a given <tag>mrow</tag> by setting the <attr>break</attr> attribute on the <tag>mrow</tag> to the value <c>yes</c>.</p>
+            <p>For print output, do nothing additional and <latex /> will do its best to break your display between lines.  You can turn this behavior off by setting the <attr>break</attr> attribute on the <tag>md</tag> to the value <c>no</c>.  Once you do this, you can then selectively allow a page break after a given <tag>mrow</tag> by setting the <attr>break</attr> attribute on the <tag>mrow</tag> to the value <c>yes</c>.</p>
         </subsection>
 
         <subsection xml:id="mathematics-macros">
@@ -1626,7 +1625,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>If a chunk of displayed math concludes a sentence, then the sentence-ending punctuation should appear at the conclusion of the display.  (And certainly not at the start of the first line after the display!)  But do not author the punctuation within the mathematics element, put it afterwards, where it logically belongs.</p>
 
-            <p>More specifically, place a sentence-ending period (say) <em>immediately</em> after the closing of an <tag>me</tag>, <tag>men</tag>, <tag>md</tag>, or <tag>mdn</tag> element. <pretext /> will place the period in your output in the right place and in the right way.  (By using <latex />'s <c>\text{}</c> macro, if you are curious to know the details.)  Here is an example.  The <init>XML</init> source<cd>
+            <p>More specifically, place a sentence-ending period (say) <em>immediately</em> after the closing of an <tag>md</tag> element. <pretext /> will place the period in your output in the right place and in the right way.  (By using <latex />'s <c>\text{}</c> macro, if you are curious to know the details.)  Here is an example.  The <init>XML</init> source<cd>
                 <cline>&lt;md&gt;</cline>
                 <cline>    &lt;mrow&gt;(a+b)^2&lt;/mrow&gt;</cline>
                 <cline>&lt;/md&gt;.  Now...</cline>
@@ -1638,7 +1637,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>For inline mathematics (the <tag>m</tag> element) the same authoring principle holds, though you would likely do this naturally.  Author the punctuation <em>outside</em> the element, where it will remain.</p>
 
-            <p>Here is a technical subtlety that will demonstrate some of the inner machinery of <pretext /> and our conversions.  In your work, locate a theorem that has some numbered display mathematics (<c>mdn</c>) which is at the end of a sentence, and which you have authored as described above.  In <init>HTML</init> output, test a cross-reference (<c>xref</c>) to the theorem and you will see the period for the end of the sentence at the end of the display, where it should be.  Now test a cross-reference (<c>xref</c>) to one of the numbered equations.  First, the knowl will contain the entire display, to provide context, but it also will not contain the period, since the rest of the sentence is not in the knowl and so the period is not necessary.</p>
+            <p>Here is a technical subtlety that will demonstrate some of the inner machinery of <pretext /> and our conversions.  In your work, locate a theorem that has some numbered display mathematics (<c>md</c>) which is at the end of a sentence, and which you have authored as described above.  In <init>HTML</init> output, test a cross-reference (<c>xref</c>) to the theorem and you will see the period for the end of the sentence at the end of the display, where it should be.  Now test a cross-reference (<c>xref</c>) to one of the numbered equations.  First, the knowl will contain the entire display, to provide context, but it also will not contain the period, since the rest of the sentence is not in the knowl and so the period is not necessary.</p>
 
             <note xml:id="authoring-math-punctuation">
                 <title>Authoring Punctuation after Mathematics</title>
@@ -1672,7 +1671,7 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
 
             <p>Suppose there is a <latex/> math-mode macro you would like to use.  We will illustrate with the <c>\cancelto</c> macro that is part of the fairly standard <url href="https://ctan.org/pkg/cancel"><c>cancel</c></url> package.  It will draw an arrow through a mathematical formula, with a replacement value.  Conveniently, MathJax has a <c>cancel</c> extension, and this extension <em>also</em> defines the <c>\cancelto</c> macro.  You need to check this, as a <latex/> package and a MathJax extension are not guaranteed to define the same collection of macros.  Nor are the two guaranteed to have the same name (though this is best practice).</p>
 
-            <p>To make the <c>\cancelto</c> macro available and active in your mathematical elements (<tag>m</tag>, <tag>me</tag>, etc.) add the following to your <tag>docinfo</tag> element:
+            <p>To make the <c>\cancelto</c> macro available and active in your mathematical elements (<tag>m</tag> or <tag>md</tag>) add the following to your <tag>docinfo</tag> element:
             <cd>
                 <cline>&lt;math-package latex-name="cancel" mathjax-name="cancel"/&gt;</cline>
             </cd>Now you may freely use the <c>\cancelto</c> macro in your mathematics, confident that it will render correctly in all output formats.</p>
@@ -3188,9 +3187,9 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     <p>The <pretext/> source below describes a simple TikZ picture, nd is followed by the picture itself.  The rectangle is 8 centimeters wide.  The Guide is produced as a <init>PDF</init> with 10 point text and a text width of <m>6.5</m> inches.  (This is too wide for comfortable reading, and contrary to our recommendations.  See <xref ref="best-practice-too-much-text"/>.)   Normally, a choice of 10 point text would result in a width of <m>340</m> point, or about <m>4.7</m> inches.</p>
 
                     <p>So we compute the fraction of the available width required, as a percentage:
-                        <me>\frac{8\text{ cm}}{6.5\text{ in}} =
+                        <md>\frac{8\text{ cm}}{6.5\text{ in}} =
                             \frac{8\text{ cm}\left(\frac{1\text{ in}}{2.54\text{ cm}}\right)}{6.5\text{ in}} =
-                            0.4846 = 48.46\%</me>
+                            0.4846 = 48.46\%</md>
                     and we use that as the width of the image.</p>
 
                     <pre><![CDATA[
@@ -3230,10 +3229,10 @@ displayed line, and there are no <c>\\</c>s.  Use <c>\amp</c> to mark the alignm
                     <p>In the <init>PDF</init> version, the text matches between the image and the surrounding text almost identically.  We could slide the image right and left by adjusting the margins (the default is to be centered).  But if we want the image bigger and smaller, we need to adjust the TikZ code and recompute the <attr>width</attr> attribute.</p>
 
                     <p>Now for <init>HTML</init> we need to produce an <init>SVG</init> version that is a close match.  The <init>HTML</init> version is a close match for <latex/> built with a computed text width (for any font size).  We do not want to change the percentage of the width devoted to the TikZ picture, and we do not want to change the TikZ code itself.  If we had not chosen a different text width (the <m>6.5</m> inches, versus a computed <m>340</m> point), then we could generate the <init>SVG</init> by supplying the same publication file, so as to use the same font size.  However, our text width is 38% larger in the <latex/> version,
-                        <me>\frac{6.5\text{ in}}{340\text{ pt}} =
-                            \frac{6.5\text{ in}\left(\frac{72.27\text{ pt}}{1\text{ in}}\right)}{340\text{ pt}} = 1.3816</me>
+                        <md>\frac{6.5\text{ in}}{340\text{ pt}} =
+                            \frac{6.5\text{ in}\left(\frac{72.27\text{ pt}}{1\text{ in}}\right)}{340\text{ pt}} = 1.3816</md>
                     The font size needs to increase by a similar percentage,
-                        <me>10\text{ pt}\times 1.3816 = 13.816\text{ pt}\approx 14\text{ pt}</me>
+                        <md>10\text{ pt}\times 1.3816 = 13.816\text{ pt}\approx 14\text{ pt}</md>
                     So we generate the <init>SVG</init> image with a <em>different</em> publication file, giving a font size of 14 point.  The <init>HTML</init> font in the text may be very different from the <latex/> font used in the TikZ picture, but their <em>sizes</em> are nearly identical.  Note that our use of <latex/> only supports 8 different font sizes, so it was fortuitous in this example that the 38% increase was so close to the supported 14 point font size.  Note also, that since we used a different text width for the <init>PDF</init>, the resulting 40% increase in the font size for the <init>SVG</init> could play havoc with text that has been placed carefully not to overlap other components of the picture.</p>
                 </example>
 
