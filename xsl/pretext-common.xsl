@@ -5632,6 +5632,13 @@ Book (with parts), "section" at level 3
         <xsl:message>M:<xsl:value-of select="$left-margin" />:<xsl:value-of select="$right-margin" />:M</xsl:message>
     </xsl:if>
     <!-- error check for reasonable values -->
+    <!-- When there are three values, the "left" margin still -->
+    <!-- has a space character to split on (which of course,  -->
+    <!-- we don't do!).  It seems to survive until here.      -->
+    <xsl:if test="contains($right-margin, ' ')">
+        <xsl:message>PTX:ERROR:   it appears that a &lt;sidebyside&gt; has a @margins attribute with three or more values ("<xsl:value-of select="@margins" />").  There should be at most two values (a left margin and a right margin).  Results may be unpredictable.</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
     <xsl:if test="(substring-before($left-margin, '%') &lt; 0) or (substring-before($left-margin, '%') &gt; 100)">
         <xsl:message>PTX:ERROR:   left margin of a &lt;sidebyside&gt; ("<xsl:value-of select="$left-margin" />") is outside the interval [0%, 100%], (this may be computed, check consistency of "@margins" and "@widths")</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
