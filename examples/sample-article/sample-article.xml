@@ -4308,6 +4308,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>In PreTeXt, you can specify a Mermaid theme via the <attr>theme</attr> in the <c>common/mermaid/</c> publisher variable.</p>
 
+                <p>For HTML output, if you switch back-and-forth between light-mode and dark-mode, you will need to refresh the page to see the changes in the Mermaid diagrams.</p>
+
                 <figure xml:id="figure-mermaid-git">
                     <caption>Mermaid Git Diagram</caption>
                     <image>
