@@ -88,6 +88,10 @@
     <xsl:choose>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
+        <!-- break "article" into "section" -->
+        <xsl:when test="$root/article/section">1</xsl:when>
+        <!-- otherwise, no real divisions -->
+        <xsl:when test="$root/article">0</xsl:when>
     </xsl:choose>
 </xsl:variable>
 
@@ -187,9 +191,9 @@
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
     <!-- no hope for an "article" so fail immediately, with warning -->
-    <xsl:if test="not($b-is-book)">
+    <xsl:if test="not($b-is-book or $b-is-article)">
         <xsl:call-template name="banner-warning">
-            <xsl:with-param name="warning">PTX:FATAL: EPUB creation is only implemented for a "book",&#xa;not a "<xsl:value-of select="local-name($document-root)"/>", and we cannot recover</xsl:with-param>
+            <xsl:with-param name="warning">PTX:FATAL: EPUB creation is only implemented for a "book" or an "article",&#xa;not a "<xsl:value-of select="local-name($document-root)"/>", and we cannot recover</xsl:with-param>
         </xsl:call-template>
         <xsl:message terminate="yes">Quitting...</xsl:message>
     </xsl:if>
