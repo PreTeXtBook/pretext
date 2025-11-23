@@ -453,9 +453,8 @@
             <!-- chapter and appendix, this will need revision. -->
             <xsl:attribute name="properties">
                 <xsl:choose>
-                    <xsl:when test="$document-root//chapter/title/m or
-                                    $document-root//appendix/title/m">
-                        <xsl:choose>
+                    <xsl:when test="($b-is-book and ($document-root//chapter/title/m or $document-root//appendix/title/m))">
+                    <xsl:choose>
                             <xsl:when test="$math.format = 'mml' or
                                             $math.format = 'kindle'">
                                 <xsl:text>nav mathml</xsl:text>
@@ -873,7 +872,8 @@ width: 100%
                 <nav epub:type="toc" id="toc">
                     <h1>Table of Contents</h1>
                     <ol>
-                        <xsl:for-each select="$document-root/chapter">
+                        <!-- top-level divisions, for a book -->
+                        <xsl:for-each select="$document-root/chapter[$b-is-book]|$document-root/section[$b-is-article]">
                             <li>
                                 <xsl:element name="a">
                                     <xsl:attribute name="href">
@@ -883,6 +883,7 @@ width: 100%
                                 </xsl:element>
                             </li>
                         </xsl:for-each>
+                        <!-- following divisions identical for book v. article -->
                         <xsl:if test="$document-root/backmatter/appendix|$document-root/backmatter/solutions">
                             <li class="no-marker">
                                 <span>Appendices</span>
