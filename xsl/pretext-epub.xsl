@@ -994,6 +994,30 @@ width: 100%
                 </xsl:choose>
             </xsl:if>
         </xsl:when>
+        <!-- Various interactive bits get static images as replacements for    -->
+        <!-- interactivity and become images with filenames relative to the    -->
+        <!-- *generated* directories, and hence are of predictable image types -->
+        <!--                                                                   -->
+        <!-- Audio, Video, Interactive: automatic screenshot preview, PNG      -->
+        <!-- Audio, Video, Interactive: QR code, PNG                           -->
+        <!-- Video Play Button (FigLeaf):  PNG stock image                     -->
+        <!-- YouTube: provided video preview, JPG                              -->
+        <!--                                                                   -->
+        <!-- Author-supplied images to be used as previews for audio, video,   -->
+        <!-- and interactive become  image/@source  and so are handled above   -->
+        <!-- and are "external", not "generated"                               -->
+        <xsl:when test="@pi:generated">
+            <xsl:choose>
+                <xsl:when test="$purpose = 'read'">
+                    <xsl:value-of select="$generated-directory-source"/>
+                </xsl:when>
+                <xsl:when test="$purpose = 'write'">
+                    <xsl:value-of select="$generated-directory"/>
+                </xsl:when>
+            </xsl:choose>
+            <!-- indiscriminate about name/type of image file -->
+            <xsl:value-of select="@pi:generated"/>
+        </xsl:when>
         <xsl:when test="latex-image|sageplot|asymptote|mermaid|pf:prefigure">
             <xsl:choose>
                 <xsl:when test="$purpose = 'read'">
@@ -1044,13 +1068,13 @@ width: 100%
 <!-- Manifest entry with image file information -->
 <!-- For each "image" we record basic information in the form the  -->
 <!-- manifest expects (an "item").  Later, duplicate files will be -->
-<!-- scrubbed from this list based on the @href value, so a given  -->
-<!-- file is not referenced twice in the manifest.                 -->
-<!-- TODO: Missing video posters, interactive screenshots, QR codes -->
+<!-- scrubbed from this list based on the @href value, so that a   -->
+<!-- given file is not referenced more than once in the manifest.  -->
 <xsl:template match="image" mode="manifest">
     <xsl:variable name="extension">
         <xsl:call-template name="file-extension">
-            <xsl:with-param name="filename" select="@source" />
+            <!-- at most one of these two attributes shold be present -->
+            <xsl:with-param name="filename" select="@source|@pi:generated" />
         </xsl:call-template>
     </xsl:variable>
     <!-- item  element for manifest -->
@@ -1076,6 +1100,14 @@ width: 100%
                 </xsl:when>
                 <xsl:when test="@source and ($extension='svg' or $extension='')">
                     <xsl:text>image/svg+xml</xsl:text>
+                </xsl:when>
+                <!-- QR code, automatic preview, YouuTube fig leaf -->
+                <xsl:when test="@pi:generated and ($extension = 'png')">
+                    <xsl:text>image/png</xsl:text>
+                </xsl:when>
+                <!-- YouTube-provided previews (always just *.jpg) -->
+                <xsl:when test="@pi:generated and ($extension = 'jpg')">
+                    <xsl:text>image/jpeg</xsl:text>
                 </xsl:when>
                 <xsl:when test="latex-image|sageplot|asymptote|mermaid|pf:prefigure">
                     <xsl:text>image/svg+xml</xsl:text>
