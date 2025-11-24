@@ -4145,9 +4145,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
             dest = os.path.join(xhtml_dir, filename)
             os.makedirs(os.path.dirname(dest), exist_ok=True)
             shutil.copy2(source, dest)
-        except:
-            msg = 'PTX:BUG: error copying image with sourcename "{}" and filename "{}".  Perhaps see issue #2326.'
+        except Exception as e:
+            msg = 'PTX:BUG: error copying image with sourcename "{}" and filename "{}".  Traceback follows:'
+            # traceback.print_exc()
             log.warning(msg.format(sourcename, filename))
+            log.warning(traceback.format_exc())
 
     # clean-up the trash
     # TODO: squelch knowls or find alternative
