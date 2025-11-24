@@ -1027,6 +1027,11 @@ width: 100%
                     <xsl:value-of select="$generated-directory"/>
                 </xsl:when>
             </xsl:choose>
+            <!-- All of the following "source language" images should     -->
+            <!-- be available as vector graphics, and thus in SVG format, -->
+            <!-- or convertible to SVG format.  We prefer SVG format.     -->
+            <!-- However, Kindle is hostile to SVG, so we need to also    -->
+            <!-- have PNG versions.                                       -->
             <xsl:choose>
                 <xsl:when test="latex-image">
                     <xsl:text>latex-image/</xsl:text>
