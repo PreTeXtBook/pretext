@@ -181,6 +181,17 @@
 <!-- Disable clipboardable -->
 <xsl:template name="insert-clipboardable-class"/>
 
+<!-- Printables -->
+<!-- Worksheets and handouts get a near-duplicate HTML file designed for printing.  -->
+<!-- The pretext-html.xsl conversion explicitly stops to build these in the course  -->
+<!-- of considering every other structural element, and then also passes a          -->
+<!-- "b-printable" switch into the "file-wrap" template to get extra bits.  That    -->
+<!-- doesn't happen in this conversion, so we don't get these extra files (good).   -->
+<!-- But we do get little buttons to elect a printable version.  We have to kill    -->
+<!-- those buttons, since EPUB wants to go looking for the printable-version files. -->
+<xsl:template match="worksheet|handout" mode="standalone-printout-links"/>
+
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
