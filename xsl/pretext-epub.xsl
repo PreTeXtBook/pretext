@@ -261,7 +261,6 @@
             <head>
                 <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
                 <xsl:call-template name="converter-blurb-html" />
-                <xsl:call-template name="mathjax-css"/>
                 <xsl:call-template name="epub-kindle-css"/>
                 <title>
                     <xsl:apply-templates select="." mode="type-name-number" />
@@ -710,86 +709,6 @@
     </packaging>
 </xsl:template>
 
-<!-- MathJax CSS, which is placed on enclosing span elements      -->
-<!--   mjpage:        for all math, so only class on online math  -->
-<!--   mjpage__block: for display math, so additional on "md"     -->
-<!-- Removed as EPUB 3.0 violation: .mjpage direction: ltr;       -->
-<xsl:template name="mathjax-css">
-<style type="text/css">
-.mjpage .MJX-monospace {
-font-family: monospace
-}
-
-.mjpage .MJX-sans-serif {
-font-family: sans-serif
-}
-
-.mjpage {
-display: inline;
-font-style: normal;
-font-weight: normal;
-line-height: normal;
-font-size: 100%;
-font-size-adjust: none;
-text-indent: 0;
-text-align: left;
-text-transform: none;
-letter-spacing: normal;
-word-spacing: normal;
-word-wrap: normal;
-white-space: nowrap;
-float: none;
-max-width: none;
-max-height: none;
-min-width: 0;
-min-height: 0;
-border: 0;
-padding: 0;
-margin: 0
-}
-
-.mjpage * {
-transition: none;
--webkit-transition: none;
--moz-transition: none;
--ms-transition: none;
--o-transition: none
-}
-
-.mjx-svg-href {
-fill: blue;
-stroke: blue
-}
-
-.MathJax_SVG_LineBox {
-display: table!important
-}
-
-.MathJax_SVG_LineBox span {
-display: table-cell!important;
-width: 10000em!important;
-min-width: 0;
-max-width: none;
-padding: 0;
-border: 0;
-margin: 0
-}
-
-.mjpage__block {
-text-align: center;
-margin: 1em 0em;
-position: relative;
-display: block!important;
-text-indent: 0;
-max-width: none;
-max-height: none;
-min-width: 0;
-min-height: 0;
-width: 100%
-}
-</style>
-</xsl:template>
-
 <!-- Include the appropriate CSS file depending on output -->
 <xsl:template name="epub-kindle-css">
     <xsl:choose>
@@ -830,7 +749,6 @@ width: 100%
                     <xsl:apply-templates select="$document-root" mode="title-full"/>
                 </title>
                 <xsl:if test="not($b-authored-cover)">
-                    <xsl:call-template name="mathjax-css"/>
                     <xsl:call-template name="epub-kindle-css"/>
                 </xsl:if>
             </head>
@@ -874,7 +792,6 @@ width: 100%
             <xsl:call-template name="html-theme-attributes"/>
             <head>
                 <meta charset="utf-8"/>
-                <xsl:call-template name="mathjax-css"/>
                 <xsl:call-template name="epub-kindle-css"/>
                 <title>Table of Contents</title>
             </head>
@@ -1346,7 +1263,6 @@ width: 100%
                 <head>
                     <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
                     <xsl:call-template name="converter-blurb-html" />
-                    <xsl:call-template name="mathjax-css"/>
                     <xsl:call-template name="epub-kindle-css"/>
                     <title>Endnotes</title>
                 </head>
