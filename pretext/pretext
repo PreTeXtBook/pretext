@@ -395,6 +395,10 @@ def get_cli_arguments():
         ("epub-mml", "EPUB container, math as MathML"),
         ("epub-speech", "EPUB container, math as speech"),
         ("epub-kindle", "EPUB container, math as MathML, PNG images"),
+        ("epub-svg-nozip", "EPUB build files, math as SVG"),
+        ("epub-mml-nozip", "EPUB build files, math as MathML"),
+        ("epub-speech-nozip", "EPUB build files, math as speech"),
+        ("epub-kindle-nozip", "EPUB build files, math as MathML, PNG images"),
         (
             "assembly-static",
             "PreTeXt source, after pre-processor, static exercises (for developers)",
@@ -869,6 +873,14 @@ def main():
             ptx.epub(xml_source, publication_file, out_file, dest_dir, "epub", "speech", stringparams)
         elif args.format == "epub-kindle":
             ptx.epub(xml_source, publication_file, out_file, dest_dir, "epub", "kindle", stringparams)
+        elif args.format == "epub-svg-nozip":
+            ptx.epub(xml_source, publication_file, out_file, dest_dir, "nozip", "svg", stringparams)
+        elif args.format == "epub-mml-nozip":
+            ptx.epub(xml_source, publication_file, out_file, dest_dir, "nozip", "mml", stringparams)
+        elif args.format == "epub-speech-nozip":
+            ptx.epub(xml_source, publication_file, out_file, dest_dir, "nozip", "speech", stringparams)
+        elif args.format == "epub-kindle-nozip":
+            ptx.epub(xml_source, publication_file, out_file, dest_dir, "nozip", "kindle", stringparams)
         elif args.format == "assembly-static":
             ptx.assembly(
                 xml_source, publication_file, stringparams, out_file, dest_dir, "static"

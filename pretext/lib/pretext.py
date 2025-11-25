@@ -4198,6 +4198,10 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
             derivedname = get_output_filename(xml_source, out_file, dest_dir, ".epub")
             log.info("EPUB file deposited as {}".format(derivedname))
             shutil.copy2(epub_file, derivedname)
+    elif file_format == 'nozip':
+        copy_build_directory(tmp_dir, dest_dir)
+        msg = 'EPUB build files produced, but not zipped into a single file; results placed in {}'
+        log.info(msg.format(dest_dir))
     else:
         msg = 'PTX:BUG: conversion to EPUB got an unrecognized file format ("{}").  No output results.'
         log.warning(msg.format(file_format))
