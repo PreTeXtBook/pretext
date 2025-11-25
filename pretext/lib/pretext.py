@@ -4151,9 +4151,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
             log.warning(msg.format(sourcename, filename))
             log.warning(traceback.format_exc())
 
-    # clean-up the trash
-    # TODO: squelch knowls or find alternative
-    # shutil.rmtree(os.path.join(tmp_dir, 'knowl'))
+    # The build/temp directory has a lot of cruft
+    # Leave it for the nozip option (debugging)
+    # Remove it before zipping
+    #
+    # cover manufacture (cover.log, cover.aux, etc)
     # os.remove(packaging_file)
     # os.remove(math_representations)
 
