@@ -183,10 +183,9 @@
 
 <!-- Printables -->
 <!-- Worksheets and handouts get a near-duplicate HTML file designed for printing.  -->
-<!-- The pretext-html.xsl conversion explicitly stops to build these in the course  -->
-<!-- of considering every other structural element, and then also passes a          -->
-<!-- "b-printable" switch into the "file-wrap" template to get extra bits.  That    -->
-<!-- doesn't happen in this conversion, so we don't get these extra files (good).   -->
+<!-- That is initiated very close to the entry template via a named template        -->
+<!-- "make-printout-printables".  We explicitly *do not* include any call to this   -->
+<!-- template in the entry template here, so these pages are not built (good).      -->
 <!-- But we do get little buttons to elect a printable version.  We have to kill    -->
 <!-- those buttons, since EPUB wants to go looking for the printable-version files. -->
 <xsl:template match="worksheet|handout" mode="standalone-printout-links"/>
