@@ -1007,6 +1007,11 @@ width: 100%
         <!-- and interactive become  image/@source  and so are handled above   -->
         <!-- and are "external", not "generated"                               -->
         <xsl:when test="@pi:generated">
+            <xsl:variable name="extension">
+                <xsl:call-template name="file-extension">
+                    <xsl:with-param name="filename" select="@pi:generated" />
+                </xsl:call-template>
+            </xsl:variable>
             <xsl:choose>
                 <xsl:when test="$purpose = 'read'">
                     <xsl:value-of select="$generated-directory-source"/>
@@ -1015,8 +1020,22 @@ width: 100%
                     <xsl:value-of select="$generated-directory"/>
                 </xsl:when>
             </xsl:choose>
-            <!-- indiscriminate about name/type of image file -->
+            <!-- Maybe with an extension and OK.  If not, -->
+            <!-- we provide a good extension right now.   -->
             <xsl:value-of select="@pi:generated"/>
+            <!-- MOM generated files come extensionless since   -->
+            <!-- we/MOM can make them in all desirable formats, -->
+            <!-- so we switch on Kindle or not.                 -->
+            <xsl:if test="$extension = ''">
+                <xsl:choose>
+                    <xsl:when test="$b-kindle">
+                        <xsl:text>.png</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>.svg</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
         </xsl:when>
         <xsl:when test="latex-image|sageplot|asymptote|mermaid|pf:prefigure">
             <xsl:choose>
@@ -1105,6 +1124,17 @@ width: 100%
                 </xsl:when>
                 <xsl:when test="@source and ($extension='svg' or $extension='')">
                     <xsl:text>image/svg+xml</xsl:text>
+                </xsl:when>
+                <!-- MOM generated images are extensionless -->
+                <xsl:when test="@pi:generated and ($extension = '')">
+                    <xsl:choose>
+                        <xsl:when test="$b-kindle">
+                            <xsl:text>image/png</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>image/svg+xml</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:when>
                 <!-- QR code, automatic preview, YouuTube fig leaf -->
                 <xsl:when test="@pi:generated and ($extension = 'png')">
