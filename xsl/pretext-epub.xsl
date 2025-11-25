@@ -1101,8 +1101,11 @@ width: 100%
                 <xsl:when test="@source and ($extension='jpeg' or $extension='jpg')">
                     <xsl:text>image/jpeg</xsl:text>
                 </xsl:when>
-                <xsl:when test="@source and ($extension='svg' or $extension='')">
+                <xsl:when test="@source and ($extension = 'svg')">
                     <xsl:text>image/svg+xml</xsl:text>
+                </xsl:when>
+                <xsl:when test="@source and ($extension = '')">
+                    <xsl:call-template name="best-media-type"/>
                 </xsl:when>
                 <!-- MOM generated images are extensionless -->
                 <xsl:when test="@pi:generated and ($extension = '')">
