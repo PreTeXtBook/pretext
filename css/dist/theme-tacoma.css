@@ -1367,35 +1367,26 @@ ol > li {
 }
 .fillin {
   display: inline-block;
-  border-bottom-style: solid;
-  border-width: 1px;
-  margin-right: 0.1em;
-  margin-bottom: -0.25em;
-}
-.fillin .underline {
-  display: inline-block;
-  border-bottom-style: solid;
-  border-width: 1px;
-  margin-right: 0.1em;
-  margin-bottom: -0.25em;
-}
-.fillin .box {
-  display: inline-block;
   border: none;
-  margin-left: 0.1em;
-  margin-right: 0.1em;
-  margin-bottom: -0.25em;
-  outline: 1px solid black;
-  height: 1.3em;
-}
-.fillin .shade {
-  display: inline-block;
-  border: none;
+  border-width: 1px;
   margin-right: 0.1em;
   margin-left: 0.1em;
   margin-bottom: -0.25em;
-  background-color: #eee;
+}
+.fillin.underline {
+  border-bottom-style: solid;
+  border-width: 1px;
+}
+.fillin.box {
+  outline: 1px solid var(--body-text-color);
   height: 1.3em;
+}
+.fillin.shade {
+  background-color: var(--fillin-background-color, #eee);
+  height: 1.3em;
+}
+:root.dark-mode {
+  --fillin-background-color: #444;
 }
 .heading:is(h1, h2, h3, h4, h5, h6) {
   margin: 0;
@@ -2001,6 +1992,9 @@ img.contained {
 .ptx-content img,
 .ptx-content svg {
   background: var(--ptx-image-bg);
+}
+.mermaid > svg {
+  background: none;
 }
 .image-description summary {
   list-style: none;
