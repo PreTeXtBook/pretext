@@ -984,14 +984,7 @@ width: 100%
             </xsl:choose>
             <xsl:apply-templates select="@source" />
             <xsl:if test="$extension=''">
-                <xsl:choose>
-                    <xsl:when test="$b-kindle">
-                        <xsl:text>.png</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>.svg</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:call-template name="best-file-extension"/>
             </xsl:if>
         </xsl:when>
         <!-- Various interactive bits get static images as replacements for    -->
@@ -1027,14 +1020,7 @@ width: 100%
             <!-- we/MOM can make them in all desirable formats, -->
             <!-- so we switch on Kindle or not.                 -->
             <xsl:if test="$extension = ''">
-                <xsl:choose>
-                    <xsl:when test="$b-kindle">
-                        <xsl:text>.png</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>.svg</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:call-template name="best-file-extension"/>
             </xsl:if>
         </xsl:when>
         <xsl:when test="latex-image|sageplot|asymptote|mermaid|pf:prefigure">
@@ -1073,14 +1059,7 @@ width: 100%
                     <xsl:apply-templates select="pf:prefigure" mode="image-source-basename"/>
                 </xsl:when>
             </xsl:choose>
-            <xsl:choose>
-                <xsl:when test="$b-kindle">
-                    <xsl:text>.png</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>.svg</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:call-template name="best-file-extension"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG:     image filename not determined in EPUB conversion</xsl:message>
@@ -1127,14 +1106,7 @@ width: 100%
                 </xsl:when>
                 <!-- MOM generated images are extensionless -->
                 <xsl:when test="@pi:generated and ($extension = '')">
-                    <xsl:choose>
-                        <xsl:when test="$b-kindle">
-                            <xsl:text>image/png</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>image/svg+xml</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:call-template name="best-media-type"/>
                 </xsl:when>
                 <!-- QR code, automatic preview, YouuTube fig leaf -->
                 <xsl:when test="@pi:generated and ($extension = 'png')">
@@ -1156,6 +1128,35 @@ width: 100%
     </xsl:element>
     <!-- likely a dead-end here, but we examine children anyway -->
     <xsl:apply-templates select="*" mode="manifest" />
+</xsl:template>
+
+<!-- Kindle has an upper limit of 25 or so SVG images.  Not sure the       -->
+<!-- rationale.  Anyway, we prefer (our) SVG images which are generally    -->
+<!-- very tight and compact and scale nicely.  When we know that an image  -->
+<!-- (source, or generated) does not have an extension, then we are free   -->
+<!-- to choose, on the assumption that such files have actually been       -->
+<!-- generated.  These utility templates *only* depend on a Kindle switch. -->
+
+<xsl:template name="best-file-extension">
+    <xsl:choose>
+        <xsl:when test="$b-kindle">
+            <xsl:text>.png</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>.svg</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="best-media-type">
+    <xsl:choose>
+        <xsl:when test="$b-kindle">
+            <xsl:text>image/png</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>image/svg+xml</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Now the actual image inclusion where born -->
