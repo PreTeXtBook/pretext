@@ -862,21 +862,13 @@ def main():
         elif args.format == "braille-electronic":
             ptx.braille(xml_source, publication_file, stringparams, out_file, dest_dir, "electronic")
         elif args.format == "epub-svg":
-            ptx.epub(
-                xml_source, publication_file, out_file, dest_dir, "svg", stringparams
-            )
+            ptx.epub(xml_source, publication_file, out_file, dest_dir, "epub", "svg", stringparams)
         elif args.format == "epub-mml":
-            ptx.epub(
-                xml_source, publication_file, out_file, dest_dir, "mml", stringparams
-            )
+            ptx.epub(xml_source, publication_file, out_file, dest_dir, "epub", "mml", stringparams)
         elif args.format == "epub-speech":
-            ptx.epub(
-                xml_source, publication_file, out_file, dest_dir, "speech", stringparams
-            )
+            ptx.epub(xml_source, publication_file, out_file, dest_dir, "epub", "speech", stringparams)
         elif args.format == "epub-kindle":
-            ptx.epub(
-                xml_source, publication_file, out_file, dest_dir, "kindle", stringparams
-            )
+            ptx.epub(xml_source, publication_file, out_file, dest_dir, "epub", "kindle", stringparams)
         elif args.format == "assembly-static":
             ptx.assembly(
                 xml_source, publication_file, stringparams, out_file, dest_dir, "static"

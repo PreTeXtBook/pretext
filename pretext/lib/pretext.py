@@ -3801,7 +3801,7 @@ def _split_brf(filename):
 ####################
 
 
-def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
+def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, stringparams):
     """Produce complete document in an EPUB container"""
 
     # to ensure provided stringparams aren't mutated unintentionally
@@ -4157,6 +4157,10 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
     # os.remove(packaging_file)
     # os.remove(math_representations)
 
+    ##########################################
+    # Notes on packaging an EPUB as a ZIP file
+    ##########################################
+
     # mimetype parameters: -0Xq
     # -0 no compression
     # -X no extra fields, eg uid/gid on Unix
@@ -4177,22 +4181,26 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format, stringparams):
 
     # Python 3.7 - compress level 0 to 9
 
-    title_file_element = packaging_tree.xpath("/packaging/filename")[0]
-    title_file = ET.tostring(title_file_element, method="text").decode("ascii")
-    epub_file = "{}-{}.epub".format(title_file, math_format)
-    log.info("packaging an EPUB temporarily as {}".format(epub_file))
-    with working_directory(tmp_dir):
-        with zipfile.ZipFile(epub_file, mode="w", compression=zipfile.ZIP_DEFLATED) as epub:
-            epub.write("mimetype", compress_type=zipfile.ZIP_STORED)
-            for root, dirs, files in os.walk("EPUB"):
-                for name in files:
-                    epub.write(os.path.join(root, name))
-            for root, dirs, files in os.walk("META-INF"):
-                for name in files:
-                    epub.write(os.path.join(root, name))
-        derivedname = get_output_filename(xml_source, out_file, dest_dir, ".epub")
-        log.info("EPUB file deposited as {}".format(derivedname))
-        shutil.copy2(epub_file, derivedname)
+    if file_format == 'epub':
+        title_file_element = packaging_tree.xpath("/packaging/filename")[0]
+        title_file = ET.tostring(title_file_element, method="text").decode("ascii")
+        epub_file = "{}-{}.epub".format(title_file, math_format)
+        log.info("packaging an EPUB temporarily as {}".format(epub_file))
+        with working_directory(tmp_dir):
+            with zipfile.ZipFile(epub_file, mode="w", compression=zipfile.ZIP_DEFLATED) as epub:
+                epub.write("mimetype", compress_type=zipfile.ZIP_STORED)
+                for root, dirs, files in os.walk("EPUB"):
+                    for name in files:
+                        epub.write(os.path.join(root, name))
+                for root, dirs, files in os.walk("META-INF"):
+                    for name in files:
+                        epub.write(os.path.join(root, name))
+            derivedname = get_output_filename(xml_source, out_file, dest_dir, ".epub")
+            log.info("EPUB file deposited as {}".format(derivedname))
+            shutil.copy2(epub_file, derivedname)
+    else:
+        msg = 'PTX:BUG: conversion to EPUB got an unrecognized file format ("{}").  No output results.'
+        log.warning(msg.format(file_format))
 
 
 ####################
