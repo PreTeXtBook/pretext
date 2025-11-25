@@ -365,6 +365,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($b-subsetting) and not($b-portable-html)">
         <xsl:apply-templates select="." mode="make-xref-knowls"/>
     </xsl:if>
+    <!-- Produce "printouts ("worksheet" and "handout") -->
+    <!-- as standalone pages hyped-up to be printable   -->
+    <xsl:call-template name="make-printout-printables"/>
     <!-- custom ol marker css production -->
     <xsl:if test="not($b-subsetting) and not($b-portable-html)">
         <xsl:call-template name="ol-marker-styles"/>
@@ -590,15 +593,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="structural-division-content">
         <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
-
-    <!-- For a printout (worksheet or handout), we do it again,   -->
-    <!-- to generate a standalone printable and editable version. -->
-    <!-- NB we don't produce these for portable html.             -->
-    <xsl:if test="(self::worksheet or self::handout) and not($b-portable-html)">
-        <xsl:apply-templates select="." mode="standalone-printout">
-            <xsl:with-param name="heading-level" select="$heading-level"/>
-        </xsl:apply-templates>
-    </xsl:if>
 </xsl:template>
 
 <!-- This is where a division becomes an HTML "section".  It may -->
@@ -783,23 +777,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Worksheets generate one additional version     -->
 <!-- designed for printing, on Letter or A4 paper.  -->
-<xsl:template match="worksheet|handout" mode="standalone-printout">
-    <xsl:param name="heading-level"/>
-
-    <xsl:variable name="base-filename">
-        <xsl:apply-templates select="." mode="visible-id"/>
-    </xsl:variable>
-    <xsl:apply-templates select="." mode="file-wrap">
-        <xsl:with-param name="filename">
-            <xsl:apply-templates select="." mode="standalone-printout-filename"/>
-        </xsl:with-param>
-        <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="structural-division-content">
-                <xsl:with-param name="heading-level" select="$heading-level"/>
-            </xsl:apply-templates>
-        </xsl:with-param>
-        <xsl:with-param name="b-printable" select="true()"/>
-    </xsl:apply-templates>
+<xsl:template name="make-printout-printables">
+    <xsl:for-each select="$document-root//worksheet|$document-root//handout">
+        <xsl:apply-templates select="." mode="file-wrap">
+            <xsl:with-param name="filename">
+                <xsl:apply-templates select="." mode="standalone-printout-filename"/>
+            </xsl:with-param>
+            <xsl:with-param name="content">
+                <xsl:apply-templates select="." mode="structural-division-content">
+                    <!-- as a standalone page, we just start at h1 -->
+                    <!-- styling seems unaffected, and it is not   -->
+                    <!-- critical this page be accessible          -->
+                    <xsl:with-param name="heading-level" select="1"/>
+                </xsl:apply-templates>
+            </xsl:with-param>
+            <xsl:with-param name="b-printable" select="true()"/>
+        </xsl:apply-templates>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- ############### -->
