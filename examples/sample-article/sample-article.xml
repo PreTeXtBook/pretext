@@ -3170,26 +3170,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><url href="http://example.com/">With no <attr>visual</attr> attribute</url>, so an edited one is formulated (no protocol)</li>
                 </ul></p>
 
-                <p>Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Normal text, monospace text, <tag>url</tag> with just <attr>href</attr>, <tag>url</tag> with <attr>href</attr> and <attr>visual</attr>, <tag>url</tag> with <attr>href</attr>, <attr>visual</attr> and content.  Notice how the various versions do, or do not, line-break in <latex/>/PDF output, including the (potentially confusing) use of a use of a hyphen in the normal text version</p>
+                <p>Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Normal text, monospace text, <tag>url</tag> with just <attr>href</attr>, <tag>url</tag> with <attr>href</attr> and <attr>visual</attr>, <tag>url</tag> with <attr>href</attr>, <attr>visual</attr> and content.  Notice how the various versions do, or do not, line-break in <latex/>/PDF output, including the (potentially confusing) use of a use of a hyphen in the normal text version.  Note that <c>#</c> starts a fragment identifier, so it is the penultimate character.  A <c>?</c> would normally start a query string, but as the fragment identifier, it is not special.  Finally, square brackets (<c>[</c> and <c>]</c>) are only legal in limited situations (authority component for IPv6 host literals), so they are present as percent-encoded literals, which really does not demonstrate anything.  All these efforts to make a comprehensive, but legal, <init>URL</init> are meant to appease the EPUB validator which will otherwise flag them as errors.</p>
 
                 <blockquote>
 
-                    <p>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</p>
+                    <p>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/%5B%5D@!$&amp;'()*+,;=#?</p>
 
-                    <p><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></p>
+                    <p><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/%5B%5D@!$&amp;'()*+,;=#?</c></p>
 
-                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="/></p>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?"/></p>
 
-                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="/></p>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?"/></p>
 
-                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=">Characters to a footnote</url></p>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?">Characters to a footnote</url></p>
 
                 </blockquote>
 
                 <p>Line-breaking in <latex/>/PDF output is specialized, using path separators (slashes) as candidates for splitting across lines: <url href="http://example.com/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer"/></p>
 
                 <p>We are not fans of footnotes, they are totally unstructured.<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="">Carleson's Theorem</url></fn>
-                A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="/></fn>
+                A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?"/></fn>
                 This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite.
                 For good measure, we repeat the URL found in the first footnote<fn>And if you do provide a link like <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url> in a footnote you should see an  easy-to-read parenthetical version in some output formats, such as <c>en.wikipedia.org/wiki/Carleson%27s_theorem</c>.</fn>:
                 <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="">Carleson's Theorem</url>.
@@ -6746,27 +6746,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </sidebyside>
             </figure>
 
-            <p>Tables are formed in <latex/> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex/>'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex/> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" type="text-global"/>, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.  So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars" text="type-global"/>.)</p>
+            <p>Tables are formed in <latex/> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex/>'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex/> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" type="text-global"/>, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  That section says more about making a comprehensive, yet legal, test <init>URL</init>.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.  So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars" text="type-global"/>.)</p>
 
             <table xml:id="table-latex-problems">
                 <title>Problematic Table Cells for <latex/></title>
                 <tabular halign="center" top="medium" left="medium" bottom="medium" right="medium">
                     <row>
                         <cell>1</cell>
-                        <cell halign="left"><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
-                        <cell><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
+                        <cell halign="left"><c>09az%-._~:/%5B%5D@!$&amp;'()*+,;=#?</c></cell>
+                        <cell><c>09az%-._~:/%5B%5D@!$&amp;'()*+,;=#?</c></cell>
                     </row>
 
                     <row>
                         <cell>2</cell>
-                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">e.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
-                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">e.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
+                        <cell halign="left"><url href="http://example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?">e.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?</url></cell>
+                        <cell><url href="http://example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?">e.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?</url></cell>
                     </row>
 
                     <row>
                         <cell>3</cell>
-                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="/></cell>
-                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="/></cell>
+                        <cell halign="left"><url href="http://example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?"/></cell>
+                        <cell><url href="http://example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?"/></cell>
                     </row>
                 </tabular>
             </table>
