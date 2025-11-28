@@ -1392,6 +1392,11 @@
 <!--       of (unique) ids necessary to point to the speech.     -->
 <!--       Pattern 11 at:                                        -->
 <!--       https://www.deque.com/blog/creating-accessible-svgs/  -->
+<!--   4.  Seems                                                 -->
+<!--           "title" + @aria-labelledby                        -->
+<!--           "desc"  + @aria-describedby                       -->
+<!--       cover all the bases.  It is suggested that the two    -->
+<!--       elements alone would be recognized by screen readers. -->
 <xsl:template match="svg:svg[not(ancestor::svg:svg)]" mode="svg-edit">
     <xsl:param name="speech"/>
     <xsl:param name="base-id"/>
@@ -1414,7 +1419,8 @@
         </xsl:attribute>
         <xsl:attribute name="aria-labelledby">
             <xsl:value-of select="$title-id"/>
-            <xsl:text> </xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="aria-describedby">
             <xsl:value-of select="$desc-id"/>
         </xsl:attribute>
         <!-- now additional metadata, of sorts -->
