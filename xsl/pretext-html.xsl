@@ -9653,7 +9653,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   1.  Instructions (paragraphs, etc)  -->
 <!--   2.  An iframe, via modal-template   -->
 <xsl:template match="interactive" mode="interactive-core">
-    <!-- An iframe first -->
+    <!-- We want to recognize an "interactive" authored  -->
+     <!-- in an "exercise" (or similar) which originated -->
+     <!-- from a "dual" dynamic/static exercise.         -->
+    <xsl:variable name="b-in-dual-exercise" select="ancestor::*[@exercise-interactive = 'dual']"/>
     <xsl:choose>
         <!-- A DoenetML interactive lives two lives.  Plain 'ol PreTeXt,  -->
         <!-- supported by a Doenet CDN for its interactivity.  But when   -->
@@ -9669,6 +9672,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </xsl:when>
+        <!-- An iframe interactive lives two lives.  Plain 'ol PreTeXt. But  -->
+        <!-- when hosted on Runestone, and authored as the "dynamic" part of -->
+        <!-- a "dual" exercise it needs surrounding infrastructure, in part  -->
+        <!-- to hold an id.  SPLICE is the protocol for a generic iframe to  -->
+        <!-- communicate reader responses, plus save and restore state.      -->
+        <xsl:when test="@iframe and $b-in-dual-exercise and $b-host-runestone">
+            <div class="ptx-runestone-container">
+                <div data-component="splice">
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="." mode="runestone-id"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates select="." mode="iframe-interactive"/>
+                </div>
+            </div>
+        </xsl:when>
+        <!-- no more special situations for Runestone exercises -->
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="iframe-interactive"/>
         </xsl:otherwise>
