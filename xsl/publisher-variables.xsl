@@ -2356,9 +2356,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML Theme Specification     -->
 <!--                              -->
 
+<!-- Stringparam to override theme. For testing and website build. -->
+<xsl:param name="debug.html.theme-name"  select="''" />
+
 <xsl:variable name="html-theme-name">
     <xsl:variable name="warning-message">PTX:WARNING: The "FROMSTYLE" style requested in publication/html/css is deprecated. Your book will be built with theme="TOSTYLE". See the PreTeXt Guide for options for the newer HTML themes and their specification .</xsl:variable>
     <xsl:choose>
+        <xsl:when test="$debug.html.theme-name != ''">
+            <xsl:value-of select="$debug.html.theme-name"/>
+        </xsl:when>
         <xsl:when test="$publication/html/css/@theme">
             <xsl:value-of select="$publication/html/css/@theme"/>
         </xsl:when>
