@@ -3527,7 +3527,7 @@ Book (with parts), "section" at level 3
 <!-- PreTeXt "exercise" HTML id.  And we will require a *stable* @label   -->
 <!-- from an author, which we will dress up here.  Notice that this can   -->
 <!-- change when an author declares a new edition.                        -->
-<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet|interactive[@platform = 'doenetml']" mode="runestone-id">
+<xsl:template match="exercise|program|datafile|query|&PROJECT-LIKE;|task|video[@youtube]|exercises|worksheet|interactive[@platform = 'doenetml']|interactive[@iframe]" mode="runestone-id">
     <!-- With no @xml:id and no @label we realize the author has not given    -->
     <!-- any thought to a (semi-)peersistent identifire for the Runestone     -->
     <!-- database.  So we call that out as an error.  And we do not even      -->
