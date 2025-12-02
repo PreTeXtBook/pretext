@@ -2058,7 +2058,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <div class="runestone dualquestion_section">
             <div data-component="dual">
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
-                <xsl:apply-templates select="statement"/>
+                <!-- Assume only "p" and a single "interactive".  The -->
+                <!-- "p" could be expanded to include some options.   -->
+                <xsl:apply-templates select="statement/p|statement/interactive[1]"/>
             </div>
         </div>
     </div>
