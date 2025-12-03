@@ -1952,28 +1952,6 @@
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="intertext">
-    <xsl:if test="ancestor::ul|ancestor::ol">
-        <xsl:call-template name="potential-list-indent" />
-    </xsl:if>
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="displaymath-alignment"/>
-    <xsl:text>}```]&#xa;</xsl:text>
-    <xsl:if test="ancestor::ul|ancestor::ol">
-        <xsl:call-template name="potential-list-indent" />
-    </xsl:if>
-    <xsl:apply-templates/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:if test="ancestor::ul|ancestor::ol">
-        <xsl:call-template name="potential-list-indent" />
-    </xsl:if>
-    <xsl:text>[```\begin{</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="displaymath-alignment"/>
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="alignat-columns"/>
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
 <!-- ######### -->
 <!-- Groupings -->
 <!-- ######### -->
