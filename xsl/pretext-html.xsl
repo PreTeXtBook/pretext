@@ -5489,50 +5489,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- No title; type and number obvious from content -->
 <xsl:template match="md[mrow]" mode="heading-xref-knowl" />
 
-<!-- Intertext -->
-<!-- A LaTeX construct really, we just jump out/in of    -->
-<!-- the align/gather environment and process the text.  -->
-<!-- "md" and "mdn" can only occur in a "p" and          -->
-<!-- we break a logical PreTeXt "p" into multiple HTML   -->
-<!-- "p" at places where displays occur, such as math    -->
-<!-- and lists.  So we can wrap the "intertext" in a     -->
-<!-- p.intertext, giving xref knowls a place to open.    -->
-<!-- This breaks the alignment, but MathJax has no good  -->
-<!-- solution for this.                                  -->
-<!-- NB: "displaymath-alignment" needs to be just right  -->
-<!-- NB: we check the *parent* for alignment information -->
-<!-- NB: the out-of-order LaTeX begin/end pairs mean     -->
-<!-- the "p" for intertext are contained in the overall  -->
-<!-- "display-math-wrapper".  It might be advisable      -->
-<!-- to unpack the whole md/mdn into math bits and       -->
-<!-- intertext bits, similar to how paragraphs are       -->
-<!-- exploded.  This will make it harder to locate       -->
-<!-- the id of an enclosing paragraph onto the first     -->
-<!-- component (first in exploded paragraph, first in    -->
-<!-- exploded md/intertext).                             -->
-<!-- An abstact "intertext-wrapper" would allow all      -->
-<!-- this to live in -common.                            -->
-<!-- TODO: pass duplication flag, reaction unnecessary?  -->
-<xsl:template match="intertext">
-    <xsl:param name="b-nonumbers" select="false()" />
-    <xsl:text>\end{</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="displaymath-alignment">
-        <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
-    </xsl:apply-templates>
-    <xsl:text>}&#xa;</xsl:text>
-    <div class="para intertext">
-        <xsl:apply-templates/>
-    </div>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\begin{</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="displaymath-alignment">
-        <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
-    </xsl:apply-templates>
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="alignat-columns" />
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
 <!-- Once upon a time, we broke up markup meant for MathJax that occured   -->
 <!-- outside of what we know is a mathematical context ("accidental        -->
 <!-- mathematics").   We did this by breaking up strings with a zero-width -->
