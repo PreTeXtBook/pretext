@@ -5174,6 +5174,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:variable name="leftward" select="$next-display/preceding-sibling::*|$next-display/preceding-sibling::text()" />
                 <!-- device below forms set intersection -->
                 <xsl:variable name="common" select="$rightward[count(. | $leftward) = count($leftward)]" />
+                <!-- Common content could be just a "pi:intertext"  -->
+                <!-- as a result of the "intertext-exploder" mode    -->
+                <!-- in -assembly.  This situation is recorded here. -->
+                <xsl:variable name="b-common-is-intertext" select="$common[self::pi:intertext]"/>
                 <!-- No id on these, as the first "p" got that    -->
                 <!-- Careful, punctuation after display math      -->
                 <!-- gets absorbed into display and so is a node  -->
@@ -5185,14 +5189,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:variable>
                 <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
                 <!-- This comparison might improve with a normalize-space()      -->
+                <!-- When the intervening material aries from an authored        -->
+                <!-- "intertext", we mark the paragraph we create here as such   -->
+                <!-- for styling purposes.                                       -->
                 <xsl:if test="not($common-content = '')">
-                    <div class="para">
+                    <div>
+                        <xsl:attribute name="class">
+                            <xsl:text>para</xsl:text>
+                            <xsl:if test="$b-common-is-intertext">
+                                <xsl:text> intertext</xsl:text>
+                            </xsl:if>
+                        </xsl:attribute>
                         <xsl:copy-of select="$common-content" />
                     </div>
                 </xsl:if>
             </xsl:when>
             <xsl:otherwise>
-                <!-- finish the trailing content, if nonempty -->
+                <!-- finish the trailing content, if nonempty    -->
+                <!-- Note: impossible for this to be "intertext" -->
                 <xsl:variable name="common-content">
                     <xsl:apply-templates select="$rightward">
                         <xsl:with-param name="b-original" select="$b-original" />
