@@ -6295,7 +6295,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<xsl:template match="image" mode="description">
+<xsl:template match="image|interactive[@platform]" mode="description">
     <xsl:if test="description">
         <!-- @aria-live means screenreaders will make announcements -->
         <details class="image-description" aria-live="polite">
@@ -9881,8 +9881,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
         </xsl:attribute>
+        <xsl:if test="shortdescription">
+            <xsl:attribute name="title">
+                <xsl:value-of select="shortdescription"/>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
+    <!-- possibly give a long description -->
+    <xsl:apply-templates select="." mode="description"/>
 </xsl:template>
 
 <!-- ######################### -->
