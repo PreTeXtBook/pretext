@@ -7290,9 +7290,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- calls the modal "body" template needed for the HTML   -->
 <!-- knowl production scheme. The variables in the "body"  -->
 <!-- template have the right defaults for this application -->
-
+<!-- When an "md" is the result of exploding an "md" with  -->
+<!-- "intertext" (via the "intertext-exploder" mode in     -->
+<!-- -assembly), then it will have a  @pi:location         -->
+<!-- attribute set to "first", "intermediate", or "last".  -->
+<!-- So:                                                   -->
+<!--   *  No such attribute, yes, we need both open and close delimiters             -->
+<!--   *  Have such an attribute, put an open delimiter on the "first" exploded "md" -->
+<!--   *  Have such an attribute, put a close delimiter on the "last" exploded "md"  -->
+<!--   *  Have such an attribute, no delimiters on the "intermediate" exploded "md"  -->
+<!-- Why?  Now LaTeX can typeset the original "md" with    -->
+<!-- alignment preserved across the intervening "intertext"-->
 <xsl:template match="md[mrow]">
-    <xsl:apply-templates select="." mode="body" />
+    <xsl:apply-templates select="." mode="body">
+        <xsl:with-param name="b-needs-open"  select="not(@pi:location) or @pi:location = 'first'"/>
+        <xsl:with-param name="b-needs-close" select="not(@pi:location) or @pi:location = 'last'"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="mrow" mode="tag">
@@ -7334,7 +7347,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so we do the same here for visual source -->
 <!-- We need to do this very differently for  -->
 <!-- HTML (we fake it).                       -->
-<xsl:template match="intertext">
+<xsl:template match="pi:intertext">
     <xsl:text>\intertext{</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>}&#xa;</xsl:text>
