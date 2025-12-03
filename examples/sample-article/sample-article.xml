@@ -2217,6 +2217,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>So.  Do not take any extra steps and let <latex/> figure out the breaks.  If you do not like a break, modify the <tag>md</tag> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <tag>mrow</tag> to suggest that it is a good place for a break.</p>
                 </example>
 
+                <p>Displayed mathematics in <latex/> has a device called <term>intertext</term>, allowing for short snippets of text in-between displayed equations, but alignment continues across these short breaks.  For any other output format besides <init>PDF</init>/<latex/> there really is not the technical means to make this continued alignment happen.  So we mostly do the best we can.  The following is a test example.  Since almost all the equations are very similar in shape, it appears that there is alignment throughout.  However, for almost all output formats, the very last equation changes the horizontal positioning of the block with the final three equations, and they are not aligned with the previous equations.  The exception is a <init>PDF</init> where we are able to take advantage of <latex/>'s support and the equations should <em>all</em> be aligned on the equals signs.
+                    <md number="yes">
+                        <mrow>A &amp;= Z + 1</mrow>
+                        <mrow>B &amp;= Y + 2</mrow>
+                        <intertext>One intertext.</intertext>
+                        <mrow>C &amp;= X + 3</mrow>
+                        <mrow>D &amp;= W + 4</mrow>
+                        <mrow>E &amp;= V + 5</mrow>
+                        <intertext>Two intertext.</intertext>
+                        <mrow>F &amp;= U + 6</mrow>
+                        <intertext>Three intertext.</intertext>
+                        <mrow>G &amp;= T + 7</mrow>
+                        <mrow>H &amp;= S + 8</mrow>
+                        <mrow>I + J + K &amp;= P + Q + R + 9 + 10 + 11</mrow>
+                    </md>
+                </p>
+
                 <p>This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <md>z+y = z</md>.  <md>a + b = c</md>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
             </subsection>
 
