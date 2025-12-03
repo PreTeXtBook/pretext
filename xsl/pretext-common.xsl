@@ -1203,9 +1203,11 @@ Book (with parts), "section" at level 3
 <!-- Intertext -->
 <!-- ######### -->
 
-<!-- Treatment of "intetext" varies, so no base implementation will suffice -->
-<xsl:template match="intertext">
-     <xsl:message>PTX:ERROR:   the template for LaTeX "intertext" needs an implementation in the current conversion</xsl:message>
+<!-- Unless overridden somehow, an internal "pi:intertext" element -->
+<!-- (coming from the "intertext-exploder" mode in -assembly) just -->
+<!-- needs a full-on "xsl:apply-templates"                         -->
+<xsl:template match="pi:intertext">
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- #################### -->
