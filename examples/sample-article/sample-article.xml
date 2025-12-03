@@ -8862,6 +8862,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>Numerical integrals using the midpoint rule</caption>
 
                     <interactive dark-mode-enabled="yes" xml:id="interactive-numerical-integral" platform="sage" width="100%" aspect="4:5">
+                        <shortdescription>An interactive for numerical integration</shortdescription>
+                        <description>
+                            <p>An interactive element with a slider allowing the value of <m>m</m> for the number of rectangles, the function <m>f</m>, and start and stop values for the interval of integration. There is an image showing the graph of <m>f</m> on the interval along with <m>m</m> rectangles of equal base width along the interval of integration. The height of each rectangle is determined by the value of <m>f</m> at the midpoint of the base of the rectangle. Above the image, the numerical value of the integral reported by SageMath is provided as well as the sum of the areas of the rectangles as the midpoint estimate.
+                            </p>
+                        </description>
                         <!-- Changes: gave 3 input boxes widths -->
                         <!-- Changes: Escaped \ inside LaTeX -->
                         <!-- Changes: Added figsize=5 to show -->
