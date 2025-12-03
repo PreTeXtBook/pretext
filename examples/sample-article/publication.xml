@@ -122,7 +122,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- <knowl proof="no" example="no" example-solution="no" exercise-inline="no"/> -->
         <!-- Specify the theme for the HTML.                       -->
         <!-- See the guide for options                             -->
-        <css theme="default-modern" palette="blue-red"/>
+        <css theme="default-modern"/>
+        <!-- <css theme="default-modern" palette="blue-red"/> -->
         <!-- Magic IDs identify HTML pages to analytics services   -->
         <!-- Presence implies relevant Javascript will be added    -->
         <!-- StatCounter requires both values to be set            -->
