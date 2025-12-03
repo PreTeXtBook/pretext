@@ -2008,6 +2008,94 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- Display math with "intertext"                           -->
+<!-- We explode display math with "inertext" into a series   -->
+<!-- of "md" interspered with "pi:intertext" elements.       -->
+<!-- Note that $nodes only selects "mrow" and "intertext".   -->
+<!-- Note:                                                   -->
+<!-- *  This really is a "repair" for "mdn" with intertext   -->
+<!--    there is a transformation to many "md".              -->
+<!-- *  When the "mrow" get hit by the "repair" template,    -->
+<!--    the numbering is recorded, based on the usual        -->
+<!--     hierarchy,including the "md" or "mdn" container.    -->
+<!-- *  The text of the "intertext" also gets hit by         -->
+<!--   "repair"s of any sentence-level changes will be made. -->
+
+<xsl:template match="md[intertext]|mdn[intertext]" mode="repair">
+    <xsl:apply-templates select="." mode="intertext-exploder">
+        <xsl:with-param name="nodes" select="mrow|intertext"/>
+        <xsl:with-param name="location" select="'first'"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="md[intertext]|mdn[intertext]" mode="intertext-exploder">
+    <xsl:param name="nodes"/>
+    <xsl:param name="location"/>
+
+    <!-- No nodes, no action, so recursion ends, -->
+    <!-- AND there is no $lead-node to switch on. -->
+    <xsl:if test="$nodes">
+        <!-- will switch on if $lead node is "mrow" or "interext" -->
+        <xsl:variable name="lead-node" select="$nodes[1]"/>
+        <xsl:choose>
+            <xsl:when test="$lead-node[self::mrow]">
+                <!-- The first intertext after $lead-node (if any) -->
+                <!-- marks the end of a non-empty run of "mrow"    -->
+                <!-- (we know $lead-node is an "mrow")             -->
+                <xsl:variable name="break" select="$lead-node/following-sibling::intertext[1]"/>
+                <!-- A maximal run of contiguous "mrow" starting at $lead-node.    -->
+                <!-- All "mrow" including $lead-node, and those coming afterwards. -->
+                <!-- $break is empty for the last run, so "not($break)" will be    -->
+                <!-- true and there is no filtering.  Otherwise we compare an      -->
+                <!-- "mrow"'s following "intertext" to see if it is $break or not. -->
+                <xsl:variable name="md-block" select="$lead-node |
+                    $lead-node/following-sibling::mrow[not($break) or (following-sibling::intertext[1] = $break)]"/>
+                <!-- put the maximal run into a fresh "md"     -->
+                <!-- Location helps with reconstruction in     -->
+                <!-- the LaTeX conversion, where we un-explode -->
+                <md pi:location="{$location}">
+                    <xsl:apply-templates select="$md-block" mode="repair"/>
+                </md>
+                <!-- "first" is never repeated, and  -->
+                <!-- "last" only happens in one case -->
+                <xsl:variable name="next-location">
+                    <xsl:choose>
+                        <xsl:when test="not($break/following-sibling::intertext)">
+                            <xsl:text>last</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>intermediate</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <!-- We strip down the set of $nodes, starting at the     -->
+                <!-- last "mrow" of the $md-block, so the remainder will  -->
+                <!-- normally start with an "intertext", or the remainder -->
+                <!-- might be empty (which will halt the recursion).      -->
+                <xsl:apply-templates select="." mode="intertext-exploder">
+                    <xsl:with-param name="nodes" select="$md-block[last()]/following-sibling::*"/>
+                    <xsl:with-param name="location" select="$next-location"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:when test="$lead-node[self::intertext]">
+                <!-- We place the text of the intertext into a custom      -->
+                <!-- internal element for handling by the common templates -->
+                <pi:intertext>
+                    <xsl:apply-templates select="$lead-node/node()" mode="repair"/>
+                </pi:intertext>
+                <!-- Strip down $nodes by simply removing the leading "intertext" -->
+                <xsl:apply-templates select="." mode="intertext-exploder">
+                    <xsl:with-param name="nodes" select="$lead-node/following-sibling::*"/>
+                    <xsl:with-param name="location" select="$location"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <!-- orioginal  $nodes  ensures we never get here -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- ############################## -->
 <!-- Killed, in Chronological Order -->
 <!-- ############################## -->
