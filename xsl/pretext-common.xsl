@@ -860,22 +860,32 @@ Book (with parts), "section" at level 3
     <!-- include adjacent (trailing) punctuation,      -->
     <!-- since it is meaningless                       -->
     <xsl:param name="b-top-level" select="false()" />
+    <!-- Optionally, the \begin{} (the "open") or the \end{}  -->
+    <!-- (the "close") can be suppressed.  This only happens  -->
+    <!-- when making LaTeX output, and only when un-exploding -->
+    <!-- an "md" that has "intertext" in it.  So the default  -->
+    <!-- values are true, and most conversions can safely     -->
+    <!-- ignore the use of these parameters.                  -->
+    <xsl:param name="b-needs-open"  select="true()"/>
+    <xsl:param name="b-needs-close" select="true()"/>
     <!-- Look across all mrow for 100% no-number rows.  We do not -->
     <!-- flag local tags as being numbered, but this affects        -->
     <!-- LaTeX environment construction, so we need to consider it. -->
     <!-- This just allows for slightly nicer human-readable source. -->
     <xsl:variable name="b-nonumbers" select="not(mrow[@pi:numbered = 'yes' or @tag])" />
     <xsl:variable name="complete-latex">
-        <!-- we provide a newline for visual appeal -->
-        <xsl:call-template name="display-math-visual-blank-line" />
-        <xsl:text>\begin{</xsl:text>
-        <xsl:apply-templates select="." mode="displaymath-alignment">
-            <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
-        </xsl:apply-templates>
-        <xsl:text>}</xsl:text>
-        <xsl:apply-templates select="." mode="alignat-columns" />
-        <!-- leading whitespace not present, or stripped -->
-        <xsl:text>&#xa;</xsl:text>
+        <xsl:if test="$b-needs-open">
+            <!-- we provide a newline for visual appeal -->
+            <xsl:call-template name="display-math-visual-blank-line" />
+            <xsl:text>\begin{</xsl:text>
+            <xsl:apply-templates select="." mode="displaymath-alignment">
+                <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
+            </xsl:apply-templates>
+            <xsl:text>}</xsl:text>
+            <xsl:apply-templates select="." mode="alignat-columns" />
+            <!-- leading whitespace not present, or stripped -->
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
         <xsl:apply-templates select="mrow|intertext">
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="b-top-level" select="$b-top-level" />
@@ -883,16 +893,18 @@ Book (with parts), "section" at level 3
         </xsl:apply-templates>
         <!-- each mrow provides a newline, so unlike  -->
         <!-- above, we do not need to add one here    -->
-        <xsl:text>\end{</xsl:text>
-        <xsl:apply-templates select="." mode="displaymath-alignment">
-            <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
-        </xsl:apply-templates>
-        <xsl:text>}</xsl:text>
-        <!-- We must return to a paragraph, so                     -->
-        <!-- we can add an unprotected newline                     -->
-        <!-- Note: clause-ending punctuation has been absorbed,    -->
-        <!-- so is not left orphaned at the start of the next line -->
-        <xsl:text>&#xa;</xsl:text>
+        <xsl:if test="$b-needs-close">
+            <xsl:text>\end{</xsl:text>
+            <xsl:apply-templates select="." mode="displaymath-alignment">
+                <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
+            </xsl:apply-templates>
+            <xsl:text>}</xsl:text>
+            <!-- We must return to a paragraph, so                     -->
+            <!-- we can add an unprotected newline                     -->
+            <!-- Note: clause-ending punctuation has been absorbed,    -->
+            <!-- so is not left orphaned at the start of the next line -->
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
     </xsl:variable>
     <xsl:apply-templates select="." mode="display-math-wrapper">
         <xsl:with-param name="b-original" select="$b-original" />
