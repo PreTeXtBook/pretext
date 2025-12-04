@@ -3019,6 +3019,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- statement|hint|answer|solution style  -->
             <!-- for use naturally by most conversions -->
             <xsl:when test="$exercise-style = 'static'">
+                <!-- overwrite classification as purely static now -->
+                <xsl:attribute name="exercise-interactive">
+                    <xsl:text>static</xsl:text>
+                </xsl:attribute>
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
             </xsl:when>
             <!-- duplicate for a dynamic version -->
@@ -3043,13 +3047,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static')">
                 <xsl:apply-templates select="@*" mode="representations"/>
+                <!-- overwrite classification as purely static now -->
+                <xsl:attribute name="exercise-interactive">
+                    <xsl:text>static</xsl:text>
+                </xsl:attribute>
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
             </xsl:when>
-            <!-- Use static version when making dynamic exercises *that are   -->
-            <!-- not hosted on Runestone*.  Scrub the indication that it is   -->
-            <!-- a particular type of interactive exercise, it isn't anymore. -->
+            <!-- Use static version when making dynamic exercises *that are -->
+            <!-- not hosted on Runestone*.  Classify as now being 'static'. -->
             <xsl:when test="($exercise-style = 'dynamic') and not($b-host-runestone)">
-                <xsl:apply-templates select="@*[not(local-name() = 'exercise-interactive')]" mode="representations"/>
+                <xsl:apply-templates select="@*" mode="representations"/>
+                <!-- overwrite classification as purely static now -->
+                <xsl:attribute name="exercise-interactive">
+                    <xsl:text>static</xsl:text>
+                </xsl:attribute>
                 <xsl:apply-templates select="." mode="runestone-to-static"/>
             </xsl:when>
             <!-- duplicate for a dynamic version -->
@@ -3074,7 +3085,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static')">
                 <!-- make a "static" classification, over-writing a "dual" -->
-                <xsl:attribute name="exercise-interative">
+                <xsl:attribute name="exercise-interactive">
                     <xsl:text>static</xsl:text>
                 </xsl:attribute>
                 <!-- copy overall title and idx, METADATA-FILTER feels too broad  -->
@@ -3126,7 +3137,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- static, for multiple conversions, but primarily LaTeX -->
         <xsl:when test="$exercise-style = 'static'">
             <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-static"/>
+                <xsl:apply-templates select="@*" mode="webwork-rep-to-static"/>
+                <!-- overwrite classification as purely static now -->
+                <xsl:attribute name="exercise-interactive">
+                    <xsl:text>static</xsl:text>
+                </xsl:attribute>
+                <xsl:apply-templates select="node()" mode="webwork-rep-to-static"/>
             </xsl:copy>
         </xsl:when>
         <!-- dynamic (aka HTML), needs static previews, server base64, etc, -->
@@ -3379,6 +3395,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Now bifurcate on static/dynamic.  PG problem creation should not fall in here. -->
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
+                <!-- overwrite classification as purely static now -->
+                <xsl:attribute name="exercise-interactive">
+                    <xsl:text>static</xsl:text>
+                </xsl:attribute>
                 <!-- locate the static representation in a file, generated independently -->
                 <!-- NB: this filename is relative to the author's source                -->
                 <xsl:variable name="filename">
@@ -3435,6 +3455,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Now bifurcate on static/dynamic.  PG problem creation should not fall in here. -->
         <xsl:choose>
             <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
+                <!-- overwrite classification as purely static now -->
+                <xsl:attribute name="exercise-interactive">
+                    <xsl:text>static</xsl:text>
+                </xsl:attribute>
                 <!-- locate the static representation in a file, generated independently -->
                 <!-- NB: this filename is relative to the author's source in "generated" -->
                 <xsl:variable name="filename">
