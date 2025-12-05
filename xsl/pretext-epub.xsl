@@ -148,7 +148,7 @@
 <xsl:variable name="b-kindle" select="$math.format = 'kindle'"/>
 
 <!-- If there are footnotes, we'll build and package a "endnotes.xhtml" file -->
-<xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical|$document-root//hint)"/>
+<xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical)"/>
 
 <xsl:variable name="endnotes-have-math">
     <xsl:if test="$b-has-endnotes">
@@ -166,10 +166,6 @@
             </xsl:when>
             <xsl:when test="$document-root//historical//m or
                             $document-root//historical//md[mrow]">
-                <xsl:text>true</xsl:text>
-            </xsl:when>
-            <xsl:when test="$document-root//hint//m or
-                            $document-root//hint//md[mrow]">
                 <xsl:text>true</xsl:text>
             </xsl:when>
         </xsl:choose>
@@ -1149,11 +1145,11 @@
 <!-- recognizable by their "-kindle-return" suffix.  See 10.3.12:   -->
 <!-- https://kindlegen.s3.amazonaws.com/AmazonKindlePublishingGuidelines.pdf -->
 
-<!-- Asides and hints -->
+<!-- Asides -->
 <!-- EPUB has a semi-natural mechanism for this, though -->
 <!-- the text we drop could use some work. The marker,  -->
 <!-- a simple title/paragraph, tostyle minimally        -->
-<xsl:template match="&ASIDE-LIKE;|hint">
+<xsl:template match="&ASIDE-LIKE;">
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
@@ -1173,7 +1169,7 @@
 </xsl:template>
 
 <!-- The content, unwrapped from HTML infrastructure -->
-<xsl:template match="&ASIDE-LIKE;|hint" mode="endnote-content">
+<xsl:template match="&ASIDE-LIKE;" mode="endnote-content">
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
@@ -1267,7 +1263,7 @@
                 <body class="ptx-content epub">
                     <h4>Endnotes</h4>
                     <!-- structure according to footnote level -->
-                    <xsl:apply-templates select="$document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical|$document-root//hint" mode="endnote-content"/>
+                    <xsl:apply-templates select="$document-root//fn|$document-root//aside|$document-root//biographical|$document-root//historical" mode="endnote-content"/>
                 </body>
             </html>
         </exsl:document>
