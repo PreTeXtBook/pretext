@@ -31,7 +31,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- LateX conversion the default is no ToC at all.  So we  -->
         <!-- let these conversion-specific defaults play out, and   -->
         <!-- just leave this example as a comment.                  -->
-        <!-- <tableofcontents level="2"/> -->
+        <tableofcontents level="4"/>
         <!-- These "exercise component visibility" settings are the -->
         <!-- defaults, but can be switched to "no" in order to hide -->
         <!-- parts of an exercise, where born.                      -->
