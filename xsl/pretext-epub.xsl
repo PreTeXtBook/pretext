@@ -1153,7 +1153,13 @@
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
-    <p>
+    <xsl:element name="div">
+        <xsl:attribute name="class">
+            <xsl:text>para</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:value-of select="$hid"/>
+        </xsl:attribute>
         <a class="url" epub:type="noteref" href="{$endnote-file}#{$hid}">
             <!-- Older Kindles don't always support pop-ups, so -->
             <!-- create infrastructure for endnotes to jump back-->
@@ -1165,7 +1171,7 @@
             </xsl:if>
             <xsl:apply-templates select="." mode="heading-simple" />
         </a>
-    </p>
+    </xsl:element>
 </xsl:template>
 
 <!-- The content, unwrapped from HTML infrastructure -->
@@ -1205,6 +1211,9 @@
     </xsl:variable>
     <!-- drop cross-reference, super-scripted, spaced -->
     <xsl:element name="sup">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="html-id" />
+        </xsl:attribute>
         <a epub:type="noteref" href="{$endnote-file}#{$hid}">
             <xsl:if test="$b-kindle">
                 <xsl:attribute name="id">
