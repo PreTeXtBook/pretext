@@ -1339,8 +1339,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <statement>
         <!-- duplicate the authored prompt/statement -->
         <xsl:copy-of select="statement/node()"/>
-        <!-- bring up the program as part of the problem statement -->
-        <xsl:copy-of select="program"/>
+        <!-- Bring up the program as part of the problem statement and -->
+        <!-- also neuter any @interactive indication.  This was not    -->
+        <!-- tagged as a coding exercise without a "program" outside   -->
+        <!-- the "statement", but we are careful about not making an   -->
+        <!-- empty "program" where there is none.                      -->
+        <xsl:if test="program">
+            <xsl:element name="program">
+                <xsl:copy-of select="program/@*[not(name() = 'interactive')]"/>
+                <xsl:copy-of select="program/node()"/>
+            </xsl:element>
+        </xsl:if>
     </statement>
     <xsl:copy-of select="hint"/>
     <xsl:copy-of select="answer"/>
