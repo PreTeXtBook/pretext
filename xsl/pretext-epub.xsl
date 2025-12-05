@@ -444,14 +444,11 @@
     <!-- start "manifest" with one-off items -->
     <manifest xmlns="http://www.idpf.org/2007/opf">
         <xsl:choose>
-            <!-- The "remote-resource" property is suggested by an -->
-            <!-- epubcheck validation error.  We are not entirely  -->
-            <!-- certain of its necessity otherwise.               -->
             <xsl:when test="$b-kindle">
-                <item id="css-kindle" href="{$css-dir}/kindle.css" media-type="text/css" properties="remote-resources"/>
+                <item id="css-kindle" href="{$css-dir}/kindle.css" media-type="text/css"/>
             </xsl:when>
             <xsl:otherwise>
-                <item id="css-epub" href="{$css-dir}/epub.css" media-type="text/css" properties="remote-resources"/>
+                <item id="css-epub" href="{$css-dir}/epub.css" media-type="text/css"/>
             </xsl:otherwise>
         </xsl:choose>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
