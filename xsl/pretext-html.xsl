@@ -9207,9 +9207,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- This should likely become an "a" for URLS -->
 <xsl:template match="*" mode="monospace">
-    <tt>
+    <code class="code-inline tex2jax_ignore">
         <xsl:apply-templates/>
-    </tt>
+    </code>
 </xsl:template>
 
 <xsl:template name="biblio-period">
