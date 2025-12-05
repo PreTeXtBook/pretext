@@ -3495,6 +3495,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- A "program" is "made" interactive by setting a value of the        -->
+<!-- @interactive attribute.  For static (incapable) formats, code      -->
+<!-- simply does not even consult the @interactive attribute.  By       -->
+<!-- explicitly dropping it here, we insure that even if we are         -->
+<!-- making HTML, but with static contents (e.g. EPUB), a "program"     -->
+<!-- will not get routed into templates that make Runestone components. -->
+<xsl:template match="program/@interactive" mode="representations">
+    <xsl:choose>
+        <!-- drop  @interactive  for static formats -->
+        <xsl:when test="$exercise-style = 'static'"/>
+        <xsl:otherwise>
+            <xsl:copy/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <xsl:template match="datafile|query" mode="representations">
     <xsl:choose>
         <!-- make a static version, in a PreTeXt style -->
