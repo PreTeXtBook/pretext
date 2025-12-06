@@ -57,8 +57,9 @@ $border-radius: 2px !default;
 
 // get rid of this wrapper when print worksheet styles are fixed
 .ptx-content:not(:has(>.worksheet)) {
-  .conclusion,
-  .goal-like {
+  // avoid styling inside runestone containers
+  .conclusion:not(.ptx-runestone-container *),
+  .goal-like:not(.ptx-runestone-container *) {
     @include heading-box-mixin.box(
       $background-color: var(--goal-like-body-background),
       $border-color: var(--goal-like-border-color),
@@ -67,6 +68,7 @@ $border-radius: 2px !default;
     );
   }
 }
+
 .ptx-content:has(>.worksheet) {
   .goal-like {
     margin-top: 1.5em;
