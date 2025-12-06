@@ -756,7 +756,7 @@ Book (with parts), "section" at level 3
 <!-- This template needs an override in each output mode. -->
 <xsl:template name="inline-math-wrapper">
     <xsl:param name="math"/>
-    <xsl:message>PTX:ERROR:   the "wrapper" modal template for inline math needs an implementation in the current conversion</xsl:message>
+    <xsl:message>PTX:BUG:   the "wrapper" modal template for inline math needs an implementation in the current conversion</xsl:message>
     <xsl:text>[[[</xsl:text>
     <xsl:value-of select="$math"/>
     <xsl:text>]]]</xsl:text>
@@ -927,7 +927,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="mrow" mode="display-page-break"/>
 
 <xsl:template match="mrow" mode="tag">
-     <xsl:message>PTX:ERROR:   the modal "tag" template needs an implementation for "mrow" in the current conversion</xsl:message>
+     <xsl:message>PTX:BUG:   the modal "tag" template needs an implementation for "mrow" in the current conversion</xsl:message>
 </xsl:template>
 
 <xsl:template match="mrow">
@@ -1624,7 +1624,7 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <xsl:template name="code-wrapper">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "code-wrapper" template</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of the "code-wrapper" template</xsl:message>
 </xsl:template>
 
 
@@ -4856,11 +4856,11 @@ Book (with parts), "section" at level 3
 <!-- They are (or should be) overridden with appropriate templates of same name in the     -->
 <!-- -latex, -html, etc conversions.                                                       -->
 <xsl:template name="double-right-arrow-symbol">
-    <xsl:message>PTX:ERROR: A "case" has "direction" equal to either "forward" or "cycle", but the conversion for this output target does not have a double right arrow symbol defined.</xsl:message>
+    <xsl:message>PTX:BUG: A "case" has "direction" equal to either "forward" or "cycle", but the conversion for this output target does not have a double right arrow symbol defined.</xsl:message>
     <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 <xsl:template name="double-left-arrow-symbol">
-    <xsl:message>PTX:ERROR: A "case" has "direction" equal to "backward", but the conversion for this output target does not have a double left arrow symbol defined.</xsl:message>
+    <xsl:message>PTX:BUG: A "case" has "direction" equal to "backward", but the conversion for this output target does not have a double left arrow symbol defined.</xsl:message>
     <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 <!-- This template is to add an extra small horizontal space between the outer delimiters -->
@@ -4869,7 +4869,7 @@ Book (with parts), "section" at level 3
 <!-- or is defined to be a null string in a particular conversion stylesheet, in which    -->
  <!-- case no extra space is added. -->
 <xsl:template name="case-cycle-delimiter-space">
-    <xsl:message>PTX:WARNING: A "case" has "direction" equal to "cycle", but the conversion for this output target does not have a "delimiter space" symbol defined. The maintainer for this output target may wish to know about this (or may wish to set the "delimiter space" symbol to be a null string to suppress this warning message).</xsl:message>
+    <xsl:message>PTX:BUG A "case" has "direction" equal to "cycle", but the conversion for this output target does not have a "delimiter space" symbol defined. The maintainer for this output target may wish to know about this (or may wish to set the "delimiter space" symbol to be a null string to suppress this warning message).</xsl:message>
     <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 
@@ -8002,12 +8002,12 @@ Book (with parts), "section" at level 3
 
 <!-- Stub implementations, with warnings -->
 <xsl:template name="list-of-begin">
-     <xsl:message>PTX:ERROR:   the "list-of-begin" template needs an implementation in the current conversion</xsl:message>
+     <xsl:message>PTX:BUG:   the "list-of-begin" template needs an implementation in the current conversion</xsl:message>
      <xsl:text>[[[BEGINLIST]]]</xsl:text>
  </xsl:template>
 
 <xsl:template name="list-of-end">
-     <xsl:message>PTX:ERROR:   the "list-of-end" template needs an implementation in the current conversion</xsl:message>
+     <xsl:message>PTX:BUG:   the "list-of-end" template needs an implementation in the current conversion</xsl:message>
      <xsl:text>[[[ENDLIST]]]</xsl:text>
  </xsl:template>
 
@@ -10144,7 +10144,7 @@ Book (with parts), "section" at level 3
 
 <xsl:template name="warn-unimplemented-character">
     <xsl:param name="char-name"/>
-     <xsl:message>PTX:ERROR:   the character named "<xsl:value-of select="$char-name"/>" needs an implementation in the current conversion</xsl:message>
+     <xsl:message>PTX:BUG:   the character named "<xsl:value-of select="$char-name"/>" needs an implementation in the current conversion</xsl:message>
      <xsl:text>[[[</xsl:text>
      <xsl:value-of select="$char-name"/>
      <xsl:text>]]]</xsl:text>
@@ -10583,19 +10583,19 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- here, not repeatedly in derived stylesheets.       -->
 
 <xsl:template match="*" mode="italic">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the italic font</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of the italic font</xsl:message>
 </xsl:template>
 
 <xsl:template match="*" mode="bold">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the bold font</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of the bold font</xsl:message>
 </xsl:template>
 
 <xsl:template match="*" mode="monospace">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the monospace font</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of the monospace font</xsl:message>
 </xsl:template>
 
 <xsl:template name="biblio-period">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of a bibliographic period</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of a bibliographic period</xsl:message>
 </xsl:template>
 
 <!-- Single implementations of highly non-semantic elements    -->
@@ -10655,7 +10655,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 <xsl:template match="biblio" mode="bibentry-wrapper">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "bibentry-wrapper" template</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of the "bibentry-wrapper" template</xsl:message>
 </xsl:template>
 
 
