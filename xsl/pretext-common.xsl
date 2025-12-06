@@ -11202,7 +11202,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template match="mathbook|pretext" mode="table-paragraph-cells-warning">
     <xsl:for-each select=".//tabular">
         <xsl:if test="row/cell/p and not(col/@width)">
-            <xsl:message>PTX:ERROR:   a &lt;tabular&gt; has at least one paragraph (&lt;p&gt;) inside a &lt;cell&gt;, yet there are no &lt;col&gt; elements with a @width attribute.  Default widths will be supplied.</xsl:message>
+            <xsl:message>PTX:WARNING:   a &lt;tabular&gt; has at least one paragraph (&lt;p&gt;) inside a &lt;cell&gt;, yet there are no &lt;col&gt; elements with a @width attribute.  Default widths will be supplied.</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:if>
     </xsl:for-each>
