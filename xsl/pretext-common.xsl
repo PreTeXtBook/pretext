@@ -6530,7 +6530,7 @@ Book (with parts), "section" at level 3
                 <xsl:value-of select="$raw-workspace"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message>PTX:ERROR:  a worksheet exercises', project-likes' or tasks' workspace should be specified with units of 'in' or 'cm', and not as "<xsl:value-of select="@workspace"/>".  Using a default of "2in".</xsl:message>
+                <xsl:message>PTX:WARNING:  a worksheet exercises', project-likes' or tasks' workspace should be specified with units of 'in' or 'cm', and not as "<xsl:value-of select="@workspace"/>".  Using a default of "2in".</xsl:message>
                 <xsl:text>2in</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
