@@ -824,7 +824,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:otherwise>
                     <xsl:text>yes</xsl:text>
                     <!-- and we take the opportunity to say so, just once, and early on -->
-                    <xsl:message>PTX:ERROR:     your publisher file indicates the use of one Citation Stylesheet Language (CSL) specification for references ("<xsl:value-of select="$csl-style-file"/>"), but your file of generated references and citations at "<xsl:value-of select="$csl-file"/>" was built using a different CSL style file ("<xsl:value-of select="$csl-style-file-for-generated"/>").  We will fall back to default processing in order to proceed.</xsl:message>
+                    <xsl:message>PTX:WARNING:     your publisher file indicates the use of one Citation Stylesheet Language (CSL) specification for references ("<xsl:value-of select="$csl-style-file"/>"), but your file of generated references and citations at "<xsl:value-of select="$csl-file"/>" was built using a different CSL style file ("<xsl:value-of select="$csl-style-file-for-generated"/>").  We will fall back to default processing in order to proceed.</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:otherwise>
