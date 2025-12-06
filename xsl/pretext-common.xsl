@@ -450,7 +450,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>
-                <xsl:text>PTX:ERROR: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
+                <xsl:text>PTX:WARNING: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
                 <xsl:value-of select="$whitespace" />
                 <xsl:text>'.  Using the default ('flexible').</xsl:text>
             </xsl:message>
@@ -756,7 +756,7 @@ Book (with parts), "section" at level 3
 <!-- This template needs an override in each output mode. -->
 <xsl:template name="inline-math-wrapper">
     <xsl:param name="math"/>
-    <xsl:message>PTX:ERROR:   the "wrapper" modal template for inline math needs an implementation in the current conversion</xsl:message>
+    <xsl:message>PTX:BUG:   the "wrapper" modal template for inline math needs an implementation in the current conversion</xsl:message>
     <xsl:text>[[[</xsl:text>
     <xsl:value-of select="$math"/>
     <xsl:text>]]]</xsl:text>
@@ -927,7 +927,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="mrow" mode="display-page-break"/>
 
 <xsl:template match="mrow" mode="tag">
-     <xsl:message>PTX:ERROR:   the modal "tag" template needs an implementation for "mrow" in the current conversion</xsl:message>
+     <xsl:message>PTX:BUG:   the modal "tag" template needs an implementation for "mrow" in the current conversion</xsl:message>
 </xsl:template>
 
 <xsl:template match="mrow">
@@ -1624,7 +1624,7 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <xsl:template name="code-wrapper">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "code-wrapper" template</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of the "code-wrapper" template</xsl:message>
 </xsl:template>
 
 
@@ -2851,7 +2851,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="normalized-width" select="normalize-space($raw-width)" />
     <xsl:choose>
         <xsl:when test="not(substring($normalized-width, string-length($normalized-width)) = '%')">
-            <xsl:message>PTX:ERROR:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />, using 100% instead"</xsl:message>
+            <xsl:message>PTX:WARNING:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />, using 100% instead"</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
             <!-- replace by 100% -->
             <xsl:text>100%</xsl:text>
@@ -4856,11 +4856,11 @@ Book (with parts), "section" at level 3
 <!-- They are (or should be) overridden with appropriate templates of same name in the     -->
 <!-- -latex, -html, etc conversions.                                                       -->
 <xsl:template name="double-right-arrow-symbol">
-    <xsl:message>PTX:ERROR: A "case" has "direction" equal to either "forward" or "cycle", but the conversion for this output target does not have a double right arrow symbol defined.</xsl:message>
+    <xsl:message>PTX:BUG: A "case" has "direction" equal to either "forward" or "cycle", but the conversion for this output target does not have a double right arrow symbol defined.</xsl:message>
     <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 <xsl:template name="double-left-arrow-symbol">
-    <xsl:message>PTX:ERROR: A "case" has "direction" equal to "backward", but the conversion for this output target does not have a double left arrow symbol defined.</xsl:message>
+    <xsl:message>PTX:BUG: A "case" has "direction" equal to "backward", but the conversion for this output target does not have a double left arrow symbol defined.</xsl:message>
     <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 <!-- This template is to add an extra small horizontal space between the outer delimiters -->
@@ -4869,7 +4869,7 @@ Book (with parts), "section" at level 3
 <!-- or is defined to be a null string in a particular conversion stylesheet, in which    -->
  <!-- case no extra space is added. -->
 <xsl:template name="case-cycle-delimiter-space">
-    <xsl:message>PTX:WARNING: A "case" has "direction" equal to "cycle", but the conversion for this output target does not have a "delimiter space" symbol defined. The maintainer for this output target may wish to know about this (or may wish to set the "delimiter space" symbol to be a null string to suppress this warning message).</xsl:message>
+    <xsl:message>PTX:BUG A "case" has "direction" equal to "cycle", but the conversion for this output target does not have a "delimiter space" symbol defined. The maintainer for this output target may wish to know about this (or may wish to set the "delimiter space" symbol to be a null string to suppress this warning message).</xsl:message>
     <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 
@@ -6530,7 +6530,7 @@ Book (with parts), "section" at level 3
                 <xsl:value-of select="$raw-workspace"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message>PTX:ERROR:  a worksheet exercises', project-likes' or tasks' workspace should be specified with units of 'in' or 'cm', and not as "<xsl:value-of select="@workspace"/>".  Using a default of "2in".</xsl:message>
+                <xsl:message>PTX:WARNING:  a worksheet exercises', project-likes' or tasks' workspace should be specified with units of 'in' or 'cm', and not as "<xsl:value-of select="@workspace"/>".  Using a default of "2in".</xsl:message>
                 <xsl:text>2in</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
@@ -8002,12 +8002,12 @@ Book (with parts), "section" at level 3
 
 <!-- Stub implementations, with warnings -->
 <xsl:template name="list-of-begin">
-     <xsl:message>PTX:ERROR:   the "list-of-begin" template needs an implementation in the current conversion</xsl:message>
+     <xsl:message>PTX:BUG:   the "list-of-begin" template needs an implementation in the current conversion</xsl:message>
      <xsl:text>[[[BEGINLIST]]]</xsl:text>
  </xsl:template>
 
 <xsl:template name="list-of-end">
-     <xsl:message>PTX:ERROR:   the "list-of-end" template needs an implementation in the current conversion</xsl:message>
+     <xsl:message>PTX:BUG:   the "list-of-end" template needs an implementation in the current conversion</xsl:message>
      <xsl:text>[[[ENDLIST]]]</xsl:text>
  </xsl:template>
 
@@ -10144,7 +10144,7 @@ Book (with parts), "section" at level 3
 
 <xsl:template name="warn-unimplemented-character">
     <xsl:param name="char-name"/>
-     <xsl:message>PTX:ERROR:   the character named "<xsl:value-of select="$char-name"/>" needs an implementation in the current conversion</xsl:message>
+     <xsl:message>PTX:BUG:   the character named "<xsl:value-of select="$char-name"/>" needs an implementation in the current conversion</xsl:message>
      <xsl:text>[[[</xsl:text>
      <xsl:value-of select="$char-name"/>
      <xsl:text>]]]</xsl:text>
@@ -10583,19 +10583,19 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- here, not repeatedly in derived stylesheets.       -->
 
 <xsl:template match="*" mode="italic">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the italic font</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of the italic font</xsl:message>
 </xsl:template>
 
 <xsl:template match="*" mode="bold">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the bold font</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of the bold font</xsl:message>
 </xsl:template>
 
 <xsl:template match="*" mode="monospace">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the monospace font</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of the monospace font</xsl:message>
 </xsl:template>
 
 <xsl:template name="biblio-period">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of a bibliographic period</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of a bibliographic period</xsl:message>
 </xsl:template>
 
 <!-- Single implementations of highly non-semantic elements    -->
@@ -10655,7 +10655,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 <xsl:template match="biblio" mode="bibentry-wrapper">
-    <xsl:message>PTX:ERROR:  current conversion needs an implementation of the "bibentry-wrapper" template</xsl:message>
+    <xsl:message>PTX:BUG:  current conversion needs an implementation of the "bibentry-wrapper" template</xsl:message>
 </xsl:template>
 
 
@@ -11202,7 +11202,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template match="mathbook|pretext" mode="table-paragraph-cells-warning">
     <xsl:for-each select=".//tabular">
         <xsl:if test="row/cell/p and not(col/@width)">
-            <xsl:message>PTX:ERROR:   a &lt;tabular&gt; has at least one paragraph (&lt;p&gt;) inside a &lt;cell&gt;, yet there are no &lt;col&gt; elements with a @width attribute.  Default widths will be supplied.</xsl:message>
+            <xsl:message>PTX:WARNING:   a &lt;tabular&gt; has at least one paragraph (&lt;p&gt;) inside a &lt;cell&gt;, yet there are no &lt;col&gt; elements with a @width attribute.  Default widths will be supplied.</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:if>
     </xsl:for-each>
@@ -11232,7 +11232,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>P100Y</xsl:text>
-            <xsl:message>PTX:ERROR:   "author.deprecations.all" should be "yes" or "no", not "<xsl:value-of select="$author.deprecations.all"/>", using the default value of "yes"</xsl:message>
+            <xsl:message>PTX:WARNING:   "author.deprecations.all" should be "yes" or "no", not "<xsl:value-of select="$author.deprecations.all"/>", using the default value of "yes"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
