@@ -450,7 +450,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>
-                <xsl:text>PTX:ERROR: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
+                <xsl:text>PTX:WARNING: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
                 <xsl:value-of select="$whitespace" />
                 <xsl:text>'.  Using the default ('flexible').</xsl:text>
             </xsl:message>
