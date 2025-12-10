@@ -3748,6 +3748,17 @@ TEST_CASE( "Test the add function" ) {
             </statement>
             <response/>
         </exercise>
+
+        <p>This one looks very similar, but it will not attempt to render the submitted answer using MathJax because it has <attr>use-mathjax</attr> set to <c>no</c> in the <tag>response</tag>. You can set a default of <c>no</c> for an entire document by setting the <tag>shortanswer</tag> element's <attr>use-mathjax</attr> attribute to <c>no</c> in the <tag>docinfo</tag> element.</p>
+
+        <exercise label="short-answer-question-no-mathjax">
+            <title>Short Answer</title>
+
+            <statement>
+                <p>This sample book is configured to make some simple questions interactive on a capable platform, by adding a <tag>response</tag> element as a signal.</p>
+            </statement>
+            <response use-mathjax="no"/>
+        </exercise>
     </exercises>
 
     <section xml:id="polling" label="polling">
