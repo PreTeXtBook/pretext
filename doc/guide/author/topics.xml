@@ -5317,7 +5317,9 @@
         </p>
 
         <insight>
-          VS Code, and presumably most modern text editors, will display the character count of selected text in the status bar.
+          <p>
+            VS Code, and presumably most modern text editors, will display the character count of selected text in the status bar.
+          </p>
         </insight>
 
         <p>
