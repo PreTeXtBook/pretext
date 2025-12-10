@@ -3276,7 +3276,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- end: options -->
 </xsl:template>
 
-<xsl:template match="figure|table|listing|list" mode="environment">
+<xsl:template match="&FIGURE-LIKE;" mode="environment">
     <xsl:variable name="fig-placement">
         <xsl:apply-templates select="." mode="figure-placement"/>
     </xsl:variable>
@@ -9023,7 +9023,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="figure|table|list|listing" mode="environment-name">
+<xsl:template match="&FIGURE-LIKE;" mode="environment-name">
     <xsl:variable name="fig-placement">
         <xsl:apply-templates select="." mode="figure-placement"/>
     </xsl:variable>

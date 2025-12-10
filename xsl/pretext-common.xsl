@@ -4274,14 +4274,14 @@ Book (with parts), "section" at level 3
 <!-- a lone sidebyside, not in a sbsgroup -->
 <xsl:template match="figure/sidebyside/figure | figure/sidebyside/table | figure/sidebyside/listing | figure/sidebyside/list" mode="serial-number">
     <xsl:text>(</xsl:text>
-    <xsl:number format="a" count="figure|table|listing|list"/>
+    <xsl:number format="a" count="&FIGURE-LIKE;"/>
     <xsl:text>)</xsl:text>
 </xsl:template>
 
 <!-- when inside a sbsgroup, subnumbers range across entire group -->
 <xsl:template match="figure/sbsgroup/sidebyside/figure | figure/sbsgroup/sidebyside/table | figure/sbsgroup/sidebyside/listing | figure/sbsgroup/sidebyside/list" mode="serial-number">
     <xsl:text>(</xsl:text>
-    <xsl:number format="a" count="figure|table|listing|list" level="any" from="sbsgroup"/>
+    <xsl:number format="a" count="&FIGURE-LIKE;" level="any" from="sbsgroup"/>
     <xsl:text>)</xsl:text>
 </xsl:template>
 
