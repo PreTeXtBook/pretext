@@ -3539,6 +3539,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$exercise-style = 'static'">
             <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
+                <!-- copy over @xml:id, which may be in use by -->
+                <!-- page-breaking mechanism for LaTeX output  -->
+                <xsl:copy-of select="@xml:id"/>
+                <!-- A @label could mask an authored @xml:id           -->
+                <!-- Note: this may be manufactured by an earlier pass -->
+                <xsl:copy-of select="@label"/>
                 <xsl:choose>
                     <!-- @preview present, so author provides a static image  -->
                     <!--                                                      -->
