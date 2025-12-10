@@ -3539,6 +3539,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$exercise-style = 'static'">
             <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
+                <xsl:copy-of select="@xml:id"/>
                 <xsl:choose>
                     <!-- @preview present, so author provides a static image  -->
                     <!--                                                      -->
