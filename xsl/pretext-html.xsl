@@ -2057,7 +2057,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="figure|listing|table|list" mode="figure-caption">
+<xsl:template match="&FIGURE-LIKE;" mode="figure-caption">
     <xsl:param name="b-original"/>
 
     <!-- Subnumbered panels of a "sidebyside" get a simpler caption/title -->

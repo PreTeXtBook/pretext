@@ -802,7 +802,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Other FIGURE-LIKE can be handled together -->
-<xsl:template match="figure|listing|table|list">
+<xsl:template match="&FIGURE-LIKE;">
     <block breakable="no" box="standard" lines-before="1" lines-after="1">
         <segment indentation="6" runover="4">
             <!-- [BANA, 2016, 11.17.1a] "Leave a blank line after the title." -->
@@ -821,7 +821,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Caption/title, with label, number, etc.  "caption" and -->
 <!-- "title" elements are metadata, killed in -common,      -->
 <!-- obtained as needed via modal templates.                -->
-<xsl:template match="figure|listing|table|list" mode="block-title">
+<xsl:template match="&FIGURE-LIKE;" mode="block-title">
     <xsl:apply-templates select="." mode="type-name"/>
     <!--  -->
     <xsl:variable name="the-number">
