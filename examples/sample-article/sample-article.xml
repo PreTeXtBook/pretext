@@ -2656,9 +2656,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <exercise>
                     <p>How was <c>&amp;amp;</c> authored?  Work it out, and then check the source here for the answer.</p>
                 </exercise>
+
+                <p>
+                    The next subsection should start on a new page in PDF output if the standard publisher file is used.
+                </p>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="quotations">
                 <title>Quotations</title>
 
                 <p>The <tag>q</tag><idx><h>quotations</h></idx> tag will provide beginning and ending double quotations, while the <tag>sq</tag> tag will behave similarly but provide single quotes.  Given the complexity of quotations, the different symbols used in different languages, and the over-simplified versions provided on keyboards, it is necessary to use markup.</p>
@@ -5073,6 +5077,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <exercises xml:id="exercises-section-multiple">
                 <title>More Exercises</title>
+
+                <introduction>
+                    <p>
+                        This exercises section should start on a new page in PDF output if the standard publisher file is used.
+                    </p>
+                </introduction>
 
                 <exercise>
                     <statement>
@@ -12219,8 +12229,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </stack>
                     </sidebyside>
                 </figure>
+                <p>
+                    The next paragraphs should start on a new page in PDF output if the standard publisher file is used.
+                </p>
 
-                <paragraphs>
+                <paragraphs xml:id="sidebyside-bully-pulpit">
                     <title>Bully Pulpit</title>
 
                     <p>Remember that <tag>sidebyside</tag> has attributes that strongly influence layout.  That is intentional.  But to support a variety of output formats, it does not allow overly-precise control, and they be viewed as providing <em>hints</em> to an implementer of a conversion.  So for example, do not expect <tag>sidebyside</tag> to function like a <latex/> <c>tabular</c> or an <init>HTML</init> <c>table</c>.</p>
@@ -13369,6 +13382,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <video xml:id="ups-promo-8" source="video/ups-visitor-guide-360" width="40%" preview="preview/ups-promo-preview.jpg"/>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
+
+                <p>
+                    This next video should start on a new page if the distribution publication file
+                    is in use.
+                </p>
 
                 <video xml:id="pre-roll-countdown-8" youtube="Srmdij0CU1U" width="40%"/>
 
