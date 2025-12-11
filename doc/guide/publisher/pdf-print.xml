@@ -141,7 +141,7 @@
             </cd>
             At time of writing, the allowable elements which may be preceded by a page break using
             this feature are divisions, numbered blocks, and the following unnumbered elements:
-            <tag>answer</tag>, <tag>aside</tag>, <tag>audo</tag>, <tag>biographical</tag>,
+            <tag>answer</tag>, <tag>aside</tag>, <tag>audio</tag>, <tag>biographical</tag>,
             <tag>assemblage</tag>, <tag>blokquote</tag>, <tag>console</tag> (when not a child of a
             <tag>sidebyside</tag>), <tag>hint</tag>, <tag>historical</tag>, <tag>image</tag> (when
             not a child of a <tag>sidebyside</tag>), <tag>interactive</tag>, <tag>list-of</tag>,
