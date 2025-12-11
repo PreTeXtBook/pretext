@@ -115,6 +115,53 @@
         </note>
     </section>
 
+    <section xml:id="page-breaks">
+        <title>Page Breaks</title>
+        <p>
+            A publisher can insert page breaks beyond those that <latex/> creates automatically.
+            This might relieve some awkwardness that <latex/>'s otherwise excellent page breaking
+            failed to relieve. The publisher should identify each source element for which they
+            would like a page break to happen <em>before</em> that element appears in output. For
+            each such element, there must be an <attr>xml:id</attr>. Bring these <attr>xml:id</attr>
+            values together in the publication file, using whitespace to separate them. For example:
+            <cd>
+                <cline>&lt;latex&gt;</cline>
+                <cline>  &lt;insertions pagebreaks="xmlid1 xmlid2 ..."&gt;</cline>
+                <cline>&lt;/latex&gt;</cline>
+            </cd>
+            You may use multiple <tag>insertions</tag> elements to help organize page breaks by
+            chapter, section, etc. For example:
+            <cd>
+                <cline>&lt;latex&gt;</cline>
+                <cline>  &lt;!-- chapter 1 page breaks --&gt;</cline>
+                <cline>  &lt;insertions pagebreaks="xmlid1 xmlid2"&gt;</cline>
+                <cline>  &lt;!-- chapter 2 page breaks --&gt;</cline>
+                <cline>  &lt;insertions pagebreaks="xmlid3 xmlid4"&gt;</cline>
+                <cline>&lt;/latex&gt;</cline>
+            </cd>
+            At time of writing, the allowable elements which may be preceded by a page break using
+            this feature are divisions, numbered blocks, and the following unnumbered elements:
+            <tag>answer</tag>, <tag>aside</tag>, <tag>audo</tag>, <tag>biographical</tag>,
+            <tag>assemblage</tag>, <tag>blokquote</tag>, <tag>console</tag> (when not a child of a
+            <tag>sidebyside</tag>), <tag>hint</tag>, <tag>historical</tag>, <tag>image</tag> (when
+            not a child of a <tag>sidebyside</tag>), <tag>interactive</tag>, <tag>list-of</tag>,
+            <tag>p</tag>, <tag>paragraphs</tag>, <tag>poem</tag>, <tag>pre</tag>, <tag>program</tag>
+            (when not a child of a <tag>sidebyside</tag>), <tag>sage</tag>, <tag>sbsgroup</tag>,
+            <tag>sidebyside</tag> (when not a child of a <tag>sidebyside</tag>), <tag>solution</tag>,
+            <tag>tabular</tag> (when not a child of a <tag>sidebyside</tag>), and <tag>video</tag>.
+        </p>
+        <p>
+            Note that over time, the precise size of many things in your PDF output may change. This
+            may be because of an underlying change in how <pretext/> builds PDFs. It may be because
+            of change in the <latex/> distribution. And of course, it may be because the source
+            content and publisher specifications (like font) change. So all manually specified page
+            breaks may need to be monitored over the life of a project.
+        </p>
+        <p>
+            See <xref ref="latex-insertions-pagebreaks-options"/>.
+        </p>
+    </section>
+
     <section xml:id="latex-asymptote-links">
         <title>Asymptote Links</title>
 
