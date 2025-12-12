@@ -3293,10 +3293,10 @@ TEST_CASE( "Test the add function" ) {
                 <block order="3"><c>test</c></block>
             </blocks>
         </exercise>
-        <exercise label="horizontal-parson-python-test">
+        <exercise label="horizontal-parson-python-test" language="python">
           <title>Parsons Problem, Python import</title>
           <statement>
-              <p>This is testing that horizontal parsons get the default programming language from <c>docinfo/parsons/@language</c>.</p>
+              <p>Testing syntax highlighting.</p>
           </statement>
           <blocks layout="horizontal" randomize="yes">
               <block order="2"><c>from</c></block>
