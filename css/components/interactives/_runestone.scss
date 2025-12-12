@@ -88,3 +88,15 @@ ul[data-component="timedAssessment"] {
     background: hsl(0, 0%, 8%);
   }
 }
+
+// Similar to rules in _spacing.scss
+// <statments> exercise content divs that are hoisted into a RS interactive
+// should get one of these classes.
+@layer spacing {
+  .runestone :is(.exercise-statement, .exercise-content) > *:not(:first-child) {
+    margin-top: 1em;
+  }
+  .ptx-runestone-container + .solutions {
+    margin-top: 0.5em;
+  }
+}
