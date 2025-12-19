@@ -105,7 +105,8 @@ section.worksheet, section.handout {
 
 
 // Try to make an open solution knowl look less strange.  Eventually the print version of worksheets should create HTML that isn't a details element.
-summary::marker {
+// NB specify that this only happens inside worksheets/handouts and not in the print-controls area.
+.worksheet summary::marker, .handout summary::marker {
   content: "";
 }
 
@@ -255,8 +256,20 @@ form.papersize-select {
     align-items: center;
     padding-bottom: 1em;
   }
-}
 
+// Style the additional printing options the same as we do for knowls
+  .print-options {
+    summary {
+      cursor: pointer;
+      display: list-item inline;
+    }
+
+    .hide-option {
+      display: inline-block;
+      padding-right: 1em;
+    }
+  }
+}
 
 
 // Print specific styles

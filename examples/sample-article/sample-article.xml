@@ -15509,6 +15509,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <statement>
                             <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
                         </statement>
+                        <hint>
+                            <p>This is a hint.  You can hide it in the print preview before printing.</p>
+                        </hint>
+                        <answer>
+                            <p>Here is an answer.  Also hidable.</p>
+                        </answer>
+                        <solution>
+                            <p>This is a rather long solution.  When you hide or show it in the print preview, the workspace should be adjusted (the page will reload).</p>
+
+                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                        </solution>
                     </exercise>
                 </sidebyside>
 
