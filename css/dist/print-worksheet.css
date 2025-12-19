@@ -2612,7 +2612,8 @@ section.handout {
 .onepage .instructions {
   display: none;
 }
-summary::marker {
+.worksheet summary::marker,
+.handout summary::marker {
   content: "";
 }
 summary {
@@ -2764,6 +2765,14 @@ form.papersize-select {
     justify-content: space-between;
     align-items: center;
     padding-bottom: 1em;
+  }
+  .print-options summary {
+    cursor: pointer;
+    display: list-item inline;
+  }
+  .print-options .hide-option {
+    display: inline-block;
+    padding-right: 1em;
   }
 }
 @media print {
