@@ -11183,7 +11183,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <div class="print-controls">
                                     <div class="print-controls-toggles">
                                         <xsl:apply-templates select="." mode="papersize-toggle"/>
-                                        <xsl:apply-templates select="." mode="highlight-workspace-toggle"/>
+                                        <xsl:apply-templates select="." mode="printing-options"/>
                                     </div>
                                     <xsl:apply-templates select="." mode="print-button"/>
                                 </div>
@@ -11974,15 +11974,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </form>
 </xsl:template>
 
+<xsl:template match="*" mode="printing-options"/>
+<xsl:template match="worksheet|handout" mode="printing-options">
+    <details class="print-options">
+        <summary>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'printing-options'"/>
+            </xsl:apply-templates>
+        </summary>
+        <xsl:apply-templates select="." mode="hide-solutions"/>
+        <xsl:apply-templates select="." mode="highlight-workspace-toggle"/>
+    </details>
+</xsl:template>
+
+<xsl:template match="*" mode="hide-solutions"/>
+
+<!-- We provide a checkboxes to hide hints, answers, and solution -->
+<!-- but only if the worksheet contains these elements.           -->
+<xsl:template match="worksheet|handout" mode="hide-solutions">
+    <xsl:if test=".//solution or .//answer or .//hint">
+        <div class="hide-solutions-options">
+            <xsl:if test=".//hint">
+                <div class="hide-option">
+                    <label for="hide-hints-checkbox">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'hide-hints'"/>
+                        </xsl:apply-templates>
+                    </label>
+                    <input type="checkbox" id="hide-hints-checkbox"/>
+                </div>
+            </xsl:if>
+            <xsl:if test=".//answer">
+                <div class="hide-option">
+                    <label for="hide-answers-checkbox">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'hide-answers'"/>
+                        </xsl:apply-templates>
+                    </label>
+                    <input type="checkbox" id="hide-answers-checkbox"/>
+                </div>
+            </xsl:if>
+            <xsl:if test=".//solution">
+                <div class="hide-option">
+                    <label for="hide-solutions-checkbox">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'hide-solutions'"/>
+                        </xsl:apply-templates>
+                    </label>
+                    <input type="checkbox" id="hide-solutions-checkbox"/>
+                </div>
+            </xsl:if>
+        </div>
+    </xsl:if>
+</xsl:template>
+
 <xsl:template match="*" mode="highlight-workspace-toggle"/>
 
 <xsl:template match="worksheet|handout" mode="highlight-workspace-toggle">
-    <label for="highlight-workspace-checkbox">
-        <xsl:apply-templates select="." mode="type-name">
-            <xsl:with-param name="string-id" select="'highlight-workspace'"/>
-        </xsl:apply-templates>
-    </label>
-    <input type="checkbox" id="highlight-workspace-checkbox"/>
+    <div class="highlight-workspace-option">
+        <label for="highlight-workspace-checkbox">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'highlight-workspace'"/>
+            </xsl:apply-templates>
+        </label>
+        <input type="checkbox" id="highlight-workspace-checkbox"/>
+    </div>
 </xsl:template>
 
 <!-- Primary Navigation Panels -->
