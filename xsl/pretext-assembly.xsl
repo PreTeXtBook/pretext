@@ -874,10 +874,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- though make take this tyepe private some day -->
                 <xsl:for-each select="$the-references/pi:csl-biblio">
                     <biblio type="raw">
-                        <!-- preserve @xml:id through the process -->
-                        <xsl:attribute name="xml:id">
-                            <xsl:value-of select="@xml:id"/>
-                        </xsl:attribute>
+                        <!-- An @xml:id is likely present, but conceivably -->
+                        <!-- absent if a "biblio" is never referenced.     -->
+                        <!-- Preserve it through the process.              -->
+                        <xsl:copy-of select="@xml:id"/>
                         <!-- preserve numeric identification -->
                         <xsl:attribute name="numeric">
                             <xsl:value-of select="@numeric"/>
