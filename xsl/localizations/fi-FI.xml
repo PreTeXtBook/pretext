@@ -286,6 +286,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='reset'>Reset</localization> -->
     <!-- <localization string-id='array'>array</localization> -->
     <!-- <localization string-id='papersize'>Paper size</localization> -->
+    <!-- Additional printing options -->
+    <!-- <localization string-id="printing-options">Additional printing options</localization> -->
+    <!-- "hide hint/answer/solutions" toggle title                         -->
+    <!-- <localization string-id="hide-hints">Hide hints</localization> -->
+    <!-- <localization string-id="hide-answers">Hide answers</localization> -->
+    <!-- <localization string-id="hide-solutions">Hide solutions</localization> -->
     <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
     <!-- <localization string-id='print'>Print</localization> -->
     <!--<localization string-id='print-preview'>Print preview</localization>-->
