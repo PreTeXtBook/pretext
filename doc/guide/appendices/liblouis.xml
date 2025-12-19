@@ -11,30 +11,67 @@
     <title>LibLouis</title>
     <idx>liblouis</idx>
 
-    <p><url href="https://liblouis.io"><c>liblouis</c></url> is an open-source library for low-level translation of phrases into braille, supporting many, many languages.  We rely on Python bindings for this library to translate all of the literary text (non-math) to braille for a document, so this is an essential piece of the pipeline.  Once installed, its use is transparent.  This appendix contains some brief notes to help with installation, current as of 2023-06-09, and for Ubuntu Linux 22.04.  Contributions of adjustments for other operating systems welcome.</p>
+    <introduction>
+        <p><url href="https://liblouis.io"><c>liblouis</c></url> is an open-source library for low-level translation of phrases into braille, supporting many, many languages.  We rely on Python bindings for this library to translate all of the literary text (non-math) to braille for a document, so this is an essential piece of the pipeline.  Once installed, its use is transparent.  This appendix outlines two alternative installation methods, current as of 2025-12-19, on Linux, Mac, and Windows Subsystem for Linux.  Contributions of adjustments for other operating systems are welcome.</p>
+    </introduction>
 
-    <p><ul>
-        <li>
-            <p>Download the <c>liblouis-X.YY.0.tar.gz</c> archive from the <url href="https://liblouis.io/downloads">downloads page</url>.  Releases are tracked at the <url href="https://github.com/liblouis/liblouis/releases">GitHub release page</url>.  The <c>liblouisutdml</c> package is not necessary.</p>
-        </li>
-        <li>
-            <p><c>tar -xvf liblouis-X.YY.0.tar.gz</c> into a scratch directory like <c>/tmp</c>.</p>
-        </li>
-        <li>
-            <p>Switch to being root (<c>sudo</c>) and <c>cd</c> into the directory created by the extraction.</p>
-        </li>
-        <li>
-            <p>In your terminal run<cd>
+    <section xml:id="liblouis-system-pkg">
+        <title>Installing as a system package</title>
+
+        <p>
+            For many operating systems, one may install the <c>liblouis</c> Python bindings as a system package.  For instance, on Debain/Ubuntu systems and Windows Subsystem for Linux, run
+            <cd>
+                <cline># sudo apt install python3-louis</cline>
+            </cd>
+            and on Mac
+            <cd>
+                <cline># brew install liblouis</cline>
+            </cd>
+            To test the bindings, the following should complete successfully in a Python interpreter
+            <cd>
+                <cline>>>> import louis</cline>
+            </cd>
+        </p>
+
+        <p>
+            If you are following best practices by using a <xref ref="python-virtual" text="custom">Python virtual environment</xref> for your <pretext/> project, you will need to give the environment access to system packages since <c>liblouis</c> is now installed as a system package.  You can do this when creating the virtual environment using
+            <cd>
+                <cline># python3 -m venv /path/to/venv --system-site-packages</cline>
+            </cd>
+            If you have an existing virtual environment configured for your <pretext/> project, you may alternatively edit one line in the file <c>pyvenv.cfg</c> in the virtual environment's main directory:
+            <cd>
+                <cline>include-system-site-packages = true</cline>
+            </cd>
+        </p>
+    </section>
+
+    <section xml:id="liblouis-source">
+        <title>Installing from source</title>
+
+        <p>While the <c>python3-louis</c> system package appears to be updated frequently, if you need a more recent version of <c>liblouis</c> or simply feel a little more adventurous, you may wish to install <c>liblouis</c> directly from source following these instructions:
+        <ul>
+            <li>
+                <p>Download the <c>liblouis-X.YY.0.tar.gz</c> archive from the <url href="https://liblouis.io/downloads">downloads page</url>.  Releases are tracked at the <url href="https://github.com/liblouis/liblouis/releases">GitHub release page</url>.  The <c>liblouisutdml</c> package is not necessary.</p>
+            </li>
+            <li>
+                <p><c>tar -xvf liblouis-X.YY.0.tar.gz</c> into a scratch directory like <c>/tmp</c>.</p>
+            </li>
+            <li>
+                <p>Switch to being root (<c>sudo</c>) and <c>cd</c> into the directory created by the extraction.</p>
+            </li>
+            <li>
+                <p>In your terminal run<cd>
                 <cline># ./configure --enable-ucs4</cline>
                 <cline># make</cline>
                 <cline># make install</cline>
-            </cd>The <q>ucs4</q> flag enables 32-bit Unicode support, which is necessary for running tests later.</p>
-        </li>
-        <li>
-            <p>Read <c>/tmp/liblouis-X.YY.0/python/README.md</c> and perform two steps, still as root, from within the directory structure in <c>/tmp</c>: install the bindings into your Python distribution and run the Python tests.</p>
-        </li>
-        <li>
-            <p>I do not do anything special to clean-up afterwards, and of course, my <c>/tmp</c> goes away on the next reboot.  I also do not do anything special when installing the next version, I just follow the same procedure as a fresh install.</p>
-        </li>
-    </ul></p>
+                </cd>The <q>ucs4</q> flag enables 32-bit Unicode support, which is necessary for running tests later.</p>
+            </li>
+            <li>
+                <p>Read <c>/tmp/liblouis-X.YY.0/python/README.md</c> and perform two steps, still as root, from within the directory structure in <c>/tmp</c>: install the bindings into your Python distribution and run the Python tests.  Instructions for setting up a Python virtual environment are also available in that file.</p>
+            </li>
+            <li>
+                <p>I do not do anything special to clean-up afterwards, and of course, my <c>/tmp</c> goes away on the next reboot.  I also do not do anything special when installing the next version, I just follow the same procedure as a fresh install.</p>
+            </li>
+        </ul></p>
+    </section>
 </appendix>
