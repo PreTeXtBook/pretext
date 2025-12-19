@@ -2080,8 +2080,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- when "response" has attributes, perhaps they get interpreted here -->
             <div class="ptx-runestone-container">
                 <div class="runestone shortanswer_section">
-                    <div data-component="shortanswer" data-question_label="" class="journal" data-mathjax="">
+                    <div data-component="shortanswer" data-question_label="" class="journal">
                         <xsl:apply-templates select="." mode="runestone-id-attribute"/>
+                        <xsl:variable name="use-mathjax">
+                            <xsl:choose>
+                                <xsl:when test="response/@use-mathjax = 'no'">
+                                    <xsl:value-of select="false()"/>
+                                </xsl:when>
+                                <xsl:when test="$version-docinfo/shortanswer/@use-mathjax = 'no'">
+                                    <xsl:value-of select="false()"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <!-- for backwards compatibility, default to true -->
+                                    <xsl:value-of select="true()"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <xsl:if test="$use-mathjax = 'true'">
+                            <xsl:attribute name="data-mathjax">
+                                <xsl:text>true</xsl:text>
+                            </xsl:attribute>
+                        </xsl:if>
                         <!-- showing a box, but it can't be graded, so warn reader -->
                         <xsl:if test="not($b-host-runestone)">
                             <xsl:attribute name="data-placeholder">

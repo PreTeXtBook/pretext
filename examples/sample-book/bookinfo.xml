@@ -81,4 +81,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- If neither is set, parsons will default to "natural" language -->
     <parsons language="natural"/>
 
+    <!-- Can be set to "no" to make short answer areas not default to  -->
+    <!-- trying to render their contents with MathJax upon submission. -->
+    <shortanswer use-mathjax="yes"/>
+
 </docinfo>
