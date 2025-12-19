@@ -1063,8 +1063,33 @@ window.addEventListener("load",function(event) {
       });
     });
 
-    // Open all details elements (knowls) on the page
-    var born_hidden_knowls = document.querySelectorAll('details');
+    // If there are hints/answers/solutions on the page, then we will get a checkbox to optionally hide them.
+    for (const solutionType of ["Hints", "Solutions", "Answers"]) {
+        const checkbox = document.getElementById(`hide-${solutionType.toLowerCase()}-checkbox`);
+        if (checkbox) {
+            // Set the checkbox state from localStorage
+            const storageKey = `hide${solutionType}`;
+            checkbox.checked = localStorage.getItem(storageKey) === "true";
+            // if the checkbox is checked, then we remove any solution divs that have first element "details" with class "solutionType"
+            if (checkbox.checked) {
+                // cssClass will be "hint", "solution", or "answer"; lowercase version of solutionType and remove the last character
+                const cssClass = solutionType.slice(0, -1).toLowerCase();
+                document.querySelectorAll(`details.${cssClass}`).forEach(elem => {
+                    elem.remove()
+                });
+            }
+
+            // Add event listener to toggle visibility
+            checkbox.addEventListener("change", function() {
+                localStorage.setItem(storageKey, this.checked);
+                // Reload the page to recompute workspace with changed visibility
+                window.location.reload();
+            });
+        }
+    }
+
+    // Open all details elements (knowls) on the page that are inside the .worksheet or .handout section
+    var born_hidden_knowls = document.querySelectorAll('.worksheet details, .handout details');
     console.log("born_hidden_knowls", born_hidden_knowls);
     born_hidden_knowls.forEach(function(detail) {
         detail.open = true;
