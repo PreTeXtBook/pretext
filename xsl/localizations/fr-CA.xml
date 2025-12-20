@@ -234,7 +234,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subject'>Sujet</localization>
     <localization string-id='date'>Date</localization>
     <localization string-id='copy'>Copie</localization>
-    <localization string-id='enclosure'>Pièce Jointe</localization>
+    <localization string-id='enclosure'>Pièce jointe</localization>
     <!-- Various -->
     <localization string-id='todo'>À Faire</localization>
     <localization string-id='editor'>Éditeur</localization>
