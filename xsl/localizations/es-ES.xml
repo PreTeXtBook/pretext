@@ -24,6 +24,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- es-ES, Spanish (Spain) -->
 <!-- Juan José Torrens, jjtorrens@unavarra.es, 2014-10-27 -->
 <!-- Julian Pfeifle, julian.pfeifle@upc.edu, 2020-05-28 -->
+<!-- Christian Chávez, christian.chavez@usherbrooke.ca, 2025-12-20 -->
+
 
 <locale language="es-ES" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
@@ -38,10 +40,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='identity'>Identidad</localization>
     <!-- PROOF-LIKE -->
     <localization string-id='proof'>Demostración</localization>
-    <!-- <localization string-id='argument'>Argument</localization> -->
-    <!-- <localization string-id='justification'>Justification</localization> -->
-    <!-- <localization string-id='reasoning'>Reasoning</localization> -->
-    <!-- <localization string-id='explanation'>Explanation</localization> -->
+    <localization string-id='argument'>Argumento</localization>
+    <localization string-id='justification'>Justificación</localization>
+    <localization string-id='reasoning'>Razonamiento</localization>
+    <localization string-id='explanation'>Explicación</localization>
     <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Caso</localization>
     <!-- Mathematical statements without proofs -->
@@ -63,7 +65,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='volume'>Volumen</localization>
     <localization string-id='book'>Libro</localization>
     <localization string-id='article'>Artículo</localization>
-    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
+    <localization string-id='slideshow'>Diapositivas</localization>
     <localization string-id='letter'>Carta</localization>
     <localization string-id='memo'>Memorándum</localization>
     <localization string-id='presentation'>Presentación</localization>
@@ -73,28 +75,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='chapter'>Capítulo</localization>
     <localization string-id='appendix'>Apéndice</localization>
     <!-- Next is the plural of Appendix, used to identify a group of appendix -->
-    <!-- <localization string-id='appendices'>Appendices</localization> -->
+    <localization string-id='appendices'>Apéndices</localization>
     <localization string-id='section'>Sección</localization>
     <localization string-id='subsection'>Subsección</localization>
     <localization string-id='subsubsection'>Subsubsección</localization>
     <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
-    <!-- <localization string-id='slide'>Slide</localization> -->
+    <localization string-id='slide'>Diapositiva</localization>
     <localization string-id='introduction'>Introducción</localization>
     <localization string-id='conclusion'>Conclusión</localization>
     <localization string-id='exercises'>Ejercicios</localization>
     <localization string-id='worksheet'>Hoja de trabajo</localization>
-    <!-- <localization string-id='handout'>Handout</localization> -->
+    <localization string-id='handout'>Folleto</localization>
     <localization string-id='reading-questions'>Preguntas de comprensión</localization>
     <localization string-id='solutions'>Soluciones</localization>
     <localization string-id='glossary'>Glosario</localization>
     <localization string-id='references'>Referencias</localization>
-    <!-- Translation needed for Spain Spanish -->
-    <!-- <localization string-id='backmatter'>Back Matter</localization> -->
+    <localization string-id='backmatter'>Paratexto final</localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'>Párrafo</localization>
     <localization string-id='subparagraph'>Subpárrafo</localization>
     <!-- Adjustments to titles of divisions -->
-    <!-- <localization string-id='group'>Group</localization> -->
+    <localization string-id='group'>Grupo</localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
     <!-- "note" is used within "biblio", likely to change -->
@@ -103,83 +104,83 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='note'>Nota</localization>
     <localization string-id='observation'>Observación</localization>
     <localization string-id='warning'>Advertencia</localization>
-    <!-- <localization string-id='insight'>Insight</localization> -->
+    <localization string-id='insight'>Perspectiva</localization>
     <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Computación</localization>
     <localization string-id='technology'>Tecnología</localization>
-    <!-- <localization string-id='data'>Data</localization> -->
+    <localization string-id='data'>Datos</localization>
     <!-- ASIDE-LIKE blocks -->
-    <!-- <localization string-id='aside'>Aside</localization> -->
-    <!-- <localization string-id='biographical'>Biographical Aside</localization> -->
-    <!-- <localization string-id='historical'>Historical Aside</localization> -->
+    <localization string-id='aside'>Comentario</localization>
+    <localization string-id='biographical'>Nota biográfica</localization>
+    <localization string-id='historical'>Nota histórica</localization>
     <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'>Ejemplo</localization>
     <localization string-id='question'>Pregunta</localization>
     <localization string-id='problem'>Problema</localization>
     <!-- PROJECT-LIKE blocks -->
-    <!-- <localization string-id='project'>Project</localization> -->
-    <!-- <localization string-id='activity'>Activity</localization> -->
-    <!-- <localization string-id='exploration'>Exploration</localization> -->
-    <!-- <localization string-id='task'>Task</localization> -->
-    <!-- <localization string-id='investigation'>Investigation</localization> -->
+    <localization string-id='project'>Proyecto</localization>
+    <localization string-id='activity'>Actividad</localization>
+    <localization string-id='exploration'>Exploración</localization>
+    <localization string-id='task'>Tarea</localization>
+    <localization string-id='investigation'>Investigación</localization>
     <!--  -->
     <!-- assemblages are collections of minimally structured material -->
-    <!-- <localization string-id='assemblage'>Assemblage</localization> -->
-    <!-- <localization string-id='poem'>Poem</localization> -->
+    <localization string-id='assemblage'>Colección</localization>
+    <localization string-id='poem'>Poema</localization>
     <!-- Objectives is the block, objective is a list item within -->
-    <!-- <localization string-id='objectives'>Objectives</localization> -->
-    <!-- <localization string-id='objective'>Objective</localization> -->
+    <localization string-id='objectives'>Objetivos</localization>
+    <localization string-id='objective'>Objetivo</localization>
     <!-- Outcomes is the block, outcome is a list item within (different) -->
-    <!-- <localization string-id='outcomes'>Outcomes</localization> -->
-    <!-- <localization string-id='outcome'>Outcome</localization> -->
+    <localization string-id='outcomes'>Resultados</localization>
+    <localization string-id='outcome'>Resultado</localization>
     <!--  -->
     <!-- "Open" means unsolved, a research question/problem -->
-    <!-- <localization string-id='openquestion'>Open Question</localization> -->
-    <!-- <localization string-id='openproblem'>Open Problem</localization> -->
-    <!-- <localization string-id='openconjecture'>Open Conjecture</localization> -->
+    <localization string-id='openquestion'>Pregunta abierta</localization>
+    <localization string-id='openproblem'>Problema abierto</localization>
+    <localization string-id='openconjecture'>Conjetura abierta</localization>
     <!-- "discussion" on open problems -->
-    <!-- <localization string-id='context'>Context</localization> -->
-    <!-- <localization string-id='discussion'>Discussion</localization> -->
-    <!-- <localization string-id='opinion'>Opinion</localization> -->
-    <!-- <localization string-id='status'>Status</localization> -->
-    <!-- <localization string-id='suggestion'>Suggestion</localization> -->
+    <localization string-id='context'>Contexto</localization>
+    <localization string-id='discussion'>Discusión</localization>
+    <localization string-id='opinion'>Opinión</localization>
+    <localization string-id='status'>Estado</localization>
+    <localization string-id='suggestion'>Sugerencia</localization>
     <!--  -->
     <localization string-id='figure'>Figura</localization>
     <localization string-id='table'>Cuadro</localization>
     <localization string-id='listing'>Listado</localization>
     <!-- Translation needed for Spain Spanish -->
-    <!-- <localization string-id='contributor'>Contributor</localization> -->
+    <localization string-id='contributor'>Contribuyente</localization>
     <localization string-id='fn'>Nota a pie de página</localization>
     <!-- Lists and their items -->
     <!-- Translations needed for Spain Spanish -->
-    <!-- <localization string-id='list'>List</localization> -->
-    <!-- <localization string-id='li'>Item</localization> -->
+    <localization string-id='list'>Lista</localization>
+    <localization string-id='li'>Ítem</localization>
     <!-- A term (word) defined in a glossary item -->
-    <!-- <localization string-id='gi'>Term</localization> -->
+    <localization string-id='gi'>Término</localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Párrafo</localization>
-    <!-- <localization string-id='blockquote'>Quotation</localization> -->
-    <!-- <localization string-id='pre'>Code Block</localization> -->
+    <localization string-id='blockquote'>Cita</localization>
+    <localization string-id='pre'>Bloque de código</localization>
     <!-- Literate programming, a chunk of computer code -->
-    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <localization string-id='fragment'>Fragmento</localization>
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
     <localization string-id='divisionalexercise'>Ejercicio</localization>
     <!-- Translation needed for Spain Spanish -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <!-- <localization string-id='inlineexercise'>Checkpoint</localization> -->
-    <!-- <localization string-id='worksheetexercise'>Worksheet Exercise</localization> -->
-    <!-- <localization string-id='readingquestion'>Reading Question</localization> -->
+    <localization string-id='inlineexercise'>Punto de control</localization>
+    <localization string-id='worksheetexercise'>Ejercicio de hoja de trabajo</localization>
+    <localization string-id='readingquestion'>Pregunta de lectura</localization>
     <localization string-id='webwork'>WeBWorK</localization>
     <localization string-id='hint'>Pista</localization>
     <localization string-id='answer'>Respuesta</localization>
     <localization string-id='solution'>Solución</localization>
     <!-- Translation needed for Spain Spanish -->
-    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
+    <localization string-id='subexercises'>Subejercicios</localization>
     <!-- A group of divisional exercises (with introduction and conclusion) -->
-    <!-- <localization string-id='exercisegroup'>Exercise Group</localization> -->
+    <localization string-id='exercisegroup'>Grupo de ejercicios</localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
-    <!-- <localization string-id='biblio'>Bibliographic Entry</localization> -->
+    <localization string-id='biblio'>Entrada bibliográfica</localization>
     <!-- Front matter components -->
     <localization string-id='toc'>Índice</localization>
     <localization string-id='abstract'>Resumen</localization>
@@ -187,27 +188,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='acknowledgement'>Agradecimentos</localization>
     <localization string-id='biography'>Biografía del autor</localization>
     <!-- singular and plural titles for biography subdivision -->
-    <!-- <localization string-id='about-author'>About the Author</localization> -->
-    <!-- <localization string-id='about-authors'>About the Authors</localization> -->
+    <localization string-id='about-author'>Sobre el autor</localization>
+    <localization string-id='about-authors'>Sobre los autores</localization>
     <localization string-id='foreword'>Prólogo</localization>
     <localization string-id='dedication'>Dedicatoria</localization>
     <localization string-id='colophon'>Colofón</localization>
     <!-- Runestone Activities -->
-    <!-- <localization string-id='video'>Video</localization> -->
-    <!-- <localization string-id='program'>Program</localization> -->
-    <!-- <localization string-id='true'>True</localization> -->
-    <!-- <localization string-id='false'>False</localization> -->
-    <!-- <localization string-id='or'>Or</localization> -->
-    <!-- <localization string-id='either'>Either</localization> -->
-    <!-- <localization string-id='uncategorized'>Uncategorized</localization> -->
-    <!-- <localization string-id='query'>Query</localization> -->
+    <localization string-id='video'>Vídeo</localization>
+    <localization string-id='program'>Programa</localization>
+    <localization string-id='true'>Verdadero</localization>
+    <localization string-id='false'>Falso</localization>
+    <localization string-id='or'>O</localization>
+    <localization string-id='either'>Cualquiera</localization>
+    <localization string-id='uncategorized'>Sin categoría</localization>
+    <localization string-id='query'>Consulta</localization>
     <localization string-id='program-activecode'>ActiveCode</localization>
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
     <localization string-id='index'>Índice alfabético</localization>
-    <!-- <localization string-id='jump-to'>Jump to:</localization> -->
+    <localization string-id='jump-to'>Ir a:</localization>
     <!-- Parts of the Index -->
     <localization string-id='index'>Índice alfabético</localization>
     <localization string-id='see'>Véase</localization>
@@ -226,16 +227,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='next'>Siguiente</localization>
     <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
     <!-- TODO: SHORTEN THESE -->
-    <localization string-id='previous-short'>Anterior</localization>
-    <localization string-id='up-short'>Arriba</localization>
-    <localization string-id='next-short'>Siguiente</localization>
+    <localization string-id='previous-short'>Ant.</localization>
+    <localization string-id='up-short'>Subir</localization>
+    <localization string-id='next-short'>Sig.</localization>
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'>Anotaciones</localization>
     <localization string-id='feedback'>Comentario</localization>
     <localization string-id='authored'>Realizado con PreTeXt</localization>
     <!-- Search Results display/dialog -->
-    <!-- <localization string-id='search-results-heading'>Search Results</localization> -->
-    <!-- <localization string-id='no-search-results'>No results</localization> -->
+    <localization string-id='search-results-heading'>Resultados de la búsqueda</localization>
+    <localization string-id='no-search-results'>Sin resultados</localization>
     <!-- Parts of memos and letters -->
     <localization string-id='to'>A</localization>
     <localization string-id='from'>De</localization>
@@ -247,7 +248,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='todo'>Para hacer</localization>
     <localization string-id='editor'>Editor</localization>
     <localization string-id='edition'>Edición</localization>
-    <!-- <localization string-id='website'>Website</localization> -->
+    <localization string-id='website'>Sitio web</localization>
     <localization string-id='copyright'>Derechos de autor</localization>
     <localization string-id='keywords'>Palabras clave</localization>
     <!-- HTML clickables (lowercase strings to click on) -->
@@ -257,37 +258,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- ubiquitous nature we have not left it undefined.  See the     -->
     <!-- "en-US" file for a more complete explanation of its use.      -->
     <!-- Please remove this entire comment when translated.  Thanks.   -->
-    <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
+    <localization string-id='permalink-tooltip'>Copiar encabezado y enlace permanente para</localization>
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->
     <!-- This needs to be defined to *something* (English)       -->
     <!-- else whatever crud ends up on the button kills the cell -->
     <!-- Translate at first opportunity, please                  -->
-    <localization string-id='evaluate'>Evaluate</localization>
-    <!-- <localization string-id='code'>Code</localization> -->
+    <localization string-id='evaluate'>Evaluar</localization>
+    <localization string-id='code'>Código</localization>
     <!-- How to run an interactive widget, sliders, checkboxes, etc -->
-    <!-- <localization string-id='instructions'>Instructions</localization> -->
+    <localization string-id='instructions'>Instrucciones</localization>
     <!-- Interactive exercise feedback messages -->
-    <!-- <localization string-id='correct'>Correct</localization> -->
-    <!-- <localization string-id='incorrect'>Incorrect</localization> -->
-    <!-- <localization string-id='blank'>Blank</localization> -->
-    <!-- <localization string-id='submit'>Submit</localization> -->
-    <!-- <localization string-id='check-responses'>Check Responses</localization> -->
-    <!-- <localization string-id='reveal'>Reveal</localization> -->
-    <!-- <localization string-id='randomize'>Randomize</localization> -->
-    <!-- <localization string-id='activate'>Activate</localization> -->
-    <!-- <localization string-id='reset'>Reset</localization> -->
-    <!-- <localization string-id='array'>array</localization> -->
+    <localization string-id='correct'>Correcto</localization>
+    <localization string-id='incorrect'>Incorrecto</localization>
+    <localization string-id='blank'>En blanco</localization>
+    <localization string-id='submit'>Enviar</localization>
+    <localization string-id='check-responses'>Comprobar respuestas</localization>
+    <localization string-id='reveal'>Revelar</localization>
+    <localization string-id='randomize'>Aleatorizar</localization>
+    <localization string-id='activate'>Activar</localization>
+    <localization string-id='reset'>Reiniciar</localization>
+    <localization string-id='array'>Arreglo</localization>
     <localization string-id='papersize'>Tamaño del papel</localization>
     <!-- Additional printing options -->
-    <!-- <localization string-id="printing-options">Additional printing options</localization> -->
+    <localization string-id="printing-options">Opciones de impresión adicionales</localization>
     <!-- "hide hint/answer/solutions" toggle title                         -->
-    <!-- <localization string-id="hide-hints">Hide hints</localization> -->
-    <!-- <localization string-id="hide-answers">Hide answers</localization> -->
-    <!-- <localization string-id="hide-solutions">Hide solutions</localization> -->
-    <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
-    <!-- <localization string-id='print'>Print</localization> -->
-    <!--<localization string-id='print-preview'>Print preview</localization>-->
-    <!-- <localization string-id='close'>Close</localization> -->
+    <localization string-id="hide-hints">Ocultar pistas</localization>
+    <localization string-id="hide-answers">Ocultar respuestas</localization>
+    <localization string-id="hide-solutions">Ocultar soluciones</localization>
+    <localization string-id="highlight-workspace">Resaltar espacio de trabajo</localization>
+    <localization string-id='print'>Imprimir</localization>
+    <localization string-id='print-preview'>Vista previa de impresión</localization>
+    <localization string-id='close'>Cerrar</localization>
 </locale>
