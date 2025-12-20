@@ -16,7 +16,7 @@
     <p>Some notes:<ul>
         <li>We know it is hard to translate subtleties of one language into another.  Do the best you can!  Something is better than nothing.  And somebody may come along later with an improvement.  See the <c>en-US</c> file for explanations, this is the only documentation about each term that gets translated.</li>
 
-        <li>Do nt copy the documentation from the <c>en-US</c> file into your file.  Add comments if you feel your work needs some explanations.  Do try to keep the order and organization the same.</li>
+        <li>Do not copy the documentation from the <c>en-US</c> file into your file.  Add comments if you feel your work needs some explanations.  Do try to keep the order and organization the same.</li>
 
         <li>When we add new features, sometimes new translations are needed.  We appreciate maintainers who regularly come back to add in more.  But anybody can hop in and add new translations to an existing file.  We try to be careful to have all the <q>missing</q> translations commented-out so it is easy to see what needs work.</li>
 
