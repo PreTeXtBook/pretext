@@ -20,6 +20,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fr-CA, French (Canada) -->
 <!-- based on initial fr-FR translation -->
 <!-- Jean-Sébastien Turcotte, js.turcotte@cgodin.qc.ca, 2021-02-19-->
+<!-- Added missing fr-CA translations by Christian Chávez, christian.chavez@usherbrooke.ca, 2025-12-20-->
 
 <!-- If/when a new string-id gets translated in French for the first time, it should also be translated into fr-FR -->
 <locale language="fr-CA" direction="ltr">
@@ -81,7 +82,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'>Conclusion</localization>
     <localization string-id='exercises'>Exercices</localization>
     <localization string-id='worksheet'>Feuille d'activités</localization> <!-- Harmonisation avec worksheetexercise -->
-    <!-- <localization string-id='handout'>Handout</localization> -->
+    <localization string-id='handout'>Document</localization>
     <localization string-id='reading-questions'>Questions de compréhension de la lecture</localization> <!-- Peut-être un peu long /might be a bit too long -->
     <localization string-id='solutions'>Solutions</localization>
     <localization string-id='glossary'>Glossaire</localization>
@@ -91,7 +92,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraphs'>Paragraphes</localization>  <!--checked-->
     <localization string-id='subparagraph'>Sous-paragraphe</localization> <!--checked-->
     <!-- Adjustments to titles of divisions -->
-    <!-- <localization string-id='group'>Group</localization> -->
+    <localization string-id='group'>Groupe</localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
     <!-- "note" is used within "biblio", likely to change -->
@@ -100,11 +101,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='note'>Note</localization>
     <localization string-id='observation'>Observation</localization>
     <localization string-id='warning'>Mise en garde</localization>
-    <!-- <localization string-id='insight'>Insight</localization> -->
+    <localization string-id='insight'>Aperçu</localization>
     <!-- COMPUTATION-LIKE blocks -->
     <localization string-id='computation'>Calcul</localization>
     <localization string-id='technology'>Technologie</localization>
-    <!-- <localization string-id='data'>Data</localization> -->
+    <localization string-id='data'>Données</localization>
     <!-- ASIDE-LIKE blocks -->
     <localization string-id='aside'>Digression</localization>
     <localization string-id='biographical'>Note biographique</localization> <!-- Knowingly differs from fr-FR, which uses "digression" instead of "note" -->
@@ -131,15 +132,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='outcome'>Résultat</localization>
     <!--  -->
     <!-- "Open" means unsolved, a research question/problem -->
-    <!-- <localization string-id='openquestion'>Open Question</localization> -->
-    <!-- <localization string-id='openproblem'>Open Problem</localization> -->
-    <!-- <localization string-id='openconjecture'>Open Conjecture</localization> -->
+    <localization string-id='openquestion'>Question ouverte</localization>
+    <localization string-id='openproblem'>Problème ouvert</localization>
+    <localization string-id='openconjecture'>Conjecture ouverte</localization>
     <!-- "discussion" on open problems -->
-    <!-- <localization string-id='context'>Context</localization> -->
-    <!-- <localization string-id='discussion'>Discussion</localization> -->
-    <!-- <localization string-id='opinion'>Opinion</localization> -->
-    <!-- <localization string-id='status'>Status</localization> -->
-    <!-- <localization string-id='suggestion'>Suggestion</localization> -->
+    <localization string-id='context'>Contexte</localization>
+    <localization string-id='discussion'>Discussion</localization>
+    <localization string-id='opinion'>Opinion</localization>
+    <localization string-id='status'>Statut</localization>
+    <localization string-id='suggestion'>Suggestion</localization>
     <!--  -->
     <localization string-id='figure'>Figure</localization>
     <localization string-id='table'>Table</localization>
@@ -154,9 +155,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Paragraphe</localization>
     <localization string-id='blockquote'>Citation</localization>
-    <!-- <localization string-id='pre'>Code Block</localization> -->
+    <localization string-id='pre'>Bloc de code</localization>
     <!-- Literate programming, a chunk of computer code -->
-    <!-- <localization string-id='fragment'>Fragment</localization> -->
+    <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
     <localization string-id='divisionalexercise'>Exercice</localization>
@@ -169,7 +170,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'>Indice</localization>  <!-- Knowingly differs from fr-FR, which uses "Indication" instead -->
     <localization string-id='answer'>Réponse</localization>
     <localization string-id='solution'>Solution</localization>
-    <!-- <localization string-id='subexercises'>Subexercises</localization> -->
+    <localization string-id='subexercises'>Sous-exercices</localization>
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Groupe d'exercices</localization>
      <!-- Front matter components -->
@@ -186,13 +187,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='colophon'>Colophon</localization>
     <!-- Runestone Activities -->
     <localization string-id='video'>Vidéo</localization>
-    <!-- <localization string-id='program'>Program</localization> -->
-    <!-- <localization string-id='true'>True</localization> -->
-    <!-- <localization string-id='false'>False</localization> -->
-    <!-- <localization string-id='or'>Or</localization> -->
-    <!-- <localization string-id='either'>Either</localization> -->
-    <!-- <localization string-id='uncategorized'>Uncategorized</localization> -->
-    <!-- <localization string-id='query'>Query</localization> -->
+    <localization string-id='program'>Programme</localization>
+    <localization string-id='true'>Vrai</localization>
+    <localization string-id='false'>Faux</localization>
+    <localization string-id='or'>Ou</localization>
+    <localization string-id='either'>Soit</localization>
+    <localization string-id='uncategorized'>Non catégorisé</localization>
+    <localization string-id='query'>Requête</localization>
     <localization string-id='program-activecode'>ActiveCode</localization>
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
@@ -203,7 +204,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Parts of the Index -->
     <localization string-id='index'>Index</localization>
     <localization string-id='see'>Visiter</localization>
-    <localization string-id='also'>Voir Aussi</localization>
+    <localization string-id='also'>Voir aussi</localization>
     <!-- Notation List headings/foot -->
     <localization string-id='symbol'>Symbole</localization>
     <localization string-id='description'>Description</localization>
@@ -217,10 +218,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='up'>Haut</localization>
     <localization string-id='next'>Suivant</localization>
     <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
-    <!-- TODO: SHORTEN THESE -->
-    <localization string-id='previous-short'>Précédent</localization> <!--buttons for HTML navigation-->
+    <localization string-id='previous-short'>Préc.</localization> <!--buttons for HTML navigation-->
     <localization string-id='up-short'>Haut</localization>
-    <localization string-id='next-short'>Suivant</localization>
+    <localization string-id='next-short'>Suiv.</localization>
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'>Annotations</localization> <!--does not get printed -->
     <localization string-id='feedback'>Commentaires</localization>  <!--e.g., in case there is a link for feedback.  Will appear in HTML.-->
@@ -241,13 +241,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='edition'>Édition</localization>
     <localization string-id='website'>Site Web</localization>
     <localization string-id='copyright'>Copyright</localization>
-    <!-- <localization string-id='keywords'>Keywords</localization> -->
+    <localization string-id='keywords'>Mots-clés</localization>
     <localization string-id='incontext'>Contexte</localization>
-    <!-- Following is in ENGLISH and should be translated.  Due to its -->
-    <!-- ubiquitous nature we have not left it undefined.  See the     -->
-    <!-- "en-US" file for a more complete explanation of its use.      -->
-    <!-- Please remove this entire comment when translated.  Thanks.   -->
-    <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
+    <localization string-id='permalink-tooltip'>Copier le titre et le lien permanent pour</localization>
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->
@@ -268,16 +264,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='randomize'>Générer une nouvelle version aléatoire</localization>
     <localization string-id='activate'>Activer</localization>
     <localization string-id='reset'>Réinitialiser</localization>
-    <!-- <localization string-id='array'>array</localization> -->
-    <!-- <localization string-id='papersize'>Paper size</localization> -->
+    <localization string-id='array'>Tableau</localization>
+    <localization string-id='papersize'>Format de papier</localization>
     <!-- Additional printing options -->
-    <!-- <localization string-id="printing-options">Additional printing options</localization> -->
+    <localization string-id="printing-options">Options d'impression supplémentaires</localization>
     <!-- "hide hint/answer/solutions" toggle title                         -->
-    <!-- <localization string-id="hide-hints">Hide hints</localization> -->
-    <!-- <localization string-id="hide-answers">Hide answers</localization> -->
-    <!-- <localization string-id="hide-solutions">Hide solutions</localization> -->
-    <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
+    <localization string-id="hide-hints">Masquer les indices</localization>
+    <localization string-id="hide-answers">Masquer les réponses</localization>
+    <localization string-id="hide-solutions">Masquer les solutions</localization>
+    <localization string-id="highlight-workspace">Mettre en évidence l'espace de travail</localization>
     <localization string-id='print'>Imprimer</localization>
-    <!--<localization string-id='print-preview'>Print preview</localization>-->
+    <localization string-id='print-preview'>Aperçu avant impression</localization>
     <localization string-id='close'>Fermer</localization>
 </locale>
