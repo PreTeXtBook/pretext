@@ -1472,13 +1472,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <title>STACK integration question</title>
 
                         <introduction>
-                            <p>A test question. (2025-10-17: you will need to ask for a <q>new</q> question to make this render.)  (2025-11-04: the question has been removed since it was causing conflicts with MathJax for HTML versions.)</p>
+                            <p>A test question. (2025-10-17: you will need to ask for a <q>new</q> question to make this render.)</p>
                         </introduction>
 
                         <!-- A @label is required, becomes a filename in output -->
-                        <!-- <stack-moodle label="stack-integration" xmlns="http://stack-assessment.org/2025/moodle-question">
+                        <!-- See warning inside enclosed file before proceeding -->
+                        <stack-moodle label="stack-integration" xmlns="http://stack-assessment.org/2025/moodle-question">
                             <xi:include href="stack/01_integration_with_feedback.xml"/>
-                        </stack-moodle> -->
+                        </stack-moodle>
                     </exercise>
                 </exercises>
 
