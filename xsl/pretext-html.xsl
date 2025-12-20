@@ -10815,11 +10815,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="stack-js">
 
     <xsl:if test="$b-has-stack">
-        <!-- Note: MathJax2 is required for HTML STACK problems to render.  -->
-        <!-- But loading this conflicts with v3 (and presumably v4 in major -->
-        <!-- ways.  The offending command has been commented out, so        -->
-        <!-- testing might proceed on certain aspects.                      -->
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script> -->
         <script src="{$html.js.dir}/pretext-stack/stackjsvle.js" type="text/javascript"></script>
         <script src="{$html.js.dir}/pretext-stack/stackapicalls.js" type="text/javascript"></script>
         <script type="text/javascript">
