@@ -6,18 +6,18 @@
       <components>
         <passive>down-arrows</passive>
         <passive>top-down-arrow</passive>
-        <active>tiling-row=0</active>
-        <active>tiling-row=1</active>
-        <active>tiling-row=2</active>
+        <active>tiling-row_0</active>
+        <active>tiling-row_1</active>
+        <active>tiling-row_2</active>
         <active>bottom-tilings</active>
         <active>periodic-0</active>
         <active>periodic-1</active>
         <active>periodic-2</active>
       </components>
       <children>
-        <active>tiling-row=0</active>
-        <active>tiling-row=1</active>
-        <active>tiling-row=2</active>
+        <active>tiling-row_0</active>
+        <active>tiling-row_1</active>
+        <active>tiling-row_2</active>
         <active>bottom-tilings</active>
         <active>periodic-0</active>
         <active>periodic-1</active>
@@ -38,71 +38,71 @@
         <grouped>figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row=0" speech2="We begin with this Fibonacci tiling">
-      <active>tiling-row=0</active>
+    <annotation id="tiling-row_0" speech2="We begin with this Fibonacci tiling">
+      <active>tiling-row_0</active>
       <position>1</position>
       <parents>
         <grouped>figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row=1" speech2="Our first Fibonacci tiling is obtained by deflating this second tiling">
-      <grouped>tiling-row=1</grouped>
+    <annotation id="tiling-row_1" speech2="Our first Fibonacci tiling is obtained by deflating this second tiling">
+      <grouped>tiling-row_1</grouped>
       <position>2</position>
       <components>
-        <passive>down-arrow-row=0</passive>
+        <passive>down-arrow-row_0</passive>
       </components>
       <parents>
         <grouped>figure</grouped>
       </parents>
     </annotation>
-    <annotation id="down-arrow-row=0">
-      <passive>down-arrow-row=0</passive>
+    <annotation id="down-arrow-row_0">
+      <passive>down-arrow-row_0</passive>
       <position>0</position>
       <parents>
-        <grouped>tiling-row=1</grouped>
+        <grouped>tiling-row_1</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row=2" speech2="The second tiling is obtained by deflating this third tiling, so we see that there is an infinite hierarchy of tilings.">
-      <grouped>tiling-row=2</grouped>
+    <annotation id="tiling-row_2" speech2="The second tiling is obtained by deflating this third tiling, so we see that there is an infinite hierarchy of tilings.">
+      <grouped>tiling-row_2</grouped>
       <position>3</position>
       <components>
-        <passive>down-arrow-row=1</passive>
+        <passive>down-arrow-row_1</passive>
       </components>
       <parents>
         <grouped>figure</grouped>
       </parents>
     </annotation>
-    <annotation id="down-arrow-row=1">
-      <passive>down-arrow-row=1</passive>
+    <annotation id="down-arrow-row_1">
+      <passive>down-arrow-row_1</passive>
       <position>0</position>
       <parents>
-        <grouped>tiling-row=2</grouped>
+        <grouped>tiling-row_2</grouped>
       </parents>
     </annotation>
     <annotation id="bottom-tilings" speech2="Beginning with one tiling, the tiling above is uniquely determined.">
       <grouped>bottom-tilings</grouped>
       <position>4</position>
       <children>
-        <active>tiling-row=0</active>
-        <active>tiling-row=1</active>
+        <active>tiling-row_0</active>
+        <active>tiling-row_1</active>
       </children>
       <components>
-        <active>tiling-row=0</active>
-        <active>tiling-row=1</active>
+        <active>tiling-row_0</active>
+        <active>tiling-row_1</active>
       </components>
       <parents>
         <grouped>figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row=0" speech2="Consider this Fibonacci tiling.">
-      <active>tiling-row=0</active>
+    <annotation id="tiling-row_0" speech2="Consider this Fibonacci tiling.">
+      <active>tiling-row_0</active>
       <position>1</position>
       <parents>
         <grouped>bottom-tilings</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row=1" speech2="By inverting the deflation rules, we can uniquely determine the tiling above.">
-      <active>tiling-row=1</active>
+    <annotation id="tiling-row_1" speech2="By inverting the deflation rules, we can uniquely determine the tiling above.">
+      <active>tiling-row_1</active>
       <position>2</position>
       <parents>
         <grouped>bottom-tilings</grouped>
@@ -112,26 +112,26 @@
       <grouped>periodic-0</grouped>
       <position>5</position>
       <children>
-        <active>tiling-row=0</active>
-        <active>right-arrow-row=0</active>
+        <active>tiling-row_0</active>
+        <active>right-arrow-row_0</active>
       </children>
       <components>
-        <active>tiling-row=0</active>
-        <active>right-arrow-row=0</active>
+        <active>tiling-row_0</active>
+        <active>right-arrow-row_0</active>
       </components>
       <parents>
         <grouped>figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row=0" speech2="For example, suppose this Fibonacci tiling is periodic.">
-      <active>tiling-row=0</active>
+    <annotation id="tiling-row_0" speech2="For example, suppose this Fibonacci tiling is periodic.">
+      <active>tiling-row_0</active>
       <position>1</position>
       <parents>
         <grouped>periodic-0</grouped>
       </parents>
     </annotation>
-    <annotation id="right-arrow-row=0" speech2="And that this horizontal translation leaves the tiling unchanged.">
-      <active>right-arrow-row=0</active>
+    <annotation id="right-arrow-row_0" speech2="And that this horizontal translation leaves the tiling unchanged.">
+      <active>right-arrow-row_0</active>
       <position>2</position>
       <parents>
         <grouped>periodic-0</grouped>
@@ -141,26 +141,26 @@
       <grouped>periodic-1</grouped>
       <position>6</position>
       <children>
-        <active>tiling-row=1</active>
-        <active>right-arrow-row=1</active>
+        <active>tiling-row_1</active>
+        <active>right-arrow-row_1</active>
       </children>
       <components>
-        <active>tiling-row=1</active>
-        <active>right-arrow-row=1</active>
+        <active>tiling-row_1</active>
+        <active>right-arrow-row_1</active>
       </components>
       <parents>
         <grouped>figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row=1" speech2="This Fibonacci tiling is also periodic.">
-      <active>tiling-row=1</active>
+    <annotation id="tiling-row_1" speech2="This Fibonacci tiling is also periodic.">
+      <active>tiling-row_1</active>
       <position>1</position>
       <parents>
         <grouped>periodic-1</grouped>
       </parents>
     </annotation>
-    <annotation id="right-arrow-row=1" speech2="The same horizontal translation leaves the tiling unchanged.">
-      <active>right-arrow-row=1</active>
+    <annotation id="right-arrow-row_1" speech2="The same horizontal translation leaves the tiling unchanged.">
+      <active>right-arrow-row_1</active>
       <position>2</position>
       <parents>
         <grouped>periodic-1</grouped>
@@ -170,26 +170,26 @@
       <grouped>periodic-2</grouped>
       <position>7</position>
       <children>
-        <active>tiling-row=2</active>
-        <active>right-arrow-row=2</active>
+        <active>tiling-row_2</active>
+        <active>right-arrow-row_2</active>
       </children>
       <components>
-        <active>tiling-row=2</active>
-        <active>right-arrow-row=2</active>
+        <active>tiling-row_2</active>
+        <active>right-arrow-row_2</active>
       </components>
       <parents>
         <grouped>figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row=2" speech2="The size of the tiles grows exponentially as we move up in the hierarchy.">
-      <active>tiling-row=2</active>
+    <annotation id="tiling-row_2" speech2="The size of the tiles grows exponentially as we move up in the hierarchy.">
+      <active>tiling-row_2</active>
       <position>1</position>
       <parents>
         <grouped>periodic-2</grouped>
       </parents>
     </annotation>
-    <annotation id="right-arrow-row=2" speech2="Eventually the tiles are longer than the translation.">
-      <active>right-arrow-row=2</active>
+    <annotation id="right-arrow-row_2" speech2="Eventually the tiles are longer than the translation.">
+      <active>right-arrow-row_2</active>
       <position>2</position>
       <parents>
         <grouped>periodic-2</grouped>
