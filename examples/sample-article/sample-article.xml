@@ -3669,45 +3669,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                           <annotation ref="down-arrows"/>
                                           <annotation ref="top-down-arrow"/>
 
-                                          <annotation ref="tiling-row=0"
+                                          <annotation ref="tiling-row_0"
                                                       text="We begin with this Fibonacci tiling"/>
 
-                                          <annotation ref="tiling-row=1"
+                                          <annotation ref="tiling-row_1"
                                                       text="Our first Fibonacci tiling is obtained by deflating this second tiling">
-                                              <annotation ref="down-arrow-row=0"/>
+                                              <annotation ref="down-arrow-row_0"/>
                                           </annotation>
 
-                                          <annotation ref="tiling-row=2"
+                                          <annotation ref="tiling-row_2"
                                                       text="The second tiling is obtained by deflating this third tiling, so we see that there is an infinite hierarchy of tilings.">
-                                              <annotation ref="down-arrow-row=1"/>
+                                              <annotation ref="down-arrow-row_1"/>
                                           </annotation>
 
                                           <annotation ref="bottom-tilings"
                                                       text="Beginning with one tiling, the tiling above is uniquely determined.">
-                                              <annotation ref="tiling-row=0"
+                                              <annotation ref="tiling-row_0"
                                                           text="Consider this Fibonacci tiling."/>
-                                              <annotation ref="tiling-row=1"
+                                              <annotation ref="tiling-row_1"
                                                           text="By inverting the deflation rules, we can uniquely determine the tiling above."/>
                                           </annotation>
                                           <annotation ref="periodic-0"
                                                       text="Suppose that a Fibonacci tiling is periodic under a horizontal translation.">
-                                              <annotation ref="tiling-row=0"
+                                              <annotation ref="tiling-row_0"
                                                           text="For example, suppose this Fibonacci tiling is periodic."/>
-                                              <annotation ref="right-arrow-row=0"
+                                              <annotation ref="right-arrow-row_0"
                                                           text="And that this horizontal translation leaves the tiling unchanged."/>
                                           </annotation>
                                           <annotation ref="periodic-1"
                                                       text="Because the inflated tiling above is unique, it must also be periodic under the same translation.">
-                                              <annotation ref="tiling-row=1"
+                                              <annotation ref="tiling-row_1"
                                                           text="This Fibonacci tiling is also periodic."/>
-                                              <annotation ref="right-arrow-row=1"
+                                              <annotation ref="right-arrow-row_1"
                                                           text="The same horizontal translation leaves the tiling unchanged."/>
                                           </annotation>
                                           <annotation ref="periodic-2"
                                                       text="Consequently, every tiling in the hierarchy is periodic by this translation.  This is not possible, which means the original tiling cannot be periodic.">
-                                              <annotation ref="tiling-row=2"
+                                              <annotation ref="tiling-row_2"
                                                           text="The size of the tiles grows exponentially as we move up in the hierarchy."/>
-                                              <annotation ref="right-arrow-row=2"
+                                              <annotation ref="right-arrow-row_2"
                                                           text="Eventually the tiles are longer than the translation."/>
                                           </annotation>
                                       </annotation>

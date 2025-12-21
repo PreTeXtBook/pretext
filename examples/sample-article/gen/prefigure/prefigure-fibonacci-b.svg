@@ -14,7 +14,7 @@
     </marker>
   </defs>
   <g id="g-0">
-    <g id="left-dots-row=0" transform="translate(26.0,168.8) translate(-21.2,-1.1)">
+    <g id="left-dots-row_0" transform="translate(26.0,168.8) translate(-21.2,-1.1)">
       <g id="g-1">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
           <defs>
@@ -30,22 +30,22 @@
         </svg>
       </g>
     </g>
-    <g id="tiling-row=0">
-      <path id="tile-row=0-type=0" d="M 30.0 175.0 L 57.1 175.0 L 57.1 162.5 L 30.0 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=0-type=1" d="M 57.1 175.0 L 73.8 175.0 L 73.8 162.5 L 57.1 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
-      <path id="tile-row=0-type=2" d="M 73.8 175.0 L 100.8 175.0 L 100.8 162.5 L 73.8 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=0-type=3" d="M 100.8 175.0 L 127.9 175.0 L 127.9 162.5 L 100.8 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=0-type=4" d="M 127.9 175.0 L 144.6 175.0 L 144.6 162.5 L 127.9 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
-      <path id="tile-row=0-type=5" d="M 144.6 175.0 L 171.6 175.0 L 171.6 162.5 L 144.6 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=0-type=6" d="M 171.6 175.0 L 188.4 175.0 L 188.4 162.5 L 171.6 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
-      <path id="tile-row=0-type=7" d="M 188.4 175.0 L 215.4 175.0 L 215.4 162.5 L 188.4 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=0-type=8" d="M 215.4 175.0 L 242.5 175.0 L 242.5 162.5 L 215.4 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=0-type=9" d="M 242.5 175.0 L 259.2 175.0 L 259.2 162.5 L 242.5 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
-      <path id="tile-row=0-type=10" d="M 259.2 175.0 L 286.2 175.0 L 286.2 162.5 L 259.2 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=0-type=11" d="M 286.2 175.0 L 313.3 175.0 L 313.3 162.5 L 286.2 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=0-type=12" d="M 313.3 175.0 L 330.0 175.0 L 330.0 162.5 L 313.3 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
+    <g id="tiling-row_0">
+      <path id="tile-row_0-type_0" d="M 30.0 175.0 L 57.1 175.0 L 57.1 162.5 L 30.0 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_0-type_1" d="M 57.1 175.0 L 73.8 175.0 L 73.8 162.5 L 57.1 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row_0-type_2" d="M 73.8 175.0 L 100.8 175.0 L 100.8 162.5 L 73.8 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_0-type_3" d="M 100.8 175.0 L 127.9 175.0 L 127.9 162.5 L 100.8 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_0-type_4" d="M 127.9 175.0 L 144.6 175.0 L 144.6 162.5 L 127.9 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row_0-type_5" d="M 144.6 175.0 L 171.6 175.0 L 171.6 162.5 L 144.6 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_0-type_6" d="M 171.6 175.0 L 188.4 175.0 L 188.4 162.5 L 171.6 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row_0-type_7" d="M 188.4 175.0 L 215.4 175.0 L 215.4 162.5 L 188.4 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_0-type_8" d="M 215.4 175.0 L 242.5 175.0 L 242.5 162.5 L 215.4 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_0-type_9" d="M 242.5 175.0 L 259.2 175.0 L 259.2 162.5 L 242.5 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row_0-type_10" d="M 259.2 175.0 L 286.2 175.0 L 286.2 162.5 L 259.2 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_0-type_11" d="M 286.2 175.0 L 313.3 175.0 L 313.3 162.5 L 286.2 162.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_0-type_12" d="M 313.3 175.0 L 330.0 175.0 L 330.0 162.5 L 313.3 162.5 Z" stroke="black" stroke-width="2" fill="red"/>
     </g>
-    <g id="right-dots-row=0" transform="translate(334.0,168.8) translate(0.0,-1.1)">
+    <g id="right-dots-row_0" transform="translate(334.0,168.8) translate(0.0,-1.1)">
       <g id="g-2">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
           <defs>
@@ -61,7 +61,7 @@
         </svg>
       </g>
     </g>
-    <g id="left-dots-row=1" transform="translate(26.0,118.8) translate(-21.2,-1.1)">
+    <g id="left-dots-row_1" transform="translate(26.0,118.8) translate(-21.2,-1.1)">
       <g id="g-3">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
           <defs>
@@ -77,17 +77,17 @@
         </svg>
       </g>
     </g>
-    <g id="tiling-row=1">
-      <path id="tile-row=1-type=0" d="M 30.0 125.0 L 73.8 125.0 L 73.8 112.5 L 30.0 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=1-type=1" d="M 73.8 125.0 L 100.8 125.0 L 100.8 112.5 L 73.8 112.5 Z" stroke="black" stroke-width="2" fill="red"/>
-      <path id="tile-row=1-type=2" d="M 100.8 125.0 L 144.6 125.0 L 144.6 112.5 L 100.8 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=1-type=3" d="M 144.6 125.0 L 188.4 125.0 L 188.4 112.5 L 144.6 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=1-type=4" d="M 188.4 125.0 L 215.4 125.0 L 215.4 112.5 L 188.4 112.5 Z" stroke="black" stroke-width="2" fill="red"/>
-      <path id="tile-row=1-type=5" d="M 215.4 125.0 L 259.2 125.0 L 259.2 112.5 L 215.4 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=1-type=6" d="M 259.2 125.0 L 286.2 125.0 L 286.2 112.5 L 259.2 112.5 Z" stroke="black" stroke-width="2" fill="red"/>
-      <path id="tile-row=1-type=7" d="M 286.2 125.0 L 330.0 125.0 L 330.0 112.5 L 286.2 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+    <g id="tiling-row_1">
+      <path id="tile-row_1-type_0" d="M 30.0 125.0 L 73.8 125.0 L 73.8 112.5 L 30.0 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_1-type_1" d="M 73.8 125.0 L 100.8 125.0 L 100.8 112.5 L 73.8 112.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row_1-type_2" d="M 100.8 125.0 L 144.6 125.0 L 144.6 112.5 L 100.8 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_1-type_3" d="M 144.6 125.0 L 188.4 125.0 L 188.4 112.5 L 144.6 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_1-type_4" d="M 188.4 125.0 L 215.4 125.0 L 215.4 112.5 L 188.4 112.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row_1-type_5" d="M 215.4 125.0 L 259.2 125.0 L 259.2 112.5 L 215.4 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_1-type_6" d="M 259.2 125.0 L 286.2 125.0 L 286.2 112.5 L 259.2 112.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row_1-type_7" d="M 286.2 125.0 L 330.0 125.0 L 330.0 112.5 L 286.2 112.5 Z" stroke="black" stroke-width="2" fill="blue"/>
     </g>
-    <g id="right-dots-row=1" transform="translate(334.0,118.8) translate(0.0,-1.1)">
+    <g id="right-dots-row_1" transform="translate(334.0,118.8) translate(0.0,-1.1)">
       <g id="g-4">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
           <defs>
@@ -103,7 +103,7 @@
         </svg>
       </g>
     </g>
-    <g id="left-dots-row=2" transform="translate(26.0,68.8) translate(-21.2,-1.1)">
+    <g id="left-dots-row_2" transform="translate(26.0,68.8) translate(-21.2,-1.1)">
       <g id="g-5">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
           <defs>
@@ -119,14 +119,14 @@
         </svg>
       </g>
     </g>
-    <g id="tiling-row=2">
-      <path id="tile-row=2-type=0" d="M 30.0 75.0 L 100.8 75.0 L 100.8 62.5 L 30.0 62.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=2-type=1" d="M 100.8 75.0 L 144.6 75.0 L 144.6 62.5 L 100.8 62.5 Z" stroke="black" stroke-width="2" fill="red"/>
-      <path id="tile-row=2-type=2" d="M 144.6 75.0 L 215.4 75.0 L 215.4 62.5 L 144.6 62.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=2-type=3" d="M 215.4 75.0 L 286.2 75.0 L 286.2 62.5 L 215.4 62.5 Z" stroke="black" stroke-width="2" fill="blue"/>
-      <path id="tile-row=2-type=4" d="M 286.2 75.0 L 330.0 75.0 L 330.0 62.5 L 286.2 62.5 Z" stroke="black" stroke-width="2" fill="red"/>
+    <g id="tiling-row_2">
+      <path id="tile-row_2-type_0" d="M 30.0 75.0 L 100.8 75.0 L 100.8 62.5 L 30.0 62.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_2-type_1" d="M 100.8 75.0 L 144.6 75.0 L 144.6 62.5 L 100.8 62.5 Z" stroke="black" stroke-width="2" fill="red"/>
+      <path id="tile-row_2-type_2" d="M 144.6 75.0 L 215.4 75.0 L 215.4 62.5 L 144.6 62.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_2-type_3" d="M 215.4 75.0 L 286.2 75.0 L 286.2 62.5 L 215.4 62.5 Z" stroke="black" stroke-width="2" fill="blue"/>
+      <path id="tile-row_2-type_4" d="M 286.2 75.0 L 330.0 75.0 L 330.0 62.5 L 286.2 62.5 Z" stroke="black" stroke-width="2" fill="red"/>
     </g>
-    <g id="right-dots-row=2" transform="translate(334.0,68.8) translate(0.0,-1.1)">
+    <g id="right-dots-row_2" transform="translate(334.0,68.8) translate(0.0,-1.1)">
       <g id="g-6">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: 0.000px" width="21.216px" height="2.168px" role="img" focusable="false" viewBox="0 -120 1172 120" x="0.0" y="0.0">
           <defs>
@@ -144,13 +144,13 @@
     </g>
   </g>
   <g id="down-arrows">
-    <line id="down-arrow-row=0" x1="180.0" y1="128.0" x2="180.0" y2="157.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
-    <line id="down-arrow-row=1" x1="180.0" y1="78.0" x2="180.0" y2="107.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
-    <line id="down-arrow-row=2" x1="180.0" y1="28.0" x2="180.0" y2="57.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+    <line id="down-arrow-row_0" x1="180.0" y1="128.0" x2="180.0" y2="157.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+    <line id="down-arrow-row_1" x1="180.0" y1="78.0" x2="180.0" y2="107.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+    <line id="down-arrow-row_2" x1="180.0" y1="28.0" x2="180.0" y2="57.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
   </g>
   <g id="right-arrows">
-    <line id="right-arrow-row=0" x1="280.8" y1="182.5" x2="314.2" y2="182.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
-    <line id="right-arrow-row=1" x1="280.8" y1="132.5" x2="314.2" y2="132.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
-    <line id="right-arrow-row=2" x1="280.8" y1="82.5" x2="314.2" y2="82.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+    <line id="right-arrow-row_0" x1="280.8" y1="182.5" x2="314.2" y2="182.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+    <line id="right-arrow-row_1" x1="280.8" y1="132.5" x2="314.2" y2="132.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
+    <line id="right-arrow-row_2" x1="280.8" y1="82.5" x2="314.2" y2="82.5" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrow-head-end-2_None_24_60-black)"/>
   </g>
 </svg>
