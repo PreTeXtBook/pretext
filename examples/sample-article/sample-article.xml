@@ -3339,11 +3339,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>If you have existing images that are vector graphics, then PDF format works best for <latex/> output and SVG format works best for HTML.  The utility <c>pdf2svg</c> works well for converting PDF to SVG.  In this case, specify your source as a filename, but leave off the file extension, and the appropriate version will be used for the current output format.</p>
 
-                <p>The image below is provided from a PDF file in <latex/> output, and was converted to an SVG for use with the HTML output.  It has been explicitly scaled to a width of 65% of the text width.</p>
+                <p>The image below is provided from a PDF file in <latex/> output, and was converted to an SVG for use with the HTML output.  It has been explicitly scaled to a width of 65% of the text width.  It has a <tag>description</tag>, but no <tag>shortdescription</tag>, so is testing that scenario.</p>
 
                 <figure xml:id="figure-complete-graph">
                     <caption>Complete graph on <m>16</m> vertices, from <c>www.texample.net</c></caption>
-                    <image source="images/complete-graph" width="65%"/>
+                    <image source="images/complete-graph" width="65%">
+                        <description>A circular arrangment of <m>16</m> dots (<term>vertices</term>) with <m>120</m> straight lines (<term>edges</term>), joining every pair of dots.</description>
+                    </image>
                 </figure>
 
                 <remark>
