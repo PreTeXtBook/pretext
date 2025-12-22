@@ -6295,7 +6295,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<xsl:template match="image" mode="description">
+<xsl:template match="image|interactive[@platform]" mode="description">
     <xsl:if test="description">
         <!-- @aria-live means screenreaders will make announcements -->
         <details class="image-description" aria-live="polite">
@@ -6315,7 +6315,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Utility template so "aria-describedby" values are consistent -->
-<xsl:template match="image" mode="describedby-id">
+<xsl:template match="image|interactive[@platform]" mode="describedby-id">
     <xsl:apply-templates select="." mode="visible-id"/>
     <xsl:text>-description</xsl:text>
 </xsl:template>
@@ -9881,8 +9881,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
         </xsl:attribute>
+        <!-- title attribute for accessibility -->
+        <xsl:choose>
+            <xsl:when test="not(string(shortdescription) = '')">
+                <xsl:attribute name="title">
+                    <xsl:apply-templates select="shortdescription" />
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:when test="description">
+                <xsl:attribute name="title">
+                    <xsl:text>described in detail following the image</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="aria-describedby">
+                    <xsl:apply-templates select="." mode="describedby-id"/>
+                </xsl:attribute>
+            </xsl:when>
+        </xsl:choose>
         <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
     </iframe>
+    <!-- possibly give a long description -->
+    <xsl:apply-templates select="." mode="description"/>
 </xsl:template>
 
 <!-- ######################### -->
