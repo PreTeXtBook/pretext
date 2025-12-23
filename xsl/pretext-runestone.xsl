@@ -597,34 +597,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- "exercises" divisions with @time-limit are Runestone "timed-exams".      -->
 <!-- They can be at the PreTeXt "section" level (as a Runestone "subchapter") -->
-<!-- or they are at the PreTeXt "subsection" level, which we report here as   -->
-<!-- a fictional Runestone "subsubchapter". Their contained "exercise" are    -->
-<!-- excluded previously, and are now collected here.                         -->
+<!-- or they are at the PreTeXt "subsection" level. Their contained           -->
+<!-- "exercise" are excluded previously, and are now collected here.          -->
 <xsl:template match="chapter/exercises[@time-limit]|chapter/section/exercises[@time-limit]" mode="runestone-manifest">
-    <xsl:variable name="rs-division">
-        <xsl:choose>
-            <xsl:when test="parent::chapter">
-                <xsl:text>subchapter</xsl:text>
-            </xsl:when>
-            <xsl:when test="parent::section">
-                <xsl:text>subsubchapter</xsl:text>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:element name="{$rs-division}">
-        <!-- Attributes are all mostly of the form "data-no-*", following   -->
-        <!-- Runestone conventions and thus utilizing a single template and -->
-        <!-- thus ensuring some consistency. This includes the mandatory    -->
-        <!-- attribute @data-time, which will be the signal for manifest    -->
-        <!-- processing that this is a timed exam.                          -->
-        <xsl:apply-templates select="." mode="runestone-timed-exam-attributes"/>
-        <!-- some properties of the division -->
-        <xsl:apply-templates select="." mode="runestone-division-properties"/>
-        <!-- Slim possibility "exercise" are buried within an       -->
-        <!-- "exercisegroup", though usually they are just children -->
-        <!-- of the "exercises", so this is not really overkill     -->
-        <xsl:apply-templates select=".//exercise" mode="runestone-manifest"/>
-    </xsl:element>
+    <!-- Duplicate the division, ehnhanced with indicators of a timed -->
+    <!-- exam.  Include the contained exercises as manifest items.    -->
+    <!-- Strictly speaking this not exactly correct, for example,     -->
+    <!-- we get a progress indicator we do not want.                  -->
+    <xsl:apply-templates select="." mode="runestone-timed-exam">
+        <xsl:with-param name="the-exercises">
+            <xsl:apply-templates select=".//exercise" mode="runestone-manifest"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <xsl:comment> The "progress indicator" above is not necessary as part </xsl:comment>
+    <xsl:comment> of the manifest.  Processing should simply ignore it.   </xsl:comment>
 </xsl:template>
 
 <!-- Properties to report for each division -->
