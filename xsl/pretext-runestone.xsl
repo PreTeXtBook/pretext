@@ -1210,43 +1210,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:apply-templates select="." mode="runestone-id"/>
                             <xsl:text>-runnable-ac</xsl:text>
                         </xsl:attribute>
-                    <textarea data-lang="{$active-language}" data-audio="" data-coach="true" style="visibility: hidden;">
-                        <xsl:variable name="hosting">
-                            <xsl:apply-templates select="." mode="activecode-host"/>
-                        </xsl:variable>
-                        <!-- loop just to set context. program should be single -->
-                        <xsl:for-each select="program">
-                            <xsl:call-template name="runestone-activecode-editor-attributes">
-                                <xsl:with-param name="active-language" select="$active-language"/>
-                                <xsl:with-param name="hosting" select="$hosting"/>
+                        <textarea data-lang="{$active-language}" data-audio="" data-coach="true" style="visibility: hidden;">
+                            <xsl:variable name="hosting">
+                                <xsl:apply-templates select="." mode="activecode-host"/>
+                            </xsl:variable>
+                            <!-- loop just to set context. program should be single -->
+                            <xsl:for-each select="program">
+                                <xsl:call-template name="runestone-activecode-editor-attributes">
+                                    <xsl:with-param name="active-language" select="$active-language"/>
+                                    <xsl:with-param name="hosting" select="$hosting"/>
+                                </xsl:call-template>
+                            </xsl:for-each>
+                            <!-- the content -->
+                            <xsl:text>&#xa;</xsl:text>
+                            <xsl:call-template name="add-indentation">
+                                <xsl:with-param name="text">
+                                    <xsl:call-template name="sanitize-text">
+                                        <xsl:with-param name="text" select="program-preamble"/>
+                                        <xsl:with-param name="preserve-end" select="true()"/>
+                                    </xsl:call-template>
+                                </xsl:with-param>
+                                <xsl:with-param name="indent"><xsl:value-of select="program-preamble/@indent"/></xsl:with-param>
                             </xsl:call-template>
-                        </xsl:for-each>
-                        <!-- the content -->
-                        <xsl:text>&#xa;</xsl:text>
-                        <xsl:call-template name="add-indentation">
-                            <xsl:with-param name="text">
-                                <xsl:call-template name="sanitize-text">
-                                    <xsl:with-param name="text" select="program-preamble"/>
-                                    <xsl:with-param name="preserve-end" select="true()"/>
-                                </xsl:call-template>
-                            </xsl:with-param>
-                            <xsl:with-param name="indent"><xsl:value-of select="program-preamble/@indent"/></xsl:with-param>
-                        </xsl:call-template>
-                        <!-- placeholder for user code -->
-                        <xsl:text>==PARSONSCODE==&#xa;</xsl:text>
-                        <xsl:call-template name="add-indentation">
-                            <xsl:with-param name="text">
-                                <xsl:call-template name="sanitize-text">
-                                    <xsl:with-param name="text" select="program-postamble"/>
-                                    <xsl:with-param name="preserve-start" select="true()"/>
-                                </xsl:call-template>
-                            </xsl:with-param>
-                            <xsl:with-param name="indent"><xsl:value-of select="program-postamble/@indent"/></xsl:with-param>
-                        </xsl:call-template>
-                    </textarea>
-                </div></div>
+                            <!-- placeholder for user code -->
+                            <xsl:text>==PARSONSCODE==&#xa;</xsl:text>
+                            <xsl:call-template name="add-indentation">
+                                <xsl:with-param name="text">
+                                    <xsl:call-template name="sanitize-text">
+                                        <xsl:with-param name="text" select="program-postamble"/>
+                                        <xsl:with-param name="preserve-start" select="true()"/>
+                                    </xsl:call-template>
+                                </xsl:with-param>
+                                <xsl:with-param name="indent"><xsl:value-of select="program-postamble/@indent"/></xsl:with-param>
+                            </xsl:call-template>
+                        </textarea>
+                    </div>
+                </div>
             </xsl:if>
-
         </div>
     </div>
 </xsl:template>
