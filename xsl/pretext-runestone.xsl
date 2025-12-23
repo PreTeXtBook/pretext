@@ -1206,6 +1206,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:text>-runnable</xsl:text>
                     </xsl:attribute>
                     <div data-component="parsons-runnable">
+                        <xsl:attribute name="id">
+                            <xsl:apply-templates select="." mode="runestone-id"/>
+                            <xsl:text>-runnable-ac</xsl:text>
+                        </xsl:attribute>
                     <textarea data-lang="{$active-language}" data-audio="" data-coach="true" style="visibility: hidden;">
                         <xsl:variable name="hosting">
                             <xsl:apply-templates select="." mode="activecode-host"/>
