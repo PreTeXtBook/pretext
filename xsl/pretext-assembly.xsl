@@ -30,11 +30,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:pf="https://prefigure.org"
-    xmlns:stk="http://stack-assessment.org/2025/moodle-question"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="exsl date str stk"
+    extension-element-prefixes="exsl date str"
     exclude-result-prefixes="pi"
 >
 
@@ -2197,7 +2196,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
-<xsl:template match="exercise/stk:stack-moodle" mode="assembly-id">
+<xsl:template match="exercise/stack" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
@@ -2337,11 +2336,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- There is no real purpose to put identification onto an     -->
 <!-- (X)HTML element floating around as part of an interactive. -->
-<!-- The "stack-moodle" element marks the transition to a new   -->
-<!-- namespace.  We do not generally need id's on its children, -->
-<!-- but we do need an "assembly-id" so we can extract the      -->
-<!-- question source for processing into static forms.          -->
-<xsl:template match="pf:*|xhtml:*|stk:*[not(self::stk:stack-moodle)]" mode="id-attribute">
+<xsl:template match="pf:*|xhtml:*" mode="id-attribute">
     <xsl:copy>
         <xsl:apply-templates select="@*|node()" mode="id-attribute"/>
     </xsl:copy>
@@ -2828,7 +2823,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="myopenmath">
                 <xsl:text>myopenmath</xsl:text>
             </xsl:when>
-            <xsl:when test="stk:stack-moodle">
+            <xsl:when test="stack">
                 <xsl:text>stack</xsl:text>
             </xsl:when>
             <!-- @runestone was once used to signify a Runestone exercise given  -->
@@ -3466,7 +3461,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="$generated-directory-source"/>
                     </xsl:if>
                     <xsl:text>stack/</xsl:text>
-                    <xsl:apply-templates select="stk:stack-moodle" mode="assembly-id"/>
+                    <xsl:apply-templates select="stack" mode="assembly-id"/>
                     <xsl:text>.ptx</xsl:text>
                 </xsl:variable>
                 <xsl:variable name="stack-static-rep" select="document($filename, $original)/stack-static"/>
