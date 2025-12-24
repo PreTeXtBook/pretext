@@ -52,8 +52,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:str="http://exslt.org/strings"
     xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:pf="https://prefigure.org"
-    xmlns:stk="http://stack-assessment.org/2025/moodle-question"
-    exclude-result-prefixes="svg xlink pi fn pf stk"
+    exclude-result-prefixes="svg xlink pi fn pf"
     extension-element-prefixes="exsl date str"
 >
 
@@ -227,7 +226,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-icon"         select="boolean($document-root//icon)"/>
 <xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)"/>
 <xsl:variable name="b-has-myopenmath"   select="boolean($document-root//myopenmath)"/>
-<xsl:variable name="b-has-stack"        select="boolean($document-root//exercise/stk:stack-moodle)"/>
+<xsl:variable name="b-has-stack"        select="boolean($document-root//exercise/stack)"/>
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)"/>
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)"/>
 <xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
@@ -3718,8 +3717,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:when>
         <!-- STACK case -->
-        <xsl:when test="stk:stack-moodle">
-            <xsl:apply-templates select="introduction|stk:stack-moodle|conclusion">
+        <xsl:when test="stack">
+            <xsl:apply-templates select="introduction|stack|conclusion">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
@@ -10847,37 +10846,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Not to be confused with  sidebyside/stack  panel -->
-<xsl:template match="exercise/stk:stack-moodle">
-
-    <!-- The location in HTML output where files of STACK -->
-    <!-- questions live, ready to be fed into Javascript  -->
-    <!-- and servers. Analagous to where xref knowl files -->
-    <!-- live, a production as part of an HTML build.     -->
-    <xsl:variable name="stack-dir">
-        <xsl:text>stack/</xsl:text>
-    </xsl:variable>
-
-    <!-- the file we build and the file we serve up -->
-    <xsl:variable name="the-filename">
-        <xsl:value-of select="$stack-dir"/>
-        <xsl:value-of select="@label"/>
-        <xsl:text>.xml</xsl:text>
-    </xsl:variable>
-
-    <!-- Write out the STACK (XML) source as a file in the HTML output -->
-    <!-- TODO: make this a general purpose templare (in -common)  -->
-    <!-- TODO: use an "edit" template to scrub junk from assembly -->
-    <!--       Note: @xml:base might be worth keeping/adjusting   -->
-    <exsl:document href="{$the-filename}" method="xml" indent="yes" encoding="UTF-8">
-        <!-- don't copy the "stack-moodle" element, just children -->
-        <xsl:copy-of select="node()"/>
-    </exsl:document>
-
-    <!-- Replace the source by a bit of HTML -->
-    <!-- for Javascript to find and act on   -->
+<xsl:template match="exercise/stack">
+    <!-- A little bit of STACK-specific HTML to  -->
+    <!-- embed a question file onto the page -->
     <div class="container-fluid que stack">
         <xsl:attribute name="data-qfile">
-            <xsl:value-of select="$the-filename"/>
+            <!-- empty when not using managed directories -->
+            <xsl:value-of select="$external-directory"/>
+            <xsl:value-of select="@source"/>
         </xsl:attribute>
         <xsl:if test="@qname != ''">
             <xsl:attribute name="data-qname">
