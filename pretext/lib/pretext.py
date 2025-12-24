@@ -2799,7 +2799,7 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
     pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
     stack_server = get_publisher_variable(pub_vars, 'stack-server')
     api_url = urllib.parse.urljoin(stack_server, 'render')
-    log.info(f"Using STACK API at {api_url}")
+    log.info("Using STACK API server at {}".format(api_url))
 
     os.makedirs(dest_dir, exist_ok=True)
     msg = 'converting STACK exercises from {} to static forms for placement in {}'
@@ -2818,21 +2818,35 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
 
     log.info("extracting STACK exercises from {}".format(xml_source))
     log.info("string parameters passed to extraction stylesheet: {}".format(stringparams) )
-    # place verbatim copies of STACK XML into a temporary directory
-    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
 
-    # Course over files in temporary directory,
-    # converting to PreTeXt XML. Innermosat loop
+    # Build list of stack/@source into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    source_filename = os.path.join(tmp_dir, "stack-source.txt")
+    log.debug("STACK source filenames temporarily in {}".format(source_filename))
+    xsltproc(extraction_xslt, xml_source, source_filename, None, stringparams)
+
+    # Course over (source, id) pairs in file created by
+    # extraction stylesheet, converting source STACK files
+    # to PreTeXt files based on id/label. Innermost loop
     # is modeled after work provided in
     #   https://github.com/PreTeXtBook/pretext/pull/2576
-    with working_directory(tmp_dir):
-        for stack_file in os.listdir(tmp_dir):
-            # form output file now, for diagnostic
-            # message before it is needed
-            # just change extension, easy
-            pretext_file = os.path.join(dest_dir, stack_file.replace('.xml', '.ptx'))
-            msg = 'converting STACK question file "{}/{}" to static PreTeXt XML file "{}"'
-            log.debug(msg.format(tmp_dir, stack_file, pretext_file))
+
+    # location of external directory for STACK files
+    _, external_dir = get_managed_directories(xml_source, pub_file)
+
+    with open(source_filename, "r") as source_file:
+        for source in source_file:
+
+            # source is the  stack/@source  attribute
+            # label is the "assembly-id" used for base filename
+            source, label = source.split()
+            # external directory plus authored @source is STACK question
+            stack_file = os.path.join(external_dir, source)
+            # destination directory, label/id filename, PTX extension is
+            # static version of question, to be melded in by assembly stylesheet
+            pretext_file = os.path.join(dest_dir, label + '.ptx')
+            msg = 'converting STACK question file "{}" to static PreTeXt XML file "{}"'
+            log.debug(msg.format(stack_file, pretext_file))
 
             # Open STACK XML file, send to server, unravel JSON response into
             # a text version of the static PreTeXt XML question
