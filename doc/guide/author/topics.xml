@@ -4806,6 +4806,13 @@
         </p>
     </section>
 
+    <section xml:id="topic-stack">
+        <title>STACK Exercises</title>
+        <idx>STACK exercise</idx>
+
+        <p><acro>STACK</acro> is an assessment system with online interactive exercioses.  This section will soon have instructions on how to embed these exercises.</p>
+    </section>
+
     <section xml:id="topic-url">
         <title><init>URL</init>s and External References</title>
         <idx>URL</idx>

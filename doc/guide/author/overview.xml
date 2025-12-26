@@ -559,6 +559,13 @@
         limitations on which problems will display correctly in web and static output. See <xref ref="topic-myopenmath"/> for best practices.</p>
     </section>
 
+    <section xml:id="overview-stack">
+        <title>STACK Exercises</title>
+        <idx>STACK exercise</idx>
+
+        <p><acro>STACK</acro> is an online assessment system, and these exercises can be embedded in a <pretext/> document. <acro>STACK</acro> is an acronym for <q>System for Teaching and Assessment using a Computer algebra Kernel.</q>  See <xref ref="topic-stack"/> for details.</p>
+    </section>
+
     <section xml:id="overview-url">
         <title><init>URL</init>s and External References</title>
         <idx>URL</idx>
