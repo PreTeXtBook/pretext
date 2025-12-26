@@ -1465,18 +1465,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p>And the other thing.</p>
                         </task>
                     </exercise>
-
-                    <!-- Note: a new section with a few problemns will be -->
-                    <!-- better than this addition for initial testing.   -->
-                    <exercise>
-                        <title>STACK integration question</title>
-
-                        <introduction>
-                            <p>A test question. (2025-10-17: in HTML output you will need to ask for a <q>new</q> question to make this render.)</p>
-                        </introduction>
-
-                        <stack label="stack-integration" source="stack/01_integration_with_feedback.xml"/>
-                    </exercise>
                 </exercises>
 
                 <reading-questions>
@@ -14767,6 +14755,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </exercise>
         </section>
 
+        <exercises xml:id="stack-questions" label="section-stack">
+            <title>STACK Interactive Questions</title>
+            <idx>STACK</idx>
+
+            <introduction>
+                <p>These are interactive exercises provided by the <url href="https://stack-assessment.org/">STACK Assessment</url> system.  In HTML output you will need to ask for a <q>new</q> question to make each question render initially.</p>
+            </introduction>
+
+            <exercise>
+                <title>STACK integration question</title>
+
+                <introduction>
+                    <p>An introduction to a test question, providing context within the larger document.</p>
+                </introduction>
+
+                <stack label="stack-integration" source="stack/01_integration_with_feedback.xml"/>
+            </exercise>
+
+        </exercises>
 
         <section xml:id="ancillaries" label="section-ancillaries">
             <title>Ancillaries</title>
