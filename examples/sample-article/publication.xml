@@ -167,6 +167,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- change to "no" to format as regular sections.     -->
         <worksheet formatted="yes"/>
         <asymptote links="yes"/>
+        <insertions pagebreaks="quotations exercises-section-multiple pre-roll-countdown-8"/>
+        <insertions pagebreaks="sidebyside-bully-pulpit"/>
     </latex>
 
 </publication>

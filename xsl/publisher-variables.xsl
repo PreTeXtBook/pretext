@@ -2890,6 +2890,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-latex-worksheet-formatted" select="$latex-worksheet-formatted = 'yes'"/>
 
+<!-- LaTeX insertions -->
+<!-- Pagebreaks-->
+<xsl:variable name="latex-pagebreaks-string">
+    <xsl:variable name="join-latex-pagebreaks">
+        <xsl:for-each select="$publication/latex/insertions/@pagebreaks">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="normalize-space(.)"/>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:value-of select="substring-after($join-latex-pagebreaks, ' ')"/>
+</xsl:variable>
+
 <!-- For historical reasons, this variable has "pt" as part -->
 <!-- of its value.  A change would need to be coordinated   -->
 <!-- with every application in the -latex conversion.       -->
