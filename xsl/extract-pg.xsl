@@ -841,7 +841,7 @@
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
 
-    <!-- three standard macros always, order and placement is critical -->
+    <!-- two standard macros always used -->
     <xsl:variable name="standard-macros">
         <xsl:call-template name="macro-padding">
             <xsl:with-param name="string" select="'PGstandard.pl'"/>
@@ -855,396 +855,193 @@
 
     <!-- accumulate macros evidenced by some aspect of problem design      -->
     <!-- for details on what each macro file provides, see their source at -->
-    <!-- https://github.com/openwebwork/pg/tree/master/macros              -->
-    <!-- or                                                                -->
-    <!-- https://github.com/openwebwork/webwork-open-problem-library/tree/master/OpenProblemLibrary/macros -->
+    <!-- https://github.com/openwebwork/pg/tree/main/macros                -->
     <xsl:variable name="implied-macros">
-        <!-- tables -->
-        <xsl:if test=".//tabular">
-            <xsl:call-template name="macro-padding">
-                <xsl:with-param name="string" select="'niceTables.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-            </xsl:call-template>
-        </xsl:if>
-        <!-- bizarro arithmetic technique for assesing answer form -->
-        <xsl:if test="contains(.//pg-code,'bizarro')">
-            <xsl:call-template name="macro-padding">
-                <xsl:with-param name="string" select="'bizarroArithmetic.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-            </xsl:call-template>
-        </xsl:if>
-        <!-- multistage problems ("scaffolded") -->
-        <xsl:if test="task">
-            <xsl:call-template name="macro-padding">
-                <xsl:with-param name="string" select="'scaffold.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-            </xsl:call-template>
-        </xsl:if>
-        <!-- links to syntax help following answer blanks -->
+        <xsl:variable name="pg-code" select="./pg-code"/>
+
+        <!-- some publisher variable or stringparam indicates the need for a macro               -->
         <xsl:if test="$pg.answer.form.help = 'yes'">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'AnswerFormatHelp.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
-        <!-- targeted feedback messages for specific wrong answers -->
-        <xsl:if test="contains(.//pg-code,'AnswerHints')">
+
+        <!-- within the webwork there is some element and/or attribute that necessitates a macro -->
+        <!-- TODO: starting with PG 2.19, niceTables.pl is always loaded by PGML.pl. Once we no  -->
+        <!-- longer support 2.18 or earlier, we can remove this niceTables test.                 -->
+        <xsl:if test=".//tabular">
             <xsl:call-template name="macro-padding">
-                <xsl:with-param name="string" select="'answerHints.pl'"/>
+                <xsl:with-param name="string" select="'niceTables.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
-        <!-- the very useful NchooseK function-->
-        <xsl:if test="contains(.//pg-code,'NchooseK')">
-            <xsl:call-template name="macro-padding">
-                <xsl:with-param name="string" select="'PGchoicemacros.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-            </xsl:call-template>
-        </xsl:if>
-        <!-- essay answers -->
-        <xsl:if test=".//var[@form='essay'] or contains(.//pg-code,'explanation_box')">
-            <xsl:call-template name="macro-padding">
-                <xsl:with-param name="string" select="'PGessaymacros.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-            </xsl:call-template>
-        </xsl:if>
-        <!-- when there is a PGgraphmacros graph -->
         <xsl:if test=".//image[@pg-name]">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PGgraphmacros.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
-        <!-- when there is a latex-image graph -->
         <xsl:if test=".//latex-image or ($b-human-readable and ancestor::exercisegroup/introduction//latex-image)">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PGlateximage.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
-        <!-- instructions for entering answers into HTML forms -->
-        <!-- utility for randomly generating variable letters -->
-        <xsl:if test=".//instruction or contains(.//pg-code,'RandomVariableName') or contains(.//pg-code,'RandomName') or contains(.//pg-code,'numberWord')">
+        <xsl:if test="task">
+            <xsl:call-template name="macro-padding">
+                <xsl:with-param name="string" select="'scaffold.pl'"/>
+                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+            </xsl:call-template>
+        </xsl:if>
+
+        <!-- within the webwork there is some element and/or attribute that necessitates a macro -->
+        <!-- OR the pg-code contains some string indicating the need for a macro, but not a      -->
+        <!-- parser or context macro (see below)                                                 -->
+        <xsl:if test=".//instruction or contains($pg-code,'RandomVariableName') or contains($pg-code,'RandomName') or contains($pg-code,'numberWord')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PCCmacros.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
-        <!-- ################### -->
-        <!-- Parser Enhancements -->
-        <!-- ################### -->
-        <!-- https://github.com/openwebwork/pg/tree/master/macros -->
-        <!-- "assignment" answers, like "y=x+1", "f(x)=x+1" -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'Assignment'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- force String() to accept any string (and add it to the context if not already there) -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'AutoStrings'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- special type of Formula for simplified difference quotients -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'DifferenceQuotient'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- special type of Formula with only one variable and student can use any variable -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'FormulaAnyVar'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- special type of Formula with a "+C" at the end -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'FormulaUpToConstant'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- formulas with units -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'FormulaWithUnits'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- allow "f(x)" as part of answers -->
-        <!-- note unusual usage precludes using parser modal template here -->
-        <xsl:if test="contains(.//pg-code,'parserFunction')">
+        <xsl:if test=".//var[@form='essay'] or contains($pg-code,'explanation_box')">
+            <xsl:call-template name="macro-padding">
+                <xsl:with-param name="string" select="'PGessaymacros.pl'"/>
+                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+            </xsl:call-template>
+        </xsl:if>
+
+        <!-- the pg-code contains some string indicating the need for a macro, but not a parser  -->
+        <!-- or context macro (see below)                                                        -->
+        <xsl:if test="contains($pg-code,'AnswerHints')">
+            <xsl:call-template name="macro-padding">
+                <xsl:with-param name="string" select="'answerHints.pl'"/>
+                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="contains($pg-code,'bizarro')">
+            <xsl:call-template name="macro-padding">
+                <xsl:with-param name="string" select="'bizarroArithmetic.pl'"/>
+                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="contains($pg-code,'NchooseK')">
+            <xsl:call-template name="macro-padding">
+                <xsl:with-param name="string" select="'PGchoicemacros.pl'"/>
+                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+            </xsl:call-template>
+        </xsl:if>
+
+        <!-- ############# -->
+        <!-- Parser Macros -->
+        <!-- ############# -->
+
+        <!-- PG parser macros that conform to the convention where the file name is parserXXX.pl -->
+        <!-- and the tool provided is XXX                                                        -->
+        <xsl:for-each select="str:tokenize('
+                Assignment
+                AutoStrings
+                CheckboxList
+                DifferenceQuotient
+                FormulaAnyVar
+                FormulaUpToConstant
+                FormulaWithUnits
+                FunctionPrime
+                ImplicitEquation
+                ImplicitPlane
+                LinearInequality
+                MultiAnswer
+                NumberWithUnits
+                OneOf
+                ParametricLine
+                ParametricPlane
+                PopUp
+                QuotedString
+                RadioButtons
+                SolutionFor
+                WordCompletion
+            ')">
+            <xsl:if test="contains($pg-code, .)">
+                <xsl:call-template name="macro-padding">
+                    <xsl:with-param name="string" select="concat('parser', ., '.pl')"/>
+                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+                </xsl:call-template>
+            </xsl:if>
+        </xsl:for-each>
+
+        <!-- PG parser macros that do NOT conform to the convention where the file name is       -->
+        <!-- parserXXX.pl and the tool provided is XXX                                           -->
+        <xsl:if test="contains($pg-code, 'parserFunction')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'parserFunction.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
-        <!-- allow "f'(x)" as part of answers -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'FunctionPrime'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- implicit equations, e.g. x^2+sin(x+y)=5 -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'ImplicitEquation'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- implicit planes, e.g. x+2y=3z+1 -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'ImplicitPlane'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- linear inequalities, e.g. 4x1 -3x2 <= 5 -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'LinearInequality'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- for questions where multiple answer blanks work in conjunction  -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'MultiAnswer'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- numbers with units -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'NumberWithUnits'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- for questions where any one of a finite list of answers is allowable  -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'OneOf'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- parametric lines, specified in a variety of ways  -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'ParametricLine'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- parametric planes, specified in a variety of ways  -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'ParametricPlane'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- popup menu multiple choice answers -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'PopUp'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- checkboxes multiple choice answers -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'CheckboxList'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- allow "'" as part of answers, as an effective derivative operator -->
-        <!-- note unusual usage precludes using parser modal template here -->
-        <xsl:if test="contains(.//pg-code,'parser::Prime')">
+        <xsl:if test="contains($pg-code, 'parser::Prime')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'parserPrime.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
-        <!-- parserQuotedString.pl is part of pg distribution, but not documented what it does -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'QuotedString'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- radio buttons multiple choice answers -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'RadioButtons'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- allow a root(n,x) function -->
-        <!-- note unusual usage precludes using parser modal template here -->
-        <xsl:if test="contains(.//pg-code,'parser::Root')">
+        <xsl:if test="contains($pg-code, 'parser::Root')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'parserRoot.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
-        <!-- check if a number/point satisfies an implicit equation -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'SolutionFor'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Some utility routines that are useful in vector problems -->
-        <!-- note unusual usage precludes using parser modal template here -->
-        <xsl:if test="contains(.//pg-code,'Overline') or contains(.//pg-code,'BoldMath' or contains(.//pg-code,'non_zero_point') or contains(.//pg-code,'non_zero_vector'))">
+        <xsl:if test="contains($pg-code, 'Overline') or contains($pg-code, 'BoldMath' or contains($pg-code, 'non_zero_point') or contains($pg-code, 'non_zero_vector'))">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'parserVectorUtils.pl'"/>
                 <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
-        <!-- Provides free response, fill in the blank questions with interactive help -->
-        <xsl:apply-templates select="." mode="parser">
-            <xsl:with-param name="parser" select="'WordCompletion'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- #################### -->
-        <!-- Math Object contexts -->
-        <!-- #################### -->
-        <!-- https://github.com/openwebwork/pg/tree/master/macros -->
-        <!-- string-valued answers especially for matching problems -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'ABCD'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Provides a context that allows the entry of decimal numbers using a comma -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'AlternateDecimal'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Allows the entry of intervals using reversed bracket notation for open endpoints -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'AlternateIntervals'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Allow arbitrary string answers where you code the checker -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'ArbitraryString'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- ComplexExtras context loads tools with no good way to auto detect. Must be added by user. -->
-        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextComplexExtras.pl -->
-        <!-- ComplexJ context lets j^2 = -1 with no good way to auto detect. Must be added by user. -->
-        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextComplexJ.pl -->
-        <!-- Provides contexts that allow the entry of congruence solutions -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'Congruence'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Answers with currency symbols -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'Currency'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Form -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'Form'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Fractions -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'Fraction'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Inequalities -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'Inequalities'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Inequalitis in SEt-Builder notation -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'InequalitySetBuilder'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Integer objects, with integer functions -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'Integers'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Integer functions -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'IntegerFunctions'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Require a leading zero on decimal numbers -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'LeadingZero'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Allow complex numbers but not complex operations -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'LimitedComplex'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Check that the students answer agrees in form with a factored polynomial -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'LimitedFactor'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Allow point entry but no point operations -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'LimitedPoint'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Allow only entry of polynomials -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'LimitedPolynomial'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Restrict the base or power allowed in exponentials -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'LimitedPowers'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Allows for specification of forms of radical answers -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'LimitedRadical'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Allow vector entry but no vector operations -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'LimitedVector'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- MatrixExtras adds features to Matrix context  with no good way to auto detect. Must be added by user. -->
-        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextMatrixExtras.pl -->
-        <!-- Orderings, like A > B > C -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'Ordering'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Partition of an integer as a sum -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'Partition'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Percent answers -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'Percent'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Allow the entry of cycles and permutations -->
-        <!-- User must choose between Permutation and PermutationUBC -->
-        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextPermutation.pl -->
-        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextPermutationUBC.pl -->
-        <!-- Piecewise functions -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'PiecewiseFunction'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Allow only entry of polynomials, and their products and powers -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'PolynomialFactors'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Only allow rational functions (and their products and powers) -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'RationalFunction'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Chemical reactions -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'Reaction'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Scientific notation -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'ScientificNotation'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- String-centric context. User must add -->
-        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextString.pl -->
-        <!-- Context for True/False answers. User must add -->
-        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextTF.pl -->
-        <!-- Make ttrig functions behave wrt degrees -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'TrigDegrees'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Below are context files from the OPL macros folder, not the pg distribution -->
-        <!-- Answers like {1,2,3} that can be entered in many other ways, like "x=1,2,or 3" -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'FiniteSolutionSets'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
-        <!-- Answers that are functions paired with domains, like x^2, x != 2 -->
-        <xsl:apply-templates select="." mode="context">
-            <xsl:with-param name="context" select="'RestrictedDomains'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:apply-templates>
+
+        <!-- ############## -->
+        <!-- Context Macros -->
+        <!-- ############## -->
+
+        <!-- PG context macros that conform to the convention where the file name is             -->
+        <!-- contextXXX.pl and the context name is XXX                                           -->
+        <xsl:for-each select="str:tokenize('
+                ABCD
+                AlternateDecimal
+                AlternateIntervals
+                ArbitraryString
+                Congruence
+                Currency
+                FiniteSolutionSets
+                Form
+                Fraction
+                Inequalities
+                InequalitySetBuilder
+                Integers
+                IntegerFunctions
+                LeadingZero
+                LimitedComplex
+                LimitedFactor
+                LimitedPoint
+                LimitedPolynomial
+                LimitedPowers
+                LimitedRadical
+                LimitedVector
+                Ordering
+                Partition
+                Percent
+                PiecewiseFunction
+                PolynomialFactors
+                RationalFunction
+                Reaction
+                RestrictedDomains
+                ScientificNotation
+                TrigDegrees
+            ')">
+            <xsl:if test="contains($pg-code, .)">
+                <xsl:call-template name="macro-padding">
+                    <xsl:with-param name="string" select="concat('context', ., '.pl')"/>
+                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
+                </xsl:call-template>
+            </xsl:if>
+        </xsl:for-each>
     </xsl:variable>
     <!-- capture problem root to use inside upcoming for-each -->
     <xsl:variable name="problem-root" select="." />
@@ -1333,28 +1130,6 @@
     <!-- if images are used, explicitly refresh or stale images will be used in HTML -->
     <xsl:if test="(.//image[@pg-name] or .//image[latex-image]) and not($b-human-readable)">
         <xsl:text>$refreshCachedImages=1;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template match="webwork" mode="context">
-    <xsl:param name="context"/>
-    <xsl:param name="b-human-readable"/>
-    <xsl:if test="contains(.//pg-code,$context)">
-        <xsl:call-template name="macro-padding">
-            <xsl:with-param name="string" select="concat('context',$context,'.pl')"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:call-template>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template match="webwork" mode="parser">
-    <xsl:param name="parser"/>
-    <xsl:param name="b-human-readable"/>
-    <xsl:if test="contains(.//pg-code,$parser)">
-        <xsl:call-template name="macro-padding">
-            <xsl:with-param name="string" select="concat('parser',$parser,'.pl')"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
-        </xsl:call-template>
     </xsl:if>
 </xsl:template>
 
