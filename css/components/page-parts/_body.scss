@@ -79,6 +79,10 @@ body.standalone {
   background: var(--page-color, white);
 }
 
+// Hide print preview header div in normal view
+.ptx-content .print-preview-header {
+  display: none;
+}
 
 body.pretext > a.assistive {
   padding:6px;
