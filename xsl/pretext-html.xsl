@@ -365,9 +365,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($b-subsetting) and not($b-portable-html)">
         <xsl:apply-templates select="." mode="make-xref-knowls"/>
     </xsl:if>
-    <!-- Produce "printouts ("worksheet" and "handout") -->
-    <!-- as standalone pages hyped-up to be printable   -->
-    <xsl:call-template name="make-printout-printables"/>
     <!-- custom ol marker css production -->
     <xsl:if test="not($b-subsetting) and not($b-portable-html)">
         <xsl:call-template name="ol-marker-styles"/>
@@ -510,6 +507,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                  <xsl:with-param name="heading-level" select="2"/>
             </xsl:apply-templates>
         </xsl:with-param>
+        <!-- Set b-has-printout to true if the structural node is or contains a worksheet or handout -->
+        <xsl:with-param name="b-has-printout" select="descendant-or-self::worksheet or descendant-or-self::handout"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -775,26 +774,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
 </xsl:template>
 
-<!-- Worksheets generate one additional version     -->
-<!-- designed for printing, on Letter or A4 paper.  -->
-<xsl:template name="make-printout-printables">
-    <xsl:for-each select="$document-root//worksheet|$document-root//handout">
-        <xsl:apply-templates select="." mode="file-wrap">
-            <xsl:with-param name="filename">
-                <xsl:apply-templates select="." mode="standalone-printout-filename"/>
-            </xsl:with-param>
-            <xsl:with-param name="content">
-                <xsl:apply-templates select="." mode="structural-division-content">
-                    <!-- as a standalone page, we just start at h1 -->
-                    <!-- styling seems unaffected, and it is not   -->
-                    <!-- critical this page be accessible          -->
-                    <xsl:with-param name="heading-level" select="1"/>
-                </xsl:apply-templates>
-            </xsl:with-param>
-            <xsl:with-param name="b-printable" select="true()"/>
-        </xsl:apply-templates>
-    </xsl:for-each>
-</xsl:template>
 
 <!-- ############### -->
 <!-- Bits and Pieces -->
@@ -923,9 +902,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Links to the "printable" version(s), meant only for "viewable" -->
     <!-- printout, so CSS can kill on the "printable" versions          -->
     <!-- $paper is LOWER CASE "a4" and "letter"                         -->
-    <!-- NB until printout printing can be done without extra files,    -->
-    <!-- we omit this for portable html.                                -->
-    <xsl:if test="(self::worksheet or self::handout) and not($b-portable-html)">
+    <xsl:if test="(self::worksheet or self::handout)">
         <xsl:apply-templates select="." mode="standalone-printout-links"/>
     </xsl:if>
 </xsl:template>
@@ -938,8 +915,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We isolate link creation, so we can kill it simply in          -->
 <!-- derivative  conversions                                        -->
 <xsl:template match="worksheet|handout" mode="standalone-printout-links">
-    <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="standalone-printout-filename"/>
+    <xsl:variable name="printout-id">
+        <xsl:apply-templates select="." mode="html-id"/>
     </xsl:variable>
     <xsl:variable name="print-preview-text">
         <xsl:apply-templates select="." mode="type-name">
@@ -947,7 +924,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
     </xsl:variable>
     <div class="print-links">
-        <a href="{$filename}" class="print-link" title="{$print-preview-text}">
+        <a href="?printpreview={$printout-id}" class="print-link" title="{$print-preview-text}">
             <xsl:call-template name="insert-symbol">
                 <xsl:with-param name="name" select="'print'"/>
             </xsl:call-template>
@@ -11046,7 +11023,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
     <xsl:param name="filename" select="''"/>
-    <xsl:param name="b-printable" select="false()"/>
+    <xsl:param name="b-has-printout" select="false()"/>
 
     <xsl:variable name="the-filename">
         <xsl:choose>
@@ -11090,14 +11067,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="filename" select="$the-filename"/>
             </xsl:call-template>
             <!-- grab the contents every page gets -->
-            <xsl:choose>
-                <xsl:when test="$b-printable">
-                    <xsl:copy-of select="$file-wrap-full-head-cache-printable"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:copy-of select="$file-wrap-full-head-cache"/>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:copy-of select="$file-wrap-full-head-cache"/>
             <!-- now do anything that is or could be page-specific and comes after cache -->
             <xsl:apply-templates select="." mode="knowl" />
             <!-- webwork's iframeResizer needs to come before sagecell template -->
@@ -11173,17 +11143,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:attribute>
                     </xsl:if>
                     <div id="ptx-content" class="ptx-content">
-                        <xsl:if test="$b-printable">
-                            <div class="print-preview-header">
-                                <xsl:apply-templates select="." mode="print-preview-header"/>
-                                <div class="print-controls">
-                                    <div class="print-controls-toggles">
-                                        <xsl:apply-templates select="." mode="papersize-toggle"/>
-                                        <xsl:apply-templates select="." mode="printing-options"/>
-                                    </div>
-                                    <xsl:apply-templates select="." mode="print-button"/>
-                                </div>
-                            </div>
+                        <xsl:if test="$b-has-printout">
+                            <xsl:apply-templates select="." mode="print-preview-header"/>
                         </xsl:if>
                         <!-- Alternative to "copy-of": convert $content to a  -->
                         <!-- node-set, and then hit with an identity template -->
@@ -11923,9 +11884,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<xsl:template match="*" mode="print-button"/>
-
-<xsl:template match="worksheet|handout" mode="print-button">
+<xsl:template match="*" mode="print-button">
     <xsl:variable name="print-text">
         <xsl:apply-templates select="." mode="type-name">
             <xsl:with-param name="string-id" select="'print'"/>
@@ -11941,19 +11900,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </button>
 </xsl:template>
 
-<xsl:template match="*" mode="print-preview-header"/>
-
-<xsl:template match="worksheet|handout" mode="print-preview-header">
-    <h2 class="print-preview">
-        <xsl:apply-templates select="." mode="type-name">
-            <xsl:with-param name="string-id" select="'print-preview'"/>
-        </xsl:apply-templates>
-    </h2>
+<xsl:template match="*" mode="print-preview-header">
+    <div class="print-preview-header">
+        <h2 class="print-preview">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'print-preview'"/>
+            </xsl:apply-templates>
+        </h2>
+        <div class="print-controls">
+            <div class="print-controls-toggles">
+                <xsl:apply-templates select="." mode="papersize-toggle"/>
+                <xsl:apply-templates select="." mode="printing-options"/>
+            </div>
+            <xsl:apply-templates select="." mode="print-button"/>
+        </div>
+    </div>
 </xsl:template>
 
-<xsl:template match="*" mode="papersize-toggle"/>
-
-<xsl:template match="worksheet|handout" mode="papersize-toggle">
+<xsl:template match="*" mode="papersize-toggle">
     <xsl:variable name="papersize">
         <xsl:apply-templates select="." mode="type-name">
             <xsl:with-param name="string-id" select="'papersize'"/>
@@ -11970,8 +11934,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </form>
 </xsl:template>
 
-<xsl:template match="*" mode="printing-options"/>
-<xsl:template match="worksheet|handout" mode="printing-options">
+<xsl:template match="*" mode="printing-options">
     <details class="print-options">
         <summary>
             <xsl:apply-templates select="." mode="type-name">
@@ -11983,11 +11946,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </details>
 </xsl:template>
 
-<xsl:template match="*" mode="hide-solutions"/>
-
 <!-- We provide a checkboxes to hide hints, answers, and solution -->
 <!-- but only if the worksheet contains these elements.           -->
-<xsl:template match="worksheet|handout" mode="hide-solutions">
+<xsl:template match="*" mode="hide-solutions">
     <xsl:if test=".//solution or .//answer or .//hint">
         <div class="hide-solutions-options">
             <xsl:if test=".//hint">
@@ -12024,9 +11985,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="*" mode="highlight-workspace-toggle"/>
-
-<xsl:template match="worksheet|handout" mode="highlight-workspace-toggle">
+<xsl:template match="*" mode="highlight-workspace-toggle">
     <div class="highlight-workspace-option">
         <label for="highlight-workspace-checkbox">
             <xsl:apply-templates select="." mode="type-name">
