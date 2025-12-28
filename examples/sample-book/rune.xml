@@ -743,6 +743,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <tests visible="yes">
 <![CDATA[
 
+//There should be two visible empty lines above this line
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
