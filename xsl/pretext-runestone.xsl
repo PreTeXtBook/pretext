@@ -2314,12 +2314,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <!-- trying to process them.                        -->
                                 <!-- NB: static versions never show "tests" anyway  -->
                                 <xsl:variable name="tests-content">
-                                    <xsl:call-template name="sanitize-text">
-                                        <xsl:with-param name="text" select="tests/text()" />
+                                    <xsl:variable name="trimmed-text">
+                                        <xsl:apply-templates select="tests" mode="program-part-processing"/>
+                                    </xsl:variable>
+                                    <xsl:call-template name="left-align-text">
+                                        <xsl:with-param name="text" select="$trimmed-text" />
                                     </xsl:call-template>
                                 </xsl:variable>
-                                <!-- Even if there is no content, the sanitization -->
-                                <!-- template adds a concluding newline            -->
+                                <!-- guard against whitespace-only tests, could be tests/iotests -->
                                 <xsl:if test="not(normalize-space($tests-content) = '')">
                                     <xsl:choose>
                                         <xsl:when test="tests[@visible = 'yes']">
