@@ -1801,6 +1801,14 @@ ul[data-component=timedAssessment] {
   color: white;
   background: hsl(0, 0%, 8%);
 }
+@layer spacing {
+  .runestone :is(.exercise-statement, .exercise-content) > *:not(:first-child) {
+    margin-top: 1em;
+  }
+  .ptx-runestone-container + .solutions {
+    margin-top: 0.5em;
+  }
+}
 .ptx-content .wwprob table.attemptResults {
   margin-left: 2em;
   background: #efefef;

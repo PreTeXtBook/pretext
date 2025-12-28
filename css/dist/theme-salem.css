@@ -1235,16 +1235,16 @@ summary.knowl__link {
 .assemblage-like:not(.knowl__content, .born-hidden-knowl) > *:first-child {
   margin-top: 0;
 }
-.ptx-content:not(:has(> .worksheet)) .conclusion:not(.knowl__content, .born-hidden-knowl),
-.ptx-content:not(:has(> .worksheet)) .goal-like:not(.knowl__content, .born-hidden-knowl) {
+.ptx-content:not(:has(> .worksheet)) .conclusion:not(.ptx-runestone-container *):not(.knowl__content, .born-hidden-knowl),
+.ptx-content:not(:has(> .worksheet)) .goal-like:not(.ptx-runestone-container *):not(.knowl__content, .born-hidden-knowl) {
   border: 3px solid var(--goal-like-border-color);
   background-color: var(--goal-like-body-background);
   padding: 20px;
   padding-top: calc(20px + 0.25ex);
   margin-top: 2.5em !important;
 }
-.ptx-content:not(:has(> .worksheet)) .conclusion:not(.knowl__content, .born-hidden-knowl) > .heading:first-child,
-.ptx-content:not(:has(> .worksheet)) .goal-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
+.ptx-content:not(:has(> .worksheet)) .conclusion:not(.ptx-runestone-container *):not(.knowl__content, .born-hidden-knowl) > .heading:first-child,
+.ptx-content:not(:has(> .worksheet)) .goal-like:not(.ptx-runestone-container *):not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
   background-color: var(--goal-like-border-color);
   display: block;
   color: white;
@@ -1254,12 +1254,12 @@ summary.knowl__link {
   width: fit-content;
   border: 0;
 }
-.ptx-content:not(:has(> .worksheet)) .conclusion:not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after,
-.ptx-content:not(:has(> .worksheet)) .goal-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after {
+.ptx-content:not(:has(> .worksheet)) .conclusion:not(.ptx-runestone-container *):not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after,
+.ptx-content:not(:has(> .worksheet)) .goal-like:not(.ptx-runestone-container *):not(.knowl__content, .born-hidden-knowl) > .heading:first-child:after {
   display: none;
 }
-.knowl__content *:first-child .ptx-content:not(:has(> .worksheet)) .conclusion,
-.knowl__content *:first-child .ptx-content:not(:has(> .worksheet)) .goal-like {
+.knowl__content *:first-child .ptx-content:not(:has(> .worksheet)) .conclusion:not(.ptx-runestone-container *),
+.knowl__content *:first-child .ptx-content:not(:has(> .worksheet)) .goal-like:not(.ptx-runestone-container *) {
   margin-top: 1em;
 }
 .ptx-content:has(> .worksheet) .goal-like {
@@ -3149,6 +3149,14 @@ ul[data-component=timedAssessment] {
 :root.dark-mode .ptx-runestone-container pre[class*=language-] {
   color: white;
   background: hsl(0, 0%, 8%);
+}
+@layer spacing {
+  .runestone :is(.exercise-statement, .exercise-content) > *:not(:first-child) {
+    margin-top: 1em;
+  }
+  .ptx-runestone-container + .solutions {
+    margin-top: 0.5em;
+  }
 }
 .ptx-content .wwprob table.attemptResults {
   margin-left: 2em;
