@@ -53,6 +53,9 @@ body.standalone {
   font-size: 16px;
   background: var(--page-color, white);
 }
+.ptx-content .print-preview-header {
+  display: none;
+}
 body.pretext > a.assistive {
   padding: 6px;
   position: absolute;
