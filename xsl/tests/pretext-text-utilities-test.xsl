@@ -256,6 +256,73 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 
+<!--========================================================================-->
+<!-- test left-align-text -->
+<xsl:variable name="align-left-first-line-shortest">
+  <xsl:variable name="test-val">
+    <xsl:call-template name="left-align-text">
+      <xsl:with-param name="text" select="'  Line one&#10;   Line two&#10;    Line three'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <!-- 2/3/4 spaces should become 0/1/2 spaces -->
+    <xsl:with-param name="expected" select="'Line one&#10; Line two&#10;  Line three'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'align-left-first-line-shortest'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="align-left-other-line-shortest">
+  <xsl:variable name="test-val-rtf">
+    <xsl:call-template name="left-align-text">
+      <xsl:with-param name="text" select="'    Line one&#10; Line two&#10;  Line three'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="test-val">
+    <xsl:value-of select="$test-val-rtf"/>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <!-- 4/1/2 spaces should become 3/0/1 spaces -->
+    <xsl:with-param name="expected" select="'   Line one&#10;Line two&#10; Line three'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'align-left-other-line-shortest'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="align-left-no-indent">
+  <xsl:variable name="test-val-rtf">
+    <xsl:call-template name="left-align-text">
+      <xsl:with-param name="text" select="'  Line one&#10;Line two&#10;  Line three'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="test-val">
+    <xsl:value-of select="$test-val-rtf"/>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <!-- 2/0/2 spaces should become 2/0/2 spaces -->
+    <xsl:with-param name="expected" select="'  Line one&#10;Line two&#10;  Line three'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'align-left-no-indent'"/>
+  </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="align-left-trailing-empty-preserved">
+  <xsl:variable name="test-val-rtf">
+    <xsl:call-template name="left-align-text">
+      <xsl:with-param name="text" select="'  Line one&#10;Line two&#10;  Line three&#10;'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="test-val">
+    <xsl:value-of select="$test-val-rtf"/>
+  </xsl:variable>
+  <xsl:call-template name="assert-equal">
+    <!-- 2/0/2 spaces should become 2/0/2 spaces -->
+    <xsl:with-param name="expected" select="'  Line one&#10;Line two&#10;  Line three&#10;'"/>
+    <xsl:with-param name="actual" select="$test-val"/>
+    <xsl:with-param name="test-name" select="'align-left-trailing-empty-preserved'"/>
+  </xsl:call-template>
+</xsl:variable>
+
 
 <!--========================================================================-->
 
