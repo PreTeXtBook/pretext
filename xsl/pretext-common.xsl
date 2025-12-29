@@ -12138,6 +12138,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'an &quot;mdn&quot; element without any &quot;mrow&quot; children (&quot;bare&quot;) was only implemented briefly and was never supported.  Your instance is being ignored and will not be visible in output.  You can switch it to the supported bare &quot;md&quot; element with a &quot;@number&quot; attribute set to &quot;yes&quot;.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2025-12-29  Deprecating the use of pre@source inside datafile, in favor of xi:include -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//datafile[pre[@source]]&quot;" />
+        <xsl:with-param name="date-string" select="'2025-12-29'" />
+        <xsl:with-param name="message" select="'The use of pre@source inside of datafiles is deprecated. Please use pre+xi:include instead.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
