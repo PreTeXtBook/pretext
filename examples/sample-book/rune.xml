@@ -2292,7 +2292,6 @@ TEST_CASE( "Test the add function" ) {
             } // end of SimplePicture class
             ]]>
             </pre>
-            <!-- <pre source="datafiles/picture-classes-library.jar"/> -->
         </datafile>
 
         <program label="java-only-blue" interactive='activecode' language="java" add-files="file-picture-classes-jar, beach-datafile" include-source="yes">
@@ -3495,7 +3494,7 @@ TEST_CASE( "Test the add function" ) {
     <idx>matching function types</idx>
     <statement>
       <p>
-        Sort the following functions into their correct categories. 
+        Sort the following functions into their correct categories.
       </p>
     </statement>
     <feedback>
