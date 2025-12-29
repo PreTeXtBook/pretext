@@ -874,7 +874,7 @@ TEST_CASE( "Test the add function" ) {
             </ol></p>
 
             <datafile label="stack-overflow-survey" filename="so_survey.csv" rows="10" cols="65" editable="no" include-source="yes">
-                <pre source="datafiles/stackoverflow.csv"/>
+                <pre><xi:include parse="text" href="./ext/datafiles/stackoverflow.csv" /></pre>
             </datafile>
         </data>
 
