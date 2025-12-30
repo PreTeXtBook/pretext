@@ -365,14 +365,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="preserve-intentional" select="$preserve-start" />
         </xsl:call-template>
     </xsl:variable>
-    <xsl:variable name="left-margin">
-        <xsl:call-template name="left-margin">
-            <xsl:with-param name="text" select="$trimmed-text" />
-        </xsl:call-template>
-    </xsl:variable>
-    <xsl:call-template name="strip-indentation" >
+    <xsl:call-template name="left-align-text" >
         <xsl:with-param name="text" select="$trimmed-text" />
-        <xsl:with-param name="indent" select="$left-margin" />
     </xsl:call-template>
 </xsl:template>
 
