@@ -11929,32 +11929,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <div class="hide-solutions-options">
             <xsl:if test=".//hint">
                 <div class="hide-option">
-                    <label for="hide-hints-checkbox">
+                    <label for="hide-hint-checkbox">
                         <xsl:apply-templates select="." mode="type-name">
                             <xsl:with-param name="string-id" select="'hide-hints'"/>
                         </xsl:apply-templates>
                     </label>
-                    <input type="checkbox" id="hide-hints-checkbox"/>
+                    <input type="checkbox" id="hide-hint-checkbox"/>
                 </div>
             </xsl:if>
             <xsl:if test=".//answer">
                 <div class="hide-option">
-                    <label for="hide-answers-checkbox">
+                    <label for="hide-answer-checkbox">
                         <xsl:apply-templates select="." mode="type-name">
                             <xsl:with-param name="string-id" select="'hide-answers'"/>
                         </xsl:apply-templates>
                     </label>
-                    <input type="checkbox" id="hide-answers-checkbox"/>
+                    <input type="checkbox" id="hide-answer-checkbox"/>
                 </div>
             </xsl:if>
             <xsl:if test=".//solution">
                 <div class="hide-option">
-                    <label for="hide-solutions-checkbox">
+                    <label for="hide-solution-checkbox">
                         <xsl:apply-templates select="." mode="type-name">
                             <xsl:with-param name="string-id" select="'hide-solutions'"/>
                         </xsl:apply-templates>
                     </label>
-                    <input type="checkbox" id="hide-solutions-checkbox"/>
+                    <input type="checkbox" id="hide-solution-checkbox"/>
                 </div>
             </xsl:if>
         </div>
