@@ -960,7 +960,6 @@ function toggleWorkspaceHighlight(isChecked) {
                 original.classList.add('original-workspace');
                 const originalHeight = workspace.getAttribute('data-space') || '0px';
                 original.setAttribute('title', 'Author-specified workspace height (' + originalHeight + ')');
-                console.log("setting original workspace height for", workspace);
                 // Use the data-space attribute for height of original workspace
                 original.style.height = originalHeight;
                 // insert original div before the workspace content
@@ -1053,6 +1052,26 @@ async function loadPrintout(printableSectionID) {
     ptxContent.appendChild(printableSection);
 }
 
+// Function to redo solutions details to divs with summary as title
+function rewriteSolutions() {
+    var born_hidden_knowls = document.querySelectorAll('.worksheet details, .handout details');
+    born_hidden_knowls.forEach(function(detail) {
+        const summary = detail.querySelector('summary');
+        const content = detail.innerHTML.replace(summary.outerHTML, '');
+        const div = document.createElement('div');
+        div.classList = detail.classList;
+        if (summary) {
+            const title = document.createElement('h5');
+            title.innerHTML = summary.innerHTML;
+            div.appendChild(title);
+        }
+        const body = document.createElement('div');
+        body.innerHTML = content;
+        div.appendChild(body);
+        detail.parentNode.replaceChild(div, detail);
+    });
+}
+
 // Utility to convert various CSS length units to pixels
 function toPixels(value) {
     if (typeof value === "number") return value;
@@ -1075,9 +1094,8 @@ function toPixels(value) {
 }
 
 // Event listener for page load to handle print preview setup
-window.addEventListener("load", async function(event) {
+window.addEventListener("DOMContentLoaded", async function(event) {
     const urlParams = new URLSearchParams(window.location.search);
-    console.log("urlParams", urlParams);
     // We condition on the existence of the papersize radio buttons, which only appear in the printout print preview.
     if (urlParams.has("printpreview")) {
         const printableSectionID = urlParams.get("printpreview");
@@ -1092,6 +1110,9 @@ window.addEventListener("load", async function(event) {
             bottom: toPixels(marginList[2] || "0.75in"),
             left: toPixels(marginList[3] || "0.75in")
         }
+
+        // Transform all solutions details elements to divs with the summary as a title
+        rewriteSolutions();
 
         // Get the papersize from localStorage or set it based on user's geographic region.  This will always return a value (defaulting to 'letter' if all else fails).
         let paperSize = getPaperSize();
@@ -1115,70 +1136,78 @@ window.addEventListener("load", async function(event) {
                     document.body.classList.remove("a4", "letter");
                     document.body.classList.add(this.value);
                     localStorage.setItem("papersize", this.value);
-                    console.log("Setting papersize to", this.value);
                     setPageGeometryCSS({paperSize: this.value, margins: margins});
-                    console.log("Adjusting workspace heights to fit new papersize.");
                     adjustWorkspaceToFitPage({paperSize: this.value, margins: margins});
                 }
             });
         });
 
-    // If there are hints/answers/solutions on the page, then we will get a checkbox to optionally hide them.
-    for (const solutionType of ["Hints", "Solutions", "Answers"]) {
-        const checkbox = document.getElementById(`hide-${solutionType.toLowerCase()}-checkbox`);
-        if (checkbox) {
-            // Set the checkbox state from localStorage
-            const storageKey = `hide${solutionType}`;
-            checkbox.checked = localStorage.getItem(storageKey) === "true";
-            // if the checkbox is checked, then we remove any solution divs that have first element "details" with class "solutionType"
-            if (checkbox.checked) {
-                // cssClass will be "hint", "solution", or "answer"; lowercase version of solutionType and remove the last character
-                const cssClass = solutionType.slice(0, -1).toLowerCase();
-                document.querySelectorAll(`details.${cssClass}`).forEach(elem => {
-                    elem.remove()
+        // Add event listeners to the hide hints/answers/solutions checkboxes
+        for (const solutionType of ["hint", "answer", "solution"]) {
+            const checkbox = document.getElementById(`hide-${solutionType}-checkbox`);
+            if (checkbox) {
+                const storageKey = `hide-${solutionType}`;
+                // by default, hide answer and solution divs
+                if (solutionType === "answer" || solutionType === "solution") {
+                    if (!localStorage.getItem(storageKey)) {
+                        checkbox.checked = true;
+                        localStorage.setItem(storageKey, "true");
+                    }
+                }
+                // Now adjust based on local storage
+                // set visibility based on current checkbox state
+                checkbox.checked = localStorage.getItem(storageKey) === "true";
+                document.querySelectorAll(`div.${solutionType}`).forEach(elem => {
+                    // add hidden to class list
+                    if (checkbox.checked) {
+                        elem.classList.add("hidden");
+                    } else {
+                        elem.classList.remove("hidden");
+                    }
+                });
+                // Add event listener to toggle visibility
+                checkbox.addEventListener("change", function() {
+                    localStorage.setItem(storageKey, this.checked);
+                    // toggle visibility of solution divs
+                    document.querySelectorAll(`div.${solutionType}`).forEach(elem => {
+                        if (checkbox.checked) {
+                            elem.classList.add("hidden");
+                        } else {
+                            elem.classList.remove("hidden");
+                        }
+                        //adjustPrintoutPages();
+                        adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                    });
                 });
             }
-
-            // Add event listener to toggle visibility
-            checkbox.addEventListener("change", function() {
-                localStorage.setItem(storageKey, this.checked);
-                // Reload the page to recompute workspace with changed visibility
-                window.location.reload();
-            });
         }
+
+        // Finally, with everything set up, we create or adjust the printout pages as needed.
+
+        // If the printout has authored pages, there will be at least one .onepage element.
+        if (document.querySelector('.onepage')) {
+            adjustPrintoutPages();
+        } else {
+            createPrintoutPages(margins);
+        }
+        // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size).
+        adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+
+        // Get the 'highlight workspace' checkbox state from localStorage or set it to false by default
+        // NB we need to do this after the adjustment of workspace heights so that the additional original workspace divs don't throw off the calculations when the page is reloaded.
+        const highlightWorkspaceCheckbox = document.getElementById("highlight-workspace-checkbox");
+        if (highlightWorkspaceCheckbox) {
+            highlightWorkspaceCheckbox.checked = localStorage.getItem("highlightWorkspace") === "true";
+            highlightWorkspaceCheckbox.addEventListener("change", function() {
+                localStorage.setItem("highlightWorkspace", this.checked);
+                toggleWorkspaceHighlight(this.checked);
+            });
+            // Initial toggle to apply the highlight class if checked
+            toggleWorkspaceHighlight(highlightWorkspaceCheckbox.checked);
+        }
+
+        console.log("finished adjusting workspace");
     }
-
-    // Open all details elements (knowls) on the page that are inside the .worksheet or .handout section
-    var born_hidden_knowls = document.querySelectorAll('.worksheet details, .handout details');
-    console.log("born_hidden_knowls", born_hidden_knowls);
-    born_hidden_knowls.forEach(function(detail) {
-        detail.open = true;
-    });
-    // If the printout has authored pages, there will be at least one .onepage element.
-    if (document.querySelector('.onepage')) {
-        adjustPrintoutPages();
-    } else {
-        createPrintoutPages(margins);
-    }
-    // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size).
-    adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
-
-    console.log("finished adjusting workspace");
-
-
-    // Get the 'highlight workspace' checkbox state from localStorage or set it to false by default
-    const highlightWorkspaceCheckbox = document.getElementById("highlight-workspace-checkbox");
-    if (highlightWorkspaceCheckbox) {
-        highlightWorkspaceCheckbox.checked = localStorage.getItem("highlightWorkspace") === "true";
-        highlightWorkspaceCheckbox.addEventListener("change", function() {
-            localStorage.setItem("highlightWorkspace", this.checked);
-            toggleWorkspaceHighlight(this.checked);
-        });
-        // Initial toggle to apply the highlight class if checked
-        toggleWorkspaceHighlight(highlightWorkspaceCheckbox.checked);
-    }
-
-  }
 });
 
 
