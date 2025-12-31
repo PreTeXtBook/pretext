@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="diagram" width="360" height="200" viewBox="0 0 360 200">
+<svg xmlns="http://www.w3.org/2000/svg" id="diagram" viewBox="0 0 360 200">
   <defs>
     <clipPath id="clipPath-0">
       <rect x="30.0" y="0.0" width="300.0" height="200.0"/>
