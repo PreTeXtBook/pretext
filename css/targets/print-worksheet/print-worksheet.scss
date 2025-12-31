@@ -104,28 +104,43 @@ section.worksheet, section.handout {
 }
 
 
-// Try to make an open solution knowl look less strange.  Eventually the print version of worksheets should create HTML that isn't a details element.
-// NB specify that this only happens inside worksheets/handouts and not in the print-controls area.
-.worksheet summary::marker, .handout summary::marker {
-  content: "";
+// Style solutions divs, which the javascript transforms from knowls to divs with titles
+
+.solutions {
+  margin-top: 1em;
+
+  .solution-like.born-hidden-knowl {
+    margin-top: 1em;
+    padding: unset;
+
+    h5 {
+      font-weight: bolder;
+      display: inline;
+      font-size: 1em;
+    }
+
+    > div {
+      display: inline;
+    }
+
+    .knowl__content {
+      display: inline;
+      border: none;
+      background-color: unset;
+      padding: 0;
+
+      >:first-child {
+        display: inline;
+      }
+
+      .para {
+        margin-top: 0.5em;
+      }
+    }
+  }
 }
 
-summary {
-  font-weight: bolder;
-  display: inline;
-}
-
-.knowl__content {
-  display: inline;
-  margin: unset;
-  border: none;
-  padding: 3px 0;
-  background-color: unset;
-}
-
-.knowl__link {
-  all: unset
-}
+// Additional styling tweaks for print
 
 .code-inline {
   border: unset;
@@ -255,6 +270,11 @@ form.papersize-select {
     justify-content: space-between;
     align-items: center;
     padding-bottom: 1em;
+  }
+
+  // Make labels and inputs for print options have pointer cursor
+  label, input {
+    cursor: pointer;
   }
 
 // Style the additional printing options the same as we do for knowls
