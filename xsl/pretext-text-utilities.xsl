@@ -319,6 +319,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Shift all lines in text to the left far enough that   -->
+<!-- line with the least indentation is at the left margin -->
+<xsl:template name="left-align-text">
+    <xsl:param name="text" />
+    <xsl:variable name="left-margin">
+        <xsl:call-template name="left-margin">
+            <xsl:with-param name="text" select="$text" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="stripped-text">
+        <xsl:call-template name="strip-indentation">
+            <!-- strip-indentation requires trailing newline -->
+            <!-- add one here and trim it when done          -->
+            <xsl:with-param name="text" select="concat($text, '&#xA;')" />
+            <xsl:with-param name="indent" select="$left-margin" />
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- produce value without the added newline -->
+    <xsl:value-of select="substring($stripped-text, 1, string-length($stripped-text) - 1)" />
+</xsl:template>
+
+
 <!-- Main template for cleaning up hunks of raw text      -->
 <!--                                                      -->
 <!-- 1) Trim all trailing whitespace                      -->
@@ -343,14 +365,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="preserve-intentional" select="$preserve-start" />
         </xsl:call-template>
     </xsl:variable>
-    <xsl:variable name="left-margin">
-        <xsl:call-template name="left-margin">
-            <xsl:with-param name="text" select="$trimmed-text" />
-        </xsl:call-template>
-    </xsl:variable>
-    <xsl:call-template name="strip-indentation" >
+    <xsl:call-template name="left-align-text" >
         <xsl:with-param name="text" select="$trimmed-text" />
-        <xsl:with-param name="indent" select="$left-margin" />
     </xsl:call-template>
 </xsl:template>
 
