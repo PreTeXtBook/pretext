@@ -5945,7 +5945,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="ChemAccess-element">
                 <xsl:attribute name="data-src">
                     <xsl:value-of select="$base-pathname"/>
-                    <xsl:text>.svg</xsl:text>
+                    <xsl:text>-diagcess.svg</xsl:text>
                 </xsl:attribute>
                 <xsl:attribute name="data-cml">
                     <xsl:value-of select="$base-pathname"/>
