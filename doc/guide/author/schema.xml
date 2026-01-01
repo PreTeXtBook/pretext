@@ -144,7 +144,7 @@
     <section xml:id="schema-browser">
         <title>Schema Browser</title>
 
-        <p>Through the efforts of <url href="https://github.com/siefkenj/pretext-book" visual="github.com/siefkenj/pretext-book">Jason Siefkin</url>, and other contributors, we have a <term>schema browser</term> that lets you easily and naturally explore the schema through web pages, many with example uses.  Look for a link in the Documentation section of the <url href="https://pretextbook.org/doc" visual="pretextbook.org/doc"><pretext/> website</url>.</p>
+        <p>Through the efforts of <url href="https://github.com/siefkenj/pretext-book" visual="github.com/siefkenj/pretext-book">Jason Siefkin</url>, and other contributors, we have a <term>schema browser</term> that lets you easily and naturally explore the schema through web pages, many with example uses.  Look for a link in the <url href="https://pretextbook.org/documentation.html" visual="https://pretextbook.org/documentation.html">Documentation section</url> of the <pretext/> website.</p>
 
         <p>Do not be intimidated by the list of roughly 300 elements available in the <q>All Tags</q> panel.  Many are configuration options, many are special-purpose, and many you will never use.  (Someday we will do lexical analysis on a substantial range of <pretext/> texts to see just which elements do get used most frequently).  We hope to document elements which have complicated restrictions that cannot be expressed with the parent-child relationships of the schema as part of this tool.</p>
 
@@ -167,6 +167,11 @@
                     <cell>Notes</cell>
                 </row>
                 <!--  -->
+                <row>
+                    <cell>Visual Studio Code</cell>
+                    <cell>RNG</cell>
+                    <cell>Validation and completion, open source</cell>
+                </row>
                 <row>
                     <cell>emacs</cell>
                     <cell>RNC</cell>
