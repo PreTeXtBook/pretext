@@ -4830,7 +4830,17 @@ def revealjs(
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     # place JS in scratch directory
+    # TODO: audit what JS is really needed/used
     copy_html_js(tmp_dir)
+
+    # copy CSS
+    css_src = os.path.join(get_ptx_path(), "css", "dist", "pretext-reveal.css")
+    css_dest = os.path.join(tmp_dir, "_static", "pretext", "css", "pretext-reveal.css")
+    with open(css_src, 'r') as theme_file:
+        filedata = theme_file.read()
+        os.makedirs(os.path.dirname(css_dest), exist_ok=True)
+        with open(css_dest, 'w+') as file:
+            file.write(filedata)
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))

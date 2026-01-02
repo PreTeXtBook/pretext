@@ -28,7 +28,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </source>
 
     <revealjs>
-        <appearance theme="solarized"/>
+        <!-- theme="solarized" is the default, see https://revealjs.com/themes/ -->
+        <!-- for other theme options.                                           -->
+        <!-- custom-css is a space-separated list of CSS files to include.      -->
+        <!-- They can be local or remote. If local, they should be under your   -->
+        <!-- "external files" directory if you want them automatically copied   -->
+        <!-- to the output folder.                                              -->
+        <appearance theme="solarized" custom-css="external/custom.css"/>
         <!-- this is a "resources" default, but best for a sample -->
         <resources host="cdn"/>
         <!-- display="yes" is the default so we can see arrows          -->
