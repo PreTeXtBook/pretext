@@ -5249,6 +5249,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is not a PreTeXt "table" so we don't let    -->
 <!-- LaTeX number it, nor increment the table counter -->
 <xsl:template name="list-of-begin">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:text>\noindent&#xa;</xsl:text>
     <xsl:text>\begin{longtable}[l]{ll}&#xa;</xsl:text>
     <xsl:text>\addtocounter{table}{-1}&#xa;</xsl:text>
@@ -5456,6 +5457,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|worksheet|handout|reading-questions|solutions|glossary|references">
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:apply-templates select="." mode="begin-language" />
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:apply-templates select="." mode="latex-division-heading" />
     <!-- Process the contents, title, idx killed, but avoid author -->
     <!-- "solutions" content needs to call content generator       -->
@@ -5734,6 +5736,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Paragraphs -->
 <!-- Non-structural, even if they appear to be -->
 <xsl:template match="paragraphs">
+    <xsl:apply-templates select="." mode="newpage"/>
     <!-- Warn about paragraph deprecation -->
     <xsl:text>\begin{paragraphs}</xsl:text>
     <xsl:text>{</xsl:text>
@@ -5792,6 +5795,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Statement structure should be relaxed     -->
 <!-- Style is controlled in the preamble       -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;">
+    <xsl:apply-templates select="." mode="newpage"/>
     <!-- environment, title, label string, newline -->
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="local-name(.)" />
@@ -5819,6 +5823,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Subsidary to THEOREM-LIKE, or standalone        -->
 <!-- Defaults to "Proof", can be replaced by "title" -->
 <xsl:template match="proof[not(&SOLUTION-PROOF-FILTER;)]|argument[not(&SOLUTION-PROOF-FILTER;)]|justification[not(&SOLUTION-PROOF-FILTER;)]|reasoning[not(&SOLUTION-PROOF-FILTER;)]|explanation[not(&SOLUTION-PROOF-FILTER;)]">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:variable name="environment-name">
         <xsl:value-of select="local-name(.)"/>
     </xsl:variable>
@@ -6225,6 +6230,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "subexercises", "exercisegroup" or "sidebyside"            -->
 <!-- (worksheet), so we match with a //                         -->
 <xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]|&PROJECT-LIKE;|exercises//exercise|worksheet//exercise|reading-questions//exercise">
+    <xsl:apply-templates select="." mode="newpage"/>
     <!-- Five types of exercise... determine which we are in    -->
     <xsl:variable name="exercise-type">
         <xsl:choose>
@@ -6835,6 +6841,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -6855,6 +6862,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-component-heading"/>
     <xsl:param name="b-has-solution" />
 
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -6874,6 +6882,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="purpose" />
     <xsl:param name="b-component-heading"/>
 
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -6986,6 +6995,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simpler than theorems, definitions, etc      -->
 <!-- Only EXAMPLE-LIKE has hint, answer, solution -->
 <xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;">
+    <xsl:apply-templates select="." mode="newpage"/>
     <!-- structured version may contain a prelude -->
     <!-- no structure => don't even consider it   -->
     <xsl:if test="statement or task">
@@ -7041,6 +7051,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- historical semantically, but perhaps should -->
 <!-- title is inline, boldface in mdframe setup  -->
 <xsl:template match="&ASIDE-LIKE;">
+    <xsl:apply-templates select="." mode="newpage"/>
     <!-- environment, title, label string, newline -->
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="local-name(.)" />
@@ -7062,6 +7073,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Low-structure content, high-visibility presentation -->
 <!-- Title is optional, keep remainders coordinated      -->
 <xsl:template match="assemblage">
+    <xsl:apply-templates select="." mode="newpage"/>
     <!-- environment, title, label string, newline -->
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="local-name(.)" />
@@ -7081,6 +7093,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A GOAL-LIKE element holds a list,         -->
 <!-- surrounded by introduction and conclusion -->
 <xsl:template match="&GOAL-LIKE;">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}</xsl:text>
@@ -7176,6 +7189,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&DISCUSSION-LIKE;">
     <!-- break *before* the appendage -->
     <xsl:text>\par%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:apply-templates select="." mode="discussion-heading"/>
     <!-- DISCUSSION-LIKE assumed to be structured -->
     <xsl:apply-templates select="*"/>
@@ -7214,6 +7228,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: maybe we could look backward at the end of a paragraph       -->
 <!-- to see if the above scenario happens, and we could end gracefully. -->
 <xsl:template match="p">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:variable name="node-preceding-current" select="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1]" />
     <xsl:if test="$node-preceding-current[self::p or self::paragraphs or self::sidebyside or self::case]">
         <xsl:text>\par</xsl:text>
@@ -7779,6 +7794,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Actual Quotations                -->
 <!-- TODO: <quote> element for inline -->
 <xsl:template match="blockquote">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:text>\begin{quote}</xsl:text>
     <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
@@ -8141,6 +8157,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (See templates in xsl/pretext-common.xsl file)     -->
 <!-- Then wrap in a  verbatim  environment               -->
 <xsl:template match="pre">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:text>\begin{preformatted}&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="interior"/>
     <xsl:text>\end{preformatted}&#xa;</xsl:text>
@@ -8649,6 +8666,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="in" />
     <xsl:param name="out" />
 
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:if test="$in!=''">
         <xsl:text>\begin{sageinput}&#xa;</xsl:text>
         <xsl:value-of select="$in" />
@@ -8723,6 +8741,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Embeddings first -->
 
 <xsl:template match="program[not(ancestor::sidebyside)]">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
@@ -8831,6 +8850,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An interactive command-line session with a prompt, input and output -->
 
 <xsl:template match="console[not(ancestor::sidebyside)]">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
@@ -9052,6 +9072,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2: standard identifier for cross-references   -->
 <!-- 3: empty, or a hard-coded number from -common -->
 <xsl:template match="figure">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:if test="@landscape and $b-latex-print">
       <xsl:text>\begin{sidewaysfigure}%&#xa;</xsl:text>
     </xsl:if>
@@ -9095,6 +9116,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2: standard identifier for cross-references    -->
 <!-- 3: empty, or a hard-coded number from -common  -->
 <xsl:template match="table|list|listing">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:if test="@landscape and $b-latex-print">
       <xsl:text>\begin{sidewaystable}%&#xa;</xsl:text>
     </xsl:if>
@@ -9182,6 +9204,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="layout" />
     <xsl:param name="panels" />
 
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:variable name="number-panels" select="$layout/number-panels" />
     <xsl:variable name="left-margin" select="$layout/left-margin" />
     <xsl:variable name="right-margin" select="$layout/right-margin" />
@@ -9207,6 +9230,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
+<!-- Copied verbatim from pretext-common.xsl   -->
+<!-- except with the possibility for a newpage -->
+<xsl:template match="sbsgroup">
+    <xsl:variable name="data">
+        <xsl:apply-templates select="sidebyside" />
+        <xsl:apply-templates select="." mode="post-sbsgroup"/>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="newpage"/>
+    <xsl:call-template name="sbsgroup-wrapper">
+        <xsl:with-param name="sbsgroup-content" select="$data"/>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- ###### -->
 <!-- Images -->
 <!-- ###### -->
@@ -9215,6 +9251,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- naked images go into a tcolorbox for layout control    -->
 <!-- figure/image (not in a sidebyside) into same tcolorbox -->
 <xsl:template match="image[not(ancestor::sidebyside)]">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
@@ -9463,6 +9500,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############## -->
 
 <xsl:template match="tabular[not(ancestor::sidebyside)]">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:choose>
         <!-- the "natural width" case, centered -->
         <xsl:when test="not(@margins) and not(@width)">
@@ -10900,6 +10938,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ###### -->
 
 <xsl:template match="poem">
+    <xsl:apply-templates select="." mode="newpage"/>
     <xsl:text>\begin{poem}</xsl:text>
     <xsl:apply-templates select="." mode="optional-label"/>
     <xsl:text>%&#xa;</xsl:text>
@@ -11605,5 +11644,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Publisher-declared pagebreaks -->
+<xsl:template match="*" mode="newpage">
+    <xsl:if test="@xml:id = str:tokenize($latex-pagebreaks-string)">
+        <xsl:text>\newpage%&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
 
 </xsl:stylesheet>
