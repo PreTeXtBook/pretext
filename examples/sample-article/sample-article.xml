@@ -12695,6 +12695,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </sidebyside>
                 </sbsgroup>
 
+                <p>
+                    Now an <tag>sbsgroup</tag> that should start on a new page if this sample
+                    article is built to PDF using the distribution publisher file.
+                </p>
+
+                <sbsgroup xml:id="sbsgroup-pagebreak-test" width="20%">
+                    <sidebyside>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                    </sidebyside>
+                    <sidebyside>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                    </sidebyside>
+                </sbsgroup>
+
                 <p>The following is a <tag>sbsgroup</tag> full of <q>operation</q> tables.  Once upon a time it was rather cramped vertically in HTML output, but Andrew Scholer improved the spacing at <url href="https://github.com/PreTeXtBook/pretext/pull/2387" visual="github.com/PreTeXtBook/pretext/pull/2387">GitHub #2387</url>.  The example is from Valerio Monti.</p>
 
                 <figure xml:id="tabelle_classi_di_resto">
