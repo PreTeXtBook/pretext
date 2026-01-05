@@ -5874,7 +5874,7 @@ Book (with parts), "section" at level 3
     <!-- "paragraphs" deprecated within sidebyside, 2018-05-02 -->
     <!-- jsxgraph deprecated?  Check                           -->
 
-     <xsl:variable name="panels" select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs" />
+    <xsl:variable name="panels" select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs" />
 
     <!-- We build up lists of various parts of a panel      -->
     <!-- It has setup (LaTeX), headers (titles), panels,    -->
