@@ -6888,7 +6888,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- this *must* be first for maximum utility -->
                 <xsl:call-template name="skip-to-content-link" />
                 <xsl:apply-templates select="." mode="primary-navigation"/>
-                <xsl:call-template name="latex-macros" />
                 <xsl:call-template name="enable-editing" />
                  <header id="ptx-masthead" class="ptx-masthead">
                     <div class="ptx-banner">
@@ -9917,7 +9916,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Some interactives use slates that are PreTeXt  -->
                 <!-- elements, hence could have math, hence need to -->
                 <!-- know globally available macros from the author -->
-                <xsl:call-template name="latex-macros"/>
                 <div>
                     <!-- the actual interactive bit          -->
                     <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
@@ -11110,7 +11108,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </div>  <!-- banner -->
             </header>  <!-- masthead -->
             <xsl:apply-templates select="." mode="primary-navigation"/>
-            <xsl:call-template name="latex-macros"/>
             <xsl:call-template name="enable-editing"/>
             <div class="ptx-page">
                 <xsl:apply-templates select="." mode="sidebars" />
@@ -12924,7 +12921,7 @@ TODO:
                                 <string>base</string>
                                 <!-- 2023-10-19: this provides backward-compatible behavior -->
                                 <!-- and could be removed at the first sign of trouble      -->
-                                <xsl:if test="not(contains($latex-packages-mathjax, '\require{extpfeil}'))">
+                                <xsl:if test="not($docinfo/math-package[@mathjax-name='extpfeil'])">
                                     <string>extpfeil</string>
                                 </xsl:if>
                                 <string>ams</string>
@@ -12932,6 +12929,9 @@ TODO:
                                 <string>color</string>
                                 <string>newcommand</string>
                                 <string>knowl</string>
+                                <xsl:for-each select="$docinfo/math-package[@mathjax-name and normalize-space(@mathjax-name) != '']">
+                                    <string><xsl:value-of select="@mathjax-name"/></string>
+                                </xsl:for-each>
                             </array>
                         </map>
                     </map>
@@ -12955,7 +12955,9 @@ TODO:
                                         <xsl:text>            });&#xa;</xsl:text>
                                         <xsl:text>        }</xsl:text>
                                     </raw>
-                                    <string></string>
+                                    <raw>
+                                        <xsl:text>() => {}</xsl:text>
+                                    </raw>
                                 </array>
                             </map>
                         </xsl:if>
@@ -12972,6 +12974,9 @@ TODO:
                             <string>[tex]/color</string>
                             <string>[tex]/newcommand</string>
                             <string>[pretext]/mathjaxknowl3.js</string>
+                            <xsl:for-each select="$docinfo/math-package[@mathjax-name and normalize-space(@mathjax-name) != '']">
+                                <string>[tex]/<xsl:value-of select="@mathjax-name"/></string>
+                            </xsl:for-each>
                         </array>
                         <map key="paths">
                             <string key="pretext">
@@ -12985,9 +12990,17 @@ TODO:
                                 <boolean key="typeset">false</boolean>
                             </xsl:when>
                             <xsl:otherwise>
-                                <!-- tell Runestone components that MathJax is all loaded -->
                                 <raw>
                                     <xsl:text>pageReady() {&#xa;</xsl:text>
+                                    <xsl:text>      MathJax.tex2mmlPromise(String.raw`&#xa;</xsl:text>
+                                    <xsl:value-of select="$latex-macros"/>
+                                    <xsl:call-template name="fillin-math"/>
+                                    <!-- legacy built-in support for "slanted|beveled|nice" fractions -->
+                                    <xsl:if test="$b-has-sfrac">
+                                        <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
+                                    </xsl:if>
+                                    <xsl:text>      `);&#xa;</xsl:text>
+                                    <!-- tell Runestone components that MathJax is all loaded -->
                                     <xsl:text>      return MathJax.startup.defaultPageReady().then(function () {&#xa;</xsl:text>
                                     <xsl:text>      console.log("in ready function");&#xa;</xsl:text>
                                     <xsl:text>      rsMathReady();&#xa;</xsl:text>
@@ -13782,44 +13795,6 @@ TODO:
 <!-- ############## -->
 <!-- LaTeX Preamble -->
 <!-- ############## -->
-
-<!-- First a variable to massage the author-supplied -->
-<!-- package list to the form MathJax expects        -->
-<xsl:variable name="latex-packages-mathjax">
-    <xsl:for-each select="$docinfo/math-package">
-        <!-- must be specified, but can be empty/null -->
-        <xsl:if test="not(normalize-space(@mathjax-name)) = ''">
-            <xsl:text>\require{</xsl:text>
-            <xsl:value-of select="@mathjax-name"/>
-            <xsl:apply-templates/>
-            <xsl:text>}</xsl:text>
-            <!-- all on one line, not very readable, but historical -->
-        </xsl:if>
-    </xsl:for-each>
-</xsl:variable>
-
-<!-- MathJax expects math wrapping, and we place in   -->
-<!-- a hidden div so not visible and take up no space -->
-<!-- Inline CSS added because a "flash" was visible   -->
-<!-- between HTML loading and CSS taking effect.      -->
-<!-- We could rename this properly, since we are      -->
-<!-- sneaking in packages, which load first, in       -->
-<!-- case authors want to build on these macros       -->
-<xsl:template name="latex-macros">
-    <div id="latex-macros" class="hidden-content process-math" style="display:none">
-        <xsl:call-template name="inline-math-wrapper">
-            <xsl:with-param name="math">
-                <xsl:value-of select="$latex-packages-mathjax"/>
-                <xsl:value-of select="$latex-macros"/>
-                <xsl:call-template name="fillin-math"/>
-                <!-- legacy built-in support for "slanted|beveled|nice" fractions -->
-                <xsl:if test="$b-has-sfrac">
-                    <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
-                </xsl:if>
-            </xsl:with-param>
-        </xsl:call-template>
-    </div>
-</xsl:template>
 
 <!-- If editing is enabled, the .ptx source file of each -->
 <!-- HTML page will be created.  We still need to set a  -->
