@@ -61,6 +61,10 @@ dl.description-list {
     }
   }
 
+  & + dl.description-list {
+    margin-top: 1em;
+  }
+
   dt {
     float: left;
     clear: both;
