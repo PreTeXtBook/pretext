@@ -13570,7 +13570,6 @@ TODO:
             <script src="{$html.jslib.dir}/jquery.espy.min.js"></script>
             <script src="{$html.js.dir}/pretext.js"></script>
             <script src="{$html.js.dir}/pretext_add_on.js?x=1"></script>
-            <script src="{$html.js.dir}/user_preferences.js"></script>
         </xsl:when>
         <xsl:when test="$b-debug-react-local">
             <script type="module" defer="" src="./static/js/main.js"></script>
