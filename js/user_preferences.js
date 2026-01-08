@@ -477,34 +477,5 @@ console.log("previous_sibling",previous_sibling);
 
 
     return;
-
-    editorLog("input_region", input_region);
-    // if we are writing something, keystrokes usually are just text input
-    if (document.getElementById('actively_editing')) {
-        editorLog("                 we are actively editing");
-
-        if (e.code == "Tab" && !document.getElementById('local_menu_holder')) {
-   // disabled for now
-            e.preventDefault();
-            return ""
-            create_local_menu()
-        } else if (document.getElementById('local_menu_holder')) {
-            main_menu_navigator(e);
-        } else {
-            local_editing_action(e)
-        }
-
-    } else if (document.getElementById('phantomobject')) {
-        var the_phantomobject = document.getElementById('phantomobject');
-
-        if (the_phantomobject.classList.contains('move')) {
-            move_object(e)
-        } else {
-            alert("do not know what to do with that")
-        }
-    } else {
-        console.log("calling main_menu_navigator");
-        main_menu_navigator(e);
-    }
 }
 
