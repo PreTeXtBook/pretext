@@ -5874,7 +5874,7 @@ Book (with parts), "section" at level 3
     <!-- "paragraphs" deprecated within sidebyside, 2018-05-02 -->
     <!-- jsxgraph deprecated?  Check                           -->
 
-     <xsl:variable name="panels" select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs" />
+    <xsl:variable name="panels" select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs" />
 
     <!-- We build up lists of various parts of a panel      -->
     <!-- It has setup (LaTeX), headers (titles), panels,    -->
@@ -5903,6 +5903,7 @@ Book (with parts), "section" at level 3
         </xsl:for-each>
     </xsl:variable>
 
+    <xsl:apply-templates select="." mode="pre-sidebyside"/>
     <!-- now collect components into output wrappers -->
     <xsl:apply-templates select="." mode="compose-panels">
         <xsl:with-param name="b-original" select="$b-original" />
@@ -5937,6 +5938,7 @@ Book (with parts), "section" at level 3
 
 <xsl:template match="sbsgroup">
     <xsl:variable name="data">
+        <xsl:apply-templates select="." mode="pre-sbsgroup"/>
         <xsl:apply-templates select="sidebyside" />
         <xsl:apply-templates select="." mode="post-sbsgroup"/>
     </xsl:variable>
@@ -5965,12 +5967,14 @@ Book (with parts), "section" at level 3
 <!-- Post-Layout Hooks -->
 <!-- ################# -->
 
-<!-- We may wish to add information below a "sidebyside"    -->
-<!-- or a "sbsgroup".  Motivation is keyboard shortcut help -->
-<!-- for interactive accessible diagrams out of PreFigure   -->
-<!-- code with the diagcess JS library.  See invocations    -->
-<!-- above, with no-op stubs here. -->
+<!-- We may wish to add information above or below a "sidebyside"  -->
+<!-- or a "sbsgroup".  Motivation is keyboard shortcut help for    -->
+<!-- interactive accessible diagrams out of PreFigure code with    -->
+<!-- the diagcess JS library.  See invocations above, with no-op   -->
+<!-- stubs here. -->
 
+<xsl:template match="sidebyside" mode="pre-sidebyside"/>
+<xsl:template match="sbsgroup" mode="pre-sbsgroup"/>
 <xsl:template match="sidebyside" mode="post-sidebyside"/>
 <xsl:template match="sbsgroup" mode="post-sbsgroup"/>
 

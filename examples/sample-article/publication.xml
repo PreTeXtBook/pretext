@@ -168,7 +168,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <worksheet formatted="yes"/>
         <asymptote links="yes"/>
         <insertions pagebreaks="quotations exercises-section-multiple pre-roll-countdown-8"/>
-        <insertions pagebreaks="sidebyside-bully-pulpit"/>
+        <insertions pagebreaks="sidebyside-bully-pulpit sbsgroup-pagebreak-test"/>
     </latex>
 
 </publication>

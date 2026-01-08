@@ -9230,17 +9230,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
-<!-- Copied verbatim from pretext-common.xsl   -->
-<!-- except with the possibility for a newpage -->
-<xsl:template match="sbsgroup">
-    <xsl:variable name="data">
-        <xsl:apply-templates select="sidebyside" />
-        <xsl:apply-templates select="." mode="post-sbsgroup"/>
-    </xsl:variable>
+<!-- Possibility for a newpage -->
+<xsl:template match="sbsgroup" mode="pre-sbsgroup">
     <xsl:apply-templates select="." mode="newpage"/>
-    <xsl:call-template name="sbsgroup-wrapper">
-        <xsl:with-param name="sbsgroup-content" select="$data"/>
-    </xsl:call-template>
 </xsl:template>
 
 <!-- ###### -->
