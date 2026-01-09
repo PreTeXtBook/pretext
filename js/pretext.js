@@ -133,25 +133,6 @@ window.addEventListener("DOMContentLoaded",function(event) {
     }
 });
 
-/* jump to next page if reader tries to scroll past the bottom */
-// var hitbottom = false;
-// window.onscroll = function(ev) {
-//   if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
-//     // you're at the bottom of the page
-//     console.log("Bottom of page");
-//     if (hitbottom) {
-//         console.log("hit bottom again");
-//         thenextbutton = document.getElementsByClassName("next-button")[0];
-//         thenextbutton.click();
-//     } else {
-//         hitbottom = true;
-//         /* only jump to next page if hard scroll in quick succession */
-//         window.scrollBy(0, -20);
-//         setTimeout(function (){ hitbottom = false }, 1000);
-//     }
-//   }
-// };
-
 
 //-----------------------------------------------------------------------------
 // Dynamic TOC logic
