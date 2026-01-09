@@ -5883,11 +5883,6 @@ def copy_html_js(work_dir):
     js_dest = os.path.join(work_dir, "_static", "pretext", "js")
     shutil.copytree(js_src, js_dest)
 
-    # 2024-01-18: may migrate these resources up to "js"
-    js_lib_src = os.path.join(get_ptx_path(), "js_lib")
-    js_lib_dest = os.path.join(work_dir, "_static", "pretext", "js", "lib")
-    shutil.copytree(js_lib_src, js_lib_dest)
-
 
 def copy_build_directory(build_dir, dest_dir):
     '''Copy final product from build directory into desired destination directory'''
