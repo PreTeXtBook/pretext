@@ -961,25 +961,39 @@
                 <xsl:when test="latex-image">
                     <xsl:text>latex-image/</xsl:text>
                     <xsl:apply-templates select="latex-image" mode="image-source-basename"/>
+                    <xsl:call-template name="best-file-extension"/>
                 </xsl:when>
-                <xsl:when test="sageplot">
+                <!-- A 2D "sageplot" is just like any other image built from source -->
+                <xsl:when test="sageplot[not(@variant) or (@variant = '2d')]">
                     <xsl:text>sageplot/</xsl:text>
                     <xsl:apply-templates select="sageplot" mode="image-source-basename"/>
+                    <xsl:call-template name="best-file-extension"/>
+                </xsl:when>
+                <!-- NB: a 3D "sageplot" only comes in PNG and HTML variants, -->
+                <!-- so we cannot manufacture the preferable SVG version,     -->
+                <!-- and the PNG is just fine for a Kindle build, so we do    -->
+                <!-- not have to condition on a Kindle build.                 -->
+                <xsl:when test="sageplot[@variant = '3d']">
+                    <xsl:text>sageplot/</xsl:text>
+                    <xsl:apply-templates select="sageplot" mode="image-source-basename"/>
+                    <xsl:text>.png</xsl:text>
                 </xsl:when>
                 <xsl:when test="asymptote">
                     <xsl:text>asymptote/</xsl:text>
                     <xsl:apply-templates select="asymptote" mode="image-source-basename"/>
+                    <xsl:call-template name="best-file-extension"/>
                 </xsl:when>
                 <xsl:when test="mermaid">
                     <xsl:text>mermaid/</xsl:text>
                     <xsl:apply-templates select="mermaid" mode="image-source-basename"/>
+                    <xsl:call-template name="best-file-extension"/>
                 </xsl:when>
                 <xsl:when test="pf:prefigure">
                     <xsl:text>prefigure/</xsl:text>
                     <xsl:apply-templates select="pf:prefigure" mode="image-source-basename"/>
+                    <xsl:call-template name="best-file-extension"/>
                 </xsl:when>
             </xsl:choose>
-            <xsl:call-template name="best-file-extension"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG:     image filename not determined in EPUB conversion</xsl:message>
@@ -1039,8 +1053,19 @@
                 <xsl:when test="@pi:generated and ($extension = 'jpg')">
                     <xsl:text>image/jpeg</xsl:text>
                 </xsl:when>
-                <xsl:when test="latex-image|sageplot|asymptote|mermaid|pf:prefigure">
+                <xsl:when test="latex-image|asymptote|mermaid|pf:prefigure">
                     <xsl:text>image/svg+xml</xsl:text>
+                </xsl:when>
+                <!-- A 2D "sageplot" is just like any other image built from source -->
+                <xsl:when test="sageplot[not(@variant) or (@variant = '2d')]">
+                    <xsl:text>image/svg+xml</xsl:text>
+                </xsl:when>
+                <!-- NB: a 3D "sageplot" only comes in PNG and HTML variants, -->
+                <!-- so we cannot manufacture the preferable SVG version,     -->
+                <!-- and the PNG is just fine for a Kindle build, so we do    -->
+                <!-- not have to condition on a Kindle build.                 -->
+                <xsl:when test="sageplot[@variant = '3d']">
+                    <xsl:text>image/png</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:message>PTX:BUG:     EPUB image media-type not determined</xsl:message>
