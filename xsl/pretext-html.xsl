@@ -113,7 +113,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- change without warning.                                   -->
 <xsl:variable name="html.css.dir" select="concat($cdn-prefix, '_static/pretext/css')"/>
 <xsl:variable name="html.js.dir" select="concat($cdn-prefix, '_static/pretext/js')"/>
-<xsl:variable name="html.jslib.dir" select="concat($cdn-prefix, '_static/pretext/js/lib')"/>
 
 <!-- Add a prefix for the cdn url, which is empty unless the portable html variable is true -->
 <!-- We use version "latest" unless the CLI provides a version -->
@@ -12974,7 +12973,7 @@ TODO:
                         </array>
                         <map key="paths">
                             <string key="pretext">
-                                <xsl:value-of select="$html.jslib.dir"/>
+                                <xsl:value-of select="$html.js.dir"/>
                             </string>
                         </map>
                     </map>
@@ -13508,7 +13507,7 @@ TODO:
 <!-- Knowl header -->
 <xsl:template match="*" mode="knowl">
     <xsl:if test="not($b-debug-react)">
-        <script src="{$html.jslib.dir}/knowl.js"></script>
+        <script src="{$html.js.dir}/knowl.js"></script>
         <!-- Variables are defined to defaults in knowl.js and  -->
         <!-- we can override them with new values here          -->
         <xsl:comment>knowl.js code controls Sage Cells within knowls</xsl:comment>
@@ -13564,9 +13563,9 @@ TODO:
     <xsl:choose>
         <xsl:when test="not($b-debug-react)">
             <!-- condition first on toc present? -->
-            <script src="{$html.jslib.dir}/jquery.min.js"></script>
-            <script src="{$html.jslib.dir}/jquery.sticky.js" ></script>
-            <script src="{$html.jslib.dir}/jquery.espy.min.js"></script>
+            <script src="{$html.js.dir}/jquery.min.js"></script>
+            <script src="{$html.js.dir}/jquery.sticky.js" ></script>
+            <script src="{$html.js.dir}/jquery.espy.min.js"></script>
             <script src="{$html.js.dir}/pretext.js"></script>
             <script src="{$html.js.dir}/pretext_add_on.js?x=1"></script>
         </xsl:when>
