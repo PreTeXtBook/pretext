@@ -8109,8 +8109,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- For pure HTML we can make a true knowl or traditional link -->
 <!-- when an "xref" is authored inside of a display math "mrow" -->
-<!-- Requires js/lib/mathjaxknowl3.js                           -->
-<!-- loaded as a MathJax extension for knowls to render.        -->
+<!-- Requires a MathJax extension for knowls to render.         -->
 <!-- See discussion in "xref-link" about "copy-of" necessity.   -->
 <xsl:template match="*" mode="xref-link-display-math">
     <xsl:param name="target"/>

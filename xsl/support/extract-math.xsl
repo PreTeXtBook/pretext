@@ -181,7 +181,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--       See "xLinks" section of https://wiki.mobileread.com/wiki/SVG (2020-03-25), -->
 <!--       perhaps the MathJax version does not have enough namespace info, etc.      -->
 <!--       The \knowl{} extension of the conversion to HTML is not understood at all. -->
-<!--       A knowl requires https://pretextbook.org/js/lib/mathjaxknowl.js            -->
+<!--       A knowl requires that PreTeXt Javascript named like "mathjaxknowl.js"      -->
 <!--       loaded as a MathJax extension for knowls to possibly render                -->
 <!--                                                                                  -->
 <!--   3.  Our links' base filename will depend on chunking level, and the file       -->
