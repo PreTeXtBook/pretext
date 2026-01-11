@@ -950,18 +950,27 @@ Book (with parts), "section" at level 3
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
-    <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
-        <!-- look ahead to absorb immediate clause-ending punctuation         -->
-        <!-- for original versions, and as a child of a duplicated element    -->
-        <!-- but not in a duplicate that is entirely the display math         -->
-        <!-- pass the context as enclosing environment (parent::*, md or mdn) -->
-        <xsl:if test="$b-original or not($b-top-level)">
-            <xsl:apply-templates select="parent::*" mode="get-clause-punctuation" />
+    <!-- pull left for visual fidelity -->
+    <xsl:variable name="sanitized-latex">
+        <xsl:call-template name="sanitize-latex">
+            <xsl:with-param name="text" select="$raw-latex" />
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- maybe there is clause-ending punctuation, and maybe we want it -->
+    <xsl:variable name="potential-punctuation">
+        <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
+            <!-- look ahead to absorb immediate clause-ending punctuation         -->
+            <!-- for original versions, and as a child of a duplicated element    -->
+            <!-- but not in a duplicate that is entirely the display math         -->
+            <!-- pass the context as enclosing environment (parent::*, md or mdn) -->
+            <xsl:if test="$b-original or not($b-top-level)">
+                <xsl:apply-templates select="parent::*" mode="get-clause-punctuation" />
+            </xsl:if>
         </xsl:if>
-    </xsl:if>
+    </xsl:variable>
+    <!-- output the latex and the punctuation -->
+    <xsl:value-of select="$sanitized-latex"/>
+    <xsl:value-of select="$potential-punctuation"/>
     <!-- If we built a pure no-number environment, then we add nothing   -->
     <!-- Otherwise, we are in a non-starred environment and get a number -->
     <!-- unless we "\notag" it, which is the better choice under AMSmath -->
