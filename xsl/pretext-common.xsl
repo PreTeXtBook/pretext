@@ -968,9 +968,27 @@ Book (with parts), "section" at level 3
             </xsl:if>
         </xsl:if>
     </xsl:variable>
+    <!-- Identify if the sanitized LaTeX finishes a "cases" environment -->
+    <xsl:variable name="b-ends-with-cases"
+                  select="substring($sanitized-latex, string-length($sanitized-latex) - 10) = '\end{cases}'"/>
     <!-- output the latex and the punctuation -->
-    <xsl:value-of select="$sanitized-latex"/>
-    <xsl:value-of select="$potential-punctuation"/>
+    <xsl:choose>
+        <!-- effectively slide the punctuation inside the "cases" environment -->
+        <!-- NB: condition on non-empty punctuation could be dropped and the  -->
+        <!-- rearrangement would effective be idential to the "otherwise"     -->
+        <!-- clause, but it is clearer to include the condition and do the    -->
+        <!-- "otherwise" more of the time.                                    -->
+        <xsl:when test="not($potential-punctuation = '') and $b-ends-with-cases">
+            <xsl:value-of select="substring($sanitized-latex, 1, string-length($sanitized-latex) - 11)"/>
+            <xsl:value-of select="$potential-punctuation"/>
+            <xsl:text>\end{cases}</xsl:text>
+        </xsl:when>
+        <!-- The usual case, where punctuation has been stripped elsewhere -->
+        <xsl:otherwise>
+            <xsl:value-of select="$sanitized-latex"/>
+            <xsl:value-of select="$potential-punctuation"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- If we built a pure no-number environment, then we add nothing   -->
     <!-- Otherwise, we are in a non-starred environment and get a number -->
     <!-- unless we "\notag" it, which is the better choice under AMSmath -->
