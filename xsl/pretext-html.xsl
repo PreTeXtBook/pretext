@@ -13564,8 +13564,6 @@ TODO:
         <xsl:when test="not($b-debug-react)">
             <!-- condition first on toc present? -->
             <script src="{$html.js.dir}/jquery.min.js"></script>
-            <script src="{$html.js.dir}/jquery.sticky.js" ></script>
-            <script src="{$html.js.dir}/jquery.espy.min.js"></script>
             <script src="{$html.js.dir}/pretext.js"></script>
             <script src="{$html.js.dir}/pretext_add_on.js?x=1"></script>
         </xsl:when>
