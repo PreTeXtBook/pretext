@@ -16892,6 +16892,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </statement>
                 <solution xml:id="solution-antiderivative">
                     <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<md>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}</md>!?!      This is indeed an exciting result, but we are mostly interested in seeing that the sentence-ending punctuation is absorbed properly into the displayed equation.</p>
+                    <p>And sentence-ending punctuation is also placed carefully when display math finishes with a <latex/> <c>cases</c> environment.  To wit, the absolute value can be defined by<md>
+                        |x| = \begin{cases}
+                              x \amp \text{if } x \ge 0 \\
+                              -x \amp \text{if } x \lt 0
+                              \end{cases}
+                    </md>.</p>
                 </solution>
             </exercise>
 
