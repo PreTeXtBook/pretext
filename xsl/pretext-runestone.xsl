@@ -354,8 +354,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="runestone-timed-exam-attributes"/>
                 <!-- the actual list of exercises -->
                 <xsl:copy-of select="$the-exercises"/>
-                <!-- only at "section" level. only when building for a Runestone server -->
-                <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
+                <xsl:if test="not($b-manifest)">
+                    <!-- only at "section" level. only when building for a Runestone server -->
+                    <xsl:apply-templates select="." mode="runestone-progress-indicator"/>
+                </xsl:if>
             </ul>
         </div>
     </xsl:if>
@@ -611,8 +613,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:with-param>
         <xsl:with-param name="b-manifest" select="true()"/>
     </xsl:apply-templates>
-    <xsl:comment> The "progress indicator" above is not necessary as part </xsl:comment>
-    <xsl:comment> of the manifest.  Processing should simply ignore it.   </xsl:comment>
 </xsl:template>
 
 <!-- Properties to report for each division -->
