@@ -451,19 +451,6 @@ var newscript = document.createElement('script');
 });
 
 
-window.addEventListener("load",function(event) {
-       if (false && window.location.href.includes("soundwriting.pugetsound")) {
-/* a bunch of temporary exploration for a Sound Writing survey */
-            console.log("please take our survey");
-            console.log(window.location.href);
-            console.log(window.location.href.includes("soundwriting.pugetsound"));
-
-            // Some calls to a loadResource() function were here
-            // Supporting: js/login, css/features, and js/survey
-        }
-
-});
-
 // this is to open every knowl on a page
 // (this code is not actually used anywhere)
 window.addEventListener("load",function(event) {
