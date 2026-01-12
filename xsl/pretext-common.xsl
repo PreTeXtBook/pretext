@@ -400,9 +400,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- specifying various options).  Totally unsupported.  -->
 <xsl:param name="debug.mathjax.svg" select="''"/>
 
-<!-- Definitely not debugging.  Transitional.  Top-secret. -->
-<xsl:param name="debug.editable" select="''"/>
-
 <!-- 2021-07-02: any non-empty string will cause project-like  -->
 <!-- to run on the same counter as other blocks. Un-supported. -->
 <xsl:param name="debug.project.number" select="''"/>
