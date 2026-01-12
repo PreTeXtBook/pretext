@@ -173,6 +173,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subexercises'>Sous-exercices</localization>
     <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Groupe d'exercices</localization>
+    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
+    <localization string-id='biblio'>Entrée bibliographique</localization>
      <!-- Front matter components -->
     <localization string-id='toc'>Table des matières</localization>
     <localization string-id='abstract'>Résumé</localization>
