@@ -390,12 +390,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:param name="debug.skip-knowls" select="''"/>
 <xsl:variable name="b-skip-knowls" select="not($debug.skip-knowls = '')"/>
 
-<!-- HTML only, experimental -->
-<!-- Temporary, undocumented, and experimental           -->
-<!-- Makes randomization buttons for inline WW probmlems -->
-<xsl:param name="debug.webwork.inline.randomize" select="''"/>
-<xsl:variable name="b-webwork-inline-randomize" select="$debug.webwork.inline.randomize = 'yes'"/>
-
 <!-- MathJax SVG option (yes/no, could be generalized to -->
 <!-- specifying various options).  Totally unsupported.  -->
 <xsl:param name="debug.mathjax.svg" select="''"/>
