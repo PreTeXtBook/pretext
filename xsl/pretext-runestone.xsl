@@ -342,6 +342,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of exercises, so we pass the exercises in as a parameter     -->
 <xsl:template match="exercises" mode="runestone-timed-exam">
     <xsl:param name="the-exercises"/>
+    <xsl:param name="b-manifest" select="false()"/>
 
     <!-- Since the component wraps the exercises, we do not need any  -->
     <!-- restriction about being at teh Runestone "subchapter" level. -->
@@ -608,6 +609,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="the-exercises">
             <xsl:apply-templates select=".//exercise" mode="runestone-manifest"/>
         </xsl:with-param>
+        <xsl:with-param name="b-manifest" select="true()"/>
     </xsl:apply-templates>
     <xsl:comment> The "progress indicator" above is not necessary as part </xsl:comment>
     <xsl:comment> of the manifest.  Processing should simply ignore it.   </xsl:comment>
