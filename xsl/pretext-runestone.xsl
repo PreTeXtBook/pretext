@@ -348,6 +348,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- restriction about being at teh Runestone "subchapter" level. -->
     <xsl:if test="$b-host-runestone">
         <div class="timedAssessment">
+            <!-- for the manifest only, report information about -->
+            <!-- the "exercises" division being re-purposed      -->
+            <xsl:if test="$b-manifest">
+                <title>
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </title>
+                <number>
+                    <xsl:apply-templates select="." mode="number"/>
+                </number>
+            </xsl:if>
             <ul data-component="timedAssessment" data-question_label="">
                 <!-- a Runestone id -->
                 <xsl:apply-templates select="." mode="runestone-id-attribute"/>
