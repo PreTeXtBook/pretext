@@ -282,15 +282,6 @@ function updateURLParameter(url, param, paramVal){
   return baseURL + "?" + newAdditionalURL + rows_txt;
 }
 
-function WWiframeReseed(iframe, seed) {
-  var this_problem = document.getElementsByName(iframe)[0];
-  var this_problem_url = this_problem.src;
-  if (seed === undefined){seed = Number(this_problem.getAttribute('data-seed')) + 80 + 84 + 88;}
-  this_problem.setAttribute('data-seed', seed);
-  this_problem_url = updateURLParameter(this_problem_url, "problemSeed", seed);
-  this_problem.src = this_problem_url;
-}
-
 function process_workspace() {
     console.log("processing workspace");
 // next does not work, because the cursor does back to the beginning
