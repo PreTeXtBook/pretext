@@ -419,37 +419,6 @@ window.addEventListener("load",function(event) {
 },
 false);
 
-// a hack for hosted tracking
-
-window.addEventListener("load",function(event) {
-       if($('body').attr('id') == "judson-AATA") {
-           console.log("            found AATA");
-           console.log(" looking for id");
-           if (typeof eBookConfig !== 'undefined') {
-             if(eBookConfig['username']) {
-                aa_id = "run" + eBookConfig['username'];
-                ut_id = eBookConfig['username'];
-             console.log(" done looking for id", ut_id);
-var newscript = document.createElement('script');
-  newscript.type = 'text/javascript';
-  newscript.async = true;
-  newscript.src = 'https://pretextbook.org/js/' + '0.13' + '/' + 'trails' + '.js';
-  var allscripts = document.getElementsByTagName('script');
-  var s = allscripts[allscripts.length - 1];
-  console.log('s',s);
-  console.log("adding a script", newscript);
-  s.parentNode.insertBefore(newscript, s.nextSibling);
-  trail = true;
-             console.log(" done adding script");
-             } else {
-             console.log(" did not find username");
-             }
-           }  else {
-             console.log(" did not find eBookConfig")
-           }
-       }
-});
-
 
 // when the anchor is a knowl, open it
 window.addEventListener("load",function(event) {
