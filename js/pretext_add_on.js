@@ -15,13 +15,6 @@
 console.log("thisbrowser.userAgent", window.navigator.userAgent);
 */
 
-var minivers = "0";
-if (typeof miniversion !== 'undefined') {
-  console.log("typeof miniversion", typeof miniversion, "dddd", typeof miniversion == 'undefined');
-  minivers = miniversion.toString();
-}
-console.log("               minivers", minivers);
-
 /* scrollbar width from https://stackoverflow.com/questions/13382516/getting-scroll-bar-width-using-javascript */
 function getScrollbarWidth() {
     var outer = document.createElement("div");
@@ -457,37 +450,6 @@ var newscript = document.createElement('script');
        }
 });
 
-function loadResource(type, file) {
-  /* type should be js or css */
-  if (typeof js_version === 'undefined') { js_version = '0.2' }
-  if (typeof css_version === 'undefined') { css_version = '0.6' }
-  var newresource, allresources, s;
-  var linktype = "script";
-  if (type == "css") { linktype = "link" }
-  newresource = document.createElement(linktype);
-
-  if (type == "css") {
-      newresource.type = 'text/css';
-      newresource.rel = 'stylesheet';
-      newresource.href = 'https://pretextbook.org/css/' + css_version + '/' + file + '.css';
-      newresource.href += '?minivers=' + minivers;
-  } else if (type == "js") {
-      newresource.type = 'text/javascript';
-//  newscript.async = true;
-      newresource.src = 'https://pretextbook.org/js/' + js_version + '/' + file + '.js';
-      newresource.src += '?minivers=' + minivers;
-  } else {
-      console.log("unknown resource type", type, "for", file);
-      return
-  }
-
-  allresources = document.getElementsByTagName(linktype);
-  s = allresources[allresources.length - 1];
-  console.log('s',s);
-  console.log("adding a resource", newresource);
-  s.parentNode.insertBefore(newresource, s.nextSibling);
-}
-
 
 window.addEventListener("load",function(event) {
        if (false && window.location.href.includes("soundwriting.pugetsound")) {
@@ -496,15 +458,8 @@ window.addEventListener("load",function(event) {
             console.log(window.location.href);
             console.log(window.location.href.includes("soundwriting.pugetsound"));
 
-            loadResource("js", "login");
-            loadResource("css", "features");
-            setTimeout( loadResource("js", "survey"), 1000);  /* I know: sloppy */
-
-  //      } else if ((typeof online_editable !== 'undefined') &&  online_editable) {
-        } else if (false && $('body').attr('id') == "pretext-SA") {
-            loadResource('css', 'features');
-            loadResource('js', 'login')
-            loadResource('js', 'edit');
+            // Some calls to a loadResource() function were here
+            // Supporting: js/login, css/features, and js/survey
         }
 
 });
