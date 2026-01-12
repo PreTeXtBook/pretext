@@ -490,17 +490,7 @@ function loadResource(type, file) {
 
 
 window.addEventListener("load",function(event) {
-       if(false && $('body').attr('id') == "pretext-SA") {
-           console.log("            found DMOI");
-           if (typeof uname === "undefined") { uname = "" }
-           console.log("aaaa", uname, "  uname");
-           if(uname == "editor") {
-                loadResource('js', 'edit');
-           } else {
-                console.log("not enabling editing")
-           }
- /*       } else if ($('body').attr('id') == "pugetsound-SW") { */
-        } else if (false && window.location.href.includes("soundwriting.pugetsound")) {
+       if (false && window.location.href.includes("soundwriting.pugetsound")) {
 /* a bunch of temporary exploration for a Sound Writing survey */
             console.log("please take our survey");
             console.log(window.location.href);
@@ -515,30 +505,6 @@ window.addEventListener("load",function(event) {
             loadResource('css', 'features');
             loadResource('js', 'login')
             loadResource('js', 'edit');
-        } else {
-            var this_source_txt;
-            var source_url = window.location.href;
-            source_url = source_url.replace(/(#|\?).*/, "");
-            source_url = source_url.replace(/html$/, "ptx");
-            if (typeof sourceeditable !== 'undefined') {
-              fetch(source_url).then(
-                  function(u){ return u.text();}
-                ).then(
-                  function(text){
-                      this_source_txt = text;
-                      if (this_source_txt.includes("404 Not")) {
-                          console.log("Editing not enabled: source unavailable")
-                      } else {
-                        loadResource('css', 'features');
-                        loadResource('css', 'edit');
-                        loadResource('js', 'login')
-                        loadResource('js', 'edit');
-                      }
-                  }
-                );
-              } else {
-                   console.log("Source file unavailable: editing not possible")
-              }
         }
 
 });
