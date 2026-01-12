@@ -284,11 +284,6 @@ function updateURLParameter(url, param, paramVal){
 
 function process_workspace() {
     console.log("processing workspace");
-// next does not work, because the cursor does back to the beginning
-// so:  need to handle the cursor
-//    the_text = document.activeElement.innerHTML;
-//    the_text = the_text.replace(/(^|\s)\$([^\$]+)\$(\s|$|[.,!?;:])/g, "\1\\(\2\\)\3")
-//    document.activeElement.innerHTML = the_text
     MathJax.typesetPromise();
 }
 /* for the GeoGebra calculator */
@@ -336,17 +331,8 @@ window.addEventListener("load",function(event) {
                  ggbscript.id = "create_ggb_calc";
                  ggbscript.innerHTML = "ggbApp.inject('geogebra-calculator')";
                  document.body.appendChild(ggbscript);
-//                 setTimeout( function() {
-//                     $("#calculator-toggle").focus();
-//                     var inputfield = $("input.gwt-SuggestBox.TextField")[0];
-//                     console.log("inputfield", inputfield);
-//                     inputfield.focus();
-//                 }, 4000);
              } else {
                  pretext_geogebra_calculator_onload();
-//                 var inputfield = $("input.gwt-SuggestBox.TextField")[0];
-//                 console.log("inputfield", inputfield);
-//                 inputfield.focus();
              }
          } else {
              $('#calculator-container').css('display', 'none');
@@ -357,16 +343,6 @@ window.addEventListener("load",function(event) {
      });
 });
 
-
-/*
-window.addEventListener("load",function(event) {
-//    setTimeout( function() {
-       console.log("changein play color");
-       $('figure > div.onclick > svg > path').attr('fill', '#0000aa');
-       $('path').attr('fill', '#0000aa')
-//    }, 5000)
-});
-*/
 
 window.addEventListener("load",function(event) {
     document.onkeyup = function(event)
@@ -386,14 +362,6 @@ window.addEventListener("load",function(event) {
                     console.log("staying in the sage cell", parent_sage_cell, document.activeElement)
                     just_hit_escape = true;
                     setTimeout(function(){ just_hit_escape = false }, 1000);
-     //           console.log("parent_sage_cell", parent_sage_cell);
-     //           if ($(parent_sage_cell).hasClass('sagecell_editor')) {
-     //              console.log("I am trapped in a sage cell", $(document.activeElement).closest(".sagecell_editor"));
-     //              console.log($(document.activeElement));
-     //              var this_sage_cell = $(document.activeElement).closest(".sagecell_editor");
-     //              this_sage_cell.next().focus;
-     //           }
-     //           else
                 } else
                 if(knowl_focus_stack.length > 0 ) {
                    most_recently_opened = knowl_focus_stack.pop();
@@ -520,16 +488,6 @@ function createPrintoutPages(margins) {
                 printout.insertBefore(tasks[i], child.nextSibling);
             }
         // Skipping separate treatment of exercisegroups for now.
-        //} else if (child.classList.contains('exercisegroup')) {
-        //    for (const subChild of child.children) {
-        //        if (subChild.classList.contains('exercisegroup-exercises')){
-        //            for (const row of subChild.children){
-        //                rows.push(row);
-        //            }
-        //        } else {
-        //            rows.push(child);
-        //        }
-        //    }
         } else {
             rows.push(child);
         }
