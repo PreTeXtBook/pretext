@@ -2620,6 +2620,50 @@ section.handout {
 .onepage .instructions {
   display: none;
 }
+.onepage .first-page-header,
+.onepage .running-header,
+.onepage .first-page-footer,
+.onepage .running-footer {
+  display: flex;
+  justify-content: space-between;
+  align-content: flex-start;
+}
+.onepage .first-page-header div,
+.onepage .running-header div,
+.onepage .first-page-footer div,
+.onepage .running-footer div {
+  min-width: 10em;
+}
+.onepage .first-page-header .header-center,
+.onepage .first-page-header .footer-center,
+.onepage .running-header .header-center,
+.onepage .running-header .footer-center,
+.onepage .first-page-footer .header-center,
+.onepage .first-page-footer .footer-center,
+.onepage .running-footer .header-center,
+.onepage .running-footer .footer-center {
+  text-align: center;
+}
+.onepage .first-page-header .header-right,
+.onepage .first-page-header .footer-right,
+.onepage .running-header .header-right,
+.onepage .running-header .footer-right,
+.onepage .first-page-footer .header-right,
+.onepage .first-page-footer .footer-right,
+.onepage .running-footer .header-right,
+.onepage .running-footer .footer-right {
+  text-align: right;
+}
+.onepage .first-page-header,
+.onepage .running-header {
+  margin-bottom: 1em;
+  border-bottom: 1px dashed lightgray;
+}
+.onepage .first-page-footer,
+.onepage .running-footer {
+  margin-top: 1em;
+  border-top: 1px dashed lightgray;
+}
 .solutions {
   margin-top: 1em;
 }
@@ -2718,7 +2762,7 @@ form.papersize-select {
     width: 100%;
   }
   .highlight-workspace .onepage .workspace {
-    border: 1px dashed grey;
+    border: 1px dashed gray;
     background: hsl(224, 100%, 95%);
   }
   .onepage .original-workspace {
@@ -2787,6 +2831,16 @@ form.papersize-select {
   input {
     cursor: pointer;
   }
+  .header-option,
+  .footer-option {
+    display: flex;
+    gap: 1em;
+    align-items: baseline;
+  }
+  .header-option .title::after,
+  .footer-option .title::after {
+    content: ":";
+  }
   .print-options summary {
     cursor: pointer;
     display: list-item inline;
@@ -2818,6 +2872,18 @@ form.papersize-select {
     overflow: hidden;
     page-break-after: always;
     page-break-inside: avoid;
+  }
+  section.worksheet .first-page-header,
+  section.worksheet .running-header,
+  section.handout .first-page-header,
+  section.handout .running-header {
+    border-bottom: none;
+  }
+  section.worksheet .first-page-footer,
+  section.worksheet .running-footer,
+  section.handout .first-page-footer,
+  section.handout .running-footer {
+    border-top: none;
   }
   section.worksheet div.workspace,
   section.worksheet div.workspace.squashed.tight,
