@@ -165,7 +165,8 @@
                         attribute top {text}?,
                         attribute right {text}?,
                         attribute bottom {text}?,
-                        attribute left {text}?
+                        attribute left {text}?,
+                        HeaderFooterElements?
                     }?
                 }
 
@@ -174,6 +175,28 @@
                 attribute hint { "yes" | "no" }?,
                 attribute answer { "yes" | "no" }?,
                 attribute solution { "yes" | "no" }?
+
+            HeaderFooterElements =
+                element first-page-header {
+                    attribute left { text }?,
+                    attribute center { text }?,
+                    attribute right { text }?
+                }? &amp;
+                element running-header {
+                    attribute left { text }?,
+                    attribute center { text }?,
+                    attribute right { text }?
+                }? &amp;
+                element first-page-footer {
+                    attribute left { text }?,
+                    attribute center { text }?,
+                    attribute right { text }?
+                }? &amp;
+                element running-footer {
+                    attribute left { text }?,
+                    attribute center { text }?,
+                    attribute right { text }?
+                }?
             </code>
         </fragment>
     </section>

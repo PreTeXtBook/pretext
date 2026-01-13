@@ -153,6 +153,9 @@
             <optional>
               <attribute name="left"/>
             </optional>
+            <optional>
+              <ref name="HeaderFooterElements"/>
+            </optional>
           </element>
         </optional>
       </interleave>
@@ -191,6 +194,62 @@
         </choice>
       </attribute>
     </optional>
+  </define>
+  <define name="HeaderFooterElements">
+    <interleave>
+      <optional>
+        <element name="first-page-header">
+          <optional>
+            <attribute name="left"/>
+          </optional>
+          <optional>
+            <attribute name="center"/>
+          </optional>
+          <optional>
+            <attribute name="right"/>
+          </optional>
+        </element>
+      </optional>
+      <optional>
+        <element name="running-header">
+          <optional>
+            <attribute name="left"/>
+          </optional>
+          <optional>
+            <attribute name="center"/>
+          </optional>
+          <optional>
+            <attribute name="right"/>
+          </optional>
+        </element>
+      </optional>
+      <optional>
+        <element name="first-page-footer">
+          <optional>
+            <attribute name="left"/>
+          </optional>
+          <optional>
+            <attribute name="center"/>
+          </optional>
+          <optional>
+            <attribute name="right"/>
+          </optional>
+        </element>
+      </optional>
+      <optional>
+        <element name="running-footer">
+          <optional>
+            <attribute name="left"/>
+          </optional>
+          <optional>
+            <attribute name="center"/>
+          </optional>
+          <optional>
+            <attribute name="right"/>
+          </optional>
+        </element>
+      </optional>
+    </interleave>
   </define>
   <define name="Source">
     <element name="source">

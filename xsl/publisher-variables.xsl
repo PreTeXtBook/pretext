@@ -291,6 +291,44 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$ws-margin"/>
 </xsl:template>
 
+<!-- Printout headers and footers.  We have separate variables for "first-page" and "running" -->
+<!-- Each can take a "left", "center", and "right" value. -->
+<xsl:variable name="ws-header-first-left">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/first-page-header/pi:pub-attribute[@name='left']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-header-first-center">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/first-page-header/pi:pub-attribute[@name='center']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-header-first-right">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/first-page-header/pi:pub-attribute[@name='right']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-header-running-left">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/running-header/pi:pub-attribute[@name='left']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-header-running-center">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/running-header/pi:pub-attribute[@name='center']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-header-running-right">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/running-header/pi:pub-attribute[@name='right']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-footer-first-left">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/first-page-footer/pi:pub-attribute[@name='left']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-footer-first-center">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/first-page-footer/pi:pub-attribute[@name='center']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-footer-first-right">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/first-page-footer/pi:pub-attribute[@name='right']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-footer-running-left">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/running-footer/pi:pub-attribute[@name='left']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-footer-running-center">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/running-footer/pi:pub-attribute[@name='center']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="ws-footer-running-right">
+    <xsl:apply-templates select="$publisher-attribute-options/common/worksheet/running-footer/pi:pub-attribute[@name='right']" mode="set-pubfile-variable"/>
+</xsl:variable>
 
 <!-- ########################### -->
 <!-- Exercise component switches -->
@@ -3273,6 +3311,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="right" freeform="yes"/>
             <pi:pub-attribute name="bottom" freeform="yes"/>
             <pi:pub-attribute name="left" freeform="yes"/>
+            <first-page-header>
+                <pi:pub-attribute name="left" default="" freeform="yes"/>
+                <pi:pub-attribute name="center" default="" freeform="yes"/>
+                <pi:pub-attribute name="right" default="" freeform="yes"/>
+            </first-page-header>
+            <first-page-footer>
+                <pi:pub-attribute name="left" default="" freeform="yes"/>
+                <pi:pub-attribute name="center" default="" freeform="yes"/>
+                <pi:pub-attribute name="right" default="" freeform="yes"/>
+            </first-page-footer>
+            <running-header>
+                <pi:pub-attribute name="left" default="" freeform="yes"/>
+                <pi:pub-attribute name="center" default="" freeform="yes"/>
+                <pi:pub-attribute name="right" default="" freeform="yes"/>
+            </running-header>
+            <running-footer>
+                <pi:pub-attribute name="left" default="" freeform="yes"/>
+                <pi:pub-attribute name="center" default="" freeform="yes"/>
+                <pi:pub-attribute name="right" default="" freeform="yes"/>
+            </running-footer>
         </worksheet>
     </common>
     <html>

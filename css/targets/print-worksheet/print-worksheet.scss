@@ -103,6 +103,39 @@ section.worksheet, section.handout {
   display: none;
 }
 
+// Headers and footers
+.onepage .first-page-header,
+.onepage .running-header,
+.onepage .first-page-footer,
+.onepage .running-footer {
+  display: flex;
+  justify-content: space-between;
+  align-content: flex-start;
+
+  // Make divs have minimum width to make it easier to select them for editing
+  div {
+    min-width: 10em;
+  }
+
+  .header-center, .footer-center {
+    text-align: center;
+  }
+
+  .header-right, .footer-right {
+    text-align: right;
+  }
+}
+
+.onepage .first-page-header, .onepage .running-header {
+  margin-bottom: 1em;
+  border-bottom: 1px dashed lightgray;
+}
+
+.onepage .first-page-footer, .onepage .running-footer {
+  margin-top: 1em;
+  border-top: 1px dashed lightgray;
+}
+
 
 // Style solutions divs, which the javascript transforms from knowls to divs with titles
 
@@ -235,7 +268,7 @@ form.papersize-select {
   }
 
   .highlight-workspace .onepage .workspace {
-    border: 1px dashed grey;
+    border: 1px dashed gray;
     background: hsl(224, 100%, 95%);
   }
 
@@ -277,6 +310,17 @@ form.papersize-select {
     cursor: pointer;
   }
 
+  // Add spacing for header/footer options
+  .header-option, .footer-option {
+    display: flex;
+    gap: 1em;
+    align-items: baseline;
+
+    .title::after {
+      content: ":";
+    }
+  }
+
 // Style the additional printing options the same as we do for knowls
   .print-options {
     summary {
@@ -316,6 +360,15 @@ form.papersize-select {
       page-break-after: always;
       page-break-inside: avoid;
     }
+
+    .first-page-header, .running-header {
+      border-bottom: none;
+    }
+
+    .first-page-footer, .running-footer {
+      border-top: none;
+    }
+
     // Never show the workspace preview in print
     div.workspace,
     div.workspace.squashed.tight {

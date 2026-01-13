@@ -31,6 +31,7 @@
         <xs:element minOccurs="0" ref="journal"/>
         <xs:element minOccurs="0" name="worksheet">
           <xs:complexType>
+            <xs:group minOccurs="0" ref="HeaderFooterElements"/>
             <xs:attribute name="margin"/>
             <xs:attribute name="top"/>
             <xs:attribute name="right"/>
@@ -176,6 +177,44 @@
       </xs:simpleType>
     </xs:attribute>
   </xs:attributeGroup>
+  <xs:group name="HeaderFooterElements">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="first-page-header"/>
+        <xs:element ref="running-header"/>
+        <xs:element ref="first-page-footer"/>
+        <xs:element ref="running-footer"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="first-page-header">
+    <xs:complexType>
+      <xs:attribute name="left"/>
+      <xs:attribute name="center"/>
+      <xs:attribute name="right"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="running-header">
+    <xs:complexType>
+      <xs:attribute name="left"/>
+      <xs:attribute name="center"/>
+      <xs:attribute name="right"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="first-page-footer">
+    <xs:complexType>
+      <xs:attribute name="left"/>
+      <xs:attribute name="center"/>
+      <xs:attribute name="right"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="running-footer">
+    <xs:complexType>
+      <xs:attribute name="left"/>
+      <xs:attribute name="center"/>
+      <xs:attribute name="right"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="source">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
