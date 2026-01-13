@@ -3277,10 +3277,20 @@
                             <cell>SVG</cell>
                             <cell>HTML (for <c>iframe</c>)</cell>
                         </row>
+                        <row valign="top">
+                            <cell>EPUB</cell>
+                            <cell>SVG</cell>
+                            <cell>PNG</cell>
+                        </row>
+                        <row valign="top">
+                            <cell>Kindle</cell>
+                            <cell>PNG</cell>
+                            <cell>PNG</cell>
+                        </row>
                     </tabular>
                 </table>
 
-                <p>Note that the <init>PNG</init> images in the 3D case are not very good.  This needs help on the Sage side.  And since 3D images in <init>HTML</init> output are inserted via an <init>HTML</init> <c>iframe</c> they can misbehave if you do not get the aspect ratio close to right.  On the plus side, the 3D <init>HTML</init> images may be manipulated interactively with keyboard arrow keys, a mouse scroll wheel, and by dragging with a mouse using both a left and a right mouse press.</p>
+                <p>Note that the <init>PNG</init> images in the 3D case are not very good.  This needs help on the Sage side.  And since 3D images in <init>HTML</init> output are inserted via an <init>HTML</init> <c>iframe</c> they can misbehave if you do not get the aspect ratio close to right.  On the plus side, the 3D <init>HTML</init> images may be manipulated interactively with keyboard arrow keys, a mouse scroll wheel, and by dragging with a mouse using both a left and a right mouse press.  Note that EPUB output used to make a Kindle book needs to use PNG images for both the 2D and 3D cases.</p>
 
 
                 <p>Pay very careful attention to the requirement that the last line of your code evaluates to be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing during testing, it evaluates to Python's <c>None</c> object and that is just what you will get for your image.  The example below illustrates creating two graphics objects and combining them into an expression on the last line that evaluates to the graphics object that will be created in the desired graphics files.</p>
