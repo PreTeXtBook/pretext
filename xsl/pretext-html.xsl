@@ -622,8 +622,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <!-- page-margins-attribute will be empty unless in a printout's standalone page -->
+        <!-- page-margins-attribute will be empty unless in a printout division -->
         <xsl:apply-templates select="." mode="page-margins-attribute"/>
+        <!-- page-header-footer-attributes; empty except in a printout division -->
+        <xsl:apply-templates select="." mode="page-header-footer-attributes"/>
         <xsl:apply-templates select="." mode="section-heading">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
@@ -11919,6 +11921,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </summary>
         <xsl:apply-templates select="." mode="hide-solutions"/>
+        <xsl:apply-templates select="." mode="header-footer-toggles"/>
         <xsl:apply-templates select="." mode="highlight-workspace-toggle"/>
     </details>
 </xsl:template>
@@ -11960,6 +11963,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </div>
     </xsl:if>
+</xsl:template>
+
+<xsl:template match="*" mode="header-footer-toggles">
+    <div class="header-footer-options">
+        <div class="header-option">
+            <span class="title">
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'print-header'"/>
+                </xsl:apply-templates>
+            </span>
+            <label>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'first-page'"/>
+                </xsl:apply-templates>
+                <input type="checkbox" id="print-first-page-header-checkbox" checked="checked"/>
+            </label>
+            <label>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'running'"/>
+                </xsl:apply-templates>
+                <input type="checkbox" id="print-running-header-checkbox" checked="checked"/>
+            </label>
+        </div>
+        <div class="footer-option">
+            <span class="title">
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'print-footer'"/>
+                </xsl:apply-templates>
+            </span>
+            <label>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'first-page'"/>
+                </xsl:apply-templates>
+                <input type="checkbox" id="print-first-page-footer-checkbox" checked="checked"/>
+            </label>
+            <label>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'running'"/>
+                </xsl:apply-templates>
+                <input type="checkbox" id="print-running-footer-checkbox" checked="checked"/>
+            </label>
+        </div>
+    </div>
 </xsl:template>
 
 <xsl:template match="*" mode="highlight-workspace-toggle">
@@ -13970,9 +14016,9 @@ TODO:
     </xsl:if>
 </xsl:template>
 
-<!-- ########################### -->
-<!-- Worksheet Margins and Pages -->
-<!-- ########################### -->
+<!-- ############################################# -->
+<!-- Worksheet Margins, Headers/Footers, and Pages -->
+<!-- ############################################# -->
 
 <!-- We put page-margins-attributes only on printout sections -->
 <xsl:template match="*" mode="page-margins-attribute"/>
@@ -14000,6 +14046,72 @@ TODO:
             <xsl:with-param name="publisher-side" select="$ws-margin-left"/>
         </xsl:apply-templates>
     </xsl:attribute>
+</xsl:template>
+
+<!-- Add data-* attributes for headers and footers -->
+<xsl:template match="*" mode="page-header-footer-attributes"/>
+
+<xsl:template match="worksheet|handout" mode="page-header-footer-attributes">
+    <xsl:if test="not($ws-header-first-left = '')">
+        <xsl:attribute name="data-header-first-left">
+            <xsl:value-of select="normalize-space($ws-header-first-left)"/>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not($ws-header-first-center = '')">
+        <xsl:attribute name="data-header-first-center">
+            <xsl:value-of select="normalize-space($ws-header-first-center)"/>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not($ws-header-first-right = '')">
+        <xsl:attribute name="data-header-first-right">
+            <xsl:value-of select="normalize-space($ws-header-first-right)"/>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not($ws-header-running-left = '')">
+        <xsl:attribute name="data-header-running-left">
+            <xsl:value-of select="normalize-space($ws-header-running-left)"/>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not($ws-header-running-center = '')">
+        <xsl:attribute name="data-header-running-center">
+            <xsl:value-of select="normalize-space($ws-header-running-center)"/>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not($ws-header-running-right = '')">
+        <xsl:attribute name="data-header-running-right">
+            <xsl:value-of select="normalize-space($ws-header-running-right)"/>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not($ws-footer-first-left = '')">
+        <xsl:attribute name="data-footer-first-left">
+            <xsl:value-of select="normalize-space($ws-footer-first-left)"/>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not($ws-footer-first-center = '')">
+        <xsl:attribute name="data-footer-first-center">
+            <xsl:value-of select="normalize-space($ws-footer-first-center)"/>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not($ws-footer-first-right = '')">
+        <xsl:attribute name="data-footer-first-right">
+            <xsl:value-of select="normalize-space($ws-footer-first-right)"/>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not($ws-footer-running-left = '')">
+        <xsl:attribute name="data-footer-running-left">
+            <xsl:value-of select="normalize-space($ws-footer-running-left)"/>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not($ws-footer-running-center = '')">
+        <xsl:attribute name="data-footer-running-center">
+            <xsl:value-of select="normalize-space($ws-footer-running-center)"/>
+        </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not($ws-footer-running-right = '')">
+        <xsl:attribute name="data-footer-running-right">
+            <xsl:value-of select="normalize-space($ws-footer-running-right)"/>
+        </xsl:attribute>
+    </xsl:if>
 </xsl:template>
 
 <!-- A printout is (mostly) structured by "page", which translates    -->
