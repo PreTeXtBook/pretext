@@ -935,6 +935,19 @@
                 <li><c>yes</c>: show a button in the navigation bar, that when clicked, displays a popup allowing the user to copy an iframe code snippet to paste into their website or LMS.</li>
             </ul></p>
         </subsection>
+
+        <subsection xml:id="online-interactives-options">
+            <title>Interactives Options</title>
+            <idx><h>publisher options</h><h>html interactives</h></idx>
+
+            <p>
+                The
+                <cd>
+                    <cline>/publication/html</cline>
+                </cd>
+                element can have an attribute <attr>design-width</attr> with an integer value. This will be used as the base value for converting the percentage based widths of an interactive into a pixel values when that is required. The default value is <c>600</c> (100% width is 600px).
+            </p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-revealjs">
