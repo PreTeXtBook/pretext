@@ -318,6 +318,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id="hide-hints">Hide hints</localization> -->
     <!-- <localization string-id="hide-answers">Hide answers</localization> -->
     <!-- <localization string-id="hide-solutions">Hide solutions</localization> -->
+    <!-- <localization string-id="print-header">Print headers</localization> -->
+    <!-- <localization string-id="print-footer">Print footers</localization> -->
+    <!-- <localization string-id="first-page">First page</localization> -->
+    <!-- <localization string-id="running">Running</localization> -->
     <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
     <!-- Print page button text -->
     <localization string-id='print'>پرنت</localization>

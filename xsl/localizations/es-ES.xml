@@ -287,6 +287,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id="hide-hints">Ocultar pistas</localization>
     <localization string-id="hide-answers">Ocultar respuestas</localization>
     <localization string-id="hide-solutions">Ocultar soluciones</localization>
+    <!-- <localization string-id="print-header">Print headers</localization> -->
+    <!-- <localization string-id="print-footer">Print footers</localization> -->
+    <!-- <localization string-id="first-page">First page</localization> -->
+    <!-- <localization string-id="running">Running</localization> -->
     <localization string-id="highlight-workspace">Resaltar espacio de trabajo</localization>
     <localization string-id='print'>Imprimir</localization>
     <localization string-id='print-preview'>Vista previa de impresión</localization>
