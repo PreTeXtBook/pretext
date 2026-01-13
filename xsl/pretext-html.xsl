@@ -902,21 +902,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
-    <!-- Links to the "printable" version(s), meant only for "viewable" -->
-    <!-- printout, so CSS can kill on the "printable" versions          -->
-    <!-- $paper is LOWER CASE "a4" and "letter"                         -->
+    <!-- add print preview button for printouts -->
     <xsl:if test="(self::worksheet or self::handout)">
         <xsl:apply-templates select="." mode="standalone-printout-links"/>
     </xsl:if>
 </xsl:template>
 
-<!-- Links to the "printable" version(s), meant only for "viewable" -->
-<!-- printout, so CSS can kill on the "printable" versions          -->
-<!-- As of 2025-05-31, this is changing to a single print button    -->
-<!-- and will later change to have the button to popout printable   -->
-<!-- printout instead of linking to separate file.                  -->
-<!-- We isolate link creation, so we can kill it simply in          -->
-<!-- derivative  conversions                                        -->
+<!-- Add print preview button for printouts                          -->
+<!-- As of 2025-12-29, we no longer create a separate html page for  -->
+<!-- print previews.  A simple button with printer icon that reloads -->
+<!-- the page with a url parameter that tells javascript to switch   -->
+<!-- to printout css and format all the pages and workspace.         -->
 <xsl:template match="worksheet|handout" mode="standalone-printout-links">
     <xsl:variable name="printout-id">
         <xsl:apply-templates select="." mode="html-id"/>
@@ -10928,38 +10924,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="native-search-box-js" />
 </xsl:variable>
 
-<!-- Generate a version of file-wrap-full-head-cache customized for use in -->
-<!-- printable worksheets and handouts. There does not seem to be a better -->
-<!-- (and straightforward) method other than duplicating above work.       -->
-<xsl:variable name="file-wrap-full-head-cache-printable">
-    <!-- file-wrap-iframe-head-cache -->
-    <xsl:call-template name="fonts"/>
-    <xsl:call-template name="font-awesome"/>
-    <xsl:call-template name="css-printable"/>
-    <xsl:call-template name="mathjax"/>
-    <!-- file-wrap-basic-head-cache -->
-    <xsl:call-template name="keywords-meta-element"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <xsl:call-template name="open-graph-info"/>
-    <xsl:call-template name="pretext-js"/>
-    <xsl:call-template name="runestone-header"/>
-    <xsl:call-template name="diagcess-header"/>
-    <!-- file-wrap-simple-head-cache -->
-    <xsl:call-template name="sagecell-code" />
-    <xsl:call-template name="favicon"/>
-    <xsl:call-template name="webwork-js"/>
-    <xsl:call-template name="stack-js"/>
-    <xsl:call-template name="lti-iframe-resizer"/>
-    <xsl:call-template name="syntax-highlight"/>
-    <xsl:call-template name="hypothesis-annotation" />
-    <xsl:call-template name="geogebra" />
-    <xsl:call-template name="jsxgraph" />
-    <xsl:call-template name="mermaid-header" />
-    <!-- file-wrap-full-head-cache -->
-    <xsl:call-template name="google-search-box-js" />
-    <xsl:call-template name="native-search-box-js" />
-</xsl:variable>
-
 <!-- Now build end of body caches in the same manner          -->
 <!-- Again, start with univeral content and build from there  -->
 
@@ -13730,14 +13694,6 @@ TODO:
         <xsl:comment> must supply it.                                             </xsl:comment>
         <link href="developer.css" rel="stylesheet" type="text/css" />
     </xsl:if>
-</xsl:template>
-
-<!-- The printout previews get their own css target that controls both screen and print styles -->
-<xsl:template name="css-printable">
-    <xsl:if test="not($b-debug-react)">
-        <link href="{$html.css.dir}/print-worksheet.css" rel="stylesheet" type="text/css"/>
-    </xsl:if>
-    <xsl:call-template name="css-common"/>
 </xsl:template>
 
 <xsl:template name="css">
