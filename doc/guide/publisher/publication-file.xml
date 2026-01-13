@@ -191,13 +191,15 @@
             </p>
         </subsection>
 
-        <subsection xml:id="common-worksheet">
-            <title>Worksheet margins</title>
-            <idx><h>common option</h><h>worksheet</h></idx>
-            <idx><h>worksheet</h><h>common option</h></idx>
+        <subsection xml:id="common-worksheet-margins">
+            <title>Worksheet and Handout Margins</title>
+            <idx><h>common option</h><h>worksheet margins</h></idx>
+            <idx><h>common option</h><h>handout margins</h></idx>
+            <idx><h>worksheet margins</h><h>common option</h></idx>
+            <idx><h>handout margins</h><h>common option</h></idx>
 
             <p>
-                Margins for worksheets can be specified using a combination of attributes on the element
+                Margins for worksheets and handouts can be specified using a combination of attributes on the element
                 <cd>
                     <cline>/publication/common/worksheet</cline>
                 </cd>
@@ -213,6 +215,34 @@
                 See also <xref ref="latex-worksheet-options"/> for more information on how these margins are used in the <latex/> conversion.
             </p>
 
+        </subsection>
+
+        <subsection xml:id="common-worksheet-headers-footers">
+            <title>Worksheet and Handout Headers/Footers</title>
+            <idx><h>common option</h><h>worksheet headers and footers</h></idx>
+            <idx><h>worksheet headers and footers</h><h>common option</h></idx>
+
+            <p>
+                Headers and footers for worksheets and handouts can be specified in the publication file (they can also be edited in the browser when producing <init>HTML</init> output).  First-page and running headers and footers are specified separately, and each can have a value for left, center, and right positions.
+            </p>
+            <p>
+                That is, each of the elements
+                <cd>
+                    <cline>/publication/common/worksheet/first-page-header</cline>
+                    <cline>/publication/common/worksheet/first-page-footer</cline>
+                    <cline>/publication/common/worksheet/running-header</cline>
+                    <cline>/publication/common/worksheet/running-footer</cline>
+                </cd>
+                can have attributes <attr>left</attr>, <attr>center</attr>, and <attr>right</attr>, whose values are the desired content for that position in the header or footer.
+            </p>
+
+            <p>
+                For example, to add a name and date line to the top of the first page, one would include the publication file entry
+                <cd>
+                    <cline>&lt;first-page-header left="Name: __________" right="Date: __________"/&gt;</cline>
+                </cd>
+                (inside the <tag>worksheet</tag> element of <tag>common</tag>).
+            </p>
         </subsection>
     </section>
 
@@ -367,7 +397,7 @@
             </p>
 
             <p>
-                See also <xref ref="common-worksheet"/> for how to specify margins for formatted worksheets.
+                See also <xref ref="common-worksheet-margins"/> for how to specify margins for formatted worksheets.
             </p>
         </subsection>
 
