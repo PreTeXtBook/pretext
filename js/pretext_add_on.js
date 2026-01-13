@@ -738,6 +738,77 @@ function createPrintoutPages(margins) {
     }
 }
 
+// Add headers and footers to all pages in a printout.  Start with this set to be hidden by default; a toggle later will show/hide them.
+function addHeadersAndFootersToPrintout() {
+    const printout = document.querySelector('section.worksheet, section.handout');
+    if (!printout) {
+        console.warn("No printout found, exiting addHeadersAndFootersToPrintout.");
+        return;
+    }
+    const pages = printout.querySelectorAll('.onepage');
+    // Loop through pages and add header and footer divs
+    pages.forEach((page, index) => {
+        const isFirstPage = index === 0;
+        // Add header
+        const headerDiv = document.createElement('div');
+        headerDiv.classList.add(isFirstPage ? 'first-page-header' : 'running-header', 'hidden');
+        headerDiv.innerHTML = `<div class="header-left" contenteditable="true"></div><div class="header-center" contenteditable="true"></div><div class="header-right" contenteditable="true"></div>`;
+        page.insertBefore(headerDiv, page.firstChild);
+        // Add footer
+        const footerDiv = document.createElement('div');
+        footerDiv.classList.add(isFirstPage ? 'first-page-footer' : 'running-footer', 'hidden');
+        footerDiv.innerHTML = `<div class="footer-left" contenteditable="true"></div><div class="footer-center" contenteditable="true"></div><div class="footer-right" contenteditable="true"></div>`;
+        page.appendChild(footerDiv);
+    });
+    // Add content based on local storage if available, otherwise from data-attributes on the printout
+    const headerFooterKeys = ['header-first-left', 'header-first-center', 'header-first-right', 'footer-first-left', 'footer-first-center', 'footer-first-right', 'header-running-left', 'header-running-center', 'header-running-right', 'footer-running-left', 'footer-running-center', 'footer-running-right'];
+    const headerFooterContent = {};
+    headerFooterKeys.forEach(key => {
+        headerFooterContent[key] = localStorage.getItem(key) || printout.getAttribute(`data-${key}`) || '';
+    });
+    // First page header and footer
+    document.querySelector('.first-page-header').querySelector('.header-left').innerHTML = headerFooterContent['header-first-left'];
+    document.querySelector('.first-page-header').querySelector('.header-center').innerHTML = headerFooterContent['header-first-center'];
+    document.querySelector('.first-page-header').querySelector('.header-right').innerHTML = headerFooterContent['header-first-right'];
+    document.querySelector('.first-page-footer').querySelector('.footer-left').innerHTML = headerFooterContent['footer-first-left'];
+    document.querySelector('.first-page-footer').querySelector('.footer-center').innerHTML = headerFooterContent['footer-first-center'];
+    document.querySelector('.first-page-footer').querySelector('.footer-right').innerHTML = headerFooterContent['footer-first-right'];
+    // Running headers and footers
+    document.querySelectorAll('.running-header').forEach(headerDiv => {
+        headerDiv.querySelector('.header-left').innerHTML = headerFooterContent['header-running-left'];
+        headerDiv.querySelector('.header-center').innerHTML = headerFooterContent['header-running-center'];
+        headerDiv.querySelector('.header-right').innerHTML = headerFooterContent['header-running-right'];
+    });
+    document.querySelectorAll('.running-footer').forEach(footerDiv => {
+        footerDiv.querySelector('.footer-left').innerHTML = headerFooterContent['footer-running-left'];
+        footerDiv.querySelector('.footer-center').innerHTML = headerFooterContent['footer-running-center'];
+        footerDiv.querySelector('.footer-right').innerHTML = headerFooterContent['footer-running-right'];
+    });
+    // Add event listeners to update local storage when content is edited
+    headerFooterKeys.forEach(key => {
+        const selectorMap = {
+            'header-first-left': '.first-page-header .header-left',
+            'header-first-center': '.first-page-header .header-center',
+            'header-first-right': '.first-page-header .header-right',
+            'footer-first-left': '.first-page-footer .footer-left',
+            'footer-first-center': '.first-page-footer .footer-center',
+            'footer-first-right': '.first-page-footer .footer-right',
+            'header-running-left': '.running-header .header-left',
+            'header-running-center': '.running-header .header-center',
+            'header-running-right': '.running-header .header-right',
+            'footer-running-left': '.running-footer .footer-left',
+            'footer-running-center': '.running-footer .footer-center',
+            'footer-running-right': '.running-footer .footer-right'
+        };
+        const elements = document.querySelectorAll(selectorMap[key]);
+        elements.forEach(elem => {
+            elem.addEventListener('input', () => {
+                localStorage.setItem(key, elem.innerHTML);
+            });
+        });
+    });
+}
+
 
 // We look at each page and adjust the heights of the workspaces to fit it nicely into the page.
 // The width and height of the page will now depend on the letter or a4 setting.
@@ -1190,6 +1261,40 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         } else {
             createPrintoutPages(margins);
         }
+
+        // Add headers and footers to all pages in the printout
+        addHeadersAndFootersToPrintout();
+
+        // Add event listeners to the print header/footer checkboxes
+        for (const hf of ["first-page-header", "running-header", "first-page-footer", "running-footer"]) {
+            const checkbox = document.getElementById(`print-${hf}-checkbox`);
+            if (checkbox) {
+                // set visibility based on current checkbox state
+                checkbox.checked = localStorage.getItem(`print-${hf}`) === "true";
+                document.querySelectorAll(`.${hf}`).forEach(elem => {
+                    // add hidden to class list
+                    if (checkbox.checked) {
+                        elem.classList.remove("hidden");
+                    } else {
+                        elem.classList.add("hidden");
+                    }
+                });
+                // Add event listener to toggle visibility
+                checkbox.addEventListener("change", function() {
+                    localStorage.setItem(`print-${hf}`, this.checked);
+                    // toggle visibility of header/footer divs
+                    document.querySelectorAll(`.${hf}`).forEach(elem => {
+                        if (checkbox.checked) {
+                            elem.classList.remove("hidden");
+                        } else {
+                            elem.classList.add("hidden");
+                        }
+                        adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
+                    });
+                });
+            }
+        }
+
         // After pages are set up, we adjust the workspace heights to fit the page (based on the paper size).
         adjustWorkspaceToFitPage({paperSize: paperSize, margins: margins});
 
