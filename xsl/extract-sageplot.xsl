@@ -121,8 +121,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="substr" select="'&#xa;'" />
         </xsl:call-template>
     </xsl:variable>
+    <!-- NB: 2D PNG is not preferable, but needed for EPUB sent to Kindle -->
     <xsl:variable name="b-legal-combination" select="($variant = '2d' and $sageplot.fileformat = 'pdf')
                                                  or  ($variant = '2d' and $sageplot.fileformat = 'svg')
+                                                 or  ($variant = '2d' and $sageplot.fileformat = 'png')
                                                  or  ($variant = '3d' and $sageplot.fileformat = 'png')
                                                  or  ($variant = '3d' and $sageplot.fileformat = 'html')"/>
     <!-- Only certain combinations are supported and only certain       -->
