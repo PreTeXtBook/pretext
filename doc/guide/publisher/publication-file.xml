@@ -935,6 +935,48 @@
                 <li><c>yes</c>: show a button in the navigation bar, that when clicked, displays a popup allowing the user to copy an iframe code snippet to paste into their website or LMS.</li>
             </ul></p>
         </subsection>
+
+        <subsection xml:id="online-interactives-options">
+            <title>Interactives Options</title>
+            <idx><h>publisher options</h><h>html interactives</h></idx>
+
+            <p>
+                The
+                <cd>
+                    <cline>/publication/html</cline>
+                </cd>
+                element can have an attribute <attr>design-width</attr> with an integer value. This will be used as the base value for converting the percentage based widths of an interactive into a pixel values when that is required. The default value is <c>600</c> (100% width is 600px).
+            </p>
+
+           <p>
+              The
+              <cd>
+                  <cline>/publication/html/interactives</cline>
+              </cd>
+              element can have an attribute <attr>resize-behavior</attr> that is used to control how interactives respond to window resizing. Possible values are:
+              <ul>
+                  <li><c>fixed-height</c> (default): interactives will maintain their initial height as the window size changes. When the content becomes too wide to display, a horizontal scrollbar will appear.</li>
+                  <li><c>responsive</c>: interactives will resize dynamically as the window size changes to maintain their aspect ratio.</li>
+              </ul>
+              In addition to this global setting, you can add child elemements to 
+              <cd>
+                  <cline>/publication/html/interactives</cline>
+              </cd>
+              to set the resize behavior for specific types of interactives. Each child element should be named after the interactive type (e.g. <c>geogebra</c> or <c>desmos</c>) and have a <attr>resize-behavior</attr> attribute with the same possible values as above. Settings on these child elements will override the global setting for that specific interactive type. Known interactive types that can be specified this way are:
+              <ul>
+                <li>calcplot3d</li>
+                <li>circuitjs</li>
+                <li>d3</li>
+                <li>desmos</li>
+                <li>doenetml</li>
+                <li>geogebra</li>
+                <li>iframe</li>
+                <li>javascript</li>
+                <li>jsxgraph</li>
+                <li>sage</li>
+              </ul>
+            </p>
+        </subsection>
     </section>
 
     <section xml:id="publication-file-revealjs">

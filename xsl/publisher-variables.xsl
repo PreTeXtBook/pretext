@@ -1851,6 +1851,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML-Specific Options -->
 <!-- ##################### -->
 
+<!-- Various components need to be built with pixel widths from % based widths -->
+<!-- design-width serves as the value that percent is based on                 -->
+<xsl:variable name="html-design-width">
+    <xsl:choose>
+        <xsl:when test="$publication/html[@design-width != '']">
+            <xsl:apply-templates select="$publisher-attribute-options/html/pi:pub-attribute[@name='design-width']" mode="set-pubfile-variable"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="'600'"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- Calculator -->
 <!-- Possible values are geogebra-classic, geogebra-graphing -->
 <!-- geogebra-geometry, geogebra-3d                          -->
@@ -3337,6 +3350,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <pi:pub-attribute name="short-answer-responses" default="graded" options="always"/>
         <pi:pub-attribute name="favicon" default="none" options="simple"/>
         <pi:pub-attribute name="embed-button" default="no" options="yes"/>
+        <pi:pub-attribute name="design-width" freeform="yes"/>
         <calculator>
             <pi:pub-attribute name="model" default="none" options="geogebra-classic geogebra-graphing geogebra-geometry geogebra-3d" legacy-stringparam="html.calculator"/>
         </calculator>
@@ -3388,6 +3402,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="host" default="web" options="runestone" legacy-options="aim"/>
             <pi:pub-attribute name="portable" default="no" options="yes"/>
         </platform>
+        <interactives>
+            <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+            <calcplot3d>
+                <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+            </calcplot3d>
+            <circuitjs>
+                <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+            </circuitjs>
+            <d3>
+                <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+            </d3>
+            <desmos>
+                <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+            </desmos>
+            <doenetml>
+                <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+            </doenetml>
+            <geogebra>
+                <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+            </geogebra>
+            <iframe>
+                <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+            </iframe>
+            <javascript>
+                <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+            </javascript>
+            <jsxgraph>
+                <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+            </jsxgraph>
+            <sage>
+                <pi:pub-attribute name="resize-behavior" default="fixed-height" options="responsive"/>
+            </sage>
+        </interactives>
     </html>
     <epub>
         <cover>

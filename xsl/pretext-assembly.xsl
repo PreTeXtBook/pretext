@@ -1813,6 +1813,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- 2025-08-15: Ensure that interactives all have a @interactive-platform -->
+<!-- that identifies their basic type                                      -->
+<xsl:template match="interactive" mode="repair">
+    <xsl:copy>
+        <xsl:attribute name="interactive-platform">
+            <xsl:choose>
+                <xsl:when test="@platform">
+                    <xsl:value-of select="@platform"/>
+                </xsl:when>
+                <xsl:when test="@desmos">desmos</xsl:when>
+                <xsl:when test="@geogebra">geogebra</xsl:when>
+                <xsl:when test="@calcplot3d">calcplot3d</xsl:when>
+                <xsl:when test="@circuitjs">circuitjs</xsl:when>
+                <xsl:when test="@iframe">iframe</xsl:when>
+                <xsl:otherwise>unknown</xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
 <!-- 2025-11-04: a @runestone attribute was used to point into a file      -->
 <!-- of raw HTML versions of Runestone exercises.  This was a              -->
 <!-- transitional device to allow conversions of Runestone books into      -->

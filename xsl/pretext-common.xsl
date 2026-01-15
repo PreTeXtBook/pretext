@@ -2974,31 +2974,40 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
-<!-- This is cribbed from the CSS "max-width"-->
-<!-- Design width, measured in pixels        -->
-<!-- NB: the exact same value, for similar,  -->
-<!-- but not identical, reasons is used in   -->
-<!-- the formation of WeBWorK problems       -->
-<xsl:variable name="design-width-pixels" select="'600'" />
+<!-- Various components need to be built with pixel widths from % based widths -->
+<!-- design-width is the 100% value.                                           -->
+<!-- Individual stylesheets (e.g. html, reveal) may change this                -->
+<xsl:variable name="design-width" select="'600'" />
 
+<!-- Some elements may allow for a custom design-width.                        -->
+<!-- They will override this template and either provide a different value or  -->
+<!-- fall back on the local variable                                           -->
+<xsl:template match="*" mode="get-design-width">
+    <xsl:value-of select="$design-width" />
+</xsl:template>
 
 <!-- Pixels are an HTML thing, but we may need these numbers -->
 <!-- elsewhere, and these are are pure text templates        -->
 <!-- NB 3D "sageplot" needs an "iframe" with pixels for size -->
 <xsl:template match="slate|audio|video|interactive|image[asymptote]|image[sageplot]" mode="get-width-pixels">
+    <xsl:variable name="local-design-width">
+        <xsl:apply-templates select="." mode="get-design-width" />
+    </xsl:variable>
     <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
     <xsl:variable name="width-fraction">
         <xsl:value-of select="substring-before($width-percent,'%') div 100" />
     </xsl:variable>
-    <xsl:value-of select="round($design-width-pixels * $width-fraction)" />
+    <xsl:value-of select="round($local-design-width * $width-fraction)" />
 </xsl:template>
 
 <!-- Square by default, when asked.  Can override -->
 <xsl:template match="slate|audio|video|interactive|image[asymptote]|image[sageplot]" mode="get-height-pixels">
     <xsl:param name="default-aspect" select="'1:1'" />
-
+    <xsl:variable name="local-design-width">
+        <xsl:apply-templates select="." mode="get-design-width" />
+    </xsl:variable>
     <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
@@ -3010,7 +3019,7 @@ Book (with parts), "section" at level 3
             <xsl:with-param name="default-aspect" select="$default-aspect" />
         </xsl:apply-templates>
     </xsl:variable>
-    <xsl:value-of select="round($design-width-pixels * $width-fraction div $aspect-ratio)" />
+    <xsl:value-of select="round($local-design-width * $width-fraction div $aspect-ratio)" />
 </xsl:template>
 
 
