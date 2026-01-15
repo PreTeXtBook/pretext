@@ -5399,6 +5399,9 @@ Book (with parts), "section" at level 3
     <centered>
         <xsl:value-of select="$centered" />
     </centered>
+    <width-native>
+        <xsl:value-of select="$normalized-width"/>
+    </width-native>
 
     <!-- This will be useful in a debugging switch -->
 <!--
