@@ -2345,7 +2345,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 </xsl:if>
                                 <xsl:if test="tests/iotest">
                                     <xsl:choose>
-                                        <xsl:when test="not(normalize-space($tests-content) = '')">
+                                        <xsl:when test="not(normalize-space(tests/text()) = '')">
                                             <xsl:message>WARNING: You can either write text based tests or use iotests, but not both. iotests ignored in <xsl:value-of select="$rsid"/>.</xsl:message>
                                         </xsl:when>
                                         <xsl:otherwise>
