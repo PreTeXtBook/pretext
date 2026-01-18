@@ -6111,7 +6111,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
           <xsl:value-of select="$baseurl"/>
           <xsl:value-of select="$html-filename"/>
       </xsl:variable>
-      <div style="text-align: center;">
+      <div class="asymptote-fullsize-link">
         <a href="{$image-html-url}">Link to full-sized image</a>
       </div>
     </xsl:if>
