@@ -5799,7 +5799,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- an intermediate HTML "figure" which will not      -->
 <!-- interfere with the panel's constraints            -->
 <xsl:template match="image[ancestor::sidebyside]">
-    <xsl:apply-templates select="." mode="image-inclusion" />
+    <div class="image-box">
+        <xsl:apply-templates select="." mode="image-inclusion" />
+    </div>
 </xsl:template>
 
 <!-- With a @source attribute, without an extension, -->
