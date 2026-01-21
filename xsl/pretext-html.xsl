@@ -5765,13 +5765,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fill this box horizontally, with necessary vertical dimension -->
 <!-- to preserve the aspect ratio.  This div is also used to       -->
 <!-- provide vertical spacing from its surroundings.               -->
-<xsl:template match="image[not(ancestor::sidebyside)]">
+<xsl:template match="image">
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
     <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
     <!-- div is constraint/positioning for contained image -->
-    <div class="image-box">
+    <div>
+        <xsl:attribute name="class">
+            <xsl:text>image-box</xsl:text>
+            <xsl:if test="$layout/width-native = 'auto'">
+                <xsl:text> image-box__auto-width</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
         <xsl:attribute name="style">
             <xsl:text>width: </xsl:text>
             <xsl:value-of select="$layout/width"/>
@@ -5791,15 +5797,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <pre class="mermaid">
         <xsl:value-of select="." />
     </pre>
-</xsl:template>
-
-<!-- The div for a panel of a sidebyside will provide  -->
-<!-- the constraint/positioning of the contained image -->
-<!-- If the panel is a PTX "figure" then there will be -->
-<!-- an intermediate HTML "figure" which will not      -->
-<!-- interfere with the panel's constraints            -->
-<xsl:template match="image[ancestor::sidebyside]">
-    <xsl:apply-templates select="." mode="image-inclusion" />
 </xsl:template>
 
 <!-- With a @source attribute, without an extension, -->
