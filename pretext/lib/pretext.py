@@ -1734,7 +1734,7 @@ def webwork_to_xml(
         #
         #   <image source="relative-path-to-temporary-image-on-server"
         #
-        graphics_pattern = re.compile(r'<image.*?source="([^"]*)"')
+        graphics_pattern = re.compile(r'<image.*?source="([^"]+)"')
 
         # replace filenames, download images with new filenames
         count = 0
