@@ -22,6 +22,12 @@ ul {
 
 //---- Container Styles ----
 
+// Force sidebyside divs to be full width
+.sidebyside {
+  width: 100%;
+}
+
+
 /* Callout boxes */
 // Note: the box around a "theorem" does not contain
 // the associated "proof" because the HTML does not
