@@ -9941,22 +9941,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- elements, hence could have math, hence need to -->
                 <!-- know globally available macros from the author -->
                 <xsl:call-template name="latex-macros"/>
-                <div>
-                    <!-- aspect ratio will force the proper height for wrapper div                           -->
-                    <!-- don't want to mess with width as iframe has applied any % width and px is redundant -->
-                    <xsl:attribute name="style">
-                        <xsl:text>aspect-ratio: </xsl:text>
-                        <xsl:apply-templates select="." mode="get-aspect-ratio"/>
-                        <xsl:text>;</xsl:text>
-                    </xsl:attribute>
-                    
-                    <!-- stack, else use a layout -->
-                    <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
-                    <!-- accumulate script tags *after* HTML elements -->
-                    <xsl:apply-templates select="@source" />
-                    <!-- accumulate script elements *after* @source scripts -->
-                    <xsl:apply-templates select="script"/>
-                </div>
+                <xsl:if test="slate|sidebyside|sbsgroup">
+                    <div>
+                        <!-- aspect ratio will force the proper height for wrapper div                           -->
+                        <!-- don't want to mess with width as iframe has applied any % width and px is redundant -->
+                        <xsl:attribute name="style">
+                            <xsl:text>aspect-ratio: </xsl:text>
+                            <xsl:apply-templates select="." mode="get-aspect-ratio"/>
+                            <xsl:text>;</xsl:text>
+                        </xsl:attribute>
+                        
+                        <!-- stack, else use a layout -->
+                        <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
+                    </div>
+                </xsl:if>
+                <!-- accumulate script tags *after* HTML elements -->
+                <xsl:apply-templates select="@source" />
+                <!-- accumulate script elements *after* @source scripts -->
+                <xsl:apply-templates select="script"/>
             </body>
         </html>
     </exsl:document>
