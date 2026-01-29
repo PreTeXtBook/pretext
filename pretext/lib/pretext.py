@@ -2743,20 +2743,130 @@ def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, out
 #   https://github.com/PreTeXtBook/pretext/pull/2576
 # procedure name modified
 def _stack_replace_latex(text):
-    text = re.sub(r"\\\((.*?[^\\])\\\)", r"<m>\1</m>", text)
-    text = re.sub(r"\\\[(.*?[^\\])\\]", r"<me>\1</me>", text)
-    # We may want to detect align/similar environments inside \[\] and replace them with
-    # <md></md> using <mrow></mrow> for each row and \amp for alignment (also \lt, \gt)
+    
+    # Replace multiline environments
+    def process_match(match):
+        has_asterisk = match.group(2) == "*"
+        content = match.group(3).strip().replace('&', r'\amp ')
+        
+        # Process lines
+        lines = [line.strip() for line in content.split(r'\\') if line.strip()]
+        xml_rows = "\n".join([f"<mrow>{line}</mrow>" for line in lines])
+
+        opening_tag = '<md number="yes">' if has_asterisk else '<md>'
+        return f"{opening_tag}\n{xml_rows}\n</md>"
+    # Pattern to find \( \begin{align} ... \end{align} \) and similar
+    # (align|gather)     -> Group 1: The environment name
+    # (\*?)              -> Group 2: The optional asterisk
+    # (.*?)              -> Group 3: The content (non-greedy)
+    # \\end\{\1\2\}      -> Matches the closing tag using backreferences to groups 1 and 2
+    pattern = r'\\[\[\(]\s*\\begin\{(align|gather|eqnarray|multline)(\*?)\}(.*?)\\end\{\1\2\}\s*\\[\]\)]'
+    # re.DOTALL allows the '.' to match newlines
+    text = re.sub(pattern, process_match, text, flags=re.DOTALL)
+
+    # Replace simple environment
+    text = re.sub(r"\\\((.*?[^\\])\\\)", r"<m>\1</m>", text, flags=re.DOTALL)
+    text = re.sub(r"\\\[(.*?[^\\])\\]", r"<me>\1</me>", text, flags=re.DOTALL)
+
     return text
+
+_stack_tag_map = {
+    "b": "alert",
+    "strong": "alert",
+    "i": "em",
+    "code": "c",
+    "tt": "c",
+    "table": "tabular",
+    "tr": "row",
+    "td": "cell",
+    "th": "cell",
+    "a": "url",
+}
+
+def _stack_replace_tags(text, asset_prefix_rel, mathmode=False):
+    if not text.strip():
+        return text
+    # We should also replace other HTML entities with their equivalents (e.g. unicode)
+    text = text.replace('&nbsp;', '<nbsp/>')
+
+    from lxml import html
+
+    tree = html.fromstring(text)
+    # Find all <img> tags, make width relative, update source path
+    for img in tree.xpath('//img'):
+        img.tag = 'image'
+        if 'src' in img.attrib:
+            # we assume images don't link to random sources on the internet
+            src = img.attrib.pop('src')
+            new_src = f"{asset_prefix_rel}-{src}"
+            if src.endswith(".svg"):
+                new_src = new_src.replace(".svg", ".pdf")
+            img.attrib['pi:generated'] = new_src
+            img.attrib['xmlns:pi'] = "http://pretextbook.org/2020/pretext/internal"
+        if 'width' in img.attrib and not '%' in img.attrib['width']:
+            # image width percentage relative to 600 px
+            img.attrib['width'] = f"{int(img.attrib['width']) // 6}%"
+        if 'height' in img.attrib:
+            img.attrib.pop('height')
+    # Some heuristic HTML replacements
+    for tag, replacement in _stack_tag_map.items():
+        for elem in tree.xpath(f"//{tag}"):
+            elem.tag = replacement
+    for elem in tree.xpath("//thead|//tbody"):
+        elem.drop_tag()
+
+    # Convert back to a string
+    # method="xml" ensures we get the self-closing <image ... />, <br/>, ... style
+    new_text = html.tostring(tree, encoding='unicode', method='xml')
+    if mathmode:
+        new_text = new_text.removeprefix("<p>").removesuffix("</p>")
+    return new_text
+
+def _stack_postprocess(text, asset_prefix_rel):
+    text = _stack_replace_latex(text)
+    return _stack_replace_tags(text, asset_prefix_rel)
+
+def _stack_download_assets(assets, api_url, asset_prefix_abs, stack_file):
+    import requests
+    try:
+        import fitz # for svg/pdf conversion
+    except ImportError:
+        raise ImportError(__module_warning.format("pyMuPDF"))
+
+    # Download assets (images, plots)
+    for filename, urlname in assets.items():
+        plots_url = api_url.replace('/render', '/plots')
+        full_url = f"{plots_url}/{urlname}";
+        response = requests.get(full_url)
+        if response.status_code == 200:
+            response.raw.decode_content = True
+            asset_file = f"{asset_prefix_abs}-{filename}"
+            asset_file_out = asset_file.replace(".svg", ".pdf")
+            log.debug(f"Extracting asset {asset_file} from {stack_file}.")
+            if asset_file.endswith(".svg"):
+                with fitz.Document(stream=response.content) as doc:
+                    log.info(f"converting {asset_file} to PDF")
+                    pdfbytes = doc.convert_to_pdf()
+                    with open(asset_file_out, "wb") as pdfout:
+                        pdfout.write(pdfbytes)
+            else:
+                with open(asset_file, 'wb') as f:
+                    f.write(response.content)
+        else:
+            log.warning(f"Failed to download image {filename} for {stack_file}.")
 
 # 2025-08-16: verbatim from
 #   https://github.com/PreTeXtBook/pretext/pull/2576
 # procedure name modified
-def _stack_process_response(qdict):
-    # This is a new feature not yet available at https://stack-api.maths.ed.ac.uk/render
-    # if qdict["isinteractive"]:
-    #     # We could generate a QR code to an online version in the future
-    #     return "<statement><p>This question contains interactive elements.</p></statement>"
+def _stack_process_response(qdict, asset_prefix_rel, stack_file):
+    if "isinteractive" not in qdict:
+        log.warning(f"An error occurred while processing {stack_file}: {qdict.get('message')}")
+        return "<statement><p>An error occurred while processing this question.</p></statement>"
+    # For now, return a default message for interactive questions
+    if qdict["isinteractive"]:
+        # We could generate a QR code to an online version in the future
+        log.warning(f"{stack_file} contains interactive elements")
+        return "<statement><p>This question contains interactive elements.</p></statement>"
     qtext = qdict["questionrender"]
     soltext = qdict["questionsamplesolutiontext"]
 
@@ -2771,18 +2881,51 @@ def _stack_process_response(qdict):
         ansdata = qdict["questioninputs"][ansid]
 
         ansconfig = ansdata["configuration"]
-        width = ansconfig["boxWidth"]
+        input_type = ansconfig["type"]
+        answer = _stack_replace_tags(ansdata["samplesolutionrender"], asset_prefix_rel, mathmode=True)
+        if input_type in ["algebraic", "numerical", "singlechar", "string", "units"] \
+                or input_type in ["equiv", "notes", "textarea", "varmatrix", "matrix"]:
+            if input_type == "singlechar":
+                width = 1
+            else:
+                width = ansconfig["boxWidth"]
+            input_render = f'<fillin characters="{width}" name="{ansid}"/>'
+        elif input_type in ["checkbox", "radio", "dropdown"]:
+            # Remove the "(Clear my choice)" option
+            options = [opt_render for opt_id, opt_render in ansconfig["options"].items() if opt_id]
+            if input_type == "dropdown":
+                options_render = ' | '.join(options)
+                input_render = f"[ {options_render} ]"
+            else:
+                options_render = '\n'.join(f"<li>{option}</li>" for option in options)
+                input_render = f'<ol marker="(1)">\n{options_render}\n</ol>'
+            if input_type == "checkbox":
+                answer = ', '.join([f"({i})" for i in ansdata["samplesolution"].values()])
+            elif input_type == "radio":
+                answer = f'({ansdata["samplesolution"][""]})'
+            else:
+                ans_id = ansdata["samplesolution"][""]
+                answer = _stack_replace_tags(ansconfig["options"][ans_id], asset_prefix_rel, mathmode=True)
+        elif input_type == "boolean":
+            input_render = f"[ true | false ]"
+        else:
+            input_render = f"[[input:{ansid}]]"
+            log.warning(f"{stack_file} contains unsupported input type")
 
-        answers.append(f'<p><m>{ansdata["samplesolutionrender"]}</m></p>') # still need to wrap into <answer></answer>
-        qtext = qtext.replace(f"[[input:{ansid}]]", f'<fillin characters="{width}" name="{ansid}"/>')
+        qtext = qtext.replace(f"[[input:{ansid}]]", input_render)
+        if input_type not in ["singlechar", "notes", "dropdown"]:
+            answer = f"<m>{answer}</m>"
+        answers.append(f'<answer><p>{answer}</p></answer>')
 
-    qtext = _stack_replace_latex(qtext)
-    soltext = _stack_replace_latex(soltext)
+    qtext = _stack_postprocess(qtext, asset_prefix_rel)
+    soltext = _stack_postprocess(soltext, asset_prefix_rel)
 
-    return f'''
-    <statement>{qtext}</statement>
-    <solution>{soltext}</solution>
-    ''' + "\n".join(f"<answer>{ans}</answer>" for ans in answers)
+    render_output = f'    <statement>{qtext}</statement>\n'
+    if soltext:
+        render_output += f'    <solution>{soltext}</solution>\n'
+    if answers:
+        render_output += "    " + "\n    ".join(answers)
+    return render_output
 
 def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
     '''Convert a STACK question to a static PreTeXt version via a STACK server'''
@@ -2832,7 +2975,7 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
     #   https://github.com/PreTeXtBook/pretext/pull/2576
 
     # location of external directory for STACK files
-    _, external_dir = get_managed_directories(xml_source, pub_file)
+    generated_dir, external_dir = get_managed_directories(xml_source, pub_file)
 
     with open(source_filename, "r") as source_file:
         for source in source_file:
@@ -2848,6 +2991,12 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
             msg = 'converting STACK question file "{}" to static PreTeXt XML file "{}"'
             log.debug(msg.format(stack_file, pretext_file))
 
+            # Relative and absolute path to store assets in
+            asset_path = os.path.join(generated_dir, "stack", "images")
+            os.makedirs(asset_path, exist_ok=True)
+            asset_prefix_abs = os.path.join(asset_path, f"{label}")
+            asset_prefix_rel = os.path.join("stack", "images", f"{label}")
+
             # Open STACK XML file, send to server, unravel JSON response into
             # a text version of the static PreTeXt XML question
             question_data = open(stack_file).read()
@@ -2856,9 +3005,8 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
             request_data = {"questionDefinition": question_data, "seed": None}
             question_json = requests.post(api_url, json=request_data)
             question_dict = json.loads(question_json.text)
-            response = _stack_process_response(question_dict)
-            # response needs to be a single element, XSL uses it
-            # TODO: maybe STACK server can provide this wrapper
+            response = _stack_process_response(question_dict, asset_prefix_rel, stack_file)
+            _stack_download_assets(question_dict.get("questionassets", {}), api_url, asset_prefix_abs, stack_file)
             wrap_response = "<stack-static>\n{}\n</stack-static>"
             question_pretext = wrap_response.format(response)
 
