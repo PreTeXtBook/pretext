@@ -10694,6 +10694,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- @source directives in the interactive element        -->
 <xsl:template match="interactive[@platform = 'javascript']/script">
     <script>
+        <!-- ECMAScript modules need type="module" on the script -->
+        <xsl:if test="@type">
+          <xsl:attribute name="type">
+            <xsl:value-of select="@type"/>
+          </xsl:attribute>
+        </xsl:if>
         <xsl:value-of select="."/>
     </script>
 </xsl:template>
