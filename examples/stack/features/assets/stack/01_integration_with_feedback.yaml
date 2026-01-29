@@ -1,0 +1,97 @@
+name: Integration
+questiontext: '<p>Find \[ \int {@p@} d{@v@}\] [[input:ans1]] [[validation:ans1]]</p>'
+generalfeedback: '<p>We can either do this question by inspection (i.e. spot the answer) or in a more formal manner by using the substitution \[ u = ({@v@}-{@a@}).\] Then, since \(\frac{d}{d{@v@}}u=1\) we have \[ \int {@p@} d{@v@} = \int u^{@n@} du = \frac{u^{@n+1@}}{@n+1@}+c = {@ta@}+c.\]</p>'
+stackversion: '2025030700'
+questionvariables: |-
+  n:rand(5)+3;
+   a:rand(5)+3;
+   v:x
+   p:(v-a)^n;
+   ta:(v-a)^(n+1)/(n+1);
+questionnote: '\(\int {@p@} d{@v@} = {@ta@}+c\)'
+questionnoteformat: moodle_auto_format
+questiondescriptionformat: moodle_auto_format
+questionsimplify: '1'
+prtcorrect: 'Correct answer, well done.'
+prtpartiallycorrect: 'Your answer is partially correct.'
+prtincorrect: 'Incorrect answer.'
+input:
+  - name: ans1
+    type: algebraic
+    tans: ta+c
+    boxsize: '20'
+    forbidwords: int
+    forbidfloat: '1'
+    requirelowestterms: '1'
+    checkanswertype: '1'
+    mustverify: '1'
+    showvalidation: '1'
+prt:
+  - name: prt1
+    autosimplify: '1'
+    feedbackstyle: '1'
+    node:
+      - name: '0'
+        answertest: Int
+        sans: ans1
+        tans: ta
+        testoptions: v
+        quiet: '0'
+        trueanswernote: '1-0-T '
+        falseanswernote: '1-0-F '
+deployedseed:
+  - '1001758021'
+  - '165520961'
+  - '1575780430'
+  - '1893097548'
+  - '196914510'
+  - '119069312'
+  - '2028726687'
+  - '788370893'
+  - '400217408'
+  - '1304537090'
+  - '1439331987'
+  - '193373653'
+qtest:
+  - testcase: '1'
+    testinput:
+      - name: ans1
+        value: ta+c
+    expected:
+      - name: prt1
+        expectedscore: '1.0000000'
+        expectedpenalty: '0.0000000'
+  - testcase: '2'
+    testinput:
+      - name: ans1
+        value: ta
+    expected:
+      - name: prt1
+        expectedscore: '0.0000000'
+        expectedpenalty: '0.1000000'
+        expectedanswernote: 1-0-F
+  - testcase: '3'
+    testinput:
+      - name: ans1
+        value: 'ev(n*(v-a)^(n-1),simp)'
+    expected:
+      - name: prt1
+        expectedscore: '0.0000000'
+        expectedpenalty: '0.1000000'
+        expectedanswernote: 1-0-F
+  - testcase: '4'
+    testinput:
+      - name: ans1
+        value: (v-a)^(n+1)
+    expected:
+      - name: prt1
+        expectedscore: '0.0000000'
+        expectedpenalty: '0.1000000'
+        expectedanswernote: 1-0-F
+  - testcase: '5'
+    testinput:
+      - name: ans1
+        value: 'ev(float(ta),simp)'
+    expected:
+      - name: prt1
+        expectedanswernote: 'NULL'

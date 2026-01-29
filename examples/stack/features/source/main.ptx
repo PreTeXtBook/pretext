@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- To process this file with PreTeXt-CLI do                                                     -->
+<!--                                                                                              -->
+<!-- (1) HTML:                                                                                    -->
+<!--     pretext build html                                                                       -->
+<!--                                                                                              -->
+<!-- (2) LaTeX:                                                                                   -->
+<!--     pretext build latex                                                                      -->
+<!--                                                                                              -->
+<!-- (3) PDF:                                                                                     -->
+<!--     pretext build pdf                                                                        -->
+
+
+<!-- To process this file with xsltproc do                                                        -->
+<!--                                                                                              -->
+<!-- (1) LaTeX/PDF:                                                                               -->
+<!--     xsltproc -o minimal.tex PATH_TO/mathbook/xsl/pretext-latex.xsl source/main.ptx           -->
+<!--     pdflatex minimal.tex                                                                     -->
+<!--     xelatex minimal.tex                                                                      -->
+<!--                                                                                              -->
+<!-- (2) HTML:                                                                                    -->
+<!--     xsltproc PATH_TO/mathbook/xsl/pretext-html.xsl source/main.ptx                           -->
+<!--     <browser>  minimal.html                                                                  -->
+<!--                                                                                              -->
+<!-- (3) CoCalc worksheet (parameter causes a single file for output)                             -->
+<!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
+<!--     xsltproc -X-stringparam chunk.level 0 PATH_TO/mathbook/xsl/pretext-smc.xsl source/main.ptx   -->
+<!--     <CoCalc> minimal.sagews                                                                  -->
+<!--                                                                                              -->
+<!-- (4) Sage doctesting                                                                          -->
+<!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
+<!--     xsltproc -X-stringparam chunk.level 0 PATH_TO/mathbook/xsl/pretext-sage-doctest.xsl source/main.ptx  -->
+<!--     <read further instructions in> minimal.py                                                -->
+
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <docinfo>
+        <macros>
+        \newcommand{\doubler}[1]{2#1}
+        </macros>
+
+        <latex-image-preamble> \usepackage{tikz, graphics}</latex-image-preamble>
+    </docinfo>
+
+    <article xml:id="features">
+        <title>An article showcasing differents features of STACK questions in PreText</title>
+
+        <frontmatter>
+
+            <bibinfo>
+                <author>
+                    <personname>Chris Sangwin</personname>
+                    <institution>University of Edinburgh</institution>
+                </author>
+                <date><today /></date>
+            </bibinfo>
+
+            <abstract>
+                <p>This is an article serving as a test suite for various STACK features in PreTeXt.</p>
+            </abstract>
+
+        </frontmatter>
+
+        <introduction>
+                <p>This is an article serving as a test suite for various STACK features in PreTeXt.</p>
+        </introduction>
+
+        <section xml:id="section-stack">
+            <title>STACK questions</title>
+            <introduction>
+                <p>The following illustrates various features of STACK questions.</p>
+
+                <p>These serve as test cases.</p>
+
+                <!-- <image xml:id="my-image">
+                    <latex-image label="my-latex-image">
+                        \begin{tikzpicture}[scale=2.4]
+                            \node[circle, draw] {Circle};
+                        \end{tikzpicture}
+                    </latex-image>
+                </image> -->
+
+                <p>
+                    Issues:
+                    <ol>
+                        <li>
+                            <p>Adapt/adapt-delay block: Currently not supported.</p>
+                        </li>
+                        <li>
+                            <p>Validation-state-listener: Currently not supported - An Error occured while processing the question (In API, the error is: Unknown message-type: "track-validation-state")</p>
+                        </li>
+                    </ol>
+                </p>
+            </introduction>
+            
+            <subsection xml:id="subsec-formats">
+                <title>Inclusion formats</title>
+                <p>STACK questions can be included in Moodle XML format or (as of STACK 4.11) YAML format.</p>
+
+                <exercises xml:id="exercises-xml-yaml">
+                    <exercise xml:id="ex-integration-xml">
+                        <title>Question in XML format</title>
+                        <stack label="stk-integration-xml" source="stack/01_integration_with_feedback.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-integration-yaml">
+                        <title>Question in YAML format</title>
+                        <stack label="stk-integration-yaml" source="stack/01_integration_with_feedback.yaml" />
+                    </exercise>
+                </exercises>
+
+                <exercise xml:id="ex-integration-knowl">
+                    <title>Question in a knowl</title>
+                    <stack label="stk-integration-knowl" source="stack/01_integration_with_feedback.xml" />
+                </exercise>
+
+            </subsection>
+
+            <subsection xml:id="subsec-inputs">
+                <title>Input types</title>
+                <p></p>
+
+                <exercises xml:id="exercises-inputs">
+
+                    <exercise xml:id="ex-algebraic-input">
+                        <title>Algebraic_input</title>
+                        <stack label="stk-algebraic-input"
+                               source="stack/Features/input-type-sample-questions/Algebraic_input.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-algebraic-input-answer-box-sizes-test">
+                        <title>Algebraic_input_answer_box_sizes_test</title>
+                        <stack label="stk-algebraic-input-answer-box-sizes-test"
+                               source="stack/Features/input-type-sample-questions/Algebraic_input_answer_box_sizes_test.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-algebraic-input-align-to-the-right">
+                        <title>Algebraic_input_align_to_the_right</title>
+                        <stack label="stk-algebraic-input-align-to-the-right"
+                               source="stack/Features/input-type-sample-questions/Algebraic_input_align_to_the_right.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-algebraic-input-compact">
+                        <title>Algebraic_input_compact</title>
+                        <stack label="stk-algebraic-input-compact"
+                               source="stack/Features/input-type-sample-questions/Algebraic_input_compact.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-algebraic-input-empty-answer-permitted">
+                        <title>Algebraic_input_empty_answer_permitted</title>
+                        <stack label="stk-algebraic-input-empty-answer-permitted"
+                               source="stack/Features/input-type-sample-questions/Algebraic_input_empty_answer_permitted.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-algebraic-input-with-simplification">
+                        <title>Algebraic_input_with_simplification</title>
+                        <stack label="stk-algebraic-input-with-simplification"
+                               source="stack/Features/input-type-sample-questions/Algebraic_input_with_simplification.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-checkbox">
+                        <title>Checkbox</title>
+                        <stack label="stk-checkbox"
+                               source="stack/Features/input-type-sample-questions/Checkbox.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-checkbox-no-body-la-te-x">
+                        <title>Checkbox_no_body_LaTeX</title>
+                        <stack label="stk-checkbox-no-body-la-te-x"
+                               source="stack/Features/input-type-sample-questions/Checkbox_no_body_LaTeX.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-checkbox-plots-in-options">
+                        <title>Checkbox_plots_in_options</title>
+                        <stack label="stk-checkbox-plots-in-options"
+                               source="stack/Features/input-type-sample-questions/Checkbox_plots_in_options.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-checkbox-show-teachers-answer">
+                        <title>Checkbox_Show_teachers_answer</title>
+                        <stack label="stk-checkbox-show-teachers-answer"
+                               source="stack/Features/input-type-sample-questions/Checkbox_Show_teachers_answer.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-dropdown-shuffle">
+                        <title>Dropdown_shuffle</title>
+                        <stack label="stk-dropdown-shuffle"
+                               source="stack/Features/input-type-sample-questions/Dropdown_shuffle.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-equiv-input-test-compact">
+                        <title>Equiv_input_test_compact</title>
+                        <stack label="stk-equiv-input-test-compact"
+                               source="stack/Features/input-type-sample-questions/Equiv_input_test_compact.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-equiv-input-test-let-comma-or-pm">
+                        <title>Equiv_input_test_let_comma_or_pm</title>
+                        <stack label="stk-equiv-input-test-let-comma-or-pm"
+                               source="stack/Features/input-type-sample-questions/Equiv_input_test_let_comma_or_pm.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-matrix">
+                        <title>Matrix</title>
+                        <stack label="stk-matrix"
+                               source="stack/Features/input-type-sample-questions/Matrix.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-matrix-multi">
+                        <title>Matrix-multi</title>
+                        <stack label="stk-matrix-multi"
+                               source="stack/Features/input-type-sample-questions/Matrix-multi.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-matrix-varmatrix">
+                        <title>Matrix_varmatrix</title>
+                        <stack label="stk-matrix-varmatrix"
+                               source="stack/Features/input-type-sample-questions/Matrix_varmatrix.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-notes">
+                        <title>Notes</title>
+                        <stack label="stk-notes"
+                               source="stack/Features/input-type-sample-questions/Notes.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-numerical-input-min-sf">
+                        <title>Numerical_input_min_sf</title>
+                        <stack label="stk-numerical-input-min-sf"
+                               source="stack/Features/input-type-sample-questions/Numerical_input_min_sf.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-radio">
+                        <title>Radio</title>
+                        <stack label="stk-radio"
+                               source="stack/Features/input-type-sample-questions/Radio.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-radio-compact">
+                        <title>Radio_compact</title>
+                        <stack label="stk-radio-compact"
+                               source="stack/Features/input-type-sample-questions/Radio_compact.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-single-char">
+                        <title>Single_char</title>
+                        <stack label="stk-single-char"
+                               source="stack/Features/input-type-sample-questions/Single_char.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-string-input">
+                        <title>String_input</title>
+                        <stack label="stk-string-input"
+                               source="stack/Features/input-type-sample-questions/String_input.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-textarea-test-compact">
+                        <title>Textarea_test_compact</title>
+                        <stack label="stk-textarea-test-compact"
+                               source="stack/Features/input-type-sample-questions/Textarea_test_compact.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-textarea-test">
+                        <title>Textarea_test</title>
+                        <stack label="stk-textarea-test"
+                               source="stack/Features/input-type-sample-questions/Textarea_test.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-true-or-false">
+                        <title>TrueORfalse</title>
+                        <stack label="stk-true-or-false"
+                               source="stack/Features/input-type-sample-questions/TrueORfalse.xml" />
+                    </exercise>
+                    
+                    <exercise xml:id="ex-units">
+                        <title>Units</title>
+                        <stack label="stk-units"
+                               source="stack/Features/input-type-sample-questions/Units.xml" />
+                    </exercise>
+                    
+                </exercises>
+
+            </subsection>
+
+            <subsection xml:id="subsec-blocks">
+                <title>Question blocks</title>
+                <p></p>
+                <exercises xml:id="exercises-blocks">
+                    <exercise xml:id="ex-blocks-if-for">
+                        <title>If and for blocks</title>
+                        <stack label="stk-blocks-if-for"
+                               source="stack/Doc-Examples/Authoring-Docs/Question-blocks/Blocks.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-reveal-block-example">
+                        <title>Reveal_block_example</title>
+                        <stack label="stk-reveal-block-example"
+                               source="stack/Doc-Examples/Authoring-Docs/Question-blocks/Reveal_block_example.xml" />
+                    </exercise>           
+    
+                    <exercise xml:id="ex-adapt-button-block">
+                        <title>Adapt_button_block</title>
+                        <stack label="stk-adapt-button-block"
+                               source="stack/Doc-Examples/Authoring-Docs/Question-blocks/Adapt_button_block.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-adapt-delay-block">
+                        <title>Adapt_delay_block</title>
+                        <stack label="stk-adapt-delay-block"
+                               source="stack/Doc-Examples/Authoring-Docs/Question-blocks/Adapt_delay_block.xml" />
+                    </exercise>
+
+                </exercises>
+            </subsection>
+    
+            <subsection xml:id="subsec-parsons">
+                <title>Parsons and Drag &amp; Drop exercises</title>
+                <p></p>
+                <exercises xml:id="exercises-parsons">
+
+                    <exercise xml:id="ex-parsons-1-minimal">
+                        <title>Parsons-1-minimal</title>
+                        <stack label="stk-parsons-1-minimal"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/ParsonsProof/Parsons-1-minimal.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-parsons-2-interchangable-order">
+                        <title>Parsons-2-Interchangable-order</title>
+                        <stack label="stk-parsons-2-interchangable-order"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/ParsonsProof/Parsons-2-Interchangable-order.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-parsons-3-builder">
+                        <title>Parsons-3-builder</title>
+                        <stack label="stk-parsons-3-builder"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/ParsonsProof/Parsons-3-builder.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-parsons-4-dag-proof">
+                        <title>Parsons-4-DAG-Proof</title>
+                        <stack label="stk-parsons-4-dag-proof"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/ParsonsProof/Parsons-4-DAG-Proof.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-irrational-power-irrational-illustrates-re-use-of-strings">
+                        <title>irrational-power-irrational_illustrates_re-use_of_strings</title>
+                        <stack label="stk-irrational-power-irrational-illustrates-re-use-of-strings"
+                               source="stack/Features/Parsons/irrational-power-irrational_illustrates_re-use_of_strings.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-log-two-three-irrational">
+                        <title>log-two-three-irrational</title>
+                        <stack label="stk-log-two-three-irrational"
+                               source="stack/Features/Parsons/log-two-three-irrational.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-parsons-plot">
+                        <title>Parsons-plot</title>
+                        <stack label="stk-parsons-plot"
+                               source="stack/Features/Parsons/Parsons-plot.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-drag-and-drop-1-grouping">
+                        <title>Drag_and_drop-1-grouping</title>
+                        <stack label="stk-drag-and-drop-1-grouping"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/Drag-and-drop/Drag_and_drop-1-grouping.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-drag-and-drop-2-grid">
+                        <title>Drag_and_drop-2-Grid</title>
+                        <stack label="stk-drag-and-drop-2-grid"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/Drag-and-drop/Drag_and_drop-2-Grid.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-drag-and-drop-3-grid-with-index">
+                        <title>Drag_and_drop-3-Grid_with_index</title>
+                        <stack label="stk-drag-and-drop-3-grid-with-index"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/Drag-and-drop/Drag_and_drop-3-Grid_with_index.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-drag-and-drop-4-using-images">
+                        <title>Drag_and_drop-4-Using-images</title>
+                        <stack label="stk-drag-and-drop-4-using-images"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/Drag-and-drop/Drag_and_drop-4-Using-images.xml" />
+                    </exercise>
+
+                </exercises>
+            </subsection>
+    
+
+            <subsection xml:id="subsec-jsxgraph">
+                <title>JSXGraph</title>
+                <p></p>
+                <exercises xml:id="exercises-jsxgraph">
+
+                    <exercise xml:id="ex-1-basic-non-bound-example-of-a_graph">
+                        <title>1_Basic_non_bound_example_of_a_graph</title>
+                        <stack label="stk-1-basic-non-bound-example-of-a_graph"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/JSXgraphs/1_Basic_non_bound_example_of_a_graph.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-2-binding-what-does-it-mean">
+                        <title>2_Binding_what_does_it_mean</title>
+                        <stack label="stk-2-binding-what-does-it-mean"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/JSXgraphs/2_Binding_what_does_it_mean.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-3-two-way-binding-what-does-that-mean">
+                        <title>3_Two-way_binding_what_does_that_mean</title>
+                        <stack label="stk-3-two-way-binding-what-does-that-mean"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/JSXgraphs/3_Two-way_binding_what_does_that_mean.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-4-json-and-complex-binding">
+                        <title>4_JSON_and_complex_binding</title>
+                        <stack label="stk-4-json-and-complex-binding"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/JSXgraphs/4_JSON_and_complex_binding.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-author-quickstart-line-parallel-to-graph">
+                        <title>Author_quickstart_Line_parallel_to_graph</title>
+                        <stack label="stk-author-quickstart-line-parallel-to-graph"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/JSXgraphs/Author_quickstart_Line_parallel_to_graph.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-jsx-graph-and-validation-tech-demo">
+                        <title>JSXGraph_and_validation_TECH_DEMO</title>
+                        <stack label="stk-jsx-graph-and-validation-tech-demo"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/JSXgraphs/JSXGraph_and_validation_TECH_DEMO.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-stack-jxg-binding-demo">
+                        <title>stack_jxg.binding-demo-4.4</title>
+                        <stack label="stk-stack-jxg-binding-demo"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/JSXgraphs/stack_jxg.binding-demo-4.4.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-jsx-graph-in-feedback">
+                        <title>JSXGraph in feedback</title>
+                        <stack label="stk-jsx-graph-in-feedback"
+                               source="stack/jsx-in-feedback.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-parallel-vectors">
+                        <title>Parallel vectors</title>
+                        <stack label="stk-parallel-vectors"
+                               source="stack/Parallel_vectors.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-validation-state-listener">
+                        <title>Validation-state-listener</title>
+                        <stack label="stk-validation-state-listener"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/STACK-JS/Validation-state-listener.xml" />
+                    </exercise>
+
+                </exercises>
+            </subsection>
+    
+
+            <subsection xml:id="subsec-misc">
+                <title>Misc</title>
+                <p></p>
+                <exercises xml:id="exercises-misc">
+
+                    <exercise xml:id="ex-basic-plot">
+                        <title>Plot in question text</title>
+                        <stack label="stk-basic-plot"
+                               source="stack/basic-plot.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-plot-in-feedback">
+                        <title>Plot in feedback</title>
+                        <stack label="stk-plot-in-feedback"
+                                source="stack/plot-in-feedback.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-included-image">
+                        <title>Image in solution</title>
+                        <stack label="stk-included-image"
+                               source="stack/9-1-5-4-Adding-vectors-in-triangles.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-equivalence-reasoning-example">
+                        <title>equivalence_reasoning_example</title>
+                        <stack label="stk-equivalence-reasoning-example"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/equivalence_reasoning_example.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-file-download">
+                        <title>file_download</title>
+                        <stack label="stk-file-download"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/file_download.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-geogebra">
+                        <title>GeoGebra</title>
+                        <stack label="stk-geogebra"
+                               source="stack/Doc-Examples/Specialist-Tools-Docs/GeoGebra.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-dropdown-permutation">
+                        <title>Question with a randomly permutated dropdown list</title>
+                        <stack label="stk-dropdown-permutation"
+                               source="stack/Using-Similarity-to-Determine-Unknown-Lengths-and-Scale-Factor.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-find-several-x-values-on-the-graph">
+                        <title>Find-several-x-values-on-the-graph-of-the-trigonometric-functionon with plot image</title>
+                        <stack label="stk-find-several-x-values-on-the-graph"
+                               source="stack/Find-several-x-values-on-the-graph-of-the-trigonometric-function.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-mcq-example-multiselqnalpha">
+                        <title>MCQ-example-multiselqnalpha</title>
+                        <stack label="stk-mcq-example-multiselqnalpha"
+                               source="stack/MCQ-example-multiselqnalpha.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-jsx-graph-behat">
+                        <title>JSXGraph-behat - broken</title>
+                        <stack label="stk-jsx-graph-behat"
+                               source="stack/JSXGraph-behat.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-information-item">
+                        <title>Information-item</title>
+                        <stack label="stk-information-item"
+                               source="stack/Doc-Examples/Authoring-Docs/Information-item.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-d-l-distance">
+                        <title>D-L-distance</title>
+                        <stack label="stk-d-l-distance"
+                               source="stack/Doc-Examples/Topics-Docs/D-L-distance.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-statistics">
+                        <title>Statistics</title>
+                        <stack label="stk-statistics"
+                               source="stack/Doc-Examples/Topics-Docs/Statistics.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-presenting-strings">
+                        <title>Presenting_strings</title>
+                        <stack label="stk-presenting-strings"
+                               source="stack/Doc-Examples/Authoring-Docs/Presenting_strings.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-enlargement-and-similarity-parsons-proof">
+                        <title>Enlargement_and_Similarity_Parsons_Proof</title>
+                        <stack label="stk-enlargement-and-similarity-parsons-proof"
+                               source="stack/Enlargement-and-Similarity-Parsons-Proof.xml" />
+                    </exercise>
+
+                    <exercise xml:id="ex-25-3-reflections">
+                        <title>25-3-Reflections</title>
+                        <stack label="stk-25-3-reflections"
+                               source="stack/25-3-Reflections.xml" />
+                    </exercise>
+
+                </exercises>
+            </subsection>
+
+        </section>
+
+    </article>
+
+</pretext>

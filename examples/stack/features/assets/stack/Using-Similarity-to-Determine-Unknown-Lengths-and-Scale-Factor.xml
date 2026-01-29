@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>Using Similarity to Determine Unknown Lengths and Scale Factor</text>
+    </name>
+    <questiontext format="moodle_auto_format">
+      <text><![CDATA[<p>In the diagram shown below, triangle \(OA'B'\) is an enlargement of triangle \(OAB\). </p>
+[[jsxgraph]]
+var board = JXG.JSXGraph.initBoard('jxgbox', {
+    boundingbox: [-12, 10, 4, -4],
+    axis: false,
+    pan: { enabled: false },
+    zoom: { enabled: false },
+    showNavigation: false
+});
+
+/* === Static points (not to scale) === */
+var O  = board.create('point', [0,0], {name:'O', fixed:true, size:2});
+var A  = board.create('point', [-4,0], {name:'A', fixed:true, visible:false}); // invisible
+var B  = board.create('point', [-4,3], {name:'B', fixed:true, visible:false}); // invisible
+var A1 = board.create('point', [-8,0], {name:"A'", fixed:true, size:2});
+var B1 = board.create('point', [-8,6], {name:"B'", fixed:true, size:2});
+
+/* === Draw edges === */
+function edge(P1,P2){ return board.create('segment',[P1,P2],{strokeWidth:2,fixed:true}); }
+edge(O,A); edge(A,B); edge(B,O);         // Original triangle
+edge(O,A1); edge(A1,B1); edge(B1,O);     // Enlarged triangle
+edge(A,A1); edge(B,B1);                   // Connectors
+
+/* === Labels with just numbers === */
+// Original triangle
+board.create('text', [() => (O.X()+A.X())/2, () => (O.Y()+A.Y())/2 - 0.3, "{#OA#} cm"]);
+board.create('text', [() => (A.X()+B.X())/2, () => (A.Y()+B.Y())/2 + 0.3, "{#AB#} cm"]);
+board.create('text', [() => (O.X()+B.X())/2, () => (O.Y()+B.Y())/2 + 0.3, "{#OB#} cm"]);
+
+// Enlarged triangle
+board.create('text', [() => (O.X()+A1.X())/2, () => (O.Y()+A1.Y())/2 - 0.3, "A"]);
+board.create('text', [() => (O.X()+B1.X())/2, () => (O.Y()+B1.Y())/2 + 0.3, "B"]);
+
+// Connector BB'
+board.create('text', [() => (B.X()+B1.X())/2, () => (B.Y()+B1.Y())/2 + 0.3, "{#BB1#} cm"]);
+
+/* Prevent interaction */
+board.renderer.svgRoot.style.pointerEvents = "none";
+[[/jsxgraph]]
+
+<p>(a). Identify the centre of enlargement.</p>
+<p>[[input:ans1]] [[validation:ans1]][[feedback:prt1]]</p>
+<p>(b). Find the scale factor of the enlargement.</p>
+<p>[[input:ans2]] [[validation:ans2]][[feedback:prt2]]</p>
+<p>(c). Calculate the lengths of</p>
+  <p>  (i). \(A'B'\) [[input:ans3]] cm[[validation:ans3]][[feedback:prt3]]
+             </p>
+  <p>  (ii). \(OA'\) [[input:ans4]] cm[[validation:ans4]][[feedback:prt4]]
+             </p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text><![CDATA[<h3>Worked solution</h3>
+<p>(a).The centre of enlargement is \(O\).</p>
+<p>(b). Scale factor = \(\frac {OB'}{OB} = \frac{{@OB1@}}{{@OB@}} = {@K@}\)</p>
+<p>(c). (i). \(\frac{OB'}{OB} = \frac{A'B'}{AB} \Rightarrow \frac{{@OB1@}}{{@OB@}} = \frac{A'B'}{{@AB@}}\)</p>
+<p>\(\quad \quad \quad \quad A'B'= \frac{{@AB@}\times{@OB1@}}{{@AB@}}={@ta2@}\) cm</p>
+
+<p> (ii). \(\frac{OB'}{OB} = \frac{OA'}{OA} \Rightarrow \frac{{@OB1@}}{{@OB@}} = \frac{OA'}{{@OA@}}\)</p>
+<p>\(\quad \quad \quad \quad OA'= \frac{{@OB1@}\times{@OA@}}{{@OB@}}={@ta3@}\) cm</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2025073100</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[ta:random_permutation([["O", true],["B", false],["A'", false],["B'", false]]);
+
+OB:rand(10)+2;
+OA:rand_with_prohib(2,5,[OB]);
+K:rand([2,3,4,5]);
+OB1:K*OB;
+AB:rand_with_prohib(2,5,[OB,OA]);
+OA1:K*OA;
+BB1:OB1-OB;
+ta1:K;
+ta2:K*AB;
+ta3:OA1;]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text/>
+    </specificfeedback>
+    <questionnote format="html">
+      <text><![CDATA[<p>\(A'B'\) = {@ta2@}</p>
+<p>\(OA'\) = {@ta3@}</p>]]></text>
+    </questionnote>
+    <questiondescription format="html">
+      <text/>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>none</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+    <input>
+      <name>ans1</name>
+      <type>dropdown</type>
+      <tans>ta</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>3</showvalidation>
+      <options/>
+    </input>
+    <input>
+      <name>ans2</name>
+      <type>algebraic</type>
+      <tans>ta1</tans>
+      <boxsize>5</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>3</showvalidation>
+      <options/>
+    </input>
+    <input>
+      <name>ans3</name>
+      <type>algebraic</type>
+      <tans>ta2</tans>
+      <boxsize>5</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>3</showvalidation>
+      <options/>
+    </input>
+    <input>
+      <name>ans4</name>
+      <type>algebraic</type>
+      <tans>ta3</tans>
+      <boxsize>5</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>3</showvalidation>
+      <options/>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text/>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>EqualComAss</answertest>
+        <sans>ans1</sans>
+        <tans>mcq_correct(ta)[1]</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt2</name>
+      <value>2.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text/>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans2</sans>
+        <tans>ta1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt2-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt3</name>
+      <value>3.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text/>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans3</sans>
+        <tans>ta2</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt3-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt3-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt4</name>
+      <value>4.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text/>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans4</sans>
+        <tans>ta3</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt4-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt4-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>842258310</deployedseed>
+    <deployedseed>898158260</deployedseed>
+    <deployedseed>313475464</deployedseed>
+    <deployedseed>1222965442</deployedseed>
+    <deployedseed>1093556149</deployedseed>
+    <deployedseed>275363241</deployedseed>
+    <deployedseed>335671725</deployedseed>
+    <deployedseed>974834232</deployedseed>
+    <deployedseed>631992674</deployedseed>
+    <deployedseed>160309941</deployedseed>
+    <deployedseed>1155744774</deployedseed>
+    <deployedseed>1731449008</deployedseed>
+    <deployedseed>979266588</deployedseed>
+    <deployedseed>422670948</deployedseed>
+    <deployedseed>981099574</deployedseed>
+    <deployedseed>693395756</deployedseed>
+    <deployedseed>1899989681</deployedseed>
+    <deployedseed>996243196</deployedseed>
+    <deployedseed>1269531791</deployedseed>
+    <deployedseed>1542588172</deployedseed>
+    <qtest>
+      <testcase>1</testcase>
+      <description>Test case assuming the teacher's input gets full marks.</description>
+      <testinput>
+        <name>ans1</name>
+        <value>first(mcq_correct(ta))</value>
+      </testinput>
+      <testinput>
+        <name>ans2</name>
+        <value>ta1</value>
+      </testinput>
+      <testinput>
+        <name>ans3</name>
+        <value>ta2</value>
+      </testinput>
+      <testinput>
+        <name>ans4</name>
+        <value>ta3</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-1-T</expectedanswernote>
+      </expected>
+      <expected>
+        <name>prt2</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt2-1-T</expectedanswernote>
+      </expected>
+      <expected>
+        <name>prt3</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt3-1-T</expectedanswernote>
+      </expected>
+      <expected>
+        <name>prt4</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt4-1-T</expectedanswernote>
+      </expected>
+    </qtest>
+  </question>
+</quiz>

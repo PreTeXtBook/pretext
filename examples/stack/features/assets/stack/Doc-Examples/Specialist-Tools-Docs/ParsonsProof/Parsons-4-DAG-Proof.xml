@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>Parsons-4-DAG-Proof 3*2^172 + 1</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Prove the following theorem by dragging sentences and arranging them in the correct order.</p>
+<p><b>Theorem:</b>   {@thm@}</p>
+[[parsons input="ans1"]]
+{# parsons_encode(proof_steps) #}
+[[/parsons ]]
+<p>[[input:ans1]] [[validation:ans1]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text><![CDATA[<p><b>Theorem:</b>   {@thm@}</p>
+{@proof_display(ta, proof_steps)@}]]></text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2024112000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[stack_include_contrib("prooflib.mac");
+
+thm: "If \\(3 \\cdot 2^{172} + 1\\) is a perfect square, then \\(3 \\cdot 2^{172} + 173\\) is not a perfect square.";
+
+proof_steps: [
+    ["S1",   "Assume that \\(3 \\cdot 2^{172} + 1\\) is a perfect square."],
+    ["S2",   "There is a positive integer \\(k\\) such that \\(3 \\cdot 2^{172} + 1 = k^2\\)."],
+    ["S3",   "\\(k^2 = 3 \\cdot 2^{172} + 1 < 3 \\cdot 2^{172} + 173\\)."],
+    ["S4",   "Since \\(3 \\cdot 2^{172} + 1 > 2^{172} = (2^{86})^2 > 172^2\\), we have \\(k > 172\\)."],
+    ["S5",   "\\(3 \\cdot 2^{172} + 173 = (3 \\cdot 2^{172} + 1) + 172 < k^2 + k < (k + 1)^2\\)."],
+    ["C6",   "Since \\(k^2 < 3 \\cdot 2^{172} + 173 < (k + 1)^2\\) it is strictly between two successive squares \\(k^2\\) and \\((k + 1)^2\\), it cannot be a perfect square."]
+];
+
+/* Because of interleaving, we have to add in another "ta2" proof. */
+ta: proof("S1", "S2", proof_c(proof("S4", "S5"), proof("S3")), "C6");
+ta2: proof("S1", "S2", "S4", "S3", "S5", "C6");
+tal:proof_alternatives(ta);
+tas:setify(map(proof_flatten, tal));
+/* This graph represents the teacher's answer. */
+tdag: [["S1", "S2", "S4", "S5", "C6"],
+       ["S1", "S2", "S3", "C6"]];
+
+proof_steps:random_permutation(proof_steps);]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prt1]]</text>
+    </specificfeedback>
+    <questionnote format="moodle_auto_format">
+      <text>{@map(first,proof_steps)@}</text>
+    </questionnote>
+    <questiondescription format="moodle_auto_format">
+      <text>This question is an example of how to use a directed acyclic graph (DAG) in assessment of a Parsons problem.</text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+    <input>
+      <name>ans1</name>
+      <type>parsons</type>
+      <tans>[ta, proof_steps]</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options>hideanswer</options>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text>sa:parsons_decode(ans1);
+saprob: proof_assessment_dag(sa, tdag) ;
+[pd, saa]:proof_assessment(sa, proof_alternatives(ta));</text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Check for problems with the teacher's DAG.</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>saprob</sans>
+        <tans>[]</tans>
+        <testoptions/>
+        <quiet>1</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<b>You need to modify your proof as follows:</b><br/>
+{@proof_dag_problem_display(saprob, poof_steps)@}]]></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>Check the distance to the closest proof.</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>pd</sans>
+        <tans>0</tans>
+        <testoptions/>
+        <quiet>1</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<br/><b>This shows how to modify your proof to get a correct proof.</b><br/>
+{@proof_assessment_display(saa, proof_steps)@}]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>1</deployedseed>
+    <deployedseed>4</deployedseed>
+    <deployedseed>5</deployedseed>
+    <deployedseed>6</deployedseed>
+    <deployedseed>7</deployedseed>
+    <deployedseed>8</deployedseed>
+    <deployedseed>9</deployedseed>
+    <deployedseed>10</deployedseed>
+    <qtest>
+      <testcase>1</testcase>
+      <description>Test case assuming the teacher's input gets full marks.</description>
+      <testinput>
+        <name>ans1</name>
+        <value>parsons_answer(ta, [])</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-1-T</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>2</testcase>
+      <description>The interleaved proof, just as in the original paper.</description>
+      <testinput>
+        <name>ans1</name>
+        <value>parsons_answer(ta2, [])</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-1-T</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>3</testcase>
+      <description/>
+      <testinput>
+        <name>ans1</name>
+        <value><![CDATA[parsons_answer(proof("S1", "S2", "S3", "S4", "C6"), [])]]></value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty/>
+        <expectedanswernote>prt1-2-F</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>4</testcase>
+      <description/>
+      <testinput>
+        <name>ans1</name>
+        <value><![CDATA[parsons_answer(proof("S1", "S3", "S5","S2","S4", "C6"), [])]]></value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty/>
+        <expectedanswernote>prt1-2-F</expectedanswernote>
+      </expected>
+    </qtest>
+  </question>
+</quiz>
