@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text><![CDATA[Presenting "strings"]]></text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>STACKs support for "strings" has improved during the last few years and the use of textual values e.g. in MCQ options has led to more use cases becoming apparent. However, as inputting "strings" to Maxima requires some escaping to be done like in most programming languages and as that escaping slightly differs from the escaping used in the other languages used (e.g. (X)HTML, JavaScript) when authoring STACK questions there are certain things one needs to note.</p><p>Presenting how a string should be inputted is the easiest part as it uses the same logic as mathematical expressions. Just use the <code>[[escape value="{#expression#}"/]]</code>-syntax, note that it will also output the wrapping "-chars for the string:</p><table><tr><th><code>[[escape value="{@str@}"/]]</code></th><th><code>[[escape value="{#str#}"/]]</code></th></tr><tr><td><code>{@teststring1@}</code></td><td><code>{#teststring1#}</code></td></tr><tr><td><code>{@teststring2@}</code></td><td><code>{#teststring2#}</code></td></tr><tr><td><code>{@teststring3@}</code></td><td><code>{#teststring3#}</code></td></tr><tr><td><code>{@teststring4@}</code></td><td><code>{#teststring4#}</code></td></tr></table><p>When mixing "strings" with (X)HTML or JavaScript you need to note the special escapes those languages need, STACK provides two functions <code>str_to_html(str)</code> and <code>str_to_js(str)</code> that do the escaping and entity conversions so that one can simply output the string where needed.</p><!-- Note. that for display reasons we actually escape the HTML-output twice to show that we escaped it... In practical use (e.g. attribute values for 'style' or such) you probably only want to escape it once. --><table><tr><th><code>[[escape value="{@str_to_html(str)@}"/]]</code></th><th><code>[[escape value="{@str_to_js(str)@}"/]]</code></th></tr><tr><td><code>{@str_to_html(str_to_html(teststring1))@}</code></td><td><code>{@str_to_js(teststring1)@}</code></td></tr><tr><td><code>{@str_to_html(str_to_html(teststring2))@}</code></td><td><code>{@str_to_js(teststring2)@}</code></td></tr><tr><td><code>{@str_to_html(str_to_html(teststring3))@}</code></td><td><code>{@str_to_js(teststring3)@}</code></td></tr><tr><td><code>{@str_to_html(str_to_html(teststring4))@}</code></td><td><code>{@str_to_js(teststring4)@}</code></td></tr></table><p>Note! Moodles output filtering does often handle &, < and other such characters that have special meanings in HTML automatically in the textual content of HTML-output but when you wish to push those characters  to attributes or more complex code you will need to do these messy things yourself.</p><p>Also remember that while you may construct complex "strings" at the CAS level some things may be better left to the CASText level. While some "string" trickery may be necessary when dealing with randomly generated options for MCQ questions generally one should try to leave the textual content of the question outside of the CAS, both of the following examples generate the same output but the later one is the preferred one:</p><ul><li><code>[[ escape value='{@sconcat("The derivative of \\(f(x)\\) is \\(", tex1(diff(f(x),x)), "\\).")@}' /]]</code></li><li><code>[[ escape value="The derivative of {@'f(x)@} is {@diff(f(x),x)@}." /]]</code></li></ul><p>Note that if you need to build the output conditionally or loop over something there are new tools for those tasks and you generally do not need to do that at CAS-level. Check the other examples in the question set for those.</p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text/>
+    </generalfeedback>
+    <defaultgrade>0</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text/>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[teststring1: "abcd...XYZÅÄÖ";
+teststring2: "Quotes in \"strings\": 'test'";
+teststring3: "\\LaTeX like this \\frac{a}{b}";
+teststring4: "&<>";
+
+f(x):=x^2+sin(x)]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text/>
+    </specificfeedback>
+    <questionnote format="html">
+      <text/>
+    </questionnote>
+    <questiondescription format="html">
+      <text/>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+  </question>
+</quiz>

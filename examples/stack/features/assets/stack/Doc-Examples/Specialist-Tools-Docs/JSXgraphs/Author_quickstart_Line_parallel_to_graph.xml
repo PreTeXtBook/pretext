@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>Line parallel to graph</text>
+    </name>
+    <questiontext format="moodle_auto_format">
+      <text><![CDATA[<p>Drag the point \(A\) so that the line \(OA\) is parallel to the function graph of \(f(x) = {@expr@}\).</p>
+
+[[jsxgraph  input-ref-ans1="ref_A"]]
+var board = JXG.JSXGraph.initBoard(divid, {
+    axis: true,
+    showCopyright: false,
+    showNavigation: false,
+    boundingbox: [-6, 6, 6, -6],
+    keepaspectratio: true,
+    grid:true
+});
+
+var pO = board.create('point', [0, 0], {name: 'O', fixed: true, color: "blue" });
+var pA = board.create('point', {# A_init #}, { name: 'A', snapToGrid:true, snapSizeX:0.2, snapSizeY:0.2 });
+var line = board.create('line', [pO, pA], { fixed: true });
+
+stack_jxg.bind_point(ref_A, pA);
+[[/jsxgraph]]
+
+<p style="display:none">[[input:ans1]] [[validation:ans1]] </p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text/>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2025012100</text>
+    </stackversion>
+    <questionvariables>
+      <text>slope: rand([1/2, 3/2, 2]);
+intercept: rand_with_step(-3, -1, 1);
+expr: slope*x + intercept;  /* our function f(x) */
+ta1: [2, 2 * float(slope)];  /* A correct answer for A with integer coordinates */
+
+xA_init: 1 + rand(3);
+yA_init: -1 - rand(3);
+A_init: [xA_init, yA_init];  /* Initial position of A */</text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prt1]]</text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text><![CDATA[\(f(x) = {@expr@}\)<br>
+\(A = {@ta1@}, A_{init} = {@A_init@}\)]]></text>
+    </questionnote>
+    <questiondescription format="html">
+      <text/>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>none</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+    <input>
+      <name>ans1</name>
+      <type>algebraic</type>
+      <tans>ta1</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options>hideanswer</options>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text>student_slope: ans1[2]/ans1[1];</text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>NumRelative</answertest>
+        <sans>student_slope</sans>
+        <tans>slope</tans>
+        <testoptions>0.02</testoptions>
+        <quiet>1</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>The slope of your line is different from the slope of {@expr@}, see below:</p>
+
+[[jsxgraph]]
+var board = JXG.JSXGraph.initBoard(divid, {
+    axis: true,
+    showCopyright: false,
+    showNavigation: false,
+    boundingbox: [-6, 6, 6, -6],
+    keepaspectratio: true,
+    grid:true
+});
+
+var pO = board.create('point', [0, 0], {name: 'O', fixed: true, color: "blue" });
+var pA = board.create('point', {# ans1 #}, { name: 'A',  fixed: true});
+var line = board.create('line', [pO, pA], { fixed: true });
+var graph = board.create('functiongraph', '{#expr#}' , {name:'{#expr#}', withLabel: true});
+[[/jsxgraph]]]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>1087841721</deployedseed>
+    <deployedseed>1423895478</deployedseed>
+    <deployedseed>334985751</deployedseed>
+    <deployedseed>1002610041</deployedseed>
+    <deployedseed>1924126921</deployedseed>
+    <deployedseed>1898273712</deployedseed>
+    <deployedseed>1441446943</deployedseed>
+    <deployedseed>1990039778</deployedseed>
+    <deployedseed>1852419708</deployedseed>
+    <deployedseed>1325137336</deployedseed>
+    <qtest>
+      <testcase>1</testcase>
+      <description>Test case assuming the teacher's input gets full marks.</description>
+      <testinput>
+        <name>ans1</name>
+        <value>ta1</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-1-T</expectedanswernote>
+      </expected>
+    </qtest>
+  </question>
+</quiz>

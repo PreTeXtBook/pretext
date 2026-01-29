@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 209987  -->
+  <question type="stack">
+    <name>
+      <text>Parallel vectors</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[Move \(p_3\) and \(p_4\) so that the vector \(\vec{p_3p_4}\) is parallel to the vector \(\vec{p_1p_2}\), but NOT identical or opposite.
+
+[[jsxgraph input-ref-ans1='ans1Ref']]
+
+var board = JXG.JSXGraph.initBoard(divid, { boundingbox : [-5.5, 5.5, 5.5, -5.5], axis : true });
+
+var p1 = board.create('point', {#p1#}, { name : 'p_1', fixed: true });
+var p2 = board.create('point', {#p2#}, { name : 'p_2', fixed: true, lastArrow: {type: 2, size: 8, highlightSize: 6} });
+
+var p3 = board.create('point', {#p3#}, { name : 'p_3', fixed: false, snapSizeX: 0.5, snapSizeY: 0.5, snapToGrid: true });
+var p4 = board.create('point', {#p4#}, { name : 'p_4', fixed: false, lastArrow: {type: 2, size: 8, highlightSize: 6}, snapSizeX: 0.5, snapSizeY: 0.5, snapToGrid: true });
+
+board.create('arrow', [p1, p2], { fixed : true, strokeWidth : 4, strokeOpacity : .6 });
+board.create('arrow', [p3, p4], {strokeWidth : 4, strokeOpacity : .6 });
+
+stack_jxg.bind_point_relative(ans1Ref, p3, p4);
+
+[[/jsxgraph]]
+
+<p style="display:none">[[input:ans1]] [[validation:ans1]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text></text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <stackversion>
+      <text>2025012100</text>
+    </stackversion>
+    <questionvariables>
+      <text>p1x: rand_with_step(-5, 0, 1);
+p1y: rand_with_step(-5, 0, 1);
+p2x: p1x+rand_with_step(1, 4, 1);
+p2y: p1y+rand_with_step(1, 5, 1);
+v1: [p2x-p1x, p2y-p1y];
+
+p3x: rand_with_step(0, 5, 1);
+p3y: rand_with_step(-5, 0, 1);
+p4x: p3x+rand_with_step(-5, -1, 1);
+p4y: p3y+rand_with_step(1, 5, 1);
+
+p1: [p1x, p1y];
+p2: [p2x, p2y];
+p3: [p3x, p3y];
+p4: [p4x, p4y];
+
+ta1: [[p2x+1, p2y], 0.5*v1]</text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prt1]]</text>
+    </specificfeedback>
+    <questionnote format="moodle_auto_format">
+      <text>{@p1@}, {@p2@}, {@p3@}, {@p4@}</text>
+    </questionnote>
+    <questiondescription format="moodle_auto_format">
+      <text></text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed></variantsselectionseed>
+    <input>
+      <name>ans1</name>
+      <type>algebraic</type>
+      <tans>ta1</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint></syntaxhint>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords></forbidwords>
+      <allowwords></allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options></options>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text>sv: ans1[2];
+stack: matrix(sv, v1);
+is_parallel: is(rank(stack) = 1);</text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>sv</sans>
+        <tans>-v1</tans>
+        <testoptions></testoptions>
+        <quiet>1</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Your vector is opposite to \(\vec{p_1p_2}\)!</text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>sv</sans>
+        <tans>v1</tans>
+        <testoptions></testoptions>
+        <quiet>1</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text>Your vector is identical to \(\vec{p_1p_2}\)!</text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt1-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text></text>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description></description>
+        <answertest>AlgEquiv</answertest>
+        <sans>is_parallel</sans>
+        <tans>true</tans>
+        <testoptions></testoptions>
+        <quiet>1</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty></truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty></falsepenalty>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text>Your vector is not parallel to \(\vec{p_1p_2}\)!</text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>1586907116</deployedseed>
+    <deployedseed>1472623394</deployedseed>
+    <deployedseed>1205969954</deployedseed>
+    <deployedseed>542773597</deployedseed>
+    <deployedseed>1696546475</deployedseed>
+    <deployedseed>2141059283</deployedseed>
+    <deployedseed>305789242</deployedseed>
+    <deployedseed>326662952</deployedseed>
+    <deployedseed>796071881</deployedseed>
+    <deployedseed>1956926514</deployedseed>
+    <deployedseed>1154429849</deployedseed>
+    <deployedseed>120819070</deployedseed>
+    <deployedseed>359102522</deployedseed>
+    <deployedseed>40935666</deployedseed>
+    <deployedseed>1260884880</deployedseed>
+    <qtest>
+      <testcase>1</testcase>
+      <description>Test case assuming the teacher's input gets full marks.</description>
+      <testinput>
+        <name>ans1</name>
+        <value>ta1</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-3-T</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>2</testcase>
+      <description></description>
+      <testinput>
+        <name>ans1</name>
+        <value>[[0,0], -v1]</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty></expectedpenalty>
+        <expectedanswernote>prt1-1-T</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>3</testcase>
+      <description></description>
+      <testinput>
+        <name>ans1</name>
+        <value>[[0,0], v1]</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty></expectedpenalty>
+        <expectedanswernote>prt1-2-T</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>4</testcase>
+      <description></description>
+      <testinput>
+        <name>ans1</name>
+        <value>[[0,0], [v1[2], -v1[1]]]</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty></expectedpenalty>
+        <expectedanswernote>prt1-3-F</expectedanswernote>
+      </expected>
+    </qtest>
+  </question>
+
+</quiz>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>Checkbox (plots in options)</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p class="noindent">Which of the following functions are invertible?<br></p>
+ [[input:ans1]] [[validation:ans1]]
+<p>(This question is to test auto-generated images appear in MCQ options.)</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[<p>A function is invertible if and only if it takes each value in its range precisely once.&nbsp; The functions that are not invertible here are not invertible because they take some values more than once.<br></p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2020123000</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[cfn1:x^3;
+cfn2:atan(x);
+cfn3:(1/2)^x;
+cfn4:-x^5;
+wfn1:x^2-1;
+wfn2:(x-1)*x*(x+1);
+wfn3:1/x^2;
+wfn4:cos(x);
+xmax:3;
+ymax:3;
+cplot1:plot(cfn1,[x,-xmax,xmax],[y,-ymax,ymax],[box, false],[yx_ratio, 1],[axes, solid]);
+cplot2:plot(cfn2,[x,-xmax,xmax],[y,-%pi/2,%pi/2],[box, false],[yx_ratio, 1],[axes, solid]);
+cplot3:plot(cfn3,[x,-xmax,xmax],[y,0,ymax],[box, false],[yx_ratio, 1],[axes, solid]);
+cplot4:plot(cfn4,[x,-xmax,xmax],[y,-ymax,ymax],[box, false],[yx_ratio, 1],[axes, solid]);
+wplot1:plot(wfn1,[x,-xmax,xmax],[y,-1,ymax],[box, false],[yx_ratio, 1],[axes, solid]);
+wplot2:plot(wfn2,[x,-xmax,xmax],[y,-ymax,ymax],[box, false],[yx_ratio, 1],[axes, solid]);
+wplot3:plot(wfn3,[x,-xmax,xmax],[y,0,ymax],[box, false],[yx_ratio, 1],[axes, solid]);
+wplot4:plot(wfn4,[x,-xmax,xmax],[y,-1,1],[box, false],[yx_ratio, 1],[axes, solid]);
+corbase:[cplot1,cplot2,cplot3,cplot4];
+wrongbase:[wplot1,wplot2,wplot3,wplot4];
+/* code lifted and adapted from multiselqnalpha */
+sel_cor: maplist(lambda([ex], [ex, true]), rand_selection(corbase, 2));
+sel_incorr: maplist(lambda([ex], [ex, false]), rand_selection(wrongbase, 2));
+opts: random_permutation(append(sel_cor,sel_incorr));
+talab: ev(makelist(sconcat("(",ascii(96+i),")"), i, 1, length(opts)), simp);
+ta1:zip_with(lambda([ex1, ex2], [ex1, ex2[2], sconcat("<b>", ex1, "</b> ", ex2[1])]), talab, opts);
+version: map(first, opts);
+corr1:mcq_correct(ta1);
+incorr1:mcq_incorrect(ta1);]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prt1]]</text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text>{@f@} {#version#}</text>
+    </questionnote>
+    <questiondescription format="html">
+      <text/>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>none</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+    <input>
+      <name>ans1</name>
+      <type>checkbox</type>
+      <tans>ta1</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>1</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options>LaTeX</options>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>0</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text/>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>setify(ans1)</sans>
+        <tans>setify(corr1)</tans>
+        <testoptions/>
+        <quiet>1</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1.0000000</truescore>
+        <truepenalty>0</truepenalty>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-0-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0.0000000</falsescore>
+        <falsepenalty>0.1</falsepenalty>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt1-0-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>subsetp(setify(ans1),setify(corr1))</sans>
+        <tans>true</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0.5000000</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You have correctly identified one of the correct answers, but missed \({@setdifference(setify(corr1),setify(ans1))@}\).<br></p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0.0000000</falsescore>
+        <falsepenalty/>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt1-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description/>
+        <answertest>CasEqual</answertest>
+        <sans>cardinality(ev(intersection(setify(incorr1),setify(ans1)),simp))</sans>
+        <tans>0</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0.0000000</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p><br></p><p>{@setify(ans1)@}<br></p><p>{@(intersection(setify(incorr),setify(ans1)))@}<br></p><p>{@cardinality(intersection(setify(incorr),setify(ans1)))@}</p>]]></text>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0.0000000</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text><![CDATA[<p>You incorrectly selected {@(setdifference(setify(ans1),setify(corr1)))@}<br></p>]]></text>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>473610050</deployedseed>
+    <deployedseed>808241651</deployedseed>
+    <qtest>
+      <testcase>1</testcase>
+      <description/>
+      <testinput>
+        <name>ans1</name>
+        <value>[incorr1[1]]</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty>0.1000000</expectedpenalty>
+        <expectedanswernote>prt1-3-F</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>2</testcase>
+      <description/>
+      <testinput>
+        <name>ans1</name>
+        <value>corr1</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-0-T</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>3</testcase>
+      <description/>
+      <testinput>
+        <name>ans1</name>
+        <value>[corr1[1],incorr1[1]]</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>0.0000000</expectedscore>
+        <expectedpenalty>0.1000000</expectedpenalty>
+        <expectedanswernote>prt1-3-F</expectedanswernote>
+      </expected>
+    </qtest>
+    <tags>
+      <tag><text>multiselqnalpha</text>
+</tag>
+    </tags>
+  </question>
+</quiz>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>Blocks</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>With v4.0 of STACK the CASText parts of the question gain <i>blocks</i> which allow the text to contain segments that are evaluated further and which may have parameters that define their behaviour. Those parameters and the contents of the blocks can naturally contain values evaluated by the CAS and even randomisation. The block system is extensible and may receive various new features in the future but for start the initial set of blocks should already allow new things to be done in question authoring.</p><p>In general when authoring questions with blocks or for example JavaScript one should turn of the WYSIWYG editor in ones Moodle user preferences and start using the plain text area as it tends to respect white space and line changes and does not try to be helpful. One should also know that opening and saving questions using JavaScript in WYSIWYG editors may break them, blocks will survive WYSIWYG editors but may pick up extra line changes and spaces which may make the questions look less than perfect.</p><br/><h5>The <code>[[escape value="[[ if test='...' ]]...[[/ if ]]"/]]</code>-block</h5><p>The simplest of the blocks is the if-block which takes the value given to it in the argument named 'test' and gives it to the CAS to be evaluated and if and only if the argument evaluates to the value 'true' will the block evaluate to the value of its contents otherwise it will simply disappear. To complicate things the contents of the if-block may have been divided to multiple branches by including <code>[[escape value="[[ elif test='...' ]]"/]]</code> and <code>[[escape value="[[ else ]]"/]]</code> style dividers into the blocks contents. Those branches will only fire if all the branches before them have been 'false', should any argument not evaluate to 'true' or 'false' then the matching branch and all branches after it will remain hidden as unknown values will break the raw logic of the block.</p><table><tr><th>Example</th><th>Result</th></tr><tr><td><code style="display:block;white-space: pre-wrap;"> [[escape value="[[ if test='oddp(1)' ]]1 is odd [[/ if ]]" /]]
+[[escape value='[[ if test="evenp(1)" ]]1 is even [[/ if ]]'/]]</code></td><td><code "display:block;white-space: pre-wrap;">[[ if test='oddp(1)' ]]1 is odd [[/ if ]]
+[[ if test="evenp(1)" ]]1 is even [[/ if ]]</code></td></tr><tr><td><code style="display:block;white-space: pre-wrap;">[[escape value="[[ if test='oddp(2)' ]]2 is odd [[ else ]]2 is even[[/ if ]]" /]]</td><td><code "display:block;white-space: pre-wrap;">[[ if test='oddp(2)' ]]2 is odd [[ else ]]2 is even[[/ if ]]</code></td></tr><tr><td><code style="display:block;white-space: pre-wrap;"> [[escape value="[[ define x='2'/]]
+[[ if test='is(x>2)']]
+{@x@} is larger than 2.
+[[ elif test='is(x<2)']]
+{@x@} is smaller than 2.
+[[ else ]]
+  [[ if test='oddp(x)' ]]
+  {@x@} is odd.
+  [[ else ]]
+  {@x@} is even.
+  [[/ if ]]
+[[/ if ]]" /]]</td><td><code "display:block;white-space: pre-wrap;"> [[ define x='2'/]]
+[[ if test='is(x>2)']]
+{@x@} is larger than 2.
+[[ elif test='is(x<2)']]
+{@x@} is smaller than 2.
+[[ else ]]
+[[ if test='oddp(x)' ]]
+{@x@} is odd.
+[[ else ]]
+{@x@} is even.
+[[/ if ]]
+[[/ if ]]</code></td></tr></table><p>The if-block has been designed to be used in the general feedback or model solution context to point out short cuts or pitfalls present for the current values of the random parameters of the question. But naturally, like all the blocks you may use it in the question text and PRT-feedback as well. In PRT-feedback you may actually reference the students inputs as well.</p><br/><h5>The <code>[[escape value="[[ foreach ...='...' ]]...[[/ foreach ]]"/]]</code>-block</h5><p>The foreach-block is designed for repeating its contents for each element of a given list or a set. To use it construct a list or a set and give it as a parameter to the block the name of the parameter defines the variable to which the block places the current element when iterating. You may also give multiple parameters with different lists and the block will iterate them all in parallel.</p><p>You may nest multiple foreach-blocks but note that each level of nesting leads to one extra evaluation cycle when instantiating the CASText and those cycles cost time.</p><table><tr><th>Example</th><th>Result</th></tr><tr><td><code style="display:block;white-space: pre-wrap;">[[ escape value="[[ foreach k='[1,2,3]' ]]{#k#},[[/foreach]]"/]]</code></td><td><code "display:block;white-space: pre-wrap;">[[ foreach k='[1,2,3]' ]]{#k#},[[/foreach]]</code></td></tr><tr><td><code style="display:block;white-space: pre-wrap;">[[ escape value="[[ foreach k='[1,2,3]' l='makelist(x^3,x,3)' ]]
+({#k#},{#l#}),
+[[/foreach]]" /]]</code></td><td><code "display:block;white-space: pre-wrap;">[[ foreach k='[1,2,3]' l='makelist(x^3,x,3)' ]]
+({#k#},{#l#}),
+[[/foreach]]</code></td></tr><tr><td><code style="display:block;white-space: pre-wrap;"> [[ escape value="&lt;table>
+[[ foreach row='args(matrix([1,2],[3,4]))']]&lt;tr>
+  [[ foreach c='row']]&lt;td>
+    [[ if test='oddp(c)']]&lt;b>{#c#}&lt;/b>[[ else ]]{#c#}[[/if]]&lt;/td>
+  [[/foreach ]]&lt;/tr>
+[[/foreach ]]&lt;/table>" /]]</code></td><td><table>
+[[ foreach row='args(matrix([1,2],[3,4]))']]<tr>
+[[ foreach c='row']]<td>
+[[ if test="oddp(c)"]]<b>{#c#}</b>[[ else ]]{#c#}[[/if]]</td>
+[[/foreach ]]</tr>
+[[/foreach ]]</table></td></tr></table><br/><h5>Other blocks</h5><p><code>[[ escape value="[[ debug /]]" /]]</code>, <code>[[ escape value="[[ define ...='...' /]]" /]]</code> and <code>[[ escape value="[[ escape value="..." /]]" /]]</code> blocks provide other tools for those special cases where you need to do something complex. In general you should not need them but try to remember them they may solve some problem at some point.</p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text/>
+    </generalfeedback>
+    <defaultgrade>0</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text/>
+    </stackversion>
+    <questionvariables>
+      <text/>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text/>
+    </specificfeedback>
+    <questionnote format="html">
+      <text/>
+    </questionnote>
+    <questiondescription format="html">
+      <text/>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+  </question>
+</quiz>
