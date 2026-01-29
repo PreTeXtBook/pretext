@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>1. Basic, non bound example of a graph</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>Graphs that do not need to remember their state between page reloads are simple to build, just act like you would with the official JSXGraph filter. Note however that you do not need that filter as STACK provides its own implementation which has some handy features:</p><ul><li>STACK version does not allow you to name the div-element storing the graph, instead it gives you the name it has chosen in a variable named <code>divid</code>, the reason for this is that we ensure that each graph has an unique identifier and that there cannot exist name collisions, not even if you were to place the same question twice on the same page.</li><li>We provide a way to reference the input fields of the question and provide the identifiers of those input field elements if requested. The key benefit here is that we can provide those references in the same way regardless on the VLE you are running the question in, so you do not need to adapt the graph code if you decide to ditch Moodle and move ILIAS or some other system. (see more of this in the other examples of this category)</li><li>We also provide convenience functions to bind primitives (points and sliders) in the graph to STACK input fields so that you do not need to repeat that binding code yourself. Basically, single call to binding function will replace about twenty lines of code, more importantly we can change the implementation of the binding functions if the world changes so that you do not need to fix all your graphs with all their bindings.</li></ul><p><b>Note that as these graphs are coded in JavaScript you should not use WYSIWYG editors to edit these questions, as they tend to "helpfully" add random styling to random places and might break things. In Moodle do switch your text editor to 'plain text area', before editing these.</b></p><p>Now as a minimal example lets copy some example from JSXGraphs showcase library <a href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Showcases">http://jsxgraph.uni-bayreuth.de/wiki/index.php/Showcases</a>. Note, that we do not provide memory for this example, so it will revert to its initial state when the page reloads or you return to this page.</p><pre style="line-height:0.9;">[[escape value="[[jsxgraph width='500px' height='500px']]"/]]
+/* http://jsxgraph.uni-bayreuth.de/wiki/index.php/Five_Circle_Theorem */
+/* Only difference here to the example is the 'jxgbox' => divid replacement */
+/* so that the element name becomes dynamic. */
+var brd = JXG.JSXGraph.initBoard(divid, {boundingbox:[-5,5,5,-5]});
+var p = [], l = [], i = [], c = [], j = [], k;
+
+p[0] = brd.create('point',[-2.5,-3],{name:'',strokeColor:'#7355ff',fillColor:'#7355ff'});
+p[1] = brd.create('point',[-0,4],{name:'',strokeColor:'#7355ff',fillColor:'#7355ff'});
+p[2] = brd.create('point',[2.5,-3],{name:'',strokeColor:'#7355ff',fillColor:'#7355ff'});
+p[3] = brd.create('point',[-4,0],{name:'',strokeColor:'#7355ff',fillColor:'#7355ff'});
+p[4] = brd.create('point',[4,0],{name:'',strokeColor:'#7355ff',fillColor:'#7355ff'});
+
+for (k=0;k<5;k++) {
+   l[k] = brd.create('segment',[p[k],p[(k+1)%5]],{strokeColor:'black',strokeWidth:1});
+}
+
+for (k=0;k<5;k++) {
+   i[k] = brd.create('intersection',[l[k],l[(k+2)%5],0],{name:'',strokeColor:'#EAEA00',fillColor:'#EAEA00'});
+}
+
+for (k=0;k<5;k++) {
+   c[k] = brd.create('circumcircle',[p[k],i[k],i[(k+2)%5]],{strokeColor:'gray', strokeWidth:1, point: {visible: false}});
+}
+for (k=0;k<5;k++) {
+   j[k] = brd.create('intersection',[c[k],c[(k+2)%5],0],{name:'',strokeColor:'#EA0000',fillColor:'#EA0000'});
+}
+
+var cc = brd.create('circumcircle',[j[0],j[2],j[3]],{strokeColor:'red',strokeWidth:2,point:{strokeColor:'#000000',fillColor:'#000000',size:1}});
+brd.update();
+[[escape value="[[/jsxgraph]]"/]]</pre><p>Renders as:</p>
+
+[[jsxgraph width='500px' height='500px']]
+/* http://jsxgraph.uni-bayreuth.de/wiki/index.php/Five_Circle_Theorem */
+/* Only difference here to the example is the 'jxgbox' => divid replacement */
+/* so that the element name becomes dynamic. */
+var brd = JXG.JSXGraph.initBoard(divid, {boundingbox:[-5,5,5,-5]});
+var p = [], l = [], i = [], c = [], j = [], k;
+
+p[0] = brd.create('point',[-2.5,-3],{name:'',strokeColor:'#7355ff',fillColor:'#7355ff'});
+p[1] = brd.create('point',[-0,4],{name:'',strokeColor:'#7355ff',fillColor:'#7355ff'});
+p[2] = brd.create('point',[2.5,-3],{name:'',strokeColor:'#7355ff',fillColor:'#7355ff'});
+p[3] = brd.create('point',[-4,0],{name:'',strokeColor:'#7355ff',fillColor:'#7355ff'});
+p[4] = brd.create('point',[4,0],{name:'',strokeColor:'#7355ff',fillColor:'#7355ff'});
+
+for (k=0;k<5;k++) {
+   l[k] = brd.create('segment',[p[k],p[(k+1)%5]],{strokeColor:'black',strokeWidth:1});
+}
+
+for (k=0;k<5;k++) {
+   i[k] = brd.create('intersection',[l[k],l[(k+2)%5],0],{name:'',strokeColor:'#EAEA00',fillColor:'#EAEA00'});
+}
+
+for (k=0;k<5;k++) {
+   c[k] = brd.create('circumcircle',[p[k],i[k],i[(k+2)%5]],{strokeColor:'gray', strokeWidth:1, point: {visible: false}});
+}
+for (k=0;k<5;k++) {
+   j[k] = brd.create('intersection',[c[k],c[(k+2)%5],0],{name:'',strokeColor:'#EA0000',fillColor:'#EA0000'});
+}
+
+var cc = brd.create('circumcircle',[j[0],j[2],j[3]],{strokeColor:'red',strokeWidth:2,point:{strokeColor:'#000000',fillColor:'#000000',size:1}});
+brd.update();
+[[/jsxgraph]]]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text/>
+    </generalfeedback>
+    <defaultgrade>0</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2020040300</text>
+    </stackversion>
+    <questionvariables>
+      <text/>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text/>
+    </specificfeedback>
+    <questionnote format="html">
+      <text/>
+    </questionnote>
+    <questiondescription format="html">
+      <text/>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+  </question>
+</quiz>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>Validation-state-listener</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<h3>STACK-JS:1.5.0 tech demo, <code>stack_js.register_validation_state_listener</code></h3>
+<p>This is a slow plotter for functions that are defined \(x \in [-5,5]\), don't use this as a basis for your plotting implementations. The numerical processing is done on the server side during input validation and passed back as an invisible bit of validation feedback.</p>
+<p>This tech example only exists to demonstrate reactions to validation state changes and how slow validation becomes if one pushes a significant amount of data through it. Smaller and cheap-to-evaluate bits of data are more suitable for this combination of technical features.</p>
+<p>\(f(x)=\)[[input:ans1]] [[validation:ans1]]</p>
+
+[[comment]]
+<script>
+/* Debug to see the STACK-JS comms in console. */
+window.addEventListener("message", (event) => {
+  console.log(`VLE Received message: ${event.data}`);
+});
+</script>
+[[/comment]]
+
+[[jsxgraph width="100%" aspect-ratio="3/2"]]
+
+[[comment]]
+/* Debug to see the STACK-JS comms */
+window.addEventListener("message", (event) => {
+  console.log(`IFRAME Received message: ${event.data}`);
+});
+[[/comment]]
+
+var board = JXG.JSXGraph.initBoard(divid, {
+    boundingbox:[-5,5,5,-5], 
+    axis:true
+});
+
+let curve = null;
+
+
+/* Logic that reacts to a valid result. */
+const get_content = () => {
+ stack_js.get_content("[[quid id='validationdata'/]]").then((data) => {
+  if (data === null) {
+   return;
+  }
+  let parsed = JSON.parse(data);
+  if (curve === null) {
+   curve = board.create('curve', [parsed['x'], parsed['y']], {strokeColor: 'black',strokeWidth:2});
+  } else {
+   curve.dataY = parsed['y'];
+   curve.dataX = parsed['x'];
+   curve.setAttribute({strokeColor: 'black',strokeWidth:2});
+   curve.updateCurve();
+  }
+  board.setBoundingBox(parsed['bb']);
+ });
+};
+
+/* Listen for validation state changes and react accordingly. */
+stack_js.register_validation_state_listener('ans1',(completed,valid,_name) => {
+ if (curve != null && !completed) {
+  curve.setAttribute({strokeColor: 'grey',strokeWidth:1});
+  curve.updateCurve();
+ } else if (completed && valid) {
+  get_content();
+ } else {
+  board.removeObject(curve);
+  curve = null;
+ }
+},true);
+
+/* Note that the above only reacts to dynamic changes; the validation content already on the page needs to be taken into account. Luckily, we wrote the getter for that in a way that can deal with the no content present case. */
+get_content();
+
+[[/jsxgraph]]]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text/>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2025080100</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* This example uses custom validation and feedback messages to 
+   transfer information to STACK-JS using logic.
+
+   This example does numerical plotting in Maxima and moves 
+   coordinate data to a JSXGraph, while that is possible to do,
+   it is a better idea to let JSXGraph plot things on its own.
+   Just figure out how to convert expressions to JessieCode to do
+   that.
+
+*/
+ta1:log(x^2+9);
+
+/* Connect the following function to the input through the extra options field. */
+
+/* A simple filter to only accept inputs that don't have extra variables. */
+validate_x_only(expression):= block([simp,lofv],
+ simp:true,
+ lofv: listofvars(expression),
+ if is(lofv=[]) or is(lofv=[x]) then return(true),
+ "Only plotting functions of \(x\)."
+);
+
+/* Numerical calculation and output to a hidden div as a JSON blob. */
+feedback_expression(expression):=block([simp,float,numer,xs,ys,bb],
+ float:true,
+ numer:true,
+ simp:true,
+ xs:makelist(10.0*k/200-5,k,0,201),
+ ys:makelist(ev(expression,x=k),k,xs),
+ bb:[lmin(xs),lmax(ys),lmax(xs),lmin(ys)],
+ castext("<div style='display:none;' id='[[quid id=\"validationdata\"/]]'>
+{\"x\":{#xs#},\"y\":{#ys#},\"bb\":{#bb#}}
+</div>")
+);]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text><![CDATA[<p>[[feedback:prt1]]</p>]]></text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text><![CDATA[<p>{@ta1@}</p>]]></text>
+    </questionnote>
+    <questiondescription format="html">
+      <text/>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<p><i class="fa fa-check"></i> Correct answer, well done.</p>]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<p><i class="fa fa-adjust"></i> Your answer is partially correct.</p>]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<p><i class="fa fa-times"></i> Incorrect answer.</p>]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+    <input>
+      <name>ans1</name>
+      <type>algebraic</type>
+      <tans>ta1</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>1</showvalidation>
+      <options>validator:validate_x_only,feedback:feedback_expression</options>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text/>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans1</sans>
+        <tans>ta1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+    </prt>
+  </question>
+</quiz>
