@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="description">
+    <name>
+      <text>Style check: HELM</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<h1>HELM style check</h1><p><code>HELM_keypoint</code> div class.</p><div class="HELM_keypoint"><h4>Key Point</h4><p>This should be in a box.</p></div><p><code>HELM_example</code> h4 class.</p><h4 class="HELM_example">Example</h4><p>Just the h4 heading above is in a different style.</p><p><code>HELM_solution</code> h4 class.</p><h4 class="HELM_solution">Solution</h4><p>Just the h4 heading above is in a different style.</p><hr><h4 class="HELM_example">Example</h4><p>Identify the index and base in the following expressions. </p><ol class="HELM_parts_inline"><li> Ex 1. </li><li> Ex 2. </li><li> Ex 3. </li></ol><h4 class="HELM_solution">Solution</h4><ol class="HELM_parts"><li>In the expression ..., 8 is the base and 11 is the index.</li><li>In the expression ..., -2 is the base and 5 is the index.</li><li>In the expression ..., p is the base and -q is the index.<p></p><p>The interpretation of a negative index will be given
+  in sub-section 4 which starts on page 31.</p></li></ol><p class="HELM_exercise">Exercise</p><p>Just the paragraph above is in a different style.</p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text/>
+    </generalfeedback>
+    <defaultgrade>0</defaultgrade>
+    <penalty>0</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+  </question>
+</quiz>
