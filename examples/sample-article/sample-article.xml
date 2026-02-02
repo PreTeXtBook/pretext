@@ -15006,6 +15006,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               <figure xml:id="figure-triangle-cyclic-medians-copy">
                 <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
                 <image xml:id="worksheet-triangle-cyclic-medians-copy" width="50%">
+                    <description><p>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.  This image description should show up in the regular view, but disappear when printing.</p></description>
                   <latex-image>
                     \begin{tikzpicture}[xscale=1.5, yscale=1.5]
                       \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
@@ -16028,7 +16029,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </worksheet>
 
             <worksheet>
-                <title>Worksheet with an exercise with tasks</title>
+                <title>Worksheet with an exercise with tasks and subtasks</title>
                 <introduction>
                     <p>
                         Page breaking between tasks in a single exercise can be tricky.  This is a test for that.
@@ -16040,21 +16041,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             Here are multiple tasks with just enough workspace to cause a page break after the third one.
                         </p>
                     </introduction>
-                    <task workspace="2in">
+                    <task>
+                        <introduction>
+                            <p>
+                                This task has two short subtasks that should be indented under it.
+                            </p>
+                        </introduction>
+                        <task workspace=".5in">
                         <statement>
                             <p>
-                                The first tasks.
+                                The first subtask.
+                            </p>
+                        </statement>
+                        </task>
+                        <task workspace=".5in">
+                        <statement>
+                            <p>
+                                The second subtask.
                             </p>
                         </statement>
                     </task>
-                    <task workspace="2in">
+                    <conclusion>
+                        <p>
+                            Conclusion for the first task.
+                        </p>
+                    </conclusion>
+                    </task>
+                    <task workspace="1.5in">
                         <statement>
                             <p>
                                 The second task.
                             </p>
                         </statement>
                     </task>
-                    <task workspace="2in">
+                    <task workspace="1.5in">
                         <statement>
                             <p>
                                 The third task.
@@ -16068,6 +16088,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </p>
                         </statement>
                     </task>
+                    <conclusion>
+                        <p>
+                            Conclusion for the entire exercise.
+                        </p>
+                    </conclusion>
                 </exercise>
                 <exercise workspace="3in">
                     <statement>
