@@ -482,7 +482,7 @@ function createPrintoutPages(margins) {
         } else if (child.querySelector('.task')) {
             // Keep the child as a block, but put each task after the first one as its own row:
             rows.push(child);
-            const tasks = child.querySelectorAll('.task');
+            const tasks = child.querySelectorAll('.task, .conclusion');
 
             //Determine how many levels of nesting each task has.  If parent is an .exercise, leave alone.  If parent is a .task, add .subtask class.  If grandparent is .task, add .subsubtask to it so it can be indented by css:
             for (let i = 0; i < tasks.length; i++) {
