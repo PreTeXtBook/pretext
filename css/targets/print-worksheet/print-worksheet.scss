@@ -201,8 +201,14 @@ section.worksheet, section.handout {
 }
 
 // tasks might be "free-floating" articles, in which case they should get the same indenting as tasks inside exercises.
- section article.task {
+section article.task, .conclusion.subtask {
   margin-left: 20px;
+}
+section article.subtask, .conclusion.subsubtask {
+  margin-left: 40px;
+}
+section article.subsubtask {
+  margin-left: 60px;
 }
 
 section.worksheet > .heading, section.handout > .heading {
