@@ -13,7 +13,7 @@ $text-color: white !default;
 .ptx-navbar {
     background: linear-gradient(to bottom, var(--banner-background), var(--navbar-background));
 
-    .button {
+    .button:not(.copy-embed-button) {
         background: linear-gradient(to bottom, var(--banner-background), var(--navbar-background));
 
         // Turn off background-image (linear gradient) on hover so it behaves like a solid color button
