@@ -3387,6 +3387,22 @@ TEST_CASE( "Test the add function" ) {
                 <block order="3"><c>test</c></block>
             </blocks>
         </exercise>
+
+        <exercise label="horizontal-parson-math-test" language="math">
+            <title>Parsons Problem with math blocks</title>
+
+            <statement>
+                <p>
+                Testing math mode blocks - <m>\sum \pi \alpha \beta</m>
+                </p>
+            </statement>
+            <blocks layout="horizontal" randomize="yes"> 
+                <block order="2"><m>\pi</m></block> 
+                <block order="1"><m>\sum</m></block> 
+                <block order="4"><m>\beta</m></block> 
+                <block order="3"><m>\alpha</m></block> 
+            </blocks>
+        </exercise>
     </exercises>
 
     <exercises xml:id="matching-exercises">
