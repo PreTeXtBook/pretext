@@ -5473,6 +5473,35 @@ TEST_CASE( "Test the add function" ) {
             </static>
         </exercise>
 
+    <p>This example recreates the Show-Eval visualization from the Runestone Components, using a PreTexT <tag>interactive</tag>. It also records student activity using SPLICE.</p>
+    <p>It demonstrates how the Show-Eval tool can be used to visualize the evaluation of Python expressions step by step.</p>
+    <p>This could also be used for doing similar visualization of mathematical expressions.  Support for MathJax would take some work, but this example would be a good starting point.</p>
+    <figure xml:id="show-eval-visualization1">
+        <caption>Show-Eval Visualization</caption>
+        <interactive label="show-eval-visualization" platform="javascript" source="https://runestone.academy/cdn/runestone/showEval-0.10.0.js" width="100%" >
+            <slate surface="html">
+                <style>
+                    .showEval { font-family: monospace; font-size: 1.5em; }
+                    .showEval span { vertical-align: text-top; }
+                </style>
+                <button id="nextStep">Next Step</button>
+                <button id="reset">Reset</button>
+                <div class='showEval'>eggs = ['dogs', 'cats', 'moose']</div>
+                <div id="showeval"></div>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        console.log("Document loaded");
+                        // for each step, put the part to replaced in the first set of {{ }}, and the replacement text in the following {{ }}
+                        steps = ["''.join({{eggs}}{{['dogs', 'cats', 'moose']}}).upper().join(eggs)",
+                        "{{''.join(['dogs', 'cats', 'moose'])}}{{'dogscatsmoose'}}.upper().join(eggs)",
+                        "{{'dogscatsmoose'.upper()}}{{'DOGSCATSMOOSE'}}.join(eggs)",
+                        "'DOGSCATSMOOSE'.join({{eggs}}{{['dogs', 'cats', 'moose']}})",
+                        "{{'DOGSCATSMOOSE'.join(['dogs', 'cats', 'moose'])}}{{'dogsDOGSCATSMOOSEcatsDOGSCATSMOOSEmoose'}}"];
+                        s = new SHOWEVAL.ShowEval(document.querySelector('#showeval'), steps, false); });
+                </script>
+            </slate>
+        </interactive>
+        </figure>
     </section>
 
     <exercises xml:id="chapter-exam" label="chapter-exam" time-limit="15" pause="yes">
