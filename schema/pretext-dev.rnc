@@ -184,32 +184,6 @@
                     ConclusionDivision?
                 }
             
-            MathDisplay |=
-                element me {
-                    MetaDataTarget?,
-                    mixed {(Xref | FillInMath | WWVariable)*}
-                } |
-                element men {
-                    MetaDataTarget?,
-                    mixed {(Xref | FillInMath | WWVariable)*}
-                } |
-                element md {
-                    attribute number {"yes" | "no"}?,
-                    attribute break {"yes" | "no"}?,
-                    attribute alignment {text}?,
-                    attribute alignat-columns {text}?,
-                    MathRow,
-                    (MathRow | MathIntertext)*
-                } |
-                element mdn {
-                    attribute number {"yes" | "no"}?,
-                    attribute break {"yes" | "no"}?,
-                    attribute alignment {text}?,
-                    attribute alignat-columns {text}?,
-                    MathRow,
-                    (MathRow | MathIntertext)*
-                }
-            
             MyOpenMath =
                 MetaDataTitleOptional,
                 IntroductionText?,
