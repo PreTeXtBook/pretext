@@ -13186,6 +13186,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </sidebyside>
             </figure>
 
+            <p>
+                Now let's test the alignment of various items that might be placed with an image in a figure. We want asymptote links and long descriptions close to the image. The caption for figures should be aligned.
+            </p>
+
+            <figure>
+                <caption>Two Asympote images side-by-side</caption>
+                <sidebyside margins="5%" widths="40% 45%">
+
+                <figure>
+                    <caption>Asymptote Lever Demonstration</caption>
+                    <image xml:id="asymptote-lever-sbs">
+                        <shortdescription>moments on a lever</shortdescription>
+                        <description>
+                            <p>This diagram has two masses at either end of a lever, namely <m>m</m> and <m>M</m>.  They are located at distance <m>x</m> and <m>X</m> on an axis.  The resulting center-of-mass is at a point <m>\bar{x}</m>.</p>
+                        </description>
+                        <asymptote>
+                            size(200,0);
+
+                            pair z0=(0,0);
+                            pair z1=(2,0);
+                            pair z2=(5,0);
+                            pair zf=z1+0.75*(z2-z1);
+
+                            draw(z1--z2);
+                            dot(z1,red+0.15cm);
+                            dot(z2,darkgreen+0.3cm);
+                            label("$m$",z1,1.2N,red);
+                            label("$M$",z2,1.5N,darkgreen);
+                            label("$\hat{\ }$",zf,0.2*S,fontsize(24pt)+blue);
+
+                            pair s=-0.2*I;
+                            draw("$x$",z0+s--z1+s,N,red,Arrows,Bars,PenMargins);
+
+                            s=-0.5*I;
+                            draw("$\bar{x}$",z0+s--zf+s,blue,Arrows,Bars,PenMargins);
+
+                            s=-0.95*I;
+                            draw("$X$",z0+s--z2+s,darkgreen,Arrows,Bars,PenMargins);
+                        </asymptote>
+                    </image>
+                </figure>
+
+                <figure>
+                    <caption>Asymptote Contour Plot</caption>
+                    <image xml:id="asymptote-contour-sbs">
+                        <asymptote>
+                            import graph;
+                            import palette;
+
+                            size(10cm,10cm,IgnoreAspect);
+
+                            real f(real x, real y) {
+                            return 0.9*pow10(2*sin(x/5+2*y^0.25)) + 0.1*(1+cos(10*log(y)));
+                            }
+
+                            scale(Linear,Log,Log);
+
+                            pen[] Palette=BWRainbow();
+
+                            bounds range=image(f,Automatic,(0,1),(100,100),nx=200,Palette);
+
+                            xaxis("$x$",BottomTop,LeftTicks,above=true);
+                            yaxis("$y$",LeftRight,RightTicks,above=true);
+
+                            palette("$f(x,y)$",range,(0,200),(100,250),Top,Palette,
+                            PaletteTicks(ptick=linewidth(0.5*linewidth())));
+                        </asymptote>
+                    </image>
+                </figure>
+                </sidebyside>
+            </figure>
+
             <p>Now we have some more interactive elements.</p>
 
             <sidebyside  margins="5%" widths="40% 45%">
