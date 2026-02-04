@@ -8231,7 +8231,9 @@ Book (with parts), "section" at level 3
     <xsl:call-template name="trim-start-lines">
         <xsl:with-param name="text">
             <xsl:call-template name="trim-end">
-                <xsl:with-param name="text" select="." />
+                <!-- only include immediate text content                   -->
+                <!-- we want to exclude any nested elements (tests/iotest) -->
+                <xsl:with-param name="text" select="text()" />
                 <xsl:with-param name="preserve-intentional" select="self::preamble or self::code" />
             </xsl:call-template>
         </xsl:with-param>
