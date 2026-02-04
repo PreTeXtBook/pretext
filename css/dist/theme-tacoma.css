@@ -1994,6 +1994,10 @@ iframe.asymptote,
 img.contained {
   width: 100%;
 }
+.asymptote-fullsize-link {
+  text-align: center;
+  font-size: 0.9em;
+}
 .ptx-content img,
 .ptx-content svg {
   background: var(--ptx-image-bg);
