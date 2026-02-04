@@ -319,6 +319,7 @@ body.pretext > a.assistive:focus {
   border: 1px solid var(--page-border-color);
   border-radius: 3px;
   box-shadow: 0 0 5px var(--primary-color-gray-80);
+  color: var(--button-text-color);
 }
 .ptx-navbar .embed-popup .embed-code-container {
   width: "100%";
@@ -3667,17 +3668,17 @@ figure.table-like {
       var(--banner-background),
       var(--navbar-background));
 }
-.ptx-navbar .button {
+.ptx-navbar .button:not(.copy-embed-button) {
   background:
     linear-gradient(
       to bottom,
       var(--banner-background),
       var(--navbar-background));
 }
-.ptx-navbar .button:hover:not(.disabled) {
+.ptx-navbar .button:not(.copy-embed-button):hover:not(.disabled) {
   background-image: none;
 }
-.ptx-navbar .button.open {
+.ptx-navbar .button:not(.copy-embed-button).open {
   background-image: none;
 }
 :root {

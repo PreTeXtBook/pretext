@@ -2378,6 +2378,7 @@ body.pretext > a.assistive:focus {
   border: 1px solid var(--page-border-color);
   border-radius: 3px;
   box-shadow: 0 0 5px var(--primary-color-gray-80);
+  color: var(--button-text-color);
 }
 .ptx-navbar .embed-popup .embed-code-container {
   width: "100%";
