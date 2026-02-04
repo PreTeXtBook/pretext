@@ -482,7 +482,18 @@ function createPrintoutPages(margins) {
         } else if (child.querySelector('.task')) {
             // Keep the child as a block, but put each task after the first one as its own row:
             rows.push(child);
-            const tasks = child.querySelectorAll('.task');
+            const tasks = child.querySelectorAll('.task, .conclusion');
+
+            //Determine how many levels of nesting each task has.  If parent is an .exercise, leave alone.  If parent is a .task, add .subtask class.  If grandparent is .task, add .subsubtask to it so it can be indented by css:
+            for (let i = 0; i < tasks.length; i++) {
+                let parent = tasks[i].parentElement;
+                let grandparent = parent.parentElement;
+                if (grandparent.classList.contains('task')) {
+                    tasks[i].classList.add('subsubtask');
+                } else if (parent.classList.contains('task')) {
+                    tasks[i].classList.add('subtask');
+                }
+            }
             for (let i = tasks.length-1; i > 0; i--) {
                 // Move the task out of the original child and place it directly after it in the printout.  We do this in reverse order so when every task is moved, they return to the original order. They will then be added to the rows list as their own blocks.
                 printout.insertBefore(tasks[i], child.nextSibling);
