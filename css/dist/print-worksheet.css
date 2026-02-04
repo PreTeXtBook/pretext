@@ -2639,7 +2639,7 @@ body.pretext > a.assistive,
 .autopermalink {
   display: none;
 }
-details.image-description,
+.image-description,
 .ptx-content .webwork-button,
 .ptx-runestone-container button.btn {
   display: none;
@@ -2745,8 +2745,16 @@ section.handout {
 .onepage > section > .heading {
   margin-top: 0;
 }
-section article.task {
+section article.task,
+.conclusion.subtask {
   margin-left: 20px;
+}
+section article.subtask,
+.conclusion.subsubtask {
+  margin-left: 40px;
+}
+section article.subsubtask {
+  margin-left: 60px;
 }
 section.worksheet > .heading,
 section.handout > .heading {
