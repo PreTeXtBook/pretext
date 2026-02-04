@@ -9403,22 +9403,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="layout-interactives">
                 <title>Layout of Interactives</title>
 
                 <p>In HTML, interactives are rendered in iframes, which can offer some layout challenges. The PreTeXt page has no direct control over the layout within the interactive. All it does is provide a fixed sized frame in which the interactive content can display itself. The <attr>width</attr> (a percentage) and <attr>aspect</attr> (a width:height ratio like <c>2.1:1</c> OR a number like <c>1.5</c>) attributes on the interactive are the main tools to specify the dimensions. Below are three renderings of the same Google map using different widths/heights.</p>
 
-                <interactive iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" aspect="15:10"/>
+                <interactive xml:id="interactive-layout-map-wide" iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" aspect="15:10"/>
 
-                <interactive iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" aspect="15:10" width="50%"/>
+                <interactive xml:id="interactive-layout-map-medium" iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" aspect="15:10" width="50%"/>
 
-                <interactive iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" aspect="0.5" width="50%"/>
+                <interactive xml:id="interactive-layout-map-tall" iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" aspect="0.5" width="50%"/>
 
                 <p>If you know a particular interactive is designed to display at a particular pixel size, you can can specify a <attr>design-width</attr> like <c>300</c> to force exactly that width. Combine that with <attr>aspect</attr> to also force the height. The example below forces a size of 300x450.</p>
 
                 <figure>
                     <caption>Graph of <m>ln(x^2+5)-3</m></caption>
-                    <interactive desmos="ttox1bvxku" design-width="300" aspect="300:450"/>
+                    <interactive xml:id="interactive-layout-desmos" desmos="ttox1bvxku" design-width="300" aspect="300:450"/>
                 </figure>
 
                 <p>What happens if there is not enough space to display the requested frame? That depends on the <attr>resize-behavior</attr> applied to the interactive. The default is <c>fixed-height</c>. In this case, the interactive's height will not change if the window becomes too small to display the full width of the interactive. Instead a horizontal scroll bar will appear. This can be seen in many of the samples in <xref ref="section-interactive-authored" text="type-global"/> and this CircuitJS sample:</p>
@@ -9426,7 +9426,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure>
                     <caption>CircuitJS with <c>resize-behavior="fixed-height"</c></caption>
 
-                    <interactive circuitjs="$ 1 0.000005 10.20027730826997 58 5 50 5e-11%0AR 464 32 464 -16 0 0 40 3.3 0 0 0.5%0Ag 464 224 464 240 0 0%0As 464 32 464 128 0 0 false%0As 464 128 464 224 0 1 false%0Ax 274 181 431 184 4 12 bottom\sswitch\s(to\sground)%0Ax 312 85 426 88 4 12 top\sswitch\s(to\sVdd)%0AO 464 128 544 128 1 0%0Ax 532 110 593 113 4 12 output\spin" width="90%" aspect="4:3" resize-behavior="fixed-height"/>
+                    <interactive xml:id="interactive-layout-circuitjs-small" circuitjs="$ 1 0.000005 10.20027730826997 58 5 50 5e-11%0AR 464 32 464 -16 0 0 40 3.3 0 0 0.5%0Ag 464 224 464 240 0 0%0As 464 32 464 128 0 0 false%0As 464 128 464 224 0 1 false%0Ax 274 181 431 184 4 12 bottom\sswitch\s(to\sground)%0Ax 312 85 426 88 4 12 top\sswitch\s(to\sVdd)%0AO 464 128 544 128 1 0%0Ax 532 110 593 113 4 12 output\spin" width="90%" aspect="4:3" resize-behavior="fixed-height"/>
                 </figure>
 
                 <p>The other option for <attr>resize-behavior</attr> is <c>responsive</c>. In this case, the interactive's aspect ratio will be maintained. If the width gets smaller, so will the height. This can be seen in the version below.</p>
@@ -9434,7 +9434,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure>
                     <caption>CircuitJS with <c>resize-behavior="responsive"</c></caption>
 
-                    <interactive circuitjs="$ 1 0.000005 10.20027730826997 58 5 50 5e-11%0AR 464 32 464 -16 0 0 40 3.3 0 0 0.5%0Ag 464 224 464 240 0 0%0As 464 32 464 128 0 0 false%0As 464 128 464 224 0 1 false%0Ax 274 181 431 184 4 12 bottom\sswitch\s(to\sground)%0Ax 312 85 426 88 4 12 top\sswitch\s(to\sVdd)%0AO 464 128 544 128 1 0%0Ax 532 110 593 113 4 12 output\spin" width="90%" aspect="4:3" resize-behavior="responsive"/>
+                    <interactive xml:id="interactive-layout-circuitjs-big" circuitjs="$ 1 0.000005 10.20027730826997 58 5 50 5e-11%0AR 464 32 464 -16 0 0 40 3.3 0 0 0.5%0Ag 464 224 464 240 0 0%0As 464 32 464 128 0 0 false%0As 464 128 464 224 0 1 false%0Ax 274 181 431 184 4 12 bottom\sswitch\s(to\sground)%0Ax 312 85 426 88 4 12 top\sswitch\s(to\sVdd)%0AO 464 128 544 128 1 0%0Ax 532 110 593 113 4 12 output\spin" width="90%" aspect="4:3" resize-behavior="responsive"/>
                 </figure>
 
                 <p>The best behavior will be determined by the contents of the interactive. If the interactive knows how to dynamically size itself, <c>responsive</c> is likely the better option. If the interactive assumes that there is a certain amount of space and the contents will never resize themselves, <c>fixed-height</c> will likely work better.</p>
@@ -9447,17 +9447,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure>
                     <caption>Growable interactive fixed-height</caption>
-                    <interactive platform="javascript" width="80%" aspect="2:1" source="code/splice/splice-resize.js" resize-behavior="fixed-height"/>
+                    <interactive xml:id="interactive-layout-grow-one" platform="javascript" width="80%" aspect="2:1" source="code/splice/splice-resize.js" resize-behavior="fixed-height"/>
                 </figure>
 
                 <figure>
                     <caption>Growable interactive responsive with % width</caption>
-                    <interactive platform="javascript" width="80%" aspect="2:1" source="code/splice/splice-resize.js" resize-behavior="responsive"/>
+                    <interactive xml:id="interactive-layout-grow-two" platform="javascript" width="80%" aspect="2:1" source="code/splice/splice-resize.js" resize-behavior="responsive"/>
                 </figure>
 
                 <figure>
                     <caption>Growable interactive responsive and design-width</caption>
-                    <interactive platform="javascript" design-width="480" aspect="2:1" source="code/splice/splice-resize.js" resize-behavior="responsive"/>
+                    <interactive xml:id="interactive-layout-grow-three" platform="javascript" design-width="480" aspect="2:1" source="code/splice/splice-resize.js" resize-behavior="responsive"/>
                 </figure>
             </subsection>
         </section>
