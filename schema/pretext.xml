@@ -965,15 +965,66 @@
                 }
             MathIntertext = element intertext {TextLong}
             MathDisplay =
+                element me {
+                    mixed {(FillInMath | WWVariable)*}
+                } |
+                element men {
+                    MetaDataTarget,
+                    mixed {(FillInMath | WWVariable)*}
+                } |
                 element md {
                     attribute number {"yes" | "no"}?,
                     attribute break {"yes" | "no"}?,
                     attribute alignment {text}?,
                     attribute alignat-columns {text}?,
-                    (
-                    (mixed {(Xref | FillInMath | WWVariable)*}) |
-                    (MathRow, (MathRow | MathIntertext)*)
-                    )
+                    MathRow,
+                    (MathRow | MathIntertext)*
+                } |
+                element mdn {
+                    attribute number {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
+                    attribute alignment {text}?,
+                    attribute alignat-columns {text}?,
+                    MathRow,
+                    (MathRow | MathIntertext)*
+                }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Mathematics (experimental)</title>
+
+        <p>We include some additions to math elements, including allowing xrefs inside displayed math.</p>
+
+
+        <fragment xml:id="mathematics-dev">
+            <title>Mathematics (experimental)</title>
+            <code>
+            MathDisplay |=
+                element me {
+                    MetaDataTarget?,
+                    mixed {(Xref | FillInMath | WWVariable)*}
+                } |
+                element men {
+                    MetaDataTarget?,
+                    mixed {(Xref | FillInMath | WWVariable)*}
+                } |
+                element md {
+                    attribute number {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
+                    attribute alignment {text}?,
+                    attribute alignat-columns {text}?,
+                    MathRow,
+                    (MathRow | MathIntertext)*
+                } |
+                element mdn {
+                    attribute number {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
+                    attribute alignment {text}?,
+                    attribute alignat-columns {text}?,
+                    MathRow,
+                    (MathRow | MathIntertext)*
                 }
             </code>
         </fragment>
@@ -3434,6 +3485,7 @@
             <fragref ref="handout"/>
             <fragref ref="solutions-dev"/>
             <fragref ref="reference-dev"/>
+            <fragref ref="mathematics-dev"/>
             <fragref ref="exercise-dev"/>
             <code>
                 }

@@ -3222,7 +3222,7 @@
         <xs:group ref="Music"/>
         <xs:group ref="Reference"/>
         <xs:element ref="cd"/>
-        <xs:element ref="md"/>
+        <xs:group ref="MathDisplay"/>
         <xs:group ref="List"/>
         <xs:element ref="fn"/>
         <xs:element ref="notation"/>
@@ -3481,22 +3481,72 @@
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="md">
+  <xs:group name="MathDisplay">
+    <xs:choice>
+      <xs:element ref="me"/>
+      <xs:element ref="men"/>
+      <xs:element ref="md"/>
+      <xs:element ref="mdn"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="me">
     <xs:complexType mixed="true">
-      <xs:choice>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="FillInMath"/>
+        <xs:element ref="var"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="men">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:group ref="MetaDataTarget"/>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="xref"/>
           <xs:group ref="FillInMath"/>
           <xs:element ref="var"/>
         </xs:choice>
-        <xs:sequence>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTarget"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="md">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="mrow"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:element ref="mrow"/>
-          <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="mrow"/>
-            <xs:element ref="intertext"/>
-          </xs:choice>
-        </xs:sequence>
-      </xs:choice>
+          <xs:element ref="intertext"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="number">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="break">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="alignment"/>
+      <xs:attribute name="alignat-columns"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mdn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="mrow"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="mrow"/>
+          <xs:element ref="intertext"/>
+        </xs:choice>
+      </xs:sequence>
       <xs:attribute name="number">
         <xs:simpleType>
           <xs:restriction base="xs:token">

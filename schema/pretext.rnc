@@ -1616,15 +1616,28 @@
                 }
             MathIntertext = element intertext {TextLong}
             MathDisplay =
+                element me {
+                    mixed {(FillInMath | WWVariable)*}
+                } |
+                element men {
+                    MetaDataTarget,
+                    mixed {(FillInMath | WWVariable)*}
+                } |
                 element md {
                     attribute number {"yes" | "no"}?,
                     attribute break {"yes" | "no"}?,
                     attribute alignment {text}?,
                     attribute alignat-columns {text}?,
-                    (
-                    (mixed {(Xref | FillInMath | WWVariable)*}) |
-                    (MathRow, (MathRow | MathIntertext)*)
-                    )
+                    MathRow,
+                    (MathRow | MathIntertext)*
+                } |
+                element mdn {
+                    attribute number {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
+                    attribute alignment {text}?,
+                    attribute alignat-columns {text}?,
+                    MathRow,
+                    (MathRow | MathIntertext)*
                 }
             
             Verbatim =

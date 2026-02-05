@@ -370,6 +370,100 @@
       </optional>
     </element>
   </define>
+  <define name="MathDisplay" combine="choice">
+    <choice>
+      <element name="me">
+        <optional>
+          <ref name="MetaDataTarget"/>
+        </optional>
+        <mixed>
+          <zeroOrMore>
+            <choice>
+              <ref name="Xref"/>
+              <ref name="FillInMath"/>
+              <ref name="WWVariable"/>
+            </choice>
+          </zeroOrMore>
+        </mixed>
+      </element>
+      <element name="men">
+        <optional>
+          <ref name="MetaDataTarget"/>
+        </optional>
+        <mixed>
+          <zeroOrMore>
+            <choice>
+              <ref name="Xref"/>
+              <ref name="FillInMath"/>
+              <ref name="WWVariable"/>
+            </choice>
+          </zeroOrMore>
+        </mixed>
+      </element>
+      <element name="md">
+        <optional>
+          <attribute name="number">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="break">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="alignment"/>
+        </optional>
+        <optional>
+          <attribute name="alignat-columns"/>
+        </optional>
+        <ref name="MathRow"/>
+        <zeroOrMore>
+          <choice>
+            <ref name="MathRow"/>
+            <ref name="MathIntertext"/>
+          </choice>
+        </zeroOrMore>
+      </element>
+      <element name="mdn">
+        <optional>
+          <attribute name="number">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="break">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="alignment"/>
+        </optional>
+        <optional>
+          <attribute name="alignat-columns"/>
+        </optional>
+        <ref name="MathRow"/>
+        <zeroOrMore>
+          <choice>
+            <ref name="MathRow"/>
+            <ref name="MathIntertext"/>
+          </choice>
+        </zeroOrMore>
+      </element>
+    </choice>
+  </define>
   <define name="MyOpenMath">
     <ref name="MetaDataTitleOptional"/>
     <optional>
