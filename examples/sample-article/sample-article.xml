@@ -8491,6 +8491,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </figure>
 
+                <p>This next interactive uses ECMAScript module based code. That will not function unless the <element>script</element>'s <attr>type</attr> is set to <c>module</c> in the HTML output. So let's set it here and pass it through. It also generates its own HTML elements, so we hopefully don't get a default empty div.</p>
+
+                <figure>
+                    <caption>A simple JS module test</caption>
+                    <interactive xml:id="interactive-js-module" aspect="6:1" platform="javascript" label="js-module-test">
+                        <script type="module">
+                            import cytoscape from "https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.33.1/cytoscape.esm.min.mjs";
+                            const cyEl = document.createElement('div');
+                            cyEl.style.width = '600px';
+                            cyEl.style.height = '100px';
+                            document.body.appendChild(cyEl);
+                            const cy = cytoscape({
+                                container: cyEl,
+                                elements: {
+                                    nodes: [ 'a', 'b' ].map(id => ({ data: { id } })),
+                                    edges: [
+                                        {
+                                            data: { id: 'ab', source: 'a', target: 'b' }
+                                        }
+                                    ]
+                                },
+                                style: [
+                                    {
+                                        selector: 'node',
+                                        style: {
+                                            'label': 'data(id)'
+                                        }
+                                    }
+                                ]
+                            });
+                        </script>
+                    </interactive>
+            </figure>
+
             </subsection>
 
             <subsection>
