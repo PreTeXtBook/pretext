@@ -4188,13 +4188,25 @@
         <optional>
           <attribute name="alignat-columns"/>
         </optional>
-        <ref name="MathRow"/>
-        <zeroOrMore>
-          <choice>
+        <choice>
+          <mixed>
+            <zeroOrMore>
+              <choice>
+                <ref name="FillInMath"/>
+                <ref name="WWVariable"/>
+              </choice>
+            </zeroOrMore>
+          </mixed>
+          <group>
             <ref name="MathRow"/>
-            <ref name="MathIntertext"/>
-          </choice>
-        </zeroOrMore>
+            <zeroOrMore>
+              <choice>
+                <ref name="MathRow"/>
+                <ref name="MathIntertext"/>
+              </choice>
+            </zeroOrMore>
+          </group>
+        </choice>
       </element>
     </choice>
   </define>

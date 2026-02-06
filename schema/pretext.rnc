@@ -1636,8 +1636,10 @@
                     attribute break {"yes" | "no"}?,
                     attribute alignment {text}?,
                     attribute alignat-columns {text}?,
-                    MathRow,
-                    (MathRow | MathIntertext)*
+                    (
+                    (mixed {(FillInMath | WWVariable)*}) |
+                    (MathRow, (MathRow | MathIntertext)*)
+                    )
                 }
             
             Verbatim =
