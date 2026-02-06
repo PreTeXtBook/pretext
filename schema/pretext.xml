@@ -985,8 +985,10 @@
                     attribute break {"yes" | "no"}?,
                     attribute alignment {text}?,
                     attribute alignat-columns {text}?,
-                    MathRow,
-                    (MathRow | MathIntertext)*
+                    (
+                    (mixed {(FillInMath | WWVariable)*}) |
+                    (MathRow, (MathRow | MathIntertext)*)
+                    )
                 }
             </code>
         </fragment>
@@ -1015,8 +1017,10 @@
                     attribute break {"yes" | "no"}?,
                     attribute alignment {text}?,
                     attribute alignat-columns {text}?,
-                    MathRow,
-                    (MathRow | MathIntertext)*
+                    (
+                    (mixed {(Xref | FillInMath | WWVariable)*}) |
+                    (MathRow, (MathRow | MathIntertext)*)
+                    )
                 } |
                 element mdn {
                     attribute number {"yes" | "no"}?,
