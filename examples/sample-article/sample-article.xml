@@ -2219,6 +2219,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </md>
                 </p>
 
+            <p>Now for some more testing of the <tag>intertext</tag> feature. Numbering some equations, and not others, requires some care in the conversion to <latex/>.</p>
+
+            <p>
+            First, a numbered equation in the first group of equations.
+                <md>
+                    <mrow number="yes">A &amp; = B + C</mrow>
+                    <intertext>Intertext: between first and second equations.</intertext>
+                    <mrow>P &amp; = Q + R</mrow>
+                    <intertext>Intertext: between second and third equations.</intertext>
+                    <mrow>X &amp; = Y + Z</mrow>
+                </md>
+            Second, a numbered equation in the intermediate group of equations.
+                <md>
+                    <mrow>A &amp; = B + C</mrow>
+                    <intertext>Intertext: between first and second equations.</intertext>
+                    <mrow number="yes">P &amp; = Q + R</mrow>
+                    <intertext>Intertext: between second and third equations.</intertext>
+                    <mrow>X &amp; = Y + Z</mrow>
+                </md>
+            Third, a numbered equation in the final group of equations.
+                <md>
+                    <mrow>A &amp; = B + C</mrow>
+                    <intertext>Intertext: between first and second equations.</intertext>
+                    <mrow>P &amp; = Q + R</mrow>
+                    <intertext>Intertext: between second and third equations.</intertext>
+                    <mrow number="yes">X &amp; = Y + Z</mrow>
+                </md>
+            Fourth, no numbered equations at all.
+                <md>
+                    <mrow>A &amp; = B + C</mrow>
+                    <intertext>Intertext: between first and second equations.</intertext>
+                    <mrow>P &amp; = Q + R</mrow>
+                    <intertext>Intertext: between second and third equations.</intertext>
+                    <mrow>X &amp; = Y + Z</mrow>
+                </md>
+            </p>
+
                 <p>This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <md>z+y = z</md>.  <md>a + b = c</md>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
             </subsection>
 
