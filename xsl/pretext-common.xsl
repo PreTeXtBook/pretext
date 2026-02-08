@@ -859,18 +859,18 @@ Book (with parts), "section" at level 3
     <!-- ignore the use of these parameters.                  -->
     <xsl:param name="b-needs-open"  select="true()"/>
     <xsl:param name="b-needs-close" select="true()"/>
-    <!-- Look across all mrow for 100% no-number rows.  We do not -->
+    <!-- Look across all mrow for the necessity of tags. We do not  -->
     <!-- flag local tags as being numbered, but this affects        -->
     <!-- LaTeX environment construction, so we need to consider it. -->
     <!-- This just allows for slightly nicer human-readable source. -->
-    <xsl:variable name="b-nonumbers" select="not(mrow[@pi:numbered = 'yes' or @tag])" />
+    <xsl:variable name="b-needs-tags" select="mrow[@pi:numbered = 'yes' or @tag]" />
     <xsl:variable name="complete-latex">
         <xsl:if test="$b-needs-open">
             <!-- we provide a newline for visual appeal -->
             <xsl:call-template name="display-math-visual-blank-line" />
             <xsl:text>\begin{</xsl:text>
             <xsl:apply-templates select="." mode="displaymath-alignment">
-                <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
+                <xsl:with-param name="b-needs-tags" select="$b-needs-tags" />
             </xsl:apply-templates>
             <xsl:text>}</xsl:text>
             <xsl:apply-templates select="." mode="alignat-columns" />
@@ -880,14 +880,14 @@ Book (with parts), "section" at level 3
         <xsl:apply-templates select="mrow|intertext">
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="b-top-level" select="$b-top-level" />
-            <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
+            <xsl:with-param name="b-needs-tags" select="$b-needs-tags" />
         </xsl:apply-templates>
         <!-- each mrow provides a newline, so unlike  -->
         <!-- above, we do not need to add one here    -->
         <xsl:if test="$b-needs-close">
             <xsl:text>\end{</xsl:text>
             <xsl:apply-templates select="." mode="displaymath-alignment">
-                <xsl:with-param name="b-nonumbers" select="$b-nonumbers" />
+                <xsl:with-param name="b-needs-tags" select="$b-needs-tags" />
             </xsl:apply-templates>
             <xsl:text>}</xsl:text>
             <!-- We must return to a paragraph, so                     -->
@@ -924,7 +924,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="mrow">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="b-top-level" select="false()" />
-    <xsl:param name="b-nonumbers" />
+    <xsl:param name="b-needs-tags" />
     <!-- Build a textual version of the latex,       -->
     <!-- applying the rare templates allowed,        -->
     <!-- save for minor manipulation later.          -->
@@ -980,7 +980,7 @@ Book (with parts), "section" at level 3
             <xsl:value-of select="$potential-punctuation"/>
         </xsl:otherwise>
     </xsl:choose>
-    <!-- If we built a pure no-number environment, then we add nothing   -->
+    <!-- If we build a pure no-tag environment, then we add nothing      -->
     <!-- Otherwise, we are in a non-starred environment and get a number -->
     <!-- unless we "\notag" it, which is the better choice under AMSmath -->
     <!-- The modal "tag" template is more complicated than just forming  -->
@@ -990,7 +990,7 @@ Book (with parts), "section" at level 3
     <!-- http://tex.stackexchange.com/questions/48965                    -->
     <!-- The @tag attribute trumps almost everything                     -->
     <xsl:choose>
-        <xsl:when test="$b-nonumbers" />
+        <xsl:when test="not($b-needs-tags)" />
         <!-- "local" tag is not numbered, but needs treatment -->
         <xsl:when test="(@pi:numbered = 'yes') or @tag">
             <xsl:apply-templates select="." mode="tag">
@@ -1096,14 +1096,14 @@ Book (with parts), "section" at level 3
 <!-- ####################### -->
 
 <!-- We sniff around for ampersands, to decide between "align"    -->
-<!-- and "gather", plus an asterisk for the unnumbered version    -->
+<!-- and "gather", plus an asterisk for the no-tag version        -->
 <!-- AMSMath has no easy way to make a one-off number within      -->
 <!-- the *-form, so we lean toward always using the un-starred    -->
-<!-- versions, except when we flag 100% no numbers inside an "md" -->
+<!-- versions, except when we flag tags as needed inside an "md"  -->
 <!-- Template is applied twice (begin/end) and its use ensures    -->
 <!-- consistency.                                                 -->
 <xsl:template match="md[mrow]" mode="displaymath-alignment">
-    <xsl:param name="b-nonumbers" select="false()" />
+    <xsl:param name="b-needs-tags" select="true()" />
     <xsl:choose>
         <!-- look for @alignment override, possibly bad -->
         <xsl:when test="@alignment='gather'">
@@ -1136,7 +1136,7 @@ Book (with parts), "section" at level 3
     </xsl:choose>
     <!-- if absolutely no numbers and no local tags,   -->
     <!-- we'll economize in favor of human-readability -->
-    <xsl:if test="$b-nonumbers">
+    <xsl:if test="not($b-needs-tags)">
         <xsl:text>*</xsl:text>
     </xsl:if>
 </xsl:template>
