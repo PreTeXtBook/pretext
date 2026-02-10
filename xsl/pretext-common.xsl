@@ -859,11 +859,16 @@ Book (with parts), "section" at level 3
     <!-- ignore the use of these parameters.                  -->
     <xsl:param name="b-needs-open"  select="true()"/>
     <xsl:param name="b-needs-close" select="true()"/>
+    <!-- When applied by the LaTeX conversion to "put back    -->
+    <!-- together" an exploded "md" with "intertext", we need -->
+    <!-- to know if tags are necessary.                       -->
+    <xsl:param name="b-latex-intertext-needs-tags" select="false()"/>
+
     <!-- Look across all mrow for the necessity of tags. We do not  -->
     <!-- flag local tags as being numbered, but this affects        -->
     <!-- LaTeX environment construction, so we need to consider it. -->
     <!-- This just allows for slightly nicer human-readable source. -->
-    <xsl:variable name="b-needs-tags" select="mrow[@pi:numbered = 'yes' or @tag]" />
+    <xsl:variable name="b-needs-tags" select="mrow[@pi:numbered = 'yes' or @tag] or $b-latex-intertext-needs-tags" />
     <xsl:variable name="complete-latex">
         <xsl:if test="$b-needs-open">
             <!-- we provide a newline for visual appeal -->

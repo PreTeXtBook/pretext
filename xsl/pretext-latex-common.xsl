@@ -7316,10 +7316,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   *  Have such an attribute, no delimiters on the "intermediate" exploded "md"  -->
 <!-- Why?  Now LaTeX can typeset the original "md" with    -->
 <!-- alignment preserved across the intervening "intertext"-->
+<!-- The necessity of tags on the "mrow" (and if we use a  -->
+<!-- *-form of the environment) is conveyed by an internal -->
+<!-- attribute placed by the pre-processor in the          -->
+<!-- "intertext" case.                                     -->
 <xsl:template match="md[mrow]">
     <xsl:apply-templates select="." mode="body">
         <xsl:with-param name="b-needs-open"  select="not(@pi:location) or @pi:location = 'first'"/>
         <xsl:with-param name="b-needs-close" select="not(@pi:location) or @pi:location = 'last'"/>
+        <xsl:with-param name="b-latex-intertext-needs-tags" select="@pi:latex-intertext-needs-tags = 'yes'"/>
     </xsl:apply-templates>
 </xsl:template>
 
