@@ -2043,15 +2043,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   "repair"s of any sentence-level changes will be made. -->
 
 <xsl:template match="md[intertext]|mdn[intertext]" mode="repair">
+
+    <!-- We are going to explode an "md" with "intertext" into  -->
+    <!-- multiple "md".  But for LaTeX, only, we are going to   -->
+    <!-- basically put them all back together again.  But as we -->
+    <!-- come up to each exploded "md" in the LaTeX conversion  -->
+    <!-- it will not be so easy to see if the *original* "md"   -->
+    <!-- had numbers or local tags.  So we determine this       -->
+    <!-- prior to the explosion and record it onto each "md".   -->
+    <!--                                                        -->
+    <!-- The logic of deprecations here means it is perhaps     -->
+    <!-- best to construct all the "mrow" in a disposable       -->
+    <!-- node-set and analyze it for numbers and tags, recorded -->
+    <!-- as a single boolean we can replicate.                  -->
+
+    <xsl:variable name="trial-mrow-rtf">
+        <xsl:apply-templates select="mrow" mode="repair"/>
+    </xsl:variable>
+    <xsl:variable name="trial-mrow" select="exsl:node-set($trial-mrow-rtf)"/>
+    <xsl:variable name="b-needs-tags" select="boolean($trial-mrow/mrow[@pi:numbered = 'yes' or @tag])"/>
+
     <xsl:apply-templates select="." mode="intertext-exploder">
         <xsl:with-param name="nodes" select="mrow|intertext"/>
         <xsl:with-param name="location" select="'first'"/>
+        <xsl:with-param name="b-needs-tags" select="$b-needs-tags"/>
     </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="md[intertext]|mdn[intertext]" mode="intertext-exploder">
     <xsl:param name="nodes"/>
     <xsl:param name="location"/>
+    <xsl:param name="b-needs-tags"/>
 
     <!-- No nodes, no action, so recursion ends, -->
     <!-- AND there is no $lead-node to switch on. -->
@@ -2075,6 +2097,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Location helps with reconstruction in     -->
                 <!-- the LaTeX conversion, where we un-explode -->
                 <md pi:location="{$location}">
+                    <xsl:attribute name="pi:latex-intertext-needs-tags">
+                        <xsl:choose>
+                            <xsl:when test="$b-needs-tags">
+                                <xsl:text>yes</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>no</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
                     <xsl:apply-templates select="$md-block" mode="repair"/>
                 </md>
                 <!-- "first" is never repeated, and  -->
@@ -2096,6 +2128,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="intertext-exploder">
                     <xsl:with-param name="nodes" select="$md-block[last()]/following-sibling::*"/>
                     <xsl:with-param name="location" select="$next-location"/>
+                    <xsl:with-param name="b-needs-tags" select="$b-needs-tags"/>
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$lead-node[self::intertext]">
@@ -2108,6 +2141,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="intertext-exploder">
                     <xsl:with-param name="nodes" select="$lead-node/following-sibling::*"/>
                     <xsl:with-param name="location" select="$location"/>
+                    <xsl:with-param name="b-needs-tags" select="$b-needs-tags"/>
                 </xsl:apply-templates>
             </xsl:when>
             <!-- orioginal  $nodes  ensures we never get here -->
