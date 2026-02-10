@@ -14266,14 +14266,6 @@ TODO:
     </section>
 </xsl:template>
 
-<!-- A template ensures standalone page creation, -->
-<!-- and links to same, are consistent            -->
-<xsl:template match="worksheet|handout" mode="standalone-printout-filename">
-    <xsl:apply-templates select="." mode="visible-id"/>
-    <xsl:text>-printable</xsl:text>
-    <xsl:text>.html</xsl:text>
-</xsl:template>
-
 <!-- 2020-03-17: Empty element, since originally a       -->
 <!-- "page" element interrupted numbering of contents.   -->
 <!-- Now deprecated in favor of a proper "page" element. -->
