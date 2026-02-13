@@ -2761,11 +2761,11 @@ def _stack_process_response(qdict):
     soltext = qdict["questionsamplesolutiontext"]
 
     # Strip validation and specific feedback
-    qtext = re.sub("\[\[validation:(\w+)\]\]", "", qtext)
-    qtext = re.sub("\[\[feedback:(\w+)\]\]", "", qtext)
+    qtext = re.sub(r"\[\[validation:(\w+)\]\]", "", qtext)
+    qtext = re.sub(r"\[\[feedback:(\w+)\]\]", "", qtext)
 
     # Iterate over inputs. For each input with ID ansid:
-    ansids = re.findall("\[\[input:(\w+)\]\]", qtext)
+    ansids = re.findall(r"\[\[input:(\w+)\]\]", qtext)
     answers = []
     for ansid in ansids:
         ansdata = qdict["questioninputs"][ansid]
