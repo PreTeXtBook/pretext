@@ -8764,22 +8764,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################## -->
 
 <!-- Left Single Quote -->
-<xsl:template name="lsq-character">
+<xsl:template match="*" mode="lsq-character">
     <xsl:text>&#x2018;</xsl:text>
 </xsl:template>
 
 <!-- Right Single Quote -->
-<xsl:template name="rsq-character">
+<xsl:template match="*" mode="rsq-character">
     <xsl:text>&#x2019;</xsl:text>
 </xsl:template>
 
 <!-- Left (Double) Quote -->
-<xsl:template name="lq-character">
+<xsl:template match="*" mode="lq-character">
     <xsl:text>&#x201c;</xsl:text>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
-<xsl:template name="rq-character">
+<xsl:template match="*" mode="rq-character">
     <xsl:text>&#x201d;</xsl:text>
 </xsl:template>
 
@@ -9070,9 +9070,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- marks are necessary for accessibility.                 -->
 <xsl:template match="articletitle">
     <span class="articletitle">
-        <xsl:call-template name="lq-character"/>
+        <xsl:apply-templates select="." mode="lq-character"/>
         <xsl:apply-templates/>
-        <xsl:call-template name="rq-character"/>
+        <xsl:apply-templates select="." mode="rq-character"/>
     </span>
 </xsl:template>
 

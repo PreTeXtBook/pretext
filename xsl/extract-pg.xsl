@@ -1737,20 +1737,20 @@
 
 <xsl:template match="q">
     <xsl:param name="b-human-readable" />
-    <xsl:call-template name="lq-character"/>
+    <xsl:apply-templates select="." mode="lq-character"/>
     <xsl:apply-templates>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:call-template name="rq-character"/>
+    <xsl:apply-templates select="." mode="rq-character"/>
 </xsl:template>
 
 <xsl:template match="sq">
     <xsl:param name="b-human-readable" />
-    <xsl:call-template name="lsq-character"/>
+    <xsl:apply-templates select="." mode="lsq-character"/>
     <xsl:apply-templates>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:call-template name="rsq-character"/>
+    <xsl:apply-templates select="." mode="rsq-character"/>
 </xsl:template>
 
 <xsl:template match="dblbrackets">
@@ -1960,19 +1960,19 @@
 <!-- the right thing in a conversion to "smart" quotes -->
 <!-- in various WW output formats                      -->
 
-<xsl:template name="lsq-character">
+<xsl:template match="*" mode="lsq-character">
     <xsl:text>'</xsl:text>
 </xsl:template>
 
-<xsl:template name="rsq-character">
+<xsl:template match="*" mode="rsq-character">
     <xsl:text>'</xsl:text>
 </xsl:template>
 
-<xsl:template name="lq-character">
+<xsl:template match="*" mode="lq-character">
     <xsl:text>"</xsl:text>
 </xsl:template>
 
-<xsl:template name="rq-character">
+<xsl:template match="*" mode="rq-character">
     <xsl:text>"</xsl:text>
 </xsl:template>
 

@@ -10189,43 +10189,43 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- Left Single Quote -->
-<xsl:template name="lsq-character">
+<xsl:template match="*" mode="lsq-character">
     <xsl:call-template name="warn-unimplemented-character">
         <xsl:with-param name="char-name" select="'lsq'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="lsq">
-    <xsl:call-template name="lsq-character"/>
+    <xsl:apply-templates select="." mode="lsq-character"/>
 </xsl:template>
 
 <!-- Right Single Quote -->
-<xsl:template name="rsq-character">
+<xsl:template match="*" mode="rsq-character">
     <xsl:call-template name="warn-unimplemented-character">
         <xsl:with-param name="char-name" select="'rsq'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="rsq">
-    <xsl:call-template name="rsq-character"/>
+    <xsl:apply-templates select="." mode="rsq-character"/>
 </xsl:template>
 
 <!-- Left (Double) Quote -->
-<xsl:template name="lq-character">
+<xsl:template match="*" mode="lq-character">
     <xsl:call-template name="warn-unimplemented-character">
         <xsl:with-param name="char-name" select="'lq'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="lq">
-    <xsl:call-template name="lq-character"/>
+    <xsl:apply-templates select="." mode="lq-character"/>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
-<xsl:template name="rq-character">
+<xsl:template match="*" mode="rq-character">
     <xsl:call-template name="warn-unimplemented-character">
         <xsl:with-param name="char-name" select="'rq'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="rq">
-    <xsl:call-template name="rq-character"/>
+    <xsl:apply-templates select="." mode="rq-character"/>
 </xsl:template>
 
 <!-- Left Double Bracket -->
@@ -10540,15 +10540,15 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- LaTeX quotes are odd, so we override "q" and "sq" there -->
 
 <xsl:template match="q">
-    <xsl:call-template name="lq-character"/>
+    <xsl:apply-templates select="." mode="lq-character"/>
     <xsl:apply-templates/>
-    <xsl:call-template name="rq-character"/>
+    <xsl:apply-templates select="." mode="rq-character"/>
 </xsl:template>
 
 <xsl:template match="sq">
-    <xsl:call-template name="lsq-character"/>
+    <xsl:apply-templates select="." mode="lsq-character"/>
     <xsl:apply-templates/>
-    <xsl:call-template name="rsq-character"/>
+    <xsl:apply-templates select="." mode="rsq-character"/>
 </xsl:template>
 
 <xsl:template match="dblbrackets">

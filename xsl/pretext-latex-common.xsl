@@ -8193,22 +8193,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--       Even if followed by punctuation (?).  Ugly. -->
 
 <!-- Left Single Quote -->
-<xsl:template name="lsq-character">
+<xsl:template match="*" mode="lsq-character">
     <xsl:text>`</xsl:text>
 </xsl:template>
 
 <!-- Right Single Quote -->
-<xsl:template name="rsq-character">
+<xsl:template match="*" mode="rsq-character">
     <xsl:text>'</xsl:text>
 </xsl:template>
 
 <!-- Left (Double) Quote -->
-<xsl:template name="lq-character">
+<xsl:template match="*" mode="lq-character">
     <xsl:text>``</xsl:text>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
-<xsl:template name="rq-character">
+<xsl:template match="*" mode="rq-character">
     <xsl:text>''</xsl:text>
 </xsl:template>
 
@@ -8623,9 +8623,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="articletitle">
-    <xsl:call-template name="lq-character"/>
+    <xsl:apply-templates select="." mode="lq-character"/>
     <xsl:apply-templates/>
-    <xsl:call-template name="rq-character"/>
+    <xsl:apply-templates select="." mode="rq-character"/>
 </xsl:template>
 
 <!-- ################-->

@@ -147,19 +147,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
 </xsl:template>
 
-<xsl:template name="lsq-character">
+<xsl:template match="*" mode="lsq-character">
     <xsl:text>'</xsl:text>
 </xsl:template>
 
-<xsl:template name="rsq-character">
+<xsl:template match="*" mode="rsq-character">
     <xsl:text>'</xsl:text>
 </xsl:template>
 
-<xsl:template name="lq-character">
+<xsl:template match="*" mode="lq-character">
     <xsl:text>"</xsl:text>
 </xsl:template>
 
-<xsl:template name="rq-character">
+<xsl:template match="*" mode="rq-character">
     <xsl:text>"</xsl:text>
 </xsl:template>
 

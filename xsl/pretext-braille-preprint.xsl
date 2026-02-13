@@ -1319,25 +1319,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Unicode Character 'LEFT SINGLE QUOTATION MARK' (U+2018) -->
 <!-- Liblouis: 6-236                                         -->
-<xsl:template name="lsq-character">
+<xsl:template match="*" mode="lsq-character">
     <xsl:text>&#x2018;</xsl:text>
 </xsl:template>
 
 <!-- Unicode Character 'RIGHT SINGLE QUOTATION MARK' (U+2019) -->
 <!-- Liblouis: 6-356                                          -->
-<xsl:template name="rsq-character">
+<xsl:template match="*" mode="rsq-character">
     <xsl:text>&#x2019;</xsl:text>
 </xsl:template>
 
 <!-- Unicode Character 'LEFT DOUBLE QUOTATION MARK' (U+201C) -->
 <!-- Liblouis: 236                                           -->
-<xsl:template name="lq-character">
+<xsl:template match="*" mode="lq-character">
     <xsl:text>&#x201C;</xsl:text>
 </xsl:template>
 
 <!-- Unicode Character 'RIGHT DOUBLE QUOTATION MARK' (U+201D) -->
 <!-- Liblouis: 356                                            -->
-<xsl:template name="rq-character">
+<xsl:template match="*" mode="rq-character">
     <xsl:text>&#x201D;</xsl:text>
 </xsl:template>
 
