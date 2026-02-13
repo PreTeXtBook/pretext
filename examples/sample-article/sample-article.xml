@@ -22,8 +22,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Overall element for a Mathbook XML document; mandatory, always  -->
 <!-- Experiment with the "xml:lang" attribute to see localization    -->
 <!-- changes, the  xsl/localizations  directory has more information -->
-<!-- Note: unwind xi:include use once STACK questions settle down -->
-<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
+<pretext>
 <!-- <pretext xml:lang="ku-CKB"> -->    <!-- an RTL language -->
 <!-- <pretext xml:lang="pt-BR"> -->
 <!-- <pretext xml:lang="fr-FR"> -->
