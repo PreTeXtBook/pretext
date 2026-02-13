@@ -76,7 +76,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </source>
 
     <!-- Server to process STACK problems embedded in HTML -->
-    <stack server="https://stackapi-1-43834256136.europe-west1.run.app/"/>
+    <stack server="https://stack-api.maths.ed.ac.uk"/>
 
     <!-- For an "article" with "section" we can only go 3 levels    -->
     <!-- deep (section > subsection > subsubsection) and this is    -->
