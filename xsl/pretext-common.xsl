@@ -3075,19 +3075,17 @@ Book (with parts), "section" at level 3
         </xsl:choose>
     </xsl:variable>
 
-    <!-- Look up the tree for the "closest" indication of a language  -->
-    <!-- for localization. The  @locale-lang  attribute is set by the -->
-    <!-- -assembly  stylesheet, and guarantees the language is        -->
-    <!-- supported by an extant localization file.                    -->
+    <!-- The language "in force", or "ambient language" is found      -->
+    <!-- by looking up the document tree for the closest containing   -->
+    <!-- specification of the language.                               -->
     <!--                                                              -->
     <!-- Tip: To get the "document-language" as the in-force          -->
     <!-- language, *only* for the case of setting a string-id         -->
     <!-- override, set the context to $root in the employing @select, -->
     <!-- then $lang-element *will* be $root and $lang *will* be the   -->
     <!-- overall, document-wide, language (set by -assembly).         -->
-    <xsl:variable name="lang-element" select="ancestor-or-self::*[@locale-lang][1]"/>
     <xsl:variable name="lang">
-        <xsl:value-of select="$lang-element/@locale-lang"/>
+        <xsl:apply-templates select="." mode="ambient-language"/>
     </xsl:variable>
 
     <!-- Now, build the actual translation via a lookup -->
@@ -3241,9 +3239,30 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="local-name(.)"/>
 </xsl:template>
 
-<!-- ################## -->
+<!-- ################### -->
+<!-- Language Properties -->
+<!-- ################### -->
+
+<!-- At any given point in processing, we may want   -->
+<!-- to know which language is in effect. We look    -->
+<!-- up the tree for the "closest" indication of a   -->
+<!-- language for localization. The  @locale-lang    -->
+<!-- attribute is set by the -assembly  stylesheet,  -->
+<!-- and guarantees the language is supported by an  -->
+<!-- extant localization file. Result is a           -->
+<!-- language code we can use.  At worst, we get the -->
+<!-- $document-language from the "pretext" element.  -->
+<!-- Typical use would save the result in a          -->
+<!-- variable, say $lang, and then locate a "locale" -->
+<!-- via XPath that leads with an expression like    -->
+<!--                                                 -->
+<!--    $localizations/locale[@language = $lang]     -->
+
+<xsl:template match="*" mode="ambient-language">
+    <xsl:value-of select="ancestor-or-self::*[@locale-lang][1]/@locale-lang"/>
+</xsl:template>
+
 <!-- Language direction -->
-<!-- ################## -->
 
 <!-- Every localiztion should specify the direction of the  -->
 <!-- language, which we record as a variable and as a flag. -->
