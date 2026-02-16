@@ -736,10 +736,12 @@ body.pretext > a.assistive:focus {
 .ptx-masthead .title-container {
   flex: unset;
 }
-.ptx-masthead {
-  max-width: var(--page-width);
-  margin-left: auto;
-  margin-right: auto;
+@media screen and (width > 800px) {
+  .ptx-masthead {
+    max-width: var(--page-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 @media screen and (width > 1100px) {
   .ptx-masthead {
@@ -747,10 +749,12 @@ body.pretext > a.assistive:focus {
     border-right: 1px solid var(--page-border-color);
   }
 }
-.ptx-navbar {
-  max-width: var(--page-width);
-  margin-left: auto;
-  margin-right: auto;
+@media screen and (width > 800px) {
+  .ptx-navbar {
+    max-width: var(--page-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 @media screen and (width > 1100px) {
   .ptx-navbar {
@@ -758,10 +762,12 @@ body.pretext > a.assistive:focus {
     border-right: 1px solid var(--page-border-color);
   }
 }
-.ptx-page {
-  max-width: var(--page-width);
-  margin-left: auto;
-  margin-right: auto;
+@media screen and (width > 800px) {
+  .ptx-page {
+    max-width: var(--page-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 @media screen and (width > 1100px) {
   .ptx-page {
@@ -772,10 +778,12 @@ body.pretext > a.assistive:focus {
 .ptx-page-footer {
   border-bottom: 0;
 }
-.ptx-page-footer {
-  max-width: var(--page-width);
-  margin-left: auto;
-  margin-right: auto;
+@media screen and (width > 800px) {
+  .ptx-page-footer {
+    max-width: var(--page-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 @media screen and (width > 1100px) {
   .ptx-page-footer {
