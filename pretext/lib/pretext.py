@@ -2858,7 +2858,7 @@ def _stack_download_assets(assets, api_url, asset_prefix_abs, stack_file):
 # 2025-08-16: verbatim from
 #   https://github.com/PreTeXtBook/pretext/pull/2576
 # procedure name modified
-def _stack_process_response(qdict, asset_prefix_rel, stack_file):
+def _stack_process_response(qdict, asset_prefix_rel, stack_file, base_url):
     if "isinteractive" not in qdict:
         log.warning(f"An error occurred while processing {stack_file}: {qdict.get('message')}")
         return "<statement><p>An error occurred while processing this question.</p></statement>"
@@ -2866,7 +2866,10 @@ def _stack_process_response(qdict, asset_prefix_rel, stack_file):
     if qdict["isinteractive"]:
         # We could generate a QR code to an online version in the future
         log.warning(f"{stack_file} contains interactive elements")
-        return "<statement><p>This question contains interactive elements.</p></statement>"
+        message = "<p>This question contains interactive elements.</p>"
+        if base_url:
+            message += f'\n<p>Browse the <url href="{base_url}">online version of this book</url> to view this question.</p>'
+        return f"<statement>\n{message}\n</statement>"
     qtext = qdict["questionrender"]
     soltext = qdict["questionsamplesolutiontext"]
 
@@ -2942,6 +2945,7 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
     pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
     stack_server = get_publisher_variable(pub_vars, 'stack-server')
     api_url = urllib.parse.urljoin(stack_server, 'render')
+    base_url = get_publisher_variable(pub_vars, 'baseurl')
     log.info("Using STACK API server at {}".format(api_url))
 
     os.makedirs(dest_dir, exist_ok=True)
@@ -3005,7 +3009,7 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
             request_data = {"questionDefinition": question_data, "seed": None}
             question_json = requests.post(api_url, json=request_data)
             question_dict = json.loads(question_json.text)
-            response = _stack_process_response(question_dict, asset_prefix_rel, stack_file)
+            response = _stack_process_response(question_dict, asset_prefix_rel, stack_file, base_url)
             _stack_download_assets(question_dict.get("questionassets", {}), api_url, asset_prefix_abs, stack_file)
             wrap_response = "<stack-static>\n{}\n</stack-static>"
             question_pretext = wrap_response.format(response)
