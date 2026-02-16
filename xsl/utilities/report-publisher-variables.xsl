@@ -127,6 +127,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$stack-server"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2026-02-16 Base URL that  interactives -->
+    <xsl:text>baseurl</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$baseurl"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- -->
 
     <!--
