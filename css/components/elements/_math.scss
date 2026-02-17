@@ -7,7 +7,7 @@
 
 .displaymath mjx-container[jax="CHTML"][display="true"] {
   margin: 0 0 0 0;  // container is going to apply margin, so remove it from mjx-container
-  padding-top: 2px; // Chrome sometimes clips the top 1-2 pixels of math after it has been scaled - provide room for that content
+  padding-top: .3em; // backport MJ4 padding to MJ3
 }
 
 .process-math mjx-container svg {
