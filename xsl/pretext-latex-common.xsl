@@ -8192,24 +8192,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   3.  \xspace might work after words.             -->
 <!--       Even if followed by punctuation (?).  Ugly. -->
 
+<!-- Single and Double Quote Marks -->
+<!-- LaTeX is a bit brain-dead when a single quote        -->
+<!-- is up tight against a double quote, or vice-versa,   -->
+<!-- as the three consecutive single-quote characters are -->
+<!-- ambiguous.  So we opt for accuracy and use macros    -->
+<!-- that are precise and avoid ambiguity when adjacent.  -->
+<!-- Even if the LaTeX is less natural looking.           -->
+
 <!-- Left Single Quote -->
 <xsl:template match="*" mode="lsq-character">
-    <xsl:text>`</xsl:text>
+    <xsl:text>\textquoteleft{}</xsl:text>
 </xsl:template>
 
 <!-- Right Single Quote -->
 <xsl:template match="*" mode="rsq-character">
-    <xsl:text>'</xsl:text>
+    <xsl:text>\textquoteright{}</xsl:text>
 </xsl:template>
 
 <!-- Left (Double) Quote -->
 <xsl:template match="*" mode="lq-character">
-    <xsl:text>``</xsl:text>
+    <xsl:text>\textquotedblleft{}</xsl:text>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
 <xsl:template match="*" mode="rq-character">
-    <xsl:text>''</xsl:text>
+    <xsl:text>\textquotedblright{}</xsl:text>
 </xsl:template>
 
 <!-- Left Double Bracket -->
