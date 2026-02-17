@@ -109,12 +109,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <xsl:message>S:<xsl:value-of select="local-name(.)" />:S</xsl:message> -->
     <xsl:apply-templates select="." mode="pretext-heading" />
     <xsl:apply-templates select="*"/>
-    <!-- A worksheet is always a leaf of the gross document structure, as -->
-    <!-- a specialized division, but we would always like to have them as -->
-    <!-- standalone worksheets, not matter the chunking level in effect.  -->
-    <xsl:if test="self::worksheet">
-        <xsl:apply-templates select="." mode="standalone-printout"/>
-    </xsl:if>
 </xsl:template>
 
 <!-- Some structural nodes do not need their title,                -->
@@ -201,17 +195,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- deserving of their own cells.                                       -->
 <xsl:template match="worksheet/page">
     <xsl:apply-templates select="*"/>
-</xsl:template>
-
-<!-- A template ensures standalone page creation, -->
-<!-- and links to same, are consistent (*.ipynb)  -->
-<xsl:template match="worksheet" mode="standalone-printout-filename">
-    <xsl:param name="paper"/>
-
-    <xsl:apply-templates select="." mode="visible-id"/>
-    <xsl:text>-</xsl:text>
-    <xsl:value-of select="$paper"/>
-    <xsl:text>.ipynb</xsl:text>
 </xsl:template>
 
 
