@@ -6243,11 +6243,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="description"/>
             </desc>
         </xsl:if>
-        <xsl:apply-templates select="$image-svg-xml/svg:svg/*" mode="svg-unique-ids">
-            <xsl:with-param name="svg-unique-id">
-                <xsl:value-of select="@unique-id"/>
-            </xsl:with-param>
-        </xsl:apply-templates>
+        <!-- Need to add unique ids to latex-image svgs (prefigure does this automatically) -->
+        <xsl:choose>
+            <xsl:when test="latex-image">
+                <xsl:apply-templates select="$image-svg-xml/svg:svg/*" mode="svg-unique-ids">
+                    <xsl:with-param name="svg-unique-id">
+                        <xsl:value-of select="@unique-id"/>
+                    </xsl:with-param>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="$image-svg-xml/svg:svg/*"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </svg>
 </xsl:template>
 
