@@ -275,20 +275,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='activate'>Ativar</localization>
     <localization string-id='reset'>Redefinir</localization>
     <localization string-id='array'>lista</localization>
-    <!-- <localization string-id='papersize'>Paper size</localization> -->
+    <!-- "paper size" toggle title                                -->
+    <localization string-id='papersize'>Formato do papel</localization>
     <!-- Additional printing options -->
-    <!-- <localization string-id="printing-options">Additional printing options</localization> -->
+    <localization string-id="printing-options">Opções de impressão</localization>
     <!-- "hide hint/answer/solutions" toggle title                         -->
-    <!-- <localization string-id="hide-hints">Hide hints</localization> -->
-    <!-- <localization string-id="hide-answers">Hide answers</localization> -->
-    <!-- <localization string-id="hide-solutions">Hide solutions</localization> -->
-    <!-- <localization string-id="print-header">Print headers</localization> -->
-    <!-- <localization string-id="print-footer">Print footers</localization> -->
-    <!-- <localization string-id="first-page">First page</localization> -->
-    <!-- <localization string-id="running">Running</localization> -->
-    <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
-    <!-- <localization string-id='print'>Print</localization> -->
-    <!--<localization string-id='print-preview'>Print preview</localization>-->
-    <!-- <localization string-id='close'>Close</localization> -->
+    <localization string-id="hide-hints">Esconder dicas</localization>
+    <localization string-id="hide-answers">Esconder respostas</localization>
+    <localization string-id="hide-solutions">Esconder soluções</localization>
+    <localization string-id="print-header">Imprimir cabeçalho</localization>
+    <localization string-id="print-footer">Imprimir rodapé</localization>
+    <localization string-id="first-page">Primeira página</localization>
+    <localization string-id="running">Página atual</localization>
+    <localization string-id="highlight-workspace">Destacar área para solução</localization>
+    <localization string-id='print'>Imprimir</localization>
+    <localization string-id='print-preview'>Pré-visualização da impressão</localization>
+    <localization string-id='close'>Fechar</localization>
     <!-- <localization string-id='open-new-tab'>Open in new tab</localization> -->
 </locale>
