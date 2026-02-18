@@ -26,8 +26,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </source>
 
     <!-- This public server is for testing and demonstration only. -->
-    <!-- <stack server="https://stack-api.maths.ed.ac.uk" /> -->
-    <stack server="https://stackapi-1-43834256136.europe-west1.run.app/"/>
+    <stack server="https://stack-api.maths.ed.ac.uk" />
 
     <html>
         <!-- Native search with Javascript. -->

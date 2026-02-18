@@ -15035,6 +15035,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <stack label="stack-integration" source="stack/01_integration_with_feedback.xml"/>
             </exercise>
 
+            <exercise>
+                <title>STACK multiple choice question</title>
+
+                <introduction>
+                    <p>This is a multiple choice question where multiple answers can (in principle) be correct.</p>
+                </introduction>
+
+                <stack label="stack-mcq" source="stack/Checkbox.xml"/>
+            </exercise>
+
+            <exercise>
+                <title>STACK matrix input question</title>
+
+                <introduction>
+                    <p>This is a question where the input is a matrix.</p>
+                </introduction>
+
+                <stack label="stack-matrix" source="stack/Matrix.xml"/>
+            </exercise>
+
+            <exercise>
+                <title>STACK question with generated plot</title>
+
+                <introduction>
+                    <p>This is a question that generates a plot that must be rendered in the question text.</p>
+                </introduction>
+
+                <stack label="stack-plot" source="stack/basic-plot.xml"/>
+            </exercise>
+
+            <exercise>
+                <title>STACK question with advanced typesetting and embedded image</title>
+
+                <introduction>
+                    <p>This question comes from the <url href="https://stack-assessment.org/CaseStudies/2021/HELM/">HELM project</url>. It features an embedded image in its solution, as well as advanced typesetting and multi-line latex.</p>
+                </introduction>
+
+                <stack label="stack-typesetting" source="stack/Adding-vectors-in-triangles.xml"/>
+            </exercise>
+
+
         </exercises>
 
         <section xml:id="ancillaries" label="section-ancillaries">
