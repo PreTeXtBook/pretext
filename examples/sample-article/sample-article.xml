@@ -2715,7 +2715,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>I must stand with anybody that stands right, and stand with him while he is right, and part with him when he goes wrong.<rq/></p>
 
-                <p>And as a tests, we try some crazy combinations of quotes, which would normally give <latex/> some trouble where the quotation marks are adjacent.<ul>
+                <p>And as a tests, we try some crazy combinations of quotes, which would normally give <latex/> some trouble where the quotation marks are adjacent.  View these examples in <init>PDF</init> output, with lots of magnification and note the spacing between the quotation marks.<ul>
                     <li><p><q>we use <sq>single quotes inside of double quotes</sq></q></p></li>
                     <li><p><sq><q>double quotes inside of single quotes</q> with more</sq></p></li>
                     <li><p><q><sq>single quotes tight inside of double quotes</sq></q></p></li>
@@ -2723,8 +2723,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><p>An <q><sq><sq><q>absurd test</q></sq></sq></q> of two adjacent single quotes inside a pair of double quotes</p></li>
                     <li><p>you would never do this, but a <sq><sq>pair of single quotes</sq></sq></p></li>
                 </ul></p>
-
-                <p><abbr>N.B.</abbr> We have taken no special care to protect against interactions of the actual quote characters (described above) in <latex/> with themselves, or with the grouping tags.</p>
             </subsection>
 
             <subsection>
