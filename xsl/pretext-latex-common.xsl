@@ -8466,53 +8466,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="end-language" />
 </xsl:template>
 
-<!-- Single and Double Quote Groupings -->
-<!-- LaTeX is a bit brain-dead when a single quote        -->
-<!-- is up tight against a double quote, or vice-versa,   -->
-<!-- as the three consecutive single-quote characters are -->
-<!-- ambiguous.  So we protect single quotes anytime it   -->
-<!-- could be dangerous, even if precedence might do the  -->
-<!-- right thing.  Double quotes are unmolested since     -->
-<!-- they will work fine even in consecutive runs         -->
-<!-- We have to override the RTF routines here.           -->
-
-<xsl:template match="q">
-    <xsl:text>``</xsl:text>
-    <xsl:apply-templates/>
-    <xsl:text>''</xsl:text>
-</xsl:template>
-
-<!-- We look left (up the tree) and right   -->
-<!-- (down the tree) for adjacent groupings -->
-<xsl:template match="sq">
-    <xsl:choose>
-        <!-- left quote, possibly protected in a group -->
-        <xsl:when test="(parent::q or parent::sq) and not(preceding-sibling::*) and not(preceding-sibling::text())">
-            <xsl:text>{`}</xsl:text>
-        </xsl:when>
-        <xsl:when test="(*|text())[1][self::q or self::sq]">
-            <xsl:text>{`}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>`</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- content -->
-    <xsl:apply-templates/>
-    <!-- right quote, possibly protected in a group -->
-    <xsl:choose>
-        <xsl:when test="(parent::q or parent::sq) and not(following-sibling::*) and not(following-sibling::text())">
-            <xsl:text>{'}</xsl:text>
-        </xsl:when>
-        <xsl:when test="(*|text())[last()][self::q or self::sq]">
-            <xsl:text>{'}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>'</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!-- ##### -->
 <!-- Icons -->
 <!-- ##### -->
