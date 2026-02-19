@@ -8200,24 +8200,103 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- that are precise and avoid ambiguity when adjacent.  -->
 <!-- Even if the LaTeX is less natural looking.           -->
 
+<!-- Quotation marks come in left and right variants. -->
+<!-- Note: maybe this should be part of a lookup      -->
+<!-- table with Unicode, LaTeX, ASCII (7-bit/8-bit).  -->
+<xsl:template match="*" mode="quote-character-latex">
+    <xsl:param name="style"/>
+    <xsl:param name="side"/>
+
+    <xsl:choose>
+        <xsl:when test="$style = 'english-double'">
+            <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <xsl:text>\textquotedblleft{}</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <xsl:text>\textquotedblright{}</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$style = 'english-single'">
+            <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <xsl:text>\textquoteleft{}</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <xsl:text>\textquoteright{}</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$style = 'angle-double-space'">
+             <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <xsl:text>\guillemotleft\thinspace{}</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <xsl:text>\thinspace\guillemotright{}</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$style = 'angle-single-space'">
+             <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <xsl:text>\guilsinglleft\thinspace{}</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <xsl:text>\thinspace\guilsinglright{}</xsl:text>
+                    <xsl:text>&#x203A;</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>
+                <xsl:text>PTX:BUG:  a quotation style ("</xsl:text>
+                <xsl:value-of select="$style"/>
+                <xsl:text>") for a quote character in LaTeX was not recognized</xsl:text>
+            </xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Left Single Quote -->
 <xsl:template match="*" mode="lsq-character">
-    <xsl:text>\textquoteleft{}</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-latex">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-secondary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'left'"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Right Single Quote -->
 <xsl:template match="*" mode="rsq-character">
-    <xsl:text>\textquoteright{}</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-latex">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-secondary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'right'"/>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- Left (Double) Quote -->
+<!-- Left (Primary) Quote -->
 <xsl:template match="*" mode="lq-character">
-    <xsl:text>\textquotedblleft{}</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-latex">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-primary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'left'"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
 <xsl:template match="*" mode="rq-character">
-    <xsl:text>\textquotedblright{}</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-latex">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-primary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'right'"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Left Double Bracket -->
