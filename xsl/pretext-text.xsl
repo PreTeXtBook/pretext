@@ -124,6 +124,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to use cheap ASCII versions (or stand-ins, like [PER-MILLE]), -->
 <!-- versus more realistic Unicode versions                        -->
 
+<!-- N.B. Quotation marks are localized by language in other       -->
+<!-- conversions (HTML, LaTeX) and skipped in other conversions    -->
+<!-- (braille).  They would likely need to use Unicode characters  -->
+<!-- like  «, »  rather than cheap 7-bit ASCII versions, like      -->
+<!-- <<, >>.  So this would force the issue of a Unicode (8-bit    -->
+<!-- and more-than) switch and supporting that.  So as of          -->
+<!-- 2026-02-18 we are punting.                                    -->
+
 <!-- ASCII we just use a regular space -->
 <xsl:template name="nbsp-character">
     <xsl:text> </xsl:text>

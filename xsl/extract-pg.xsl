@@ -1959,6 +1959,15 @@
 <!-- PGML is content with "dumb" quotes and will do    -->
 <!-- the right thing in a conversion to "smart" quotes -->
 <!-- in various WW output formats                      -->
+<!-- Futhermore, PGML is not organized to receive      -->
+<!-- "smart" quotes, and especially not quotation      -->
+<!-- marks that vary by language.  So we just keep it  -->
+<!-- very simple here.  Note: a static version of a WW -->
+<!-- problem may be produced with  "q"  or  "sq"       -->
+<!-- elements in it.  And then be incorporated in a    -->
+<!-- document with a  @xml:lang  element that gives a  -->
+<!-- very different rendering.  The pre-processor      -->
+<!-- might be able to "fix" this.                      -->
 
 <xsl:template match="*" mode="lsq-character">
     <xsl:text>'</xsl:text>

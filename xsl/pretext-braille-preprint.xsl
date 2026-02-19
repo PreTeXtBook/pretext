@@ -1258,6 +1258,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which is incorporated via the English-UEB Grade 1 and Grade 2 -->
 <!-- tables.  As of 2023-05-12.  We document the Unicode character -->
 <!-- and the cells described in the liblouis table.                -->
+<!--                                                               -->
+<!-- N.B. there is no attempt here to provide localizations, such  -->
+<!-- as quotation mark styles, since we are limited ourselves to   -->
+<!-- English language documents by larger decisions elsewhere.     -->
 
 <!-- Unicode Character 'NO-BREAK SPACE' (U+00A0)   -->
 <!-- yields a template for "nbsp" in -common       -->
