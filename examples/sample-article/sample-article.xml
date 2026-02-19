@@ -2633,19 +2633,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </investigation>
             </subsection>
 
-            <assemblage>
-                <p>A minimal <tag>assemblage</tag>.</p>
-            </assemblage>
+            <subsection>
+                <title>Miscellaneous Blocks</title>
+                <assemblage>
+                    <p>A minimal <tag>assemblage</tag>.</p>
+                </assemblage>
+                <aside>
+                    <title>A title</title>
+                    <p>A final <tag>aside</tag> to test behavior towards the end of a page. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </aside>
+            </subsection>
+
+            <outcomes>
+                <title>Our results</title>
+                <p>A minimal <tag>outcome</tag>.</p>
+                <ul>
+                  <li>Stress test HTML themes</li>
+                  <li>Locally, test outcomes</li>
+                </ul>
+            </outcomes>
 
             <conclusion>
                 <title>Wrap-up</title>
                 <p>A minimal <tag>conclusion</tag>.</p>
             </conclusion>
-
-            <aside>
-                <title>A title</title>
-                <p>A final <tag>aside</tag> to test behavior at the end of a page. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            </aside>
         </section>
 
         <section xml:id="text-in-paragraphs" label="section-text-paragraphs">
