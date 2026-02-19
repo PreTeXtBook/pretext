@@ -293,5 +293,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='print'>Imprimir</localization>
     <localization string-id='print-preview'>Pré-visualização da impressão</localization>
     <localization string-id='close'>Fechar</localization>
-    <!-- <localization string-id='open-new-tab'>Open in new tab</localization> -->
+    <localization string-id='open-new-tab'>Abrir em nova aba</localization>
 </locale>
