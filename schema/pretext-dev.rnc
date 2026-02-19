@@ -286,14 +286,20 @@
                 attribute number {text}?,
                 StatementExercise,
                 Feedback?,
+                Matches,
+                Hint*, Answer*, Solution*
+            Matches = (
                 element matches {
                     Match+
-                },
-                Hint*, Answer*, Solution*
+                } |
+                element cardsort {
+                    Match+
+                })
             Match =
                 element match {
                     attribute order {xsd:integer}?,
                     element premise {
+                        attribute order {xsd:integer}?,
                         mixed {BlockText?}
                     },
                     element response {
