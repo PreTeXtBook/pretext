@@ -28,6 +28,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- there is no assumed default.  Left-to-right is "ltr" and         -->
 <!-- right-to-left is "rtl".  Provide these exactly as written since  -->
 <!-- they can migrate untouched into output (e.g. HTML).              -->
+
+<!-- Every localization should specify two "styles" for how       -->
+<!-- primary/outer quote marks are given (double quotes in        -->
+<!-- English) and how secondary/inner quote marks are given       -->
+<!-- (single quotes in English).  Here are the extant styles      -->
+<!-- and crude Unicode versions of how they might look:           -->
+<!--                                                              -->
+<!--     english-single          ‘word’                           -->
+<!--     english-double          “word”                           -->
+<!--     angle-single-space      ‹ word ›                         -->
+<!--     angle-double-space      « word »                         -->
+<!--                                                              -->
+<!-- Maintainers: please use the  pretext-dev  group to discuss   -->
+<!-- what is best for your language.  If a style exists, then it  -->
+<!-- is just a simple edit of the default English values.  New    -->
+<!-- styles require Unicode values and LaTeX macros to be         -->
+<!-- implemented, work which RAB can do easily.  Examples in the  -->
+<!-- sample article can be updated with new languages/countries,  -->
+<!-- or created with iconic quotes from the specific language.    -->
+<!-- The table at Wikipedia is not a bad thing to consult, even   -->
+<!-- if it seems to have some inaccuracies.                       -->
+<!--                                                              -->
+<!--     https://en.wikipedia.org/wiki/Quotation_mark             -->
+
 <locale language="en-US" direction="ltr">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
