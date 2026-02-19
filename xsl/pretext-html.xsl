@@ -8771,24 +8771,115 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Special Characters -->
 <!-- ################## -->
 
+<!-- Quotation marks come in left and right variants. -->
+<!-- Note: maybe this should be part of a lookup      -->
+<!-- table with Unicode, LaTeX, ASCII (7-bit/8-bit).  -->
+<xsl:template match="*" mode="quote-character-html">
+    <xsl:param name="style"/>
+    <xsl:param name="side"/>
+
+    <xsl:choose>
+        <xsl:when test="$style = 'english-double'">
+            <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <xsl:text>&#x201c;</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <xsl:text>&#x201d;</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$style = 'english-single'">
+            <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <xsl:text>&#x2018;</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <xsl:text>&#x2019;</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$style = 'angle-double-space'">
+             <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <!-- LEFT-POINTING DOUBLE ANGLE QUOTATION MARK -->
+                    <xsl:text>&#x00AB;</xsl:text>
+                    <!-- NARROW NO-BREAK SPACE (NNBSP) -->
+                    <xsl:text>&#x202F;</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <!-- NARROW NO-BREAK SPACE (NNBSP) -->
+                    <xsl:text>&#x202F;</xsl:text>
+                    <!-- RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK -->
+                    <xsl:text>&#x00BB;</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$style = 'angle-single-space'">
+             <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <!-- SINGLE LEFT-POINTING ANGLE QUOTATION MARK -->
+                    <xsl:text>&#x2039;</xsl:text>
+                    <!-- NARROW NO-BREAK SPACE (NNBSP) -->
+                    <xsl:text>&#x202F;</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <!-- NARROW NO-BREAK SPACE (NNBSP) -->
+                    <xsl:text>&#x202F;</xsl:text>
+                    <!-- SINGLE RIGHT-POINTING ANGLE QUOTATION MARK -->
+                    <xsl:text>&#x203A;</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>
+                <xsl:text>PTX:BUG:  a quotation style ("</xsl:text>
+                <xsl:value-of select="$style"/>
+                <xsl:text>") for a left quote character in HTML was not recognized</xsl:text>
+            </xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- Left Single Quote -->
 <xsl:template match="*" mode="lsq-character">
-    <xsl:text>&#x2018;</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-html">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-secondary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'left'"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Right Single Quote -->
 <xsl:template match="*" mode="rsq-character">
-    <xsl:text>&#x2019;</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-html">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-secondary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'right'"/>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- Left (Double) Quote -->
+<!-- Left (Primary) Quote -->
 <xsl:template match="*" mode="lq-character">
-    <xsl:text>&#x201c;</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-html">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-primary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'left'"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
 <xsl:template match="*" mode="rq-character">
-    <xsl:text>&#x201d;</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-html">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-primary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'right'"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Left Double Bracket -->
