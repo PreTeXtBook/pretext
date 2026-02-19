@@ -3277,6 +3277,25 @@ Book (with parts), "section" at level 3
 <!-- for HTML pages.                                              -->
 <xsl:variable name="b-rtl" select="$document-language-direction = 'rtl'"/>
 
+<!-- Quotation Marks -->
+
+<!-- Utility templates to query localization specification -->
+
+<xsl:template match="*" mode="get-quote-primary">
+    <xsl:variable name="lang">
+        <xsl:apply-templates select="." mode="ambient-language"/>
+    </xsl:variable>
+    <xsl:value-of select="$localizations/locale[@language = $lang]/@quote-primary"/>
+</xsl:template>
+
+<xsl:template match="*" mode="get-quote-secondary">
+    <xsl:variable name="lang">
+        <xsl:apply-templates select="." mode="ambient-language"/>
+    </xsl:variable>
+    <xsl:value-of select="$localizations/locale[@language = $lang]/@quote-secondary"/>
+</xsl:template>
+
+
 <!-- ##### -->
 <!-- Icons -->
 <!-- ##### -->
@@ -10207,6 +10226,17 @@ Book (with parts), "section" at level 3
      <xsl:text>]]]</xsl:text>
 </xsl:template>
 
+<!-- A given document may use for different characters for quotations:         -->
+<!--                                                                           -->
+<!--     left/right (open/close)  by  primary/secondary                        -->
+<!--                                                                           -->
+<!-- We then define elements for these characters (should be rarely used)      -->
+<!-- and elements for groupings that will atart with a "left" character        -->
+<!-- and end with a "right" character.  Some conversions define these four     -->
+<!-- characters outright and universally (e.g. braille), some have more        -->
+<!-- involved processes that react to the ambient language (e.g. HTML). So     -->
+<!-- the follwing for templates are an interface of sorts for implementations. -->
+
 <!-- Left Single Quote -->
 <xsl:template match="*" mode="lsq-character">
     <xsl:call-template name="warn-unimplemented-character">
@@ -10554,9 +10584,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Characters with left and right variants naturally       -->
 <!-- give rise to tags with begin and end variants           -->
-<!-- We implement these here with Result Tree Fragments      -->
-<!-- as a polymorphic technique for the actual characters    -->
-<!-- LaTeX quotes are odd, so we override "q" and "sq" there -->
 
 <xsl:template match="q">
     <xsl:apply-templates select="." mode="lq-character"/>
