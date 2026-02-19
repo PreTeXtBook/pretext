@@ -24,7 +24,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hu-HU, Hungarian (Hungary) -->
 <!-- Sándor Czirbusz, czirbusz@gmail.com, 2017-04-09 -->
 
-<locale language="hu-HU" direction="ltr">
+<locale language="hu-HU" direction="ltr"
+        quote-primary="english-double" quote-secondary="english-single">
+    <!-- The english quotation style above is just a default, it needs adjustment -->
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Tétel</localization>

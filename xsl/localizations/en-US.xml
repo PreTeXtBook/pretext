@@ -52,7 +52,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                              -->
 <!--     https://en.wikipedia.org/wiki/Quotation_mark             -->
 
-<locale language="en-US" direction="ltr">
+<locale language="en-US" direction="ltr"
+        quote-primary="english-double" quote-secondary="english-single">
+
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Theorem</localization>

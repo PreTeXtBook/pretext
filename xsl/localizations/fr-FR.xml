@@ -24,7 +24,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Jean-Sébastien Turcotte, js.turcotte@cgodin.qc.ca, 2021-02-19-->
 
 <!-- If/when a new string-id gets translated in French for the first time, it should also be translated into fr-CA -->
-<locale language="fr-FR" direction="ltr">
+<locale language="fr-FR" direction="ltr"
+        quote-primary="angle-double-space" quote-secondary="english-double">
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id="theorem">Théorème</localization>

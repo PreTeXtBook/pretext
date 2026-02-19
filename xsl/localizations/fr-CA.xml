@@ -23,7 +23,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Added missing fr-CA translations by Christian Chávez, christian.chavez@usherbrooke.ca, 2025-12-20-->
 
 <!-- If/when a new string-id gets translated in French for the first time, it should also be translated into fr-FR -->
-<locale language="fr-CA" direction="ltr">
+<locale language="fr-CA" direction="ltr"
+        quote-primary="english-double" quote-secondary="english-single">
+    <!-- The english quotation style above is just a default, it needs adjustment -->
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id="theorem">Théorème</localization>

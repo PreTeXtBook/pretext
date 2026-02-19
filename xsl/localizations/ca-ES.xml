@@ -24,7 +24,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ca-ES, Catalan (Spain) -->
 <!-- Jordi Saludes, jordi.saludes@upc.edu, 2021-07-13 -->
 
-<locale language="ca-ES" direction="ltr">
+<locale language="ca-ES" direction="ltr"
+        quote-primary="english-double" quote-secondary="english-single">
+    <!-- The english quotation style above is just a default, it needs adjustment -->
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id="theorem">Teorema</localization>

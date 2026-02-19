@@ -24,7 +24,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fi-FI, Finnish (Finland) -->
 <!-- Lasse M. Manninen lasse.m.manninen@gmail.com   -->
 
-<locale language="fi-FI" direction="ltr">
+<locale language="fi-FI" direction="ltr"
+        quote-primary="english-double" quote-secondary="english-single">
+    <!-- The english quotation style above is just a default, it needs adjustment -->
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
     <localization string-id='theorem'>Lause</localization>
