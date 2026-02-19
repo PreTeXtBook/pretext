@@ -2723,6 +2723,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><p>An <q><sq><sq><q>absurd test</q></sq></sq></q> of two adjacent single quotes inside a pair of double quotes</p></li>
                     <li><p>you would never do this, but a <sq><sq>pair of single quotes</sq></sq></p></li>
                 </ul></p>
+
+                <p>Quotation marks are different in different languages.  The following paragraphs contain short examples.</p>
+
+                <paragraphs xml:lang="en-US">
+                    <title>English (United States)</title>
+
+                    <p>Primary only: <q>Government of the people, by the people, for the people, shall not perish from the earth.</q> Primary and secondary: <q>I have a dream that one day this nation will rise up and live out the true meaning of its creed: <sq>We hold these truths to be self-evident, that all men are created equal.</sq></q> (Abraham Lincoln, Gettysburg Address; Martin Luther King Jr., I Have a Dream)</p>
+                </paragraphs>
+
+                <paragraphs xml:lang="fr-FR">
+                    <title>French (France)</title>
+
+                    <!-- “Freedom begins where ignorance ends.”                      -->
+                    <!--                                                             -->
+                    <!-- “She kept repeating to herself, ‘I have a lover! a lover!’  -->
+                    <!-- savoring the idea as if a new puberty had come upon her.”   -->
+
+                    <p>Primary only: <q>La liberté commence où l’ignorance finit.</q> Primary and secondary: <q>Elle se répétait : <sq>J’ai un amant ! un amant !</sq> se délectant à cette idée comme à celle d’une autre puberté qui lui serait survenue</q>. (Victor Hugo, Les Misérables; Gustave Flaubert, Madame Bovary)</p>
+                </paragraphs>
+
             </subsection>
 
             <subsection>
