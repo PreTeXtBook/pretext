@@ -164,7 +164,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- 10pt font is the default   -->
     <!-- draft mode default is "no" -->
     <!-- snapshot default is "no", but we elect to stress the supported package -->
-    <latex print="no" sides="two" font-size="10" draft="no" snapshot="yes">
+    <latex print="no" sides="one" font-size="10" draft="no" snapshot="yes">
         <!-- these are the default alignments, given just as an example -->
         <!-- Even if you set  @crop-marks  to something like "letter" or "a4"    -->
         <!-- you may not see a change.  You need to use the  geometery  package  -->
