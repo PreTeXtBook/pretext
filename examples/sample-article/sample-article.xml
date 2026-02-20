@@ -7087,6 +7087,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </table>
 
             <table>
+                <title>Test of vertical header orientation and padding with borders</title>
+                <tabular row-headers="yes"
+                        halign="center"
+                        valign="middle"
+                        right="minor"
+                        bottom="minor">
+                    <col halign="left"
+                        right="major"/>
+                    <col/>
+                    <col/>
+                    <col/>
+                    <col/>
+                    <col/>
+                    <col/>
+                    <row header="vertical"
+                        bottom="major"
+                        halign="left">
+                        <cell right="minor"
+                            bottom="minor"></cell>
+                        <cell>0 <em>(MTH111)</em></cell>
+                        <cell>1 <em>(MTH112)</em></cell>
+                        <cell>2 <em>(CS160)</em></cell>
+                        <cell>3 <em>(CS161)</em></cell>
+                        <cell>4 <em>(CS162)</em></cell>
+                        <cell>5 <em>(CS205)</em></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>0 <em>(MTH111)</em></cell>
+                        <cell>0</cell>
+                        <cell>1</cell>
+                        <cell>0</cell>
+                        <cell>1</cell>
+                        <cell>0</cell>
+                        <cell>0</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
                 <title>One Row Header, with Rules</title>
                 <tabular>
                     <row header="yes" bottom="major">
