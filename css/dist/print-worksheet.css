@@ -945,7 +945,8 @@ a[href^="mailto:"] {
 }
 .ptx-content tr.header-vertical th {
   writing-mode: vertical-rl;
-  padding-left: 2em;
+  transform: rotate(180deg);
+  padding-top: 5px;
 }
 .ptx-content .center table {
   text-align: center;

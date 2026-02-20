@@ -468,7 +468,8 @@ a[href^="mailto:"] {
 }
 .ptx-content tr.header-vertical th {
   writing-mode: vertical-rl;
-  padding-left: 2em;
+  transform: rotate(180deg);
+  padding-top: 5px;
 }
 .ptx-content .center table {
   text-align: center;
@@ -2819,7 +2820,7 @@ body.pretext > a.assistive:focus {
   margin-left: auto;
 }
 @container ptx-main (width > 640px) {
-  :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
+  :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, iframe[design-width]) {
     --max-width: calc(min((100cqw - 2 * 20px), 10000px));
     min-width: 100%;
     clear: right;
