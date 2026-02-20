@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- Variant of  publication.xml  strictly for a print PDF. -->
+<!--   *  "common", "source, "stack" sections should match. -->
+<!--   *  "latex" section should have minimal edits.        -->
+<!--   *  "html" section has been removed.                  -->
+<!-- Doing a diff might help sync-up edits.                 -->
+
+<publication>
+
+    <!-- Common Options -->
+    <common>
+        <!-- How deep to go for separate files, in HTML the -->
+        <!-- default for an article with sections is 1      -->
+        <chunking level="1"/>
+        <!-- How deep to nest a Table of Contents, for an article   -->
+        <!-- with subsections in HTML, the default is 2, but in the -->
+        <!-- LateX conversion the default is no ToC at all.  So we  -->
+        <!-- let these conversion-specific defaults play out, and   -->
+        <!-- just leave this example as a comment.                  -->
+        <!-- <tableofcontents level="2"/> -->
+        <!-- These "exercise component visibility" settings are the -->
+        <!-- defaults, but can be switched to "no" in order to hide -->
+        <!-- parts of an exercise, where born.                      -->
+        <exercise-inline hint="yes"/>
+        <exercise-project answer="yes"/>
+        <!-- fillin styles are "underline" (the default for text),  -->
+        <!-- "box", and "shade" (the default for math)              -->
+        <fillin textstyle="underline" mathstyle="shade"/>
+        <qrcode image="misc/ptx-logo-square.png"/>
+        <!-- This is the minimum information to locate a     -->
+        <!-- Citation Stylesheet Language (CSL) style file   -->
+        <!-- in the CSL repository.  It is not expected to   -->
+        <!-- have the ".csl" suffix.  Default is "harvard1". -->
+        <!-- Note: "harvard1" might be best first use.       -->
+        <!-- 2025-08-13: this is experimental and opt-in.    -->
+        <!--  -->
+        <!-- "harvard1" style available in CiteProcPy code?  -->
+        <!-- <citation-stylesheet-language style="harvard1"/> -->
+        <!--  -->
+        <!-- numeric style, ". " for suffix -->
+        <!-- <citation-stylesheet-language style="vancouver-brackets"/> -->
+        <!--  -->
+        <!-- "elsevier-with-titles" is a "numeric" style, [6] -->
+        <!-- <citation-stylesheet-language style="elsevier-with-titles"/> -->
+        <!--  -->
+        <!-- <citation-stylesheet-language style="taylor-and-francis-chicago-author-date"/> -->
+        <!--  -->
+        <!-- 2025-06-03: "chicago-fullnote" uses footnotes/endnotes, and       -->
+        <!-- therefore should throw an error as an unsupported style, and halt -->
+        <!-- <citation-stylesheet-language style="chicago-fullnote-bibliography-with-ibid"/> -->
+        <!-- If desired, defaults for mermaid theme and layout engine -->
+        <!-- can be specifed. These values can be overriden in a      -->
+        <!-- diagram using config: frontmatter                        -->
+        <!-- <mermaid theme="forest" layout-engine="elk"/> -->
+    </common>
+
+    <!-- we use customizations-two for the oscarlevin style example -->
+    <source customizations="customizations-one.xml">
+        <directories external="media" generated="gen"/>
+        <!-- this is an example of placing @generated *outside* of revision control -->
+        <!-- <directories external="media" generated="../../../altgen"/> -->
+    </source>
+
+    <!-- Server to process STACK problems embedded in HTML -->
+    <stack server="https://stackapi-1-43834256136.europe-west1.run.app/"/>
+
+    <!-- For an "article" with "section" we can only go 3 levels    -->
+    <!-- deep (section > subsection > subsubsection) and this is    -->
+    <!-- the default for divisions' levels.  For numbers on smaller -->
+    <!-- pieces of content, the default is XX.NN, i.e. level 1.     -->
+    <!-- Read the PreTeXt Guide for more on numbering and levels.   -->
+    <numbering>
+        <divisions level="3"/>
+        <blocks    level="1"/>
+        <projects  level="1"/>
+        <equations level="1"/>
+        <footnotes level="1"/>
+    </numbering>
+
+    <!-- 10pt font is the default   -->
+    <!-- draft mode default is "no" -->
+    <!-- snapshot default is "no", but we elect to stress the supported package -->
+    <latex print="yes" sides="two" font-size="10" draft="no" snapshot="yes">
+        <!-- these are the default alignments, given just as an example -->
+        <!-- Even if you set  @crop-marks  to something like "letter" or "a4"    -->
+        <!-- you may not see a change.  You need to use the  geometery  package  -->
+        <!-- to set a smaller (logical) page size.                               -->
+        <page right-alignment="flush" bottom-alignment="ragged" crop-marks="none"/>
+        <!-- worksheets are formatted separately by default.   -->
+        <!-- change to "no" to format as regular sections.     -->
+        <worksheet formatted="yes"/>
+        <asymptote links="yes"/>
+        <insertions pagebreaks="quotations exercises-section-multiple pre-roll-countdown-8"/>
+        <insertions pagebreaks="sidebyside-bully-pulpit sbsgroup-pagebreak-test"/>
+    </latex>
+
+</publication>
