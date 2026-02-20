@@ -187,6 +187,7 @@
             
             Html =
                 element html {
+                    attribute design-width { xsd:integer }?,
                     attribute favicon { "none" | "simple" }?,
                     attribute short-answer-responses { "graded" | "always" }?,
                     (
@@ -199,6 +200,7 @@
                         Exercises? &
                         Feedback? &
                         Indexpage? &
+                        Interactives? &
                         Knowls? &
                         NavigationHTML? &
                         Platform? &
@@ -256,6 +258,28 @@
             Indexpage =
                 element index-page {
                     attribute ref { text }
+                }
+
+            Interactives =
+                element interactives {
+                    attribute resize-behavior { "fixed-height" | "responsive" }?,
+                    InteractiveTypes*
+                }
+
+            InteractiveTypes =
+                element (
+                    geogebra |
+                    desmos |
+                    calcplot3d |
+                    circuitjs |
+                    d3 |
+                    doenetml |
+                    iframe |
+                    javascript |
+                    jsxgraph |
+                    sage
+                ) {
+                    attribute resize-behavior { "fixed-height" | "responsive" }?
                 }
 
             Knowls =

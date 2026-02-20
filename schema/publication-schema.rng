@@ -565,6 +565,11 @@
   <define name="Html">
     <element name="html">
       <optional>
+        <attribute name="design-width">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="favicon">
           <choice>
             <value>none</value>
@@ -607,6 +612,9 @@
         </optional>
         <optional>
           <ref name="Indexpage"/>
+        </optional>
+        <optional>
+          <ref name="Interactives"/>
         </optional>
         <optional>
           <ref name="Knowls"/>
@@ -738,6 +746,45 @@
   <define name="Indexpage">
     <element name="index-page">
       <attribute name="ref"/>
+    </element>
+  </define>
+  <define name="Interactives">
+    <element name="interactives">
+      <optional>
+        <attribute name="resize-behavior">
+          <choice>
+            <value>fixed-height</value>
+            <value>responsive</value>
+          </choice>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <ref name="InteractiveTypes"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="InteractiveTypes">
+    <element>
+      <choice>
+        <name>geogebra</name>
+        <name>desmos</name>
+        <name>calcplot3d</name>
+        <name>circuitjs</name>
+        <name>d3</name>
+        <name>doenetml</name>
+        <name>iframe</name>
+        <name>javascript</name>
+        <name>jsxgraph</name>
+        <name>sage</name>
+      </choice>
+      <optional>
+        <attribute name="resize-behavior">
+          <choice>
+            <value>fixed-height</value>
+            <value>responsive</value>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
   <define name="Knowls">

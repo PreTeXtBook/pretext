@@ -505,6 +505,7 @@
         <xs:element ref="exercises"/>
         <xs:element ref="feedback"/>
         <xs:element ref="index-page"/>
+        <xs:element ref="interactives"/>
         <xs:element ref="knowl"/>
         <xs:group ref="NavigationHTML"/>
         <xs:element ref="platform"/>
@@ -513,6 +514,7 @@
         <xs:element ref="video"/>
         <xs:group ref="WebworkDynamism"/>
       </xs:choice>
+      <xs:attribute name="design-width" type="xs:integer"/>
       <xs:attribute name="favicon">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -623,6 +625,53 @@
       <xs:attribute name="ref" use="required"/>
     </xs:complexType>
   </xs:element>
+  <xs:element name="interactives">
+    <xs:complexType>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="InteractiveTypes"/>
+      <xs:attribute name="resize-behavior">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="fixed-height"/>
+            <xs:enumeration value="responsive"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="InteractiveTypes">
+    <xs:attribute name="resize-behavior">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="fixed-height"/>
+          <xs:enumeration value="responsive"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:group name="InteractiveTypes">
+    <xs:choice>
+      <xs:element ref="geogebra"/>
+      <xs:element ref="desmos"/>
+      <xs:element ref="calcplot3d"/>
+      <xs:element ref="circuitjs"/>
+      <xs:element ref="d3"/>
+      <xs:element ref="doenetml"/>
+      <xs:element ref="iframe"/>
+      <xs:element ref="javascript"/>
+      <xs:element ref="jsxgraph"/>
+      <xs:element ref="sage"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="geogebra" type="InteractiveTypes"/>
+  <xs:element name="desmos" type="InteractiveTypes"/>
+  <xs:element name="calcplot3d" type="InteractiveTypes"/>
+  <xs:element name="circuitjs" type="InteractiveTypes"/>
+  <xs:element name="d3" type="InteractiveTypes"/>
+  <xs:element name="doenetml" type="InteractiveTypes"/>
+  <xs:element name="iframe" type="InteractiveTypes"/>
+  <xs:element name="javascript" type="InteractiveTypes"/>
+  <xs:element name="jsxgraph" type="InteractiveTypes"/>
+  <xs:element name="sage" type="InteractiveTypes"/>
   <xs:element name="knowl">
     <xs:complexType>
       <xs:attribute name="theorem">
