@@ -8855,6 +8855,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
             </xsl:choose>
         </xsl:when>
+        <xsl:when test="$style = 'down-up-double'">
+            <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <!-- DOUBLE LOW-9 QUOTATION MARK -->
+                    <xsl:text>&#x201e;</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <!-- RIGHT DOUBLE QUOTATION MARK -->
+                    <xsl:text>&#x201d;</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$style = 'down-up-single'">
+            <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <!-- SINGLE LOW-9 QUOTATION MARK -->
+                    <xsl:text>&#x201a;</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <!-- RIGHT SINGLE QUOTATION MARK -->
+                    <xsl:text>&#x2019;</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
         <xsl:otherwise>
             <xsl:message>
                 <xsl:text>PTX:BUG:  a quotation style ("</xsl:text>
