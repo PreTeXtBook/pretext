@@ -8799,6 +8799,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
             </xsl:choose>
         </xsl:when>
+        <xsl:when test="$style = 'angle-double'">
+             <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <!-- LEFT-POINTING DOUBLE ANGLE QUOTATION MARK -->
+                    <xsl:text>&#x00AB;</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <!-- RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK -->
+                    <xsl:text>&#x00BB;</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$style = 'angle-single'">
+             <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <!-- SINGLE LEFT-POINTING ANGLE QUOTATION MARK -->
+                    <xsl:text>&#x2039;</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                     <!-- SINGLE RIGHT-POINTING ANGLE QUOTATION MARK -->
+                    <xsl:text>&#x203A;</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
         <xsl:when test="$style = 'angle-double-space'">
              <xsl:choose>
                 <xsl:when test="$side = 'left'">
