@@ -37,6 +37,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                              -->
 <!--     english-single          ‘word’                           -->
 <!--     english-double          “word”                           -->
+<!--     angle-single            ‹word›                           -->
+<!--     angle-double            «word»                           -->
 <!--     angle-single-space      ‹ word ›                         -->
 <!--     angle-double-space      « word »                         -->
 <!--                                                              -->
