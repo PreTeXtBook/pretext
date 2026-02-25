@@ -8245,7 +8245,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <xsl:when test="$side = 'right'">
                     <xsl:text>\thinspace\guilsinglright{}</xsl:text>
-                    <xsl:text>&#x203A;</xsl:text>
                 </xsl:when>
             </xsl:choose>
         </xsl:when>
