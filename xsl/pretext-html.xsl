@@ -8782,9 +8782,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$style = 'english-double'">
             <xsl:choose>
                 <xsl:when test="$side = 'left'">
+                    <!-- LEFT DOUBLE QUOTATION MARK -->
                     <xsl:text>&#x201c;</xsl:text>
                 </xsl:when>
                 <xsl:when test="$side = 'right'">
+                    <!-- RIGHT DOUBLE QUOTATION MARK -->
                     <xsl:text>&#x201d;</xsl:text>
                 </xsl:when>
             </xsl:choose>
@@ -8792,9 +8794,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$style = 'english-single'">
             <xsl:choose>
                 <xsl:when test="$side = 'left'">
+                    <!-- LEFT SINGLE QUOTATION MARK -->
                     <xsl:text>&#x2018;</xsl:text>
                 </xsl:when>
                 <xsl:when test="$side = 'right'">
+                    <!-- RIGHT SINGLE QUOTATION MARK -->
                     <xsl:text>&#x2019;</xsl:text>
                 </xsl:when>
             </xsl:choose>
