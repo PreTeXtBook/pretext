@@ -8228,6 +8228,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
             </xsl:choose>
         </xsl:when>
+        <xsl:when test="$style = 'angle-double'">
+             <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <xsl:text>\guillemotleft{}</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <xsl:text>\guillemotright{}</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$style = 'angle-single'">
+             <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <xsl:text>\guilsinglleft{}</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <xsl:text>\guilsinglright{}</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
         <xsl:when test="$style = 'angle-double-space'">
              <xsl:choose>
                 <xsl:when test="$side = 'left'">
