@@ -41,6 +41,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     angle-double            «word»                           -->
 <!--     angle-single-space      ‹ word ›                         -->
 <!--     angle-double-space      « word »                         -->
+<!--     down-up-single          ‚word’                           -->
+<!--     down-up-double          „word”                           -->
 <!--                                                              -->
 <!-- Maintainers: please use the  pretext-dev  group to discuss   -->
 <!-- what is best for your language.  If a style exists, then it  -->
