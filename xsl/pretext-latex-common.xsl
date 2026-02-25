@@ -8268,6 +8268,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
             </xsl:choose>
         </xsl:when>
+        <xsl:when test="$style = 'down-up-double'">
+            <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <xsl:text>\quotedblbase{}</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <xsl:text>\textquotedblright{}</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$style = 'down-up-single'">
+            <xsl:choose>
+                <xsl:when test="$side = 'left'">
+                    <xsl:text>\quotesinglbase{}</xsl:text>
+                </xsl:when>
+                <xsl:when test="$side = 'right'">
+                    <xsl:text>\textquoteright{}</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
         <xsl:otherwise>
             <xsl:message>
                 <xsl:text>PTX:BUG:  a quotation style ("</xsl:text>
