@@ -358,22 +358,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- This will override the HTML version, but is patterned -->
-<!-- after same.  Adjustments are: different overall       -->
-<!-- delimiters, and no enclosing div to hide content      -->
-<!-- (thereby avoiding the need for serialization).        -->
-<!-- We *remove* our defintion of \lt since MathJax does   -->
-<!-- it anyway and Jupyter adds it in as part of a         -->
-<!-- conversion to LateX.  Bad practice?  Maybe better to  -->
-<!-- go back to -common and rework the entire latex-macro  -->
-<!-- generation scheme?                                    -->
+<!-- Jupyter uses its own MathJax config, so we cannot load packages and define macros -->
+<!-- in the MJ config as we do in HTML. Instead, we load/define these inline here.     -->
+<!-- We *remove* our defintion of \lt since MathJax does it anyway and Jupyter adds it -->
+<!-- in as part of a conversion to LateX.  Bad practice?  Maybe better to go back to   -->
+<!-- -common and rework the entire latex-macro generation scheme?                      -->
 <xsl:template name="latex-macros">
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
             <xsl:call-template name="inline-math-wrapper">
                 <xsl:with-param name="math">
-                    <xsl:value-of select="$latex-packages-mathjax" />
+                    <xsl:for-each select="$docinfo/math-package">
+                        <!-- must be specified, but can be empty/null -->
+                        <xsl:if test="not(normalize-space(@mathjax-name)) = ''">
+                            <xsl:text>\require{</xsl:text>
+                            <xsl:value-of select="@mathjax-name"/>
+                            <xsl:apply-templates/>
+                            <xsl:text>}</xsl:text>
+                            <!-- all on one line, not very readable, but historical -->
+                        </xsl:if>
+                    </xsl:for-each>
                     <!-- Sequence replacements if \gt and/or \amp need to go -->
                     <xsl:value-of select="str:replace($latex-macros,'\newcommand{\lt}{&lt;}&#xa;', '')"/>
                 </xsl:with-param>
