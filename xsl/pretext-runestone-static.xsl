@@ -1146,6 +1146,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- Don't duplicate xml:id. Nobody should point into the solution. -->
+<!-- Note that any internal link references will point to the original not the copy -->
+<xsl:template match="@xml:id" mode="fillin-solution"/>
+
+<!-- Append to a label -->
+<xsl:template match="@label" mode="fillin-solution">
+    <xsl:attribute name="label">
+        <xsl:value-of select="."/>
+        <xsl:text>-fitb-solution</xsl:text>
+    </xsl:attribute>
+</xsl:template>
+
 <xsl:template match="statement" mode="fillin-solution">
     <xsl:variable name="exercise" select=".."/>
     <solution>
