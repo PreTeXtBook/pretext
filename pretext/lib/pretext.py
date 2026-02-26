@@ -91,6 +91,8 @@ import re
 # contextmanager tools
 import contextlib
 
+import time
+
 # cleanup multiline strings used as source code
 import textwrap
 
@@ -4253,6 +4255,12 @@ def _parse_runestone_services(et):
 
     return (rs_js, rs_css, rs_cdn_url, rs_version)
 
+# Update stringparams with Runestone Services information
+def _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version):
+    stringparams["rs-js"] = rs_js
+    stringparams["rs-css"] = rs_css
+    stringparams["rs-version"] = rs_version
+
 # A helper function to query the latest Runestone
 # Services file, while failing gracefully
 
@@ -4298,15 +4306,8 @@ def _runestone_services(stringparams, ext_rs_methods):
     # Developer is responsible for placement of the right files in _static
     # ** Simply return early with stock values (or None) **
     if "debug.rs.dev" in stringparams:
-        rs_js = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
-        rs_css = "prefix-runtime-libs.css:prefix-runestone.css"
-        rs_cdn_url = None
-        rs_version = "dev"
-        services_xml = None
-        # Return, plus side-effect
-        stringparams["rs-js"] = rs_js
-        stringparams["rs-css"] = rs_css
-        stringparams["rs-version"] = rs_version
+        rs_js, rs_css, rs_cdn_url, rs_version, services_xml = _runestone_debug_service_info()
+        _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
         return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
     # Otherwise, we have a URL pointing to the Runestone server/CDN
@@ -4333,11 +4334,17 @@ def _runestone_services(stringparams, ext_rs_methods):
     rs_js, rs_css, rs_cdn_url, rs_version = _parse_runestone_services(services)
 
     # Return, plus side-effect
-    stringparams["rs-js"] = rs_js
-    stringparams["rs-css"] = rs_css
-    stringparams["rs-version"] = rs_version
+    _set_runestone_stringparams(stringparams, rs_js, rs_css, rs_version)
     return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
+def _runestone_debug_service_info():
+    """Return hardcoded values used for debugging Runestone Services (debug.rs.dev)"""
+    rs_js = "prefix-runtime.bundle.js:prefix-runtime-libs.bundle.js:prefix-runestone.bundle.js"
+    rs_css = "prefix-runtime-libs.css:prefix-runestone.css"
+    rs_cdn_url = None
+    rs_version = "dev"
+    services_xml = None
+    return (rs_js, rs_css, rs_cdn_url, rs_version, services_xml)
 
 def _cdn_runestone_services(stringparams, ext_rs_methods):
     """Version of _runestone_services function to query the Runestone Services file from the PreTeXt html-static CDN"""
@@ -4441,6 +4448,21 @@ def query_runestone_services(services_url):
     # Return the XML from the services response
     return services_response.text
 
+
+def query_existing_runestone_services(dest_dir, stringparams):
+    '''Attempt to get Runestone service data from existing
+       Runestone Services file in _static directory.
+       Returns a tuple of the JS, CSS, CDN URL and version or None'''
+    services_record_files = os.path.join(dest_dir, "_static", "_runestone-services.xml")
+    
+    if os.path.exists(services_record_files):
+        with open(services_record_files, 'r') as f:
+            services_xml = f.read()
+        services = ET.fromstring(services_xml)
+        return _parse_runestone_services(services)
+    else:
+        msg = "query_existing_runestone_services failed: no _runestone-services.xml file found in _static directory"
+        raise RuntimeError(msg)
 
 def _place_runestone_services(tmp_dir, stringparams, ext_rs_methods):
     '''Obtain Runestone Services and place in _static directory of build'''
@@ -4715,6 +4737,9 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
+    log_time_info = stringparams.get("profile-py", False) == "yes"
+    time_logger = Stopwatch("html()", log_time_info)
+
     # Consult publisher file for locations of images
     generated_abs, external_abs = get_managed_directories(xml, pub_file)
     # Consult source for additional files
@@ -4725,6 +4750,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
 
     pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
     include_static_files = get_publisher_variable(pub_vars, 'portable-html') != "yes"
+    time_logger.log("pubvars loaded")
 
     if include_static_files:
         # interrogate Runestone server (or debugging switches) and populate
@@ -4734,6 +4760,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
         # even if we don't need static files, we need to set stringparams for
         # Runestone Services information.
         _cdn_runestone_services(stringparams, ext_rs_methods)
+    time_logger.log("runestone placed")
 
     # support publisher file, and subtree argument
     if pub_file:
@@ -4752,18 +4779,19 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     # place managed directories - some of these (Asymptote HTML) are
     # consulted during the XSL run and so need to be placed beforehand
     copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
+    time_logger.log("managed directories copied")
 
     if include_static_files:
         # Copy js and css, but only if not building portable html
         # place JS in scratch directory
         copy_html_js(tmp_dir)
-
-        # build or copy theme
         build_or_copy_theme(xml, pub_vars, tmp_dir)
+        time_logger.log("css/js copied")
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
+    time_logger.log("xsltproc complete")
 
     if not(include_static_files):
         # remove latex-image generated directories for portable builds
@@ -4798,6 +4826,43 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
             log.info("zip file of HTML output deposited as {}".format(derivedname))
     else:
         raise ValueError("PTX:BUG: HTML file format not recognized")
+
+    time_logger.log("build completed")
+
+
+def html_incremental(xml, pub_file, stringparams, xmlid_root, extra_xsl, dest_dir):
+    """Update an HTML incrementally in place.
+       Depends on _static and generated files already being in the destination directory.
+       Caller must supply:
+       * stringparams supplemented with:
+          * rs-js, rs-css, and rs-version (can use _set_runestone_stringparams to set)
+          * publisher: path to publisher file for use by xsltproc
+    """
+    if not "rs-js" in stringparams:
+        log.error("Incremental build missing needed stringparam(s).  Unable to complete build.")
+        return False
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    log_time_info = stringparams.get("profile-py", False) == "yes"
+    time_logger = Stopwatch("html_incremental()", log_time_info)
+
+    # support publisher file, and subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+
+    # Optional extra XSL could be None, or sanitized full filename
+    if extra_xsl:
+        extraction_xslt = extra_xsl
+    else:
+        extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
+
+    log.info("incremental convertsion of {} to HTML in {}".format(xml, dest_dir))
+    xsltproc(extraction_xslt, xml, None, dest_dir, stringparams)
+    time_logger.log("xsltproc complete")
 
 
 def revealjs(
@@ -6117,6 +6182,29 @@ def place_latex_package_files(dest_dir, journal_name, cache_dir):
         # Copy required resource to the destination directory
         shutil.copy2(file_path, dest_dir)
 
+
+class Stopwatch:
+    """A simple stopwatch class for measuring elapsed time.    """
+    """print_log set to false disables logging of elapsed time """
+
+    def __init__(self, name:str="", print_log:bool=True):
+        self.name = name
+        self.print_log = print_log
+        self.start_time = time.time()
+        self.last_log_time = self.start_time
+    
+    def reset(self):
+        """Reset the log timer to the current time."""
+        self.last_log_time = time.time()
+
+    def log(self, timepoint_description:str=""):
+        """Print a log message with the elapsed time since the last log event."""
+        if self.print_log:
+            cur_time = time.time()
+            elapsed_time = cur_time - self.start_time
+            since_last_log_time = cur_time - self.last_log_time
+            self.reset()
+            log.info(f"** Timing report from {self.name}: {timepoint_description}, {since_last_log_time:.2f}s since last watch reset. {elapsed_time:.2f}s total elapsed time.")
 
 
 ###########################
