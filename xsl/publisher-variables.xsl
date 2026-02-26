@@ -3176,18 +3176,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX Fonts -->
 <!-- ########### -->
 
-<!-- 2022-11-03: experimental, subject to change -->
-
 <xsl:variable name="latex-font-main-regular">
-    <xsl:choose>
-        <!-- having a main font specification *rerquires* a @regular -->
-        <!-- TODO: put in a test here to generate a warning if no @regular -->
-        <xsl:when test="$publication/latex/fonts/main">
-            <xsl:value-of select="$publication/latex/fonts/main/@regular"/>
-        </xsl:when>
-        <!-- empty is signal there is no main font overrride -->
-        <xsl:otherwise/>
-    </xsl:choose>
+    <!-- having a main font specification *requires* a @regular -->
+    <xsl:apply-templates select="$publisher-attribute-options/latex/fonts/main/pi:pub-attribute[@name='regular']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
 
@@ -3455,6 +3446,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <worksheet>
             <pi:pub-attribute name="formatted" default="yes" options="no"/>
         </worksheet>
+        <fonts>
+            <main>
+                <pi:pub-attribute name="regular" default="" freeform="yes"/>
+            </main>
+        </fonts>
     </latex>
     <webwork>
         <pi:pub-attribute name="static-processing" default="webwork2" options="local"/>
