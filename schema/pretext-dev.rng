@@ -702,11 +702,7 @@
     <optional>
       <ref name="Feedback"/>
     </optional>
-    <element name="matches">
-      <oneOrMore>
-        <ref name="Match"/>
-      </oneOrMore>
-    </element>
+    <ref name="Matches"/>
     <zeroOrMore>
       <ref name="Hint"/>
     </zeroOrMore>
@@ -717,6 +713,20 @@
       <ref name="Solution"/>
     </zeroOrMore>
   </define>
+  <define name="Matches">
+    <choice>
+      <element name="matches">
+        <oneOrMore>
+          <ref name="Match"/>
+        </oneOrMore>
+      </element>
+      <element name="cardsort">
+        <oneOrMore>
+          <ref name="Match"/>
+        </oneOrMore>
+      </element>
+    </choice>
+  </define>
   <define name="Match">
     <element name="match">
       <optional>
@@ -725,6 +735,11 @@
         </attribute>
       </optional>
       <element name="premise">
+        <optional>
+          <attribute name="order">
+            <data type="integer"/>
+          </attribute>
+        </optional>
         <mixed>
           <optional>
             <ref name="BlockText"/>
