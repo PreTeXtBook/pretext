@@ -8588,6 +8588,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Inline veil (no block-level descendants) -->
+<xsl:template match="veil[
+  not(descendant::p or descendant::ul or descendant::ol or descendant::table or descendant::figure or descendant::me or descendant::md or descendant::blockquote)
+]">
+  <xsl:variable name="vid" select="generate-id()"/>
+  <span class="veil veil--inline" id="veil-{$vid}">
+    <button
+      class="veil-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="veil-content-{$vid}"
+    >reveal</button>
+    <span
+      class="veil-content"
+      id="veil-content-{$vid}"
+      tabindex="-1"
+      role="button"
+      hidden="hidden"
+      aria-label="Revealed content (click to hide)"
+      data-veil-id="{$vid}"
+    >
+      <xsl:apply-templates/>
+    </span>
+  </span>
+</xsl:template>
+
+<!-- Block/multiline veil (has block-level descendants) -->
+<xsl:template match="veil[
+  descendant::p or descendant::ul or descendant::ol or descendant::table or descendant::figure or descendant::me or descendant::md or descendant::blockquote
+]">
+  <xsl:variable name="vid" select="generate-id()"/>
+  <div class="veil veil--block" id="veil-{$vid}">
+    <button
+      class="veil-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="veil-content-{$vid}"
+    >reveal</button>
+    <div
+      class="veil-content"
+      id="veil-content-{$vid}"
+      tabindex="-1"
+      role="button"
+      hidden="hidden"
+      aria-label="Revealed content (click to hide)"
+      data-veil-id="{$vid}"
+    >
+      <xsl:apply-templates/>
+    </div>
+  </div>
+</xsl:template>
+ 
 <!-- Implication Symbols -->
 <!-- TODO: better names! -->
 <xsl:template match="imply">

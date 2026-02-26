@@ -1273,6 +1273,147 @@ document.addEventListener("click", (ev) => {
     setTimeout(() => button.classList.toggle("copied"), 1000);
 });
 
+/**
+ * <veil> interaction
+ * ------------------
+ * Purpose: Provide show/hide behavior for <veil> in HTML:
+ *   - When hidden: show a small button (.veil-toggle)
+ *   - When revealed: show bordered content (.veil-content) that can be clicked to hide
+ *
+ * Notes:
+ *   - Real <button> for the toggle, with aria-expanded kept in sync
+ *   - Focus moves into revealed content; hiding returns focus to the toggle
+ *   - Enter/Space work on both the toggle and the revealed content
+ *   - Clicks on interactive descendants (<a>, <input>, etc.) do not hide
+ *   - MathJax: On first reveal, request typesetting of the revealed node
+ */
+(function () {
+  'use strict';
+
+  // Prevent double-initialization if this script runs more than once
+  if (window.__PTX_VEIL_INIT__) return;
+  window.__PTX_VEIL_INIT__ = true;
+
+  // Centralized selectors
+  const SEL = {
+    container: '.veil',
+    toggle: '.veil .veil-toggle',
+    revealedContent: '.veil.revealed .veil-content',
+    pressed: '.veil.revealed .veil-content.is-pressed',
+  };
+
+  // Elements considered "interactive" inside .veil-content: don't toggle on them
+  const INTERACTIVE = 'a, button, input, textarea, select, label, summary, details';
+
+  function isInteractive(target) {
+    return !!target.closest(INTERACTIVE);
+  }
+
+  function parts(container) {
+    return {
+      toggle: container.querySelector('.veil-toggle'),
+      content: container.querySelector('.veil-content'),
+    };
+  }
+
+  function typesetMath(node) {
+    // MathJax v3
+    if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+      window.MathJax.typesetPromise([node]).catch(() => {});
+    }
+    // Fallback: MathJax v2
+    else if (window.MathJax && window.MathJax.Hub && typeof window.MathJax.Hub.Queue === 'function') {
+      try { window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub, node]); } catch (_) {}
+    }
+  }
+
+  function reveal(container) {
+    if (!container || container.classList.contains('revealed')) return;
+    const { toggle, content } = parts(container);
+    if (!content) return;
+
+    container.classList.add('revealed');
+    if (toggle) toggle.setAttribute('aria-expanded', 'true');
+    content.removeAttribute('hidden');
+
+    // Move focus into content for keyboard users
+    content.focus({ preventScroll: true });
+
+    // Typeset any newly-visible math
+    typesetMath(content);
+  }
+
+  function hide(container) {
+    if (!container || !container.classList.contains('revealed')) return;
+    const { toggle, content } = parts(container);
+
+    container.classList.remove('revealed');
+    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    if (content) content.setAttribute('hidden', 'hidden');
+
+    // Return focus to the toggle for predictable keyboard flow
+    if (toggle) toggle.focus({ preventScroll: true });
+
+    // Clear pressed visual if present
+    if (content) content.classList.remove('is-pressed');
+  }
+
+  // Click: reveal via chip, hide by clicking inside revealed content (except on interactive children)
+  document.addEventListener('click', (evt) => {
+    const btn = evt.target.closest(SEL.toggle);
+    if (btn) {
+      reveal(btn.closest(SEL.container));
+      return;
+    }
+
+    const content = evt.target.closest(SEL.revealedContent);
+    if (content) {
+      if (isInteractive(evt.target)) return; // allow links/inputs to work normally
+      hide(content.closest(SEL.container));
+    }
+  });
+
+  // Keyboard: Enter/Space on either the chip or the revealed content
+  document.addEventListener('keydown', (evt) => {
+    const key = evt.key;
+    if (key !== 'Enter' && key !== ' ') return;
+
+    const btn = evt.target.closest(SEL.toggle);
+    if (btn) {
+      evt.preventDefault();
+      reveal(btn.closest(SEL.container));
+      return;
+    }
+
+    const content = evt.target.closest(SEL.revealedContent);
+    if (content) {
+      evt.preventDefault();
+      hide(content.closest(SEL.container));
+    }
+  });
+
+  // Pressed visual: add on pointerdown; remove on any pointerup/cancel anywhere
+  document.addEventListener('pointerdown', (evt) => {
+    const content = evt.target.closest(SEL.revealedContent);
+    if (!content || isInteractive(evt.target)) return;
+    content.classList.add('is-pressed');
+  });
+
+  function clearPressed() {
+    document.querySelectorAll(SEL.pressed).forEach((el) => el.classList.remove('is-pressed'));
+  }
+  document.addEventListener('pointerup', clearPressed);
+  document.addEventListener('pointercancel', clearPressed);
+
+  // Initialize ARIA explicitly (useful if HTML was serialized without it)
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll(SEL.toggle).forEach((btn) => {
+      if (!btn.hasAttribute('aria-expanded')) btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const elements = document.querySelectorAll(".clipboardable");
     for (el of elements) {

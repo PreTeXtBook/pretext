@@ -64,7 +64,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
 
-
 <!-- ############### -->
 <!-- Source Analysis -->
 <!-- ############### -->
@@ -1154,6 +1153,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$document-root//m/fillin|$document-root//mrow/fillin">
         <xsl:call-template name="fillin-math"/>
+    </xsl:if>
+    <xsl:if test="$document-root//veil">
+        <xsl:text>%% Veil support (PreTeXt)&#xa;</xsl:text>
+        <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
+        <xsl:text>\usepackage{xcolor}&#xa;</xsl:text>
+
+        <!-- Future hook (publisher boolean). For now, fixed behavior: -->
+        <xsl:text>% \newif\ifPTXVeilRevealInPrint % future publisher-driven boolean&#xa;</xsl:text>
+        <xsl:text>% \PTXVeilRevealInPrintfalse   % default could be set in publisher later&#xa;</xsl:text>
+
+        <!-- Inline/short veil (revealed by underlining, line-wrap aware) -->
+        <xsl:text>\newcommand{\PTXveil}[1]{\uline{#1}}&#xa;</xsl:text>
+        <!-- Block/multiline: show content plainly (no underline) -->
+        <xsl:text>\newcommand{\PTXveilblock}[1]{#1}&#xa;</xsl:text>
     </xsl:if>
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
     <xsl:if test="$document-root//swungdash">
@@ -2639,17 +2652,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Vertical workspace for worksheets and handouts -->
 <xsl:template match="*" mode="workspace">
-    <xsl:variable name="vertical-space">
-        <xsl:apply-templates select="." mode="sanitize-workspace"/>
-    </xsl:variable>
-    <xsl:if test="not($vertical-space = '')">
-        <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
-        <xsl:value-of select="$vertical-space"/>
-        <xsl:text>}%&#xa;</xsl:text>
-    </xsl:if>
+  <xsl:variable name="vertical-space">
+    <xsl:apply-templates select="." mode="sanitize-workspace"/>
+  </xsl:variable>
+  <xsl:if test="not($vertical-space = '')">
+    <xsl:text>\par\rule{\workspacestrutwidth}{</xsl:text>
+    <xsl:value-of select="$vertical-space"/>
+    <xsl:text>}%&#xa;</xsl:text>
+  </xsl:if>
 </xsl:template>
-
-
+  
 <!-- When workspace is requested, we call the modal "sanitize-workspace" which in -->
 <!-- pretext-common returns an empty string if the requested workspace is not in  -->
 <!-- an appropriate division.  But we automatically want the empty string if the  -->
@@ -2658,11 +2670,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: it is important to do this here and not in the  pretext-common           -->
 <!-- stylesheet's template since that is also used for HTML                       -->
 <xsl:template match="*" mode="sanitize-workspace">
-    <xsl:if test="$b-latex-worksheet-formatted">
-        <xsl:apply-imports/>
-    </xsl:if>
+  <xsl:if test="$b-latex-worksheet-formatted">
+    <xsl:apply-imports/>
+  </xsl:if>
 </xsl:template>
 
+<!-- Veil inside math: currently unsupported; warn and print content -->
+<xsl:template match="veil[parent::m or parent::me or parent::men or parent::mrow]">
+  <xsl:message>PTX:WARNING: Veil inside math is not supported in LaTeX; content will be printed as-is.</xsl:message>
+  <xsl:apply-templates/>
+</xsl:template>
+
+<!-- Veil in text contexts -->
+<xsl:template match="veil[not(parent::m or parent::me or parent::men or parent::mrow)]">
+  <xsl:choose>
+    <!-- "Blocky" content: show (no underline) -->
+    <xsl:when test="descendant::p or descendant::me or descendant::md or descendant::ul or descendant::ol or descendant::display or descendant::table or descendant::blockquote">
+      <xsl:text>\PTXveilblock{</xsl:text>
+      <xsl:apply-templates/>
+      <xsl:text>}</xsl:text>
+    </xsl:when>
+    <!-- Inline/short: underline (wrap-aware) -->
+    <xsl:otherwise>
+      <xsl:text>\PTXveil{</xsl:text>
+      <xsl:apply-templates/>
+      <xsl:text>}</xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 <!--##################################-->
 <!-- PTX Divisions to LaTeX Divisions -->
