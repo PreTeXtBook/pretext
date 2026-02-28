@@ -6891,11 +6891,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:choose>
                     <!-- ignore MathJax signals everywhere, then enable selectively -->
                     <xsl:text> ignore-math</xsl:text>
+                    <xsl:text> standalone-page</xsl:text>
                 </xsl:attribute>
                 <!-- assistive "Skip to main content" link    -->
                 <!-- this *must* be first for maximum utility -->
                 <xsl:call-template name="skip-to-content-link" />
-                <xsl:apply-templates select="." mode="primary-navigation"/>
+                <!-- <xsl:apply-templates select="." mode="primary-navigation"/> -->
                 <xsl:call-template name="latex-macros" />
                  <header id="ptx-masthead" class="ptx-masthead">
                     <div class="ptx-banner">
@@ -6932,16 +6933,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- This seemed to not be enough, until Google Search went away  -->
                     <!-- <xsl:apply-templates select="." mode="primary-navigation" /> -->
                 </header> <!-- masthead -->
-                <div class="ptx-page" style="max-width: 1600px">
+                <div class="ptx-page">
                     <!-- With sidebars killed, this stuff is extraneous     -->
                     <!-- <xsl:apply-templates select="." mode="sidebars" /> -->
                     <main class="ptx-main">
-                        <!-- relax the 600px width restriction, so with    -->
-                        <!-- responsive videos they grow to be much bigger -->
-                        <div id="ptx-content" class="ptx-content" style="max-width: 1600px">
+                        <div id="ptx-content">
                             <!-- This is content passed in as a parameter -->
                             <xsl:copy-of select="$content" />
-                          </div>
+                        </div>
                     </main>
                 </div>
                 <xsl:copy-of select="$file-wrap-basic-endbody-cache"/>
@@ -9819,7 +9818,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "title" is handled in knowl creation     -->
     <!-- div.solutions is good, but replacable?   -->
     <xsl:if test="instructions">
-        <div class="instructions">
+        <div class="instructions interactive__instructions">
             <xsl:apply-templates select="instructions" />
         </div>
     </xsl:if>
@@ -10674,19 +10673,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="resize-behavior">
         <xsl:apply-templates select="." mode="get-resize-behavior"/>
     </xsl:variable>
+    <!-- tag wide interactives with some data attributes that styling/js can use -->
+    <xsl:if test="@design-width != ''">
+        <xsl:attribute name="data-design-width">
+            <xsl:value-of select="@design-width"/>
+        </xsl:attribute>
+        <!-- css can't easily test numerics, so provide hint this content is wide --> 
+        <xsl:if test="@design-width > $html-design-width">
+            <xsl:attribute name="data-design-width-wide"/>
+        </xsl:if>
+    </xsl:if>
     <xsl:choose>
         <xsl:when test="$resize-behavior = 'responsive'">
             <xsl:attribute name="style">
                 <xsl:variable name="max-width">
-                      <xsl:choose>
-                          <xsl:when test="@design-width != ''">
-                              <xsl:value-of select="@design-width"/>
-                              <xsl:text>px</xsl:text>
-                          </xsl:when>
-                          <xsl:otherwise>
-                              <xsl:apply-templates select="." mode="get-width-percentage"/>
-                          </xsl:otherwise>
-                        </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="@design-width != ''">
+                            <xsl:value-of select="@design-width"/>
+                            <xsl:text>px</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="." mode="get-width-percentage"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:variable>
                 <xsl:variable name="aspect-ratio">
                     <xsl:apply-templates select="." mode="get-aspect-ratio">
@@ -11258,6 +11267,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="pretext-js"/>
     <xsl:call-template name="runestone-header"/>
     <xsl:call-template name="diagcess-header"/>
+    <xsl:call-template name="lti-iframe-resizer"/>
 </xsl:variable>
 
 <!-- Content used by simple-file-wrap -->
@@ -11267,7 +11277,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="favicon"/>
     <xsl:call-template name="webwork-js"/>
     <xsl:call-template name="stack-js"/>
-    <xsl:call-template name="lti-iframe-resizer"/>
     <xsl:call-template name="syntax-highlight"/>
     <xsl:call-template name="hypothesis-annotation" />
     <xsl:call-template name="geogebra" />

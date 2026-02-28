@@ -8,6 +8,20 @@
   }
 }
 
+.interactive__instructions {
+  // ensure interactive instructions stay normal width
+  max-width: var(--base-content-width);
+}
+
+// center instructions and iframes on standalone pages
+.standalone-page .interactive-iframe-container {
+  margin-left: auto;
+  margin-right: auto;
+}
+.standalone-page .interactive__instructions {
+  margin: 5px auto 20px;
+}
+
 .interactive-iframe-container__opener {
   display: block;
   margin-right: 5px;
@@ -29,6 +43,10 @@
   + .instructions + figcaption {
     clear: left;
   }
-  
-  + .instructions { margin-top: .5em; }
+
+  + .instructions {
+    margin-top: .5em;
+  }
 }
+
+.interactive-iframe-container + .interactive {}
