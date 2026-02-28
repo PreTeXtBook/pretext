@@ -6933,16 +6933,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- This seemed to not be enough, until Google Search went away  -->
                     <!-- <xsl:apply-templates select="." mode="primary-navigation" /> -->
                 </header> <!-- masthead -->
-                <div class="ptx-page" style="max-width: 1600px">
+                <div class="ptx-page">
                     <!-- With sidebars killed, this stuff is extraneous     -->
                     <!-- <xsl:apply-templates select="." mode="sidebars" /> -->
                     <main class="ptx-main">
-                        <!-- relax the 600px width restriction, so with    -->
-                        <!-- responsive videos they grow to be much bigger -->
-                        <div id="ptx-content" class="ptx-content" style="max-width: 1600px">
+                        <div id="ptx-content">
                             <!-- This is content passed in as a parameter -->
                             <xsl:copy-of select="$content" />
-                          </div>
+                        </div>
                     </main>
                 </div>
                 <xsl:copy-of select="$file-wrap-basic-endbody-cache"/>
