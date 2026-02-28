@@ -10673,6 +10673,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="resize-behavior">
         <xsl:apply-templates select="." mode="get-resize-behavior"/>
     </xsl:variable>
+    <!-- tag wide interactives with some data attributes that styling/js can use -->
+    <xsl:if test="@design-width != ''">
+        <xsl:attribute name="data-design-width">
+            <xsl:value-of select="@design-width"/>
+        </xsl:attribute>
+        <!-- css can't easily test numerics, so provide hint this content is wide --> 
+        <xsl:if test="@design-width > $html-design-width">
+            <xsl:attribute name="data-design-width-wide"/>
+        </xsl:if>
+    </xsl:if>
     <xsl:choose>
         <xsl:when test="$resize-behavior = 'responsive'">
             <xsl:attribute name="style">
