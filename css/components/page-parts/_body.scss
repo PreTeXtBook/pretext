@@ -1,5 +1,6 @@
 // Body level styling
 $max-width: 1200px !default;  // 0 == no max width
+$standalone-max-width: 1600px !default;  // used for iframe standalones
 
 $content-width: 600px !default;                 // without padding
 $content-side-padding: 48px !default;
@@ -127,4 +128,9 @@ body.pretext > a.assistive {
       margin: 0 -7px; // current icons have lots of whitespace
     }
   }
+}
+
+// Give iframe popout pages 
+body.standalone-page .ptx-page {
+    max-width: $standalone-max-width;
 }
