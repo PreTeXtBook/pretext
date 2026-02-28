@@ -70,6 +70,11 @@ $page-width: $sidebar-total-width + $main-width + $main-right-margin;
   margin-right: $sidebar-total-width;
 }
 
+.standalone-page .ptx-main {
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .ptx-sidebar.hidden + .ptx-main {
   margin-left: $sidebar-total-width;
 }

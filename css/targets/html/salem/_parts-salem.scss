@@ -41,6 +41,10 @@ $sidebar-breakpoint: $content-width + $sidebar-width + $content-side-padding * 2
   --page-width: 1100px;
 }
 
+.standalone-page {
+  --page-width: 1600px;
+}
+
 @mixin page-block {
   @at-root {
     @media screen and (width > 800px) {
