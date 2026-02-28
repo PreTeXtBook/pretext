@@ -6896,7 +6896,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- assistive "Skip to main content" link    -->
                 <!-- this *must* be first for maximum utility -->
                 <xsl:call-template name="skip-to-content-link" />
-                <xsl:apply-templates select="." mode="primary-navigation"/>
                 <xsl:call-template name="latex-macros" />
                  <header id="ptx-masthead" class="ptx-masthead">
                     <div class="ptx-banner">
@@ -6930,8 +6929,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:if>
                         </div>  <!-- title-container -->
                     </div> <!-- banner -->
-                    <!-- This seemed to not be enough, until Google Search went away  -->
-                    <!-- <xsl:apply-templates select="." mode="primary-navigation" /> -->
                 </header> <!-- masthead -->
                 <div class="ptx-page">
                     <!-- With sidebars killed, this stuff is extraneous     -->
