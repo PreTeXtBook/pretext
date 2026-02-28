@@ -6891,6 +6891,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:choose>
                     <!-- ignore MathJax signals everywhere, then enable selectively -->
                     <xsl:text> ignore-math</xsl:text>
+                    <xsl:text> standalone-page</xsl:text>
                 </xsl:attribute>
                 <!-- assistive "Skip to main content" link    -->
                 <!-- this *must* be first for maximum utility -->
