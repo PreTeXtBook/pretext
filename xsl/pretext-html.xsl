@@ -11259,6 +11259,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="pretext-js"/>
     <xsl:call-template name="runestone-header"/>
     <xsl:call-template name="diagcess-header"/>
+    <xsl:call-template name="lti-iframe-resizer"/>
 </xsl:variable>
 
 <!-- Content used by simple-file-wrap -->
@@ -11268,7 +11269,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="favicon"/>
     <xsl:call-template name="webwork-js"/>
     <xsl:call-template name="stack-js"/>
-    <xsl:call-template name="lti-iframe-resizer"/>
     <xsl:call-template name="syntax-highlight"/>
     <xsl:call-template name="hypothesis-annotation" />
     <xsl:call-template name="geogebra" />
