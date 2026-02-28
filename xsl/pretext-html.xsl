@@ -10678,15 +10678,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$resize-behavior = 'responsive'">
             <xsl:attribute name="style">
                 <xsl:variable name="max-width">
-                      <xsl:choose>
-                          <xsl:when test="@design-width != ''">
-                              <xsl:value-of select="@design-width"/>
-                              <xsl:text>px</xsl:text>
-                          </xsl:when>
-                          <xsl:otherwise>
-                              <xsl:apply-templates select="." mode="get-width-percentage"/>
-                          </xsl:otherwise>
-                        </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="@design-width != ''">
+                            <xsl:value-of select="@design-width"/>
+                            <xsl:text>px</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="." mode="get-width-percentage"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:variable>
                 <xsl:variable name="aspect-ratio">
                     <xsl:apply-templates select="." mode="get-aspect-ratio">
