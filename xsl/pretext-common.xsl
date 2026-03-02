@@ -4190,7 +4190,7 @@ Book (with parts), "section" at level 3
             <xsl:number from="book|article|letter|memo" level="any" count="mrow[@pi:numbered = 'yes']"/>
         </xsl:when>
         <xsl:when test="$subtree-level=0">
-            <xsl:number from="part" level="any" count="mmrow[@pi:numbered = 'yes']"/>
+            <xsl:number from="part" level="any" count="mrow[@pi:numbered = 'yes']"/>
             </xsl:when>
         <xsl:when test="$subtree-level=1">
             <xsl:number from="chapter|book/backmatter/appendix" level="any" count="mrow[@pi:numbered = 'yes']"/>
