@@ -3181,6 +3181,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/latex/fonts/main/pi:pub-attribute[@name='regular']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<xsl:variable name="latex-font-main-options">
+    <!-- having a main font specification *requires* a @regular -->
+    <xsl:apply-templates select="$publisher-attribute-options/latex/fonts/main/pi:pub-attribute[@name='options']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 
 <!-- ########################### -->
 <!-- Reveal.js Slideshow Options -->
@@ -3449,6 +3454,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <fonts>
             <main>
                 <pi:pub-attribute name="regular" default="" freeform="yes"/>
+                <pi:pub-attribute name="options" default="" freeform="yes"/>
             </main>
         </fonts>
     </latex>
