@@ -3939,7 +3939,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($latex-font-main-regular = '')">
         <xsl:text>\setmainfont{</xsl:text>
         <xsl:value-of select="$latex-font-main-regular"/>
-        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>}</xsl:text>
+        <!-- optonally add font options -->
+        <xsl:if test="not($latex-font-main-options = '')">
+            <xsl:text>[</xsl:text>
+            <xsl:value-of select="$latex-font-main-options"/>
+            <xsl:text>]</xsl:text>
+        </xsl:if>
+        <!-- end the line (in any event) -->
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
