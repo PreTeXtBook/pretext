@@ -170,6 +170,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- you may not see a change.  You need to use the  geometery  package  -->
         <!-- to set a smaller (logical) page size.                               -->
         <page right-alignment="flush" bottom-alignment="ragged" crop-marks="none"/>
+        <!-- Uncomment this to experiment with a LaTeX OTF font -->
+        <!-- commonly included in TeX distributions.  Be sure   -->
+        <!-- to use the  xelatex  engine (the default).         -->
+        <!--
+        <fonts>
+            <main regular="TeX Gyre Pagella" options="Numbers={SlashedZero}"/>
+        </fonts>
+        -->
         <!-- worksheets are formatted separately by default.   -->
         <!-- change to "no" to format as regular sections.     -->
         <worksheet formatted="yes"/>
