@@ -394,6 +394,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-engine-support"/>
     <xsl:call-template name="font-support"/>
     <xsl:call-template name="math-packages"/>
+    <xsl:call-template name="text-symbols"/>
     <xsl:call-template name="pdfpages-package"/>
     <xsl:call-template name="division-titles"/>
     <xsl:call-template name="semantic-macros"/>
@@ -924,6 +925,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% can make this even bigger by overriding with  latex.preamble.late  processing option&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Various symbols to use with text.  "pifont" package should -->
+<!-- be reliable for use with both pdflatex and xelatex.        -->
+<xsl:template name="text-symbols">
+    <xsl:text>%% Symbols for use in text mode (i.e. not in math mode)&#xa;</xsl:text>
+    <xsl:text>\usepackage{pifont}&#xa;</xsl:text>
+    <xsl:text>%% Solid geometric shapes to mark ends of environments&#xa;</xsl:text>
+    <!-- solid black disc (bigger than a bullet) is #108 -->
+    <!-- various possibilities exist for stars           -->
+    <xsl:text>\newcommand{\ptxsquare}{\ding{110}}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\ptxtriangle}{\ding{115}}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\ptxdiamond}{\ding{117}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- pdfpages package for covers -->
@@ -3028,7 +3042,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\NewDocumentEnvironment{solution</xsl:text>
     <xsl:value-of select="local-name(.)"/>
     <xsl:text>}{m}&#xa;</xsl:text>
-    <xsl:text>{\par\smallskip\noindent\textit{#1}.\space\space}{\space\space\hspace*{\stretch{1}}\(\blacksquare\)\par\smallskip}&#xa;</xsl:text>
+    <xsl:text>{\par\smallskip\noindent\textit{#1}.\space\space}{\space\space\hspace*{\stretch{1}}\ptxsquare\par\smallskip}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "case" (of a PROOF-LIKE) -->
@@ -3496,7 +3510,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Instead, this template is simply not employed   -->
 <!-- for the "solution proof" case.                  -->
 <xsl:template match="&PROOF-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, fonttitle=\blocktitlefont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)},&#xa;</xsl:text>
+    <xsl:text>bwminimalstyle, fonttitle=\blocktitlefont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\ptxsquare},&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -3560,11 +3574,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="&DEFINITION-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, before upper app={\setparstyle}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\ptxdiamond}, before upper app={\setparstyle}, </xsl:text>
 </xsl:template>
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, before upper app={\setparstyle}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\ptxtriangle}, before upper app={\setparstyle}, </xsl:text>
 </xsl:template>
 
 <!-- FIGURE-LIKE: -->
