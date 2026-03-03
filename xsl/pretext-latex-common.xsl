@@ -938,6 +938,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newcommand{\ptxsquare}{\ding{110}}&#xa;</xsl:text>
     <xsl:text>\newcommand{\ptxtriangle}{\ding{115}}&#xa;</xsl:text>
     <xsl:text>\newcommand{\ptxdiamond}{\ding{117}}&#xa;</xsl:text>
+    <xsl:text>%% Markers for unordered list items&#xa;</xsl:text>
+    <xsl:text>\newcommand{\ptxlistdisc}{\raisebox{0.3ex}{\textbullet}}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\ptxlistcircle}{\raisebox{0.3ex}{\textopenbullet}}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\ptxlistsquare}{\raisebox{0.4ex}{\scalebox{0.5}{\ding{110}}}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- pdfpages package for covers -->
@@ -7541,9 +7545,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
    <xsl:choose>
-        <xsl:when test="$format-code = 'disc'">\textbullet</xsl:when>
-        <xsl:when test="$format-code = 'circle'">$\circ$</xsl:when>
-        <xsl:when test="$format-code = 'square'">$\blacksquare$</xsl:when>
+        <xsl:when test="$format-code = 'disc'">\ptxlistdisc</xsl:when>
+        <xsl:when test="$format-code = 'circle'">\ptxlistcircle</xsl:when>
+        <xsl:when test="$format-code = 'square'">\ptxlistsquare</xsl:when>
         <xsl:when test="$format-code = 'none'"></xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG: bad unordered list label format code in LaTeX conversion</xsl:message>
@@ -7557,17 +7561,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is similar to Firefox default choices -->
 <!-- but different in the fourth slot           -->
 <!-- disc, circle, square, disc                 -->
-<!-- TODO: cannot find text mode filled black square symbol -->
-<!-- TODO: textcomp (now in main latex) has \textopenbullet (unexamined) -->
 <xsl:template match="*" mode="latex-unordered-list-label-default">
     <xsl:variable name="level">
         <xsl:apply-templates select="." mode="unordered-list-level" />
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$level='0'">\textbullet</xsl:when>
-        <xsl:when test="$level='1'">$\circ$</xsl:when>
-        <xsl:when test="$level='2'">$\blacksquare$</xsl:when>
-        <xsl:when test="$level='3'">\textbullet</xsl:when>
+        <xsl:when test="$level='0'">\ptxlistdisc</xsl:when>
+        <xsl:when test="$level='1'">\ptxlistcircle</xsl:when>
+        <xsl:when test="$level='2'">\ptxlistsquare</xsl:when>
+        <xsl:when test="$level='3'">\ptxlistdisc</xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:ERROR: unordered list is more than 4 levels deep</xsl:message>
         </xsl:otherwise>

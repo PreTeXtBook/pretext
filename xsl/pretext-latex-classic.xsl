@@ -139,6 +139,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="latex-engine-support"/>
     <xsl:call-template name="font-support"/>
     <xsl:call-template name="math-packages"/>
+    <xsl:call-template name="text-symbols"/>
     <xsl:call-template name="pdfpages-package"/>
     <!--<xsl:call-template name="division-titles"/>-->
     <xsl:call-template name="semantic-macros"/>
