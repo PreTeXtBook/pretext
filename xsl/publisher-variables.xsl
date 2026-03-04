@@ -3180,6 +3180,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- having a main font specification *requires* a @regular -->
     <xsl:apply-templates select="$publisher-attribute-options/latex/fonts/main/pi:pub-attribute[@name='regular']" mode="set-pubfile-variable"/>
 </xsl:variable>
+<!-- A convenience boolean variable for indication of alternate main font -->
+<xsl:variable name="b-alternate-main-font" select="not($latex-font-main-regular = '')"/>
 
 <xsl:variable name="latex-font-main-options">
     <!-- having a main font specification *requires* a @regular -->

@@ -3954,8 +3954,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% http://tex.stackexchange.com/questions/115321&#xa;</xsl:text>
     <xsl:text>%% /how-to-optimize-latin-modern-font-with-xelatex&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
-    <xsl:if test="not($latex-font-main-regular = '')">
+    <xsl:if test="$b-alternate-main-font">
         <xsl:text>\setmainfont{</xsl:text>
+        <!-- guaranteed non-empty string by enclosing boolean -->
         <xsl:value-of select="$latex-font-main-regular"/>
         <xsl:text>}</xsl:text>
         <!-- optonally add font options -->
