@@ -9792,7 +9792,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="resize-behavior">
                 <xsl:apply-templates select="." mode="get-resize-behavior"/>
             </xsl:variable>
-            <xsl:if test="$is-standalone = false() and $resize-behavior = 'responsive'">
+            <xsl:if test="$is-standalone = false()">
                 <div class="interactive-iframe-container__opener">
                     <xsl:variable name="if-filename">
                         <xsl:apply-templates select="." mode="standalone-filename" />
