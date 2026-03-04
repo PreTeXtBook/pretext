@@ -126,6 +126,9 @@ body.pretext > a.assistive:focus {
 .ptx-content-footer .button .icon {
   margin: 0 -7px;
 }
+body.standalone-page .ptx-page {
+  max-width: 1600px;
+}
 .ptx-masthead {
   position: relative;
   background: var(--banner-background);
@@ -760,7 +763,7 @@ body.pretext > a.assistive:focus {
   margin-left: auto;
 }
 @container ptx-main (width > 640px) {
-  :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, iframe[design-width]) {
+  :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
     --max-width: calc(min((100cqw - 2 * 20px), 10000px));
     min-width: 100%;
     clear: right;
@@ -936,6 +939,20 @@ body.pretext > a.assistive:focus {
   color: var(--tocitem-highlight-text-color);
   background-color: var(--tocitem-highlight-background);
   border-color: var(--tocitem-highlight-border-color);
+}
+.standalone-page {
+  margin: 0;
+  padding: 0;
+}
+.standalone-page .ptx-page {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.standalone-page .ptx-main {
+  margin-right: auto;
+  margin-left: auto;
+  box-shadow: none;
+  max-width: 100%;
 }
 .aside-like > .knowl__link {
   color: var(--aside-like-link-color);
@@ -3377,6 +3394,16 @@ ul[data-component=timedAssessment] {
   margin-left: auto;
   margin-right: auto;
   display: block;
+}
+.interactive__instructions {
+  max-width: var(--base-content-width);
+}
+.standalone-page .interactive-iframe-container {
+  margin-left: auto;
+  margin-right: auto;
+}
+.standalone-page .interactive__instructions {
+  margin: 5px auto 20px;
 }
 .interactive-iframe-container__opener {
   display: block;
