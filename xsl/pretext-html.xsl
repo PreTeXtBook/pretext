@@ -9806,7 +9806,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:with-param name="string-id" select="'open-new-tab'"/>
                         </xsl:apply-templates>
                     </xsl:variable>
-                    <a href="{$if-filename}" title="{$label}" aria-label="{$label}">
+                    <a href="{$if-filename}" title="{$label}" aria-label="{$label}" target="_blank">
                         <xsl:call-template name="insert-symbol">
                             <xsl:with-param name="name" select="'open_in_new'"/>
                         </xsl:call-template>
