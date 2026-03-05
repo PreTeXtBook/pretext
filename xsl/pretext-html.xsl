@@ -13276,11 +13276,6 @@ TODO:
                         <map key="packages">
                             <array key="[+]">
                                 <string>base</string>
-                                <!-- 2023-10-19: this provides backward-compatible behavior -->
-                                <!-- and could be removed at the first sign of trouble      -->
-                                <xsl:if test="not(contains($latex-packages-mathjax, '\require{extpfeil}'))">
-                                    <string>extpfeil</string>
-                                </xsl:if>
                                 <string>ams</string>
                                 <string>amscd</string>
                                 <string>color</string>
@@ -13321,7 +13316,6 @@ TODO:
                     <map key="loader">
                         <array key="load">
                             <string>input/asciimath</string>
-                            <string>[tex]/extpfeil</string>
                             <string>[tex]/amscd</string>
                             <string>[tex]/color</string>
                             <string>[tex]/newcommand</string>
