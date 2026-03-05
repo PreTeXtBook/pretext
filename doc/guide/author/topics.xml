@@ -1698,9 +1698,9 @@
                 <cline>&lt;math-package latex-name="xfrac" mathjax-name=""/&gt;</cline>
             </cd>See the <xref ref="mathematics-latex-packages"/> for more details.</p>
 
-            <p>Historically, we provided good internal support for the <latex/> <c>extpfeil</c> package of extensible arrows, even though the <latex/> version has some severe shortcomings.  As of 2023-10-19, it is now an author's responsibility to <em>elect</em> this package, along with the reliable MathJax extension of the same name.  Add to <tag>docinfo</tag>:<cd>
+            <p>Historically, we provided good internal support for the <latex/> <c>extpfeil</c> package of extensible arrows, even though the <latex/> version has some severe shortcomings.  As of 2023-10-19, it is now an author's responsibility to <em>elect</em> this package, along with the reliable MathJax extension of the same name.  And as of 2026-03-04 we have removed all attempts at backward-compatibility.  Add to <tag>docinfo</tag>:<cd>
                 <cline>&lt;math-package latex-name="extpfeil" mathjax-name="extpfeil"/&gt;</cline>
-            </cd>See the <xref ref="mathematics-latex-packages"/> for more details.</p>
+            </cd>See the <xref ref="mathematics-latex-packages"/> for more details.  Note that this package can have several adverse impacts on the conversion to <init>PDF</init> via <latex/>.</p>
         </subsection>
 
         <subsection xml:id="mathematics-notes">
