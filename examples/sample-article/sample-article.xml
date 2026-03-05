@@ -55,7 +55,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <math-package latex-name="cancel" mathjax-name="cancel"/>
         <!-- Superior bevelled/slanted fractions in LaTeX output (only) -->
         <math-package latex-name="xfrac" mathjax-name=""/>
-        <math-package latex-name="extpfeil" mathjax-name="extpfeil"/>
+        <!-- 2026-03-04: once we tested the "extpfeil" package but it     -->
+        <!-- is a bad actor in LaTeX files, loading "amssymb" and using   -->
+        <!-- "calc" with a redefined \setlength (or something like that). -->
+        <!-- We tested this device here with an "\xmapsto" macro in math. -->
         <!--
         TeX/LaTeX macros can be written in the usual way.
         Whitespace and line breaks are irrelevant here.
@@ -2003,8 +2006,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
                     <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
                 </md><notation><usage><m>\nabla</m></usage><description>gradient operator</description></notation></p>
-
-                <p>Historically, we provided internal support for the <latex/> package <c>extpfeil</c>.  As of 2023-10-19 this has become an author election (see the <tag>docinfo</tag> section in the source of this document).  We preeserve a small test that this extensible arrows library is being included properly:<md>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</md></p>
 
                 <p>Look back at the top of the source file of this document to see how to include your <tex/> macros just once.  For best results keep your macros simple and semantic.</p>
 
