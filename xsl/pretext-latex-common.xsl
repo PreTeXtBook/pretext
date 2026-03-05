@@ -2484,34 +2484,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- We could use contains() on the 5 types of arrows  -->
     <!-- to really defend against this problematic package -->
-    <xsl:if test="$document-root//m|$document-root//md">
-        <xsl:choose>
-            <xsl:when test="contains($latex-packages, '\usepackage{extpfeil}')">
-                <xsl:text>%% You have elected to load the LaTeX "extpfeil" package&#xa;</xsl:text>
-                <xsl:text>%% for certain extensible arrows, and it should appear just below.&#xa;</xsl:text>
-                <xsl:text>%% This package has numerous shortcomings leading to conflicts with&#xa;</xsl:text>
-                <xsl:text>%% packages like "stmaryrd" and our manipulations of lengths to support&#xa;</xsl:text>
-                <xsl:text>%% variable thickness of rules in tables.  It should appear late&#xa;</xsl:text>
-                <xsl:text>%% in the preamble in an effort to mitigate these shortcomings.&#xa;</xsl:text>
-            </xsl:when>
-            <!-- 2023-10-19: at the first hint of trouble with automatic loading of this package,     -->
-            <!-- feel free to jettison the "otherwise" clause.  Then move the warning (in the "when") -->
-            <!-- to simply condition on the appearance in the list of packages being included.        -->
-            <!-- Following preserves backward-compatible behavior.                                    -->
-            <xsl:otherwise>
-                <xsl:text>%% extpfeil package for certain extensible arrows,&#xa;</xsl:text>
-                <xsl:text>%% as also provided by MathJax extension of the same name&#xa;</xsl:text>
-                <xsl:text>%% NB: this package loads mtools, which loads calc, which redefines&#xa;</xsl:text>
-                <xsl:text>%%     \setlength, so it can be removed if it seems to be in the &#xa;</xsl:text>
-                <xsl:text>%%     way and your math does not use:&#xa;</xsl:text>
-                <xsl:text>%%     &#xa;</xsl:text>
-                <xsl:text>%%     \xtwoheadrightarrow, \xtwoheadleftarrow, \xmapsto, \xlongequal, \xtofrom&#xa;</xsl:text>
-                <xsl:text>%%     &#xa;</xsl:text>
-                <xsl:text>%%     we have had to be extra careful with variable thickness&#xa;</xsl:text>
-                <xsl:text>%%     lines in tables, and so also load this package late&#xa;</xsl:text>
-                <xsl:text>\usepackage{extpfeil}&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:if test="contains($latex-packages, '\usepackage{extpfeil}')">
+        <xsl:text>%% You have elected to load the LaTeX "extpfeil" package&#xa;</xsl:text>
+        <xsl:text>%% for certain extensible arrows, and it should appear just below.&#xa;</xsl:text>
+        <xsl:text>%% This package has numerous shortcomings leading to conflicts with&#xa;</xsl:text>
+        <xsl:text>%% packages like "stmaryrd" and our manipulations of lengths to support&#xa;</xsl:text>
+        <xsl:text>%% variable thickness of rules in tables.  It should appear late&#xa;</xsl:text>
+        <xsl:text>%% in the preamble in an effort to mitigate these shortcomings.&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="not($latex-packages = '')">
         <xsl:text>%% Begin: Author-provided TeX/LaTeX packages&#xa;</xsl:text>
