@@ -3188,6 +3188,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/latex/fonts/main/pi:pub-attribute[@name='options']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<xsl:variable name="latex-font-math-regular">
+    <!-- having a math font specification *requires* a @regular -->
+    <xsl:apply-templates select="$publisher-attribute-options/latex/fonts/math/pi:pub-attribute[@name='regular']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<!-- A convenience boolean variable for indication of alternate math font -->
+<xsl:variable name="b-alternate-math-font" select="not($latex-font-math-regular = '')"/>
+
+<xsl:variable name="latex-font-math-options">
+    <!-- having a math font specification *requires* a @regular -->
+    <xsl:apply-templates select="$publisher-attribute-options/latex/fonts/math/pi:pub-attribute[@name='options']" mode="set-pubfile-variable"/>
+</xsl:variable>
 
 <!-- ########################### -->
 <!-- Reveal.js Slideshow Options -->
@@ -3458,6 +3469,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <pi:pub-attribute name="regular" default="" freeform="yes"/>
                 <pi:pub-attribute name="options" default="" freeform="yes"/>
             </main>
+            <math>
+                <pi:pub-attribute name="regular" default="" freeform="yes"/>
+                <pi:pub-attribute name="options" default="" freeform="yes"/>
+            </math>
         </fonts>
     </latex>
     <webwork>
