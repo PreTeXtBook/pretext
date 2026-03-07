@@ -402,9 +402,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <section xml:id="section-sage-cells" label="section-sage-cells">
             <title>Computing Integrals with Sage (<m>\int</m>)</title>
-            <!-- A version of the title with no markup at all,     -->
-            <!-- math is now a Unicode symbol for an integral sign -->
-            <plaintitle>Computing Integrals with Sage (&#x222B;)</plaintitle>
+            <!-- A version of the title with no markup at all, in -->
+            <!-- order to cooperate with an (optional) math font  -->
+            <shorttitle>Computing Integrals with Sage</shorttitle>
             <!-- Index testing, semi-realistic -->
             <idx><h>Sage</h><h>integration</h></idx>
             <idx><h>Sage</h><h>integration</h><h>cell</h></idx>
