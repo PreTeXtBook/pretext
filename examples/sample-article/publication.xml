@@ -170,12 +170,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- you may not see a change.  You need to use the  geometery  package  -->
         <!-- to set a smaller (logical) page size.                               -->
         <page right-alignment="flush" bottom-alignment="ragged" crop-marks="none"/>
-        <!-- Uncomment this to experiment with a LaTeX OTF font -->
-        <!-- commonly included in TeX distributions.  Be sure   -->
-        <!-- to use the  xelatex  engine (the default).         -->
+        <!-- Uncomment this to experiment with a LaTeX OTF font              -->
+        <!-- commonly included in TeX distributions.  Be sure                -->
+        <!-- to use the  xelatex  engine (the default).                      -->
+        <!-- TeX Gyre Pagella: has slashed zeros that go the *opposite* way  -->
+        <!-- from the slashed zeros in our Inconsolata monospace font.       -->
+        <!-- TeX Gyre Pagella Math: with a "french" style, Greek letters     -->
+        <!-- *and* upper-case Latin letters will be upright in mathematics.  -->
         <!--
         <fonts>
             <main regular="TeX Gyre Pagella" options="Numbers={SlashedZero}"/>
+            <math regular="TeX Gyre Pagella Math" options="math-style=french"/>
         </fonts>
         -->
         <!-- worksheets are formatted separately by default.   -->
