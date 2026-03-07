@@ -735,6 +735,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="font-xelatex-main"/>
     <xsl:text>%% end:   xelatex main font ("font-xelatex-main" template)&#xa;</xsl:text>
     <!--  -->
+    <xsl:text>%% begin: xelatex math font ("font-xelatex-math" template)&#xa;</xsl:text>
+    <xsl:call-template name="font-xelatex-math"/>
+    <xsl:text>%% end:   xelatex math font ("font-xelatex-math" template)&#xa;</xsl:text>
+    <!--  -->
     <xsl:text>%% begin: xelatex mono font ("font-xelatex-mono" template)&#xa;</xsl:text>
     <xsl:text>%% (conditional on non-trivial uses being present in source)&#xa;</xsl:text>
     <xsl:call-template name="font-xelatex-mono"/>
@@ -914,7 +918,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Symbols, align environment, commutative diagrams, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amscd}&#xa;</xsl:text>
-    <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
+    <!-- AMS symbol package clashes with the  unicode-math    -->
+    <!-- package as they both try to define identical macros. -->
+    <!-- First problem seems to be the  \eth  macro.          -->
+    <xsl:if test="not($b-alternate-math-font)">
+        <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% allow page breaks within display mathematics anywhere&#xa;</xsl:text>
     <xsl:text>%% level 4 is maximally permissive&#xa;</xsl:text>
     <xsl:text>%% this is exactly the opposite of AMSmath package philosophy&#xa;</xsl:text>
@@ -3942,6 +3951,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="not($latex-font-main-options = '')">
             <xsl:text>[</xsl:text>
             <xsl:value-of select="$latex-font-main-options"/>
+            <xsl:text>]</xsl:text>
+        </xsl:if>
+        <!-- end the line (in any event) -->
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="font-xelatex-math">
+    <!-- nothing if there is no attempt to use a Unicode math font -->
+    <xsl:if test="$b-alternate-math-font">
+        <xsl:text>%% Load a Unicode math font (as specified by a publisher)&#xa;</xsl:text>
+        <xsl:text>%% This is not a simple add-on/replacement:&#xa;</xsl:text>
+        <xsl:text>%%   *  must use  unicode-math  package&#xa;</xsl:text>
+        <xsl:text>%%   *  \setmathfont then enabled, which takes options&#xa;</xsl:text>
+        <xsl:text>%%   *  clashes with  amssymb  so we do not load that package&#xa;</xsl:text>
+        <xsl:text>%%   *  packages like  extpfeil  load amssymb, which is a problem&#xa;</xsl:text>
+        <xsl:text>\usepackage{unicode-math}&#xa;</xsl:text>
+        <!-- now can use the \setmathfont{} command -->
+        <xsl:text>\setmathfont{</xsl:text>
+        <!-- guaranteed non-empty string by enclosing boolean -->
+        <xsl:value-of select="$latex-font-math-regular"/>
+        <xsl:text>}</xsl:text>
+        <!-- NB: some options are from the unicode-math package and   -->
+        <!-- apply no matter which font might be loaded, for example  -->
+        <!-- "math-style=french".  Other options are features of the  -->
+        <!-- selected font itself, such as "Slashed Zero" being a     -->
+        <!-- feature of the Libertinus Math font.  The former can go  -->
+        <!-- with the package loading, OR with the font selection,    -->
+        <!-- so we just use one publisher attribute for all of them.  -->
+        <xsl:if test="not($latex-font-math-options = '')">
+            <xsl:text>[</xsl:text>
+            <xsl:value-of select="$latex-font-math-options"/>
             <xsl:text>]</xsl:text>
         </xsl:if>
         <!-- end the line (in any event) -->
