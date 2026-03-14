@@ -536,6 +536,9 @@
                         <cell><attr>latex-engine</attr></cell><cell><p>Optional, default: <c>xelatex</c>.  Valid values: <c>xelatex</c>, <c>pdflatex</c>, or <c>latex</c>. Only used on targets that build with latex, to specify what latex command to call in that step.</p></cell>
                     </row>
                     <row>
+                        <cell><attr>latex-source</attr></cell><cell><p>Optional, default: <c>no</c>.  Valid values: <c>yes</c> or <c>no</c>.  Only used on pdf format targets. If <c>yes</c>, the LaTeX source file will be included in the output directory. Equivalent to using the <c>--latex</c> flag with <c>pretext build</c>.</p></cell>
+                    </row>
+                    <row>
                         <cell><attr>braille-mode</attr></cell><cell><p>Optional, default: <c>emboss</c>.  Valid values: <c>emboss</c> or <c>electronic</c>. Only used when <attr>format</attr> is <c>braille</c>, to specify the mode for braille.</p></cell>
                     </row>
                     <row>
