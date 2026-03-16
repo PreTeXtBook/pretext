@@ -5290,7 +5290,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:when>
                     <!-- No good test for unstructured? -->
                     <xsl:otherwise>
-                        <div class="para">
+                        <div>
+                            <xsl:attribute name="class">
+                                <xsl:text>para</xsl:text>
+                                <!-- Just like for explicitly added <p>'s, if we contain a block  -->
+                                <!-- element, an additional "logical" class should be added       -->
+                                <xsl:if test="ol|ul|dl|me|men|md|mdn|cd">
+                                    <xsl:text> logical</xsl:text>
+                                </xsl:if>
+                            </xsl:attribute>
                             <!-- Create a derived id, if original.  Somewhat  -->
                             <!-- contrived so it doesn't collide with another. -->
                             <xsl:if test="$b-original">
