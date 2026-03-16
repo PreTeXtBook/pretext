@@ -102,7 +102,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parameters -->
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
-<!-- See more generally applicable parameters in pretext-common.xsl file     -->
+<!-- See more generally applicable parameters in pretext-common.xsl file      -->
+
+<!-- Fast HTML builds that skip steps not needed for quickly rebuilding       -->
+<!-- individual pages in a document.                                          -->
+<!-- build-incremental: skips rebuilding search index, theme, Runestone       -->
+<!--   manifest, moving external/generated files,...                          -->
+<!--   Should produce clean diffs against pages from non-incremental build    -->
+<!-- build-preview, implies build-incremental and, when combined with         -->
+<!--   subtree, prunes the document to avoid processing nodes not part of     -->
+<!--   the output subtree.                                                    -->
+<!--   Will produce pages that are visually the same but have diffs when      -->
+<!--   compared to non-preview builds                                         -->
+<xsl:param name="html.build-preview" select="''"/>
+<xsl:variable name="b-build-preview" select="$html.build-preview = 'yes'"/>
+<xsl:param name="html.build-incremental" select="''"/>
+<xsl:variable name="b-build-incremental" select="$b-build-preview or $html.build-incremental = 'yes'"/>
 
 <!-- CSS and Javascript Directories -->
 <!-- These are convenience variables to specify file prefixes  -->
@@ -294,15 +309,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:apply-templates select="$original" mode="generic-warnings"/>
-    <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
-    <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
+    <xsl:choose>
+        <!-- If working on a subtree, only warn on that part.              -->
+        <!-- Not much speed difference, but helpful if author is focusing  -->
+        <!-- on a part of the work.                                        -->
+        <xsl:when test="$b-build-incremental and $b-subsetting">
+            <xsl:apply-templates select="$pruning-tree" mode="generic-warnings"/>
+            <xsl:apply-templates select="$pruning-tree" mode="element-deprecation-warnings"/>
+            <xsl:apply-templates select="$pruning-tree" mode="parameter-deprecation-warnings"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$original" mode="generic-warnings"/>
+            <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
+            <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- Usually no manifest is created -->
     <xsl:call-template name="runestone-manifest"/>
     <!-- A structured Table of Contents for a React app approach -->
     <xsl:call-template name="doc-manifest"/>
     <!-- build a search page (in development) -->
-    <xsl:if test="$has-native-search and not($b-portable-html)">
+    <xsl:if test="$has-native-search and not($b-build-incremental) and not($b-portable-html)">
         <xsl:call-template name="search-page-construction"/>
     </xsl:if>
     <!-- Optionally, build a SCORM manifest -->
@@ -11432,6 +11459,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:attribute>
                     </xsl:if>
                     <div id="ptx-content" class="ptx-content">
+                        <xsl:if test="$b-build-preview">
+                            <div class="preview-build-warning">Preview build. Links and knowls that cross pages may not function correctly.</div>
+                        </xsl:if>
                         <xsl:if test="$b-has-printout">
                             <xsl:apply-templates select="." mode="print-preview-header"/>
                         </xsl:if>
