@@ -226,3 +226,21 @@ $sidebar-hide-breakpoint: $content-width + 2 * $content-side-padding-tight + $si
   background-color: var(--tocitem-highlight-background);
   border-color: var(--tocitem-highlight-border-color);
 }
+
+
+.standalone-page {
+  margin: 0;
+  padding: 0;
+
+  .ptx-page {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .ptx-main {
+    margin-right: auto;
+    margin-left: auto;
+    box-shadow: none;
+    max-width: 100%;
+  }
+}

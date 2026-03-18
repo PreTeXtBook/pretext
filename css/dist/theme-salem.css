@@ -126,6 +126,9 @@ body.pretext > a.assistive:focus {
 .ptx-content-footer .button .icon {
   margin: 0 -7px;
 }
+body.standalone-page .ptx-page {
+  max-width: 1600px;
+}
 .ptx-masthead {
   position: relative;
   background: var(--banner-background);
@@ -729,6 +732,9 @@ body.pretext > a.assistive:focus {
 }
 :root {
   --page-width: 1100px;
+}
+.standalone-page {
+  --page-width: 1600px;
 }
 .ptx-masthead .ptx-banner {
   justify-content: center;
@@ -3186,6 +3192,16 @@ ul[data-component=timedAssessment] {
   margin-right: auto;
   display: block;
 }
+.interactive__instructions {
+  max-width: var(--base-content-width);
+}
+.standalone-page .interactive-iframe-container {
+  margin-left: auto;
+  margin-right: auto;
+}
+.standalone-page .interactive__instructions {
+  margin: 5px auto 20px;
+}
 .interactive-iframe-container__opener {
   display: block;
   margin-right: 5px;
@@ -3487,7 +3503,7 @@ figure.table-like {
   margin-left: auto;
 }
 @container ptx-main (width > 821px) {
-  :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile, iframe[design-width]) {
+  :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
     --max-width: calc(min((100cqw - 2 * 48px), 10000px));
     min-width: 100%;
     clear: right;
