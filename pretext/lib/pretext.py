@@ -1170,19 +1170,12 @@ def webwork_to_xml(
         "string parameters passed to extraction stylesheet: {}".format(stringparams)
     )
 
-    # Various directories need to be established
-    # These first two are the source folders which may not have the usual names
-    # "generated" and "external"
+    # dest_dir is already resolved by get_destination_directory() in the CLI:
+    #   explicit -d > managed directories (generated/webwork/) > cwd fallback.
+    # Warn when managed directories are not in use, since WeBWorK output
+    # landing in the current directory is likely unintentional.
     generated_dir, external_dir = get_managed_directories(xml_source, pub_file)
-    if generated_dir:
-        # create the generated_dir if it doesn't actually exist yet
-        if not (os.path.isdir(generated_dir)):
-            os.mkdir(generated_dir)
-        # where the representations file will live
-        ww_reps_dir = os.path.join(generated_dir, "webwork")
-        # where generated images from webwork exercises will live
-        ww_images_dir = os.path.join(ww_reps_dir, "images")
-    else:
+    if not generated_dir:
         msg = "".join(
             [
                 "a publisher file specifying /publication/source/directories/@generated ",
@@ -1190,9 +1183,11 @@ def webwork_to_xml(
             ]
         )
         log.warning(msg.format(dest_dir))
-        ww_reps_dir = dest_dir
-        # Below is not a good choice, but here for backwards compatibility
-        ww_images_dir = dest_dir
+    ww_reps_dir = dest_dir
+    ww_images_dir = os.path.join(dest_dir, "images")
+
+    # file path for the representations file
+    ww_reps_file = os.path.join(ww_reps_dir, "webwork-representations.xml")
 
     # where generated pg problem files will live (each .pg file will usually be deeper in a folder
     # tree based on document structure and chunking level)
@@ -1205,9 +1200,6 @@ def webwork_to_xml(
         os.mkdir(ww_images_dir)
     if not (os.path.isdir(ww_pg_dir)):
         os.mkdir(ww_pg_dir)
-
-    # file path for the representations file
-    ww_reps_file = os.path.join(ww_reps_dir, "webwork-representations.xml")
 
     # execute XSL extraction to get back a tree with fundamental
     # information about webwork exercises in the project
