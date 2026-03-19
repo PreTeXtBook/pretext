@@ -1174,13 +1174,17 @@ def webwork_to_xml(
     # These first two are the source folders which may not have the usual names
     # "generated" and "external"
     generated_dir, external_dir = get_managed_directories(xml_source, pub_file)
-    if generated_dir:
-        # create the generated_dir if it doesn't actually exist yet
+
+    # Determine output location.  Priority:
+    #   explicit -d (directory) > managed directories > cwd.
+    # An explicit -d is signalled by dest_dir differing from os.getcwd().
+    if dest_dir != os.getcwd():
+        ww_reps_dir = dest_dir
+        ww_images_dir = os.path.join(ww_reps_dir, "images")
+    elif generated_dir:
         if not (os.path.isdir(generated_dir)):
             os.mkdir(generated_dir)
-        # where the representations file will live
         ww_reps_dir = os.path.join(generated_dir, "webwork")
-        # where generated images from webwork exercises will live
         ww_images_dir = os.path.join(ww_reps_dir, "images")
     else:
         msg = "".join(
@@ -1194,6 +1198,9 @@ def webwork_to_xml(
         # Below is not a good choice, but here for backwards compatibility
         ww_images_dir = dest_dir
 
+    # file path for the representations file
+    ww_reps_file = os.path.join(ww_reps_dir, "webwork-representations.xml")
+
     # where generated pg problem files will live (each .pg file will usually be deeper in a folder
     # tree based on document structure and chunking level)
     ww_pg_dir = os.path.join(ww_reps_dir, "pg")
@@ -1205,9 +1212,6 @@ def webwork_to_xml(
         os.mkdir(ww_images_dir)
     if not (os.path.isdir(ww_pg_dir)):
         os.mkdir(ww_pg_dir)
-
-    # file path for the representations file
-    ww_reps_file = os.path.join(ww_reps_dir, "webwork-representations.xml")
 
     # execute XSL extraction to get back a tree with fundamental
     # information about webwork exercises in the project
