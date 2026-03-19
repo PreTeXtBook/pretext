@@ -8242,92 +8242,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Even if the LaTeX is less natural looking.           -->
 
 <!-- Quotation marks come in left and right variants. -->
-<!-- Note: maybe this should be part of a lookup      -->
-<!-- table with Unicode, LaTeX, ASCII (7-bit/8-bit).  -->
+<!-- The lookup table is in pretext-common.xsl.       -->
 <xsl:template match="*" mode="quote-character-latex">
     <xsl:param name="style"/>
     <xsl:param name="side"/>
-
+    <xsl:variable name="latex-character">
+        <xsl:for-each select="$quote-character-table">
+            <xsl:value-of select="key('quote-character-key',
+                concat($style, '|', $side))/latex-character"/>
+        </xsl:for-each>
+    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$style = 'english-double'">
-            <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <xsl:text>\textquotedblleft{}</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <xsl:text>\textquotedblright{}</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'english-single'">
-            <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <xsl:text>\textquoteleft{}</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <xsl:text>\textquoteright{}</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'angle-double'">
-             <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <xsl:text>\guillemotleft{}</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <xsl:text>\guillemotright{}</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'angle-single'">
-             <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <xsl:text>\guilsinglleft{}</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <xsl:text>\guilsinglright{}</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'angle-double-space'">
-             <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <xsl:text>\guillemotleft\thinspace{}</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <xsl:text>\thinspace\guillemotright{}</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'angle-single-space'">
-             <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <xsl:text>\guilsinglleft\thinspace{}</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <xsl:text>\thinspace\guilsinglright{}</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'down-up-double'">
-            <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <xsl:text>\quotedblbase{}</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <xsl:text>\textquotedblright{}</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'down-up-single'">
-            <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <xsl:text>\quotesinglbase{}</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <xsl:text>\textquoteright{}</xsl:text>
-                </xsl:when>
-            </xsl:choose>
+        <xsl:when test="$latex-character != ''">
+            <xsl:value-of select="$latex-character"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>

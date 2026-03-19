@@ -8768,116 +8768,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################## -->
 
 <!-- Quotation marks come in left and right variants. -->
-<!-- Note: maybe this should be part of a lookup      -->
-<!-- table with Unicode, LaTeX, ASCII (7-bit/8-bit).  -->
-<xsl:template match="*" mode="quote-character-html">
+<!-- The lookup table is in pretext-common.xsl.       -->
+<xsl:template match="*" mode="quote-character-unicode">
     <xsl:param name="style"/>
     <xsl:param name="side"/>
-
+    <xsl:variable name="unicode-character">
+        <xsl:for-each select="$quote-character-table">
+            <xsl:value-of select="key('quote-character-key',
+                concat($style, '|', $side))/@unicode-character"/>
+        </xsl:for-each>
+    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$style = 'english-double'">
-            <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <!-- LEFT DOUBLE QUOTATION MARK -->
-                    <xsl:text>&#x201c;</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <!-- RIGHT DOUBLE QUOTATION MARK -->
-                    <xsl:text>&#x201d;</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'english-single'">
-            <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <!-- LEFT SINGLE QUOTATION MARK -->
-                    <xsl:text>&#x2018;</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <!-- RIGHT SINGLE QUOTATION MARK -->
-                    <xsl:text>&#x2019;</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'angle-double'">
-             <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <!-- LEFT-POINTING DOUBLE ANGLE QUOTATION MARK -->
-                    <xsl:text>&#x00AB;</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <!-- RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK -->
-                    <xsl:text>&#x00BB;</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'angle-single'">
-             <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <!-- SINGLE LEFT-POINTING ANGLE QUOTATION MARK -->
-                    <xsl:text>&#x2039;</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                     <!-- SINGLE RIGHT-POINTING ANGLE QUOTATION MARK -->
-                    <xsl:text>&#x203A;</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'angle-double-space'">
-             <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <!-- LEFT-POINTING DOUBLE ANGLE QUOTATION MARK -->
-                    <xsl:text>&#x00AB;</xsl:text>
-                    <!-- NARROW NO-BREAK SPACE (NNBSP) -->
-                    <xsl:text>&#x202F;</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <!-- NARROW NO-BREAK SPACE (NNBSP) -->
-                    <xsl:text>&#x202F;</xsl:text>
-                    <!-- RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK -->
-                    <xsl:text>&#x00BB;</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'angle-single-space'">
-             <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <!-- SINGLE LEFT-POINTING ANGLE QUOTATION MARK -->
-                    <xsl:text>&#x2039;</xsl:text>
-                    <!-- NARROW NO-BREAK SPACE (NNBSP) -->
-                    <xsl:text>&#x202F;</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <!-- NARROW NO-BREAK SPACE (NNBSP) -->
-                    <xsl:text>&#x202F;</xsl:text>
-                    <!-- SINGLE RIGHT-POINTING ANGLE QUOTATION MARK -->
-                    <xsl:text>&#x203A;</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'down-up-double'">
-            <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <!-- DOUBLE LOW-9 QUOTATION MARK -->
-                    <xsl:text>&#x201e;</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <!-- RIGHT DOUBLE QUOTATION MARK -->
-                    <xsl:text>&#x201d;</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:when test="$style = 'down-up-single'">
-            <xsl:choose>
-                <xsl:when test="$side = 'left'">
-                    <!-- SINGLE LOW-9 QUOTATION MARK -->
-                    <xsl:text>&#x201a;</xsl:text>
-                </xsl:when>
-                <xsl:when test="$side = 'right'">
-                    <!-- RIGHT SINGLE QUOTATION MARK -->
-                    <xsl:text>&#x2019;</xsl:text>
-                </xsl:when>
-            </xsl:choose>
+        <xsl:when test="$unicode-character != ''">
+            <xsl:value-of select="$unicode-character"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>
@@ -8892,7 +8795,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Left Single Quote -->
 <xsl:template match="*" mode="lsq-character">
-    <xsl:apply-templates select="." mode="quote-character-html">
+    <xsl:apply-templates select="." mode="quote-character-unicode">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-secondary"/>
         </xsl:with-param>
@@ -8902,7 +8805,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Right Single Quote -->
 <xsl:template match="*" mode="rsq-character">
-    <xsl:apply-templates select="." mode="quote-character-html">
+    <xsl:apply-templates select="." mode="quote-character-unicode">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-secondary"/>
         </xsl:with-param>
@@ -8912,7 +8815,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Left (Primary) Quote -->
 <xsl:template match="*" mode="lq-character">
-    <xsl:apply-templates select="." mode="quote-character-html">
+    <xsl:apply-templates select="." mode="quote-character-unicode">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-primary"/>
         </xsl:with-param>
@@ -8922,7 +8825,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Right (Double) Quote -->
 <xsl:template match="*" mode="rq-character">
-    <xsl:apply-templates select="." mode="quote-character-html">
+    <xsl:apply-templates select="." mode="quote-character-unicode">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-primary"/>
         </xsl:with-param>
