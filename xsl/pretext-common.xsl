@@ -3295,6 +3295,80 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="$localizations/locale[@language = $lang]/@quote-secondary"/>
 </xsl:template>
 
+<!-- Lookup table: one row per (style, side) with Unicode and LaTeX -->
+<!-- representations.  Output-format templates look up a row by     -->
+<!-- combining @style and @side with a "|" separator, then read     -->
+<!-- @unicode-character attribute or the latex-character child.     -->
+<!-- Add a new child element to support additional output formats.  -->
+
+<xsl:variable name="quote-character-rtf">
+    <!-- U+201C: LEFT DOUBLE QUOTATION MARK  -->
+    <!-- U+201D: RIGHT DOUBLE QUOTATION MARK -->
+    <quote-character style="english-double" side="left"  unicode-character="&#x201c;">
+        <latex-character>\textquotedblleft{}</latex-character>
+    </quote-character>
+    <quote-character style="english-double" side="right" unicode-character="&#x201d;">
+        <latex-character>\textquotedblright{}</latex-character>
+    </quote-character>
+    <!-- U+2018: LEFT SINGLE QUOTATION MARK  -->
+    <!-- U+2019: RIGHT SINGLE QUOTATION MARK -->
+    <quote-character style="english-single" side="left"  unicode-character="&#x2018;">
+        <latex-character>\textquoteleft{}</latex-character>
+    </quote-character>
+    <quote-character style="english-single" side="right" unicode-character="&#x2019;">
+        <latex-character>\textquoteright{}</latex-character>
+    </quote-character>
+    <!-- U+00AB: LEFT-POINTING DOUBLE ANGLE QUOTATION MARK  -->
+    <!-- U+00BB: RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK -->
+    <quote-character style="angle-double" side="left"  unicode-character="&#x00ab;">
+        <latex-character>\guillemotleft{}</latex-character>
+    </quote-character>
+    <quote-character style="angle-double" side="right" unicode-character="&#x00bb;">
+        <latex-character>\guillemotright{}</latex-character>
+    </quote-character>
+    <!-- U+2039: SINGLE LEFT-POINTING ANGLE QUOTATION MARK  -->
+    <!-- U+203A: SINGLE RIGHT-POINTING ANGLE QUOTATION MARK -->
+    <quote-character style="angle-single" side="left"  unicode-character="&#x2039;">
+        <latex-character>\guilsinglleft{}</latex-character>
+    </quote-character>
+    <quote-character style="angle-single" side="right" unicode-character="&#x203a;">
+        <latex-character>\guilsinglright{}</latex-character>
+    </quote-character>
+    <!-- U+202F: NARROW NO-BREAK SPACE -->
+    <quote-character style="angle-double-space" side="left"  unicode-character="&#x00ab;&#x202f;">
+        <latex-character>\guillemotleft\thinspace{}</latex-character>
+    </quote-character>
+    <quote-character style="angle-double-space" side="right" unicode-character="&#x202f;&#x00bb;">
+        <latex-character>\thinspace\guillemotright{}</latex-character>
+    </quote-character>
+    <quote-character style="angle-single-space" side="left"  unicode-character="&#x2039;&#x202f;">
+        <latex-character>\guilsinglleft\thinspace{}</latex-character>
+    </quote-character>
+    <quote-character style="angle-single-space" side="right" unicode-character="&#x202f;&#x203a;">
+        <latex-character>\thinspace\guilsinglright{}</latex-character>
+    </quote-character>
+    <!-- U+201E: DOUBLE LOW-9 QUOTATION MARK -->
+    <quote-character style="down-up-double" side="left"  unicode-character="&#x201e;">
+        <latex-character>\quotedblbase{}</latex-character>
+    </quote-character>
+    <quote-character style="down-up-double" side="right" unicode-character="&#x201d;">
+        <latex-character>\textquotedblright{}</latex-character>
+    </quote-character>
+    <!-- U+201A: SINGLE LOW-9 QUOTATION MARK -->
+    <quote-character style="down-up-single" side="left"  unicode-character="&#x201a;">
+        <latex-character>\quotesinglbase{}</latex-character>
+    </quote-character>
+    <quote-character style="down-up-single" side="right" unicode-character="&#x2019;">
+        <latex-character>\textquoteright{}</latex-character>
+    </quote-character>
+</xsl:variable>
+
+<xsl:variable name="quote-character-table"
+    select="exsl:node-set($quote-character-rtf)"/>
+
+<xsl:key name="quote-character-key" match="quote-character"
+    use="concat(@style, '|', @side)"/>
+
 
 <!-- ##### -->
 <!-- Icons -->
