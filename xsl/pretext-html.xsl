@@ -8769,7 +8769,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Quotation marks come in left and right variants. -->
 <!-- The lookup table is in pretext-common.xsl.       -->
-<xsl:template match="*" mode="quote-character-html">
+<xsl:template match="*" mode="quote-character-unicode">
     <xsl:param name="style"/>
     <xsl:param name="side"/>
     <xsl:variable name="unicode-character">
@@ -8795,7 +8795,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Left Single Quote -->
 <xsl:template match="*" mode="lsq-character">
-    <xsl:apply-templates select="." mode="quote-character-html">
+    <xsl:apply-templates select="." mode="quote-character-unicode">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-secondary"/>
         </xsl:with-param>
@@ -8805,7 +8805,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Right Single Quote -->
 <xsl:template match="*" mode="rsq-character">
-    <xsl:apply-templates select="." mode="quote-character-html">
+    <xsl:apply-templates select="." mode="quote-character-unicode">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-secondary"/>
         </xsl:with-param>
@@ -8815,7 +8815,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Left (Primary) Quote -->
 <xsl:template match="*" mode="lq-character">
-    <xsl:apply-templates select="." mode="quote-character-html">
+    <xsl:apply-templates select="." mode="quote-character-unicode">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-primary"/>
         </xsl:with-param>
@@ -8825,7 +8825,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Right (Double) Quote -->
 <xsl:template match="*" mode="rq-character">
-    <xsl:apply-templates select="." mode="quote-character-html">
+    <xsl:apply-templates select="." mode="quote-character-unicode">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-primary"/>
         </xsl:with-param>
