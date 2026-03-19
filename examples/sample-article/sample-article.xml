@@ -2755,6 +2755,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Primary only: <q>La liberté commence où l’ignorance finit.</q> Primary and secondary: <q>Elle se répétait : <sq>J’ai un amant ! un amant !</sq> se délectant à cette idée comme à celle d’une autre puberté qui lui serait survenue</q>. (Victor Hugo, Les Misérables; Gustave Flaubert, Madame Bovary)</p>
                 </paragraphs>
 
+                <paragraphs xml:lang="fr-CA">
+                    <title>French (Canada)</title>
+
+                    <!-- Same quotes as fr-FR; secondary marks differ:               -->
+                    <!-- fr-CA uses english-single (' ') for inner quotes,           -->
+                    <!-- fr-FR uses english-double (“ “) for inner quotes.           -->
+                    <!--                                                             -->
+                    <!-- “Freedom begins where ignorance ends.”                      -->
+                    <!--                                                             -->
+                    <!-- “She kept repeating to herself, ‘I have a lover! a lover!’  -->
+                    <!-- savoring the idea as if a new puberty had come upon her.”   -->
+
+                    <p>Primary only: <q>La liberté commence où l’ignorance finit.</q> Primary and secondary: <q>Elle se répétait : <sq>J’ai un amant ! un amant !</sq> se délectant à cette idée comme à celle d’une autre puberté qui lui serait survenue</q>. (Victor Hugo, Les Misérables; Gustave Flaubert, Madame Bovary)</p>
+                </paragraphs>
+
+                <paragraphs xml:lang="de-DE">
+                    <title>German (Germany)</title>
+
+                    <!-- “Gray, dear friend, is all theory, and green the golden    -->
+                    <!-- tree of life.” Mephistopheles to the Student.              -->
+                    <!-- Goethe, Faust, Part I (“Studierzimmer”), 1808.             -->
+                    <!--                                                            -->
+                    <!-- “’My Luise,’ he said to me, ‘has knocked me to the ground. -->
+                    <!-- My Luise will lift me up again.’”                          -->
+                    <!-- Wurm reports Miller’s words to Lady Milford.               -->
+                    <!-- Schiller, Kabale und Liebe, Act III, Scene 6, 1784.        -->
+
+                    <p>Primary only: <q>Grau, teurer Freund, ist alle Theorie, und grün des Lebens goldner Baum.</q> Primary and secondary: <q><sq>Meine Luise</sq>, sagte er mir, <sq>hat mich zu Boden geworfen. Meine Luise wird mich auch aufrichten.</sq></q> (Johann Wolfgang von Goethe, Faust I; Friedrich Schiller, Kabale und Liebe)</p>
+                </paragraphs>
+
             </subsection>
 
             <subsection>
