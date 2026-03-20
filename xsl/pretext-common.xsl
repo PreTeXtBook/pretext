@@ -1650,6 +1650,11 @@ Book (with parts), "section" at level 3
     <xsl:message>PTX:BUG:  current conversion needs an implementation of the "code-wrapper" template</xsl:message>
 </xsl:template>
 
+<xsl:template match="veil">
+  <xsl:message>PTX:WARNING: &lt;veil&gt; encountered but this conversion has no implementation; content suppressed.</xsl:message>
+  <!-- no output by default in -common -->
+  <xsl:text></xsl:text>
+</xsl:template>
 
 <!-- The content of a "pre" element is wrapped many ways, -->
 <!-- but the content itself is always strictly text       -->
