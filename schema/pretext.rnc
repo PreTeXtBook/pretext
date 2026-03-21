@@ -1628,18 +1628,17 @@
                     attribute break {"yes" | "no"}?,
                     attribute alignment {text}?,
                     attribute alignat-columns {text}?,
-                    MathRow,
-                    (MathRow | MathIntertext)*
+                    (
+                    (mixed {(FillInMath | WWVariable)*}) |
+                    (MathRow, (MathRow | MathIntertext)*)
+                    )
                 } |
                 element mdn {
                     attribute number {"yes" | "no"}?,
                     attribute break {"yes" | "no"}?,
                     attribute alignment {text}?,
                     attribute alignat-columns {text}?,
-                    (
-                    (mixed {(FillInMath | WWVariable)*}) |
-                    (MathRow, (MathRow | MathIntertext)*)
-                    )
+                    MathRow, (MathRow | MathIntertext)*
                 }
             
             Verbatim =
