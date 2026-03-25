@@ -161,6 +161,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- default is empty, so we ccan detect non-use -->
 <xsl:param name="assembly.version-only" select="''"/>
 
+<!-- Set to 'yes' to enable diagnostic checks, such as   -->
+<!-- verifying coherence of @assembly-id and @unique-id. -->
+<!-- Not documented as an author or publisher feature.   -->
+<xsl:param name="assembly.debug" select="''"/>
+<xsl:variable name="b-assembly-debug" select="$assembly.debug = 'yes'"/>
+
 <!-- onvert to a boolean, with error-checking -->
 <xsl:variable name="version-only">
     <xsl:choose>
@@ -300,6 +306,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="node()|@*" mode="enrichment"/>
     </xsl:copy>
 </xsl:template>
+
 
 <xsl:template match="node()|@*" mode="labels">
     <xsl:copy>
@@ -560,6 +567,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
 
 <xsl:variable name="language-rtf">
+    <xsl:apply-templates select="$identification" mode="id-coherence-check"/>
     <xsl:apply-templates select="$identification" mode="language"/>
 </xsl:variable>
 <xsl:variable name="language" select="exsl:node-set($language-rtf)"/>
@@ -2526,6 +2534,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
         </xsl:if>
     </xsl:for-each>
+</xsl:template>
+
+<!-- Diagnostic: verify @assembly-id equals @unique-id for  -->
+<!-- every element that carries both.  A mismatch indicates -->
+<!-- a structural change between the two ID-stamping passes -->
+<!-- that violates the identification contract documented   -->
+<!-- near the top of this stylesheet.  Gated by the         -->
+<!-- assembly.debug parameter; does nothing when off.       -->
+
+<xsl:template match="node()|@*" mode="id-coherence-check">
+    <xsl:if test="$b-assembly-debug">
+        <xsl:for-each select=".//*[@assembly-id and @unique-id and not(@assembly-id = @unique-id)]">
+            <xsl:message>
+                <xsl:text>PTX:DEBUG:  @assembly-id / @unique-id mismatch on &lt;</xsl:text>
+                <xsl:value-of select="local-name()"/>
+                <xsl:text>&gt;: assembly-id="</xsl:text>
+                <xsl:value-of select="@assembly-id"/>
+                <xsl:text>" unique-id="</xsl:text>
+                <xsl:value-of select="@unique-id"/>
+                <xsl:text>"</xsl:text>
+            </xsl:message>
+        </xsl:for-each>
+    </xsl:if>
 </xsl:template>
 
 
