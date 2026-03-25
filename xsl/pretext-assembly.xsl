@@ -1273,34 +1273,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:apply-templates select="node()" mode="webwork"/>
     </xsl:copy>
-
-    <!-- COMMENTED OUT: substitution from representations file.     -->
-    <!-- This functionality moves to the representations pass       -->
-    <!-- (mode="representations") where it runs later in the        -->
-    <!-- pipeline with @assembly-id available.                      -->
-    <!--                                                            -->
-    <!-- <xsl:when test="not($b-extracting)">                       -->
-    <!--     <xsl:variable name="the-webwork-rep"                   -->
-    <!--         select="document(                                  -->
-    <!--             $webwork-representations-file, $original       -->
-    <!--         )/webwork-representations/                         -->
-    <!--         webwork-reps[@ww-id=$ww-id]"/>                     -->
-    <!--     <xsl:choose>                                           -->
-    <!--         <xsl:when test=                                    -->
-    <!--             "$webwork-representations-file = ''">          -->
-    <!--             [error messages]                               -->
-    <!--         </xsl:when>                                        -->
-    <!--         <xsl:when test="not($the-webwork-rep)">            -->
-    <!--             [error messages]                               -->
-    <!--         </xsl:when>                                        -->
-    <!--         <xsl:otherwise>                                    -->
-    <!--             <xsl:apply-templates                           -->
-    <!--                 select="$the-webwork-rep"                  -->
-    <!--                 mode="webwork"/>                           -->
-    <!--         </xsl:otherwise>                                   -->
-    <!--     </xsl:choose>                                          -->
-    <!-- </xsl:when>                                                -->
-
 </xsl:template>
 
 
@@ -3211,51 +3183,114 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Mine webwork-reps for relevant application -->
 
-<!-- Matching with the filter means this will only happen on     -->
-<!-- the non-extraction pass, since the 'webwork-reps' value     -->
-<!-- is placed after the WW representations file has been built. -->
-<!-- We split three ways, for PGML, static, and dynamic (HTML)   -->
-<!-- employment, via modal templates.                            -->
-<!-- NB: including "task" though this may not be supported.      -->
+<!-- WeBWorK exercises retain a "webwork" child element through the      -->
+<!-- pipeline (with @ww-id stamped in the webwork pass).  Here in the    -->
+<!-- representations pass, we look up the corresponding "webwork-reps"   -->
+<!-- from the representations file and substitute it in place of the     -->
+<!-- "webwork" element.  We then split three ways, for PGML, static,    -->
+<!-- and dynamic (HTML) employment, via modal templates.                 -->
+<!-- During extraction, the "webwork" child is left intact.             -->
+<!-- NB: including "task" though this may not be supported.              -->
 <xsl:template match="exercise[(@exercise-interactive = 'webwork')]
                    | project[(@exercise-interactive = 'webwork')]
                    | activity[(@exercise-interactive = 'webwork')]
                    | exploration[(@exercise-interactive = 'webwork')]
                    | investigation[(@exercise-interactive = 'webwork')]" mode="representations">
     <xsl:choose>
-        <!-- destined for creating problem sets, really just need PG code -->
-        <xsl:when test="$exercise-style = 'pg-problems'">
-            <!-- duplicate exercise, task, PROJECT-LIKE -->
+        <!-- During extraction, pass through the exercise with its         -->
+        <!-- "webwork" child intact.  The extraction stylesheet will read  -->
+        <!-- the @ww-id and process the authored content.                  -->
+        <xsl:when test="$b-extracting">
             <xsl:copy>
-                <!-- and duplicate the associated attributes, while moving to new mode -->
-                <xsl:apply-templates select="@*" mode="webwork-rep-to-pg"/>
-                <!-- for building problem sets, we do not need much metadata,      -->
-                <!-- nor the connecting "introduction" or "conclusion", we just    -->
-                <!-- want to make the PG code available in a predictable way       -->
-                <!-- (see templates following).  But we do need a title for naming -->
-                <!-- files and building the set definition files pointing to them. -->
-                <xsl:apply-templates select="title" mode="webwork-rep-to-pg"/>
-                <xsl:apply-templates select="webwork-reps" mode="webwork-rep-to-pg"/>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
             </xsl:copy>
         </xsl:when>
-        <!-- static, for multiple conversions, but primarily LaTeX -->
-        <xsl:when test="$exercise-style = 'static'">
-            <xsl:copy>
-                <xsl:apply-templates select="@*" mode="webwork-rep-to-static"/>
-                <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
-                    <xsl:text>static</xsl:text>
-                </xsl:attribute>
-                <xsl:apply-templates select="node()" mode="webwork-rep-to-static"/>
-            </xsl:copy>
-        </xsl:when>
-        <!-- dynamic (aka HTML), needs static previews, server base64, etc, -->
-        <!-- so just copy as-is with "webwork-reps" to signal and organize  -->
-        <!-- to/for HTML conversion                                         -->
         <xsl:otherwise>
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-html"/>
-            </xsl:copy>
+            <!-- Look up the "webwork-reps" element from the server  -->
+            <!-- for this "webwork" exercise, using the @ww-id that  -->
+            <!-- was stamped in the webwork pass.                    -->
+            <xsl:variable name="ww-id" select="webwork/@ww-id"/>
+            <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
+            <xsl:choose>
+                <!-- An empty string for $webwork-representations-file, and      -->
+                <!-- the "document()" still succeeds (returns the source file?). -->
+                <!-- But this is hopeless. So just totally bail out repeatedly   -->
+                <!-- and leave the containing "exercise" hollow.                 -->
+                <xsl:when test="$webwork-representations-file = ''">
+                    <xsl:copy>
+                        <xsl:apply-templates select="node()|@*" mode="representations"/>
+                    </xsl:copy>
+                    <xsl:message>PTX:ERROR:    There is a WeBWorK exercise with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
+                    <xsl:message>              but your publication file does not indicate the file</xsl:message>
+                    <xsl:message>              of problem representations created by a WeBWorK server.</xsl:message>
+                    <xsl:message>              Your WeBWorK exercises will all, at best, be empty.</xsl:message>
+                </xsl:when>
+                <!-- This should only fail if the file is missing.  Repeatedly. -->
+                <xsl:when test="not($the-webwork-rep)">
+                    <xsl:copy>
+                        <xsl:apply-templates select="node()|@*" mode="representations"/>
+                    </xsl:copy>
+                    <xsl:message>PTX:ERROR:    The WeBWorK problem with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
+                    <xsl:message>              could not be located in the file of WeBWorK problems from</xsl:message>
+                    <xsl:message>              the server, which your publication file indicates should be located</xsl:message>
+                    <xsl:message>              at "<xsl:value-of select="$webwork-representations-file"/>". </xsl:message>
+                    <xsl:message>              If there are many messages like this, then likely your file is missing. </xsl:message>
+                    <xsl:message>              But if this is an isolated error message, then it may indicate a bug,</xsl:message>
+                    <xsl:message>              which should be reported.</xsl:message>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- Build a temporary exercise with "webwork-reps" from the  -->
+                    <!-- representations file substituted in place of "webwork".   -->
+                    <!-- This preserves the parent-child relationship that         -->
+                    <!-- downstream templates rely on (e.g. "../introduction" in   -->
+                    <!-- webwork-rep-to-static navigates from webwork-reps up to   -->
+                    <!-- the exercise).                                            -->
+                    <xsl:variable name="exercise-with-reps-rtf">
+                        <xsl:copy>
+                            <xsl:copy-of select="@*"/>
+                            <xsl:for-each select="node()">
+                                <xsl:choose>
+                                    <xsl:when test="self::webwork">
+                                        <xsl:copy-of select="$the-webwork-rep"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:copy-of select="."/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:for-each>
+                        </xsl:copy>
+                    </xsl:variable>
+                    <xsl:variable name="exercise-with-reps" select="exsl:node-set($exercise-with-reps-rtf)/*"/>
+
+                    <xsl:choose>
+                        <!-- destined for creating problem sets, really just need PG code -->
+                        <xsl:when test="$exercise-style = 'pg-problems'">
+                            <xsl:copy>
+                                <xsl:apply-templates select="@*" mode="webwork-rep-to-pg"/>
+                                <xsl:apply-templates select="title" mode="webwork-rep-to-pg"/>
+                                <xsl:apply-templates select="$exercise-with-reps/webwork-reps" mode="webwork-rep-to-pg"/>
+                            </xsl:copy>
+                        </xsl:when>
+                        <!-- static, for multiple conversions, but primarily LaTeX -->
+                        <xsl:when test="$exercise-style = 'static'">
+                            <xsl:copy>
+                                <xsl:apply-templates select="@*" mode="webwork-rep-to-static"/>
+                                <xsl:attribute name="exercise-interactive">
+                                    <xsl:text>static</xsl:text>
+                                </xsl:attribute>
+                                <xsl:apply-templates select="$exercise-with-reps/node()" mode="webwork-rep-to-static"/>
+                            </xsl:copy>
+                        </xsl:when>
+                        <!-- dynamic (aka HTML), needs static previews, server base64, etc -->
+                        <xsl:otherwise>
+                            <xsl:copy>
+                                <xsl:apply-templates select="@*" mode="webwork-rep-to-html"/>
+                                <xsl:apply-templates select="$exercise-with-reps/node()" mode="webwork-rep-to-html"/>
+                            </xsl:copy>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
