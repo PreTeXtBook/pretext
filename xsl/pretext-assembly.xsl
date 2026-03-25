@@ -2917,18 +2917,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="exercise-interactive-attribute">
     <xsl:attribute name="exercise-interactive">
         <xsl:choose>
-            <!-- This is defensive, so statement//var below does not   -->
-            <!-- match for WW.  Ancestor varies on extraction, or not. -->
-            <xsl:when test="self::task and (ancestor::webwork|ancestor::webwork-reps)">
+            <!-- This is defensive, so statement//var below does not -->
+            <!-- match for WeBWorK.                                  -->
+            <xsl:when test="self::task and ancestor::webwork">
                 <xsl:text>webwork-task</xsl:text>
             </xsl:when>
-            <!-- WeBWorK next, signal is clear.  Again, -->
-            <!-- two passes and we identify which one.  -->
-            <xsl:when test="webwork and $b-extracting-pg">
-                <xsl:text>webwork-authored</xsl:text>
-            </xsl:when>
-            <xsl:when test="webwork-reps and not($b-extracting-pg)">
-                <xsl:text>webwork-reps</xsl:text>
+            <!-- WeBWorK exercises always retain "webwork" child     -->
+            <!-- through the pipeline.  Substitution from the        -->
+            <!-- representations file happens in the representations -->
+            <!-- pass, after exercise tagging.                       -->
+            <xsl:when test="webwork">
+                <xsl:text>webwork</xsl:text>
             </xsl:when>
             <xsl:when test="myopenmath">
                 <xsl:text>myopenmath</xsl:text>
@@ -3218,11 +3217,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We split three ways, for PGML, static, and dynamic (HTML)   -->
 <!-- employment, via modal templates.                            -->
 <!-- NB: including "task" though this may not be supported.      -->
-<xsl:template match="exercise[(@exercise-interactive = 'webwork-reps')]
-                   | project[(@exercise-interactive = 'webwork-reps')]
-                   | activity[(@exercise-interactive = 'webwork-reps')]
-                   | exploration[(@exercise-interactive = 'webwork-reps')]
-                   | investigation[(@exercise-interactive = 'webwork-reps')]" mode="representations">
+<xsl:template match="exercise[(@exercise-interactive = 'webwork')]
+                   | project[(@exercise-interactive = 'webwork')]
+                   | activity[(@exercise-interactive = 'webwork')]
+                   | exploration[(@exercise-interactive = 'webwork')]
+                   | investigation[(@exercise-interactive = 'webwork')]" mode="representations">
     <xsl:choose>
         <!-- destined for creating problem sets, really just need PG code -->
         <xsl:when test="$exercise-style = 'pg-problems'">
