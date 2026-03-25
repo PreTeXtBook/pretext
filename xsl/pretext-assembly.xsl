@@ -1049,6 +1049,93 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- WeBWorK @copy resolution -->
+
+<!-- A "webwork" with a @copy attribute is a lightweight reference     -->
+<!-- to another authored "webwork".  We resolve the copy here in the   -->
+<!-- assembly pass (after @ww-id has been stamped in the webwork pass) -->
+<!-- by pulling the target's content into a new "webwork" element.     -->
+<xsl:template match="webwork[@copy]" mode="assembly">
+    <!-- Find the target.  Maybe. -->
+    <xsl:variable name="target" select="id(@copy)"/>
+    <!-- Trap potential pitfalls and record part of an error -->
+    <!-- message.  Use a non-empty error message as a signal -->
+    <!-- to bail out gracefully on the copy.                 -->
+    <xsl:variable name="error-message-for-copy">
+        <xsl:choose>
+            <xsl:when test="not($target)">
+                <xsl:text>the @copy attribute points to nothing, check the spelling?</xsl:text>
+            </xsl:when>
+            <xsl:when test="not($target/self::webwork)">
+                <xsl:text>the @copy attribute points to a "</xsl:text>
+                <xsl:value-of select="local-name($target)"/>
+                <xsl:text>" element, not another "webwork".</xsl:text>
+            </xsl:when>
+            <xsl:when test="$target/self::webwork[@source]">
+                <xsl:text>the @copy attribute points a "webwork" with a @source attribute.  (Replace the @copy by the @source?)</xsl:text>
+            </xsl:when>
+            <xsl:when test="$target/self::webwork[@copy]">
+                <xsl:text>the @copy attribute points to "webwork" with a @copy attribute. Sorry, we are not that sophisticated.</xsl:text>
+            </xsl:when>
+            <!-- Presumably OK, no error message -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:choose>
+        <!-- no error means to proceed with copy -->
+        <xsl:when test="$error-message-for-copy = ''">
+            <xsl:copy>
+                <xsl:attribute name="copied-from">
+                    <xsl:value-of select="@copy"/>
+                </xsl:attribute>
+                <!-- Duplicate attributes, but remove the @copy attribute -->
+                <!-- used as a signal here.  We don't want to copy this   -->
+                <!-- again after we have been to the WeBWorK server.      -->
+                <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
+                <!-- The @seed makes the problem different, and there are also      -->
+                <!-- unique identifiers, so grab any other attributes of the        -->
+                <!-- original, but exclude these while formulating a copy/clone.     -->
+                <!-- We also exclude @ww-id since the target already has its own     -->
+                <!-- @ww-id from the webwork pass, and we must keep the source's ID. -->
+                <xsl:apply-templates select="$target/@*[(not(local-name(.) = 'id')) and
+                                                        (not(local-name(.) = 'label')) and
+                                                        (not(local-name(.) = 'seed')) and
+                                                        (not(local-name(.) = 'ww-id'))]" mode="assembly"/>
+                <!-- NB: authored WeBWorK content never has @xml:id or @label, -->
+                <!-- so no scrubbing of unique IDs is needed here.             -->
+                <xsl:apply-templates select="$target/node()" mode="assembly"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- with an error in formulation, drop in something very -->
+        <!-- similar in gross form, and alert at the console      -->
+        <xsl:otherwise>
+            <xsl:copy>
+                <!-- As for a legitimate copy above, we carry over as much -->
+                <!-- metadata as possible, and in particular include a     -->
+                <!-- @ww-id for tracking through the server                -->
+                <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
+                <!-- Now a minimal, but correct PreTeXt, WeBWorK problem into the  -->
+                <!-- extraction machinery, and out into all possible final outputs  -->
+                <statement>
+                    <p>
+                        A WeBWorK problem right here was meant to be a copy of another problem,
+                        but potentially with different randomization, but there was a failure.
+                        The <c>@copy</c> attribute was set to <c><xsl:value-of select="@copy"/></c>.
+                        Please report me, so the publisher can get more details by searching the
+                        runtime output for <q><c>PTX:ERROR</c></q>.
+                    </p>
+                </statement>
+            </xsl:copy>
+            <!-- minimalist report into source, more at console -->
+            <xsl:message>PTX:ERROR:   A WeBWorK problem has a @copy attribute with value "<xsl:value-of select="@copy"/>".</xsl:message>
+            <xsl:message>             However, the problem did not render:</xsl:message>
+            <xsl:message><xsl:text>             </xsl:text><xsl:value-of select="$error-message-for-copy"/></xsl:message>
+            <xsl:message>             A placeholder problem will appear in your output instead.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ##################################################### -->
 <!-- Dynamic Substitutions                                 -->
 <!-- Cut out dynamic setup and evaluation for static mode. -->
@@ -1214,25 +1301,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!--     </xsl:choose>                                          -->
     <!-- </xsl:when>                                                -->
 
-    <!-- COMMENTED OUT: @copy resolution during extraction.         -->
-    <!-- This functionality moves to the assembly pass              -->
-    <!-- (mode="assembly") as a dedicated template.                 -->
-    <!--                                                            -->
-    <!-- <xsl:when test="@copy">                                    -->
-    <!--     <xsl:variable name="target" select="id(@copy)"/>      -->
-    <!--     <xsl:variable name="error-message-for-copy">           -->
-    <!--         [gauntlet of @copy validation checks]              -->
-    <!--     </xsl:variable>                                        -->
-    <!--     <xsl:choose>                                           -->
-    <!--         <xsl:when test=                                    -->
-    <!--             "$error-message-for-copy = ''">                -->
-    <!--             [copy target content with @ww-id]              -->
-    <!--         </xsl:when>                                        -->
-    <!--         <xsl:otherwise>                                    -->
-    <!--             [placeholder with error messages]              -->
-    <!--         </xsl:otherwise>                                   -->
-    <!--     </xsl:choose>                                          -->
-    <!-- </xsl:when>                                                -->
 </xsl:template>
 
 
