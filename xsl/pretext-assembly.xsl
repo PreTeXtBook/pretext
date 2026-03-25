@@ -355,6 +355,61 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- convert it into real XML nodes. These "real" trees have a -->
 <!-- root element, as a result of the node-set() manufacture.  -->
 
+<!-- ################################################### -->
+<!-- Structural Contract for Identification Passes       -->
+<!-- ################################################### -->
+
+<!-- The "id-attribute" template (mode="id-attribute")       -->
+<!-- produces identification strings by a depth-first        -->
+<!-- traversal, encoding each element's position among its   -->
+<!-- siblings.  An element's ID depends only on its          -->
+<!-- ancestors and their sibling positions, so the template  -->
+<!-- is fast, unique, and local.                             -->
+<!--                                                         -->
+<!-- This template is applied three times, producing three   -->
+<!-- attributes on every element:                            -->
+<!--                                                         -->
+<!--   @original-id                                          -->
+<!--       after "version", before any additions             -->
+<!--   @assembly-id                                          -->
+<!--       after "exercise", before "representations"        -->
+<!--   @unique-id                                            -->
+<!--       after "labels", the final structural form         -->
+<!--                                                         -->
+<!-- The architecture relies on one critical invariant:      -->
+<!--                                                         -->
+<!--   BETWEEN ANY TWO ID-STAMPING PASSES, NO INTERVENING    -->
+<!--   PASS MAY CHANGE THE NUMBER OR ORDER OF SIBLING        -->
+<!--   ELEMENTS AT ANY LEVEL OF THE TREE, EXCEPT WITHIN A    -->
+<!--   SUBTREE THAT IS BEING WHOLLY REPLACED (SAME PARENT,   -->
+<!--   SAME SIBLING POSITION).                               -->
+<!--                                                         -->
+<!-- This invariant holds because:                           -->
+<!--                                                         -->
+<!--   (a) Replacements (e.g. an interactive replaced by a   -->
+<!--       static sidebyside) occupy the same sibling        -->
+<!--       position as the original element.                 -->
+<!--                                                         -->
+<!--   (b) Replacements are never nested: a replaced         -->
+<!--       subtree does not itself contain another element   -->
+<!--       that will be replaced at a different sibling      -->
+<!--       position.                                         -->
+<!--                                                         -->
+<!--   (c) Each ID-stamping pass is placed at a moment when  -->
+<!--       the tree is structurally quiet - no pending       -->
+<!--       changes will shift sibling positions before the   -->
+<!--       next one.                                         -->
+<!--                                                         -->
+<!-- Consequence: the id-attribute template produces the     -->
+<!-- same ID for every non-replaced element across passes,   -->
+<!-- and a replaced element's ID (consumed during isolation) -->
+<!-- remains valid through to the substitution phase.        -->
+<!--                                                         -->
+<!-- Any future pass that inserts or removes sibling         -->
+<!-- elements (rather than replacing in-place) MUST be       -->
+<!-- placed so that it does not fall between two ID-stamping -->
+<!-- passes, or else the identification will silently drift. -->
+
 <!-- Grab private solutions first.  The "exercise" (and more) -->
 <!-- that they belong to might be part of a version (have a   -->
 <!-- @component attribute) and we don't want to miss that.    -->
