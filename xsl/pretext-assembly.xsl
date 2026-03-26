@@ -161,6 +161,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- default is empty, so we ccan detect non-use -->
 <xsl:param name="assembly.version-only" select="''"/>
 
+<!-- Set to 'yes' to enable diagnostic checks, such as   -->
+<!-- verifying coherence of @assembly-id and @unique-id. -->
+<!-- Not documented as an author or publisher feature.   -->
+<xsl:param name="assembly.debug" select="''"/>
+<xsl:variable name="b-assembly-debug" select="$assembly.debug = 'yes'"/>
+
 <!-- onvert to a boolean, with error-checking -->
 <xsl:variable name="version-only">
     <xsl:choose>
@@ -301,6 +307,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+
 <xsl:template match="node()|@*" mode="labels">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="labels"/>
@@ -354,6 +361,61 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- new tree as a (text) result tree fragment and then we     -->
 <!-- convert it into real XML nodes. These "real" trees have a -->
 <!-- root element, as a result of the node-set() manufacture.  -->
+
+<!-- ################################################### -->
+<!-- Structural Contract for Identification Passes       -->
+<!-- ################################################### -->
+
+<!-- The "id-attribute" template (mode="id-attribute")       -->
+<!-- produces identification strings by a depth-first        -->
+<!-- traversal, encoding each element's position among its   -->
+<!-- siblings.  An element's ID depends only on its          -->
+<!-- ancestors and their sibling positions, so the template  -->
+<!-- is fast, unique, and local.                             -->
+<!--                                                         -->
+<!-- This template is applied three times, producing three   -->
+<!-- attributes on every element:                            -->
+<!--                                                         -->
+<!--   @original-id                                          -->
+<!--       after "version", before any additions             -->
+<!--   @assembly-id                                          -->
+<!--       after "exercise", before "representations"        -->
+<!--   @unique-id                                            -->
+<!--       after "labels", the final structural form         -->
+<!--                                                         -->
+<!-- The architecture relies on one critical invariant:      -->
+<!--                                                         -->
+<!--   BETWEEN ANY TWO ID-STAMPING PASSES, NO INTERVENING    -->
+<!--   PASS MAY CHANGE THE NUMBER OR ORDER OF SIBLING        -->
+<!--   ELEMENTS AT ANY LEVEL OF THE TREE, EXCEPT WITHIN A    -->
+<!--   SUBTREE THAT IS BEING WHOLLY REPLACED (SAME PARENT,   -->
+<!--   SAME SIBLING POSITION).                               -->
+<!--                                                         -->
+<!-- This invariant holds because:                           -->
+<!--                                                         -->
+<!--   (a) Replacements (e.g. an interactive replaced by a   -->
+<!--       static sidebyside) occupy the same sibling        -->
+<!--       position as the original element.                 -->
+<!--                                                         -->
+<!--   (b) Replacements are never nested: a replaced         -->
+<!--       subtree does not itself contain another element   -->
+<!--       that will be replaced at a different sibling      -->
+<!--       position.                                         -->
+<!--                                                         -->
+<!--   (c) Each ID-stamping pass is placed at a moment when  -->
+<!--       the tree is structurally quiet - no pending       -->
+<!--       changes will shift sibling positions before the   -->
+<!--       next one.                                         -->
+<!--                                                         -->
+<!-- Consequence: the id-attribute template produces the     -->
+<!-- same ID for every non-replaced element across passes,   -->
+<!-- and a replaced element's ID (consumed during isolation) -->
+<!-- remains valid through to the substitution phase.        -->
+<!--                                                         -->
+<!-- Any future pass that inserts or removes sibling         -->
+<!-- elements (rather than replacing in-place) MUST be       -->
+<!-- placed so that it does not fall between two ID-stamping -->
+<!-- passes, or else the identification will silently drift. -->
 
 <!-- Grab private solutions first.  The "exercise" (and more) -->
 <!-- that they belong to might be part of a version (have a   -->
@@ -505,6 +567,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
 
 <xsl:variable name="language-rtf">
+    <xsl:apply-templates select="$identification" mode="id-coherence-check"/>
     <xsl:apply-templates select="$identification" mode="language"/>
 </xsl:variable>
 <xsl:variable name="language" select="exsl:node-set($language-rtf)"/>
@@ -2471,6 +2534,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
         </xsl:if>
     </xsl:for-each>
+</xsl:template>
+
+<!-- Diagnostic: verify @assembly-id equals @unique-id for  -->
+<!-- every element that carries both.  A mismatch indicates -->
+<!-- a structural change between the two ID-stamping passes -->
+<!-- that violates the identification contract documented   -->
+<!-- near the top of this stylesheet.  Gated by the         -->
+<!-- assembly.debug parameter; does nothing when off.       -->
+
+<xsl:template match="node()|@*" mode="id-coherence-check">
+    <xsl:if test="$b-assembly-debug">
+        <xsl:for-each select=".//*[@assembly-id and @unique-id and not(@assembly-id = @unique-id)]">
+            <xsl:message>
+                <xsl:text>PTX:DEBUG:  @assembly-id / @unique-id mismatch on &lt;</xsl:text>
+                <xsl:value-of select="local-name()"/>
+                <xsl:text>&gt;: assembly-id="</xsl:text>
+                <xsl:value-of select="@assembly-id"/>
+                <xsl:text>" unique-id="</xsl:text>
+                <xsl:value-of select="@unique-id"/>
+                <xsl:text>"</xsl:text>
+            </xsl:message>
+        </xsl:for-each>
+    </xsl:if>
 </xsl:template>
 
 
