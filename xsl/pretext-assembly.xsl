@@ -1049,6 +1049,93 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- WeBWorK @copy resolution -->
+
+<!-- A "webwork" with a @copy attribute is a lightweight reference     -->
+<!-- to another authored "webwork".  We resolve the copy here in the   -->
+<!-- assembly pass (after @ww-id has been stamped in the webwork pass) -->
+<!-- by pulling the target's content into a new "webwork" element.     -->
+<xsl:template match="webwork[@copy]" mode="assembly">
+    <!-- Find the target.  Maybe. -->
+    <xsl:variable name="target" select="id(@copy)"/>
+    <!-- Trap potential pitfalls and record part of an error -->
+    <!-- message.  Use a non-empty error message as a signal -->
+    <!-- to bail out gracefully on the copy.                 -->
+    <xsl:variable name="error-message-for-copy">
+        <xsl:choose>
+            <xsl:when test="not($target)">
+                <xsl:text>the @copy attribute points to nothing, check the spelling?</xsl:text>
+            </xsl:when>
+            <xsl:when test="not($target/self::webwork)">
+                <xsl:text>the @copy attribute points to a "</xsl:text>
+                <xsl:value-of select="local-name($target)"/>
+                <xsl:text>" element, not another "webwork".</xsl:text>
+            </xsl:when>
+            <xsl:when test="$target/self::webwork[@source]">
+                <xsl:text>the @copy attribute points a "webwork" with a @source attribute.  (Replace the @copy by the @source?)</xsl:text>
+            </xsl:when>
+            <xsl:when test="$target/self::webwork[@copy]">
+                <xsl:text>the @copy attribute points to "webwork" with a @copy attribute. Sorry, we are not that sophisticated.</xsl:text>
+            </xsl:when>
+            <!-- Presumably OK, no error message -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:choose>
+        <!-- no error means to proceed with copy -->
+        <xsl:when test="$error-message-for-copy = ''">
+            <xsl:copy>
+                <xsl:attribute name="copied-from">
+                    <xsl:value-of select="@copy"/>
+                </xsl:attribute>
+                <!-- Duplicate attributes, but remove the @copy attribute -->
+                <!-- used as a signal here.  We don't want to copy this   -->
+                <!-- again after we have been to the WeBWorK server.      -->
+                <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
+                <!-- The @seed makes the problem different, and there are also      -->
+                <!-- unique identifiers, so grab any other attributes of the        -->
+                <!-- original, but exclude these while formulating a copy/clone.     -->
+                <!-- We also exclude @ww-id since the target already has its own     -->
+                <!-- @ww-id from the webwork pass, and we must keep the source's ID. -->
+                <xsl:apply-templates select="$target/@*[(not(local-name(.) = 'id')) and
+                                                        (not(local-name(.) = 'label')) and
+                                                        (not(local-name(.) = 'seed')) and
+                                                        (not(local-name(.) = 'ww-id'))]" mode="assembly"/>
+                <!-- NB: authored WeBWorK content never has @xml:id or @label, -->
+                <!-- so no scrubbing of unique IDs is needed here.             -->
+                <xsl:apply-templates select="$target/node()" mode="assembly"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- with an error in formulation, drop in something very -->
+        <!-- similar in gross form, and alert at the console      -->
+        <xsl:otherwise>
+            <xsl:copy>
+                <!-- As for a legitimate copy above, we carry over as much -->
+                <!-- metadata as possible, and in particular include a     -->
+                <!-- @ww-id for tracking through the server                -->
+                <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
+                <!-- Now a minimal, but correct PreTeXt, WeBWorK problem into the  -->
+                <!-- extraction machinery, and out into all possible final outputs  -->
+                <statement>
+                    <p>
+                        A WeBWorK problem right here was meant to be a copy of another problem,
+                        but potentially with different randomization, but there was a failure.
+                        The <c>@copy</c> attribute was set to <c><xsl:value-of select="@copy"/></c>.
+                        Please report me, so the publisher can get more details by searching the
+                        runtime output for <q><c>PTX:ERROR</c></q>.
+                    </p>
+                </statement>
+            </xsl:copy>
+            <!-- minimalist report into source, more at console -->
+            <xsl:message>PTX:ERROR:   A WeBWorK problem has a @copy attribute with value "<xsl:value-of select="@copy"/>".</xsl:message>
+            <xsl:message>             However, the problem did not render:</xsl:message>
+            <xsl:message><xsl:text>             </xsl:text><xsl:value-of select="$error-message-for-copy"/></xsl:message>
+            <xsl:message>             A placeholder problem will appear in your output instead.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ##################################################### -->
 <!-- Dynamic Substitutions                                 -->
 <!-- Cut out dynamic setup and evaluation for static mode. -->
@@ -1135,42 +1222,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ################### -->
-<!-- WeBWorK Manufacture -->
-<!-- ################### -->
+<!-- ################################# -->
+<!-- WeBWorK Identification (ww-id)  -->
+<!-- ################################# -->
 
-<!-- Don't match on simple WeBWorK logo       -->
-<!-- But do match with a @copy attribute      -->
-<!-- Seed and possibly source attributes      -->
-<!-- Then authored?, pg?, and static children -->
-<!-- NB: "xref" check elsewhere is not        -->
-<!-- performed here since we accept           -->
-<!-- representations at face-value            -->
-
-<!-- NB: when working to improve which parts of the webwork representations -->
-<!-- move on to assembled source, realize that the "static" version meant   -->
-<!-- for non-HTML outputs is also the best thing to provide to the HTML     -->
-<!-- conversion for use as a search document.  Perhaps create the full-on   -->
-<!-- JSON (escaped) string here from "static" and provide it as an internal -->
-<!-- element ("pi:") for later consumption.  Review the destination for     -->
-<!-- similar notes about possible changes.                                  -->
+<!-- Every "webwork" that is a problem (not just the logo)     -->
+<!-- gets a @ww-id stamped here.  This ID migrates through     -->
+<!-- the extraction stylesheet ("extract-pg.xsl"), the Python  -->
+<!-- communication with the server, and into the               -->
+<!-- representations file.  It is then used to look up the     -->
+<!-- matching "webwork-reps" during the representations pass.  -->
+<!-- 2022-11-21: we are a bit careful to optimize the          -->
+<!-- computation of the identifiers in a backwards-compatible   -->
+<!-- way.  Better to someday switch to a purely recursive       -->
+<!-- descent version as a one-time jolt to authors.            -->
+<!-- (Remove global $all-webwork.)                             -->
 
 <xsl:template match="webwork[* or @copy or @source or text()]" mode="webwork">
-    <!-- Every "webwork" that is a problem (not a generator) gets a   -->
-    <!-- lifetime identification in both passes through the source.   -->
-    <!-- The first migrates through the "extract-pg.xsl" template,    -->
-    <!-- then the Python communication with the server, and into the  -->
-    <!-- representations file.  The second is then used to align the  -->
-    <!-- source with the representations file on the second pass.     -->
-    <!-- For historical reasons, this ID genertaion is slow and       -->
-    <!-- clumsy, we can improve by using a recursive generation,      -->
-    <!-- which would require parameter passing through all the        -->
-    <!-- "assembly" templates.  Better to perhaps break out a         -->
-    <!-- "webwork" pass just prior to assembly.                       -->
-    <!-- 2022-11-21: we are a bit careful to optimize the computation -->
-    <!-- of the identifiers in a backwards-compatible way.  Better to -->
-    <!-- someday switch to a purely recursive descent version as a    -->
-    <!-- one-time jolt to authors. (Remove global $all-webwork.)      -->
     <xsl:variable name="ww-id">
         <xsl:choose>
             <xsl:when test="@xml:id">
@@ -1194,145 +1262,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:choose>
-        <!-- "normally" not extracting to build PGML, it -->
-        <!-- should be saved off in the representations  -->
-        <!-- file and available for making replacements  -->
-        <xsl:when test="not($b-extracting)">
-            <!-- the "webwork-reps" element from the server for this "webwork" -->
-            <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
-            <xsl:choose>
-                <!-- An empty string for $webwork-representations-file, and      -->
-                <!-- the "document()" still succeeds (returns the source file?). -->
-                <!-- But this is hopeless. So just totally bail out repeatedly   -->
-                <!-- and leave the containing "exercise" hollow.                 -->
-                <xsl:when test="$webwork-representations-file = ''">
-                    <xsl:message>PTX:ERROR:    There is a WeBWorK exercise with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
-                    <xsl:message>              but your publication file does not indicate the file</xsl:message>
-                    <xsl:message>              of problem representations created by a WeBWorK server.</xsl:message>
-                    <xsl:message>              Your WeBWorK exercises will all, at best, be empty.</xsl:message>
-                </xsl:when>
-                <!-- This should only fail if the file is missing.  Repeatedly. -->
-                <xsl:when test="not($the-webwork-rep)">
-                    <xsl:message>PTX:ERROR:    The WeBWorK problem with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
-                    <xsl:message>              could not be located in the file of WeBWorK problems from</xsl:message>
-                    <xsl:message>              the server, which your publication file indicates should be located</xsl:message>
-                    <xsl:message>              at "<xsl:value-of select="$webwork-representations-file"/>". </xsl:message>
-                    <xsl:message>              If there are many messages like this, then likely your file is missing. </xsl:message>
-                    <xsl:message>              But if this is an isolated error message, then it may indicate a bug,</xsl:message>
-                    <xsl:message>              which should be reported.</xsl:message>
-                </xsl:when>
-                <!-- Copy the "webwork-reps" in place of the "webwork", so this is  -->
-                <!-- a new signal of a WW problem for the second pass.  This is     -->
-                <!-- also temporary, since we will subset and slim this down later. -->
-                <xsl:otherwise>
-                    <xsl:apply-templates select="$the-webwork-rep" mode="webwork"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- Now we are doing a pass to support extraction -->
-        <!-- of PGML, so $b-extracting- is true            -->
-        <!--                                               -->
-        <!-- This is where we copy PTX source to prevent   -->
-        <!-- multiple versions foating in around in an     -->
-        <!-- author's source                               -->
-        <xsl:when test="@copy">
-            <!-- Find the target.  Maybe. -->
-            <xsl:variable name="target" select="id(@copy)"/>
-            <!-- Trap potential pitfalls and record part of an error -->
-            <!-- message.  Use a non-empty error message as a signal -->
-            <!-- to bail out gracefully on the copy.                 -->
-            <xsl:variable name="error-message-for-copy">
-                <xsl:choose>
-                    <xsl:when test="not($target)">
-                        <xsl:text>the @copy attribute points to nothing, check the spelling?</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="not($target/self::webwork)">
-                        <xsl:text>the @copy attribute points to a "</xsl:text>
-                        <xsl:value-of select="local-name($target)"/>
-                        <xsl:text>" element, not another "webwork".</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$target/self::webwork[@source]">
-                        <xsl:text>the @copy attribute points a "webwork" with a @source attribute.  (Replace the @copy by the @source?)</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$target/self::webwork[@copy]">
-                        <xsl:text>the @copy attribute points to "webwork" with a @copy attribute. Sorry, we are not that sophisticated.</xsl:text>
-                    </xsl:when>
-                    <!-- Presumably OK, no error message -->
-                    <xsl:otherwise/>
-                </xsl:choose> <!-- end: gauntlet of bad @copy discovery -->
-            </xsl:variable>
-
-            <xsl:choose>
-                <!-- no error means to proceed with copy -->
-                <xsl:when test="$error-message-for-copy = ''">
-                    <xsl:copy>
-                        <xsl:attribute name="copied-from">
-                            <xsl:value-of select="@copy"/>
-                        </xsl:attribute>
-                        <!-- Duplicate attributes, but remove the @copy attribute -->
-                        <!-- used as a signal here.  We don't want to copy this   -->
-                        <!-- again after we have been to the WW server.           -->
-                        <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="webwork"/>
-                        <!-- The @seed makes the problem different, and there are also   -->
-                        <!-- unique identifiers, so grab any other attributes of the     -->
-                        <!-- original, but exclude these while formulating a copy/clone. -->
-                        <xsl:apply-templates select="$target/@*[(not(local-name(.) = 'id')) and
-                                                                (not(local-name(.) = 'label')) and
-                                                                (not(local-name(.) = 'seed'))]" mode="webwork"/>
-                        <!-- Add a @ww-id for the trip to the server -->
-                        <xsl:attribute name="ww-id">
-                            <xsl:value-of select="$ww-id"/>
-                        </xsl:attribute>
-                        <!-- TODO: The following should scrub unique IDs as it continues down the tree. -->
-                        <!-- Perhaps with a param to the assembly modal template.                       -->
-                        <!-- Does the contents of the original WW have any @xml:id or @label?           -->
-                        <xsl:apply-templates select="$target/node()" mode="webwork"/>
-                    </xsl:copy>
-                </xsl:when>
-                <!-- with an error in formulation, drop in something very -->
-                <!-- similar in gross form, and alert at the console      -->
-                <xsl:otherwise>
-                    <xsl:copy>
-                        <!-- As for a legitimate copy above , we carry over as much -->
-                        <!-- metadata as possible, and in particular include a      -->
-                        <!-- @ww-id  for tracking through the server                -->
-                        <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="webwork"/>
-                        <xsl:attribute name="ww-id">
-                            <xsl:value-of select="$ww-id"/>
-                        </xsl:attribute>
-                        <!-- Now a minimal, but correct PreTeXt, WW problem into the       -->
-                        <!-- extraction machinery, and out into all possible final outputs -->
-                        <statement>
-                            <p>
-                                A WeBWorK problem right here was meant to be a copy of another problem,
-                                but potentially with different randomization, but there was a failure.
-                                The <c>@copy</c> attribute was set to <c><xsl:value-of select="@copy"/></c>.
-                                Please report me, so the publisher can get more details by searching the
-                                runtime output for <q><c>PTX:ERROR</c></q>.
-                            </p>
-                        </statement>
-                    </xsl:copy>
-                    <!-- minimalist report into source, more at console -->
-                    <xsl:message>PTX:ERROR:   A WeBWorK problem has a @copy attribute with value "<xsl:value-of select="@copy"/>".</xsl:message>
-                    <xsl:message>             However, the problem did not render:</xsl:message>
-                    <xsl:message><xsl:text>             </xsl:text><xsl:value-of select="$error-message-for-copy"/></xsl:message>
-                    <xsl:message>             A placeholder problem will appear in your output instead.</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose> <!-- end: action for copy is good/bad -->
-        </xsl:when>
-        <!-- extracting, but not copying, so xerox author's source, plus an ID -->
-        <xsl:otherwise>
-            <xsl:copy>
-                <xsl:apply-templates select="@*" mode="webwork"/>
-                <!-- Add a @ww-id for the trip to the server -->
-                <xsl:attribute name="ww-id">
-                    <xsl:value-of select="$ww-id"/>
-                </xsl:attribute>
-                <xsl:apply-templates select="node()" mode="webwork"/>
-            </xsl:copy>
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- Stamp @ww-id on every webwork element and pass through.    -->
+    <!-- Substitution (from representations file) and @copy         -->
+    <!-- resolution are handled later in the representations pass   -->
+    <!-- and the assembly pass, respectively.                       -->
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="webwork"/>
+        <xsl:attribute name="ww-id">
+            <xsl:value-of select="$ww-id"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()" mode="webwork"/>
+    </xsl:copy>
 </xsl:template>
 
 
@@ -2949,18 +2889,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="exercise-interactive-attribute">
     <xsl:attribute name="exercise-interactive">
         <xsl:choose>
-            <!-- This is defensive, so statement//var below does not   -->
-            <!-- match for WW.  Ancestor varies on extraction, or not. -->
-            <xsl:when test="self::task and (ancestor::webwork|ancestor::webwork-reps)">
+            <!-- This is defensive, so statement//var below does not -->
+            <!-- match for WeBWorK.                                  -->
+            <xsl:when test="self::task and ancestor::webwork">
                 <xsl:text>webwork-task</xsl:text>
             </xsl:when>
-            <!-- WeBWorK next, signal is clear.  Again, -->
-            <!-- two passes and we identify which one.  -->
-            <xsl:when test="webwork and $b-extracting-pg">
-                <xsl:text>webwork-authored</xsl:text>
-            </xsl:when>
-            <xsl:when test="webwork-reps and not($b-extracting-pg)">
-                <xsl:text>webwork-reps</xsl:text>
+            <!-- WeBWorK exercises always retain "webwork" child     -->
+            <!-- through the pipeline.  Substitution from the        -->
+            <!-- representations file happens in the representations -->
+            <!-- pass, after exercise tagging.                       -->
+            <xsl:when test="webwork">
+                <xsl:text>webwork</xsl:text>
             </xsl:when>
             <xsl:when test="myopenmath">
                 <xsl:text>myopenmath</xsl:text>
@@ -3244,51 +3183,114 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Mine webwork-reps for relevant application -->
 
-<!-- Matching with the filter means this will only happen on     -->
-<!-- the non-extraction pass, since the 'webwork-reps' value     -->
-<!-- is placed after the WW representations file has been built. -->
-<!-- We split three ways, for PGML, static, and dynamic (HTML)   -->
-<!-- employment, via modal templates.                            -->
-<!-- NB: including "task" though this may not be supported.      -->
-<xsl:template match="exercise[(@exercise-interactive = 'webwork-reps')]
-                   | project[(@exercise-interactive = 'webwork-reps')]
-                   | activity[(@exercise-interactive = 'webwork-reps')]
-                   | exploration[(@exercise-interactive = 'webwork-reps')]
-                   | investigation[(@exercise-interactive = 'webwork-reps')]" mode="representations">
+<!-- WeBWorK exercises retain a "webwork" child element through the      -->
+<!-- pipeline (with @ww-id stamped in the webwork pass).  Here in the    -->
+<!-- representations pass, we look up the corresponding "webwork-reps"   -->
+<!-- from the representations file and substitute it in place of the     -->
+<!-- "webwork" element.  We then split three ways, for PGML, static,    -->
+<!-- and dynamic (HTML) employment, via modal templates.                 -->
+<!-- During extraction, the "webwork" child is left intact.             -->
+<!-- NB: including "task" though this may not be supported.              -->
+<xsl:template match="exercise[(@exercise-interactive = 'webwork')]
+                   | project[(@exercise-interactive = 'webwork')]
+                   | activity[(@exercise-interactive = 'webwork')]
+                   | exploration[(@exercise-interactive = 'webwork')]
+                   | investigation[(@exercise-interactive = 'webwork')]" mode="representations">
     <xsl:choose>
-        <!-- destined for creating problem sets, really just need PG code -->
-        <xsl:when test="$exercise-style = 'pg-problems'">
-            <!-- duplicate exercise, task, PROJECT-LIKE -->
+        <!-- During extraction, pass through the exercise with its         -->
+        <!-- "webwork" child intact.  The extraction stylesheet will read  -->
+        <!-- the @ww-id and process the authored content.                  -->
+        <xsl:when test="$b-extracting">
             <xsl:copy>
-                <!-- and duplicate the associated attributes, while moving to new mode -->
-                <xsl:apply-templates select="@*" mode="webwork-rep-to-pg"/>
-                <!-- for building problem sets, we do not need much metadata,      -->
-                <!-- nor the connecting "introduction" or "conclusion", we just    -->
-                <!-- want to make the PG code available in a predictable way       -->
-                <!-- (see templates following).  But we do need a title for naming -->
-                <!-- files and building the set definition files pointing to them. -->
-                <xsl:apply-templates select="title" mode="webwork-rep-to-pg"/>
-                <xsl:apply-templates select="webwork-reps" mode="webwork-rep-to-pg"/>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
             </xsl:copy>
         </xsl:when>
-        <!-- static, for multiple conversions, but primarily LaTeX -->
-        <xsl:when test="$exercise-style = 'static'">
-            <xsl:copy>
-                <xsl:apply-templates select="@*" mode="webwork-rep-to-static"/>
-                <!-- overwrite classification as purely static now -->
-                <xsl:attribute name="exercise-interactive">
-                    <xsl:text>static</xsl:text>
-                </xsl:attribute>
-                <xsl:apply-templates select="node()" mode="webwork-rep-to-static"/>
-            </xsl:copy>
-        </xsl:when>
-        <!-- dynamic (aka HTML), needs static previews, server base64, etc, -->
-        <!-- so just copy as-is with "webwork-reps" to signal and organize  -->
-        <!-- to/for HTML conversion                                         -->
         <xsl:otherwise>
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="webwork-rep-to-html"/>
-            </xsl:copy>
+            <!-- Look up the "webwork-reps" element from the server  -->
+            <!-- for this "webwork" exercise, using the @ww-id that  -->
+            <!-- was stamped in the webwork pass.                    -->
+            <xsl:variable name="ww-id" select="webwork/@ww-id"/>
+            <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
+            <xsl:choose>
+                <!-- An empty string for $webwork-representations-file, and      -->
+                <!-- the "document()" still succeeds (returns the source file?). -->
+                <!-- But this is hopeless. So just totally bail out repeatedly   -->
+                <!-- and leave the containing "exercise" hollow.                 -->
+                <xsl:when test="$webwork-representations-file = ''">
+                    <xsl:copy>
+                        <xsl:apply-templates select="node()|@*" mode="representations"/>
+                    </xsl:copy>
+                    <xsl:message>PTX:ERROR:    There is a WeBWorK exercise with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
+                    <xsl:message>              but your publication file does not indicate the file</xsl:message>
+                    <xsl:message>              of problem representations created by a WeBWorK server.</xsl:message>
+                    <xsl:message>              Your WeBWorK exercises will all, at best, be empty.</xsl:message>
+                </xsl:when>
+                <!-- This should only fail if the file is missing.  Repeatedly. -->
+                <xsl:when test="not($the-webwork-rep)">
+                    <xsl:copy>
+                        <xsl:apply-templates select="node()|@*" mode="representations"/>
+                    </xsl:copy>
+                    <xsl:message>PTX:ERROR:    The WeBWorK problem with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
+                    <xsl:message>              could not be located in the file of WeBWorK problems from</xsl:message>
+                    <xsl:message>              the server, which your publication file indicates should be located</xsl:message>
+                    <xsl:message>              at "<xsl:value-of select="$webwork-representations-file"/>". </xsl:message>
+                    <xsl:message>              If there are many messages like this, then likely your file is missing. </xsl:message>
+                    <xsl:message>              But if this is an isolated error message, then it may indicate a bug,</xsl:message>
+                    <xsl:message>              which should be reported.</xsl:message>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- Build a temporary exercise with "webwork-reps" from the  -->
+                    <!-- representations file substituted in place of "webwork".   -->
+                    <!-- This preserves the parent-child relationship that         -->
+                    <!-- downstream templates rely on (e.g. "../introduction" in   -->
+                    <!-- webwork-rep-to-static navigates from webwork-reps up to   -->
+                    <!-- the exercise).                                            -->
+                    <xsl:variable name="exercise-with-reps-rtf">
+                        <xsl:copy>
+                            <xsl:copy-of select="@*"/>
+                            <xsl:for-each select="node()">
+                                <xsl:choose>
+                                    <xsl:when test="self::webwork">
+                                        <xsl:copy-of select="$the-webwork-rep"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:copy-of select="."/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:for-each>
+                        </xsl:copy>
+                    </xsl:variable>
+                    <xsl:variable name="exercise-with-reps" select="exsl:node-set($exercise-with-reps-rtf)/*"/>
+
+                    <xsl:choose>
+                        <!-- destined for creating problem sets, really just need PG code -->
+                        <xsl:when test="$exercise-style = 'pg-problems'">
+                            <xsl:copy>
+                                <xsl:apply-templates select="@*" mode="webwork-rep-to-pg"/>
+                                <xsl:apply-templates select="title" mode="webwork-rep-to-pg"/>
+                                <xsl:apply-templates select="$exercise-with-reps/webwork-reps" mode="webwork-rep-to-pg"/>
+                            </xsl:copy>
+                        </xsl:when>
+                        <!-- static, for multiple conversions, but primarily LaTeX -->
+                        <xsl:when test="$exercise-style = 'static'">
+                            <xsl:copy>
+                                <xsl:apply-templates select="@*" mode="webwork-rep-to-static"/>
+                                <xsl:attribute name="exercise-interactive">
+                                    <xsl:text>static</xsl:text>
+                                </xsl:attribute>
+                                <xsl:apply-templates select="$exercise-with-reps/node()" mode="webwork-rep-to-static"/>
+                            </xsl:copy>
+                        </xsl:when>
+                        <!-- dynamic (aka HTML), needs static previews, server base64, etc -->
+                        <xsl:otherwise>
+                            <xsl:copy>
+                                <xsl:apply-templates select="@*" mode="webwork-rep-to-html"/>
+                                <xsl:apply-templates select="$exercise-with-reps/node()" mode="webwork-rep-to-html"/>
+                            </xsl:copy>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

@@ -735,7 +735,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- attribute. Explicit listing in template match might be slightly more-->
 <!-- efficient but has proven to be a popular spot for bugs.             -->
 <xsl:template match="exercise|&PROJECT-LIKE;|task" mode="runestone-manifest">
-    <xsl:variable name="manifestable-interactives-fenced">|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|select|fillin-basic|fillin|coding|dual|shortanswer|webwork-reps|</xsl:variable>
+    <xsl:variable name="manifestable-interactives-fenced">|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|select|fillin-basic|fillin|coding|dual|shortanswer|webwork|</xsl:variable>
     <xsl:if test="contains($manifestable-interactives-fenced, concat('|', @exercise-interactive, '|'))">
         <question>
             <!-- A divisional exercise ("exercises/../exercise") is not really   -->
@@ -764,7 +764,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="eg-introduction"/>
                 <xsl:choose>
                     <!-- with "webwork" guts, the HTML is exceptional -->
-                    <xsl:when test="@exercise-interactive = 'webwork-reps'">
+                    <xsl:when test="@exercise-interactive = 'webwork'">
                         <xsl:apply-templates select="." mode="webwork-core">
                             <xsl:with-param name="b-original" select="true()"/>
                         </xsl:apply-templates>
