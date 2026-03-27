@@ -2889,6 +2889,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/latex/pi:pub-attribute[@name='latex-style']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- "none" (default) or "underline": whether hyperlinks (xref, url) -->
+<!-- receive visual highlighting in the LaTeX/PDF output.            -->
+<xsl:variable name="latex-link-highlight">
+    <xsl:apply-templates select="$publisher-attribute-options/latex/pi:pub-attribute[@name='link-highlight']" mode="set-pubfile-variable"/>
+</xsl:variable>
+
 <!-- LaTeX/Page -->
 
 <!-- Right Alignment -->
@@ -3458,6 +3464,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <pi:pub-attribute name="draft" default="no" options="yes" legacy-stringparam="latex.draft"/>
         <pi:pub-attribute name="open-odd" default="no" options="add-blanks skip-pages"/>
         <pi:pub-attribute name="latex-style" default="" options="AIM chaos CLP dyslexic-font guide texstyle"/>
+        <pi:pub-attribute name="link-highlight" default="none" options="underline"/>
         <page>
             <pi:pub-attribute name="bottom-alignment" default="ragged" options="flush"/>
         </page>
