@@ -388,6 +388,16 @@
             </cd> to values <c>yes</c> or <c>no</c> to enable or disable the use of page numbers in cross-references (typically achieved with the <tag>xref</tag> element).  The default varies, as it is dependent on the print option (<xref ref="latex-print-options"/>).  See <xref ref="latex-xref-page-numbers"/> for more on the defaults.</p>
         </subsection>
 
+        <subsection xml:id="latex-link-highlight-options">
+            <title>Hyperlink Highlighting</title>
+            <idx><h>accessibility</h><h>hyperlink underlining, LaTeX</h></idx>
+            <idx><h>LaTeX</h><h>hyperlink highlighting</h></idx>
+
+            <p>Set<cd>
+                <cline>/publication/latex/@link-highlight</cline>
+            </cd>to <c>underline</c> to draw an underline beneath hyperlinks (<tag>xref</tag> and <tag>url</tag>) in the <init>PDF</init> output.  The default value is <c>none</c>.  This option requires no additional <latex/> packages.  See <xref ref="topic-accessibility"/> for accessibility motivation.</p>
+        </subsection>
+
         <subsection xml:id="latex-worksheet-options">
             <title><latex /> Worksheet Options</title>
             <p>
