@@ -1112,6 +1112,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Always defined, even if there is no need, or if a specific tt font is not loaded&#xa;</xsl:text>
     <xsl:text>\newcommand{\mono}[1]{\texttt{#1}}&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
+    <!-- \linkhilite macro for highlighting hyperlinks (xref, url) -->
+    <!-- Only defined when needed, i.e. when not "none"            -->
+    <!-- "underline": wraps with \underline                        -->
+    <xsl:if test="$latex-link-highlight != 'none'">
+        <xsl:text>%% \linkhilite macro: wraps hyperlink visible text for highlighting&#xa;</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$latex-link-highlight = 'underline'">
+                <xsl:text>\newcommand{\linkhilite}[1]{\underline{#1}}&#xa;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:if>
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Following semantic macros are only defined here if their&#xa;</xsl:text>
     <xsl:text>%% use is required only in this specific document&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
@@ -8097,7 +8109,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
             <!-- the visible clickable -->
             <xsl:text>{</xsl:text>
+            <xsl:if test="$latex-link-highlight != 'none'">
+                <xsl:text>\linkhilite{</xsl:text>
+            </xsl:if>
             <xsl:copy-of select="$visible-text"/>
+            <xsl:if test="$latex-link-highlight != 'none'">
+                <xsl:text>}</xsl:text>
+            </xsl:if>
             <xsl:text>}</xsl:text>
             <!-- A content-full URL will have an authored @visual version,  -->
             <!-- or the pre-processor will have manufactured a reasonable   -->
@@ -10834,17 +10852,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$xref-as-ref='true'">
             <xsl:text>\hyperref[</xsl:text>
             <xsl:apply-templates select="$target" mode="unique-id" />
-            <xsl:text>]</xsl:text>
-            <xsl:text>{</xsl:text>
+            <xsl:text>]{</xsl:text>
+            <xsl:if test="$latex-link-highlight != 'none'">
+                <xsl:text>\linkhilite{</xsl:text>
+            </xsl:if>
             <xsl:value-of select="$content" />
+            <xsl:if test="$latex-link-highlight != 'none'">
+                <xsl:text>}</xsl:text>
+            </xsl:if>
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\hyperlink{</xsl:text>
             <xsl:apply-templates select="$target" mode="unique-id" />
-            <xsl:text>}</xsl:text>
-            <xsl:text>{</xsl:text>
+            <xsl:text>}{</xsl:text>
+            <xsl:if test="$latex-link-highlight != 'none'">
+                <xsl:text>\linkhilite{</xsl:text>
+            </xsl:if>
             <xsl:value-of select="$content" />
+            <xsl:if test="$latex-link-highlight != 'none'">
+                <xsl:text>}</xsl:text>
+            </xsl:if>
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
