@@ -302,6 +302,7 @@
                     attribute page-ref { "yes" | "no" }?,
                     attribute draft { "yes" | "no" }?,
                     attribute snapshow { "yes" | "no" }?,
+                    attribute link-highlight { "none" | "underline" }?,
                     ( Page? &amp; Worksheet? &amp; Cover? &amp; Asymptote?)
                 }
 

@@ -5302,6 +5302,11 @@
             </li>
 
             <li>
+                <title>Hyperlink Underlining in <init>PDF</init></title>
+                <p>In an electronic <init>PDF</init>, hyperlinks are distinguished from surrounding text by color alone, which may be insufficient for readers with color vision deficiencies.  A publisher option can add an underline beneath all hyperlinks (<tag>xref</tag> and <tag>url</tag>), providing a second visual cue independent of color.  (A print <init>PDF</init> does not color links, but a publisher may still choose to underline them.)  See <xref ref="latex-link-highlight-options"/> for the publisher file syntax.</p>
+            </li>
+
+            <li>
                 <title>Commutative Diagrams</title>
                 <p>Whenever possible, author commutative diagrams using the syntax of the <c>amscd</c> <latex/> package.  Then online and braille output will be more accessible.  See <xref ref="commutative-diagrams"/> for more.</p>
             </li>

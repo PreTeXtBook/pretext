@@ -463,6 +463,14 @@
           </choice>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="link-highlight">
+          <choice>
+            <value>none</value>
+            <value>underline</value>
+          </choice>
+        </attribute>
+      </optional>
       <interleave>
         <optional>
           <ref name="Page"/>
