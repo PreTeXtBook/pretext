@@ -25,7 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Jiri Lebl, lebl@okstate.edu, 2023-05-21   -->
 
 <locale language="cs-CZ" direction="ltr"
-        quote-primary="english-double" quote-secondary="english-single">
+        quote-primary="down-up-double" quote-secondary="down-up-single">
     <!-- The english quotation style above is just a default, it needs adjustment -->
     <!-- THEOREM-LIKE blocks -->
     <!-- Environments which have proofs, plus proofs themselves -->
@@ -82,7 +82,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'>Závěr</localization>
     <localization string-id='exercises'>Cvičení</localization>
     <localization string-id='worksheet'>Pracovní list</localization>
-    <!-- <localization string-id='handout'>Handout</localization> -->
+    <localization string-id='handout'>Handout</localization>
     <localization string-id='reading-questions'>Otázky ze čtení</localization>
     <localization string-id='solutions'>Řešení</localization>
     <localization string-id='glossary'>Vysvětlivky</localization>
@@ -92,7 +92,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='paragraphs'>Odstavce</localization>
     <localization string-id='subparagraph'>Pododstavec</localization>
     <!-- Adjustments to titles of divisions -->
-    <!-- <localization string-id='group'>Group</localization> -->
+    <localization string-id='group'>Skupina</localization>
     <!-- used for a (logical) portion of a proof -->
     <localization string-id='case'>Případ</localization>
     <!-- Components of the narrative -->
@@ -192,12 +192,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Runestone Activities -->
     <localization string-id='video'>Video</localization>
     <localization string-id='program'>Program</localization>
-    <!-- <localization string-id='true'>True</localization> -->
-    <!-- <localization string-id='false'>False</localization> -->
-    <!-- <localization string-id='or'>Or</localization> -->
-    <!-- <localization string-id='either'>Either</localization> -->
-    <!-- <localization string-id='uncategorized'>Uncategorized</localization> -->
-    <!-- <localization string-id='query'>Query</localization> -->    <localization string-id='program-activecode'>ActiveCode</localization>
+    <localization string-id='true'>Pravda</localization>
+    <localization string-id='false'>Nepravda</localization>
+    <localization string-id='or'>Nebo</localization>
+    <localization string-id='either'>Buď</localization>
+    <localization string-id='uncategorized'>Nezařazeno</localization>
+    <localization string-id='query'>Otázka</localization>
+    <localization string-id='program-activecode'>ActiveCode</localization>
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
@@ -244,7 +245,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='edition'>Edice</localization>
     <localization string-id='website'>Webová stránka</localization>
     <localization string-id='copyright'>Copyright</localization>
-    <!-- <localization string-id='keywords'>Keywords</localization> -->
+    <localization string-id='keywords'>Kličová slova</localization>
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>permalink</localization>
     <localization string-id='incontext'>v-souvislosti</localization>
@@ -274,20 +275,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='activate'>Aktivovat</localization>
     <localization string-id='reset'>Reset</localization>
     <localization string-id='array'>pole</localization>
-    <!-- <localization string-id='papersize'>Paper size</localization> -->
+    <localization string-id='papersize'>Velikost papíru</localization>
     <!-- Additional printing options -->
-    <!-- <localization string-id="printing-options">Additional printing options</localization> -->
+    <localization string-id="printing-options">Další možnosti tisku</localization>
     <!-- "hide hint/answer/solutions" toggle title                         -->
-    <!-- <localization string-id="hide-hints">Hide hints</localization> -->
-    <!-- <localization string-id="hide-answers">Hide answers</localization> -->
-    <!-- <localization string-id="hide-solutions">Hide solutions</localization> -->
-    <!-- <localization string-id="print-header">Print headers</localization> -->
-    <!-- <localization string-id="print-footer">Print footers</localization> -->
-    <!-- <localization string-id="first-page">First page</localization> -->
-    <!-- <localization string-id="running">Running</localization> -->
-    <!-- <localization string-id="highlight-workspace">Highlight workspace</localization> -->
+    <localization string-id="hide-hints">Zakrýt nápovědu</localization>
+    <localization string-id="hide-answers">Zakrýt odpovědi</localization>
+    <localization string-id="hide-solutions">Zakrýt řešení</localization>
+    <localization string-id="print-header">Tisknout záhlaví</localization>
+    <localization string-id="print-footer">Tisknout zápatí</localization>
+    <localization string-id="first-page">První strana</localization>
+    <localization string-id="running">Živé</localization>
+    <localization string-id="highlight-workspace">Zvýraznit pracovní plochu</localization>
     <localization string-id='print'>Tisk</localization>
-    <!--<localization string-id='print-preview'>Print preview</localization>-->
+    <localization string-id='print-preview'>Náhled tisku</localization>
     <localization string-id='close'>Zavřít</localization>
-    <!-- <localization string-id='open-new-tab'>Open in new tab</localization> -->
+    <localization string-id='open-new-tab'>Otevřít v nové kartě</localization> 
 </locale>
