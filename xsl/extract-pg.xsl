@@ -176,7 +176,7 @@
 
 <xsl:template match="webwork[@source|statement|task|text()]" mode="extraction">
     <xsl:variable name="problem">
-        <xsl:value-of select="@ww-id"/>
+        <xsl:value-of select="../@assembly-id"/>
     </xsl:variable>
     <problem>
         <xsl:attribute name="id">
