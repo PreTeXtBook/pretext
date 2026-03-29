@@ -1854,7 +1854,7 @@ def webwork_to_xml(
         webwork_reps.set("webwork2_major_version", str(webwork2_major_version))
         webwork_reps.set("webwork2_minor_version", str(webwork2_minor_version))
         webwork_reps.set("{%s}id" % (XML), "extracted-" + problem)
-        webwork_reps.set("ww-id", problem)
+        webwork_reps.set("assembly-id", problem)
         static = ET.SubElement(webwork_reps, "static")
         static.set("seed", seed[problem])
         if origin[problem] == "webwork2":
