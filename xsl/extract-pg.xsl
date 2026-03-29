@@ -196,7 +196,7 @@
         <!-- 1b. if this problem is a copy, record what it was copied from         -->
         <xsl:if test="@copied-from">
             <xsl:attribute name="copied-from">
-                <xsl:value-of select="@copied-from"/>
+                <xsl:value-of select="id(@copied-from)/../@assembly-id"/>
             </xsl:attribute>
         </xsl:if>
         <!-- 2. a seed for randomization (with a default explicitly declared)      -->
