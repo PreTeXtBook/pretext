@@ -1186,8 +1186,7 @@ def webwork_to_xml(
     ww_reps_dir = dest_dir
     ww_images_dir = os.path.join(dest_dir, "images")
 
-    # file path for the representations file
-    ww_reps_file = os.path.join(ww_reps_dir, "webwork-representations.xml")
+    # per-exercise representation files live in this directory, named {assembly-id}.xml
 
     # where generated pg problem files will live (each .pg file will usually be deeper in a folder
     # tree based on document structure and chunking level)
@@ -1441,11 +1440,8 @@ def webwork_to_xml(
         if count > 0:
             raise ValueError("PTX:ERROR: unable to establish connection to local socket")
 
-    # begin XML tree
-    # then we loop through all problems, appending children
     NSMAP = {"xml": "http://www.w3.org/XML/1998/namespace"}
     XML = "http://www.w3.org/XML/1998/namespace"
-    webwork_representations = ET.Element("webwork-representations", nsmap=NSMAP)
     # Choose one of the dictionaries to take its keys as what to loop through
     for problem in origin:
         if origin[problem] == "webwork2":
@@ -1502,7 +1498,7 @@ def webwork_to_xml(
                 socket_params["sourceFilePath"] = os.path.join(external_dir, path[problem])
 
             msg = "sending {} to socket to save in {}: origin is '{}'"
-            log.info(msg.format(problem, ww_reps_file, origin[problem]))
+            log.info(msg.format(problem, ww_reps_dir, origin[problem]))
             clientsocket.send(json.dumps(socket_params).encode('utf-8'))
 
             buffer = bytearray()
@@ -1561,17 +1557,17 @@ def webwork_to_xml(
                 )
 
             msg = "sending {} to server to save in {}: origin is '{}'"
-            log.info(msg.format(problem, ww_reps_file, origin[problem]))
+            log.info(msg.format(problem, ww_reps_dir, origin[problem]))
             if origin[problem] == "webwork2":
                 log.debug(
                     "server-to-ptx: {}\n{}\n{}\n{}".format(
-                        problem, webwork2_path, path[problem], ww_reps_file
+                        problem, webwork2_path, path[problem], ww_reps_dir
                     )
                 )
             elif origin[problem] == "generated":
                 log.debug(
                     "server-to-ptx: {}\n{}\n{}\n{}".format(
-                        problem, webwork2_path, pgdense[problem], ww_reps_file
+                        problem, webwork2_path, pgdense[problem], ww_reps_dir
                     )
                 )
 
@@ -1844,8 +1840,8 @@ def webwork_to_xml(
                         log.warning(msg.format(destination_image_file, ext))
                 os.remove(os.path.join(ww_images_dir, ptx_image_filename))
 
-        # Use "webwork-reps" as parent tag for the various representations of a problem
-        webwork_reps = ET.SubElement(webwork_representations, "webwork-reps")
+        # Use "webwork-reps" as the root tag for this problem's representation file
+        webwork_reps = ET.Element("webwork-reps", nsmap=NSMAP)
         # There once was a "version 1" structure to the representations file before "version 2".
         # For a while, both were supported. Neither was officially defined anywhere, and now
         # "version 1" is a thing of the past. We still mark the current representations file as
@@ -2005,22 +2001,22 @@ def webwork_to_xml(
         elif origin[problem] == "webwork2":
             pg.set("source", path[problem])
 
-    # write to file
-    include_file_name = os.path.join(ww_reps_file)
-    try:
-        with open(include_file_name, "wb") as include_file:
-            include_file.write(
-                ET.tostring(
-                    webwork_representations,
-                    encoding="utf-8",
-                    xml_declaration=True,
-                    pretty_print=True,
+        # write one file per exercise, named by @assembly-id
+        include_file_name = os.path.join(ww_reps_dir, problem + ".xml")
+        try:
+            with open(include_file_name, "wb") as include_file:
+                include_file.write(
+                    ET.tostring(
+                        webwork_reps,
+                        encoding="utf-8",
+                        xml_declaration=True,
+                        pretty_print=True,
+                    )
                 )
-            )
-    except Exception as e:
-        root_cause = str(e)
-        msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
-        raise ValueError(msg.format(include_file_name) + root_cause)
+        except Exception as e:
+            root_cause = str(e)
+            msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
+            raise ValueError(msg.format(include_file_name) + root_cause)
 
     # close session to avoid resource wanrnings
     try:
