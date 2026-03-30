@@ -4982,6 +4982,12 @@ Book (with parts), "section" at level 3
                     <xsl:when test="self::li and ancestor::list">
                         <xsl:text>:</xsl:text>
                     </xsl:when>
+                    <!-- A figure-like inside a sidebyside (or       -->
+                    <!-- sbsgroup) inside a figure is subnumbered    -->
+                    <!-- with a letter like "(a)", so the serial     -->
+                    <!-- number already carries its own delimiter    -->
+                    <!-- and no period separator is needed.          -->
+                    <xsl:when test="(&FIGURE-FILTER;) and (parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)"/>
                     <xsl:otherwise>
                         <xsl:text>.</xsl:text>
                     </xsl:otherwise>
