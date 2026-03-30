@@ -99,6 +99,12 @@ section.worksheet, section.handout {
   font-size: 1.3em;
 }
 
+// Headings made out of paragraphs titles
+.onepage h4.heading {
+  font-size: 1.2em;
+  margin-top: 1em;
+}
+
 .onepage .instructions {
   display: none;
 }
