@@ -2117,6 +2117,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]{subdisplay}{}&#xa;</xsl:text>
     <!-- faux subdisplay requires manipulating low-level counters -->
     <xsl:text>\makeatother&#xa;</xsl:text>
+    <!-- Debug: macro to compare PreTeXt-computed numbers against LaTeX counters -->
+    <xsl:if test="$b-debug-numbering-check">
+        <xsl:text>%% Debug: verify PreTeXt-computed numbers match LaTeX counter numbers&#xa;</xsl:text>
+        <xsl:text>\makeatletter&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxnumbercheck}[1]{%&#xa;</xsl:text>
+        <xsl:text>  \protected@edef\ptx@expected{#1}%&#xa;</xsl:text>
+        <xsl:text>  \protected@edef\ptx@actual{\thetcbcounter}%&#xa;</xsl:text>
+        <xsl:text>  \ifx\ptx@expected\ptx@actual\else&#xa;</xsl:text>
+        <xsl:text>    \GenericWarning{(PreTeXt)}{PreTeXt Warning: Number mismatch for block: expected \ptx@expected, LaTeX produced \ptx@actual}%&#xa;</xsl:text>
+        <xsl:text>  \fi&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\makeatother&#xa;</xsl:text>
+    </xsl:if>
    <!-- Groups of environments/blocks -->
     <!-- Variables hold exactly one node of each type in use -->
     <!-- "environment" template constructs...environments -->
@@ -5857,6 +5870,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="block-options"/>
     <xsl:text>%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="debug-numbering-check"/>
     <!-- statement is required now, to be relaxed in schema             -->
     <!-- explicitly ignore PROOF-LIKE and pickup just for theorems      -->
     <!-- Alternative: ocate first PROOF-LIKE, select only preceding:: ? -->
@@ -6354,6 +6368,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>%&#xa;</xsl:text>
+    <!-- Debug numbering check only for inline exercises and    -->
+    <!-- projects, which use tcolorbox auto counters.           -->
+    <!-- Divisional/worksheet/reading exercises use manual      -->
+    <!-- serial numbers, not auto counters.                     -->
+    <xsl:if test="$inline or $project">
+        <xsl:apply-templates select="." mode="debug-numbering-check"/>
+    </xsl:if>
     <!-- Each "idx" produces its own newline -->
     <xsl:apply-templates select="idx"/>
     <!-- Now the guts of the exercise, inside of its  -->
@@ -7062,6 +7083,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="block-options"/>
     <xsl:text>%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="debug-numbering-check"/>
     <xsl:choose>
         <!-- We use common routines for this variant, but     -->
         <!-- components of these objects are not controllable -->
@@ -9159,6 +9181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="number"/>
     </xsl:if>
     <xsl:text>}%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="debug-numbering-check"/>
     <!-- images have margins and widths, so centering not needed -->
     <!-- likewise, sidebyside and tabular will center themselves -->
     <!-- Eventually everything in a figure should control itself -->
@@ -9205,6 +9228,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="number"/>
     </xsl:if>
     <xsl:text>}%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="debug-numbering-check"/>
     <!-- A "list" has an introduction/conclusion, with a       -->
     <!-- list of some type in-between, and these will all      -->
     <!-- automatically word-wrap to fill the available width.  -->
@@ -11720,6 +11744,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="newpage">
     <xsl:if test="@xml:id = str:tokenize($latex-pagebreaks-string)">
         <xsl:text>\newpage%&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- Debug: emit a LaTeX assertion comparing PreTeXt's number -->
+<!-- against the number LaTeX computed from its own counters  -->
+<xsl:template match="*" mode="debug-numbering-check">
+    <xsl:if test="$b-debug-numbering-check">
+        <xsl:text>\ptxnumbercheck{</xsl:text>
+        <xsl:apply-templates select="." mode="number"/>
+        <xsl:text>}%&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
