@@ -3109,58 +3109,60 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Mine webwork-reps for relevant application -->
 
-<!-- WeBWorK exercises retain a "webwork" child element through the      -->
-<!-- pipeline (with @ww-id stamped in the webwork pass).  Here in the    -->
-<!-- representations pass, we look up the corresponding "webwork-reps"   -->
-<!-- from the representations file and substitute it in place of the     -->
-<!-- "webwork" element.  We then split three ways, for PGML, static,    -->
-<!-- and dynamic (HTML) employment, via modal templates.                 -->
-<!-- During extraction, the "webwork" child is left intact.             -->
-<!-- NB: including "task" though this may not be supported.              -->
+<!-- WeBWorK exercises retain a "webwork" child element through the    -->
+<!-- pipeline.  Here in the representations pass, we look up the       -->
+<!-- corresponding "webwork-reps" from the representations file using  -->
+<!-- the parent exercise's @assembly-id, and substitute it in place    -->
+<!-- of the "webwork" element.  We then split three ways, for PGML,    -->
+<!-- static, and dynamic (HTML) employment, via modal templates.       -->
+<!-- During extraction, the "webwork" child is left intact.            -->
+<!-- NB: including "task" though this may not be supported.            -->
 <xsl:template match="exercise[(@exercise-interactive = 'webwork')]
                    | project[(@exercise-interactive = 'webwork')]
                    | activity[(@exercise-interactive = 'webwork')]
                    | exploration[(@exercise-interactive = 'webwork')]
                    | investigation[(@exercise-interactive = 'webwork')]" mode="representations">
     <xsl:choose>
-        <!-- During extraction, pass through the exercise with its         -->
-        <!-- "webwork" child intact.  The extraction stylesheet will read  -->
-        <!-- the @ww-id and process the authored content.                  -->
+        <!-- During extraction, pass through the exercise with its    -->
+        <!-- "webwork" child intact for the extraction stylesheet     -->
+        <!-- to process the authored content.                         -->
         <xsl:when test="$b-extracting">
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="representations"/>
             </xsl:copy>
         </xsl:when>
         <xsl:otherwise>
-            <!-- Look up the "webwork-reps" element from the server  -->
-            <!-- for this "webwork" exercise, using the @ww-id that  -->
-            <!-- was stamped in the webwork pass.                    -->
-            <xsl:variable name="ww-id" select="webwork/@ww-id"/>
-            <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
+            <!-- Load the per-exercise representation file for this    -->
+            <!-- exercise, identified by its @assembly-id.             -->
+            <xsl:variable name="webwork-rep-uri"
+                select="concat($webwork-representations-dir, @assembly-id, '.xml')"/>
+            <xsl:variable name="the-webwork-rep"
+                select="document($webwork-rep-uri, $original)/webwork-reps"/>
             <xsl:choose>
-                <!-- An empty string for $webwork-representations-file, and      -->
+                <!-- An empty string for $webwork-representations-dir, and       -->
                 <!-- the "document()" still succeeds (returns the source file?). -->
                 <!-- But this is hopeless. So just totally bail out repeatedly   -->
                 <!-- and leave the containing "exercise" hollow.                 -->
-                <xsl:when test="$webwork-representations-file = ''">
+                <xsl:when test="$webwork-representations-dir = ''">
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:    There is a WeBWorK exercise with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
-                    <xsl:message>              but your publication file does not indicate the file</xsl:message>
+                    <xsl:message>PTX:ERROR:    There is a WeBWorK exercise with @assembly-id "<xsl:value-of select="@assembly-id"/>"</xsl:message>
+                    <xsl:message>              but your publication file does not indicate the directory</xsl:message>
                     <xsl:message>              of problem representations created by a WeBWorK server.</xsl:message>
                     <xsl:message>              Your WeBWorK exercises will all, at best, be empty.</xsl:message>
                 </xsl:when>
-                <!-- This should only fail if the file is missing.  Repeatedly. -->
+                <!-- This should only fail if the file is missing or stale.  Repeatedly. -->
                 <xsl:when test="not($the-webwork-rep)">
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:    The WeBWorK problem with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
-                    <xsl:message>              could not be located in the file of WeBWorK problems from</xsl:message>
-                    <xsl:message>              the server, which your publication file indicates should be located</xsl:message>
-                    <xsl:message>              at "<xsl:value-of select="$webwork-representations-file"/>". </xsl:message>
-                    <xsl:message>              If there are many messages like this, then likely your file is missing. </xsl:message>
+                    <xsl:message>PTX:ERROR:    The WeBWorK problem with @assembly-id "<xsl:value-of select="@assembly-id"/>"</xsl:message>
+                    <xsl:message>              could not be located at "<xsl:value-of select="$webwork-rep-uri"/>". </xsl:message>
+                    <xsl:message>              If the WeBWorK files were built with an older version of PreTeXt,</xsl:message>
+                    <xsl:message>              they need to be regenerated.  A "webwork-representations.xml"</xsl:message>
+                    <xsl:message>              in that directory is a sign of this old single-file format.</xsl:message>
+                    <xsl:message>              If there are many messages like this, then likely your directory is missing.</xsl:message>
                     <xsl:message>              But if this is an isolated error message, then it may indicate a bug,</xsl:message>
                     <xsl:message>              which should be reported.</xsl:message>
                 </xsl:when>
