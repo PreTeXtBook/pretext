@@ -2128,6 +2128,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    \GenericWarning{(PreTeXt)}{PreTeXt Warning: Number mismatch for block: expected \ptx@expected, LaTeX produced \ptx@actual}%&#xa;</xsl:text>
         <xsl:text>  \fi&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>%% Debug: verify PreTeXt division numbers match LaTeX counter numbers&#xa;</xsl:text>
+        <xsl:text>%% Second argument is a LaTeX counter name (section, chapter, etc.)&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxdivisionnumbercheck}[2]{%&#xa;</xsl:text>
+        <xsl:text>  \protected@edef\ptx@expected{#1}%&#xa;</xsl:text>
+        <xsl:text>  \protected@edef\ptx@actual{\csname the#2\endcsname}%&#xa;</xsl:text>
+        <xsl:text>  \ifx\ptx@expected\ptx@actual\else&#xa;</xsl:text>
+        <xsl:text>    \GenericWarning{(PreTeXt)}{PreTeXt Warning: Division number mismatch for #2: expected \ptx@expected, LaTeX produced \ptx@actual}%&#xa;</xsl:text>
+        <xsl:text>  \fi&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\makeatother&#xa;</xsl:text>
     </xsl:if>
    <!-- Groups of environments/blocks -->
@@ -5634,6 +5643,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
+    <xsl:if test="$b-debug-numbering-check">
+        <xsl:variable name="the-number">
+            <xsl:apply-templates select="." mode="number"/>
+        </xsl:variable>
+        <xsl:variable name="numberless-suffix">
+            <xsl:apply-templates select="." mode="division-environment-name-suffix"/>
+        </xsl:variable>
+        <!-- Only check divisions that are numbered and use       -->
+        <!-- a numbered LaTeX environment (not numberless).       -->
+        <!-- Numberless specialized divisions (exercises, etc.)   -->
+        <!-- have a PreTeXt number but no LaTeX counter step.     -->
+        <xsl:if test="not($the-number = '') and not($numberless-suffix = '-numberless')">
+            <xsl:text>\ptxdivisionnumbercheck{</xsl:text>
+            <xsl:value-of select="$the-number"/>
+            <xsl:text>}{</xsl:text>
+            <xsl:apply-templates select="." mode="division-name"/>
+            <xsl:text>}%&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
     <!-- Various LaTeX classes and packages define various names, see   -->
     <!-- two links below.  The ones redefined here seem critical for    -->
     <!-- how the "titleps" package makes heads and foots, in concert    -->
