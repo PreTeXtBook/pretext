@@ -16344,6 +16344,92 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
             </worksheet>
 
+            <worksheet>
+                <title>Worksheet with <tag>paragraphs</tag></title>
+                <introduction>
+                    <p>
+                        This is a test of the <tag>paragraphs</tag> element within a worksheet.  It should be able to contain exercises that have workspace, and we should be able to insert page breaks even inside of paragraphs.
+                    </p>
+                </introduction>
+                <paragraphs>
+                    <title>Warm up</title>
+                    <exercise workspace="1in">
+                        <statement>
+                            <p>
+                                This is a warm-up exercise.  It should have a small workspace and be on the first page of the worksheet.
+                            </p>
+                        </statement>
+                    </exercise>
+                </paragraphs>
+                <paragraphs>
+                    <title>More exercises</title>
+                    <exercise workspace="2in">
+                        <statement>
+                            <p>
+                                This is a second exercise.  It should have a larger workspace and be on the second page of the worksheet.
+                            </p>
+                        </statement>
+                    </exercise>
+                    <exercise>
+                        <introduction>
+                            <p>
+                                This is a third exercise with some tasks.  The workspace should be such that there will be a page break between tasks.
+                            </p>
+                        </introduction>
+                        <task workspace="1in">
+                            <statement>
+                                <p>
+                                    Do the first thing.
+                                </p>
+                            </statement>
+                        </task>
+                        <task workspace="2in">
+                            <statement>
+                                <p>
+                                    Do the second thing.
+                                </p>
+                            </statement>
+                        </task>
+                        <task workspace="2in">
+                            <statement>
+                                <p>
+                                    Do the third thing.
+                                </p>
+                            </statement>
+                        </task>
+                    </exercise>
+                </paragraphs>
+                <paragraphs>
+                    <title>A third division</title>
+                    <p>
+                        This is a paragraph that starts the third <tag>paragaphs</tag> division.
+                    </p>
+                    <sidebyside>
+                        <exercise workspace="1in">
+                            <statement>
+                                <p>
+                                    This is an exercise in the third paragraphs division inside a side-by-side.
+                                </p>
+                            </statement>
+                        </exercise>
+
+                        <exercise workspace="2in">
+                            <statement>
+                                <p>
+                                    This is a second exercise in the third paragraphs division.  It should have a larger workspace and be on the fourth page of the worksheet.
+                                </p>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+                    <exercise workspace="2in">
+                        <statement>
+                            <p>
+                                This is a third exercise in the third paragraphs division.  It should have a larger workspace and be on the fifth page of the worksheet.
+                            </p>
+                        </statement>
+                    </exercise>
+                </paragraphs>
+            </worksheet>
         </section>
 
         <section xml:id="handouts" label="section-handouts">
