@@ -425,6 +425,27 @@ function flattenParagraphsSections(printout) {
     });
 }
 
+// Wait for all images inside a container to finish loading.
+// Returns a promise that resolves when every <img> has loaded (or on timeout).
+function waitForImages(container, timeoutMs = 5000) {
+    const images = container.querySelectorAll('img');
+    const promises = [];
+    for (const img of images) {
+        if (!img.complete) {
+            promises.push(new Promise(resolve => {
+                img.addEventListener('load', resolve, { once: true });
+                img.addEventListener('error', resolve, { once: true });
+            }));
+        }
+    }
+    if (promises.length === 0) return Promise.resolve();
+    // Race all image loads against a timeout so broken images don't block forever
+    return Promise.race([
+        Promise.all(promises),
+        new Promise(resolve => setTimeout(resolve, timeoutMs))
+    ]);
+}
+
 // This is used multiple places to set height of workspace divs to their author-provided heights
 function setInitialWorkspaceHeights() {
     const workspaces = document.querySelectorAll('.workspace');
@@ -1089,6 +1110,11 @@ window.addEventListener("DOMContentLoaded", async function(event) {
         const printoutSection = document.querySelector('section.worksheet, section.handout');
         if (printoutSection) {
             flattenParagraphsSections(printoutSection);
+        }
+
+        // Wait for all images to load so height measurements are accurate.
+        if (printoutSection) {
+            await waitForImages(printoutSection);
         }
 
         // If the printout has authored pages, there will be at least one .onepage element.
