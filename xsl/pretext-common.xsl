@@ -424,6 +424,10 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:param name="debug.html.annotate" select="'no'"/>
 <xsl:variable name="b-view-source" select="$debug.html.annotate = 'yes'"/>
 
+<!-- LaTeX only: verify PreTeXt-computed numbers match LaTeX counter numbers -->
+<xsl:param name="debug.numbering.check" select="''"/>
+<xsl:variable name="b-debug-numbering-check" select="$debug.numbering.check = 'yes'"/>
+
 <!-- Maybe not debugging, but transitional variables -->
 
 <!-- Prior to January 2017 we treated all whitespace as -->
@@ -4982,6 +4986,12 @@ Book (with parts), "section" at level 3
                     <xsl:when test="self::li and ancestor::list">
                         <xsl:text>:</xsl:text>
                     </xsl:when>
+                    <!-- A figure-like inside a sidebyside (or       -->
+                    <!-- sbsgroup) inside a figure is subnumbered    -->
+                    <!-- with a letter like "(a)", so the serial     -->
+                    <!-- number already carries its own delimiter    -->
+                    <!-- and no period separator is needed.          -->
+                    <xsl:when test="(&FIGURE-FILTER;) and (parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)"/>
                     <xsl:otherwise>
                         <xsl:text>.</xsl:text>
                     </xsl:otherwise>
