@@ -424,6 +424,10 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:param name="debug.html.annotate" select="'no'"/>
 <xsl:variable name="b-view-source" select="$debug.html.annotate = 'yes'"/>
 
+<!-- LaTeX only: verify PreTeXt-computed numbers match LaTeX counter numbers -->
+<xsl:param name="debug.numbering.check" select="''"/>
+<xsl:variable name="b-debug-numbering-check" select="$debug.numbering.check = 'yes'"/>
+
 <!-- Maybe not debugging, but transitional variables -->
 
 <!-- Prior to January 2017 we treated all whitespace as -->
