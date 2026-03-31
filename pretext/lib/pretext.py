@@ -2791,7 +2791,7 @@ def _stack_replace_tags(text, asset_prefix_rel, mathmode=False):
 
     from lxml import html
 
-    tree = html.fromstring(text)
+    tree = html.fragment_fromstring(text, create_parent='p')
     # Find all <img> tags, make width relative, update source path
     for img in tree.xpath('//img'):
         img.tag = 'image'
