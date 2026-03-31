@@ -4698,10 +4698,9 @@ Book (with parts), "section" at level 3
 
 <!-- Structure Numbers: Theorems, Examples, Projects, Figures -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-blocks" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$numbering-blocks"/>
+    </xsl:call-template>
 </xsl:template>
 <!-- PROJECT-LIKE is now independent, under control of $numbering-projects -->
 <!-- But all ready to become elective -->
@@ -4716,10 +4715,9 @@ Book (with parts), "section" at level 3
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$project-levels" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$project-levels"/>
+    </xsl:call-template>
 </xsl:template>
 <!-- FIGURE-LIKE get a structure number from default $numbering-blocks -->
 <!-- or from "docinfo" independent numbering configuration             -->
@@ -4734,10 +4732,9 @@ Book (with parts), "section" at level 3
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$figure-levels" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$figure-levels"/>
+    </xsl:call-template>
 </xsl:template>
 <!-- Proofs get structure number from parent theorem -->
 <!-- NB: assumes proofs are not detached? Maybe not.      -->
@@ -4758,16 +4755,15 @@ Book (with parts), "section" at level 3
 <!-- manufactured single "mrow".  So we need a structure number for the -->
 <!-- numbered versions of these elements.                               -->
 <xsl:template match="mrow|md[@pi:authored-one-line]" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-equations" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$numbering-equations"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Structure Numbers: Inline Exercises -->
 <!-- Follows the theorem/figure/etc scheme (can't poll parent) -->
 <xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="structure-number">
-    <xsl:variable name="equation-levels">
+    <xsl:variable name="exercise-levels">
         <xsl:choose>
             <xsl:when test="$b-number-exercise-distinct">
                 <xsl:value-of select="$numbering-exercises" />
@@ -4777,10 +4773,9 @@ Book (with parts), "section" at level 3
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$equation-levels" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$exercise-levels"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Structure Numbers: Divisional and Worksheet Exercises -->
@@ -4829,10 +4824,9 @@ Book (with parts), "section" at level 3
 
 <!-- Structure Numbers: Footnotes -->
 <xsl:template match="fn" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-footnotes" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$numbering-footnotes"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Structure Numbers: Lists -->
