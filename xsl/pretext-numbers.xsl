@@ -206,4 +206,72 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>false</xsl:text>
 </xsl:template>
 
+<!-- ######################## -->
+<!-- Block Structure Numbers  -->
+<!-- ######################## -->
+
+<!-- Given a block element, produce its structure number prefix   -->
+<!-- by reading the pre-computed @block-struct from the        -->
+<!-- nearest ancestor division, then truncating or padding to     -->
+<!-- the configured number of levels.                             -->
+<xsl:template name="block-structure-number">
+    <xsl:param name="levels"/>
+    <xsl:variable name="raw-struct"
+        select="ancestor::*[@block-struct][1]/@block-struct"/>
+    <xsl:call-template name="truncate-pad-struct">
+        <xsl:with-param name="struct" select="$raw-struct"/>
+        <xsl:with-param name="levels" select="$levels"/>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Truncate a dotted-number string to a given number of     -->
+<!-- components, padding with ".0" if fewer components exist.  -->
+<xsl:template name="truncate-pad-struct">
+    <xsl:param name="struct"/>
+    <xsl:param name="levels"/>
+    <xsl:param name="count" select="0"/>
+
+    <xsl:choose>
+        <!-- Emitted enough levels, halt -->
+        <xsl:when test="$count = $levels"/>
+        <!-- Components remaining in the string -->
+        <xsl:when test="$struct != ''">
+            <xsl:if test="$count > 0">
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="contains($struct, '.')">
+                    <xsl:value-of select="substring-before($struct, '.')"/>
+                    <xsl:call-template name="truncate-pad-struct">
+                        <xsl:with-param name="struct"
+                            select="substring-after($struct, '.')"/>
+                        <xsl:with-param name="levels" select="$levels"/>
+                        <xsl:with-param name="count" select="$count + 1"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$struct"/>
+                    <xsl:call-template name="truncate-pad-struct">
+                        <xsl:with-param name="struct" select="''"/>
+                        <xsl:with-param name="levels" select="$levels"/>
+                        <xsl:with-param name="count" select="$count + 1"/>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- Out of components, pad with zero -->
+        <xsl:otherwise>
+            <xsl:if test="$count > 0">
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+            <xsl:text>0</xsl:text>
+            <xsl:call-template name="truncate-pad-struct">
+                <xsl:with-param name="struct" select="''"/>
+                <xsl:with-param name="levels" select="$levels"/>
+                <xsl:with-param name="count" select="$count + 1"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 </xsl:stylesheet>
