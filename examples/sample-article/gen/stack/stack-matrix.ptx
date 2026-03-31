@@ -1,0 +1,4 @@
+<stack-static>
+    <statement><p><p>Type in <m>{\left[\begin{array}{cc} 1 &amp; 2 \\ 3 &amp; 4 \end{array}\right]}</m><br/></p><p><fillin characters="15" name="ans1"/></p><div/></p></statement>
+    <answer><p><m>\left[\begin{array}{cc} 1 &amp; 2 \\ 3 &amp; 4 \end{array}\right]</m></p></answer>
+</stack-static>

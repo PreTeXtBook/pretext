@@ -1,0 +1,21 @@
+<stack-static>
+    <statement><p><p class="HELM_exercise">Exercise</p>
+<p> In triangle <m>OAB</m> the point <m>P</m> divides <m>AB</m> internally in the ratio <m>m:n</m>.</p>
+<p>If <m>\overrightarrow{OA} = \underline{a}</m> and <m>\overrightarrow{OB} 
+= \underline{b}</m>, then find an expression for <m>\overrightarrow{OP}</m> in terms of <m>\underline{a}</m> and <m>\underline{b}</m>.</p>
+<p>You might find it helpful to draw a diagram showing this triangle.</p>
+<p><m>\overrightarrow{OP} = </m> <fillin characters="15" name="ans1"/>  </p></p></statement>
+    <solution><p><p>The figure below shows the triangle with the vector <m>\overrightarrow{OP}</m> marked with a dotted line within.</p><p style="text-align: center;"><image alt="A triangle OAB with vectors a and b marked on the edges OA and OB respectively. The point P is marked partway along the edge AB and a dotted line marks the vector OP through the middle of the triangle." class="img-responsive atto_image_button_text-bottom" width="75%" pi:generated="stack/images/stack-typesetting-9-1-4TriangleQuestionAns.pdf" xmlns:pi="http://pretextbook.org/2020/pretext/internal"/></p><p>From
+ the diagram we can see <m>\overrightarrow{OP} = \overrightarrow{OA} + 
+\overrightarrow{AP}</m>.<nbsp/> We are told <m>\overrightarrow{OA} = 
+\underline{a}</m> and so we need to find <m>\overrightarrow{AP}</m>.<nbsp/> We know
+ that <m>P</m> divides <m>\overrightarrow{AB}</m> in the ratio <m>m:n</m> so 
+<me>\overrightarrow{AP} = \frac{m}{m+n}\left(\overrightarrow{AB}\right),</me>
+ as <me>\overrightarrow{AB} = \underline{b} - \underline{a}</me> we find 
+<me>\overrightarrow{AP} = \frac{m}{m+n}\left(\underline{b} - 
+\underline{a}\right)</me> and therefore, <me>\overrightarrow{OP} = 
+\underline{a} + \frac{m}{m+n}\left(\underline{b} - 
+\underline{a}\right).</me></p><p>Note: You can arrive at an equivalent expression by starting from <m>\overrightarrow{OP} = \overrightarrow{OB} + 
+\overrightarrow{BP}</m>.</p><br/></p></solution>
+    <answer><p><m>\frac{\left(b-a\right) m}{n+m}+a</m></p></answer>
+</stack-static>

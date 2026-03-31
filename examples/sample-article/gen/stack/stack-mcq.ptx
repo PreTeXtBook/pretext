@@ -1,0 +1,10 @@
+<stack-static>
+    <statement><p><p>Differentiate <m>{\sin \left( 2\cdot x \right)}</m> with respect to <m>x</m>.</p><p/><ol marker="(1)">
+<li><m>2\cdot \cos \left( 2\cdot x \right)</m></li>
+<li><m>\sin \left( 2\cdot x \right)</m></li>
+<li><m>-\frac{\cos \left( 2\cdot x \right)}{2}</m></li>
+<li><m>\cos \left( 2\cdot x \right)+c</m></li>
+<li>None of these</li>
+</ol><div/></p></statement>
+    <answer><p><m>(1)</m></p></answer>
+</stack-static>
