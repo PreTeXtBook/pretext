@@ -2667,6 +2667,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="level">
             <xsl:value-of select="$next-level"/>
         </xsl:attribute>
+        <!-- Full structure chain including this division's       -->
+        <!-- contribution.  Decorative specialized divisions are  -->
+        <!-- transparent (pass through parent's chain).  Used by  -->
+        <!-- block elements to compute their structure numbers.   -->
+        <xsl:attribute name="block-struct">
+            <xsl:value-of select="$new-struct"/>
+        </xsl:attribute>
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="parent-struct" select="$new-struct"/>
             <xsl:with-param name="level" select="$next-level"/>
