@@ -210,17 +210,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Block Structure Numbers  -->
 <!-- ######################## -->
 
-<!-- Given a block element, produce its structure number prefix   -->
-<!-- by reading the pre-computed @block-struct from the        -->
-<!-- nearest ancestor division, then truncating or padding to     -->
-<!-- the configured number of levels.                             -->
+<!-- Given a block element, produce its structure number prefix      -->
+<!-- by reading the pre-computed @block-struct from the nearest      -->
+<!-- ancestor division, then truncating or padding to the configured -->
+<!-- number of levels.  The @block-struct chain already excludes     -->
+<!-- parts (they are squelched in assembly), so when parts are       -->
+<!-- present the caller's $levels (which counts from "part" depth)   -->
+<!-- must be reduced by one to match the shorter chain.              -->
 <xsl:template name="block-structure-number">
     <xsl:param name="levels"/>
     <xsl:variable name="raw-struct"
         select="ancestor::*[@block-struct][1]/@block-struct"/>
+    <!-- The @block-struct chain already excludes parts, so when  -->
+    <!-- parts are present the $levels count (which includes the -->
+    <!-- part depth) must be reduced by one.  But only for       -->
+    <!-- blocks actually inside a part or backmatter — blocks    -->
+    <!-- in frontmatter have no part ancestor and should use     -->
+    <!-- $levels unmodified.                                     -->
+    <xsl:variable name="effective-levels">
+        <xsl:choose>
+            <xsl:when test="not($parts = 'absent') and ancestor::*[self::part or self::backmatter]">
+                <xsl:choose>
+                    <xsl:when test="$levels > 0">
+                        <xsl:value-of select="$levels - 1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="0"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$levels"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:call-template name="truncate-pad-struct">
         <xsl:with-param name="struct" select="$raw-struct"/>
-        <xsl:with-param name="levels" select="$levels"/>
+        <xsl:with-param name="levels" select="$effective-levels"/>
     </xsl:call-template>
 </xsl:template>
 

@@ -4629,12 +4629,17 @@ Book (with parts), "section" at level 3
 <xsl:template match="&PROOF-LIKE;" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>
-<!-- Captioned items, arranged in a side-by-side,  -->
-<!-- then inside a captioned figure, earn a serial -->
-<!-- number that is a letter.  So their structure  -->
-<!-- number comes from their grandparent figure    -->
+<!-- Captioned items, arranged in a side-by-side,      -->
+<!-- then inside a captioned figure, earn a serial     -->
+<!-- number that is a letter.  So their structure      -->
+<!-- number comes from the enclosing captioned figure. -->
+<!-- The sidebyside may be a child of the figure,      -->
+<!-- or wrapped in an sbsgroup.                        -->
 <xsl:template match="figure/sidebyside/figure | figure/sidebyside/table | figure/sidebyside/listing | figure/sidebyside/list" mode="structure-number">
     <xsl:apply-templates select="parent::sidebyside/parent::figure" mode="number" />
+</xsl:template>
+<xsl:template match="figure/sbsgroup/sidebyside/figure | figure/sbsgroup/sidebyside/table | figure/sbsgroup/sidebyside/listing | figure/sbsgroup/sidebyside/list" mode="structure-number">
+    <xsl:apply-templates select="parent::sidebyside/parent::sbsgroup/parent::figure" mode="number" />
 </xsl:template>
 
 <!-- Structure Numbers: Equations -->
