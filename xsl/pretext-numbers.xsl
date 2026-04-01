@@ -1,5 +1,10 @@
 <?xml version='1.0'?>
 
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
 <!--********************************************************************
 Copyright 2020 Robert A. Beezer
 
@@ -118,6 +123,181 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- as an appendix when present in the backmatter, see above        -->
 <xsl:template match="backmatter/solutions" mode="division-serial-number">
     <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
+</xsl:template>
+
+<!-- ######################### -->
+<!-- Structured vs. Decorative -->
+<!-- ######################### -->
+
+<!-- These templates determine the structure of divisions, needed    -->
+<!-- during assembly to compute block structure numbers.  They are   -->
+<!-- also used at render time from pretext-common.xsl and elsewhere, -->
+<!-- available via cross-import resolution (every conversion         -->
+<!-- stylesheet imports both pretext-assembly.xsl and                -->
+<!-- pretext-common.xsl).                                            -->
+
+<!-- There are two models for most of the divisions (part -->
+<!-- through subsubsection, plus appendix).  One has      -->
+<!-- subdivisions, and possibly specialized subdivisions. -->
+<!-- The other has no subdivisions, and then at most one  -->
+<!-- of each type of specialized subdivision, which       -->
+<!-- inherit numbers from their parent division. This is  -->
+<!-- the test, which is very similar to "is-leaf" in      -->
+<!-- pretext-common.xsl.                                  -->
+<!--                                                      -->
+<!-- A "part" must have chapters, so will always return   -->
+<!-- 'true' and for a 'subsubsection' there are no more   -->
+<!-- subdivisions to employ and so will return empty.     -->
+<!--                                                      -->
+<!-- An exception is a division of *only* worksheets.     -->
+<!-- Although there could be titles and the like.         -->
+<!-- So we compare all-children to  metadata + worksheet. -->
+<!-- TODO: should there be a similar exception for handouts? -->
+<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
+    <xsl:variable name="has-traditional" select="boolean(&TRADITIONAL-DIVISION;)"/>
+    <xsl:variable name="all-children" select="*"/>
+    <xsl:variable name="all-worksheet" select="title|shorttitle|plaintitle|idx|introduction|worksheet|handout|conclusion"/>
+    <xsl:variable name="only-worksheets" select="count($all-children) = count($all-worksheet)"/>
+
+    <xsl:value-of select="$has-traditional or $only-worksheets"/>
+</xsl:template>
+
+<xsl:template match="*" mode="is-structured-division">
+    <xsl:message>PTX:BUG: asking if a non-traditional division (<xsl:value-of select="local-name(.)"/>) is structured or not</xsl:message>
+</xsl:template>
+
+<!-- Specialized divisions sometimes inherit a number from their  -->
+<!-- parent (as part of an unstructured division) and sometimes   -->
+<!-- they do not even have a number (singleton "references" as    -->
+<!-- child of "backmatter").  This template returns "true" if a   -->
+<!-- specialized division "owns" its "own" number.                -->
+<xsl:template match="exercises|worksheet|handout|references|glossary|reading-questions|solutions" mode="is-specialized-own-number">
+    <xsl:choose>
+        <!-- *Some* specialized divisions can appear as a child of the    -->
+        <!-- "backmatter" too.  But only those below.  The rest are       -->
+        <!-- banned as top-level items in the backmatter, but might       -->
+        <!-- occur in an "appendix" or below, with or without structure.  -->
+        <!--   "solutions" will look like an appendix, thus numbered.     -->
+        <!--   "references" or "glossary" are singletons, never numbered. -->
+        <xsl:when test="parent::*[self::backmatter]">
+            <xsl:choose>
+                <xsl:when test="self::solutions">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:when test="self::references or self::glossary">
+                    <xsl:text>false</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   encountered a specialized division ("<xsl:value-of select="local-name(.)"/>") as a child of "backmatter" that was unexpected.  Results will be unpredictable</xsl:message>
+                    <!-- no idea if we should say true or false here -->
+                    <xsl:text>true</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- parent must now be a "traditional" division -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="is-specialized-own-number">
+    <xsl:message>PTX:BUG: asking if a non-specialized division (<xsl:value-of select="local-name(.)"/>) is numbered or not</xsl:message>
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<!-- ######################## -->
+<!-- Block Structure Numbers  -->
+<!-- ######################## -->
+
+<!-- Given a block element, produce its structure number prefix      -->
+<!-- by reading the pre-computed @block-struct from the nearest      -->
+<!-- ancestor division, then truncating or padding to the configured -->
+<!-- number of levels.  The @block-struct chain already excludes     -->
+<!-- parts (they are squelched in assembly), so when parts are       -->
+<!-- present the caller's $levels (which counts from "part" depth)   -->
+<!-- must be reduced by one to match the shorter chain.              -->
+<xsl:template name="block-structure-number">
+    <xsl:param name="levels"/>
+    <xsl:variable name="raw-struct"
+        select="ancestor::*[@block-struct][1]/@block-struct"/>
+    <!-- The @block-struct chain already excludes parts, so when  -->
+    <!-- parts are present the $levels count (which includes the -->
+    <!-- part depth) must be reduced by one.  But only for       -->
+    <!-- blocks actually inside a part or backmatter — blocks    -->
+    <!-- in frontmatter have no part ancestor and should use     -->
+    <!-- $levels unmodified.                                     -->
+    <xsl:variable name="effective-levels">
+        <xsl:choose>
+            <xsl:when test="not($parts = 'absent') and ancestor::*[self::part or self::backmatter]">
+                <xsl:choose>
+                    <xsl:when test="$levels > 0">
+                        <xsl:value-of select="$levels - 1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="0"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$levels"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="truncate-pad-struct">
+        <xsl:with-param name="struct" select="$raw-struct"/>
+        <xsl:with-param name="levels" select="$effective-levels"/>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Truncate a dotted-number string to a given number of     -->
+<!-- components, padding with ".0" if fewer components exist.  -->
+<xsl:template name="truncate-pad-struct">
+    <xsl:param name="struct"/>
+    <xsl:param name="levels"/>
+    <xsl:param name="count" select="0"/>
+
+    <xsl:choose>
+        <!-- Emitted enough levels, halt -->
+        <xsl:when test="$count = $levels"/>
+        <!-- Components remaining in the string -->
+        <xsl:when test="$struct != ''">
+            <xsl:if test="$count > 0">
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="contains($struct, '.')">
+                    <xsl:value-of select="substring-before($struct, '.')"/>
+                    <xsl:call-template name="truncate-pad-struct">
+                        <xsl:with-param name="struct"
+                            select="substring-after($struct, '.')"/>
+                        <xsl:with-param name="levels" select="$levels"/>
+                        <xsl:with-param name="count" select="$count + 1"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$struct"/>
+                    <xsl:call-template name="truncate-pad-struct">
+                        <xsl:with-param name="struct" select="''"/>
+                        <xsl:with-param name="levels" select="$levels"/>
+                        <xsl:with-param name="count" select="$count + 1"/>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- Out of components, pad with zero -->
+        <xsl:otherwise>
+            <xsl:if test="$count > 0">
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+            <xsl:text>0</xsl:text>
+            <xsl:call-template name="truncate-pad-struct">
+                <xsl:with-param name="struct" select="''"/>
+                <xsl:with-param name="levels" select="$levels"/>
+                <xsl:with-param name="count" select="$count + 1"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

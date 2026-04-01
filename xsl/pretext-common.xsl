@@ -2096,78 +2096,6 @@ Book (with parts), "section" at level 3
     <!-- <xsl:message>PTX:BUG:     asking if a non-structural division is a leaf</xsl:message> -->
 </xsl:template>
 
-<!-- There are two models for most of the divisions (part -->
-<!-- through subsubsection, plus appendix).  One has      -->
-<!-- subdivisions, and possibly multiple "exercises", or  -->
-<!-- other specialized subdivisions.  (Namely "worksheet",-->
-<!-- "handout", "exercises", "solutions", and not         -->
-<!-- "references", "glossary", nor "reading-questions".)  -->
-<!-- The other has no subdivisions, and then at most one  -->
-<!-- of each type of specialized subdivision, which       -->
-<!-- inherit numbers from their parent division. This is  -->
-<!-- the test, which is very similar to "is-leaf" above.  -->
-<!--                                                      -->
-<!-- A "part" must have chapters, so will always return   -->
-<!-- 'true' and for a 'subsubsection' there are no more   -->
-<!-- subdivisions to employ and so will return empty.     -->
-<!--                                                      -->
-<!-- An exception is a division of *only* worksheets.     -->
-<!-- Although there could be titles and the like.         -->
-<!-- So we compare all-children to  metadata + worksheet. -->
-<!-- TODO: should there be a similar exception for handouts? -->
-<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
-    <xsl:variable name="has-traditional" select="boolean(&TRADITIONAL-DIVISION;)"/>
-    <xsl:variable name="all-children" select="*"/>
-    <xsl:variable name="all-worksheet" select="title|shorttitle|plaintitle|idx|introduction|worksheet|handout|conclusion"/>
-    <xsl:variable name="only-worksheets" select="count($all-children) = count($all-worksheet)"/>
-
-    <xsl:value-of select="$has-traditional or $only-worksheets"/>
-</xsl:template>
-
-<xsl:template match="*" mode="is-structured-division">
-    <xsl:message>PTX:BUG: asking if a non-traditional division (<xsl:value-of select="local-name(.)"/>) is structured or not</xsl:message>
-</xsl:template>
-
-<!-- Specialized divisions sometimes inherit a number from their  -->
-<!-- parent (as part of an unstructured division) and sometimes   -->
-<!-- they do not even have a number (singleton "references" as    -->
-<!-- child of "backmatter").  This template returns "true" if a   -->
-<!-- specialized division "owns" its "own" number.                -->
-<xsl:template match="exercises|worksheet|handout|references|glossary|reading-questions|solutions" mode="is-specialized-own-number">
-    <xsl:choose>
-        <!-- *Some* specialized divisions can appear as a child of the    -->
-        <!-- "backmatter" too.  But only those below.  The rest are       -->
-        <!-- banned as top-level items in the backmatter, but might       -->
-        <!-- occur in an "appendix" or below, with or without structure.  -->
-        <!--   "solutions" will look like an appendix, thus numbered.     -->
-        <!--   "references" or "glossary" are singletons, never numbered. -->
-        <xsl:when test="parent::*[self::backmatter]">
-            <xsl:choose>
-                <xsl:when test="self::solutions">
-                    <xsl:text>true</xsl:text>
-                </xsl:when>
-                <xsl:when test="self::references or self::glossary">
-                    <xsl:text>false</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:ERROR:   encountered a specialized division ("<xsl:value-of select="local-name(.)"/>") as a child of "backmatter" that was unexpected.  Results will be unpredictable</xsl:message>
-                    <!-- no idea if we should say true or false here -->
-                    <xsl:text>true</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- parent must now be a "traditional" division -->
-        <xsl:otherwise>
-            <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="*" mode="is-specialized-own-number">
-    <xsl:message>PTX:BUG: asking if a non-specialized division (<xsl:value-of select="local-name(.)"/>) is numbered or not</xsl:message>
-    <xsl:text>false</xsl:text>
-</xsl:template>
-
 <!-- Test if element is a specialized division or not. -->
 <!-- If element is not even a division, give error.    -->
 <xsl:template match="*" mode="is-specialized-division">
@@ -4611,119 +4539,6 @@ Book (with parts), "section" at level 3
 <!-- Multi-Numbers Utility -->
 <!--                       -->
 
-<!-- We concatenate serial numbers of divisions to form the       -->
-<!-- "structure number" of a division or element.                 -->
-<!-- NOTE: this is not the number of a division (or element),     -->
-<!-- it is everything but the "serial number".  Later, the        -->
-<!-- serial number is appended to form the "number".              -->
-<!-- So if the context is a division element we look at strict    -->
-<!-- *ancestors* to accumulate serial numbers into a structure    -->
-<!-- number.  For example, an implication of this is that the     -->
-<!-- structure number of a chapter in a part-less book will be    -->
-<!-- empty - its number is just its serial-number.                -->
-<!-- NB: the structure number never ends in a separator (period). -->
-<!--                                                              -->
-<!-- We initialize the recursion with exactly the ancestors       -->
-<!-- that contributes to a structure number.  This is the only    -->
-<!-- time the context is employed.  The level is                  -->
-<!--   (a) $pad = 'no',  the maximum number of levels, which      -->
-<!--   may not be reached if the $nodes get depleted              -->
-<!--   (b) $pad = 'yes', the exact number of serial numbers       -->
-<!--   accumulated, and hence the number of separators            -->
-<!--   in the final number (after the serial number is appended)  -->
-<!-- NB: decorative parts may mean we need                        -->
-<!-- to exclude "part" from the ancestors?                        -->
-<!-- NB: for a book with parts, we include the "backmatter" in    -->
-<!-- the list of $nodes, to impersonate the "part" nodes when     -->
-<!-- working with the main matter.  Like a "part", we silently    -->
-<!-- drop it and decrement the level.                             -->
-
-<!-- BUG: we include specialized divisions here, which inherit -->
-<!-- their serial number from their parent.  The symptom is a  -->
-<!-- duplicated serial number just before padding begins.  The -->
-<!-- offending specialized division should be skipped with no  -->
-<!-- contribution to the multi-number and no decrease in the   -->
-<!-- level when passed recursively.                            -->
-
-<xsl:template match="*" mode="multi-number">
-    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::reading-questions or self::solutions or self::references or self::glossary or self::worksheet or self::handout or self::backmatter[$b-has-parts]]"/>
-    <xsl:param name="levels" />
-    <xsl:param name="pad" />
-
-    <!-- Test if last node is unnumbered specialized division -->
-    <!-- we do not want to duplicate the serial number, which is from the containing division -->
-    <xsl:variable name="decorative-division">
-        <xsl:if test="$nodes[last()][self::exercises or self::worksheet or self::handout or self::reading-questions]">
-            <xsl:variable name="is-numbered">
-                <xsl:apply-templates select="$nodes[last()]" mode="is-specialized-own-number"/>
-            </xsl:variable>
-            <xsl:if test="not($is-numbered = 'true')">
-                <xsl:text>true</xsl:text>
-            </xsl:if>
-        </xsl:if>
-    </xsl:variable>
-
-    <xsl:choose>
-        <!-- always halt when levels met, do this check *before* -->
-        <!-- adjusting for parts or for decorative divisions     -->
-        <xsl:when test="$levels = 0" />
-        <!-- When the lead node is a part, we just drop it,   -->
-        <!-- and we decrement the level.  A lead node of      -->
-        <!-- backmatter will appear for a book with parts,    -->
-        <!-- which is dropped also.  We may later devise      -->
-        <!-- an option with more part numbers, and we can     -->
-        <!-- condition here to include the part number in the -->
-        <!-- numbering scheme NB: this is *not* the serial    -->
-        <!-- number, so for example, the summary page for     -->
-        <!-- a part *will* have a number, and the right one   -->
-        <!-- NB: can $nodes be stripped without the  position()  function? -->
-        <xsl:when test="$nodes[1][self::part or self::backmatter]">
-            <xsl:apply-templates select="." mode="multi-number">
-                <xsl:with-param name="nodes" select="$nodes[position() > 1]" />
-                <xsl:with-param name="levels" select="$levels - 1" />
-                <xsl:with-param name="pad" select="$pad" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- strip a decorative division -->
-        <xsl:when test="$decorative-division = 'true'">
-            <xsl:apply-templates select="." mode="multi-number">
-                <xsl:with-param name="nodes" select="$nodes[position() &lt; last()]" />
-                <xsl:with-param name="levels" select="$levels" />
-                <xsl:with-param name="pad" select="$pad" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- not padding, halt if $nodes exhausted -->
-        <xsl:when test="($pad = 'no') and not($nodes)" />
-        <xsl:otherwise>
-            <xsl:choose>
-                <xsl:when test="$nodes">
-                    <xsl:apply-templates select="$nodes[1]" mode="serial-number"/>
-                </xsl:when>
-                <!-- no nodes, so must be padding -->
-                <xsl:otherwise>
-                    <xsl:text>0</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <!-- mutuially exclusive conditions, just for clarity           -->
-            <!-- (a) if halting next pass, no separator, no-padding version -->
-            <xsl:if test="($pad = 'no') and not(count($nodes) = 1) and not($levels = 1)">
-                <xsl:text>.</xsl:text>
-            </xsl:if>
-            <!-- (b) if halting next pass, no separator, padding version -->
-            <xsl:if test="($pad = 'yes') and not($levels = 1)">
-                <xsl:text>.</xsl:text>
-            </xsl:if>
-            <!-- decrease $nodes and $levels             -->
-            <!-- padding: empty $nodes can't get emptier -->
-            <xsl:apply-templates select="." mode="multi-number">
-                <xsl:with-param name="nodes" select="$nodes[position() > 1]" />
-                <xsl:with-param name="levels" select="$levels - 1" />
-                <xsl:with-param name="pad" select="$pad" />
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!--                         -->
 <!-- Structure Numbers       -->
 <!--                         -->
@@ -4770,10 +4585,9 @@ Book (with parts), "section" at level 3
 
 <!-- Structure Numbers: Theorems, Examples, Projects, Figures -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-blocks" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$numbering-blocks"/>
+    </xsl:call-template>
 </xsl:template>
 <!-- PROJECT-LIKE is now independent, under control of $numbering-projects -->
 <!-- But all ready to become elective -->
@@ -4788,10 +4602,9 @@ Book (with parts), "section" at level 3
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$project-levels" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$project-levels"/>
+    </xsl:call-template>
 </xsl:template>
 <!-- FIGURE-LIKE get a structure number from default $numbering-blocks -->
 <!-- or from "docinfo" independent numbering configuration             -->
@@ -4806,10 +4619,9 @@ Book (with parts), "section" at level 3
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$figure-levels" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$figure-levels"/>
+    </xsl:call-template>
 </xsl:template>
 <!-- Proofs get structure number from parent theorem -->
 <!-- NB: assumes proofs are not detached? Maybe not.      -->
@@ -4817,12 +4629,17 @@ Book (with parts), "section" at level 3
 <xsl:template match="&PROOF-LIKE;" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>
-<!-- Captioned items, arranged in a side-by-side,  -->
-<!-- then inside a captioned figure, earn a serial -->
-<!-- number that is a letter.  So their structure  -->
-<!-- number comes from their grandparent figure    -->
+<!-- Captioned items, arranged in a side-by-side,      -->
+<!-- then inside a captioned figure, earn a serial     -->
+<!-- number that is a letter.  So their structure      -->
+<!-- number comes from the enclosing captioned figure. -->
+<!-- The sidebyside may be a child of the figure,      -->
+<!-- or wrapped in an sbsgroup.                        -->
 <xsl:template match="figure/sidebyside/figure | figure/sidebyside/table | figure/sidebyside/listing | figure/sidebyside/list" mode="structure-number">
     <xsl:apply-templates select="parent::sidebyside/parent::figure" mode="number" />
+</xsl:template>
+<xsl:template match="figure/sbsgroup/sidebyside/figure | figure/sbsgroup/sidebyside/table | figure/sbsgroup/sidebyside/listing | figure/sbsgroup/sidebyside/list" mode="structure-number">
+    <xsl:apply-templates select="parent::sidebyside/parent::sbsgroup/parent::figure" mode="number" />
 </xsl:template>
 
 <!-- Structure Numbers: Equations -->
@@ -4830,16 +4647,15 @@ Book (with parts), "section" at level 3
 <!-- manufactured single "mrow".  So we need a structure number for the -->
 <!-- numbered versions of these elements.                               -->
 <xsl:template match="mrow|md[@pi:authored-one-line]" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-equations" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$numbering-equations"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Structure Numbers: Inline Exercises -->
 <!-- Follows the theorem/figure/etc scheme (can't poll parent) -->
 <xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="structure-number">
-    <xsl:variable name="equation-levels">
+    <xsl:variable name="exercise-levels">
         <xsl:choose>
             <xsl:when test="$b-number-exercise-distinct">
                 <xsl:value-of select="$numbering-exercises" />
@@ -4849,10 +4665,9 @@ Book (with parts), "section" at level 3
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$equation-levels" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$exercise-levels"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Structure Numbers: Divisional and Worksheet Exercises -->
@@ -4901,10 +4716,9 @@ Book (with parts), "section" at level 3
 
 <!-- Structure Numbers: Footnotes -->
 <xsl:template match="fn" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-footnotes" />
-        <xsl:with-param name="pad" select="'yes'" />
-    </xsl:apply-templates>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$numbering-footnotes"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Structure Numbers: Lists -->

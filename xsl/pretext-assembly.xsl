@@ -2614,6 +2614,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- the structural numbers will be delayed one level.       -->
             <!-- (It seems harder to strip these in -common.)            -->
             <xsl:when test="self::part"/>
+            <!-- Decorative specialized divisions are transparent:    -->
+            <!-- they do not extend the structure number chain, so    -->
+            <!-- blocks inside them use the parent division's chain.  -->
+            <!-- Specialized divisions are leaves of the division     -->
+            <!-- tree, so this does not affect any descendant         -->
+            <!-- division's @struct.                                  -->
+            <xsl:when test="&SPECIALIZED-DIVISION-FILTER;">
+                <xsl:variable name="is-numbered">
+                    <xsl:apply-templates select="." mode="is-specialized-own-number"/>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$is-numbered = 'true'">
+                        <xsl:value-of select="$parent-struct"/>
+                        <xsl:if test="not($parent-struct='')">
+                            <xsl:text>.</xsl:text>
+                        </xsl:if>
+                        <xsl:value-of select="$the-serial"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$parent-struct"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$parent-struct"/>
                 <xsl:if test="not($parent-struct='')">
@@ -2643,6 +2666,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:attribute name="level">
             <xsl:value-of select="$next-level"/>
+        </xsl:attribute>
+        <!-- Full structure chain including this division's       -->
+        <!-- contribution.  Decorative specialized divisions are  -->
+        <!-- transparent (pass through parent's chain).  Used by  -->
+        <!-- block elements to compute their structure numbers.   -->
+        <xsl:attribute name="block-struct">
+            <xsl:value-of select="$new-struct"/>
         </xsl:attribute>
         <xsl:apply-templates select="node()|@*" mode="augment">
             <xsl:with-param name="parent-struct" select="$new-struct"/>
