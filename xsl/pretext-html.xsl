@@ -614,6 +614,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
+    <!-- newlines inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <section>
         <xsl:attribute name="class">
             <xsl:value-of select="local-name(.)"/>
@@ -691,6 +693,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <!-- Include permalink for the section as last child -->
         <xsl:apply-templates select="." mode="permalink"/>
+    <xsl:text>&#xa;</xsl:text>
     </section>
 </xsl:template>
 
@@ -797,6 +800,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </xsl:variable>
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:element name="{$html-heading}">
         <xsl:attribute name="class">
             <xsl:choose>
@@ -1187,6 +1192,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Tunnel the duplication flag, drop id if duplicate     -->
 <xsl:template match="introduction[parent::*[&STRUCTURAL-FILTER;]]|conclusion[parent::*[&STRUCTURAL-FILTER;]]">
     <xsl:param name="b-original" select="true()" />
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <section>
         <!-- cheap, but it works -->
         <xsl:attribute name="class">
@@ -2553,6 +2560,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="born-hidden">
     <xsl:param name="b-original" select="true()" />
 
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <details>
         <!-- put an HTML id as a target of cross-references, etc, -->
         <!-- but only when this is original content.  In other    -->
@@ -3884,6 +3893,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($dry-run = '')">
         <!-- incongruities here are historical, -->
         <!-- keeping the diff low-impact        -->
+        <!-- newline inserted to encourage formatted output -->
+        <xsl:text>&#xa;</xsl:text>
         <xsl:element name="article">
             <xsl:attribute name="class">
                 <xsl:choose>
@@ -4975,6 +4986,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="body-elt">
         <xsl:apply-templates select="." mode="body-element" />
     </xsl:variable>
+    <!-- newlines inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:element name="{$body-elt}">
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="body-css-class" />
@@ -5022,6 +5035,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="not(&FIGURE-FILTER;)">
             <xsl:apply-templates select="." mode="permalink"/>
         </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     </xsl:element>
     <!-- Extraordinary: PROOF-LIKE are not displayed within their-->
     <!-- parent theorem, but as a sibling, following.  It might  -->
@@ -5078,6 +5092,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$block-type = 'xref'">
         <xsl:apply-templates select="." mode="heading-xref-knowl" />
     </xsl:if>
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <div>
         <xsl:attribute name="class">
             <xsl:text>para</xsl:text>
@@ -5110,6 +5126,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$block-type = 'xref'">
         <xsl:apply-templates select="." mode="heading-xref-knowl" />
     </xsl:if>
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <!-- will later loop over displays within paragraph -->
     <xsl:variable name="displays" select="ul|ol|dl|md[mrow]|cd" />
     <!-- content prior to first display is exceptional, but if empty,   -->
@@ -5261,6 +5279,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </article>
         </xsl:when>
         <xsl:otherwise>
+            <!-- newline inserted to encourage formatted output -->
+            <xsl:text>&#xa;</xsl:text>
             <xsl:element name="li">
                 <!-- label original -->
                 <xsl:if test="$b-original">
@@ -5331,6 +5351,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </article>
         </xsl:when>
         <xsl:otherwise>
+            <!-- newline inserted to encourage formatted output -->
+            <xsl:text>&#xa;</xsl:text>
             <xsl:element name="dt">
                 <!-- label original -->
                 <xsl:if test="$b-original">
@@ -5340,6 +5362,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Insert permalink -->
                 <xsl:apply-templates select="." mode="permalink"/>
             </xsl:element>
+            <!-- newline inserted to encourage formatted output -->
+            <xsl:text>&#xa;</xsl:text>
             <xsl:element name="dd">
                 <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
@@ -5517,6 +5541,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- As components of blocks.      -->
 <xsl:template match="introduction[not(parent::*[&STRUCTURAL-FILTER;])]|conclusion[not(parent::*[&STRUCTURAL-FILTER;])]">
     <xsl:param name="b-original" select="true()" />
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:element name="div">
         <xsl:attribute name="class">
             <xsl:value-of select="local-name(.)" />
@@ -5641,6 +5667,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:element name="{local-name(.)}">
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="html-list-class" />
@@ -6526,6 +6554,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="sbsgroup-wrapper">
     <xsl:param name="sbsgroup-content"/>
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:element name="div">
         <xsl:attribute name="class">
             <xsl:text>sbsgroup</xsl:text>
@@ -6558,6 +6588,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="left-margin" />
     <xsl:param name="right-margin" />
     <xsl:param name="valign" />
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:element name="div">
         <xsl:attribute name="class">
             <xsl:text>sbspanel</xsl:text>
@@ -6621,6 +6653,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- A "sidebyside" div, to contain headers, -->
     <!-- panels, captions rows as "sbsrow" divs  -->
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:element name="div">
         <xsl:attribute name="class">
             <xsl:text>sidebyside</xsl:text>
@@ -6635,6 +6669,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
 
         <!-- Panels in an "sbsrow" div, always -->
+        <!-- newline inserted to encourage formatted output -->
+        <xsl:text>&#xa;</xsl:text>
         <xsl:element name="div">
             <xsl:attribute name="class">
                 <xsl:text>sbsrow</xsl:text>
@@ -7612,6 +7648,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <!-- Form the HTML table row -->
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:element name="tr">
         <!-- and a class attribute for horizontal or vertical headers -->
         <xsl:if test="not($header-row = '')">
@@ -7836,6 +7874,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:variable>
 
         <!-- the HTML element for the cell -->
+        <!-- newline inserted to encourage formatted output -->
+        <xsl:text>&#xa;</xsl:text>
         <xsl:element name="{$header-row-elt}">
             <!-- Scope attribute helps with accessibility: what          -->
             <!-- is the table element/cell describing?                   -->
@@ -8713,6 +8753,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Unstructured is pure text           -->
 <xsl:template match="cd">
     <xsl:param name="b-original" select="true()" />
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:element name="pre">
         <xsl:attribute name="class">
             <xsl:text>code-display tex2jax_ignore</xsl:text>
@@ -8732,6 +8774,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- cline template is in xsl/pretext-common.xsl -->
 <xsl:template match="cd[cline]">
     <xsl:param name="b-original" select="true()" />
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
     <xsl:element name="pre">
         <xsl:attribute name="class">
             <xsl:text>code-display tex2jax_ignore</xsl:text>
