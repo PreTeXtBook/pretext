@@ -1364,33 +1364,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 
-<!-- WeBWork problem representations are formed by Python routines  -->
+<!-- WeBWorK problem representations are formed by Python routines  -->
 <!-- in the   pretext.py  module that communicates with a WeBWorK   -->
-<!-- server.  So this filename is only relevant for *consumption"   -->
-<!-- of WW representations into final output.   But we need to make -->
-<!-- sure these filenames stay in sync, creation v. consumption.    -->
-<!-- Keep this template silent, since this variable may not be      -->
-<!-- necessary, and it is only needed during consumption.           -->
-<xsl:variable name="webwork-representations-file">
-    <!-- Only relevant if there are WW problems present. A version     -->
-    <!-- might remove all WW problems but there is no harm in this     -->
-    <!-- template since the variable created will not be used, and     -->
-    <!-- the template is silent, but for a useful deprecation warning. -->
+<!-- server.  One file per exercise is written into this directory, -->
+<!-- named by the exercise's @assembly-id.  This variable is only   -->
+<!-- relevant for consumption of WW representations into output.    -->
+<!-- Keep this variable silent since it may not be necessary.       -->
+<xsl:variable name="webwork-representations-dir">
+    <!-- Only relevant if there are WW problems present. A version    -->
+    <!-- might remove all WW problems but there is no harm in this    -->
+    <!-- variable since it will not be used, and it is silent.        -->
     <xsl:if test="$original//webwork[* or @copy or @source]">
         <xsl:choose>
             <!-- Note: $generated-directory-source is never empty?    -->
             <!-- Defaults to the very old "directory.images"?         -->
             <!-- So testing for the publication file entry is better. -->
             <xsl:when test="$publication/source/directories/@generated">
-                <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/webwork-representations.xml'), '&#x20;', '%20')"/>
+                <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/'), '&#x20;', '%20')"/>
             </xsl:when>
-            <xsl:when test="$publication/source/@webwork-problems">
-                <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
-                <xsl:message>PTX:WARNING: the publication file entry  source/@webwork-problems  is</xsl:message>
-                <xsl:message>             deprecated, please move to using managed directories</xsl:message>
-            </xsl:when>
-            <!-- no specification, so empty string for filename -->
-            <!-- this will be noted where it is employed        -->
+            <!-- no specification, so empty string for directory    -->
+            <!-- this will be noted where it is employed            -->
             <xsl:otherwise/>
         </xsl:choose>
     </xsl:if>

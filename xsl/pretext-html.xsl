@@ -10947,7 +10947,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- (or PROJECT-LIKE).  So in this case (only) we place    -->
     <!-- an id value on the  div.exercise-wrapper that is       -->
     <!-- derived from the parent.  Otherwise, we use the id     -->
-    <!-- placed on the "webwork-reps" in @ww-id.                -->
+    <!-- placed on the "webwork-reps" in @assembly-id.          -->
     <xsl:variable name="inner-id">
         <xsl:choose>
             <xsl:when test="$b-host-runestone">
@@ -10955,7 +10955,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>-ww-rs</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="@ww-id"/>
+                <xsl:value-of select="@assembly-id"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -11102,7 +11102,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- build the iframe -->
     <!-- mimicking Mike Gage's blog post -->
-    <iframe name="{@ww-id}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
+    <iframe name="{@assembly-id}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
     <script>
         <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
         <xsl:value-of select="$webwork-server" />
