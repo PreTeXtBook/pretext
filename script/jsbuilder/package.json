@@ -1,0 +1,17 @@
+{
+  "name": "pretext-jsbuilder",
+  "version": "1.0.0",
+  "description": "PreTeXt JavaScript Builder — bundles JS source modules into dist/ files",
+  "scripts": {
+    "build": "node ./jsbuilder.mjs",
+    "watch": "node ./jsbuilder.mjs --watch"
+  },
+  "dependencies": {
+    "command-line-args": "^6.0.0",
+    "command-line-usage": "^7.0.3",
+    "esbuild": "^0.25.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
