@@ -12103,7 +12103,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="permalink-toggle-button">
-    <button id="permalink-toggle-button" class="permalink-toggle-button button" title="Enable Permalinks" aria-label="Enable Permalinks">
+    <xsl:variable name="enable-label">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'permalink-enable'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="disable-label">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'permalink-disable'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <button id="permalink-toggle-button" class="permalink-toggle-button button">
+        <xsl:attribute name="title">
+            <xsl:value-of select="$enable-label"/>
+        </xsl:attribute>
+        <xsl:attribute name="aria-label">
+            <xsl:value-of select="$enable-label"/>
+        </xsl:attribute>
+        <xsl:attribute name="data-enable-label">
+            <xsl:value-of select="$enable-label"/>
+        </xsl:attribute>
+        <xsl:attribute name="data-disable-label">
+            <xsl:value-of select="$disable-label"/>
+        </xsl:attribute>
         <xsl:call-template name="insert-symbol">
             <xsl:with-param name="name" select="'link'"/>
         </xsl:call-template>

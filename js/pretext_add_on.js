@@ -133,7 +133,9 @@ function initPermalinkToggle() {
     if (!btn) return;
 
     let permalinksVisible = initiallyVisible;
-    const initialLabel = initiallyVisible ? 'Disable Permalinks' : 'Enable Permalinks';
+    const enableLabel = btn.dataset.enableLabel;
+    const disableLabel = btn.dataset.disableLabel;
+    const initialLabel = initiallyVisible ? disableLabel : enableLabel;
     btn.setAttribute('aria-label', initialLabel);
     btn.title = initialLabel;
     btn.querySelector('.icon').textContent = initiallyVisible ? 'link_off' : 'link';
@@ -141,7 +143,7 @@ function initPermalinkToggle() {
     btn.addEventListener('click', function() {
         permalinksVisible = !permalinksVisible;
         setPermalinkVisibility(permalinksVisible);
-        const label = permalinksVisible ? 'Disable Permalinks' : 'Enable Permalinks';
+        const label = permalinksVisible ? disableLabel : enableLabel;
         btn.setAttribute('aria-label', label);
         btn.title = label;
         btn.querySelector('.icon').textContent = permalinksVisible ? 'link_off' : 'link';
