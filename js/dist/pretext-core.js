@@ -427,6 +427,7 @@
     const bornHiddens = target.querySelectorAll(".born-hidden-knowl");
     for (const bhk of bornHiddens) {
       const summary = bhk.querySelector(":scope > summary");
+      if (!summary) continue;
       const contents = bhk.querySelector(":scope > summary + *");
       new SlideRevealer(summary, contents, bhk);
     }
