@@ -135,55 +135,55 @@ script/jsbuilder/                 ← new (this directory)
 
 ## Tasks (in order)
 
-### Phase 1 — Build infrastructure
-- [ ] Create `script/jsbuilder/package.json` (esbuild dep, build/watch scripts)
-- [ ] Create `script/jsbuilder/jsbuilder.mjs` (entry points, output to `js/dist/`)
-- [ ] Create `script/jsbuilder/README.md`
+### Phase 1 — Build infrastructure ✅
+- [x] Create `script/jsbuilder/package.json` (esbuild dep, build/watch scripts)
+- [x] Create `script/jsbuilder/jsbuilder.mjs` (entry points, output to `js/dist/`)
+- [x] Create `script/jsbuilder/README.md`
 
-### Phase 2 — Modularize `pretext_add_on.js`
+### Phase 2 — Modularize `pretext_add_on.js` ✅
 Break the monolith into `js/src/` modules. Remove jQuery (~35 calls, concentrated
 in image-magnify, auto-id, video-magnify, GeoGebra, and keyboard-nav sections).
 Fix known bugs (ENTER/ESC fallthrough, broken `knowl_focus_stack` reference).
 
-- [ ] Create `js/src/permalink.js`
-- [ ] Create `js/src/image-magnify.js` (remove jQuery)
-- [ ] Create `js/src/geogebra.js` (remove jQuery — heaviest: ~9 calls)
-- [ ] Create `js/src/keyboard-nav.js` (remove jQuery, fix ESC/ENTER bug, fix broken knowl_focus_stack ref)
-- [ ] Create `js/src/print-preview/` (9 sub-modules — already jQuery-free)
-- [ ] Create `js/src/theme.js`
-- [ ] Create `js/src/embed.js`
-- [ ] Create `js/src/code-copy.js`
-- [ ] Create `js/src/deprecated/video-magnify.js` (flagged dead)
-- [ ] Create `js/src/deprecated/auto-id.js` (flagged suspicious, remove jQuery)
-- [ ] Create `js/src/deprecated/scrollbar-width.js`
+- [x] Create `js/src/permalink.js`
+- [x] Create `js/src/image-magnify.js` (remove jQuery)
+- [x] Create `js/src/geogebra.js` (remove jQuery — heaviest: ~9 calls)
+- [x] Create `js/src/keyboard-nav.js` (remove jQuery, fix ESC/ENTER bug, fix broken knowl_focus_stack ref)
+- [x] Create `js/src/print-preview/` (9 sub-modules — already jQuery-free)
+- [x] Create `js/src/theme.js`
+- [x] Create `js/src/embed.js`
+- [x] Create `js/src/code-copy.js`
+- [x] Create `js/src/deprecated/video-magnify.js` (flagged dead)
+- [x] Create `js/src/deprecated/auto-id.js` (flagged suspicious, remove jQuery)
+- [x] Create `js/src/deprecated/scrollbar-width.js`
 
-### Phase 3 — Convert existing standalone files to ES modules
-These are already jQuery-free; just add `import`/`export` and clean up globals.
+### Phase 3 — Convert existing standalone files to ES modules ✅
+Created ES module versions in `js/src/` (originals left intact for backward compat).
 
-- [ ] `js/pretext.js` (227 lines — TOC, sidebar, hash nav)
-- [ ] `js/knowl.js` (286 lines — knowl open/close)
-- [ ] `js/lti_iframe_resizer.js` (50 lines — LTI message handler)
-- [ ] `js/pretext_search.js` (296 lines — search UI)
+- [x] `js/src/toc.js` (from `js/pretext.js` — TOC, sidebar, hash nav)
+- [x] `js/src/knowl.js` (from `js/knowl.js` — knowl open/close)
+- [x] `js/src/lti-iframe-resizer.js` (from `js/lti_iframe_resizer.js` — LTI message handler)
+- [x] `js/src/search.js` (from `js/pretext_search.js` — search UI)
 
-### Phase 4 — Bundle entry points + build
-- [ ] Create `js/src/pretext-core-entry.js` — imports + inits all core modules
-- [ ] Create `js/src/pretext-search-entry.js` — imports + inits search
-- [ ] Run `npm run build` in `script/jsbuilder/`
-- [ ] Commit `js/dist/` pre-built files
-- [ ] Delete `js/jquery.min.js`
+### Phase 4 — Bundle entry points + build ✅
+- [x] Create `js/src/pretext-core-entry.js` — imports + inits all core modules
+- [x] Create `js/src/pretext-search-entry.js` — imports + inits search
+- [x] Run `npm run build` in `script/jsbuilder/`
+- [x] Commit `js/dist/` pre-built files
+- [x] Delete `js/jquery.min.js`
 
-### Phase 5 — XSL update (`xsl/pretext-html.xsl`)
-- [ ] `pretext-js` template (line ~13869): replace 3 `<script>` tags → 1 loading `dist/pretext-core.js`
-- [ ] Wherever `knowl.js` is loaded: remove standalone tag (now in core bundle)
-- [ ] Wherever `lti_iframe_resizer.js` is loaded: remove standalone tag (now in core bundle)
-- [ ] `native-search-box-js` template (line ~13758): load `dist/pretext-search.js` instead
-- [ ] Keep MathJax loader path `"pretext": "_static/pretext/js"` unchanged
-- [ ] The `$b-debug-react` XSL branch is unrelated — leave untouched
+### Phase 5 — XSL update (`xsl/pretext-html.xsl`) ✅
+- [x] `pretext-js` template: replace 3 `<script>` tags → 1 loading `dist/pretext-core.js`
+- [x] Knowl template: remove standalone `knowl.js` tag (now in core bundle)
+- [x] LTI template: remove standalone `lti_iframe_resizer.js` tag (now in core bundle)
+- [x] `native-search-box-js` template: load `dist/pretext-search.js` instead
+- [x] Keep MathJax loader path `"pretext": "_static/pretext/js"` unchanged
+- [x] The `$b-debug-react` XSL branch is unrelated — left untouched
 
-### Phase 6 — Python update (`pretext/lib/pretext.py`)
-- [ ] `copy_html_js()` (line ~6021): uses `shutil.copytree` on entire `js/` dir —
-  verify `js/dist/` is included and `js/src/` can optionally be excluded
-- [ ] Verify `mathjaxknowl3.js`, `pretext-webwork/`, `pretext-stack/`, `diagcess/` still copied
+### Phase 6 — Python update (`pretext/lib/pretext.py`) ✅
+- [x] `copy_html_js()`: exclude `js/src/` from deployed copy via `shutil.ignore_patterns`
+- [x] `js/dist/` included automatically (copytree copies everything not ignored)
+- [x] `mathjaxknowl3.js`, `pretext-webwork/`, `pretext-stack/`, `diagcess/` still copied
 
 ## Notes
 
