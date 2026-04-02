@@ -28,6 +28,10 @@ import { initVideoMagnify } from "./deprecated/video-magnify.js";
 // Run dark mode immediately to avoid flash of wrong theme
 setDarkMode(isDarkMode());
 
+// Expose theme functions globally for inline scripts (e.g., mermaid init in XSL)
+window.isDarkMode = isDarkMode;
+window.setDarkMode = setDarkMode;
+
 // --- DOMContentLoaded handlers ---
 window.addEventListener("DOMContentLoaded", function () {
     // TOC and sidebar

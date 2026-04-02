@@ -1586,6 +1586,8 @@
 
   // ../../js/src/pretext-core-entry.js
   setDarkMode(isDarkMode());
+  window.isDarkMode = isDarkMode;
+  window.setDarkMode = setDarkMode;
   window.addEventListener("DOMContentLoaded", function() {
     initToc();
     initFocusedToc();

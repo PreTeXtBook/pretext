@@ -223,6 +223,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Javascript and CSS "master" links/pointers into _static -->
     <xsl:comment>*** Runestone Services ***</xsl:comment>
     <xsl:text>&#xa;</xsl:text>
+    <!-- Runestone components require jQuery globally -->
+    <xsl:if test="$rs-js-tokens">
+        <script src="{$html.js.dir}/jquery.min.js"></script>
+    </xsl:if>
     <xsl:for-each select="$rs-js-tokens">
         <script>
             <xsl:attribute name="src">
