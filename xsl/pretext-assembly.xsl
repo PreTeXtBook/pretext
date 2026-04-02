@@ -1429,23 +1429,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </interactive>
 </xsl:template>
 
-<!-- The following attributes are transferred from the #interactive  -->
-<!-- to the corresponding generated #slate when material-id is given -->
-<!-- Cut them from the interactive parent.                           -->
-<xsl:template match="interative/@geogebra
-                    | interactive[@geogebra]/@toolbar
-                    | interactive[@geogebra]/@algebra-input
-                    | interactive[@geogebra]/@reset-icon
-                    | interactive[@geogebra]/@shift-drag-zoom
-                    | interactive[@geogebra]/@material-width
-                    | interactive[@geogebra]/@material-height" mode="enrichment" />
-
-<xsl:template match="@toolbar|@algebra-input|@reset-icon|@shift-drag-zoom|@material-width|@material-height" mode="geogebra-slate-attributes">
-    <xsl:copy-of select="node()"/>
-</xsl:template>
-<!-- No other attributes are transferred to the slate. -->
-<xsl:template match="*" mode="geogebra-slate-attributes"/>
-
 
 <!-- ############# -->
 <!-- Source Repair -->
