@@ -2109,6 +2109,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:attribute name="href">
                         <xsl:apply-templates select="." mode="url"/>
                     </xsl:attribute>
+                    <xsl:attribute name="aria-label">
+                        <xsl:text>Back to </xsl:text>
+                        <xsl:copy-of select="$heading-title"/>
+                    </xsl:attribute>
                     <xsl:copy-of select="$heading-title"/>
                 </xsl:element>
             </xsl:when>
