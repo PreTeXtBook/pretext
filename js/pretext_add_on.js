@@ -113,7 +113,40 @@ window.addEventListener("DOMContentLoaded", function() {
             copyPermalink(link);
         });
     });
+
+    if (typeof ptx_default_settings !== 'undefined' && ptx_default_settings.permalink_button) {
+        initPermalinkToggle();
+    }
 });
+
+function setPermalinkVisibility(visible) {
+    document.querySelectorAll('div.autopermalink').forEach(function(el) {
+        el.style.display = visible ? '' : 'none';
+    });
+}
+
+function initPermalinkToggle() {
+    const stored = localStorage.getItem('ptx_permalink_visible');
+    const initiallyVisible = stored === 'true';
+
+    setPermalinkVisibility(initiallyVisible);
+
+    const btn = document.getElementById('permalink-toggle-button');
+    if (!btn) return;
+
+    btn.setAttribute('aria-pressed', String(initiallyVisible));
+    btn.setAttribute('aria-label', initiallyVisible ? 'Disable Permalinks' : 'Enable Permalinks');
+    btn.querySelector('.name').textContent = initiallyVisible ? 'Disable Permalinks' : 'Enable Permalinks';
+
+    btn.addEventListener('click', function() {
+        const nowVisible = btn.getAttribute('aria-pressed') !== 'true';
+        setPermalinkVisibility(nowVisible);
+        btn.setAttribute('aria-pressed', String(nowVisible));
+        btn.setAttribute('aria-label', nowVisible ? 'Disable Permalinks' : 'Enable Permalinks');
+        btn.querySelector('.name').textContent = nowVisible ? 'Disable Permalinks' : 'Enable Permalinks';
+        localStorage.setItem('ptx_permalink_visible', String(nowVisible));
+    });
+}
 
 
 window.addEventListener("load",function(event) {

@@ -11,6 +11,7 @@
       <source>source/main.ptx</source>
       <publication>publication/publication.ptx</publication>
       <output-dir>output/html</output-dir>
+      <xsl>../../xsl/pretext-html.xsl</xsl>
     </target>
     <target name="latex">
       <format>latex</format>

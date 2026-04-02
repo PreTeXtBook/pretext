@@ -4,4 +4,7 @@
     <source>
         <directories external="../assets" generated="../generated-assets"/>
     </source>
+    <html>
+        <permalink-button/>
+    </html>
 </publication>

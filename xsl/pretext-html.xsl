@@ -12102,6 +12102,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </button>
 </xsl:template>
 
+<xsl:template name="permalink-toggle-button">
+    <button id="permalink-toggle-button" class="permalink-toggle-button button" title="Toggle permalink visibility" aria-pressed="false" aria-label="Enable Permalinks">
+        <xsl:call-template name="insert-symbol">
+            <xsl:with-param name="name" select="'link'"/>
+        </xsl:call-template>
+        <span class="name">Enable Permalinks</span>
+    </button>
+</xsl:template>
+
 <xsl:template name="embed-button">
     <button id="embed-button" class="embed-button button" title="Embed this page">
         <xsl:call-template name="insert-symbol">
@@ -12349,6 +12358,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:if test="$b-theme-has-darkmode">
             <xsl:call-template name="light-dark-button" />
+        </xsl:if>
+        <xsl:if test="$b-has-permalink-button">
+            <xsl:call-template name="permalink-toggle-button" />
         </xsl:if>
     </span>
 </xsl:template>
@@ -13865,9 +13877,26 @@ TODO:
 <xsl:template name="pretext-js">
     <xsl:choose>
         <xsl:when test="not($b-debug-react)">
+            <!-- Hide permalinks before JS runs when permalink button is enabled -->
+            <xsl:if test="$b-has-permalink-button">
+                <style>div.autopermalink { display: none; }</style>
+            </xsl:if>
             <!-- condition first on toc present? -->
             <script src="{$html.js.dir}/jquery.min.js"></script>
             <script src="{$html.js.dir}/pretext.js"></script>
+            <script>
+                <xsl:text>var ptx_default_settings = {&#xa;</xsl:text>
+                <xsl:text>    permalink_button: </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="$b-has-permalink-button">
+                        <xsl:text>true</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>false</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:text>&#xa;};</xsl:text>
+            </script>
             <script src="{$html.js.dir}/pretext_add_on.js?x=1"></script>
         </xsl:when>
         <xsl:when test="$b-debug-react-local">
