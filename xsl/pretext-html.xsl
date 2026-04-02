@@ -10872,8 +10872,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- lti-iframe-resizer -->
+<!-- lti_iframe_resizer.js is now bundled into dist/pretext-core.js -->
 <xsl:template name="lti-iframe-resizer">
-    <script src="{$html.js.dir}/lti_iframe_resizer.js"></script>
 </xsl:template>
 
 
@@ -12470,7 +12470,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>true);&#xa;</xsl:text>
             <!--   The calculator is created by                    -->
             <!--   ggbApp.inject('geogebra-calculator');           -->
-            <!--   which is inserted by code in pretext_add_on.js  -->
+            <!--   which is inserted by code in dist/pretext-core.js -->
         </script>
     </xsl:if>
 </xsl:template>
@@ -13755,7 +13755,7 @@ TODO:
         <!-- document-specific variables with search documents -->
         <script src="{$lunr-search-file}" async=""/>
         <!-- PreTeXt Javascript and CSS to form and render results of a search -->
-        <script src="{$html.js.dir}/pretext_search.js"/>
+        <script src="{$html.js.dir}/dist/pretext-search.js"/>
         <!-- CSS for search is bundled into theme.css -->
     </xsl:if>
 </xsl:template>
@@ -13808,11 +13808,9 @@ TODO:
 </xsl:template>
 
 <!-- Knowl header -->
+<!-- knowl.js is now bundled into dist/pretext-core.js -->
 <xsl:template match="*" mode="knowl">
     <xsl:if test="not($b-debug-react)">
-        <script src="{$html.js.dir}/knowl.js"></script>
-        <!-- Variables are defined to defaults in knowl.js and  -->
-        <!-- we can override them with new values here          -->
         <xsl:comment>knowl.js code controls Sage Cells within knowls</xsl:comment>
         <script>
             <!-- button text, internationalized -->
@@ -13865,10 +13863,7 @@ TODO:
 <xsl:template name="pretext-js">
     <xsl:choose>
         <xsl:when test="not($b-debug-react)">
-            <!-- condition first on toc present? -->
-            <script src="{$html.js.dir}/jquery.min.js"></script>
-            <script src="{$html.js.dir}/pretext.js"></script>
-            <script src="{$html.js.dir}/pretext_add_on.js?x=1"></script>
+            <script src="{$html.js.dir}/dist/pretext-core.js"></script>
         </xsl:when>
         <xsl:when test="$b-debug-react-local">
             <script type="module" defer="" src="./static/js/main.js"></script>
