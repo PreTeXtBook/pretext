@@ -12103,11 +12103,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="permalink-toggle-button">
-    <button id="permalink-toggle-button" class="permalink-toggle-button button" title="Toggle permalink visibility" aria-pressed="false" aria-label="Enable Permalinks">
+    <button id="permalink-toggle-button" class="permalink-toggle-button button" title="Enable Permalinks" aria-label="Enable Permalinks">
         <xsl:call-template name="insert-symbol">
             <xsl:with-param name="name" select="'link'"/>
         </xsl:call-template>
-        <span class="name">Enable Permalinks</span>
     </button>
 </xsl:template>
 
@@ -13879,7 +13878,8 @@ TODO:
         <xsl:when test="not($b-debug-react)">
             <!-- Hide permalinks before JS runs when permalink button is enabled -->
             <xsl:if test="$b-has-permalink-button">
-                <style>div.autopermalink { display: none; }</style>
+                <style>html.ptx-permalinks-hidden div.autopermalink { display: none; }</style>
+                <script>if (localStorage.getItem('ptx_permalink_visible') !== 'true') { document.documentElement.classList.add('ptx-permalinks-hidden'); }</script>
             </xsl:if>
             <!-- condition first on toc present? -->
             <script src="{$html.js.dir}/jquery.min.js"></script>

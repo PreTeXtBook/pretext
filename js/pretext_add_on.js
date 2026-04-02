@@ -120,9 +120,7 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 function setPermalinkVisibility(visible) {
-    document.querySelectorAll('div.autopermalink').forEach(function(el) {
-        el.style.display = visible ? '' : 'none';
-    });
+    document.documentElement.classList.toggle('ptx-permalinks-hidden', !visible);
 }
 
 function initPermalinkToggle() {
@@ -134,17 +132,20 @@ function initPermalinkToggle() {
     const btn = document.getElementById('permalink-toggle-button');
     if (!btn) return;
 
-    btn.setAttribute('aria-pressed', String(initiallyVisible));
-    btn.setAttribute('aria-label', initiallyVisible ? 'Disable Permalinks' : 'Enable Permalinks');
-    btn.querySelector('.name').textContent = initiallyVisible ? 'Disable Permalinks' : 'Enable Permalinks';
+    let permalinksVisible = initiallyVisible;
+    const initialLabel = initiallyVisible ? 'Disable Permalinks' : 'Enable Permalinks';
+    btn.setAttribute('aria-label', initialLabel);
+    btn.title = initialLabel;
+    btn.querySelector('.icon').textContent = initiallyVisible ? 'link_off' : 'link';
 
     btn.addEventListener('click', function() {
-        const nowVisible = btn.getAttribute('aria-pressed') !== 'true';
-        setPermalinkVisibility(nowVisible);
-        btn.setAttribute('aria-pressed', String(nowVisible));
-        btn.setAttribute('aria-label', nowVisible ? 'Disable Permalinks' : 'Enable Permalinks');
-        btn.querySelector('.name').textContent = nowVisible ? 'Disable Permalinks' : 'Enable Permalinks';
-        localStorage.setItem('ptx_permalink_visible', String(nowVisible));
+        permalinksVisible = !permalinksVisible;
+        setPermalinkVisibility(permalinksVisible);
+        const label = permalinksVisible ? 'Disable Permalinks' : 'Enable Permalinks';
+        btn.setAttribute('aria-label', label);
+        btn.title = label;
+        btn.querySelector('.icon').textContent = permalinksVisible ? 'link_off' : 'link';
+        localStorage.setItem('ptx_permalink_visible', String(permalinksVisible));
     });
 }
 
