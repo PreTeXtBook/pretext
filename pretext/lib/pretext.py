@@ -6019,13 +6019,15 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None, d
 
 
 def copy_html_js(work_dir):
-    '''Copy all necessary CSS and JS into working directory'''
+    '''Copy all necessary JS into working directory'''
 
     # Place support files where expected.
     # We are not careful about placing only modules that are needed, all are copied.
+    # Exclude js/src/ (ES module sources) since only the built bundles in js/dist/
+    # are needed at runtime.
     js_src = os.path.join(get_ptx_path(), "js")
     js_dest = os.path.join(work_dir, "_static", "pretext", "js")
-    shutil.copytree(js_src, js_dest)
+    shutil.copytree(js_src, js_dest, ignore=shutil.ignore_patterns("src"))
 
 
 def copy_build_directory(build_dir, dest_dir):
