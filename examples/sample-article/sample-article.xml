@@ -2389,6 +2389,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             </subsection>
 
+            <subsection xml:id="subsection-special-characters-text-mode" label="subsection-special-characters-text-mode">
+                <title>Special Characters in Text Mode</title>
+
+                <p><latex/> designates ten characters as <term>special</term> because they carry syntactic meaning.  When these characters appear inside text-mode macros (such as <c>\text{}</c>) within mathematics, they must be escaped to produce their literal glyph.  Seven of the ten have simple single-character escapes and are demonstrated in the following table.  The remaining three (<c>~</c>, <c>^</c>, <c>\</c>) require macros from <latex/>'s <c>textcomp</c> package (<c>\textasciitilde</c>, <c>\textasciicircum</c>, <c>\textbackslash</c>) which are not available in MathJax's text mode as of 2026-04-03.</p>
+
+                <tabular halign="center">
+                    <row header="yes" bottom="major">
+                        <cell>Character</cell>
+                        <cell>Escaped form</cell>
+                        <cell>Rendered</cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Hash <c>#</c></cell>
+                        <cell><c>\#</c></cell>
+                        <cell><m>\text{5\#}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Ampersand <c>&amp;</c></cell>
+                        <cell><c>\&amp;</c></cell>
+                        <cell><m>\text{P \&amp; Q}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Percent <c>%</c></cell>
+                        <cell><c>\%</c></cell>
+                        <cell><m>\text{5\%}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Dollar <c>$</c></cell>
+                        <cell><c>\$</c></cell>
+                        <cell><m>\text{\$3}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Underscore <c>_</c></cell>
+                        <cell><c>\_</c></cell>
+                        <cell><m>\text{x\_1}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Left brace <c>{</c></cell>
+                        <cell><c>\{</c></cell>
+                        <cell><m>\text{\{a, b\}}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Right brace <c>}</c></cell>
+                        <cell><c>\}</c></cell>
+                        <cell><m>\text{\{a, b\}}</m></cell>
+                    </row>
+                </tabular>
+
+                <p>The hash character also requires escaping within the <c>\tag{}</c> macro.  See <xref ref="equation-local-hash"/> for an example where the <c>tag="dhash"</c> attribute produces a double hash as an equation tag.</p>
+
+            </subsection>
+
             <subsection xml:id="miscellaneous-math">
                 <title>Miscellaneous</title>
 
