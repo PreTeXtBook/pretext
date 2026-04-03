@@ -8551,9 +8551,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2021;</xsl:text>
 </xsl:template>
 
-<!-- 'NUMBER SIGN' (U+0023) -->
+<!-- 'NUMBER SIGN' (U+0023), identical to LaTeX -->
 <xsl:template name="tag-hash">
-    <xsl:text>&#x0023;</xsl:text>
+    <xsl:text>\#</xsl:text>
 </xsl:template>
 
 <!-- 'MALTESE CROSS' (U+2720) -->
@@ -13188,6 +13188,8 @@ TODO:
                                 <string>amscd</string>
                                 <string>color</string>
                                 <string>newcommand</string>
+                                <!-- necessary for \text{} in math -->
+                                <string>textmacros</string>
                                 <string>knowl</string>
                             </array>
                         </map>
@@ -13227,6 +13229,8 @@ TODO:
                             <string>[tex]/amscd</string>
                             <string>[tex]/color</string>
                             <string>[tex]/newcommand</string>
+                            <!-- necessary for \text{} in math -->
+                            <string>[tex]/textmacros</string>
                             <string>[pretext]/mathjaxknowl3.js</string>
                         </array>
                         <map key="paths">
