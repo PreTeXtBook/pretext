@@ -35,16 +35,11 @@ let mathJaxOpts = {
   },
   "loader": {
     "load": [
-      //"ui/lazy", // Vastly speeds up time to visible content. But breaks embedded knowl parsing
       "input/asciimath",
-      //"[tex]/extpfeil",  //remove backwards compatibility?
       "[tex]/amscd",
       "[tex]/color",
       "[tex]/newcommand",
-    ],
-    "paths": {
-      "pretext": "_static/pretext/js/lib"
-    }
+    ]
   }
 };
 
@@ -149,8 +144,4 @@ export function startMathJax(opts) {
   const runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);
   window.runestoneMathReady = runestoneMathReady;
 }
-
-
-
-
 
