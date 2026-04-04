@@ -113,7 +113,43 @@ window.addEventListener("DOMContentLoaded", function() {
             copyPermalink(link);
         });
     });
+
+    if (typeof ptx_default_settings !== 'undefined' && ptx_default_settings.permalink_button) {
+        initPermalinkToggle();
+    }
 });
+
+function setPermalinkVisibility(visible) {
+    document.documentElement.classList.toggle('ptx-permalinks-hidden', !visible);
+}
+
+function initPermalinkToggle() {
+    const stored = localStorage.getItem('ptx_permalink_visible');
+    const initiallyVisible = stored === 'true';
+
+    setPermalinkVisibility(initiallyVisible);
+
+    const btn = document.getElementById('permalink-toggle-button');
+    if (!btn) return;
+
+    let permalinksVisible = initiallyVisible;
+    const enableLabel = btn.dataset.enableLabel;
+    const disableLabel = btn.dataset.disableLabel;
+    const initialLabel = initiallyVisible ? disableLabel : enableLabel;
+    btn.setAttribute('aria-label', initialLabel);
+    btn.title = initialLabel;
+    btn.querySelector('.icon').textContent = initiallyVisible ? 'link_off' : 'link';
+
+    btn.addEventListener('click', function() {
+        permalinksVisible = !permalinksVisible;
+        setPermalinkVisibility(permalinksVisible);
+        const label = permalinksVisible ? disableLabel : enableLabel;
+        btn.setAttribute('aria-label', label);
+        btn.title = label;
+        btn.querySelector('.icon').textContent = permalinksVisible ? 'link_off' : 'link';
+        localStorage.setItem('ptx_permalink_visible', String(permalinksVisible));
+    });
+}
 
 
 window.addEventListener("load",function(event) {
