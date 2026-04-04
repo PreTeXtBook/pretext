@@ -703,7 +703,64 @@ Book (with parts), "section" at level 3
 
 <!-- $debug.displaystyle defaults to yes for testing -->
 
+<!-- Warn about bare special characters inside \text{} in math.      -->
+<!-- The textmacros extension treats # % &amp; as special, so they   -->
+<!-- must be escaped as \# \% \&amp; to produce literal glyphs.      -->
+<!-- We walk through each \text{...} segment via recursion and check -->
+<!-- the content up to the next } for bare special characters.       -->
+<!-- Imperfect with nested braces, but catches common cases.         -->
+<xsl:template name="warn-text-special-characters">
+    <xsl:variable name="math-text" select="string(.)"/>
+    <xsl:if test="contains($math-text, '\text{')">
+        <xsl:call-template name="check-text-segments">
+            <xsl:with-param name="remaining" select="$math-text"/>
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<!-- Recursive walk through \text{...} segments of a LaTeX string -->
+<xsl:template name="check-text-segments">
+    <xsl:param name="remaining"/>
+    <xsl:if test="contains($remaining, '\text{')">
+        <!-- content after \text{ up to next } -->
+        <xsl:variable name="after-text" select="substring-after($remaining, '\text{')"/>
+        <xsl:variable name="inside" select="substring-before($after-text, '}')"/>
+        <!-- check for bare # (present but \# is not) -->
+        <xsl:if test="contains($inside, '#') and not(contains($inside, '\#'))">
+            <xsl:message>
+                <xsl:text>PTX:WARNING:   a bare "#" inside \text{} in math must be escaped as "\#"</xsl:text>
+                <xsl:text>&#xa;</xsl:text>
+                <xsl:text>               </xsl:text>
+                <xsl:apply-templates select="." mode="location-report"/>
+            </xsl:message>
+        </xsl:if>
+        <!-- check for bare % -->
+        <xsl:if test="contains($inside, '%') and not(contains($inside, '\%'))">
+            <xsl:message>
+                <xsl:text>PTX:WARNING:   a bare "%" inside \text{} in math must be escaped as "\%"</xsl:text>
+                <xsl:text>&#xa;</xsl:text>
+                <xsl:text>               </xsl:text>
+                <xsl:apply-templates select="." mode="location-report"/>
+            </xsl:message>
+        </xsl:if>
+        <!-- check for bare & -->
+        <xsl:if test="contains($inside, '&amp;') and not(contains($inside, '\&amp;'))">
+            <xsl:message>
+                <xsl:text>PTX:WARNING:   a bare "&amp;" inside \text{} in math must be escaped as "\&amp;"</xsl:text>
+                <xsl:text>&#xa;</xsl:text>
+                <xsl:text>               </xsl:text>
+                <xsl:apply-templates select="." mode="location-report"/>
+            </xsl:message>
+        </xsl:if>
+        <!-- recurse on remainder after this \text{...} -->
+        <xsl:call-template name="check-text-segments">
+            <xsl:with-param name="remaining" select="$after-text"/>
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
 <xsl:template match="m">
+    <xsl:call-template name="warn-text-special-characters"/>
     <!-- wrap in math delimiters -->
     <xsl:call-template name="inline-math-wrapper">
         <xsl:with-param name="math">
@@ -934,6 +991,7 @@ Book (with parts), "section" at level 3
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="b-top-level" select="false()" />
     <xsl:param name="b-needs-tags" />
+    <xsl:call-template name="warn-text-special-characters"/>
     <!-- Build a textual version of the latex,       -->
     <!-- applying the rare templates allowed,        -->
     <!-- save for minor manipulation later.          -->
