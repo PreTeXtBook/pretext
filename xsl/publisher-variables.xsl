@@ -2762,6 +2762,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-portable-html" select="$portable-html = 'yes'"/>
 
+<!-- HTML chunk-level defaults, available to any stylesheet that    -->
+<!-- needs to compute HTML filenames via the "containing-filename"  -->
+<!-- template (pretext-common.xsl) without importing the full       -->
+<!-- pretext-html.xsl.  Uses $version-root rather than $root        -->
+<!-- because this is computed before later assembly passes.  The    -->
+<!-- contract (documented at the definition of $version-root in     -->
+<!-- pretext-assembly.xsl) is that no assembly pass alters the      -->
+<!-- gross document structure (book/article type, part/chapter/     -->
+<!-- section hierarchy), so $version-root is reliable for these     -->
+<!-- top-level queries.  Same contract relied upon by $toc-level.   -->
+<xsl:variable name="html-chunk-level">
+    <xsl:choose>
+        <!-- portable html always gets chunk level 0 -->
+        <xsl:when test="$b-portable-html">0</xsl:when>
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered" />
+        </xsl:when>
+        <xsl:when test="$version-root/book/part">3</xsl:when>
+        <xsl:when test="$version-root/book">2</xsl:when>
+        <xsl:when test="$version-root/article/section">1</xsl:when>
+        <xsl:when test="$version-root/article">0</xsl:when>
+        <xsl:when test="$version-root/slideshow">0</xsl:when>
+        <xsl:when test="$version-root/letter">0</xsl:when>
+        <xsl:when test="$version-root/memo">0</xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:ERROR: HTML chunk level not determined</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!--                            -->
 <!-- HTML Favicon Specification -->
 <!--                            -->
