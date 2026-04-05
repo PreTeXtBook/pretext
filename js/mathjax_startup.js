@@ -16,11 +16,8 @@ let mathJaxOpts = {
     "tagIndent": ".8em",
     "packages": {
       "[+]": [
-        "base",
-        "ams",
         "amscd",
         "color",
-        "newcommand",
         "knowl"
       ]
     }
@@ -38,7 +35,6 @@ let mathJaxOpts = {
       "input/asciimath",
       "[tex]/amscd",
       "[tex]/color",
-      "[tex]/newcommand",
     ]
   }
 };
@@ -79,8 +75,9 @@ export function startMathJax(opts) {
           }
         });
 
+        const NodeUtil = MathJax._.input.tex.NodeUtil.default;
+
         function GetArgumentMML(parser, name) {
-          const NodeUtil = MathJax._.input.tex.NodeUtil.default;
           const arg = parser.ParseArg(name);
           if (!NodeUtil.isInferred(arg)) {
             return arg;
@@ -95,35 +92,23 @@ export function startMathJax(opts) {
           return mrow;
         };
 
-        let mathjaxKnowl = {};
-        /**
-         * Implements \knowl{url}{math}
-         * @param {TexParser} parser The calling parser.
-         * @param {string} name The TeX string
-         */
-        mathjaxKnowl.Knowl = function (parser, name) {
-          const url = parser.GetArgument(name);
-          const arg = GetArgumentMML(parser, name);
-          const mrow = parser.create("node", "mrow", [arg], { tabindex: '0', "data-knowl": url });
-          parser.Push(mrow);
-        };
-
         const CommandMap = MathJax._.input.tex.TokenMap.CommandMap;
         new CommandMap(
           "knowl",
           {
-            knowl: ["Knowl"]
-          },
-          mathjaxKnowl
+            knowl(parser, name) {
+              const url = parser.GetArgument(name);
+              const arg = GetArgumentMML(parser, name);
+              const mrow = parser.create("node", "mrow", [arg], { tabindex: '0', "data-knowl": url });
+              parser.Push(mrow);
+            }
+          }
         );
 
         MathJax.startup.defaultReady();
       },
       pageReady() {
-        return MathJax.startup.defaultPageReady().then(function () {
-          rsMathReady();
-        }
-        )
+        return MathJax.startup.defaultPageReady().then(rsMathReady);
       },
     }
   }
