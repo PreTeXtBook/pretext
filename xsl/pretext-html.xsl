@@ -177,26 +177,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$html-design-width"/>
 </xsl:variable>
 
-<!-- We generally want to chunk longer HTML output -->
-<xsl:variable name="chunk-level">
-    <xsl:choose>
-        <!-- portable html always gets chunk level 0, even something else is entered -->
-        <xsl:when test="$b-portable-html">0</xsl:when>
-        <xsl:when test="$chunk-level-entered != ''">
-            <xsl:value-of select="$chunk-level-entered" />
-        </xsl:when>
-        <xsl:when test="$root/book/part">3</xsl:when>
-        <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section">1</xsl:when>
-        <xsl:when test="$root/article">0</xsl:when>
-        <xsl:when test="$root/slideshow">0</xsl:when>
-        <xsl:when test="$root/letter">0</xsl:when>
-        <xsl:when test="$root/memo">0</xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:ERROR: HTML chunk level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
+<!-- We generally want to chunk longer HTML output.       -->
+<!-- Delegates to $html-chunk-level in publisher-variables -->
+<!-- so lightweight stylesheets can access the same logic. -->
+<xsl:variable name="chunk-level" select="$html-chunk-level"/>
 
 <!-- HTML files as output -->
 <xsl:variable name="file-extension" select="'.html'" />
