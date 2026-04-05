@@ -2767,10 +2767,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- template (pretext-common.xsl) without importing the full       -->
 <!-- pretext-html.xsl.  Uses $version-root rather than $root        -->
 <!-- because this is computed before later assembly passes.  The    -->
-<!-- contract is that no assembly pass alters the gross document    -->
-<!-- structure (book/article type, part/chapter/section hierarchy), -->
-<!-- so $version-root is reliable for these top-level queries.      -->
-<!-- This is the same contract relied upon by $toc-level above.     -->
+<!-- contract (documented at the definition of $version-root in     -->
+<!-- pretext-assembly.xsl) is that no assembly pass alters the      -->
+<!-- gross document structure (book/article type, part/chapter/     -->
+<!-- section hierarchy), so $version-root is reliable for these     -->
+<!-- top-level queries.  Same contract relied upon by $toc-level.   -->
 <xsl:variable name="html-chunk-level">
     <xsl:choose>
         <!-- portable html always gets chunk level 0 -->

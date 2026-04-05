@@ -431,16 +431,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="version" select="exsl:node-set($version-rtf)"/>
 
-<!-- The "version" tree should be valid PreTeXt.  Furthermore, there -->
-<!-- should not be anymore modifactions in subsequent passes which   -->
-<!-- change the gross structure of a document (i.e. nature of the    -->
-<!-- divisions).  The determination of various pubisher variables,   -->
-<!-- mostly relative to numbering depth, have default values that    -->
-<!-- depend on the structure.  So aspects of this tree are consulted -->
-<!-- frequently in  publisher-variables.xsl.                         -->
-<!-- Also, note that this tree is useful for certain tasks, like     -->
-<!-- validation, or reporting values of publisher variables, without -->
-<!-- regard to the subsequent passes.                                -->
+<!-- The "version" tree should be valid PreTeXt.  Furthermore, there  -->
+<!-- should not be anymore modifications in subsequent passes which   -->
+<!-- change the gross structure of a document (i.e. nature of the     -->
+<!-- divisions).  The determination of various publisher variables,   -->
+<!-- mostly relative to numbering depth, have default values that     -->
+<!-- depend on the structure.  So aspects of this tree are consulted  -->
+<!-- frequently in  publisher-variables.xsl.  This includes           -->
+<!-- $html-chunk-level which inspects top-level division structure    -->
+<!-- (book/part, article/section) to set chunking defaults.           -->
+<!-- Also, note that this tree is useful for certain tasks, like      -->
+<!-- validation, or reporting values of publisher variables, without  -->
+<!-- regard to the subsequent passes.                                 -->
 <xsl:variable name="version-root" select="$version/pretext"/>
 <xsl:variable name="version-docinfo" select="$version-root/docinfo"/>
 <xsl:variable name="version-document-root" select="$version-root/*[not(self::docinfo)]"/>
