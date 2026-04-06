@@ -3259,7 +3259,7 @@
                 <table>
                     <title>File formats for <c>sageplot</c> images</title>
                     <tabular>
-                        <col right="major" header="yes"/>
+                        <col right="major"/>
                         <col/>
                         <col/>
                         <row bottom="major">

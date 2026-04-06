@@ -53,8 +53,8 @@
 
     <section xml:id="processing-CLI">
         <title>The <pretext />-CLI</title>
-        <author>Oscar Levin</author>
         <idx><h>CLI</h></idx>
+        <author>Oscar Levin</author>
         <introduction>
         <p>
             Here we will outline the functionality of the <pretext />-CLI.  Instructions for using the CLI without any local installation can be found in <xref ref="tutorial"/>.  An easy first step toward getting PreTeXt working locally would be to download VS Code and install the <c>pretext-tools</c> extension (which will install the <pretext />-CLI for you, assuming you have an appropriate version of python available).

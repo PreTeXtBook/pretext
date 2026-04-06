@@ -32,7 +32,7 @@
             <li><pretext/>-CLI, <xref ref="cli-project-manifest"/></li>
             <li><c>pretext/pretext</c> Python script, <xref ref="pretext-publisher-stringparam"/></li>
             <li><c>xsltproc</c> binary executable, <xref ref="xsltproc-string-parameters"/></li>
-        </ul></p>.
+        </ul></p>
     </section>
 
     <section xml:id="publisher-extra-stylesheet">
