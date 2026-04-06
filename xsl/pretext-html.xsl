@@ -6300,7 +6300,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Diagacess Instructions -->
 
 <xsl:template name="diagacess-instructions">
-    <details>
+    <details class="instructions diagcess__instructions">
         <summary>Diagram Exploration Keyboard Controls</summary>
         <div class="diagcess-navigation-controls">
             <table>
