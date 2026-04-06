@@ -165,6 +165,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- @workspace is only relevant on exercises and tasks that -->
+<!-- are within a worksheet or a handout, see the template  -->
+<!-- "sanitize-workspace" in pretext-common.xsl             -->
+<xsl:template match="exercise[@workspace]|task[@workspace]">
+    <xsl:if test="not(ancestor::worksheet) and not(ancestor::handout)">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>The @workspace attribute is only relevant for an exercise or&#xa;</xsl:text>
+                <xsl:text>task within a worksheet or a handout, and will be ignored here</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
 <!-- ########## -->
 <!-- Advisories -->
 <!-- ########## -->
