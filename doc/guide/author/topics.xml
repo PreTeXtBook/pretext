@@ -3523,6 +3523,9 @@
         <subsection>
             <title>Content and Placement of Programs</title>
 
+            <subsubsection xml:id="program-content-placement">
+                <title>Content and Placement</title>
+
             <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal"/>), subject to all the exceptions for exceptional characters (see <xref ref="overview-exceptional-characters"/>).  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your <init>XML</init> indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (e.g. Python).</p>
 
             <p>The text contents of a program can be surrounded with <tag>code</tag>, but that is only necessary if you have other elements inside of the <tag>program</tag> like <tag>preamble</tag> or <tag>tests</tag> used by an interactive program (see <xref ref="interactive-program-activecode"/> below for details).</p>
@@ -3578,6 +3581,7 @@
             <p>For interactive versions hosted on Runestone servers, the <attr>label</attr> attribute is critical, just like for interactive exercises.  So be certain to read <xref ref="best-practice-label"/>.</p>
 
             <p>Finally, when authoring programs, it may be helpful to keep the source code as plain text in separate files. This can avoid the need to manually escape characters that have special meaning in XML and can facilitate testing and updating the code samples. See <xref ref="topic-xinclude"/> for how to do so.</p>
+            </subsubsection>
 
             <subsubsection xml:id="program-default-values">
                 <title>Default Attributes for Programs</title>
@@ -3607,6 +3611,9 @@
 
         <subsection xml:id="interactive-program-activecode">
             <title>Interactive Programs, ActiveCode</title>
+
+            <subsubsection xml:id="activecode-authoring">
+                <title>Authoring ActiveCode Programs</title>
 
             <p><term>ActiveCode</term> is an interactive environment where a reader may work on code through repeated edit-compile-test cycles.  Code can be provided by an author as a complete program to be modified, a partial program to be completed, or nothing at all.  One good example is that maybe header files, import statement, and similar are provided, and a skeleton of a main entry-point procedure is also provided.  Then a reader can concentrate on the more conceptual parts of the programming.  Some languages will be executable <q>in browser</q> on any old generic web server, while others must be on a Runestone server (<xref ref="runestone"/>) where a <url href="https://github.com/trampgeek/jobe" visual="github.com/trampgeek/jobe">Jobe Server</url> is running to support the execution.</p>
 
@@ -3755,6 +3762,7 @@
                     </li>
                 </dl>
             </p>
+            </subsubsection>
 
             <subsubsection xml:id="interactive-program-activecode-tests">
                 <title>Tests for Interactive Programs</title>
