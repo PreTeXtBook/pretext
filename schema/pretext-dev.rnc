@@ -288,10 +288,21 @@
                 Feedback?,
                 Matches,
                 Hint*, Answer*, Solution*
-            Matches =
+            Matches = (
                 element cardsort {
                     Match+
-                }
+                } |
+                element matching {
+                    element premise {
+                        attribute ref {text}?,
+                        TextLong
+                    }+,
+                    element response {
+                        UniqueID,
+                        attribute order {xsd:integer}?,
+                        TextLong
+                    }+
+                })
             Match =
                 element match {
                     element premise {

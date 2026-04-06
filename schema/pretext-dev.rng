@@ -714,11 +714,34 @@
     </zeroOrMore>
   </define>
   <define name="Matches">
-    <element name="cardsort">
-      <oneOrMore>
-        <ref name="Match"/>
-      </oneOrMore>
-    </element>
+    <choice>
+      <element name="cardsort">
+        <oneOrMore>
+          <ref name="Match"/>
+        </oneOrMore>
+      </element>
+      <element name="matching">
+        <oneOrMore>
+          <element name="premise">
+            <optional>
+              <attribute name="ref"/>
+            </optional>
+            <ref name="TextLong"/>
+          </element>
+        </oneOrMore>
+        <oneOrMore>
+          <element name="response">
+            <ref name="UniqueID"/>
+            <optional>
+              <attribute name="order">
+                <data type="integer"/>
+              </attribute>
+            </optional>
+            <ref name="TextLong"/>
+          </element>
+        </oneOrMore>
+      </element>
+    </choice>
   </define>
   <define name="Match">
     <element name="match">
