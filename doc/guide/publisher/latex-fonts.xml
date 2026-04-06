@@ -73,12 +73,12 @@
                     </li>
                     <li>
                         <p>Karl-Dieter Crisman reports on 2019-07-01 that <q>I was able to use some fonts already existing in TeXLive with a symbolic link to the Font Book,
-                          as suggested at <url href="https://apple.stackexchange.com/a/225824/189102" visual="apple.stackexchange.com/a/225824/189102">Ask Different</url>:
+                          as suggested at <url href="https://apple.stackexchange.com/a/225824/189102" visual="apple.stackexchange.com/a/225824/189102">Ask Different</url>:</q>
                         <cd>
                             <cline>ln -s</cline>
                             <cline>  /usr/local/texlive/2018/texmf-dist/fonts/opentype/public/lm/</cline>
                             <cline>  '/Library/Fonts/Latin Modern'</cline>
-                        </cd>where 2018 indicates when I updated my <tex/>Live distribution.</q></p>
+                        </cd><q>where 2018 indicates when I updated my <tex/>Live distribution.</q></p>
                     </li>
                 </ul></p>
        </paragraphs>

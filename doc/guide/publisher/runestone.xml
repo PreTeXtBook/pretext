@@ -17,7 +17,8 @@
     <section xml:id="about-runestone">
         <title>About Runestone Academy</title>
 
-        <p>Runestone textbooks are designed around interactive activities and active reading.  We are very far along in the process of exposing these capabilities via <pretext/> markup.  Publicly-accessible Runestone servers are available at <url href="https://runestone.academy" visual="Runestone.Academy">Runestone Academy</url>.<ul>
+        <p>Runestone textbooks are designed around interactive activities and active reading.  We are very far along in the process of exposing these capabilities via <pretext/> markup.  Publicly-accessible Runestone servers are available at <url href="https://runestone.academy" visual="Runestone.Academy">Runestone Academy</url>.
+        <ul>
             <li>Every feature of the usual <pretext/> <init>HTML</init> output should function identically on a Runestone server.</li>
 
             <li>We have designed <pretext/> markup for the various types of problems available in Runestone: True/False, multiple choice, Parsons problems, matching, clickable area, (basic) fill-in, and ActiveCode programming exercises.  Hosted on Runestone, readers have their responses graded and get instant feedback, plus their results are saved at the site.  For other <init>HTML</init> output, hosted on your own server, these problems are automatically graded and the reader gets instant feedback, but of course, responses and scores are not saved anywhere.  Please see <xref ref="topic-interactive-exercises"/> for details of these exercises and their markup.</li>
@@ -64,7 +65,6 @@
             While this HTML may be manually deployed to any Runestone server, authors who wish to publish their
             work on the <url href="https://runestone.academy" visual="Runestone.Academy">Runestone Academy</url>
             server have a few more requirements.
-        </p>
         <ul>
             <li>
                 <p>
@@ -135,7 +135,7 @@
                     Runestone Academy administrators to get them to re-clone your repository.
                 </p>
             </li>
-        </ul>
+        </ul></p>
     </section>
 
     <section xml:id="sec-the-author-interface">

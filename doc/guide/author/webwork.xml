@@ -124,7 +124,7 @@
       <title>Local PG Source</title>
       <p>
         You can include PG source for a problem directly, as text content for the
-        <tag>webwork</tag> element. For example:
+        <tag>webwork</tag> element. For example:</p>
         <pre>
     &lt;exercise>
         &lt;webwork>DOCUMENT();
@@ -142,7 +142,7 @@ ENDDOCUMENT();
 &lt;/webwork>
     &lt;/exercise>
         </pre>
-        Note the attention paid here to whitespace. Any indentation or newline whitespace within
+      <p>Note the attention paid here to whitespace. Any indentation or newline whitespace within
         the <tag>webwork</tag> will be kept in the PG file that results from this method. Such
         whitespace may affect the functionality of the problem.
       </p>
