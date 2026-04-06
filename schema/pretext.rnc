@@ -796,6 +796,7 @@
             Task =
                 element task {
                     MetaDataTitleOptional,
+                    attribute workspace {text}?,
                     (
                         BlockStatement+ |
                         (Statement, Hint*, Answer*, Solution*) |
@@ -1143,6 +1144,7 @@
                 element exercise {
                     MetaDataTitleOptional,
                     attribute number {text}?,
+                    attribute workspace {text}?,
                     (
                     ExerciseBody |
                     (StatementExercise, Hint*, Answer*, Solution*) |

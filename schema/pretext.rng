@@ -2186,6 +2186,9 @@
   <define name="Task">
     <element name="task">
       <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
       <choice>
         <oneOrMore>
           <ref name="BlockStatement"/>
@@ -2963,6 +2966,9 @@
       <ref name="MetaDataTitleOptional"/>
       <optional>
         <attribute name="number"/>
+      </optional>
+      <optional>
+        <attribute name="workspace"/>
       </optional>
       <choice>
         <ref name="ExerciseBody"/>
