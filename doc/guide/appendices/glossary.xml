@@ -11,66 +11,66 @@
     <!-- Let title internationalize itself -->
 
     <gi>
-        <idx>alt text</idx>
         <title>alt text</title>
+        <idx>alt text</idx>
         <p>A text description of an image or other visual content.
            Its purpose is to describe content to readers who are unable to see the page.
         </p>
     </gi>
 
     <gi>
-        <idx>AMSMath</idx>
         <title>AMSMath</title>
+        <idx>AMSMath</idx>
         <p>A <latex/> package containing a wide variety of common math symbols.
         </p>
     </gi>
 
     <gi>
-        <idx>Asymptote</idx>
         <title>Asymptote</title>
+        <idx>Asymptote</idx>
         <p>A package for drawing graphs, diagrams or pictures which may be used with <latex/> or <pretext/>.
         </p>
     </gi>
 
     <gi>
-        <idx>attribute</idx>
         <title>attribute</title>
+        <idx>attribute</idx>
         <p>In XML, tags can have attributes, which provide more information about the element.  For example,
            in <c>&lt;section permid="dWf"></c> the tag is <q>section</q>,
            the attribute is <q>permid</q>, and the value of that attribute is <q>dWf</q>.</p>
     </gi>
 
     <gi>
-        <idx>BibTeX</idx>
         <title>BibTeX</title>
+        <idx>BibTeX</idx>
         <p>A <latex/> package for typesetting bibliographies.
         </p>
     </gi>
 
     <gi>
-        <idx>branch (git)</idx>
         <title>branch</title>
+        <idx>branch (git)</idx>
         <p>In git, the files in a repository can exist in multiple versions which are independent
            of each other, but are able to be merged.  Each independent version is a <term>branch</term></p>
     </gi>
 
     <gi>
-        <idx>commit (git)</idx>
         <title>commit</title>
+        <idx>commit (git)</idx>
         <p>In git, the act of declaring that changes to the files in a branch are now a permanent part of that branch.</p>
     </gi>
 
     <gi>
-        <idx>copyleft</idx>
         <title>copyleft</title>
+        <idx>copyleft</idx>
         <p>An arrangement whereby software or artistic work may be used,
            modified, and distributed freely on condition that anything derived from it is bound by the same condition.
         </p>
     </gi>
     <gi>
+        <title>Creative Commons</title>
         <idx>Creative Commons</idx>
         <idx>CC</idx>
-        <title>Creative Commons</title>
         <p>An organization which has created several open licenses for creative works.
         </p>
 
@@ -82,23 +82,23 @@
     </gi>
 
     <gi>
-        <idx>D3.js</idx>
         <title>D3.js</title>
+        <idx>D3.js</idx>
         <p>A JavaScript library for animating data.
            The name comes from <q>Data Driven Documents</q>.
         </p>
     </gi>
 
     <gi>
-        <idx>Desmos</idx>
         <title>Desmos</title>
+        <idx>Desmos</idx>
         <p>A graphing calculator that can be embedded in a Web page.
         </p>
     </gi>
 
     <gi>
-        <idx>division</idx>
         <title>division</title>
+        <idx>division</idx>
         <p>In <pretext/>, a
            <c>part</c>,
            <c>chapter</c>,
@@ -116,24 +116,24 @@
     </gi>
 
     <gi>
-        <idx>DVI</idx>
         <title>DVI</title>
+        <idx>DVI</idx>
         <p>A file format intermediate between <latex/> and PS or PDF.
            Stands for <em>Device Independent</em>.
         </p>
     </gi>
 
     <gi>
-        <idx>EPS</idx>
         <title>EPS</title>
+        <idx>EPS</idx>
         <p>Encapsulated Postscript:  a form of Postscript designed to hold a fragment of a page, to be included
            in a larger document.
         </p>
     </gi>
 
     <gi>
-        <idx>escape (character)</idx>
         <title>escape character</title>
+        <idx>escape (character)</idx>
         <p>Every markup language has <term>escape characters</term> which play a special role.
            In XML there are two escape characters: &amp; and &lt;.
            In <tex/> there are 10 escape characters: # $ % &amp; \ ^ _ { } and ~.
@@ -141,51 +141,51 @@
     </gi>
 
     <gi>
-        <idx>FontAwesome</idx>
         <title>FontAwesome</title>
+        <idx>FontAwesome</idx>
         <p>A <latex/> package containing many popular icons.
         </p>
     </gi>
 
     <gi>
-        <idx>GeoGebra</idx>
         <title>GeoGebra</title>
+        <idx>GeoGebra</idx>
         <p>An interactive environment particularly suited for constructing demonstrations in Euclidean geometry.
         </p>
     </gi>
 
     <gi>
-        <idx>GFDL</idx>
         <title>GFDL</title>
+        <idx>GFDL</idx>
         <p>GNU Free Documentation License: a copyleft license for manuals, textbooks,
            and other written materials.
            </p>
     </gi>
 
     <gi>
-        <idx>GIF</idx>
         <title>GIF</title>
+        <idx>GIF</idx>
         <p>Graphics Interchange Format: a lossless bitmap image format.
            </p>
     </gi>
 
     <gi>
-        <idx>git</idx>
         <title>git</title>
+        <idx>git</idx>
         <p>A version control system which is is used to track changes to computer files.
            Git is particularly useful for large projects involving multiple authors.</p>
     </gi>
 
     <gi>
-        <idx>GitHub</idx>
         <title>GitHub</title>
+        <idx>GitHub</idx>
         <p>A commercial website which hosts repositories for software projects, with the assumption
            that users use git to transfer material between GitHub and other systems.</p>
     </gi>
 
     <gi>
-        <idx>GPL</idx>
         <title>GPL</title>
+        <idx>GPL</idx>
         <p>GNU General Public License: a copyleft license which gives users the right to
            run, study, share and modify software.
            </p>
@@ -193,21 +193,21 @@
 
 
     <gi>
-        <idx>HTML</idx>
         <title>HTML</title>
+        <idx>HTML</idx>
         <p>Hypertext Markup Language:  the markup language used to describe the content of Web pages.</p>
     </gi>
 
     <gi>
-        <idx>JavaScript</idx>
         <title>JavaScript</title>
+        <idx>JavaScript</idx>
         <p>A computer language in common use for interactivity in Web pages.
         </p>
     </gi>
 
     <gi>
-        <idx>JPEG</idx><idx><h>jpg</h><see>JPEG</see></idx>
         <title>JPEG</title>
+        <idx>JPEG</idx><idx><h>jpg</h><see>JPEG</see></idx>
         <p>A method for compressing digital images, where the amount of compression can be adjusted,
            allowing for a tradeoff between image size and image quality.  Named for
            the Joint Photographic Experts Group, which developed the standard.  Files with JPEG
@@ -216,8 +216,8 @@
     </gi>
 
     <gi>
-        <idx>Jupyter</idx>
         <title>Jupyter</title>
+        <idx>Jupyter</idx>
         <p>An interactive computing environment designed to support a wide variety of computer languages.
            Named after the languages  Julia, Python and R.</p>
 
@@ -227,15 +227,15 @@
     </gi>
 
     <gi>
-        <idx>JSXGraph</idx>
         <title>JSXGraph</title>
+        <idx>JSXGraph</idx>
         <p>A JavaScript library for interactive geometry, function plotting, and data visualization.
         </p>
     </gi>
 
     <gi>
-        <idx>knowl</idx>
         <title>knowl</title>
+        <idx>knowl</idx>
         <p>Similar to a hyperlink, except the referenced material appears inside
            the current Web page.
            Usually indicated by a dotted underline.
@@ -244,155 +244,155 @@
         </p>
     </gi>
     <gi>
-        <idx><latex/></idx>
         <title><latex/></title>
+        <idx><latex/></idx>
         <p>A markup language used for books and papers with lots of mathematics, which is built on <tex/>.  <pretext/> uses <latex/> as an intermediate format to produce <init>PDF</init> and print output.</p>
     </gi>
 
     <gi>
-        <idx>main branch</idx>
         <title>main branch</title>
+        <idx>main branch</idx>
         <p>In git, the name of the default branch.</p>
     </gi>
     <gi>
-        <idx>Markdown</idx>
         <title>Markdown</title>
+        <idx>Markdown</idx>
         <p>A plain text markup language which is easy to use, is limited in its capabilities
            (compared to <pretext/> or <latex/>, for example), but can convert to many other formats.</p>
     </gi>
 
     <gi>
-        <idx>markup language</idx>
         <title>markup language</title>
+        <idx>markup language</idx>
         <p>A computer language that uses tags to define the content of a document. XML, HTML, Markdown, and <latex/> are examples of markup languages.</p>
     </gi>
 
     <gi>
-        <idx>master branch</idx>
         <title>master branch</title>
+        <idx>master branch</idx>
         <p>In git, the former name of the default branch.
            Currently <q>main</q> is the preferred.</p>
     </gi>
 
     <gi>
-        <idx>MathJax</idx>
         <title>MathJax</title>
+        <idx>MathJax</idx>
         <p>A JavaScript package for converting math <latex/> to presentation MathML or other visual formats.</p>
     </gi>
 
     <gi>
-        <idx>MBX</idx>
         <title>MBX</title>
+        <idx>MBX</idx>
         <p><pretext/> was once known as <q>MathBook XML</q>, commonly abbreviated as MBX.  This abbreviation appears in many historical references.</p>
     </gi>
 
     <gi>
-        <idx>MP3</idx>
         <title>MP3</title>
+        <idx>MP3</idx>
         <p>A format for storing audio content.
         </p>
     </gi>
 
     <gi>
-        <idx>MP4</idx>
         <title>MP4</title>
+        <idx>MP4</idx>
         <p>A format for storing video content.
         </p>
     </gi>
 
     <gi>
-        <idx>MyOpenMath</idx>
         <title>MyOpenMath</title>
+        <idx>MyOpenMath</idx>
         <p>A free and open online homework system.
         </p>
     </gi>
 
     <gi>
-        <idx>Ogg</idx>
         <title>Ogg</title>
+        <idx>Ogg</idx>
         <p>A format for storing video content.
         </p>
     </gi>
 
     <gi>
-        <idx>origin repository</idx>
         <title>origin repository</title>
+        <idx>origin repository</idx>
         <p>In git, the default name for the remote repository from which the local repository was cloned.</p>
     </gi>
 
     <gi>
-        <idx>PDF</idx>
         <title>PDF</title>
+        <idx>PDF</idx>
         <p>Portable Document Format:  a file format designed for printing documents, where the appearance of
            the pages is identical on all devices.</p>
     </gi>
 
     <gi>
-        <idx>PDFLaTeX</idx>
         <title>PDFLaTeX</title>
+        <idx>PDFLaTeX</idx>
         <p>One of the available programs to convert <latex/> to PDF.
         </p>
     </gi>
 
     <gi>
-        <idx>pgfplots</idx>
         <title>pgfplots</title>
+        <idx>pgfplots</idx>
         <p>A <latex/> package for drawing graphs of functions.</p>
     </gi>
 
     <gi>
-        <idx>PNG</idx>
         <title>PNG</title>
+        <idx>PNG</idx>
         <p>Portable Network Graphics: a raster image format that supports lossless data compression.
            PNG offers a similar functionality to GIF but is not subject to patent protection.
         </p>
     </gi>
 
     <gi>
+        <title>Postscript</title>
         <idx>Postscript</idx><idx><h>ps (file extension)</h><see>Postscript</see></idx>
         <idx><h>file extension</h><h>ps</h><see>Postscript</see></idx>
-        <title>Postscript</title>
         <p>A page description language and file format designed for printing documents.
         </p>
     </gi>
 
     <gi>
-        <idx><pretext/></idx>
         <title><pretext/></title>
+        <idx><pretext/></idx>
         <p>The markup language and document preparation system for creating the next generation of textbooks.
            And the generation after that.
         </p>
     </gi>
 
     <gi>
-        <idx>PSTricks</idx>
         <title>PSTricks</title>
+        <idx>PSTricks</idx>
         <p>A <latex/> package for drawing diagrams and pictures.
         </p>
     </gi>
 
     <gi>
-        <idx>pull (git)</idx>
         <title>pull</title>
+        <idx>pull (git)</idx>
         <p>In git, the process of transferring information from a remote repository to a local repository.</p>
     </gi>
 
     <gi>
-        <idx>pull request</idx>
         <title>pull request</title>
+        <idx>pull request</idx>
         <p>In git, a suggestion that the changes to the files in one branch be merged into another branch
            (typically in another repository).</p>
     </gi>
 
     <gi>
-        <idx>push (git)</idx>
         <title>push</title>
+        <idx>push (git)</idx>
         <p>In git, the process of transferring information from a local repository to a remote repository.</p>
     </gi>
 
     <gi>
-        <idx>Python</idx>
         <title>Python</title>
+        <idx>Python</idx>
         <p>A general-purpose programming language, noted for making it easy (compared to other programming
            languages) for a programmer to read the code written by someone else.
            Sage is written in Python.
@@ -400,60 +400,60 @@
     </gi>
 
     <gi>
-        <idx>QR code</idx>
         <title>QR code</title>
+        <idx>QR code</idx>
         <p>Quick Response code: a type of two-dimensional bar code,
            usually consisting of a grid of small black-and-white squares.
         </p>
     </gi>
 
     <gi>
-        <idx>R (programming language)</idx>
         <title>R</title>
+        <idx>R (programming language)</idx>
         <p>A programming language and software environment for statistics;
            available in Sage.
         </p>
     </gi>
 
     <gi>
-        <idx>Sage</idx>
         <title>Sage</title>
+        <idx>Sage</idx>
         <p>An open source computer algebra system for a wide range of symbolic and numerical mathematical computations.</p>
     </gi>
 
     <gi>
-        <idx><h>Sage</h><h>cell</h></idx>
         <title>Sage cell</title>
+        <idx><h>Sage</h><h>cell</h></idx>
         <p>A text box in which the user can run Sage commands, designed to be included
            in a Web page.
         </p>
     </gi>
 
     <gi>
-        <idx><h>Sage</h><h>interact</h></idx>
         <title>Sage interact</title>
+        <idx><h>Sage</h><h>interact</h></idx>
         <p>A interactive demonstration, with sliders and boxes to adjust parameters,
            created as a single Python function in Sage.
         </p>
     </gi>
 
     <gi>
-        <idx>siunitx</idx>
         <title>siunitx</title>
+        <idx>siunitx</idx>
         <p>A <latex/> package for typesetting scientific units.
         </p>
     </gi>
 
     <gi>
-        <idx>SVG</idx>
         <title>SVG</title>
+        <idx>SVG</idx>
         <p>Scalable Vector Graphics: an XML vector image format for two-dimensional graphics.
         </p>
     </gi>
 
     <gi>
-        <idx>tag</idx>
         <title>tag</title>
+        <idx>tag</idx>
         <p>In XML, tags are enclosed in angle brackets and are used to describe the contents of a document.
            For example, if <q>All about even</q> was the title of a book about numbers that are multiples of 2,
            then the XML source of that book might mark up the title using the <c>title</c> tag,
@@ -464,112 +464,112 @@
     </gi>
 
     <gi>
-        <idx><tex/></idx>
         <title><tex/></title>
+        <idx><tex/></idx>
         <p>A typesetting language with high-quality automatic line- and page-breaking, specifically designed for mathematics.
         </p>
     </gi>
 
     <gi>
-        <idx>three.js</idx>
         <title>three.js</title>
+        <idx>three.js</idx>
         <p>A JavaScript library for animating 3-dimensional graphics on a Web page.
         </p>
     </gi>
 
     <gi>
-        <idx>TikZ</idx>
         <title>TikZ</title>
+        <idx>TikZ</idx>
         <p>A <latex/> package for drawing diagrams and pictures.
         </p>
     </gi>
 
     <gi>
-        <idx>unicode</idx>
         <title>unicode</title>
+        <idx>unicode</idx>
         <p>The accepted standard for encoding text in any language.</p>
     </gi>
 
     <gi>
-        <idx>upstream repository (git)</idx>
         <title>upstream repository</title>
+        <idx>upstream repository (git)</idx>
         <p>In git, the usual name for the remote repository from which the local repository was originally forked.</p>
     </gi>
 
     <gi>
-        <idx>URL</idx>
         <title>URL</title>
+        <idx>URL</idx>
         <p>Uniform Resource Locator:  the <q>web address</q> of a Web page (or other online content)
            consisting of a domain name, optionally followed by strings separated by slashes (<c>/</c>)
            which indicate specific content in the domain.</p>
     </gi>
 
     <gi>
-        <idx>Vimeo</idx>
         <title>Vimeo</title>
+        <idx>Vimeo</idx>
         <p>A commercial website for hosting videos.</p>
     </gi>
 
     <gi>
-        <idx>WebM</idx>
         <title>WebM</title>
+        <idx>WebM</idx>
         <p>A format for storing video content.
         </p>
     </gi>
     <gi>
-        <idx><webwork/></idx>
         <title><webwork/></title>
+        <idx><webwork/></idx>
         <p>An open-source online homework system for math and sciences courses.</p>
     </gi>
 
     <gi>
+        <title>Wolfram CDF</title>
         <idx>Wolfram CDF</idx>
         <idx>CDF</idx>
-        <title>Wolfram CDF</title>
         <p> Wolfram Computable Document Format: a system for creating interactive demonstrations
             hosted in the Wolfram Cloud.
         </p>
     </gi>
 
     <gi>
-        <idx><xelatex/></idx>
         <title><xelatex/></title>
+        <idx><xelatex/></idx>
         <p>One of the available programs to convert <latex/> to DVI or PDF, the executable is <c>xelatex</c>.
         </p>
     </gi>
 
     <gi>
-        <idx>XML</idx>
         <title>XML</title>
+        <idx>XML</idx>
         <p>eXstensible Markup Language: the base syntax for the <pretext/> language.
            Angle brackets enclose matching begin and end tags.  Tags can nest hierarchically, and can have attributes.
            <init>HTML</init> is another markup language that uses XML syntax.</p>
     </gi>
 
     <gi>
-        <idx>XSL</idx>
         <title>XSL</title>
+        <idx>XSL</idx>
         <p>eXstensible Stylesheet Language: the language that describes how to convert XML to other formats.
            <pretext/>'s XSL stylesheets are used to convert <pretext/> XML to <latex/>, HTML, ePub, and other formats.</p>
     </gi>
 
     <gi>
-        <idx>xsltproc</idx>
         <title>xsltproc</title>
+        <idx>xsltproc</idx>
         <p>A command-line program which takes as input an XSL file and and XML file, using the contents of the XSL
            file to transform the contents of the XML file. It is now preferred to use the <pretext /> CLI for transforming.</p>
     </gi>
 
     <gi>
-        <idx>xypic</idx>
         <title>xypic</title>
+        <idx>xypic</idx>
         <p>A <latex/> package for drawing simple commutative diagrams.
         </p>
     </gi>
 
     <gi>
-        <idx>YouTube</idx>
         <title>YouTube</title>
+        <idx>YouTube</idx>
         <p>A commercial website for hosting videos.</p>
     </gi>
 </glossary>
