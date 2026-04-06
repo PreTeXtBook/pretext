@@ -385,6 +385,82 @@
                     MetaDataTitleOptional,
                     BlockSolution+
                 }
+            # Fill-in-the-blank exercises (new-style evaluation)
+            FillInBlank =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                StatementExercise,
+                Evaluation,
+                Hint*, Answer*, Solution*
+            Evaluation =
+                element evaluation {
+                    attribute answers-coupled {"yes"|"no"}?,
+                    Evaluate+
+                }
+            Evaluate =
+                element evaluate {
+                    attribute name {text}?,
+                    attribute submit {text}?,
+                    attribute all {"yes"|"no"}?,
+                    FITBTest+
+                }
+            FITBTest =
+                element test {
+                    attribute correct {"yes"|"no"}?,
+                    FITBComparison,
+                    Feedback?
+                }
+            FITBComparison =
+                FITBNumcmp | FITBStrcmp | FITBJscmp | FITBMathcmp | FITBLogic
+            FITBNumcmp =
+                element numcmp {
+                    attribute use-answer {"yes"|"no"}?,
+                    attribute value {text}?,
+                    attribute tolerance {text}?,
+                    attribute min {text}?,
+                    attribute max {text}?,
+                    attribute object {text}?
+                }
+            FITBStrcmp =
+                element strcmp {
+                    attribute use-answer {"yes"|"no"}?,
+                    attribute case {"insensitive"}?,
+                    attribute strip {"no"}?,
+                    text
+                }
+            FITBJscmp =
+                element jscmp {
+                    text
+                }
+            FITBMathcmp =
+                element mathcmp {
+                    attribute obj {text}?,
+                    mixed {AnyElement*}
+                }
+            FITBLogic =
+                element logic {
+                    attribute op {"and"|"or"|"not"},
+                    (FITBComparison)+
+                }
+            AnyElement =
+                element * {
+                    attribute * {text}*,
+                    mixed {AnyElement*}
+                }
+            # Extended fillin with interactive attributes
+            FillIn |=
+                element fillin {
+                    attribute characters {xsd:integer}?,
+                    attribute cols {xsd:integer}?,
+                    attribute rows {xsd:integer}?,
+                    attribute width {text}?,
+                    attribute answer {text}?,
+                    attribute mode {"string"|"number"|"math"}?,
+                    attribute name {text}?,
+                    attribute ansobj {text}?,
+                    attribute fill {text}?
+                }
+
             # Include all exercise types in exercise and activity
             Exercise |=
                 element exercise {
@@ -394,6 +470,7 @@
                     Parsons |
                     Matching |
                     FreeResponse |
+                    FillInBlank |
                     Areas
                 }
             ProjectLike |=
@@ -403,6 +480,7 @@
                 Parsons |
                 Matching |
                 FreeResponse |
+                FillInBlank |
                 Areas
             
                 }
