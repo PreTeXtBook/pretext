@@ -995,6 +995,11 @@
                                 attribute variant {'2d'|'3d'}?,
                                 attribute aspect {text}?,
                                 text
+                            } |
+                            element mermaid {
+                                LabelID?,
+                                Component?,
+                                text
                             }
                           )
                         )

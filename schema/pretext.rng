@@ -2598,6 +2598,15 @@
                 </optional>
                 <text/>
               </element>
+              <element name="mermaid">
+                <optional>
+                  <ref name="LabelID"/>
+                </optional>
+                <optional>
+                  <ref name="Component"/>
+                </optional>
+                <text/>
+              </element>
             </choice>
           </interleave>
         </group>
