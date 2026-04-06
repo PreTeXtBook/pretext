@@ -10,6 +10,17 @@
 <chapter xml:id="tutorial">
     <title>Getting Started Tutorial</title>
 
+    <objectives>
+      <introduction><p>At the end of this tutorial you will have...</p></introduction>
+      <ul>
+        <li><p>Created a free GitHub account.</p></li>
+        <li><p>Created a GitHub Repository and Codespace for authoring <pretext/> in your web browser.</p></li>
+        <li><p>Learned the first steps to editing a <pretext/> document.</p></li>
+        <li><p>Converted your document to both <latex/>-generated PDF and accessible <init>HTML</init>.</p></li>
+        <li><p>Deployed your <init>HTML</init> to the web via GitHub Pages.</p></li>
+      </ul>
+    </objectives>
+
     <introduction>
       <p>
         This chapter serves as a tutorial for quickly getting started with <pretext /> in your web browser
@@ -17,16 +28,6 @@
         (Advanced users who'd prefer to install our free and open-source software
         to their own machine may choose to skip ahead to <xref ref="tutorial-install"/>.)
       </p>
-      <objectives>
-        <introduction><p>At the end of this tutorial you will have...</p></introduction>
-        <ul>
-          <li><p>Created a free GitHub account.</p></li>
-          <li><p>Created a GitHub Repository and Codespace for authoring <pretext/> in your web browser.</p></li>
-          <li><p>Learned the first steps to editing a <pretext/> document.</p></li>
-          <li><p>Converted your document to both <latex/>-generated PDF and accessible <init>HTML</init>.</p></li>
-          <li><p>Deployed your <init>HTML</init> to the web via GitHub Pages.</p></li>
-        </ul>
-      </objectives>
       <p>
         The community does its best to keep this guide updated, but for even more up-to-date advice,
         join us at our regular Zoom drop-ins announced at
