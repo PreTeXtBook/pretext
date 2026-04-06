@@ -1144,6 +1144,83 @@
       </optional>
     </element>
   </define>
+  <!-- Datafile element for student data -->
+  <define name="Datafile">
+    <element name="datafile">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
+      </optional>
+      <attribute name="filename"/>
+      <optional>
+        <attribute name="rows">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="cols">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="editable">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="include-source">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <choice>
+        <element name="pre">
+          <optional>
+            <attribute name="source"/>
+          </optional>
+          <text/>
+        </element>
+        <ref name="Image"/>
+      </choice>
+    </element>
+  </define>
+  <define name="BlockStatement" combine="choice">
+    <ref name="Datafile"/>
+  </define>
+  <!-- Query (poll/survey) element -->
+  <define name="Query">
+    <element name="query">
+      <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
+        <attribute name="scale">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <ref name="StatementExercise"/>
+      <optional>
+        <element name="choices">
+          <oneOrMore>
+            <ref name="Choice"/>
+          </oneOrMore>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="BlockStatement" combine="choice">
+    <ref name="Query"/>
+  </define>
   <!-- Include all exercise types in exercise and activity -->
   <define name="Exercise" combine="choice">
     <element name="exercise">

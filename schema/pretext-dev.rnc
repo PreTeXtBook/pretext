@@ -461,6 +461,39 @@
                     attribute fill {text}?
                 }
 
+            # Datafile element for student data
+            Datafile =
+                element datafile {
+                    UniqueID?,
+                    LabelID?,
+                    Component?,
+                    attribute filename {text},
+                    attribute rows {xsd:integer}?,
+                    attribute cols {xsd:integer}?,
+                    attribute editable {"yes"|"no"}?,
+                    attribute include-source {"yes"|"no"}?,
+                    (
+                        element pre {
+                            attribute source {text}?,
+                            text
+                        } |
+                        Image
+                    )
+                }
+            BlockStatement |= Datafile
+
+            # Query (poll/survey) element
+            Query =
+                element query {
+                    LabelID?,
+                    attribute scale {xsd:integer}?,
+                    StatementExercise,
+                    element choices {
+                        Choice+
+                    }?
+                }
+            BlockStatement |= Query
+
             # Include all exercise types in exercise and activity
             Exercise |=
                 element exercise {
