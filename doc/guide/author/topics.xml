@@ -2537,7 +2537,7 @@
             <pre>
             <![CDATA[
             <image source="images/toad-life-cycle" width="85%">
-                <description>The four stages of a toad's life.</description>
+                <description><p>The four stages of a toad's life.</p></description>
             </image>
             ]]>
             </pre>
@@ -2591,7 +2591,7 @@
                 <p>Here is the result.  Look elsewhere for examples of 3-D output from Asymptote.</p>
 
                 <image width="60%">
-                    <description>A histogram of Gaussian data.</description>
+                    <description><p>A histogram of Gaussian data.</p></description>
                     <asymptote label="gaussian-histogram">
                     import graph;
                     import stats;
@@ -2667,7 +2667,7 @@
                 <figure xml:id="rna-codons-figure">
                     <caption>RNA Codons Table, by Florian Hollandt</caption>
                     <image width="100%">
-                        <description>A table of the RNA codons.</description>
+                        <description><p>A table of the RNA codons.</p></description>
                         <latex-image label="rna-codons-table">
                         \begin{tikzpicture}
                         \footnotesize
@@ -2712,7 +2712,7 @@
                 <figure xml:id="rna-codons-figure">
                     <caption>RNA Codons Table, by Florian Hollandt, from <url href="https://texample.net/tikz/examples/rna-codons-table/" visual="texample.net/tikz/examples/rna-codons-table/"><tex/>ample.net</url></caption>
                     <image width="100%">
-                        <description>A table of the RNA codons, together with the amino acids they encode.</description>
+                        <description><p>A table of the RNA codons, together with the amino acids they encode.</p></description>
                         <latex-image label="rna-codons-figure">
                         \begin{tikzpicture}
                         \footnotesize
@@ -3299,7 +3299,7 @@
                 <figure>
                     <caption>Negative multiple of a curve</caption>
                     <image width="65%">
-                        <description>Plot of x^4 - 1 and its negative.</description>
+                        <description><p>Plot of x^4 - 1 and its negative.</p></description>
                         <sageplot label="negative-curve">
                         f(x) = x^4 - 1
                         g(x) = -x^4 + 1
@@ -3316,7 +3316,7 @@
                 <figure>
                     <caption>Negative multiple of a curve</caption>
                     <image width="65%">
-                        <description>Plot of x^4 - 1 and its negative.</description>
+                        <description><p>Plot of x^4 - 1 and its negative.</p></description>
                         <sageplot label="negative-curve">
                         f(x) = x^4 - 1
                         g(x) = -x^4 + 1

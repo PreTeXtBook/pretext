@@ -205,7 +205,7 @@
         <figure xml:id="tutorial-figure-codespaces-pretext">
           <caption>PreTeXt commands in Codespaces</caption>
           <image width="50%" source="codespaces-pretext.png">
-            <description>Screenshot of VS Code PreTeXt button in Codespaces</description>
+            <description><p>Screenshot of VS Code PreTeXt button in Codespaces</p></description>
           </image>
         </figure>
       </subsection>
@@ -280,7 +280,7 @@
         <figure xml:id="tutorial-figure-codespaces-sidebar">
           <caption>Filenames changing color as they are edited in Codespaces</caption>
           <image width="50%" source="codespaces-sidebar.png">
-            <description>Screenshot of VS Code sidebar in Codespaces</description>
+            <description><p>Screenshot of VS Code sidebar in Codespaces</p></description>
           </image>
         </figure>
 
@@ -293,7 +293,7 @@
         <figure xml:id="tutorial-figure-codespaces-diff">
           <caption>A <q>Git diff</q> showing changes in a file</caption>
           <image width="100%" source="codespaces-diff.png">
-            <description>Screenshot of VS Code Git diff in Codespaces</description>
+            <description><p>Screenshot of VS Code Git diff in Codespaces</p></description>
           </image>
         </figure>
 
@@ -306,7 +306,7 @@
         <figure xml:id="tutorial-figure-codespaces-sync">
           <caption>Committing and syncing changes</caption>
           <image width="50%" source="codespaces-sync.png">
-            <description>Screenshot of VS Code source control in Codespaces</description>
+            <description><p>Screenshot of VS Code source control in Codespaces</p></description>
           </image>
         </figure>
 
@@ -392,7 +392,7 @@
         <figure xml:id="tutorial-figure-codespaces-pretext-cli">
           <caption>Using the PreTeXt CLI with a Codespaces terminal</caption>
           <image width="80%" source="codespaces-pretext-cli.png">
-            <description>Screenshot of using the PreTeXt CLI within Codespaces</description>
+            <description><p>Screenshot of using the PreTeXt CLI within Codespaces</p></description>
           </image>
         </figure>
         <p>

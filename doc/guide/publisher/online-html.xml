@@ -212,13 +212,13 @@
                 <sidebyside widths="40% 40%" margins="auto" valign="middle">
                     <figure>
                       <image source="theme-default-modern.jpg" width="100%">
-                          <description>Screenshot of the default-modern theme</description>
+                          <description><p>Screenshot of the default-modern theme</p></description>
                       </image>
                       <caption><term>default-modern</term> An updated version of the traditional PreTeXt theme.</caption>
                     </figure>
                     <figure>
                       <image source="theme-tacoma.png" width="100%">
-                          <description>Screenshot of the tacoma theme</description>
+                          <description><p>Screenshot of the tacoma theme</p></description>
                       </image>
                       <caption><term>tacoma</term> A theme with minimal decorations and colors. A minimalistic presentation of the contents.</caption>
                     </figure>
@@ -226,13 +226,13 @@
                 <sidebyside widths="40% 40%" margins="auto" valign="middle">
                     <figure>
                       <image source="theme-denver.png" width="100%">
-                          <description>Screenshot of the denver theme</description>
+                          <description><p>Screenshot of the denver theme</p></description>
                       </image>
                       <caption><term>denver</term> A theme that uses bolder structural elements and colors.</caption>
                     </figure>
                     <figure>
                       <image source="theme-greeley.png" width="100%">
-                          <description>Screenshot of the greeley theme</description>
+                          <description><p>Screenshot of the greeley theme</p></description>
                       </image>
                       <caption><term>greeley</term> A theme designed for short documents like academic papers.</caption>
                     </figure>
@@ -240,13 +240,13 @@
                 <sidebyside widths="40% 40%" margins="auto" valign="middle">
                     <figure>
                       <image source="theme-salem.png" width="100%">
-                          <description>Screenshot of the salem theme</description>
+                          <description><p>Screenshot of the salem theme</p></description>
                       </image>
                       <caption><term>salem</term> A theme that is optimized for displaying wide interactive elements (such as Active Code and Parsons).</caption>
                     </figure>
                     <figure>
                       <image source="theme-boulder.png" width="100%">
-                          <description>Screenshot of the boulder theme</description>
+                          <description><p>Screenshot of the boulder theme</p></description>
                       </image>
                       <caption><term>boulder</term> A minimal theme designed to mimic a LaTeX pdf for academic paper (no masthead).</caption>
                     </figure>

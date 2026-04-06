@@ -155,7 +155,7 @@
         <figure xml:id="img-author-interface">
             <caption>The author interface main page</caption>
             <image source="author-interface.png" width="100%">
-                <description>The author interface lets you pull changes from GitHub and rebuild your book.</description>
+                <description><p>The author interface lets you pull changes from GitHub and rebuild your book.</p></description>
             </image>
         </figure>
         <p>
@@ -168,7 +168,7 @@
         <figure xml:id="img-analytics">
             <caption>Some example analytics for your book</caption>
             <image source="impact-report.png" width="100%">
-                <description>An impact report for Foundations of Python Programming</description>
+                <description><p>An impact report for Foundations of Python Programming</p></description>
             </image>
         </figure>
         <p>
@@ -181,7 +181,7 @@
         <figure xml:id="img-edit-metadata">
             <caption>Editing a book's metadata</caption>
             <image source="edit-metadata.png" width="100%">
-                <description>Editing metatdata about a book</description>
+                <description><p>Editing metatdata about a book</p></description>
             </image>
         </figure>
         </subsection>

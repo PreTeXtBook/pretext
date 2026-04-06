@@ -3480,7 +3480,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <figure xml:id="figure-complete-graph">
                     <caption>Complete graph on <m>16</m> vertices, from <c>www.texample.net</c></caption>
                     <image source="images/complete-graph" width="65%">
-                        <description>A circular arrangment of <m>16</m> dots (<term>vertices</term>) with <m>120</m> straight lines (<term>edges</term>), joining every pair of dots.</description>
+                        <description><p>A circular arrangment of <m>16</m> dots (<term>vertices</term>) with <m>120</m> straight lines (<term>edges</term>), joining every pair of dots.</p></description>
                     </image>
                 </figure>
 

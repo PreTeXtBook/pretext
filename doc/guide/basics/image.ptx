@@ -1,4 +1,4 @@
 <image source="small-graph" width="20%">
-    <description>A graph on five vertices. One of the vertices is isolated, while the other four form a path on four vertices.</description>
+    <description><p>A graph on five vertices. One of the vertices is isolated, while the other four form a path on four vertices.</p></description>
 </image>
 

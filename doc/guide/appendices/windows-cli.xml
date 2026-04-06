@@ -52,7 +52,7 @@
       </p>
 
       <image width="70%" source="vscode-download.png">
-        <description>Screenshot of the VSCode website, showing where to click to download the installer</description>
+        <description><p>Screenshot of the VSCode website, showing where to click to download the installer</p></description>
       </image>
 
       <p>
@@ -60,7 +60,7 @@
       </p>
 
       <image width="50%" source="vscode-setup.png">
-        <description>Screenshot of the VSCode installer program, showing where to click to ensure the program is added to the Windows system environment variables</description>
+        <description><p>Screenshot of the VSCode installer program, showing where to click to ensure the program is added to the Windows system environment variables</p></description>
       </image>
 
       <p>
@@ -81,7 +81,7 @@
       </p>
 
       <image width="70%" source="python-download.png">
-        <description>Screenshot of the python.org webpage, showing where to access the installer download</description>
+        <description><p>Screenshot of the python.org webpage, showing where to access the installer download</p></description>
       </image>
 
       <p>
@@ -90,7 +90,7 @@
       </p>
 
       <image width="50%" source="python-setup.png">
-        <description>Screenshot of the Python installer program, showing the box that needs to be checked to ensure it is added to the system environment variables</description>
+        <description><p>Screenshot of the Python installer program, showing the box that needs to be checked to ensure it is added to the system environment variables</p></description>
       </image>
     </subsection>
 
@@ -116,7 +116,7 @@
       </p>
 
       <image width="50%" source="git-setup.png">
-        <description>Screenshot of the Git for Windows installation program, showing how to select VSCode as the default text editor</description>
+        <description><p>Screenshot of the Git for Windows installation program, showing how to select VSCode as the default text editor</p></description>
       </image>
     </subsection>
 
@@ -149,15 +149,15 @@
 
       <sidebyside widths="33% 33% 33%">
         <image source="windows-path-1.png">
-          <description>Screenshot of the Windows system property control panel, showing how to access the Environment Variables</description>
+          <description><p>Screenshot of the Windows system property control panel, showing how to access the Environment Variables</p></description>
         </image>
 
         <image source="windows-path-2.png">
-          <description>Screenshot of the Environment Variables control panel, showing how to access and edit the Path</description>
+          <description><p>Screenshot of the Environment Variables control panel, showing how to access and edit the Path</p></description>
         </image>
 
         <image source="windows-path-3.png">
-          <description>Screenshot of the interface for editing the Windows Path to add a new program</description>
+          <description><p>Screenshot of the interface for editing the Windows Path to add a new program</p></description>
         </image>
       </sidebyside>
 
