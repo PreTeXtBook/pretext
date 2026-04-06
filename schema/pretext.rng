@@ -1022,6 +1022,9 @@
         </choice>
       </zeroOrMore>
       <optional>
+        <ref name="Glossary"/>
+      </optional>
+      <optional>
         <ref name="References"/>
       </optional>
       <optional>
@@ -3988,6 +3991,8 @@
       <value>type-hybrid</value>
       <value>phrase-global</value>
       <value>phrase-hybrid</value>
+      <value>type-local-title</value>
+      <value>type-global-title</value>
       <value>title</value>
       <value>custom</value>
     </choice>

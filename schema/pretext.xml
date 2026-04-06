@@ -1157,6 +1157,7 @@
             XrefTextStyle =
                 "local" | "global" | "hybrid" | "type-local" | "type-global" |
                 "type-hybrid" | "phrase-global" | "phrase-hybrid" |
+                "type-local-title" | "type-global-title" |
                 "title" | "custom"
             Reference = Url | Xref
             Url =
@@ -3286,6 +3287,7 @@
                 element backmatter {
                     MetaDataTitleOptional,
                     (BookAppendix|Solutions)*,
+                    Glossary?,
                     References?,
                     IndexDivision?,
                     ColophonBack?
