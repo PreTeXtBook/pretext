@@ -44,7 +44,7 @@
     force this.</p>
     <figure>
       <caption>Just a little figure</caption>
-      <image src="image-4.svg" width="50%" />
+      <image source="image-4.svg" width="50%" />
     </figure>
     <sidebyside margins="0%" widths="30% 60%" valign="top">
       <exercise workspace="4.5in">

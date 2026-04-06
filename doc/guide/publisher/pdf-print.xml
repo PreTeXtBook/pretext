@@ -81,7 +81,7 @@
 
         <p>Note that if you change the paper size, you may want to change the text width computed by <pretext/>, and the more changes you make, the more default settings you may need to adjust.  However, if you are producing your book for print-on-demand (<xref ref="print-on-demand"/>) getting the page size and margins just right is a key step of the process.</p>
 
-        <p>Note also that when you use the <tag>geometry</tag> element of the publication file, the <emc>content</emc> of the element (text between the opening and closing tags) will be duplicated <em>exactly</em> into a <latex/> source file.  Being careless here is a good explanation for the <latex/> compilation step to fail.</p>
+        <p>Note also that when you use the <tag>geometry</tag> element of the publication file, the <em>content</em> of the element (text between the opening and closing tags) will be duplicated <em>exactly</em> into a <latex/> source file.  Being careless here is a good explanation for the <latex/> compilation step to fail.</p>
 
         <p>Here is an example:<cd>
             <cline>&lt;latex&gt;</cline>

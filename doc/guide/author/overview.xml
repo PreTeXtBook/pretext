@@ -299,10 +299,10 @@
 
                 <row>
                     <cell>Details</cell>
-                    <cell><xref ref="topic-figure"     type="global"/></cell>
-                    <cell><xref ref="topic-tabular"    type="global"/></cell>
-                    <cell><xref ref="topic-listing"    type="global"/></cell>
-                    <cell><xref ref="topic-named-list" type="global"/></cell>
+                    <cell><xref ref="topic-figure"     text="global"/></cell>
+                    <cell><xref ref="topic-tabular"    text="global"/></cell>
+                    <cell><xref ref="topic-listing"    text="global"/></cell>
+                    <cell><xref ref="topic-named-list" text="global"/></cell>
                 </row>
             </tabular>
         </table>

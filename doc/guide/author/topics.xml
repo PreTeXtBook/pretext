@@ -4765,7 +4765,7 @@
 
         <p>To further control the web behavior of the embedded question, you can
         optionally include a <attr>params</attr> attribute containing a comma-separated
-        list of parameters, like <code>maxtries=1,showhints=0</code>, which can include:
+        list of parameters, like <c>maxtries=1,showhints=0</c>, which can include:
         <dl>
             <li>
                 <title>maxtries</title>
@@ -5485,7 +5485,7 @@
           <figure xml:id="fig-img-desc-kpi">
             <caption>Kernel and pre-image diagram from <url href="http://linear.ups.edu/html/section-ILT.html"><pubtitle>A First Course in Linear Algebra</pubtitle></url></caption>
             <image source="KPI" width="60%">
-              <shortdescrition>Two ovals representing vector spaces containing points representing vectors, with arrows associating points.</shortdescrition>
+              <shortdescription>Two ovals representing vector spaces containing points representing vectors, with arrows associating points.</shortdescription>
               <description>
                 <p>
                   Two ovals representing vector spaces <m>U</m> and <m>V</m> with arrows connecting points in oval <m>U</m> to oval <m>V</m>, representing the transformation <m>T</m>.  Oval <m>U</m> is split into 4 roughly equal sections, each with 3 points; arrows point from each individual point to a shared, corresponding point in oval <m>V</m>. Each section's points connect to a different point in oval <m>V</m>, which contains 6 points in total.  In each section of oval <m>U</m>, a label appears above the first point and an expression appears to label the section.
