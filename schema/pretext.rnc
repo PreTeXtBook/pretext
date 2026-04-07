@@ -1,4 +1,5 @@
 
+                    namespace pf = "https://prefigure.org"
                     grammar {
                 
             start = PretextRoot | DocInfo | Part | Chapter | Section | Subsection | Subsubsection | Printout | Paragraphs | ReadingQuestions | Exercises | Subexercises |  Solutions | BookFrontMatter | ArticleFrontMatter | BookBackMatter | ArticleBackMatter | Preface | Acknowledgement | ArticleAppendix | BookAppendix | IndexDivision | References | Glossary | Figure | WebWork
@@ -969,6 +970,7 @@
                     Component?,
                     text
                 }
+            AnyPFContent = text | element * { attribute * { text }*, AnyPFContent* }
             ImageCode =
                 element image {
                     UniqueID?,
@@ -1001,6 +1003,10 @@
                                 LabelID?,
                                 Component?,
                                 text
+                            } |
+                            element pf:prefigure {
+                                attribute label {text}?,
+                                AnyPFContent*
                             }
                           )
                         )

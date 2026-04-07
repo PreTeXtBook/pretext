@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:pf="https://prefigure.org" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
     <choice>
       <ref name="PretextRoot"/>
@@ -2536,6 +2536,22 @@
       <text/>
     </element>
   </define>
+  <define name="AnyPFContent">
+    <choice>
+      <text/>
+      <element>
+        <anyName/>
+        <zeroOrMore>
+          <attribute>
+            <anyName/>
+          </attribute>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="AnyPFContent"/>
+        </zeroOrMore>
+      </element>
+    </choice>
+  </define>
   <define name="ImageCode">
     <element name="image">
       <optional>
@@ -2609,6 +2625,14 @@
                   <ref name="Component"/>
                 </optional>
                 <text/>
+              </element>
+              <element name="pf:prefigure">
+                <optional>
+                  <attribute name="label"/>
+                </optional>
+                <zeroOrMore>
+                  <ref name="AnyPFContent"/>
+                </zeroOrMore>
               </element>
             </choice>
           </interleave>

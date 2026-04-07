@@ -1926,6 +1926,7 @@
                     Component?,
                     text
                 }
+            AnyPFContent = text | element * { attribute * { text }*, AnyPFContent* }
             ImageCode =
                 element image {
                     UniqueID?,
@@ -1958,6 +1959,10 @@
                                 LabelID?,
                                 Component?,
                                 text
+                            } |
+                            element pf:prefigure {
+                                attribute label {text}?,
+                                AnyPFContent*
                             }
                           )
                         )
@@ -3538,6 +3543,7 @@
         <fragment filename="pretext.rnc">
             <title>Hierarchical Structure</title>
             <code>
+                    namespace pf = "https://prefigure.org"
                     grammar {
                 </code>
             <fragref ref="start-elements" />
