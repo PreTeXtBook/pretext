@@ -2470,7 +2470,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <objectives>
                 <title>Our goals</title>
-                <p>A minimal <tag>objective</tag>.</p>
+                <introduction>
+                    <p>A minimal <tag>objective</tag>.</p>
+                </introduction>
                 <ul>
                   <li>Stress test HTML themes</li>
                   <li>Locally, test objectives</li>
@@ -2699,7 +2701,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <outcomes>
                 <title>Our results</title>
-                <p>A minimal <tag>outcome</tag>.</p>
+                <introduction>
+                    <p>A minimal <tag>outcome</tag>.</p>
+                </introduction>
                 <ul>
                   <li>Stress test HTML themes</li>
                   <li>Locally, test outcomes</li>
