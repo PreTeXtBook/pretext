@@ -197,6 +197,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- use of the translation, "external/"                 -->
         <directories data="numerical"/>
 
+        <!-- A blurb for describing  -->
+        <blurb>
+            This is a simple string (no markup is allowed) that describes
+            this document, a sample article for the PreTeXt markup language.
+        </blurb>
     </docinfo>
 
     <!--
