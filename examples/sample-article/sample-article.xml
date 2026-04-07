@@ -2597,27 +2597,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Axiom-like Blocks</title>
                 <axiom>
                     <title>A title</title>
-                    <p>A minimal <tag>axiom</tag>.</p>
+                    <statement><p>A minimal <tag>axiom</tag>.</p></statement>
                 </axiom>
                 <conjecture>
                     <title>A title</title>
-                    <p>A minimal <tag>conjecture</tag>.</p>
+                    <statement><p>A minimal <tag>conjecture</tag>.</p></statement>
                 </conjecture>
                 <principle>
                     <title>A title</title>
-                    <p>A minimal <tag>principle</tag>.</p>
+                    <statement><p>A minimal <tag>principle</tag>.</p></statement>
                 </principle>
                 <heuristic>
                     <title>A title</title>
-                    <p>A minimal <tag>heuristic</tag>.</p>
+                    <statement><p>A minimal <tag>heuristic</tag>.</p></statement>
                 </heuristic>
                 <hypothesis>
                     <title>A title</title>
-                    <p>A minimal <tag>hypothesis</tag>.</p>
+                    <statement><p>A minimal <tag>hypothesis</tag>.</p></statement>
                 </hypothesis>
                 <assumption>
                     <title>A title</title>
-                    <p>A minimal <tag>assumption</tag>.</p>
+                    <statement><p>A minimal <tag>assumption</tag>.</p></statement>
                 </assumption>
             </subsection>
 
@@ -2625,7 +2625,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Definition-like Blocks</title>
                 <definition>
                     <title>A title</title>
-                    <p>A minimal <tag>definition</tag>.</p>
+                    <statement><p>A minimal <tag>definition</tag>.</p></statement>
                 </definition>
             </subsection>
 
