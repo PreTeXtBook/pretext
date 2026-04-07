@@ -11537,14 +11537,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="namespace" select="'og'"/>
         <xsl:with-param name="property" select="'title'"/>
         <xsl:with-param name="content">
-            <xsl:apply-templates select="$document-root" mode="title-full"/>
+            <xsl:apply-templates select="$document-root" mode="title-plain"/>
+            <xsl:if test="$docinfo/blurb and $document-root/subtitle">
+                <xsl:text>: </xsl:text>
+                <xsl:value-of select="$document-root/subtitle"/>
+            </xsl:if>
         </xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="social-meta-element">
         <xsl:with-param name="namespace" select="'twitter'"/>
         <xsl:with-param name="name" select="'title'"/>
         <xsl:with-param name="content">
-            <xsl:apply-templates select="$document-root" mode="title-full"/>
+            <xsl:apply-templates select="$document-root" mode="title-plain"/>
+            <xsl:if test="$docinfo/blurb and $document-root/subtitle">
+                <xsl:text>: </xsl:text>
+                <xsl:value-of select="$document-root/subtitle"/>
+            </xsl:if>
         </xsl:with-param>
     </xsl:call-template>
     <xsl:if test="$b-is-book">
@@ -11552,7 +11560,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="namespace" select="'book'"/>
             <xsl:with-param name="property" select="'title'"/>
             <xsl:with-param name="content">
-                <xsl:apply-templates select="$document-root" mode="title-full"/>
+                <xsl:apply-templates select="$document-root" mode="title-plain"/>
+                <xsl:if test="$docinfo/blurb and $document-root/subtitle">
+                    <xsl:text>: </xsl:text>
+                    <xsl:value-of select="$document-root/subtitle"/>
+                </xsl:if>
             </xsl:with-param>
         </xsl:call-template>
     </xsl:if>
