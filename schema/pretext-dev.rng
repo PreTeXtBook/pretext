@@ -49,6 +49,12 @@
         <attribute name="resize-behavior"/>
       </optional>
       <interleave>
+        <optional>
+          <ref name="ImageShortDescription"/>
+        </optional>
+        <optional>
+          <ref name="ImageDescription"/>
+        </optional>
         <zeroOrMore>
           <choice>
             <ref name="Slate"/>

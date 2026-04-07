@@ -2071,6 +2071,8 @@
                     attribute dark-mode-enabled { text }?,
                     attribute resize-behavior { text }?,
                     (
+                      ImageShortDescription? &amp;
+                      ImageDescription? &amp;
                       (
                         Slate |
                         SideBySideNoCaption |
