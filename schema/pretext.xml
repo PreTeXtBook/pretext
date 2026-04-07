@@ -2568,6 +2568,8 @@
             # Include all exercise types in exercise and activity
             Exercise |=
                 element exercise {
+                    attribute workspace {text}?,
+                    (
                     MyOpenMath |
                     TrueFalse |
                     MultipleChoice |
@@ -2576,6 +2578,7 @@
                     FreeResponse |
                     FillInBlank |
                     Areas
+                    )
                 }
             ProjectLike |=
                 MyOpenMath |

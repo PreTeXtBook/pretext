@@ -1224,6 +1224,9 @@
   <!-- Include all exercise types in exercise and activity -->
   <define name="Exercise" combine="choice">
     <element name="exercise">
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
       <choice>
         <ref name="MyOpenMath"/>
         <ref name="TrueFalse"/>
