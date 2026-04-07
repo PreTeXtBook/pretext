@@ -17246,73 +17246,73 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <title>Column test</title>
                                 <p>An aside in a multi-column container.</p>
                             </aside>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                         <hint>
                             <title>OPEN ME!</title>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>3u \amp {}+{} 1v \amp {}+{} 3w \amp {}+{} 2x \amp {}+{} \amp  y \amp {}+{} \amp 3z \amp {}={} \amp 10</mrow>
                                 <mrow>2u \amp {}+{} 2v \amp {}-{} 2w \amp {}+{} x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
                                 <mrow>1u \amp {}-{} 3v \amp {}+{} 1w \amp {}+{} x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </hint>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>200t \amp {}+{} 3u \amp {}+{} 1v \amp {}+{} 3w \amp {}+{} 2x \amp {}+{} \amp  y \amp {}+{} \amp 3z \amp {}={} \amp 10</mrow>
                                 <mrow> \amp {}+{} 2u \amp {}+{} 2v \amp {}-{} 2w \amp {}+{} x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
                                 <mrow>100t \amp {}+{} 1u \amp {}-{} 3v \amp {}+{} 1w \amp {}+{} x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                 </exercisegroup>
