@@ -2943,6 +2943,26 @@
         <ref name="AttributesYouTubePlaylist"/>
         <ref name="AttributesVimeo"/>
       </choice>
+      <zeroOrMore>
+        <ref name="Track"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Track">
+    <element name="track">
+      <attribute name="kind"/>
+      <optional>
+        <attribute name="listing"/>
+      </optional>
+      <optional>
+        <ref name="XMLLang"/>
+      </optional>
+      <attribute name="source"/>
+      <optional>
+        <attribute name="default">
+          <value>yes</value>
+        </attribute>
+      </optional>
     </element>
   </define>
   <define name="AttributesSourceFile">
@@ -3871,6 +3891,7 @@
           <ref name="MathInline"/>
           <ref name="Music"/>
           <ref name="Reference"/>
+          <ref name="Custom"/>
           <ref name="CodeDisplay"/>
           <ref name="MathDisplay"/>
           <ref name="List"/>
@@ -3945,6 +3966,7 @@
           <ref name="MathInline"/>
           <ref name="Music"/>
           <ref name="Reference"/>
+          <ref name="Custom"/>
           <ref name="WWVariable"/>
         </choice>
       </zeroOrMore>
@@ -4025,7 +4047,28 @@
     <choice>
       <ref name="Url"/>
       <ref name="Xref"/>
+      <ref name="DataUrl"/>
     </choice>
+  </define>
+  <define name="Custom">
+    <element name="custom">
+      <attribute name="ref"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="DataUrl">
+    <element name="dataurl">
+      <choice>
+        <attribute name="href"/>
+        <attribute name="source"/>
+      </choice>
+      <optional>
+        <attribute name="visual"/>
+      </optional>
+      <optional>
+        <ref name="TextShort"/>
+      </optional>
+    </element>
   </define>
   <define name="Url">
     <element name="url">

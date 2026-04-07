@@ -555,6 +555,7 @@
                 MathInline |
                 Music |
                 Reference |
+                Custom |
                 WWVariable)* }
                 </code>
         </fragment>
@@ -577,6 +578,7 @@
                 MathInline |
                 Music |
                 Reference |
+                Custom |
                 CodeDisplay |
                 MathDisplay |
                 List |
@@ -1159,7 +1161,18 @@
                 "type-hybrid" | "phrase-global" | "phrase-hybrid" |
                 "type-local-title" | "type-global-title" |
                 "title" | "custom"
-            Reference = Url | Xref
+            Reference = Url | Xref | DataUrl
+            Custom =
+                element custom {
+                    attribute ref {text},
+                    empty
+                }
+            DataUrl =
+                element dataurl {
+                    (attribute href {text} | attribute source {text}),
+                    attribute visual {text}?,
+                    TextShort?
+                }
             Url =
                 element url {
                     attribute href {text},
@@ -2184,7 +2197,16 @@
                     attribute play-at {"embed" | "popout" | "select"}?,
                     attribute preview {"default" | "generic" | text}?,
                     (AttributesSourceFile | AttributesNetwork | AttributesYouTube |
-                     AttributesYouTubePlaylist | AttributesVimeo)
+                     AttributesYouTubePlaylist | AttributesVimeo),
+                    Track*
+                }
+            Track =
+                element track {
+                    attribute kind {text},
+                    attribute listing {text}?,
+                    XMLLang?,
+                    attribute source {text},
+                    attribute default {"yes"}?
                 }
             AttributesSourceFile =
                 attribute source {text}
