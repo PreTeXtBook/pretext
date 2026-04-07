@@ -1400,7 +1400,7 @@
                     attribute highlight-lines {text}?,
                     attribute include {text}?,
                     attribute filename {text}?,
-                    attribute interactive {"codelens"|"activecode"}?,
+                    attribute interactive {"codelens"|"activecode"|"no"}?,
                     attribute interpreter-args {text}?,
                     attribute language {text}?,
                     attribute line-numbers {"yes"|"no"}?,

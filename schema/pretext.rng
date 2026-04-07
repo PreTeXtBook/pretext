@@ -1832,6 +1832,7 @@
           <choice>
             <value>codelens</value>
             <value>activecode</value>
+            <value>no</value>
           </choice>
         </attribute>
       </optional>
