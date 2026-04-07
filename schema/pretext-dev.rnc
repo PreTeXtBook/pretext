@@ -514,6 +514,17 @@
                     Areas
                     )
                 }
+            # STACK assessment exercise type
+            Exercise |=
+                element exercise {
+                    MetaDataTitleOptional,
+                    IntroductionStatement?,
+                    element stack {
+                        LabelID?,
+                        attribute source {text}?
+                    },
+                    ConclusionStatement?
+                }
             ProjectLike |=
                 MyOpenMath |
                 TrueFalse |

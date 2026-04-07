@@ -1254,6 +1254,26 @@
       </choice>
     </element>
   </define>
+  <!-- STACK assessment exercise type -->
+  <define name="Exercise" combine="choice">
+    <element name="exercise">
+      <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <ref name="IntroductionStatement"/>
+      </optional>
+      <element name="stack">
+        <optional>
+          <ref name="LabelID"/>
+        </optional>
+        <optional>
+          <attribute name="source"/>
+        </optional>
+      </element>
+      <optional>
+        <ref name="ConclusionStatement"/>
+      </optional>
+    </element>
+  </define>
   <define name="ProjectLike" combine="choice">
     <choice>
       <ref name="MyOpenMath"/>
