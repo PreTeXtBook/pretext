@@ -11614,14 +11614,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="name"/>
     <xsl:param name="content"/>
     <meta>
-        <xsl:if select="$property">
+        <xsl:if test="$property">
             <xsl:attribute name="property">
                 <xsl:value-of select="$namespace"/>
                 <xsl:text>:</xsl:text>
                 <xsl:value-of select="$property"/>
             </xsl:attribute>
         </xsl:if>
-        <xsl:if select="$name">
+        <xsl:if test="$name">
             <xsl:attribute name="name">
                 <xsl:value-of select="$namespace"/>
                 <xsl:text>:</xsl:text>
