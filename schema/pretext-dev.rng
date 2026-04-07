@@ -33,6 +33,21 @@
       <optional>
         <attribute name="version"/>
       </optional>
+      <optional>
+        <attribute name="circuitjs"/>
+      </optional>
+      <optional>
+        <attribute name="calcplot3d"/>
+      </optional>
+      <optional>
+        <attribute name="variant"/>
+      </optional>
+      <optional>
+        <attribute name="dark-mode-enabled"/>
+      </optional>
+      <optional>
+        <attribute name="resize-behavior"/>
+      </optional>
       <interleave>
         <zeroOrMore>
           <choice>

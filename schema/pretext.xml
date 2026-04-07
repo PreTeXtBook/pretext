@@ -2052,6 +2052,11 @@
                     attribute iframe { text }?,
                     attribute source { text }?,
                     attribute version { text }?,
+                    attribute circuitjs { text }?,
+                    attribute calcplot3d { text }?,
+                    attribute variant { text }?,
+                    attribute dark-mode-enabled { text }?,
+                    attribute resize-behavior { text }?,
                     (
                       (
                         Slate |
