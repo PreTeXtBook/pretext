@@ -11540,7 +11540,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="$document-root" mode="title-plain"/>
             <xsl:if test="$docinfo/blurb and $document-root/subtitle">
                 <xsl:text>: </xsl:text>
-                <xsl:value-of select="$document-root/subtitle"/>
+                <xsl:apply-templates select="$document-root" mode="subtitle" />
             </xsl:if>
         </xsl:with-param>
     </xsl:call-template>
@@ -11551,7 +11551,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="$document-root" mode="title-plain"/>
             <xsl:if test="$docinfo/blurb and $document-root/subtitle">
                 <xsl:text>: </xsl:text>
-                <xsl:value-of select="$document-root/subtitle"/>
+                <xsl:apply-templates select="$document-root" mode="subtitle" />
             </xsl:if>
         </xsl:with-param>
     </xsl:call-template>
@@ -11563,7 +11563,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="$document-root" mode="title-plain"/>
                 <xsl:if test="$docinfo/blurb and $document-root/subtitle">
                     <xsl:text>: </xsl:text>
-                    <xsl:value-of select="$document-root/subtitle"/>
+                    <xsl:apply-templates select="$document-root" mode="subtitle" />
                 </xsl:if>
             </xsl:with-param>
         </xsl:call-template>
@@ -11580,7 +11580,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="normalize-space($docinfo/blurb)"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="$document-root/subtitle"/>
+                        <xsl:apply-templates select="$document-root" mode="subtitle" />
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:with-param>
@@ -11594,7 +11594,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="normalize-space($docinfo/blurb)"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="$document-root/subtitle"/>
+                        <xsl:apply-templates select="$document-root" mode="subtitle" />
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:with-param>
