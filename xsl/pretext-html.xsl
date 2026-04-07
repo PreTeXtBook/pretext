@@ -11558,20 +11558,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!--  -->
     <!-- description (og,twitter) -->
-    <xsl:call-template name="social-meta-element">
-        <xsl:with-param name="namespace" select="'og'"/>
-        <xsl:with-param name="property" select="'description'"/>
-        <xsl:with-param name="content">
-            <xsl:value-of select="$docinfo/blurb"/>
-        </xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="social-meta-element">
-        <xsl:with-param name="namespace" select="'twitter'"/>
-        <xsl:with-param name="name" select="'description'"/>
-        <xsl:with-param name="content">
-            <xsl:value-of select="$docinfo/blurb"/>
-        </xsl:with-param>
-    </xsl:call-template>
+    <xsl:if test="$docinfo/blurb or $document-root/subtitle">
+        <xsl:call-template name="social-meta-element">
+            <xsl:with-param name="namespace" select="'og'"/>
+            <xsl:with-param name="property" select="'description'"/>
+            <xsl:with-param name="content">
+                <xsl:choose>
+                    <xsl:when test="$docinfo/blurb">
+                        <xsl:value-of select="normalize-space($docinfo/blurb)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$document-root/subtitle"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="social-meta-element">
+            <xsl:with-param name="namespace" select="'twitter'"/>
+            <xsl:with-param name="name" select="'description'"/>
+            <xsl:with-param name="content">
+                <xsl:choose>
+                    <xsl:when test="$docinfo/blurb">
+                        <xsl:value-of select="normalize-space($docinfo/blurb)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$document-root/subtitle"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
     <!--  -->
     <!-- author (book) (allow for multiple) -->
     <xsl:if test="$b-is-book">
