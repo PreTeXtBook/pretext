@@ -3871,7 +3871,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="$url-file/pi:qrcode-urls/pi:standalone-url"/>
                     </xsl:variable>
                     <xsl:if test="not($standalone-url = '')">
-                        <p>
+                        <p pi:indent="no">
                             <url href="{$standalone-url}" visual="">
                                 <pi:localize string-id="standalone"/>
                             </url>
@@ -3882,7 +3882,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="$url-file/pi:qrcode-urls/pi:context-url"/>
                     </xsl:variable>
                     <xsl:if test="not($context-url = '')">
-                        <p>
+                        <p pi:indent="no">
                             <url href="{$context-url}" visual="">
                                 <pi:localize string-id="incontext"/>
                             </url>
@@ -3893,7 +3893,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="$url-file/pi:qrcode-urls/pi:embed-iframe-url"/>
                     </xsl:variable>
                     <xsl:if test="not($embed-iframe-url = '')">
-                        <p>
+                        <p pi:indent="no">
                             <!-- Kill the automatic footnote -->
                             <url href="{$embed-iframe-url}" visual="">
                                 <pi:localize string-id="embed"/>
