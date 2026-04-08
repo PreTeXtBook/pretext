@@ -258,7 +258,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='keywords'>Keywords</localization> -->
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>Permalink</localization>
-    <localization string-id='incontext'>im Zusammenhang</localization>
+    <localization string-id='incontext'>Im Zusammenhang</localization>
     <!-- Static representation link to the dedicated HTML page ("standalone") -->
     <!-- <localization string-id='standalone'>Standalone</localization> -->
     <!-- Static representation link to the embeddable iframe version ("embed") -->
