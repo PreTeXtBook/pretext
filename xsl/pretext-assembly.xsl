@@ -355,6 +355,65 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- Pruning templates generate a subtree towards $target-node    -->
+<!-- which prunes as many other branches as possible while        -->
+<!-- retaining reasonably decent output of the desire tree.       -->
+<!-- i.e. drop content other than titled structural elements.     -->
+<xsl:template match="@*" mode="pruning">
+    <xsl:apply-templates select="." mode="pruning-keep"/>
+</xsl:template>
+
+<xsl:template match="node()" mode="pruning">
+    <xsl:param name="target-node"/>
+    <xsl:choose>
+        <!-- This node contains the target node, copy and keep going -->
+        <xsl:when test="count(descendant::*|$target-node) = count(descendant::*)">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="pruning">
+                    <xsl:with-param name="target-node" select="$target-node"/>
+                </xsl:apply-templates>
+            </xsl:copy>
+        </xsl:when>
+        <!-- This node is target node, keep it all -->
+        <xsl:when test="count(.|$target-node) = 1">
+            <xsl:apply-templates select="." mode="pruning-keep"/>
+        </xsl:when>
+        <!-- Shift to aggressive pruning -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="pruning-prune"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Certain structural elements have data/metadata that we want to -->
+<!-- preserve, so we copy them over entirely.                       -->
+<xsl:template match="frontmatter|docinfo|bookinfo|backmatter" mode="pruning">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="pruning-keep"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Preserve anything from here on down -->
+<xsl:template match="node()|@*" mode="pruning-keep">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="pruning-keep"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Once aggressively pruning, only keep structural elements that give us -->
+<!-- numbering and toc info.                                               -->
+<xsl:template match="&STRUCTURAL;|@*" mode="pruning-prune">
+    <xsl:copy>
+        <xsl:apply-templates select="&STRUCTURAL;|title|@*" mode="pruning-prune">
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- If we hit a title, grab all the contents so the ToC gets content-->
+<xsl:template match="title" mode="pruning-prune">
+    <xsl:apply-templates select="." mode="pruning-keep"/>
+</xsl:template>
+
 <!-- These templates initiate and create several iterations of -->
 <!-- the source tree via modal templates.  Think of each as a  -->
 <!-- "pass" through the source. Generally this constructs the  -->
@@ -478,12 +537,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
 
+<!-- See pretext-html for full version of these params              -->
+<!-- "forward declared" here to avoid stylesheet ordering conflict  -->
+<xsl:param name="subtree" select="''"/>
+<xsl:param name="html.build-preview" select="''"/>
+<!-- After labeling, but before further processing, build a         -->
+<!-- pruned tree. Most of the time it is a copy of the labeled tree -->
+<!-- but when doing a preview build of a subtree, we prune          -->
+<!-- down the labeled tree to the desired subtree and select other  -->
+<!-- important elements.                                            -->
+<xsl:variable name="pruning-tree-rtf">
+    <xsl:choose>
+        <xsl:when test="$subtree != '' and $html.build-preview = 'yes'">
+            <xsl:variable name="target-node" select="$original-labeled//*[@xml:id = $subtree]"/>
+            <xsl:apply-templates select="$original-labeled" mode="pruning">
+                <xsl:with-param name="target-node" select="$original-labeled//*[@xml:id = $subtree]"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy-of select="$original-labeled"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="pruning-tree" select="exsl:node-set($pruning-tree-rtf)"/>
+
+<!-- Variable just to allow some printing after pruning-tree is established -->
+<xsl:variable name="not-used-pruning-info">
+    <xsl:if test="$subtree != '' and $html.build-preview = 'yes'">
+      <xsl:message>PTX:INFO: Pruned build tree to <xsl:value-of select="count($pruning-tree//node())"/> out of original <xsl:value-of select="count($original-labeled//node())"/> nodes.</xsl:message>
+    </xsl:if>
+</xsl:variable>
+
 <!-- A global list of all "webwork" used for       -->
 <!-- efficient backward-compatible indentification -->
-<xsl:variable name="all-webwork" select="$original-labeled//webwork"/>
+<xsl:variable name="all-webwork" select="$pruning-tree//webwork"/>
 
 <xsl:variable name="webwork-rtf">
-    <xsl:apply-templates select="$original-labeled" mode="webwork"/>
+    <xsl:apply-templates select="$pruning-tree" mode="webwork"/>
 </xsl:variable>
 <xsl:variable name="webworked" select="exsl:node-set($webwork-rtf)"/>
 
@@ -2325,6 +2415,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
+<xsl:template match="program[@interactive]" mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+
 <xsl:template match="datafile" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
@@ -3775,11 +3869,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Form a PreTeXt side-by-side with an image, a QR code and links -->
 
 <xsl:template match="audio|video|interactive[not(static)]" mode="representations">
-    <xsl:variable name="the-url">
-        <xsl:apply-templates select="." mode="static-url"/>
-    </xsl:variable>
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
+            <xsl:variable name="the-url">
+                <xsl:apply-templates select="." mode="get-interactive-url-from-file"/>
+            </xsl:variable>
             <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
                 <!-- copy over @xml:id, which may be in use by -->
@@ -4091,6 +4185,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="@source" />
 </xsl:template>
 
+<!-- interactive programs need to point to page in book -->
+<xsl:template match="program[@interactive = 'codelens' or @interactive = 'activecode']" mode="static-url">
+    <xsl:value-of select="$baseurl"/>
+    <xsl:apply-templates select="." mode="containing-filename" />
+</xsl:template>
+
 <!-- The contents of a datafile may be encoded as text in an XML   -->
 <!-- file within the generated/datafile directory.  The filename   -->
 <!-- has this construction, even if we do not always consult it.   -->
@@ -4134,6 +4234,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Get interactive URL from sidecar file produced with QRcode image -->
+<xsl:template match="&QRCODE-INTERACTIVES;" mode="get-interactive-url-from-file">
+    <xsl:variable name="interactive-url-file" select="concat($generated-directory-source,'qrcode/', @assembly-id, '-url.xml')"/>
+    <xsl:value-of select="document($interactive-url-file, $original)/interactive-url/@url"/>
+</xsl:template>
+
+<xsl:template match="program[@interactive = 'codelens' or @interactive = 'activecode']" mode="representations">
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'static'">
+            <!-- first the static program -->
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+            <!-- then a qr assemblage if desired -->
+            <xsl:if test="$b-program-static-qrcodes">
+                <xsl:variable name="static-url">
+                    <xsl:apply-templates select="." mode="get-interactive-url-from-file"/>
+                </xsl:variable>
+                <sidebyside margins="0%" widths="70% 25%" valign="middle" halign="center">
+                    <paragraphs>
+                        <p pi:indent="no">
+                            <xsl:element name="pi:localize">
+                                <xsl:attribute name="string-id">program-interactive-available</xsl:attribute>
+                            </xsl:element>
+                        </p>
+                        <p pi:indent="no">
+                            <!-- Kill the automatic footnote    -->
+                            <url href="{$static-url}" visual="">
+                                <xsl:value-of select="$static-url"/>
+                            </url>
+                        </p>
+                    </paragraphs>
+                    <image>
+                        <xsl:attribute name="pi:generated">
+                            <xsl:text>qrcode/</xsl:text>
+                            <xsl:apply-templates select="." mode="assembly-id"/>
+                            <xsl:text>.png</xsl:text>
+                        </xsl:attribute>
+                    </image>
+                </sidebyside>
+            </xsl:if>
+        </xsl:when>
+        <xsl:when test="($exercise-style = 'dynamic')">
+            <!-- duplicate authored content for the non-static conversions -->
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:when>
     </xsl:choose>
 </xsl:template>
 
