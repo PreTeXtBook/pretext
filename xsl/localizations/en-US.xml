@@ -324,6 +324,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>permalink</localization>
     <localization string-id='incontext'>in-context</localization>
+    <!-- Static representations of audio, video, and interactive  -->
+    <!-- elements link to the HTML version.  "standalone" is for  -->
+    <!-- the dedicated page, "embed" is for the embeddable iframe -->
+    <localization string-id='standalone'>Standalone</localization>
     <!-- A permalink icon in HTML output will have a tooltip (on hover) -->
     <!-- that says something like                                       -->
     <!--                                                                -->

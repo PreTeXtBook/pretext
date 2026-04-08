@@ -248,6 +248,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='copyright'>Copyright</localization>
     <localization string-id='keywords'>Mots-clés</localization>
     <localization string-id='incontext'>Contexte</localization>
+    <!-- Static representation link to the dedicated HTML page ("standalone") -->
+    <!-- <localization string-id='standalone'>Standalone</localization> -->
     <localization string-id='permalink-tooltip'>Copier le titre et le lien permanent pour</localization>
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
