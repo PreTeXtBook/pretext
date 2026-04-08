@@ -3894,9 +3894,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:variable>
                     <xsl:if test="not($embed-iframe-url = '')">
                         <p>
-                            <!-- Kill the automatic footnote    -->
+                            <!-- Kill the automatic footnote -->
                             <url href="{$embed-iframe-url}" visual="">
-                                <xsl:text>Embed</xsl:text>
+                                <pi:localize string-id="embed"/>
                             </url>
                         </p>
                     </xsl:if>
