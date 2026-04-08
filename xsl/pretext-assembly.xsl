@@ -3873,7 +3873,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="not($standalone-url = '')">
                         <p>
                             <url href="{$standalone-url}" visual="">
-                                <xsl:text>Standalone</xsl:text>
+                                <pi:localize string-id="standalone"/>
                             </url>
                         </p>
                     </xsl:if>
