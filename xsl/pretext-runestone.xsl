@@ -225,7 +225,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:comment>*** Runestone Services ***</xsl:comment>
     <xsl:text>&#xa;</xsl:text>
     <xsl:for-each select="$rs-js-tokens">
-        <script>
+        <script defer="true">
             <xsl:attribute name="src">
                 <xsl:value-of select="$cdn-prefix"/>
                 <xsl:text>_static/</xsl:text>

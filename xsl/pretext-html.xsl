@@ -13147,152 +13147,32 @@ TODO:
 <!-- Autobold extension is critical for captions (bold'ed) that -->
 <!-- have mathematics in them (suggested by P. Krautzberger)    -->
 <xsl:template name="mathjax">
-    <!-- mathjax configuration -->
-    <xsl:element name="script">
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>var runestoneMathReady = new Promise((resolve) => window.rsMathReady = resolve);&#xa;</xsl:text>
-        <xsl:text>window.MathJax = </xsl:text>
-        <xsl:call-template name="json">
-            <xsl:with-param name="content">
-                <map xmlns="http://www.w3.org/2005/xpath-functions">
-                    <map key="tex">
-                        <array key="inlineMath">
-                            <array>
-                                <string>\(</string>
-                                <string>\)</string>
-                            </array>
-                        </array>
-                        <string key="tags">none</string>
-                        <string key="tagSide">right</string>
-                        <string key="tagIndent">.8em</string>
-                        <map key="packages">
-                            <array key="[+]">
-                                <string>base</string>
-                                <string>ams</string>
-                                <string>amscd</string>
-                                <string>color</string>
-                                <string>newcommand</string>
-                                <!-- necessary for \text{} in math -->
-                                <string>textmacros</string>
-                                <string>knowl</string>
-                            </array>
-                        </map>
-                    </map>
-                    <map key="options">
-                        <string key="ignoreHtmlClass">tex2jax_ignore|ignore-math</string>
-                        <string key="processHtmlClass">process-math</string>
-                        <xsl:if test="$b-has-webwork-reps or $b-has-sage">
-                            <map key="renderActions">
-                                <array key="findScript">
-                                    <number>10</number>
-                                    <raw>
-                                        <xsl:text>function (doc) {&#xa;</xsl:text>
-                                        <xsl:text>            document.querySelectorAll('script[type^="math/tex"]').forEach(function(node) {&#xa;</xsl:text>
-                                        <xsl:text>                var display = !!node.type.match(/; *mode=display/);&#xa;</xsl:text>
-                                        <xsl:text>                var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);&#xa;</xsl:text>
-                                        <xsl:text>                var text = document.createTextNode('');&#xa;</xsl:text>
-                                        <xsl:text>                node.parentNode.replaceChild(text, node);&#xa;</xsl:text>
-                                        <xsl:text>                math.start = {node: text, delim: '', n: 0};&#xa;</xsl:text>
-                                        <xsl:text>                math.end = {node: text, delim: '', n: 0};&#xa;</xsl:text>
-                                        <xsl:text>                doc.math.push(math);&#xa;</xsl:text>
-                                        <xsl:text>            });&#xa;</xsl:text>
-                                        <xsl:text>        }</xsl:text>
-                                    </raw>
-                                    <string></string>
-                                </array>
-                            </map>
-                        </xsl:if>
-                    </map>
-                    <map key="chtml">
-                        <number key="scale">0.98</number>
-                        <boolean key="mtextInheritFont">true</boolean>
-                    </map>
-                    <map key="loader">
-                        <array key="load">
-                            <string>input/asciimath</string>
-                            <string>[tex]/amscd</string>
-                            <string>[tex]/color</string>
-                            <string>[tex]/newcommand</string>
-                            <!-- necessary for \text{} in math -->
-                            <string>[tex]/textmacros</string>
-                            <string>[pretext]/mathjaxknowl3.js</string>
-                        </array>
-                        <map key="paths">
-                            <string key="pretext">
-                                <xsl:value-of select="$html.js.dir"/>
-                            </string>
-                        </map>
-                    </map>
-                    <map key="startup">
-                        <xsl:choose>
-                            <xsl:when test="$b-debug-react">
-                                <boolean key="typeset">false</boolean>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <!-- tell Runestone components that MathJax is all loaded -->
-                                <raw>
-                                    <xsl:text>pageReady() {&#xa;</xsl:text>
-                                    <xsl:text>      return MathJax.startup.defaultPageReady().then(function () {&#xa;</xsl:text>
-                                    <xsl:text>      console.log("in ready function");&#xa;</xsl:text>
-                                    <xsl:text>      rsMathReady();&#xa;</xsl:text>
-                                    <xsl:text>      }&#xa;</xsl:text>
-                                    <xsl:text>    )}</xsl:text>
-                                </raw>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </map>
-                    <!-- optional presentation mode gets clickable, large math -->
-                    <xsl:if test="$b-html-presentation">
-                        <map key="options">
-                            <map key="menuOptions">
-                                <map key="settings">
-                                    <string key="zoom">Click</string>
-                                    <string key="zscale">300%</string>
-                                </map>
-                            </map>
-                        </map>
-                    </xsl:if>
-                </map>
-            </xsl:with-param>
-        </xsl:call-template>
-        <xsl:text>;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:element>
-    <!-- mathjax javascript -->
-    <xsl:element name="script">
-        <!-- probably should be universal, but only adding for MJ 4    -->
-        <!-- TODO: make a literal "script" element with this attribute -->
-        <xsl:if test="$mathjax4-testing">
-            <xsl:attribute name="type">
-                <xsl:text>text/javascript</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
+    <!-- MathJax 4 configuration via JavaScript module -->
+    <script type="module">
+        <xsl:text>import { startMathJax } from './</xsl:text>
+        <xsl:value-of select="$html.js.dir"/>
+        <xsl:text>/mathjax_startup.js';&#xa;</xsl:text>
+        <xsl:text>startMathJax({&#xa;</xsl:text>
+            <xsl:text>hasWebworkReps: </xsl:text><xsl:value-of select="$b-has-webwork-reps"/><xsl:text>,&#xa;</xsl:text>
+            <xsl:text>hasSage: </xsl:text><xsl:value-of select="$b-has-sage"/><xsl:text>,&#xa;</xsl:text>
+            <xsl:text>isReact: </xsl:text><xsl:value-of select="$b-debug-react"/><xsl:text>,&#xa;</xsl:text>
+            <xsl:text>htmlPresentation: </xsl:text><xsl:value-of select="$b-html-presentation"/><xsl:text>,&#xa;</xsl:text>
+        <xsl:text>});&#xa;</xsl:text>
+    </script>
+    <!-- MathJax 4 CDN -->
+    <script defer="true">
         <xsl:attribute name="src">
+            <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@4/</xsl:text>
             <xsl:choose>
-                <xsl:when test="$mathjax4-testing">
-                    <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@4/</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@3/es5/</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <!-- CHTML is the default, SVG is for debugging -->
-            <xsl:choose>
-                <!-- SVG filename identical for v3, v4 -->
-                <!-- NB: is tex-mml-svg.js new for v4? -->
                 <xsl:when test="$debug.mathjax.svg = 'yes'">
                     <xsl:text>tex-svg.js</xsl:text>
                 </xsl:when>
-                <!-- new filename (default) for v4 -->
-                <xsl:when test="$mathjax4-testing">
-                    <xsl:text>tex-mml-chtml.js</xsl:text>
-                </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>tex-chtml.js</xsl:text>
+                    <xsl:text>tex-mml-chtml.js</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
-    </xsl:element>
+    </script>
 </xsl:template>
 
 <!-- SageCell Javascript-->
