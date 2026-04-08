@@ -1,198 +1,198 @@
 <diagram>
   <annotations>
-    <annotation id="figure" speech2="A Fibonacci tiling is a horizontal sequence of tiles obtained by deflating the tiles in another Fibonacci tiling.  We will explain why these tilings are aperiodic.">
-      <grouped>figure</grouped>
+    <annotation id="prefigure-fibonacci-b-figure" speech2="A Fibonacci tiling is a horizontal sequence of tiles obtained by deflating the tiles in another Fibonacci tiling.  We will explain why these tilings are aperiodic.">
+      <grouped>prefigure-fibonacci-b-figure</grouped>
       <position>1</position>
       <components>
-        <passive>down-arrows</passive>
-        <passive>top-down-arrow</passive>
-        <active>tiling-row_0</active>
-        <active>tiling-row_1</active>
-        <active>tiling-row_2</active>
-        <active>bottom-tilings</active>
-        <active>periodic-0</active>
-        <active>periodic-1</active>
-        <active>periodic-2</active>
+        <passive>prefigure-fibonacci-b-down-arrows</passive>
+        <passive>prefigure-fibonacci-b-top-down-arrow</passive>
+        <active>prefigure-fibonacci-b-tiling-row_0</active>
+        <active>prefigure-fibonacci-b-tiling-row_1</active>
+        <active>prefigure-fibonacci-b-tiling-row_2</active>
+        <active>prefigure-fibonacci-b-bottom-tilings</active>
+        <active>prefigure-fibonacci-b-periodic-0</active>
+        <active>prefigure-fibonacci-b-periodic-1</active>
+        <active>prefigure-fibonacci-b-periodic-2</active>
       </components>
       <children>
-        <active>tiling-row_0</active>
-        <active>tiling-row_1</active>
-        <active>tiling-row_2</active>
-        <active>bottom-tilings</active>
-        <active>periodic-0</active>
-        <active>periodic-1</active>
-        <active>periodic-2</active>
+        <active>prefigure-fibonacci-b-tiling-row_0</active>
+        <active>prefigure-fibonacci-b-tiling-row_1</active>
+        <active>prefigure-fibonacci-b-tiling-row_2</active>
+        <active>prefigure-fibonacci-b-bottom-tilings</active>
+        <active>prefigure-fibonacci-b-periodic-0</active>
+        <active>prefigure-fibonacci-b-periodic-1</active>
+        <active>prefigure-fibonacci-b-periodic-2</active>
       </children>
     </annotation>
-    <annotation id="down-arrows">
-      <passive>down-arrows</passive>
+    <annotation id="prefigure-fibonacci-b-down-arrows">
+      <passive>prefigure-fibonacci-b-down-arrows</passive>
       <position>0</position>
       <parents>
-        <grouped>figure</grouped>
+        <grouped>prefigure-fibonacci-b-figure</grouped>
       </parents>
     </annotation>
-    <annotation id="top-down-arrow">
-      <passive>top-down-arrow</passive>
+    <annotation id="prefigure-fibonacci-b-top-down-arrow">
+      <passive>prefigure-fibonacci-b-top-down-arrow</passive>
       <position>0</position>
       <parents>
-        <grouped>figure</grouped>
+        <grouped>prefigure-fibonacci-b-figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row_0" speech2="We begin with this Fibonacci tiling">
-      <active>tiling-row_0</active>
+    <annotation id="prefigure-fibonacci-b-tiling-row_0" speech2="We begin with this Fibonacci tiling">
+      <active>prefigure-fibonacci-b-tiling-row_0</active>
       <position>1</position>
       <parents>
-        <grouped>figure</grouped>
+        <grouped>prefigure-fibonacci-b-figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row_1" speech2="Our first Fibonacci tiling is obtained by deflating this second tiling">
-      <grouped>tiling-row_1</grouped>
+    <annotation id="prefigure-fibonacci-b-tiling-row_1" speech2="Our first Fibonacci tiling is obtained by deflating this second tiling">
+      <grouped>prefigure-fibonacci-b-tiling-row_1</grouped>
       <position>2</position>
       <components>
-        <passive>down-arrow-row_0</passive>
+        <passive>prefigure-fibonacci-b-down-arrow-row_0</passive>
       </components>
       <parents>
-        <grouped>figure</grouped>
+        <grouped>prefigure-fibonacci-b-figure</grouped>
       </parents>
     </annotation>
-    <annotation id="down-arrow-row_0">
-      <passive>down-arrow-row_0</passive>
+    <annotation id="prefigure-fibonacci-b-down-arrow-row_0">
+      <passive>prefigure-fibonacci-b-down-arrow-row_0</passive>
       <position>0</position>
       <parents>
-        <grouped>tiling-row_1</grouped>
+        <grouped>prefigure-fibonacci-b-tiling-row_1</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row_2" speech2="The second tiling is obtained by deflating this third tiling, so we see that there is an infinite hierarchy of tilings.">
-      <grouped>tiling-row_2</grouped>
+    <annotation id="prefigure-fibonacci-b-tiling-row_2" speech2="The second tiling is obtained by deflating this third tiling, so we see that there is an infinite hierarchy of tilings.">
+      <grouped>prefigure-fibonacci-b-tiling-row_2</grouped>
       <position>3</position>
       <components>
-        <passive>down-arrow-row_1</passive>
+        <passive>prefigure-fibonacci-b-down-arrow-row_1</passive>
       </components>
       <parents>
-        <grouped>figure</grouped>
+        <grouped>prefigure-fibonacci-b-figure</grouped>
       </parents>
     </annotation>
-    <annotation id="down-arrow-row_1">
-      <passive>down-arrow-row_1</passive>
+    <annotation id="prefigure-fibonacci-b-down-arrow-row_1">
+      <passive>prefigure-fibonacci-b-down-arrow-row_1</passive>
       <position>0</position>
       <parents>
-        <grouped>tiling-row_2</grouped>
+        <grouped>prefigure-fibonacci-b-tiling-row_2</grouped>
       </parents>
     </annotation>
-    <annotation id="bottom-tilings" speech2="Beginning with one tiling, the tiling above is uniquely determined.">
-      <grouped>bottom-tilings</grouped>
+    <annotation id="prefigure-fibonacci-b-bottom-tilings" speech2="Beginning with one tiling, the tiling above is uniquely determined.">
+      <grouped>prefigure-fibonacci-b-bottom-tilings</grouped>
       <position>4</position>
       <children>
-        <active>tiling-row_0</active>
-        <active>tiling-row_1</active>
+        <active>prefigure-fibonacci-b-tiling-row_0</active>
+        <active>prefigure-fibonacci-b-tiling-row_1</active>
       </children>
       <components>
-        <active>tiling-row_0</active>
-        <active>tiling-row_1</active>
+        <active>prefigure-fibonacci-b-tiling-row_0</active>
+        <active>prefigure-fibonacci-b-tiling-row_1</active>
       </components>
       <parents>
-        <grouped>figure</grouped>
+        <grouped>prefigure-fibonacci-b-figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row_0" speech2="Consider this Fibonacci tiling.">
-      <active>tiling-row_0</active>
+    <annotation id="prefigure-fibonacci-b-tiling-row_0" speech2="Consider this Fibonacci tiling.">
+      <active>prefigure-fibonacci-b-tiling-row_0</active>
       <position>1</position>
       <parents>
-        <grouped>bottom-tilings</grouped>
+        <grouped>prefigure-fibonacci-b-bottom-tilings</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row_1" speech2="By inverting the deflation rules, we can uniquely determine the tiling above.">
-      <active>tiling-row_1</active>
+    <annotation id="prefigure-fibonacci-b-tiling-row_1" speech2="By inverting the deflation rules, we can uniquely determine the tiling above.">
+      <active>prefigure-fibonacci-b-tiling-row_1</active>
       <position>2</position>
       <parents>
-        <grouped>bottom-tilings</grouped>
+        <grouped>prefigure-fibonacci-b-bottom-tilings</grouped>
       </parents>
     </annotation>
-    <annotation id="periodic-0" speech2="Suppose that a Fibonacci tiling is periodic under a horizontal translation.">
-      <grouped>periodic-0</grouped>
+    <annotation id="prefigure-fibonacci-b-periodic-0" speech2="Suppose that a Fibonacci tiling is periodic under a horizontal translation.">
+      <grouped>prefigure-fibonacci-b-periodic-0</grouped>
       <position>5</position>
       <children>
-        <active>tiling-row_0</active>
-        <active>right-arrow-row_0</active>
+        <active>prefigure-fibonacci-b-tiling-row_0</active>
+        <active>prefigure-fibonacci-b-right-arrow-row_0</active>
       </children>
       <components>
-        <active>tiling-row_0</active>
-        <active>right-arrow-row_0</active>
+        <active>prefigure-fibonacci-b-tiling-row_0</active>
+        <active>prefigure-fibonacci-b-right-arrow-row_0</active>
       </components>
       <parents>
-        <grouped>figure</grouped>
+        <grouped>prefigure-fibonacci-b-figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row_0" speech2="For example, suppose this Fibonacci tiling is periodic.">
-      <active>tiling-row_0</active>
+    <annotation id="prefigure-fibonacci-b-tiling-row_0" speech2="For example, suppose this Fibonacci tiling is periodic.">
+      <active>prefigure-fibonacci-b-tiling-row_0</active>
       <position>1</position>
       <parents>
-        <grouped>periodic-0</grouped>
+        <grouped>prefigure-fibonacci-b-periodic-0</grouped>
       </parents>
     </annotation>
-    <annotation id="right-arrow-row_0" speech2="And that this horizontal translation leaves the tiling unchanged.">
-      <active>right-arrow-row_0</active>
+    <annotation id="prefigure-fibonacci-b-right-arrow-row_0" speech2="And that this horizontal translation leaves the tiling unchanged.">
+      <active>prefigure-fibonacci-b-right-arrow-row_0</active>
       <position>2</position>
       <parents>
-        <grouped>periodic-0</grouped>
+        <grouped>prefigure-fibonacci-b-periodic-0</grouped>
       </parents>
     </annotation>
-    <annotation id="periodic-1" speech2="Because the inflated tiling above is unique, it must also be periodic under the same translation.">
-      <grouped>periodic-1</grouped>
+    <annotation id="prefigure-fibonacci-b-periodic-1" speech2="Because the inflated tiling above is unique, it must also be periodic under the same translation.">
+      <grouped>prefigure-fibonacci-b-periodic-1</grouped>
       <position>6</position>
       <children>
-        <active>tiling-row_1</active>
-        <active>right-arrow-row_1</active>
+        <active>prefigure-fibonacci-b-tiling-row_1</active>
+        <active>prefigure-fibonacci-b-right-arrow-row_1</active>
       </children>
       <components>
-        <active>tiling-row_1</active>
-        <active>right-arrow-row_1</active>
+        <active>prefigure-fibonacci-b-tiling-row_1</active>
+        <active>prefigure-fibonacci-b-right-arrow-row_1</active>
       </components>
       <parents>
-        <grouped>figure</grouped>
+        <grouped>prefigure-fibonacci-b-figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row_1" speech2="This Fibonacci tiling is also periodic.">
-      <active>tiling-row_1</active>
+    <annotation id="prefigure-fibonacci-b-tiling-row_1" speech2="This Fibonacci tiling is also periodic.">
+      <active>prefigure-fibonacci-b-tiling-row_1</active>
       <position>1</position>
       <parents>
-        <grouped>periodic-1</grouped>
+        <grouped>prefigure-fibonacci-b-periodic-1</grouped>
       </parents>
     </annotation>
-    <annotation id="right-arrow-row_1" speech2="The same horizontal translation leaves the tiling unchanged.">
-      <active>right-arrow-row_1</active>
+    <annotation id="prefigure-fibonacci-b-right-arrow-row_1" speech2="The same horizontal translation leaves the tiling unchanged.">
+      <active>prefigure-fibonacci-b-right-arrow-row_1</active>
       <position>2</position>
       <parents>
-        <grouped>periodic-1</grouped>
+        <grouped>prefigure-fibonacci-b-periodic-1</grouped>
       </parents>
     </annotation>
-    <annotation id="periodic-2" speech2="Consequently, every tiling in the hierarchy is periodic by this translation.  This is not possible, which means the original tiling cannot be periodic.">
-      <grouped>periodic-2</grouped>
+    <annotation id="prefigure-fibonacci-b-periodic-2" speech2="Consequently, every tiling in the hierarchy is periodic by this translation.  This is not possible, which means the original tiling cannot be periodic.">
+      <grouped>prefigure-fibonacci-b-periodic-2</grouped>
       <position>7</position>
       <children>
-        <active>tiling-row_2</active>
-        <active>right-arrow-row_2</active>
+        <active>prefigure-fibonacci-b-tiling-row_2</active>
+        <active>prefigure-fibonacci-b-right-arrow-row_2</active>
       </children>
       <components>
-        <active>tiling-row_2</active>
-        <active>right-arrow-row_2</active>
+        <active>prefigure-fibonacci-b-tiling-row_2</active>
+        <active>prefigure-fibonacci-b-right-arrow-row_2</active>
       </components>
       <parents>
-        <grouped>figure</grouped>
+        <grouped>prefigure-fibonacci-b-figure</grouped>
       </parents>
     </annotation>
-    <annotation id="tiling-row_2" speech2="The size of the tiles grows exponentially as we move up in the hierarchy.">
-      <active>tiling-row_2</active>
+    <annotation id="prefigure-fibonacci-b-tiling-row_2" speech2="The size of the tiles grows exponentially as we move up in the hierarchy.">
+      <active>prefigure-fibonacci-b-tiling-row_2</active>
       <position>1</position>
       <parents>
-        <grouped>periodic-2</grouped>
+        <grouped>prefigure-fibonacci-b-periodic-2</grouped>
       </parents>
     </annotation>
-    <annotation id="right-arrow-row_2" speech2="Eventually the tiles are longer than the translation.">
-      <active>right-arrow-row_2</active>
+    <annotation id="prefigure-fibonacci-b-right-arrow-row_2" speech2="Eventually the tiles are longer than the translation.">
+      <active>prefigure-fibonacci-b-right-arrow-row_2</active>
       <position>2</position>
       <parents>
-        <grouped>periodic-2</grouped>
+        <grouped>prefigure-fibonacci-b-periodic-2</grouped>
       </parents>
     </annotation>
   </annotations>
