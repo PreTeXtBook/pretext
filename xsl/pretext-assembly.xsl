@@ -3878,6 +3878,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </xsl:if>
                     <!--  -->
+                    <xsl:variable name="context-url">
+                        <xsl:value-of select="$url-file/pi:qrcode-urls/pi:context-url"/>
+                    </xsl:variable>
+                    <xsl:if test="not($context-url = '')">
+                        <p>
+                            <url href="{$context-url}" visual="">
+                                <pi:localize string-id="incontext"/>
+                            </url>
+                        </p>
+                    </xsl:if>
+                    <!--  -->
                     <xsl:variable name="embed-iframe-url">
                         <xsl:apply-templates select="." mode="embed-iframe-url"/>
                     </xsl:variable>
