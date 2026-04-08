@@ -90,6 +90,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:context-url>
                 <xsl:apply-templates select="." mode="context-url"/>
             </pi:context-url>
+            <pi:embed-iframe-url>
+                <xsl:apply-templates select="." mode="embed-iframe-url"/>
+            </pi:embed-iframe-url>
         </pi:qrcode-urls>
     </exsl:document>
 </xsl:template>

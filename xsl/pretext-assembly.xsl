@@ -3890,7 +3890,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:if>
                     <!--  -->
                     <xsl:variable name="embed-iframe-url">
-                        <xsl:apply-templates select="." mode="embed-iframe-url"/>
+                        <xsl:value-of select="$url-file/pi:qrcode-urls/pi:embed-iframe-url"/>
                     </xsl:variable>
                     <xsl:if test="not($embed-iframe-url = '')">
                         <p>
