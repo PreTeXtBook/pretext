@@ -3776,9 +3776,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Form a PreTeXt side-by-side with an image, a QR code and links -->
 
 <xsl:template match="audio|video|interactive[not(static)]" mode="representations">
-    <xsl:variable name="the-url">
-        <xsl:apply-templates select="." mode="static-url"/>
+    <!-- Read pre-computed URLs from sidecar file, guarded -->
+    <!-- against access during extraction (Catch-22)       -->
+    <xsl:variable name="url-file-rtf">
+        <xsl:if test="not($b-extracting)">
+            <xsl:copy-of select="document(concat($generated-directory-source, 'qrcode/', @assembly-id, '-url.xml'), $original)"/>
+        </xsl:if>
     </xsl:variable>
+    <xsl:variable name="url-file" select="exsl:node-set($url-file-rtf)"/>
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
             <!-- panel widths are experimental -->
@@ -3860,11 +3865,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:text>.png</xsl:text>
                         </xsl:attribute>
                     </image>
-                    <!-- URL templates create empty strings as signals URLs do not (yet) exist -->
-                    <!-- We kill the automatic footnotes, a debatable decision                 -->
+                    <!-- We kill the automatic footnotes, a debatable decision -->
                     <!--  -->
                     <xsl:variable name="standalone-url">
-                        <xsl:apply-templates select="." mode="standalone-url"/>
+                        <xsl:value-of select="$url-file/pi:qrcode-urls/pi:standalone-url"/>
                     </xsl:variable>
                     <xsl:if test="not($standalone-url = '')">
                         <p>

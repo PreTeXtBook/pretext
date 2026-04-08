@@ -75,14 +75,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="file-extension" select="'.html'"/>
 
 <xsl:template match="audio[@source|@href]|video[@source|@href|@youtube|@youtubeplaylist|@vimeo]|interactive" mode="extraction">
-    <!-- Text output for Python QR code generation -->
-    <xsl:apply-templates select="." mode="static-url"/>
-    <!-- Do not use a comma, since a YouTube playlist has      -->
-    <!-- commas as separators, and they show up in the URL.    -->
-    <!-- So a space instead.  See comments in Python consumer. -->
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>&#xa;</xsl:text>
     <!-- Sidecar XML file with pre-computed URLs for use      -->
     <!-- by pretext-assembly.xsl when building static         -->
     <!-- representations, and by the Python script when       -->
