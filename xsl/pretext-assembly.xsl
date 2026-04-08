@@ -271,12 +271,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="node()|@*" mode="webwork">
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="webwork"/>
-    </xsl:copy>
-</xsl:template>
-
 <xsl:template match="node()|@*" mode="assembly">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="assembly"/>
@@ -478,17 +472,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="original-labeled" select="exsl:node-set($original-labeled-rtf)"/>
 
-<!-- A global list of all "webwork" used for       -->
-<!-- efficient backward-compatible indentification -->
-<xsl:variable name="all-webwork" select="$original-labeled//webwork"/>
-
-<xsl:variable name="webwork-rtf">
-    <xsl:apply-templates select="$original-labeled" mode="webwork"/>
-</xsl:variable>
-<xsl:variable name="webworked" select="exsl:node-set($webwork-rtf)"/>
-
 <xsl:variable name="assembly-rtf">
-    <xsl:apply-templates select="$webworked" mode="assembly"/>
+    <xsl:apply-templates select="$original-labeled" mode="assembly"/>
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
@@ -1053,10 +1038,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- WeBWorK @copy resolution -->
 
-<!-- A "webwork" with a @copy attribute is a lightweight reference     -->
-<!-- to another authored "webwork".  We resolve the copy here in the   -->
-<!-- assembly pass (after @ww-id has been stamped in the webwork pass) -->
-<!-- by pulling the target's content into a new "webwork" element.     -->
+<!-- A "webwork" with a @copy attribute is a lightweight reference  -->
+<!-- to another authored "webwork".  We resolve the copy here in    -->
+<!-- the assembly pass by pulling the target's content into a new   -->
+<!-- "webwork" element.                                             -->
 <xsl:template match="webwork[@copy]" mode="assembly">
     <!-- Find the target.  Maybe. -->
     <xsl:variable name="target" select="id(@copy)"/>
@@ -1095,15 +1080,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- used as a signal here.  We don't want to copy this   -->
                 <!-- again after we have been to the WeBWorK server.      -->
                 <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
-                <!-- The @seed makes the problem different, and there are also      -->
-                <!-- unique identifiers, so grab any other attributes of the        -->
-                <!-- original, but exclude these while formulating a copy/clone.     -->
-                <!-- We also exclude @ww-id since the target already has its own     -->
-                <!-- @ww-id from the webwork pass, and we must keep the source's ID. -->
+                <!-- The @seed makes the problem different, and there are also  -->
+                <!-- unique identifiers, so grab any other attributes of the    -->
+                <!-- original, but exclude these while formulating a copy/clone. -->
                 <xsl:apply-templates select="$target/@*[(not(local-name(.) = 'id')) and
                                                         (not(local-name(.) = 'label')) and
-                                                        (not(local-name(.) = 'seed')) and
-                                                        (not(local-name(.) = 'ww-id'))]" mode="assembly"/>
+                                                        (not(local-name(.) = 'seed'))]" mode="assembly"/>
                 <!-- NB: authored WeBWorK content never has @xml:id or @label, -->
                 <!-- so no scrubbing of unique IDs is needed here.             -->
                 <xsl:apply-templates select="$target/node()" mode="assembly"/>
@@ -1113,9 +1095,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- similar in gross form, and alert at the console      -->
         <xsl:otherwise>
             <xsl:copy>
-                <!-- As for a legitimate copy above, we carry over as much -->
-                <!-- metadata as possible, and in particular include a     -->
-                <!-- @ww-id for tracking through the server                -->
+                <!-- Carry over as much metadata as possible -->
                 <xsl:apply-templates select="@*[not(local-name(.) = 'copy')]" mode="assembly"/>
                 <!-- Now a minimal, but correct PreTeXt, WeBWorK problem into the  -->
                 <!-- extraction machinery, and out into all possible final outputs  -->
@@ -1221,60 +1201,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:copy>
         </xsl:when>
     </xsl:choose>
-</xsl:template>
-
-
-<!-- ################################# -->
-<!-- WeBWorK Identification (ww-id)  -->
-<!-- ################################# -->
-
-<!-- Every "webwork" that is a problem (not just the logo)     -->
-<!-- gets a @ww-id stamped here.  This ID migrates through     -->
-<!-- the extraction stylesheet ("extract-pg.xsl"), the Python  -->
-<!-- communication with the server, and into the               -->
-<!-- representations file.  It is then used to look up the     -->
-<!-- matching "webwork-reps" during the representations pass.  -->
-<!-- 2022-11-21: we are a bit careful to optimize the          -->
-<!-- computation of the identifiers in a backwards-compatible   -->
-<!-- way.  Better to someday switch to a purely recursive       -->
-<!-- descent version as a one-time jolt to authors.            -->
-<!-- (Remove global $all-webwork.)                             -->
-
-<xsl:template match="webwork[* or @copy or @source or text()]" mode="webwork">
-    <xsl:variable name="ww-id">
-        <xsl:choose>
-            <xsl:when test="@xml:id">
-                <xsl:value-of select="@xml:id"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="local-name(.)" />
-                <xsl:text>-</xsl:text>
-                <!-- compute the eqivalent of the count of all previous WW:     -->
-                <!-- <xsl:number from="book|article|letter|memo" level="any" /> -->
-                <!-- Save off the WW in question -->
-                <xsl:variable name="the-ww" select="self::*"/>
-                <!-- Run over global list, looking for a match -->
-                <xsl:for-each select="$all-webwork">
-                    <xsl:if test="count($the-ww|.) = 1">
-                        <!-- context is the $all-webwork node-set, so   -->
-                        <!-- position() gives index/location of $the-ww -->
-                        <xsl:value-of select="position()"/>
-                    </xsl:if>
-                </xsl:for-each>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- Stamp @ww-id on every webwork element and pass through.    -->
-    <!-- Substitution (from representations file) and @copy         -->
-    <!-- resolution are handled later in the representations pass   -->
-    <!-- and the assembly pass, respectively.                       -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="webwork"/>
-        <xsl:attribute name="ww-id">
-            <xsl:value-of select="$ww-id"/>
-        </xsl:attribute>
-        <xsl:apply-templates select="node()" mode="webwork"/>
-    </xsl:copy>
 </xsl:template>
 
 
@@ -3287,58 +3213,60 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Mine webwork-reps for relevant application -->
 
-<!-- WeBWorK exercises retain a "webwork" child element through the      -->
-<!-- pipeline (with @ww-id stamped in the webwork pass).  Here in the    -->
-<!-- representations pass, we look up the corresponding "webwork-reps"   -->
-<!-- from the representations file and substitute it in place of the     -->
-<!-- "webwork" element.  We then split three ways, for PGML, static,    -->
-<!-- and dynamic (HTML) employment, via modal templates.                 -->
-<!-- During extraction, the "webwork" child is left intact.             -->
-<!-- NB: including "task" though this may not be supported.              -->
+<!-- WeBWorK exercises retain a "webwork" child element through the    -->
+<!-- pipeline.  Here in the representations pass, we look up the       -->
+<!-- corresponding "webwork-reps" from the representations file using  -->
+<!-- the parent exercise's @assembly-id, and substitute it in place    -->
+<!-- of the "webwork" element.  We then split three ways, for PGML,    -->
+<!-- static, and dynamic (HTML) employment, via modal templates.       -->
+<!-- During extraction, the "webwork" child is left intact.            -->
+<!-- NB: including "task" though this may not be supported.            -->
 <xsl:template match="exercise[(@exercise-interactive = 'webwork')]
                    | project[(@exercise-interactive = 'webwork')]
                    | activity[(@exercise-interactive = 'webwork')]
                    | exploration[(@exercise-interactive = 'webwork')]
                    | investigation[(@exercise-interactive = 'webwork')]" mode="representations">
     <xsl:choose>
-        <!-- During extraction, pass through the exercise with its         -->
-        <!-- "webwork" child intact.  The extraction stylesheet will read  -->
-        <!-- the @ww-id and process the authored content.                  -->
+        <!-- During extraction, pass through the exercise with its    -->
+        <!-- "webwork" child intact for the extraction stylesheet     -->
+        <!-- to process the authored content.                         -->
         <xsl:when test="$b-extracting">
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="representations"/>
             </xsl:copy>
         </xsl:when>
         <xsl:otherwise>
-            <!-- Look up the "webwork-reps" element from the server  -->
-            <!-- for this "webwork" exercise, using the @ww-id that  -->
-            <!-- was stamped in the webwork pass.                    -->
-            <xsl:variable name="ww-id" select="webwork/@ww-id"/>
-            <xsl:variable name="the-webwork-rep" select="document($webwork-representations-file, $original)/webwork-representations/webwork-reps[@ww-id=$ww-id]"/>
+            <!-- Load the per-exercise representation file for this    -->
+            <!-- exercise, identified by its @assembly-id.             -->
+            <xsl:variable name="webwork-rep-uri"
+                select="concat($webwork-representations-dir, @assembly-id, '.xml')"/>
+            <xsl:variable name="the-webwork-rep"
+                select="document($webwork-rep-uri, $original)/webwork-reps"/>
             <xsl:choose>
-                <!-- An empty string for $webwork-representations-file, and      -->
+                <!-- An empty string for $webwork-representations-dir, and       -->
                 <!-- the "document()" still succeeds (returns the source file?). -->
                 <!-- But this is hopeless. So just totally bail out repeatedly   -->
                 <!-- and leave the containing "exercise" hollow.                 -->
-                <xsl:when test="$webwork-representations-file = ''">
+                <xsl:when test="$webwork-representations-dir = ''">
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:    There is a WeBWorK exercise with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
-                    <xsl:message>              but your publication file does not indicate the file</xsl:message>
+                    <xsl:message>PTX:ERROR:    There is a WeBWorK exercise with @assembly-id "<xsl:value-of select="@assembly-id"/>"</xsl:message>
+                    <xsl:message>              but your publication file does not indicate the directory</xsl:message>
                     <xsl:message>              of problem representations created by a WeBWorK server.</xsl:message>
                     <xsl:message>              Your WeBWorK exercises will all, at best, be empty.</xsl:message>
                 </xsl:when>
-                <!-- This should only fail if the file is missing.  Repeatedly. -->
+                <!-- This should only fail if the file is missing or stale.  Repeatedly. -->
                 <xsl:when test="not($the-webwork-rep)">
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:    The WeBWorK problem with internal id "<xsl:value-of select="$ww-id"/>"</xsl:message>
-                    <xsl:message>              could not be located in the file of WeBWorK problems from</xsl:message>
-                    <xsl:message>              the server, which your publication file indicates should be located</xsl:message>
-                    <xsl:message>              at "<xsl:value-of select="$webwork-representations-file"/>". </xsl:message>
-                    <xsl:message>              If there are many messages like this, then likely your file is missing. </xsl:message>
+                    <xsl:message>PTX:ERROR:    The WeBWorK problem with @assembly-id "<xsl:value-of select="@assembly-id"/>"</xsl:message>
+                    <xsl:message>              could not be located at "<xsl:value-of select="$webwork-rep-uri"/>". </xsl:message>
+                    <xsl:message>              If the WeBWorK files were built with an older version of PreTeXt,</xsl:message>
+                    <xsl:message>              they need to be regenerated.  A "webwork-representations.xml"</xsl:message>
+                    <xsl:message>              in that directory is a sign of this old single-file format.</xsl:message>
+                    <xsl:message>              If there are many messages like this, then likely your directory is missing.</xsl:message>
                     <xsl:message>              But if this is an isolated error message, then it may indicate a bug,</xsl:message>
                     <xsl:message>              which should be reported.</xsl:message>
                 </xsl:when>
