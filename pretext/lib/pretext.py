@@ -2645,7 +2645,7 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                            )
         qr.add_data(url)
         if has_image:
-            qr_image = qr.make_image(image_factory=qrcode.image.styledpil.StyledPilImage, embeded_image_path=image_path)
+            qr_image = qr.make_image(image_factory=qrcode.image.styledpil.StyledPilImage, embedded_image_path=image_path)
         else:
             qr_image = qr.make_image(fill_color="black", back_color="white")
         # Now save as a PNG
