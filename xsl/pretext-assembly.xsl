@@ -234,8 +234,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-extracting-fitb" select="false()"/>
 <xsl:variable name="b-extracting-biblio" select="false()"/>
 <xsl:variable name="b-extracting-stack" select="false()"/>
+<xsl:variable name="b-extracting-qrcode" select="false()"/>
 
-<xsl:variable name="b-extracting" select="$b-extracting-pg or $b-extracting-mom or $b-extracting-fitb or $b-extracting-biblio or $b-extracting-stack"/>
+<xsl:variable name="b-extracting" select="$b-extracting-pg or $b-extracting-mom or $b-extracting-fitb or $b-extracting-biblio or $b-extracting-stack or $b-extracting-qrcode"/>
 
 
 <!-- ############################## -->

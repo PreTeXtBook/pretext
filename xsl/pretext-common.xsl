@@ -2440,6 +2440,21 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- Context URL                                                   -->
+<!-- URL for an element on its containing HTML page.               -->
+<!-- Produces: baseurl + containing-filename + "#" + visible-id    -->
+<!-- Empty when no baseurl is configured.                          -->
+<!-- NB: requires $chunk-level and $file-extension to be set       -->
+<!-- correctly for HTML output (as in extract-qrcode.xsl).         -->
+<xsl:template match="audio|video|interactive" mode="context-url">
+    <xsl:if test="$b-has-baseurl">
+        <xsl:value-of select="$baseurl"/>
+        <xsl:apply-templates select="." mode="containing-filename"/>
+        <xsl:text>#</xsl:text>
+        <xsl:apply-templates select="." mode="visible-id"/>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ###### -->
 <!-- Titles -->
