@@ -1,153 +1,153 @@
 <diagram>
   <annotations>
-    <annotation id="figure" speech2="The set of Fibonacci tiles consists of two tiles denoted by L and S.">
-      <grouped>figure</grouped>
+    <annotation id="prefigure-fibonacci-a-figure" speech2="The set of Fibonacci tiles consists of two tiles denoted by L and S.">
+      <grouped>prefigure-fibonacci-a-figure</grouped>
       <position>1</position>
       <children>
-        <active>top</active>
-        <active>arrows</active>
+        <active>prefigure-fibonacci-a-top</active>
+        <active>prefigure-fibonacci-a-arrows</active>
       </children>
       <components>
-        <active>top</active>
-        <active>arrows</active>
+        <active>prefigure-fibonacci-a-top</active>
+        <active>prefigure-fibonacci-a-arrows</active>
       </components>
     </annotation>
-    <annotation id="top" speech2="The ratio of the lengths of the tiles is the golden ratio so one tile L is long and the other S is short">
-      <grouped>top</grouped>
+    <annotation id="prefigure-fibonacci-a-top" speech2="The ratio of the lengths of the tiles is the golden ratio so one tile L is long and the other S is short">
+      <grouped>prefigure-fibonacci-a-top</grouped>
       <position>1</position>
       <children>
-        <active>top-L</active>
-        <active>top-S</active>
+        <active>prefigure-fibonacci-a-top-L</active>
+        <active>prefigure-fibonacci-a-top-S</active>
       </children>
       <components>
-        <active>top-L</active>
-        <active>top-S</active>
+        <active>prefigure-fibonacci-a-top-L</active>
+        <active>prefigure-fibonacci-a-top-S</active>
       </components>
       <parents>
-        <grouped>figure</grouped>
+        <grouped>prefigure-fibonacci-a-figure</grouped>
       </parents>
     </annotation>
-    <annotation id="top-L" speech2="The long tile L">
-      <active>top-L</active>
+    <annotation id="prefigure-fibonacci-a-top-L" speech2="The long tile L">
+      <active>prefigure-fibonacci-a-top-L</active>
       <position>1</position>
       <parents>
-        <grouped>top</grouped>
+        <grouped>prefigure-fibonacci-a-top</grouped>
       </parents>
     </annotation>
-    <annotation id="top-S" speech2="The short tile S">
-      <active>top-S</active>
+    <annotation id="prefigure-fibonacci-a-top-S" speech2="The short tile S">
+      <active>prefigure-fibonacci-a-top-S</active>
       <position>2</position>
       <parents>
-        <grouped>top</grouped>
+        <grouped>prefigure-fibonacci-a-top</grouped>
       </parents>
     </annotation>
-    <annotation id="arrows" speech2="A process called deflation replaces each tile by a new set of tiles">
-      <grouped>arrows</grouped>
+    <annotation id="prefigure-fibonacci-a-arrows" speech2="A process called deflation replaces each tile by a new set of tiles">
+      <grouped>prefigure-fibonacci-a-arrows</grouped>
       <position>2</position>
       <children>
-        <active>left-deflate</active>
-        <active>right-deflate</active>
+        <active>prefigure-fibonacci-a-left-deflate</active>
+        <active>prefigure-fibonacci-a-right-deflate</active>
       </children>
       <components>
-        <active>left-deflate</active>
-        <active>right-deflate</active>
+        <active>prefigure-fibonacci-a-left-deflate</active>
+        <active>prefigure-fibonacci-a-right-deflate</active>
       </components>
       <parents>
-        <grouped>figure</grouped>
+        <grouped>prefigure-fibonacci-a-figure</grouped>
       </parents>
     </annotation>
-    <annotation id="left-deflate" speech2="A long tile is replaced by a long and a short tile">
-      <grouped>left-deflate</grouped>
+    <annotation id="prefigure-fibonacci-a-left-deflate" speech2="A long tile is replaced by a long and a short tile">
+      <grouped>prefigure-fibonacci-a-left-deflate</grouped>
       <position>1</position>
       <components>
-        <passive>left-arrow</passive>
-        <passive>top-L</passive>
-        <active>bottom-L</active>
+        <passive>prefigure-fibonacci-a-left-arrow</passive>
+        <passive>prefigure-fibonacci-a-top-L</passive>
+        <active>prefigure-fibonacci-a-bottom-L</active>
       </components>
       <children>
-        <active>bottom-L</active>
+        <active>prefigure-fibonacci-a-bottom-L</active>
       </children>
       <parents>
-        <grouped>arrows</grouped>
+        <grouped>prefigure-fibonacci-a-arrows</grouped>
       </parents>
     </annotation>
-    <annotation id="left-arrow">
-      <passive>left-arrow</passive>
+    <annotation id="prefigure-fibonacci-a-left-arrow">
+      <passive>prefigure-fibonacci-a-left-arrow</passive>
       <position>0</position>
       <parents>
-        <grouped>left-deflate</grouped>
+        <grouped>prefigure-fibonacci-a-left-deflate</grouped>
       </parents>
     </annotation>
-    <annotation id="top-L">
-      <passive>top-L</passive>
+    <annotation id="prefigure-fibonacci-a-top-L">
+      <passive>prefigure-fibonacci-a-top-L</passive>
       <position>0</position>
       <parents>
-        <grouped>left-deflate</grouped>
+        <grouped>prefigure-fibonacci-a-left-deflate</grouped>
       </parents>
     </annotation>
-    <annotation id="bottom-L" speech2="The length of the new tiles is scaled by the reciprocal of the golden ratio">
-      <grouped>bottom-L</grouped>
+    <annotation id="prefigure-fibonacci-a-bottom-L" speech2="The length of the new tiles is scaled by the reciprocal of the golden ratio">
+      <grouped>prefigure-fibonacci-a-bottom-L</grouped>
       <position>1</position>
       <children>
-        <active>bottom-LL</active>
-        <active>bottom-LS</active>
+        <active>prefigure-fibonacci-a-bottom-LL</active>
+        <active>prefigure-fibonacci-a-bottom-LS</active>
       </children>
       <components>
-        <active>bottom-LL</active>
-        <active>bottom-LS</active>
+        <active>prefigure-fibonacci-a-bottom-LL</active>
+        <active>prefigure-fibonacci-a-bottom-LS</active>
       </components>
       <parents>
-        <grouped>left-deflate</grouped>
+        <grouped>prefigure-fibonacci-a-left-deflate</grouped>
       </parents>
     </annotation>
-    <annotation id="bottom-LL" speech2="The new long tile is on the left">
-      <active>bottom-LL</active>
+    <annotation id="prefigure-fibonacci-a-bottom-LL" speech2="The new long tile is on the left">
+      <active>prefigure-fibonacci-a-bottom-LL</active>
       <position>1</position>
       <parents>
-        <grouped>bottom-L</grouped>
+        <grouped>prefigure-fibonacci-a-bottom-L</grouped>
       </parents>
     </annotation>
-    <annotation id="bottom-LS" speech2="The new short tile is on the right">
-      <active>bottom-LS</active>
+    <annotation id="prefigure-fibonacci-a-bottom-LS" speech2="The new short tile is on the right">
+      <active>prefigure-fibonacci-a-bottom-LS</active>
       <position>2</position>
       <parents>
-        <grouped>bottom-L</grouped>
+        <grouped>prefigure-fibonacci-a-bottom-L</grouped>
       </parents>
     </annotation>
-    <annotation id="right-deflate" speech2="A short tile is replaced by a single long tile">
-      <grouped>right-deflate</grouped>
+    <annotation id="prefigure-fibonacci-a-right-deflate" speech2="A short tile is replaced by a single long tile">
+      <grouped>prefigure-fibonacci-a-right-deflate</grouped>
       <position>2</position>
       <components>
-        <passive>right-arrow</passive>
-        <passive>top-S</passive>
-        <active>bottom-S</active>
+        <passive>prefigure-fibonacci-a-right-arrow</passive>
+        <passive>prefigure-fibonacci-a-top-S</passive>
+        <active>prefigure-fibonacci-a-bottom-S</active>
       </components>
       <children>
-        <active>bottom-S</active>
+        <active>prefigure-fibonacci-a-bottom-S</active>
       </children>
       <parents>
-        <grouped>arrows</grouped>
+        <grouped>prefigure-fibonacci-a-arrows</grouped>
       </parents>
     </annotation>
-    <annotation id="right-arrow">
-      <passive>right-arrow</passive>
+    <annotation id="prefigure-fibonacci-a-right-arrow">
+      <passive>prefigure-fibonacci-a-right-arrow</passive>
       <position>0</position>
       <parents>
-        <grouped>right-deflate</grouped>
+        <grouped>prefigure-fibonacci-a-right-deflate</grouped>
       </parents>
     </annotation>
-    <annotation id="top-S">
-      <passive>top-S</passive>
+    <annotation id="prefigure-fibonacci-a-top-S">
+      <passive>prefigure-fibonacci-a-top-S</passive>
       <position>0</position>
       <parents>
-        <grouped>right-deflate</grouped>
+        <grouped>prefigure-fibonacci-a-right-deflate</grouped>
       </parents>
     </annotation>
-    <annotation id="bottom-S" speech2="The length of the new tile is again scaled by the reciprocal of the golden ratio">
-      <active>bottom-S</active>
+    <annotation id="prefigure-fibonacci-a-bottom-S" speech2="The length of the new tile is again scaled by the reciprocal of the golden ratio">
+      <active>prefigure-fibonacci-a-bottom-S</active>
       <position>1</position>
       <parents>
-        <grouped>right-deflate</grouped>
+        <grouped>prefigure-fibonacci-a-right-deflate</grouped>
       </parents>
     </annotation>
   </annotations>
