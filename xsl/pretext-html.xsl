@@ -454,7 +454,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <meta http-equiv="refresh" content="0; URL='{$html-index-page}'" />
                 <!-- Add a canonical link here, in generic build case? -->
                 <!-- more "meta" elements for discovery -->
-                <xsl:call-template name="open-graph-info"/>
+                <xsl:call-template name="social-meta-info"/>
             </head>
             <!-- body is non-existent, i.e. empty -->
             <body/>
@@ -11146,7 +11146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="keywords-meta-element"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- more "meta" elements for discovery -->
-    <xsl:call-template name="open-graph-info"/>
+    <xsl:call-template name="social-meta-info"/>
     <xsl:call-template name="pretext-js"/>
     <xsl:call-template name="runestone-header"/>
     <xsl:call-template name="diagcess-header"/>
@@ -11464,17 +11464,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Open Graph Protocol, advertise to Facebook, others       -->
+<!-- Social meta tags (OpenGraph/Facebook, Twitter/X, others) -->
 <!-- https://ogp.me/                                          -->
 <!-- https://developers.facebook.com/docs/sharing/webmasters/ -->
 <!-- https://webcode.tools/generators/open-graph/book         -->
 <!-- Sanity-check live instance: https://opengraphcheck.com/  -->
+<!-- Includes Twitter/X: https://www.digitalocean.com/community/tutorials/how-to-add-twitter-card-and-open-graph-social-metadata-to-your-webpage-with-html -->
 <!-- NB not used for EPUB nor Jupyter (could be in RevealJS?) -->
 
-<xsl:template name="open-graph-info">
-    <!-- og:type - book, article, or missing -->
+<xsl:template name="social-meta-info">
+    <!-- type (og) - book, article, or missing -->
     <xsl:if test="$b-is-article or $b-is-book">
-        <xsl:call-template name="open-graph-meta-element">
+        <xsl:call-template name="social-meta-element">
             <xsl:with-param name="namespace" select="'og'"/>
             <xsl:with-param name="property" select="'type'"/>
             <xsl:with-param name="content">
@@ -11489,9 +11490,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:if>
-    <!-- og:image - if it's URL can be constructed -->
+    <!--  -->
+    <!-- image (og,twitter) - if its URL can be constructed -->
     <xsl:if test="$b-has-baseurl and $docinfo/brandlogo">
-        <xsl:call-template name="open-graph-meta-element">
+        <xsl:call-template name="social-meta-element">
             <xsl:with-param name="namespace" select="'og'"/>
             <xsl:with-param name="property" select="'image'"/>
             <!-- URL = baseurl + external + @source -->
@@ -11502,23 +11504,107 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$docinfo/brandlogo/@source"/>
             </xsl:with-param>
         </xsl:call-template>
-    </xsl:if>
-    <!--  -->
-    <!-- book:title (always exactly one)-->
-    <xsl:if test="$b-is-book">
-        <xsl:call-template name="open-graph-meta-element">
-            <xsl:with-param name="namespace" select="'book'"/>
-            <xsl:with-param name="property" select="'title'"/>
+        <xsl:call-template name="social-meta-element">
+            <xsl:with-param name="namespace" select="'twitter'"/>
+            <xsl:with-param name="name" select="'image'"/>
+            <!-- URL = baseurl + external + @source -->
             <xsl:with-param name="content">
-                <xsl:apply-templates select="$document-root" mode="title-plain"/>
+                <!-- empty when not using managed directories -->
+                <xsl:value-of select="$baseurl"/>
+                <xsl:value-of select="$external-directory"/>
+                <xsl:value-of select="$docinfo/brandlogo/@source"/>
+            </xsl:with-param>
+        </xsl:call-template>
+        <!-- alttext -->
+        <xsl:call-template name="social-meta-element">
+            <xsl:with-param name="namespace" select="'og'"/>
+            <xsl:with-param name="property" select="'image:alt'"/>
+            <xsl:with-param name="content">
+                <xsl:text>Document Logo</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="social-meta-element">
+            <xsl:with-param name="namespace" select="'twitter'"/>
+            <xsl:with-param name="name" select="'image:alt'"/>
+            <xsl:with-param name="content">
+                <xsl:text>Document Logo</xsl:text>
             </xsl:with-param>
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <!-- book:author (allow for multiple) -->
+    <!-- title (og,twitter,book) (always exactly one)-->
+    <xsl:call-template name="social-meta-element">
+        <xsl:with-param name="namespace" select="'og'"/>
+        <xsl:with-param name="property" select="'title'"/>
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="$document-root" mode="title-plain"/>
+            <xsl:if test="$docinfo/blurb and $document-root/subtitle">
+                <xsl:text>: </xsl:text>
+                <xsl:apply-templates select="$document-root" mode="subtitle" />
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:call-template name="social-meta-element">
+        <xsl:with-param name="namespace" select="'twitter'"/>
+        <xsl:with-param name="name" select="'title'"/>
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="$document-root" mode="title-plain"/>
+            <xsl:if test="$docinfo/blurb and $document-root/subtitle">
+                <xsl:text>: </xsl:text>
+                <xsl:apply-templates select="$document-root" mode="subtitle" />
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:if test="$b-is-book">
+        <xsl:call-template name="social-meta-element">
+            <xsl:with-param name="namespace" select="'book'"/>
+            <xsl:with-param name="property" select="'title'"/>
+            <xsl:with-param name="content">
+                <xsl:apply-templates select="$document-root" mode="title-plain"/>
+                <xsl:if test="$docinfo/blurb and $document-root/subtitle">
+                    <xsl:text>: </xsl:text>
+                    <xsl:apply-templates select="$document-root" mode="subtitle" />
+                </xsl:if>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- description (og,twitter) -->
+    <xsl:if test="$docinfo/blurb or $document-root/subtitle">
+        <xsl:call-template name="social-meta-element">
+            <xsl:with-param name="namespace" select="'og'"/>
+            <xsl:with-param name="property" select="'description'"/>
+            <xsl:with-param name="content">
+                <xsl:choose>
+                    <xsl:when test="$docinfo/blurb">
+                        <xsl:value-of select="normalize-space($docinfo/blurb)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="$document-root" mode="subtitle" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="social-meta-element">
+            <xsl:with-param name="namespace" select="'twitter'"/>
+            <xsl:with-param name="name" select="'description'"/>
+            <xsl:with-param name="content">
+                <xsl:choose>
+                    <xsl:when test="$docinfo/blurb">
+                        <xsl:value-of select="normalize-space($docinfo/blurb)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="$document-root" mode="subtitle" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+    <!--  -->
+    <!-- author (book) (allow for multiple) -->
     <xsl:if test="$b-is-book">
         <xsl:for-each select="$bibinfo/author">
-            <xsl:call-template name="open-graph-meta-element">
+            <xsl:call-template name="social-meta-element">
                 <xsl:with-param name="namespace" select="'book'"/>
                 <xsl:with-param name="property" select="'author'"/>
                 <xsl:with-param name="content">
@@ -11527,19 +11613,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
         </xsl:for-each>
     </xsl:if>
+    <xsl:if test="$b-is-article">
+        <xsl:for-each select="$bibinfo/author">
+            <xsl:call-template name="social-meta-element">
+                <xsl:with-param name="namespace" select="'article'"/>
+                <xsl:with-param name="property" select="'author'"/>
+                <xsl:with-param name="content">
+                    <xsl:value-of select="personname"/>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:for-each>
+    </xsl:if>
+    <!--  -->
+    <!-- card (twitter) -->
+    <xsl:call-template name="social-meta-element">
+        <xsl:with-param name="namespace" select="'twitter'"/>
+        <xsl:with-param name="name" select="'card'"/>
+        <xsl:with-param name="content">
+            <xsl:text>summary_large_image</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
     <!--  -->
 </xsl:template>
 
-<xsl:template name="open-graph-meta-element">
+<xsl:template name="social-meta-element">
     <xsl:param name="namespace"/>
     <xsl:param name="property"/>
+    <xsl:param name="name"/>
     <xsl:param name="content"/>
     <meta>
-        <xsl:attribute name="property">
-            <xsl:value-of select="$namespace"/>
-            <xsl:text>:</xsl:text>
-            <xsl:value-of select="$property"/>
-        </xsl:attribute>
+        <xsl:if test="$property">
+            <xsl:attribute name="property">
+                <xsl:value-of select="$namespace"/>
+                <xsl:text>:</xsl:text>
+                <xsl:value-of select="$property"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="$name">
+            <xsl:attribute name="name">
+                <xsl:value-of select="$namespace"/>
+                <xsl:text>:</xsl:text>
+                <xsl:value-of select="$name"/>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="content">
             <xsl:value-of select="$content"/>
         </xsl:attribute>
