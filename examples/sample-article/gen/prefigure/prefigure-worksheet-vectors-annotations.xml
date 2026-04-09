@@ -1,0 +1,48 @@
+<diagram>
+  <annotations>
+    <annotation id="prefigure-worksheet-vectors-figure" speech2="Two vectors labeled a and b in the coordinate plane">
+      <grouped>prefigure-worksheet-vectors-figure</grouped>
+      <position>1</position>
+      <children>
+        <active>prefigure-worksheet-vectors-grid</active>
+        <active>prefigure-worksheet-vectors-axes</active>
+        <active>prefigure-worksheet-vectors-vector-a</active>
+        <active>prefigure-worksheet-vectors-vector-b</active>
+      </children>
+      <components>
+        <active>prefigure-worksheet-vectors-grid</active>
+        <active>prefigure-worksheet-vectors-axes</active>
+        <active>prefigure-worksheet-vectors-vector-a</active>
+        <active>prefigure-worksheet-vectors-vector-b</active>
+      </components>
+    </annotation>
+    <annotation id="prefigure-worksheet-vectors-grid" speech2="A one by one grid">
+      <active>prefigure-worksheet-vectors-grid</active>
+      <position>1</position>
+      <parents>
+        <grouped>prefigure-worksheet-vectors-figure</grouped>
+      </parents>
+    </annotation>
+    <annotation id="prefigure-worksheet-vectors-axes" speech2="A set of labeled axes">
+      <active>prefigure-worksheet-vectors-axes</active>
+      <position>2</position>
+      <parents>
+        <grouped>prefigure-worksheet-vectors-figure</grouped>
+      </parents>
+    </annotation>
+    <annotation id="prefigure-worksheet-vectors-vector-a" speech2="The vector a">
+      <active>prefigure-worksheet-vectors-vector-a</active>
+      <position>3</position>
+      <parents>
+        <grouped>prefigure-worksheet-vectors-figure</grouped>
+      </parents>
+    </annotation>
+    <annotation id="prefigure-worksheet-vectors-vector-b" speech2="The vector b">
+      <active>prefigure-worksheet-vectors-vector-b</active>
+      <position>4</position>
+      <parents>
+        <grouped>prefigure-worksheet-vectors-figure</grouped>
+      </parents>
+    </annotation>
+  </annotations>
+</diagram>

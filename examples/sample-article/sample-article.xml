@@ -16125,10 +16125,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                     <exercise workspace="3in">
                         <statement>
-                            <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
-                            <image width="100%" source="images/projection1.png">
-                                <shortdescription>two vectors in a Cartesian plane</shortdescription>
-                            </image>
+                            <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec b = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
+                            <figure xml:id="prefigure-vectors">
+                                <image width="100%">
+                                    <prefigure xmlns="https://prefigure.org"
+                                               label="prefigure-worksheet-vectors">
+                                        <diagram dimensions="(320, 400)" margins="(5,5,20,20)">
+                                            <coordinates bbox="(0,0,8,10)">
+                                                <grid at="grid" spacings="((0,1,8),(0,1,10))"/>
+                                                <axes at="axes" decorations="no">
+                                                    <xlabel><m>x</m></xlabel>
+                                                    <ylabel><m>y</m></ylabel>
+                                                </axes>
+                                                <vector at="vector-a" v="(3,9)" alignment="se"><m>\vec a</m></vector>
+                                                <vector at="vector-b" v="(4,2)" alignment="nw"><m>\vec b</m></vector>
+                                            </coordinates>
+                                            <annotations>
+                                                <annotation ref="figure"
+                                                            text="Two vectors labeled a and b in the coordinate plane">
+                                                    <annotation ref="grid"
+                                                                text="A one by one grid"/>
+                                                    <annotation ref="axes"
+                                                                text="A set of labeled axes"/>
+                                                    <annotation ref="vector-a"
+                                                                text="The vector a"/>
+                                                    <annotation ref="vector-b"
+                                                                text="The vector b"/>
+                                                </annotation>
+                                            </annotations>
+                                        </diagram>
+                                    </prefigure>
+                                    <shortdescription>two vectors in a Cartesian plane</shortdescription>
+                                </image>
+                                <caption>Two vectors <m>\vec a</m> and <m>\vec b</m>.</caption>
+                            </figure>
                         </statement>
                     </exercise>
                 </sidebyside>
