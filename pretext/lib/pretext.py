@@ -2611,25 +2611,22 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         stringparams["publisher"] = pub_file
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
-    # Build list of id's into a scratch directory/file
-    tmp_dir = get_temporary_directory()
-    id_filename = os.path.join(tmp_dir, "qrcode-ids.txt")
-    log.debug("QR code id list temporarily in {}".format(id_filename))
-    xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
-    # "run" an assignment for the list of triples of strings
-    with open(id_filename, "r") as id_file:
-        interactives = id_file.readlines()
+    import glob
+    import xml.etree.ElementTree as ET
 
-    for inter in interactives:
-        # separator is a space, since a comma can be in a YouTube playlist
-        # no argument here means contiguous whitespace - should always
-        # be a single space coming from the extraction routine.
-        # NB: an audio or video file provided by an author with a URL to
-        # some external location, with a space in it, will be a problem here.
-        # The URL should be percent-encoded so the space is not problematic.
-        inter_pair = inter.split()
-        url = inter_pair[0]
-        path = os.path.join(dest_dir, inter_pair[1] + ".png")
+    # Extraction writes sidecar XML files (one per element) into dest_dir
+    # via exsl:document, each containing standalone and in-context URLs.
+    xsltproc(extraction_xslt, xml_source, None, dest_dir, stringparams)
+    # Read sidecar XML files to get URLs for QR code generation
+    pi_ns = {'pi': 'http://pretextbook.org/2020/pretext/internal'}
+    url_files = sorted(glob.glob(os.path.join(dest_dir, "*-url.xml")))
+    for url_file in url_files:
+        tree = ET.parse(url_file)
+        url = tree.find('pi:standalone-url', pi_ns).text
+        # Derive visible-id from filename: {id}-url.xml
+        basename = os.path.splitext(os.path.basename(url_file))[0]
+        the_id = basename.rsplit('-url', 1)[0]
+        path = os.path.join(dest_dir, the_id + ".png")
         log.info('creating URL with content "{}" as {}...'.format(url, path))
         # Using more elaborate (class) calls to simply get a zero border,
         # rather than cropping (ala https://stackoverflow.com/questions/9870876)
@@ -2648,7 +2645,7 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                            )
         qr.add_data(url)
         if has_image:
-            qr_image = qr.make_image(image_factory=qrcode.image.styledpil.StyledPilImage, embeded_image_path=image_path)
+            qr_image = qr.make_image(image_factory=qrcode.image.styledpil.StyledPilImage, embedded_image_path=image_path)
         else:
             qr_image = qr.make_image(fill_color="black", back_color="white")
         # Now save as a PNG

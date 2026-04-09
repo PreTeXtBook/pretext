@@ -1986,7 +1986,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A paragraph without "displays" is straightforward and -->
 <!-- we can bypass the more complicated procedure next.    -->
 <xsl:template match="p">
-    <segment indentation="2">
+    <segment>
+        <xsl:attribute name="indentation">
+            <xsl:choose>
+                <xsl:when test="@pi:indent = 'no'">
+                    <xsl:text>0</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>2</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
         <xsl:apply-templates select="node()"/>
     </segment>
 </xsl:template>

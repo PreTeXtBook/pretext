@@ -7349,6 +7349,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="@xml:id">
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
+    <!-- Suppress indentation when directed by assembly -->
+    <xsl:if test="@pi:indent = 'no'">
+        <xsl:text>\noindent{}</xsl:text>
+    </xsl:if>
     <xsl:apply-templates/>
     <xsl:text>%&#xa;</xsl:text>
     <!-- Add workspace if appropriate -->

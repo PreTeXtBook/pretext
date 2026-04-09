@@ -234,8 +234,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-extracting-fitb" select="false()"/>
 <xsl:variable name="b-extracting-biblio" select="false()"/>
 <xsl:variable name="b-extracting-stack" select="false()"/>
+<xsl:variable name="b-extracting-qrcode" select="false()"/>
 
-<xsl:variable name="b-extracting" select="$b-extracting-pg or $b-extracting-mom or $b-extracting-fitb or $b-extracting-biblio or $b-extracting-stack"/>
+<xsl:variable name="b-extracting" select="$b-extracting-pg or $b-extracting-mom or $b-extracting-fitb or $b-extracting-biblio or $b-extracting-stack or $b-extracting-qrcode"/>
 
 
 <!-- ############################## -->
@@ -3775,9 +3776,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Form a PreTeXt side-by-side with an image, a QR code and links -->
 
 <xsl:template match="audio|video|interactive[not(static)]" mode="representations">
-    <xsl:variable name="the-url">
-        <xsl:apply-templates select="." mode="static-url"/>
+    <!-- Read pre-computed URLs from sidecar file, guarded -->
+    <!-- against access during extraction (Catch-22)       -->
+    <xsl:variable name="url-file-rtf">
+        <xsl:if test="not($b-extracting)">
+            <xsl:copy-of select="document(concat($generated-directory-source, 'qrcode/', @assembly-id, '-url.xml'), $original)"/>
+        </xsl:if>
     </xsl:variable>
+    <xsl:variable name="url-file" select="exsl:node-set($url-file-rtf)"/>
     <xsl:choose>
         <xsl:when test="$exercise-style = 'static'">
             <!-- panel widths are experimental -->
@@ -3859,28 +3865,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:text>.png</xsl:text>
                         </xsl:attribute>
                     </image>
-                    <!-- URL templates create empty strings as signals URLs do not (yet) exist -->
-                    <!-- We kill the automatic footnotes, a debatable decision                 -->
+                    <!-- We kill the automatic footnotes, a debatable decision -->
                     <!--  -->
                     <xsl:variable name="standalone-url">
-                        <xsl:apply-templates select="." mode="standalone-url"/>
+                        <xsl:value-of select="$url-file/pi:qrcode-urls/pi:standalone-url"/>
                     </xsl:variable>
                     <xsl:if test="not($standalone-url = '')">
-                        <p>
+                        <p pi:indent="no">
                             <url href="{$standalone-url}" visual="">
-                                <xsl:text>Standalone</xsl:text>
+                                <pi:localize string-id="standalone"/>
+                            </url>
+                        </p>
+                    </xsl:if>
+                    <!--  -->
+                    <xsl:variable name="context-url">
+                        <xsl:value-of select="$url-file/pi:qrcode-urls/pi:context-url"/>
+                    </xsl:variable>
+                    <xsl:if test="not($context-url = '')">
+                        <p pi:indent="no">
+                            <url href="{$context-url}" visual="">
+                                <pi:localize string-id="incontext"/>
                             </url>
                         </p>
                     </xsl:if>
                     <!--  -->
                     <xsl:variable name="embed-iframe-url">
-                        <xsl:apply-templates select="." mode="embed-iframe-url"/>
+                        <xsl:value-of select="$url-file/pi:qrcode-urls/pi:embed-iframe-url"/>
                     </xsl:variable>
                     <xsl:if test="not($embed-iframe-url = '')">
-                        <p>
-                            <!-- Kill the automatic footnote    -->
+                        <p pi:indent="no">
+                            <!-- Kill the automatic footnote -->
                             <url href="{$embed-iframe-url}" visual="">
-                                <xsl:text>Embed</xsl:text>
+                                <pi:localize string-id="embed"/>
                             </url>
                         </p>
                     </xsl:if>
