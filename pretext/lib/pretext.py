@@ -5224,14 +5224,25 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
         # process with a  latex  engine
         latex_key = get_deprecated_tex_fallback(method)
         latex_exec_cmd = get_executable_cmd(latex_key)
-        # In flux during development, now nonstop
         # -halt-on-error will give an exit code to examine
-        # perhaps behavior depends on -v, -vv
-        # Two passes to resolve cross-references,
-        # we may need a third for tcolorbox adjustments
+        # First pass always needed, second resolves cross-references.
+        # Additional passes may be required by packages like nicematrix
+        # (which uses TikZ "remember picture" for cell coloring) or
+        # tcolorbox.  We check the .log for "Rerun" requests, matching
+        # the same strategy used for standalone latex-image compilation.
         latex_cmd = latex_exec_cmd + ["-halt-on-error", sourcename]
+        logname = basename + ".log"
+        MAX_PASSES = 10
         subprocess.run(latex_cmd)
-        subprocess.run(latex_cmd)
+        for pass_num in range(2, MAX_PASSES + 1):
+            subprocess.run(latex_cmd)
+            if os.path.isfile(logname):
+                with open(logname) as f:
+                    log_contents = f.read()
+                if "Rerun" not in log_contents and "rerun" not in log_contents:
+                    break
+            else:
+                break
 
         # If we want all outputs, we copy the entire build directory now that the PDF is built
         # so we can get the *.log, *.aux, etc build files.
