@@ -5228,21 +5228,25 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
         # First pass always needed, second resolves cross-references.
         # Additional passes may be required by packages like nicematrix
         # (which uses TikZ "remember picture" for cell coloring) or
-        # tcolorbox.  We check the .log for "Rerun" requests, matching
-        # the same strategy used for standalone latex-image compilation.
+        # tcolorbox.  We check the .log for "Rerun to get" requests,
+        # matching the strategy used for standalone latex-image compilation.
         latex_cmd = latex_exec_cmd + ["-halt-on-error", sourcename]
         logname = basename + ".log"
         MAX_PASSES = 10
-        subprocess.run(latex_cmd)
-        for pass_num in range(2, MAX_PASSES + 1):
-            subprocess.run(latex_cmd)
+        result = subprocess.run(latex_cmd)
+        for _ in range(2, MAX_PASSES + 1):
+            result = subprocess.run(latex_cmd)
+            if result.returncode != 0:
+                break
             if os.path.isfile(logname):
                 with open(logname) as f:
                     log_contents = f.read()
-                if "Rerun" not in log_contents and "rerun" not in log_contents:
+                if "Rerun to get" not in log_contents:
                     break
             else:
                 break
+        else:
+            log.warning("LaTeX compilation of {} required {} passes and may not have converged.".format(sourcename, MAX_PASSES))
 
         # If we want all outputs, we copy the entire build directory now that the PDF is built
         # so we can get the *.log, *.aux, etc build files.
