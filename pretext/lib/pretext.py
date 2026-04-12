@@ -2617,13 +2617,20 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Extraction writes sidecar XML files (one per element) into dest_dir
     # via exsl:document, each containing standalone and in-context URLs.
     xsltproc(extraction_xslt, xml_source, None, dest_dir, stringparams)
-    # Read sidecar XML files to get URLs for QR code generation
+    # Read sidecar XML files to get URLs for QR code generation.
+    # Interactive programs intentionally leave standalone URLs empty,
+    # so fall back to the in-context page URL in that case.
     pi_ns = {'pi': 'http://pretextbook.org/2020/pretext/internal'}
     url_files = sorted(glob.glob(os.path.join(dest_dir, "*-url.xml")))
     for url_file in url_files:
         tree = ET.parse(url_file)
         url = tree.find('pi:standalone-url', pi_ns).text
-        # Derive visible-id from filename: {id}-url.xml
+        if not url:
+            url = tree.find('pi:context-url', pi_ns).text
+        if not url:
+            log.info('skipping QR code creation for {} because no URL was provided'.format(url_file))
+            continue
+        # Derive internal id from filename: {id}-url.xml
         basename = os.path.splitext(os.path.basename(url_file))[0]
         the_id = basename.rsplit('-url', 1)[0]
         path = os.path.join(dest_dir, the_id + ".png")
