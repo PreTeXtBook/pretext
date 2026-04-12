@@ -4023,6 +4023,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="audio|video"  mode="embed-iframe-url"/>
 <xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@circuitjs|@iframe]"  mode="embed-iframe-url"/>
 
+<!-- Programs should not get embed urls in sidecar files -->
+<xsl:template match="program[@interactive = 'activecode' or @interactive = 'codelens']" mode="embed-iframe-url"/>
+
 
 <!-- Static URL's -->
 <!-- Predictable and/or stable URLs for versions         -->
@@ -4040,6 +4043,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$baseurl"/>
     <xsl:apply-templates select="." mode="standalone-filename" />
 </xsl:template>
+
+<!-- Programs should not get standalone urls in sidecar files -->
+<xsl:template match="program[@interactive = 'activecode' or @interactive = 'codelens']" mode="static-url"/>
 
 <!-- Natural override for YouTube videos               -->
 <!-- Better - standalone page, with "View on You Tube" -->
