@@ -129,11 +129,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="latex-macros-html" select="str:replace($no-less-than, '\newcommand{\gt}{&gt;}&#xa;', '')"/>
             <!-- put macros and packages early for MJ to find         -->
             <!-- give the div an @id so we can trash it as a leftover -->
+            <!-- NB: "math support" macros (fillin-math, sfrac) must  -->
+            <!-- be defined here AND in the "latex-macros" named      -->
+            <!-- template in  pretext-html.xsl                        -->
             <div id="latex-macros">
                 <xsl:call-template name="inline-math-wrapper">
                     <xsl:with-param name="math">
                         <xsl:value-of select="$latex-packages-mathjax"/>
                         <xsl:value-of select="$latex-macros-html"/>
+                        <xsl:call-template name="fillin-math"/>
+                        <!-- legacy built-in support for "slanted|beveled|nice" fractions -->
+                        <xsl:if test="$b-has-sfrac">
+                            <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
+                        </xsl:if>
                     </xsl:with-param>
                 </xsl:call-template>
             </div>
