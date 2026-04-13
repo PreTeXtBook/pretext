@@ -875,7 +875,7 @@ TEST_CASE( "Test the add function" ) {
             </ol></p>
 
             <datafile label="stack-overflow-survey" filename="so_survey.csv" rows="10" cols="65" editable="no" include-source="yes">
-                <pre source="datafiles/stackoverflow.csv"/>
+                <pre><xi:include parse="text" href="./ext/datafiles/stackoverflow.csv" /></pre>
             </datafile>
         </data>
 
@@ -2293,7 +2293,6 @@ TEST_CASE( "Test the add function" ) {
             } // end of SimplePicture class
             ]]>
             </pre>
-            <!-- <pre source="datafiles/picture-classes-library.jar"/> -->
         </datafile>
 
         <program label="java-only-blue" interactive='activecode' language="java" add-files="file-picture-classes-jar, beach-datafile" include-source="yes">
@@ -3512,7 +3511,7 @@ TEST_CASE( "Test the add function" ) {
     <idx>matching function types</idx>
     <statement>
       <p>
-        Sort the following functions into their correct categories. 
+        Sort the following functions into their correct categories.
       </p>
     </statement>
     <feedback>
