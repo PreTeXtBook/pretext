@@ -14038,6 +14038,9 @@ TODO:
 <!-- We could rename this properly, since we are      -->
 <!-- sneaking in packages, which load first, in       -->
 <!-- case authors want to build on these macros       -->
+<!-- NB: "math support" macros (fillin-math, sfrac) must  -->
+<!-- be defined here AND in the "extraction-wrapper"      -->
+<!-- template in  support/extract-math.xsl                -->
 <xsl:template name="latex-macros">
     <div id="latex-macros" class="hidden-content process-math" style="display:none">
         <xsl:call-template name="inline-math-wrapper">
