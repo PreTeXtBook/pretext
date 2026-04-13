@@ -688,27 +688,7 @@ def individual_latex_image_conversion(latex_image, outformat, dest_dir, method):
         log.debug("tex executable: {}".format(tex_executable_cmd[0]))
         latex_cmd = tex_executable_cmd + ["-interaction=nonstopmode", "-halt-on-error", latex_image]
         log.info("converting {} to {}".format(latex_image, latex_image_pdf))
-        # Run LaTeX on the image file, usual console transcript is stdout.
-        # "result" is a "CompletedProcess" object.  Specifying an encoding
-        # causes captured output to be a string, which is convenient.
-        result = subprocess.run(latex_cmd, stdout=subprocess.PIPE, encoding="utf-8")
-
-        # It may be that the image needs to be compiled twice. If the .log file contains
-        # the string `Rerun to get`, then the document should be compiled again.
-
-        # We keep track of how many times we've tried to compile the document and
-        # bail if it looks like we're stuck in a loop.
-        loop_count = 0
-        MAX_LOOPS = 10
-        while result.returncode == 0 and "Rerun to get" in open(latex_image_log).read() and loop_count < MAX_LOOPS:
-            msg = "File {} needs to be processed with LaTeX again. Rerunning LaTeX for pass number {}."
-            log.info(msg.format(latex_image, loop_count + 2))
-            result = subprocess.run(latex_cmd, stdout=subprocess.PIPE, encoding="utf-8")
-            loop_count += 1
-
-        if loop_count == MAX_LOOPS:
-            log.error("Detected infinite loop while compiling {}. Aborting.".format(latex_image))
-            result.returncode = 1
+        result = _latex_compile(latex_cmd, latex_image_log, latex_image, capture_output=True)
 
         if result.returncode != 0:
             # failed to compile the LaTeX image
@@ -5154,6 +5134,31 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
 ###################
 
 
+def _latex_compile(latex_cmd, log_file, source_name, max_passes=10, capture_output=False):
+    """Compile a LaTeX file, rerunning until cross-references settle.
+
+    Runs the initial pass, then reruns while the log file requests
+    "Rerun to get" and the pass limit has not been reached.
+
+    Returns the CompletedProcess from the final pass.  Sets returncode
+    to 1 if the pass limit is reached without convergence.
+    """
+    run_kwargs = {"stdout": subprocess.PIPE, "encoding": "utf-8"} if capture_output else {}
+    result = subprocess.run(latex_cmd, **run_kwargs)
+    pass_count = 1
+    while (result.returncode == 0
+           and os.path.isfile(log_file)
+           and "Rerun to get" in open(log_file).read()
+           and pass_count < max_passes):
+        log.info("Rerunning LaTeX for {} (pass {}).".format(source_name, pass_count + 1))
+        result = subprocess.run(latex_cmd, **run_kwargs)
+        pass_count += 1
+    if pass_count == max_passes and result.returncode == 0:
+        log.warning("LaTeX compilation of {} required {} passes and may not have converged.".format(source_name, max_passes))
+        result.returncode = 1
+    return result
+
+
 def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outputs):
     """
     Generate a PDF from an XML source using LaTeX as an intermediate format.
@@ -5237,21 +5242,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
         # matching the strategy used for standalone latex-image compilation.
         latex_cmd = latex_exec_cmd + ["-halt-on-error", sourcename]
         logname = basename + ".log"
-        MAX_PASSES = 10
-        result = subprocess.run(latex_cmd)
-        for _ in range(2, MAX_PASSES + 1):
-            result = subprocess.run(latex_cmd)
-            if result.returncode != 0:
-                break
-            if os.path.isfile(logname):
-                with open(logname) as f:
-                    log_contents = f.read()
-                if "Rerun to get" not in log_contents:
-                    break
-            else:
-                break
-        else:
-            log.warning("LaTeX compilation of {} required {} passes and may not have converged.".format(sourcename, MAX_PASSES))
+        result = _latex_compile(latex_cmd, logname, sourcename)
 
         # If we want all outputs, we copy the entire build directory now that the PDF is built
         # so we can get the *.log, *.aux, etc build files.
