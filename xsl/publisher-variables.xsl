@@ -2809,6 +2809,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-has-embed-button" select="$embed-button = 'yes'"/>
 
+<xsl:variable name="b-has-permalink-button" select="boolean($publication/html/permalink-button)"/>
+
 
 <!--                            -->
 <!-- HTML Banner options        -->
