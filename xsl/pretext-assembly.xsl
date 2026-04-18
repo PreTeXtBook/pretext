@@ -2326,6 +2326,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
 
+<xsl:template match="program[@interactive = 'activecode' or @interactive = 'codelens']" mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+
 <xsl:template match="datafile" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
@@ -3755,6 +3759,48 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<xsl:template match="program[@interactive = 'activecode' or @interactive = 'codelens']" mode="representations">
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'static'">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+            <xsl:if test="$b-program-static-qrcodes and not($b-extracting)">
+                <xsl:variable name="url-file-rtf">
+                    <xsl:copy-of select="document(concat($generated-directory-source, 'qrcode/', @assembly-id, '-url.xml'), $original)"/>
+                </xsl:variable>
+                <xsl:variable name="url-file" select="exsl:node-set($url-file-rtf)"/>
+                <xsl:variable name="context-url">
+                    <xsl:value-of select="$url-file/pi:qrcode-urls/pi:context-url"/>
+                </xsl:variable>
+                <xsl:if test="not($context-url = '')">
+                    <sidebyside margins="0%" widths="70% 25%" valign="middle" halign="center">
+                        <paragraphs>
+                            <p pi:indent="no">
+                                <url href="{$context-url}" visual="">
+                                    <pi:localize string-id="incontext"/>
+                                </url>
+                            </p>
+                        </paragraphs>
+                        <image>
+                            <xsl:attribute name="pi:generated">
+                                <xsl:text>qrcode/</xsl:text>
+                                <xsl:apply-templates select="." mode="assembly-id"/>
+                                <xsl:text>.png</xsl:text>
+                            </xsl:attribute>
+                        </image>
+                    </sidebyside>
+                </xsl:if>
+            </xsl:if>
+        </xsl:when>
+        <xsl:when test="($exercise-style = 'dynamic') or ($exercise-style = 'pg-problems')">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="representations"/>
+            </xsl:copy>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
 <xsl:template match="datafile|query" mode="representations">
     <xsl:choose>
         <!-- make a static version, in a PreTeXt style -->
@@ -4023,6 +4069,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="audio|video"  mode="embed-iframe-url"/>
 <xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@circuitjs|@iframe]"  mode="embed-iframe-url"/>
 
+<!-- Programs should not get embed urls in sidecar files -->
+<xsl:template match="program[@interactive = 'activecode' or @interactive = 'codelens']" mode="embed-iframe-url"/>
+
 
 <!-- Static URL's -->
 <!-- Predictable and/or stable URLs for versions         -->
@@ -4040,6 +4089,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$baseurl"/>
     <xsl:apply-templates select="." mode="standalone-filename" />
 </xsl:template>
+
+<!-- Programs should not get standalone urls in sidecar files -->
+<xsl:template match="program[@interactive = 'activecode' or @interactive = 'codelens']" mode="static-url"/>
 
 <!-- Natural override for YouTube videos               -->
 <!-- Better - standalone page, with "View on You Tube" -->

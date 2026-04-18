@@ -2449,6 +2449,14 @@ Book (with parts), "section" at level 3
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="program[@interactive = 'activecode' or @interactive = 'codelens']" mode="context-url">
+    <xsl:if test="$b-has-baseurl">
+        <xsl:value-of select="$baseurl"/>
+        <xsl:apply-templates select="." mode="containing-filename"/>
+        <xsl:text>#</xsl:text>
+        <xsl:apply-templates select="." mode="runestone-id"/>
+    </xsl:if>
+</xsl:template>
 
 <!-- ###### -->
 <!-- Titles -->
