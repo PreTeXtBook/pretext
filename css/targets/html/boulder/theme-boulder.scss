@@ -22,7 +22,7 @@ $background-color-dark: hsl(270, 10%, 5%) !default;
 );
 
 // Basic components: 
-@use 'components/pretext'; 
+@use 'components/pretext-web'; 
 
 @use '../salem/other-widen';
 

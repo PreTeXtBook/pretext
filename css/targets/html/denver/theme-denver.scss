@@ -35,7 +35,7 @@ $background-color-dark: hsl(210, 10%, 10%) !default;
 
 @use 'chunks-denver';
 
-@use 'components/pretext' with (
+@use 'components/pretext-web' with (
  $navbar-breakpoint: parts-paper.$navbar-breakpoint,
 );
 
