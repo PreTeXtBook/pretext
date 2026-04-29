@@ -373,6 +373,11 @@ form.papersize-select {
       page-break-inside: avoid;
     }
 
+    // Avoid a blank page at the end if the last page fits on the previous page
+    .onepage:last-of-type {
+      page-break-after: avoid;
+    }
+
     .first-page-header, .running-header {
       border-bottom: none;
     }
