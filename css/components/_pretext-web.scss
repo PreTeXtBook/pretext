@@ -1,0 +1,27 @@
+// Entry point for web-based themes. Incorporates common PreTeXt styles
+// and web-specific styles.
+
+// Todo - analyze interactives/ and other scss files for items
+// that belong here
+
+// Breakpoint at which the navbar moves to the bottom of the screen
+$navbar-breakpoint: 800px !default;
+
+@use 'components/pretext';
+
+
+@use 'printing';
+@use 'worksheet';
+
+@use 'google-search';
+@use 'pretext-search';
+@use 'interactives/runestone';
+@use 'interactives/other';
+@use 'interactives/webwork';
+@use 'interactives/sagecell';
+
+@use 'interactives/calculators' with (
+  $navbar-breakpoint: $navbar-breakpoint,
+);
+
+@use 'elements/permalinks';

@@ -25,7 +25,7 @@ $background-color-dark: hsl(214, 20%, 10%) !default;
   $content-side-padding: 20px
 );
 
-@use 'components/pretext';
+@use 'components/pretext-web';
 
 @use '../salem/other-widen';
 

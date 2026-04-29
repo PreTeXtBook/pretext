@@ -33,7 +33,7 @@ $background-color-dark: #23241f !default;
 
 @use 'parts-salem';
 @use 'chunks-salem';
-@use 'components/pretext' with (
+@use 'components/pretext-web' with (
   $navbar-breakpoint: parts-salem.$navbar-breakpoint,
 );
 

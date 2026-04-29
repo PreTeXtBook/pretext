@@ -1,5 +1,12 @@
 // Use this file for anything common to kindle and epub
 @use 'components/pretext';
+
+@use 'components/chunks/codelike';
+@use 'components/chunks/exercises';
+@use 'components/chunks/solutions';
+@use 'components/chunks/sidebyside';
+@use 'components/chunks/discussion-inline';
+
 // TODO... needed???
 // @use 'colors/legacy/all_colors.scss';
 // @use 'colors/legacy/setcolors.css';
