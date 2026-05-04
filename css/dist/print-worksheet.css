@@ -1689,6 +1689,7 @@ dt,
   opacity: var(--permalink-opacity, 0);
   transition: opacity 0.2s;
   margin-top: 0 !important;
+  user-select: none;
 }
 li > .autopermalink {
   left: -3.5em;
@@ -2663,6 +2664,10 @@ section.handout {
 .onepage > .heading {
   margin-top: 0;
   font-size: 1.3em;
+}
+.onepage h4.heading {
+  font-size: 1.2em;
+  margin-top: 1em;
 }
 .onepage .instructions {
   display: none;
