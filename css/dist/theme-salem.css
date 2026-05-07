@@ -2685,6 +2685,7 @@ dt,
   opacity: var(--permalink-opacity, 0);
   transition: opacity 0.2s;
   margin-top: 0 !important;
+  user-select: none;
 }
 li > .autopermalink {
   left: -3.5em;
