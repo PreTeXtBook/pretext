@@ -2664,6 +2664,10 @@ section.handout {
   margin-top: 0;
   font-size: 1.3em;
 }
+.onepage h4.heading {
+  font-size: 1.2em;
+  margin-top: 1em;
+}
 .onepage .instructions {
   display: none;
 }
@@ -2927,6 +2931,10 @@ form.papersize-select {
     overflow: hidden;
     page-break-after: always;
     page-break-inside: avoid;
+  }
+  section.worksheet .onepage:last-of-type,
+  section.handout .onepage:last-of-type {
+    page-break-after: avoid;
   }
   section.worksheet .first-page-header,
   section.worksheet .running-header,
