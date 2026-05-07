@@ -7981,7 +7981,8 @@ Book (with parts), "section" at level 3
     <xsl:param name="b-reading-questions"/>
 
     <!-- Check if we are at a divison that needs a heading                      -->
-    <xsl:variable name="b-division-element" select="local-name(.) = $divisions"/>
+    <!-- match only the default namespace                                       -->
+    <xsl:variable name="b-division-element" select="(local-name(.) = $divisions) and (namespace-uri(.) = '')"/>
     <xsl:choose>
         <xsl:when test="$b-division-element">
             <!-- handling a division element that *may* need a heading -->
@@ -7994,7 +7995,8 @@ Book (with parts), "section" at level 3
                     <!-- extensive searching for "exercise", but we hope the      -->
                     <!-- booleans passed in will short-circuit and result in no   -->
                     <!-- searching when it is not necessary                       -->
-                    <xsl:variable name="by-name-elements" select="boolean(.//*[local-name(.) = $elements])" />
+                    <!-- match only the default namespace                         -->
+                    <xsl:variable name="by-name-elements" select="boolean(.//*[(local-name(.) = $elements) and (namespace-uri(.) = '')])" />
                     <xsl:variable name="division-exercises" select="$b-division-exercises and .//exercise[ancestor::exercises]"/>
                     <xsl:variable name="worksheet-exercises" select="$b-worksheet-exercises and .//exercise[ancestor::worksheet]"/>
                     <xsl:variable name="reading-questions" select="$b-reading-questions and .//exercise[ancestor::reading-questions]"/>
@@ -8016,7 +8018,8 @@ Book (with parts), "section" at level 3
         </xsl:when>
         <xsl:otherwise>
             <!-- not at a division, so test element for inclusion -->
-            <xsl:if test="(local-name(.) = $elements)
+            <!-- match only the default namespace                 -->
+            <xsl:if test="((local-name(.) = $elements) and (namespace-uri(.) = ''))
                        or ($b-division-exercises and self::exercise and ancestor::exercises)
                        or ($b-worksheet-exercises and self::exercise and ancestor::worksheet)
                        or ($b-reading-questions and self::exercise and ancestor::reading-questions)
