@@ -29,6 +29,7 @@ dt,
   opacity: var(--permalink-opacity, $opacity);
   transition: opacity 0.2s;
   margin-top: 0 !important;
+  user-select: none;
 }
 
 li > .autopermalink {
