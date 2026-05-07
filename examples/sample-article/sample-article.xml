@@ -15044,6 +15044,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <list-of elements="theorem" scope="section"/>
             </subsection>
 
+            <subsection xml:id="subsection-list-of-definitions" label="subsection-list-of-definitions">
+                <title>Definitions in This Article</title>
+
+                <p>Here is a similar list, but for <c>definition</c> elements across the whole article.  This list also serves as a regression test.  <xref ref="prefigure-diagrams"/> contains a <prefigure/> diagram whose source uses a <c>definition</c> element of its own, in the <prefigure/> XML namespace.  An earlier version of <tag>list-of</tag> matched descendants by local name only, ignoring namespaces, and so would catch <prefigure/> definitions and then fail to produce numbers for them.  The list below correctly contains only the <pretext/> definitions.</p>
+
+                <list-of elements="definition" empty="no"/>
+            </subsection>
+
             <subsection xml:id="subsection-with-an-exercise">
                 <title>A Title with ] a Right Bracket</title>
 
