@@ -4063,7 +4063,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
     if math_format == "kindle":
         css = os.path.join(get_ptx_xsl_path(), "..", "css", "dist", "kindle.css")
         shutil.copy2(css, css_dir)
-    if math_format == "svg":
+    else:
         css = os.path.join(get_ptx_xsl_path(), "..", "css", "dist", "epub.css")
         shutil.copy2(css, css_dir)
 
