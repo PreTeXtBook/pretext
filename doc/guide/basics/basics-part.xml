@@ -239,20 +239,20 @@
           <idx><h>equation</h><h>numbered</h></idx>
     </p>
 
-    <listing xml:id="basics-l-me">
+    <listing xml:id="basics-l-md-bare">
       <title>Displayed equations</title>
       <idx><h><pretext/> code for</h><h>displayed equation</h></idx>
       <idx><h>equation</h><h>displayed</h><h><pretext/> code for</h></idx>
       <program>
-<code><xi:include href="me.ptx" parse="text"/></code>
+<code><xi:include href="md-bare.ptx" parse="text"/></code>
 </program>
     </listing>
 
     <p>
-      The code in <xref ref="basics-l-me"/> produces the following output:
+      The code in <xref ref="basics-l-md-bare"/> produces the following output:
     </p>
 
-    <xi:include href="me.ptx"/>
+    <xi:include href="md-bare.ptx"/>
 
     <p>
       For a collection of equations all aligned at a designated point,
