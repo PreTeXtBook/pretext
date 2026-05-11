@@ -233,7 +233,7 @@
       just wrap things in the <tag>m</tag> tag.
           <idx><h>equation</h><h>in-line</h><h><pretext/> code for</h></idx>
           <idx><h><pretext/> code for</h><h>in-line equation</h></idx>
-      For example, <m>a^2 + b^2 = c^2</m> is produced by <c>&lt;m&gt;a^2 + b^2 = c^2&lt;/m&gt;.</c> We get displayed equations via the <tag>me</tag> and <tag>men</tag> tags; the latter produces a numbered equation.
+      For example, <m>a^2 + b^2 = c^2</m> is produced by <c>&lt;m&gt;a^2 + b^2 = c^2&lt;/m&gt;.</c> We get displayed equations with the <tag>md</tag> tag; setting <attr>number</attr> to <c>yes</c> on the <tag>md</tag> produces a numbered equation.
           <idx><h>mathematics</h><h>environments</h><h>displayed equation</h></idx>
           <idx><h>mathematics</h><h>environments</h><h>in-line equation</h></idx>
           <idx><h>equation</h><h>numbered</h></idx>
@@ -243,8 +243,6 @@
       <title>Displayed equations</title>
       <idx><h><pretext/> code for</h><h>displayed equation</h></idx>
       <idx><h>equation</h><h>displayed</h><h><pretext/> code for</h></idx>
-      <idx><h><pretext/> code for</h><h sortby="me"><tag>me</tag></h></idx>
-      <idx><h sortby="me"><tag>me</tag></h><h><pretext/> code for</h></idx>
       <program>
 <code><xi:include href="me.ptx" parse="text"/></code>
 </program>
@@ -258,7 +256,7 @@
 
     <p>
       For a collection of equations all aligned at a designated point,
-      use <tag>md</tag> and <tag>mrow</tag>. (There's also <tag>mdn</tag> for numbered equations.) <idx><h>mathematics</h><h>environments</h><h>aligned equation</h></idx>
+      use <tag>md</tag> and <tag>mrow</tag>.  Number equations by setting <attr>number</attr> to <c>yes</c> on the <tag>md</tag> (or on individual <tag>mrow</tag> children). <idx><h>mathematics</h><h>environments</h><h>aligned equation</h></idx>
     </p>
 
     <listing xml:id="basics-l-md">
@@ -1560,7 +1558,7 @@
         This is a sample footnote, just so you can see how one looks.
         </fn> For instance,
         you can't put a <tag>p</tag> (and thus you can't put lists) inside a footnote.
-        Also, no displayed math via <tag>me</tag>.
+        Also, no displayed math via <tag>md</tag>.
         There's a lot of care being taken because of the prospect of footnotes inside footnotes inside footnotes.
             <idx><h>footnote</h><h>restrictions</h></idx>
       </p>
