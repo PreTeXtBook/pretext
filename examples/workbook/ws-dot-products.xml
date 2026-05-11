@@ -64,9 +64,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <exercise workspace="1.25in">
                 <introduction>
                     <p>Consider the vector equation
-                    <me>
+                    <md>
                     m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
-                    </me>.</p>
+                    </md>.</p>
                 </introduction>
                 <task>
                     <p>Check that there is no solution <m>m</m> that makes the equation true.</p>

@@ -30,16 +30,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <theorem>
           <title> Ohms Law </title>
           <p> The current through a resistor is proportional to the ratio of the <em> Voltage </em> to the <em> Resistance </em>
-              <me> I = \frac{V}{R} </me>
+              <md> I = \frac{V}{R} </md>
               Or for our purposes
-              <me> I R = V </me>
+              <md> I R = V </md>
           </p>
       </theorem>
 
       <theorem>
           <title>Kirchoffs Current Law</title>
           <p> The sum of the currents in a network meeting at a point is zero.
-              <me> \sum_{k=1}^n I_k = 0 </me>
+              <md> \sum_{k=1}^n I_k = 0 </md>
           </p>
       </theorem>
 
@@ -63,7 +63,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <theorem>
           <title> Kirchoffs Voltage Law </title>
           <p> The sum of the voltages around any closed circuit (or subcircuit) is zero.
-              <me> \sum_{k=1}^n V_k = 0 </me>
+              <md> \sum_{k=1}^n V_k = 0 </md>
           </p>
       </theorem>
 
