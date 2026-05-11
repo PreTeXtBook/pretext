@@ -11306,7 +11306,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:param name="occurrences" />
     <xsl:param name="date-string" />
     <xsl:param name="message" />
-    <xsl:param name="b-bulk" select="false()"/>
+    <!-- "max-reports" caps the per-occurrence location reports.    -->
+    <!-- An empty string (the default) imposes no cap; "0" silences -->
+    <!-- the per-location reports entirely (the count line still    -->
+    <!-- appears); a positive integer caps the number of reports.   -->
+    <xsl:param name="max-reports" select="''"/>
 
     <!-- These apparent re-definitions are local to this template -->
     <!-- Reasons are historical, so to be a convenience           -->
@@ -11340,14 +11344,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <!-- once verbosity is implemented -->
                 <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
             </xsl:message>
-            <!-- Give location reports, except optionally, when the $occurences -->
-            <!-- are so pervasive, squelch a (useless) long list of instances   -->
-            <!-- that nobody would really want to see.                        . -->
-            <xsl:if test="not($b-bulk)">
-                <xsl:for-each select="$occurrences-rtf">
+            <xsl:for-each select="$occurrences-rtf">
+                <xsl:if test="($max-reports = '') or (position() &lt;= number($max-reports))">
                     <xsl:apply-templates select="." mode="location-report" />
-                </xsl:for-each>
-            </xsl:if>
+                </xsl:if>
+            </xsl:for-each>
             <xsl:message>
                 <xsl:text>--------------</xsl:text>
             </xsl:message>
@@ -12126,11 +12127,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'PDF front and back covers via a &quot;docinfo/covers&quot; element has moved to the publication file with some small changes.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2024-07-24 @permid abolished (bulk message added 2025-11-03) -->
+    <!-- 2024-07-24 @permid abolished -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="&quot;$document-root//@permid&quot;"/>
         <xsl:with-param name="date-string" select="'2024-07-24'" />
-        <xsl:with-param name="b-bulk" select="true()" />
+        <xsl:with-param name="max-reports" select="'0'" />
         <xsl:with-param name="message" select="'Experiments using the @permid attribute have concluded, and the attribute is now being ignored.  You can safely remove them all and then this message will stop.'"/>
     </xsl:call-template>
     <!--  -->
@@ -12183,11 +12184,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the temporary &quot;@runestone&quot; attribute was used to temporarily specify a raw HTML version of a Runestone problem.  That device is now obsolete.  The exercise remains, but its contents have been neutered to form an informational message.  Consider authoring the exercise using supported PreTeXt syntax.'"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2025-11-14  bare "mdn" construction was only ever temporary/transitional -->
+    <!-- 2026-05-11  "me" and "men" deprecated in favor of bare "md" -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="&quot;$document-root//mdn[not(mrow)]&quot;" />
-        <xsl:with-param name="date-string" select="'2025-11-14'" />
-        <xsl:with-param name="message" select="'an &quot;mdn&quot; element without any &quot;mrow&quot; children (&quot;bare&quot;) was only implemented briefly and was never supported.  Your instance is being ignored and will not be visible in output.  You can switch it to the supported bare &quot;md&quot; element with a &quot;@number&quot; attribute set to &quot;yes&quot;.'"/>
+        <xsl:with-param name="occurrences" select="&quot;$document-root//me|$document-root//men&quot;" />
+        <xsl:with-param name="date-string" select="'2026-05-11'" />
+        <xsl:with-param name="max-reports" select="'8'" />
+        <xsl:with-param name="message" select="'the &quot;me&quot; and &quot;men&quot; elements have been deprecated.  The replacement is an &quot;md&quot; with no &quot;mrow&quot; children, and numbering is controlled by the &quot;@number&quot; attribute, or a global setting in &quot;docinfo&quot;.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-05-11  "mdn" deprecated in favor of "md" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//mdn&quot;" />
+        <xsl:with-param name="date-string" select="'2026-05-11'" />
+        <xsl:with-param name="max-reports" select="'8'" />
+        <xsl:with-param name="message" select="'the &quot;mdn&quot; element has been deprecated.  The replacement is an &quot;md&quot;, and numbering is controlled by the &quot;@number&quot; attribute, or a global setting in &quot;docinfo&quot;.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>
