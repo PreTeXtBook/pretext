@@ -44,6 +44,10 @@ class SlideRevealer {
     this.triggerElement.addEventListener('click', (e) => this.onClick(e));
   }
 
+  isBusy() {
+    return this.animationState !== SlideRevealer.STATE.INACTIVE || this.animatedElementInlineStyle !== null;
+  }
+
   storeAnimatedElementInlineStyle() {
     if (this.animatedElementInlineStyle !== null) return;
 
@@ -68,6 +72,8 @@ class SlideRevealer {
   onClick(e) {
     // Stop default behavior from the browser
     if (e) e.preventDefault();
+
+    if (this.isBusy()) return;
 
     // Add an overflow on the <details> to avoid content overflowing
     this.storeAnimatedElementInlineStyle();
@@ -209,6 +215,7 @@ class LinkKnowl {
   constructor(knowlLinkElement) {
     this.linkElement = knowlLinkElement;
     this.outputElement = null;
+    this.slideHandler = null;
     this.uid = LinkKnowl.xrefCount++;
     knowlLinkElement.setAttribute("data-knowl-uid", this.uid);
 
@@ -323,21 +330,25 @@ class LinkKnowl {
     // prevent navigation
     event.preventDefault();
 
+    if (this.slideHandler?.isBusy()) {
+      return;
+    }
+
     if (this.outputElement !== null) {
       // output already created, toggle visibility
       this.toggle();
     } else {
       this.createOutputElement();
 
-      const slideHandler = new SlideRevealer(this.linkElement, this.outputElement, this.outputElement);
+      this.slideHandler = new SlideRevealer(this.linkElement, this.outputElement, this.outputElement);
       //slideHandler is now responsible for handling clicks to this element
-      this.linkElement.addEventListener('click', slideHandler);
+      this.linkElement.addEventListener('click', this.slideHandler);
 
       // Wait up to a half second in hopes of avoiding double content change
       // then render to show loading message
       let loadingTimeout = setTimeout(() => {
         loadingTimeout = null;
-        slideHandler.onClick(); //fake initial click
+        this.slideHandler.onClick(); //fake initial click
         this.toggle();
       }, 500);
 
@@ -352,7 +363,7 @@ class LinkKnowl {
           }
           // Now give code that follows .1 seconds to render before making visible
           setTimeout(() => {
-            slideHandler.onClick(); //fake initial click
+            this.slideHandler.onClick(); //fake initial click
             this.toggle();
           }, 100);
 
