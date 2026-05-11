@@ -240,7 +240,7 @@
         <statement>
           <p>
             Consider the equation
-            <me><var name="$quadratic" /> = 0</me>
+            <md><var name="$quadratic" /> = 0</md>
             Identify the coefficients for the quadratic equation using the standard form from
             <xref ref="subsection-the-quadratic-formula" />.
           </p>
@@ -264,7 +264,7 @@
         <statement>
           <p>
             Use the quadratic formula to find the solution set to
-            <me><var name="$quadratic"/>=0</me>
+            <md><var name="$quadratic"/>=0</md>
           </p>
           <p>
             <var name="$solutions" width="30"/>

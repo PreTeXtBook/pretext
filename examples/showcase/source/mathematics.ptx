@@ -42,30 +42,30 @@
       These equations are amusing, although maybe only to mathematicians. Largely taken from
       <url href="https://math.stackexchange.com/questions/505367/surprising-identities-equations" visual="math.stackexchange.com/questions/505367/surprising-identities-equations">math.stackexchange.com</url>.
       <idx><h>mathematics</h><h>displayed equations</h></idx>
-      <me>
+      <md>
         \sqrt[\sqrt{2}]{2}=\sqrt{2}^{\sqrt{2}}
-      </me>
-      <me>
+      </md>
+      <md>
         2592=2^59^2
-      </me>
-      <me>
+      </md>
+      <md>
         \sqrt{2025}=20+25
-      </me>
-      <me>
+      </md>
+      <md>
         \sum_{n=1}^{\infty}\frac{1}{n^n}=\int_{0}^1\frac{1}{x^x}\,dx
-      </me>
-      <me>
+      </md>
+      <md>
         3^3 + 4^4 + 3^3 + 5^5 = 3435
-      </me>
-      <me>
+      </md>
+      <md>
         \int_{-\infty}^{\infty}\frac{\sin x}{x}\,dx=\int_{-\infty}^{\infty}\frac{\sin^2 x}{x^2}\,dx
-      </me>
-      <me>
+      </md>
+      <md>
         \log(1+2+3)=\log(1)+\log(2)+\log(3)
-      </me>
-      <me>
+      </md>
+      <md>
         \int_{0}^{\infty}\frac1{1+x^2}\frac1{1+x^{\pi}}\,dx=\int_{0}^{\infty}\frac1{1+x^2}\frac1{1+x^e}\,dx
-      </me>
+      </md>
     </p>
   </subsection>
 

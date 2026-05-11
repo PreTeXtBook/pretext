@@ -108,9 +108,9 @@
         </exercise>
         <exercise workspace="2in">
           <statement>
-            <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
+            <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <md>
             \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin characters="10"/>
-            </me>.</p>
+            </md>.</p>
           </statement>
         </exercise>
       </sidebyside>
