@@ -275,7 +275,7 @@
                         </hint>
 
                         <solution>
-                            <p><me><var name="$expression"/>=\sqrt{<var name="$b"/>^2\cdot <var name="$a"/>}=<var name="$b"/>\sqrt{<var name="$a"/>}</me></p>
+                            <p><md><var name="$expression"/>=\sqrt{<var name="$b"/>^2\cdot <var name="$a"/>}=<var name="$b"/>\sqrt{<var name="$a"/>}</md></p>
                         </solution>
                     </webwork>
                 </exercise>
@@ -423,7 +423,7 @@ ENDDOCUMENT();
                     <title>Quadratic Formula</title>
 
                     <statement>
-                        <p>Given the second-degree polynomial equation <m>ax^2 + bx + c = 0</m>, where <m>a\neq0</m>, solutions are given by <me>x = \frac{-b\pm\sqrt{b^2-4ac}}{2a}.</me></p>
+                        <p>Given the second-degree polynomial equation <m>ax^2 + bx + c = 0</m>, where <m>a\neq0</m>, solutions are given by <md>x = \frac{-b\pm\sqrt{b^2-4ac}}{2a}.</md></p>
                     </statement>
                     <proof>
                         <p><md>
@@ -517,9 +517,9 @@ ENDDOCUMENT();
                                     You already identified <m>a = <var name="$a"/></m>,
                                     <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>,
                                     so the results are:
-                                    <me>x = <var name="$sol1"/> = <var name="$x1"/></me>
+                                    <md>x = <var name="$sol1"/> = <var name="$x1"/></md>
                                     or
-                                    <me>x = <var name="$sol2"/> = <var name="$x2"/></me>
+                                    <md>x = <var name="$sol2"/> = <var name="$x2"/></md>
                                 </p>
                             </solution>
                         </task>
@@ -638,9 +638,9 @@ ENDDOCUMENT();
                                     You already identified <m>a = <var name="$a"/></m>,
                                     <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>,
                                     so the results are:
-                                    <me>x = <var name="$sol1"/> = <var name="$x1"/></me>
+                                    <md>x = <var name="$sol1"/> = <var name="$x1"/></md>
                                     or
-                                    <me>x = <var name="$sol2"/> = <var name="$x2"/></me>
+                                    <md>x = <var name="$sol2"/> = <var name="$x2"/></md>
                                 </p>
                             </solution>
                         </task>
@@ -715,7 +715,7 @@ ENDDOCUMENT();
                         <title>Antiderivative of a Function</title>
 
                         <statement>
-                            <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <me>F^\prime(x) = f(x).</me>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
+                            <p>Suppose that <m>f(x)</m> and <m>F(x)</m> are two functions such that <md>F^\prime(x) = f(x).</md>  Then we say <m>F</m> is an <term>antiderivative</term> of <m>f</m>.</p>
                         </statement>
                     </definition>
 
@@ -725,7 +725,7 @@ ENDDOCUMENT();
                         <title>The Fundamental Theorem of Calculus</title>
                         <idx>Fundamental Theorem of Calculus</idx>
                         <statement>
-                            <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me></p>
+                            <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <md>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</md></p>
                         </statement>
                         <proof>
                             <p>Left to the reader.</p>
@@ -736,14 +736,14 @@ ENDDOCUMENT();
 
                     <corollary xml:id="corollary-FTC-derivative">
                         <statement>
-                            <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men></p>
+                            <p>Suppose <m>f(x)</m> is a continuous function.  Then <md number="yes" xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</md></p>
                         </statement>
                         <proof xml:id="proof-FTC-corollary">
-                            <p>We simply take the indicated derivative, applying <xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<mdn>
+                            <p>We simply take the indicated derivative, applying <xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" />.<md number="yes">
                                 <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                                 <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
                                 <mrow>&amp;=f(x)-0 = f(x)</mrow>
-                            </mdn></p>
+                            </md></p>
                         </proof>
                     </corollary>
                 </subsection>
@@ -888,15 +888,14 @@ ENDDOCUMENT();
                     <title>Math Elements and Alignment</title>
                     <introduction>
                         <p>
-                            In this exercise we demonstrate the allowed math elements: <tag>m</tag>, <tag>me</tag>, and <tag>md</tag>.
-                            The last of these may have attribute <attr>alignment</attr> with options <c>gather</c>, <c>align</c>, or <c>alignat</c>.
-                            The first two are used by default, depending on if you have <c>&amp;</c> or <c>\amp</c> in your math.
+                            In this exercise we demonstrate the allowed math elements: <tag>m</tag> and <tag>md</tag>.
+                            The latter may have attribute <attr>alignment</attr> with options <c>gather</c>, <c>align</c>, or <c>alignat</c>.
                         </p>
                     </introduction>
                     <webwork>
                         <statement>
                             <p>
-                                If <m>a=5</m> and <m>b=12</m>, then <me>a^2+b^2=13^2</me>.
+                                If <m>a=5</m> and <m>b=12</m>, then <md>a^2+b^2=13^2</md>.
                             </p>
                             <p>
                                 Here, we solve an equation.
@@ -2069,55 +2068,55 @@ ENDDOCUMENT();
 
                             <p><ol>
                                 <li>
-                                    <p><me>1+1=2</me>Structured item</p>
-                                    <p>Second<me>1+1=2</me> paragraph</p>
+                                    <p><md>1+1=2</md>Structured item</p>
+                                    <p>Second<md>1+1=2</md> paragraph</p>
                                 </li>
                                 <li>
                                     <p><ol marker="a">
                                         <li>
-                                            <p>Sublist<me>1+1=2</me> Item</p>
-                                            <p>Second paragraph<me>1+1=2</me></p>
+                                            <p>Sublist<md>1+1=2</md> Item</p>
+                                            <p>Second paragraph<md>1+1=2</md></p>
                                         </li>
                                         <li>
-                                            <p><me>1+1=2</me>Sublist Item</p>
-                                            <p>Second<me>1+1=2</me> paragraph</p>
+                                            <p><md>1+1=2</md>Sublist Item</p>
+                                            <p>Second<md>1+1=2</md> paragraph</p>
                                         </li>
                                         <li>
-                                            <p>Sublist Item<me>1+1=2</me></p>
-                                            <p><me>1+1=2</me>Second paragraph</p>
+                                            <p>Sublist Item<md>1+1=2</md></p>
+                                            <p><md>1+1=2</md>Second paragraph</p>
                                         </li>
                                     </ol></p>
                                 </li>
                                 <li>
-                                    <p>Structured<me>1+1=2</me> item</p>
-                                    <p>Second paragraph<me>1+1=2</me></p>
+                                    <p>Structured<md>1+1=2</md> item</p>
+                                    <p>Second paragraph<md>1+1=2</md></p>
                                 </li>
                             </ol></p>
 
                             <p>Text before.<ol>
                                 <li>
-                                    <p>Structured<me>1+1=2</me> item</p>
-                                    <p>Second paragraph<me>1+1=2</me></p>
+                                    <p>Structured<md>1+1=2</md> item</p>
+                                    <p>Second paragraph<md>1+1=2</md></p>
                                 </li>
                                 <li>
-                                    <p><me>1+1=2</me>Text before.<ol marker="A">
+                                    <p><md>1+1=2</md>Text before.<ol marker="A">
                                         <li>
-                                            <p>Sublist<me>1+1=2</me> Item</p>
-                                            <p>Second paragraph<me>1+1=2</me></p>
+                                            <p>Sublist<md>1+1=2</md> Item</p>
+                                            <p>Second paragraph<md>1+1=2</md></p>
                                         </li>
                                         <li>
-                                            <p><me>1+1=2</me>Sublist Item</p>
-                                            <p>Second<me>1+1=2</me> paragraph</p>
+                                            <p><md>1+1=2</md>Sublist Item</p>
+                                            <p>Second<md>1+1=2</md> paragraph</p>
                                         </li>
                                         <li>
-                                            <p>Sublist Item<me>1+1=2</me></p>
-                                            <p><me>1+1=2</me>Second paragraph</p>
+                                            <p>Sublist Item<md>1+1=2</md></p>
+                                            <p><md>1+1=2</md>Second paragraph</p>
                                         </li>
-                                    </ol>And<me>1+1=2</me> after.</p>
+                                    </ol>And<md>1+1=2</md> after.</p>
                                 </li>
                                 <li>
-                                    <p>Structured item<me>1+1=2</me></p>
-                                    <p><me>1+1=2</me>Second paragraph</p>
+                                    <p>Structured item<md>1+1=2</md></p>
+                                    <p><md>1+1=2</md>Second paragraph</p>
                                 </li>
                             </ol>And after.</p>
 
