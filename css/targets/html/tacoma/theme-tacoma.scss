@@ -19,7 +19,7 @@ $background-color-dark: #23241f !default;
 
 @use 'chunks-minimal' with ($border-radius: 0); 
 
-@use 'components/pretext' with (
+@use 'components/pretext-web' with (
   $navbar-breakpoint: parts.$navbar-breakpoint,
 );
 

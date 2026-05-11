@@ -18,6 +18,8 @@
 .code-display {
   overflow-x: auto;      //scroll if overflowing
   font-family: var(--font-monospace);
+  // code-display appears inside .paras and may need space around it
+  margin: 0.5em 0;
 }
 
 .console,
@@ -69,64 +71,6 @@
   width: 3.0em;
 }
 
-// special handling for code-display as it appears inside .paras
-// and may need space around it
-.code-display {
-  margin: 0.5em 0;
-}
-// if inside clipboardable, move margin to that container and turn some into padding
-// to help make sure clipboard icon is contained inside the code-display in dark mode
-.clipboardable:has(.code-display) {
-  margin: 0.25em 0;
-
-  .code-display {
-    margin: 0;
-    padding: 0.25em 0;
-  }
-}
-
-
-.clipboardable {
-  position: relative;  // To anchor the code-copy button
-  display: flow-root;
-
-  .code-copy {
-    position: absolute;
-    right: 0;
-    top: 0;
-    opacity: 0.25;
-    border-width: 0;
-    background: none;
-    cursor: pointer;
-    z-index: 1;
-    white-space-collapse: collapse;
-    padding: 1px;
-    scale: 0.85;
-
-    &:hover {
-      opacity: 0.7;
-    }
-
-    .checkmark {
-      display: none;
-    }
-
-    &.copied {
-      opacity: 1;
-      color: mediumseagreen;
-      cursor: not-allowed;
-      pointer-events: none;
-
-      .copyicon {
-        display: none;
-      }
-
-      .checkmark {
-        display: inline;
-      }
-    }
-  }
-}
 
 @media print {
   .code-copy {
