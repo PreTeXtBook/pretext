@@ -159,7 +159,7 @@
               that is more likely to be caused by a problem with your <latex /> installation
               than with <pretext />.  It is difficult to make legitimate <pretext />
               that fails to compile; an exception being math markup inside a math element
-              (<tag>m</tag>, <tag>me</tag>, and friends).
+              (<tag>m</tag>, <tag>md</tag>, and friends).
             </p>
 
             <p>
