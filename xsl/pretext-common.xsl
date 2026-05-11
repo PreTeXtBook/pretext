@@ -11307,6 +11307,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:param name="date-string" />
     <xsl:param name="message" />
     <xsl:param name="b-bulk" select="false()"/>
+    <!-- "max-reports" caps the per-occurrence location reports.    -->
+    <!-- An empty string (the default) imposes no cap; "0" silences -->
+    <!-- the per-location reports entirely (the count line still    -->
+    <!-- appears); a positive integer caps the number of reports.   -->
+    <xsl:param name="max-reports" select="''"/>
 
     <!-- These apparent re-definitions are local to this template -->
     <!-- Reasons are historical, so to be a convenience           -->
@@ -11341,7 +11346,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
             </xsl:message>
             <xsl:for-each select="$occurrences-rtf">
-                <xsl:apply-templates select="." mode="location-report" />
+                <xsl:if test="($max-reports = '') or (position() &lt;= number($max-reports))">
+                    <xsl:apply-templates select="." mode="location-report" />
+                </xsl:if>
             </xsl:for-each>
             <xsl:message>
                 <xsl:text>--------------</xsl:text>
