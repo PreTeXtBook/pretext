@@ -360,7 +360,7 @@ systems.
                         <title>Part 1: Identify the coefficients</title>
 
                         <statement>
-                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
+                            <p>Consider the quadratic equation given by <md><var name="$quadratic" /> = 0\text{.}</md>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
 
                             <p><m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/></p>
                         </statement>
@@ -381,7 +381,7 @@ systems.
                         <solution>
                             <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" />.</p>
 
-                            <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></me> or <me>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></me></p>
+                            <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <md>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></md> or <md>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></md></p>
                         </solution>
                     </stage>
                 </webwork>
@@ -523,7 +523,7 @@ systems.
                         <title>Part 1: Identify the coefficients</title>
 
                         <statement>
-                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
+                            <p>Consider the quadratic equation given by <md><var name="$quadratic" /> = 0\text{.}</md>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
 
                             <p><m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/></p>
                         </statement>
@@ -544,7 +544,7 @@ systems.
                         <solution>
                             <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" />.</p>
 
-                            <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></me> or <me>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></me></p>
+                            <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <md>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></md> or <md>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></md></p>
                         </solution>
             </exercise>
 
@@ -805,9 +805,9 @@ systems.
             </exercise>
             <exercise workspace="2in">
               <statement>
-                <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
+                <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <md>
                   \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin characters="10"/>
-                </me>.</p>
+                </md>.</p>
               </statement>
             </exercise>
           </sidebyside>
@@ -833,16 +833,16 @@ systems.
                 <theorem>
                     <title> Ohms Law </title>
                     <p> The current through a resistor is proportional to the ratio of the <em> Voltage </em> to the <em> Resistance </em>
-                        <me> I = \frac{V}{R} </me>
+                        <md> I = \frac{V}{R} </md>
                         Or for our purposes
-                        <me> I R = V </me>
+                        <md> I R = V </md>
                     </p>
                 </theorem>
 
                 <theorem>
                     <title>Kirchoffs Current Law</title>
                     <p> The sum of the currents in a network meeting at a point is zero.
-                        <me> \sum_{k=1}^n I_k = 0 </me>
+                        <md> \sum_{k=1}^n I_k = 0 </md>
                     </p>
                 </theorem>
 
@@ -866,7 +866,7 @@ systems.
                 <theorem>
                     <title> Kirchoffs Voltage Law </title>
                     <p> The sum of the voltages around any closed circuit (or subcircuit) is zero.
-                        <me> \sum_{k=1}^n V_k = 0 </me>
+                        <md> \sum_{k=1}^n V_k = 0 </md>
                     </p>
                 </theorem>
 
@@ -1187,9 +1187,9 @@ Also compute the length of the residual vector.</p>
             <exercise>
                 <introduction>
                     <p>Consider the vector equation
-<me>
+<md>
 m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
-</me>.
+</md>.
 </p>
                 </introduction>
 <task workspace="1in">
