@@ -126,9 +126,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <mrow>p^4 + q^4 &amp;= r^4</mrow>
             </md>.  Adjust to a single displayed equation, but authored as a single <tag>mrow</tag> within a <tag>md</tag>, without alignment:<md>
                 <mrow>r^5 + s^5 = t^5</mrow>
-            </md>.  Plus as an <tag>me</tag>, which cannot have alignment:<me>p^4 + q^4 = r^4</me>.</p>
+            </md>.  Plus as a bare <tag>md</tag>, which cannot have alignment:<md>p^4 + q^4 = r^4</md>.</p>
             <p>And a moderately complicated fraction:
-                <me>\frac{\alpha+1/2}{\beta+\gamma} = \frac{12}{37}</me>
+                <md>\frac{\alpha+1/2}{\beta+\gamma} = \frac{12}{37}</md>
             .</p>
 
         </chapter>
@@ -316,7 +316,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </li>
                 <li>
                     <p>Second item, first paragraph.  All by itself, no more structure. With some display math that the HTML conversion will isolate and provide a "continuation paragraph".
-                        <me>a^2+b^2=c^2</me>
+                        <md>a^2+b^2=c^2</md>
                     And a nonsense sentence so there is something after the math.</p>
                 </li>
                 <li>Third item, but now totally unstructured, just to provide a mix within the list.</li>
@@ -784,7 +784,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <theorem xml:id="pythagorean-theorem">
                 <title>The Pythagorean Theorem</title>
 
-                <p>For a right triangle with side lengths <m>a, b, c</m>, where the side of length <m>c</m> is opposite the right angle, we have<me>a^2 + b^2 = c^2</me>.</p>
+                <p>For a right triangle with side lengths <m>a, b, c</m>, where the side of length <m>c</m> is opposite the right angle, we have<md>a^2 + b^2 = c^2</md>.</p>
             </theorem>
 
             <p>The concluding period of the statement of the theorem will be absorbed into the displayed mathematics in a print version.  For Braille, we want the period to remain detached, so it is rendered as literary text and not with Nemeth Braille.</p>

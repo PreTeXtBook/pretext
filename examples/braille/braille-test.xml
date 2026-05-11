@@ -31,7 +31,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <theorem xml:id="pythagorean-theorem">
             <title>The Pythagorean Theorem</title>
 
-            <p>For a right triangle with side lengths <m>a, b, c</m>, where the side of length <m>c</m> is opposite the right angle, we have<me>a^2 + b^2 = c^2</me>.</p>
+            <p>For a right triangle with side lengths <m>a, b, c</m>, where the side of length <m>c</m> is opposite the right angle, we have<md>a^2 + b^2 = c^2</md>.</p>
         </theorem>
 
         <p>The concluding period of the statement of the theorem will be absorbed into the displayed mathematics in a print version.  For Braille, we want the period to remain detached, so it is rendered as literary text and not with Nemeth Braille.</p>
