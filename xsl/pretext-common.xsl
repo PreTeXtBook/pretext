@@ -11306,7 +11306,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:param name="occurrences" />
     <xsl:param name="date-string" />
     <xsl:param name="message" />
-    <xsl:param name="b-bulk" select="false()"/>
     <!-- "max-reports" caps the per-occurrence location reports.    -->
     <!-- An empty string (the default) imposes no cap; "0" silences -->
     <!-- the per-location reports entirely (the count line still    -->
@@ -12128,11 +12127,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'PDF front and back covers via a &quot;docinfo/covers&quot; element has moved to the publication file with some small changes.  Specification in &quot;docinfo&quot; is now being ignored.'"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2024-07-24 @permid abolished (bulk message added 2025-11-03) -->
+    <!-- 2024-07-24 @permid abolished -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="&quot;$document-root//@permid&quot;"/>
         <xsl:with-param name="date-string" select="'2024-07-24'" />
-        <xsl:with-param name="b-bulk" select="true()" />
+        <xsl:with-param name="max-reports" select="'0'" />
         <xsl:with-param name="message" select="'Experiments using the @permid attribute have concluded, and the attribute is now being ignored.  You can safely remove them all and then this message will stop.'"/>
     </xsl:call-template>
     <!--  -->
