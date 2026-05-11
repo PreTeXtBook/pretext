@@ -36,11 +36,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>Mathematical Induction and Math in a Title <m>A\notsubset B</m></title>
 
         <p>Suppose we wish to show that
-            <me>1 + 2 + \cdots + n = \frac{n(n + 1)}{2}</me>
+            <md>1 + 2 + \cdots + n = \frac{n(n + 1)}{2}</md>
         for any natural number <m>n</m>. This formula is easily  verified for small numbers such as <m>n = 1</m>, 2, 3, or 4, but it is impossible to verify for all natural numbers on a case-by-case basis.  To prove the formula true in general, a more generic method is required.</p>
 
         <p>Suppose we have verified the equation for the first <m>n</m> cases.  We will attempt to show that we can generate the formula for the <m>(n + 1)</m>th case from this knowledge.  The formula is true for <m>n = 1</m> since 
-            <me>1 = \frac{1(1 + 1)}{2}</me>.
+            <md>1 = \frac{1(1 + 1)}{2}</md>.
         If we have verified the first <m>n</m> cases, then<md>
             <mrow>1 + 2 + \cdots + n + (n + 1) &amp; = \frac{n(n + 1)}{2} + n + 1</mrow>
             <mrow>&amp; = \frac{n^2 + 3n + 2}{2}</mrow>
@@ -64,9 +64,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <example xml:id="example-integers-induction-greater-than">
             <title>An Inequality for Powers of <m>2</m></title>
             <p>For all integers <m>n \geq 3</m>, <m>2^n \gt n + 4</m>. Since
-                <me>8 = 2^3 \gt 3 + 4 = 7</me>,
+                <md>8 = 2^3 \gt 3 + 4 = 7</md>,
             the statement is true for <m>n_0 = 3</m>.  Assume that <m>2^k \gt k + 4</m> for <m>k \geq 3</m>.  Then <m>2^{k + 1} = 2 \cdot 2^{k} \gt 2(k + 4)</m>.  But 
-                <me>2(k + 4) = 2k + 8 \gt k + 5 = (k + 1) + 4</me>
+                <md>2(k + 4) = 2k + 8 \gt k + 5 = (k + 1) + 4</md>
             since <m>k</m> is positive.  Hence, by induction, the statement holds for all integers <m>n \geq 3</m>.</p>
         </example>
 
@@ -74,7 +74,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <example xml:id="example-integers-induction-divisible">
             <title>Some Integers Divisible by <m>9</m></title>
             <p>Every integer <m>10^{n + 1} + 3 \cdot 10^n + 5</m> is divisible by 9 for <m>n \in {\mathbb N}</m>.  For <m>n = 1</m>, 
-                <me>10^{1 + 1} + 3 \cdot 10 + 5 = 135 = 9 \cdot 15</me>
+                <md>10^{1 + 1} + 3 \cdot 10 + 5 = 135 = 9 \cdot 15</md>
             is divisible by 9.  Suppose that <m>10^{k + 1} + 3 \cdot 10^k + 5</m> is divisible by 9 for <m>k \geq 1</m>.  Then<md>
                 <mrow>10^{(k + 1) + 1} + 3 \cdot 10^{k + 1} + 5&amp; = 10^{k + 2} + 3 \cdot 10^{k + 1} + 50 - 45</mrow>
                 <mrow>&amp; = 10 (10^{k + 1} + 3 \cdot 10^{k} + 5) - 45</mrow>
@@ -83,7 +83,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <example xml:id="example-integers-binomial-theorem">
             <title>The Binomial Theorem</title>
-            <p>We will prove the binomial theorem using mathematical induction; that is, <me>(a + b)^n = \sum_{k = 0}^{n} \binom{n}{k} a^k b^{n - k}</me>, where <m>a</m> and <m>b</m> are real numbers, <m>n \in \mathbb{N}</m>, and <me>\binom{n}{k} = \frac{n!}{k! (n - k)!}</me> is the binomial coefficient.  We first show that <me>\binom{n + 1}{k} = \binom{n}{k} + \binom{n}{k - 1}</me>. This result follows from<md>
+            <p>We will prove the binomial theorem using mathematical induction; that is, <md>(a + b)^n = \sum_{k = 0}^{n} \binom{n}{k} a^k b^{n - k}</md>, where <m>a</m> and <m>b</m> are real numbers, <m>n \in \mathbb{N}</m>, and <md>\binom{n}{k} = \frac{n!}{k! (n - k)!}</md> is the binomial coefficient.  We first show that <md>\binom{n + 1}{k} = \binom{n}{k} + \binom{n}{k - 1}</md>. This result follows from<md>
                 <mrow>\binom{n}{k} + \binom{n}{k - 1} &amp; = \frac{n!}{k!(n - k)!} +\frac{n!}{(k-1)!(n - k + 1)!}</mrow>
                 <mrow>&amp; = \frac{(n + 1)!}{k!(n + 1 - k)!}</mrow>
                 <mrow>&amp; =\binom{n + 1}{k}</mrow>
@@ -171,20 +171,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <idx><h>Division algorithm</h><h>for integers</h></idx>
                 <statement>
                     <p>Let <m>a</m> and <m>b</m> be integers, with <m>b \gt 0</m>.  Then there exist unique integers <m>q</m> and <m>r</m> such that 
-                        <me>a = bq + r</me>
+                        <md>a = bq + r</md>
                     where <m>0 \leq r \lt b</m>.</p>
                 </statement>
                 <proof>
                     <p>This is a perfect example of the existence-and-uniqueness type of proof.  We must first prove that the numbers <m>q</m> and <m>r</m> actually  exist. Then we must show that if  <m>q'</m> and <m>r'</m> are two other such numbers, then <m>q = q'</m> and <m>r = r'</m>.</p>
 
                     <p><em>Existence of <m>q</m> and <m>r</m>.</em> Let
-                        <me>S = \{ a - bk : k \in {\mathbb Z} \text{ and } a - bk \geq 0 \}</me>.
+                        <md>S = \{ a - bk : k \in {\mathbb Z} \text{ and } a - bk \geq 0 \}</md>.
                     If <m>0 \in S</m>, then <m>b</m> divides <m>a</m>, and  we can let <m>q = a/b</m> and <m>r = 0</m>.  If <m>0 \notin S</m>, we can use the Well-Ordering Principle.  We must first show that <m>S</m> is nonempty.  If <m>a \gt 0</m>, then <m>a - b \cdot 0 \in S</m>. If <m>a \lt 0</m>, then <m>a - b(2a) = a(1 - 2b) \in S</m>.  In either case <m>S \neq \emptyset</m>.  By the Well-Ordering Principle, <m>S</m> must have a smallest member, say <m>r = a - bq</m>. Therefore, <m>a = bq + r</m>, <m>r \geq 0</m>. We now show that <m>r \lt b</m>. Suppose that <m>r \gt b</m>. Then   
-                        <me>a - b(q + 1)= a - bq - b = r - b \gt 0</me>.
+                        <md>a - b(q + 1)= a - bq - b = r - b \gt 0</md>.
                     In this case we would have <m>a - b(q + 1)</m> in the set <m>S</m>. But then <m>a - b(q + 1) \lt a - bq</m>, which would contradict the fact that <m>r = a - bq</m> is the smallest member  of <m>S</m>. So <m>r \leq b</m>.  Since <m>0 \notin S</m>, <m>r \neq b</m> and so <m>r \lt b</m>.</p>
 
                     <p><em>Uniqueness of <m>q</m> and <m>r</m>.</em> Suppose there exist integers <m>r</m>, <m>r'</m>, <m>q</m>, and <m>q'</m> such that
-                        <me>a = bq + r, 0 \leq r \lt b \quad \text{and}\quad a = bq' + r', 0 \leq r' \lt b</me>.
+                        <md>a = bq + r, 0 \leq r \lt b \quad \text{and}\quad a = bq' + r', 0 \leq r' \lt b</md>.
                     Then <m> bq + r =  bq' + r'</m>.  Assume that <m>r' \geq r</m>.  From the last equation we have <m>b(q - q') = r' - r</m>; therefore, <m>b</m> must divide <m>r' - r</m> and <m>0 \leq r'- r \leq r' \lt b</m>.  This is possible only if <m>r' - r = 0</m>.  Hence, <m>r = r'</m> and  <m>q = q'</m>.</p>
                 </proof>
             </theorem>
@@ -194,12 +194,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <theorem xml:id="theorem-integers-gcd">
                 <statement>
                     <p>Let <m>a</m> and <m>b</m> be nonzero integers. Then there exist integers <m>r</m> and <m>s</m> such that
-                        <me>\gcd( a, b) = ar + bs</me>.
+                        <md>\gcd( a, b) = ar + bs</md>.
                     Furthermore, the greatest common divisor of <m>a</m> and <m>b</m> is unique.</p>
                 </statement>
                 <proof>
                     <p>Let
-                        <me>S = \{ am + bn : m, n \in {\mathbb Z} \text{ and } am + bn \gt 0 \}</me>.
+                        <md>S = \{ am + bn : m, n \in {\mathbb Z} \text{ and } am + bn \gt 0 \}</md>.
                     Clearly, the set <m>S</m> is nonempty; hence, by the Well-Ordering Principle <m>S</m> must have a smallest member, say <m>d = ar + bs</m>.  We claim that <m>d = \gcd( a, b)</m>.  Write <m>a = dq + r'</m> where <m>0 \leq r' \lt d</m>. If <m>r' \gt 0</m>, then<md>
                         <!-- r changed to r' - TWJ 1/31/2011 -->
                         <mrow>r'&amp; = a - dq</mrow>
@@ -209,7 +209,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </md>,  which is in <m>S</m>.  But this would contradict the fact that <m>d</m> is the smallest member of <m>S</m>.  Hence, <m>r' = 0</m> and <m>d</m> divides <m>a</m>.  A similar argument shows that <m>d</m> divides <m>b</m>.  Therefore, <m>d</m> is a common divisor of <m>a</m> and <m>b</m>.</p>
 
                     <p>Suppose that <m>d'</m> is another common divisor of <m>a</m> and <m>b</m>, and we want to show that <m>d' \mid d</m>. If we let <m>a = d'h</m> and <m>b = d'k</m>, then
-                        <me>d = ar + bs = d'hr + d'ks = d'(hr + ks)</me>.
+                        <md>d = ar + bs = d'hr + d'ks = d'(hr + ks)</md>.
                     So <m>d'</m> must divide <m>d</m>. Hence, <m>d</m> must be the unique greatest common divisor of <m>a</m> and <m>b</m>.</p>
                 </proof>
                 <!-- Notation error in proof fixed (pointed out by Rocco Rossi) - TWJ 9/13/2010 -->
@@ -285,7 +285,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </statement>
                 <proof>
                     <p>Suppose that <m>p</m> does not divide <m>a</m>.  We must show that <m>p \mid b</m>. Since <m>\gcd( a, p ) = 1</m>, there exist integers <m>r</m> and <m>s</m> such that <m>ar + ps = 1</m>.  So 
-                        <me>b = b(ar + ps) = (ab)r + p(bs)</me>.
+                        <md>b = b(ar + ps) = (ab)r + p(bs)</md>.
                     Since <m>p</m> divides both <m>ab</m> and itself, <m>p</m> must divide <m>b = (ab)r + p(bs)</m>.</p>
                 </proof>
             </lemma>
@@ -308,16 +308,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <idx><h>Fundamental Theorem</h><h>of Arithmetic</h></idx>
                 <statement>
                     <p>Let <m>n</m> be an integer such that <m>n \gt 1</m>. Then
-                        <me>n = p_1 p_2 \cdots p_k</me>,
+                        <md>n = p_1 p_2 \cdots p_k</md>,
                     where <m>p_1, \ldots, p_k</m> are  primes (not necessarily distinct).  Furthermore, this factorization is unique; that is, if 
-                        <me>n = q_1 q_2 \cdots q_l</me>,
+                        <md>n = q_1 q_2 \cdots q_l</md>,
                     then <m>k = l</m> and the <m>q_i</m>'s are just the <m>p_i</m>'s rearranged.</p>
                 </statement>
                 <proof>
                     <p><em>Uniqueness.</em>  To show uniqueness we will use induction on <m>n</m>. The theorem is certainly true for <m>n = 2</m> since in this case <m>n</m> is prime.  Now assume that the result holds for all integers <m>m</m> such that <m>1 \leq m \lt n</m>, and 
-                        <me>n = p_1 p_2 \cdots p_k = q_1 q_2 \cdots q_l</me>,
+                        <md>n = p_1 p_2 \cdots p_k = q_1 q_2 \cdots q_l</md>,
                     where <m>p_1 \leq p_2 \leq \cdots \leq p_k</m> and <m>q_1 \leq q_2 \leq \cdots \leq q_l</m>. By <xref ref="theorem-integers-prime-divisor" />, <m>p_1  \mid  q_i</m> for some <m>i = 1, \ldots, l</m> and <m>q_1  \mid  p_j</m> for some <m>j = 1, \ldots, k</m>.  Since all of the <m>p_i</m>'s and <m>q_i</m>'s are prime, <m>p_1 = q_i</m> and  <m>q_1 = p_j</m>. Hence, <m>p_1 = q_1</m> since <m>p_1 \leq p_j = q_1 \leq q_i = p_1</m>.  By the induction hypothesis, 
-                        <me>n' = p_2 \cdots p_k = q_2 \cdots q_l</me>
+                        <md>n' = p_2 \cdots p_k = q_2 \cdots q_l</md>
                     has a unique factorization.  Hence, <m>k = l</m> and <m>q_i = p_i</m> for <m>i = 1, \ldots, k</m>.</p>
 
                     <p><em>Existence.</em> To show existence, suppose that there is some integer that cannot be written as the product of primes.  Let <m>S</m> be the set of all such numbers.  By the Principle of Well-Ordering, <m>S</m> has a smallest number, say <m>a</m>.  If the only positive factors of <m>a</m> are <m>a</m> and 1, then <m>a</m> is prime, which is a contradiction.  Hence, <m>a = a_1 a_2</m> where <m>1 \lt a_1 \lt a</m> and <m>1 \lt a_2 \lt a</m>.  Neither <m>a_1\in S</m> nor <m>a_2 \in S</m>, since <m>a</m> is the smallest element in <m>S</m>.  So<md>
@@ -325,7 +325,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <mrow>a_2 &amp; = q_1 \cdots q_s</mrow>
                     </md>.</p>
 
-                    <p>Therefore, <me>a = a_1 a_2 = p_1 \cdots p_r q_1 \cdots q_s</me>.  So <m>a \notin S</m>, which is a contradiction.</p>
+                    <p>Therefore, <md>a = a_1 a_2 = p_1 \cdots p_r q_1 \cdots q_s</md>.  So <m>a \notin S</m>, which is a contradiction.</p>
                 </proof>
             </theorem>
 
@@ -335,7 +335,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Historical Note</title>
 
             <p>Prime numbers were first studied by the ancient Greeks.  Two important results from antiquity are Euclid's proof that an infinite number of primes exist and the Sieve of Eratosthenes, a method of computing all of the prime numbers less than a fixed positive integer <m>n</m>.  One problem in number theory is to find a function <m>f</m> such that <m>f(n)</m> is prime for each integer <m>n</m>. Pierre Fermat (1601?<ndash />1665) conjectured that <m>2^{2^n} + 1</m> was prime for all <m>n</m>, but later it was shown by Leonhard Euler (1707<ndash />1783) that 
-                <me>2^{2^5} + 1 = \text{4,294,967,297}</me>
+                <md>2^{2^5} + 1 = \text{4,294,967,297}</md>
             is a composite number. One of the many unproven conjectures about prime numbers is Goldbach's Conjecture.  In a letter to Euler in 1742, Christian Goldbach stated the conjecture that every even integer with the exception of 2 seemed to be the sum of two primes:  <m>4 = 2 + 2</m>, <m>6 = 3 + 3</m>, <m>8 =3 + 5</m>, <m>\ldots</m>.  Although the conjecture has been verified for the numbers up through <m>4 \times 10^{18}</m>, it has yet to be proven in general.  Since prime numbers play an important role in public key cryptography, there is currently a great deal of interest in determining whether or not a large number is prime.</p>
 
             <xi:include href="./sage/integers-info.xml" />
@@ -377,7 +377,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <exercise>
             <statement>
                 <p>Write a computer program that will implement the Euclidean algorithm.  The program should accept two positive integers <m>a</m> and <m>b</m> as input and should output <m>\gcd( a,b)</m> as well as integers <m>r</m> and <m>s</m> such that 
-                    <me>\gcd( a,b) = ra + sb</me>.</p>
+                    <md>\gcd( a,b) = ra + sb</md>.</p>
             </statement>
         </exercise>
 

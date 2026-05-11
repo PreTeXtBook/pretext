@@ -30,7 +30,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="1">
         <statement>
             <p>Prove that
-                <me>1^2 + 2^2 + \cdots + n^2 = \frac{n(n + 1)(2n + 1)}{6}</me>
+                <md>1^2 + 2^2 + \cdots + n^2 = \frac{n(n + 1)(2n + 1)}{6}</md>
             for <m>n \in {\mathbb N}</m>.</p>
         </statement>
         <answer>
@@ -46,7 +46,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="2">
         <statement>
             <p>Prove that
-                <me>1^3 + 2^3 + \cdots + n^3 = \frac{n^2(n + 1)^2}{4}</me>
+                <md>1^3 + 2^3 + \cdots + n^3 = \frac{n^2(n + 1)^2}{4}</md>
             for <m>n \in {\mathbb N}</m>.</p>
         </statement>
 
@@ -65,7 +65,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="4">
         <statement>
             <p>Prove that
-                <me>x + 4x + 7x + \cdots + (3n - 2)x = \frac{n(3n - 1)x}{2}</me>
+                <md>x + 4x + 7x + \cdots + (3n - 2)x = \frac{n(3n - 1)x}{2}</md>
             for <m>n \in {\mathbb N}</m>.</p>
         </statement>
     </exercise>
@@ -85,7 +85,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="7">
         <statement>
             <p>Show that
-                <me>\sqrt[n]{a_1 a_2 \cdots a_n} \leq \frac{1}{n} \sum_{k = 1}^{n} a_k.</me></p>
+                <md>\sqrt[n]{a_1 a_2 \cdots a_n} \leq \frac{1}{n} \sum_{k = 1}^{n} a_k.</md></p>
         </statement>
     </exercise>
 
@@ -98,7 +98,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="9">
         <statement>
             <p>Prove the Leibniz rule for <m>f^{(n)} (x)</m>, where <m>f^{(n)}</m> is the <m>n</m>th derivative of <m>f</m>; that is, show that
-                <me>(fg)^{(n)}(x) = \sum_{k = 0}^{n} \binom{n}{k} f^{(k)}(x) g^{(n - k)}(x).</me></p>
+                <md>(fg)^{(n)}(x) = \sum_{k = 0}^{n} \binom{n}{k} f^{(k)}(x) g^{(n - k)}(x).</md></p>
         </statement>
         <hint>
             <p>Follow the proof in <xref ref="example-integers-binomial-theorem"/>.</p>
@@ -108,7 +108,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="10">
         <statement>
             <p>Prove that
-                <me>\frac{1}{2}+ \frac{1}{6} + \cdots + \frac{1}{n(n + 1)} = \frac{n}{n + 1} </me>
+                <md>\frac{1}{2}+ \frac{1}{6} + \cdots + \frac{1}{n(n + 1)} = \frac{n}{n + 1} </md>
             for <m>n \in {\mathbb N}</m>.</p>
         </statement>
     </exercise>
@@ -132,7 +132,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>Power Sets</title>
         <statement>
             <p>Let <m>X</m> be a set. Define the <term>power set</term> of <m>X</m>, denoted <m>{\mathcal P}(X)</m>, to be the set of all subsets  of <m>X</m>.  <notation><usage><m>\mathcal P(X)</m></usage><description>power set of <m>X</m></description></notation> For example,  
-                <me>{\mathcal P}( \{a, b\} ) = \{ \emptyset, \{a\}, \{b\}, \{a, b\} \}.</me>
+                <md>{\mathcal P}( \{a, b\} ) = \{ \emptyset, \{a\}, \{b\}, \{a, b\} \}.</md>
             For every positive integer <m>n</m>, show that a set with exactly <m>n</m> elements has a power set with exactly <m>2^n</m> elements.</p>
         </statement>
     </exercise>
@@ -175,7 +175,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>Fibonacci Numbers</title>
         <statement>
             <p>The Fibonacci numbers are
-                <me>1, 1, 2, 3, 5, 8, 13, 21, \ldots.</me>
+                <md>1, 1, 2, 3, 5, 8, 13, 21, \ldots.</md>
             We can define them inductively by <m>f_1 = 1</m>, <m>f_2 = 1</m>, and <m>f_{n + 2} = f_{n + 1} + f_n</m> for <m>n \in {\mathbb N}</m>.</p>
             <ol>
                 <li xml:id="fn_ineq"><p>Prove that <m>f_n \lt 2^n</m>.</p></li>
@@ -196,7 +196,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="18">
         <statement>
             <p>Let <m>a</m> and <m>b</m> be integers such that <m>\gcd(a,b) = 1</m>.  Let <m>r</m> and <m>s</m> be integers such that <m>ar + bs =1</m>.  Prove that 
-                <me>\gcd(a,s) = \gcd(r,b) = \gcd(r,s) =  1.</me></p>
+                <md>\gcd(a,s) = \gcd(r,b) = \gcd(r,s) =  1.</md></p>
         </statement>
     </exercise>
 

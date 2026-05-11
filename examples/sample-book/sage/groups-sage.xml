@@ -145,7 +145,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>The symmetries of some geometric shapes are already defined in Sage, albeit with different names.  They are implemented as <q>permutation groups</q> which we will begin to study carefully in Chapter<nbsp />5.</p>
 
-        <p>Sage uses integers to label vertices, starting the count at <c>1</c>, instead of letters.  Elements by default are printed using <q>cycle notation</q> which we will see described carefully in Chapter<nbsp />5.    Here is an example, with both the mathematics and Sage.  For the Sage part, we create the group of symmetries and then create the symmetry <m>\rho_2</m> with coercion, followed by outputting the element in cycle notation.  Then we create just the <em>bottom row</em> of the notation we are using for permutations.  <me>\rho_2=
+        <p>Sage uses integers to label vertices, starting the count at <c>1</c>, instead of letters.  Elements by default are printed using <q>cycle notation</q> which we will see described carefully in Chapter<nbsp />5.    Here is an example, with both the mathematics and Sage.  For the Sage part, we create the group of symmetries and then create the symmetry <m>\rho_2</m> with coercion, followed by outputting the element in cycle notation.  Then we create just the <em>bottom row</em> of the notation we are using for permutations.  <md>\rho_2=
         \begin{pmatrix}<![CDATA[
         A & B & C\\
         C & A & B
@@ -154,7 +154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         \begin{pmatrix}<![CDATA[
         1 & 2 & 3\\
         3 & 1 & 2
-        ]]>\end{pmatrix}</me>
+        ]]>\end{pmatrix}</md>
         </p>
 
         <sage>

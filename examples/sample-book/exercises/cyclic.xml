@@ -182,7 +182,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="14">
         <statement>
             <p>Let
-                <me>A =
+                <md>A =
                 \begin{pmatrix}
                 0 &amp; 1 \\
                 -1 &amp; 0
@@ -192,7 +192,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 \begin{pmatrix}
                 0 &amp; -1 \\
                 1 &amp; -1
-                \end{pmatrix}</me>
+                \end{pmatrix}</md>
             be elements in <m>GL_2( {\mathbb R} )</m>. Show that <m>A</m> and <m>B</m> have finite orders but <m>AB</m> does not.</p>
         </statement>
     </exercise>
@@ -408,7 +408,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="41">
         <statement>
             <p>If <m>z = r( \cos \theta + i \sin \theta)</m> and <m>w = s(\cos \phi + i \sin \phi)</m> are two nonzero complex numbers, show that
-                <me>zw = rs[ \cos( \theta + \phi)  + i \sin( \theta + \phi)].</me></p>
+                <md>zw = rs[ \cos( \theta + \phi)  + i \sin( \theta + \phi)].</md></p>
         </statement>
     </exercise>
 

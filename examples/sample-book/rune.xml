@@ -2692,7 +2692,7 @@ TEST_CASE( "Test the add function" ) {
                     <feedback>
                     <p>
                         Correct! Using the binomial theorem, we get a term containing the monomial <m>x^4y^4</m> by taking two of the first term, and two of the second term in the expansion of <m>(2x+5xy^2)^4</m>, and so this term is equal to
-                        <me>\binom{4}{2} (2x)^2 (5xy^2)^2 = 6 \cdot 2^2 5^2 x^4 y^4 = 600 x^4 y^4</me>.
+                        <md>\binom{4}{2} (2x)^2 (5xy^2)^2 = 6 \cdot 2^2 5^2 x^4 y^4 = 600 x^4 y^4</md>.
                     </p>
                     </feedback>
                 </choice>
@@ -4188,7 +4188,7 @@ TEST_CASE( "Test the add function" ) {
         <exercise label="fillin-math-solve-equation">
             <title>Fill-In, Dynamic Math with Simple Numerical Answer</title>
             <statement>
-                <p>Solve the equation <me><eval obj="theFunction"/>=0</me> to get the value of <m>x</m>.</p>
+                <p>Solve the equation <md><eval obj="theFunction"/>=0</md> to get the value of <m>x</m>.</p>
                 <p><m>x = </m> <fillin width="5" mode="math" ansobj="theAnswer"/></p>
             </statement>
             <solution>
@@ -4290,7 +4290,7 @@ TEST_CASE( "Test the add function" ) {
         <exercise label="fillin-math-decompose-function">
             <title>Fill-In, Dynamic Math with Interdependent Formula Checking</title>
             <statement>
-                <p>Consider the function <me>h(x)=<eval obj="composition"/></me>. Find two nontrivial functions <m>f(x)</m> and <m>g(x)</m> so that <m>h(x) = f(g(x))</m>.</p>
+                <p>Consider the function <md>h(x)=<eval obj="composition"/></md>. Find two nontrivial functions <m>f(x)</m> and <m>g(x)</m> so that <m>h(x) = f(g(x))</m>.</p>
                 <p><m>f(x) = </m> <fillin mode="math" width="15" ansobj="outerFormula" name="fGiven"/> and <m>g(x)=</m> <fillin mode="math" width="15" ansobj="innerFormula" name="gGiven"/></p>
             </statement>
             <solution>

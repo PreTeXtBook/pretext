@@ -248,7 +248,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <exercise number="23">
             <statement>
                 <p>Define a function on the real numbers by
-                    <me>f(x) = \frac{x + 1}{x - 1}.</me>
+                    <md>f(x) = \frac{x + 1}{x - 1}.</md>
                 What are the domain and range of <m>f</m>? What is the inverse of <m>f</m>?  Compute <m>f \circ f^{-1}</m> and <m>f^{-1} \circ f</m>.</p>
             </statement>
             <!-- commented out for testing, so that only even hints, answers, solutions may appear in the "solutions" -->
@@ -263,7 +263,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <ol>
                     <li><p>Prove <m>f( A_1 \cup A_2 ) = f( A_1) \cup f( A_2 )</m>.</p></li>
                     <li><p>Prove <m>f( A_1 \cap A_2 ) \subset f( A_1) \cap f( A_2 )</m>.  Give an example in which equality fails.</p></li>
-                    <li><p>Prove <m>f^{-1}( B_1 \cup B_2 ) = f^{-1}( B_1) \cup f^{-1}(B_2 )</m>, where <me>f^{-1}(B) = \{ x \in X : f(x) \in B \}.</me></p></li>
+                    <li><p>Prove <m>f^{-1}( B_1 \cup B_2 ) = f^{-1}( B_1) \cup f^{-1}(B_2 )</m>, where <md>f^{-1}(B) = \{ x \in X : f(x) \in B \}.</md></p></li>
                     <li><p>Prove <m>f^{-1}( B_1 \cap B_2 ) = f^{-1}( B_1) \cap f^{-1}( B_2 )</m>.</p></li>
                     <li><p>Prove <m>f^{-1}( Y \setminus B_1 ) = X \setminus f^{-1}( B_1)</m>.</p></li>
                 </ol>

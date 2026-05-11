@@ -49,41 +49,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Which of the following multiplication tables defined on the set <m>G = \{ a, b, c, d \}</m> form a group? Support your answer in each case.</p>
         <ol cols="2">
 
-            <li><p><me>\begin{array}{c|cccc}
+            <li><p><md>\begin{array}{c|cccc}
             \circ &amp; a &amp; b &amp; c &amp; d \\
             \hline
             a &amp; a &amp; c &amp; d &amp; a \\
             b &amp; b &amp; b &amp; c &amp; d \\
             c &amp; c &amp; d &amp; a &amp; b \\
             d &amp; d &amp; a &amp; b &amp; c
-            \end{array}</me></p></li>
+            \end{array}</md></p></li>
 
-            <li><p><me>\begin{array}{c|cccc}
+            <li><p><md>\begin{array}{c|cccc}
             \circ &amp; a &amp; b &amp; c &amp; d \\
             \hline
             a &amp; a &amp; b &amp; c &amp; d \\
             b &amp; b &amp; a &amp; d &amp; c \\
             c &amp; c &amp; d &amp; a &amp; b \\
             d &amp; d &amp; c &amp; b &amp; a
-            \end{array}</me></p></li>
+            \end{array}</md></p></li>
 
-            <li><p><me>\begin{array}{c|cccc}
+            <li><p><md>\begin{array}{c|cccc}
             \circ &amp; a &amp; b &amp; c &amp; d \\
             \hline
             a &amp; a &amp; b &amp; c &amp; d \\
             b &amp; b &amp; c &amp; d &amp; a \\
             c &amp; c &amp; d &amp; a &amp; b \\
             d &amp; d &amp; a &amp; b &amp; c
-            \end{array}</me></p></li>
+            \end{array}</md></p></li>
 
-            <li><p><me>\begin{array}{c|cccc}
+            <li><p><md>\begin{array}{c|cccc}
             \circ &amp; a &amp; b &amp; c &amp; d \\
             \hline
             a &amp; a &amp; b &amp; c &amp; d \\
             b &amp; b &amp; a &amp; c &amp; d \\
             c &amp; c &amp; b &amp; a &amp; d \\
             d &amp; d &amp; d &amp; b &amp; c
-            \end{array}</me></p></li>
+            \end{array}</md></p></li>
 
         </ol>
     </statement>
@@ -115,12 +115,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Give a multiplication table for the group <m>U(12)</m>.</p>
         </statement>
         <hint>
-            <p><me>\begin{array}{c|cccc}
+            <p><md>\begin{array}{c|cccc}
                 \cdot &amp; 1  &amp; 5  &amp; 7  &amp; 11 \\
                 \hline
                 1 &amp; 1 &amp; 5 &amp; 7 &amp; 11 \\ 5 &amp; 5 &amp; 1 &amp; 11 &amp; 7 \\
                 7 &amp; 7 &amp; 11 &amp; 1 &amp; 5 \\ 11 &amp; 11 &amp; 7 &amp; 5 &amp; 1
-                \end{array}</me></p>
+                \end{array}</md></p>
             </hint>
     </exercise>
 
@@ -150,14 +150,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="10">
         <statement>
             <p>Prove that the set of matrices of the form
-                <me>\begin{pmatrix}
+                <md>\begin{pmatrix}
                 1 &amp; x &amp; y \\
                 0 &amp; 1 &amp; z \\
                 0 &amp; 0 &amp; 1
-                \end{pmatrix}</me>
+                \end{pmatrix}</md>
             is a group under matrix multiplication.  This group, known as the
             <term>Heisenberg group</term>, is important in quantum physics. Matrix multiplication in the Heisenberg group is defined by  
-                <me>\begin{pmatrix}
+                <md>\begin{pmatrix}
                 1 &amp; x &amp; y \\
                 0 &amp; 1 &amp; z \\
                 0 &amp; 0 &amp; 1
@@ -172,7 +172,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 1 &amp; x+x' &amp; y+y'+xz' \\
                 0 &amp; 1 &amp; z+z' \\
                 0 &amp; 0 &amp; 1
-                \end{pmatrix}.</me></p>
+                \end{pmatrix}.</md></p>
         </statement>
     </exercise>
 
@@ -185,7 +185,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="12">
         <statement>
             <p>Let <m>{\mathbb Z}_2^n = \{ (a_1, a_2, \ldots, a_n) : a_i \in {\mathbb Z}_2 \}</m>. Define a binary operation on <m>{\mathbb Z}_2^n</m> by
-                <me>(a_1, a_2, \ldots, a_n) + (b_1, b_2, \ldots, b_n) = (a_1 + b_1, a_2 + b_2, \ldots, a_n + b_n).</me>
+                <md>(a_1, a_2, \ldots, a_n) + (b_1, b_2, \ldots, b_n) = (a_1 + b_1, a_2 + b_2, \ldots, a_n + b_n).</md>
             Prove that <m>{\mathbb Z}_2^n</m> is a group under this operation. This group is important in algebraic coding theory.</p>
         </statement>
     </exercise>
@@ -235,10 +235,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
         <hint>
             <p>Let
-                <me>\sigma =
+                <md>\sigma =
                 \begin{pmatrix}
                 1 &amp; 2 &amp; \cdots &amp; n \\ a_1 &amp; a_2 &amp; \cdots &amp; a_n
-                \end{pmatrix}</me>
+                \end{pmatrix}</md>
             be in <m>S_n</m>. All of the <m>a_i</m>s must be distinct. There are <m>n</m> ways to choose <m>a_1</m>, <m>n-1</m> ways to choose <m>a_2</m>, <m>\ldots</m>, 2 ways to choose <m>a_{n - 1}</m>, and only one way to choose <m>a_n</m>. Therefore, we can form <m>\sigma</m> in <m>n(n - 1) \cdots 2 \cdot 1 = n!</m> ways.</p>
         </hint>
     </exercise>
@@ -246,7 +246,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="19">
         <statement>
             <p>Show that 
-                <me>0 + a  \equiv a + 0  \equiv a \pmod{ n }</me>
+                <md>0 + a  \equiv a + 0  \equiv a \pmod{ n }</md>
             for all <m>a \in {\mathbb Z}_n</m>.</p>
         </statement>
     </exercise>
@@ -254,14 +254,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="20">
         <statement>
             <p>Prove that there is  a multiplicative identity for the integers modulo <m>n</m>: 
-                <me>a \cdot  1   \equiv  a \pmod{n}.</me></p>
+                <md>a \cdot  1   \equiv  a \pmod{n}.</md></p>
         </statement>
     </exercise>
 
     <exercise number="21">
         <statement>
             <p>For each <m>a \in {\mathbb Z}_n</m> find an element <m>b \in {\mathbb Z}_n</m> such that
-                <me>a + b \equiv b + a  \equiv 0 \pmod{ n}.</me></p>
+                <md>a + b \equiv b + a  \equiv 0 \pmod{ n}.</md></p>
         </statement>
     </exercise>
 
@@ -280,7 +280,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="24">
         <statement>
             <p>Show that multiplication distributes over addition modulo <m>n</m>:
-                <me>a(b  + c)  \equiv ab + ac  \pmod{n}.</me></p>
+                <md>a(b  + c)  \equiv ab + ac  \pmod{n}.</md></p>
         </statement>
     </exercise>
 
@@ -389,10 +389,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <exercise number="40">
         <statement>
-            <p><me>\begin{pmatrix}
+            <p><md>\begin{pmatrix}
                 \cos \theta &amp; -\sin \theta \\
                 \sin \theta &amp; \cos \theta
-                \end{pmatrix}</me>
+                \end{pmatrix}</md>
             where <m>\theta \in {\mathbb R}</m>. Prove that <m>G</m> is a subgroup of <m>SL_2({\mathbb R})</m>.</p>
         </statement>
     </exercise>
@@ -400,7 +400,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="41">
         <statement>
             <p>Prove that
-                <me>G = \{ a + b \sqrt{2} : a, b \in {\mathbb Q} \text{ and } a \text{ and } b \text{ are not both zero} \}</me>
+                <md>G = \{ a + b \sqrt{2} : a, b \in {\mathbb Q} \text{ and } a \text{ and } b \text{ are not both zero} \}</md>
             is a subgroup of <m>{\mathbb R}^{\ast}</m> under the group operation of multiplication.</p>
         </statement>
         <hint>
@@ -411,14 +411,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="42">
         <statement>
             <p>Let <m>G</m> be the group of <m>2 \times 2</m> matrices under addition and
-                <me>H =
+                <md>H =
                 \left\{
                 \begin{pmatrix}
                 a &amp; b \\
                 c &amp; d
                 \end{pmatrix} :
                 a + d = 0
-                \right\}.</me>
+                \right\}.</md>
             Prove that <m>H</m> is a subgroup of <m>G</m>.</p>
         </statement>
     </exercise>
@@ -459,7 +459,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="48">
         <statement>
             <p>Let <m>G</m> be a group and <m>g \in G</m>. Show that
-            <me>Z(G) = \{ x \in G : gx = xg \text{ for all } g \in G \}</me> is a subgroup of <m>G</m>. This subgroup is called the <term>center</term> of <m>G</m>. <notation><usage><m>Z(G)</m></usage><description>the center of a group</description></notation></p>
+            <md>Z(G) = \{ x \in G : gx = xg \text{ for all } g \in G \}</md> is a subgroup of <m>G</m>. This subgroup is called the <term>center</term> of <m>G</m>. <notation><usage><m>Z(G)</m></usage><description>the center of a group</description></notation></p>
         </statement>
     </exercise>
 
@@ -506,7 +506,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <exercise number="53">
         <statement>
             <p>Let <m>H</m> be a subgroup of <m>G</m> and
-                <me>C(H) = \{ g \in G : gh = hg \text{ for all } h \in H \}.</me>
+                <md>C(H) = \{ g \in G : gh = hg \text{ for all } h \in H \}.</md>
             Prove <m>C(H)</m> is a subgroup of <m>G</m>.  This subgroup is called the <term>centralizer</term> of <m>H</m> in <m>G</m>. </p>
         </statement>
     </exercise>
