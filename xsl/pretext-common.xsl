@@ -11340,14 +11340,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <!-- once verbosity is implemented -->
                 <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
             </xsl:message>
-            <!-- Give location reports, except optionally, when the $occurences -->
-            <!-- are so pervasive, squelch a (useless) long list of instances   -->
-            <!-- that nobody would really want to see.                        . -->
-            <xsl:if test="not($b-bulk)">
-                <xsl:for-each select="$occurrences-rtf">
-                    <xsl:apply-templates select="." mode="location-report" />
-                </xsl:for-each>
-            </xsl:if>
+            <xsl:for-each select="$occurrences-rtf">
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:for-each>
             <xsl:message>
                 <xsl:text>--------------</xsl:text>
             </xsl:message>
