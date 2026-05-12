@@ -2666,6 +2666,8 @@ article.theorem-like .emphasis {
 }
 .heading .print-links {
   float: right;
+  position: relative;
+  z-index: 100;
   vertical-align: bottom;
 }
 .heading .print-links .print-link {
