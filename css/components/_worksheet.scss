@@ -6,6 +6,8 @@
 
 .heading .print-links {
   float: right;
+  position: relative;
+  z-index: 100;
   vertical-align: bottom;
   .print-link {
     font-family: var(--font-body);
