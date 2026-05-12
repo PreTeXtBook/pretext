@@ -66,6 +66,7 @@ img.mag_popup {
 }
 
 .mag_popup_container {
+  background: var(--content-background);
   width:100%;
   position:absolute;
   z-index:1001;
