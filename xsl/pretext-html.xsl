@@ -1174,7 +1174,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Not knowlable as a component of bigger things, a      -->
 <!-- pure container.  This is the component of a division. -->
 <!-- Tunnel the duplication flag, drop id if duplicate     -->
-<xsl:template match="introduction[parent::*[&STRUCTURAL-FILTER;]]|conclusion[parent::*[&STRUCTURAL-FILTER;]]">
+<!-- NB: self::page for inside printouts -->
+<xsl:template match="introduction[parent::*[&STRUCTURAL-FILTER; or self::page]]|conclusion[parent::*[&STRUCTURAL-FILTER; or self::page]]">
     <xsl:param name="b-original" select="true()" />
     <!-- newline inserted to encourage formatted output -->
     <xsl:text>&#xa;</xsl:text>
@@ -5505,7 +5506,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Introductions and Conclusions -->
 <!-- As components of blocks.      -->
-<xsl:template match="introduction[not(parent::*[&STRUCTURAL-FILTER;])]|conclusion[not(parent::*[&STRUCTURAL-FILTER;])]">
+<!-- NB: self::page for inside printouts -->
+<xsl:template match="introduction[not(parent::*[&STRUCTURAL-FILTER; or self::page])]|conclusion[not(parent::*[&STRUCTURAL-FILTER; or self::page])]">
     <xsl:param name="b-original" select="true()" />
     <!-- newline inserted to encourage formatted output -->
     <xsl:text>&#xa;</xsl:text>
