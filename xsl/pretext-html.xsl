@@ -520,14 +520,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:if test="self::frontmatter[not(titlepage)]">
                     <xsl:call-template name="frontmatter-title" />
                 </xsl:if>
-                <xsl:apply-templates select="objectives|introduction|titlepage|abstract" />
+                <xsl:apply-templates select="objectives|introduction|titlepage|abstract">
+                    <xsl:with-param name="heading-level" select="3"/>
+                </xsl:apply-templates>
                 <!-- Links to subsidiary divisions, as a group of button/hyperlinks -->
                 <nav class="summary-links">
                     <ul>
                         <xsl:apply-templates select="*" mode="summary-nav" />
                     </ul>
                 </nav>
-                <xsl:apply-templates select="conclusion|outcomes"/>
+                <xsl:apply-templates select="conclusion|outcomes">
+                    <xsl:with-param name="heading-level" select="3"/>
+                </xsl:apply-templates>
                 <!-- Insert permalink -->
                 <xsl:apply-templates select="." mode="permalink"/>
             </section>
@@ -1177,6 +1181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: self::page for inside printouts -->
 <xsl:template match="introduction[parent::*[&STRUCTURAL-FILTER; or self::page]]|conclusion[parent::*[&STRUCTURAL-FILTER; or self::page]]">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <!-- newline inserted to encourage formatted output -->
     <xsl:text>&#xa;</xsl:text>
     <section>
@@ -1189,6 +1194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:if test="title">
             <xsl:apply-templates select="." mode="heading-generic">
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="heading-title">
                     <xsl:apply-templates select="." mode="title-full" />
                     <span> </span>
@@ -1197,6 +1203,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates select="*">
             <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </section>
 </xsl:template>
@@ -1806,6 +1813,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:with-param name="block-type" select="'xref'" />
                             <xsl:with-param name="b-original" select="false()" />
                             <xsl:with-param name="b-top-level" select="true()" />
+                            <xsl:with-param name="heading-level" select="2"/>
                         </xsl:apply-templates>
                     </xsl:when>
                     <xsl:otherwise>
@@ -1813,6 +1821,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:with-param name="block-type" select="'xref'" />
                             <xsl:with-param name="b-original" select="false()" />
                             <xsl:with-param name="b-top-level" select="true()" />
+                            <xsl:with-param name="heading-level" select="2"/>
                         </xsl:apply-templates>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -1922,43 +1931,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- These are convenience methods for frequently-used headings -->
 
-<!-- heading level for when something needs an hN                       -->
-<!-- count structural ancestors, which all have an hN                   -->
-<!-- subtract the chunk level for those ancestors not on the page       -->
-<!-- subtract 1 more if chunk level is 0, since we quash overall title  -->
-<!-- subtract the backmatter and frontmatter                            -->
-<!-- add block ancestors that definitely have an hN                     -->
-<!-- but subtract 1 for a hint|answer|solution because the statement is -->
-<!--   not an HTML heading ancestor                                     -->
-<!-- also subtract 1 for a PROOF-LIKE inside a THEOREM-LIKE             -->
-<!-- add block ancestors that have an hN if they had a @title           -->
-<!-- add 1 for the overall h1                                           -->
-<!-- add 1 for the section itself                                       -->
+<!-- Emit the "hN" tag name for a heading element.  Every caller is -->
+<!-- expected to thread a $heading-level parameter through from the -->
+<!-- chunk-template starting point (currently 2, accounting for the -->
+<!-- masthead h1) via "body", "wrapped-content", and the various    -->
+<!-- heading-* helper templates.                                    -->
 <xsl:template match="*" mode="hN">
     <xsl:param name="heading-level" />
-    <xsl:variable name="chunk-level-zero-adjustment">
-        <xsl:choose>
-            <xsl:when test="$chunk-level = 0">1</xsl:when>
-            <xsl:otherwise>0</xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
     <xsl:variable name="actual-heading-level">
         <xsl:choose>
             <xsl:when test="$heading-level">
                 <xsl:value-of select="$heading-level"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="
-                    count(ancestor::*[&STRUCTURAL-FILTER;])
-                    - $chunk-level
-                    - $chunk-level-zero-adjustment
-                    - count(ancestor::*[self::backmatter or self::frontmatter])
-                    + count(ancestor::*[&DEFINITION-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &OPENPROBLEM-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &GOAL-FILTER; or self:: subexercises or self::exercise or self::task or self::exercisegroup])
-                    - count(self::answer|self::hint|self::solution)
-                    - count(self::*[&INNER-PROOF-FILTER;])
-                    + count(ancestor::*[&ASIDE-FILTER; or self::introduction or self::conclusion or self::paragraphs or self::li][title])
-                    + 2
-                "/>
+                <!-- Reaching this branch is a BUG: every caller of    -->
+                <!-- mode="hN" should now thread a $heading-level      -->
+                <!-- parameter down through "body", "wrapped-content", -->
+                <!-- and the various heading-* templates.  If you see  -->
+                <!-- this message, locate the apply-templates chain    -->
+                <!-- that omitted the parameter and add it.            -->
+                <xsl:message>PTX:BUG:     "hN" template reached without a $heading-level parameter on element &lt;<xsl:value-of select="local-name(.)"/>&gt; at <xsl:for-each select="ancestor::*"><xsl:value-of select="local-name(.)"/><xsl:text>/</xsl:text></xsl:for-each><xsl:value-of select="local-name(.)"/>; defaulting to h2</xsl:message>
+                <xsl:text>2</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -2135,7 +2128,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hN, no type name, serial number, title (if exists) -->
 <!-- divisional exercise, principally when born         -->
 <xsl:template match="*" mode="heading-divisional-exercise-serial">
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
             <span class="codenumber">
                 <xsl:apply-templates select="." mode="serial-number" />
@@ -2154,7 +2149,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hN, type name, serial number, title (if exists) -->
 <!-- exercise (divisional, xref-content)      -->
 <xsl:template match="*" mode="heading-divisional-exercise-typed">
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
             <span class="type">
                 <xsl:apply-templates select="." mode="type-name" />
@@ -2177,7 +2174,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hN, no type name, just simple list number, no title -->
 <!-- task (when born) -->
 <xsl:template match="*" mode="heading-list-number">
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
             <span class="codenumber">
                 <xsl:text>(</xsl:text>
@@ -2199,7 +2198,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: rather specific to "objectives" and "outcomes", careful               -->
 <!-- objectives and outcomes (when born) -->
 <xsl:template match="*" mode="heading-full-implicit-number">
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
             <span class="type">
                 <xsl:apply-templates select="." mode="type-name" />
@@ -2225,7 +2226,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: no punctuation, intended only for xref knowl content     -->
 <!-- blockquote, exercisegroup, defined term -->
 <xsl:template match="*" mode="heading-type">
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
             <span class="type">
                 <xsl:apply-templates select="." mode="type-name" />
@@ -2237,7 +2240,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A title or the type, with a period   -->
 <!-- PROOF-LIKE. interactive/instructions -->
 <xsl:template match="&PROOF-LIKE;|interactive/instructions" mode="heading-no-number">
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
             <xsl:choose>
                 <xsl:when test="title">
@@ -2290,8 +2295,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- No title, then nothing happens -->
 <!-- TODO: titles will be mandatory sometime -->
 <xsl:template match="*" mode="heading-title-paragraphs">
+    <xsl:param name="heading-level"/>
     <xsl:if test="title/*|title/text()">
         <xsl:apply-templates select="." mode="heading-generic">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
             <xsl:with-param name="heading-title">
                 <span class="title">
                     <xsl:apply-templates select="." mode="title-full" />
@@ -2342,7 +2349,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A title or the type, with a period, and an optional number -->
 <!-- &SOLUTION-LIKE;, when unknowled, is the only known case    -->
 <xsl:template match="*" mode="heading-non-singleton-number">
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
             <xsl:choose>
                 <xsl:when test="title">
@@ -2398,7 +2407,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- case -->
 <xsl:template match="*" mode="heading-case">
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
             <!-- optional direction, given by attribute -->
             <xsl:apply-templates select="." mode="case-direction" />
@@ -2553,6 +2564,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|md[mrow]|fragment">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -2561,6 +2573,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$hidden = 'true'">
             <xsl:apply-templates select="." mode="born-hidden">
                 <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:when>
         <!-- born-visible case -->
@@ -2568,6 +2581,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- pass-thru of b-original mandatory -->
             <xsl:apply-templates select="." mode="born-visible">
                 <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
@@ -2575,14 +2589,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="born-visible">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="body">
         <xsl:with-param name="block-type" select="'visible'" />
         <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="*" mode="born-hidden">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
 
     <!-- newline inserted to encourage formatted output -->
     <xsl:text>&#xa;</xsl:text>
@@ -2600,7 +2617,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <!-- the clickable that is visible on the page -->
         <summary class="knowl__link">
-           <xsl:apply-templates select="." mode="heading-birth" />
+           <xsl:apply-templates select="." mode="heading-birth">
+               <xsl:with-param name="heading-level" select="$heading-level"/>
+           </xsl:apply-templates>
         </summary>
         <!-- the content of the knowl, to be revealed later        -->
         <!-- NB: the Javascript controlling the animation of the   -->
@@ -2610,6 +2629,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="body">
             <xsl:with-param name="block-type" select="'hidden'" />
             <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </details>
 </xsl:template>
@@ -2671,12 +2691,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&REMARK-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&REMARK-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template  -->
@@ -2687,10 +2713,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&REMARK-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -2716,12 +2744,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&COMPUTATION-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&COMPUTATION-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template  -->
@@ -2732,10 +2766,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&COMPUTATION-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -2762,12 +2798,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&OPENPROBLEM-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&OPENPROBLEM-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template  -->
@@ -2785,6 +2827,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&OPENPROBLEM-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <xsl:choose>
         <!-- structured by "task" so let templates for tasks work -->
@@ -2793,6 +2836,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="introduction|task|conclusion">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:when>
         <!-- structured with "statement" and DISCUSSION-LIKE  -->
@@ -2801,6 +2845,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="statement|&DISCUSSION-LIKE;">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
@@ -2828,12 +2873,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&DEFINITION-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&DEFINITION-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template  -->
@@ -2844,10 +2895,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&DEFINITION-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -2873,12 +2926,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&ASIDE-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-full-implicit-number" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full-implicit-number">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&ASIDE-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full-implicit-number" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full-implicit-number">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -2889,11 +2948,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&ASIDE-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <!-- Coordinate with schema, since we enforce it here -->
     <xsl:apply-templates select="p|blockquote|pre|image|video|program|console|tabular">
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -2921,12 +2982,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="poem" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-title" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-title">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="poem" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-title" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-title">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -2934,6 +3001,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="poem" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="stanza" >
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
@@ -3087,6 +3155,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Handle "caption" exceptionally               -->
 <xsl:template match="&FIGURE-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
 
     <!-- Subnumbered caption/title go below, to help with alignment -->
     <xsl:variable name="fig-placement">
@@ -3098,6 +3167,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="self::figure">
             <xsl:apply-templates select="*">
                 <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
             <xsl:apply-templates select="." mode="figure-caption">
                 <xsl:with-param name="b-original" select="$b-original"/>
@@ -3113,6 +3183,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="listing__contents">
                 <xsl:apply-templates select="program|console">
                     <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
                 </xsl:apply-templates>
             </div>
             <xsl:if test="$b-place-title-below">
@@ -3131,6 +3202,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <xsl:apply-templates select="tabular">
                 <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
             <xsl:if test="$b-place-title-below">
                 <xsl:apply-templates select="." mode="figure-caption">
@@ -3148,6 +3220,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="named-list-content">
                 <xsl:apply-templates select="introduction|ol|ul|dl|conclusion">
                     <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
                 </xsl:apply-templates>
             </div>
             <xsl:if test="$b-place-title-below">
@@ -3181,12 +3254,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="assemblage" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-title" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-title">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="assemblage" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-title" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-title">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template    -->
@@ -3196,9 +3275,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in the side-by-side                           -->
 <xsl:template match="assemblage" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <!-- Coordinate with schema, since we enforce it here -->
     <xsl:apply-templates select="p|blockquote|pre|image|video|program|console|tabular|sidebyside|sbsgroup" >
         <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -3228,7 +3309,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="blockquote" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-type" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-type">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -3236,8 +3320,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="blockquote" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -3262,12 +3348,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="paragraphs" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-title-paragraphs" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-title-paragraphs">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="paragraphs" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-title-paragraphs" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-title-paragraphs">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -3275,8 +3367,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="paragraphs" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -3305,12 +3399,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&GOAL-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-full-implicit-number" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full-implicit-number">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&GOAL-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template        -->
@@ -3318,8 +3418,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, with partial restriction -->
 <xsl:template match="&GOAL-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="introduction|ol|ul|dl|conclusion" >
         <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -3364,12 +3466,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&EXAMPLE-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&EXAMPLE-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template  -->
@@ -3380,6 +3488,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&EXAMPLE-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <xsl:choose>
         <!-- structured by "task" so let templates for tasks work -->
@@ -3388,6 +3497,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="introduction|task|conclusion">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:when>
         <!-- structured with "statement" and SOLUTION-LIKE, -->
@@ -3396,6 +3506,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-has-statement" select="true()"/>
                 <xsl:with-param name="b-has-hint"      select="true()"/>
                 <xsl:with-param name="b-has-answer"    select="true()"/>
@@ -3428,7 +3539,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
 <xsl:template match="subexercises" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-title"/>
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-title">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
@@ -3441,14 +3555,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Mirror changes here into "solutions" below   -->
 <xsl:template match="subexercises" mode="wrapped-content">
     <xsl:param name="b-original" select="true()"/>
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="introduction">
         <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
     <xsl:apply-templates select="exercise|exercisegroup">
         <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
     <xsl:apply-templates select="conclusion">
         <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -3522,12 +3640,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
 <xsl:template match="exercisegroup" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-title" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-title">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="exercisegroup" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -3536,8 +3660,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Mirror changes here into "solutions" below   -->
 <xsl:template match="exercisegroup" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="introduction">
         <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
     <div>
         <xsl:attribute name="class">
@@ -3553,10 +3679,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:apply-templates select="exercise">
             <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </div>
     <xsl:apply-templates select="conclusion">
         <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -3681,10 +3809,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Heading for interior of xref-knowl content  -->
 <!-- Note match first on inline, then divisional -->
 <xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 <xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-divisional-exercise-typed" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-divisional-exercise-typed">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- An "exercise" or PROJECT-LIKE authored with a "webwork" element -->
@@ -3729,6 +3863,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <xsl:choose>
         <!-- webwork case -->
@@ -3741,12 +3876,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="myopenmath">
             <xsl:apply-templates select="introduction|myopenmath|conclusion">
                 <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:when>
         <!-- STACK case -->
         <xsl:when test="stack">
             <xsl:apply-templates select="introduction|stack|conclusion">
                 <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:when>
         <!-- structured by "task" so let templates for tasks work -->
@@ -3763,12 +3900,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:choose>
                 <xsl:when test="$b-tabbed-tasks">
                     <!-- Use tabbed viewer from Runestone Components -->
-                    <xsl:apply-templates select="."  mode="tabbed-tasks"/>
+                    <xsl:apply-templates select="."  mode="tabbed-tasks">
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
+                    </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="introduction|task|conclusion">
                         <xsl:with-param name="b-original" select="$b-original"/>
                         <xsl:with-param name="block-type" select="$block-type"/>
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
                     </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
@@ -3784,6 +3924,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer" />
@@ -3794,6 +3935,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="ancestor::exercises">
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-divisional-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-divisional-answer" />
@@ -3804,6 +3946,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="ancestor::worksheet">
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-worksheet-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-worksheet-answer" />
@@ -3814,6 +3957,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="ancestor::reading-questions">
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-reading-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-reading-answer" />
@@ -3861,7 +4005,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&PROJECT-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template  -->
@@ -3878,6 +4025,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&PROJECT-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <xsl:choose>
         <!-- webwork case -->
@@ -3895,12 +4043,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:choose>
                 <xsl:when test="$b-html-tabbed-tasks-project">
                     <!-- Use tabbed viewer from Runestone Components -->
-                    <xsl:apply-templates select="."  mode="tabbed-tasks"/>
+                    <xsl:apply-templates select="."  mode="tabbed-tasks">
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
+                    </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="introduction|task|conclusion">
                         <xsl:with-param name="b-original" select="$b-original"/>
                         <xsl:with-param name="block-type" select="$block-type"/>
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
                     </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
@@ -3909,6 +4060,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-project-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-project-answer" />
@@ -3966,6 +4118,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$b-has-statement">
                         <xsl:apply-templates select="introduction">
                             <xsl:with-param name="b-original" select="false()" />
+                            <xsl:with-param name="heading-level" select="$heading-level"/>
                         </xsl:apply-templates>
                     </xsl:if>
                     <xsl:apply-templates select="task" mode="solutions">
@@ -3979,6 +4132,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$b-has-statement">
                         <xsl:apply-templates select="conclusion">
                             <xsl:with-param name="b-original" select="false()" />
+                            <xsl:with-param name="heading-level" select="$heading-level"/>
                         </xsl:apply-templates>
                     </xsl:if>
                 </xsl:when>
@@ -3986,10 +4140,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$b-has-statement">
                         <xsl:apply-templates select="webwork-reps/static/introduction">
                             <xsl:with-param name="b-original" select="false()" />
+                            <xsl:with-param name="heading-level" select="$heading-level"/>
                         </xsl:apply-templates>
                     </xsl:if>
                     <xsl:apply-templates select="webwork-reps/static/task" mode="solutions">
                         <xsl:with-param name="b-original" select="false()" />
+                        <xsl:with-param name="heading-level"   select="$heading-level + 1"/>
                         <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                         <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                         <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -3998,6 +4154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$b-has-statement">
                         <xsl:apply-templates select="webwork-reps/static/conclusion">
                             <xsl:with-param name="b-original" select="false()" />
+                            <xsl:with-param name="heading-level" select="$heading-level"/>
                         </xsl:apply-templates>
                     </xsl:if>
                 </xsl:when>
@@ -4005,6 +4162,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="webwork-reps/static/stage">
                     <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components">
                         <xsl:with-param name="b-original" select="false()" />
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
                         <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                         <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                         <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -4015,6 +4173,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="webwork-reps/static">
                     <xsl:apply-templates select="webwork-reps/static" mode="exercise-components">
                         <xsl:with-param name="b-original" select="false()" />
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
                         <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                         <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                         <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -4024,6 +4183,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:otherwise>
                     <xsl:apply-templates select="."  mode="exercise-components">
                         <xsl:with-param name="b-original" select="false()" />
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
                         <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                         <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                         <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -4056,12 +4216,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="task" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-list-number" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-list-number">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="task" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -4073,6 +4239,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="task" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <!-- There are two types of "task".  Those in "exercise", PROJECT-LIKE, -->
     <!-- or EXAMPLE-LIKE, have appendages that are SOLUTION-LIKE, with      -->
@@ -4088,6 +4255,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="introduction|task|conclusion">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:when>
         <!-- then terminal task, may have DISCUSSION-LIKE to display -->
@@ -4096,6 +4264,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="statement|&DISCUSSION-LIKE;">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:when>
         <!-- then terminal task, may have solutions to optionally display -->
@@ -4157,6 +4326,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -4198,6 +4368,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$b-has-statement">
                         <xsl:apply-templates select="introduction">
                             <xsl:with-param name="b-original" select="false()" />
+                            <xsl:with-param name="heading-level" select="$heading-level"/>
                         </xsl:apply-templates>
                     </xsl:if>
                     <xsl:apply-templates select="task" mode="solutions">
@@ -4210,12 +4381,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$b-has-statement">
                         <xsl:apply-templates select="conclusion">
                             <xsl:with-param name="b-original" select="false()" />
+                            <xsl:with-param name="heading-level" select="$heading-level"/>
                         </xsl:apply-templates>
                     </xsl:if>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="."  mode="exercise-components">
                         <xsl:with-param name="b-original" select="false()" />
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
                         <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                         <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                         <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -4256,9 +4429,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&SOLUTION-LIKE;" mode="heading-birth">
+    <xsl:param name="heading-level"/>
     <xsl:choose>
         <xsl:when test="($knowl-example-solution = 'no') and ancestor::*[&EXAMPLE-FILTER;]">
-            <xsl:apply-templates select="." mode="heading-non-singleton-number"/>
+            <xsl:apply-templates select="." mode="heading-non-singleton-number">
+                <xsl:with-param name="heading-level" select="$heading-level"/>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="heading-simple"/>
@@ -4268,7 +4444,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&SOLUTION-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -4279,10 +4458,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&SOLUTION-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -4308,12 +4489,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&DISCUSSION-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-full"/>
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&DISCUSSION-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -4324,16 +4511,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&DISCUSSION-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="exercise|&PROJECT-LIKE;|task|&EXAMPLE-LIKE;|webwork-reps/static|webwork-reps/static/task|webwork-reps/static/stage" mode="exercise-components">
     <xsl:param name="b-original"/>
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
@@ -4377,6 +4567,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="solutions-div">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
                 <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
@@ -4392,6 +4583,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="solutions-div">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
             </xsl:apply-templates>
         </xsl:when>
@@ -4402,11 +4594,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="statement">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="block-type" select="$block-type"/>
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
                 </xsl:apply-templates>
             </xsl:if>
             <xsl:apply-templates select="." mode="solutions-div">
                 <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="block-type" select="$block-type"/>
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
                 <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
@@ -4420,6 +4614,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="*">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="block-type" select="$block-type"/>
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
                 </xsl:apply-templates>
                 <!-- no separator, since no trailing components -->
             </xsl:if>
@@ -4436,6 +4631,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="solutions-div">
     <xsl:param name="b-original"/>
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
     <!-- no "statement" here -->
     <xsl:param name="b-has-hint"/>
     <xsl:param name="b-has-answer"/>
@@ -4449,18 +4645,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="hint">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="block-type" select="$block-type"/>
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
                 </xsl:apply-templates>
             </xsl:if>
             <xsl:if test="$b-has-answer">
                 <xsl:apply-templates select="answer">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="block-type" select="$block-type"/>
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
                 </xsl:apply-templates>
             </xsl:if>
             <xsl:if test="$b-has-solution">
                 <xsl:apply-templates select="solution">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="block-type" select="$block-type"/>
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
                 </xsl:apply-templates>
             </xsl:if>
         </xsl:variable>
@@ -4528,12 +4727,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template  -->
@@ -4544,11 +4749,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <!-- Alternative: Locate first "PROOF-LIKE", select only preceding:: ? -->
     <xsl:apply-templates select="*[not(&PROOF-FILTER;)]" >
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -4583,18 +4790,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- When born use this heading -->
 <!-- Optionally titled          -->
 <xsl:template match="&PROOF-LIKE;" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-no-number"/>
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-no-number">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <!-- Optionally titled                          -->
 <xsl:template match="&PROOF-LIKE;" mode="heading-xref-knowl">
+    <xsl:param name="heading-level"/>
     <xsl:choose>
         <xsl:when test="title">
-            <xsl:apply-templates select="." mode="heading-title" />
+            <xsl:apply-templates select="." mode="heading-title">
+                <xsl:with-param name="heading-level" select="$heading-level"/>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="." mode="heading-type" />
+            <xsl:apply-templates select="." mode="heading-type">
+                <xsl:with-param name="heading-level" select="$heading-level"/>
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4608,10 +4823,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&PROOF-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -4637,12 +4854,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this specialized heading -->
 <xsl:template match="case" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-case" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-case">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="case" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-case" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-case">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -4650,8 +4873,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="case" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="*">
         <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -4690,7 +4915,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="fn" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -4785,11 +5013,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="gi" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:choose>
         <xsl:when test="$block-type = 'xref'">
             <article class="li">
                 <!-- "title" of item is replicated in heading -->
-                <xsl:apply-templates select="." mode="heading-xref-knowl" />
+                <xsl:apply-templates select="." mode="heading-xref-knowl">
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
+                </xsl:apply-templates>
                 <!-- a run of paragraphs, conceivably, title is killed -->
                 <xsl:apply-templates select="*">
                     <xsl:with-param name="b-original" select="$b-original" />
@@ -4917,15 +5148,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-simple" />
 </xsl:template>
 <xsl:template match="interactive/instructions" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-no-number" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-no-number">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="biblio/note" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 <xsl:template match="interactive/instructions" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-no-number" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-no-number">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 
@@ -4935,8 +5175,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Schema says just paragraphs, "p"             -->
 <xsl:template match="biblio/note|interactive/instructions" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="p" >
         <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -4961,7 +5203,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="fragment" mode="heading-birth">
+    <xsl:param name="heading-level"/>
     <xsl:apply-templates select="." mode="heading-generic">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
             <xsl:call-template name="langle-character"/>
             <xsl:apply-templates select="." mode="number"/>
@@ -4981,7 +5225,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="fragment" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Primary content of generic "body" template -->
@@ -5005,6 +5252,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|fragment" mode="body">
     <xsl:param name="b-original" select="true()"/>
     <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
 
     <!-- prelude beforehand, when original -->
     <xsl:if test="$b-original">
@@ -5031,11 +5279,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <!-- If visible, heading interior to article -->
         <xsl:if test="$block-type = 'visible'">
-            <xsl:apply-templates select="." mode="heading-birth" />
+            <xsl:apply-templates select="." mode="heading-birth">
+                <xsl:with-param name="heading-level" select="$heading-level"/>
+            </xsl:apply-templates>
         </xsl:if>
         <!-- If xref-knowl, heading interior to article -->
         <xsl:if test="$block-type = 'xref'">
-            <xsl:apply-templates select="." mode="heading-xref-knowl" />
+            <xsl:apply-templates select="." mode="heading-xref-knowl">
+                <xsl:with-param name="heading-level" select="$heading-level"/>
+            </xsl:apply-templates>
         </xsl:if>
         <!-- After the heading, and before the actual guts, we      -->
         <!-- sometimes annotate with the source                     -->
@@ -5048,9 +5300,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="view-source-widget"/>
         <!-- Then actual content, respecting b-original flag  -->
         <!-- Pass $block-type for Sage cells to know environs -->
+        <!-- Increment heading-level for descendant blocks    -->
         <xsl:apply-templates select="." mode="wrapped-content">
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="block-type" select="$block-type" />
+            <xsl:with-param name="heading-level" select="$heading-level + 1"/>
         </xsl:apply-templates>
         <!-- Apply workspace div (but not in project, exercises or tasks, -->
         <!-- since they get them applied in their exercise-content        -->
@@ -5073,6 +5327,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="(&THEOREM-FILTER;)">
         <xsl:apply-templates select="&PROOF-LIKE;">
             <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </xsl:if>
     <!-- postlude afterward, when original -->
@@ -5111,15 +5366,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="p" mode="heading-birth" />
 
 <xsl:template match="p" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-type" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-type">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Paragraphs, without lists within   -->
 <xsl:template match="p" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:if test="$block-type = 'xref'">
-        <xsl:apply-templates select="." mode="heading-xref-knowl" />
+        <xsl:apply-templates select="." mode="heading-xref-knowl">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
     </xsl:if>
     <!-- newline inserted to encourage formatted output -->
     <xsl:text>&#xa;</xsl:text>
@@ -5135,6 +5396,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
         <!-- Insert workspace (will only apply to p inside worksheet or handout) -->
         <xsl:apply-templates select="." mode="workspace"/>
@@ -5152,8 +5414,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="p[ol|ul|dl|md[mrow]|cd]" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:if test="$block-type = 'xref'">
-        <xsl:apply-templates select="." mode="heading-xref-knowl" />
+        <xsl:apply-templates select="." mode="heading-xref-knowl">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
     </xsl:if>
     <!-- newline inserted to encourage formatted output -->
     <xsl:text>&#xa;</xsl:text>
@@ -5167,6 +5432,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="initial-content">
         <xsl:apply-templates select="$initial">
             <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </xsl:variable>
     <div class="para logical">
@@ -5189,6 +5455,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- do the display proper -->
         <xsl:apply-templates select=".">
             <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
         <!-- look through remainder, all element and text nodes, and the next display -->
         <xsl:variable name="rightward" select="following-sibling::*|following-sibling::text()" />
@@ -5209,6 +5476,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:variable name="common-content">
                     <xsl:apply-templates select="$common">
                         <xsl:with-param name="b-original" select="$b-original" />
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
                     </xsl:apply-templates>
                 </xsl:variable>
                 <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
@@ -5234,6 +5502,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:variable name="common-content">
                     <xsl:apply-templates select="$rightward">
                         <xsl:with-param name="b-original" select="$b-original" />
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
                     </xsl:apply-templates>
                 </xsl:variable>
                 <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
@@ -5279,12 +5548,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="li" mode="heading-birth" />
 
 <xsl:template match="li" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-full">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- For a description list, the title alone is enough -->
 <xsl:template match="dl/li" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-title" />
+    <xsl:param name="heading-level"/>
+    <xsl:apply-templates select="." mode="heading-title">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Pass-through regular list items    -->
@@ -5298,12 +5573,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ol/li|ul/li|var/li" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:choose>
         <xsl:when test="$block-type = 'xref'">
             <article class="li">
-                <xsl:apply-templates select="." mode="heading-xref-knowl" />
+                <xsl:apply-templates select="." mode="heading-xref-knowl">
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
+                </xsl:apply-templates>
                 <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
                 </xsl:apply-templates>
             </article>
         </xsl:when>
@@ -5335,6 +5614,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="p|blockquote|pre|image|video|program|console|tabular|&FIGURE-LIKE;|&ASIDE-LIKE;|sidebyside|sbsgroup|sage">
                         <xsl:apply-templates>
                             <xsl:with-param name="b-original" select="$b-original" />
+                            <xsl:with-param name="heading-level" select="$heading-level"/>
                         </xsl:apply-templates>
                     </xsl:when>
                     <!-- No good test for unstructured? -->
@@ -5350,6 +5630,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:if>
                             <xsl:apply-templates>
                                 <xsl:with-param name="b-original" select="$b-original" />
+                                <xsl:with-param name="heading-level" select="$heading-level"/>
                             </xsl:apply-templates>
                         </div>
                     </xsl:otherwise>
@@ -5368,11 +5649,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="dl/li" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <xsl:choose>
         <xsl:when test="$block-type = 'xref'">
             <article class="li">
                 <!-- "title" of item is replicated in heading -->
-                <xsl:apply-templates select="." mode="heading-xref-knowl" />
+                <xsl:apply-templates select="." mode="heading-xref-knowl">
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
+                </xsl:apply-templates>
                 <!-- a run of paragraphs, conceivably, title is killed -->
                 <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
@@ -5571,6 +5855,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: self::page for inside printouts -->
 <xsl:template match="introduction[not(parent::*[&STRUCTURAL-FILTER; or self::page])]|conclusion[not(parent::*[&STRUCTURAL-FILTER; or self::page])]">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <!-- newline inserted to encourage formatted output -->
     <xsl:text>&#xa;</xsl:text>
     <xsl:element name="div">
@@ -5582,6 +5867,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:if test="title">
             <xsl:apply-templates select="." mode="heading-generic">
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="heading-title">
                     <xsl:apply-templates select="." mode="title-full" />
                     <span> </span>
@@ -5590,6 +5876,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates select="*">
             <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </xsl:element>
 </xsl:template>
@@ -5681,6 +5968,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Tunnel duplication flag to list items -->
 <xsl:template match="ol|ul">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <!-- need to switch on 0-1 for ol Arabic -->
     <!-- no harm if called on "ul"           -->
     <xsl:variable name="mbx-format-code">
@@ -5724,6 +6012,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates select="li">
             <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </xsl:element>
 </xsl:template>
@@ -5787,6 +6076,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- tunnel duplication flag to list items -->
 <xsl:template match="dl">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
     <dl>
         <xsl:attribute name="class">
             <xsl:choose>
@@ -5804,6 +6094,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:apply-templates select="li">
             <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </dl>
 </xsl:template>
@@ -6609,6 +6900,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fixed-width class is additional           -->
 <xsl:template match="*" mode="panel-panel">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
 
     <xsl:param name="width" />
     <xsl:param name="left-margin" />
@@ -6648,6 +6940,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select=".">
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="width" select="$width" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
     </xsl:element>
 </xsl:template>
@@ -9699,15 +9992,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Three actions, all based on "interactive-core" template -->
 <xsl:template match="interactive">
+    <xsl:param name="heading-level"/>
     <!-- (1) Build, display full content on the page, where born -->
-    <xsl:apply-templates select="." mode="interactive-core" />
+    <xsl:apply-templates select="." mode="interactive-core">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
     <!-- (2) Identical content, but now isolated on a reader-friendly page -->
     <!-- (we skip this for portable html)                                  -->
+    <!-- The standalone page has its own masthead h1, so headings inside   -->
+    <!-- start fresh at h2.                                                -->
     <xsl:if test="not($b-portable-html)">
         <xsl:apply-templates select="." mode="standalone-page" >
             <xsl:with-param name="content">
                 <xsl:apply-templates select="." mode="interactive-core">
                     <xsl:with-param name="is-standalone" select="true()"/>
+                    <xsl:with-param name="heading-level" select="2"/>
                 </xsl:apply-templates>
             </xsl:with-param>
         </xsl:apply-templates>
@@ -9723,6 +10022,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   2.  An iframe, via modal-template   -->
 <xsl:template match="interactive" mode="interactive-core">
     <xsl:param name="is-standalone" select="false()"/>
+    <xsl:param name="heading-level"/>
     <!-- We want to recognize an "interactive" authored  -->
      <!-- in an "exercise" (or similar) which originated -->
      <!-- from a "dual" dynamic/static exercise.         -->
@@ -9789,7 +10089,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- div.solutions is good, but replacable?   -->
     <xsl:if test="instructions">
         <div class="instructions interactive__instructions">
-            <xsl:apply-templates select="instructions" />
+            <xsl:apply-templates select="instructions">
+                <xsl:with-param name="heading-level" select="$heading-level"/>
+            </xsl:apply-templates>
         </div>
     </xsl:if>
 </xsl:template>
@@ -14246,9 +14548,12 @@ TODO:
 <!-- "objectives" can precede the first "page" as HTML output, and the -->
 <!-- final "page" may be followed by a "conclusion" and "outcomes"     -->
 <xsl:template match="worksheet/page|handout/page">
+    <xsl:param name="heading-level"/>
     <section class="onepage">
         <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="*"/>
+        <xsl:apply-templates select="*">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
     </section>
 </xsl:template>
 

@@ -5867,6 +5867,7 @@ Book (with parts), "section" at level 3
 
 <xsl:template match="sidebyside">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="heading-level"/>
 
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
@@ -5934,6 +5935,7 @@ Book (with parts), "section" at level 3
                 <xsl:with-param name="left-margin" select="$layout/left-margin" />
                 <xsl:with-param name="right-margin" select="$layout/right-margin" />
                 <xsl:with-param name="valign" select="$layout/valign[$panel-number]" />
+                <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
         </xsl:for-each>
     </xsl:variable>
@@ -5972,9 +5974,12 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <xsl:template match="sbsgroup">
+    <xsl:param name="heading-level"/>
     <xsl:variable name="data">
         <xsl:apply-templates select="." mode="pre-sbsgroup"/>
-        <xsl:apply-templates select="sidebyside" />
+        <xsl:apply-templates select="sidebyside">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
         <xsl:apply-templates select="." mode="post-sbsgroup"/>
     </xsl:variable>
     <xsl:call-template name="sbsgroup-wrapper">
@@ -5991,10 +5996,12 @@ Book (with parts), "section" at level 3
 <xsl:template match="sidebyside/stack">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="width" />
+    <xsl:param name="heading-level"/>
 
     <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|audio|video|interactive|slate|program|console|exercise">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="width" select="$width"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
     </xsl:apply-templates>
 </xsl:template>
 
