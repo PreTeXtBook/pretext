@@ -2444,40 +2444,112 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Block Production, Knowls -->
 <!-- ######################## -->
 
-<!-- Generically, a "block" is a child of a "division"; see the schema for the precise rules.  Blocks also have "significant components": for example, a "solution" is a significant component of an "example".  A "p" can be a block in its own right, can be a significant component of a larger block, or can be neither. -->
+<!-- Generically, a "block" is a child of a "division"; see the schema for  -->
+<!-- the precise rules.  Blocks also have "significant components": for     -->
+<!-- example, a "solution" is a significant component of an "example".  A   -->
+<!-- "p" can be a block in its own right, can be a significant component of -->
+<!-- a larger block, or can be neither.                                     -->
 
-<!-- A block (or significant component) is rendered into HTML in one of three modes: -->
-<!-- (a) Visible and original.  Drawn directly on a main page, with full identifying information (HTML @id, etc.). -->
-<!-- (b) Hidden and original.  Drawn on a main page as an HTML "details" element, with the heading carried by a clickable "summary" and the content initially collapsed.  We call this a "born-hidden knowl"; historically it was called an "embedded knowl" because the content lives on the page (in contrast to the external file behind a cross-reference knowl).  Whether a block is born hidden may be automatic ("hint" is always hidden), publisher-elective ("theorem", "remark", "definition"), or forbidden ("blockquote" is never hidden); the modal "is-hidden" template decides. -->
-<!-- (c) Visible and duplicate.  Drawn into a separate external file, as the content of a cross-reference knowl.  All identifying information is stripped, because the file may be opened many times in many pages and any HTML @id must remain unique within the page it is shown on. -->
+<!-- A block (or significant component) is rendered into HTML in one of     -->
+<!-- three modes:                                                           -->
 
-<!-- Every block element appears in the final output at most once as an "original" (with identifying information) and at most once as a "duplicate" (without).  Duplicates should re-use other duplicates as much as possible. -->
+<!-- (a) Visible and original.  Drawn directly on a main page, with full    -->
+<!-- identifying information (HTML @id, etc.).                              -->
 
-<!-- The generic (non-modal) dispatch template below matches any element that is a block or a significant component.  Each incoming element falls into one of three situations: -->
+<!-- (b) Hidden and original.  Drawn on a main page as an HTML "details"    -->
+<!-- element, with the heading carried by a clickable "summary" and the     -->
+<!-- content initially collapsed.  We call this a "born-hidden knowl";      -->
+<!-- historically it was called an "embedded knowl" because the content     -->
+<!-- lives on the page (in contrast to the external file behind a           -->
+<!-- cross-reference knowl).  Whether a block is born hidden may be         -->
+<!-- automatic ("hint" is always hidden), publisher-elective ("theorem",    -->
+<!-- "remark", "definition"), or forbidden ("blockquote" is never hidden);  -->
+<!-- the modal "is-hidden" template decides.                                -->
 
-<!-- Original, born visible.  The element is rendered as part of a main page with full identification.  The parameter "b-original" defaults to true.  Children that are themselves blocks recurse through this same dispatch and are rendered as visible or born-hidden originals according to their own "is-hidden". -->
+<!-- (c) Visible and duplicate.  Drawn into a separate external file, as    -->
+<!-- the content of a cross-reference knowl.  All identifying information   -->
+<!-- is stripped, because the file may be opened many times in many pages   -->
+<!-- and any HTML @id must remain unique within the page it is shown on.    -->
 
-<!-- Original, born hidden.  The element is wrapped in an HTML "details" element; the @id is placed on the visible "summary" (so the element remains a cross-reference target) and the body is placed inside the "details".  The "b-original" parameter remains true throughout the subtree, so descendant blocks may themselves be original (visible or hidden) as appropriate. -->
+<!-- Every block element appears in the final output at most once as an     -->
+<!-- "original" (with identifying information) and at most once as a        -->
+<!-- "duplicate" (without).  Duplicates should re-use other duplicates as   -->
+<!-- much as possible.                                                      -->
 
-<!-- Duplicate (cross-reference knowl).  The set of cross-reference targets is collected by the "make-xref-knowls" template, which walks the document, gathers every element actually pointed at by an "xref", and hands each one to "manufacture-knowl".  That template writes one external HTML file per target, whose body comes from a single call to the modal "body" template with block-type='xref' and b-original=false.  Both parameters then flow down through the subtree: every descendant receives b-original=false (so no @id is ever emitted inside the file), while block-type reverts to 'visible' or 'hidden' at each block boundary according to that descendant's own "is-hidden". -->
+<!-- The generic (non-modal) dispatch template below matches any element    -->
+<!-- that is a block or a significant component.  Each incoming element     -->
+<!-- falls into one of three situations:                                    -->
 
-<!-- The cross-reference knowl is also given a richer top-level heading than a born element (see "heading-xref-knowl"), so the reader can identify what they have opened.  As a special case, an "xref" to an "mrow" generates a knowl whose body is the containing "md", not just the row. -->
+<!-- Original, born visible.  The element is rendered as part of a main     -->
+<!-- page with full identification.  The parameter "b-original" defaults to -->
+<!-- true.  Children that are themselves blocks recurse through this same   -->
+<!-- dispatch and are rendered as visible or born-hidden originals          -->
+<!-- according to their own "is-hidden".                                    -->
 
-<!-- The "b-original" boolean is threaded down explicitly through every body, wrapped-content, and container template (e.g. "sidebyside").  XSLT 1.0 has no tunnel parameter, so each forwarding must be written by hand and a missing one is a real source of bugs.  The "block-type" parameter (values 'visible', 'hidden', 'xref') is threaded the same way, and is also forwarded down to Sage cells so they can configure themselves correctly when they live inside a knowl. -->
+<!-- Original, born hidden.  The element is wrapped in an HTML "details"    -->
+<!-- element; the @id is placed on the visible "summary" (so the element    -->
+<!-- remains a cross-reference target) and the body is placed inside the    -->
+<!-- "details".  The "b-original" parameter remains true throughout the     -->
+<!-- subtree, so descendant blocks may themselves be original (visible or   -->
+<!-- hidden) as appropriate.                                                -->
 
-<!-- The per-element templates that customize the production of a block are: -->
+<!-- Duplicate (cross-reference knowl).  The set of cross-reference targets -->
+<!-- is collected by the "make-xref-knowls" template, which walks the       -->
+<!-- document, gathers every element actually pointed at by an "xref", and  -->
+<!-- hands each one to "manufacture-knowl".  That template writes one       -->
+<!-- external HTML file per target, whose body comes from a single call to  -->
+<!-- the modal "body" template with block-type='xref' and b-original=false. -->
+<!-- Both parameters then flow down through the subtree: every descendant   -->
+<!-- receives b-original=false (so no @id is ever emitted inside the file), -->
+<!-- while block-type reverts to 'visible' or 'hidden' at each block        -->
+<!-- boundary according to that descendant's own "is-hidden".               -->
 
-<!-- (1) "is-hidden": returns the string 'true' or 'false'.  Decides whether the block is born hidden.  Often a fixed value; sometimes tied to a publisher option. -->
+<!-- The cross-reference knowl is also given a richer top-level heading     -->
+<!-- than a born element (see "heading-xref-knowl"), so the reader can      -->
+<!-- identify what they have opened.  As a special case, an "xref" to an    -->
+<!-- "mrow" generates a knowl whose body is the containing "md", not just   -->
+<!-- the row.                                                               -->
 
-<!-- (2) "body-element", "body-css-class": the outermost HTML element wrapping the block, and its CSS classes.  The body-element must be a block-level HTML element, because it is the outer container of knowl content and the knowl-open Javascript expects exactly one enclosing element. -->
+<!-- The "b-original" boolean is threaded down explicitly through every     -->
+<!-- body, wrapped-content, and container template (e.g. "sidebyside").     -->
+<!-- XSLT 1.0 has no tunnel parameter, so each forwarding must be written   -->
+<!-- by hand and a missing one is a real source of bugs.  The "block-type"  -->
+<!-- parameter (values 'visible', 'hidden', 'xref') is threaded the same    -->
+<!-- way, and is also forwarded down to Sage cells so they can configure    -->
+<!-- themselves correctly when they live inside a knowl.                    -->
 
-<!-- (3) "heading-birth": the heading used both when the block is drawn visibly on a page and as the clickable text of a born-hidden knowl. -->
+<!-- The per-element templates that customize the production of a block     -->
+<!-- are:                                                                   -->
 
-<!-- (4) "heading-xref-knowl": the heading used at the top of a cross-reference knowl.  Sometimes richer than "heading-birth"; for example, a cross-reference to a list item benefits from naming the enclosing list and the item's number. -->
+<!-- (1) "is-hidden": returns the string 'true' or 'false'.  Decides        -->
+<!-- whether the block is born hidden.  Often a fixed value; sometimes tied -->
+<!-- to a publisher option.                                                 -->
 
-<!-- (5) "body": the generic body template, defined much later in this file.  It emits the body-element wrapper, an @id when appropriate (visible original; not on a born-hidden wrapper, since the @id is on the summary instead; never in a duplicate), a heading-birth (visible case) or heading-xref-knowl (xref case), and then the inner content via "wrapped-content". -->
+<!-- (2) "body-element", "body-css-class": the outermost HTML element       -->
+<!-- wrapping the block, and its CSS classes.  The body-element must be a   -->
+<!-- block-level HTML element, because it is the outer container of knowl   -->
+<!-- content and the knowl-open Javascript expects exactly one enclosing    -->
+<!-- element.                                                               -->
 
-<!-- (6) "wrapped-content": the inner content of the block.  Most blocks simply apply-templates over their children; some restrict the selection in order to avoid pulling in elements such as "prelude" or "postlude", which the body template instead places outside the block. -->
+<!-- (3) "heading-birth": the heading used both when the block is drawn     -->
+<!-- visibly on a page and as the clickable text of a born-hidden knowl.    -->
+
+<!-- (4) "heading-xref-knowl": the heading used at the top of a             -->
+<!-- cross-reference knowl.  Sometimes richer than "heading-birth"; for     -->
+<!-- example, a cross-reference to a list item benefits from naming the     -->
+<!-- enclosing list and the item's number.                                  -->
+
+<!-- (5) "body": the generic body template, defined much later in this      -->
+<!-- file.  It emits the body-element wrapper, an @id when appropriate      -->
+<!-- (visible original; not on a born-hidden wrapper, since the @id is on   -->
+<!-- the summary instead; never in a duplicate), a heading-birth (visible   -->
+<!-- case) or heading-xref-knowl (xref case), and then the inner content    -->
+<!-- via "wrapped-content".                                                 -->
+
+<!-- (6) "wrapped-content": the inner content of the block.  Most blocks    -->
+<!-- simply apply-templates over their children; some restrict the          -->
+<!-- selection in order to avoid pulling in elements such as "prelude" or   -->
+<!-- "postlude", which the body template instead places outside the block.  -->
 
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|contributor|biblio|biblio/note|interactive/instructions|gi|p|li|md[mrow]|fragment">
     <xsl:param name="b-original" select="true()" />
