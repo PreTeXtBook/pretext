@@ -1,9 +1,10 @@
 // These values can be set on @use to avoid repeating values in each @import
 $pad: 10px !default;
 $border-radius: 0px !default;
+$border-width: 2px !default;
 
 // Generate styles for a surrounding box
-@mixin box($border-width: 2px,
+@mixin box($border-width: $border-width,
   $style: solid,
   $background-color: var(--block-body-background),
   $border-color: var(--block-border-color),
