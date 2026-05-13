@@ -410,15 +410,25 @@ summary.knowl__link {
   font-style: italic;
   font-size: unset;
 }
-.goal-like {
-  border: none;
-  padding: 0;
+.goal-like:not(.knowl__content, .born-hidden-knowl) {
+  padding: 0.5em;
+  border-top: 1px solid var(--block-border-color);
+  border-bottom: 1px solid var(--block-border-color);
+  border-left: none;
+  border-right: none;
+  background-color: var(--content-background);
+  margin-top: 2em;
+  margin-bottom: 1em;
 }
-.goal-like > .heading {
-  margin-top: -0.5em;
-  padding: 0;
-  margin: 0;
-  font-size: 1.1em;
+.goal-like > .heading:first-child {
+  background-color: var(--content-background);
+  display: block;
+  color: var(--body-text-colorolor);
+  margin-bottom: 0.5em;
+  margin-top: -1.5em;
+  margin-left: 10px;
+  width: fit-content;
+  padding: 5px 1em;
 }
 .paragraphs > .heading:first-child,
 article > .heading:first-child {
@@ -441,6 +451,22 @@ article > .heading:first-child + :is(.para, .para.logical, .introduction) > .par
 .paragraphs > .heading:first-child + :is(.para, .para.logical, .introduction) > .para.logical:first-child > .para:first-child,
 article > .heading:first-child + :is(.para, .para.logical, .introduction) > .para.logical:first-child > .para:first-child {
   display: inline;
+}
+.assemblage-like:not(.knowl__content, .born-hidden-knowl) {
+  border: 1px solid var(--assemblage-like-border-color);
+  background-color: var(--block-body-background);
+  padding: 10px;
+}
+.assemblage-like:not(.knowl__content, .born-hidden-knowl) > .heading:first-child {
+  display: block;
+  color: var(--block-head-color);
+  margin-bottom: 0.5em;
+}
+.assemblage-like:not(.knowl__content, .born-hidden-knowl) > *:first-child {
+  margin-top: 0;
+}
+.assemblage-like > .heading {
+  font-size: 1.1em;
 }
 * {
   box-sizing: border-box;
@@ -1787,10 +1813,9 @@ article.theorem-like .emphasis {
     Times,
     serif;
 }
-:root {
+:root,
+:root.dark-mode {
   color-scheme: light;
-}
-:root:not(.dark-mode) {
   --page-color: white;
   --content-background: white;
   --page-border-color: #ccc;
@@ -1840,7 +1865,7 @@ article.theorem-like .emphasis {
   --knowl-nested-4-background: #fff5f5;
   --block-body-background: var(--content-background);
   --block-border-color: var(--knowl-border-color);
-  --block-head-color: white;
+  --block-head-color: black;
   --aside-like-link-color: var(--link-text-color);
   --button-background: #ededed;
   --button-text-color: #333333;
