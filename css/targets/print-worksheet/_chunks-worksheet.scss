@@ -15,6 +15,8 @@ $border-radius: 8px !default;
 @use 'components/chunks/knowls' with ($border-radius: $border-radius);
 
 @use 'components/chunks/helpers/inline-heading-mixin';
+@use 'components/chunks/helpers/horizontal-bars-mixin';
+@use 'components/chunks/helpers/box-mixin' with ($border-radius: $border-radius);
 
 
 .theorem-like,
@@ -54,19 +56,24 @@ $border-radius: 8px !default;
 }
 
 
- .goal-like {
-  border: none;
-  padding: 0;
-}
-
-.goal-like > .heading {
-  margin-top: -0.5em;
-  padding: 0;
-  margin: 0;
-  font-size: 1.1em;
+.goal-like {
+  @include horizontal-bars-mixin.bars(
+    $border-width: 1px,
+    $padding: 0.5em
+    );
 }
 
 .paragraphs,
 article {
   @include inline-heading-mixin.heading;
+}
+
+.assemblage-like {
+  @include box-mixin.box(
+    $border-width: 1px,
+    $border-color: var(--assemblage-like-border-color),
+  );
+  > .heading {
+    font-size: 1.1em;
+  }
 }

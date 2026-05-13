@@ -29,13 +29,27 @@
 
 
 // Make sure we are including the root colors using simple black-and-white palette
+// Always use colors from the light mode palette, since the print preview and printed version will be light mode.
+@use "sass:map";
 @use "colors/color-helpers" as colorHelpers;
 @use 'colors/palette-single' as palette with (
   $primary-color: black,
 );
 
-// render the actual colors
-@include colorHelpers.set-root-colors(palette.$colors);
+$light-colors: map.merge(
+  palette.$colors,
+  (
+    "block-head-color": black,
+  )
+);
+
+// Print worksheets should always render with the light palette, even if the page
+// root still carries the site's dark-mode class.
+:root,
+:root.dark-mode {
+  color-scheme: light;
+  @include colorHelpers.scss-to-css($light-colors);
+}
 
 // ---------------------------------------------
 // concrete rules / includes that generate CSS
