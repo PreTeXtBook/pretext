@@ -2806,6 +2806,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- boring exercises.                                                   -->
 
 <xsl:template match="exercise[task and not(@exercise-customization = 'worksheet')]|&PROJECT-LIKE;" mode="tabbed-tasks">
+    <xsl:param name="heading-level"/>
     <div class="ptx-runestone-container">
         <div>
             <xsl:attribute name="class">
@@ -2818,7 +2819,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- "introduction" first as lead-in, not as a tab -->
             <xsl:if test="introduction">
                 <div class="tabs-introduction exercise-leadin">
-                    <xsl:apply-templates select="introduction"/>
+                    <xsl:apply-templates select="introduction">
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
+                    </xsl:apply-templates>
                 </div>
             </xsl:if>
             <!-- @data-component="tab" do not need an HTML @id for any -->
@@ -2833,7 +2836,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:text>)</xsl:text>
                     </xsl:variable>
                     <div data-component="tab" data-tabname="{$the-task-number}">
-                        <xsl:apply-templates select="."/>
+                        <xsl:apply-templates select=".">
+                            <xsl:with-param name="heading-level" select="$heading-level"/>
+                        </xsl:apply-templates>
                     </div>
                 </xsl:for-each>
             </div>
@@ -2841,7 +2846,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- "conclusion" last as lead-out, not as a tab -->
             <xsl:if test="conclusion">
                 <div class="tabs-conclusion exercise-leadout">
-                    <xsl:apply-templates select="conclusion"/>
+                    <xsl:apply-templates select="conclusion">
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
+                    </xsl:apply-templates>
                 </div>
             </xsl:if>
         </div>
