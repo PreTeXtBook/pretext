@@ -3776,16 +3776,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Form a PreTeXt side-by-side with an image, a QR code and links -->
 
 <xsl:template match="audio|video|interactive[not(static)]" mode="representations">
-    <!-- Read pre-computed URLs from sidecar file, guarded -->
-    <!-- against access during extraction (Catch-22)       -->
-    <xsl:variable name="url-file-rtf">
-        <xsl:if test="not($b-extracting)">
-            <xsl:copy-of select="document(concat($generated-directory-source, 'qrcode/', @assembly-id, '-url.xml'), $original)"/>
-        </xsl:if>
-    </xsl:variable>
-    <xsl:variable name="url-file" select="exsl:node-set($url-file-rtf)"/>
     <xsl:choose>
-        <xsl:when test="$exercise-style = 'static'">
+        <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
+            <!-- Read pre-computed URLs from sidecar file -->
+            <!-- But not if doing an extraction           -->
+            <xsl:variable name="url-file"
+                select="document(concat($generated-directory-source, 'qrcode/', @assembly-id, '-url.xml'), $original)"/>
             <!-- panel widths are experimental -->
             <sidebyside margins="7.5% 7.5%" widths="47% 21%" valign="top" halign="center">
                 <!-- copy over @xml:id, which may be in use by -->
@@ -3904,12 +3900,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </stack>
             </sidebyside>
         </xsl:when>
-        <xsl:when test="($exercise-style = 'dynamic') or ($exercise-style = 'pg-problems')">
-            <!-- duplicate authored content for the non-static conversions -->
+        <xsl:otherwise>
+            <!-- duplicate authored content for the non-static conversions and extractions-->
             <xsl:copy>
                 <xsl:apply-templates select="node()|@*" mode="representations"/>
             </xsl:copy>
-        </xsl:when>
+        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
