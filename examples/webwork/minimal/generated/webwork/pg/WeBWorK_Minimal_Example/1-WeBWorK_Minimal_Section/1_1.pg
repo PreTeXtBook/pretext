@@ -1,0 +1,84 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:25:22-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$a = Compute(random(1, 9, 1));
+$b = Compute(random(1, 9, 1));
+$c = $a + $b;
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Compute the sum of [`[$a]`] and [`[$b]\text{:}`]
+
+[`[$a] + [$b] =`] [_]{$c}{5}
+
+END_PGML
+
+############################################################
+# Hint
+############################################################
+#Set value of $showHint in PGcourse.pl for course-wide attempt threshhold for revealing hints
+
+BEGIN_PGML_HINT
+Add [`[$a]`] and [`[$b]`] together.
+
+END_PGML_HINT
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+[`[$a] + [$b] = [$c]\text{.}`]
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

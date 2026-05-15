@@ -1,0 +1,19 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = WeBWorK_Minimal_Example/header/1-WeBWorK_Minimal_Section.pg
+screenHeaderFile  = WeBWorK_Minimal_Example/header/1-WeBWorK_Minimal_Section.pg
+description       = WeBWorK Minimal Section
+problemListV2
+problem_start
+source_file = WeBWorK_Minimal_Example/1-WeBWorK_Minimal_Section/1_1.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg
+problem_id = 2
+problem_end
+problem_start
+source_file = WeBWorK_Minimal_Example/1-WeBWorK_Minimal_Section/1_3.pg
+problem_id = 3
+problem_end
