@@ -1839,100 +1839,103 @@ def webwork_to_xml(
             static.set("source", path[problem])
 
         # If there is "badness"...
-        # Build 'shell' problems to indicate failures
+        # Build 'shell' problems to indicate failures.  Fall through (no
+        # "continue") so that rendering-data, pg, and the per-exercise file
+        # write below all execute — those sections have explicit "if badness"
+        # branches that produce a minimal faux problem, and assembly relies
+        # on the file existing for every WeBWorK exercise.
         if badness:
             log.error(badness_msg.format(path[problem], seed[problem], badness_tip))
             static.set("failure", badness_type)
             statement = ET.SubElement(static, "statement")
             p = ET.SubElement(statement, "p")
             p.text = badness_msg.format(path[problem], seed[problem], badness_tip)
-            continue
+        else:
+            # Start appending XML children
+            response_root = ET.fromstring(bytes(response_text, encoding='utf-8'))
 
-        # Start appending XML children
-        response_root = ET.fromstring(bytes(response_text, encoding='utf-8'))
+            # This recursive function is needed in the case of nested tasks.
+            # It is written in such a way to handle task with no nesting, and even an exercise without any task.
 
-        # This recursive function is needed in the case of nested tasks.
-        # It is written in such a way to handle task with no nesting, and even an exercise without any task.
+            def static_webwork_level(write, read):
+                # (tree we are building, tree we take from)
+                # since write is a tree and read is a tree, we use deepcopy to make sure
+                # that when we append nodes we are appending new ones, not intertwining the trees
 
-        def static_webwork_level(write, read):
-            # (tree we are building, tree we take from)
-            # since write is a tree and read is a tree, we use deepcopy to make sure
-            # that when we append nodes we are appending new ones, not intertwining the trees
+                tasks = read.findall("./task")
+                if tasks:
+                    titles = read.xpath("./title")
+                    if titles:
+                        for ttl in list(titles):
+                            title = copy.deepcopy(ttl)
+                            write.append(title)
+                    introductions = read.xpath(
+                        "./statement[following-sibling::task]|./statement[following-sibling::stage]"
+                    )
+                    if introductions:
+                        introduction = ET.SubElement(write, "introduction")
+                        for intro in list(introductions):
+                            for child in intro:
+                                chcopy = copy.deepcopy(child)
+                                introduction.append(chcopy)
+                    for tsk in list(tasks):
+                        task = ET.SubElement(write, "task")
+                        static_webwork_level(task, tsk)
+                    conclusions = read.xpath("./statement[preceding-sibling::task]")
+                    if conclusions:
+                        conclusion = ET.SubElement(write, "conclusion")
+                        for conc in list(conclusions):
+                            for child in conc:
+                                chcopy = copy.deepcopy(child)
+                                conclusion.append(chcopy)
+                else:
+                    titles = read.xpath("./title")
+                    if titles:
+                        for ttl in list(titles):
+                            title = copy.deepcopy(ttl)
+                            write.append(title)
+                    statements = read.xpath(
+                        "./statement[not(preceding-sibling::task or following-sibling::task)]"
+                    )
+                    if statements:
+                        statement = ET.SubElement(write, "statement")
+                        for stat in list(statements):
+                            for child in stat:
+                                chcopy = copy.deepcopy(child)
+                                statement.append(chcopy)
+                    hints = read.xpath("./hint")
+                    if hints:
+                        hint = ET.SubElement(write, "hint")
+                        for hnt in list(hints):
+                            for child in hnt:
+                                chcopy = copy.deepcopy(child)
+                                hint.append(chcopy)
+                    answer_names = read.xpath(".//fillin/@name|.//var/@name|.//ul/@name|.//ol/@name|.//dl/@name")
+                    answer_hashes = response_root.find("./answerhashes")
+                    if answer_hashes is not None:
+                        for ans in list(answer_hashes):
+                            if ans.get("ans_name") in list(answer_names):
+                                correct_ans = ans.get("correct_ans", "")
+                                correct_ans_latex_string = ans.get(
+                                    "correct_ans_latex_string", ""
+                                )
+                                if correct_ans != "" or correct_ans_latex_string != "":
+                                    answer = ET.SubElement(write, "answer")
+                                    p = ET.SubElement(answer, "p")
+                                    if correct_ans_latex_string:
+                                        m = ET.SubElement(p, "m")
+                                        m.text = correct_ans_latex_string
+                                    elif correct_ans:
+                                        p.text = correct_ans
+                    solutions = read.xpath("./solution")
+                    if solutions:
+                        solution = ET.SubElement(write, "solution")
+                        for sol in list(solutions):
+                            for child in sol:
+                                chcopy = copy.deepcopy(child)
+                                solution.append(chcopy)
 
-            tasks = read.findall("./task")
-            if tasks:
-                titles = read.xpath("./title")
-                if titles:
-                    for ttl in list(titles):
-                        title = copy.deepcopy(ttl)
-                        write.append(title)
-                introductions = read.xpath(
-                    "./statement[following-sibling::task]|./statement[following-sibling::stage]"
-                )
-                if introductions:
-                    introduction = ET.SubElement(write, "introduction")
-                    for intro in list(introductions):
-                        for child in intro:
-                            chcopy = copy.deepcopy(child)
-                            introduction.append(chcopy)
-                for tsk in list(tasks):
-                    task = ET.SubElement(write, "task")
-                    static_webwork_level(task, tsk)
-                conclusions = read.xpath("./statement[preceding-sibling::task]")
-                if conclusions:
-                    conclusion = ET.SubElement(write, "conclusion")
-                    for conc in list(conclusions):
-                        for child in conc:
-                            chcopy = copy.deepcopy(child)
-                            conclusion.append(chcopy)
-            else:
-                titles = read.xpath("./title")
-                if titles:
-                    for ttl in list(titles):
-                        title = copy.deepcopy(ttl)
-                        write.append(title)
-                statements = read.xpath(
-                    "./statement[not(preceding-sibling::task or following-sibling::task)]"
-                )
-                if statements:
-                    statement = ET.SubElement(write, "statement")
-                    for stat in list(statements):
-                        for child in stat:
-                            chcopy = copy.deepcopy(child)
-                            statement.append(chcopy)
-                hints = read.xpath("./hint")
-                if hints:
-                    hint = ET.SubElement(write, "hint")
-                    for hnt in list(hints):
-                        for child in hnt:
-                            chcopy = copy.deepcopy(child)
-                            hint.append(chcopy)
-                answer_names = read.xpath(".//fillin/@name|.//var/@name|.//ul/@name|.//ol/@name|.//dl/@name")
-                answer_hashes = response_root.find("./answerhashes")
-                if answer_hashes is not None:
-                    for ans in list(answer_hashes):
-                        if ans.get("ans_name") in list(answer_names):
-                            correct_ans = ans.get("correct_ans", "")
-                            correct_ans_latex_string = ans.get(
-                                "correct_ans_latex_string", ""
-                            )
-                            if correct_ans != "" or correct_ans_latex_string != "":
-                                answer = ET.SubElement(write, "answer")
-                                p = ET.SubElement(answer, "p")
-                                if correct_ans_latex_string:
-                                    m = ET.SubElement(p, "m")
-                                    m.text = correct_ans_latex_string
-                                elif correct_ans:
-                                    p.text = correct_ans
-                solutions = read.xpath("./solution")
-                if solutions:
-                    solution = ET.SubElement(write, "solution")
-                    for sol in list(solutions):
-                        for child in sol:
-                            chcopy = copy.deepcopy(child)
-                            solution.append(chcopy)
-
-        static_webwork_level(static, response_root)
+            static_webwork_level(static, response_root)
 
         # Add rendering-data element with attribute data for rendering a problem
         if (badness or origin[problem] == "generated" or (webwork2_minor_version < 19 and origin[problem] != "webwork2")):
