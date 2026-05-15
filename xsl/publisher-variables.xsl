@@ -1374,7 +1374,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Only relevant if there are WW problems present. A version    -->
     <!-- might remove all WW problems but there is no harm in this    -->
     <!-- variable since it will not be used, and it is silent.        -->
-    <xsl:if test="$original//webwork[* or @copy or @source]">
+    <xsl:if test="$original//webwork[node() or @*]">
         <xsl:choose>
             <!-- Note: $generated-directory-source is never empty?    -->
             <!-- Defaults to the very old "directory.images"?         -->
