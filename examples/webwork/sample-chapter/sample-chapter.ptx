@@ -808,7 +808,7 @@ ENDDOCUMENT();
                             </p>
                         </introduction>
 
-                        <exercise>
+                        <exercise label="antiderivative-sin">
                             <webwork>
                                 <pg-code>
                                     $answer = FormulaUpToConstant("-cos(x)");
@@ -824,7 +824,7 @@ ENDDOCUMENT();
                             </webwork>
                         </exercise>
 
-                        <exercise>
+                        <exercise label="antiderivative-exp">
                             <webwork>
                                 <pg-code>
                                     $answer = FormulaUpToConstant("e^x");
@@ -1444,7 +1444,7 @@ ENDDOCUMENT();
                               </latex-image>
                             </image>
                         </introduction>
-                        <exercise>
+                        <exercise label="box-diagonal-five">
                             <webwork>
                                 <statement>
                                     <p>
@@ -1465,7 +1465,7 @@ ENDDOCUMENT();
                                 </solution>
                             </webwork>
                         </exercise>
-                        <exercise>
+                        <exercise label="box-diagonal-thirteen">
                             <webwork>
                                 <statement>
                                     <p>
@@ -1572,7 +1572,7 @@ ENDDOCUMENT();
 
                 <p>Here we make MathObject String answers to see how they turn out in answer elements.</p>
 
-                <exercise>
+                <exercise label="mathobject-string-answers">
                     <webwork>
                         <pg-code>
                             $xmlchars = q(&lt;>&amp;'";);
@@ -1632,7 +1632,7 @@ ENDDOCUMENT();
                     use <c>data="pgml"</c>. (This is not in the <pretext/> schema as of 3/26/2020, and is subject to change.)
                 </p>
 
-                <exercise>
+                <exercise label="pgml-data-attribute">
                     <webwork>
                         <pg-code>
                             $statement = 'some PGML math: [`\frac{1}{2}+\frac{3}{2}=2`]; and some *bold text*';
@@ -1764,7 +1764,7 @@ ENDDOCUMENT();
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="radio-buttons-with-math">
                     <webwork>
                         <pg-code>
                               $expressions = RadioButtons(['\(x\)','\(x^2\)','\(2^x\)'], 2);
@@ -1844,7 +1844,7 @@ ENDDOCUMENT();
 
                 </exercise>
 
-                <exercise>
+                <exercise label="answer-arrays">
                     <title>Answer Arrays</title>
                     <webwork>
                       <pg-code>
@@ -1880,7 +1880,7 @@ ENDDOCUMENT();
             <section>
                 <title>Stress Tests</title>
 
-                <exercise>
+                <exercise label="ptx-source-with-server-images">
                     <title>PTX problem source with server-generated images</title>
                     <webwork>
                         <pg-code>
@@ -1919,7 +1919,7 @@ ENDDOCUMENT();
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="list-indentation">
                     <title>Checking Proper Indentation In Lists</title>
                     <introduction>
                         <p>One long exercise, where ordered sublists test the specification of their labels.</p>
@@ -2186,7 +2186,7 @@ ENDDOCUMENT();
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="list-indentation-with-images-and-tables">
                     <title>Checking Proper Indentation In Lists with Images and Tables</title>
                     <webwork>
                         <pg-code>
@@ -2269,7 +2269,7 @@ ENDDOCUMENT();
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="deep-nested-lists">
                     <title>Deep-nested lists</title>
                     <webwork>
                         <statement>
@@ -2313,7 +2313,7 @@ ENDDOCUMENT();
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="empty-statement">
                     <introduction>
                         <p>
                             This exercise has no content in its statement.
@@ -2326,7 +2326,7 @@ ENDDOCUMENT();
                     </webwork>
                 </exercise>
 
-                <exercise>
+                <exercise label="single-quote-in-table-cell">
                     <introduction>
                         <p>
                             This exercise has a single quote in it.
@@ -2357,14 +2357,14 @@ ENDDOCUMENT();
                 <subsection>
                     <title>Inline Exercises</title>
                     <p>Some <q>inline</q> exercises, as distinguished from the <q>divisional</q> exercises below.</p>
-                    <exercise>
+                    <exercise label="inline-bare">
                         <webwork>
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
                         </webwork>
                     </exercise>
-                    <exercise>
+                    <exercise label="inline-title">
                         <title>Has a Title</title>
                         <webwork>
                             <statement>
@@ -2372,7 +2372,7 @@ ENDDOCUMENT();
                             </statement>
                         </webwork>
                     </exercise>
-                    <exercise>
+                    <exercise label="inline-introduction">
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
@@ -2382,7 +2382,7 @@ ENDDOCUMENT();
                             </statement>
                         </webwork>
                     </exercise>
-                    <exercise>
+                    <exercise label="inline-title-introduction">
                         <title>Has a Title</title>
                         <introduction>
                             <p>Has an introduction.</p>
@@ -2393,7 +2393,7 @@ ENDDOCUMENT();
                             </statement>
                         </webwork>
                     </exercise>
-                    <exercise>
+                    <exercise label="inline-conclusion">
                         <webwork>
                             <statement>
                                 <p><m>1+1=2</m></p>
@@ -2403,7 +2403,7 @@ ENDDOCUMENT();
                             <p>Has a conclusion.</p>
                         </conclusion>
                     </exercise>
-                    <exercise>
+                    <exercise label="inline-title-conclusion">
                         <title>Has a Title</title>
                         <webwork>
                             <statement>
@@ -2414,7 +2414,7 @@ ENDDOCUMENT();
                             <p>Has a conclusion.</p>
                         </conclusion>
                     </exercise>
-                    <exercise>
+                    <exercise label="inline-introduction-conclusion">
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
@@ -2427,7 +2427,7 @@ ENDDOCUMENT();
                             <p>Has a conclusion.</p>
                         </conclusion>
                     </exercise>
-                    <exercise>
+                    <exercise label="inline-title-introduction-conclusion">
                         <title>Has a Title</title>
                         <introduction>
                             <p>Has an introduction.</p>
@@ -2445,14 +2445,14 @@ ENDDOCUMENT();
 
                 <exercises>
                     <title>Divisional Exercises</title>
-                    <exercise>
+                    <exercise label="divisional-bare">
                         <webwork>
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
                         </webwork>
                     </exercise>
-                    <exercise>
+                    <exercise label="divisional-title">
                         <title>Has a Title</title>
                         <webwork>
                             <statement>
@@ -2460,7 +2460,7 @@ ENDDOCUMENT();
                             </statement>
                         </webwork>
                     </exercise>
-                    <exercise>
+                    <exercise label="divisional-introduction">
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
@@ -2470,7 +2470,7 @@ ENDDOCUMENT();
                             </statement>
                         </webwork>
                     </exercise>
-                    <exercise>
+                    <exercise label="divisional-title-introduction">
                         <title>Has a Title</title>
                         <introduction>
                             <p>Has an introduction.</p>
@@ -2481,7 +2481,7 @@ ENDDOCUMENT();
                             </statement>
                         </webwork>
                     </exercise>
-                    <exercise>
+                    <exercise label="divisional-conclusion">
                         <webwork>
                             <statement>
                                 <p><m>1+1=2</m></p>
@@ -2491,7 +2491,7 @@ ENDDOCUMENT();
                             <p>Has a conclusion.</p>
                         </conclusion>
                     </exercise>
-                    <exercise>
+                    <exercise label="divisional-title-conclusion">
                         <title>Has a Title</title>
                         <webwork>
                             <statement>
@@ -2502,7 +2502,7 @@ ENDDOCUMENT();
                             <p>Has a conclusion.</p>
                         </conclusion>
                     </exercise>
-                    <exercise>
+                    <exercise label="divisional-introduction-conclusion">
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
@@ -2515,7 +2515,7 @@ ENDDOCUMENT();
                             <p>Has a conclusion.</p>
                         </conclusion>
                     </exercise>
-                    <exercise>
+                    <exercise label="divisional-title-introduction-conclusion">
                         <title>Has a Title</title>
                         <introduction>
                             <p>Has an introduction.</p>
@@ -2533,14 +2533,14 @@ ENDDOCUMENT();
                         <introduction>
                             <p>These are inside an exercisegroup.</p>
                         </introduction>
-                        <exercise>
+                        <exercise label="exercisegroup-bare">
                             <webwork>
                                 <statement>
                                     <p><m>1+1=2</m></p>
                                 </statement>
                             </webwork>
                         </exercise>
-                        <exercise>
+                        <exercise label="exercisegroup-title">
                             <title>Has a Title</title>
                             <webwork>
                                 <statement>
@@ -2548,7 +2548,7 @@ ENDDOCUMENT();
                                 </statement>
                             </webwork>
                         </exercise>
-                        <exercise>
+                        <exercise label="exercisegroup-introduction">
                             <introduction>
                                 <p>Has an introduction.</p>
                             </introduction>
@@ -2558,7 +2558,7 @@ ENDDOCUMENT();
                                 </statement>
                             </webwork>
                         </exercise>
-                        <exercise>
+                        <exercise label="exercisegroup-title-introduction">
                             <title>Has a Title</title>
                             <introduction>
                                 <p>Has an introduction.</p>
@@ -2569,7 +2569,7 @@ ENDDOCUMENT();
                                 </statement>
                             </webwork>
                         </exercise>
-                        <exercise>
+                        <exercise label="exercisegroup-conclusion">
                             <webwork>
                                 <statement>
                                     <p><m>1+1=2</m></p>
@@ -2579,7 +2579,7 @@ ENDDOCUMENT();
                                 <p>Has a conclusion.</p>
                             </conclusion>
                         </exercise>
-                        <exercise>
+                        <exercise label="exercisegroup-title-conclusion">
                             <title>Has a Title</title>
                             <webwork>
                                 <statement>
@@ -2590,7 +2590,7 @@ ENDDOCUMENT();
                                 <p>Has a conclusion.</p>
                             </conclusion>
                         </exercise>
-                        <exercise>
+                        <exercise label="exercisegroup-introduction-conclusion">
                             <introduction>
                                 <p>Has an introduction.</p>
                             </introduction>
@@ -2603,7 +2603,7 @@ ENDDOCUMENT();
                                 <p>Has a conclusion.</p>
                             </conclusion>
                         </exercise>
-                        <exercise>
+                        <exercise label="exercisegroup-title-introduction-conclusion">
                             <title>Has a Title</title>
                             <introduction>
                                 <p>Has an introduction.</p>
