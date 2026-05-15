@@ -13,7 +13,7 @@
   </p>
   <!-- TODO: Add an array answer once the current WW distribution is returning PTX content for that. -->
 
-  <exercise>
+  <exercise label="answer-type-variety">
     <title>Answer Type Variety</title>
     <idx><h><webwork/></h><h>answer types</h></idx>
     <introduction>
@@ -92,7 +92,7 @@
     </webwork>
   </exercise>
 
-  <exercise>
+  <exercise label="special-feedback">
     <title>Special Feedback</title>
     <idx><h><webwork/></h><h>custom feedback</h></idx>
     <idx><h><webwork/></h><h>hint</h></idx>
@@ -156,7 +156,7 @@
     </webwork>
   </exercise>
 
-  <exercise>
+  <exercise label="string-answers">
     <title>String Answers</title>
     <idx><h><webwork/></h><h>string answers</h></idx>
     <idx><h><webwork/></h><h>algorithmic image</h></idx>
@@ -202,7 +202,7 @@
     </webwork>
   </exercise>
 
-  <exercise>
+  <exercise label="open-problem-library">
     <title>Open Problem Library</title>
     <idx><h><webwork/></h><h>Open Problem Library</h></idx>
     <introduction>
@@ -215,7 +215,7 @@
     <webwork source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg"/>
   </exercise>
 
-  <exercise>
+  <exercise label="structured-with-tasks">
     <title>Structured with Tasks</title>
     <idx><h><webwork/></h><h>tasks</h></idx>
     <idx><h><webwork/></h><h>flexible answer syntax</h></idx>
@@ -283,7 +283,7 @@
     </webwork>
   </exercise>
 
-  <exercise>
+  <exercise label="units-in-answers">
     <title>Units in Answers</title>
     <idx><h><webwork/></h><h>unit answers</h></idx>
     <introduction>
