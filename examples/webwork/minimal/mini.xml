@@ -39,7 +39,7 @@
     <section>
       <title><webwork /> Minimal Section</title>
       <!-- An exercise "generated" from PTX source -->
-      <exercise>
+      <exercise label="add-integers">
         <webwork>
           <pg-code>
             $a = Compute(random(1, 9, 1));
@@ -68,12 +68,12 @@
       </exercise>
       <!-- An exercise with source from a "webwork2" server           -->
       <!-- The path is relative to the host course's templates folder -->
-      <exercise>
+      <exercise label="cylinder-volume">
         <webwork source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg"/>
       </exercise>
       <!-- An exercise with source from a pg file. This is the default new problem file template -->
       <!-- from a webwork2 server. The path is relative to this current file we are in.          -->
-      <exercise>
+      <exercise label="value-of-pi">
         <webwork><xi:include parse="text" href="pg/newProblem.pg"/></webwork>
       </exercise>
     </section>
