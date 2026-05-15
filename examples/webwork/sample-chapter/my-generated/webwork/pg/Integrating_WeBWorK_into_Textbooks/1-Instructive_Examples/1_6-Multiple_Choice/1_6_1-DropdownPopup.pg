@@ -1,0 +1,74 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.6.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserPopUp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$rational = PopUp(
+    ["?","is","is not",],
+    "is not",
+);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+The number [`\sqrt{2}`] [_]{$rational}{5} rational.
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+If [`\sqrt{2}`] were rational, then [`\sqrt{2}=\frac{p}{q}\text{,}`] with [`p`] and [`q`] coprime. But then [`2q^2=p^2\text{.}`] By [@htmlLink("https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic#Canonical_representation_of_a_positive_integer","the Fundamental Theorem of Arithmetic","TARGET='_blank'")@]*, the power of [`2`] dividing the left side is odd, while the power of [`2`] dividing the right side is even. This is a contradiction, so [`\sqrt{2}`] [$rational] rational.
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

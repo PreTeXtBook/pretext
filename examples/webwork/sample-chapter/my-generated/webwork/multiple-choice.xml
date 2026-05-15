@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-multiple-choice" assembly-id="multiple-choice">
+  <static seed="54">
+    <statement><p>The number <m>\sqrt{2}</m> <ul form="popup" name="AnSwEr0001"><li>
+<p>?</p>
+</li><li>
+<p>is</p>
+</li><li>
+<p>is not</p>
+</li></ul> rational.</p>
+</statement>
+    <answer>
+      <p>
+        <m>\text{is not}</m>
+      </p>
+    </answer>
+    <solution><p>If <m>\sqrt{2}</m> were rational, then <m>\sqrt{2}=\frac{p}{q}\text{,}</m> with <m>p</m> and <m>q</m> coprime. But then <m>2q^2=p^2\text{.}</m> By <url href="">the Fundamental Theorem of Arithmetic</url>, the power of <m>2</m> dividing the left side is odd, while the power of <m>2</m> dividing the right side is even. This is a contradiction, so <m>\sqrt{2}</m> is not rational.</p>
+</solution>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_6-Multiple_Choice/1_6_1-DropdownPopup.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.6.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserPopUp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$rational = PopUp(
+    ["?","is","is not",],
+    "is not",
+);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+The number [`\sqrt{2}`] [_]{$rational}{5} rational.
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+If [`\sqrt{2}`] were rational, then [`\sqrt{2}=\frac{p}{q}\text{,}`] with [`p`] and [`q`] coprime. But then [`2q^2=p^2\text{.}`] By [@htmlLink("https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic#Canonical_representation_of_a_positive_integer","the Fundamental Theorem of Arithmetic","TARGET='_blank'")@]*, the power of [`2`] dividing the left side is odd, while the power of [`2`] dividing the right side is even. This is a contradiction, so [`\sqrt{2}`] [$rational] rational.
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

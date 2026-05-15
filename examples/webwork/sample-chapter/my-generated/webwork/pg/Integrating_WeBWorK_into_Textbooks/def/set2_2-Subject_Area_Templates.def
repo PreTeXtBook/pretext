@@ -1,0 +1,31 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/2_2-Subject_Area_Templates.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/2_2-Subject_Area_Templates.pg
+description       = Subject Area Templates
+problemListV2
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_2-Subject_Area_Templates/2_2_1-Answer_is_a_number_or_a_function.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_2-Subject_Area_Templates/2_2_2-Answer_is_a_function_with_domain_issues.pg
+problem_id = 2
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_2-Subject_Area_Templates/2_2_3-Multiple_Choice_by_Popup_Radio_Buttons_or_Checkboxes.pg
+problem_id = 3
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_2-Subject_Area_Templates/2_2_4.pg
+problem_id = 4
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_2-Subject_Area_Templates/2_2_5-Tables.pg
+problem_id = 5
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_2-Subject_Area_Templates/2_2_6-Answer_Arrays.pg
+problem_id = 6
+problem_end

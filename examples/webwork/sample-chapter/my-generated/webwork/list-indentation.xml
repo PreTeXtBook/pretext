@@ -1,0 +1,756 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-list-indentation" assembly-id="list-indentation">
+  <static seed="83">
+    <statement><p><ol label="a.">
+<li>
+<p>Simple item</p>
+</li>
+<li>
+<p>Simple item</p>
+</li>
+<li>
+<p>Simple item</p>
+</li>
+</ol></p>
+<p><ol label="a.">
+<li>
+<p>Simple item</p>
+</li>
+<li>
+<p>Simple item</p>
+</li>
+<li>
+<p>Simple item</p>
+</li>
+</ol></p>
+<p>Text before.
+<ol label="a.">
+<li>
+<p>Simple item</p>
+</li>
+<li>
+<p>Simple item</p>
+</li>
+<li>
+<p>Simple item</p>
+</li>
+</ol></p>
+<p>And after.</p>
+<p><ol label="a.">
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+</ol></p>
+<p>Text before.
+<ol label="a.">
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+</ol></p>
+<p>And after.</p>
+<p><ol label="a.">
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p><nbsp/>
+<ol label="A.">
+<li>
+<p>Sublist Item</p>
+</li>
+<li>
+<p>Sublist Item</p>
+</li>
+<li>
+<p>Sublist Item</p>
+</li>
+</ol></p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+</ol></p>
+<p>Text before.
+<ol label="a.">
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>Text before.
+<ol label="i.">
+<li>
+<p>Sublist Item</p>
+</li>
+<li>
+<p>Sublist Item</p>
+</li>
+<li>
+<p>Sublist Item</p>
+</li>
+</ol></p>
+<p>And after.</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+</ol></p>
+<p>And after.</p>
+<p><ol label="a.">
+<li>
+<p>Structured item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p><nbsp/>
+<ol label="I.">
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+</ol></p>
+</li>
+<li>
+<p>Structured item</p>
+<p>Second paragraph</p>
+</li>
+</ol></p>
+<p>Text before.
+<ol label="a.">
+<li>
+<p>Structured item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Text before.
+<ol label="1.">
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Sublist Item</p>
+<p>Second paragraph</p>
+</li>
+</ol></p>
+<p>And after.</p>
+</li>
+<li>
+<p>Structured item</p>
+<p>Second paragraph</p>
+</li>
+</ol></p>
+<p>And after.</p>
+<p><ol label="a.">
+<li>
+<p><nbsp/></p>
+<p><me>1+1=2</me></p>
+<p>Structured item</p>
+<p>Second</p>
+<p><me>1+1=2</me></p>
+<p>paragraph</p>
+</li>
+<li>
+<p><nbsp/>
+<ol label="a.">
+<li>
+<p>Sublist</p>
+<p><me>1+1=2</me></p>
+<p>Item</p>
+<p>Second paragraph</p>
+<p><me>1+1=2</me></p>
+</li>
+<li>
+<p><nbsp/></p>
+<p><me>1+1=2</me></p>
+<p>Sublist Item</p>
+<p>Second</p>
+<p><me>1+1=2</me></p>
+<p>paragraph</p>
+</li>
+<li>
+<p>Sublist Item</p>
+<p><me>1+1=2</me></p>
+<p><me>1+1=2</me></p>
+<p>Second paragraph</p>
+</li>
+</ol></p>
+</li>
+<li>
+<p>Structured</p>
+<p><me>1+1=2</me></p>
+<p>item</p>
+<p>Second paragraph</p>
+<p><me>1+1=2</me></p>
+</li>
+</ol></p>
+<p>Text before.
+<ol label="a.">
+<li>
+<p>Structured</p>
+<p><me>1+1=2</me></p>
+<p>item</p>
+<p>Second paragraph</p>
+<p><me>1+1=2</me></p>
+</li>
+<li>
+<p><nbsp/></p>
+<p><me>1+1=2</me></p>
+<p>Text before.
+<ol label="A.">
+<li>
+<p>Sublist</p>
+<p><me>1+1=2</me></p>
+<p>Item</p>
+<p>Second paragraph</p>
+<p><me>1+1=2</me></p>
+</li>
+<li>
+<p><nbsp/></p>
+<p><me>1+1=2</me></p>
+<p>Sublist Item</p>
+<p>Second</p>
+<p><me>1+1=2</me></p>
+<p>paragraph</p>
+</li>
+<li>
+<p>Sublist Item</p>
+<p><me>1+1=2</me></p>
+<p><me>1+1=2</me></p>
+<p>Second paragraph</p>
+</li>
+</ol></p>
+<p>And</p>
+<p><me>1+1=2</me></p>
+<p>after.</p>
+</li>
+<li>
+<p>Structured item</p>
+<p><me>1+1=2</me></p>
+<p><me>1+1=2</me></p>
+<p>Second paragraph</p>
+</li>
+</ol></p>
+<p>And after.</p>
+<p>Text before.
+<ol label="a.">
+<li>
+<p>Structured</p>
+<p><me>\begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}</me></p>
+<p>item</p>
+<p>Second paragraph</p>
+<p><me>\begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}</me></p>
+</li>
+<li>
+<p><nbsp/></p>
+<p><me>\begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}</me></p>
+<p>Text before.
+<ol label="i.">
+<li>
+<p>Sublist</p>
+<p><me>\begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}</me></p>
+<p>Item</p>
+<p>Second paragraph</p>
+<p><me>\begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}</me></p>
+</li>
+<li>
+<p><nbsp/></p>
+<p><me>\begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}</me></p>
+<p>Sublist Item</p>
+<p>Second</p>
+<p><me>\begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}</me></p>
+<p>paragraph</p>
+</li>
+<li>
+<p>Sublist Item</p>
+<p><me>\begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}</me></p>
+<p><me>\begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}</me></p>
+<p>Second paragraph</p>
+</li>
+</ol></p>
+<p>And</p>
+<p><me>\begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}</me></p>
+<p>after.</p>
+</li>
+<li>
+<p>Structured item</p>
+<p><me>\begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}</me></p>
+<p><me>\begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}</me></p>
+<p>Second paragraph</p>
+</li>
+</ol></p>
+<p>And after.</p>
+</statement>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_3-Stress_Tests/2_3_2-Checking_Proper_Indentation_In_Lists.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.3.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+a.  Simple item
+a.  Simple item
+a.  Simple item   
+
+a.  Simple item
+a.  Simple item
+a.  Simple item   
+
+Text before.
+a.  Simple item
+a.  Simple item
+a.  Simple item   
+
+And after.
+
+a.  Structured item
+
+a.  Structured item
+
+a.  Structured item
+
+Text before.
+a.  Structured item
+
+a.  Structured item
+
+a.  Structured item
+
+And after.
+
+a.  Structured item
+
+a.  [$NBSP]*
+    A.  Sublist Item
+
+    A.  Sublist Item
+
+    A.  Sublist Item
+
+a.  Structured item
+
+Text before.
+a.  Structured item
+
+a.  Text before.
+    i.  Sublist Item
+
+    i.  Sublist Item
+
+    i.  Sublist Item
+
+    And after.
+
+a.  Structured item
+
+And after.
+
+a.  Structured item
+
+    Second paragraph
+
+a.  [$NBSP]*
+    I.  Sublist Item
+
+        Second paragraph
+
+    I.  Sublist Item
+
+        Second paragraph
+
+    I.  Sublist Item
+
+        Second paragraph
+
+a.  Structured item
+
+    Second paragraph
+
+Text before.
+a.  Structured item
+
+    Second paragraph
+
+a.  Text before.
+    1.  Sublist Item
+
+        Second paragraph
+
+    1.  Sublist Item
+
+        Second paragraph
+
+    1.  Sublist Item
+
+        Second paragraph
+
+    And after.
+
+a.  Structured item
+
+    Second paragraph
+
+And after.
+
+a.  [$NBSP]*
+
+    [```1+1=2```]
+
+    Structured item
+
+    Second
+
+    [```1+1=2```]
+
+    paragraph
+
+a.  [$NBSP]*
+    a.  Sublist
+
+        [```1+1=2```]
+
+        Item
+
+        Second paragraph
+
+        [```1+1=2```]
+
+    a.  [$NBSP]*
+
+        [```1+1=2```]
+
+        Sublist Item
+
+        Second
+
+        [```1+1=2```]
+
+        paragraph
+
+    a.  Sublist Item
+
+        [```1+1=2```]
+
+        
+
+        [```1+1=2```]
+
+        Second paragraph
+
+a.  Structured
+
+    [```1+1=2```]
+
+    item
+
+    Second paragraph
+
+    [```1+1=2```]
+
+Text before.
+a.  Structured
+
+    [```1+1=2```]
+
+    item
+
+    Second paragraph
+
+    [```1+1=2```]
+
+a.  [$NBSP]*
+
+    [```1+1=2```]
+
+    Text before.
+    A.  Sublist
+
+        [```1+1=2```]
+
+        Item
+
+        Second paragraph
+
+        [```1+1=2```]
+
+    A.  [$NBSP]*
+
+        [```1+1=2```]
+
+        Sublist Item
+
+        Second
+
+        [```1+1=2```]
+
+        paragraph
+
+    A.  Sublist Item
+
+        [```1+1=2```]
+
+        
+
+        [```1+1=2```]
+
+        Second paragraph
+
+    And
+
+    [```1+1=2```]
+
+    after.
+
+a.  Structured item
+
+    [```1+1=2```]
+
+    
+
+    [```1+1=2```]
+
+    Second paragraph
+
+And after.
+
+Text before.
+a.  Structured
+
+    [```\newcommand{\amp}{&}
+    \begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}
+    ```]
+
+    item
+
+    Second paragraph
+
+    [```\newcommand{\amp}{&}
+    \begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}
+    ```]
+
+a.  [$NBSP]*
+
+    [```\newcommand{\amp}{&}
+    \begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}
+    ```]
+
+    Text before.
+    i.  Sublist
+
+        [```\newcommand{\amp}{&}
+        \begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}
+        ```]
+
+        Item
+
+        Second paragraph
+
+        [```\newcommand{\amp}{&}
+        \begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}
+        ```]
+
+    i.  [$NBSP]*
+
+        [```\newcommand{\amp}{&}
+        \begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}
+        ```]
+
+        Sublist Item
+
+        Second
+
+        [```\newcommand{\amp}{&}
+        \begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}
+        ```]
+
+        paragraph
+
+    i.  Sublist Item
+
+        [```\newcommand{\amp}{&}
+        \begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}
+        ```]
+
+        
+
+        [```\newcommand{\amp}{&}
+        \begin{aligned}
+        1+1\amp=2\\
+        2\amp=2
+        \end{aligned}
+        ```]
+
+        Second paragraph
+
+    And
+
+    [```\newcommand{\amp}{&}
+    \begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}
+    ```]
+
+    after.
+
+a.  Structured item
+
+    [```\newcommand{\amp}{&}
+    \begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}
+    ```]
+
+    
+
+    [```\newcommand{\amp}{&}
+    \begin{aligned}
+    1+1\amp=2\\
+    2\amp=2
+    \end{aligned}
+    ```]
+
+    Second paragraph
+
+And after.
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

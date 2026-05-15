@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-options-subset-explicit-labeling" assembly-id="options-subset-explicit-labeling">
+  <static seed="58">
+    <statement><p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}\text{.}</m> There may be more than one correct answer.</p>
+<p><dl form="checkboxes" name="AnSwEr0001" width="narrow">
+<li>
+<title>SUSHI</title>
+<p><m>e^{ (x^3+1) / x}</m></p>
+</li>
+<li>
+<title>BURRITO</title>
+<p><m>e^{x^2} + e^{1/x}</m></p>
+</li>
+<li>
+<title>BURGER</title>
+<p><m>\dfrac{ e^{x^2} }{ e^x }</m></p>
+</li>
+<li>
+<title>TACO</title>
+<p><m>e^{x^2} e^{1/x}</m></p>
+</li>
+<li>
+<title>PIZZA</title>
+<p><m>e^{x^2} e^{x^{-1}}</m></p>
+</li>
+<li>
+<title>HUNGRY</title>
+<p>None of the above</p>
+</li>
+</dl></p>
+</statement>
+    <answer>
+      <p>
+        <m>\text{SUSHI, TACO, PIZZA}</m>
+      </p>
+    </answer>
+    <solution><p>The correct answer is SUSHI, TACO, PIZZA.</p>
+</solution>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_6-Multiple_Choice/1_6_5-Choose_a_Subset_of_Options_with_Explicit_Labeling.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.6.5)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserCheckboxList.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$checks = CheckboxList(
+    [
+        [
+            {TACO => "${BM}e^{x^2} e^{1/x}${EM}"},
+            {PIZZA => "${BM}e^{x^2} e^{x^{-1}}${EM}"},
+            {SUSHI => "${BM}e^{ (x^3+1) / x}${EM}"},
+            {BURGER => "${BM}\dfrac{ e^{x^2} }{ e^x }${EM}"},
+            {BURRITO => "${BM}e^{x^2} + e^{1/x}${EM}"}
+        ],
+        {HUNGRY => "None of the above"}
+    ],
+    [0, 1, 2],
+    displayLabels => 1
+);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Select all expressions that are equivalent to [`e^{x^2 + 1/x}\text{.}`] There may be more than one correct answer.
+
+[_]{$checks}{5}
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+The correct answer is [$checks].
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-ptx-source-with-server-images" assembly-id="ptx-source-with-server-images">
+  <static seed="82">
+    <task>
+      <statement><!-- PTX:WARNING: PGML wanted to center align here. -->
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-1.png" width="25%"/>
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-2.png" width="25%"/>
+</statement>
+      <solution><!-- PTX:WARNING: PGML wanted to center align here. -->
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-3.png" width="25%"/>
+</solution>
+    </task>
+    <task>
+      <statement><!-- PTX:WARNING: PGML wanted to center align here. -->
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-4.png" width="25%"/>
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-5.png" width="25%"/>
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-6.png" width="25%"/>
+</statement>
+      <hint><!-- PTX:WARNING: PGML wanted to center align here. -->
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-7.png" width="25%"/>
+</hint>
+      <solution><!-- PTX:WARNING: PGML wanted to center align here. -->
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-8.png" width="25%"/>
+</solution>
+    </task>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_3-Stress_Tests/2_3_1-PTX_problem_source_with_servergenerated_images.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.3.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGgraphmacros.pl",
+  "scaffold.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+COMMENT('This problem is scaffolded with multiple parts');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+for my $i(0..7){$gr[$i] = init_graph(-1,-1,4,4,axes=>[0,0],grid=>[5,5],size=>[150,150]);};
+add_functions($gr[0], "1 for x in <-1,4> using color:blue and weight:2");
+add_functions($gr[1], "x for x in <-1,4> using color:blue and weight:2");
+add_functions($gr[2], "x^2 for x in <-1,4> using color:blue and weight:2");
+add_functions($gr[3], "x^3 for x in <-1,4> using color:blue and weight:2");
+add_functions($gr[4], "e^x for x in <-1,4> using color:blue and weight:2");
+add_functions($gr[5], "sin(x) for x in <-1,4> using color:blue and weight:2");
+add_functions($gr[6], "cos(x) for x in <-1,4> using color:blue and weight:2");
+add_functions($gr[7], "exp(-x^2) for x in <-1,4> using color:blue and weight:2");
+
+############################################################
+# Body
+############################################################
+
+############################################################
+# Scaffold
+############################################################
+Scaffold::Begin(numbered => 1,is_open => "correct_or_first_incorrect",can_open => when_previous_correct,);
+
+############################################################
+# Section
+############################################################
+Section::Begin("");
+
+BEGIN_PGML
+>> [@image(insertGraph($gr[0]), width=>150)@]*  <<
+
+>> [@image(insertGraph($gr[1]), width=>150)@]*  <<
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+>> [@image(insertGraph($gr[2]), width=>150)@]*  <<
+
+END_PGML_SOLUTION
+
+Section::End();
+
+############################################################
+# Section
+############################################################
+Section::Begin("");
+
+BEGIN_PGML
+>> [@image(insertGraph($gr[3]), width=>150)@]*  <<
+
+>> [@image(insertGraph($gr[4]), width=>150)@]*  <<
+
+>> [@image(insertGraph($gr[5]), width=>150)@]*  <<
+
+END_PGML
+
+############################################################
+# Hint
+############################################################
+#Set value of $showHint in PGcourse.pl for course-wide attempt threshhold for revealing hints
+
+BEGIN_PGML_HINT
+>> [@image(insertGraph($gr[6]), width=>150)@]*  <<
+
+END_PGML_HINT
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+>> [@image(insertGraph($gr[7]), width=>150)@]*  <<
+
+END_PGML_SOLUTION
+
+Section::End();
+
+Scaffold::End();
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

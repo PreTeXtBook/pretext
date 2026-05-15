@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-local-pg-file" assembly-id="local-pg-file">
+  <static seed="20">
+    <statement><p>Compute the sum of <m>2</m> and <m>2\text{:}</m></p>
+<p><m>2 + 2 =</m> <fillin characters="5" name="AnSwEr0001"/></p>
+</statement>
+    <answer>
+      <p>
+        <m>4</m>
+      </p>
+    </answer>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/1_1_8-Local_PG_File.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+DOCUMENT();
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Add two positive single-digit integers.');
+
+Context('Numeric');
+$a = random(1, 9, 1);
+$b = random(1, 9, 1);
+$c = Compute($a + $b);
+
+BEGIN_PGML
+Compute the sum of [`[$a]`] and [`[$b]\text{:}`]
+
+[`[$a] + [$b] =`] [_]{$c}{5} [@AnswerFormatHelp('numbers')@]*
+
+END_PGML
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

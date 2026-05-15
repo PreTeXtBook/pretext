@@ -1,0 +1,119 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.7.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "niceTables.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+@a = (random(2,9,1),random(2,9,1));
+@b = (random(2,9,1),random(2,9,1));
+for my$i(0..3){$p[$i]=$a[int($i/2)]*$b[$i % 2]};
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Complete this multiplication table.
+
+>> [@DataTable(
+  [
+    [[PGML('[`\times`]'),
+      rowbottom => '3',
+      midrule => '1',],
+     PGML('[`[$a[0]]`]'),
+     PGML('[`[$a[1]]`]'),
+    ],
+    [[PGML('[`[$b[0]]`]'),
+      rowbottom => '1',
+      midrule => '1',],
+     PGML('[_]{$p[0]}{5}'),
+     PGML('[_]{$p[2]}{5}'),
+    ],
+    [[PGML('[`[$b[1]]`]'),
+      rowbottom => '1',
+      midrule => '1',],
+     PGML('[_]{$p[1]}{5}'),
+     PGML('[_]{$p[3]}{5}'),
+    ],
+  ],
+      align => 'r!{\vrule width 0.11em}c|c|',
+      valign => 'middle',);@]* <<
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+>> [@DataTable(
+  [
+    [[PGML('[`\times`]'),
+      rowbottom => '3',
+      midrule => '1',],
+     PGML('[`[$a[0]]`]'),
+     PGML('[`[$a[1]]`]'),
+    ],
+    [[PGML('[`[$b[0]]`]'),
+      rowbottom => '1',
+      midrule => '1',],
+     PGML('[`[$p[0]]`]'),
+     PGML('[`[$p[2]]`]'),
+    ],
+    [[PGML('[`[$b[1]]`]'),
+      rowbottom => '1',
+      midrule => '1',],
+     PGML('[`[$p[1]]`]'),
+     PGML('[`[$p[3]]`]'),
+    ],
+  ],
+      align => 'r!{\vrule width 0.11em}c|c|',
+      valign => 'middle',);@]* <<
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

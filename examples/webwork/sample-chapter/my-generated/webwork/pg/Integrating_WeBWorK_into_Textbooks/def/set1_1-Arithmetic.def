@@ -1,0 +1,47 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/1_1-Arithmetic.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/1_1-Arithmetic.pg
+description       = Arithmetic
+problemListV2
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/1_1_1-Adding_SingleDigit_Integers.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/1_1_1-Adding_SingleDigit_Integers.pg
+problem_id = 2
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/1_1_3-Controlling_Randomness.pg
+problem_id = 3
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/1_1_4-Special_Answer_Checking.pg
+problem_id = 4
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/1_1_5-Using_Hints.pg
+problem_id = 5
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/1_1_6-No_Randomization.pg
+problem_id = 6
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/1_1_7-Local_PG.pg
+problem_id = 7
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/1_1_8-Local_PG_File.pg
+problem_id = 8
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/Project-1_1_1-Inside_a_project.pg
+problem_id = 
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/Exploration-1_1_2-Inside_an_exploration.pg
+problem_id = 
+problem_end

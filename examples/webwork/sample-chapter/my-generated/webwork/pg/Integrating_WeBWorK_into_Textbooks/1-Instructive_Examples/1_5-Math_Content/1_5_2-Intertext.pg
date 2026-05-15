@@ -1,0 +1,111 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.5.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Here, we solve an equation.
+
+[```\newcommand{\amp}{&}
+\begin{aligned}
+2x+1 \amp= 3
+\end{aligned}
+```]
+
+Now subtract [`1`] from each side.
+
+[```\newcommand{\amp}{&}
+\begin{aligned}
+2x   \amp= 2
+\end{aligned}
+```]
+
+Now divide by [`2`] on each side.
+
+[```\newcommand{\amp}{&}
+\begin{aligned}
+x    \amp= 1
+\end{aligned}
+```]
+
+We should also test when the [|<md>|]* is within a list.
+a.  Start a list.
+
+a.  [$NBSP]*
+
+    [```\newcommand{\amp}{&}
+    \begin{aligned}
+    2x+1 \amp= 3
+    \end{aligned}
+    ```]
+
+    Now subtract [`1`] from each side.
+
+    [```\newcommand{\amp}{&}
+    \begin{aligned}
+    2x   \amp= 2
+    \end{aligned}
+    ```]
+
+    Now divide by [`2`] on each side.
+
+    [```\newcommand{\amp}{&}
+    \begin{aligned}
+    x    \amp= 1
+    \end{aligned}
+    ```]
+
+a.  Still in the list?
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

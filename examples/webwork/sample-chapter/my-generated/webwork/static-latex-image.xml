@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-static-latex-image" assembly-id="static-latex-image">
+  <static seed="65">
+    <statement><p>This image is a visual proof that <m>\sum_{k=1}^{n}k</m> equals what?</p>
+<!-- PTX:WARNING: PGML wanted to center align here. -->
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/static-latex-image-image-1" width="50%">
+<shortdescription>21 blue balls are arranged in a triangular formation, with one at the top, then a row of two, a row of three, and so on until a row of six; there is a seventh row with seven orange balls; one blue ball is highlighted, and two lines extend downward from that ball, one to the left and one to the right, parallel to the sides of the triangle, until they intersect two orange balls; the effect is that each of the 1+2+3+4+5+6 blue balls corresponds to one pair from the 7 orange balls</shortdescription>
+</image>
+<p><fillin characters="20" name="AnSwEr0001"/></p>
+</statement>
+    <answer>
+      <p>
+        <m>\mathop{\rm C}\nolimits\mathopen{}\left(n+1,2\right)\hbox{ or }\frac{\left(n+1\right)n}{2}</m>
+      </p>
+    </answer>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_8-Graphics_in_Exercises/1_8_1-A_static_lateximage_graph.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.8.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGlateximage.pl",
+  "PCCmacros.pl",
+  "parserOneOf.pl",
+  "contextForm.pl",
+  "contextIntegerFunctions.pl",
+  "WWSC.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("IntegerFunctions");
+Context()->variables->are(n=>'Real');
+$answer = OneOf(Formula("C(n+1,2)"),Formula("(n+1)n/2"));
+
+$image_1 = createLaTeXImage();
+$image_1->addToPreamble(latexImagePreamble());
+$image_1->BEGIN_LATEX_IMAGE
+\begin{tikzpicture}
+    \draw[dashed] (0.5-0.5*6.5,-0.866025*6.5) -- (7-0.5*6.5,-0.866025*6.5);
+    \draw[very thick] (2-0.5*7,-0.866025*7) -- (2-0.5*4,-0.866025*4) -- (5-0.5*7,-0.866025*7);
+    \foreach \x in {1,...,6}
+        \foreach \y in {1,...,\x}
+            \shade[ball color=blue!30] (\y-0.5*\x,-0.866025*\x) circle (0.2cm);
+    \foreach \y in {1,...,7}
+        \shade[ball color=orange!40] (\y-0.5*7,-0.866025*7) circle (0.2cm);
+    \node at (2.5,-0.5) [anchor=north west]{\(\color{blue}\sum\limits_{k=1}^nk\color{black}\)};
+    \shade[ball color=blue] (2-0.5*4,-0.866025*4) circle (0.2cm);
+    \shade[ball color=orange] (2-0.5*7,-0.866025*7) circle (0.2cm);
+    \shade[ball color=orange] (5-0.5*7,-0.866025*7) circle (0.2cm);
+\end{tikzpicture}
+
+END_LATEX_IMAGE
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+This image is a visual proof that [`\sum_{k=1}^{n}k`] equals what?
+
+>> [@image(insertGraph($image_1), width=>300, alt=>qq"21 blue balls are arranged in a triangular formation, with one at the top, then a row of two, a row of three, and so on until a row of six; there is a seventh row with seven orange balls; one blue ball is highlighted, and two lines extend downward from that ball, one to the left and one to the right, parallel to the sides of the triangle, until they intersect two orange balls; the effect is that each of the 1\+2\+3\+4\+5\+6 blue balls corresponds to one pair from the 7 orange balls")@]*  <<
+
+[@KeyboardInstructions('You may enter the answer using [|C(n,k)|]* notation.')@]**
+
+[_]{$answer}{20}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

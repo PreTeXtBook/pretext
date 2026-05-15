@@ -1,0 +1,90 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:26:17-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.3)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGlateximage.pl",
+  "contextArbitraryString.pl",
+  "PTXSC.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("ArbitraryString");
+$platypus = Compute("platypus")->cmp(checker => sub {
+  my ($correct,$student,$ans) = @_;
+  $correct = $correct->value;
+  $student = $student->value;
+  $student = lc($student);
+  $student =~ s/ +/ /;
+  $student =~ s/^ //;
+  $student =~ s/ $//;
+  return ($student eq $correct);
+});
+
+$image_1 = createLaTeXImage();
+$image_1->addToPreamble(latexImagePreamble());
+$image_1->BEGIN_LATEX_IMAGE
+\begin{tikzpicture}
+  \draw[fill=red, opacity=0.5] (0,0) circle (2cm) node[below left=1.5cm, opacity=1] {Has a Bill} node[below left, opacity=1] {Duck};
+  \draw[fill=green, opacity=0.5] (60:2cm) circle (2cm) node [above=2.1cm, opacity=1] {Is Venemous} node[above=0.5cm, opacity=1] {Jellyfish};
+  \draw[fill=blue, opacity=0.5] (0:2cm) circle (2cm) node [below right=1.5cm, opacity=1] {Has Fur} node[below right, opacity=1] {Beaver};
+\end{tikzpicture}
+
+END_LATEX_IMAGE
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+This Venn Diagram groups animals by certain characteristics.
+
+>> [@image(insertGraph($image_1), width=>300)@]*  <<
+
+Name an animal that belongs in the center region. Spelling counts!
+
+[_]{$platypus}{30}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

@@ -1,0 +1,196 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-table-completion" assembly-id="table-completion">
+  <static seed="62">
+    <statement><p>Complete this multiplication table.</p>
+<!-- PTX:WARNING: PGML wanted to center align here. -->
+<tabular>
+<col halign="right" right="major"/>
+<col halign="center" right="minor"/>
+<col halign="center" right="minor"/>
+<row bottom="major">
+<cell><m>\times</m></cell>
+<cell><m>8</m></cell>
+<cell><m>6</m></cell>
+</row>
+<row bottom="minor">
+<cell><m>6</m></cell>
+<cell><fillin characters="5" name="AnSwEr0001"/>
+</cell>
+<cell><fillin characters="5" name="AnSwEr0002"/>
+</cell>
+</row>
+<row bottom="minor">
+<cell><m>9</m></cell>
+<cell><fillin characters="5" name="AnSwEr0003"/>
+</cell>
+<cell><fillin characters="5" name="AnSwEr0004"/>
+</cell>
+</row>
+</tabular>
+</statement>
+    <answer>
+      <p>
+        <m>48</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>36</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>72</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>54</m>
+      </p>
+    </answer>
+    <solution><!-- PTX:WARNING: PGML wanted to center align here. -->
+<tabular>
+<col halign="right" right="major"/>
+<col halign="center" right="minor"/>
+<col halign="center" right="minor"/>
+<row bottom="major">
+<cell><m>\times</m></cell>
+<cell><m>8</m></cell>
+<cell><m>6</m></cell>
+</row>
+<row bottom="minor">
+<cell><m>6</m></cell>
+<cell><m>48</m></cell>
+<cell><m>36</m></cell>
+</row>
+<row bottom="minor">
+<cell><m>9</m></cell>
+<cell><m>72</m></cell>
+<cell><m>54</m></cell>
+</row>
+</tabular>
+</solution>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_7-Tables/1_7_1-Complete_this_Table.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.7.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "niceTables.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+@a = (random(2,9,1),random(2,9,1));
+@b = (random(2,9,1),random(2,9,1));
+for my$i(0..3){$p[$i]=$a[int($i/2)]*$b[$i % 2]};
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Complete this multiplication table.
+
+>> [@DataTable(
+  [
+    [[PGML('[`\times`]'),
+      rowbottom => '3',
+      midrule => '1',],
+     PGML('[`[$a[0]]`]'),
+     PGML('[`[$a[1]]`]'),
+    ],
+    [[PGML('[`[$b[0]]`]'),
+      rowbottom => '1',
+      midrule => '1',],
+     PGML('[_]{$p[0]}{5}'),
+     PGML('[_]{$p[2]}{5}'),
+    ],
+    [[PGML('[`[$b[1]]`]'),
+      rowbottom => '1',
+      midrule => '1',],
+     PGML('[_]{$p[1]}{5}'),
+     PGML('[_]{$p[3]}{5}'),
+    ],
+  ],
+      align => 'r!{\vrule width 0.11em}c|c|',
+      valign => 'middle',);@]* <<
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+>> [@DataTable(
+  [
+    [[PGML('[`\times`]'),
+      rowbottom => '3',
+      midrule => '1',],
+     PGML('[`[$a[0]]`]'),
+     PGML('[`[$a[1]]`]'),
+    ],
+    [[PGML('[`[$b[0]]`]'),
+      rowbottom => '1',
+      midrule => '1',],
+     PGML('[`[$p[0]]`]'),
+     PGML('[`[$p[2]]`]'),
+    ],
+    [[PGML('[`[$b[1]]`]'),
+      rowbottom => '1',
+      midrule => '1',],
+     PGML('[`[$p[1]]`]'),
+     PGML('[`[$p[3]]`]'),
+    ],
+  ],
+      align => 'r!{\vrule width 0.11em}c|c|',
+      valign => 'middle',);@]* <<
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

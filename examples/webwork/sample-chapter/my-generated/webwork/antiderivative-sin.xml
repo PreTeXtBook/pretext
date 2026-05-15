@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-antiderivative-sin" assembly-id="antiderivative-sin">
+  <static seed="46">
+    <statement><p><m>f(x)=\sin(x)</m></p>
+<p><fillin characters="20" name="AnSwEr0001"/></p>
+</statement>
+    <answer>
+      <p>
+        <m>-\cos\mathopen{}\left(x\right)+C</m>
+      </p>
+    </answer>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_4-Antidifferentiation/1_4_2_4.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.4.2.4)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserFormulaUpToConstant.pl",
+  "contextForm.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$answer = FormulaUpToConstant("-cos(x)");
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+For the given function [`f\text{,}`] find [`\newcommand{\indefiniteintegral}[2]{\int#1\,d#2}\indefiniteintegral{f(x)}{x}\text{.}`]
+
+Note that these common instructions are phrased in such a way that they would read well if they were applied to only one exercise at a time. That will happen if these exercises are exported as [|.pg|]* files, for example to be used in online homework from a WeBWorK server.
+
+[`f(x)=\sin(x)`]
+
+[_]{$answer}{20}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

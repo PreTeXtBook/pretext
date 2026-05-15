@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-cylinder-volume" assembly-id="cylinder-volume">
+  <static seed="4" source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg">
+    <statement><p>A cylinder<rsq/>s base<rsq/>s radius is <m>{2\ {\rm m}}</m>, and its height is <m>{5\ {\rm m}}</m>.</p>
+<!-- PTX:WARNING: PGML wanted to center align here. -->
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/cylinder-volume-image-1.png" width="40%"/>
+<p><ol label="a.">
+<li>
+<p>This cylinder<rsq/>s volume, in terms of <m>\pi</m>, is <fillin characters="13" name="AnSwEr0001"/>.</p>
+</li>
+<li>
+<p>This cylinder<rsq/>s volume, rounded to the hundredth place, is <fillin characters="13" name="AnSwEr0002"/>.</p>
+</li>
+</ol></p>
+</statement>
+    <answer>
+      <p>
+        <m>20\pi\ {\rm m^{3}}</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>62.83\ {\rm m^{3}}</m>
+      </p>
+    </answer>
+    <solution><p>We use <m>r</m> to represent the base<rsq/>s radius, and <m>h</m> to represent the cylinder<rsq/>s height.</p>
+<p>A cylinder<rsq/>s volume formula is <m>V= (\text{base area}) \cdot \text{height}</m>. A cylinder<rsq/>s base is a circle, with its area formula <m>A = \pi r^{2}</m>.</p>
+<p>Putting together these two formulas, we have a cylinder<rsq/>s volume formula:</p>
+<p><m>\displaystyle{ V= \pi r^{2} h }</m></p>
+<p>Throughout these computations, all quantities have units attached, and we only show them in the final step.</p>
+<p><ol label="a.">
+<li>
+<p>Using the volume formula, we have:</p>
+<p><m>\displaystyle{\begin{aligned}
+      V \amp  = \pi r^{2} h \\
+        \amp  = \pi \cdot 2^{2} \cdot 5 \\
+        \amp  = \pi \cdot 20 \\
+        \amp  = 20 \pi \textrm{ m}^3
+      \end{aligned}}</m></p>
+<p>Don<rsq/>t forget the volume unit <m>\textrm{m}^3</m>.</p>
+</li>
+<li>
+<p>To find the decimal version, we replace <m>\pi</m> with its decimal value, and we have:</p>
+<p><m>\displaystyle{\begin{aligned}[t]
+      V\amp  = 20 \pi \\
+       \amp  \approx 20 \cdot 3.14\ldots \\
+       \amp  \approx {62.83\ {\rm m^{3}}}
+     \end{aligned}}</m></p>
+<p>Don<rsq/>t forget the volume unit <m>\textrm{m}^3</m>.</p>
+</li>
+</ol></p>
+</solution>
+  </static>
+  <rendering-data sourceFilePath="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg" origin="webwork2" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg"/>
+</webwork-reps>

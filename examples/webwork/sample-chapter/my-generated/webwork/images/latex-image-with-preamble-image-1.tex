@@ -1,0 +1,21 @@
+\documentclass{standalone}
+\usepackage[svgnames]{xcolor}
+\usepackage{pgfplots}
+\pgfplotsset{
+    every axis/.append style={
+        axis lines=middle,
+        xlabel={$x$},
+        ylabel={$y$},
+        grid = both,
+    }
+}
+
+\begin{document}
+\begin{tikzpicture}
+    \begin{axis}
+        \addplot[domain=-2:3,smooth] {(x--1)*(x-1)*(x-2)};
+    \end{axis}
+\end{tikzpicture}
+
+
+\end{document}

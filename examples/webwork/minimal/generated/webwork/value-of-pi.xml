@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-value-of-pi" assembly-id="value-of-pi">
+  <static seed="5">
+    <statement><p>Enter a value for <m>\pi</m>.</p>
+<p><fillin characters="5" name="AnSwEr0001"/></p>
+</statement>
+    <answer>
+      <p>
+        <m>3.14159</m>
+      </p>
+    </answer>
+    <solution><p>You could type <c>pi</c> or <c>3.14</c>, or <c>22/7</c>,
+among other options.</p>
+</solution>
+  </static>
+  <rendering-data problemSource="WeBWorK_Minimal_Example/1-WeBWorK_Minimal_Section/1_3.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+## DESCRIPTION
+## Give a value for pi
+## ENDDESCRIPTION
+
+## KEYWORDS('template', 'pi')
+
+## DBsubject('Algebra')
+## DBchapter('Fundamentals')
+## DBsection('Real Numbers')
+## Date('')
+## Author('')
+## Institution('')
+
+DOCUMENT();
+
+loadMacros(
+    "PGstandard.pl",    # Standard macros for PG language
+    "PGML.pl",          # PGML markup and Math Objects
+    "PGcourse.pl",      # Customization file for the course
+);
+
+# Uncomment the following if you don't want to show which
+# answers are correct and which are incorrect
+#$showPartialCorrectAnswers = 0;
+
+$pi = Real("pi");
+
+BEGIN_PGML
+Enter a value for [`\pi`].
+
+[_]{$pi}{5}
+END_PGML
+
+BEGIN_PGML_SOLUTION
+You could type [|pi|]* or [|3.14|]*, or [|22/7|]*,
+among other options.
+END_PGML_SOLUTION
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

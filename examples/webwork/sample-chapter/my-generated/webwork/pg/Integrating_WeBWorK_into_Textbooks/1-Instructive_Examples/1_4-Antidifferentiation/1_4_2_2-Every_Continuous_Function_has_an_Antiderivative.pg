@@ -1,0 +1,63 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.4.2.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGessaymacros.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Explain how we can use Corollary[$NBSP]*1.4.3 to say that every continuous function _always_ has a derivative. (And we will demonstrate here that you can use a  macro from [|docinfo|]*: [`\newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)\text{.}`] It will work in the WeBWorK problem, regardless of whether you are using images, MathJax, or hardcopy.)
+
+[@ANS(essay_cmp()); essay_box(6,76)@]* [@essay_help()@]*
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

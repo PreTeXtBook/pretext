@@ -1,0 +1,11 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/2_5-Runestone_Assignment_Testing_Exercises.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/2_5-Runestone_Assignment_Testing_Exercises.pg
+description       = Runestone Assignment Testing
+problemListV2
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_5-Runestone_Assignment_Testing/2_5_1.pg
+problem_id = 1
+problem_end

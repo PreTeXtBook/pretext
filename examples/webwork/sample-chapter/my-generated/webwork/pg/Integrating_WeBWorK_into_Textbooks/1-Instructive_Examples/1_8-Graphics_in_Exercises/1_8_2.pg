@@ -1,0 +1,95 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.8.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGlateximage.pl",
+  "WWSC.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+
+$introduction_image_1 = createLaTeXImage();
+$introduction_image_1->addToPreamble(latexImagePreamble());
+$introduction_image_1->BEGIN_LATEX_IMAGE
+\begin{tikzpicture}
+    \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(L\)} --++ (0,3) node[right,pos=0.5] {\(W\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(D\)} --++ (0,3) --++ (4,0);
+\end{tikzpicture}
+
+END_LATEX_IMAGE
+
+$image_1 = createLaTeXImage();
+$image_1->addToPreamble(latexImagePreamble());
+$image_1->BEGIN_LATEX_IMAGE
+\begin{tikzpicture}
+    \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(12\)} --++ (0,3) node[right,pos=0.5] {\(5\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(13\)} --++ (0,3) --++ (4,0);
+\end{tikzpicture}
+
+END_LATEX_IMAGE
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+This exercisegroup has a [|<latex-image>|]* image in its introduction. In standalone versions of the exercise, this image should be repeated.
+
+>> [@image(insertGraph($introduction_image_1), width=>300)@]*  <<
+
+Find [`D`] when [`L=12`] and [`W=5\text{.}`]
+
+[_]{'13'}{10}
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+>> [@image(insertGraph($image_1), width=>600)@]*  <<
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

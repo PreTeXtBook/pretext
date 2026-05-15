@@ -1,0 +1,98 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:26:17-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserPopUp.pl",
+  "parserRadioButtons.pl",
+  "contextForm.pl",
+  "contextLimitedRadical.pl",
+  "contextRestrictedDomains.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("Numeric");
+$f = Formula("sqrt(x)");
+$derivative = Formula("1/(2sqrt(x))");
+$popup = PopUp(['?','power','exponential','linear','quadratic'],1);
+$radio = RadioButtons([
+  'It shares ancestry with "radius", as in the radius of a circle.',
+  'It shares ancestry with "radish", a vegetable.',
+  'It shares ancestry with "radler", a mixture of beer and grapefruit soda.',
+],1);
+Context("LimitedRadical");
+$a = Formula("2sqrt(3)");
+Context("LimitedNumeric");
+$b = Real(sqrt(12));
+Context("Interval");
+$domain = Interval("[0,inf)");
+Context("Point");
+$point = Point("(4,2)");
+Context("RestrictedDomains");
+$restricted = Formula("x, x >= 0");
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Consider the function [`f`] defined by [`f(x)=[$f]\text{.}`]
+a.  The exact value of [`f(12)`] is [_]{$a}{10} and a decimal approximation for this is [_]{$b}{10}.
+
+a.  The domain of this function, in interval notation, is [_]{$domain}{10}.
+
+a.  The graph of [`y=[$f]`] intersects the graph of [`y=6-x`] at [_]{$point}{10}.
+
+a.  [`\frac{d}{dx}[$f]={}`] [_]{$derivative}{10}.
+
+a.  The formula for [`f(x)^2\text{,}`] including its restricted domain, is [_]{$restricted}{20}.
+
+a.  [`f`] is a [_]{$popup}{5} function.
+
+a.  Which is true of the word "radical"?
+
+    [_]{$radio}{5}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

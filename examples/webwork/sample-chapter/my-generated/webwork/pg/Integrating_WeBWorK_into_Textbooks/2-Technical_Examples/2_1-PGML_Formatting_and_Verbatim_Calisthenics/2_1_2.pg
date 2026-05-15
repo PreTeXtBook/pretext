@@ -1,0 +1,105 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.1.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "contextABCD.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+$xmlchars = q(<>&'";);
+$latex0 = '#%&<>\^_`|~';
+$latex1 = '${}';
+$alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+$otherchars = '!()*+,-./:=?@[]';
+Context()->strings->add($xmlchars=>{});
+Context()->strings->add($latex0=>{});
+Context()->strings->add($latex1=>{});
+Context()->strings->add($alphanumeric=>{});
+Context()->strings->add($otherchars=>{});
+$xmlcharsMO = String($xmlchars);
+$latex0MO = String($latex0);
+$latex1MO = String($latex1);
+$alphanumericMO = String($alphanumeric);
+$othercharsMO = String($otherchars);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+a.  Special characters used by XML, character escaping: [$xmlchars]
+
+    Now as a MathObject: [$xmlcharsMO]
+
+    [_]{$xmlchars}{6}
+
+a.  Special characters used by LaTeX, where LaTeX [|\text|]* and MathJax [|\text|]* disagree: [$latex0]
+
+    Now as a MathObject: [$latex0MO]
+
+    [_]{$latex0}{11}
+
+a.  Special characters used by LaTeX, where LaTeX [|\text|]* and MathJax [|\text|]* can agree: [$latex1]
+
+    Now as a MathObject: [$latex1MO]
+
+    [_]{$latex1}{3}
+
+a.  Alphanumeric characters: [$alphanumeric]
+
+    Now as a MathObject: [$alphanumericMO]
+
+    [_]{$alphanumeric}{62}
+
+a.  Other characters: [$otherchars]
+
+    Now as a MathObject: [$othercharsMO]
+
+    [_]{$otherchars}{15}
+
+In answers, because of [$LATEX]* and MathJax divergence, the first two should come out in verbatim. (And so should any string containing even one of those characters.) The latter three should come out in regular text.
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

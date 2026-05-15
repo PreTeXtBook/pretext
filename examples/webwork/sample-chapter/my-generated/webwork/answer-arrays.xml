@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-answer-arrays" assembly-id="answer-arrays">
+  <static seed="81">
+    <statement><p>These answer blanks are all expecting some sort of answer in an array format.</p>
+<p><m>{\left(0,0\right)} = {}</m><fillin cols="2"/></p>
+<p><m>{\left\lt 1,2\right&gt;} = {}</m><fillin cols="2"/></p>
+<p><m>{\left[\begin{array}{c}3\\4\\\end{array}\right]} = {}</m><fillin rows="2"/></p>
+<p><m>{\left[\begin{array}{cc}
+1 \amp 2\cr
+3 \amp 4
+\end{array}\right]} = {}</m><fillin cols="2" rows="2"/></p>
+</statement>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_2-Subject_Area_Templates/2_2_6-Answer_Arrays.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.2.6)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("Point");
+$p = Point(0,0);
+Context("Vector");
+$v = Vector(1,2);
+$c = ColumnVector(3,4);
+Context("Matrix");
+$m = Matrix([[1,2],[3,4]]);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+These answer blanks are all expecting some sort of answer in an array format.
+
+[`[$p] = {}`][_]*{$p}{5}
+
+[`[$v] = {}`][_]*{$v}{5}
+
+[`[$c] = {}`][_]*{$c}{5}
+
+[`[$m] = {}`][_]*{$m}{5}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

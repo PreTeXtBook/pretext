@@ -1,0 +1,104 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.3.4)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Ordered list.
+
+a.  Level 1, first.
+
+a.  Level 1, second.
+    i.  Level 2, first.
+
+    i.  Level 2, second.
+        A.  Level 3, first.
+
+        A.  Level 3, second.
+            1.  Level 4, first.
+
+            1.  Level 4, second.
+
+            1.  Level 4, third.
+
+        A.  Level 3, third.
+
+    i.  Level 2, third.
+
+a.  Level 1, third.
+
+Unordered list.
+
+* Level 1, first.
+
+* Level 1, second.
+    o Level 2, first.
+
+    o Level 2, second.
+        + Level 3, first.
+
+        + Level 3, second.
+            * Level 4, first.
+
+            * Level 4, second.
+
+            * Level 4, third.
+
+        + Level 3, third.
+
+    o Level 2, third.
+
+* Level 1, third.   
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

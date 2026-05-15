@@ -1,0 +1,31 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = PreTeXt_Showcase/header/PreTeXt_Showcase.pg
+screenHeaderFile  = PreTeXt_Showcase/header/PreTeXt_Showcase.pg
+description       = PreTeXt Showcase
+problemListV2
+problem_start
+source_file = PreTeXt_Showcase/6_1-Answer_Type_Variety.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = PreTeXt_Showcase/6_2-Special_Feedback.pg
+problem_id = 2
+problem_end
+problem_start
+source_file = PreTeXt_Showcase/6_3-String_Answers.pg
+problem_id = 3
+problem_end
+problem_start
+source_file = Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg
+problem_id = 4
+problem_end
+problem_start
+source_file = PreTeXt_Showcase/6_5-Structured_with_Tasks.pg
+problem_id = 5
+problem_end
+problem_start
+source_file = PreTeXt_Showcase/6_6-Units_in_Answers.pg
+problem_id = 6
+problem_end

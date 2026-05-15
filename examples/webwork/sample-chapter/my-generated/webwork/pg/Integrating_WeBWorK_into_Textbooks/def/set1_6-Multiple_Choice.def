@@ -1,0 +1,27 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/1_6-Multiple_Choice.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/1_6-Multiple_Choice.pg
+description       = Multiple Choice
+problemListV2
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_6-Multiple_Choice/1_6_1-DropdownPopup.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_6-Multiple_Choice/1_6_2-Choose_one.pg
+problem_id = 2
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_6-Multiple_Choice/1_6_3-Choose_a_Subset_of_Options.pg
+problem_id = 3
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_6-Multiple_Choice/1_6_4-Choose_a_Subset_of_Options_with_Automated_Labeling.pg
+problem_id = 4
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_6-Multiple_Choice/1_6_5-Choose_a_Subset_of_Options_with_Explicit_Labeling.pg
+problem_id = 5
+problem_end

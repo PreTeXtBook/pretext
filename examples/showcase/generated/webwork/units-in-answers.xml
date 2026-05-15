@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-units-in-answers" assembly-id="units-in-answers">
+  <static seed="20">
+    <statement><p><ol label="a.">
+<li>
+<p>The average cost of gasoline in the United States in 2010 was $2.78 per gallon. How much gasoline would $20 get you in 2010, on average?</p>
+<p><fillin characters="10" name="AnSwEr0001"/></p>
+</li>
+<li>
+<p>In 2011, the average cost was $3.52 per gallon. What percent increase was that from 2010?</p>
+<p><fillin characters="10" name="AnSwEr0002"/></p>
+</li>
+<li>
+<p>In 2012, the cost had risen 2.8% from the 2011 cost. What was the cost of a gallon of gasoline in 2012?</p>
+<p><fillin characters="10" name="AnSwEr0003"/></p>
+</li>
+</ol></p>
+</statement>
+    <answer>
+      <p>
+        <m>7.19424\ {\rm gal}</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>26.6\%</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>\$3.62</m>
+      </p>
+    </answer>
+  </static>
+  <rendering-data problemSource="PreTeXt_Showcase/6_6-Units_in_Answers.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:26:17-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.6)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserNumberWithUnits.pl",
+  "contextCurrency.pl",
+  "contextPercent.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+$newUnits = [
+  {name=>'gallons',conversion=>{factor=>0.00378541,m=>3}},
+  {name=>'gallon',conversion=>{factor=>0.00378541,m=>3}},
+  {name=>'gal',conversion=>{factor=>0.00378541,m=>3}},
+];
+Context()->flags->set(tolType=>'absolute',tolerance=>0.1);
+$volume = NumberWithUnits("20/2.78 gal", {newUnit=>$newUnits});
+Context("Percent");
+Context()->flags->set(tolerance=>0.01);
+$increase = Percent(352/278-1);
+Context("Currency");
+$cost = Currency(3.52*1.028);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+a.  The average cost of gasoline in the United States in 2010 was \$2.78 per gallon. How much gasoline would \$20 get you in 2010, on average?
+
+    [_]{$volume}{10}
+
+a.  In 2011, the average cost was \$3.52 per gallon. What percent increase was that from 2010?
+
+    [_]{$increase}{10}
+
+a.  In 2012, the cost had risen 2.8% from the 2011 cost. What was the cost of a gallon of gasoline in 2012?
+
+    [_]{$cost}{10}   
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

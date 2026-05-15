@@ -1,0 +1,40 @@
+# Header file for problem set 1_1-Arithmetic
+# This header file can be used for both the screen and hardcopy output
+
+DOCUMENT();
+
+loadMacros(
+    "PG.pl",
+    "PGbasicmacros.pl",
+    "PGML.pl",
+    "PGcourse.pl",
+);
+
+TEXT($BEGIN_ONE_COLUMN);
+
+$texTopLine = "\noindent {\large \bf $studentName}\hfill{\large \bf {".protect_underbar($courseName)."}}";
+if (defined($sectionName) and ($sectionName ne '')) {$texTopLine .= "  {\large \bf { Section: ".protect_underbar($sectionName)." } }"}; 
+$texTopLine .= "\par";
+
+####################################################
+#
+# MODES provides for distinct output for TeX and HTML
+#
+####################################################
+
+TEXT(MODES(
+    TeX =>"$texTopLine",
+    HTML=>"",
+));
+
+TEXT(MODES(
+    TeX =>"\noindent{\large \sc {Assignment ".protect_underbar($setNumber)." due $formatedDueDate}}\par".
+          "\noindent \bigskip ",
+    HTML=>"<span style='font-variant: small-caps; font-size:large;'>WeBWorK Assignment ".protect_underbar($setNumber)." is due: $formattedDueDate. </span>$PAR",
+));
+
+TEXT("This assignment contains exercises from Section 1.1 of Integrating WeBWorK into Textbooks.");
+
+TEXT($END_ONE_COLUMN);
+
+ENDDOCUMENT();

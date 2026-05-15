@@ -1,0 +1,79 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.2.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$a = non_zero_random(-9,9,1);
+do { $b = random(2,9,1); } until ( $b != $a );
+$answer1 = Compute("$a");
+$answer2 = Compute("($a x^($b) + $b)/x")->reduce();
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+a.  Suppose the correct answer is [`[$answer1]\text{.}`]
+
+    + [_]{$answer1}{15} [@AnswerFormatHelp('numbers')@]*
+
+a.  Suppose the correct answer is [`\displaystyle [$answer2]\text{.}`]
+
+    + [_]{$answer2}{15} [@AnswerFormatHelp('formulas')@]*
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+Solution explanation goes here.
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

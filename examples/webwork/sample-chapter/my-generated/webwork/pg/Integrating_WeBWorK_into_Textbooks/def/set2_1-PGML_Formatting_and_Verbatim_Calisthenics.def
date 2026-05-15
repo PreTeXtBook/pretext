@@ -1,0 +1,19 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/2_1-PGML_Formatting_and_Verbatim_Calisthenics.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/2_1-PGML_Formatting_and_Verbatim_Calisthenics.pg
+description       = PGML Formatting and Verbatim Calisthenics
+problemListV2
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_1-PGML_Formatting_and_Verbatim_Calisthenics/2_1_1-PGML_Formatting.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_1-PGML_Formatting_and_Verbatim_Calisthenics/2_1_2.pg
+problem_id = 2
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_1-PGML_Formatting_and_Verbatim_Calisthenics/2_1_3.pg
+problem_id = 3
+problem_end

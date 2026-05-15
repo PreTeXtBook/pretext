@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-using-hints" assembly-id="using-hints">
+  <static seed="16">
+    <statement><p>Simplify the expression <m>{\sqrt{48}}\text{.}</m></p>
+<p><m>{\sqrt{48}}=</m> <fillin characters="10" name="AnSwEr0001"/></p>
+</statement>
+    <hint><p>Factor the number inside the radical.</p>
+</hint>
+    <answer>
+      <p>
+        <m>4\sqrt{3}</m>
+      </p>
+    </answer>
+    <solution><p><me>{\sqrt{48}}=\sqrt{4^2\cdot 3}=4\sqrt{3}</me></p>
+</solution>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_1-Arithmetic/1_1_5-Using_Hints.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.1.5)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "contextForm.pl",
+  "contextLimitedRadical.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+do {
+    $a = list_random(2,3,5,6);
+    $b = random(1, 5, 1);
+   } until (gcd($a,$b) == 1);
+$c = $a * $b**2;
+Context()->flags->set(reduceConstantFunctions=>0);
+$expression = Formula("sqrt($c)");
+
+Context("LimitedRadical");
+
+$answer = Formula("$b sqrt($a)");
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Simplify the expression [`[$expression]\text{.}`]
+
+[`[$expression]=`] [_]{$answer}{10}
+
+END_PGML
+
+############################################################
+# Hint
+############################################################
+#Set value of $showHint in PGcourse.pl for course-wide attempt threshhold for revealing hints
+
+BEGIN_PGML_HINT
+Factor the number inside the radical.
+
+END_PGML_HINT
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+
+[```[$expression]=\sqrt{[$b]^2\cdot [$a]}=[$b]\sqrt{[$a]}```]
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>
