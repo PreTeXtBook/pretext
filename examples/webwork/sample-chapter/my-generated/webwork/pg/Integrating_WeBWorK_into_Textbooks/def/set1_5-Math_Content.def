@@ -1,0 +1,15 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/1_5-Math_Content.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/1_5-Math_Content.pg
+description       = Math Content
+problemListV2
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_5-Math_Content/1_5_1-Math_Elements_and_Alignment.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_5-Math_Content/1_5_2-Intertext.pg
+problem_id = 2
+problem_end

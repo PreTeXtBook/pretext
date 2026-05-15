@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-list-indentation-with-images-and-tables" assembly-id="list-indentation-with-images-and-tables">
+  <static seed="84">
+    <statement><p xmlns:pi="http://pretextbook.org/2020/pretext/internal"><ol label="a.">
+<li>
+<p>Structured item</p>
+<image pi:generated="webwork/images/list-indentation-with-images-and-tables-image-1.png" width="17%"/>
+</li>
+<li>
+<image pi:generated="webwork/images/list-indentation-with-images-and-tables-image-1.png" width="17%"/>
+</li>
+</ol></p>
+<p>Structured item</p>
+<p xmlns:pi="http://pretextbook.org/2020/pretext/internal"><ol label="a.">
+<li>
+<p>Structured item</p>
+<image pi:generated="webwork/images/list-indentation-with-images-and-tables-image-1.png" width="17%"/>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+<li>
+<p>Structured item</p>
+<tabular>
+<col/>
+<col/>
+<row>
+<cell>a</cell>
+<cell>b</cell>
+</row>
+<row>
+<cell>c</cell>
+<cell>d</cell>
+</row>
+</tabular>
+</li>
+<li>
+<tabular left="major">
+<col halign="right" right="minor"/>
+<col halign="center" right="medium"/>
+<col right="minor"/>
+<row left="none">
+<cell halign="right">1</cell>
+<cell>two</cell>
+<cell><m>\lfloor\pi\rfloor</m></cell>
+</row>
+<row bottom="major" valign="bottom">
+<cell bottom="minor"><m>\text{I}+\text{I}</m>
+<m>{}+\text{I}+\text{I}</m></cell>
+<cell><m>5</m></cell>
+<cell>six</cell>
+</row>
+<row bottom="major">
+<cell><m>2^3-1</m></cell>
+<cell colspan="2">VIII</cell>
+</row>
+</tabular>
+</li>
+</ol></p>
+<p>Structured item</p>
+<p><ol label="a.">
+<li>
+<p>Structured item</p>
+<tabular>
+<col/>
+<col/>
+<row>
+<cell>a</cell>
+<cell>b</cell>
+</row>
+<row>
+<cell>c</cell>
+<cell>d</cell>
+</row>
+</tabular>
+<p>Second paragraph</p>
+</li>
+<li>
+<p>Structured item</p>
+</li>
+</ol></p>
+</statement>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_3-Stress_Tests/2_3_3-Checking_Proper_Indentation_In_Lists_with_Images_and_Tables.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.3.3)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "niceTables.pl",
+  "PGgraphmacros.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$g=init_graph(-1,-1,1,1,axes=>[0,0]);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+a.  Structured item
+
+    [@image(insertGraph($g), width=>102)@]* 
+
+a.  [@image(insertGraph($g), width=>102)@]* 
+
+Structured item
+
+a.  Structured item
+
+    [@image(insertGraph($g), width=>102)@]* 
+
+a.  Structured item
+
+a.  Structured item
+
+    [@DataTable(
+      [
+        [PGML('a'),
+         PGML('b'),
+        ],
+        [PGML('c'),
+         PGML('d'),
+        ],
+      ],
+          align => '*{2}{l}',
+          valign => 'middle',    );@]*
+
+a.  [@DataTable(
+      [
+        [[PGML('1'),
+          halign => 'r',],
+         PGML('two'),
+         PGML('[`\lfloor\pi\rfloor`]'),
+        ],
+        [[PGML('[`\text{I}+\text{I}`]  
+[`{}+\text{I}+\text{I}`]  
+'),
+          rowbottom => '3',
+          midrule => '1',
+          bottom => '1',
+          valign => 'bottom',],
+         PGML('[`5`]'),
+         PGML('six'),
+        ],
+        [[PGML('[`2^3-1`]'),
+          rowbottom => '3',
+          midrule => '1',],
+         [PGML('VIII'),
+          colspan => '2',],
+        ],
+      ],
+          align => '!{\vrule width 0.11em}r|c!{\vrule width 0.07em}l|',
+          valign => 'middle',
+          top => '3',    );@]*
+
+Structured item
+
+a.  Structured item
+
+    [@DataTable(
+      [
+        [PGML('a'),
+         PGML('b'),
+        ],
+        [PGML('c'),
+         PGML('d'),
+        ],
+      ],
+          align => '*{2}{l}',
+          valign => 'middle',    );@]*
+
+    Second paragraph
+
+a.  Structured item
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

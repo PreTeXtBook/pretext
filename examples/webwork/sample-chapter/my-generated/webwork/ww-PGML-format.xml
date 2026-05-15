@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-ww-PGML-format" assembly-id="ww-PGML-format">
+  <static seed="72">
+    <statement><p>Smart double quotes: <lq/>Life is about making an impact, not making an income.<rq/></p>
+<p>Smart single quotes: <lsq/>Whatever the mind of man can conceive and believe, it can achieve.<rsq/></p>
+<p>Regular apostrophes: My siblings<rsq/> mother<rsq/>s daughter isn<rsq/>t my daughter<rsq/>s siblings<rsq/> mother.</p>
+<p>Emphasis: <em>very important</em></p>
+<p>Alert: <alert>do not</alert> do it</p>
+<p>Braces: {text that looks like a set}</p>
+<pre>
+<cline>    Some pre-formatted text</cline>
+<cline>                with an indented line</cline>
+<cline>and an out-dented line</cline>
+<cline>This should not be altered *a problem*</cline>
+<cline>And this [$NDASH]* should not be an en-dash</cline>
+</pre>
+<p>Here is some inline <c>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</c>, and here is some</p>
+<pre>
+<cline>single-line display code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</cline>
+</pre>
+<p>and here is some</p>
+<pre>
+<cline>multi-line display   </cline>
+<cline>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]   </cline>
+</pre>
+<p>Some raw characters, XML/HTML:    &amp; &lt; &gt; <lq/> <lsq/></p>
+<p>Some raw characters, <tex/>:    # $ % ^ &amp; _ { } ~ \</p>
+<p>Some raw characters, PGML:        \ * # { } [ ]</p>
+<p>Some characters that need special handling for PGML conversion to HTML or <tex/>:</p>
+<p>A non<nbsp/>breaking space (invisble where a hyphen should be)</p>
+<p>An ndash<ndash/>right here.</p>
+<p>An mdash<mdash/>right here.</p>
+<p>Some constructions in <lq/>normal<rq/> text, which need to be manipulated, lest they get interpreted as PGML markup:</p>
+<p>&gt;&gt;This should not be a centered line &lt;&lt;</p>
+<p>&gt;&gt;Nor a right-justified line, either</p>
+<p>We should not get _a phrase in italics_ in the midst of this sentence.</p>
+<p>Brackets, unpaired; ] with content between [</p>
+<p>Brackets, paired, in PGML constructions; [$NDASH]*, [___]{$answer}</p>
+<p>### This should not be a level 3 heading</p>
+<p>===   Not a horizontal rule from three equal signs</p>
+<p>==    Not a horizontal rule from two equal signs</p>
+<p>===== Not a horizontal rule from five equal signs</p>
+<p>---   Not a horizontal rule from three hyphens</p>
+<p>--    Not a horizontal rule from two hyphens</p>
+<p>----- Not a horizontal rule from five hyphens</p>
+<p>+ Not an unordered list item</p>
+<p>- Not an unordered list item</p>
+</statement>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_1-PGML_Formatting_and_Verbatim_Calisthenics/2_1_1-PGML_Formatting.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.1.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Smart double quotes: "Life is about making an impact, not making an income."
+
+Smart single quotes: 'Whatever the mind of man can conceive and believe, it can achieve.'
+
+Regular apostrophes: My siblings' mother's daughter isn't my daughter's siblings' mother.
+
+Emphasis: _very important_
+
+Alert: *do not* do it
+
+Braces: \{text that looks like a set\}
+
+```
+    Some pre-formatted text
+                with an indented line
+and an out-dented line
+This should not be altered *a problem*
+And this [$NDASH]* should not be an en-dash
+```
+
+Here is some inline [|code with special characters & < > " ' # $ % ^ _ { } ~ \ * [ ]|]*, and here is some
+```
+single-line display code with special characters & < > " ' # $ % ^ _ { } ~ \ * [ ]
+```
+and here is some
+```
+multi-line display   
+code with special characters & < > " ' # $ % ^ _ { } ~ \ * [ ]   
+```
+
+Some raw characters, XML/HTML:    & < > " '
+
+Some raw characters, [$LATEX]*:    \# \$ % ^ & \_ \{ \} ~ \\
+
+Some raw characters, PGML:        \\ \* \# \{ \} \[ \]
+
+Some characters that need special handling for PGML conversion to HTML or [$LATEX]*:
+
+A non[$NBSP]*breaking space (invisble where a hyphen should be)
+
+An ndash[$NDASH]*right here.
+
+An mdash[$MDASH]*right here.
+
+Some constructions in "normal" text, which need to be manipulated, lest they get interpreted as PGML markup:
+
+\>\>This should not be a centered line <<
+
+\>\>Nor a right-justified line, either
+
+We should not get \_a phrase in italics\_ in the midst of this sentence.
+
+Brackets, unpaired; \] with content between \[
+
+Brackets, paired, in PGML constructions; \[\$NDASH\]\*, \[\_\_\_\]\{\$answer\}
+
+\#\#\# This should not be a level 3 heading
+
+=\==   Not a horizontal rule from three equal signs
+
+==    Not a horizontal rule from two equal signs
+
+=\==== Not a horizontal rule from five equal signs
+
+-\-\-   Not a horizontal rule from three hyphens
+
+-\-    Not a horizontal rule from two hyphens
+
+-\---\- Not a horizontal rule from five hyphens
+
+\+ Not an unordered list item
+
+\- Not an unordered list item
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

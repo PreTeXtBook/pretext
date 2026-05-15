@@ -1,0 +1,137 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.3.3)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "niceTables.pl",
+  "PGgraphmacros.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$g=init_graph(-1,-1,1,1,axes=>[0,0]);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+a.  Structured item
+
+    [@image(insertGraph($g), width=>102)@]* 
+
+a.  [@image(insertGraph($g), width=>102)@]* 
+
+Structured item
+
+a.  Structured item
+
+    [@image(insertGraph($g), width=>102)@]* 
+
+a.  Structured item
+
+a.  Structured item
+
+    [@DataTable(
+      [
+        [PGML('a'),
+         PGML('b'),
+        ],
+        [PGML('c'),
+         PGML('d'),
+        ],
+      ],
+          align => '*{2}{l}',
+          valign => 'middle',    );@]*
+
+a.  [@DataTable(
+      [
+        [[PGML('1'),
+          halign => 'r',],
+         PGML('two'),
+         PGML('[`\lfloor\pi\rfloor`]'),
+        ],
+        [[PGML('[`\text{I}+\text{I}`]  
+[`{}+\text{I}+\text{I}`]  
+'),
+          rowbottom => '3',
+          midrule => '1',
+          bottom => '1',
+          valign => 'bottom',],
+         PGML('[`5`]'),
+         PGML('six'),
+        ],
+        [[PGML('[`2^3-1`]'),
+          rowbottom => '3',
+          midrule => '1',],
+         [PGML('VIII'),
+          colspan => '2',],
+        ],
+      ],
+          align => '!{\vrule width 0.11em}r|c!{\vrule width 0.07em}l|',
+          valign => 'middle',
+          top => '3',    );@]*
+
+Structured item
+
+a.  Structured item
+
+    [@DataTable(
+      [
+        [PGML('a'),
+         PGML('b'),
+        ],
+        [PGML('c'),
+         PGML('d'),
+        ],
+      ],
+          align => '*{2}{l}',
+          valign => 'middle',    );@]*
+
+    Second paragraph
+
+a.  Structured item
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

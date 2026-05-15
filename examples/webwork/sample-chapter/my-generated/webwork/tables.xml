@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-tables" assembly-id="tables">
+  <static seed="80">
+    <statement><p>A table with minimal XML source.</p>
+<!-- PTX:WARNING: PGML wanted to center align here. -->
+<tabular>
+<col/>
+<col/>
+<col/>
+<row>
+<cell>A</cell>
+<cell>B</cell>
+<cell>C</cell>
+</row>
+<row>
+<cell>D</cell>
+<cell>E</cell>
+<cell>F</cell>
+</row>
+<row>
+<cell>G</cell>
+<cell>H</cell>
+<cell>I</cell>
+</row>
+</tabular>
+<p>Finish this table.</p>
+<!-- PTX:WARNING: PGML wanted to center align here. -->
+<tabular left="major">
+<col halign="right" right="minor"/>
+<col halign="center" right="medium"/>
+<col right="minor"/>
+<row left="none">
+<cell halign="right">1</cell>
+<cell>two</cell>
+<cell><m>\lfloor\pi\rfloor</m></cell>
+</row>
+<row bottom="major" valign="bottom">
+<cell bottom="minor"><m>\text{I}+\text{I}</m>
+<m>{}+\text{I}+\text{I}</m></cell>
+<cell><fillin characters="5" name="AnSwEr0001"/>
+</cell>
+<cell>six</cell>
+</row>
+<row bottom="major">
+<cell><m>2^3-1</m></cell>
+<cell colspan="2">VIII</cell>
+</row>
+</tabular>
+</statement>
+    <answer>
+      <p>
+        <m>5</m>
+      </p>
+    </answer>
+    <solution><p>The missing number is 5.</p>
+</solution>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_2-Subject_Area_Templates/2_2_5-Tables.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.2.5)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "niceTables.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$x = Real(5);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+A table with minimal XML source.
+
+>> [@DataTable(
+  [
+    [PGML('A'),
+     PGML('B'),
+     PGML('C'),
+    ],
+    [PGML('D'),
+     PGML('E'),
+     PGML('F'),
+    ],
+    [PGML('G'),
+     PGML('H'),
+     PGML('I'),
+    ],
+  ],
+      align => '*{3}{l}',
+      valign => 'middle',);@]* <<
+
+Finish this table.
+
+>> [@DataTable(
+  [
+    [[PGML('1'),
+      halign => 'r',],
+     PGML('two'),
+     PGML('[`\lfloor\pi\rfloor`]'),
+    ],
+    [[PGML('[`\text{I}+\text{I}`]  
+[`{}+\text{I}+\text{I}`]  
+'),
+      rowbottom => '3',
+      midrule => '1',
+      bottom => '1',
+      valign => 'bottom',],
+     PGML('[_]{$x}{5}'),
+     PGML('six'),
+    ],
+    [[PGML('[`2^3-1`]'),
+      rowbottom => '3',
+      midrule => '1',],
+     [PGML('VIII'),
+      colspan => '2',],
+    ],
+  ],
+      align => '!{\vrule width 0.11em}r|c!{\vrule width 0.07em}l|',
+      valign => 'middle',
+      top => '3',);@]* <<
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+The missing number is [$x].
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

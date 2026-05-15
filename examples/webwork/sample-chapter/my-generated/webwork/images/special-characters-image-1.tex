@@ -1,0 +1,21 @@
+\documentclass{standalone}
+\usepackage[svgnames]{xcolor}
+\usepackage{pgfplots}
+\pgfplotsset{
+    every axis/.append style={
+        axis lines=middle,
+        xlabel={$x$},
+        ylabel={$y$},
+        grid = both,
+    }
+}
+
+\begin{document}
+\begin{tikzpicture}
+    \node at (0,0) {I need about \$3.50.};
+    \node at (0,1) {You gotta give 110\%.};  %This is a comment.
+    \node at (0,2) {Send email user@domain.com.};
+\end{tikzpicture}
+
+
+\end{document}

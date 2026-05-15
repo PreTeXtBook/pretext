@@ -1,0 +1,11 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/1_3-Open_Problem_Library.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/1_3-Open_Problem_Library.pg
+description       = Open Problem Library
+problemListV2
+problem_start
+source_file = Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg
+problem_id = 1
+problem_end

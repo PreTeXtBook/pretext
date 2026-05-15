@@ -1,0 +1,86 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.6.5)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserCheckboxList.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$checks = CheckboxList(
+    [
+        [
+            {TACO => "${BM}e^{x^2} e^{1/x}${EM}"},
+            {PIZZA => "${BM}e^{x^2} e^{x^{-1}}${EM}"},
+            {SUSHI => "${BM}e^{ (x^3+1) / x}${EM}"},
+            {BURGER => "${BM}\dfrac{ e^{x^2} }{ e^x }${EM}"},
+            {BURRITO => "${BM}e^{x^2} + e^{1/x}${EM}"}
+        ],
+        {HUNGRY => "None of the above"}
+    ],
+    [0, 1, 2],
+    displayLabels => 1
+);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Select all expressions that are equivalent to [`e^{x^2 + 1/x}\text{.}`] There may be more than one correct answer.
+
+[_]{$checks}{5}
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+The correct answer is [$checks].
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

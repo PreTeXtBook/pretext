@@ -1,0 +1,98 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.1.4)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PCCmacros.pl",
+  "answerHints.pl",
+  "contextForm.pl",
+  "contextLimitedPolynomial.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+$a = random(1, 9, 1);
+$b = random(1, 9, 1);
+$c = $a + $b;
+$expression = Formula("x^($a)*x^($b)");
+
+Context("LimitedPolynomial-Strict");
+# custom error message
+Context()->{error}{msg}{"A variable can appear only once in each term of a polynomial"}
+    = "Your answer must be fully simplified";
+
+$answer = Formula("x^($c)");
+$product = $a*$b;
+$evaluator = $answer->cmp()->withPostFilter(AnswerHints(
+    [Compute("x^($product)")] =>
+    "When multiplying terms with the same base, you do not multiply the exponents."));
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Use the properties of exponents to simplify [`[$expression]\text{.}`]
+
+[@KeyboardInstructions('To enter a power, use a [|^|]*, as in [|x^2|]* for [`x^2\text{.}`]')@]**
+
+[`[$expression]=`] [_]{$evaluator}{8} [@AnswerFormatHelp('formulas')@]*
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+We _add_ the exponents as follows, while including a gratuitous reference to the quadratic formula:
+
+[```
+\begin{aligned}
+[$expression]&=x^{[$a]+[$b]}&\text{Theorem 1.2.1}\\
+&=x^{[$c]}
+\end{aligned}
+```]
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

@@ -1,0 +1,82 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.2.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "answerHints.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+$a = random(2,5,1);
+$answer1 = Compute("sqrt(x-$a)");
+$answer1->{limits} = [$a+1,$a+4];
+$answer2 = Compute("ln(abs( x / (x-$a) ))");
+$answer2->{test_points} = [[-5],[-4],[1],[$a-1],[7],[8]];
+$answer2evaluator = $answer2 -> cmp() -> withPostFilter( AnswerHints( [Compute("ln(abs((x-$a)/x))"),] => "This is the opposite of correct...",));
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+a.  Suppose the correct answer is [`\displaystyle [$answer1]\text{.}`]
+
+    + [_]{$answer1}{15} [@AnswerFormatHelp('formulas')@]*
+
+a.  Suppose the correct answer is [`\displaystyle [$answer2]\text{.}`]
+
+    + [_]{$answer2evaluator}{15} [@AnswerFormatHelp('formulas')@]*
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+Solution explanation goes here.
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

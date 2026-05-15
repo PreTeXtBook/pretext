@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-ww-antiderivatives" assembly-id="ww-antiderivatives">
+  <static seed="39" source="Library/ma122DB/set12/s5_4_26.pg">
+    <statement><p><m>\displaystyle \int_0^{2} (4 e^x+2 \sin x)\, dx</m> =  <fillin characters="20" name="AnSwEr0001"/></p>
+</statement>
+    <answer>
+      <p>
+        <m>28.3885180688169</m>
+      </p>
+    </answer>
+    <solution><p>SOLUTION</p>
+<p><me>\begin{array}{rcl} \displaystyle \int_0^{2} (4 e^x+2 \sin x)\, dx \amp =\amp   
+\displaystyle  4 e^x-2 \cos x  \Big]_0^{2}
+\\ \amp =\amp  (4 e^{2} - 2 \cos 2) - (4 e^0 - 2 \cos0 ) 
+\\ \amp =\amp  4 e^{2} - 2 \cos 2 - 2 
+\end{array}</me></p>
+</solution>
+  </static>
+  <rendering-data sourceFilePath="Library/ma122DB/set12/s5_4_26.pg" origin="webwork2" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg source="Library/ma122DB/set12/s5_4_26.pg"/>
+</webwork-reps>

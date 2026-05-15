@@ -1,0 +1,27 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/1_8-Graphics_in_Exercises.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/1_8-Graphics_in_Exercises.pg
+description       = Graphics in Exercises
+problemListV2
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_8-Graphics_in_Exercises/1_8_1-A_static_lateximage_graph.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_8-Graphics_in_Exercises/1_8_2-A_randomized_lateximage_graph.pg
+problem_id = 2
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_8-Graphics_in_Exercises/1_8_3-A_lateximage_graph_affected_by_lateximagepreamble.pg
+problem_id = 3
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_8-Graphics_in_Exercises/1_8_4-Special_characters.pg
+problem_id = 4
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_8-Graphics_in_Exercises/1_8_5-Solve_using_a_graph.pg
+problem_id = 5
+problem_end

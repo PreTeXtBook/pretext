@@ -1,0 +1,91 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.5.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGlateximage.pl",
+  "WWSC.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+
+$introduction_image_1 = createLaTeXImage();
+$introduction_image_1->addToPreamble(latexImagePreamble());
+$introduction_image_1->BEGIN_LATEX_IMAGE
+\begin{tikzpicture}
+    \draw[fill=blue!20] (0,0) -| (1,1) -| cycle;
+\end{tikzpicture}
+
+END_LATEX_IMAGE
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+This introduction should appear ahead of the exercise when it shows up in the Assignment page.
+
+>> [@DataTable(
+  [
+    [PGML('[`(0,0)`]'),
+     PGML('[`(0,1)`]'),
+    ],
+    [PGML('[`(1,0)`]'),
+     PGML('[`(1,1)`]'),
+    ],
+  ],
+      align => '*{2}{l}',
+      valign => 'middle',);@]* <<
+
+>> [@image(insertGraph($introduction_image_1), width=>600, alt=>qq"a blue square")@]*  <<
+
+It has a table and an image too to check it all comes through.
+
+What is [`1+1\text{?}`]
+
+[_]{'2'}{5}>
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

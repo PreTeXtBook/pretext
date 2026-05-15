@@ -1,0 +1,39 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/2_4-Layout_Configuration_Testing.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/2_4-Layout_Configuration_Testing.pg
+description       = Layout Configuration Testing
+problemListV2
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_4-Layout_Configuration_Testing/2_4_1.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_4-Layout_Configuration_Testing/2_4_2-Has_a_Title.pg
+problem_id = 2
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_4-Layout_Configuration_Testing/2_4_3.pg
+problem_id = 3
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_4-Layout_Configuration_Testing/2_4_4-Has_a_Title.pg
+problem_id = 4
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_4-Layout_Configuration_Testing/2_4_5.pg
+problem_id = 5
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_4-Layout_Configuration_Testing/2_4_6-Has_a_Title.pg
+problem_id = 6
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_4-Layout_Configuration_Testing/2_4_7.pg
+problem_id = 7
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_4-Layout_Configuration_Testing/2_4_8-Has_a_Title.pg
+problem_id = 8
+problem_end

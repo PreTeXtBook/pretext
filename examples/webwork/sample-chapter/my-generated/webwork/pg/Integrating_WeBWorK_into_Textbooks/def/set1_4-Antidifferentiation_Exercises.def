@@ -1,0 +1,31 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/1_4-Antidifferentiation_Exercises.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/1_4-Antidifferentiation_Exercises.pg
+description       = Antidifferentiation
+problemListV2
+problem_start
+source_file = Library/ma122DB/set12/s5_4_26.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_4-Antidifferentiation/1_4_2_2-Every_Continuous_Function_has_an_Antiderivative.pg
+problem_id = 2
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_4-Antidifferentiation/1_4_2_3-Inverse_Processes.pg
+problem_id = 3
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_4-Antidifferentiation/1_4_2_4.pg
+problem_id = 4
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_4-Antidifferentiation/1_4_2_5.pg
+problem_id = 5
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_4-Antidifferentiation/1_4_2_6-Show_Your_Work.pg
+problem_id = 6
+problem_end

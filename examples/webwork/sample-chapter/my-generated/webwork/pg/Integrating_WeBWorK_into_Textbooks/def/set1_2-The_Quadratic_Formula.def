@@ -1,0 +1,19 @@
+openDate          = 05/15/2026 at 12:00am
+dueDate           = 11/15/2026 at 10:00pm
+answerDate        = 11/15/2026 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/1_2-The_Quadratic_Formula.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/1_2-The_Quadratic_Formula.pg
+description       = The Quadratic Formula
+problemListV2
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_2-The_Quadratic_Formula/1_2_2-Solving_Quadratic_Equations.pg
+problem_id = 2
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_2-The_Quadratic_Formula/1_2_3-Nested_tasks.pg
+problem_id = 3
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_2-The_Quadratic_Formula/1_2_2-Solving_Quadratic_Equations.pg
+problem_id = 4
+problem_end

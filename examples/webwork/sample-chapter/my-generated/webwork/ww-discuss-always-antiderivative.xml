@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-ww-discuss-always-antiderivative" assembly-id="ww-discuss-always-antiderivative">
+  <static seed="42">
+    <statement><p>Explain how we can use Corollary<nbsp/>1.4.3 to say that every continuous function <em>always</em> has a derivative. (And we will demonstrate here that you can use a  macro from <c>docinfo</c>: <m>\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)\text{.}</m> It will work in the WeBWorK problem, regardless of whether you are using images, MathJax, or hardcopy.)</p>
+</statement>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/1-Instructive_Examples/1_4-Antidifferentiation/1_4_2_2-Every_Continuous_Function_has_an_Antiderivative.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.4.2.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "PGessaymacros.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Explain how we can use Corollary[$NBSP]*1.4.3 to say that every continuous function _always_ has a derivative. (And we will demonstrate here that you can use a  macro from [|docinfo|]*: [`\newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}\definiteintegral{1}{2}{\frac{1}{x}}{x}=\ln(2)\text{.}`] It will work in the WeBWorK problem, regardless of whether you are using images, MathJax, or hardcopy.)
+
+[@ANS(essay_cmp()); essay_box(6,76)@]* [@essay_help()@]*
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

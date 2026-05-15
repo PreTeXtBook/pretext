@@ -1,0 +1,155 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(1.2.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "scaffold.pl",
+  "answerHints.pl",
+  "contextFiniteSolutionSets.pl",
+  "contextForm.pl",
+  "contextFraction.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+COMMENT('This problem is scaffolded with multiple parts');
+COMMENT(q"Find a quadratic equation's solutions.", 'One positive integer solution and one negative fraction solution.');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("Fraction");
+$a = Compute(random(2,6,1));
+do {$k = Compute(random(2,6,1))} until (gcd($a,$k)==1);
+$r = Compute(random(2,6,1));
+$c = $k*-$r;
+$b = $a*-$r+$k;
+$quadratic = Formula("$a x^2 + $b x + $c")->reduce;
+$x1 = Fraction($r,1);
+$x2 = Fraction(-$k,$a);
+Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
+$sol1 = Formula("(-$b+sqrt(($b)**2-4($a)($c)))/(2($a))");
+$sol2 = Formula("(-$b-sqrt(($b)**2-4($a)($c)))/(2($a))");
+$evaluatorfora = $a->cmp()->withPostFilter(AnswerHints(
+    [-$a] => "Do you have the sign correct?")
+);
+$evaluatorforb = $b->cmp()->withPostFilter(AnswerHints(
+    [-$b] => "Do you have the sign correct?")
+);
+$evaluatorforc = $c->cmp()->withPostFilter(AnswerHints(
+    [-$c] => "Do you have the sign correct?")
+);
+Context("FiniteSolutionSets");
+$solutionset = Formula("{$x1,$x2}");
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Consider the quadratic equation [`[$quadratic] = 0\text{.}`]
+
+END_PGML
+
+############################################################
+# Scaffold
+############################################################
+Scaffold::Begin(numbered => 1,is_open => "correct_or_first_incorrect",can_open => when_previous_correct,);
+
+############################################################
+# Section
+############################################################
+Section::Begin("Identify Coefficients");
+
+BEGIN_PGML
+Identify the coefficients for the quadratic equation using the standard form from Theorem[$NBSP]*1.2.1.
+
+[`a=`] [_]{$evaluatorfora}{4}, [`b=`] [_]{$evaluatorforb}{4}, [`c=`] [_]{$evaluatorforc}{4}
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+Take the coefficient of [`x^2`] for the value of [`a\text{,}`] the coefficient of [`x`] for [`b\text{,}`] and the constant for [`c\text{.}`] _In this case_, they are [`a = [$a]\text{,}`] [`b = [$b]\text{,}`] [`c = [$c]\text{.}`]
+
+END_PGML_SOLUTION
+
+Section::End();
+
+############################################################
+# Section
+############################################################
+Section::Begin("Use the Quadratic Formula");
+
+BEGIN_PGML
+Using the quadratic formula, solve the equation.
+
+[_]{$solutionset}{40}
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+Recall that the quadratic formula is given in Theorem[$NBSP]*1.2.1.
+
+You already identified [`a = [$a]\text{,}`] [`b = [$b]\text{,}`] and [`c = [$c]\text{,}`] so the results are:
+
+[```x = [$sol1] = [$x1]```]
+
+or
+
+[```x = [$sol2] = [$x2]```]
+
+END_PGML_SOLUTION
+
+Section::End();
+
+Scaffold::End();
+
+BEGIN_PGML
+This conclusion is just here for testing.
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

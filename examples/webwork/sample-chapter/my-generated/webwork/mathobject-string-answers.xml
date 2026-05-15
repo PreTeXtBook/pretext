@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-mathobject-string-answers" assembly-id="mathobject-string-answers">
+  <static seed="73">
+    <statement><p><ol label="a.">
+<li>
+<p>Special characters used by XML, character escaping: &lt;&gt;&amp;'";</p>
+<p>Now as a MathObject: &lt;&gt;&amp;'";</p>
+<p><fillin characters="6" name="AnSwEr0001"/></p>
+</li>
+<li>
+<p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> disagree: #%&amp;&lt;&gt;\^_`|~</p>
+<p>Now as a MathObject: #%&amp;&lt;&gt;\^_`|~</p>
+<p><fillin characters="11" name="AnSwEr0002"/></p>
+</li>
+<li>
+<p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> can agree: ${}</p>
+<p>Now as a MathObject: ${}</p>
+<p><fillin characters="3" name="AnSwEr0003"/></p>
+</li>
+<li>
+<p>Alphanumeric characters: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789</p>
+<p>Now as a MathObject: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789</p>
+<p><fillin characters="62" name="AnSwEr0004"/></p>
+</li>
+<li>
+<p>Other characters: !()*+,-./:=?@[]</p>
+<p>Now as a MathObject: !()*+,-./:=?@[]</p>
+<p><fillin characters="15" name="AnSwEr0005"/></p>
+</li>
+</ol></p>
+<p>In answers, because of <tex/> and MathJax divergence, the first two should come out in verbatim. (And so should any string containing even one of those characters.) The latter three should come out in regular text.</p>
+</statement>
+    <answer>
+      <p>
+        <m>{\verb!&lt;&gt;&amp;'";!}</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>{\verb!#%&amp;&lt;&gt;\^_`|~!}</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>{\text{\$\{\}}}</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>\text{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789}</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>{\text{!()*+,-./:=?@[]}}</m>
+      </p>
+    </answer>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_1-PGML_Formatting_and_Verbatim_Calisthenics/2_1_2.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:29:44-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.1.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "contextABCD.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+$xmlchars = q(<>&'";);
+$latex0 = '#%&<>\^_`|~';
+$latex1 = '${}';
+$alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+$otherchars = '!()*+,-./:=?@[]';
+Context()->strings->add($xmlchars=>{});
+Context()->strings->add($latex0=>{});
+Context()->strings->add($latex1=>{});
+Context()->strings->add($alphanumeric=>{});
+Context()->strings->add($otherchars=>{});
+$xmlcharsMO = String($xmlchars);
+$latex0MO = String($latex0);
+$latex1MO = String($latex1);
+$alphanumericMO = String($alphanumeric);
+$othercharsMO = String($otherchars);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+a.  Special characters used by XML, character escaping: [$xmlchars]
+
+    Now as a MathObject: [$xmlcharsMO]
+
+    [_]{$xmlchars}{6}
+
+a.  Special characters used by LaTeX, where LaTeX [|\text|]* and MathJax [|\text|]* disagree: [$latex0]
+
+    Now as a MathObject: [$latex0MO]
+
+    [_]{$latex0}{11}
+
+a.  Special characters used by LaTeX, where LaTeX [|\text|]* and MathJax [|\text|]* can agree: [$latex1]
+
+    Now as a MathObject: [$latex1MO]
+
+    [_]{$latex1}{3}
+
+a.  Alphanumeric characters: [$alphanumeric]
+
+    Now as a MathObject: [$alphanumericMO]
+
+    [_]{$alphanumeric}{62}
+
+a.  Other characters: [$otherchars]
+
+    Now as a MathObject: [$othercharsMO]
+
+    [_]{$otherchars}{15}
+
+In answers, because of [$LATEX]* and MathJax divergence, the first two should come out in verbatim. (And so should any string containing even one of those characters.) The latter three should come out in regular text.
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

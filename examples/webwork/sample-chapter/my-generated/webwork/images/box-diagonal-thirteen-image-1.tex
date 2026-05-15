@@ -1,0 +1,19 @@
+\documentclass{standalone}
+\usepackage[svgnames]{xcolor}
+\usepackage{pgfplots}
+\pgfplotsset{
+    every axis/.append style={
+        axis lines=middle,
+        xlabel={$x$},
+        ylabel={$y$},
+        grid = both,
+    }
+}
+
+\begin{document}
+\begin{tikzpicture}
+    \draw (0,0) --++ (4,0) node[below,pos=0.5] {\(12\)} --++ (0,3) node[right,pos=0.5] {\(5\)} --++ (-4,-3) node[above,sloped,pos=0.5] {\(13\)} --++ (0,3) --++ (4,0);
+\end{tikzpicture}
+
+
+\end{document}
