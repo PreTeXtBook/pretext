@@ -3272,6 +3272,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:message>              which should be reported.</xsl:message>
                 </xsl:when>
                 <xsl:otherwise>
+                    <!-- The representation file may record a server failure   -->
+                    <!-- from when the WeBWorK representations were generated. -->
+                    <!-- In that case the file holds a placeholder "faux       -->
+                    <!-- problem" (statement only) so assembly still proceeds, -->
+                    <!-- but warn the author so the failure does not go        -->
+                    <!-- unnoticed in later builds.                            -->
+                    <xsl:if test="$the-webwork-rep/static/@failure">
+                        <xsl:message>PTX:WARNING:   the WeBWorK problem with @assembly-id "<xsl:value-of select="@assembly-id"/>" has a stored "<xsl:value-of select="$the-webwork-rep/static/@failure"/>" failure recorded when the WeBWorK representations were last generated.  A placeholder is being rendered in its place.  Re-generate the WeBWorK representations (and watch for errors) to retry.</xsl:message>
+                    </xsl:if>
                     <!-- Build a temporary exercise with "webwork-reps" from the  -->
                     <!-- representations file substituted in place of "webwork".   -->
                     <!-- This preserves the parent-child relationship that         -->
