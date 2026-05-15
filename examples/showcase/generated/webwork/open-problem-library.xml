@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-open-problem-library" assembly-id="open-problem-library">
+  <static seed="15" source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg">
+    <statement><p>Find the prime factorization of <m>35</m>.</p>
+<p><m>35={}</m><fillin characters="11" name="AnSwEr0001"/></p>
+</statement>
+    <answer>
+      <p>
+        <m>5\cdot 7</m>
+      </p>
+    </answer>
+    <solution><p>After checking to see if small prime numbers divide <m>35</m>, we find that <m>5</m> is one divisor. So <m>35=5\cdot7</m>.</p>
+<p>Since both <m>5</m> and <m>7</m> are prime, the prime factorization of <m>35</m> is <m>5\cdot7</m>.</p>
+</solution>
+  </static>
+  <rendering-data sourceFilePath="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg" origin="webwork2" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg source="Library/PCC/BasicAlgebra/NumberBasics/FactorInteger10.pg"/>
+</webwork-reps>

@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-structured-with-tasks" assembly-id="structured-with-tasks">
+  <static seed="18">
+    <introduction><p>This problem has multiple parts that must be completed in order. Try answering the second part with various things you might expect a user to enter.</p>
+</introduction>
+    <task><title>Identify Coefficients</title>
+<statement><p>Consider the equation</p>
+<p><me>{2x^{2}-7x-15} = 0</me></p>
+<p>Identify the coefficients for the quadratic equation using the standard form from Subsection<nbsp/>1.1.</p>
+<p><m>a=</m> <fillin characters="4" name="AnSwEr0001"/>, <m>b=</m> <fillin characters="4" name="AnSwEr0002"/>, <m>c=</m> <fillin characters="4" name="AnSwEr0003"/></p>
+</statement><answer><p><m>2</m></p></answer><answer><p><m>-7</m></p></answer><answer><p><m>-15</m></p></answer><solution><p>Take the coefficient of <m>x^2</m> for the value of <m>a\text{,}</m> the coefficient of <m>x</m> for <m>b\text{,}</m> and the constant for <m>c\text{.}</m> <em>In this case</em>, they are <m>a = 2\text{,}</m> <m>b = -7\text{,}</m> <m>c = -15\text{.}</m></p>
+</solution></task>
+    <task><title>Use the Quadratic Formula</title>
+<statement><p>Use the quadratic formula to find the solution set to</p>
+<p><me>{2x^{2}-7x-15}=0</me></p>
+<p><fillin characters="30" name="AnSwEr0004"/></p>
+</statement><answer><p><m>\frac{-3}{2}, 5</m></p></answer><solution><p>Recall that the quadratic formula is given in Subsection<nbsp/>1.1.</p>
+<p>You already identified <m>a = 2\text{,}</m> <m>b = -7\text{,}</m> and <m>c = -15\text{,}</m> and the results from using these in the quadratic formula are <m>-\frac{3}{2}</m> and <m>5\text{.}</m></p>
+</solution></task>
+  </static>
+  <rendering-data problemSource="PreTeXt_Showcase/6_5-Structured_with_Tasks.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:26:17-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.5)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "scaffold.pl",
+  "contextFiniteSolutionSets.pl",
+  "contextForm.pl",
+  "contextFraction.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+COMMENT('This problem is scaffolded with multiple parts');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("Fraction");
+$quadratic = Formula("2 x^2 - 7 x - 15")->reduce;
+$x1 = Fraction(5,1);
+$x2 = Fraction(-3,2);
+Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
+Context("FiniteSolutionSets");
+$solutions = Formula("-3/2,5");
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+This problem has multiple parts that must be completed in order. Try answering the second part with various things you might expect a user to enter.
+
+END_PGML
+
+############################################################
+# Scaffold
+############################################################
+Scaffold::Begin(numbered => 1,is_open => "correct_or_first_incorrect",can_open => always,);
+
+############################################################
+# Section
+############################################################
+Section::Begin("Identify Coefficients");
+
+BEGIN_PGML
+Consider the equation
+
+[```[$quadratic] = 0```]
+
+Identify the coefficients for the quadratic equation using the standard form from Subsection[$NBSP]*1.1.
+
+[`a=`] [_]{2}{4}, [`b=`] [_]{-7}{4}, [`c=`] [_]{-15}{4}
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+Take the coefficient of [`x^2`] for the value of [`a\text{,}`] the coefficient of [`x`] for [`b\text{,}`] and the constant for [`c\text{.}`] _In this case_, they are [`a = 2\text{,}`] [`b = -7\text{,}`] [`c = -15\text{.}`]
+
+END_PGML_SOLUTION
+
+Section::End();
+
+############################################################
+# Section
+############################################################
+Section::Begin("Use the Quadratic Formula");
+
+BEGIN_PGML
+Use the quadratic formula to find the solution set to
+
+[```[$quadratic]=0```]
+
+[_]{$solutions}{30}
+
+END_PGML
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+Recall that the quadratic formula is given in Subsection[$NBSP]*1.1.
+
+You already identified [`a = 2\text{,}`] [`b = -7\text{,}`] and [`c = -15\text{,}`] and the results from using these in the quadratic formula are [`-\frac{3}{2}`] and [`5\text{.}`]
+
+END_PGML_SOLUTION
+
+Section::End();
+
+Scaffold::End();
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

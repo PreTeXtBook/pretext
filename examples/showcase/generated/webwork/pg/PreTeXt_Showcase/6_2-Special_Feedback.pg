@@ -1,0 +1,113 @@
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:26:17-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.2)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "bizarroArithmetic.pl",
+  "contextForm.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context()->operators->set(
+'*' => {class => 'bizarro::BOP::multiply', isCommand => 1},
+' *' => {class => 'bizarro::BOP::multiply', isCommand => 1},
+'* ' => {class => 'bizarro::BOP::multiply', isCommand => 1},
+);
+$given = Formula("x^2 x^5");
+$answer = Formula("x^7");
+$special = Formula("x^10");
+$evaluator = $answer -> cmp(
+  checker=>sub{
+    my ( $correct, $student, $ansHash ) = @_;
+    Value::Error("When multiplying powers with the same base, you do not multiply the exponents.") if ($special == $student);
+    return 0 if $ansHash->{isPreview} || $correct != $student;
+    Context()->flags->set(bizarroMul=>1);
+    delete $correct->{test_values}; delete $student->{test_values};
+    my $OK = ($correct == $student);
+    Context()->flags->set(bizarroMul=>0);
+    Value::Error(
+      "Your answer is equivalent to the correct answer, but not in the expected form.
+      Maybe it needs to be simplified, factored, expanded, have its denominator rationalized, etc."
+    ) unless $OK;
+    return $OK;
+  }
+);
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Simplify the expression [`[$given]\text{.}`]
+
+[_]{$evaluator}{10}
+
+END_PGML
+
+############################################################
+# Hint
+############################################################
+#Set value of $showHint in PGcourse.pl for course-wide attempt threshhold for revealing hints
+
+BEGIN_PGML_HINT
+Add the exponents.
+
+END_PGML_HINT
+
+############################################################
+# Solution
+############################################################
+
+BEGIN_PGML_SOLUTION
+To simplify the product of two powers of the same base, add the exponents.
+
+[```\newcommand{\amp}{&}
+\begin{aligned}
+[$given]\amp=x^{2+5}\\
+\amp=[$answer]
+\end{aligned}
+```]
+
+END_PGML_SOLUTION
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

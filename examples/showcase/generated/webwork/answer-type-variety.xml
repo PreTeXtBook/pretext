@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-answer-type-variety" assembly-id="answer-type-variety">
+  <static seed="5">
+    <statement><p>Consider the function <m>f</m> defined by <m>f(x)={\sqrt{x}}\text{.}</m>
+<ol label="a.">
+<li>
+<p>The exact value of <m>f(12)</m> is <fillin characters="10" name="AnSwEr0001"/> and a decimal approximation for this is <fillin characters="10" name="AnSwEr0002"/>.</p>
+</li>
+<li>
+<p>The domain of this function, in interval notation, is <fillin characters="10" name="AnSwEr0003"/>.</p>
+</li>
+<li>
+<p>The graph of <m>y={\sqrt{x}}</m> intersects the graph of <m>y=6-x</m> at <fillin characters="10" name="AnSwEr0004"/>.</p>
+</li>
+<li>
+<p><m>\frac{d}{dx}{\sqrt{x}}={}</m> <fillin characters="10" name="AnSwEr0005"/>.</p>
+</li>
+<li>
+<p>The formula for <m>f(x)^2\text{,}</m> including its restricted domain, is <fillin characters="20" name="AnSwEr0006"/>.</p>
+</li>
+<li>
+<p><m>f</m> is a <ul form="popup" name="AnSwEr0007"><li>
+<p>?</p>
+</li><li>
+<p>power</p>
+</li><li>
+<p>exponential</p>
+</li><li>
+<p>linear</p>
+</li><li>
+<p>quadratic</p>
+</li></ul> function.</p>
+</li>
+<li>
+<p>Which is true of the word <lq/>radical<rq/>?</p>
+<p><ul form="buttons" name="AnSwEr0008">
+<li>
+<p>It shares ancestry with "radius", as in the radius of a circle.</p>
+</li>
+<li>
+<p>It shares ancestry with "radish", a vegetable.</p>
+</li>
+<li>
+<p>It shares ancestry with "radler", a mixture of beer and grapefruit soda.</p>
+</li>
+</ul></p>
+</li>
+</ol></p>
+</statement>
+    <answer>
+      <p>
+        <m>2\sqrt{3}</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>3.4641</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>\left[0,\infty \right)</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>\left(4,2\right)</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>\frac{1}{2\sqrt{x}}</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>x, x\ge 0</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>\text{power}</m>
+      </p>
+    </answer>
+    <answer>
+      <p>
+        <m>\text{Choice 2}</m>
+      </p>
+    </answer>
+  </static>
+  <rendering-data problemSource="PreTeXt_Showcase/6_1-Answer_Type_Variety.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###       on 2026-05-15T12:26:17-07:00       
+###   A recent stable commit (2022-07-01):   
+### 6c761d3dba23af92cba35001c852aac04ae99a5f 
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(6.1)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "parserPopUp.pl",
+  "parserRadioButtons.pl",
+  "contextForm.pl",
+  "contextLimitedRadical.pl",
+  "contextRestrictedDomains.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context("Numeric");
+$f = Formula("sqrt(x)");
+$derivative = Formula("1/(2sqrt(x))");
+$popup = PopUp(['?','power','exponential','linear','quadratic'],1);
+$radio = RadioButtons([
+  'It shares ancestry with "radius", as in the radius of a circle.',
+  'It shares ancestry with "radish", a vegetable.',
+  'It shares ancestry with "radler", a mixture of beer and grapefruit soda.',
+],1);
+Context("LimitedRadical");
+$a = Formula("2sqrt(3)");
+Context("LimitedNumeric");
+$b = Real(sqrt(12));
+Context("Interval");
+$domain = Interval("[0,inf)");
+Context("Point");
+$point = Point("(4,2)");
+Context("RestrictedDomains");
+$restricted = Formula("x, x >= 0");
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+Consider the function [`f`] defined by [`f(x)=[$f]\text{.}`]
+a.  The exact value of [`f(12)`] is [_]{$a}{10} and a decimal approximation for this is [_]{$b}{10}.
+
+a.  The domain of this function, in interval notation, is [_]{$domain}{10}.
+
+a.  The graph of [`y=[$f]`] intersects the graph of [`y=6-x`] at [_]{$point}{10}.
+
+a.  [`\frac{d}{dx}[$f]={}`] [_]{$derivative}{10}.
+
+a.  The formula for [`f(x)^2\text{,}`] including its restricted domain, is [_]{$restricted}{20}.
+
+a.  [`f`] is a [_]{$popup}{5} function.
+
+a.  Which is true of the word "radical"?
+
+    [_]{$radio}{5}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>
