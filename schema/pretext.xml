@@ -938,7 +938,7 @@
     <section>
         <title>Mathematics</title>
 
-        <p>All mathematics appears inside paragraphs, and the syntax is that of <latex/>, as supported by MathJax, whose supported commands and macros are meant to be very similar to those of the AMSMath package.  Note that the content is typically unstructured, excepting <q>fill-in-the-blank</q>, <webwork/> variables (see variants), and internal cross-references in multi-row display mathematics. Also, <c>md</c> and <c>mdn</c> are not targets of cross-references, though their rows can be.  Fill-in blanks have a variant attribute <attr>fill</attr> more suited for mathematics.</p>
+        <p>All mathematics appears inside paragraphs, and the syntax is that of <latex/>, as supported by MathJax, whose supported commands and macros are meant to be very similar to those of the AMSMath package.  Note that the content is typically unstructured, excepting <q>fill-in-the-blank</q>, <webwork/> variables (see variants), and internal cross-references in multi-row display mathematics. Also, a multi-row <c>md</c> is not itself a target of cross-references, though its rows can be; a single-line <c>md</c> may carry an <attr>xml:id</attr> and be a cross-reference target.  Fill-in blanks have a variant attribute <attr>fill</attr> more suited for mathematics.</p>
 
         <fragment xml:id="mathematics">
             <title>Mathematics</title>
@@ -967,53 +967,8 @@
                 }
             MathIntertext = element intertext {TextLong}
             MathDisplay =
-                element me {
-                    mixed {(FillInMath | WWVariable)*}
-                } |
-                element men {
+                element md {
                     MetaDataTarget,
-                    mixed {(FillInMath | WWVariable)*}
-                } |
-                element md {
-                    attribute number {"yes" | "no"}?,
-                    attribute break {"yes" | "no"}?,
-                    attribute alignment {text}?,
-                    attribute alignat-columns {text}?,
-                    (
-                    (mixed {(FillInMath | WWVariable)*}) |
-                    (MathRow, (MathRow | MathIntertext)*)
-                    )
-                } |
-                element mdn {
-                    attribute number {"yes" | "no"}?,
-                    attribute break {"yes" | "no"}?,
-                    attribute alignment {text}?,
-                    attribute alignat-columns {text}?,
-                    MathRow, (MathRow | MathIntertext)*
-                }
-            </code>
-        </fragment>
-    </section>
-
-    <section>
-        <title>Mathematics (experimental)</title>
-
-        <p>We include some additions to math elements, including allowing xrefs inside displayed math.</p>
-
-
-        <fragment xml:id="mathematics-dev">
-            <title>Mathematics (experimental)</title>
-            <code>
-            MathDisplay |=
-                element me {
-                    MetaDataTarget?,
-                    mixed {(Xref | FillInMath | WWVariable)*}
-                } |
-                element men {
-                    MetaDataTarget?,
-                    mixed {(Xref | FillInMath | WWVariable)*}
-                } |
-                element md {
                     attribute number {"yes" | "no"}?,
                     attribute break {"yes" | "no"}?,
                     attribute alignment {text}?,
@@ -1022,14 +977,6 @@
                     (mixed {(Xref | FillInMath | WWVariable)*}) |
                     (MathRow, (MathRow | MathIntertext)*)
                     )
-                } |
-                element mdn {
-                    attribute number {"yes" | "no"}?,
-                    attribute break {"yes" | "no"}?,
-                    attribute alignment {text}?,
-                    attribute alignat-columns {text}?,
-                    MathRow,
-                    (MathRow | MathIntertext)*
                 }
             </code>
         </fragment>
@@ -3670,7 +3617,6 @@
             <fragref ref="handout"/>
             <fragref ref="solutions-dev"/>
             <fragref ref="reference-dev"/>
-            <fragref ref="mathematics-dev"/>
             <fragref ref="exercise-dev"/>
             <code>
                 }
