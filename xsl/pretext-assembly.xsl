@@ -3252,24 +3252,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:    There is a WeBWorK exercise with @assembly-id "<xsl:value-of select="@assembly-id"/>"</xsl:message>
-                    <xsl:message>              but your publication file does not indicate the directory</xsl:message>
-                    <xsl:message>              of problem representations created by a WeBWorK server.</xsl:message>
-                    <xsl:message>              Your WeBWorK exercises will all, at best, be empty.</xsl:message>
+                    <xsl:message>PTX:ERROR:   no WeBWorK representations directory configured in the publication file; WeBWorK exercise with @assembly-id "<xsl:value-of select="@assembly-id"/>" will be empty.</xsl:message>
                 </xsl:when>
                 <!-- This should only fail if the file is missing or stale.  Repeatedly. -->
                 <xsl:when test="not($the-webwork-rep)">
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:    The WeBWorK problem with @assembly-id "<xsl:value-of select="@assembly-id"/>"</xsl:message>
-                    <xsl:message>              could not be located at "<xsl:value-of select="$webwork-rep-uri"/>". </xsl:message>
-                    <xsl:message>              If the WeBWorK files were built with an older version of PreTeXt,</xsl:message>
-                    <xsl:message>              they need to be regenerated.  A "webwork-representations.xml"</xsl:message>
-                    <xsl:message>              in that directory is a sign of this old single-file format.</xsl:message>
-                    <xsl:message>              If there are many messages like this, then likely your directory is missing.</xsl:message>
-                    <xsl:message>              But if this is an isolated error message, then it may indicate a bug,</xsl:message>
-                    <xsl:message>              which should be reported.</xsl:message>
+                    <xsl:message>PTX:ERROR:   could not load WeBWorK representation file "<xsl:value-of select="$webwork-rep-uri"/>" for @assembly-id "<xsl:value-of select="@assembly-id"/>"; re-generate the WeBWorK representations.  A "webwork-representations.xml" in that directory indicates old-format files that need replacing.</xsl:message>
                 </xsl:when>
                 <xsl:otherwise>
                     <!-- The representation file may record a server failure   -->
