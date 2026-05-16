@@ -1384,7 +1384,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:when test="$publication/source/@webwork-problems">
                 <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
-                <xsl:message>PTX:WARNING: the publication file entry  source/@webwork-problems  is</xsl:message>
+                <xsl:message>PTX:ERROR:   the publication file entry  source/@webwork-problems  is</xsl:message>
                 <xsl:message>             deprecated, please move to using managed directories</xsl:message>
             </xsl:when>
             <!-- no specification, so empty string for filename -->
