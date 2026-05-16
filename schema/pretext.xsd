@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:pf="https://prefigure.org">
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:import namespace="https://prefigure.org" schemaLocation="pf.xsd"/>
   <xs:group name="PretextRoot">
     <xs:sequence>
       <xs:element name="pretext">
@@ -802,6 +803,7 @@
               <xs:group ref="BookAppendix"/>
               <xs:element ref="solutions"/>
             </xs:choice>
+            <xs:element minOccurs="0" ref="glossary"/>
             <xs:element minOccurs="0" ref="references"/>
             <xs:element minOccurs="0" ref="index"/>
             <xs:group minOccurs="0" ref="ColophonBack"/>
@@ -1547,6 +1549,7 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="codelens"/>
             <xs:enumeration value="activecode"/>
+            <xs:enumeration value="no"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -1846,6 +1849,7 @@
             </xs:choice>
           </xs:sequence>
           <xs:attributeGroup ref="MetaDataTitleOptional"/>
+          <xs:attribute name="workspace"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -2189,6 +2193,11 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:group name="AnyPFContent">
+    <xs:sequence>
+      <xs:any minOccurs="0" processContents="skip"/>
+    </xs:sequence>
+  </xs:group>
   <xs:group name="ImageCode">
     <xs:sequence>
       <xs:element name="image">
@@ -2200,6 +2209,8 @@
               <xs:group ref="CodeLatexImage"/>
               <xs:element ref="asymptote"/>
               <xs:element ref="sageplot"/>
+              <xs:element ref="mermaid"/>
+              <xs:element ref="pf:prefigure"/>
             </xs:choice>
           </xs:choice>
           <xs:attribute ref="xml:id"/>
@@ -2238,6 +2249,12 @@
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="aspect"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mermaid">
+    <xs:complexType mixed="true">
+      <xs:attribute name="label"/>
+      <xs:attribute name="component"/>
     </xs:complexType>
   </xs:element>
   <xs:group name="WWLatexImage">
@@ -2463,6 +2480,9 @@
   </xs:element>
   <xs:element name="video">
     <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="track"/>
+      </xs:sequence>
       <xs:attribute ref="xml:id"/>
       <xs:attribute name="label"/>
       <xs:attribute name="component"/>
@@ -2486,6 +2506,21 @@
       <xs:attribute name="youtube"/>
       <xs:attribute name="youtubeplaylist"/>
       <xs:attribute name="vimeo"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="track">
+    <xs:complexType>
+      <xs:attribute name="kind" use="required"/>
+      <xs:attribute name="listing"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute name="source" use="required"/>
+      <xs:attribute name="default">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="AttributesSourceFile">
@@ -2575,6 +2610,7 @@
           </xs:sequence>
           <xs:attributeGroup ref="MetaDataTitleOptional"/>
           <xs:attribute name="number"/>
+          <xs:attribute name="workspace"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -3221,8 +3257,9 @@
         <xs:element ref="m"/>
         <xs:group ref="Music"/>
         <xs:group ref="Reference"/>
+        <xs:element ref="custom"/>
         <xs:element ref="cd"/>
-        <xs:group ref="MathDisplay"/>
+        <xs:element ref="md"/>
         <xs:group ref="List"/>
         <xs:element ref="fn"/>
         <xs:element ref="notation"/>
@@ -3287,6 +3324,7 @@
         <xs:element ref="m"/>
         <xs:group ref="Music"/>
         <xs:group ref="Reference"/>
+        <xs:element ref="custom"/>
         <xs:element ref="var"/>
       </xs:choice>
     </xs:sequence>
@@ -3352,6 +3390,8 @@
       <xs:enumeration value="type-hybrid"/>
       <xs:enumeration value="phrase-global"/>
       <xs:enumeration value="phrase-hybrid"/>
+      <xs:enumeration value="type-local-title"/>
+      <xs:enumeration value="type-global-title"/>
       <xs:enumeration value="title"/>
       <xs:enumeration value="custom"/>
     </xs:restriction>
@@ -3360,8 +3400,22 @@
     <xs:choice>
       <xs:group ref="Url"/>
       <xs:element ref="xref"/>
+      <xs:element ref="dataurl"/>
     </xs:choice>
   </xs:group>
+  <xs:element name="custom">
+    <xs:complexType>
+      <xs:attribute name="ref" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dataurl">
+    <xs:complexType mixed="true">
+      <xs:group minOccurs="0" ref="TextShort"/>
+      <xs:attribute name="href"/>
+      <xs:attribute name="source"/>
+      <xs:attribute name="visual"/>
+    </xs:complexType>
+  </xs:element>
   <xs:group name="Url">
     <xs:sequence>
       <xs:element name="url">
@@ -3481,78 +3535,26 @@
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
-  <xs:group name="MathDisplay">
-    <xs:choice>
-      <xs:element ref="me"/>
-      <xs:element ref="men"/>
-      <xs:element ref="md"/>
-      <xs:element ref="mdn"/>
-    </xs:choice>
-  </xs:group>
-  <xs:element name="me">
-    <xs:complexType mixed="true">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="FillInMath"/>
-        <xs:element ref="var"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="men">
+  <xs:element name="md">
     <xs:complexType mixed="true">
       <xs:sequence>
         <xs:group ref="MetaDataTarget"/>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:group ref="FillInMath"/>
-          <xs:element ref="var"/>
+        <xs:choice>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="xref"/>
+            <xs:group ref="FillInMath"/>
+            <xs:element ref="var"/>
+          </xs:choice>
+          <xs:sequence>
+            <xs:element ref="mrow"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="mrow"/>
+              <xs:element ref="intertext"/>
+            </xs:choice>
+          </xs:sequence>
         </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTarget"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="md">
-    <xs:complexType mixed="true">
-      <xs:choice>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:group ref="FillInMath"/>
-          <xs:element ref="var"/>
-        </xs:choice>
-        <xs:sequence>
-          <xs:element ref="mrow"/>
-          <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="mrow"/>
-            <xs:element ref="intertext"/>
-          </xs:choice>
-        </xs:sequence>
-      </xs:choice>
-      <xs:attribute name="number">
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="yes"/>
-            <xs:enumeration value="no"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="break">
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="yes"/>
-            <xs:enumeration value="no"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="alignment"/>
-      <xs:attribute name="alignat-columns"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="mdn">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="mrow"/>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="mrow"/>
-          <xs:element ref="intertext"/>
-        </xs:choice>
-      </xs:sequence>
       <xs:attribute name="number">
         <xs:simpleType>
           <xs:restriction base="xs:token">
