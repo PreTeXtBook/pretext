@@ -39,8 +39,8 @@
 <!-- project. This ephemeral tree also has some global publisher variable  -->
 <!-- data for how PG should be processed. This tree will be used by        -->
 <!-- pretext.py in conjuction with some form of renderer (webwork2, local  -->
-<!-- PG, or the standalone renderer) to create an XML file called          -->
-<!-- webwork-representations.xml with various representations of each      -->
+<!-- PG, or the standalone renderer) to write, for each webwork exercise,  -->
+<!-- a file of representations of that problem (named by @assembly-id).    -->
 
 <!-- The top of the ephemeral XML tree has some global attributes.         -->
 
@@ -58,15 +58,14 @@
 <!-- 4.  pghuman: human readable PG (for generated exercises only)         -->
 <!-- 5.  PG that is somewhat minimized (and less human-readable)           -->
 
-<!-- The pretext/pretext script (-c webwork) uses all this to build a      -->
-<!-- single XML file (called webwork-representations.xml) containing       -->
-<!-- multiple representations of each webwork problem. The pretext/pretext -->
-<!-- script must be re-run whenever something changes with author source   -->
-<!-- within a webwork element. Or if something changes with a .pg file.    -->
-<!-- Or if some configuration changes.                                     -->
+<!-- The pretext/pretext script (-c webwork) uses all this to write, for   -->
+<!-- each webwork exercise, an XML file of representations of that problem -->
+<!-- (named by @assembly-id). The script must be re-run whenever the       -->
+<!-- author source for a webwork exercise, a .pg file, or some             -->
+<!-- configuration changes.                                                -->
 
-<!-- Then other translation sheets' assembly phase will factor in          -->
-<!-- webwork-representations.xml                                           -->
+<!-- Then other translation sheets' assembly phase will read the per-      -->
+<!-- exercise representation file for each webwork exercise.               -->
 
 <!-- Standard conversion groundwork -->
 <xsl:import href="./publisher-variables.xsl"/>
