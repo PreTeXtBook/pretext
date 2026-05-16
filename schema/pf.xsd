@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="https://prefigure.org" xmlns:pf="https://prefigure.org">
+  <xs:import schemaLocation="pretext.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:element name="prefigure">
+    <xs:complexType mixed="true">
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="AnyPFContent"/>
+      <xs:attribute name="label"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
