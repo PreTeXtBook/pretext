@@ -99,24 +99,19 @@ class SlideRevealer {
       this.animatedElement.style.paddingTop = '0px';
       this.animatedElement.style.paddingBottom = '0px';
 
-      // Trigger the animation to expand or collapse the knowl.
-      // Delay the MathJax typesetting until the knowl is visible to ensure proper measurements
-      // are taken, but before the unrolling begins. This helps avoid layout shifts and ensures
-      // smooth animation with correctly sized content.
-      MathJax.typesetPromise().then(() => window.requestAnimationFrame(() => {
-        const expandingMeasurements = {
-          fullHeight: this.contentElement === this.animatedElement
-            ? this.contentElement.scrollHeight
-            : closedHeight + this.contentElement.offsetHeight,
-          paddingTop: naturalPaddingTop,
-          paddingBottom: naturalPaddingBottom
-        };
+      // Trigger the animation to expand or collapse the knowl
+      // We assume content is already rendered and size is accurate.
+      // If not, there may be a jump at the end of the animation when styles are cleared
+      const expandingMeasurements = {
+        fullHeight: this.contentElement === this.animatedElement
+          ? this.contentElement.scrollHeight
+          : closedHeight + this.contentElement.offsetHeight,
+        paddingTop: naturalPaddingTop,
+        paddingBottom: naturalPaddingBottom
+      };
+      this.contentElement.style.visibility = '';
+      this.toggle(true, expandingMeasurements);
 
-        window.requestAnimationFrame(() => {
-          this.contentElement.style.visibility = '';
-          this.toggle(true, expandingMeasurements);
-        });
-      }));
     } else if (this.animationState === SlideRevealer.STATE.EXPANDING || this.animatedElement.hasAttribute("open")) {
       this.toggle(false);
     }
@@ -388,6 +383,7 @@ class LinkKnowl {
 
           // render any knowls and mathjax in the knowl
           addKnowls(this.outputElement);
+          MathJax.typesetPromise([this.outputElement]);
 
           // try prism highlighting
           Prism.highlightAllUnder(this.outputElement);
