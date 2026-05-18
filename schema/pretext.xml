@@ -426,7 +426,7 @@
                 BlockStatement | Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | PrintoutExercise | Project |
                 Poem | Assemblage | ListGenerator | Fragment |
-                PrintoutSideBySide
+                PrintoutSideBySide | Paragraphs
 
             # Allow exercise in sidebyside
             PrintoutSideBySide =

@@ -983,6 +983,7 @@
       <xs:element ref="list-of"/>
       <xs:element ref="fragment"/>
       <xs:group ref="PrintoutSideBySide"/>
+      <xs:group ref="Paragraphs"/>
     </xs:choice>
   </xs:group>
   <!-- Allow exercise in sidebyside -->
