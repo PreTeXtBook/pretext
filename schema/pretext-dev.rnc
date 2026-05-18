@@ -473,6 +473,14 @@
                 }
             BlockStatement |= Query
 
+            # Coding exercise: an interactive program (typically
+            # activecode) whose "tests" hold unit tests
+            CodingExercise =
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                StatementExercise,
+                Program,
+                Hint*, Answer*, Solution*
             # Include all exercise types in exercise and activity
             Exercise |=
                 element exercise {
@@ -485,7 +493,8 @@
                     Matching |
                     FreeResponse |
                     FillInBlank |
-                    Areas
+                    Areas |
+                    CodingExercise
                     )
                 }
             # STACK assessment exercise type
