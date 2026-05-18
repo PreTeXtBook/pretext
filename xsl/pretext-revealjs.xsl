@@ -316,7 +316,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               <xsl:apply-templates select="." mode="title-full" />
           </h3>
           <div align="left">
-              <xsl:apply-templates select="*"/>
+              <!-- As a single-file output (no chunking), we have assigned   -->
+              <!-- heading levels in a strictly increasing progression.  Now -->
+              <!-- processing beconmes a bit less predictable.  So we pass   -->
+              <!-- in level 4 to the children of a slide and go from there.  -->
+              <!-- TODO: if there are no #section in the source, then maybe sides should begin at "h2"? -->
+              <xsl:apply-templates select="*">
+                  <xsl:with-param name="heading-level" select="4"/>
+              </xsl:apply-templates>
           </div>
       </section>
 </xsl:template>
