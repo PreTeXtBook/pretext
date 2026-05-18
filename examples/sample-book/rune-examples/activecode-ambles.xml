@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <listing>
-    <caption>A Python program with preamble/postamble</caption>
+    <title>A Python program with preamble/postamble</title>
     <program interactive='activecode' language="python" label="program-activecode-python-ambles" include-source="yes">
         <preamble>
         def add(a, b):

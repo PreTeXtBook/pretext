@@ -42,7 +42,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Instead of specifying <attr>language</attr> on each program, a default can be specified at <c>docinfo/programs/@language</c>. That value will be used for any program that lacks a <attr>language</attr> attribute. This sample does not specify it's own <attr>language</attr> and is relying on the default set in this book.</p>
 
         <listing>
-            <caption>Python program, relying on default programs language</caption>
+            <title>Python program, relying on default programs language</title>
             <program line-numbers="yes" include-source="yes">
                 <code>
                 def say_hello():
@@ -100,10 +100,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A Java program will only be interactive if hosted on a Runestone server.</p>
 
         <listing xml:id="program-activecode-java">
-            <title>Informal Java <q>Hello, World</q></title>
             <title>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server</title>
             <program xml:id="java-hello-world" interactive='activecode' language="java">
-                <title>"hi" in Java</title>
                 <code>
                 public class HelloWorld {
                     public static void main(String[] args) {
@@ -228,7 +226,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>Here is the same Python program from the previous section, but now with a <tag>preamble</tag> and <tag>postamble</tag> that are invisible.  The user will not see the code that is added to their submission.  Not actually useful in this case, but it might be if you wanted to hide boilerplate setup from the reader.</p>
 
         <listing>
-            <caption>A Python program with invisible pre/post ambles</caption>
+            <title>A Python program with invisible pre/post ambles</title>
             <program interactive='activecode' language="python" label="program-activecode-python-ambles-invisible" include-source="yes">
                 <preamble visible="no">
                 def add(a, b):
@@ -270,7 +268,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <listing xml:id="program-activecode-java-flags">
             <title>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server, with compiler and linker flags</title>
             <program xml:id="java-hello-world-flags" interactive='activecode' language="java" compiler-args="-g" linker-args="-s">
-                <title>"hi" in Java</title>
                 <code>
                 import javax.swing.JFrame;  //Importing class JFrame
                 import javax.swing.JLabel;  //Importing class JLabel
@@ -375,11 +372,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>First, we have a <c>.h</c> file that defines an <attr>filename</attr>. It has an <attr>xml:id</attr> so other elements can reference it. It also has an <attr>label</attr> which is it's unique identifier in the Runestone database. (The label is intentionally different than the xml:id for demonstration purposes, but they can be the same.) The <attr>filename</attr> is used to indicate what to name to use when the contents of the element are written to a file on the server - other program code and/or tools on the server can look for it using this name. The <attr>filename</attr> need not be unique<mdash/>we could have multiple programs with <attr>filename="add.h"</attr>. As we will see below, the author specifies which <q>version</q> of a file should be used in any given location with its unique xml:id.</p>
 
-        <p>The <tag>program</tag> is inside of a <tag>listing</tag> so that we have a place to add a caption and so that we can reference the code sample, including that caption, with an <tag>xref</tag> from elsewhere. Note that the <tag>listing</tag> has both a <tag>caption</tag> and a <tag>title</tag>. The <tag>caption</tag> will be rendered with the program. The <tag>title</tag> will not appear locally. It will be used if an <tag>xref</tag> links to the <tag>listing</tag> using <attr>text="title"</attr></p>
+        <p>The <tag>program</tag> is inside of a <tag>listing</tag> so that we have a place to add a title and so that we can reference the code sample, including that title, with an <tag>xref</tag> from elsewhere. The <tag>title</tag> of the <tag>listing</tag> is rendered with the program. It is also used if an <tag>xref</tag> links to the <tag>listing</tag> using <attr>text="title"</attr>.</p>
 
         <listing xml:id="addh-v1-listing">
-            <title>add.h (version 1)</title>
-            <caption>add.h (version 1) - A very simple header file that lacks header guards.</caption>
+            <title>add.h (version 1) - A very simple header file that lacks header guards.</title>
             <program filename="add.h" xml:id="addh-v1" label="addh-v1-label" language="cpp" include-source="yes">
                 int add(int a, int b);
             </program>

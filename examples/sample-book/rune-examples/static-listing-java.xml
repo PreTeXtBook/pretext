@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <listing>
-  <caption>A static Java program with highlighted lines</caption>
+  <title>A static Java program with highlighted lines</title>
   <program language="java" line-numbers="yes" highlight-lines="2,6-8" include-source="yes">
-      <title>"hi" in Java</title>
       <code>
       import javax.swing.JFrame;  //Importing class JFrame
       import javax.swing.JLabel;  //Importing class JLabel

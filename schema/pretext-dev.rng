@@ -1135,6 +1135,27 @@
   <define name="BlockStatement" combine="choice">
     <ref name="Query"/>
   </define>
+  <!--
+    Coding exercise: an interactive program (typically
+    activecode) whose "tests" hold unit tests
+  -->
+  <define name="CodingExercise">
+    <ref name="MetaDataTitleOptional"/>
+    <optional>
+      <attribute name="number"/>
+    </optional>
+    <ref name="StatementExercise"/>
+    <ref name="Program"/>
+    <zeroOrMore>
+      <ref name="Hint"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="Answer"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="Solution"/>
+    </zeroOrMore>
+  </define>
   <!-- Include all exercise types in exercise and activity -->
   <define name="Exercise" combine="choice">
     <element name="exercise">
@@ -1150,6 +1171,7 @@
         <ref name="FreeResponse"/>
         <ref name="FillInBlank"/>
         <ref name="Areas"/>
+        <ref name="CodingExercise"/>
       </choice>
     </element>
   </define>
