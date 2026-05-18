@@ -103,7 +103,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Informal Java <q>Hello, World</q></title>
             <title>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server</title>
             <program xml:id="java-hello-world" interactive='activecode' language="java">
-                <title>"hi" in Java</title>
                 <code>
                 public class HelloWorld {
                     public static void main(String[] args) {
@@ -270,7 +269,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <listing xml:id="program-activecode-java-flags">
             <title>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server, with compiler and linker flags</title>
             <program xml:id="java-hello-world-flags" interactive='activecode' language="java" compiler-args="-g" linker-args="-s">
-                <title>"hi" in Java</title>
                 <code>
                 import javax.swing.JFrame;  //Importing class JFrame
                 import javax.swing.JLabel;  //Importing class JLabel
