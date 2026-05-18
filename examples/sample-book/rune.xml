@@ -100,7 +100,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A Java program will only be interactive if hosted on a Runestone server.</p>
 
         <listing xml:id="program-activecode-java">
-            <title>Informal Java <q>Hello, World</q></title>
             <title>A Java program, interactive on a <pubtitle>Runestone</pubtitle> server</title>
             <program xml:id="java-hello-world" interactive='activecode' language="java">
                 <code>
