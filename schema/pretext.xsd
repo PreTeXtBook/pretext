@@ -3538,7 +3538,7 @@
   <xs:element name="md">
     <xs:complexType mixed="true">
       <xs:sequence>
-        <xs:group ref="MetaDataTarget"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
         <xs:choice>
           <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element ref="xref"/>
@@ -3554,7 +3554,7 @@
           </xs:sequence>
         </xs:choice>
       </xs:sequence>
-      <xs:attributeGroup ref="MetaDataTarget"/>
+      <xs:attribute name="component"/>
       <xs:attribute name="number">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -3563,6 +3563,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute ref="xml:id"/>
       <xs:attribute name="break">
         <xs:simpleType>
           <xs:restriction base="xs:token">

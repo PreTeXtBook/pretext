@@ -938,7 +938,7 @@
     <section>
         <title>Mathematics</title>
 
-        <p>All mathematics appears inside paragraphs, and the syntax is that of <latex/>, as supported by MathJax, whose supported commands and macros are meant to be very similar to those of the AMSMath package.  Note that the content is typically unstructured, excepting <q>fill-in-the-blank</q>, <webwork/> variables (see variants), and internal cross-references in multi-row display mathematics. Also, a multi-row <c>md</c> is not itself a target of cross-references, though its rows can be; a single-line <c>md</c> may carry an <attr>xml:id</attr> and be a cross-reference target.  Fill-in blanks have a variant attribute <attr>fill</attr> more suited for mathematics.</p>
+        <p>All mathematics appears inside paragraphs, and the syntax is that of <latex/>, as supported by MathJax, whose supported commands and macros are meant to be very similar to those of the AMSMath package.  Note that the content is typically unstructured, excepting <q>fill-in-the-blank</q>, <webwork/> variables (see variants), and internal cross-references in multi-row display mathematics. Also, displayed mathematics, <c>md</c>, comes in two forms.  A single-line <c>md</c> has no <c>mrow</c> children and may carry an <attr>xml:id</attr> to be a cross-reference target; it does not use a <attr>label</attr>.  A multi-row <c>md</c> has <c>mrow</c> children and is not itself a target of cross-references, so takes neither an <attr>xml:id</attr> nor a <attr>label</attr>, though its rows can be targets.  Either form may carry a <attr>number</attr> attribute, defaulting to <q>no</q>; on a multi-row <c>md</c> it applies to each <c>mrow</c> that does not override it.  Fill-in blanks have a variant attribute <attr>fill</attr> more suited for mathematics.</p>
 
         <fragment xml:id="mathematics">
             <title>Mathematics</title>
@@ -968,14 +968,25 @@
             MathIntertext = element intertext {TextLong}
             MathDisplay =
                 element md {
-                    MetaDataTarget,
+                    # common to both forms; @number defaults to "no"
+                    Component?,
+                    Index*,
                     attribute number {"yes" | "no"}?,
-                    attribute break {"yes" | "no"}?,
-                    attribute alignment {text}?,
-                    attribute alignat-columns {text}?,
                     (
-                    (mixed {(Xref | FillInMath | WWVariable)*}) |
-                    (MathRow, (MathRow | MathIntertext)*)
+                        # single-line: text content, optional @xml:id
+                        # makes it a cross-reference target, no @label
+                        (
+                            UniqueID?,
+                            mixed {(Xref | FillInMath | WWVariable)*}
+                        ) |
+                        # multi-line: "mrow" content, not itself a
+                        # cross-reference target, so no @xml:id, no @label
+                        (
+                            attribute break {"yes" | "no"}?,
+                            attribute alignment {text}?,
+                            attribute alignat-columns {text}?,
+                            MathRow, (MathRow | MathIntertext)*
+                        )
                     )
                 }
             </code>

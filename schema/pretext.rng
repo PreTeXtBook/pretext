@@ -4201,7 +4201,13 @@
   </define>
   <define name="MathDisplay">
     <element name="md">
-      <ref name="MetaDataTarget"/>
+      <optional>
+        <!-- common to both forms; @number defaults to "no" -->
+        <ref name="Component"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="Index"/>
+      </zeroOrMore>
       <optional>
         <attribute name="number">
           <choice>
@@ -4210,31 +4216,44 @@
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="break">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="alignment"/>
-      </optional>
-      <optional>
-        <attribute name="alignat-columns"/>
-      </optional>
       <choice>
-        <mixed>
-          <zeroOrMore>
-            <choice>
-              <ref name="Xref"/>
-              <ref name="FillInMath"/>
-              <ref name="WWVariable"/>
-            </choice>
-          </zeroOrMore>
-        </mixed>
+        <!--
+          single-line: text content, optional @xml:id
+          makes it a cross-reference target, no @label
+        -->
         <group>
+          <optional>
+            <ref name="UniqueID"/>
+          </optional>
+          <mixed>
+            <zeroOrMore>
+              <choice>
+                <ref name="Xref"/>
+                <ref name="FillInMath"/>
+                <ref name="WWVariable"/>
+              </choice>
+            </zeroOrMore>
+          </mixed>
+        </group>
+        <!--
+          multi-line: "mrow" content, not itself a
+          cross-reference target, so no @xml:id, no @label
+        -->
+        <group>
+          <optional>
+            <attribute name="break">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="alignment"/>
+          </optional>
+          <optional>
+            <attribute name="alignat-columns"/>
+          </optional>
           <ref name="MathRow"/>
           <zeroOrMore>
             <choice>
