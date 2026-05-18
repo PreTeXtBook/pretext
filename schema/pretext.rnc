@@ -1654,14 +1654,25 @@
             MathIntertext = element intertext {TextLong}
             MathDisplay =
                 element md {
-                    MetaDataTarget,
+                    # common to both forms; @number defaults to "no"
+                    Component?,
+                    Index*,
                     attribute number {"yes" | "no"}?,
-                    attribute break {"yes" | "no"}?,
-                    attribute alignment {text}?,
-                    attribute alignat-columns {text}?,
                     (
-                    (mixed {(Xref | FillInMath | WWVariable)*}) |
-                    (MathRow, (MathRow | MathIntertext)*)
+                        # single-line: text content, optional @xml:id
+                        # makes it a cross-reference target, no @label
+                        (
+                            UniqueID?,
+                            mixed {(Xref | FillInMath | WWVariable)*}
+                        ) |
+                        # multi-line: "mrow" content, not itself a
+                        # cross-reference target, so no @xml:id, no @label
+                        (
+                            attribute break {"yes" | "no"}?,
+                            attribute alignment {text}?,
+                            attribute alignat-columns {text}?,
+                            MathRow, (MathRow | MathIntertext)*
+                        )
                     )
                 }
             
