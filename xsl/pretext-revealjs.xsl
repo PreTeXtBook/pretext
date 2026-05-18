@@ -52,6 +52,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML conversion (preferably avoid using this).                -->
 <xsl:variable name="b-reveal-build" select="true()" />
 
+<!-- Reveal.js output is one monolithic page, so heading levels are -->
+<!-- threaded, not chunked.  The slideshow title (h1) and subtitle  -->
+<!-- (h2) are fixed.  A "section" is always level 2 (sections never -->
+<!-- nest in a slideshow), so a "slide" title is level 3 when there -->
+<!-- are sections and level 2 when there are none; slide content    -->
+<!-- begins one level deeper.                                       -->
+<xsl:variable name="b-reveal-has-sections" select="boolean($root/slideshow/section)"/>
+<xsl:variable name="reveal-slide-heading-level">
+    <xsl:choose>
+        <xsl:when test="$b-reveal-has-sections">
+            <xsl:text>3</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>2</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- HTML5 format -->
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 
@@ -228,18 +246,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="($reveal-navigation-mode = 'default') or ($reveal-navigation-mode = 'grid')">
             <section>
                 <section>
-                    <h1>
+                    <h2>
                         <xsl:apply-templates select="." mode="title-full"/>
-                    </h1>
+                    </h2>
                 </section>
                 <xsl:apply-templates select="slide"/>
             </section>
         </xsl:when>
         <xsl:when test="$reveal-navigation-mode = 'linear'">
             <section>
-                <h1>
+                <h2>
                     <xsl:apply-templates select="." mode="title-full"/>
-                </h1>
+                </h2>
             </section>
             <xsl:apply-templates select="slide"/>
         </xsl:when>
@@ -266,15 +284,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="titlepage" mode="author-list"/>
         <!-- optional "event" -->
         <xsl:if test="bibinfo/event">
-            <h4>
+            <h3>
                 <xsl:apply-templates select="bibinfo/event"/>
-            </h4>
+            </h3>
         </xsl:if>
         <!-- optional "date" -->
         <xsl:if test="bibinfo/date">
-            <h4>
+            <h3>
                 <xsl:apply-templates select="bibinfo/date"/>
-            </h4>
+            </h3>
         </xsl:if>
     </section>
     <xsl:apply-templates select="abstract"/>
@@ -303,7 +321,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="abstract">
     <section>
-          <h3>Abstract</h3>
+          <h2>Abstract</h2>
           <div align="left">
               <xsl:apply-templates select="*"/>
           </div>
@@ -312,17 +330,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="slide">
     <section>
-          <h3>
+          <xsl:variable name="slide-hN">
+              <xsl:apply-templates select="." mode="hN">
+                  <xsl:with-param name="heading-level" select="$reveal-slide-heading-level"/>
+              </xsl:apply-templates>
+          </xsl:variable>
+          <xsl:element name="{$slide-hN}">
               <xsl:apply-templates select="." mode="title-full" />
-          </h3>
+          </xsl:element>
           <div align="left">
-              <!-- As a single-file output (no chunking), we have assigned   -->
-              <!-- heading levels in a strictly increasing progression.  Now -->
-              <!-- processing beconmes a bit less predictable.  So we pass   -->
-              <!-- in level 4 to the children of a slide and go from there.  -->
-              <!-- TODO: if there are no #section in the source, then maybe sides should begin at "h2"? -->
+              <!-- Single monolithic page: heading levels are threaded, not -->
+              <!-- chunked.  The slide title is one level below a "section" -->
+              <!-- (when present); slide content is one level below that.   -->
               <xsl:apply-templates select="*">
-                  <xsl:with-param name="heading-level" select="4"/>
+                  <xsl:with-param name="heading-level" select="$reveal-slide-heading-level + 1"/>
               </xsl:apply-templates>
           </div>
       </section>
