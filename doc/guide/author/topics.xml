@@ -2279,6 +2279,7 @@
                 <p>To compare the reader's submitted response to the provided correct answer with <tag>mathcmp</tag>, use <attr>use-answer="yes"</attr>. To compare the submitted response to any other object, the <tag>mathcmp</tag> element should have a single evaluated math object as content, which could include a newly generated expression using <tag>de-expression</tag> that is based on the submitted responses. To compare two different math objects, the <tag>mathcmp</tag> should have two math objects. For convenience, there are some implicit representations available as well, illustrated in <xref ref="list-mathcmp-expressions-structure"/>.</p>
 
                 <listing xml:id="list-mathcmp-expressions-structure">
+                    <title>Possible structures for using <tag>mathcmp</tag> within a <tag>test</tag>. The <tag>de-expression</tag> would be replaced by any valid construction as described for the <tag>setup</tag>.</title>
                     <program>
                         <code><![CDATA[
                             <!-- Compare submitted response with fillin answer -->
@@ -2317,7 +2318,6 @@
                         ]]>
                         </code>
                     </program>
-                    <title>Possible structures for using <tag>mathcmp</tag> within a <tag>test</tag>. The <tag>de-expression</tag> would be replaced by any valid construction as described for the <tag>setup</tag>.</title>
                 </listing>
 
                 <p>Compound logical structures are created using the <tag>logic</tag> element in the place of a comparison. To specify which operation is being used, the <attr>op</attr> attribute is set to one of <attr>op="and"</attr>, <attr>op="or"</attr>, or <attr>op="not"</attr>. The operations are considered <m>n</m>-ary, meaning that the contents should be one or more comparison elements, which might include additional logic. The <attr>op="and"</attr> will evaluate as true when <em>all</em> of the children comparisons evaluate as true. The <attr>op="or"</attr> will evaluate as true when <em>at least one</em> of the children comparisons evaluates as true. The <attr>op="not"</attr> is technically implemented as the negation of <attr>op="and"</attr>, and so will evaluate as true when <em>at least one</em> of the children comparisons evaluates as <em>false</em>. In the absence of any <tag>logic</tag>, there is always an implicit <attr>op="and"</attr> so that any sequence of comparisons within a single <tag>test</tag>, all comparisons are required to evaluate as true.</p>
