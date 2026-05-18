@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--        PreTeXt Developer's Guide                         -->
+<!--                                                          -->
+<!-- Copyright (C) 2019-2026                                  -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan              -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="css-source" label="css-source">
+    <title>Styling with CSS and SCSS</title>
+    <idx>CSS</idx>
+    <idx>SCSS</idx>
+    <idx><h>theme</h><h>development</h></idx>
+
+    <introduction>
+        <p>The <pretext/> conversion to <init>HTML</init> deliberately produces plain, semantic markup and leaves nearly all of the visual presentation to <init>CSS</init> (see <xref ref="online-style"/> for the publisher-facing view).  Every <init>HTML</init> book loads a single <c>theme.css</c> file, which is not written by hand but built from <init>SCSS</init> source by a small <c>node</c> script.  This chapter is a map of that source, so you can find your way around to adjust an existing theme or contribute a new one.  You do not need to be a web developer; a working knowledge of <init>CSS</init> and a willingness to read existing files is enough.  <init>SCSS</init> (or <q>Sass</q>) is a superset of <init>CSS</init> that adds variables, nesting, functions, and a module system (<c>@use</c>) for splitting styles across files; the result is still ordinary <init>CSS</init>.  The <url href="https://sass-lang.com/guide/">Sass basics guide</url> covers everything you will meet here.</p>
+    </introduction>
+
+    <section xml:id="css-directory" label="css-directory">
+        <title>The <c>css</c> Directory</title>
+
+        <p>All styling source lives in the top-level <c>css</c> directory, whose <c>README.md</c> is the authoritative reference.  The folders are:<ul>
+            <li><p><c>targets</c><mdash/>each <term>target</term> is a self-contained final product: one entry file that compiles to one <init>CSS</init> file.  The modern <init>HTML</init> themes are in <c>targets/html</c>, one folder per theme, named for a city (<c>default-modern</c>, <c>salem</c>, <c>denver</c>, <c>greeley</c>, <c>boulder</c>, <c>tacoma</c>).  Non-web targets (<c>epub</c>, <c>kindle</c>, <c>revealjs</c>, the print worksheet) live here too.  A file used by only one target belongs in that target's folder.</p></li>
+            <li><p><c>components</c><mdash/>source shared across targets, grouped by what it styles: <c>chunks</c> (PreTeXt containers like exercises and knowls), <c>elements</c> (small pieces such as figures and lists), <c>page-parts</c> (table of contents, navigation bar, banner), <c>interactives</c> (Sage, Runestone, <webwork/>), and <c>helpers</c> (reusable mixins).  Editing a component affects every target that uses it.</p></li>
+            <li><p><c>colors</c><mdash/>color <term>palettes</term> a theme can draw on, plus the master list of color variables (see <xref ref="css-colors"/>).</p></li>
+            <li><p><c>fonts</c><mdash/>the mechanism a theme uses to select fonts.</p></li>
+            <li><p><c>dist</c><mdash/>the built, ready-to-use <init>CSS</init> files (and source maps).  <em>Generated output<mdash/>never edit by hand</em> (see <xref ref="css-building"/>).</p></li>
+            <li><p><c>legacy</c><mdash/>plain <init>CSS</init> for older themes that predate the <init>SCSS</init> system, kept for backward compatibility; new work does not go here.  <c>other</c> holds <init>CSS</init> that is not part of a book, such as the <pretext/> catalog.</p></li>
+        </ul></p>
+    </section>
+
+    <section xml:id="css-theme-assembly" label="css-theme-assembly">
+        <title>How a Theme Is Assembled</title>
+
+        <p>A theme's entry file (for example <c>targets/html/default-modern/theme-default-modern.scss</c>) is short and readable, and does three things: it declares the variables a publisher may override (each marked <c>!default</c>); it pulls in components and a color palette with <c>@use</c>; and it finishes by emitting the color rules.  Reading one entry file top to bottom is the fastest way to understand a theme.</p>
+
+        <p>The <c>css/README.md</c> describes four ways a theme can differ from another, from most to least separation.  Knowing which one a difference uses tells you where to change it.<ul>
+            <li><p><em>Alternative files.</em>  For substantially different styling, a theme imports one of several variant files (<c>_toc-default</c> versus <c>_toc-overlay</c>), with common parts in a shared file they both import.</p></li>
+            <li><p><em>SCSS variables.</em>  For smaller variations that touch several rules (a margin, rounded corners), a value is passed as an <init>SCSS</init> variable through the imports, with a sensible default.</p></li>
+            <li><p><em>CSS custom properties.</em>  Differences that are only a value (most colors) are emitted as <init>CSS</init> variables like <c>--toc-border-color</c>; a theme need only set a different value.</p></li>
+            <li><p><em>Theme-level overrides.</em>  A theme's entry file can add or override rules after the imports<mdash/>good for a change that suits only that theme and extends, rather than undoes, the defaults.</p></li>
+        </ul></p>
+
+        <p>Files in <c>targets</c> are <q>owned</q> by their folder; files in <c>components</c> are shared, so test every target that uses a component you edit.  Avoid copying large blocks of rules between targets<mdash/>factor genuinely reusable rules into a component<mdash/>but do not create a component merely to share a handful of rules.</p>
+    </section>
+
+    <section xml:id="css-colors" label="css-colors">
+        <title>Colors and Palettes</title>
+
+        <p>Colors are kept separate from layout.  <c>colors/_color-vars.scss</c> is the master list of every color, given semantic names (<c>--link-text-color</c>, not <c>--pretty-blue</c>) with defaults.  A <term>palette</term> file (such as <c>_palette-dual.scss</c>) starts from that list, overrides the entries it cares about, and produces an <init>SCSS</init> map named <c>$colors</c>.  The theme hands that map to the <c>set-root-colors</c> mixin, which emits each entry as a <init>CSS</init> custom property on <c>:root</c><mdash/>so a publisher (or a later rule) can override any single color without rebuilding.</p>
+
+        <p>A palette typically defines a few named schemes (such as <c>blue-red</c> or <c>greens</c>) and accepts overrides for the primary and secondary colors.  Those choices arrive as <init>SCSS</init> variables the build script sets from publisher options (see <xref ref="css-building"/> and the publisher list at <xref ref="online-style-options"/>).  Helpers in <c>colors/_color-helpers.scss</c> compute tints, shades, and tones (via the <init>CSS</init> <c>color-mix</c> function, so blends track any override), and a theme supplies a separate dark-mode palette emitted under <c>:root.dark-mode</c>.</p>
+    </section>
+
+    <section xml:id="css-building" label="css-building">
+        <title>Building the CSS</title>
+
+        <p>The build script is <c>script/cssbuilder</c>, run with <c>node</c>.  In normal use you never invoke it directly<mdash/>the <pretext/> script and the <init>CLI</init> build whatever theme a document needs.  The one-time setup is to install <c>node</c> and run <c>npm install</c> once in <c>script/cssbuilder</c> (the <init>CLI</init> does even this for you).  See <xref ref="node-and-npm"/> for <c>node</c> and <c>npm</c>, and <xref ref="pretext-script"/> for the <c>-c theme</c> shortcut that rebuilds only the theme.</p>
+
+        <p>When developing a theme it is convenient to run the script yourself.  From <c>script/cssbuilder</c>, <c>npm run build</c> builds everything into <c>css/dist</c>; to work on one theme, build it straight into a test book and rebuild on every change:</p>
+
+        <cd>
+        <cline>npm run build -- -t theme-default-modern -o yourbook/_static/pretext/css -w</cline>
+        </cd>
+
+        <p>The <c>--</c> is required so the flags reach the script rather than <c>npm</c>.  Useful flags: <c>-t</c> (one target; <c>-l</c> lists them), <c>-o</c> (output directory), <c>-w</c> (watch and rebuild), and <c>-c</c> (a <init>JSON</init> string of options and variables, the same ones a publisher sets, for trying colors and options).  Run <c>npm run build -- -h</c> for the full list; details are in <c>script/cssbuilder/README.md</c>.</p>
+
+        <p>The files in <c>css/dist</c> are checked into the repository so the common themes work without a build.  Regenerating them is the committer's responsibility, usually a separate dedicated commit.  If your contribution changes <init>SCSS</init> source you do <em>not</em> need to rebuild and commit <c>css/dist</c><mdash/>just make sure your source compiles.</p>
+    </section>
+
+    <section xml:id="css-making-changes" label="css-making-changes">
+        <title>Making a Change</title>
+
+        <p>A reliable way to locate the source for something you see on a page:<ul>
+            <li><p>Inspect the element with your browser's developer tools and read its class names<mdash/><pretext/> styles by class, not by tag.</p></li>
+            <li><p>Search the <c>css</c> tree for that class to find the rule, usually in a <c>components</c> file (shared) or a <c>targets</c> file (one theme).</p></li>
+            <li><p>Decide which of the four mechanisms in <xref ref="css-theme-assembly"/> fits: a value change is probably a <init>CSS</init> or <init>SCSS</init> variable; a structural change may need a theme-owned rule or a variant file.</p></li>
+            <li><p>Build that one target into a test book with <c>-o</c> and <c>-w</c>, reload, and iterate.  Check dark mode and a narrow window, and test other targets if you touched a shared component.</p></li>
+        </ul></p>
+
+        <p>Follow the usual conventions when submitting (<xref ref="code-style"/> and <xref ref="git-developer"/>), and raise larger ideas, such as a brand-new theme, on the <c>pretext-dev</c> discussion group first.</p>
+    </section>
+</chapter>

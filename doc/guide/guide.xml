@@ -77,6 +77,7 @@
             <xi:include href="developer/xsltproc.xml"/>
             <xi:include href="developer/pretext-script.xml"/>
             <xi:include href="developer/coding.xml"/>
+            <xi:include href="developer/css.xml"/>
             <xi:include href="developer/localization.xml"/>
             <xi:include href="developer/code-style.xml"/>
             <xi:include href="developer/debugging.xml"/>
