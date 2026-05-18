@@ -257,7 +257,7 @@
         <paragraphs>
             <title>Development</title>
 
-            <p>Please join us on the <c>pretext-dev</c> discussion group if you want to create alternate themes.</p>
+            <p>The <init>CSS</init> for these themes is built from <init>SCSS</init> source.  See <xref ref="css-source"/> for a developer's tour of that source, and please join us on the <c>pretext-dev</c> discussion group if you want to create alternate themes.</p>
         </paragraphs>
     </section>
 
