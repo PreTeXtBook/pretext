@@ -12207,6 +12207,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;mdn&quot; element has been deprecated.  The replacement is an &quot;md&quot;, and numbering is controlled by the &quot;@number&quot; attribute, or a global setting in &quot;docinfo&quot;.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2025-12-29  Deprecating the use of pre@source inside datafile, in favor of xi:include -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//datafile[pre[@source]]&quot;" />
+        <xsl:with-param name="date-string" select="'2025-12-29'" />
+        <xsl:with-param name="message" select="'The use of pre@source inside of datafiles is deprecated. Please use pre+xi:include instead.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
