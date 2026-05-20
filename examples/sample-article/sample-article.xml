@@ -2325,7 +2325,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>If you are not writing a research monograph, maybe (a) you will not use many numbered equations, or do not like the looks of them, or feel they scare your readers, and (b) maybe your cross-references are always local-ish, like strictly within an <tag>example</tag> or a <tag>proof</tag>.  For this situation you can create, and employ, a <q>local</q> tag on a displayed equation.  Nothing enforces the idea of what constitutes local, and there is nothing to stop you from using the same symbols more than once.  With freedom comes responsibility.</p>
 
-                <p>Use the <attr>tag</attr> attribute on an <tag>mrow</tag>, only.  (Remember, you can have just one <tag>mrow</tag>.)  The value of the <attr>tag</attr> attribute is a symbol name.  The prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  So allowed values are<cd>
+                <p>Use the <attr>tag</attr> attribute on an <tag>mrow</tag>, or directly on a single-line <tag>md</tag> (one with no <tag>mrow</tag> children).  The value of the <attr>tag</attr> attribute is a symbol name.  The prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  So allowed values are<cd>
                     <cline>star, dstar, tstar</cline>
                     <cline>dagger, ddagger, tdagger</cline>
                     <cline>daggerdbl, ddaggerdbl, tdaggerdbl</cline>
@@ -2339,6 +2339,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow xml:id="equation-local-maltese"   tag="dmaltese">c^2 \amp = a^2+b^2</mrow>
                     <mrow>z^2 \amp = x^2+y^2</mrow>
                 </md>Here are the local cross-references: <xref ref="equation-local-star"/>, <xref ref="equation-local-dagger"/>, <xref ref="equation-local-daggerdbl"/>, <xref ref="equation-local-hash"/>, <xref ref="equation-local-maltese"/>.  We test another farther away in <xref ref="section-cross-referencing" text="type-global"/>, contrary to our advice above.</p>
+
+                <p>When there is nothing to align, the <attr>tag</attr> attribute may live directly on a single-line <tag>md</tag>: <md xml:id="equation-tag-on-md" tag="star">c^2 = a^2 + b^2</md>.  This is equivalent to placing the content in a single <tag>mrow</tag> child carrying the <attr>tag</attr>.  A cross-reference to this equation looks like <xref ref="equation-tag-on-md"/>.  Note that <attr>tag</attr> and <attr>number</attr> are mutually exclusive on a single-line <tag>md</tag>.</p>
             </subsection>
 
             <subsection xml:id="commutative-diagrams">
