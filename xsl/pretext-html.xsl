@@ -11211,6 +11211,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="open-graph-info"/>
     <xsl:call-template name="pretext-js"/>
     <xsl:call-template name="runestone-header"/>
+    <xsl:call-template name="scorm-js"/>
     <xsl:call-template name="diagcess-header"/>
     <xsl:call-template name="lti-iframe-resizer"/>
 </xsl:variable>
@@ -13743,6 +13744,18 @@ TODO:
         </xsl:variable>
         <link rel="icon" type="image/png" sizes="32x32" href="{$res32}"/>
         <link rel="icon" type="image/png" sizes="16x16" href="{$res16}"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- SCORM tracking script -->
+<!-- Emits a <script> tag that loads ptx-scorm-events.js only when the      -->
+<!-- build target has html.scorm = 'yes' (i.e. compression="scorm").        -->
+<!-- ptx-scorm-events.js hooks into RunestoneBase.prototype.logBookEvent    -->
+<!-- to capture exercise submissions and report them to the LMS via the      -->
+<!-- SCORM 1.2 / SCORM 2004 JavaScript API.                                  -->
+<xsl:template name="scorm-js">
+    <xsl:if test="$b-build-scorm-manifest">
+        <script src="{$html.js.dir}/ptx-scorm-events.js"></script>
     </xsl:if>
 </xsl:template>
 
