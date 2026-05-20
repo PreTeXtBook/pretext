@@ -10751,6 +10751,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}}</xsl:text>
 </xsl:template>
 
+<!-- Same for a bare "md" whose manufactured "mrow" carries a @tag; -->
+<!-- the \label{} lives on the "md", so \ref{} resolves to its \tag -->
+<xsl:template match="md[@pi:authored-one-line and mrow/@tag]" mode="xref-number">
+    <xsl:text>{\xreffont\ref{</xsl:text>
+    <xsl:apply-templates select="." mode="unique-id" />
+    <xsl:text>}}</xsl:text>
+</xsl:template>
+
 <!-- These exceptions are unnumbered, and are just handled explicitly, -->
 <!-- along with a check, the template produces *nothing*               -->
 <xsl:template match="p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-number">
