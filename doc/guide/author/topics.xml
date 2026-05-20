@@ -1467,6 +1467,8 @@
             <title>One-Line Display Mathematics</title>
 
             <p>The <tag>md</tag> element can be used for longer expressions or a single equation.  Typically you will get vertical separation above and below, and the contents will be centered.  See below about concluding periods (and other punctuation), and alignment.  To number the expression, use the <attr>number</attr> attribute with the value set to <c>yes</c>.  And once numbered, the expression can be the target of a cross-reference (<tag>xref</tag>), if you also add a <attr>xml:id</attr> attribute.</p>
+
+            <p>A symbolic local tag may instead be requested with the <attr>tag</attr> attribute, using the same set of symbol names as on an <tag>mrow</tag>; see <xref ref="topic-display-math"/>.  Since a tag stands in for a number, the <attr>tag</attr> and <attr>number</attr> attributes are mutually exclusive on a one-line <tag>md</tag>.</p>
         </subsection>
 
         <subsection xml:id="topic-display-math">

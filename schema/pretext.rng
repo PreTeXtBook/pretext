@@ -4144,6 +4144,25 @@
       </mixed>
     </element>
   </define>
+  <define name="TagSymbol">
+    <choice>
+      <value>star</value>
+      <value>dstar</value>
+      <value>tstar</value>
+      <value>dagger</value>
+      <value>ddagger</value>
+      <value>tdagger</value>
+      <value>daggerdbl</value>
+      <value>ddaggerdbl</value>
+      <value>tdaggerdbl</value>
+      <value>hash</value>
+      <value>dhash</value>
+      <value>thash</value>
+      <value>maltese</value>
+      <value>dmaltese</value>
+      <value>tmaltese</value>
+    </choice>
+  </define>
   <define name="MathRow">
     <element name="mrow">
       <ref name="MetaDataTarget"/>
@@ -4156,23 +4175,7 @@
             </choice>
           </attribute>
           <attribute name="tag">
-            <choice>
-              <value>star</value>
-              <value>dstar</value>
-              <value>tstar</value>
-              <value>dagger</value>
-              <value>ddagger</value>
-              <value>tdagger</value>
-              <value>daggerdbl</value>
-              <value>ddaggerdbl</value>
-              <value>tdaggerdbl</value>
-              <value>hash</value>
-              <value>dhash</value>
-              <value>thash</value>
-              <value>maltese</value>
-              <value>dmaltese</value>
-              <value>tmaltese</value>
-            </choice>
+            <ref name="TagSymbol"/>
           </attribute>
         </choice>
       </optional>
@@ -4203,28 +4206,35 @@
   <define name="MathDisplay">
     <element name="md">
       <optional>
-        <!-- common to both forms; @number defaults to "no" -->
+        <!-- common to both forms -->
         <ref name="Component"/>
       </optional>
       <zeroOrMore>
         <ref name="Index"/>
       </zeroOrMore>
-      <optional>
-        <attribute name="number">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
       <choice>
         <!--
           single-line: text content, optional @xml:id
-          makes it a cross-reference target, no @label
+          makes it a cross-reference target, no @label;
+          @number and @tag are mutually exclusive,
+          @number defaults to "no"
         -->
         <group>
           <optional>
             <ref name="UniqueID"/>
+          </optional>
+          <optional>
+            <choice>
+              <attribute name="number">
+                <choice>
+                  <value>yes</value>
+                  <value>no</value>
+                </choice>
+              </attribute>
+              <attribute name="tag">
+                <ref name="TagSymbol"/>
+              </attribute>
+            </choice>
           </optional>
           <mixed>
             <zeroOrMore>
@@ -4238,9 +4248,18 @@
         </group>
         <!--
           multi-line: "mrow" content, not itself a
-          cross-reference target, so no @xml:id, no @label
+          cross-reference target, so no @xml:id, no @label;
+          @number defaults to "no" and applies to each "mrow"
         -->
         <group>
+          <optional>
+            <attribute name="number">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
           <optional>
             <attribute name="break">
               <choice>

@@ -1941,17 +1941,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Replace bare "md" by "md" with one "mrow"          -->
 <!--   - @xml:id will live on the "md" (new)            -->
 <!--   - md/@number  respected first                    -->
+<!--   - md/@tag  transferred to the manufactured       -->
+<!--       "mrow", where downstream processing expects  -->
+<!--       it; @tag and @number are mutually exclusive  -->
 <!--   - @pi:authored-one-line as empty sentinel, to    -->
 <!--       distinguish from an *authored* single "mrow" -->
 <xsl:template match="md[not(mrow)]" mode="repair">
     <xsl:copy>
-        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:apply-templates select="@*[not(local-name(.) = 'tag')]" mode="repair"/>
         <!-- note origin as single-line display math -->
         <xsl:attribute name="pi:authored-one-line"/>
         <!-- manufacture an "mrow" to hold content -->
         <xsl:element name="mrow">
+            <!-- a @tag on the bare "md" is transferred to the "mrow" -->
+            <xsl:copy-of select="@tag"/>
             <xsl:attribute name="pi:numbered">
                 <xsl:choose>
+                    <!-- a local @tag precludes a number -->
+                    <xsl:when test="@tag">
+                        <xsl:text>no</xsl:text>
+                    </xsl:when>
                     <!-- possibly authored with @number -->
                     <xsl:when test="@number = 'yes'">
                         <xsl:text>yes</xsl:text>

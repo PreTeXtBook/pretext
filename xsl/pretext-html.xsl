@@ -8376,6 +8376,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="@tag" mode="tag-symbol" />
 </xsl:template>
 
+<!-- Same for a bare "md" whose manufactured "mrow" carries a @tag -->
+<xsl:template match="md[@pi:authored-one-line and mrow/@tag]" mode="xref-number">
+    <xsl:apply-templates select="mrow/@tag" mode="tag-symbol" />
+</xsl:template>
+
 <!-- The second abstract template, we condition   -->
 <!-- on if the link is rendered as a knowl or not -->
 <!-- and then condition on the location of the    -->

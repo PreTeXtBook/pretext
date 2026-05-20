@@ -7453,9 +7453,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label" />
 </xsl:template>
 
-<!-- When tagging the manufactured "mrow" of a bare "md" we -->
-<!-- get the identification from the containing parent "md" -->
+<!-- When tagging the manufactured "mrow" of a bare "md" we  -->
+<!-- get the identification from the containing parent "md"; -->
+<!-- a @tag transferred from the bare "md" still emits the   -->
+<!-- symbol via the usual \tag{} mechanism                   -->
 <xsl:template match="mrow[parent::md/@pi:authored-one-line]" mode="tag">
+    <xsl:if test="@tag">
+        <xsl:text>\tag{</xsl:text>
+        <xsl:apply-templates select="@tag" mode="tag-symbol" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="parent::md" mode="label" />
 </xsl:template>
 
@@ -10739,6 +10746,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- when an "mrow" of display mathematics is tagged    -->
 <!-- with symbols not numbers                           -->
 <xsl:template match="mrow[@tag]" mode="xref-number">
+    <xsl:text>{\xreffont\ref{</xsl:text>
+    <xsl:apply-templates select="." mode="unique-id" />
+    <xsl:text>}}</xsl:text>
+</xsl:template>
+
+<!-- Same for a bare "md" whose manufactured "mrow" carries a @tag; -->
+<!-- the \label{} lives on the "md", so \ref{} resolves to its \tag -->
+<xsl:template match="md[@pi:authored-one-line and mrow/@tag]" mode="xref-number">
     <xsl:text>{\xreffont\ref{</xsl:text>
     <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}}</xsl:text>
