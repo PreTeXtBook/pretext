@@ -63,9 +63,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>&#xa;</xsl:text>
     <!-- (2) Identical content, but now isolated on a reader-friendly page -->
+    <!-- The standalone page has its own masthead h1, so headings inside   -->
+    <!-- start fresh at h2.  Mirrors the standalone-page invocation in     -->
+    <!-- the "interactive" template of pretext-html.xsl.                   -->
     <xsl:apply-templates select="." mode="standalone-page" >
         <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="interactive-core" />
+            <xsl:apply-templates select="." mode="interactive-core">
+                <xsl:with-param name="is-standalone" select="true()"/>
+                <xsl:with-param name="heading-level" select="2"/>
+            </xsl:apply-templates>
         </xsl:with-param>
     </xsl:apply-templates>
     <!-- (3) A simple page that can be used in an iframe construction -->
