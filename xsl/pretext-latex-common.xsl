@@ -7453,9 +7453,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label" />
 </xsl:template>
 
-<!-- When tagging the manufactured "mrow" of a bare "md" we -->
-<!-- get the identification from the containing parent "md" -->
+<!-- When tagging the manufactured "mrow" of a bare "md" we  -->
+<!-- get the identification from the containing parent "md"; -->
+<!-- a @tag transferred from the bare "md" still emits the   -->
+<!-- symbol via the usual \tag{} mechanism                   -->
 <xsl:template match="mrow[parent::md/@pi:authored-one-line]" mode="tag">
+    <xsl:if test="@tag">
+        <xsl:text>\tag{</xsl:text>
+        <xsl:apply-templates select="@tag" mode="tag-symbol" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="parent::md" mode="label" />
 </xsl:template>
 
