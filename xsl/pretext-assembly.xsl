@@ -149,17 +149,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="exercise-style" select="'static'"/>
 
 <!-- Short-Circuit -->
-<!-- Sometimes we only want to convert to a "version" (valid PreTeXt) via -->
-<!-- the resolution of version support and customizations.  Examples are  -->
-<!-- determining publisher variables (for generating something like LaTeX -->
-<!-- images, when we do not process the whole source) or performiong      -->
-<!-- validation.  We control this with an internal variable, which is not -->
-<!-- documented as an author or publisher feature.  When we select only   -->
-<!-- the production of the "version" tree, the choice of "exercise-style" -->
-<!-- is irrelevant.                                                       -->
+<!-- Sometimes we only want to stop at an intermediate tree.  For example, -->
+<!-- we may convert only to a "version" (valid PreTeXt) via resolution of  -->
+<!-- version support and customizations, or stop at the tree that has       -->
+<!-- @assembly-id attributes but has not yet loaded exercise components.    -->
+<!-- We control this with internal variables, not documented as author or   -->
+<!-- publisher features.  When we stop this early, "exercise-style" is      -->
+<!-- irrelevant.                                                             -->
 
 <!-- default is empty, so we ccan detect non-use -->
 <xsl:param name="assembly.version-only" select="''"/>
+<xsl:param name="assembly.assembly-id-only" select="''"/>
 
 <!-- Set to 'yes' to enable diagnostic checks, such as   -->
 <!-- verifying coherence of @assembly-id and @unique-id. -->
@@ -185,6 +185,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 <xsl:variable name="b-version-only" select="$version-only = 'yes'"/>
+
+<!-- convert to a boolean, with error-checking -->
+<xsl:variable name="assembly-id-only">
+    <xsl:choose>
+        <xsl:when test="$assembly.assembly-id-only = ''">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$assembly.assembly-id-only = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$assembly.assembly-id-only = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG:  the internal parameter  assembly.assembly-id-only  received an unrecognized value of "<xsl:value-of select="$assembly.assembly-id-only"/>" (possible values are "yes" and "no")</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-assembly-id-only" select="$assembly-id-only = 'yes'"/>
 
 <!-- ################################################ -->
 <!-- Controlling Two-Pass Extraction and Substitution -->
@@ -506,7 +525,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="assembly-label" select="exsl:node-set($assembly-label-rtf)"/>
 
 <xsl:variable name="representations-rtf">
-    <xsl:apply-templates select="$assembly-label" mode="representations"/>
+    <xsl:choose>
+        <!-- short-circuit to stop after adding @assembly-id -->
+        <xsl:when test="$b-assembly-id-only"/>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$assembly-label" mode="representations"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:variable>
 <xsl:variable name="representations" select="exsl:node-set($representations-rtf)"/>
 

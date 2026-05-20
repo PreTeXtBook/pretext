@@ -94,6 +94,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-version-only">
             <xsl:apply-templates select="$version" mode="showme"/>
         </xsl:when>
+        <xsl:when test="$b-assembly-id-only">
+            <xsl:apply-templates select="$assembly-label" mode="showme"/>
+        </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="$root" mode="showme"/>
         </xsl:otherwise>

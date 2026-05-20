@@ -5011,6 +5011,8 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
         stringparams["debug.assembly.exercise"] = method
     elif method == "version":
         stringparams["assembly.version-only"] = "yes"
+    elif method == "assembly-id":
+        stringparams["assembly.assembly-id-only"] = "yes"
     else:
         log.error("assembly method {} not recognized".format(method))
     # "extra_xsl" would be silly in this context (?)
@@ -5044,6 +5046,8 @@ def assembly_internal(xml, pub_file, stringparams, method):
         stringparams["debug.assembly.exercise"] = method
     elif method == "version":
         stringparams["assembly.version-only"] = "yes"
+    elif method == "assembly-id":
+        stringparams["assembly.assembly-id-only"] = "yes"
     else:
         log.error("assembly method {} not recognized".format(method))
     # use the right xsl template
