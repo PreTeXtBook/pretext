@@ -12207,6 +12207,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;mdn&quot; element has been deprecated.  The replacement is an &quot;md&quot;, and numbering is controlled by the &quot;@number&quot; attribute, or a global setting in &quot;docinfo&quot;.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2026-05-22  "@include-source" attribute deprecated -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//@include-source&quot;" />
+        <xsl:with-param name="date-string" select="'2026-05-22'" />
+        <xsl:with-param name="message" select="'the &quot;@include-source&quot; attribute has been deprecated and it will be ignored.  No replacement is planned.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

@@ -1089,14 +1089,6 @@
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="include-source">
-          <choice>
-            <value>yes</value>
-            <value>no</value>
-          </choice>
-        </attribute>
-      </optional>
       <choice>
         <element name="pre">
           <optional>
