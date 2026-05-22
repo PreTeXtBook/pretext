@@ -24,7 +24,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   Abstract Algebra: Theory and Applications   -->
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
-<chapter xml:id="rune" xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xml:id="rune">
     <title>Runestone Testing</title>
 
     <introduction>
@@ -37,7 +37,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>First, some samples of programs that are not interactive. They will be syntax highlighted if a valid <attr>language</attr> is specified. Optionally, lines can be numbered and selected lines highlighted.</p>
 
-        <xi:include href="./rune-examples/static-listing-java.xml"/>
+        <!-- This example also appears in the PreTeXt Guide (doc/guide/author/topics.xml).  Apply any edit to both copies. -->
+        <listing>
+            <title>A static Java program with highlighted lines</title>
+            <program language="java" line-numbers="yes" highlight-lines="2,6-8">
+                <code>
+                import javax.swing.JFrame;  //Importing class JFrame
+                import javax.swing.JLabel;  //Importing class JLabel
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        JFrame frame = new JFrame();           //Creating frame
+                        frame.setTitle("Hi!");                 //Setting title frame
+                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                        frame.pack();                          //Setting size to smallest
+                        frame.setLocationRelativeTo(null);     //Centering frame
+                        frame.setVisible(true);                //Showing frame
+                    }
+                }
+                </code>
+            </program>
+        </listing>
 
         <p>Instead of specifying <attr>language</attr> on each program, a default can be specified at <c>docinfo/programs/@language</c>. That value will be used for any program that lacks a <attr>language</attr> attribute. This sample does not specify it's own <attr>language</attr> and is relying on the default set in this book.</p>
 
@@ -221,7 +240,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A program can have a <tag>preamble</tag> and/or <tag>postamble</tag> which are added to the code that the user writes before it is run. They are visible by default, but can be made invisible with <attr>visible</attr> set to <c>"no"</c>. When visible, the code editor will prevent those regions from being modified. The indentation for lines in the <c>preamble/code/postamble</c> elements will be calculated relative to each other - make sure to indent them all to a similar extent. (In the source for the sample below, the <c># TODO...</c> is intentially indented one stop extra so that the user's code is part of the <c>add</c> function.</p>
         <p><tag>tests</tag> are similar to <tag>postamble</tag> in that it represents code that is added to the users submission. However, <tag>tests</tag> is intended specifically for unit testing code (see examples below for unit testing in Python, Java, C++, SQL). Tests are invisble by default and can be made visible with <attr>visible</attr> set to <c>"yes"</c>. For historical reasons, the indentation of the <tag>tests</tag> is treated separately from the rest of the program.</p>
 
-        <xi:include href="./rune-examples/activecode-ambles.xml"/>
+        <!-- This example also appears in the PreTeXt Guide (doc/guide/author/topics.xml).  Apply any edit to both copies. -->
+        <listing>
+            <title>A Python program with preamble/postamble</title>
+            <program interactive='activecode' language="python" label="program-activecode-python-ambles">
+                <preamble>
+                def add(a, b):
+                </preamble>
+                <code>
+                    # TODO - complete the add function
+
+                </code>
+                <postamble>
+                # Use the function
+                result = add(2, 3)
+                if result == 5:
+                    print("Test passed")
+                else:
+                    print("Test failed")
+                </postamble>
+            </program>
+        </listing>
 
         <p>Here is the same Python program from the previous section, but now with a <tag>preamble</tag> and <tag>postamble</tag> that are invisible.  The user will not see the code that is added to their submission.  Not actually useful in this case, but it might be if you wanted to hide boilerplate setup from the reader.</p>
 
@@ -681,7 +720,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Unit testing can be used to automatically evaluate student work. Unit testing frameworks are available for Python, Java, and C++</p>
 
-        <xi:include href="./rune-examples/activecode-unittest.xml"/>
+        <!-- This example also appears in the PreTeXt Guide (doc/guide/author/topics.xml).  Apply any edit to both copies. -->
+        <exercise xml:id="unit-test-example" label="coding-exercise-python-unit-test">
+            <title>Coding Exercise, with Unit Tests</title>
+
+            <statement>
+                <p>Fix the following code so that it always correctly adds two numbers. [Ed. Unit test support is experimental.]</p>
+            </statement>
+            <program interactive="activecode" language="python">
+                <code>
+                def add(a,b):
+                    return 4
+                </code>
+                <tests>
+                from unittest.gui import TestCaseGui
+
+                class myTests(TestCaseGui):
+
+                   def testOne(self):
+                       self.assertEqual(add(2,2), 4, "Adding two identical integers")
+                       self.assertEqual(add(7,13), 20, "Adding two different integers")
+                       self.assertAlmostEqual(add(2.0,3.0), 5.0, 5, "Adding two decimal numbers")
+
+                myTests().main()
+                </tests>
+            </program>
+            <answer>
+                <p>We're not really sure.  But it would begin as follows:</p>
+                <program language="c">
+                    <code>
+                    #include &lt;stdio.h&gt;
+
+                    int main(void)
+                    </code>
+                </program>
+            </answer>
+        </exercise>
 
         <exercise xml:id="unit-test-example-java" label="coding-exercise-java-unit-test">
             <title>Java Exercise, with Unit Tests</title>
