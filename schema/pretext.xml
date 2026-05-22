@@ -2542,7 +2542,6 @@
                     attribute rows {xsd:integer}?,
                     attribute cols {xsd:integer}?,
                     attribute editable {"yes"|"no"}?,
-                    attribute include-source {"yes"|"no"}?,
                     (
                         element pre {
                             attribute source {text}?,
