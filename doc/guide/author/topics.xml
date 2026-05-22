@@ -3578,7 +3578,26 @@
 
             <p>In some output formats, notably <init>HTML</init>, the syntax highlighter can add lines or highlight individual lines of code. Highlighting lines is not supported for <latex/> output.  To display line numbers, set the <attr>line-numbers</attr> attribute to <c>yes</c>. To highlight particular lines, set <attr>highlight-lines</attr> to a comma-separated list consisting of individual lines and/or ranges indicated with dashes.  Some examples are: <c>5</c>, <c>2,5</c>,  <c>2,5-8,10-15,15</c>.</p>
 
-            <xi:include href="../../../examples/sample-book/rune-examples/static-listing-java.xml"/>
+            <!-- This example also appears in the sample book (examples/sample-book/rune.xml).  Apply any edit to both copies. -->
+            <listing>
+                <title>A static Java program with highlighted lines</title>
+                <program language="java" line-numbers="yes" highlight-lines="2,6-8">
+                    <code>
+                    import javax.swing.JFrame;  //Importing class JFrame
+                    import javax.swing.JLabel;  //Importing class JLabel
+                    public class HelloWorld {
+                        public static void main(String[] args) {
+                            JFrame frame = new JFrame();           //Creating frame
+                            frame.setTitle("Hi!");                 //Setting title frame
+                            frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                            frame.pack();                          //Setting size to smallest
+                            frame.setLocationRelativeTo(null);     //Centering frame
+                            frame.setVisible(true);                //Showing frame
+                        }
+                    }
+                    </code>
+                </program>
+            </listing>
 
             <p>For interactive versions hosted on Runestone servers, the <attr>label</attr> attribute is critical, just like for interactive exercises.  So be certain to read <xref ref="best-practice-label"/>.</p>
 
@@ -3687,7 +3706,27 @@
 
             <p>Here is a sample of a program with preamble and postamble. For more examples, see <url href="https://runestone.academy/ns/books/published/PTXSB/activecode.html">the Activecode section of the Sample Book</url></p>
 
-            <xi:include href="../../../examples/sample-book/rune-examples/activecode-ambles.xml"/>
+            <!-- This example also appears in the sample book (examples/sample-book/rune.xml).  Apply any edit to both copies. -->
+            <listing>
+                <title>A Python program with preamble/postamble</title>
+                <program interactive='activecode' language="python" label="program-activecode-python-ambles">
+                    <preamble>
+                    def add(a, b):
+                    </preamble>
+                    <code>
+                        # TODO - complete the add function
+
+                    </code>
+                    <postamble>
+                    # Use the function
+                    result = add(2, 3)
+                    if result == 5:
+                        print("Test passed")
+                    else:
+                        print("Test failed")
+                    </postamble>
+                </program>
+            </listing>
 
             <p>
                 There are a wealth of attributes that can be used to control the behavior of ActiveCode. (These are in addition to the standard ones allowed for for <tag>program</tag>. see <xref ref="topic-program"/> for those.) Below is a list of the extra attributes available. Any attribute that lists other elements for inclusion will take a list of <attr>xml:id</attr>s for those elements.
@@ -3773,7 +3812,42 @@
 
                 <p>Below is an example of unit tested Python. For more examples, see <url href="https://runestone.academy/ns/books/published/PTXSB/coding-exercises.html">the Coding Exercises section of the Sample Book</url></p>
 
-                <xi:include href="../../../examples/sample-book/rune-examples/activecode-unittest.xml"/>
+                <!-- This example also appears in the sample book (examples/sample-book/rune.xml).  Apply any edit to both copies. -->
+                <exercise xml:id="unit-test-example" label="coding-exercise-python-unit-test">
+                    <title>Coding Exercise, with Unit Tests</title>
+
+                    <statement>
+                        <p>Fix the following code so that it always correctly adds two numbers. [Ed. Unit test support is experimental.]</p>
+                    </statement>
+                    <program interactive="activecode" language="python">
+                        <code>
+                        def add(a,b):
+                            return 4
+                        </code>
+                        <tests>
+                        from unittest.gui import TestCaseGui
+
+                        class myTests(TestCaseGui):
+
+                           def testOne(self):
+                               self.assertEqual(add(2,2), 4, "Adding two identical integers")
+                               self.assertEqual(add(7,13), 20, "Adding two different integers")
+                               self.assertAlmostEqual(add(2.0,3.0), 5.0, 5, "Adding two decimal numbers")
+
+                        myTests().main()
+                        </tests>
+                    </program>
+                    <answer>
+                        <p>We're not really sure.  But it would begin as follows:</p>
+                        <program language="c">
+                            <code>
+                            #include &lt;stdio.h&gt;
+
+                            int main(void)
+                            </code>
+                        </program>
+                    </answer>
+                </exercise>
 
                 <p>The second way to automatically test code is to provide a set of structured input-output pair tests. For each test, the program will be run and fed the specified input. Then the program output will be compared against the test output to decide if the program handled the test correctly. This mechanism is useful for testing simple programs without functions and for languages that do not have a unit testing framework. A particular program can only have one of these two testing mechanisms.</p>
 
