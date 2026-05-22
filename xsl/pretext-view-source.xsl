@@ -89,9 +89,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- kill them here.  Careful experiments suggest these are the  -->
     <!-- only elements without source.                               -->
     <xsl:variable name="b-banned" select="boolean(self::fn)"/>
-    <!-- Allow for annotations of select elements                    -->
-    <xsl:variable name="include-source" select="@include-source = 'yes'"/>
-    <xsl:if test="($b-view-source and not($b-banned)) or $include-source">
+    <xsl:if test="$b-view-source and not($b-banned)">
         <!-- Part 1: Serialize the source -->
         <!-- Save off the id of the element being annotated -->
         <xsl:variable name="the-element-id" select="@original-id"/>
