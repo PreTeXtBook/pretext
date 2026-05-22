@@ -2,7 +2,7 @@
 
 <listing>
     <title>A Python program with preamble/postamble</title>
-    <program interactive='activecode' language="python" label="program-activecode-python-ambles" include-source="yes">
+    <program interactive='activecode' language="python" label="program-activecode-python-ambles">
         <preamble>
         def add(a, b):
         </preamble>

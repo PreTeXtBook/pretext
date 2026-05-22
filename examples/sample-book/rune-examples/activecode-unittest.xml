@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<exercise xml:id="unit-test-example" label="coding-exercise-python-unit-test" include-source="yes">
+<exercise xml:id="unit-test-example" label="coding-exercise-python-unit-test">
   <title>Coding Exercise, with Unit Tests</title>
 
   <statement>
