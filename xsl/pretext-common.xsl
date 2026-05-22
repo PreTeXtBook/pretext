@@ -12352,9 +12352,10 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- then translate all asterisks to octothorpes.  The left margin -->
 <!-- becomes three octothorpes to not be confused with metadata    -->
 <!-- This can revert to  -perl  if the editor changes              -->
+<!-- 2026-05-22: removed dates, too much noise in diffs            -->
 <xsl:template name="converter-blurb-webwork">
     <xsl:variable name="blurb">
-        <xsl:call-template name="converter-blurb">
+        <xsl:call-template name="converter-blurb-no-date">
             <xsl:with-param name="lead-in"  select="'##'" />
             <xsl:with-param name="lead-out" select="'XXX'" />
         </xsl:call-template>
