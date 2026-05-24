@@ -11080,8 +11080,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 </xsl:if>
             </xsl:message>
         </xsl:when>
-        <xsl:when test="mathbook|pretext">
-            <!-- at root, fail with no action -->
+        <xsl:when test="self::mathbook or self::pretext">
+            <!-- at the document root, fail with no action.  Earlier  -->
+            <!-- this test used "mathbook|pretext", which matched any -->
+            <!-- ancestor that happened to *contain* a "pretext/" or  -->
+            <!-- "mathbook/" empty element (the project-name marker)  -->
+            <!-- and halted the walk prematurely.                     -->
         </xsl:when>
         <xsl:otherwise>
             <!-- pop up a level and try again -->
