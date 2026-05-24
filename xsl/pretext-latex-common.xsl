@@ -7429,6 +7429,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- *-form of the environment) is conveyed by an internal -->
 <!-- attribute placed by the pre-processor in the          -->
 <!-- "intertext" case.                                     -->
+<!-- The "intertext" sandwich rule (every "intertext" inside an "md"    -->
+<!-- must be followed by an "mrow") is enforced by the schema.          -->
+<!-- If the schema check were bypassed, the assembly explosion would    -->
+<!-- produce malformed LaTeX in either of two ways:                     -->
+<!--   *  a trailing "intertext" leaves an unclosed "\begin{align}"     -->
+<!--      with no matching "\end{align}".                               -->
+<!--   *  back-to-back "intertext" produce two consecutive              -->
+<!--      "\intertext{...}" with no math environment between them.      -->
+<!-- The schema check means this template can omit defensive checks.    -->
 <xsl:template match="md[mrow]">
     <xsl:apply-templates select="." mode="body">
         <xsl:with-param name="b-needs-open"  select="not(@pi:location) or @pi:location = 'first'"/>

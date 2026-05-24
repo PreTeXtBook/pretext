@@ -1673,13 +1673,16 @@
                         ) |
                         # multi-line: "mrow" content, not itself a
                         # cross-reference target, so no @xml:id, no @label;
-                        # @number defaults to "no" and applies to each "mrow"
+                        # @number defaults to "no" and applies to each "mrow".
+                        # Each "intertext" must be sandwiched between "mrow":
+                        # it cannot lead, cannot trail, and two cannot be
+                        # adjacent.
                         (
                             attribute number {"yes" | "no"}?,
                             attribute break {"yes" | "no"}?,
                             attribute alignment {text}?,
                             attribute alignat-columns {text}?,
-                            MathRow, (MathRow | MathIntertext)*
+                            MathRow, (MathRow | (MathIntertext, MathRow))*
                         )
                     )
                 }
