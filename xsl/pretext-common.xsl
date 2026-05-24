@@ -11032,11 +11032,34 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:choose>
 </xsl:template>
 
-<!-- We search up the tree, looking for something -->
-<!-- an author will recognize, and then report it -->
-<!-- Useful for warnings that do not contain any  -->
-<!-- identifying information themselves           -->
+<!-- Report the location of an element or attribute, for use after a   -->
+<!-- warning that does not itself contain identifying information.     -->
+<!-- Prints two lines: a structural path of element local-names from   -->
+<!-- the root, useful for diagnosing structural problems; then the     -->
+<!-- nearest @xml:id or "title" up the ancestor chain, useful for the  -->
+<!-- author to locate the issue in their source.                       -->
 <xsl:template match="*|@*" mode="location-report">
+    <!-- structural path: "pretext/book/chapter/.../element" -->
+    <!-- attributes display as a trailing "@name" step       -->
+    <xsl:message>
+        <xsl:text>             located at: </xsl:text>
+        <xsl:for-each select="ancestor::*">
+            <xsl:value-of select="local-name(.)"/>
+            <xsl:text>/</xsl:text>
+        </xsl:for-each>
+        <xsl:if test="not(self::*)">
+            <xsl:text>@</xsl:text>
+        </xsl:if>
+        <xsl:value-of select="local-name(.)"/>
+    </xsl:message>
+    <!-- nearest @xml:id or "title" for author orientation -->
+    <xsl:apply-templates select="." mode="named-ancestor-report"/>
+</xsl:template>
+
+<!-- Walk up the ancestor chain, looking for the first element with     -->
+<!-- @xml:id or "title", and report it.  Companion to "location-report" -->
+<!-- so the structural path is printed once while this walk continues.  -->
+<xsl:template match="*|@*" mode="named-ancestor-report">
     <xsl:choose>
         <xsl:when test="@xml:id or title">
             <!-- print information about location -->
@@ -11062,7 +11085,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         </xsl:when>
         <xsl:otherwise>
             <!-- pop up a level and try again -->
-            <xsl:apply-templates select="parent::*[1]" mode="location-report" />
+            <xsl:apply-templates select="parent::*[1]" mode="named-ancestor-report" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
