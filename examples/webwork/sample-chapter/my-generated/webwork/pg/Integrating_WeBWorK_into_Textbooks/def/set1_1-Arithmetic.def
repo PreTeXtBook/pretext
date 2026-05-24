@@ -1,6 +1,6 @@
-openDate          = 05/15/2026 at 12:00am
-dueDate           = 11/15/2026 at 10:00pm
-answerDate        = 11/15/2026 at 10:00pm
+openDate          = 01/01/2027 at 12:00am
+dueDate           = 12/31/2027 at 10:00pm
+answerDate        = 12/31/2027 at 10:00pm
 paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/1_1-Arithmetic.pg
 screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/1_1-Arithmetic.pg
 description       = Arithmetic
