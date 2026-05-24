@@ -29,8 +29,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
-    xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="exsl date"
+    extension-element-prefixes="exsl"
 >
 
 <!-- Apply this style sheet to to produce a folder tree of PG problem files -->
@@ -269,30 +268,15 @@
         </xsl:variable>
         <!-- set-definition file -->
         <exsl:document href="{$def-filename}" method="text">
-            <xsl:variable name="open" select="substring(date:date-time(),1,10)" />
-            <xsl:variable name="due" select="date:add($open,'P6M')" />
-            <xsl:variable name="answer" select="$due" />
-            <xsl:text>openDate          = </xsl:text>
-            <xsl:value-of select="substring($open, 6, 2)" />
-            <xsl:text>/</xsl:text>
-            <xsl:value-of select="substring($open, 9, 2)" />
-            <xsl:text>/</xsl:text>
-            <xsl:value-of select="substring($open, 1, 4)" />
-            <xsl:text> at 12:00am&#xa;</xsl:text>
-            <xsl:text>dueDate           = </xsl:text>
-            <xsl:value-of select="substring($due, 6, 2)" />
-            <xsl:text>/</xsl:text>
-            <xsl:value-of select="substring($due, 9, 2)" />
-            <xsl:text>/</xsl:text>
-            <xsl:value-of select="substring($due, 1, 4)" />
-            <xsl:text> at 10:00pm&#xa;</xsl:text>
-            <xsl:text>answerDate        = </xsl:text>
-            <xsl:value-of select="substring($due, 6, 2)" />
-            <xsl:text>/</xsl:text>
-            <xsl:value-of select="substring($due, 9, 2)" />
-            <xsl:text>/</xsl:text>
-            <xsl:value-of select="substring($due, 1, 4)" />
-            <xsl:text> at 10:00pm&#xa;</xsl:text>
+            <!-- Fixed, obviously fictional placeholder dates so the file -->
+            <!-- is stable across regenerations.  Earlier this used       -->
+            <!-- "date:date-time()" + a six-month "date:add", which made  -->
+            <!-- every regeneration churn the dates with no semantic      -->
+            <!-- change.  Authors using this output will edit the dates   -->
+            <!-- to fit their course schedule anyway.                     -->
+            <xsl:text>openDate          = 01/01/2027 at 12:00am&#xa;</xsl:text>
+            <xsl:text>dueDate           = 12/31/2027 at 10:00pm&#xa;</xsl:text>
+            <xsl:text>answerDate        = 12/31/2027 at 10:00pm&#xa;</xsl:text>
             <xsl:text>paperHeaderFile   = </xsl:text>
             <xsl:value-of select="$relative-header-filename" />
             <xsl:text>&#xa;</xsl:text>
