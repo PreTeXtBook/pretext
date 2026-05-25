@@ -4272,7 +4272,13 @@
             </attribute>
           </optional>
           <optional>
-            <attribute name="alignment"/>
+            <attribute name="alignment">
+              <choice>
+                <value>align</value>
+                <value>gather</value>
+                <value>alignat</value>
+              </choice>
+            </attribute>
           </optional>
           <optional>
             <attribute name="alignat-columns"/>

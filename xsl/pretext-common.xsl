@@ -1166,7 +1166,12 @@ Book (with parts), "section" at level 3
 <xsl:template match="md[mrow]" mode="displaymath-alignment">
     <xsl:param name="b-needs-tags" select="true()" />
     <xsl:choose>
-        <!-- look for @alignment override, possibly bad -->
+        <!-- Honor the @alignment override.  The schema restricts the   -->
+        <!-- value to one of these three.  The trailing "@alignment"    -->
+        <!-- catch-all is reached only by schema-bypassed input; it     -->
+        <!-- emits a literal token so LaTeX (or MathJax) errors out on  -->
+        <!-- an unknown environment rather than silently falling        -->
+        <!-- through to the ampersand-sniff branch.                     -->
         <xsl:when test="@alignment='gather'">
             <xsl:text>gather</xsl:text>
         </xsl:when>
@@ -1177,8 +1182,6 @@ Book (with parts), "section" at level 3
             <xsl:text>align</xsl:text>
         </xsl:when>
         <xsl:when test="@alignment">
-            <xsl:message>PTX:ERROR: display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "align", "gather", "alignat")</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
             <xsl:text>bad-alignment-choice</xsl:text>
         </xsl:when>
         <!-- perhaps authored as obviously one-line (no alignment) -->

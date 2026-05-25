@@ -994,7 +994,7 @@
                         (
                             attribute number {"yes" | "no"}?,
                             attribute break {"yes" | "no"}?,
-                            attribute alignment {text}?,
+                            attribute alignment {"align" | "gather" | "alignat"}?,
                             attribute alignat-columns {text}?,
                             MathRow, (MathRow | (MathIntertext, MathRow))*
                         )
