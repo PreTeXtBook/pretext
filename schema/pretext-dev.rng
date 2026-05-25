@@ -40,7 +40,17 @@
         <attribute name="calcplot3d"/>
       </optional>
       <optional>
-        <attribute name="variant"/>
+        <!--
+          currently only consumed by the CalcPlot3D flavor;
+          widen this enum if another flavor adopts "@variant"
+        -->
+        <attribute name="variant">
+          <choice>
+            <value>application</value>
+            <value>controls</value>
+            <value>minimal</value>
+          </choice>
+        </attribute>
       </optional>
       <optional>
         <attribute name="dark-mode-enabled"/>

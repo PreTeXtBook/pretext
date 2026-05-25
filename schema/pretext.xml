@@ -994,7 +994,7 @@
                         (
                             attribute number {"yes" | "no"}?,
                             attribute break {"yes" | "no"}?,
-                            attribute alignment {text}?,
+                            attribute alignment {"align" | "gather" | "alignat"}?,
                             attribute alignat-columns {text}?,
                             MathRow, (MathRow | (MathIntertext, MathRow))*
                         )
@@ -1818,7 +1818,10 @@
                 Component?,
                 attribute margins {text}?,
                 (attribute width {text} | attribute widths {text})?,
-                (AlignmentVertical | attribute valigns {text})?
+                (
+                    AlignmentVertical |
+                    attribute valigns { list { ("top" | "middle" | "bottom")+ } }
+                )?
             SideBySide =
                 element sidebyside {
                     SidebySideAttributes,
@@ -2036,7 +2039,9 @@
                     attribute version { text }?,
                     attribute circuitjs { text }?,
                     attribute calcplot3d { text }?,
-                    attribute variant { text }?,
+                    # currently only consumed by the CalcPlot3D flavor;
+                    # widen this enum if another flavor adopts "@variant"
+                    attribute variant { "application" | "controls" | "minimal" }?,
                     attribute dark-mode-enabled { text }?,
                     attribute resize-behavior { text }?,
                     (
@@ -2238,7 +2243,7 @@
             <code>
             ExerciseOrderedList =
                 element ol {
-                    attribute cols {text}?,
+                    attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {text}?,
                     ExerciseListItem+
                 }

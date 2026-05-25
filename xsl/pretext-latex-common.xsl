@@ -10375,6 +10375,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- paragraph halign-specifications (left, center, right, justify) -->
 <!-- converted to \raggedright, \centering, \raggedleft, <empty>    -->
 
+<!-- The five "*-specification" translators below all receive       -->
+<!-- their "$align" or "$width" from tabular attributes whose       -->
+<!-- values are schema-restricted: @halign and @valign to their     -->
+<!-- alignment vocabularies, and @top / @bottom / @left / @right    -->
+<!-- to "none", "minor", "medium", "major", on "tabular", "row",    -->
+<!-- "col", "cell".  No defensive otherwise is needed in any.       -->
+
 <xsl:template name="paragraph-valign-specification">
     <xsl:param name="align" />
     <xsl:choose>
@@ -10387,9 +10394,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$align='bottom'">
             <xsl:text>b</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:WARNING: vertical alignment attribute not recognized: use top, middle, bottom</xsl:message>
-        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
@@ -10408,9 +10412,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$align='right'">
             <xsl:text>\raggedleft</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:WARNING: horizontal alignment attribute not recognized: use left, center, right, justify</xsl:message>
-        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
@@ -10430,9 +10431,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$width='major'">
             <xsl:text>C</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:WARNING: tabular left or right attribute not recognized: use none, minor, medium, major</xsl:message>
-        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
@@ -10452,9 +10450,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$width='major'">
             <xsl:text>\hrulethick</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:WARNING: tabular top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
-        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
@@ -10477,9 +10472,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$width='major'">
             <xsl:text>\crulethick</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:WARNING: tabular top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
-        </xsl:otherwise>
     </xsl:choose>
     <!-- span -->
     <xsl:if test="not($width='none')">

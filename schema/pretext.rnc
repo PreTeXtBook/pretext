@@ -893,7 +893,10 @@
                 Component?,
                 attribute margins {text}?,
                 (attribute width {text} | attribute widths {text})?,
-                (AlignmentVertical | attribute valigns {text})?
+                (
+                    AlignmentVertical |
+                    attribute valigns { list { ("top" | "middle" | "bottom")+ } }
+                )?
             SideBySide =
                 element sidebyside {
                     SidebySideAttributes,
@@ -1146,7 +1149,7 @@
             
             ExerciseOrderedList =
                 element ol {
-                    attribute cols {text}?,
+                    attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     attribute marker {text}?,
                     ExerciseListItem+
                 }
@@ -1680,7 +1683,7 @@
                         (
                             attribute number {"yes" | "no"}?,
                             attribute break {"yes" | "no"}?,
-                            attribute alignment {text}?,
+                            attribute alignment {"align" | "gather" | "alignat"}?,
                             attribute alignat-columns {text}?,
                             MathRow, (MathRow | (MathIntertext, MathRow))*
                         )

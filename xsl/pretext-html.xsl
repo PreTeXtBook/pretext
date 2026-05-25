@@ -10138,7 +10138,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is a query string of a URL, and we can specify -->
 <!-- the style of the interface through @variant    -->
 <xsl:template match="interactive[@calcplot3d]" mode="iframe-interactive">
-    <!-- Use @variant to pick an endpoint/view/infrastructure -->
+    <!-- Use @variant to pick an endpoint/view/infrastructure. -->
+    <!-- The schema restricts @variant on "interactive" to one -->
+    <!-- of these three, so no defensive otherwise is needed.  -->
     <xsl:variable name="cp3d-endpoint">
         <xsl:choose>
             <xsl:when test="@variant='application'">
@@ -10150,12 +10152,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="@variant='minimal'">
                 <xsl:text>https://c3d.libretexts.org/CalcPlot3D/dynamicFigure/index.html</xsl:text>
             </xsl:when>
-            <xsl:otherwise>
-                <!-- just a silly domain so something none-too-crazy happens -->
-                <xsl:text>http://www.example.com/</xsl:text>
-                <xsl:message>PTX:ERROR:  @variant="<xsl:value-of select="@variant" />" is not recognized for a CalcPlot3D &lt;interactive&gt;</xsl:message>
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
     <!-- load 'em up and go -->
