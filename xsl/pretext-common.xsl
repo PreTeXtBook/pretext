@@ -8253,10 +8253,13 @@ Book (with parts), "section" at level 3
 <!-- functions for the construction of tables.    -->
 <!-- Document uses carefully when newly employed. -->
 
-<!-- Translate thickness attribute value to integer short name -->
-<!-- HTML: makes portion of CSS class names for cells          -->
-<!-- PG: makes portion of optional parameter for DataTable     -->
-<!-- macro from niceTable.pl for thickness of table cells      -->
+<!-- Translate thickness attribute value to integer short name.  -->
+<!-- HTML: makes portion of CSS class names for cells.           -->
+<!-- PG: makes portion of optional parameter for DataTable       -->
+<!-- macro from niceTable.pl for thickness of table cells.       -->
+<!-- The schema restricts callers' @top, @bottom, @left, @right  -->
+<!-- (on "tabular", "row", "col", "cell") to these four values,  -->
+<!-- so no defensive otherwise is needed.                        -->
 <xsl:template name="thickness-specification">
     <xsl:param name="width" />
     <xsl:choose>
@@ -8272,9 +8275,6 @@ Book (with parts), "section" at level 3
         <xsl:when test="$width='major'">
             <xsl:text>3</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:WARNING: tabular rule thickness not recognized: use none, minor, medium, major</xsl:message>
-        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
