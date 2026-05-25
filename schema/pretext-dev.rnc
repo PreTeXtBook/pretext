@@ -18,7 +18,9 @@
                     attribute version { text }?,
                     attribute circuitjs { text }?,
                     attribute calcplot3d { text }?,
-                    attribute variant { text }?,
+                    # currently only consumed by the CalcPlot3D flavor;
+                    # widen this enum if another flavor adopts "@variant"
+                    attribute variant { "application" | "controls" | "minimal" }?,
                     attribute dark-mode-enabled { text }?,
                     attribute resize-behavior { text }?,
                     (
