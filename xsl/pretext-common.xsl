@@ -8278,11 +8278,14 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
-<!-- Translate horizontal alignment to CSS short name    -->
-<!-- HTML:  makes portion of CSS class names for cells   -->
-<!-- LaTeX: provides standard LaTeX horizontal alignment -->
-<!-- PG: provide LaTeX-style alignment string for        -->
-<!-- DataTable macro from niceTable.pl                   -->
+<!-- Translate horizontal alignment to CSS short name.            -->
+<!-- HTML:  makes portion of CSS class names for cells.           -->
+<!-- LaTeX: provides standard LaTeX horizontal alignment.         -->
+<!-- PG: provide LaTeX-style alignment string for the             -->
+<!-- DataTable macro from niceTable.pl.                           -->
+<!-- The schema restricts callers' @halign (on "tabular", "row",  -->
+<!-- "col", "cell") to these four values, so no defensive         -->
+<!-- otherwise is needed.                                         -->
 <xsl:template name="halign-specification">
     <xsl:param name="align" />
     <xsl:choose>
@@ -8295,17 +8298,16 @@ Book (with parts), "section" at level 3
         <xsl:when test="$align='right'">
             <xsl:text>r</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:WARNING: tabular horizontal alignment attribute not recognized: use left, center, right, justify</xsl:message>
-        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- Translate vertical alignment to CSS short name         -->
-<!-- HTML:  makes portion of CSS class names for cells      -->
-<!-- LaTeX: provides one standard LaTeX vertical alignment  -->
-<!-- PG: provide LaTeX-style alignment string for           -->
-<!-- DataTable macro from niceTable.pl                      -->
+<!-- Translate vertical alignment to CSS short name.              -->
+<!-- HTML:  makes portion of CSS class names for cells.           -->
+<!-- LaTeX: provides one standard LaTeX vertical alignment.       -->
+<!-- PG: provide LaTeX-style alignment string for the             -->
+<!-- DataTable macro from niceTable.pl.                           -->
+<!-- The schema restricts callers' @valign (on "tabular", "row")  -->
+<!-- to these three values, so no defensive otherwise is needed.  -->
 <xsl:template name="valign-specification">
     <xsl:param name="align" />
     <xsl:choose>
@@ -8318,9 +8320,6 @@ Book (with parts), "section" at level 3
         <xsl:when test="$align='bottom'">
             <xsl:text>b</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:WARNING: tabular vertical alignment attribute not recognized: use top, middle, bottom</xsl:message>
-        </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
