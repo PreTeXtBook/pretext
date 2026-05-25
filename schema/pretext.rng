@@ -2995,7 +2995,15 @@
   <define name="ExerciseOrderedList">
     <element name="ol">
       <optional>
-        <attribute name="cols"/>
+        <attribute name="cols">
+          <choice>
+            <value>2</value>
+            <value>3</value>
+            <value>4</value>
+            <value>5</value>
+            <value>6</value>
+          </choice>
+        </attribute>
       </optional>
       <optional>
         <attribute name="marker"/>

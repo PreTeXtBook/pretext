@@ -6152,27 +6152,20 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
-<!-- CSS class for multi-column lists -->
-<!-- Context is element with potential "cols" attribute -->
-<!-- Return value is "colsN" with 2 <= N <= 6           -->
-<!-- @cols absent produces no result (i.e. classless)   -->
-<!-- @cols = 1 produces no result (i.e. classless)      -->
-<!-- Error message if out-of-range, could be made fatal -->
-<!-- Schema should enforce this restriction also        -->
+<!-- CSS class for multi-column lists.  Context is an element with -->
+<!-- a potential "cols" attribute.  Return value is "colsN" with   -->
+<!-- 2 <= N <= 6, or empty when @cols is absent.                   -->
+<!-- Schema enforces @cols to be one of "2", "3", "4", "5", "6"    -->
+<!-- on each of "ol", "ul", and "exercisegroup" (and on the        -->
+<!-- variant of "ol" used inside exercise statements), so this     -->
+<!-- template just emits the class string whenever @cols is        -->
+<!-- present.                                                      -->
 <xsl:template match="ol|ul|exercisegroup" mode="number-cols-CSS-class">
-    <xsl:choose>
-        <xsl:when test="not(@cols)"/>
-        <xsl:when test="@cols = 1"/>
-        <xsl:when test="(@cols = 2) or (@cols = 3) or (@cols = 4) or (@cols = 5) or (@cols = 6)">
-            <xsl:text>cols</xsl:text>
-            <xsl:value-of select="@cols" />
-            <xsl:text> multicolumn</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:ERROR:   @cols attribute of lists or exercise groups, must be between 1 and 6 (inclusive), not "cols=<xsl:value-of select="@cols" />"</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:if test="@cols">
+        <xsl:text>cols</xsl:text>
+        <xsl:value-of select="@cols" />
+        <xsl:text> multicolumn</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- ################## -->
