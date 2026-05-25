@@ -5788,24 +5788,14 @@ Book (with parts), "section" at level 3
 <!-- SidebySide Layout Utilities -->
 <!-- ########################### -->
 
-<!-- From a space-separated list of vertical alignments -->
-<!-- create error-checked result tree fragment          -->
+<!-- From a space-separated list of vertical alignments       -->
+<!-- create a result tree fragment.  The schema enforces      -->
+<!-- "top" | "middle" | "bottom" on each list item, so no     -->
+<!-- defensive value check is needed here.                    -->
 <xsl:template name="decompose-valigns">
     <xsl:param name="valigns" />
     <xsl:variable name="the-valign" select="substring-before($valigns, ' ')" />
     <xsl:if test="not($the-valign = '')">
-        <!-- error-check, since list bypasses schema -->
-        <!-- "top" is default, so check first        -->
-        <xsl:choose>
-            <xsl:when test="$the-valign = 'top'" />
-            <xsl:when test="$the-valign = 'bottom'" />
-            <xsl:when test="$the-valign = 'middle'" />
-            <xsl:otherwise>
-                <xsl:message>PTX:ERROR:   @valign(s) ("<xsl:value-of select="$the-valign" />") in &lt;sidebyside&gt; or &lt;sbsgroup&gt; is not "top," "middle" or "bottom"</xsl:message>
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- okay, output element -->
         <valign>
             <xsl:value-of select="$the-valign" />
         </valign>

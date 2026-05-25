@@ -893,7 +893,10 @@
                 Component?,
                 attribute margins {text}?,
                 (attribute width {text} | attribute widths {text})?,
-                (AlignmentVertical | attribute valigns {text})?
+                (
+                    AlignmentVertical |
+                    attribute valigns { list { ("top" | "middle" | "bottom")+ } }
+                )?
             SideBySide =
                 element sidebyside {
                     SidebySideAttributes,
