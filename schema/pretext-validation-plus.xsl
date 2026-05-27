@@ -259,6 +259,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- A Parsons blocks/@randomize="no" without any @order on  -->
+<!-- the child "block" elements is meaningless: the fixed    -->
+<!-- order would just match the authored order.  Warn so the -->
+<!-- author either supplies @order values or drops the       -->
+<!-- @randomize attribute.                                   -->
+<xsl:template match="blocks[@randomize = 'no']">
+    <xsl:if test="not(block/@order)">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A &lt;blocks&gt; element with @randomize="no" has no &lt;block&gt; carrying @order.&#xa;</xsl:text>
+                <xsl:text>The fixed rendering order will just be the authored order.&#xa;</xsl:text>
+                <xsl:text>Either add @order to each &lt;block&gt;, or remove @randomize.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
 
 <!-- ####### -->
 <!-- WeBWorK -->

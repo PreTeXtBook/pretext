@@ -531,9 +531,14 @@
           </choice>
         </attribute>
       </optional>
-      <oneOrMore>
-        <ref name="Block"/>
-      </oneOrMore>
+      <choice>
+        <oneOrMore>
+          <ref name="BlockOrdered"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="BlockUnordered"/>
+        </oneOrMore>
+      </choice>
     </element>
     <zeroOrMore>
       <ref name="Hint"/>
@@ -564,15 +569,30 @@
       </optional>
     </optional>
   </define>
-  <define name="Block">
-    <element name="block">
-      <optional>
-        <attribute name="order">
-          <data type="integer"/>
-        </attribute>
-      </optional>
-      <choice>
-        <group>
+  <define name="BlockBody">
+    <choice>
+      <group>
+        <optional>
+          <attribute name="correct">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute>
+        </optional>
+        <oneOrMore>
+          <mixed>
+            <optional>
+              <ref name="BlockText"/>
+            </optional>
+            <optional>
+              <ref name="CodeLine"/>
+            </optional>
+          </mixed>
+        </oneOrMore>
+      </group>
+      <oneOrMore>
+        <element name="choice">
           <optional>
             <attribute name="correct">
               <choice>
@@ -591,30 +611,21 @@
               </optional>
             </mixed>
           </oneOrMore>
-        </group>
-        <oneOrMore>
-          <element name="choice">
-            <optional>
-              <attribute name="correct">
-                <choice>
-                  <value>yes</value>
-                  <value>no</value>
-                </choice>
-              </attribute>
-            </optional>
-            <oneOrMore>
-              <mixed>
-                <optional>
-                  <ref name="BlockText"/>
-                </optional>
-                <optional>
-                  <ref name="CodeLine"/>
-                </optional>
-              </mixed>
-            </oneOrMore>
-          </element>
-        </oneOrMore>
-      </choice>
+        </element>
+      </oneOrMore>
+    </choice>
+  </define>
+  <define name="BlockOrdered">
+    <element name="block">
+      <attribute name="order">
+        <data type="integer"/>
+      </attribute>
+      <ref name="BlockBody"/>
+    </element>
+  </define>
+  <define name="BlockUnordered">
+    <element name="block">
+      <ref name="BlockBody"/>
     </element>
   </define>
   <define name="Matching">

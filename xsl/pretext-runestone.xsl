@@ -1178,6 +1178,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:text>dag</xsl:text>
                         </xsl:attribute>
                     </xsl:if>
+                    <!-- Fixed-order rendering, gated by blocks/@randomize='no' -->
+                    <xsl:if test="blocks/@randomize = 'no'">
+                        <xsl:attribute name="data-order">
+                            <xsl:apply-templates select="blocks" mode="parsons-data-order"/>
+                        </xsl:attribute>
+                    </xsl:if>
                     <!-- author asks student to provide indentation via  -->
                     <!-- the indentation-enabled "drop" text window      -->
                     <!-- (not relevant for natural language)             -->
@@ -1249,6 +1255,41 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </div>
     </div>
+</xsl:template>
+
+<!-- Helper: build the @data-order list (comma-separated, -->
+<!-- 0-based) in the order specified by @order on each    -->
+<!-- block.  A block containing "choice" children does    -->
+<!-- not get an index; each choice gets one in its place. -->
+<xsl:template match="blocks" mode="parsons-data-order">
+    <xsl:for-each select="block">
+        <xsl:sort select="@order" data-type="number"/>
+        <xsl:if test="position() &gt; 1">
+            <xsl:text>,</xsl:text>
+        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="choice">
+                <xsl:for-each select="choice">
+                    <xsl:if test="position() &gt; 1">
+                        <xsl:text>,</xsl:text>
+                    </xsl:if>
+                    <!-- This choice is a leaf.  Its 0-based index is the count  -->
+                    <!-- of leaves preceding it: choice-less blocks and choices  -->
+                    <!-- of blocks before its parent, plus its earlier siblings. -->
+                    <xsl:value-of select="count(../preceding-sibling::block[not(choice)])
+                                          + count(../preceding-sibling::block/choice)
+                                          + count(preceding-sibling::choice)"/>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- This choice-less block is a leaf.  Its 0-based index   -->
+                <!-- is the count of leaves preceding it: choice-less       -->
+                <!-- blocks, plus choices belonging to blocks-with-choices. -->
+                <xsl:value-of select="count(preceding-sibling::block[not(choice)])
+                                      + count(preceding-sibling::block/choice)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="blocks/block" mode="vertical-blocks">

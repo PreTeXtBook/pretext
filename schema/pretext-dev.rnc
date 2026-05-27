@@ -234,7 +234,7 @@
                     element blocks {
                         attribute layout {"horizontal"}?,
                         attribute randomize {"yes"|"no"}?,
-                        Block+
+                        ( BlockOrdered+ | BlockUnordered+ )
                     },
                     Hint*, Answer*, Solution*,
                     (
@@ -248,19 +248,25 @@
                             text
                         }?
                     )?
-            Block =
-                element block {
-                    attribute order {xsd:integer}?,
-                    ((
+            BlockBody =
+                ((
+                    attribute correct {"yes"|"no"}?,
+                    mixed {BlockText?, CodeLine?}+
+                ) |
+                (
+                    element choice {
                         attribute correct {"yes"|"no"}?,
                         mixed {BlockText?, CodeLine?}+
-                    ) |
-                    (
-                        element choice {
-                            attribute correct {"yes"|"no"}?,
-                            mixed {BlockText?, CodeLine?}+
-                        }+
-                    ))
+                    }+
+                ))
+            BlockOrdered =
+                element block {
+                    attribute order {xsd:integer},
+                    BlockBody
+                }
+            BlockUnordered =
+                element block {
+                    BlockBody
                 }
             Matching =
                 MetaDataTitleOptional,
