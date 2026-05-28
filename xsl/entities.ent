@@ -144,4 +144,4 @@
 <!-- true. We are positive, so as new locations of "exercise"          -->
 <!-- are added, then this need not change                              -->
 <!-- Typical use: self::exercise and boolean(&INLINE-EXERCISE-FILTER;) -->
-<!ENTITY INLINE-EXERCISE-FILTER "parent::article|parent::paragraphs|parent::chapter|parent::section|parent::subsection|parent::subsubsection|parent::handout">
+<!ENTITY INLINE-EXERCISE-FILTER "parent::article|parent::paragraphs|parent::chapter|parent::appendix|parent::section|parent::subsection|parent::subsubsection|parent::handout">
