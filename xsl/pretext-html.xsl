@@ -13523,18 +13523,6 @@ TODO:
 <!-- Autobold extension is critical for captions (bold'ed) that -->
 <!-- have mathematics in them (suggested by P. Krautzberger)    -->
 <xsl:template name="mathjax">
-    <!-- MathJax 4 configuration via JavaScript module -->
-    <script type="module">
-        <xsl:text>import { startMathJax } from './</xsl:text>
-        <xsl:value-of select="$html.js.dir"/>
-        <xsl:text>/mathjax_startup.js';&#xa;</xsl:text>
-        <xsl:text>startMathJax({&#xa;</xsl:text>
-            <xsl:text>hasWebworkReps: </xsl:text><xsl:value-of select="$b-has-webwork-reps"/><xsl:text>,&#xa;</xsl:text>
-            <xsl:text>hasSage: </xsl:text><xsl:value-of select="$b-has-sage"/><xsl:text>,&#xa;</xsl:text>
-            <xsl:text>isReact: </xsl:text><xsl:value-of select="$b-debug-react"/><xsl:text>,&#xa;</xsl:text>
-            <xsl:text>htmlPresentation: </xsl:text><xsl:value-of select="$b-html-presentation"/><xsl:text>,&#xa;</xsl:text>
-        <xsl:text>});&#xa;</xsl:text>
-    </script>
     <!-- MathJax 4 CDN -->
     <script defer="true">
         <xsl:attribute name="src">
@@ -13548,6 +13536,18 @@ TODO:
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
+    </script>
+    <!-- MathJax 4 configuration via JavaScript module -->
+    <script type="module">
+        <xsl:text>import { startMathJax } from './</xsl:text>
+        <xsl:value-of select="$html.js.dir"/>
+        <xsl:text>/mathjax_startup.js';&#xa;</xsl:text>
+        <xsl:text>startMathJax({&#xa;</xsl:text>
+            <xsl:text>hasWebworkReps: </xsl:text><xsl:value-of select="$b-has-webwork-reps"/><xsl:text>,&#xa;</xsl:text>
+            <xsl:text>hasSage: </xsl:text><xsl:value-of select="$b-has-sage"/><xsl:text>,&#xa;</xsl:text>
+            <xsl:text>isReact: </xsl:text><xsl:value-of select="$b-debug-react"/><xsl:text>,&#xa;</xsl:text>
+            <xsl:text>htmlPresentation: </xsl:text><xsl:value-of select="$b-html-presentation"/><xsl:text>,&#xa;</xsl:text>
+        <xsl:text>});&#xa;</xsl:text>
     </script>
 </xsl:template>
 
