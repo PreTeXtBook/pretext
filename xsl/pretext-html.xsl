@@ -10478,7 +10478,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="@xml:id" />
         </xsl:attribute>
         <xsl:attribute name="class">
-            <xsl:text>jxgbox</xsl:text>
+            <xsl:text>jxgbox process-math</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
     </div>
