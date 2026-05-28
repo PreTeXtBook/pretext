@@ -122,18 +122,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- Convert to "real" XML, starting with "$augment" the   -->
-<!-- (current) final tree produced by the -assembly phase. -->
+<!-- An additional pass melds math markup, starting from $root, the  -->
+<!-- final tree from -assembly.  This stylesheet then works from the -->
+<!-- melded tree, $melded-root, for its $docinfo and $document-root. -->
 <xsl:variable name="math-meld-rtf">
-    <xsl:apply-templates select="$augment" mode="meld-math"/>
+    <xsl:apply-templates select="$root" mode="meld-math"/>
 </xsl:variable>
 <xsl:variable name="melded-math" select="exsl:node-set($math-meld-rtf)"/>
 
-<!-- Replace the "standard" key landmarks normally  -->
-<!-- produced by the -assembly stylesheet. -->
-<xsl:variable name="root" select="$melded-math/pretext"/>
-<xsl:variable name="docinfo" select="$root/docinfo"/>
-<xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
+<xsl:variable name="melded-root" select="$melded-math/pretext"/>
+<xsl:variable name="docinfo" select="$melded-root/docinfo"/>
+<xsl:variable name="document-root" select="$melded-root/*[not(self::docinfo)]"/>
 
 <!-- Source analysis -->
 
@@ -199,7 +198,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="segmented-rtf">
     <xsl:call-template name="warning-unimplemented"/>
     <xsl:call-template name="missing-warning"/>
-    <xsl:apply-templates select="$root"/>
+    <xsl:apply-templates select="$melded-root"/>
 </xsl:variable>
 
 <!-- And we sneak in a warning that this conversion is underway, but not complete. -->
