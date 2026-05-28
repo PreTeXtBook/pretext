@@ -8949,6 +8949,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </sidebyside>
 
+                <p>A test where the JSXGraph code indicates it needs MathJax to render.</p>
+
+                <figure xml:id="interactive-jsx-arc-graph">
+                    <interactive platform="jsxgraph" source="code/jsxgraph/interactive-jsx-arc-graph.js" width="60%">
+                        <slate xml:id="interactive-jsx-arc-graph_fig" surface="jsxboard"/>
+                        <instructions>
+                            <p>Change the values of <m>a</m> and <m>b</m> to see how the slope of the tangent line changes.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
                 <p>Finally, a piecewise function you can control, with traces of the domain values and range values in two other JSXGraph boards.  Boards and <init>HTML</init> buttons have been laid out using the <c>sidebyside</c> layout element.</p>
 
                 <figure xml:id="figure-piecewise">
