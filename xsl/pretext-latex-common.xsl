@@ -4892,6 +4892,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="appendix|solutions">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\appendix%&#xa;</xsl:text>
+        <!-- When the equation counter is scoped to "part" (see the         -->
+        <!-- equation-numbering template), the LaTeX book class's chapter   -->
+        <!-- reset of "equation" has been removed, so \appendix no longer   -->
+        <!-- resets equations as a side-effect.  Force the reset here so    -->
+        <!-- the backmatter's equation counter starts at 1.                 -->
+        <xsl:if test="$numbering-equations + $root-level = 0">
+            <xsl:text>\setcounter{equation}{0}%&#xa;</xsl:text>
+        </xsl:if>
         <xsl:text>%&#xa;</xsl:text>
         <!-- A book without parts gets a ToC entry, which is functional, -->
         <!-- while a book with parts gets a full-fledged part that is a  -->
