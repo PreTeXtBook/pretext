@@ -2717,6 +2717,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- The top-level division (book, article, ...) is the root of the   -->
+<!-- division tree, at level 0, which the catch-all does not record.  -->
+<!-- A level-0 numbering scheme counts continuously from the root.    -->
+<xsl:template match="book|article|slideshow|letter|memo" mode="augment">
+    <xsl:copy>
+        <xsl:attribute name="level">
+            <xsl:text>0</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()|@*" mode="augment">
+            <xsl:with-param name="parent-struct" select="''"/>
+            <xsl:with-param name="level" select="0"/>
+            <xsl:with-param name="ordered-list-level" select="0"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
 <!-- See the definitions of levels in -common.  For a book with parts   -->
 <!-- ($parts != 'absent') we consider parts as peers of frontmatter and -->
 <!-- backmatter.  So we need to increment the level in this case, only. -->
