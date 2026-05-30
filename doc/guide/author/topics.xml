@@ -1591,14 +1591,12 @@
                 <md>
                     <mrow>&amp;{n\choose r} &amp; &amp;\operatorname{C}(n,r)</mrow>
                 </md>which could both equally well be the realization of <c>\binomial{n}{r}</c>.</p>
-
-                <p>Here we describe some notation which often carries multiple mathematical meanings and/or may be created with <latex/> in multiple ways.</p>
             </introduction>
 
             <subsubsection>
                 <title>A Cautionary Tale</title>
 
-                <p>For a memorable illustration of what can go wrong without meaningful macro names, consider the <latex/> macro <c>\be</c>.  David Farmer collected, from papers in the arXiv preprint server, sixty-six different definitions of <c>\be</c>.  Across that collection, <c>\be</c> stands for at least sixteen entirely distinct mathematical objects (and one for which it is a stretch to call the object mathematical at all).  Without the definition close at hand, a reader of the source has no way to know which is meant.  The original list is at <url href="https://aimath.org/~farmer/print/whatisbe.html" visual="aimath.org/~farmer/print/whatisbe.html"/>; we reproduce it below, grouped into sixteen equivalence classes, with each class given a short descriptive phrase that the macro name <c>\be</c> conspicuously fails to convey.</p>
+                <p>For a memorable illustration of what can go wrong without meaningful macro names, consider the <latex/> macro <c>\be</c>.  David Farmer collected, from papers in the arXiv preprint server, sixty-six different definitions of <c>\be</c>.  Across that collection, <c>\be</c> stands for at least sixteen entirely distinct mathematical objects (and one for which it is a stretch to call the object mathematical at all).  Without the definition close at hand, a reader of the source has no way to know which is meant.  We reproduce his list below, grouped into sixteen equivalence classes, with each class given a short descriptive phrase that the macro name <c>\be</c> conspicuously fails to convey.</p>
 
                 <list>
                     <title>Sixty-six definitions of <c>\be</c></title>
@@ -1768,7 +1766,7 @@
                     </ol>
                 </list>
 
-                <p>Sixteen meanings, one name<mdash/>and that is just for one macro on one preprint server.  Now imagine reading source written by a colleague who has used <c>\be</c> consistently, but never told you which of the sixteen is meant.  The remedy is to use macro names that say what they mean: <c>\equation</c>, <c>\beta</c>, <c>\expectation</c>, and so on.  The remaining subsubsections of this section give specific advice for several common situations where a single piece of notation carries multiple mathematical meanings.</p>
+                <p>Sixteen meanings, one name<mdash/>and that is just for one macro on one preprint server.  Now imagine reading source written by a colleague who has used <c>\be</c> consistently, but never told you which of the sixteen is meant.  The remedy is to use macro names that say what they mean: <c>\equation</c>, <c>\beta</c>, <c>\expectation</c>, and so on.  The remaining subsubsections of this subsection give specific advice for several common situations where a single piece of notation carries multiple mathematical meanings.</p>
             </subsubsection>
 
             <subsubsection>
