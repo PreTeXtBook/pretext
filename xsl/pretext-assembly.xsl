@@ -360,23 +360,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- ##################### -->
-<!-- Equation Serial Pass  -->
+<!-- Serial Stamp Pass     -->
 <!-- ##################### -->
 
-<!-- Stamps @serial during assembly, in one depth-first walk.  Each     -->
-<!-- numbered family (equations today) is threaded as a node-set: its   -->
-<!-- items in the current counting scope, and each item is stamped with -->
-<!-- its position in that node-set.  How a scope is chosen, and how the -->
-<!-- node-set is recomputed at each step, is documented with the        -->
-<!-- division templates below.                                          -->
+<!-- Stamps @serial during assembly, in one depth-first walk.  Each   -->
+<!-- numbered family (equations and footnotes) is threaded as a       -->
+<!-- node-set: its items in the current counting scope, and each item -->
+<!-- is stamped with its position in that node-set.  How a scope is   -->
+<!-- chosen, and how the node-set is recomputed at each step, is      -->
+<!-- documented with the division templates below.                    -->
 
-<!-- Catch-all identity: pass through inherited node-set parameter. -->
-<xsl:template match="node()|@*" mode="equation-serial">
-    <!-- no default: every caller passes the scope explicitly -->
+<!-- Catch-all identity: thread the inherited node-sets through. -->
+<xsl:template match="node()|@*" mode="serial-stamp">
+    <!-- no defaults: every caller passes the scopes explicitly -->
     <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
     <xsl:copy>
-        <xsl:apply-templates select="@*|node()" mode="equation-serial">
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
             <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -415,16 +417,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- ITEMS (the family's items) and LEVEL (its numbering switch) are the    -->
 <!-- only per-family inputs; $b-terminal and the case structure are shared. -->
-<!-- The equation templates below tag the per-family variables "-eq":       -->
-<!-- $eq-nodes, $b-open-eq, $next-eq.                                       -->
-<xsl:template match="book|article|part|chapter|appendix|frontmatter|backmatter|preface|section|subsection|subsubsection|exercises|worksheet|handout|reading-questions|references|glossary|solutions" mode="equation-serial">
+<!-- Two families ride this structure, tagged "-eq" and "-fn": equations    -->
+<!-- ($numbering-equations; numbered mrows) and footnotes                   -->
+<!-- ($numbering-footnotes; every fn).                                      -->
+<xsl:template match="book|article|part|chapter|appendix|frontmatter|backmatter|preface|section|subsection|subsubsection|exercises|worksheet|handout|reading-questions|references|glossary|solutions" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
     <xsl:variable name="b-terminal" select="not(part|chapter|appendix|section|subsection|subsubsection|preface)"/>
     <xsl:variable name="b-open-eq" select="not($eq-nodes) and ($b-terminal or (@level &gt;= $numbering-equations))"/>
+    <xsl:variable name="b-open-fn" select="not($fn-nodes) and ($b-terminal or (@level &gt;= $numbering-footnotes))"/>
     <xsl:variable name="next-eq" select="$eq-nodes | self::*[$b-open-eq]//mrow[@pi:numbered = 'yes']"/>
+    <xsl:variable name="next-fn" select="$fn-nodes | self::*[$b-open-fn]//fn"/>
     <xsl:copy>
-        <xsl:apply-templates select="@*|node()" mode="equation-serial">
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
             <xsl:with-param name="eq-nodes" select="$next-eq"/>
+            <xsl:with-param name="fn-nodes" select="$next-fn"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -436,35 +443,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- parent recursed, the division's own introduction and conclusion pool -->
 <!-- into one scope, subdivisions excluded for free (siblings, not        -->
 <!-- descendants).                                                        -->
-<xsl:template match="article/introduction | chapter/introduction | section/introduction | subsection/introduction | appendix/introduction | article/conclusion | chapter/conclusion | section/conclusion | subsection/conclusion | appendix/conclusion" mode="equation-serial">
+<xsl:template match="article/introduction | chapter/introduction | section/introduction | subsection/introduction | appendix/introduction | article/conclusion | chapter/conclusion | section/conclusion | subsection/conclusion | appendix/conclusion" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
     <xsl:variable name="next-eq" select="$eq-nodes | (../introduction | ../conclusion)[not($eq-nodes)]//mrow[@pi:numbered = 'yes']"/>
+    <xsl:variable name="next-fn" select="$fn-nodes | (../introduction | ../conclusion)[not($fn-nodes)]//fn"/>
     <xsl:copy>
-        <xsl:apply-templates select="@*|node()" mode="equation-serial">
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
             <xsl:with-param name="eq-nodes" select="$next-eq"/>
+            <xsl:with-param name="fn-nodes" select="$next-fn"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
 
 <!-- Numbered mrow.  Stamp @serial with the position within the -->
 <!-- inherited node-set.                                        -->
-<xsl:template match="mrow[@pi:numbered = 'yes']" mode="equation-serial">
+<xsl:template match="mrow[@pi:numbered = 'yes']" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
     <xsl:copy>
         <xsl:attribute name="serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
                 <xsl:with-param name="nodes" select="$eq-nodes"/>
             </xsl:apply-templates>
         </xsl:attribute>
-        <xsl:apply-templates select="@*|node()" mode="equation-serial">
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
             <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Every fn is numbered.  Stamp @serial with the position -->
+<!-- within the inherited footnote node-set.                -->
+<xsl:template match="fn" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$fn-nodes"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
 
 <!-- The position-in-node-set utility lives in pretext-numbers.xsl. -->
-<!-- It is called from the mrow-serial template above and will be   -->
-<!-- called from future per-family stamping passes.                 -->
+<!-- It is called from the mrow and fn stamping templates above.    -->
 
 <xsl:template match="node()|@*" mode="exercise">
     <xsl:param name="division" select="''"/>
@@ -697,13 +726,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
-<xsl:variable name="equation-serial-rtf">
+<xsl:variable name="serial-stamp-rtf">
     <!-- begin the pass with no counting scope yet -->
-    <xsl:apply-templates select="$augment" mode="equation-serial">
+    <xsl:apply-templates select="$augment" mode="serial-stamp">
         <xsl:with-param name="eq-nodes" select="/.."/>
+        <xsl:with-param name="fn-nodes" select="/.."/>
     </xsl:apply-templates>
 </xsl:variable>
-<xsl:variable name="equation-serial" select="exsl:node-set($equation-serial-rtf)"/>
+<xsl:variable name="serial-stamp" select="exsl:node-set($serial-stamp-rtf)"/>
 
 <!--                        IMPORTANT                           -->
 <!--                                                            -->
@@ -721,7 +751,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And docinfo is the other child, these help prevent searching   -->
 <!-- the wrong half.                                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext     -->
-<xsl:variable name="root" select="$equation-serial/pretext"/>
+<xsl:variable name="root" select="$serial-stamp/pretext"/>
 <xsl:variable name="docinfo" select="$root/docinfo"/>
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
 <xsl:variable name="bibinfo" select="$document-root/frontmatter/bibinfo"/>
