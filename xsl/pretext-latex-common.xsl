@@ -1404,17 +1404,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- variant having numbers (we could be more careful, but it is not critical) -->
     <!-- NB: global numbering is level 0 and "level-to-name" is (a) incorrect,     -->
     <!-- and (b) not useful (\numberwithin will fail)                              -->
-    <!-- NB: perhaps the chngcntr package should/could be used here                -->
     <xsl:if test="$document-root//men|$document-root//mdn[mrow]|$document-root//md[mrow]">
         <xsl:text>%% Equation Numbering&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.equations.level  processing parameter&#xa;</xsl:text>
         <xsl:text>%% No adjustment here implies document-wide numbering&#xa;</xsl:text>
         <xsl:if test="not($numbering-equations = 0)">
+            <!-- When the reset target is "part" (numbering-equations + root-level = 0), -->
+            <!-- the LaTeX book class's default chapter reset of the equation counter   -->
+            <!-- must be removed first.  numberwithin only adds reset triggers, it does -->
+            <!-- not displace them, so without counterwithout the equation counter      -->
+            <!-- would still reset at every chapter and the part scoping would be lost. -->
+            <xsl:if test="$numbering-equations + $root-level = 0">
+                <xsl:text>\counterwithout{equation}{chapter}&#xa;</xsl:text>
+            </xsl:if>
             <xsl:text>\numberwithin{equation}{</xsl:text>
             <xsl:call-template name="level-to-name">
                 <xsl:with-param name="level" select="$numbering-equations" />
             </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
+            <!-- numberwithin redefines \theequation to include the reset target's    -->
+            <!-- own number as a prefix.  For part scoping this would prepend the     -->
+            <!-- Roman part letter to every equation display; PreTeXt convention is   -->
+            <!-- to show the part letter only on cross-part cross-references, so we   -->
+            <!-- trim the prefix here.                                                -->
+            <xsl:if test="$numbering-equations + $root-level = 0">
+                <xsl:text>\renewcommand{\theequation}{\arabic{equation}}&#xa;</xsl:text>
+            </xsl:if>
         </xsl:if>
     </xsl:if>
 </xsl:template>
@@ -4877,6 +4892,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="appendix|solutions">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\appendix%&#xa;</xsl:text>
+        <!-- When the equation counter is scoped to "part" (see the         -->
+        <!-- equation-numbering template), the LaTeX book class's chapter   -->
+        <!-- reset of "equation" has been removed, so \appendix no longer   -->
+        <!-- resets equations as a side-effect.  Force the reset here so    -->
+        <!-- the backmatter's equation counter starts at 1.                 -->
+        <xsl:if test="$numbering-equations + $root-level = 0">
+            <xsl:text>\setcounter{equation}{0}%&#xa;</xsl:text>
+        </xsl:if>
         <xsl:text>%&#xa;</xsl:text>
         <!-- A book without parts gets a ToC entry, which is functional, -->
         <!-- while a book with parts gets a full-fledged part that is a  -->
