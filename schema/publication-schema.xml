@@ -157,6 +157,9 @@
                     element qrcode {
                         attribute image { text }
                     }? &amp;
+                    element program {
+                        attribute static-qucodes { text }?
+                    }? &amp;
                     element journal {
                         attribute name {text}
                     }? &amp;

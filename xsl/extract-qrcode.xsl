@@ -74,7 +74,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="chunk-level" select="$html-chunk-level"/>
 <xsl:variable name="file-extension" select="'.html'"/>
 
-<xsl:template match="audio[@source|@href]|video[@source|@href|@youtube|@youtubeplaylist|@vimeo]|interactive" mode="extraction">
+<xsl:template match="audio[@source|@href]
+                   | video[@source|@href|@youtube|@youtubeplaylist|@vimeo]
+                   | interactive
+                   | program[@interactive = 'activecode' or @interactive = 'codelens']"
+                   mode="extraction">
     <!-- Sidecar XML file with pre-computed URLs for use      -->
     <!-- by pretext-assembly.xsl when building static         -->
     <!-- representations, and by the Python script when       -->
