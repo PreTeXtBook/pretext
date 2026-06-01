@@ -359,6 +359,142 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- ##################### -->
+<!-- Serial Stamp Pass     -->
+<!-- ##################### -->
+
+<!-- Stamps @serial during assembly, in one depth-first walk.  Each   -->
+<!-- numbered family (equations and footnotes) is threaded as a       -->
+<!-- node-set: its items in the current counting scope, and each item -->
+<!-- is stamped with its position in that node-set.  How a scope is   -->
+<!-- chosen, and how the node-set is recomputed at each step, is      -->
+<!-- documented with the division templates below.                    -->
+
+<!-- Catch-all identity: thread the inherited node-sets through. -->
+<xsl:template match="node()|@*" mode="serial-stamp">
+    <!-- no defaults: every caller passes the scopes explicitly -->
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- The "next" node-set                                                    -->
+
+<!-- A numbered family is counted within a "scope": a division whose own    -->
+<!-- items form one flat, serially numbered pool.  A division opens a       -->
+<!-- scope for a family when it is terminal (has no traditional             -->
+<!-- subdivision) or has reached the family's numbering level.  A           -->
+<!-- structural division above that level recurses instead, and the         -->
+<!-- content it holds directly (its introduction and conclusion) pools      -->
+<!-- at the division's own level.                                           -->
+
+<!-- Each template threads one node-set per family (the family's items      -->
+<!-- in the current scope) and hands its children the "next" one, built     -->
+<!-- from the inherited node-set:                                           -->
+
+<!--     $b-open = not($nodes) and ($b-terminal or @level >= LEVEL)         -->
+<!--     $next   = $nodes | self::*[$b-open]//ITEMS                         -->
+
+<!-- This is three cases.  Already in a scope ($nodes non-empty): $b-open   -->
+<!-- is false, so $next is $nodes and the scope threads down unchanged.     -->
+<!-- Opening a scope here: $next is this division's pool of items.  Still   -->
+<!-- above the level: $next is empty, the walk recurses, and a deeper       -->
+<!-- division opens the scope.                                              -->
+
+<!-- The self::*[$b-open] guard makes the descendant scan for the pool      -->
+<!-- happen only at the division that opens the scope; while a scope        -->
+<!-- merely threads down, $nodes is non-empty and nothing is scanned.       -->
+
+<!-- The introduction/conclusion template (below) has the same shape,       -->
+<!-- except its pool is the division's own introduction and conclusion      -->
+<!-- (siblings, not a descendant scan), taken only where the parent         -->
+<!-- recursed.                                                              -->
+
+<!-- ITEMS (the family's items) and LEVEL (its numbering switch) are the    -->
+<!-- only per-family inputs; $b-terminal and the case structure are shared. -->
+<!-- Two families ride this structure, tagged "-eq" and "-fn": equations    -->
+<!-- ($numbering-equations; numbered mrows) and footnotes                   -->
+<!-- ($numbering-footnotes; every fn).                                      -->
+<xsl:template match="book|article|part|chapter|appendix|frontmatter|backmatter|preface|section|subsection|subsubsection|exercises|worksheet|handout|reading-questions|references|glossary|solutions" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:variable name="b-terminal" select="not(part|chapter|appendix|section|subsection|subsubsection|preface)"/>
+    <xsl:variable name="b-open-eq" select="not($eq-nodes) and ($b-terminal or (@level &gt;= $numbering-equations))"/>
+    <xsl:variable name="b-open-fn" select="not($fn-nodes) and ($b-terminal or (@level &gt;= $numbering-footnotes))"/>
+    <xsl:variable name="next-eq" select="$eq-nodes | self::*[$b-open-eq]//mrow[@pi:numbered = 'yes']"/>
+    <xsl:variable name="next-fn" select="$fn-nodes | self::*[$b-open-fn]//fn"/>
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$next-eq"/>
+            <xsl:with-param name="fn-nodes" select="$next-fn"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Introduction and conclusion of a traditional division.  The match    -->
+<!-- is prefixed with the division names because PreTeXt also uses        -->
+<!-- introduction and conclusion inside exercises, exercisegroups,        -->
+<!-- objectives, and the like.  This is the pooling case above: where the -->
+<!-- parent recursed, the division's own introduction and conclusion pool -->
+<!-- into one scope, subdivisions excluded for free (siblings, not        -->
+<!-- descendants).                                                        -->
+<xsl:template match="article/introduction | chapter/introduction | section/introduction | subsection/introduction | appendix/introduction | article/conclusion | chapter/conclusion | section/conclusion | subsection/conclusion | appendix/conclusion" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:variable name="next-eq" select="$eq-nodes | (../introduction | ../conclusion)[not($eq-nodes)]//mrow[@pi:numbered = 'yes']"/>
+    <xsl:variable name="next-fn" select="$fn-nodes | (../introduction | ../conclusion)[not($fn-nodes)]//fn"/>
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$next-eq"/>
+            <xsl:with-param name="fn-nodes" select="$next-fn"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Numbered mrow.  Stamp @serial with the position within the -->
+<!-- inherited node-set.                                        -->
+<xsl:template match="mrow[@pi:numbered = 'yes']" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$eq-nodes"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Every fn is numbered.  Stamp @serial with the position -->
+<!-- within the inherited footnote node-set.                -->
+<xsl:template match="fn" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$fn-nodes"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- The position-in-node-set utility lives in pretext-numbers.xsl. -->
+<!-- It is called from the mrow and fn stamping templates above.    -->
+
 <xsl:template match="node()|@*" mode="exercise">
     <xsl:param name="division" select="''"/>
 
@@ -590,6 +726,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
+<xsl:variable name="serial-stamp-rtf">
+    <!-- begin the pass with no counting scope yet -->
+    <xsl:apply-templates select="$augment" mode="serial-stamp">
+        <xsl:with-param name="eq-nodes" select="/.."/>
+        <xsl:with-param name="fn-nodes" select="/.."/>
+    </xsl:apply-templates>
+</xsl:variable>
+<xsl:variable name="serial-stamp" select="exsl:node-set($serial-stamp-rtf)"/>
+
 <!--                        IMPORTANT                           -->
 <!--                                                            -->
 <!-- Definitions that follow may be overridden after additional -->
@@ -606,7 +751,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And docinfo is the other child, these help prevent searching   -->
 <!-- the wrong half.                                                -->
 <!-- NB: source repair below converts a /mathbook to a /pretext     -->
-<xsl:variable name="root" select="$augment/pretext"/>
+<xsl:variable name="root" select="$serial-stamp/pretext"/>
 <xsl:variable name="docinfo" select="$root/docinfo"/>
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
 <xsl:variable name="bibinfo" select="$document-root/frontmatter/bibinfo"/>

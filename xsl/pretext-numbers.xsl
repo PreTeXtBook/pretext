@@ -207,6 +207,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- ######################## -->
+<!-- Position In a Node-Set   -->
+<!-- ######################## -->
+
+<!-- Returns the document-order position (1-indexed) of the matched -->
+<!-- node within the given node-set.  Uses the union-count identity -->
+<!-- test: count(.|$here) = 1 iff the two are the same node.        -->
+<!-- Empty result if the node is not in the set.                    -->
+<!--                                                                -->
+<!-- Lives here, in pretext-numbers.xsl, so it is in scope for both -->
+<!-- the assembly-time stamping passes (which apply-templates on    -->
+<!-- a node to find its position within a precomputed node-set of   -->
+<!-- countable peers) and any conversion-time consumer that wants   -->
+<!-- the same arithmetic.  Currently called from the equation-      -->
+<!-- serial pass in pretext-assembly.xsl; future per-family passes  -->
+<!-- (block-serial, figure-serial, footnote-serial, ...) will reuse -->
+<!-- it verbatim.                                                   -->
+<xsl:template match="*" mode="position-in-node-set">
+    <xsl:param name="nodes"/>
+    <!-- Save off the context node before the "for-each" switches it. -->
+    <xsl:variable name="here" select="."/>
+    <xsl:for-each select="$nodes">
+        <xsl:if test="count(.|$here) = 1">
+            <xsl:value-of select="position()"/>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- ######################## -->
 <!-- Block Structure Numbers  -->
 <!-- ######################## -->
 

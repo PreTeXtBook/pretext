@@ -4248,42 +4248,12 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 
-<!-- Serial Numbers: Equations -->
-<!-- We determine the appropriate subtree to count within   -->
-<!-- given the document root and the configured depth       -->
-<!-- Pre-processor supplies @pi:numbered onto every "mrow"  -->
-<!-- and every displayed equation is eventually held in an  -->
-<!-- "mrow", so counting is straightforward.  Presence of a -->
-<!-- local tag (@tag) is considered to be unnumbered.       -->
+<!-- Serial Numbers: Equations                                          -->
+<!-- The assembly equation-serial pass stamps @serial on every numbered -->
+<!-- <mrow>; here we just read it back.  Scope rules and pad/truncate   -->
+<!-- behaviour live in the assembly pass.                               -->
 <xsl:template match="mrow[@pi:numbered = 'yes']" mode="serial-number">
-    <xsl:variable name="subtree-level">
-        <xsl:apply-templates select="." mode="absolute-subtree-level">
-            <xsl:with-param name="numbering-items" select="$numbering-equations" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$subtree-level=-1">
-            <xsl:number from="book|article|letter|memo" level="any" count="mrow[@pi:numbered = 'yes']"/>
-        </xsl:when>
-        <xsl:when test="$subtree-level=0">
-            <xsl:number from="part" level="any" count="mrow[@pi:numbered = 'yes']"/>
-            </xsl:when>
-        <xsl:when test="$subtree-level=1">
-            <xsl:number from="chapter|book/backmatter/appendix" level="any" count="mrow[@pi:numbered = 'yes']"/>
-        </xsl:when>
-        <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout|chapter/reading-questions" level="any" count="mrow[@pi:numbered = 'yes']"/>
-        </xsl:when>
-        <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout|section/reading-questions" level="any" count="mrow[@pi:numbered = 'yes']"/>
-        </xsl:when>
-        <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout|subsection/reading-questions" level="any" count="mrow[@pi:numbered = 'yes']"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:ERROR: Subtree level for equation number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="@serial"/>
 </xsl:template>
 
 <!-- An authored bare "md" may carry an @xml:id, and so may be cross-referenced. -->
@@ -4373,35 +4343,9 @@ Book (with parts), "section" at level 3
 <!-- Serial Numbers: Footnotes -->
 <!-- We determine the appropriate subtree to count within -->
 <!-- given the document root and the configured depth     -->
+<!-- @serial is stamped on every fn during assembly; here we read it back. -->
 <xsl:template match="fn" mode="serial-number">
-    <xsl:variable name="subtree-level">
-        <xsl:apply-templates select="." mode="absolute-subtree-level">
-            <xsl:with-param name="numbering-items" select="$numbering-footnotes" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$subtree-level=-1">
-            <xsl:number from="book|article|letter|memo" level="any" count="fn" />
-        </xsl:when>
-        <xsl:when test="$subtree-level=0">
-            <xsl:number from="part" level="any" count="fn" />
-        </xsl:when>
-        <xsl:when test="$subtree-level=1">
-            <xsl:number from="chapter|book/backmatter/appendix" level="any" count="fn" />
-        </xsl:when>
-        <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/handout|chapter/reading-questions" level="any" count="fn" />
-        </xsl:when>
-        <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet|section/handout|section/reading-questions" level="any" count="fn" />
-        </xsl:when>
-        <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/handout|subsection/reading-questions" level="any" count="fn" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:ERROR: Subtree level for footnote number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="@serial"/>
 </xsl:template>
 
 <!-- Serial Numbers: Subfigures, Subtables, Sublisting-->

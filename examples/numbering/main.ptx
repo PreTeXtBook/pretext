@@ -1,0 +1,1154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright 2026 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- Numbering stress test.                                              -->
+<!--                                                                     -->
+<!-- The point of this document is to exercise every code path in the    -->
+<!-- numbering machinery.  Prose is deliberately trivial; what matters   -->
+<!-- is the structure and the population of numbered objects.            -->
+<!--                                                                     -->
+<!-- Division patterns (see the three top chapters):                     -->
+<!--   Pattern A  terminal:    body content only (no subdivisions)       -->
+<!--   Pattern B  terminal:    body content, plus one of each            -->
+<!--                           specialized subdivision                   -->
+<!--   Pattern C  structural:  introduction, traditional subdivisions    -->
+<!--                           (themselves of patterns A, B, C), some    -->
+<!--                           specialized subdivisions, conclusion       -->
+<!--                                                                     -->
+<!-- The recursion: a Pattern C chapter holds Pattern A, B, C sections. -->
+<!-- The Pattern C section holds Pattern A, B, C subsections.  The      -->
+<!-- Pattern C subsection holds Pattern A and B subsubsections only;    -->
+<!-- a subsubsection is the deepest traditional division, so it cannot  -->
+<!-- be Pattern C.                                                      -->
+<!--                                                                     -->
+<!-- Numbered families exercised, with at least two instances in every  -->
+<!-- location they may legally appear:                                   -->
+<!--   equations   numbered <mrow> inside <md>                           -->
+<!--   footnotes   <fn>                                                  -->
+<!--   blocks      theorem-like, definition-like, example-like,          -->
+<!--               remark-like, computation-like, axiom-like             -->
+<!--   projects    project, activity, exploration, investigation         -->
+<!--   figures     figure, table, listing, named list  (figure-like)     -->
+<!--   exercises   inline exercises, and divisional exercises inside     -->
+<!--               exercises / worksheet / reading-questions divisions   -->
+<!--                                                                     -->
+<!-- xml:id convention:  family[-intro|-concl]-N-location  where         -->
+<!-- location is the chain of division ids that contains the object.     -->
+<!-- Family codes: t theorem, lem lemma, cor corollary, dfn definition,  -->
+<!-- e example, q question, rm remark, note note, ax axiom, cnj          -->
+<!-- conjecture, cmp computation, pj project, ac activity, exp           -->
+<!-- exploration, inv investigation, eq equation, fg figure, tb table,   -->
+<!-- ls listing, li named-list, fn footnote, ix inline-exercise, exe     -->
+<!-- divisional-exercise, task task, bib biblio, gi glossary-item.       -->
+
+<pretext>
+
+    <docinfo>
+        <macros>
+        </macros>
+        <!-- Split-out numbering for figure-like objects and inline       -->
+        <!-- exercises is consumed by the XSL from $docinfo/numbering,     -->
+        <!-- but the schema does not yet permit the entries.  Uncomment    -->
+        <!-- to test those families on their own counters; expect a        -->
+        <!-- schema warning until the schema is updated.                   -->
+        <!--                                                              -->
+        <!-- <numbering>                                                  -->
+        <!--     <figures   level="2"/>                                   -->
+        <!--     <exercises level="2"/>                                   -->
+        <!-- </numbering>                                                 -->
+    </docinfo>
+
+    <book xml:id="num-stress">
+        <title>Numbering Stress Test</title>
+        <subtitle>A document for exercising the numbering machinery</subtitle>
+
+        <frontmatter xml:id="frontmatter">
+            <bibinfo>
+                <author>
+                    <personname>R. Tester</personname>
+                </author>
+                <date><today/></date>
+            </bibinfo>
+
+            <titlepage>
+                <titlepage-items/>
+            </titlepage>
+
+            <colophon xml:id="front-colophon">
+                <colophon-items/>
+            </colophon>
+
+            <preface xml:id="preface">
+                <title>Preface</title>
+                <p>Edit the <c>level</c> attributes in <c>publication.xml</c> and rebuild to test scenarios.  Every numbered object carries an <attr>xml:id</attr> on the <c>family-N-location</c> convention.</p>
+                <!-- Edge case: a footnote in front matter. -->
+                <p>A footnote in the preface<fn xml:id="fn-1-preface">Front-matter footnote.</fn>.</p>
+            </preface>
+        </frontmatter>
+
+        <part xml:id="part-main">
+            <title>Main Content</title>
+
+            <!-- ============================================================ -->
+            <!-- CHAPTER ch-A : PATTERN A (terminal)                          -->
+            <!-- Body content only.  At least two of every numbered family,   -->
+            <!-- plus edge-case placements of numbered objects inside other   -->
+            <!-- numbered objects.                                            -->
+            <!-- ============================================================ -->
+
+            <chapter xml:id="ch-A">
+                <title>Pattern A: A Terminal Chapter</title>
+
+                <p>A terminal (content-mode) chapter with at least two of every numbered family.</p>
+
+                <!-- blocks: theorem-like -->
+                <theorem xml:id="t-1-chA">
+                    <statement>
+                        <p>First theorem in chapter A.  A numbered equation inside a block:</p>
+                        <p><md><mrow xml:id="eq-1-t-1-chA" number="yes">a^2 + b^2 = c^2</mrow></md></p>
+                        <p>and a footnote inside a block<fn xml:id="fn-1-t-1-chA">Footnote inside a theorem.</fn>.</p>
+                    </statement>
+                </theorem>
+                <lemma xml:id="lem-1-chA">
+                    <statement><p>A lemma (theorem-like) in chapter A.</p></statement>
+                </lemma>
+
+                <!-- blocks: definition-like -->
+                <definition xml:id="dfn-1-chA">
+                    <statement><p>First definition in chapter A.</p></statement>
+                </definition>
+                <definition xml:id="dfn-2-chA">
+                    <statement><p>Second definition in chapter A.</p></statement>
+                </definition>
+
+                <!-- blocks: example-like -->
+                <example xml:id="e-1-chA">
+                    <p>First example in chapter A.</p>
+                </example>
+                <question xml:id="q-1-chA">
+                    <statement><p>A question (example-like) in chapter A.</p></statement>
+                </question>
+
+                <!-- blocks: remark-like and axiom-like and computation-like -->
+                <remark xml:id="rm-1-chA">
+                    <p>First remark in chapter A.</p>
+                </remark>
+                <note xml:id="note-1-chA">
+                    <p>A note (remark-like) in chapter A.</p>
+                </note>
+                <axiom xml:id="ax-1-chA">
+                    <statement><p>An axiom in chapter A.</p></statement>
+                </axiom>
+                <conjecture xml:id="cnj-1-chA">
+                    <statement><p>A conjecture (axiom-like) in chapter A.</p></statement>
+                </conjecture>
+                <computation xml:id="cmp-1-chA">
+                    <p>A computation block in chapter A.</p>
+                </computation>
+
+                <!-- projects -->
+                <project xml:id="pj-1-chA">
+                    <statement><p>First project in chapter A.</p></statement>
+                </project>
+                <activity xml:id="ac-1-chA">
+                    <statement><p>An activity (project-like) in chapter A.</p></statement>
+                </activity>
+                <exploration xml:id="exp-1-chA">
+                    <statement>
+                        <p>An exploration with a numbered equation in its statement:</p>
+                        <p><md><mrow xml:id="eq-1-exp-1-chA" number="yes">x = y</mrow></md></p>
+                    </statement>
+                </exploration>
+                <investigation xml:id="inv-1-chA">
+                    <statement><p>An investigation (project-like) in chapter A.</p></statement>
+                </investigation>
+
+                <!-- equations: a plain pair, plus a multi-line md with mixed -->
+                <!-- numbered and unnumbered rows (edge case).                -->
+                <p><md><mrow xml:id="eq-1-chA" number="yes">u_1 = v_1</mrow></md></p>
+                <p><md><mrow xml:id="eq-2-chA" number="yes">u_2 = v_2</mrow></md></p>
+                <p>A multi-line display with one unnumbered and one numbered row:<md>
+                    <mrow number="no">w = x</mrow>
+                    <mrow xml:id="eq-3-chA" number="yes">y = z</mrow>
+                </md></p>
+
+                <!-- figures: figure (with a footnote in the caption), plus a -->
+                <!-- figure that contains two sub-figures side by side.       -->
+                <figure xml:id="fg-1-chA">
+                    <caption>First figure in chapter A.</caption>
+                    <sidebyside><p>A placeholder.</p></sidebyside>
+                </figure>
+                <figure xml:id="fg-2-chA">
+                    <caption>A figure of two sub-figures.</caption>
+                    <sidebyside>
+                        <figure xml:id="fg-2a-chA">
+                            <caption>First sub-figure.</caption>
+                            <sidebyside><p>Left panel.</p></sidebyside>
+                        </figure>
+                        <figure xml:id="fg-2b-chA">
+                            <caption>Second sub-figure.</caption>
+                            <sidebyside><p>Right panel.</p></sidebyside>
+                        </figure>
+                    </sidebyside>
+                </figure>
+
+                <!-- figures: tables (one with a footnote in a cell) -->
+                <table xml:id="tb-1-chA">
+                    <title>First table in chapter A.</title>
+                    <tabular>
+                        <row><cell>a</cell></row>
+                    </tabular>
+                </table>
+                <table xml:id="tb-2-chA">
+                    <title>Second table in chapter A.</title>
+                    <tabular><row><cell>b</cell></row></tabular>
+                </table>
+
+                <!-- figures: listings -->
+                <listing xml:id="ls-1-chA">
+                    <title>First listing in chapter A.</title>
+                    <program language="text">hello chA 1</program>
+                </listing>
+                <listing xml:id="ls-2-chA">
+                    <title>Second listing in chapter A.</title>
+                    <program language="text">hello chA 2</program>
+                </listing>
+
+                <!-- figures: named lists (one with a footnote in its title) -->
+                <list xml:id="li-1-chA">
+                    <title>First named list in chapter A.</title>
+                    <ol><li><p>An item.</p></li></ol>
+                </list>
+                <list xml:id="li-2-chA">
+                    <title>Second named list in chapter A.</title>
+                    <ul><li><p>An item.</p></li></ul>
+                </list>
+
+                <!-- footnotes in running text -->
+                <p>Two footnotes in body text<fn xml:id="fn-1-chA">First body footnote in chapter A.</fn>, and a second<fn xml:id="fn-2-chA">Second body footnote in chapter A.</fn>.</p>
+
+                <!-- inline exercises: one plain, one with a numbered equation -->
+                <!-- in the statement, one with hint/answer/solution.          -->
+                <exercise xml:id="ix-1-chA">
+                    <statement>
+                        <p>First inline exercise, with a numbered equation:</p>
+                        <p><md><mrow xml:id="eq-1-ix-1-chA" number="yes">p = q</mrow></md></p>
+                    </statement>
+                </exercise>
+                <exercise xml:id="ix-2-chA">
+                    <statement><p>Second inline exercise, with parts.</p></statement>
+                    <hint><p>A hint.</p></hint>
+                    <answer><p>An answer.</p></answer>
+                    <solution><p>A solution.</p></solution>
+                </exercise>
+            </chapter>
+
+            <!-- ============================================================ -->
+            <!-- CHAPTER ch-B : PATTERN B (terminal + specialized)            -->
+            <!-- Body content, then one of every kind of specialized          -->
+            <!-- subdivision.  Each specialized subdivision is itself a        -->
+            <!-- location for numbered objects.                                -->
+            <!-- ============================================================ -->
+
+            <chapter xml:id="ch-B">
+                <title>Pattern B: Terminal Chapter With Specialized Subdivisions</title>
+
+                <p>A terminal chapter whose body holds numbered objects, followed by one of every specialized subdivision.</p>
+
+                <theorem xml:id="t-1-chB">
+                    <statement><p>Theorem in chapter B.</p></statement>
+                </theorem>
+                <example xml:id="e-1-chB">
+                    <p>Example in chapter B.</p>
+                </example>
+                <project xml:id="pj-1-chB">
+                    <statement><p>Project in chapter B.</p></statement>
+                </project>
+                <p><md><mrow xml:id="eq-1-chB" number="yes">b_1 = c_1</mrow></md></p>
+                <p><md><mrow xml:id="eq-2-chB" number="yes">b_2 = c_2</mrow></md></p>
+                <figure xml:id="fg-1-chB">
+                    <caption>Figure in chapter B.</caption>
+                    <sidebyside><p>A placeholder.</p></sidebyside>
+                </figure>
+                <table xml:id="tb-1-chB">
+                    <title>Table in chapter B.</title>
+                    <tabular><row><cell>x</cell></row></tabular>
+                </table>
+                <p>A footnote in chapter B body<fn xml:id="fn-1-chB">Body footnote in chapter B.</fn>.</p>
+                <exercise xml:id="ix-1-chB">
+                    <statement><p>Inline exercise in chapter B.</p></statement>
+                </exercise>
+
+                <!-- specialized: exercises, with every divisional edge case   -->
+                <!-- (plain exercise with solution, exercise group, multi-task -->
+                <!-- exercise with a numbered equation in a task, and a        -->
+                <!-- hard-coded number override).                              -->
+                <exercises xml:id="exs-chB">
+                    <title>Chapter B Exercises</title>
+                    <introduction>
+                        <p>The exercises division introduction<fn xml:id="fn-ex-chB">A footnote in an exercises introduction, a terminal scope.</fn>.</p>
+                        <p><md><mrow xml:id="eq-intro-1-exs-chB" number="yes">T_1 = U_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-intro-2-exs-chB" number="yes">T_2 = U_2</mrow></md></p>
+                        <!-- a numbered block inside an exercises introduction -->
+                        <example xml:id="e-intro-1-exs-chB"><p>Example in the exercises introduction.</p></example>
+                        <!-- figure-likes and a project: exercise the "distinct" counters in a terminal specialized scope -->
+                        <figure xml:id="fg-intro-1-exs-chB">
+                            <caption>Figure in the exercises introduction.</caption>
+                            <sidebyside><p>A placeholder.</p></sidebyside>
+                        </figure>
+                        <table xml:id="tb-intro-1-exs-chB">
+                            <title>Table in the exercises introduction.</title>
+                            <tabular><row><cell>a</cell></row></tabular>
+                        </table>
+                        <listing xml:id="ls-intro-1-exs-chB">
+                            <title>Listing in the exercises introduction.</title>
+                            <program language="text">hello exs-chB</program>
+                        </listing>
+                        <project xml:id="pj-intro-1-exs-chB"><statement><p>Project in the exercises introduction.</p></statement></project>
+                    </introduction>
+                    <exercise xml:id="exe-1-chB">
+                        <statement>
+                            <p>First divisional exercise, with a numbered equation:</p>
+                            <p><md><mrow xml:id="eq-1-exe-1-chB" number="yes">d = e</mrow></md></p>
+                        </statement>
+                        <solution><p>Solution to the first divisional exercise.</p></solution>
+                    </exercise>
+                    <exercise xml:id="exe-2-chB">
+                        <statement><p>Second divisional exercise.</p></statement>
+                    </exercise>
+                    <exercisegroup xml:id="exg-1-chB" cols="2">
+                        <introduction><p>An exercise group of two.</p></introduction>
+                        <exercise xml:id="exe-g1-chB">
+                            <statement><p>Grouped exercise, first.</p></statement>
+                        </exercise>
+                        <exercise xml:id="exe-g2-chB">
+                            <statement><p>Grouped exercise, second.</p></statement>
+                        </exercise>
+                        <conclusion><p>End of group.</p></conclusion>
+                    </exercisegroup>
+                    <exercise xml:id="exe-tasks-chB">
+                        <introduction><p>Multi-part exercise with a numbered equation in a task.</p></introduction>
+                        <task xml:id="task-a-chB">
+                            <statement><p>First task.</p></statement>
+                        </task>
+                        <task xml:id="task-b-chB">
+                            <statement>
+                                <p>Second task, with a numbered equation:</p>
+                                <p><md><mrow xml:id="eq-1-task-b-chB" number="yes">f = g</mrow></md></p>
+                            </statement>
+                        </task>
+                    </exercise>
+                    <exercise xml:id="exe-numbered-chB" number="99">
+                        <statement><p>Hard-coded exercise number override (renders as 99).</p></statement>
+                    </exercise>
+                    <conclusion>
+                        <p>End of chapter B exercises.</p>
+                        <p><md><mrow xml:id="eq-concl-1-exs-chB" number="yes">V_1 = W_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-concl-2-exs-chB" number="yes">V_2 = W_2</mrow></md></p>
+                    </conclusion>
+                </exercises>
+
+                <!-- specialized: worksheet (its exercises use their own       -->
+                <!-- counter, independent of inline and divisional exercises). -->
+                <worksheet xml:id="ws-chB">
+                    <title>Chapter B Worksheet</title>
+                    <introduction>
+                        <p>A worksheet introduction.</p>
+                        <p><md><mrow xml:id="eq-intro-1-ws-chB" number="yes">DDD_1 = EEE_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-intro-2-ws-chB" number="yes">DDD_2 = EEE_2</mrow></md></p>
+                    </introduction>
+                    <exercise xml:id="exe-ws1-chB">
+                        <statement><p>First worksheet exercise.</p></statement>
+                    </exercise>
+                    <exercise xml:id="exe-ws2-chB">
+                        <statement><p>Second worksheet exercise.</p></statement>
+                    </exercise>
+                    <conclusion>
+                        <p>End of worksheet.</p>
+                        <p><md><mrow xml:id="eq-concl-1-ws-chB" number="yes">FFF_1 = GGG_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-concl-2-ws-chB" number="yes">FFF_2 = GGG_2</mrow></md></p>
+                    </conclusion>
+                </worksheet>
+
+                <!-- specialized: reading-questions -->
+                <reading-questions xml:id="rq-chB">
+                    <title>Chapter B Reading Questions</title>
+                    <introduction>
+                        <p>Introduction to reading questions.</p>
+                        <p><md><mrow xml:id="eq-intro-1-rq-chB" number="yes">X_1 = Y_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-intro-2-rq-chB" number="yes">X_2 = Y_2</mrow></md></p>
+                    </introduction>
+                    <exercise xml:id="exe-rq1-chB">
+                        <statement><p>First reading question.</p></statement>
+                    </exercise>
+                    <exercise xml:id="exe-rq2-chB">
+                        <statement><p>Second reading question.</p></statement>
+                    </exercise>
+                    <conclusion>
+                        <p>End of reading questions.</p>
+                        <p><md><mrow xml:id="eq-concl-1-rq-chB" number="yes">Z_1 = AA_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-concl-2-rq-chB" number="yes">Z_2 = AA_2</mrow></md></p>
+                    </conclusion>
+                </reading-questions>
+
+                <!-- specialized: references -->
+                <references xml:id="rfs-chB">
+                    <title>Chapter B References</title>
+                    <introduction>
+                        <p>Introduction to chapter B references<fn xml:id="fn-rfs-chB">A footnote in a references introduction.</fn>.</p>
+                        <p><md><mrow xml:id="eq-intro-1-rfs-chB" number="yes">BB_1 = CC_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-intro-2-rfs-chB" number="yes">BB_2 = CC_2</mrow></md></p>
+                    </introduction>
+                    <biblio xml:id="bib-1-chB" type="raw">
+                        <title>First reference in chapter B.</title>
+                    </biblio>
+                    <biblio xml:id="bib-2-chB" type="raw">
+                        <title>Second reference in chapter B.</title>
+                    </biblio>
+                    <conclusion>
+                        <p>End of chapter B references.</p>
+                        <p><md><mrow xml:id="eq-concl-1-rfs-chB" number="yes">DD_1 = EE_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-concl-2-rfs-chB" number="yes">DD_2 = EE_2</mrow></md></p>
+                    </conclusion>
+                </references>
+
+                <!-- specialized: glossary -->
+                <glossary xml:id="gls-chB">
+                    <title>Chapter B Glossary</title>
+                    <gi xml:id="gi-1-chB">
+                        <title>alpha</title>
+                        <p>The first letter<fn xml:id="fn-gls-chB">A footnote in a glossary item.</fn>.</p>
+                    </gi>
+                    <gi xml:id="gi-2-chB">
+                        <title>beta</title>
+                        <p>The second letter.</p>
+                    </gi>
+                </glossary>
+            </chapter>
+
+            <!-- ============================================================ -->
+            <!-- CHAPTER ch-C : PATTERN C (structural)                        -->
+            <!-- introduction, three sections (patterns A, B, C), some         -->
+            <!-- specialized subdivisions at chapter scope, conclusion.        -->
+            <!-- ============================================================ -->
+
+            <chapter xml:id="ch-C">
+                <title>Pattern C: A Structural Chapter</title>
+
+                <introduction xml:id="ch-C-intro">
+                    <p>The introduction of a structural chapter is a location for numbered objects (the "zero slot" when numbering is deeper than this division).</p>
+                    <p><md><mrow xml:id="eq-intro-1-chC" number="yes">i_1 = j_1</mrow></md></p>
+                    <p><md><mrow xml:id="eq-intro-2-chC" number="yes">i_2 = j_2</mrow></md></p>
+                    <theorem xml:id="t-intro-1-chC"><statement><p>First theorem in the chapter C introduction.</p></statement></theorem>
+                    <theorem xml:id="t-intro-2-chC"><statement><p>Second theorem in the chapter C introduction.</p></statement></theorem>
+                    <project xml:id="pj-intro-1-chC"><statement><p>First project in the chapter C introduction.</p></statement></project>
+                    <project xml:id="pj-intro-2-chC"><statement><p>Second project in the chapter C introduction.</p></statement></project>
+                    <figure xml:id="fg-intro-1-chC">
+                        <caption>First figure in the chapter C introduction.</caption>
+                        <sidebyside><p>A placeholder.</p></sidebyside>
+                    </figure>
+                    <figure xml:id="fg-intro-2-chC">
+                        <caption>Second figure in the chapter C introduction.</caption>
+                        <sidebyside><p>A placeholder.</p></sidebyside>
+                    </figure>
+                    <p>Two introduction footnotes<fn xml:id="fn-intro-1-chC">First.</fn><fn xml:id="fn-intro-2-chC">Second.</fn>.</p>
+                    <exercise xml:id="ix-intro-1-chC"><statement><p>First inline exercise in the chapter C introduction.</p></statement></exercise>
+                    <exercise xml:id="ix-intro-2-chC"><statement><p>Second inline exercise in the chapter C introduction.</p></statement></exercise>
+                </introduction>
+
+                <!-- Section A of chapter C: PATTERN A at section depth. -->
+                <section xml:id="ch-C-sA">
+                    <title>Section Pattern A</title>
+
+                    <p>Two of each family at section depth.</p>
+
+                    <theorem xml:id="t-1-chC-sA"><statement><p>First theorem in section A.</p></statement></theorem>
+                    <theorem xml:id="t-2-chC-sA"><statement><p>Second theorem in section A.</p></statement></theorem>
+                    <example xml:id="e-1-chC-sA"><p>First example in section A.</p></example>
+                    <example xml:id="e-2-chC-sA"><p>Second example in section A.</p></example>
+                    <project xml:id="pj-1-chC-sA"><statement><p>First project in section A.</p></statement></project>
+                    <activity xml:id="ac-1-chC-sA"><statement><p>An activity in section A.</p></statement></activity>
+                    <p><md><mrow xml:id="eq-1-chC-sA" number="yes">u_1 = v_1</mrow></md></p>
+                    <p><md><mrow xml:id="eq-2-chC-sA" number="yes">u_2 = v_2</mrow></md></p>
+                    <figure xml:id="fg-1-chC-sA">
+                        <caption>First figure in section A.</caption>
+                        <sidebyside><p>A placeholder.</p></sidebyside>
+                    </figure>
+                    <figure xml:id="fg-2-chC-sA">
+                        <caption>Second figure in section A.</caption>
+                        <sidebyside><p>A placeholder.</p></sidebyside>
+                    </figure>
+                    <table xml:id="tb-1-chC-sA">
+                        <title>First table in section A.</title>
+                        <tabular><row><cell>a</cell></row></tabular>
+                    </table>
+                    <listing xml:id="ls-1-chC-sA">
+                        <title>First listing in section A.</title>
+                        <program language="text">hello sA 1</program>
+                    </listing>
+                    <list xml:id="li-1-chC-sA">
+                        <title>A named list in section A.</title>
+                        <ol><li><p>An item.</p></li></ol>
+                    </list>
+                    <p>Two footnotes at section depth<fn xml:id="fn-1-chC-sA">First.</fn><fn xml:id="fn-2-chC-sA">Second.</fn>.</p>
+                    <exercise xml:id="ix-1-chC-sA"><statement><p>First inline exercise in section A.</p></statement></exercise>
+                    <exercise xml:id="ix-2-chC-sA"><statement><p>Second inline exercise in section A.</p></statement></exercise>
+                </section>
+
+                <!-- Section B of chapter C: PATTERN B at section depth. -->
+                <section xml:id="ch-C-sB">
+                    <title>Section Pattern B</title>
+
+                    <p>Body families, then one of every specialized subdivision.</p>
+
+                    <theorem xml:id="t-1-chC-sB"><statement><p>Theorem in section B.</p></statement></theorem>
+                    <example xml:id="e-1-chC-sB"><p>Example in section B.</p></example>
+                    <project xml:id="pj-1-chC-sB"><statement><p>Project in section B.</p></statement></project>
+                    <p><md><mrow xml:id="eq-1-chC-sB" number="yes">p + q = r</mrow></md></p>
+                    <p><md><mrow xml:id="eq-2-chC-sB" number="yes">s + t = u</mrow></md></p>
+                    <figure xml:id="fg-1-chC-sB">
+                        <caption>Figure in section B.</caption>
+                        <sidebyside><p>A placeholder.</p></sidebyside>
+                    </figure>
+                    <p>A footnote at section depth<fn xml:id="fn-1-chC-sB">Footnote in section B.</fn>.</p>
+                    <exercise xml:id="ix-1-chC-sB"><statement><p>Inline exercise in section B.</p></statement></exercise>
+
+                    <exercises xml:id="exs-chC-sB">
+                        <title>Section B Exercises</title>
+                        <introduction>
+                            <p>Introduction to section B exercises.</p>
+                            <p><md><mrow xml:id="eq-intro-1-exs-chC-sB" number="yes">FF_1 = GG_1</mrow></md></p>
+                            <p><md><mrow xml:id="eq-intro-2-exs-chC-sB" number="yes">FF_2 = GG_2</mrow></md></p>
+                        </introduction>
+                        <exercise xml:id="exe-1-chC-sB"><statement><p>Divisional exercise.</p></statement></exercise>
+                        <exercise xml:id="exe-2-chC-sB"><statement><p>Divisional exercise.</p></statement></exercise>
+                        <conclusion>
+                            <p>End of section B exercises.</p>
+                            <p><md><mrow xml:id="eq-concl-1-exs-chC-sB" number="yes">HH_1 = II_1</mrow></md></p>
+                            <p><md><mrow xml:id="eq-concl-2-exs-chC-sB" number="yes">HH_2 = II_2</mrow></md></p>
+                        </conclusion>
+                    </exercises>
+
+                    <reading-questions xml:id="rq-chC-sB">
+                        <title>Section B Reading Questions</title>
+                        <introduction>
+                            <p>Introduction to section B reading questions.</p>
+                            <p><md><mrow xml:id="eq-intro-1-rq-chC-sB" number="yes">JJ_1 = KK_1</mrow></md></p>
+                            <p><md><mrow xml:id="eq-intro-2-rq-chC-sB" number="yes">JJ_2 = KK_2</mrow></md></p>
+                        </introduction>
+                        <exercise xml:id="exe-rq1-chC-sB"><statement><p>Reading question.</p></statement></exercise>
+                        <conclusion>
+                            <p>End of section B reading questions.</p>
+                            <p><md><mrow xml:id="eq-concl-1-rq-chC-sB" number="yes">LL_1 = MM_1</mrow></md></p>
+                            <p><md><mrow xml:id="eq-concl-2-rq-chC-sB" number="yes">LL_2 = MM_2</mrow></md></p>
+                        </conclusion>
+                    </reading-questions>
+
+                    <references xml:id="rfs-chC-sB">
+                        <title>Section B References</title>
+                        <introduction>
+                            <p>Introduction to section B references.</p>
+                            <p><md><mrow xml:id="eq-intro-1-rfs-chC-sB" number="yes">NN_1 = OO_1</mrow></md></p>
+                            <p><md><mrow xml:id="eq-intro-2-rfs-chC-sB" number="yes">NN_2 = OO_2</mrow></md></p>
+                        </introduction>
+                        <biblio xml:id="bib-1-chC-sB" type="raw">
+                            <title>A reference.</title>
+                        </biblio>
+                        <conclusion>
+                            <p>End of section B references.</p>
+                            <p><md><mrow xml:id="eq-concl-1-rfs-chC-sB" number="yes">PP_1 = QQ_1</mrow></md></p>
+                            <p><md><mrow xml:id="eq-concl-2-rfs-chC-sB" number="yes">PP_2 = QQ_2</mrow></md></p>
+                        </conclusion>
+                    </references>
+
+                    <glossary xml:id="gls-chC-sB">
+                        <title>Section B Glossary</title>
+                        <gi xml:id="gi-1-chC-sB">
+                            <title>gamma</title>
+                            <p>The third letter.</p>
+                        </gi>
+                    </glossary>
+                </section>
+
+                <!-- Section C of chapter C: PATTERN C at section depth. -->
+                <section xml:id="ch-C-sC">
+                    <title>Section Pattern C</title>
+
+                    <introduction xml:id="ch-C-sC-intro">
+                        <p>A structural section's introduction.</p>
+                        <p><md><mrow xml:id="eq-intro-1-chC-sC" number="yes">m_1 = n_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-intro-2-chC-sC" number="yes">m_2 = n_2</mrow></md></p>
+                        <theorem xml:id="t-intro-1-chC-sC"><statement><p>Theorem in the section C introduction.</p></statement></theorem>
+                        <figure xml:id="fg-intro-1-chC-sC">
+                            <caption>Figure in the section C introduction.</caption>
+                            <sidebyside><p>A placeholder.</p></sidebyside>
+                        </figure>
+                        <p>A footnote in the section C introduction<fn xml:id="fn-intro-1-chC-sC">Intro footnote.</fn>.</p>
+                    </introduction>
+
+                    <!-- Subsection A: PATTERN A. -->
+                    <subsection xml:id="ch-C-sC-ssA">
+                        <title>Subsection Pattern A</title>
+                        <p>Two of each family at subsection depth.</p>
+                        <theorem xml:id="t-1-chC-sC-ssA"><statement><p>First theorem in subsection A.</p></statement></theorem>
+                        <theorem xml:id="t-2-chC-sC-ssA"><statement><p>Second theorem in subsection A.</p></statement></theorem>
+                        <example xml:id="e-1-chC-sC-ssA"><p>First example in subsection A.</p></example>
+                        <example xml:id="e-2-chC-sC-ssA"><p>Second example in subsection A.</p></example>
+                        <project xml:id="pj-1-chC-sC-ssA"><statement><p>First project in subsection A.</p></statement></project>
+                        <activity xml:id="ac-1-chC-sC-ssA"><statement><p>An activity in subsection A.</p></statement></activity>
+                        <p><md><mrow xml:id="eq-1-chC-sC-ssA" number="yes">\alpha_1 = \beta_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-2-chC-sC-ssA" number="yes">\alpha_2 = \beta_2</mrow></md></p>
+                        <figure xml:id="fg-1-chC-sC-ssA">
+                            <caption>First figure in subsection A.</caption>
+                            <sidebyside><p>A placeholder.</p></sidebyside>
+                        </figure>
+                        <figure xml:id="fg-2-chC-sC-ssA">
+                            <caption>Second figure in subsection A.</caption>
+                            <sidebyside><p>A placeholder.</p></sidebyside>
+                        </figure>
+                        <table xml:id="tb-1-chC-sC-ssA">
+                            <title>First table in subsection A.</title>
+                            <tabular><row><cell>a</cell></row></tabular>
+                        </table>
+                        <listing xml:id="ls-1-chC-sC-ssA">
+                            <title>First listing in subsection A.</title>
+                            <program language="text">hello ssA 1</program>
+                        </listing>
+                        <list xml:id="li-1-chC-sC-ssA">
+                            <title>A named list in subsection A.</title>
+                            <ol><li><p>An item.</p></li></ol>
+                        </list>
+                        <p>Two footnotes at subsection depth<fn xml:id="fn-1-chC-sC-ssA">First.</fn><fn xml:id="fn-2-chC-sC-ssA">Second.</fn>.</p>
+                        <exercise xml:id="ix-1-chC-sC-ssA"><statement><p>First inline exercise in subsection A.</p></statement></exercise>
+                        <exercise xml:id="ix-2-chC-sC-ssA"><statement><p>Second inline exercise in subsection A.</p></statement></exercise>
+                    </subsection>
+
+                    <!-- Subsection B: PATTERN B. -->
+                    <subsection xml:id="ch-C-sC-ssB">
+                        <title>Subsection Pattern B</title>
+                        <p>Body families, then specialized subdivisions, at subsection depth.</p>
+                        <theorem xml:id="t-1-chC-sC-ssB"><statement><p>Theorem in subsection B.</p></statement></theorem>
+                        <example xml:id="e-1-chC-sC-ssB"><p>Example in subsection B.</p></example>
+                        <project xml:id="pj-1-chC-sC-ssB"><statement><p>Project in subsection B.</p></statement></project>
+                        <p><md><mrow xml:id="eq-1-chC-sC-ssB" number="yes">u_1 = w_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-2-chC-sC-ssB" number="yes">u_2 = w_2</mrow></md></p>
+                        <figure xml:id="fg-1-chC-sC-ssB">
+                            <caption>Figure in subsection B.</caption>
+                            <sidebyside><p>A placeholder.</p></sidebyside>
+                        </figure>
+                        <p>A footnote at subsection depth<fn xml:id="fn-1-chC-sC-ssB">Footnote in subsection B.</fn>.</p>
+                        <exercise xml:id="ix-1-chC-sC-ssB"><statement><p>Inline exercise in subsection B.</p></statement></exercise>
+
+                        <exercises xml:id="exs-chC-sC-ssB">
+                            <title>Subsection B Exercises</title>
+                            <introduction>
+                                <p>Introduction to subsection B exercises.</p>
+                                <p><md><mrow xml:id="eq-intro-1-exs-chC-sC-ssB" number="yes">RR_1 = SS_1</mrow></md></p>
+                                <p><md><mrow xml:id="eq-intro-2-exs-chC-sC-ssB" number="yes">RR_2 = SS_2</mrow></md></p>
+                            </introduction>
+                            <exercise xml:id="exe-1-chC-sC-ssB"><statement><p>Divisional exercise.</p></statement></exercise>
+                            <exercise xml:id="exe-2-chC-sC-ssB"><statement><p>Divisional exercise.</p></statement></exercise>
+                            <conclusion>
+                                <p>End of subsection B exercises.</p>
+                                <p><md><mrow xml:id="eq-concl-1-exs-chC-sC-ssB" number="yes">TT_1 = UU_1</mrow></md></p>
+                                <p><md><mrow xml:id="eq-concl-2-exs-chC-sC-ssB" number="yes">TT_2 = UU_2</mrow></md></p>
+                            </conclusion>
+                        </exercises>
+
+                        <reading-questions xml:id="rq-chC-sC-ssB">
+                            <title>Subsection B Reading Questions</title>
+                            <introduction>
+                                <p>Introduction.</p>
+                                <p><md><mrow xml:id="eq-intro-1-rq-chC-sC-ssB" number="yes">VV_1 = WW_1</mrow></md></p>
+                                <p><md><mrow xml:id="eq-intro-2-rq-chC-sC-ssB" number="yes">VV_2 = WW_2</mrow></md></p>
+                            </introduction>
+                            <exercise xml:id="exe-rq1-chC-sC-ssB"><statement><p>Reading question.</p></statement></exercise>
+                            <conclusion>
+                                <p>End.</p>
+                                <p><md><mrow xml:id="eq-concl-1-rq-chC-sC-ssB" number="yes">XX_1 = YY_1</mrow></md></p>
+                                <p><md><mrow xml:id="eq-concl-2-rq-chC-sC-ssB" number="yes">XX_2 = YY_2</mrow></md></p>
+                            </conclusion>
+                        </reading-questions>
+
+                        <references xml:id="rfs-chC-sC-ssB">
+                            <title>Subsection B References</title>
+                            <biblio xml:id="bib-1-chC-sC-ssB" type="raw">
+                                <title>A reference at subsection depth.</title>
+                            </biblio>
+                        </references>
+
+                        <glossary xml:id="gls-chC-sC-ssB">
+                            <title>Subsection B Glossary</title>
+                            <gi xml:id="gi-1-chC-sC-ssB">
+                                <title>delta</title>
+                                <p>The fourth letter.</p>
+                            </gi>
+                        </glossary>
+                    </subsection>
+
+                    <!-- Subsection C: PATTERN C.  Holds two subsubsections    -->
+                    <!-- (patterns A and B); a subsubsection cannot be C.      -->
+                    <subsection xml:id="ch-C-sC-ssC">
+                        <title>Subsection Pattern C</title>
+
+                        <introduction xml:id="ch-C-sC-ssC-intro">
+                            <p>A structural subsection's introduction.</p>
+                            <p><md><mrow xml:id="eq-intro-1-chC-sC-ssC" number="yes">g_1 = h_1</mrow></md></p>
+                            <p><md><mrow xml:id="eq-intro-2-chC-sC-ssC" number="yes">g_2 = h_2</mrow></md></p>
+                            <theorem xml:id="t-intro-1-chC-sC-ssC"><statement><p>Theorem in the subsection C introduction.</p></statement></theorem>
+                            <p>A footnote in the subsection C introduction<fn xml:id="fn-intro-1-chC-sC-ssC">Intro footnote.</fn>.</p>
+                        </introduction>
+
+                        <!-- Subsubsection A: PATTERN A (deepest). -->
+                        <subsubsection xml:id="ch-C-sC-ssC-sssA">
+                            <title>Subsubsection Pattern A</title>
+                            <p>Two of each family at subsubsection depth.</p>
+                            <theorem xml:id="t-1-chC-sC-ssC-sssA"><statement><p>First theorem at subsubsection depth.</p></statement></theorem>
+                            <theorem xml:id="t-2-chC-sC-ssC-sssA"><statement><p>Second theorem at subsubsection depth.</p></statement></theorem>
+                            <example xml:id="e-1-chC-sC-ssC-sssA"><p>First example.</p></example>
+                            <example xml:id="e-2-chC-sC-ssC-sssA"><p>Second example.</p></example>
+                            <project xml:id="pj-1-chC-sC-ssC-sssA"><statement><p>First project.</p></statement></project>
+                            <activity xml:id="ac-1-chC-sC-ssC-sssA"><statement><p>An activity.</p></statement></activity>
+                            <p><md><mrow xml:id="eq-1-chC-sC-ssC-sssA" number="yes">\gamma_1 = \delta_1</mrow></md></p>
+                            <p><md><mrow xml:id="eq-2-chC-sC-ssC-sssA" number="yes">\gamma_2 = \delta_2</mrow></md></p>
+                            <figure xml:id="fg-1-chC-sC-ssC-sssA">
+                                <caption>First figure at subsubsection depth.</caption>
+                                <sidebyside><p>A placeholder.</p></sidebyside>
+                            </figure>
+                            <figure xml:id="fg-2-chC-sC-ssC-sssA">
+                                <caption>Second figure at subsubsection depth.</caption>
+                                <sidebyside><p>A placeholder.</p></sidebyside>
+                            </figure>
+                            <table xml:id="tb-1-chC-sC-ssC-sssA">
+                                <title>First table at subsubsection depth.</title>
+                                <tabular><row><cell>a</cell></row></tabular>
+                            </table>
+                            <listing xml:id="ls-1-chC-sC-ssC-sssA">
+                                <title>First listing at subsubsection depth.</title>
+                                <program language="text">hello sssA 1</program>
+                            </listing>
+                            <list xml:id="li-1-chC-sC-ssC-sssA">
+                                <title>A named list at subsubsection depth.</title>
+                                <ol><li><p>An item.</p></li></ol>
+                            </list>
+                            <p>Two footnotes at subsubsection depth<fn xml:id="fn-1-chC-sC-ssC-sssA">First.</fn><fn xml:id="fn-2-chC-sC-ssC-sssA">Second.</fn>.</p>
+                            <exercise xml:id="ix-1-chC-sC-ssC-sssA"><statement><p>First inline exercise at subsubsection depth.</p></statement></exercise>
+                            <exercise xml:id="ix-2-chC-sC-ssC-sssA"><statement><p>Second inline exercise at subsubsection depth.</p></statement></exercise>
+                        </subsubsection>
+
+                        <!-- Subsubsection B: PATTERN B (deepest). -->
+                        <subsubsection xml:id="ch-C-sC-ssC-sssB">
+                            <title>Subsubsection Pattern B</title>
+                            <p>Body families, then specialized subdivisions, at subsubsection depth.</p>
+                            <theorem xml:id="t-1-chC-sC-ssC-sssB"><statement><p>Theorem at subsubsection depth.</p></statement></theorem>
+                            <example xml:id="e-1-chC-sC-ssC-sssB"><p>Example at subsubsection depth.</p></example>
+                            <project xml:id="pj-1-chC-sC-ssC-sssB"><statement><p>Project at subsubsection depth.</p></statement></project>
+                            <p><md><mrow xml:id="eq-1-chC-sC-ssC-sssB" number="yes">k_1 = l_1</mrow></md></p>
+                            <p><md><mrow xml:id="eq-2-chC-sC-ssC-sssB" number="yes">k_2 = l_2</mrow></md></p>
+                            <figure xml:id="fg-1-chC-sC-ssC-sssB">
+                                <caption>Figure at subsubsection depth.</caption>
+                                <sidebyside><p>A placeholder.</p></sidebyside>
+                            </figure>
+                            <p>A footnote at subsubsection depth<fn xml:id="fn-1-chC-sC-ssC-sssB">Footnote.</fn>.</p>
+                            <exercise xml:id="ix-1-chC-sC-ssC-sssB"><statement><p>Inline exercise at subsubsection depth.</p></statement></exercise>
+
+                            <exercises xml:id="exs-chC-sC-ssC-sssB">
+                                <title>Subsubsection B Exercises</title>
+                                <introduction>
+                                    <p>Introduction to subsubsection B exercises.</p>
+                                    <p><md><mrow xml:id="eq-intro-1-exs-chC-sC-ssC-sssB" number="yes">ZZ_1 = AB_1</mrow></md></p>
+                                    <p><md><mrow xml:id="eq-intro-2-exs-chC-sC-ssC-sssB" number="yes">ZZ_2 = AB_2</mrow></md></p>
+                                </introduction>
+                                <exercise xml:id="exe-1-chC-sC-ssC-sssB"><statement><p>Divisional exercise.</p></statement></exercise>
+                                <exercise xml:id="exe-2-chC-sC-ssC-sssB"><statement><p>Divisional exercise.</p></statement></exercise>
+                                <conclusion>
+                                    <p>End of subsubsection B exercises.</p>
+                                    <p><md><mrow xml:id="eq-concl-1-exs-chC-sC-ssC-sssB" number="yes">AC_1 = AD_1</mrow></md></p>
+                                    <p><md><mrow xml:id="eq-concl-2-exs-chC-sC-ssC-sssB" number="yes">AC_2 = AD_2</mrow></md></p>
+                                </conclusion>
+                            </exercises>
+                        </subsubsection>
+
+                        <conclusion xml:id="ch-C-sC-ssC-concl">
+                            <p>A structural subsection's conclusion.  Its numbered objects pool with the introduction (when numbering is shallower than the subsubsections).</p>
+                            <p><md><mrow xml:id="eq-concl-1-chC-sC-ssC" number="yes">g_3 = h_3</mrow></md></p>
+                            <p><md><mrow xml:id="eq-concl-2-chC-sC-ssC" number="yes">g_4 = h_4</mrow></md></p>
+                            <theorem xml:id="t-concl-1-chC-sC-ssC"><statement><p>Theorem in the subsection C conclusion.</p></statement></theorem>
+                            <p>A footnote in the subsection C conclusion<fn xml:id="fn-concl-1-chC-sC-ssC">Conclusion footnote.</fn>.</p>
+                        </conclusion>
+                    </subsection>
+
+                    <!-- A specialized subdivision at section-C scope, to test  -->
+                    <!-- specialized divisions inside a structural division.    -->
+                    <reading-questions xml:id="rq-chC-sC">
+                        <title>Section C Reading Questions</title>
+                        <introduction>
+                            <p>Reading questions belonging to the structural section.</p>
+                            <p><md><mrow xml:id="eq-intro-1-rq-chC-sC" number="yes">AE_1 = AF_1</mrow></md></p>
+                            <p><md><mrow xml:id="eq-intro-2-rq-chC-sC" number="yes">AE_2 = AF_2</mrow></md></p>
+                        </introduction>
+                        <exercise xml:id="exe-rq1-chC-sC"><statement><p>Reading question.</p></statement></exercise>
+                        <conclusion>
+                            <p>End.</p>
+                            <p><md><mrow xml:id="eq-concl-1-rq-chC-sC" number="yes">AG_1 = AH_1</mrow></md></p>
+                            <p><md><mrow xml:id="eq-concl-2-rq-chC-sC" number="yes">AG_2 = AH_2</mrow></md></p>
+                        </conclusion>
+                    </reading-questions>
+
+                    <conclusion xml:id="ch-C-sC-concl">
+                        <p>The structural section's conclusion.</p>
+                        <p><md><mrow xml:id="eq-concl-1-chC-sC" number="yes">m_3 = n_3</mrow></md></p>
+                        <p><md><mrow xml:id="eq-concl-2-chC-sC" number="yes">m_4 = n_4</mrow></md></p>
+                        <theorem xml:id="t-concl-1-chC-sC"><statement><p>Theorem in the section C conclusion.</p></statement></theorem>
+                        <figure xml:id="fg-concl-1-chC-sC">
+                            <caption>Figure in the section C conclusion.</caption>
+                            <sidebyside><p>A placeholder.</p></sidebyside>
+                        </figure>
+                        <p>A footnote in the section C conclusion<fn xml:id="fn-concl-1-chC-sC">Conclusion footnote.</fn>.</p>
+                    </conclusion>
+                </section>
+
+                <!-- Specialized subdivisions at chapter-C scope (a structural  -->
+                <!-- chapter may carry these between its sections and its       -->
+                <!-- conclusion).                                               -->
+                <exercises xml:id="exs-chC">
+                    <title>Chapter C Exercises</title>
+                    <introduction>
+                        <p>End-of-chapter exercises in a structural chapter.</p>
+                        <p><md><mrow xml:id="eq-intro-1-exs-chC" number="yes">AI_1 = AJ_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-intro-2-exs-chC" number="yes">AI_2 = AJ_2</mrow></md></p>
+                    </introduction>
+                    <exercise xml:id="exe-1-chC"><statement><p>Divisional exercise.</p></statement></exercise>
+                    <exercise xml:id="exe-2-chC"><statement><p>Divisional exercise.</p></statement></exercise>
+                    <conclusion>
+                        <p>End of chapter C exercises.</p>
+                        <p><md><mrow xml:id="eq-concl-1-exs-chC" number="yes">AK_1 = AL_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-concl-2-exs-chC" number="yes">AK_2 = AL_2</mrow></md></p>
+                    </conclusion>
+                </exercises>
+
+                <conclusion xml:id="ch-C-concl">
+                    <p>The structural chapter's conclusion is the trailing "zero slot" location.</p>
+                    <p><md><mrow xml:id="eq-concl-1-chC" number="yes">i_3 = j_3</mrow></md></p>
+                    <p><md><mrow xml:id="eq-concl-2-chC" number="yes">i_4 = j_4</mrow></md></p>
+                    <theorem xml:id="t-concl-1-chC"><statement><p>First theorem in the chapter C conclusion.</p></statement></theorem>
+                    <theorem xml:id="t-concl-2-chC"><statement><p>Second theorem in the chapter C conclusion.</p></statement></theorem>
+                    <project xml:id="pj-concl-1-chC"><statement><p>Project in the chapter C conclusion.</p></statement></project>
+                    <figure xml:id="fg-concl-1-chC">
+                        <caption>Figure in the chapter C conclusion.</caption>
+                        <sidebyside><p>A placeholder.</p></sidebyside>
+                    </figure>
+                    <p>Two footnotes in the chapter C conclusion<fn xml:id="fn-concl-1-chC">First.</fn><fn xml:id="fn-concl-2-chC">Second.</fn>.</p>
+                    <exercise xml:id="ix-concl-1-chC"><statement><p>Inline exercise in the chapter C conclusion.</p></statement></exercise>
+                </conclusion>
+            </chapter>
+            <!-- ============================================================ -->
+            <!-- CHAPTER ch-xref : cross-reference stress.                    -->
+            <!-- References numbered objects across the document by family.   -->
+            <!-- Some numbers (tasks, or targets across a part boundary)      -->
+            <!-- surface only when cross-referenced.                          -->
+            <!-- ============================================================ -->
+            <chapter xml:id="ch-xref">
+                <title>Cross-Reference Stress</title>
+
+                <section xml:id="xref-divisions">
+                    <title>Divisions</title>
+                    <p>Parts: <xref ref="part-main"/>, <xref ref="part-thin"/>.</p>
+                    <p>Chapters: <xref ref="ch-A"/>, <xref ref="ch-B"/>, <xref ref="ch-C"/>, <xref ref="ch-xref"/>, <xref ref="ch-thin"/>.</p>
+                    <p>Sections of chapter C: <xref ref="ch-C-sA"/>, <xref ref="ch-C-sB"/>, <xref ref="ch-C-sC"/>.</p>
+                    <p>Subsections: <xref ref="ch-C-sC-ssA"/>, <xref ref="ch-C-sC-ssB"/>, <xref ref="ch-C-sC-ssC"/>.</p>
+                    <p>Subsubsections: <xref ref="ch-C-sC-ssC-sssA"/>, <xref ref="ch-C-sC-ssC-sssB"/>.</p>
+                    <p>Appendices: <xref ref="apx-A"/>, <xref ref="apx-C"/>, <xref ref="apx-C-sA"/>, <xref ref="apx-C-sA-ssA"/>.</p>
+                </section>
+
+                <section xml:id="xref-blocks">
+                    <title>Blocks</title>
+                    <p>Chapter A: <xref ref="t-1-chA"/>, <xref ref="lem-1-chA"/>, <xref ref="dfn-1-chA"/>, <xref ref="e-1-chA"/>, <xref ref="ax-1-chA"/>, <xref ref="cmp-1-chA"/>.</p>
+                    <p>At depth: <xref ref="t-1-chC-sA"/>, <xref ref="t-1-chC-sC-ssA"/>, <xref ref="t-1-chC-sC-ssC-sssA"/>.</p>
+                    <p>In an introduction and a conclusion (the zero slot): <xref ref="t-intro-1-chC"/>, <xref ref="t-concl-1-chC"/>.</p>
+                    <p>Across the part boundary, and in an appendix: <xref ref="t-1-thin"/>, <xref ref="t-1-apxA"/>.</p>
+                </section>
+
+                <section xml:id="xref-projects">
+                    <title>Projects</title>
+                    <p>Chapter A: <xref ref="pj-1-chA"/>, <xref ref="ac-1-chA"/>, <xref ref="exp-1-chA"/>, <xref ref="inv-1-chA"/>.</p>
+                    <p>Introduction, thin part, appendix: <xref ref="pj-intro-1-chC"/>, <xref ref="pj-1-thin"/>, <xref ref="pj-1-apxA"/>.</p>
+                </section>
+
+                <section xml:id="xref-equations">
+                    <title>Equations</title>
+                    <p>Chapter A, including one inside a theorem: <xref ref="eq-1-chA"/>, <xref ref="eq-1-t-1-chA"/>.</p>
+                    <p>Zero-slot intro/conclusion equations: <xref ref="eq-intro-1-chC"/>, <xref ref="eq-concl-1-chC"/>, <xref ref="eq-intro-1-chC-sC-ssC"/>, <xref ref="eq-concl-1-chC-sC-ssC"/>.</p>
+                    <p>At depth: <xref ref="eq-1-chC-sC-ssA"/>, <xref ref="eq-1-chC-sC-ssC-sssA"/>.</p>
+                    <p>Across the part boundary, and in appendices: <xref ref="eq-1-thin"/>, <xref ref="eq-1-apxA"/>, <xref ref="eq-1-apxC-sA-ssA"/>.</p>
+                </section>
+
+                <section xml:id="xref-figures">
+                    <title>Figure-Like</title>
+                    <p>Figures, including a sub-figure: <xref ref="fg-1-chA"/>, <xref ref="fg-2-chA"/>, <xref ref="fg-2a-chA"/>.</p>
+                    <p>Table, listing, named list: <xref ref="tb-1-chA"/>, <xref ref="ls-1-chA"/>, <xref ref="li-1-chA"/>.</p>
+                    <p>Across the part boundary, and in an appendix: <xref ref="fg-1-thin"/>, <xref ref="fg-1-apxA"/>.</p>
+                </section>
+
+                <section xml:id="xref-footnotes">
+                    <title>Footnotes</title>
+                    <p>Body footnotes, chapter A: <xref ref="fn-1-chA"/>, <xref ref="fn-2-chA"/>, and inside a theorem <xref ref="fn-1-t-1-chA"/>; chapter B: <xref ref="fn-1-chB"/>.</p>
+                    <p>Chapter C zero-slot pool, introduction then conclusion: <xref ref="fn-intro-1-chC"/>, <xref ref="fn-intro-2-chC"/>, <xref ref="fn-concl-1-chC"/>, <xref ref="fn-concl-2-chC"/>.</p>
+                    <p>Section and subsection scopes, chapter C: <xref ref="fn-1-chC-sA"/>, <xref ref="fn-2-chC-sA"/>, <xref ref="fn-1-chC-sB"/>, <xref ref="fn-1-chC-sC-ssA"/>, <xref ref="fn-2-chC-sC-ssA"/>, <xref ref="fn-1-chC-sC-ssB"/>.</p>
+                    <p>Subsubsection scope and its pooled intro/conclusion: <xref ref="fn-1-chC-sC-ssC-sssA"/>, <xref ref="fn-2-chC-sC-ssC-sssA"/>, <xref ref="fn-1-chC-sC-ssC-sssB"/>, <xref ref="fn-intro-1-chC-sC-ssC"/>, <xref ref="fn-concl-1-chC-sC-ssC"/>.</p>
+                    <p>Nested intro/conclusion pools, section C and subsection C: <xref ref="fn-intro-1-chC-sC"/>, <xref ref="fn-concl-1-chC-sC"/>.</p>
+                    <p>Front matter, the thin chapter, and the appendices: <xref ref="fn-1-preface"/>, <xref ref="fn-1-thin"/>, <xref ref="fn-2-thin"/>, <xref ref="fn-1-apxA"/>, <xref ref="fn-2-apxA"/>, <xref ref="fn-intro-1-apxC"/>, <xref ref="fn-1-apxC-sA"/>, <xref ref="fn-1-apxC-sA-ssA"/>.</p>
+                    <p>Specialized-division footnotes, which open their own scope: <xref ref="fn-rfs-chB"/>, <xref ref="fn-gls-chB"/>, <xref ref="fn-ex-chB"/>.</p>
+                </section>
+
+                <section xml:id="xref-exercises">
+                    <title>Exercises and Tasks</title>
+                    <p>Inline and divisional: <xref ref="ix-1-chA"/>, <xref ref="exe-1-chB"/>.</p>
+                    <p>Grouped, a multi-part task, worksheet, reading question: <xref ref="exe-g1-chB"/>, <xref ref="task-a-chB"/>, <xref ref="exe-ws1-chB"/>, <xref ref="exe-rq1-chB"/>.</p>
+                    <p>Hard-coded number override (renders as 99): <xref ref="exe-numbered-chB"/>.</p>
+                    <p>Across the part boundary: <xref ref="ix-1-thin"/>, <xref ref="exe-1-thin"/>.</p>
+                </section>
+
+                <section xml:id="xref-biblio-glossary">
+                    <title>Bibliography and Glossary</title>
+                    <p>Biblio: <xref ref="bib-1-chB"/>, <xref ref="bib-1-bm"/>.</p>
+                    <p>Glossary items: <xref ref="gi-1-chB"/>, <xref ref="gi-1-bm"/>.</p>
+                </section>
+
+                <section xml:id="xref-autoname">
+                    <title>Autoname and Style Variants</title>
+                    <p>The same theorem in several <attr>text</attr> styles, to verify number rendering in each.</p>
+                    <p>Default: <xref ref="t-1-chA"/>.  Local: <xref ref="t-1-chA" text="local"/>.  Global: <xref ref="t-1-chA" text="global"/>.  Type-local: <xref ref="t-1-chA" text="type-local"/>.  Type-global: <xref ref="t-1-chA" text="type-global"/>.</p>
+                    <p>A titled target: <xref ref="tb-1-chA" text="title"/>.</p>
+                    <p>Custom text: <xref ref="t-1-chA" text="custom">the first theorem</xref>.</p>
+                    <p>The same equation in several styles: <xref ref="eq-1-chA"/>, <xref ref="eq-1-chA" text="global"/>, <xref ref="eq-1-chA" text="local"/>.</p>
+                </section>
+            </chapter>
+
+        </part>
+
+        <part xml:id="part-thin">
+            <title>Thin Part</title>
+
+            <!-- A short chapter past a part boundary, to confirm numbering continues across it. -->
+            <chapter xml:id="ch-thin">
+                <title>Across the Part Boundary</title>
+
+                <p>Several families on the far side of a part boundary.</p>
+
+                <theorem xml:id="t-1-thin"><statement><p>Theorem in the thin part.</p></statement></theorem>
+                <theorem xml:id="t-2-thin"><statement><p>Second theorem in the thin part.</p></statement></theorem>
+                <example xml:id="e-1-thin"><p>Example in the thin part.</p></example>
+                <project xml:id="pj-1-thin"><statement><p>Project in the thin part.</p></statement></project>
+                <p><md><mrow xml:id="eq-1-thin" number="yes">a_1 + b_1 = c_1</mrow></md></p>
+                <p><md><mrow xml:id="eq-2-thin" number="yes">a_2 + b_2 = c_2</mrow></md></p>
+                <figure xml:id="fg-1-thin">
+                    <caption>Figure in the thin part.</caption>
+                    <sidebyside><p>A placeholder.</p></sidebyside>
+                </figure>
+                <p>Two footnotes across the part boundary<fn xml:id="fn-1-thin">First.</fn><fn xml:id="fn-2-thin">Second.</fn>.</p>
+                <exercise xml:id="ix-1-thin"><statement><p>Inline exercise in the thin part.</p></statement></exercise>
+
+                <exercises xml:id="exs-thin">
+                    <title>Thin-Part Exercises</title>
+                    <introduction>
+                        <p>Introduction to thin-part exercises.</p>
+                        <p><md><mrow xml:id="eq-intro-1-exs-thin" number="yes">LLL_1 = MMM_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-intro-2-exs-thin" number="yes">LLL_2 = MMM_2</mrow></md></p>
+                    </introduction>
+                    <exercise xml:id="exe-1-thin"><statement><p>Divisional exercise.</p></statement></exercise>
+                    <conclusion>
+                        <p>End of thin-part exercises.</p>
+                        <p><md><mrow xml:id="eq-concl-1-exs-thin" number="yes">NNN_1 = OOO_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-concl-2-exs-thin" number="yes">NNN_2 = OOO_2</mrow></md></p>
+                    </conclusion>
+                </exercises>
+            </chapter>
+        </part>
+
+        <!-- ============================================================ -->
+        <!-- BACKMATTER                                                    -->
+        <!-- Appendix one mirrors Pattern A; appendix two mirrors Pattern -->
+        <!-- C (with a section and subsection), so letter-prefixed        -->
+        <!-- numbering can be observed at every depth.  Then a backmatter -->
+        <!-- solutions division, backmatter references, a glossary, and   -->
+        <!-- the index.                                                   -->
+        <!-- ============================================================ -->
+
+        <backmatter xml:id="backmatter">
+
+            <appendix xml:id="apx-A">
+                <title>Appendix Pattern A</title>
+
+                <p>Two of each family in a Pattern A appendix; numbers carry a letter prefix.</p>
+
+                <theorem xml:id="t-1-apxA"><statement><p>First theorem in appendix A.</p></statement></theorem>
+                <theorem xml:id="t-2-apxA"><statement><p>Second theorem in appendix A.</p></statement></theorem>
+                <example xml:id="e-1-apxA"><p>First example in appendix A.</p></example>
+                <example xml:id="e-2-apxA"><p>Second example in appendix A.</p></example>
+                <project xml:id="pj-1-apxA"><statement><p>First project in appendix A.</p></statement></project>
+                <activity xml:id="ac-1-apxA"><statement><p>An activity in appendix A.</p></statement></activity>
+                <p><md><mrow xml:id="eq-1-apxA" number="yes">A_1 = A_1</mrow></md></p>
+                <p><md><mrow xml:id="eq-2-apxA" number="yes">A_2 = A_2</mrow></md></p>
+                <figure xml:id="fg-1-apxA">
+                    <caption>First figure in appendix A.</caption>
+                    <sidebyside><p>A placeholder.</p></sidebyside>
+                </figure>
+                <table xml:id="tb-1-apxA">
+                    <title>First table in appendix A.</title>
+                    <tabular><row><cell>a</cell></row></tabular>
+                </table>
+                <listing xml:id="ls-1-apxA">
+                    <title>First listing in appendix A.</title>
+                    <program language="text">hello apxA 1</program>
+                </listing>
+                <list xml:id="li-1-apxA">
+                    <title>A named list in appendix A.</title>
+                    <ol><li><p>An item.</p></li></ol>
+                </list>
+                <p>Two footnotes in an appendix<fn xml:id="fn-1-apxA">First.</fn><fn xml:id="fn-2-apxA">Second.</fn>.</p>
+                <exercise xml:id="ix-1-apxA"><statement><p>First inline exercise in appendix A.</p></statement></exercise>
+                <exercise xml:id="ix-2-apxA"><statement><p>Second inline exercise in appendix A.</p></statement></exercise>
+
+                <exercises xml:id="exs-apxA">
+                    <title>Appendix A Exercises</title>
+                    <introduction>
+                        <p>Introduction to appendix A exercises.</p>
+                        <p><md><mrow xml:id="eq-intro-1-exs-apxA" number="yes">PPP_1 = QQQ_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-intro-2-exs-apxA" number="yes">PPP_2 = QQQ_2</mrow></md></p>
+                    </introduction>
+                    <exercise xml:id="exe-1-apxA"><statement><p>Divisional exercise in appendix A.</p></statement></exercise>
+                    <conclusion>
+                        <p>End of appendix A exercises.</p>
+                        <p><md><mrow xml:id="eq-concl-1-exs-apxA" number="yes">RRR_1 = SSS_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-concl-2-exs-apxA" number="yes">RRR_2 = SSS_2</mrow></md></p>
+                    </conclusion>
+                </exercises>
+            </appendix>
+
+            <appendix xml:id="apx-C">
+                <title>Appendix Pattern C</title>
+
+                <introduction xml:id="apx-C-intro">
+                    <p>A structural appendix, so letter-prefixed numbering can be inspected at appendix-section and appendix-subsection depth.</p>
+                    <p><md><mrow xml:id="eq-intro-1-apxC" number="yes">J_1 = K_1</mrow></md></p>
+                    <p><md><mrow xml:id="eq-intro-2-apxC" number="yes">J_2 = K_2</mrow></md></p>
+                    <theorem xml:id="t-intro-1-apxC"><statement><p>Theorem in the appendix C introduction.</p></statement></theorem>
+                    <p>A footnote in the appendix C introduction<fn xml:id="fn-intro-1-apxC">Intro footnote.</fn>.</p>
+                </introduction>
+
+                <section xml:id="apx-C-sA">
+                    <title>Section in an Appendix</title>
+
+                    <introduction xml:id="apx-C-sA-intro">
+                        <theorem xml:id="t-1-apxC-sA"><statement><p>Theorem at appendix-section depth.</p></statement></theorem>
+                        <project xml:id="pj-1-apxC-sA"><statement><p>Project at appendix-section depth.</p></statement></project>
+                        <p><md><mrow xml:id="eq-1-apxC-sA" number="yes">L_1 = M_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-2-apxC-sA" number="yes">L_2 = M_2</mrow></md></p>
+                        <figure xml:id="fg-1-apxC-sA">
+                            <caption>Figure at appendix-section depth.</caption>
+                            <sidebyside><p>A placeholder.</p></sidebyside>
+                        </figure>
+                        <p>A footnote at appendix-section depth<fn xml:id="fn-1-apxC-sA">Footnote.</fn>.</p>
+                        <exercise xml:id="ix-1-apxC-sA"><statement><p>Inline exercise at appendix-section depth.</p></statement></exercise>
+                    </introduction>
+
+                    <subsection xml:id="apx-C-sA-ssA">
+                        <title>Subsection in an Appendix</title>
+                        <theorem xml:id="t-1-apxC-sA-ssA"><statement><p>Theorem at appendix-subsection depth.</p></statement></theorem>
+                        <p><md><mrow xml:id="eq-1-apxC-sA-ssA" number="yes">B_1 = B_1</mrow></md></p>
+                        <p><md><mrow xml:id="eq-2-apxC-sA-ssA" number="yes">C_1 = C_1</mrow></md></p>
+                        <figure xml:id="fg-1-apxC-sA-ssA">
+                            <caption>Figure at appendix-subsection depth.</caption>
+                            <sidebyside><p>A placeholder.</p></sidebyside>
+                        </figure>
+                        <p>A footnote at appendix-subsection depth<fn xml:id="fn-1-apxC-sA-ssA">Footnote.</fn>.</p>
+                    </subsection>
+                </section>
+
+                <conclusion xml:id="apx-C-concl">
+                    <p>End of appendix C.</p>
+                    <p><md><mrow xml:id="eq-concl-1-apxC" number="yes">P_1 = Q_1</mrow></md></p>
+                    <p><md><mrow xml:id="eq-concl-2-apxC" number="yes">P_2 = Q_2</mrow></md></p>
+                </conclusion>
+            </appendix>
+
+            <!-- A backmatter solutions division.  In the backmatter it     -->
+            <!-- carries a letter, like an appendix.  Pulls solutions from   -->
+            <!-- any exercise with a solution child.                         -->
+            <solutions xml:id="sols-bm" inline="solution" divisional="solution">
+                <title>Selected Solutions</title>
+                <introduction>
+                    <p>Solutions to selected exercises throughout the document.</p>
+                    <p><md><mrow xml:id="eq-intro-1-sols-bm" number="yes">TTT_1 = UUU_1</mrow></md></p>
+                    <p><md><mrow xml:id="eq-intro-2-sols-bm" number="yes">TTT_2 = UUU_2</mrow></md></p>
+                </introduction>
+                <conclusion>
+                    <p>End of selected solutions.</p>
+                    <p><md><mrow xml:id="eq-concl-1-sols-bm" number="yes">VVV_1 = WWW_1</mrow></md></p>
+                    <p><md><mrow xml:id="eq-concl-2-sols-bm" number="yes">VVV_2 = WWW_2</mrow></md></p>
+                </conclusion>
+            </solutions>
+
+            <glossary xml:id="gls-bm">
+                <title>Glossary</title>
+                <gi xml:id="gi-1-bm">
+                    <title>omega</title>
+                    <p>The last letter.</p>
+                </gi>
+                <gi xml:id="gi-2-bm">
+                    <title>psi</title>
+                    <p>The next-to-last letter.</p>
+                </gi>
+            </glossary>
+
+            <!-- Backmatter references: unique and unnumbered as a division, -->
+            <!-- but its biblio entries are numbered within it.              -->
+            <references xml:id="refs-bm">
+                <title>Bibliography</title>
+                <introduction>
+                    <p>Introduction to the backmatter references.</p>
+                    <p><md><mrow xml:id="eq-intro-1-refs-bm" number="yes">ZZZ_1 = AAAA_1</mrow></md></p>
+                    <p><md><mrow xml:id="eq-intro-2-refs-bm" number="yes">ZZZ_2 = AAAA_2</mrow></md></p>
+                </introduction>
+                <biblio xml:id="bib-1-bm" type="raw">
+                    <title>First backmatter reference.</title>
+                </biblio>
+                <biblio xml:id="bib-2-bm" type="raw">
+                    <title>Second backmatter reference.</title>
+                </biblio>
+                <conclusion>
+                    <p>End of backmatter references.</p>
+                    <p><md><mrow xml:id="eq-concl-1-refs-bm" number="yes">BBBB_1 = CCCC_1</mrow></md></p>
+                    <p><md><mrow xml:id="eq-concl-2-refs-bm" number="yes">BBBB_2 = CCCC_2</mrow></md></p>
+                </conclusion>
+            </references>
+
+            <index xml:id="the-index">
+                <index-list/>
+            </index>
+
+            <colophon xml:id="back-colophon">
+                <p>End of the numbering stress test.</p>
+            </colophon>
+        </backmatter>
+    </book>
+</pretext>
