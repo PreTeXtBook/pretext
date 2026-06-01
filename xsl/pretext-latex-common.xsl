@@ -5666,6 +5666,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="unique-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
+    <!-- A numberless division does not step a LaTeX counter, so     -->
+    <!-- \numberwithin never restarts its equations.  Reset here to  -->
+    <!-- match the assembly; with no number to show, serial is bare. -->
+    <xsl:if test="parent::backmatter and not($numbering-equations = 0)">
+        <xsl:variable name="numberless-suffix">
+            <xsl:apply-templates select="." mode="division-environment-name-suffix"/>
+        </xsl:variable>
+        <xsl:if test="$numberless-suffix = '-numberless'">
+            <xsl:text>\setcounter{equation}{0}%&#xa;</xsl:text>
+            <xsl:text>\renewcommand{\theequation}{\arabic{equation}}%&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
     <xsl:if test="$b-debug-numbering-check">
         <xsl:variable name="the-number">
             <xsl:apply-templates select="." mode="number"/>
