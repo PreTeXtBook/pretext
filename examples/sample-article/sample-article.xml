@@ -22,8 +22,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Overall element for a Mathbook XML document; mandatory, always  -->
 <!-- Experiment with the "xml:lang" attribute to see localization    -->
 <!-- changes, the  xsl/localizations  directory has more information -->
-<!-- Note: unwind xi:include use once STACK questions settle down -->
-<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
+<pretext>
 <!-- <pretext xml:lang="ku-CKB"> -->    <!-- an RTL language -->
 <!-- <pretext xml:lang="pt-BR"> -->
 <!-- <pretext xml:lang="fr-FR"> -->
@@ -56,7 +55,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <math-package latex-name="cancel" mathjax-name="cancel"/>
         <!-- Superior bevelled/slanted fractions in LaTeX output (only) -->
         <math-package latex-name="xfrac" mathjax-name=""/>
-        <math-package latex-name="extpfeil" mathjax-name="extpfeil"/>
+        <!-- 2026-03-04: once we tested the "extpfeil" package but it     -->
+        <!-- is a bad actor in LaTeX files, loading "amssymb" and using   -->
+        <!-- "calc" with a redefined \setlength (or something like that). -->
+        <!-- We tested this device here with an "\xmapsto" macro in math. -->
         <!--
         TeX/LaTeX macros can be written in the usual way.
         Whitespace and line breaks are irrelevant here.
@@ -293,7 +295,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             example near the discussion of Asymptote.
             -->
 
-            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="https://pretextbook.org" visual="pretextbook.org"><pretext/></url>.<notation>
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <md>\definiteintegral{0}{2}{\sin^2(x)}{x}</md>.  This is also a demonstration of the capabilities of <url href="https://pretextbook.org" visual="pretextbook.org"><pretext/></url>.<notation>
                 <usage><m>\int_a^b\,f(x)\,dx</m></usage>
                 <description>definite integral of <m>f(x)</m></description>
             </notation></p>
@@ -332,7 +334,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <idx><h>Fundamental Theorem of Calculus</h></idx>
 
                 <statement>
-                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><idx><h>test: buried in theorem/statement/p</h></idx></p>
+                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <md>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</md><idx><h>test: buried in theorem/statement/p</h></idx></p>
                 </statement>
                 <proof>
                     <p>Left to the reader.<fn>This is a footnote in a <tag>proof</tag> that is inside a <tag>theorem</tag>.</fn></p>
@@ -380,7 +382,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <description>indefinite integral of <m>f(x)</m></description>
                 </notation>
                 <statement>
-                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me>.</p>
+                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <md>\int\,f(x)\,dx=F(x)</md>.</p>
                 </statement>
             </definition>
         </section>
@@ -400,9 +402,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <section xml:id="section-sage-cells" label="section-sage-cells">
             <title>Computing Integrals with Sage (<m>\int</m>)</title>
-            <!-- A version of the title with no markup at all,     -->
-            <!-- math is now a Unicode symbol for an integral sign -->
-            <plaintitle>Computing Integrals with Sage (&#x222B;)</plaintitle>
+            <!-- A version of the title with no markup at all, in -->
+            <!-- order to cooperate with an (optional) math font  -->
+            <shorttitle>Computing Integrals with Sage</shorttitle>
             <!-- Index testing, semi-realistic -->
             <idx><h>Sage</h><h>integration</h></idx>
             <idx><h>Sage</h><h>integration</h><h>cell</h></idx>
@@ -683,14 +685,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <creator>Leibniz, Newton</creator>
                     <idx><h>Fundamental Theorem of Calculus</h><h>Corollary</h></idx>
                     <statement>
-                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men>.</p>
+                        <p>Suppose <m>f(x)</m> is a continuous function.  Then <md number="yes" xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</md>.</p>
                     </statement>
                     <proof xml:id="proof-FTC-corollary">
-                        <p>We simply take the indicated derivative, applying Theorem<nbsp/><xref ref="theorem-FTC"/> at <xref ref="equation-use-FTC"/><mdn>
+                        <p>We simply take the indicated derivative, applying Theorem<nbsp/><xref ref="theorem-FTC"/> at <xref ref="equation-use-FTC"/><md number="yes">
                             <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
                             <mrow xml:id="equation-conclude">&amp;=f(x)-0 = f(x)</mrow>
-                        </mdn>.</p>
+                        </md>.</p>
                     </proof>
                     <justification>
                         <p>A justification, which is one of the variants of a proof.</p>
@@ -722,7 +724,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <example xml:id="example-mysterious">
                     <title>A Mysterious Derivative!</title>
-                    <p>So if we define a function with its variable employed as a limit of integration, like so <me>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</me> then we get the derivative of that function so easily it seems like a mystery, <me>\frac{d}{dz}K(z)=z^4\sin(z^2)</me>. That's it.</p>
+                    <p>So if we define a function with its variable employed as a limit of integration, like so <md>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</md> then we get the derivative of that function so easily it seems like a mystery, <md>\frac{d}{dz}K(z)=z^4\sin(z^2)</md>. That's it.</p>
 
                     <p>For testing purposes, there is a simple Sage Cell here, buried inside an example that should be a knowl (embedded in the page).</p>
 
@@ -1465,23 +1467,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p>And the other thing.</p>
                         </task>
                     </exercise>
-
-                    <!-- Note: a new section with a few problemns will be -->
-                    <!-- better than this addition for initial testing.   -->
-                    <!-- 2025-08-16: commented-out (in two pieces) since duplicate  -->
-                    <!-- MathJax causes unreliable behavior.  Remains for testing.  -->
-                    <!-- <exercise>
-                        <title>STACK integration question</title>
-
-                        <introduction>
-                            <p>A test question. (2025-08-15: you may need to ask for a "new" question to make this render.)</p>
-                        </introduction> -->
-
-                        <!-- A @label is required, becomes a filename in output -->
-                        <!-- <stack label="stack-integration">
-                            <xi:include href="stack/01_integration_with_feedback.xml"/>
-                        </stack>
-                    </exercise> -->
                 </exercises>
 
                 <reading-questions>
@@ -1937,13 +1922,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p><latex/> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on either side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)</p>
 
-            <p>Aligned and numbered first.<mdn>
+            <p>Aligned and numbered first.<md number="yes">
                 <mrow>{\mathcal L}(y')(s)  &amp;= s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) &amp;= s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
                 <intertext>And so it follows that,</intertext>
                 <mrow>{\mathcal L}(y')(s)^{++}  &amp;= s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s)^{5} &amp;= s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
-            </mdn></p>
+            </md></p>
 
             <p>Now with no numbers and no alignment.  We include two cross-references in the <c>intertext</c> portion for testing.<md>
                 <mrow>{\mathcal L}(y')(s)  = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
@@ -2013,7 +1998,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Basic Mathematics</title>
 
-                <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/" visual="www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
+                <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/" visual="www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<md>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</md></p>
 
                 <p>And again, from the MathJax demonstration page, Maxwell's equations:<idx>Maxwell's equations</idx><md>
                     <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
@@ -2022,37 +2007,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
                 </md><notation><usage><m>\nabla</m></usage><description>gradient operator</description></notation></p>
 
-                <p>Historically, we provided internal support for the <latex/> package <c>extpfeil</c>.  As of 2023-10-19 this has become an author election (see the <tag>docinfo</tag> section in the source of this document).  We preeserve a small test that this extensible arrows library is being included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
-
                 <p>Look back at the top of the source file of this document to see how to include your <tex/> macros just once.  For best results keep your macros simple and semantic.</p>
 
                 <p><pretext/> once provided modest built-in support for <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the pre-defined <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.  The presentation in HTML is subpar, but could improve as MathJax provides support.  It is now an author's responsibility to add support for superior typesetting for <init>PDF</init> output by loading the <c>xfrac</c> <latex/> package with the following in <tag>docinfo</tag>:<cd>
                     <cline>&lt;math-package latex-name="xfrac" mathjax-name=""/&gt;</cline>
                 </cd>which is what we have done here as a test.  See the Guide for more details.</p>
 
-                <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <c>xml:id</c> on each.  We reference the whole system later as the range of equations from the first to the last.<mdn>
+                <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <attr>xml:id</attr> attribute on each.  We reference the whole system later as the range of equations from the first to the last.<md number="yes">
                     <mrow xml:id="equation-system-begin">\frac{dx}{dt} \amp = x^2 - 4x - y + 4</mrow>
                     <mrow xml:id="equation-system-end">\frac{dy}{dt} \amp = x^3 - y.</mrow>
-                </mdn></p>
+                </md></p>
 
             </subsection>
 
             <subsection>
                 <title>Displayed Mathematics</title>
 
-                <p>Multi-line displays of mathematics are achieved with the <c>md</c> tag (<q>math display</q>), and the variant that produces numbers on each line, <c>mdn</c> (<q>math display numbered</q>), used within a paragraph (<c>p</c>).  As a good example of how XML syntax is superior, you author <m>n</m> lines of equations by enclosing each line inside of a <c>mrow</c> tag, rather than using <m>n-1</m> separators (such as <c>\\</c>).</p>
+                <p>Display mathematics is achieved with the <tag>md</tag> tag (<q>math display</q>), always used within a paragraph (<tag>p</tag>).  As a good example of how XML syntax is superior, you author <m>n</m> lines of equations by enclosing each line inside of a <tag>mrow</tag> tag, rather than using <m>n-1</m> separators (such as <c>\\</c>).</p>
 
                 <p>If you use no ampersands to express alignment (read ahead), then each equation is centered independently on the width of the text.  This is implemented according to the AMSmath <latex/> package's <c>gather</c> environment.  Example:<md>
                     <mrow>\frac{dx}{dt} = x^2 - 4x - y + 4</mrow>
                     <mrow>\frac{dy}{dt} = x^3 - y.</mrow>
                 </md></p>
 
-                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We have created the pre-defined <latex/> macro <c>\amp</c> as one way specify these, but the escape sequence <c>&amp;amp;</c> may be used also.  The second, fourth, sixth, <ellipsis/> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis/> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of ampersands in each <c>mrow</c>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <c>m</c> tag will be ineffective).<md>
+                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We have created the pre-defined <latex/> macro <c>\amp</c> as one way specify these, but the escape sequence <c>&amp;amp;</c> may be used also.  The second, fourth, sixth, <ellipsis/> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis/> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of ampersands in each <tag>mrow</tag>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <tag>m</tag> tag will be ineffective).<md>
                     <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
                     <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
                 </md></p>
 
-                <p><pretext/> will automatically detect the presence or absence of ampersands, but by defining macros for entire aligned equations, you can effectively hide the ampersands.  So the <c>@alignment</c> attribute can override automatic detection.  We use a simple <latex/> macro to demonstrate setting <c>alignment='align'</c> to override the use of a <c>gather</c> environment and use a <c>align</c> environment instead.  Example:<md alignment="align">
+                <p><pretext/> will automatically detect the presence or absence of ampersands, but by defining macros for entire aligned equations, you can effectively hide the ampersands.  So the <attr>alignment</attr> attribute can override automatic detection.  We use a simple <latex/> macro to demonstrate setting <c>alignment='align'</c> to override the use of a <c>gather</c> environment and use a <c>align</c> environment instead.  Example:<md alignment="align">
                     <mrow>\myequation{\frac{dx}{dt}}{x^2 - 4x - y + 4}</mrow>
                     <mrow>\myequation{\frac{dy}{dt}}{x^3 - y}.</mrow>
                 </md></p>
@@ -2060,7 +2043,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>The AMSmath <latex/> package's <c>alignat</c> environment is a third variant of alignment.  It never happens automatically, you need to ask for it with <c>alignment="alignat"</c>.  It is very similar to <c>align</c> but adds no space between the equation columns.  So you can leave it that way, or you can add your own <q>extra</q> space to suit.  Here is a previous example with no inter-column space:<md alignment="alignat">
                     <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
                     <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
-                </md>.  This modified example has a middle row with three columns, while the other rows have just one column, as a test of our routines for determining the <c>mrow</c> with the greatest number of ampersands (and how many there are),<md alignment="alignat">
+                </md>.  This modified example has a middle row with three columns, while the other rows have just one column, as a test of our routines for determining the <tag>mrow</tag> with the greatest number of ampersands (and how many there are),<md alignment="alignat">
                     <mrow>\frac{dw}{dt} &amp;= z^3 - w</mrow>
                     <mrow>\frac{dx}{dt} &amp;= x^2 - 4x - y + 4 &amp; \frac{dy}{dt} &amp;= x^3 - y&amp;&amp; x, y\text{ third column}</mrow>
                     <mrow>\frac{dw}{dt} &amp; = z^3 - w</mrow>
@@ -2083,16 +2066,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>A long equation, to check layout on various screen sizes.  This is Weil's <q>explicit formula</q> for the
                    Riemann <m>\zeta</m>-function:
-                  <men>
+                  <md number="yes">
         \sum_\gamma S_-(\gamma) = \frac{\log Q}{\pi} \hat S_-(0)
         + \frac{1}{2\pi} \sum_{j=1}^d \Re\left\{ \int_{-\infty}^\infty \frac{\Gamma'}{\Gamma}\left(\frac{1}{4} + \frac{it}{2} + \mu_j\right)S_-(t) dt\right\}
         - \frac{d}{2\pi}\hat S_-(0)\log \pi
-                  </men>.
+                  </md>.
                 </p>
                 <example>
                     <title>Excessive Display Mathematics</title>
 
-                    <p>In print versions, a long run of displayed equations often needs to be broken across pages.  If you are reading some other version of this, then there is nothing to see here.  But for <latex/> output it could be interesting.  First, with no extra effort, this page-long display should break naturally, no matter how the preceding material changes.<md number="yes">
+                    <p>In print versions, a long run of displayed equations often needs to be broken across pages.  If you are reading some other version of this, then there is nothing to see here.  But for <latex/> output it could be interesting.  First, with no extra effort, this page-long display should break naturally, no matter how the preceding material changes.<md>
                         <mrow>x^2+y^2=z^2</mrow>
                         <mrow>a^2+b^2=c^2</mrow>
                         <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
@@ -2154,7 +2137,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <mrow>m^2+n^2=p^2</mrow>
                         <!--  -->
                     </md>.</p>
-                    <p>In this version we have turned off page breaking for the entire display, but then allowed a break at every fourth equation, so you should see a reasonably attractive page break right after one of the <m>m^2+n^2=p^2</m> equations.<mdn break="no">
+                    <p>In this version we have turned off page breaking for the entire display, but then allowed a break at every fourth equation, so you should see a reasonably attractive page break right after one of the <m>m^2+n^2=p^2</m> equations.<md number="yes" break="no">
                         <mrow>x^2+y^2=z^2</mrow>
                         <mrow>a^2+b^2=c^2</mrow>
                         <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
@@ -2215,11 +2198,65 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <mrow>\alpha^2+\beta^2=\gamma^2</mrow>
                         <mrow break="yes">m^2+n^2=p^2</mrow>
                         <!--  -->
-                    </mdn>.</p>
-                    <p>So.  Do not take any extra steps and let <latex/> figure out the breaks.  If you do not like a break, modify the <c>md</c> or <c>mdn</c> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <c>mrow</c> to suggest that it is a good place for a break.</p>
+                    </md>.</p>
+                    <p>So.  Do not take any extra steps and let <latex/> figure out the breaks.  If you do not like a break, modify the <tag>md</tag> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <tag>mrow</tag> to suggest that it is a good place for a break.</p>
                 </example>
 
-                <p>This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <me>z+y = z</me>.  <me>a + b = c</me>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
+                <p>Displayed mathematics in <latex/> has a device called <term>intertext</term>, allowing for short snippets of text in-between displayed equations, but alignment continues across these short breaks.  For any other output format besides <init>PDF</init>/<latex/> there really is not the technical means to make this continued alignment happen.  So we mostly do the best we can.  The following is a test example.  Since almost all the equations are very similar in shape, it appears that there is alignment throughout.  However, for almost all output formats, the very last equation changes the horizontal positioning of the block with the final three equations, and they are not aligned with the previous equations.  The exception is a <init>PDF</init> where we are able to take advantage of <latex/>'s support and the equations should <em>all</em> be aligned on the equals signs.
+                    <md number="yes">
+                        <mrow>A &amp;= Z + 1</mrow>
+                        <mrow>B &amp;= Y + 2</mrow>
+                        <intertext>One intertext.</intertext>
+                        <mrow>C &amp;= X + 3</mrow>
+                        <mrow>D &amp;= W + 4</mrow>
+                        <mrow>E &amp;= V + 5</mrow>
+                        <intertext>Two intertext.</intertext>
+                        <mrow>F &amp;= U + 6</mrow>
+                        <intertext>Three intertext.</intertext>
+                        <mrow>G &amp;= T + 7</mrow>
+                        <mrow>H &amp;= S + 8</mrow>
+                        <mrow>I + J + K &amp;= P + Q + R + 9 + 10 + 11</mrow>
+                    </md>
+                </p>
+
+            <p>Now for some more testing of the <tag>intertext</tag> feature. Numbering some equations, and not others, requires some care in the conversion to <latex/>.</p>
+
+            <p>
+            First, a numbered equation in the first group of equations.
+                <md>
+                    <mrow number="yes">A &amp; = B + C</mrow>
+                    <intertext>Intertext: between first and second equations.</intertext>
+                    <mrow>P &amp; = Q + R</mrow>
+                    <intertext>Intertext: between second and third equations.</intertext>
+                    <mrow>X &amp; = Y + Z</mrow>
+                </md>
+            Second, a numbered equation in the intermediate group of equations.
+                <md>
+                    <mrow>A &amp; = B + C</mrow>
+                    <intertext>Intertext: between first and second equations.</intertext>
+                    <mrow number="yes">P &amp; = Q + R</mrow>
+                    <intertext>Intertext: between second and third equations.</intertext>
+                    <mrow>X &amp; = Y + Z</mrow>
+                </md>
+            Third, a numbered equation in the final group of equations.
+                <md>
+                    <mrow>A &amp; = B + C</mrow>
+                    <intertext>Intertext: between first and second equations.</intertext>
+                    <mrow>P &amp; = Q + R</mrow>
+                    <intertext>Intertext: between second and third equations.</intertext>
+                    <mrow number="yes">X &amp; = Y + Z</mrow>
+                </md>
+            Fourth, no numbered equations at all.
+                <md>
+                    <mrow>A &amp; = B + C</mrow>
+                    <intertext>Intertext: between first and second equations.</intertext>
+                    <mrow>P &amp; = Q + R</mrow>
+                    <intertext>Intertext: between second and third equations.</intertext>
+                    <mrow>X &amp; = Y + Z</mrow>
+                </md>
+            </p>
+
+                <p>This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <md>z+y = z</md>.  <md>a + b = c</md>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
             </subsection>
 
             <subsection>
@@ -2227,7 +2264,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>If you would like to enhance your mathematics by using a macro from a <latex/> package <em>and</em> there is a MathJax extension <em>which implements the same macro</em>, then you may use this with your mathematics as we demonstrate here.</p>
 
-                <p>This example is from Jason Underdown.<idx><h>Underdown, Jason</h></idx>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <me>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</me>.   Look at the source of this article to see the package name being supplied in a <tag>math-package</tag> element within the <tag>docinfo</tag> section.  That is the only setup required to make the macro usable in <latex/> and <init>HTML</init> output.<idx><h>canceling a term</h></idx><idx sortby="cancelto macro"><c>cancelto</c> macro</idx></p>
+                <p>This example is from Jason Underdown.<idx><h>Underdown, Jason</h></idx>  The package is named <c>cancel</c> and is included in the TeXLive distribution, so is fairly standard.  The particular macro being demonstrated is <c>\cancelto{}{}</c>.  <md>\lim_{b \rightarrow \infty}\left[\cancelto{0}{-\frac{1}{s}e^{-sb}} + \frac{1}{s}\right]</md>.   Look at the source of this article to see the package name being supplied in a <tag>math-package</tag> element within the <tag>docinfo</tag> section.  That is the only setup required to make the macro usable in <latex/> and <init>HTML</init> output.<idx><h>canceling a term</h></idx><idx sortby="cancelto macro"><c>cancelto</c> macro</idx></p>
 
                 <p>See the <pubtitle><pretext/> Guide</pubtitle> subsection about <q>MathJax Extensions</q> for more detail.</p>
             </subsection>
@@ -2249,57 +2286,74 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>\zeta(1)=\sum_{n=1}^{\infty}\frac{1}{n}\mathrel{\text{ &#x201c;}\mathord{=}{\text{&#x201d; }}}\prod_{p}\left(\frac{1}{1-1/p}\right)=\prod_{p}\left(\frac{1}{1-p^{-1}}\right)</mrow>
                 </md></p>
 
-                <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <c>xref</c> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
+                <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <tag>xref</tag> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
                     <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global"/></mrow>
                     <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" text="title"/></mrow>
                     <mrow>&amp;=F+G&amp;&amp;<xref ref="theorem-number-01" text="custom">A nice result</xref></mrow>
                 </md>.</p>
 
-                <p>Scott Beaver likes to write short chains of equalities all in one line, with the cross-references sitting on each equals sign.  Here we test the <latex/> <c>\overset</c> and <c>\underset</c> macros wrapping a <pretext/> <tag>xref</tag>, with and without content, inside an <tag>me</tag> element.  Note that  <c>\stackrel</c> is obsolete, and <c>\overunderset</c> is not yet supported by MathJax (but see <url href="https://github.com/mathjax/MathJax/issues/2704" visual="github.com/mathjax/MathJax/issues/2704">GitHub #2704</url>).  The mathematics is Scott's, the reasons are totally unrelated to the math.
-                    <me>AC-AD
+                <p>Scott Beaver likes to write short chains of equalities all in one line, with the cross-references sitting on each equals sign.  Here we test the <latex/> <c>\overset</c> and <c>\underset</c> macros wrapping a <pretext/> <tag>xref</tag>, with and without content, inside an <tag>md</tag> element.  Note that  <c>\stackrel</c> is obsolete, and <c>\overunderset</c> is not yet supported by MathJax (but see <url href="https://github.com/mathjax/MathJax/issues/2704" visual="github.com/mathjax/MathJax/issues/2704">GitHub #2704</url>).  The mathematics is Scott's, the reasons are totally unrelated to the math.
+                    <md>AC-AD
                         \overset{<xref ref="theorem-FTC" text="global"/>}{=}
                         A(C-D)
                         \underset{<xref ref="definition-indefinite-integral" text="global"/>}{=}
                         A0_{n\times p}
                         \overset{<xref ref="theorem-FTC" text="global">Thm.</xref>}{=}
                         0_{m\times p}
-                    </me>
+                    </md>
                 We suggest using cross-references that only display numbers (<tag>xref</tag> with <attr>text</attr> set to <c>global</c>) since if you stick to elements like <tag>theorem</tag>, <tag>lemma</tag>, <tag>definition</tag>, or <tag>axiom</tag>, then the numbers will be unambiguous and the target of the cross-reference will contain full information.  But note that if you mix in divisions, or perhaps figures, as reasons then there is a possibility that numbers will need to be qualified by their type.  We have provided an abbreviation for one cross-reference to <xref ref="theorem-FTC" text="type-global"/> (which will not benefit from automatic translation to other languages).
                 </p>
             </subsection>
 
             <subsection>
+                <title>Numbered Equations</title>
+
+                <p>There is flexible control for numbering displayed equations, largely provided by the <attr>number</attr> attribute on the <tag>md</tag> and <tag>mrow</tag> elements, taking values of <c>yes</c> or <c>no</c>.  First, a single displayed equation, with a number: <md number="yes">x^{2} + y^2 = z^2</md>.  Now several displayed equations, all numbered.<md number="yes">
+                    <mrow>x^{3} + y^{3} = z^{3}</mrow>
+                    <mrow>x^{4} + y^{4} = z^{4}</mrow>
+                    <mrow>x^{5} + y^{5} = z^{5}</mrow>
+                </md>.
+                Similar, but now the first equation's numbering is controlled by the global default value, the second is explicitly not numbered, and the third is explicitly numbered.<md>
+                    <mrow>x^{6} + y^{6} = z^{6}</mrow>
+                    <mrow number="no">x^{7} + y^{7} = z^{7}</mrow>
+                    <mrow number="yes">x^{8} + y^{8} = z^{8}</mrow>
+                </md>.  The global default numbering choice is set in <tag>docinfo</tag>.</p>
+            </subsection>
+
+            <subsection>
                 <title>Local Tags on Equations</title>
 
-                <p>If you are not writing a research monograph, maybe (a) you will not use many numbered equations, or do not like the looks of them, or feel they scare your readers, and (b) maybe your cross-references are always local-ish, like strictly within an <c>example</c> or a <c>proof</c>.  For this situation you can create, and employ, a <q>local</q> tag on a displayed equation.  Nothing enforces the idea of what constitutes local, and there is nothing to stop you from using the same symbols more than once.  With freedom comes responsibility.</p>
+                <p>If you are not writing a research monograph, maybe (a) you will not use many numbered equations, or do not like the looks of them, or feel they scare your readers, and (b) maybe your cross-references are always local-ish, like strictly within an <tag>example</tag> or a <tag>proof</tag>.  For this situation you can create, and employ, a <q>local</q> tag on a displayed equation.  Nothing enforces the idea of what constitutes local, and there is nothing to stop you from using the same symbols more than once.  With freedom comes responsibility.</p>
 
-                <p>Use the <c>@tag</c> attribute on an <c>mrow</c>, only.  (Remember, you can have just one <c>mrow</c>.)  The behavior is identical within an <c>md</c> or <c>mdn</c>.  The value of the <c>@tag</c> attribute is a symbol name.  The prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  So allowed values are<cd>
+                <p>Use the <attr>tag</attr> attribute on an <tag>mrow</tag>, or directly on a single-line <tag>md</tag> (one with no <tag>mrow</tag> children).  The value of the <attr>tag</attr> attribute is a symbol name.  The prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  So allowed values are<cd>
                     <cline>star, dstar, tstar</cline>
                     <cline>dagger, ddagger, tdagger</cline>
                     <cline>daggerdbl, ddaggerdbl, tdaggerdbl</cline>
                     <cline>hash, dhash, thash</cline>
                     <cline>maltese, dmaltese, tmaltese</cline>
-                </cd>Cross-references to these tagged equations happens in the usual way and should behave as expected.  We test the double versions to make sure the symbols render properly in various output formats.<mdn>
+                </cd>Cross-references to these tagged equations happens in the usual way and should behave as expected.  We test the double versions to make sure the symbols render properly in various output formats.<md number="yes">
                     <mrow xml:id="equation-local-star"      tag="dstar">c^2 \amp = a^2+b^2</mrow>
                     <mrow xml:id="equation-local-dagger"    tag="ddagger">c^2 \amp = a^2+b^2</mrow>
                     <mrow xml:id="equation-local-daggerdbl" tag="ddaggerdbl">c^2 \amp = a^2+b^2</mrow>
                     <mrow xml:id="equation-local-hash"      tag="dhash">c^2 \amp = a^2+b^2</mrow>
                     <mrow xml:id="equation-local-maltese"   tag="dmaltese">c^2 \amp = a^2+b^2</mrow>
                     <mrow>z^2 \amp = x^2+y^2</mrow>
-                </mdn>Here are the local cross-references: <xref ref="equation-local-star"/>, <xref ref="equation-local-dagger"/>, <xref ref="equation-local-daggerdbl"/>, <xref ref="equation-local-hash"/>, <xref ref="equation-local-maltese"/>.  We test another farther away in <xref ref="section-cross-referencing" text="type-global"/>, contrary to our advice above.</p>
+                </md>Here are the local cross-references: <xref ref="equation-local-star"/>, <xref ref="equation-local-dagger"/>, <xref ref="equation-local-daggerdbl"/>, <xref ref="equation-local-hash"/>, <xref ref="equation-local-maltese"/>.  We test another farther away in <xref ref="section-cross-referencing" text="type-global"/>, contrary to our advice above.</p>
+
+                <p>When there is nothing to align, the <attr>tag</attr> attribute may live directly on a single-line <tag>md</tag>: <md xml:id="equation-tag-on-md" tag="star">c^2 = a^2 + b^2</md>.  This is equivalent to placing the content in a single <tag>mrow</tag> child carrying the <attr>tag</attr>.  A cross-reference to this equation looks like <xref ref="equation-tag-on-md"/>.  Note that <attr>tag</attr> and <attr>number</attr> are mutually exclusive on a single-line <tag>md</tag>.</p>
             </subsection>
 
             <subsection xml:id="commutative-diagrams">
                 <title>Commutative Diagrams</title>
 
-                <p>This diagram is authored by Tom Judson using the syntax of the <init>AMS</init> <latex/> <q>CD</q> package.  Inside of a <tag>me</tag> element start with <c>\begin{CD}</c>.  Remember to escape the less-than character.
-                    <me>\begin{CD}
+                <p>This diagram is authored by Tom Judson using the syntax of the <init>AMS</init> <latex/> <q>CD</q> package.  Inside of a <tag>md</tag> element start with <c>\begin{CD}</c>.  Remember to escape the less-than character.
+                    <md>\begin{CD}
                     E[x]/\langle p(x) \rangle    @>\psi>>  F[x]/\langle q(x) \rangle\\
                     @VV{\sigma}V        @VV{\tau}V\\
                     E(\alpha)     @>\overline{\phi}>>  F(\beta)\\
                     @VVV        @VVV\\
                     E     @>\phi>>  F
-                    \end{CD}</me>
+                    \end{CD}</md>
                 While this package is not as flexible as some generic drawing packages, it has the advantage of full support by MathJax, and thus the <init>HTML</init> version will be more accessible.</p>
             </subsection>
 
@@ -2316,7 +2370,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>This section is about testing types and sizes of fonts, not so much about using different typefaces.  First, one long displayed equation, which is designed to be full-width for <latex/> output when using defaults as of 2020-01-29 (commit <c>defd4bffd462e7ea</c>).</p>
 
-                <p>Start paragraph.<me>a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2</me>End paragraph.</p>
+                <p>Start paragraph.<md>a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2 + a^2 + b^2</md>End paragraph.</p>
 
                 <p>The next paragraph has five ways to write the sine of <m>x</m>, bracketed by plain text versions.  This tests font size and the fonts employed.  The raw source of this paragraph is (spread over two lines)<cd>
                     <cline>sin x | &lt;m&gt;\sin x&lt;/m&gt; | &lt;m&gt;\text{sin}\ x&lt;/m&gt; | &lt;m&gt;\mathrm{sin}\ x&lt;/m&gt; |</cline>
@@ -2334,6 +2388,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Finally a simple paragraph that places a text <q>x</q> next to a variable <q>x</q>.</p>
 
                 <p>wordxx<m>x+x</m>xxword</p>
+
+            </subsection>
+
+            <subsection xml:id="subsection-special-characters-text-mode" label="subsection-special-characters-text-mode">
+                <title>Special Characters in Text Mode</title>
+
+                <p><latex/> designates ten characters as <term>special</term> because they carry syntactic meaning.  When these characters appear inside text-mode macros (such as <c>\text{}</c>) within mathematics, they must be escaped to produce their literal glyph.  Seven of the ten have simple single-character escapes and are demonstrated in the following table.  The remaining three (<c>~</c>, <c>^</c>, <c>\</c>) require macros from <latex/>'s <c>textcomp</c> package (<c>\textasciitilde</c>, <c>\textasciicircum</c>, <c>\textbackslash</c>) which are not available in MathJax's text mode as of 2026-04-03.</p>
+
+                <tabular halign="center">
+                    <row header="yes" bottom="major">
+                        <cell>Character</cell>
+                        <cell>Escaped form</cell>
+                        <cell>Rendered</cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Hash <c>#</c></cell>
+                        <cell><c>\#</c></cell>
+                        <cell><m>\text{5\#}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Ampersand <c>&amp;</c></cell>
+                        <cell><c>\&amp;</c></cell>
+                        <cell><m>\text{P \&amp; Q}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Percent <c>%</c></cell>
+                        <cell><c>\%</c></cell>
+                        <cell><m>\text{5\%}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Dollar <c>$</c></cell>
+                        <cell><c>\$</c></cell>
+                        <cell><m>\text{\$3}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Underscore <c>_</c></cell>
+                        <cell><c>\_</c></cell>
+                        <cell><m>\text{x\_1}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Left brace <c>{</c></cell>
+                        <cell><c>\{</c></cell>
+                        <cell><m>\text{\{a, b\}}</m></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Right brace <c>}</c></cell>
+                        <cell><c>\}</c></cell>
+                        <cell><m>\text{\{a, b\}}</m></cell>
+                    </row>
+                </tabular>
+
+                <p>The hash character also requires escaping within the <c>\tag{}</c> macro.  See <xref ref="equation-local-hash"/> for an example where the <c>tag="dhash"</c> attribute produces a double hash as an equation tag.</p>
 
             </subsection>
 
@@ -2366,7 +2472,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <objectives>
                 <title>Our goals</title>
-                <p>A minimal <tag>objective</tag>.</p>
+                <introduction>
+                    <p>A minimal <tag>objective</tag>.</p>
+                </introduction>
                 <ul>
                   <li>Stress test HTML themes</li>
                   <li>Locally, test objectives</li>
@@ -2493,27 +2601,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Axiom-like Blocks</title>
                 <axiom>
                     <title>A title</title>
-                    <p>A minimal <tag>axiom</tag>.</p>
+                    <statement><p>A minimal <tag>axiom</tag>.</p></statement>
                 </axiom>
                 <conjecture>
                     <title>A title</title>
-                    <p>A minimal <tag>conjecture</tag>.</p>
+                    <statement><p>A minimal <tag>conjecture</tag>.</p></statement>
                 </conjecture>
                 <principle>
                     <title>A title</title>
-                    <p>A minimal <tag>principle</tag>.</p>
+                    <statement><p>A minimal <tag>principle</tag>.</p></statement>
                 </principle>
                 <heuristic>
                     <title>A title</title>
-                    <p>A minimal <tag>heuristic</tag>.</p>
+                    <statement><p>A minimal <tag>heuristic</tag>.</p></statement>
                 </heuristic>
                 <hypothesis>
                     <title>A title</title>
-                    <p>A minimal <tag>hypothesis</tag>.</p>
+                    <statement><p>A minimal <tag>hypothesis</tag>.</p></statement>
                 </hypothesis>
                 <assumption>
                     <title>A title</title>
-                    <p>A minimal <tag>assumption</tag>.</p>
+                    <statement><p>A minimal <tag>assumption</tag>.</p></statement>
                 </assumption>
             </subsection>
 
@@ -2521,7 +2629,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Definition-like Blocks</title>
                 <definition>
                     <title>A title</title>
-                    <p>A minimal <tag>definition</tag>.</p>
+                    <statement><p>A minimal <tag>definition</tag>.</p></statement>
                 </definition>
             </subsection>
 
@@ -2582,19 +2690,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </investigation>
             </subsection>
 
-            <assemblage>
-                <p>A minimal <tag>assemblage</tag>.</p>
-            </assemblage>
+            <subsection>
+                <title>Miscellaneous Blocks</title>
+                <assemblage>
+                    <p>A minimal <tag>assemblage</tag>.</p>
+                </assemblage>
+                <aside>
+                    <title>A title</title>
+                    <p>A final <tag>aside</tag> to test behavior towards the end of a page. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </aside>
+            </subsection>
+
+            <outcomes>
+                <title>Our results</title>
+                <introduction>
+                    <p>A minimal <tag>outcome</tag>.</p>
+                </introduction>
+                <ul>
+                  <li>Stress test HTML themes</li>
+                  <li>Locally, test outcomes</li>
+                </ul>
+            </outcomes>
 
             <conclusion>
                 <title>Wrap-up</title>
                 <p>A minimal <tag>conclusion</tag>.</p>
             </conclusion>
-
-            <aside>
-                <title>A title</title>
-                <p>A final <tag>aside</tag> to test behavior at the end of a page. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            </aside>
         </section>
 
         <section xml:id="text-in-paragraphs" label="section-text-paragraphs">
@@ -2626,9 +2747,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <exercise>
                     <p>How was <c>&amp;amp;</c> authored?  Work it out, and then check the source here for the answer.</p>
                 </exercise>
+
+                <p>
+                    The next subsection should start on a new page in PDF output if the standard publisher file is used.
+                </p>
             </subsection>
 
-            <subsection>
+            <subsection xml:id="quotations">
                 <title>Quotations</title>
 
                 <p>The <tag>q</tag><idx><h>quotations</h></idx> tag will provide beginning and ending double quotations, while the <tag>sq</tag> tag will behave similarly but provide single quotes.  Given the complexity of quotations, the different symbols used in different languages, and the over-simplified versions provided on keyboards, it is necessary to use markup.</p>
@@ -2660,7 +2785,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>I must stand with anybody that stands right, and stand with him while he is right, and part with him when he goes wrong.<rq/></p>
 
-                <p>And as a tests, we try some crazy combinations of quotes, which would normally give <latex/> some trouble where the quotation marks are adjacent.<ul>
+                <p>And as a tests, we try some crazy combinations of quotes, which would normally give <latex/> some trouble where the quotation marks are adjacent.  View these examples in <init>PDF</init> output, with lots of magnification and note the spacing between the quotation marks.<ul>
                     <li><p><q>we use <sq>single quotes inside of double quotes</sq></q></p></li>
                     <li><p><sq><q>double quotes inside of single quotes</q> with more</sq></p></li>
                     <li><p><q><sq>single quotes tight inside of double quotes</sq></q></p></li>
@@ -2669,7 +2794,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><p>you would never do this, but a <sq><sq>pair of single quotes</sq></sq></p></li>
                 </ul></p>
 
-                <p><abbr>N.B.</abbr> We have taken no special care to protect against interactions of the actual quote characters (described above) in <latex/> with themselves, or with the grouping tags.</p>
+                <p>Quotation marks are different in different languages.  The following paragraphs contain short examples.</p>
+
+                <paragraphs xml:lang="en-US">
+                    <title>English (United States)</title>
+
+                    <p>Primary only: <q>Government of the people, by the people, for the people, shall not perish from the earth.</q> Primary and secondary: <q>I have a dream that one day this nation will rise up and live out the true meaning of its creed: <sq>We hold these truths to be self-evident, that all men are created equal.</sq></q> (Abraham Lincoln, Gettysburg Address; Martin Luther King Jr., I Have a Dream)</p>
+                </paragraphs>
+
+                <paragraphs xml:lang="fr-FR">
+                    <title>French (France)</title>
+
+                    <!-- “Freedom begins where ignorance ends.”                      -->
+                    <!--                                                             -->
+                    <!-- “She kept repeating to herself, ‘I have a lover! a lover!’  -->
+                    <!-- savoring the idea as if a new puberty had come upon her.”   -->
+
+                    <p>Primary only: <q>La liberté commence où l’ignorance finit.</q> Primary and secondary: <q>Elle se répétait : <sq>J’ai un amant ! un amant !</sq> se délectant à cette idée comme à celle d’une autre puberté qui lui serait survenue</q>. (Victor Hugo, Les Misérables; Gustave Flaubert, Madame Bovary)</p>
+                </paragraphs>
+
+                <paragraphs xml:lang="fr-CA">
+                    <title>French (Canada)</title>
+
+                    <!-- Same quotes as fr-FR; secondary marks differ:               -->
+                    <!-- fr-CA uses english-single (' ') for inner quotes,           -->
+                    <!-- fr-FR uses english-double (“ “) for inner quotes.           -->
+                    <!--                                                             -->
+                    <!-- “Freedom begins where ignorance ends.”                      -->
+                    <!--                                                             -->
+                    <!-- “She kept repeating to herself, ‘I have a lover! a lover!’  -->
+                    <!-- savoring the idea as if a new puberty had come upon her.”   -->
+
+                    <p>Primary only: <q>La liberté commence où l’ignorance finit.</q> Primary and secondary: <q>Elle se répétait : <sq>J’ai un amant ! un amant !</sq> se délectant à cette idée comme à celle d’une autre puberté qui lui serait survenue</q>. (Victor Hugo, Les Misérables; Gustave Flaubert, Madame Bovary)</p>
+                </paragraphs>
+
+                <paragraphs xml:lang="de-DE">
+                    <title>German (Germany)</title>
+
+                    <!-- “Gray, dear friend, is all theory, and green the golden    -->
+                    <!-- tree of life.” Mephistopheles to the Student.              -->
+                    <!-- Goethe, Faust, Part I (“Studierzimmer”), 1808.             -->
+                    <!--                                                            -->
+                    <!-- “’My Luise,’ he said to me, ‘has knocked me to the ground. -->
+                    <!-- My Luise will lift me up again.’”                          -->
+                    <!-- Wurm reports Miller’s words to Lady Milford.               -->
+                    <!-- Schiller, Kabale und Liebe, Act III, Scene 6, 1784.        -->
+
+                    <p>Primary only: <q>Grau, teurer Freund, ist alle Theorie, und grün des Lebens goldner Baum.</q> Primary and secondary: <q><sq>Meine Luise</sq>, sagte er mir, <sq>hat mich zu Boden geworfen. Meine Luise wird mich auch aufrichten.</sq></q> (Johann Wolfgang von Goethe, Faust I; Friedrich Schiller, Kabale und Liebe)</p>
+                </paragraphs>
+
             </subsection>
 
             <subsection>
@@ -3157,26 +3330,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><url href="http://example.com/">With no <attr>visual</attr> attribute</url>, so an edited one is formulated (no protocol)</li>
                 </ul></p>
 
-                <p>Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Normal text, monospace text, <tag>url</tag> with just <attr>href</attr>, <tag>url</tag> with <attr>href</attr> and <attr>visual</attr>, <tag>url</tag> with <attr>href</attr>, <attr>visual</attr> and content.  Notice how the various versions do, or do not, line-break in <latex/>/PDF output, including the (potentially confusing) use of a use of a hyphen in the normal text version</p>
+                <p>Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Normal text, monospace text, <tag>url</tag> with just <attr>href</attr>, <tag>url</tag> with <attr>href</attr> and <attr>visual</attr>, <tag>url</tag> with <attr>href</attr>, <attr>visual</attr> and content.  Notice how the various versions do, or do not, line-break in <latex/>/PDF output, including the (potentially confusing) use of a use of a hyphen in the normal text version.  Note that <c>#</c> starts a fragment identifier, so it is the penultimate character.  A <c>?</c> would normally start a query string, but as the fragment identifier, it is not special.  Finally, square brackets (<c>[</c> and <c>]</c>) are only legal in limited situations (authority component for IPv6 host literals), so they are present as percent-encoded literals, which really does not demonstrate anything.  All these efforts to make a comprehensive, but legal, <init>URL</init> are meant to appease the EPUB validator which will otherwise flag them as errors.</p>
 
                 <blockquote>
 
-                    <p>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</p>
+                    <p>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/%5B%5D@!$&amp;'()*+,;=#?</p>
 
-                    <p><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></p>
+                    <p><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/%5B%5D@!$&amp;'()*+,;=#?</c></p>
 
-                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="/></p>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?"/></p>
 
-                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="/></p>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?"/></p>
 
-                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=">Characters to a footnote</url></p>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?">Characters to a footnote</url></p>
 
                 </blockquote>
 
                 <p>Line-breaking in <latex/>/PDF output is specialized, using path separators (slashes) as candidates for splitting across lines: <url href="http://example.com/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/long/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer/longer"/></p>
 
                 <p>We are not fans of footnotes, they are totally unstructured.<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="">Carleson's Theorem</url></fn>
-                A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="/></fn>
+                A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/%5B%5D@!$&amp;'()*+,;=#?"/></fn>
                 This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite.
                 For good measure, we repeat the URL found in the first footnote<fn>And if you do provide a link like <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url> in a footnote you should see an  easy-to-read parenthetical version in some output formats, such as <c>en.wikipedia.org/wiki/Carleson%27s_theorem</c>.</fn>:
                 <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" visual="">Carleson's Theorem</url>.
@@ -3308,11 +3481,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>If you have existing images that are vector graphics, then PDF format works best for <latex/> output and SVG format works best for HTML.  The utility <c>pdf2svg</c> works well for converting PDF to SVG.  In this case, specify your source as a filename, but leave off the file extension, and the appropriate version will be used for the current output format.</p>
 
-                <p>The image below is provided from a PDF file in <latex/> output, and was converted to an SVG for use with the HTML output.  It has been explicitly scaled to a width of 65% of the text width.</p>
+                <p>The image below is provided from a PDF file in <latex/> output, and was converted to an SVG for use with the HTML output.  It has been explicitly scaled to a width of 65% of the text width.  It has a <tag>description</tag>, but no <tag>shortdescription</tag>, so is testing that scenario.</p>
 
                 <figure xml:id="figure-complete-graph">
                     <caption>Complete graph on <m>16</m> vertices, from <c>www.texample.net</c></caption>
-                    <image source="images/complete-graph" width="65%"/>
+                    <image source="images/complete-graph" width="65%">
+                        <description><p>A circular arrangment of <m>16</m> dots (<term>vertices</term>) with <m>120</m> straight lines (<term>edges</term>), joining every pair of dots.</p></description>
+                    </image>
                 </figure>
 
                 <remark>
@@ -3638,45 +3813,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                           <annotation ref="down-arrows"/>
                                           <annotation ref="top-down-arrow"/>
 
-                                          <annotation ref="tiling-row=0"
+                                          <annotation ref="tiling-row_0"
                                                       text="We begin with this Fibonacci tiling"/>
 
-                                          <annotation ref="tiling-row=1"
+                                          <annotation ref="tiling-row_1"
                                                       text="Our first Fibonacci tiling is obtained by deflating this second tiling">
-                                              <annotation ref="down-arrow-row=0"/>
+                                              <annotation ref="down-arrow-row_0"/>
                                           </annotation>
 
-                                          <annotation ref="tiling-row=2"
+                                          <annotation ref="tiling-row_2"
                                                       text="The second tiling is obtained by deflating this third tiling, so we see that there is an infinite hierarchy of tilings.">
-                                              <annotation ref="down-arrow-row=1"/>
+                                              <annotation ref="down-arrow-row_1"/>
                                           </annotation>
 
                                           <annotation ref="bottom-tilings"
                                                       text="Beginning with one tiling, the tiling above is uniquely determined.">
-                                              <annotation ref="tiling-row=0"
+                                              <annotation ref="tiling-row_0"
                                                           text="Consider this Fibonacci tiling."/>
-                                              <annotation ref="tiling-row=1"
+                                              <annotation ref="tiling-row_1"
                                                           text="By inverting the deflation rules, we can uniquely determine the tiling above."/>
                                           </annotation>
                                           <annotation ref="periodic-0"
                                                       text="Suppose that a Fibonacci tiling is periodic under a horizontal translation.">
-                                              <annotation ref="tiling-row=0"
+                                              <annotation ref="tiling-row_0"
                                                           text="For example, suppose this Fibonacci tiling is periodic."/>
-                                              <annotation ref="right-arrow-row=0"
+                                              <annotation ref="right-arrow-row_0"
                                                           text="And that this horizontal translation leaves the tiling unchanged."/>
                                           </annotation>
                                           <annotation ref="periodic-1"
                                                       text="Because the inflated tiling above is unique, it must also be periodic under the same translation.">
-                                              <annotation ref="tiling-row=1"
+                                              <annotation ref="tiling-row_1"
                                                           text="This Fibonacci tiling is also periodic."/>
-                                              <annotation ref="right-arrow-row=1"
+                                              <annotation ref="right-arrow-row_1"
                                                           text="The same horizontal translation leaves the tiling unchanged."/>
                                           </annotation>
                                           <annotation ref="periodic-2"
                                                       text="Consequently, every tiling in the hierarchy is periodic by this translation.  This is not possible, which means the original tiling cannot be periodic.">
-                                              <annotation ref="tiling-row=2"
+                                              <annotation ref="tiling-row_2"
                                                           text="The size of the tiles grows exponentially as we move up in the hierarchy."/>
-                                              <annotation ref="right-arrow-row=2"
+                                              <annotation ref="right-arrow-row_2"
                                                           text="Eventually the tiles are longer than the translation."/>
                                           </annotation>
                                       </annotation>
@@ -4086,6 +4261,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>Asymptote Lever Demonstration</caption>
                     <image xml:id="asymptote-lever">
                         <shortdescription>moments on a lever</shortdescription>
+                        <description>
+                            <p>This diagram has two masses at either end of a lever, namely <m>m</m> and <m>M</m>.  They are located at distance <m>x</m> and <m>X</m> on an axis.  The resulting center-of-mass is at a point <m>\bar{x}</m>.</p>
+                        </description>
                         <asymptote>
                         size(200,0);
 
@@ -4290,15 +4468,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p><url href="https://mermaid.js.org/" visual="mermaid.js.org">Mermaid</url> is a Markdown-inspired tool for authoring various kinds of diagrams. Below, three of the available diagram types are demonstrated. For a full listing of diagram types, see the <url href="https://mermaid.js.org/intro/#diagram-types">Mermaid Documentation</url>. The <url href="https://mermaid.live/" visual="mermaid.live">Mermaid live editor</url>is a great tool for testing the syntax of your mermaid diagrams.</p>
 
-                <p>In PreTeXt, you can specify a Mermaid theme using an entry in the publication file.</p>
+                <p>In PreTeXt, you can specify a Mermaid theme via the <attr>theme</attr> in the <c>common/mermaid/</c> publisher variable.</p>
+
+                <p>For HTML output, if you switch back-and-forth between light-mode and dark-mode, you will need to refresh the page to see the changes in the Mermaid diagrams.</p>
 
                 <figure xml:id="figure-mermaid-git">
                     <caption>Mermaid Git Diagram</caption>
-                    <image xml:id="mermaid-git-image">
+                    <image>
                         <shortdescription>
                             A git diagram in Mermaid
                         </shortdescription>
-                        <mermaid>
+                        <mermaid label="mermaid-git-image">
                             ---
                             title: Example Git diagram
                             ---
@@ -4319,11 +4499,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-mermaid-class">
                     <caption>Mermaid Class Diagram</caption>
-                    <image xml:id="mermaid-class-image">
+                    <image>
                         <shortdescription>
                             A class diagram in Mermaid
                         </shortdescription>
-                        <mermaid>
+                        <mermaid label="mermaid-class-image">
                         classDiagram
                             Animal &lt;|-- Duck
                             Animal &lt;-- Fish
@@ -4351,11 +4531,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-mermaid-sequence">
                     <caption>Mermaid Seuqnece Diagram</caption>
-                    <image xml:id="mermaid-sequence-image">
+                    <image>
                         <shortdescription>
                             A sequence diagram in Mermaid
                         </shortdescription>
-                        <mermaid>
+                        <mermaid label="mermaid-sequence-image">
                         sequenceDiagram
                             participant Alice
                             participant Bob
@@ -4370,13 +4550,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </mermaid>
                     </image>
                 </figure>
+
+                <p>Mermaid has two layout engines<mdash/>the default and <c>elk</c>. The ELK engine often does a better job with complex diagrams. You can specify it as a default by setting the publisher variable <tag
+                  >common/mermaid/@layout-engine</tag> to <c>"elk"</c>, or specify it in a single diagram by using standard Mermaid config frontmatter as shown in <xref ref="figure-mermaid-elk-layout"/> below.</p>
+
+                <figure xml:id="figure-mermaid-elk-layout">
+                    <caption>Mermaid Class Diagram using ELK layout engine</caption>
+                    <image>
+                        <mermaid label="mermaid-elk-layout"><![CDATA[
+                ---
+                config:
+                  layout: elk
+                ---
+                classDiagram
+                          OrderMethod <|-- Phone
+                          OrderMethod <|-- Online
+                          OrderMethod <|-- InStore
+                          PaymentMethod <|-- Cash
+                          PaymentMethod <|-- Account
+                          PaymentMethod <|-- Credit
+                          Phone <|-- CashPhone
+                          Phone <|-- AccountPhone
+                          Phone <|-- CreditPhone
+                          Online <|-- CashOnline
+                          Online <|-- AccountOnline
+                          Online <|-- CreditOnline
+                          InStore <|-- CashInStore
+                          InStore <|-- AccountInStore
+                          InStore <|-- CreditInStore
+                          Cash <|-- CashPhone
+                          Account <|-- AccountPhone
+                          Credit <|-- CreditPhone
+                          Cash <|-- CashOnline
+                          Account <|-- AccountOnline
+                          Credit <|-- CreditOnline
+                          Cash <|-- CashInStore
+                          Account <|-- AccountInStore
+                          Credit <|-- CreditInStore
+                        ]]>
+                        </mermaid>
+                    </image>
+                </figure>
+
             </subsection>
 
             <subsection>
                 <title>Sage Plots</title>
                 <idx><h>Sage plots</h></idx>
 
-                <p>Any of the numerous capabilities of Sage may be used to produce any graphics object, be it the simple graph of a single-variable function or some realization of a more complicated object.  All of the usual rules about formatting Sage code (esp. indentation) apply, along with one more caveat.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>pretext</c> script will isolate this last line, use it as the RHS of an assignment statement, and the Sage <c>.save()</c> method will be called to generate the image, which is either a Portable Document Format (PDF) file amenable to <latex/> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex/> output.  For complete documentation, see the <pretext/> Guide as this subsection is not comprehensive.</p>
+                <p>Any of the numerous capabilities of Sage may be used to produce any graphics object, be it the simple graph of a single-variable function or some realization of a more complicated object.  All of the usual rules about formatting Sage code (esp. indentation) apply, along with one more caveat.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>pretext</c> script will isolate this last line, use it as the RHS of an assignment statement, and the Sage <c>.save()</c> method will be called to generate the image, which is either a Portable Document Format (PDF) file amenable to <latex/> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  It is also possible to make a PNG image, which is necessary for an EPUB destined for a Kindle book.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex/> output.  For complete documentation, see the <pretext/> Guide as this subsection is not comprehensive.</p>
 
                 <figure xml:id="figure-sage-parabola">
                     <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
@@ -4466,7 +4688,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </figure>
                 </sidebyside>
 
-                <p>From the Sage documentation, with slight modifications, credited to Douglas Summers-Stay.  A plot of the implicity defined surface <me>2 = \cos(x + ty) + \cos(x - ty) + \cos(y + tz) + \cos(y - tz) + \cos(z - tx) + \cos(z + tx)</me> in rectangular <m>xyz</m> coordinates, with <m>t</m> equal to the golden ratio.  If you set <c>plot_points=100</c> in the Sage code, you will get a very smooth rendering, but also a quite large <init>HTML</init> file.  We have used <c>plot_points=50</c> to reduce the file size by a factor of four.  Note the need for a value of <c>3d</c> for the <attr>variant</attr> attribute, and an explicit aspect ratio with <attr>aspect</attr>.  Arrow keys, a mouse scroll wheel, plus grabbing with a left or a right mouse button, can be used to manipulate the image.</p>
+                <p>From the Sage documentation, with slight modifications, credited to Douglas Summers-Stay.  A plot of the implicity defined surface <md>2 = \cos(x + ty) + \cos(x - ty) + \cos(y + tz) + \cos(y - tz) + \cos(z - tx) + \cos(z + tx)</md> in rectangular <m>xyz</m> coordinates, with <m>t</m> equal to the golden ratio.  If you set <c>plot_points=100</c> in the Sage code, you will get a very smooth rendering, but also a quite large <init>HTML</init> file.  We have used <c>plot_points=50</c> to reduce the file size by a factor of four.  Note the need for a value of <c>3d</c> for the <attr>variant</attr> attribute, and an explicit aspect ratio with <attr>aspect</attr>.  Arrow keys, a mouse scroll wheel, plus grabbing with a left or a right mouse button, can be used to manipulate the image.</p>
 
                 <figure xml:id="figure-sage-implicit-surface">
                     <caption>A Sage implicitly defined 3D surface</caption>
@@ -4979,7 +5201,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                             <li><p>Inside inline math (too long for this line probably, 40 characters long): <m>\tan(<fillin fill="Mxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>)</m></p></li>
 
-                            <li><p>So use inside a displayed equation<me>16\log\space<fillin fill="1-x^2"/></me>like this one.</p></li>
+                            <li><p>So use inside a displayed equation<md>16\log\space<fillin fill="1-x^2"/></md>like this one.</p></li>
 
                             <li><p>Inside the second line of a multi-line display:<md>
                                 <mrow>y &amp;= x^7\,x^8</mrow>
@@ -4996,6 +5218,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <exercises xml:id="exercises-section-multiple">
                 <title>More Exercises</title>
+
+                <introduction>
+                    <p>
+                        This exercises section should start on a new page in PDF output if the standard publisher file is used.
+                    </p>
+                </introduction>
 
                 <exercise>
                     <statement>
@@ -5391,7 +5619,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <li>There is a binary operation, denoted <q><m>\cdot</m></q>.</li>
                             <li>The operation is associative.</li>
                             <li>There is an identity element, <m>e</m>.</li>
-                            <li><p>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <me>b\cdot c=c\cdot b = e</me>.</p></li>
+                            <li><p>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <md>b\cdot c=c\cdot b = e</md>.</p></li>
                         </ol></p>
                         <p>If these conditions are met for a set <m>G</m>, then we say <m>G</m> is a <term>group</term>.</p>
                     </statement>
@@ -5738,7 +5966,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </li>
                 </dl></p>
 
-                <p>Some presentations can be assisted by a hint from the author about the lengths of the titles.  You can choose to provide a <c>width</c> attribute on a <c>dl</c> element with possible values <c>narrow</c> and <c>medium</c>. The value refers (somewhat confusingly) to the distance between the left margin and the description.  The default is <c>medium</c>, which is illustrated above. Conversion to <latex/> ignores the attribute.  An example with <c>narrow</c>:
+                <p>Some presentations can be assisted by a hint from the author about the lengths of the titles.  You can choose to provide a <c>width</c> attribute on a <c>dl</c> element with possible values <c>narrow</c>, <c>medium</c>, and <c>wide</c>. The value refers (somewhat confusingly) to the distance between the left margin and the description.  The default is <c>medium</c>, which is illustrated above.  An example with <c>narrow</c>:
                 <dl width="narrow">
                     <li>
                         <title>Red</title>
@@ -5810,7 +6038,81 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <title><c>main()</c> is a void function</title>
                         <p>A <c>dl</c> with <c>width="narrow"</c> might be a useful way to give commentary on a program listing.</p>
                     </li>
-                </dl></p>
+                </dl>
+                And the same example with <c>wide</c>:
+                <dl width="wide">
+                    <li>
+                        <title>Red</title>
+                        <p>The color of the sun at sunset.</p>
+                    </li>
+                    <li>
+                        <title>Blue</title>
+                        <p>The color of a clear sky. Also a synonym for <q>depressed or sad</q>, the title of a 1971 Joni Mitchell album (and more than a dozen other musical albums), the period of Picasso's work between 1901 and 1904, and much more!</p>
+                    </li>
+                    <li>
+                        <title>Aqua</title>
+                        <p>The color of shallow tropical waters.<fn>On a sunny day! (Testing footnotes in description lists for <latex/> output.)</fn></p>
+                    </li>
+                    <li xml:id="description-list-math-title-wide">
+                        <title>Math <m>x^2</m></title>
+                        <!-- this is a candidate for a "plaintitle" but the schema limits -->
+                        <!-- the element to divisions, figures and named lists            -->
+                        <p>Sorry, not a color but testing titles with math in them.</p>
+                    </li>
+                    <li>
+                       <title><q>i</q> before <q>e</q> except after <q>c,</q> unless it sounds like <q>a</q> as in <q>neighbor</q> and <q>weigh</q></title>
+                        <p>Get feisty about that weird counterfeit rule: seize the day and don't have a heifer, man.</p>
+                       </li>
+                    <li>
+                        <title>Avocado</title>
+                        <p>Avocado is the the color with hex code <c>#568203</c>, and also the main ingredient in guacamole.</p>
+                     </li>
+                    <li>
+                        <title>Magenta</title>
+                        <p>Magenta is a color, and a character in Rocky Horror.</p>
+                     </li>
+                    <li>
+                        <title>Zymurgist</title>
+                        <p>A scientist who studies the chemical process of fermentation in brewing and distilling.  Also the alphabetically last 9-letter word in the English language.</p>
+                     </li>
+                    <li>
+                        <title>Byzantium</title>
+                        <p>Byzantium is the the color with hex code <c>#702963</c>, and also an ancient Greek city which later became known as Constantinople, and today is called Istanbul.</p>
+                     </li>
+                    <li>
+                        <title>Convection</title>
+                        <p>Circulating motion in a fluid.</p>
+                     </li>
+                    <li>
+                        <title>Elementary</title>
+                        <p>No literary detective ever said <q>Elementary my dear Watson.</q>  In particular, Sherlock Holmes never said that.</p>
+                     </li>
+                    <li>
+                        <title>Understand</title>
+                        <p>Perceive the intended meaning of.</p>
+                     </li>
+                    <li>
+                        <title>Washington</title>
+                        <p>A state, a district, the man on the US $1 bill and on the US quarter. Did you ever notice that on the US dime, the value is stated as <q>one dime</q>? But how is one to know that a dime is worth 10 cents?</p>
+                     </li>
+                    <li>
+                        <title>Aquamarine</title>
+                        <p>Aquamarine is a color, and a mineral.</p>
+                    </li>
+                    <li>
+                        <title>Those who cannot remember the past are condemned to repeat it.</title>
+                        <p>George Santayana wrote those words in 1905.  A similar aphorism is misattributed to Winston Churchill.  The idea is embodied in the 4th principle: <pretext/> respects the good design practices which have been developed over the past centuries.</p>
+                    </li>
+                    <li>
+                        <title><m>\displaystyle \zeta(s) = \sum_{n=1}^\infty n^{-s} </m></title>
+                        <p>The Riemann <m>\zeta</m>-function is defined by a Dirichlet series, valid for <m> \Re(s) > 1</m>.</p>
+                     </li>
+                    <li>
+                        <title><c>main()</c> is a void function</title>
+                        <p>A <c>dl</c> with <c>width="narrow"</c> might be a useful way to give commentary on a program listing.</p>
+                    </li>
+                </dl>
+                </p>
 
                 <p>You can nest description lists, though items might get crowded horizontally.  We expand our computer list a bit.
                 <dl>
@@ -6612,27 +6914,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </sidebyside>
             </figure>
 
-            <p>Tables are formed in <latex/> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex/>'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex/> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" type="text-global"/>, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.  So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars" text="type-global"/>.)</p>
+            <p>Tables are formed in <latex/> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex/>'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex/> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" type="text-global"/>, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  That section says more about making a comprehensive, yet legal, test <init>URL</init>.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.  So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars" text="type-global"/>.)</p>
 
             <table xml:id="table-latex-problems">
                 <title>Problematic Table Cells for <latex/></title>
                 <tabular halign="center" top="medium" left="medium" bottom="medium" right="medium">
                     <row>
                         <cell>1</cell>
-                        <cell halign="left"><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
-                        <cell><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
+                        <cell halign="left"><c>09az%-._~:/%5B%5D@!$&amp;'()*+,;=#?</c></cell>
+                        <cell><c>09az%-._~:/%5B%5D@!$&amp;'()*+,;=#?</c></cell>
                     </row>
 
                     <row>
                         <cell>2</cell>
-                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">e.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
-                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">e.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
+                        <cell halign="left"><url href="http://example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?">e.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?</url></cell>
+                        <cell><url href="http://example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?">e.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?</url></cell>
                     </row>
 
                     <row>
                         <cell>3</cell>
-                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="/></cell>
-                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=" visual="example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="/></cell>
+                        <cell halign="left"><url href="http://example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?"/></cell>
+                        <cell><url href="http://example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?" visual="example.com/09az%58-._~:/%5B%5D@!$&amp;'()*+,;=#?"/></cell>
                     </row>
                 </tabular>
             </table>
@@ -6869,6 +7171,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <cell>39,512,223</cell>
                         <cell>163,696</cell>
                         <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
+                <title>Test of vertical header orientation and padding with borders</title>
+                <tabular row-headers="yes"
+                        halign="center"
+                        valign="middle"
+                        right="minor"
+                        bottom="minor">
+                    <col halign="left"
+                        right="major"/>
+                    <col/>
+                    <col/>
+                    <col/>
+                    <col/>
+                    <col/>
+                    <col/>
+                    <row header="vertical"
+                        bottom="major"
+                        halign="left">
+                        <cell right="minor"
+                            bottom="minor"></cell>
+                        <cell>0 <em>(MTH111)</em></cell>
+                        <cell>1 <em>(MTH112)</em></cell>
+                        <cell>2 <em>(CS160)</em></cell>
+                        <cell>3 <em>(CS161)</em></cell>
+                        <cell>4 <em>(CS162)</em></cell>
+                        <cell>5 <em>(CS205)</em></cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>0 <em>(MTH111)</em></cell>
+                        <cell>0</cell>
+                        <cell>1</cell>
+                        <cell>0</cell>
+                        <cell>1</cell>
+                        <cell>0</cell>
+                        <cell>0</cell>
                     </row>
                 </tabular>
             </table>
@@ -8308,7 +8649,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </sbsgroup>
                         <instructions>
                             <title>Flipping Woody</title>
-                            <p>Parameters <m>a</m>, <m>b</m>, <m>d</m>, and <m>e</m>, form a <m>2\times 2</m> matrix <m>A</m>, while <m>c</m> and <m>f</m> form a vector <m>\vec{b}</m>.  The two views of Woody shows the effect of the mapping <me>\vec{x}\mapsto A\vec{x} + \vec{b}</me>.</p>
+                            <p>Parameters <m>a</m>, <m>b</m>, <m>d</m>, and <m>e</m>, form a <m>2\times 2</m> matrix <m>A</m>, while <m>c</m> and <m>f</m> form a vector <m>\vec{b}</m>.  The two views of Woody shows the effect of the mapping <md>\vec{x}\mapsto A\vec{x} + \vec{b}</md>.</p>
                         </instructions>
                     </interactive>
                 </figure>
@@ -8343,6 +8684,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </figure>
 
+                <p>This next interactive uses ECMAScript module based code. That will not function unless the <element>script</element>'s <attr>type</attr> is set to <c>module</c> in the HTML output. So let's set it here and pass it through. It also generates its own HTML elements, so we hopefully don't get a default empty div.</p>
+
+                <figure>
+                    <caption>A simple JS module test</caption>
+                    <interactive xml:id="interactive-js-module" aspect="6:1" platform="javascript" label="js-module-test">
+                        <script type="module">
+                            import cytoscape from "https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.33.1/cytoscape.esm.min.mjs";
+                            const cyEl = document.createElement('div');
+                            cyEl.style.width = '600px';
+                            cyEl.style.height = '100px';
+                            document.body.appendChild(cyEl);
+                            const cy = cytoscape({
+                                container: cyEl,
+                                elements: {
+                                    nodes: [ 'a', 'b' ].map(id => ({ data: { id } })),
+                                    edges: [
+                                        {
+                                            data: { id: 'ab', source: 'a', target: 'b' }
+                                        }
+                                    ]
+                                },
+                                style: [
+                                    {
+                                        selector: 'node',
+                                        style: {
+                                            'label': 'data(id)'
+                                        }
+                                    }
+                                ]
+                            });
+                        </script>
+                    </interactive>
+            </figure>
+
             </subsection>
 
             <subsection>
@@ -8367,15 +8742,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Similar, but different, this demonstration of a graph layout uses Version 4 of the library.  Technical notes:<ul>
                     <li>We have changed the size of the nodes, and their number, to fit in a smaller space.</li>
-                    <li>The Javascript script uses introspection to size itself, which would be a good general practice.</li>
+                    <li>The Javascript script uses introspection to size itself, which would be a good general practice. (Though it does not resize itself on window resize, only initial load.) The <tag>interactive</tag> also has the <attr>resize-behavior</attr> attribute set to <c>responsive</c>. </li>
                 </ul></p>
 
                 <p>This is adapted from a <url href="https://bl.ocks.org/shimizu/e6209de87cdddde38dadbb746feaf3a3" visual="bl.ocks.org/shimizu/e6209de87cdddde38dadbb746feaf3a3">block</url> by <url href="https://bl.ocks.org/shimizu" visual="bl.ocks.org/shimizu">shimizu</url> with a <init>GPL</init> license.</p>
 
                 <figure>
                     <caption>Graph Layout</caption>
-                    <interactive xml:id="interactive-d3-graph-layout" platform="d3" version="4" width="60%" aspect="1:1" source="code/d3/graph-layout.js" preview="preview/graph-layout-preview.png">
-                        <slate xml:id="d3-graph-layout" surface="div" aspect="1:1"/>
+                    <interactive xml:id="interactive-d3-graph-layout" platform="d3" version="4" width="60%" aspect="1:1" source="code/d3/graph-layout.js" resize-behavior="responsive" preview="preview/graph-layout-preview.png">
+                        <slate xml:id="d3-graph-layout" aspect="1:1" surface="div"/>
                         <instructions>
                             <p>Drag a vertex to a new location to see the graph adjust its layout.</p>
                         </instructions>
@@ -8406,12 +8781,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li>We have adjusted the margins in an attempt to keep names visible on the right side, but without giving up too much space.</li>
                     <li>We have adjust the repelling force, and the collision buffer, to better fit the available space.</li>
                     <li>This example required its own <init>CSS</init>, which we have included as part of the <tag>interactive</tag>.</li>
+                    <li>The <attr>aspect</attr> ratio of the <tag>interactive</tag> is set to slightly taller than that of the <tag>slate</tag> it contains. This accounts for the fact that the contents generated by the js/css in the slate occupy slightly too much vertical real estate.</li>
                     <li>The data collected from the Twitter analysis is contained in a <init>JSON</init> file, <c>mention_network.json</c>, and where the script loads that file, it has a hardcoded path.  So this example is a bit brittle, should that file move.</li>
                 </ul></p>
 
                 <figure>
                     <caption>Tweet mentions within the Welsh Assembly</caption>
-                    <interactive xml:id="interactive-d3-welsh" platform="d3" version="4" width="100%" aspect="1:2" source="code/d3/welsh.js" css="code/d3/welsh.css" preview="preview/welsh-assembly-preview.png">
+                    <interactive xml:id="interactive-d3-welsh" platform="d3" version="4" width="100%" aspect="1:2.05" source="code/d3/welsh.js" css="code/d3/welsh.css" preview="preview/welsh-assembly-preview.png">
                         <slate xml:id="d3-welsh" surface="div" aspect="1:2"/>
                         <instructions>
                             <p>Hover on the name of an Assembly Member to concentrate on their tweet mentions.</p>
@@ -8573,6 +8949,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </sidebyside>
 
+                <p>A test where the JSXGraph code indicates it needs MathJax to render.</p>
+
+                <figure xml:id="interactive-jsx-arc-graph">
+                    <interactive platform="jsxgraph" source="code/jsxgraph/interactive-jsx-arc-graph.js" width="60%">
+                        <slate xml:id="interactive-jsx-arc-graph_fig" surface="jsxboard"/>
+                        <instructions>
+                            <p>Change the values of <m>a</m> and <m>b</m> to see how the slope of the line changes.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
                 <p>Finally, a piecewise function you can control, with traces of the domain values and range values in two other JSXGraph boards.  Boards and <init>HTML</init> buttons have been laid out using the <c>sidebyside</c> layout element.</p>
 
                 <figure xml:id="figure-piecewise">
@@ -8710,6 +9097,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>Numerical integrals using the midpoint rule</caption>
 
                     <interactive dark-mode-enabled="yes" xml:id="interactive-numerical-integral" platform="sage" width="100%" aspect="4:5">
+                        <shortdescription>An interactive for numerical integration</shortdescription>
+                        <description>
+                            <p>An interactive element with a slider allowing the value of <m>m</m> for the number of rectangles, the function <m>f</m>, and start and stop values for the interval of integration. There is an image showing the graph of <m>f</m> on the interval along with <m>m</m> rectangles of equal base width along the interval of integration. The height of each rectangle is determined by the value of <m>f</m> at the midpoint of the base of the rectangle. Above the image, the numerical value of the integral reported by SageMath is provided as well as the sum of the areas of the rectangles as the midpoint estimate.
+                            </p>
+                        </description>
                         <!-- Changes: gave 3 input boxes widths -->
                         <!-- Changes: Escaped \ inside LaTeX -->
                         <!-- Changes: Added figsize=5 to show -->
@@ -8754,6 +9146,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </ol></p>
 
                 <p>Then mimic the examples that follow, using GeoGebra API commands documented at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>, but do not include the <c>ggbApplet.</c> or <c>applet.</c> used in examples to prefix the functions<mdash/>that part of the code will be provided automatically by <pretext/>.</p>
+
+                <p>There are some optional control elements that Geogebra provides, such as the presence of the toolbar and the reset button. These can be controlled by adding the following additional attributes to the <c>slate</c> and are automatically included in the initialization for the Geogebra applet.
+                    <ul>
+                        <li><p><c>toolbar="yes"</c>: add the Geogebra toolbar above the material</p></li>
+                        <li><p><c>algebra-input="yes"</c>: add an entry box below the material to add graphical objects using algebra formulas or Geogebra graphical commands</p></li>
+                        <li><p><c>reset-icon="yes"</c>: enable the reset icon</p></li>
+                        <li><p><c>shift-drag-zoom="yes"</c>: enable ability to drag and zoom the viewing context</p></li>
+                        <li><p><c>zoom-buttons="yes"</c>: enable buttons that control zoom</p></li>
+                    </ul>
+                </p>
 
                 <p>Jack Green created an applet on the Classroom Resources site with ID <c>D4s2v4ft</c>, which you may view at <url href="https://www.geogebra.org/m/D4s2v4ft" visual="www.geogebra.org/m/D4s2v4ft"/>. Suppose you would like to use this in your project, but change something about it. We will change something trivial, making the <m>y</m>-axis ticks be separated <m>5</m> apart instead of <m>10</m> apart. We also decide we want a different aspect ratio and overall width. One gotcha: the original applet is loaded and then <pretext/> uses <attr>width</attr> and <attr>aspect</attr> attributes to resize the viewing window using the top left corner as an anchor. This does not rescale axes and that may leave you with important elements missing from the viewing window. So here we reset the viewing window to return to values that are in the original. Lastly, we disable zooming, which is not helpful for this applet. To do each of these things, we rely on the GeoGebra API manual at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API" visual="wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">Geogebra API Manual</url>. It is important to use one command per line.</p>
 
@@ -9019,7 +9421,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-threejs-catenoid-surface">
                     <caption><c>threejs</c> catenoid surface, from <m>n</m>-Category Cafe</caption>
-                    <interactive xml:id="interactive-threejs-catenoid-surface" platform="javascript" width="75%" aspect="2:1" source="https://cdn.rawgit.com/mrdoob/three.js/r80/build/three.min.js https://cdn.rawgit.com/mrdoob/three.js/r80/examples/js/controls/OrbitControls.js code/threejs/catenoid.js">
+                    <interactive xml:id="interactive-threejs-catenoid-surface" platform="javascript" width="80%" resize-behavior="responsive" aspect="2:1" source="https://cdn.rawgit.com/mrdoob/three.js/r80/build/three.min.js https://cdn.rawgit.com/mrdoob/three.js/r80/examples/js/controls/OrbitControls.js code/threejs/catenoid.js">
                         <slate xml:id="threejs-catenoid-surface" surface="div" aspect="2:1"/>
                     </interactive>
                 </figure>
@@ -9028,7 +9430,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-threejs-saddle">
                     <caption><c>threejs</c> saddle by Sage</caption>
-                    <interactive xml:id="interactive-threejs-saddle" platform="javascript" width="85%" aspect="1:1" source="https://cdn.jsdelivr.net/gh/sagemath/threejs-sage@r122/build/three.min.js code/threejs/saddle.js">
+                    <interactive xml:id="interactive-threejs-saddle" platform="javascript" resize-behavior="responsive" design-width="1000" aspect="1:1" source="https://cdn.jsdelivr.net/gh/sagemath/threejs-sage@r122/build/three.min.js code/threejs/saddle.js">
                         <slate xml:id="threejs-saddle" surface="div" aspect="1:1"/>
                     </interactive>
                 </figure>
@@ -9063,7 +9465,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <caption>DoenetML example</caption>
                     <!-- 2024-04-25: This exact interactive appears in the sample book, for testing on Runestone. -->
                     <!-- A @label is preferred, since it is required for use on Runestone -->
-                    <interactive label="interactive-doenetml-example" platform="doenetml" width="100%" aspect="3:2">
+                    <interactive label="interactive-doenetml-example" platform="doenetml" aspect="3:2">
                         <slate surface="doenetml">
                             <![CDATA[
                             <p>
@@ -9143,8 +9545,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </section>
 
         <section xml:id="section-interactive-server" label="section-interactive-server">
-            <title>Interactive Elements, Server</title>
+            <title>Interactive Elements, Server &amp; Layouts</title>
             <idx><h>interactive elements</h><h>server</h></idx>
+            <idx><h>interactive elements</h><h>layout</h></idx>
             <idx><h>embedded interactive elements</h><h>server</h></idx>
 
             <introduction>
@@ -9165,7 +9568,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Once you find a material that looks instructive, it will be at a <init>URL</init> such as<cd>https://www.geogebra.org/m/KGn2d4Qd</cd> and you want to pick off the identifier on the end, in this case <c>KGn2d4Qd</c>.  Then author<cd>&lt;interactive geogebra="KGn2d4Qd" /&gt;</cd>  At this writing (2018-02-04) you will want to place this inside a <c>figure</c>, with a caption, as we do right now with material <c>KGn2d4Qd</c>.</p>
 
-                <p>The shape of the material will be fixed, so guess (or measure with an on-screen ruler), the aspect ratio and use that in the <tag>interactive</tag> element. If the width of the original material is anything other than 800 pixels, you should add <attr>material-width</attr> with the actual material width (units are pixels).</p>
+                <p>The shape of the material will be fixed, so determine the dimensions (measure with an on-screen ruler or inspect the underlying definition). Use <attr>material-width</attr> and <attr>material-height</attr> with the actual material width and height (units are pixels). These are treated by Geogebra as internal coordinate dimensions and are separate from the physical layout dimensions that appear in your text. In the absence of these attributes, default values are 800 pixels for the width and a height based on the provied aspect ratio.</p>
 
                 <figure>
                     <caption>Right Triangle Paradox</caption>
@@ -9178,6 +9581,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><p><c>algebra-input="yes"</c>: add an entry box below the material to add graphical objects using algebra formulas or Geogebra graphical commands</p></li>
                     <li><p><c>reset-icon="yes"</c>: enable the reset icon</p></li>
                     <li><p><c>shift-drag-zoom="yes"</c>: enable ability to drag and zoom the viewing context</p></li>
+                    <li><p><c>zoom-buttons="yes"</c>: enable buttons that control zoom</p></li>
                 </ul>
                 </p>
 
@@ -9244,7 +9648,65 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="map-california">
                     <caption>California.</caption>
-                    <interactive xml:id="interactive-map-california" iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" width="95%" aspect="15:10"/>
+                    <interactive xml:id="interactive-map-california" iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" aspect="15:10"/>
+                </figure>
+            </subsection>
+
+            <subsection xml:id="layout-interactives">
+                <title>Layout of Interactives</title>
+
+                <p>In HTML, interactives are rendered in iframes, which can offer some layout challenges. The PreTeXt page has no direct control over the layout within the interactive. All it does is provide a fixed sized frame in which the interactive content can display itself. The <attr>width</attr> (a percentage) and <attr>aspect</attr> (a width:height ratio like <c>2.1:1</c> OR a number like <c>1.5</c>) attributes on the interactive are the main tools to specify the dimensions. Below are three renderings of the same Google map using different widths/heights.</p>
+
+                <interactive xml:id="interactive-layout-map-wide" iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" aspect="15:10"/>
+
+                <interactive xml:id="interactive-layout-map-medium" iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" aspect="15:10" width="50%"/>
+
+                <interactive xml:id="interactive-layout-map-tall" iframe="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6512739.689202133!2d-124.5931848890628!3d37.151542068971864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornie%2C%20%C3%89tats-Unis!5e0!3m2!1sfr!2sca!4v1682454368296!5m2!1sfr!2sca" aspect="0.5" width="50%"/>
+
+                <p>If you know a particular interactive is designed to display at a particular pixel size, you can can specify a <attr>design-width</attr> like <c>300</c> to force exactly that width. Combine that with <attr>aspect</attr> to also force the height. The example below forces a size of 300x450.</p>
+
+                <figure>
+                    <caption>Graph of <m>ln(x^2+5)-3</m></caption>
+                    <interactive xml:id="interactive-layout-desmos" desmos="ttox1bvxku" design-width="300" aspect="300:450"/>
+                </figure>
+
+                <p>What happens if there is not enough space to display the requested frame? That depends on the <attr>resize-behavior</attr> applied to the interactive. The default is <c>fixed-height</c>. In this case, the interactive's height will not change if the window becomes too small to display the full width of the interactive. Instead a horizontal scroll bar will appear. This can be seen in many of the samples in <xref ref="section-interactive-authored" text="type-global"/> and this CircuitJS sample:</p>
+
+                <figure>
+                    <caption>CircuitJS with <c>resize-behavior="fixed-height"</c></caption>
+
+                    <interactive xml:id="interactive-layout-circuitjs-small" circuitjs="$ 1 0.000005 10.20027730826997 58 5 50 5e-11%0AR 464 32 464 -16 0 0 40 3.3 0 0 0.5%0Ag 464 224 464 240 0 0%0As 464 32 464 128 0 0 false%0As 464 128 464 224 0 1 false%0Ax 274 181 431 184 4 12 bottom\sswitch\s(to\sground)%0Ax 312 85 426 88 4 12 top\sswitch\s(to\sVdd)%0AO 464 128 544 128 1 0%0Ax 532 110 593 113 4 12 output\spin" width="90%" aspect="4:3" resize-behavior="fixed-height"/>
+                </figure>
+
+                <p>The other option for <attr>resize-behavior</attr> is <c>responsive</c>. In this case, the interactive's aspect ratio will be maintained. If the width gets smaller, so will the height. This can be seen in the version below.</p>
+
+                <figure>
+                    <caption>CircuitJS with <c>resize-behavior="responsive"</c></caption>
+
+                    <interactive xml:id="interactive-layout-circuitjs-big" circuitjs="$ 1 0.000005 10.20027730826997 58 5 50 5e-11%0AR 464 32 464 -16 0 0 40 3.3 0 0 0.5%0Ag 464 224 464 240 0 0%0As 464 32 464 128 0 0 false%0As 464 128 464 224 0 1 false%0Ax 274 181 431 184 4 12 bottom\sswitch\s(to\sground)%0Ax 312 85 426 88 4 12 top\sswitch\s(to\sVdd)%0AO 464 128 544 128 1 0%0Ax 532 110 593 113 4 12 output\spin" width="90%" aspect="4:3" resize-behavior="responsive"/>
+                </figure>
+
+                <p>The best behavior will be determined by the contents of the interactive. If the interactive knows how to dynamically size itself, <c>responsive</c> is likely the better option. If the interactive assumes that there is a certain amount of space and the contents will never resize themselves, <c>fixed-height</c> will likely work better.</p>
+
+                <p>In addition to specifying the resize-behavior in a particular interactive, you can apply a document level default value in your pub file. You can also specify a different default for a specific types of interactive. See the PreTeXt guide for documentation, or the <c>publication.xml</c> file of this Sample Article for an example of configuring defaults.</p>
+
+                <p>The code that generates content needs to make sure it does not overflow the available space or you will get scroll bars. Common culprits are <tag>canvas</tag> or <tag>svg</tag> elements that are not displayed as blocks or little bits of whitespace.</p>
+
+                <p>If an interactive wants to request a change to the amount of vertical space available to it, it can pass a message to the PreTeXt page asking for a <c>lti.frameResize</c>. (It is also possible to request a different amount of horizontal space, but doing so is not guaranteed to work and is much more likely to result in breaking the overall page layout.) The simple demo below uses that process to allow for resizing. A resize request should trump the original aspect ratio.</p>
+
+                <figure>
+                    <caption>Growable interactive fixed-height</caption>
+                    <interactive xml:id="interactive-layout-grow-one" platform="javascript" width="80%" aspect="2:1" source="code/splice/splice-resize.js" resize-behavior="fixed-height"/>
+                </figure>
+
+                <figure>
+                    <caption>Growable interactive responsive with % width</caption>
+                    <interactive xml:id="interactive-layout-grow-two" platform="javascript" width="80%" aspect="2:1" source="code/splice/splice-resize.js" resize-behavior="responsive"/>
+                </figure>
+
+                <figure>
+                    <caption>Growable interactive responsive and design-width</caption>
+                    <interactive xml:id="interactive-layout-grow-three" platform="javascript" design-width="480" aspect="2:1" source="code/splice/splice-resize.js" resize-behavior="responsive"/>
                 </figure>
             </subsection>
         </section>
@@ -9352,7 +9814,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p>Click the heels of your ruby slippers together three times.</p>
                         </block>
                         <block order="5">
-                            <p>So we have the displayed equation: <me>n = 2m + 0</me>.</p>
+                            <p>So we have the displayed equation: <md>n = 2m + 0</md>.</p>
                             <p>This is a superfluous second paragraph in this block.</p>
                         </block>
                         <block order="4">
@@ -9653,19 +10115,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <solution>
                         <p>
                             Knowing the roots of a polynomial allows us to write down the formula of <m>f(x)</m> in factored form,
-                            <me>f(x) = A <eval obj="base_cubic"/></me>
+                            <md>f(x) = A <eval obj="base_cubic"/></md>
                             with an unknown scaling multiple <m>A</m>.
                         </p>
                         <p>
                             When we evaluate <m>f(x)</m> at <m>x=0</m> using this formula, we find
-                            <me>f(0) = <eval obj="base_yint"/>A</me>.
+                            <md>f(0) = <eval obj="base_yint"/>A</md>.
                             Since we also know <m>f(0)=<eval obj="y0"/></m>, we can write down the equation
-                            <me>A <eval obj="base_cubic"/> = <eval obj="y0"/></me>
+                            <md>A <eval obj="base_cubic"/> = <eval obj="y0"/></md>
                             and find that <m>A=<eval obj="A"/></m>.
                         </p>
                         <p>
                             Consequently, we can write our function in the form
-                            <me>f(x)=<eval obj="cubic"/></me>.
+                            <md>f(x)=<eval obj="cubic"/></md>.
                         </p>
                     </solution>
                     <setup seed="314159">
@@ -9715,7 +10177,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <title>Decompose the Function</title>
                     <statement>
                         <p>
-                        Consider the function <me>h(x)=<eval obj="composition"/></me>.
+                        Consider the function <md>h(x)=<eval obj="composition"/></md>.
                         Find two nontrivial functions <m>f(x)</m> and <m>g(x)</m> so that <m>h(x) = f(g(x))</m>.
                         </p>
                         <p>
@@ -10213,106 +10675,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </video>
 
             </subsection>
-        </section>
-
-        <section xml:id="section-veil-testing">
-            <title>Veil Element Testing</title>
-            
-            <p>The function <veil><m>f(t) = e^{-t}</m></veil> satisfies the differential equation <me>f'(t) = -f(t)</me>, which is characteristic of <veil>exponential</veil> decay.</p>
-
-            <p>This sentence contains a <veil>simple hidden phrase</veil> and continues normally.</p>
-
-            <p>Here is a veil wrapping <veil><em>emphasized hidden text</em></veil> within an emphasized span.</p>
-
-            <p>You can also hide <veil>inline math like <m>f(t) = e^{-t}</m></veil> without breaking the flow.</p>
-
-            <p>
-                Testing long text. Looks bad in print, but should be fine in HTML: 
-                <veil>
-                    This is a very long phrase that includes <em>emphasis</em>, 
-                    inline math <m>\int_0^1 x^2 dx = \frac{1}{3}</m>, and even a short sentence to see if line wrapping behaves properly.
-                </veil>
-            </p>
-
-            <p>
-                Testing long text inside <c>&lt;p&gt;</c> tags:
-                <veil>
-                    <p>
-                        This is a very long phrase that includes <em>emphasis</em>, 
-                        inline math <m>\int_0^1 x^2 dx = \frac{1}{3}</m>, and even a short sentence to see if line wrapping behaves properly.
-                    </p>
-                </veil>
-            </p>
-
-            <p>Multiple consecutive veils: <veil>first hidden</veil>, then some regular text, and <veil>second hidden part</veil>.</p>
-
-            <veil><me>h(x) = \int_0^x \sin(t)\ dt</me></veil>
-
-            <p>A veil at the <veil>end of the sentence</veil>.</p>
-
-            <p>A hidden external link: <veil><url href="https://pretextbook.org">PreTeXt website</url></veil> is a great resource.</p>
-
-            <p>The command is <veil><c>pip install pretext</c></veil>, which installs the toolkit.</p>
-
-            <p>Two quick reveals: <veil>first</veil>,<veil>second</veil>.</p>
-
-            <p>The derivative of <m>e^{kt}</m> is <veil><m>k\,e^{kt}</m></veil>.</p>
-
-            <p>The identity <m>\sin^2\theta + \cos^2\theta =</m> <veil><m>1</m></veil> is fundamental.</p>
-
-            <ul>
-                <li>The capital of France is <veil>Paris</veil>.</li>
-                <li><m>\int_0^1 x^2\,dx =</m> <veil><m>\tfrac{1}{3}</m></veil>.</li>
-            </ul>
-
-            <ol>
-                <li>Differentiate: <veil><m>\frac{d}{dx}\big(x^3\big)=3x^2</m></veil></li>
-                <li>Evaluate: <m>f(2) = </m> <veil><m>12</m></veil></li>
-            </ol>
-
-            <table>
-                <title>A tiny table with veiled entries</title>
-                <tabular>
-                    <row>
-                        <cell><em>Quantity</em></cell>
-                        <cell><em>Value</em></cell>
-                    </row>
-                    <row>
-                        <cell>Slope</cell>
-                        <cell><veil><m>\frac{\Delta y}{\Delta x}</m></veil></cell>
-                    </row>
-                    <row>
-                        <cell>Secret code</cell>
-                        <cell><veil><c>AX-42</c></veil></cell>
-                    </row>
-                </tabular>
-            </table>
-
-            <figure>
-                <caption>Just some <veil>cubic</veil> functions.</caption>
-                <image source="images/cubic-function.png" />
-            </figure>
-
-            <veil>
-                <p><term>Hint.</term> Use an integrating factor <m>\mu(x)=e^{\int p(x)\,dx}</m> to solve <m>y'+p(x)y=q(x)</m>.</p>
-            </veil>
-
-            <veil>
-                <me>\int_0^{2\pi}\sin(x)\,dx = 0</me>
-            </veil>
-
-            <theorem>
-                <title>Geometric Series</title>
-                <statement>
-                    For <m>|r| &lt; 1</m>, <m>\sum_{k=0}^{\infty} r^k =</m> <veil><m>\frac{1}{1-r}</m></veil>.
-                </statement>
-                <proof>
-                    <p><veil>Consider the partial sums <m>S_n = \sum_{k=0}^{n} r^k</m> and compute <m>(1-r)S_n</m>, then take <m>n\to\infty</m>.</veil></p>
-                </proof>
-            </theorem>
-
-            <p>The eigenvalues of <m>\begin{pmatrix}2 \amp 0\\0 \amp 3\end{pmatrix}</m> are <veil><m>2, 3</m></veil>.</p>
-
         </section>
 
         <!--
@@ -11001,7 +11363,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </proof>
             </algorithm>
 
-            <p>If you are writing about system-level software, you may need to write numbers in hexadecimal or binary.  Here we use a numbered, displayed equation (mathematics) and <latex/> macros such as <c>\texttt</c> for a monospace text font, and <c>\;</c> for spacing/grouping the bits of the binary number. <men>\texttt{6C2A}_{16} = \texttt{0110}\;\texttt{1100}\;\texttt{0010}\;\texttt{1010}_{2}</men>  If you use these constructions repeatedly, then some <latex/> macros might be useful.  It might also be beneficial for us to add some <pretext/> markup for such numbers used in a paragraph<mdash/>send us a feature request.</p>
+            <p>If you are writing about system-level software, you may need to write numbers in hexadecimal or binary.  Here we use a numbered, displayed equation (mathematics) and <latex/> macros such as <c>\texttt</c> for a monospace text font, and <c>\;</c> for spacing/grouping the bits of the binary number. <md number="yes">\texttt{6C2A}_{16} = \texttt{0110}\;\texttt{1100}\;\texttt{0010}\;\texttt{1010}_{2}</md>  If you use these constructions repeatedly, then some <latex/> macros might be useful.  It might also be beneficial for us to add some <pretext/> markup for such numbers used in a paragraph<mdash/>send us a feature request.</p>
 
             <theorem xml:id="theorem-detached">
                 <statement>
@@ -11013,6 +11375,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <proof ref="theorem-detached" text="type-global">
                 <p>This is a proof that is authored <q>detached.</q>  It is not associated with the theorem above in a way other than simply following it.<fn>Footnotes once behaved badly in a detached <tag>proof</tag>.</fn></p>
+
+                <p>Notice that this proof has a <attr>ref</attr> attribute that points to the theorem being proved.  In this way, the <tag>proof</tag> element doubles as an <tag>xref</tag>.  So the <attr>text</attr> attribute is also available to fashion how the cross-reference appears.  Options are basically the same as for <tag>xref</tag>, though some things are not possible, such as custom text.</p>
             </proof>
 
             <p>A specialized version of a program listing is an interactive command/response session at a command-line, where differing fonts are used to differentiate the system prompt, the user's commands, and the system's reaction.  A   <c>console</c> session may be used by itself inside a <c>sidebyside</c>, or it can be wrapped in a listing to get a number and a caption.  As elsewhere, you will need to escape ampersands and angle brackets (such as if you have a command using redirection), using <c>&amp;amp;</c>, <c>&amp;lt;</c>, and <c>&amp;gt;</c> in your source.</p>
@@ -11082,6 +11446,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Notice in the HTML version of the above example that when you highlight all, or a portion, of the listing for a cut-and-paste that the prompts are not included.</p>
 
+            <p>Now a test of some listings (and pre-formatted text) in a block that likely has a background color in an HTML version.</p>
+
+            <exercise>
+                <title>Code in a colored(?) container</title>
+                <statement>
+                <p>Not really much of an exercise, but it should force a colored box.</p>
+                <p>Running a program in a console:</p>
+                <console>
+                    <input>
+                    ./program
+                    </input>
+                </console>
+                <pre>
+                    A pre
+                </pre>
+                </statement>
+            </exercise>
+
             <p>The next listing is just absurdity, to check various characters from <latex/> that are otherwise employed by the code supporting consoles, and some Latin-1 characters.  We test each in a prompt, input, and output.  We use <c>(*</c> and <c>*)</c> as sequences used to escape embedded <latex/> commands, so we test those also.</p>
 
             <listing>
@@ -11112,6 +11494,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <output>Latin-1: ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß</output>
                 </console>
             </listing>
+
+            <p>A program can also have <tag>preamble</tag> and <tag>postamble</tag>. They are tested here mostly just for their handling of leading/trailing whitespace. Note that the indentation of the start/end tags for the subelements is intentionally chaotic, that should not affect the indentation of the output. (However, the actual contents of the various parts of the program must all be indented to a similar degree in the source.)</p>
+
+            <program language="python" line-numbers="yes">
+                <preamble>
+                    # meta: text in preamble with one trailing authored blank line
+                    def foo():
+                        return 42
+
+                      </preamble>
+
+                <code>
+
+                    # meta: text in code with one authored blank line before and after
+                    # meta: in the output there should be two blank lines above and three below
+                    # Your code for bar()
+
+                </code>
+                          <postamble>
+
+
+                    # meta: text in postamble with two authored blank lines preceding
+                    print(bar())</postamble>
+            </program>
+
+            <p>An interactive rendering of the same program should produce the same visible code. Both samples should end in a newline. There will be a visible difference between how this the empty line created by that newline rendered in plain HTML (the empty line is not included) and Runestone (the empty line is visible).</p>
+
+            <program language="python" line-numbers="yes" interactive="activecode">
+                <preamble>
+                    # meta: text in preamble with one trailing authored blank line
+                    def foo():
+                        return 42
+
+                      </preamble>
+
+                <code>
+
+                    # meta: text in code with one authored blank line before and after
+                    # meta: in the output there should be two blank lines above and three below
+                    # Your code for bar()
+
+                </code>
+                          <postamble>
+
+
+                    # meta: text in postamble with two authored blank lines preceding
+                    print(bar())</postamble>
+            </program>
 
             <p>We conclude this section with a longer example of a program listing, an assembly language program from Bob Plantz, included to test a <c>listing</c> breaking across pages in PDF output.</p>
 
@@ -12100,8 +12530,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </stack>
                     </sidebyside>
                 </figure>
+                <p>
+                    The next paragraphs should start on a new page in PDF output if the standard publisher file is used.
+                </p>
 
-                <paragraphs>
+                <paragraphs xml:id="sidebyside-bully-pulpit">
                     <title>Bully Pulpit</title>
 
                     <p>Remember that <tag>sidebyside</tag> has attributes that strongly influence layout.  That is intentional.  But to support a variety of output formats, it does not allow overly-precise control, and they be viewed as providing <em>hints</em> to an implementer of a conversion.  So for example, do not expect <tag>sidebyside</tag> to function like a <latex/> <c>tabular</c> or an <init>HTML</init> <c>table</c>.</p>
@@ -12571,6 +13004,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </sidebyside>
                 </sbsgroup>
 
+                <p>
+                    Now an <tag>sbsgroup</tag> that should start on a new page if this sample
+                    article is built to PDF using the distribution publisher file.
+                </p>
+
+                <sbsgroup xml:id="sbsgroup-pagebreak-test" width="20%">
+                    <sidebyside>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                    </sidebyside>
+                    <sidebyside>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                        <figure>
+                            <caption></caption>
+                            <image source="images/cross-rectangle.png"/>
+                        </figure>
+                    </sidebyside>
+                </sbsgroup>
+
                 <p>The following is a <tag>sbsgroup</tag> full of <q>operation</q> tables.  Once upon a time it was rather cramped vertically in HTML output, but Andrew Scholer improved the spacing at <url href="https://github.com/PreTeXtBook/pretext/pull/2387" visual="github.com/PreTeXtBook/pretext/pull/2387">GitHub #2387</url>.  The example is from Valerio Monti.</p>
 
                 <figure xml:id="tabelle_classi_di_resto">
@@ -12578,51 +13055,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <sbsgroup>
                         <sidebyside>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|c}
                                 + \amp \class[1]{0} \\
                                 \hline
                                 \class[1]{0} \amp \class[1]{0}
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|c}
                                 \cdot \amp \class[1]{0} \\
                                 \hline
                                 \class[1]{0} \amp \class[1]{0}
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                         </sidebyside>
 
                         <sidebyside>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|cc}
                                 + \amp \class[2]{0} \amp \class[2]{1} \\
                                 \hline
                                 \class[2]{0} \amp \class[2]{0} \amp \class[2]{1}\\
                                 \class[2]{1} \amp \class[2]{1} \amp \class[2]{0}
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|cc}
                                 \cdot \amp \class[2]{0} \amp \class[2]{1} \\
                                 \hline
                                 \class[2]{0} \amp \class[2]{0} \amp \class[2]{0}\\
                                 \class[2]{1} \amp \class[2]{0} \amp \class[2]{1}
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                         </sidebyside>
 
                         <sidebyside>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|ccc}
                                 + \amp \class[3]{0} \amp \class[3]{1} \amp \class[3]{2} \\
                                 \hline
@@ -12630,10 +13107,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 \class[3]{1} \amp \class[3]{1} \amp \class[3]{2} \amp \class[3]{0} \\
                                 \class[3]{2} \amp \class[3]{2} \amp \class[3]{0} \amp \class[3]{1} \\
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|ccc}
                                 \cdot \amp \class[3]{0} \amp \class[3]{1} \amp \class[3]{2} \\
                                 \hline
@@ -12641,13 +13118,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 \class[3]{1} \amp \class[3]{0} \amp \class[3]{1} \amp \class[3]{2} \\
                                 \class[3]{2} \amp \class[3]{0} \amp \class[3]{2} \amp \class[3]{1} \\
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                         </sidebyside>
 
                         <sidebyside>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|cccc}
                               + \amp \class[4]{0} \amp \class[4]{1} \amp \class[4]{2} \amp \class[4]{3} \\
                               \hline
@@ -12656,10 +13133,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                               \class[4]{2} \amp \class[4]{2} \amp \class[4]{3} \amp \class[4]{0} \amp \class[4]{1} \\
                               \class[4]{3} \amp \class[4]{3} \amp \class[4]{0} \amp \class[4]{1} \amp \class[4]{2} \\
                             \end{array}
-                            </me>
+                            </md>
                           </p>
                           <p>
-                            <me>
+                            <md>
                               \begin{array}{c|cccc}
                                 \cdot \amp \class[4]{0} \amp \class[4]{1} \amp \class[4]{2} \amp \class[4]{3} \\
                                 \hline
@@ -12668,7 +13145,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 \class[4]{2} \amp \class[4]{0} \amp \class[4]{2} \amp \class[4]{0} \amp \class[4]{2} \\
                                 \class[4]{3} \amp \class[4]{0} \amp \class[4]{3} \amp \class[4]{2} \amp \class[4]{1} \\
                               \end{array}
-                            </me>
+                            </md>
                           </p>
                         </sidebyside>
                     </sbsgroup>
@@ -12958,6 +13435,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </sidebyside>
             </figure>
 
+            <p>
+                Now let's test the alignment of various items that might be placed with an image in a figure. We want asymptote links and long descriptions close to the image. The caption for figures should be aligned.
+            </p>
+
+            <figure>
+                <caption>Two Asympote images side-by-side</caption>
+                <sidebyside margins="5%" widths="40% 45%">
+
+                <figure>
+                    <caption>Asymptote Lever Demonstration</caption>
+                    <image xml:id="asymptote-lever-sbs">
+                        <shortdescription>moments on a lever</shortdescription>
+                        <description>
+                            <p>This diagram has two masses at either end of a lever, namely <m>m</m> and <m>M</m>.  They are located at distance <m>x</m> and <m>X</m> on an axis.  The resulting center-of-mass is at a point <m>\bar{x}</m>.</p>
+                        </description>
+                        <asymptote>
+                            size(200,0);
+
+                            pair z0=(0,0);
+                            pair z1=(2,0);
+                            pair z2=(5,0);
+                            pair zf=z1+0.75*(z2-z1);
+
+                            draw(z1--z2);
+                            dot(z1,red+0.15cm);
+                            dot(z2,darkgreen+0.3cm);
+                            label("$m$",z1,1.2N,red);
+                            label("$M$",z2,1.5N,darkgreen);
+                            label("$\hat{\ }$",zf,0.2*S,fontsize(24pt)+blue);
+
+                            pair s=-0.2*I;
+                            draw("$x$",z0+s--z1+s,N,red,Arrows,Bars,PenMargins);
+
+                            s=-0.5*I;
+                            draw("$\bar{x}$",z0+s--zf+s,blue,Arrows,Bars,PenMargins);
+
+                            s=-0.95*I;
+                            draw("$X$",z0+s--z2+s,darkgreen,Arrows,Bars,PenMargins);
+                        </asymptote>
+                    </image>
+                </figure>
+
+                <figure>
+                    <caption>Asymptote Contour Plot</caption>
+                    <image xml:id="asymptote-contour-sbs">
+                        <asymptote>
+                            import graph;
+                            import palette;
+
+                            size(10cm,10cm,IgnoreAspect);
+
+                            real f(real x, real y) {
+                            return 0.9*pow10(2*sin(x/5+2*y^0.25)) + 0.1*(1+cos(10*log(y)));
+                            }
+
+                            scale(Linear,Log,Log);
+
+                            pen[] Palette=BWRainbow();
+
+                            bounds range=image(f,Automatic,(0,1),(100,100),nx=200,Palette);
+
+                            xaxis("$x$",BottomTop,LeftTicks,above=true);
+                            yaxis("$y$",LeftRight,RightTicks,above=true);
+
+                            palette("$f(x,y)$",range,(0,200),(100,250),Top,Palette,
+                            PaletteTicks(ptick=linewidth(0.5*linewidth())));
+                        </asymptote>
+                    </image>
+                </figure>
+                </sidebyside>
+            </figure>
+
             <p>Now we have some more interactive elements.</p>
 
             <sidebyside  margins="5%" widths="40% 45%">
@@ -13048,6 +13597,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         </section>
 
+        <section xml:id="literate-programming" label="literate-programming">
+            <title>Literate Programming</title>
+            <p>There is support for literate programming using the <tag>fragment</tag> tag. It should always contain an <attr>@xml:id</attr> or a <attr>@filename</attr> attribute, and may contain <tag>code</tag> segments as well as <tag>fragref</tag> segments referencing other fragments. The final code is to be assembled starting from a fragment with a filename attribute and traversing the tree of fragment references.</p>
+            <p>For example here is the gcd algorithm in Python. Note that indentation is hard to get right at the moment.</p>
+            <fragment filename="gcd.py">
+                <title>The GCD algorithm</title>
+                <code>
+                    def gcd(a, b):
+                        while(b):
+                </code>
+                <fragref ref="gcd-loop" />
+                <code>                        return a</code>
+            </fragment>
+            <p>The key part is the inner part of the loop:</p>
+            <fragment xml:id="gcd-loop">
+                <title>The key loop part</title>
+                <code>
+                            a, b = b, a % b
+                </code>
+            </fragment>
+            <p>This double assignment changes both a and b.</p>
+        </section>
         <section xml:id="atomic-items" label="section-atomic-items">
             <title>Atomic Objects</title>
 
@@ -13250,6 +13821,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <video xml:id="ups-promo-8" source="video/ups-visitor-guide-360" width="40%" preview="preview/ups-promo-preview.jpg"/>
 
                 <p>Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.</p>
+
+                <p>
+                    This next video should start on a new page if the distribution publication file
+                    is in use.
+                </p>
 
                 <video xml:id="pre-roll-countdown-8" youtube="Srmdij0CU1U" width="40%"/>
 
@@ -14481,6 +15057,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <list-of elements="theorem" scope="section"/>
             </subsection>
 
+            <subsection xml:id="subsection-list-of-definitions" label="subsection-list-of-definitions">
+                <title>Definitions in This Article</title>
+
+                <p>Here is a similar list, but for <c>definition</c> elements across the whole article.  This list also serves as a regression test.  <xref ref="prefigure-diagrams"/> contains a <prefigure/> diagram whose source uses a <c>definition</c> element of its own, in the <prefigure/> XML namespace.  An earlier version of <tag>list-of</tag> matched descendants by local name only, ignoring namespaces, and so would catch <prefigure/> definitions and then fail to produce numbers for them.  The list below correctly contains only the <pretext/> definitions.</p>
+
+                <list-of elements="definition" empty="no"/>
+            </subsection>
+
             <subsection xml:id="subsection-with-an-exercise">
                 <title>A Title with ] a Right Bracket</title>
 
@@ -14644,6 +15228,66 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </exercise>
         </section>
 
+        <exercises xml:id="stack-questions" label="section-stack">
+            <title>STACK Interactive Questions</title>
+            <idx>STACK</idx>
+
+            <introduction>
+                <p>These are interactive exercises provided by the <url href="https://stack-assessment.org/">STACK Assessment</url> system.  In HTML output you will need to ask for a <q>new</q> question to make each question render initially.</p>
+            </introduction>
+
+            <exercise>
+                <title>STACK integration question</title>
+
+                <introduction>
+                    <p>An introduction to a test question, providing context within the larger document.</p>
+                </introduction>
+
+                <stack label="stack-integration" source="stack/01_integration_with_feedback.xml"/>
+            </exercise>
+
+            <exercise>
+                <title>STACK multiple choice question</title>
+
+                <introduction>
+                    <p>This is a multiple choice question where multiple answers can (in principle) be correct.</p>
+                </introduction>
+
+                <stack label="stack-mcq" source="stack/Checkbox.xml"/>
+            </exercise>
+
+            <exercise>
+                <title>STACK matrix input question</title>
+
+                <introduction>
+                    <p>This is a question where the input is a matrix.</p>
+                </introduction>
+
+                <stack label="stack-matrix" source="stack/Matrix.xml"/>
+            </exercise>
+
+            <exercise>
+                <title>STACK question with generated plot</title>
+
+                <introduction>
+                    <p>This is a question that generates a plot that must be rendered in the question text.</p>
+                </introduction>
+
+                <stack label="stack-plot" source="stack/basic-plot.xml"/>
+            </exercise>
+
+            <exercise>
+                <title>STACK question with advanced typesetting and embedded image</title>
+
+                <introduction>
+                    <p>This question comes from the <url href="https://stack-assessment.org/CaseStudies/2021/HELM/">HELM project</url>. It features an embedded image in its solution, as well as advanced typesetting and multi-line latex.</p>
+                </introduction>
+
+                <stack label="stack-typesetting" source="stack/Adding-vectors-in-triangles.xml"/>
+            </exercise>
+
+
+        </exercises>
 
         <section xml:id="ancillaries" label="section-ancillaries">
             <title>Ancillaries</title>
@@ -14754,6 +15398,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               <figure xml:id="figure-triangle-cyclic-medians-copy">
                 <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
                 <image xml:id="worksheet-triangle-cyclic-medians-copy" width="50%">
+                    <description><p>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.  This image description should show up in the regular view, but disappear when printing.</p></description>
                   <latex-image>
                     \begin{tikzpicture}[xscale=1.5, yscale=1.5]
                       \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
@@ -14783,9 +15428,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
                 <exercise workspace="2in">
                   <statement>
-                    <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
+                    <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <md>
                       \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin fill="\frac{2}{3} \vec{M}_{1}-\vec{C}"/>
-                    </me>.</p>
+                    </md>.</p>
                   </statement>
                 </exercise>
               </sidebyside>
@@ -14802,75 +15447,74 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <worksheet label="worksheet-geometric-prelude-pages">
               <title>A Geometric Prelude (with authored pages)</title>
               <!-- <author>Dave Rosoff</author> -->
-              <objectives xml:id="objectives-pages">
-                <ul>
-                  <li>Practice visualizing vector addition</li>
-                  <li>Use vectors without explicit coordinates</li>
-                </ul>
-              </objectives>
-              <introduction>
-                <p>This two-page worksheet was generously donated to the sample article by Dave Rosoff at a CuratedCourses workshop in August<nbsp/>2018.  It has the default (skinny) margins.</p>
-
-                <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral" text="type-global"/>.</p>
-                <sidebyside width="30%">
-                  <figure xml:id="figure-midpoints-of-quadrilateral-pages">
-                    <caption>The midpoints of the sides of a quadrilateral are the vertices of a parallelogram.</caption>
-                    <image xml:id="worksheet-midpoints-of-quadrilateral-pages">
-                      <latex-image>
-                        \begin{tikzpicture}[xscale=0.8, yscale=0.8]
-                         \draw[style={black, ultra thick}] (0,0) -- (5,0) -- (4,4) -- (2,5) -- (0,0);
-                         \draw[style={black, dashed, very thick}] (2.5, 0) -- (4.5, 2) -- (3, 4.5) -- (1, 2.5) -- (2.5, 0);
-                        \end{tikzpicture}
-                      </latex-image>
-                    </image>
-                  </figure>
-                  <figure xml:id="figure-triangle-cyclic-vectors-pages">
-                    <caption>The sides of a triangle presented as vectors.</caption>
-                    <image xml:id="worksheet-triangle-cyclic-vectors-pages">
-                      <latex-image>
-                        \begin{tikzpicture}[xscale=1.5, yscale=1.5]
-                          \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
-                          \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
-                          \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
-                          % \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
-                          %   {} -- (1.5,0) node[below right=0mm and 3mm] {$\vec{A}$};
-                          %\draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
-                          %  {} -- (2,1) node[above left=5mm and 1mm] {$\vec{B}$};
-                          %\draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
-                          %  {} -- (0.5,1) node[below left=1mm and 3mm] {$\vec{C}$};
-                          %\node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
-                          %\node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
-                          % \node {$P$} (1.3333,0.6667);
-                        \end{tikzpicture}
-                      </latex-image>
-                    </image>
-                  </figure>
-                  <figure xml:id="figure-triangle-cyclic-medians-pages">
-                    <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
-                    <image xml:id="worksheet-triangle-cyclic-medians-pages" width="50%">
-                      <latex-image>
-                        \begin{tikzpicture}[xscale=1.5, yscale=1.5]
-                          \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
-                          \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
-                          \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
-                          \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
-                            {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
-                          \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
-                           {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
-                          \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
-                           {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
-                          \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
-                          \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
-                          % \node {$P$} (1.3333,0.6667);
-                        \end{tikzpicture}
-                      </latex-image>
-                    </image>
-                  </figure>
-                </sidebyside>
-                <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
-              </introduction>
-
               <page>
+                <objectives xml:id="objectives-pages">
+                  <ul>
+                    <li>Practice visualizing vector addition</li>
+                    <li>Use vectors without explicit coordinates</li>
+                  </ul>
+                </objectives>
+                <introduction>
+                  <p>This two-page worksheet was generously donated to the sample article by Dave Rosoff at a CuratedCourses workshop in August<nbsp/>2018.  It has the default (skinny) margins.</p>
+                  <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral" text="type-global"/>.</p>
+                  <sidebyside width="30%">
+                    <figure xml:id="figure-midpoints-of-quadrilateral-pages">
+                      <caption>The midpoints of the sides of a quadrilateral are the vertices of a parallelogram.</caption>
+                      <image xml:id="worksheet-midpoints-of-quadrilateral-pages">
+                        <latex-image>
+                          \begin{tikzpicture}[xscale=0.8, yscale=0.8]
+                           \draw[style={black, ultra thick}] (0,0) -- (5,0) -- (4,4) -- (2,5) -- (0,0);
+                           \draw[style={black, dashed, very thick}] (2.5, 0) -- (4.5, 2) -- (3, 4.5) -- (1, 2.5) -- (2.5, 0);
+                          \end{tikzpicture}
+                        </latex-image>
+                      </image>
+                    </figure>
+                    <figure xml:id="figure-triangle-cyclic-vectors-pages">
+                      <caption>The sides of a triangle presented as vectors.</caption>
+                      <image xml:id="worksheet-triangle-cyclic-vectors-pages">
+                        <latex-image>
+                          \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                            \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                            \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                            \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                            % \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                            %   {} -- (1.5,0) node[below right=0mm and 3mm] {$\vec{A}$};
+                            %\draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                            %  {} -- (2,1) node[above left=5mm and 1mm] {$\vec{B}$};
+                            %\draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                            %  {} -- (0.5,1) node[below left=1mm and 3mm] {$\vec{C}$};
+                            %\node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                            %\node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                            % \node {$P$} (1.3333,0.6667);
+                          \end{tikzpicture}
+                        </latex-image>
+                      </image>
+                    </figure>
+                    <figure xml:id="figure-triangle-cyclic-medians-pages">
+                      <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
+                      <image xml:id="worksheet-triangle-cyclic-medians-pages" width="50%">
+                        <latex-image>
+                          \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                            \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                            \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                            \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                            \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                              {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
+                            \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                             {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
+                            \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                             {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
+                            \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                            \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                            % \node {$P$} (1.3333,0.6667);
+                          \end{tikzpicture}
+                        </latex-image>
+                      </image>
+                    </figure>
+                  </sidebyside>
+                  <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
+                </introduction>
+
                 <exercise xml:id="ex-cyclic-pages" workspace="4in">
                   <statement>
                     <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
@@ -14912,9 +15556,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
                 <exercise workspace="2in">
                   <statement>
-                    <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
+                    <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <md>
                       \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin fill="\frac{2}{3} \vec{M}_{1}-\vec{C}"/>
-                    </me>.</p>
+                    </md>.</p>
                   </statement>
                 </exercise>
               </sidebyside>
@@ -14942,16 +15586,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <theorem>
                         <title> Ohms Law </title>
                         <p> The current through a resistor is proportional to the ratio of the <em> Voltage </em> to the <em> Resistance </em>
-                            <me> I = \frac{V}{R} </me>
+                            <md> I = \frac{V}{R} </md>
                             Or for our purposes
-                            <me> I R = V </me>
+                            <md> I R = V </md>
                         </p>
                     </theorem>
 
                     <theorem>
                         <title>Kirchoffs Current Law</title>
                         <p> The sum of the currents in a network meeting at a point is zero.
-                            <me> \sum_{k=1}^n I_k = 0 </me>
+                            <md> \sum_{k=1}^n I_k = 0 </md>
                         </p>
                     </theorem>
 
@@ -14975,7 +15619,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <theorem>
                         <title> Kirchoffs Voltage Law </title>
                         <p> The sum of the voltages around any closed circuit (or subcircuit) is zero.
-                            <me> \sum_{k=1}^n V_k = 0 </me>
+                            <md> \sum_{k=1}^n V_k = 0 </md>
                         </p>
                     </theorem>
 
@@ -15160,16 +15804,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <theorem>
                         <title> Ohms Law </title>
                         <p> The current through a resistor is proportional to the ratio of the <em> Voltage </em> to the <em> Resistance </em>
-                            <me> I = \frac{V}{R} </me>
+                            <md> I = \frac{V}{R} </md>
                             Or for our purposes
-                            <me> I R = V </me>
+                            <md> I R = V </md>
                         </p>
                     </theorem>
 
                     <theorem>
                         <title>Kirchoffs Current Law</title>
                         <p> The sum of the currents in a network meeting at a point is zero.
-                            <me> \sum_{k=1}^n I_k = 0 </me>
+                            <md> \sum_{k=1}^n I_k = 0 </md>
                         </p>
                     </theorem>
 
@@ -15193,7 +15837,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <theorem>
                         <title> Kirchoffs Voltage Law </title>
                         <p> The sum of the voltages around any closed circuit (or subcircuit) is zero.
-                            <me> \sum_{k=1}^n V_k = 0 </me>
+                            <md> \sum_{k=1}^n V_k = 0 </md>
                         </p>
                     </theorem>
 
@@ -15390,6 +16034,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <statement>
                             <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
                         </statement>
+                        <hint>
+                            <p>This is a hint.  You can hide it in the print preview before printing.</p>
+                        </hint>
+                        <answer>
+                            <p>Here is an answer.  Also hidable.</p>
+                        </answer>
+                        <solution>
+                            <p>This is a rather long solution.  When you hide or show it in the print preview, the workspace should be adjusted (the page will reload).</p>
+
+                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                        </solution>
                     </exercise>
                 </sidebyside>
 
@@ -15490,10 +16145,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                     <exercise workspace="3in">
                         <statement>
-                            <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec u = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
-                            <image width="100%" source="images/projection1.png">
-                                <shortdescription>two vectors in a Cartesian plane</shortdescription>
-                            </image>
+                            <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec b = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
+                            <figure xml:id="prefigure-vectors">
+                                <image width="100%">
+                                    <prefigure xmlns="https://prefigure.org"
+                                               label="prefigure-worksheet-vectors">
+                                        <diagram dimensions="(320, 400)" margins="(5,5,20,20)">
+                                            <coordinates bbox="(0,0,8,10)">
+                                                <grid at="grid" spacings="((0,1,8),(0,1,10))"/>
+                                                <axes at="axes" decorations="no">
+                                                    <xlabel><m>x</m></xlabel>
+                                                    <ylabel><m>y</m></ylabel>
+                                                </axes>
+                                                <vector at="vector-a" v="(3,9)" alignment="se"><m>\vec a</m></vector>
+                                                <vector at="vector-b" v="(4,2)" alignment="nw"><m>\vec b</m></vector>
+                                            </coordinates>
+                                            <annotations>
+                                                <annotation ref="figure"
+                                                            text="Two vectors labeled a and b in the coordinate plane">
+                                                    <annotation ref="grid"
+                                                                text="A one by one grid"/>
+                                                    <annotation ref="axes"
+                                                                text="A set of labeled axes"/>
+                                                    <annotation ref="vector-a"
+                                                                text="The vector a"/>
+                                                    <annotation ref="vector-b"
+                                                                text="The vector b"/>
+                                                </annotation>
+                                            </annotations>
+                                        </diagram>
+                                    </prefigure>
+                                    <shortdescription>two vectors in a Cartesian plane</shortdescription>
+                                </image>
+                                <caption>Two vectors <m>\vec a</m> and <m>\vec b</m>.</caption>
+                            </figure>
                         </statement>
                     </exercise>
                 </sidebyside>
@@ -15502,9 +16187,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <exercise workspace="1.25in">
                         <introduction>
                             <p>Consider the vector equation
-                            <me>
+                            <md>
                             m \begin{bmatrix}2 \\ 5\end{bmatrix} = \begin{bmatrix}3 \\ 7\end{bmatrix}
-                            </me>.</p>
+                            </md>.</p>
                         </introduction>
                         <task>
                             <p>Check that there is no solution <m>m</m> that makes the equation true.</p>
@@ -15763,6 +16448,168 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </exercise>
                 </exercisegroup>
             </worksheet>
+
+            <worksheet>
+                <title>Worksheet with an exercise with tasks and subtasks</title>
+                <introduction>
+                    <p>
+                        Page breaking between tasks in a single exercise can be tricky.  This is a test for that.
+                    </p>
+                </introduction>
+                <exercise>
+                    <introduction>
+                        <p>
+                            Here are multiple tasks with just enough workspace to cause a page break after the third one.
+                        </p>
+                    </introduction>
+                    <task>
+                        <introduction>
+                            <p>
+                                This task has two short subtasks that should be indented under it.
+                            </p>
+                        </introduction>
+                        <task workspace=".5in">
+                        <statement>
+                            <p>
+                                The first subtask.
+                            </p>
+                        </statement>
+                        </task>
+                        <task workspace=".5in">
+                        <statement>
+                            <p>
+                                The second subtask.
+                            </p>
+                        </statement>
+                    </task>
+                    <conclusion>
+                        <p>
+                            Conclusion for the first task.
+                        </p>
+                    </conclusion>
+                    </task>
+                    <task workspace="1.5in">
+                        <statement>
+                            <p>
+                                The second task.
+                            </p>
+                        </statement>
+                    </task>
+                    <task workspace="1.5in">
+                        <statement>
+                            <p>
+                                The third task.
+                            </p>
+                        </statement>
+                    </task>
+                    <task workspace="2in">
+                        <statement>
+                            <p>
+                                The fourth task.
+                            </p>
+                        </statement>
+                    </task>
+                    <conclusion>
+                        <p>
+                            Conclusion for the entire exercise.
+                        </p>
+                    </conclusion>
+                </exercise>
+                <exercise workspace="3in">
+                    <statement>
+                        <p>
+                            An exercise without any tasks but some workspace.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+
+            <worksheet>
+                <title>Worksheet with <tag>paragraphs</tag></title>
+                <introduction>
+                    <p>
+                        This is a test of the <tag>paragraphs</tag> element within a worksheet.  It should be able to contain exercises that have workspace, and we should be able to insert page breaks even inside of paragraphs.
+                    </p>
+                </introduction>
+                <paragraphs>
+                    <title>Warm up</title>
+                    <exercise workspace="1in">
+                        <statement>
+                            <p>
+                                This is a warm-up exercise.  It should have a small workspace and be on the first page of the worksheet.
+                            </p>
+                        </statement>
+                    </exercise>
+                </paragraphs>
+                <paragraphs>
+                    <title>More exercises</title>
+                    <exercise workspace="2in">
+                        <statement>
+                            <p>
+                                This is a second exercise.  It should have a larger workspace and be on the second page of the worksheet.
+                            </p>
+                        </statement>
+                    </exercise>
+                    <exercise>
+                        <introduction>
+                            <p>
+                                This is a third exercise with some tasks.  The workspace should be such that there will be a page break between tasks.
+                            </p>
+                        </introduction>
+                        <task workspace="1in">
+                            <statement>
+                                <p>
+                                    Do the first thing.
+                                </p>
+                            </statement>
+                        </task>
+                        <task workspace="2in">
+                            <statement>
+                                <p>
+                                    Do the second thing.
+                                </p>
+                            </statement>
+                        </task>
+                        <task workspace="2in">
+                            <statement>
+                                <p>
+                                    Do the third thing.
+                                </p>
+                            </statement>
+                        </task>
+                    </exercise>
+                </paragraphs>
+                <paragraphs>
+                    <title>A third division</title>
+                    <p>
+                        This is a paragraph that starts the third <tag>paragraphs</tag> division.
+                    </p>
+                    <sidebyside>
+                        <exercise workspace="1in">
+                            <statement>
+                                <p>
+                                    This is an exercise in the third paragraphs division inside a side-by-side.
+                                </p>
+                            </statement>
+                        </exercise>
+
+                        <exercise workspace="2in">
+                            <statement>
+                                <p>
+                                    This is a second exercise in the third paragraphs division.  It should have a larger workspace and be on the fourth page of the worksheet.
+                                </p>
+                            </statement>
+                        </exercise>
+                    </sidebyside>
+                    <exercise workspace="2in">
+                        <statement>
+                            <p>
+                                This is a third exercise in the third paragraphs division.  It should have a larger workspace and be on the fifth page of the worksheet.
+                            </p>
+                        </statement>
+                    </exercise>
+                </paragraphs>
+            </worksheet>
         </section>
 
         <section xml:id="handouts" label="section-handouts">
@@ -15871,7 +16718,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Guided Notes: Derivatives of sums</title>
             <page>
                 <p workspace="1in">
-                    Today we will explore how to take the derivative of the sum of two functions.  For example, if <me>f(x) = x^2 + 3x</me>, what is <m>f'(x)</m>?  What two functions is this the sum of?  What are the derivatives of each of those functions?
+                    Today we will explore how to take the derivative of the sum of two functions.  For example, if <md>f(x) = x^2 + 3x</md>, what is <m>f'(x)</m>?  What two functions is this the sum of?  What are the derivatives of each of those functions?
                 </p>
 
                 <p>
@@ -16453,73 +17300,73 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <title>Column test</title>
                                 <p>An aside in a multi-column container.</p>
                             </aside>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                         <hint>
                             <title>OPEN ME!</title>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>3u \amp {}+{} 1v \amp {}+{} 3w \amp {}+{} 2x \amp {}+{} \amp  y \amp {}+{} \amp 3z \amp {}={} \amp 10</mrow>
                                 <mrow>2u \amp {}+{} 2v \amp {}-{} 2w \amp {}+{} x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
                                 <mrow>1u \amp {}-{} 3v \amp {}+{} 1w \amp {}+{} x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </hint>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>200t \amp {}+{} 3u \amp {}+{} 1v \amp {}+{} 3w \amp {}+{} 2x \amp {}+{} \amp  y \amp {}+{} \amp 3z \amp {}={} \amp 10</mrow>
                                 <mrow> \amp {}+{} 2u \amp {}+{} 2v \amp {}-{} 2w \amp {}+{} x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
                                 <mrow>100t \amp {}+{} 1u \amp {}-{} 3v \amp {}+{} 1w \amp {}+{} x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                     <exercise>
                         <statement>
-                            <md alignment="alignat">
+                            <p><md alignment="alignat">
                                 <mrow>2x \amp {}+{} \amp  y \amp {}={} \amp 10</mrow>
                                 <mrow>x  \amp       \amp    \amp {}={} \amp 6</mrow>
                                 <mrow>x  \amp {}+{} \amp 3y \amp {}={} \amp 13</mrow>
-                            </md>
+                            </md></p>
                         </statement>
                     </exercise>
                 </exercisegroup>
@@ -16636,7 +17483,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Compute the definite integral <m>\definiteintegral{2}{4}{x^2}{x}</m>, not as an approximate value from a Riemann sum, but as an exact value based of the limit by using the Fundamental Theorem.</p>
                 </statement>
                 <solution xml:id="solution-antiderivative">
-                    <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<me>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}</me>!?!      This is indeed an exciting result, but we are mostly interested in seeing that the sentence-ending punctuation is absorbed properly into the displayed equation.</p>
+                    <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<md>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}</md>!?!      This is indeed an exciting result, but we are mostly interested in seeing that the sentence-ending punctuation is absorbed properly into the displayed equation.</p>
+                    <p>And sentence-ending punctuation is also placed carefully when display math finishes with a <latex/> <c>cases</c> environment.  To wit, the absolute value can be defined by<md>
+                        |x| = \begin{cases}
+                              x \amp \text{if } x \ge 0 \\
+                              -x \amp \text{if } x \lt 0
+                              \end{cases}
+                    </md>.</p>
                 </solution>
             </exercise>
 
@@ -16687,6 +17540,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>This is some notation introduced in the article.  <pretext/> allows the <q>notation list</q> generator anywhere, so we have this paragraph to test spacing above and below the table.  We'll say that again.</p>
 
                 <p>This is some notation introduced in the article.  <pretext/> allows the <q>notation list</q> generator anywhere, so we have this paragraph to test spacing above and below the table.  We'll say that again.</p>
+
+                <!-- Regression test: inline exercise as child of appendix. -->
+                <exercise xml:id="appendix-inline-checkpoint">
+                    <statement>
+                        <p>List two pieces of notation that appear in this appendix.</p>
+                    </statement>
+                </exercise>
             </appendix>
 
             <solutions xml:id="solutions-backmatter" label="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer" worksheet="hint" reading="answer">
