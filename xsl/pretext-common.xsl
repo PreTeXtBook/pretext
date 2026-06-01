@@ -2689,6 +2689,17 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- Plain subtitle: used for HTML <meta> tags -->
+<xsl:template match="*" mode="subtitle-plain">
+    <xsl:choose>
+        <xsl:when test="subtitle">
+            <xsl:apply-templates select="subtitle/node()[not(self::fn)]" mode="plain-title-edit"/>
+        </xsl:when>
+        <!-- just empty if there is no subtitles, no default -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:template>
+
 <!-- We do not wrap an "m" element as part of a plain title -->
 <!-- This will misbehave for m/xref and m/fillin, etc, but  -->
 <!-- these devices should not be in a title anyway          -->
