@@ -146,7 +146,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Should we build the SCORM manifest file? -->
 <xsl:param name="html.scorm" select="'no'" />
-<xsl:variable name="b-build-scorm-manifest" select="$html.scorm = 'yes'" />
+<!-- b-host-scorm is true when building a SCORM package  -->
+<!-- We might consider making this depend on a publisher variable instead of param -->
+<xsl:variable name="b-host-scorm" select="($html.scorm = 'yes')"/>
 
 <!-- ######### -->
 <!-- Variables -->
@@ -290,7 +292,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="search-page-construction"/>
     </xsl:if>
     <!-- Optionally, build a SCORM manifest -->
-    <xsl:if test="$b-build-scorm-manifest">
+    <xsl:if test="$b-host-scorm">
         <xsl:call-template name="scorm-manifest"/>
     </xsl:if>
     <!-- The main event                          -->
@@ -10052,6 +10054,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </xsl:when>
+        <!-- In a SCORM package, DoenetML can also communicate its results     -->
+        <!-- via SPLICE postMessage.  We add data-component="doenet" and an    -->
+        <!-- id so ptx_scorm_events.js can locate and grade the activity,      -->
+        <!-- but we omit the ptx-runestone-container wrapper (Runestone only). -->
+        <xsl:when test="(@platform = 'doenetml') and $b-host-scorm">
+            <div data-component="doenet">
+                <xsl:attribute name="id">
+                    <xsl:apply-templates select="." mode="runestone-id"/>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="iframe-interactive"/>
+            </div>
+        </xsl:when>
         <!-- An iframe interactive lives two lives.  Plain 'ol PreTeXt. But  -->
         <!-- when hosted on Runestone, and authored as the "dynamic" part of -->
         <!-- a "dual" exercise it needs surrounding infrastructure, in part  -->
@@ -10814,8 +10828,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="slate[@surface = 'doenetml']">
     <div class="doenetml-applet" data-doenet-add-virtual-keyboard="false" data-doenet-send-resize-events="true">
-        <!-- on Runestone builds, enable SPLICE messaging to the parent -->
-        <xsl:if test="$b-host-runestone">
+        <!-- on Runestone and SCORM builds, enable SPLICE messaging to the parent -->
+        <xsl:if test="$b-host-runestone or $b-host-scorm">
             <xsl:attribute name="data-doenet-message-parent">
                 <xsl:text>true</xsl:text>
             </xsl:attribute>
@@ -14067,8 +14081,8 @@ TODO:
 <!-- to capture exercise submissions and report them to the LMS via the  -->
 <!-- SCORM 1.2 / SCORM 2004 JavaScript API.                              -->
 <xsl:template name="scorm-js">
-    <xsl:if test="$b-build-scorm-manifest">
-        <script src="{$html.js.dir}/ptx-scorm-events.js"></script>
+    <xsl:if test="$b-host-scorm">
+        <script src="{$html.js.dir}/ptx_scorm_events.js"></script>
     </xsl:if>
 </xsl:template>
 
