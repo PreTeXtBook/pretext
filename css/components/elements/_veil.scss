@@ -1,0 +1,111 @@
+/* ==========================================================================
+   PreTeXt <veil> — final SCSS (light: royal blue, dark: burnt orange)
+   - Transparent background for revealed content
+   - Non-transparent button background (mode-aware)
+   - Works for inline (.veil--inline) and block (.veil--block) veils
+   - Includes keyboard focus and pressed feedback
+   ========================================================================== */
+
+/* ---------------- Theme tokens via CSS variables ------------------------- */
+:root {
+  --veil-primary:        #1d4ed8;           /* royal blue */
+  --veil-btn-bg:         #f8fafc;           /* very light gray-blue */
+  --veil-text-color:     inherit;
+
+  --veil-focus-ring:     rgba(29, 78, 216, 0.35);
+  --veil-hover-ring:     rgba(29, 78, 216, 0.18);
+  --veil-pressed-shadow: rgba(0,0,0,0.06);
+}
+
+/* Dark mode uses a burnt orange accent; PreTeXt toggles .dark-mode on <html> */
+.dark-mode {
+  --veil-primary:        #f59e0b;           /* burnt orange */
+  --veil-btn-bg:         rgba(245, 158, 11, 0.12);
+  --veil-text-color:     inherit;
+  
+  --veil-focus-ring:     rgba(245, 158, 11, 0.45);
+  --veil-hover-ring:     rgba(245, 158, 11, 0.22);
+  --veil-pressed-shadow: rgba(245, 158, 11, 0.16);
+}
+
+/* ---------------- Containers -------------------------------------------- */
+.veil--inline { display: inline; }
+.veil--block  { margin: 0.25rem 0; }
+
+/* ---------------- Reveal button (shown when hidden) --------------------- */
+.veil .veil-toggle {
+  display: inline-block;
+  background: var(--veil-btn-bg);
+  color: var(--veil-primary);
+  padding: 0.06rem 0.35rem;
+  // border: 1px solid color-mix(in srgb, var(--veil-primary) 35%, transparent);
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  cursor: pointer;
+  vertical-align: baseline;
+  transition: box-shadow 120ms ease, transform 60ms ease, border-color 120ms ease;
+
+  &:hover {
+    box-shadow: 0 0 0 2px var(--veil-hover-ring);
+  }
+  &:active {
+    transform: scale(0.995);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--veil-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------------- Hidden by default ------------------------------------ */
+.veil .veil-content {
+  display: none;
+}
+
+/* ---------------- Revealed state --------------------------------------- */
+.veil.revealed .veil-toggle { display: none; }
+
+.veil.revealed .veil-content {
+  display: inline;                           /* overridden to block for block variant */
+  background: transparent;                   /* transparent background as requested */
+  color: var(--veil-text-color);
+  border: 1px solid var(--veil-primary);
+  padding: 0.06rem 0.30rem;
+  border-radius: 0.20rem;
+  cursor: pointer;
+  transition: transform 60ms ease, box-shadow 120ms ease, border-color 120ms ease;
+
+  &:hover {
+    box-shadow: 0 0 0 2px var(--veil-hover-ring) inset;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--veil-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Pressed feedback (toggled by JS on pointer events) */
+  &.is-pressed {
+    transform: scale(0.995);
+    box-shadow: 0 0 0 3px var(--veil-pressed-shadow) inset;
+  }
+}
+
+/* Block variant shows content as a block when revealed */
+.veil--block.revealed .veil-content {
+  display: block;
+  padding: 0.40rem 0.55rem;
+}
+
+/* ---------------- Print (HTML -> paper) --------------------------------- */
+@media print {
+  .veil .veil-toggle { display: none !important; }
+  .veil .veil-content {
+    display: inline !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+  .veil--block .veil-content { display: block !important; }
+}
