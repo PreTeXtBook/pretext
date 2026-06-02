@@ -200,6 +200,27 @@
         answers: {}   // {divId: {answer, correct, percent}} — persisted across sessions
     };
 
+    // In-memory cache of Doenet activity state blobs, keyed by divId.
+    // Populated when the student answers a DoenetActivity (SPLICE.reportScoreAndState).
+    // Used to respond to SPLICE.getState requests when the Doenet iframe reloads.
+    // Also persisted to localStorage (not cmi.suspend_data — state blobs can be large).
+    var _doenetStates = {};
+
+    // Queue for SPLICE.getState requests that arrive before loadRestoreData() has run
+    // (i.e., before _learnerId is set and localStorage can be read correctly).
+    // In practice this never fires — external iframes have network latency — but the
+    // queue makes the code correct under any load order.
+    var _doenetRestoreReady = false;    // true once loadRestoreData() has initialized _learnerId
+    var _pendingGetStateRequests = [];  // queued { source } entries waiting for restore-ready
+
+    // When we respond to SPLICE.getState we record the timestamp so that any
+    // SPLICE.reportScoreAndState that arrives within the initialization window can
+    // be identified as an auto-report from Doenet's own startup sequence rather
+    // than a genuine new student submission.  Doenet reports its current (restored)
+    // score when it finishes initializing — we must not treat that as a re-answer.
+    var _doenetSentStateAt = {};        // divId → Date.now() when SPLICE.getState.response was sent
+    var DOENET_INIT_WINDOW_MS = 8000;   // 8 seconds: generous window for iframe init
+
     // Total auto-gradeable questions found on this page (computed at DOM ready).
     // Used as the score denominator so unanswered questions count as zero,
     // rather than being silently excluded.  Not persisted in suspend_data because
@@ -250,6 +271,75 @@
         } catch (e) {
             return null;
         }
+    }
+
+    // ── Doenet / SPLICE state persistence ────────────────────────────────────
+    //
+    // When a DoenetActivity reports its result via SPLICE.reportScoreAndState, the
+    // message carries a full "state" blob that encodes all of the student's work
+    // (selected answers, dragged objects, etc.).  When the iframe reloads it sends
+    // SPLICE.getState requesting that blob back so it can pre-populate the UI.
+    //
+    // We cannot store state in cmi.suspend_data because SCORM 1.2 limits that field
+    // to ~4 KB and Doenet state objects are typically 10-100 KB.  We store it in
+    // localStorage instead (keyed per-learner, per-page, per-divId).  localStorage
+    // survives page reloads and browser restarts on the same device; cross-device
+    // restore is not supported (consistent with the general localStorage strategy).
+
+    // State is stored as a JSON string in localStorage (for compactness) but
+    // loaded back as a parsed JS object.  Doenet's SPLICE.getState.response handler
+    // checks Ri.data.state.cid — this only works if state is an object, not a string.
+    // Runestone stores JSON.stringify(data.state) server-side but its API returns the
+    // parsed object; we replicate that by parsing on load.
+    function saveDoenetState(divId, state) {
+        if (!divId || state === null || state === undefined) return;
+        _doenetStates[divId] = state;  // keep as object in memory
+        try {
+            var str = typeof state === 'string' ? state : JSON.stringify(state);
+            localStorage.setItem(lsKey() + '|doenet|' + divId, str);
+        } catch (e) {}
+    }
+
+    // Returns the state as a JS object (Doenet needs state.cid for identity check).
+    function loadDoenetState(divId) {
+        if (_doenetStates[divId]) return _doenetStates[divId];
+        try {
+            var raw = localStorage.getItem(lsKey() + '|doenet|' + divId);
+            if (raw) {
+                _doenetStates[divId] = JSON.parse(raw);
+                return _doenetStates[divId];
+            }
+        } catch (e) {}
+        return null;
+    }
+
+    // Walk the page's iframes and return the divId of the one whose contentWindow
+    // matches sourceWindow.  Returns null if no match is found.
+    function resolveIframeId(sourceWindow) {
+        var iframes = document.getElementsByTagName('iframe');
+        for (var i = 0; i < iframes.length; i++) {
+            if (iframes[i].contentWindow === sourceWindow) {
+                var c = iframes[i].closest('[data-component="splice"],[data-component="doenet"]');
+                return (c && c.id) || iframes[i].id || null;
+            }
+        }
+        return null;
+    }
+
+    // Respond to a SPLICE.getState request from a Doenet iframe.
+    // Subject must be "SPLICE.getState.response" with the message_id echoed back.
+    // State must be a JS object (not a JSON string) because Doenet checks state.cid directly.
+    function respondToGetState(sourceWindow, messageId) {
+        var divId = resolveIframeId(sourceWindow);
+        var stateObj = divId ? loadDoenetState(divId) : null;  // JS object; Doenet checks state.cid
+        console.log('[PTX-SCORM] SPLICE.getState from "' + (divId || '?') + '" — ' +
+                    (stateObj ? 'sending saved state (cid: ' + (stateObj.cid || '?') + ')' : 'no saved state (first visit)'));
+        if (divId) _doenetSentStateAt[divId] = Date.now();
+        sourceWindow.postMessage({
+            subject:    'SPLICE.getState.response',
+            message_id: messageId,
+            state:      stateObj || null
+        }, '*');
     }
 
     /**
@@ -340,17 +430,22 @@
     // edits that are not test runs) are ungraded and are silently ignored.
 
     var RUNESTONE_TO_SCORM_TYPE = {
-        mChoice:        'choice',        // Multiple-choice question
-        clickableArea:  'choice',        // Clickable-area question (pick the right region)
-        fillb:          'fill-in',       // Fill-in-the-blank
-        webwork:        'fill-in',       // WeBWorK problem (scored as fill-in)
-        parsons:        'sequencing',    // Parsons problem (arrange code blocks in order)
-        hparsonsAnswer: 'sequencing',    // Horizontal Parsons variant
-        dragNdrop:      'matching',      // Drag-and-drop matching
-        matching:       'matching',      // Traditional matching exercise
-        unittest:       'performance',   // ActiveCode with unit tests (auto-graded)
-        shortanswer:    'long-fill-in',  // Short-answer / journal (no automatic grade)
-        splice:         'performance',   // SPLICE protocol iframe activity (see Section 10)
+        mChoice:                   'choice',       // Multiple-choice question
+        clickableArea:             'choice',       // Clickable-area question (pick the right region)
+        fillb:                     'fill-in',      // Fill-in-the-blank
+        webwork:                   'fill-in',      // WeBWorK problem (scored as fill-in)
+        parsons:                   'sequencing',   // Parsons problem (arrange code blocks in order)
+        hparsonsAnswer:            'sequencing',   // Horizontal Parsons variant
+        dragNdrop:                 'matching',     // Drag-and-drop matching
+        matching:                  'matching',     // Traditional matching exercise
+        unittest:                  'performance',  // ActiveCode with unit tests (auto-graded)
+        shortanswer:               'long-fill-in', // Short-answer / journal (no automatic grade)
+        splice:                    'performance',  // SPLICE protocol iframe activity (see Section 10)
+        // DoenetActivity events: Runestone's SpliceWrapper fires logBookEvent with
+        // event="SPLICE.reportScoreAndState" (carries score/percent/answer) and
+        // event="SPLICE.sendEvent" (notification only, no score).  Only the former
+        // should be recorded; the latter has no score and is silently ignored.
+        'SPLICE.reportScoreAndState': 'performance',
     };
 
 
@@ -384,6 +479,7 @@
         '[data-component="clickablearea"]',
         '[data-component="webwork"]',
         '[data-component="splice"]',       // SPLICE protocol iframe activities
+        '[data-component="doenet"]',       // DoenetActivity (SCORM/Runestone builds)
     ];
 
     /**
@@ -507,12 +603,47 @@
 
         // ── b) Lazy session initialization ───────────────────────────────────
         initSession();
-        if (!_initialized) return;  // API unavailable; nothing to report
+        if (!_initialized) {
+            console.warn('[PTX-SCORM] recordInteraction: aborting — session not initialized.',
+                         '_api:', !!_api, '_ver:', _ver);
+            return;  // API unavailable; nothing to report
+        }
 
         // SCORM 1.2 does not support the "long-fill-in" interaction type
         // (only SCORM 2004 does).  Narrow it to the closest valid 1.2 type.
         if (_ver === '1.2' && scormType === 'long-fill-in') {
             scormType = 'fill-in';
+        }
+
+        // ── b2) Extract score early so the Doenet init-guard can run ─────────
+        //
+        // When we respond to SPLICE.getState, Doenet restores its previous state
+        // and fires SPLICE.reportScoreAndState to confirm its current score —
+        // even when the student hasn't touched anything.  If we treated this as
+        // a new submission, the re-submission logic would subtract the prior score
+        // and add the (possibly zero) initialization score, wiping the student's
+        // record.  We detect this auto-report by:
+        //   1. Checking that this is a SPLICE.reportScoreAndState event.
+        //   2. Checking that we sent SPLICE.sendState to this divId recently
+        //      (within DOENET_INIT_WINDOW_MS, typically 8 seconds).
+        //   3. Checking that the reported score is ≤ the already-saved score
+        //      (a legitimate new answer that increases the score is always allowed).
+        var score = extractScore(ev);
+
+        if (ev.event === 'SPLICE.reportScoreAndState' && score !== null) {
+            var sentAt = _doenetSentStateAt[ev.div_id];
+            if (sentAt && (Date.now() - sentAt) < DOENET_INIT_WINDOW_MS) {
+                var prevSaved = _state.answers[ev.div_id];
+                var prevPct = prevSaved && typeof prevSaved.percent === 'number' ? prevSaved.percent : null;
+                if (prevPct !== null && score <= prevPct) {
+                    console.log('[PTX-SCORM] Ignoring Doenet init auto-report for "' + ev.div_id +
+                                '" — score ' + score + ' ≤ saved ' + prevPct + ' (initialization window)');
+                    // Still save the state blob if Doenet included it (belt-and-suspenders).
+                    if (ev.state) saveDoenetState(ev.div_id, ev.state);
+                    return;
+                }
+            }
+            delete _doenetSentStateAt[ev.div_id];  // clear after first accepted report
         }
 
         // ── c) Write the interaction record ──────────────────────────────────
@@ -557,7 +688,6 @@
         //   "neutral"   — no automatic grade (short-answer, journal)
         //   0.0000–1.0000 — partial credit (SCORM 2004 only; we still use
         //                   "correct"/"incorrect" at the boundaries)
-        var score = extractScore(ev);
         var result;
         if      (score === null) result = 'neutral';
         else if (score >= 1.0)  result = 'correct';
@@ -646,13 +776,25 @@
             percent: score
         };
 
+        // For DoenetActivity: persist the full Doenet state blob so we can send
+        // it back via SPLICE.getState.response when the iframe reloads.
+        if (ev.state) {
+            saveDoenetState(ev.div_id || 'unknown', ev.state);
+        }
+
         var suspendJson = JSON.stringify(_state);
-        console.log('[PTX-SCORM] Saving suspend_data (' + suspendJson.length + ' chars), ' +
-                    'answers keys: ' + JSON.stringify(Object.keys(_state.answers)));
         Set('cmi.suspend_data', suspendJson);
+        var setErr = lastError();
+        if (setErr !== '0') {
+            console.warn('[PTX-SCORM] Set(cmi.suspend_data) error code:', setErr);
+        }
 
         // Flush all pending writes to the LMS
         Commit();
+        var commitErr = lastError();
+        if (commitErr !== '0') {
+            console.warn('[PTX-SCORM] Commit() error code:', commitErr);
+        }
 
         // Also save to localStorage so that answers survive even when the LMS
         // resets suspend_data at the start of the next session (Canvas does this).
@@ -749,9 +891,19 @@
         // checkmarks Runestone shows for other exercise types.
         Object.keys(_state.answers).forEach(function (divId) {
             var container = document.getElementById(divId);
-            // data-domain identifies WeBWorK exercise-wrapper elements.
-            if (!container || !container.dataset || !container.dataset.domain) return;
-            addWeBWorKBadge(container, _state.answers[divId]);
+            if (!container || !container.dataset) return;
+
+            // WeBWorK: data-domain identifies exercise-wrapper elements.
+            if (container.dataset.domain) {
+                addWeBWorKBadge(container, _state.answers[divId]);
+            }
+
+            // DoenetActivity: data-component="doenet" identifies the wrapper div.
+            // Doenet resets its credit counter on load (by design), so we add a
+            // lightweight badge showing the student's saved score from prior work.
+            if (container.dataset.component === 'doenet') {
+                addDoenetBadge(container, _state.answers[divId]);
+            }
         });
     });
 
@@ -874,34 +1026,93 @@
 
     window.addEventListener('message', function (event) {
         var data = event.data;
+        if (!data || typeof data !== 'object') return;
+
+        // ── SPLICE.getState — Doenet requests its saved state when the iframe loads ──
+        //
+        // When a Doenet iframe initializes it sends { subject: 'SPLICE.getState' } to
+        // the parent window.  We respond with the state blob we saved when the student
+        // last answered.  If there is no saved state (first visit), we send null so
+        // Doenet knows to start fresh rather than waiting indefinitely.
+        //
+        // If this arrives before loadRestoreData() has run (before DOMContentLoaded),
+        // _learnerId is not yet set and localStorage reads would use the wrong key.
+        // We queue the request and flush it once loadRestoreData() completes.
+        if (data.subject === 'SPLICE.getState') {
+            if (!_doenetRestoreReady) {
+                // _learnerId not yet known — queue and handle after loadRestoreData() runs
+                _pendingGetStateRequests.push({ source: event.source, messageId: data.message_id });
+            } else {
+                respondToGetState(event.source, data.message_id);
+            }
+            return;
+        }
 
         // Guard: only handle SPLICE.sendEvent messages with a numeric score.
-        // Non-object data (e.g. the resize request string from lti_iframe_resizer)
-        // is skipped by the typeof check.
-        if (!data || typeof data !== 'object') return;
-        if (data.subject !== 'SPLICE.sendEvent') return;
+        // Accept SPLICE.sendEvent (generic SPLICE activities that carry a score)
+        // and SPLICE.reportScoreAndState (DoenetActivity's scored event).
+        // All other subjects are silently ignored.
+        var isSpliceEvent = (data.subject === 'SPLICE.sendEvent' ||
+                             data.subject === 'SPLICE.reportScoreAndState');
+        if (!isSpliceEvent) return;
+
+        // When the Runestone logBookEvent hook is installed, SpliceWrapper intercepts
+        // SPLICE.reportScoreAndState and calls logBookEvent → recordInteraction.
+        // Handling it here too would write a duplicate SCORM interaction record.
+        // We still save the Doenet state blob so SPLICE.getState can restore it,
+        // then return so only the Runestone hook records the interaction.
+        if (data.subject === 'SPLICE.reportScoreAndState' &&
+            window.RunestoneBase && window.RunestoneBase.__ptxScormHooked) {
+            // Belt-and-suspenders: save state for SPLICE.getState, but only when
+            // this is a genuine student submission (score > 0, or we have no saved
+            // score yet).  The init auto-report fires with score=0 after we send
+            // SPLICE.getState.response; saving that would overwrite the better saved state.
+            if (data.state && typeof data.score === 'number') {
+                var reportId = resolveIframeId(event.source);
+                if (reportId) {
+                    var savedEntry = _state.answers[reportId];
+                    var savedPct = savedEntry && typeof savedEntry.percent === 'number' ? savedEntry.percent : null;
+                    if (data.score > 0 || savedPct === null || data.score >= savedPct) {
+                        saveDoenetState(reportId, data.state);
+                    }
+                }
+            }
+            return;
+        }
+
         if (typeof data.score !== 'number') return;
 
         // ── Resolve the exercise div_id from the source iframe ────────────────
         //
         // The SPLICE activity runs inside an <iframe>.  We identify which iframe
         // sent the message by matching its contentWindow against event.source,
-        // then walk up the DOM to the enclosing <div data-component="splice">
-        // which carries the Runestone-assigned xml:id for this activity.
-        // This mirrors the logic in Runestone's SpliceComponent.getUniqueID().
+        // then walk up the DOM to the enclosing component wrapper div, which
+        // carries the Runestone/SCORM-assigned xml:id for this activity.
         //
-        // Fallback: if we can't find the enclosing container, use activity_id
-        // from the SPLICE message itself.
+        // Priority:
+        //   1. [data-component="splice"] wrapper — plain SPLICE iframe exercise
+        //   2. [data-component="doenet"] wrapper — DoenetActivity in SCORM/Runestone
+        //   3. The iframe's own id attribute — SCORM fallback when no wrapper exists
+        //   4. data.activity_id from the SPLICE message itself — last resort
         var divId = data.activity_id || 'splice-unknown';
+        var iframeMatched = false;
         var iframes = document.getElementsByTagName('iframe');
         for (var i = 0; i < iframes.length; i++) {
             if (iframes[i].contentWindow === event.source) {
-                var container = iframes[i].closest('[data-component="splice"]');
+                iframeMatched = true;
+                var container = iframes[i].closest('[data-component="splice"],[data-component="doenet"]');
                 if (container && container.id) {
                     divId = container.id;
+                } else if (iframes[i].id) {
+                    divId = iframes[i].id;
                 }
                 break;
             }
+        }
+        if (!iframeMatched) {
+            console.warn('[PTX-SCORM] SPLICE: could not match event.source to any iframe on page.',
+                         'Using div_id:', divId,
+                         '| iframes on page:', iframes.length);
         }
 
         // ── Normalize the score to [0.0, 1.0] ────────────────────────────────
@@ -920,12 +1131,14 @@
         //   ev.event   — key in RUNESTONE_TO_SCORM_TYPE ('splice' → 'performance')
         //   ev.div_id  — the exercise's stable Runestone/xml:id
         //   ev.percent — numeric score in [0, 1], read by extractScore()
-        //   ev.answer  — the learner's response string (we use the SPLICE event name)
+        //   ev.answer  — the learner's response; prefer data.data (DoenetActivity
+        //                sends answer detail there) and fall back to the event name.
+        var answer = data.data ? JSON.stringify(data.data) : (data.name || '');
         try {
             recordInteraction({
                 event:   'splice',
                 div_id:  divId,
-                answer:  data.name || '',
+                answer:  answer,
                 percent: score
             });
         } catch (err) {
@@ -980,6 +1193,35 @@
     // Add a small status badge to a WeBWorK container's .problem-buttons row,
     // matching the visual position of Runestone's checkmarks on other components.
     // Called at page-load time so it appears before the student clicks Activate.
+    // Show a small score badge on a DoenetActivity container when the student has
+    // prior work saved.  Doenet resets its own credit display on every page load
+    // (it only shows credit after the student clicks Submit again), so this badge
+    // provides a persistent visual reminder of the student's saved score.
+    function addDoenetBadge(container, saved) {
+        var existing = container.querySelector('.ptx-scorm-doenet-badge');
+        if (existing) existing.remove();
+
+        var pct = typeof saved.percent === 'number' ? saved.percent : null;
+        if (pct === null) return;
+
+        var badge = document.createElement('div');
+        badge.className = 'ptx-scorm-doenet-badge';
+
+        var pctLabel = Math.round(pct * 100) + '%';
+        if (pct >= 1) {
+            badge.textContent = '✓ Previously answered correctly (' + pctLabel + ')';
+            badge.style.cssText = 'padding:4px 8px;margin-bottom:4px;background:#d4edda;color:#155724;border:1px solid #c3e6cb;border-radius:4px;font-size:0.9em;';
+        } else if (pct > 0) {
+            badge.textContent = '▶ Previously answered — score: ' + pctLabel;
+            badge.style.cssText = 'padding:4px 8px;margin-bottom:4px;background:#fff3cd;color:#856404;border:1px solid #ffeeba;border-radius:4px;font-size:0.9em;';
+        } else {
+            badge.textContent = '✗ Previously answered — no credit earned';
+            badge.style.cssText = 'padding:4px 8px;margin-bottom:4px;background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;border-radius:4px;font-size:0.9em;';
+        }
+
+        container.insertBefore(badge, container.firstChild);
+    }
+
     function addWeBWorKBadge(container, saved) {
         var existing = container.querySelector('.ptx-scorm-ww-badge');
         if (existing) existing.remove();
@@ -1482,12 +1724,9 @@
 
         // --- suspend_data ---
         var raw = Get('cmi.suspend_data');
-        console.log('[PTX-SCORM] suspend_data raw value: ' + (raw || '(empty)'));
         if (raw) {
             try {
                 var saved = JSON.parse(raw);
-                console.log('[PTX-SCORM] suspend_data parsed — answers keys: ' +
-                            JSON.stringify(Object.keys(saved.answers || {})));
                 if (typeof saved.correct === 'number') _state.correct = saved.correct;
                 if (typeof saved.graded  === 'number') _state.graded  = saved.graded;
                 if (saved.answers && typeof saved.answers === 'object') {
@@ -1597,6 +1836,13 @@
         } else {
             console.log('[PTX-SCORM] Loaded ' + n + ' saved answer(s) for UI restoration.');
         }
+
+        // Flush any SPLICE.getState requests that arrived before _learnerId was set.
+        // Mark ready first so any requests arriving during the flush are handled inline.
+        _doenetRestoreReady = true;
+        _pendingGetStateRequests.forEach(function (req) { respondToGetState(req.source, req.messageId); });
+        _pendingGetStateRequests = [];
+
         return map;
     }
 
