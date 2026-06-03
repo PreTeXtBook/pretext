@@ -384,7 +384,6 @@ def asymptote_conversion(
     try:
         import requests  # post()
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
     msg = 'converting Asymptote diagrams from {} to {} graphics for placement in {} with method "{}"'
@@ -466,7 +465,6 @@ def individual_asymptote_conversion(asydiagram, outform, method, asy_cli, asyver
     try:
         import requests  # post()
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
     filebase, _ = os.path.splitext(asydiagram)
@@ -666,7 +664,6 @@ def individual_latex_image_conversion(latex_image, outformat, dest_dir, method):
     try:
         import pdfCropMargins
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("pdfCropMargins"))
     try:
         import fitz # for svg and png conversion
@@ -933,7 +930,6 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     try:
         import requests  # post()
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
     # Trace Server: language abbreviation goes in argument
@@ -1292,7 +1288,6 @@ def webwork_to_xml(
     try:
         import requests  # webwork server
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
     # Establish WW server version, for live rendering if nothing else
@@ -2489,7 +2484,6 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     try:
         import requests  # YouTube server
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
     log.info(
@@ -2575,7 +2569,6 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     try:
         import qrcode  # YouTube server
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("qrcode"))
 
     import qrcode.image.styledpil
@@ -2909,7 +2902,6 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
     try:
         import requests  # to access STACK server
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
     pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
@@ -3014,7 +3006,6 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
     try:
         import playwright.async_api  # launch()
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("playwright"))
 
     # Interior asynchronous routine to manage the Chromium headless browser.
@@ -3285,7 +3276,6 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     try:
         import requests  # to access MyOpenMath server
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("requests"))
     try:
         import playwright.async_api # for conversion to PDF and PNG
@@ -5434,7 +5424,6 @@ def validate(xml_source, out_file, dest_dir):
     try:
         import requests  # post()
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("requests"))
 
     # JaaS server location
@@ -5629,7 +5618,6 @@ def set_ptx_path(path=None):
 
 def get_ptx_path():
     """Returns path to root of PreTeXt distribution"""
-    global __ptx_path
 
     return __ptx_path
 
@@ -5722,7 +5710,6 @@ def set_executables(adict):
 def get_executable_cmd(exec_name):
     """Queries configuration file for executable name, verifies existence in Unix"""
 
-    global __executables
 
     # get the name, but then see if it really, really works
     log.debug(
@@ -5768,7 +5755,6 @@ def get_executable_cmd(exec_name):
 
 def get_deprecated_tex_fallback(key):
     """Return the best executable key in light of deprecation"""
-    global __executables
 
     # Input: 'latex', 'pdflatex', or 'xelatex', as
     #         enforced in the user interface
@@ -5789,7 +5775,6 @@ def sanitize_url(url):
     try:
         import requests  # test a URL
     except ImportError:
-        global __module_warning
         raise ImportError(__module_warning.format("requests"))
     try:
         requests.get(url, timeout=10)
@@ -5819,7 +5804,6 @@ def get_temporary_directory():
     """Create, record, and return a scratch directory"""
     import tempfile  #  mkdtemp()
 
-    global __temps  #  cache of temporary directories
 
     temp_dir = tempfile.mkdtemp(prefix="ptx-")
     # Register the directory for cleanup at the end of successful
