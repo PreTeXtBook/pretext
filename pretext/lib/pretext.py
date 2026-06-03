@@ -2759,9 +2759,9 @@ def _stack_replace_tags(text, asset_prefix_rel, mathmode=False):
     # We should also replace other HTML entities with their equivalents (e.g. unicode)
     text = text.replace('&nbsp;', '<nbsp/>')
 
-    from lxml import html
+    import lxml.html
 
-    tree = html.fragment_fromstring(text, create_parent='p')
+    tree = lxml.html.fragment_fromstring(text, create_parent='p')
     # Find all <img> tags, make width relative, update source path
     for img in tree.xpath('//img'):
         img.tag = 'image'
@@ -2787,7 +2787,7 @@ def _stack_replace_tags(text, asset_prefix_rel, mathmode=False):
 
     # Convert back to a string
     # method="xml" ensures we get the self-closing <image ... />, <br/>, ... style
-    new_text = html.tostring(tree, encoding='unicode', method='xml')
+    new_text = lxml.html.tostring(tree, encoding='unicode', method='xml')
     if mathmode:
         new_text = new_text.removeprefix("<p>").removesuffix("</p>")
     return new_text
@@ -4746,8 +4746,8 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
 
 def check_color_contrast(color1, color2):
     try:
-        from coloraide import Color
-        contrast = Color(color1).contrast(color2, method='wcag21')
+        import coloraide
+        contrast = coloraide.Color(color1).contrast(color2, method='wcag21')
         if contrast < 4.5:
             log.warning("Color " + color1 + " does not have enough contrast with expected background color " + color2 + ". Contrast ratio is " + str(contrast) + " but should be at least 4.5. Adjust your publisher file html/css/variables to ensure sufficient contrast.")
     except ImportError:
@@ -5562,10 +5562,10 @@ def guarded_xml_include_parser(xml):
         # on it for the real include process.
 
         # Generate custom loader
-        from lxml import ElementInclude
+        import lxml.ElementInclude
         def my_loader(href, parse, encoding=None, parser=None):
             try:
-                ret = ElementInclude._lxml_default_loader(href, parse, encoding, parser)
+                ret = lxml.ElementInclude._lxml_default_loader(href, parse, encoding, parser)
             except Exception as e:
                 log.error(f"Error loading {href}: {e}")
                 raise
@@ -5575,7 +5575,7 @@ def guarded_xml_include_parser(xml):
         # This should also fail, but will give a better error message
         # NB this might report false positives (duplicate xml:id even if controlled by versions)
         src_tree = ET.parse(xml, parser=huge_parser)
-        ElementInclude.include(src_tree, loader=my_loader, max_depth=100)
+        lxml.ElementInclude.include(src_tree, loader=my_loader, max_depth=100)
         return src_tree # should never actually reach
         
 
