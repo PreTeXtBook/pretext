@@ -2717,6 +2717,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$language = 'sql'">         <xsl:text>browser</xsl:text></xsl:when>
         <xsl:when test="$language = 'c'">           <xsl:text>jobeserver</xsl:text></xsl:when>
         <xsl:when test="$language = 'cpp'">         <xsl:text>jobeserver</xsl:text></xsl:when>
+        <xsl:when test="$language = 'gdscript'">    <xsl:text>jobeserver</xsl:text></xsl:when>
         <xsl:when test="$language = 'java'">        <xsl:text>jobeserver</xsl:text></xsl:when>
         <xsl:when test="$language = 'kotlin'">      <xsl:text>jobeserver</xsl:text></xsl:when>
         <xsl:when test="$language = 'python2'">     <xsl:text>jobeserver</xsl:text></xsl:when>

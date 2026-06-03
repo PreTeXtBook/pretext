@@ -4068,6 +4068,12 @@
                         <cell>AC + IO</cell>
                     </row>
                     <row>
+                        <cell>GDScript</cell>
+                        <cell><c>gdscript</c></cell>
+                        <cell></cell>
+                        <cell>AC</cell>
+                    </row>
+                    <row>
                         <cell>Java</cell>
                         <cell><c>java</c></cell>
                         <cell>CL</cell>

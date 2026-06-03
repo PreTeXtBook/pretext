@@ -1912,6 +1912,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- languages only available on a Runestone server -->
         <xsl:when test="($entered-lang = 'c') or
                         ($entered-lang = 'cpp') or
+                        ($entered-lang = 'gdscript') or
                         ($entered-lang = 'java') or
                         ($entered-lang = 'kotlin') or
                         ($entered-lang = 'python3') or

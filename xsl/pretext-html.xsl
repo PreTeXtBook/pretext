@@ -13904,6 +13904,46 @@ TODO:
     <xsl:if test="$b-has-program and not($b-debug-react)">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/components/prism-core.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+        <!-- INJECT GDSCRIPT 2 GRAMMAR VIA PRISM HOOKS -->
+        <script type="text/javascript">
+            <![CDATA[
+            (function() {
+                if (!window.Prism) return;
+                
+                // Define grammar using safe string-based RegExp constructors
+                var gdscript2Grammar = {
+                    'comment': new RegExp('#.*'),
+                    'string': {
+                        pattern: new RegExp('(?:r|f|b)?(?:"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\')', 'i'),
+                        greedy: true
+                    },
+                    'annotation': {
+                        pattern: new RegExp('@\\w+'),
+                        alias: 'builtin'
+                    },
+                    'keyword': new RegExp('\\b(?:as|assert|await|break|breakpoint|class|class_name|const|continue|enum|export|extends|for|func|if|elif|else|in|is|match|onready|pass|preload|return|self|setget|signal|static|super|tool|var|void|while|yield)\\b'),
+                    'function': new RegExp('\\b[a-z_]\\w*(?=\\s*\\()', 'i'),
+                    'number': new RegExp('\\b(?:0b+|0x[\\da-fA-F]+|\\d+(?:\\.\\d+)?(?:e[+-]?\\d+)?)\\b'),
+                    'boolean': new RegExp('\\b(?:true|false)\\b'),
+                    'operator': new RegExp('->|:=|&&|\\|\\||[-+*/%&|^!=<>]=?|~'),
+                    'punctuation': new RegExp('[{}[\\];(),.:]')
+                };
+
+                // Hook into Prism's token initialization pipeline
+                Prism.hooks.add('before-tokenize', function(env) {
+                    if (env.language === 'gdscript') {
+                        Prism.languages.gdscript = gdscript2Grammar;
+                    }
+                });
+                
+                // Pre-register it globally
+                Prism.languages.gdscript = gdscript2Grammar;
+            })();
+            ]]>
+        </script>
+
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-dubtf8xMHSQlExGRQ5R7toxHLgSDZ0K7AunqPWHXmJQ8XyVIG19S1T95gBxlAeGOK02P4Da2RTnQz0Za0H0ebQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/line-highlight/prism-line-highlight.min.js" integrity="sha512-93uCmm0q+qO5Lb1huDqr7tywS8A2TFA+1/WHvyiWaK6/pvsFl6USnILagntBx8JnVbQH5s3n0vQZY6xNthNfKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <xsl:if test="$b-html-theme-legacy or $b-reveal-build" >
