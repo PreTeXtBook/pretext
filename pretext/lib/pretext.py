@@ -106,13 +106,29 @@ import textwrap
 # * The "requests" module would be a candidate for a module-level
 #   import but we prefer to leave it as an optional dependency
 
-# The shared low-level helpers now live in "common.py"; import it here so
-# its canonical __module_warning is available to the guards below, and
-# alias the name locally so existing bare references keep working.
+# ----------------------------------------------------------------------
+# 2026 module split: the lengthy WeBWorK and STACK routines, and the
+# shared low-level helpers, were moved out of this file into siblings.
+# The import graph is strictly one-way, so there are no import cycles:
+#
+#     common.py        - imports nothing from its siblings
+#       ^  ^  ^
+#       |  |  +---- pretext.py  (this file)
+#       |  +------- stack.py
+#       +---------- webwork.py
+#
+#   "webwork" and "stack" import only "common".
+#   "pretext" imports all three; it imports "webwork"/"stack" only to
+#   re-export their public names (see end of file), so the public
+#   ptx.NAME interface used by the driver script is unchanged.
+#
+# "common" holds the canonical __module_warning; we alias it here so the
+# import guards below and existing bare references keep working.
+# ----------------------------------------------------------------------
 from . import common
-from . import stack
-from . import webwork
 __module_warning = common.__module_warning
+from . import webwork
+from . import stack
 
 # Not much can be done without the "lxml" module which mimics
 # the "xsltproc" executable (they share the same libraries)
