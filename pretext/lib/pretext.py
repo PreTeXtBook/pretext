@@ -106,17 +106,11 @@ import textwrap
 # * The "requests" module would be a candidate for a module-level
 #   import but we prefer to leave it as an optional dependency
 
-# This is a convenience for a uniform (detailed) warning when
-# an "extraneous" module fails to load, which is indicative of
-# some problem with an author's working environment
-__module_warning = "\n".join(
-    [
-        'PTX ERROR: the "{}" module has failed to load, and',
-        "  this is necessary for the task you have requested.  Perhaps",
-        "  you have not installed it?  Or perhaps you have forgotten to",
-        "  use a Python virtual environment you set up for this purpose?",
-    ]
-)
+# The shared low-level helpers now live in "common.py"; import it here so
+# its canonical __module_warning is available to the guards below, and
+# alias the name locally so existing bare references keep working.
+from . import common
+__module_warning = common.__module_warning
 
 # Not much can be done without the "lxml" module which mimics
 # the "xsltproc" executable (they share the same libraries)
@@ -144,12 +138,12 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     log.debug("converting LaTeX from {} into {} format".format(xml_source, math_format))
 
     # construct filenames for pre- and post- XSL stylesheets in xsl/support
-    extraction_xslt = os.path.join(get_ptx_xsl_path(), "support/extract-math.xsl")
-    cleaner_xslt = os.path.join(get_ptx_xsl_path(), "support/package-math.xsl")
+    extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "support/extract-math.xsl")
+    cleaner_xslt = os.path.join(common.get_ptx_xsl_path(), "support/package-math.xsl")
 
     # Extraction stylesheet makes a simple, mock web page for MathJax
     # And MathJax executables preserve the page while changing the math
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     mjinput = os.path.join(tmp_dir, "mj-input-latex.html")
     mjintermediate = os.path.join(tmp_dir, "mj-intermediate.html")
     mjoutput = os.path.join(tmp_dir, "mj-output-{}.html".format(math_format))
@@ -172,7 +166,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     params["math.punctuation"] = punctuation
     if pub_file:
         params["publisher"] = pub_file
-    xsltproc(extraction_xslt, xml_source, mjinput, None, params)
+    common.xsltproc(extraction_xslt, xml_source, mjinput, None, params)
     # Trying to correct baseline for inline math in Kindle, so we
     # insert a \mathstrut into all the inline math before feeding to MathJax
     if math_format == "kindle":
@@ -187,8 +181,8 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     log.debug(msg.format(mjinput, math_format, mjoutput))
 
     # process with  pretext.js  executable from  MathJax (Davide Cervone, Volker Sorge)
-    node_exec_cmd = get_executable_cmd("node")
-    mjsre_page = os.path.join(get_ptx_path(), "script", "mjsre", "mj-sre-page.js")
+    node_exec_cmd = common.get_executable_cmd("node")
+    mjsre_page = os.path.join(common.get_ptx_path(), "script", "mjsre", "mj-sre-page.js")
     output = {
         "svg": "svg",
         "kindle": "mathml",
@@ -224,14 +218,14 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     # Also, print() here actual writes on the file, as
     # another facility of the fileinput module, but we need
     # to kill the "extra" newline that print() creates
-    with working_directory(tmp_dir):
+    with common.working_directory(tmp_dir):
         html_file = mjoutput
         with fileinput.FileInput(html_file, inplace=True) as file:
             for line in file:
                 print(xhtml_elt.sub(repl, line), end="")
 
     # clean up and package MJ representations, font data, etc
-    derivedname = get_output_filename(
+    derivedname = common.get_output_filename(
         xml_source, out_file, dest_dir, "-" + math_format + ".xml"
     )
     log.debug(
@@ -239,7 +233,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
             math_format, mjoutput, out_file
         )
     )
-    xsltproc(cleaner_xslt, mjoutput, derivedname)
+    common.xsltproc(cleaner_xslt, mjoutput, derivedname)
     log.info("XML file of math representations deposited as {}".format(derivedname))
 
 
@@ -265,9 +259,9 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     msg = 'converting PreFigure diagrams from {} to {} graphics for placement in {}'
     log.info(msg.format(xml_source, outformat.upper(), dest_dir))
 
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     log.debug("temporary directory: {}".format(tmp_dir))
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-prefigure.xsl")
     # support publisher file, subtree argument
     if pub_file:
@@ -279,10 +273,10 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     log.info("extracting PreFigure diagrams from {}".format(xml_source))
     log.info("string parameters passed to extraction stylesheet: {}".format(stringparams))
 
-    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
 
     # Resulting prefigure files are in tmp_dir, switch there to work
-    with working_directory(tmp_dir):
+    with common.working_directory(tmp_dir):
         if outformat == "source" or outformat == "all":
             log.info("copying PreFigure source files into {}".format(dest_dir))
             shutil.copytree(
@@ -303,9 +297,9 @@ def prefigure_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
         # NB: we might really do this sooner, but then all
         # the files in "external" and "data" get added
         # into the list of source files, pf_source_files
-        _, external_dir = get_managed_directories(xml_source, pub_file)
-        data_dir = get_source_directories(xml_source)
-        copy_managed_directories(tmp_dir, external_abs=external_dir, data_abs=data_dir)
+        _, external_dir = common.get_managed_directories(xml_source, pub_file)
+        data_dir = common.get_source_directories(xml_source)
+        common.copy_managed_directories(tmp_dir, external_abs=external_dir, data_abs=data_dir)
 
         # make output/tactile directory if the outformat is "all"
         # PreFigure makes 'output' but we also want to create 'output/tactile'
@@ -395,9 +389,9 @@ def asymptote_conversion(
             "{} is not a method for Asymptote diagram generation".format(method)
         )
 
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     log.debug("temporary directory: {}".format(tmp_dir))
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-asymptote.xsl")
     # support publisher file, subtree argument
     if pub_file:
@@ -410,9 +404,9 @@ def asymptote_conversion(
     log.info(
         "string parameters passed to extraction stylesheet: {}".format(stringparams)
     )
-    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # Resulting *.asy files are in tmp_dir, switch there to work
-    with working_directory(tmp_dir):
+    with common.working_directory(tmp_dir):
         # simply copy for source file output
         # no need to check executable or server, PreTeXt XSL does it all
         if outformat == "source" or outformat == "all":
@@ -434,7 +428,7 @@ def asymptote_conversion(
             asyversion = ""
             # setup, depending on the method
             if method == "local":
-                asy_executable_cmd = get_executable_cmd("asy")
+                asy_executable_cmd = common.get_executable_cmd("asy")
                 # perhaps replace following stock advisory
                 # with a real version check.  Perhaps see:
                 # https://stackoverflow.com/questions/11887762/how-do-i-compare-version-numbers-in-python
@@ -532,12 +526,12 @@ def sage_conversion(
             xml_source, outformat.upper(), dest_dir
         )
     )
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     log.debug("temporary directory: {}".format(tmp_dir))
-    sage_executable_cmd = get_executable_cmd("sage")
+    sage_executable_cmd = common.get_executable_cmd("sage")
     # TODO why this debug line? get_executable_cmd() outputs the same debug info
     log.debug("sage executable: {}".format(sage_executable_cmd[0]))
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-sageplot.xsl")
     log.info("extracting Sage diagrams from {}".format(xml_source))
     # extraction stylesheet is parameterized by fileformat
@@ -548,8 +542,8 @@ def sage_conversion(
         stringparams["publisher"] = pub_file
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
-    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
-    with working_directory(tmp_dir):
+    common.xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+    with common.working_directory(tmp_dir):
         failed_images = []
         for sageplot in os.listdir(tmp_dir):
             try:
@@ -604,9 +598,9 @@ def latex_image_conversion(
             xml_source, outformat, dest_dir
         )
     )
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     log.debug("temporary directory for latex-image conversion: {}".format(tmp_dir))
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     log.info("extracting latex-image pictures from {}".format(xml_source))
     # support publisher file, subtree argument
     if pub_file:
@@ -619,15 +613,15 @@ def latex_image_conversion(
     # Need to copy entire external directory in the managed case.
     # Making data files available for latex image compilation is
     # not supported outside of the managed directory scheme (2021-07-28)
-    _, external_dir = get_managed_directories(xml_source, pub_file)
-    data_dir = get_source_directories(xml_source)
-    copy_managed_directories(tmp_dir, external_abs=external_dir, data_abs=data_dir)
+    _, external_dir = common.get_managed_directories(xml_source, pub_file)
+    data_dir = common.get_source_directories(xml_source)
+    common.copy_managed_directories(tmp_dir, external_abs=external_dir, data_abs=data_dir)
     # now create all the standalone LaTeX source files
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-latex-image.xsl")
     # no output (argument 3), stylesheet writes out per-image file
-    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # now work in temporary directory
-    with working_directory(tmp_dir):
+    with common.working_directory(tmp_dir):
         # and maintain a list of failures for later
         failed_images = []
         # files *only*, from top-level
@@ -681,8 +675,8 @@ def individual_latex_image_conversion(latex_image, outformat, dest_dir, method):
         latex_image_eps = "{}.eps".format(filebase)
         latex_image_log = "{}.log".format(filebase)
         # process with a  latex  engine
-        latex_key = get_deprecated_tex_fallback(method)
-        tex_executable_cmd = get_executable_cmd(latex_key)
+        latex_key = common.get_deprecated_tex_fallback(method)
+        tex_executable_cmd = common.get_executable_cmd(latex_key)
         # TODO why this debug line? get_executable_cmd() outputs the same debug info
         log.debug("tex executable: {}".format(tex_executable_cmd[0]))
         latex_cmd = tex_executable_cmd + ["-interaction=nonstopmode", "-halt-on-error", latex_image]
@@ -777,7 +771,7 @@ def individual_latex_image_conversion(latex_image, outformat, dest_dir, method):
                     )
                 shutil.copy2(latex_image_png, dest_dir)
             if outformat == "eps" or outformat == "all":
-                pdfeps_executable_cmd = get_executable_cmd("pdfeps")
+                pdfeps_executable_cmd = common.get_executable_cmd("pdfeps")
                 # TODO why this debug line? get_executable_cmd() outputs the same debug info
                 log.debug("pdfeps executable: {}".format(pdfeps_executable_cmd[0]))
                 eps_cmd = pdfeps_executable_cmd + [
@@ -815,9 +809,9 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     msg = 'converting data files from {} to text representations in XML files for placement in {}'
     log.info(msg.format(xml_source, dest_dir))
 
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     log.debug("temporary directory: {}".format(tmp_dir))
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-datafile.xsl")
     the_files = os.path.join(tmp_dir, 'datafile-list.txt')
     # support publisher file, subtree argument
@@ -829,10 +823,10 @@ def datafiles_to_xml(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # outputs a list of ids, but we just loop over created files
     log.info("extracting source files from {}".format(xml_source))
     log.info("string parameters passed to extraction stylesheet: {}".format(stringparams) )
-    xsltproc(extraction_xslt, xml_source, the_files, None, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, the_files, None, stringparams)
 
     # Copy in external resources (e.g., js code)
-    generated_abs, external_abs = get_managed_directories(xml_source, pub_file)
+    generated_abs, external_abs = common.get_managed_directories(xml_source, pub_file)
 
     # Each file receives a single element as its root
     # element. These are templates for that entry
@@ -942,7 +936,7 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     log.info(
         "creating trace data from {} for placement in {}".format(xml_source, dest_dir)
     )
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-trace.xsl")
     # support publisher file, subtree argument
     if pub_file:
@@ -950,10 +944,10 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # Build list of id's, languages, sources into a scratch directory/file
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     code_filename = os.path.join(tmp_dir, "codelens.txt")
     log.debug("Program sources for traces temporarily in {}".format(code_filename))
-    xsltproc(extraction_xslt, xml_source, code_filename, None, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, code_filename, None, stringparams)
     # get trace file contents minus trailing blank line
     with open(code_filename, "r") as code_file:
         contents = code_file.read().rstrip()
@@ -1073,9 +1067,9 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 ################################
 def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_dir, ext_rs_methods):
     # Standard reference locations
-    ptx_dir = get_ptx_path()
-    ptx_xsl_dir = get_ptx_xsl_path()
-    node_exec_cmd = get_executable_cmd("node")
+    ptx_dir = common.get_ptx_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
+    node_exec_cmd = common.get_executable_cmd("node")
     # Identify resource files to process dynamic exercises
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-dynamic.xsl")
     script = os.path.join(ptx_dir, "script", "dynsub", "dynamic_extract.mjs")
@@ -1095,10 +1089,10 @@ def dynamic_substitutions(xml_source, pub_file, stringparams, xmlid_root, dest_d
 
     # Build temporary json file to include how each dynamic problem is setup
     # and all of the substitutions that will be required
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     json_file = os.path.join(tmp_dir, "dynamic-setup.json")
     log.info("Creating temporary dynamic exercise setup JSON: {}".format(json_file))
-    xsltproc(extraction_xslt, xml_source, json_file, tmp_dir, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, json_file, tmp_dir, stringparams)
 
     # Use Node (Deno) to process the JSON to create the XML substitution file
     log.info("Generating substitutions.")
@@ -1152,7 +1146,7 @@ def webwork_to_xml(
     #   explicit -d > managed directories (generated/webwork/) > cwd fallback.
     # Warn when managed directories are not in use, since WeBWorK output
     # landing in the current directory is likely unintentional.
-    generated_dir, external_dir = get_managed_directories(xml_source, pub_file)
+    generated_dir, external_dir = common.get_managed_directories(xml_source, pub_file)
     if not generated_dir:
         msg = "".join(
             [
@@ -1180,14 +1174,14 @@ def webwork_to_xml(
 
     # execute XSL extraction to get back a tree with fundamental
     # information about webwork exercises in the project
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-pg.xsl")
 
     # Build the tree into a scratch file
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     extracted_pg_filename = os.path.join(tmp_dir, "extracted-pg.xml")
     log.debug("Exctracted PG temporarily in {}".format(extracted_pg_filename))
-    xsltproc(extraction_xslt, xml_source, extracted_pg_filename, None, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, extracted_pg_filename, None, stringparams)
 
     # build necessary variables by reading xml with lxml
     extracted_pg_xml = ET.parse(extracted_pg_filename).getroot()
@@ -1243,12 +1237,12 @@ def webwork_to_xml(
         if (server_params.startswith("(") and server_params.endswith(")")):
             server_params = server_params.strip("()")
             split_server_params = server_params.split(",")
-            webwork2_domain = sanitize_url(split_server_params[0])
-            courseID = sanitize_alpha_num_underscore(split_server_params[1])
-            user = sanitize_alpha_num_underscore(split_server_params[2])
-            passwd = sanitize_alpha_num_underscore(split_server_params[3])
+            webwork2_domain = common.sanitize_url(split_server_params[0])
+            courseID = common.sanitize_alpha_num_underscore(split_server_params[1])
+            user = common.sanitize_alpha_num_underscore(split_server_params[2])
+            passwd = common.sanitize_alpha_num_underscore(split_server_params[3])
         else:
-            webwork2_domain = sanitize_url(server_params)
+            webwork2_domain = common.sanitize_url(server_params)
             courseID        = "anonymous"
             user            = "anonymous"
             passwd          = "anonymous"
@@ -1259,7 +1253,7 @@ def webwork_to_xml(
             log.warning("Publication file in use and -s argument passed for WeBWorK server.\n"
                   + "              -s argument will be ignored.\n"
                   + "              Using publication/webwork values (or defaults) instead.")
-        webwork2_domain = sanitize_url(server_params_pub["webwork2_domain"])
+        webwork2_domain = common.sanitize_url(server_params_pub["webwork2_domain"])
         courseID        = server_params_pub["courseID"]
         user            = server_params_pub["user"]
         passwd          = server_params_pub["passwd"]
@@ -1386,8 +1380,8 @@ def webwork_to_xml(
         import socket
         import json
 
-        perl_executable_cmd = get_executable_cmd('perl')[0]
-        pgscript = os.path.join(get_ptx_path(), 'script', 'webwork', 'pg-ptx.pl')
+        perl_executable_cmd = common.get_executable_cmd('perl')[0]
+        pgscript = os.path.join(common.get_ptx_path(), 'script', 'webwork', 'pg-ptx.pl')
 
         extra_macro_dirs = []
 
@@ -2022,10 +2016,10 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz, need_macros)
 
     if pub_file:
         stringparams["publisher"] = pub_file
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "pretext-ww-problem-sets.xsl")
-    tmp_dir = get_temporary_directory()
-    xsltproc(extraction_xslt, xml_source, None, output_dir=tmp_dir, stringparams=stringparams)
+    tmp_dir = common.get_temporary_directory()
+    common.xsltproc(extraction_xslt, xml_source, None, output_dir=tmp_dir, stringparams=stringparams)
     # We don't explicitly know the name of the folder that has all of the sets
     # But it is the only thing in the tmp_dir
     folder_name = os.listdir(tmp_dir)[0]
@@ -2036,13 +2030,13 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz, need_macros)
         pg_macros(xml_source, pub_file, stringparams, macros_folder)
     if tgz:
         archive_file = os.path.join(tmp_dir, folder_name + ".tgz")
-        targz(archive_file, folder)
+        common.targz(archive_file, folder)
         shutil.copy2(archive_file, dest_dir)
     else:
         # with multiple files, we need to copy a tree
         # see comments at  copy_build_directory()
         # before replacing with  shutil.copytree()
-        copy_build_directory(folder, os.path.join(dest_dir,folder_name))
+        common.copy_build_directory(folder, os.path.join(dest_dir,folder_name))
 
 
 ################################
@@ -2059,9 +2053,9 @@ def pg_macros(xml_source, pub_file, stringparams, dest_dir):
 
     if pub_file:
         stringparams["publisher"] = pub_file
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "support", "pretext-pg-macros.xsl")
-    xsltproc(extraction_xslt, xml_source, None, output_dir=dest_dir, stringparams=stringparams)
+    common.xsltproc(extraction_xslt, xml_source, None, output_dir=dest_dir, stringparams=stringparams)
 
 ############################################################
 #
@@ -2103,14 +2097,14 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # * Abandon with an error message if not possible
 
     # Compute publisher variable report one time, collecting results
-    pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
+    pub_vars = common.get_publisher_variable_report(xml_source, pub_file, stringparams)
     # style file name selected by the publisher, no path information
     # citeproc-py looks in their DATAPATH/STYLES_PATH = data/styles
     # so place by a given style file by hand right now
     # Call below does not need an extension, so we do not supply it
-    csl_style = get_publisher_variable(pub_vars, 'csl-style-file')
+    csl_style = common.get_publisher_variable(pub_vars, 'csl-style-file')
     # XSL "value-of" for boolean reports strings "true" or "false"
-    using_csl_styles = get_publisher_variable(pub_vars, 'b-using-csl-styles')
+    using_csl_styles = common.get_publisher_variable(pub_vars, 'b-using-csl-styles')
 
     if using_csl_styles == "false":
         msg = " ".join(["requesting formatted references and citations is not possible",
@@ -2159,15 +2153,15 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     if pub_file:
         stringparams["publisher"] = pub_file
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-biblio-csl.xsl")
 
     # And a place to work and a file there for result tree
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     biblio_xml = os.path.join(tmp_dir, "biblio-csl.xml")
 
     # Harvest bibliographic items and citations, converted to JSON
-    xsltproc(extraction_xslt, xml_source, biblio_xml, None, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, biblio_xml, None, stringparams)
 
     # parse for lxml access
     biblio_tree = ET.parse(biblio_xml)
@@ -2491,7 +2485,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             xml_source, dest_dir
         )
     )
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-youtube.xsl")
     # support publisher file, subtree argument
     if pub_file:
@@ -2499,10 +2493,10 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # Build list of id's into a scratch directory/file
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     id_filename = os.path.join(tmp_dir, "youtube-ids.txt")
     log.debug("YouTube id list temporarily in {}".format(id_filename))
-    xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
     with open(id_filename, "r") as id_file:
         # read lines, but only lines that are comma delimited
@@ -2535,7 +2529,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 def play_button(dest_dir):
     '''Copy generic static video image to a directory'''
 
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     play_button_provided_image = os.path.join(ptx_xsl_dir, "support", "play-button", "play-button.png")
     log.info('Generating generic video preview, aka "play button" into {}'.format(dest_dir))
     shutil.copy2(play_button_provided_image, dest_dir)
@@ -2556,9 +2550,9 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Establish whether there is an image from pub file
     has_image = False
     try:
-        pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
-        image = get_publisher_variable(pub_vars, 'qrcode-image')
-        _, external_dir = get_managed_directories(xml_source, pub_file)
+        pub_vars = common.get_publisher_variable_report(xml_source, pub_file, stringparams)
+        image = common.get_publisher_variable(pub_vars, 'qrcode-image')
+        _, external_dir = common.get_managed_directories(xml_source, pub_file)
         image_path = os.path.join(external_dir, image)
         if (image != '' and os.path.exists(image_path)):
             has_image = True
@@ -2578,7 +2572,7 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
             xml_source, dest_dir
         )
     )
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-qrcode.xsl")
     # support publisher file, subtree argument
     if pub_file:
@@ -2590,7 +2584,7 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
     # Extraction writes sidecar XML files (one per element) into dest_dir
     # via exsl:document, each containing standalone and in-context URLs.
-    xsltproc(extraction_xslt, xml_source, None, dest_dir, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, None, dest_dir, stringparams)
     # Read sidecar XML files to get URLs for QR code generation
     pi_ns = {'pi': 'http://pretextbook.org/2020/pretext/internal'}
     url_files = sorted(glob.glob(os.path.join(dest_dir, "*-url.xml")))
@@ -2641,12 +2635,12 @@ def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, out
     msg = 'converting Mermaid diagrams from {} to {} graphics for placement in {}'
     log.info(msg.format(xml_source, outformat, dest_dir))
 
-    mmd_executable_cmd = get_executable_cmd("mermaid")
+    mmd_executable_cmd = common.get_executable_cmd("mermaid")
     log.debug("Mermaid executable command: {}".format(mmd_executable_cmd))
 
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     log.debug("temporary directory: {}".format(tmp_dir))
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-mermaid.xsl")
 
     # support publisher file, subtree argument
@@ -2660,14 +2654,14 @@ def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, out
         "string parameters passed to extraction stylesheet: {}".format(stringparams)
     )
     #generate mmd files with markdown to be converted to png
-    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
 
-    pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
-    mermaid_theme = get_publisher_variable(pub_vars, 'mermaid-theme')
-    mermaid_layout_engine = get_publisher_variable(pub_vars, 'mermaid-layout-engine')
+    pub_vars = common.get_publisher_variable_report(xml_source, pub_file, stringparams)
+    mermaid_theme = common.get_publisher_variable(pub_vars, 'mermaid-theme')
+    mermaid_layout_engine = common.get_publisher_variable(pub_vars, 'mermaid-layout-engine')
 
     # Resulting *.mmd files are in tmp_dir, switch there to work
-    with working_directory(tmp_dir):
+    with common.working_directory(tmp_dir):
         # Write a config file as JSON in working directory
         mmd_config = {
             "theme": mermaid_theme,
@@ -2904,19 +2898,19 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
     except ImportError:
         raise ImportError(__module_warning.format("requests"))
 
-    pub_vars = get_publisher_variable_report(xml_source, pub_file, stringparams)
-    stack_server = get_publisher_variable(pub_vars, 'stack-server')
+    pub_vars = common.get_publisher_variable_report(xml_source, pub_file, stringparams)
+    stack_server = common.get_publisher_variable(pub_vars, 'stack-server')
     api_url = urllib.parse.urljoin(stack_server, 'render')
-    base_url = get_publisher_variable(pub_vars, 'baseurl')
+    base_url = common.get_publisher_variable(pub_vars, 'baseurl')
     log.info("Using STACK API server at {}".format(api_url))
 
     os.makedirs(dest_dir, exist_ok=True)
     msg = 'converting STACK exercises from {} to static forms for placement in {}'
     log.info(msg.format(xml_source, dest_dir))
 
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     log.debug("temporary directory: {}".format(tmp_dir))
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-stack.xsl")
 
     # support publisher file, subtree argument
@@ -2929,10 +2923,10 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
     log.info("string parameters passed to extraction stylesheet: {}".format(stringparams) )
 
     # Build list of stack/@source into a scratch directory/file
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     source_filename = os.path.join(tmp_dir, "stack-source.txt")
     log.debug("STACK source filenames temporarily in {}".format(source_filename))
-    xsltproc(extraction_xslt, xml_source, source_filename, None, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, source_filename, None, stringparams)
 
     # Course over (source, id) pairs in file created by
     # extraction stylesheet, converting source STACK files
@@ -2941,7 +2935,7 @@ def stack_extraction(xml_source, pub_file, stringparams, xmlid_root, dest_dir ):
     #   https://github.com/PreTeXtBook/pretext/pull/2576
 
     # location of external directory for STACK files
-    generated_dir, external_dir = get_managed_directories(xml_source, pub_file)
+    generated_dir, external_dir = common.get_managed_directories(xml_source, pub_file)
 
     with open(source_filename, "r") as source_file:
         for source in source_file:
@@ -3104,7 +3098,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
     timeout = 10000 if method == "slow" else 5000
 
     # Identify interactives that will be processed
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-interactive.xsl")
     # support publisher file, subtree argument
     if pub_file:
@@ -3112,27 +3106,27 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # Build list of id's into a scratch directory/file
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     id_filename = os.path.join(tmp_dir, "interactives-ids.txt")
     log.debug("Interactives id list temporarily in {}".format(id_filename))
     log.debug("Interactives html files temporarily in {}".format(tmp_dir))
     # This next call may be unique in that the stylesheet outputs the
     # list of ids *and* produce a pile of files (the "standalone") pages
-    xsltproc(extraction_xslt, xml_source, id_filename, tmp_dir, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, id_filename, tmp_dir, stringparams)
     # read the list of interactive identifiers just generated
     with open(id_filename, "r") as id_file:
         interactives = [f.strip() for f in id_file.readlines() if not f.isspace()]
 
     # Copy in external resources (e.g., js code)
-    _, external_abs = get_managed_directories(xml_source, pub_file)
-    copy_managed_directories(tmp_dir, external_abs=external_abs)
+    _, external_abs = common.get_managed_directories(xml_source, pub_file)
+    common.copy_managed_directories(tmp_dir, external_abs=external_abs)
     # place JS in scratch directory
     copy_html_js(tmp_dir)
 
     # filenames lead to placement in current working directory
     # so change to temporary directory, and copy out
     # TODO: just write to "dest_dir"?
-    with working_directory(tmp_dir):
+    with common.working_directory(tmp_dir):
         # event loop and copy, terminating server process even if interrupted
         try:
             log.debug("Starting event loop for playwright, after starting server")
@@ -3190,7 +3184,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
             ]
         )
         raise ValueError(msg)
-    generated_dir, _ = get_managed_directories(xml, pub_file)
+    generated_dir, _ = common.get_managed_directories(xml, pub_file)
 
     # correct attribute and not a directory gets caught earlier
     # but could have publisher file and bad elements/attributes
@@ -3287,7 +3281,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
             xml_source, dest_dir
         )
     )
-    ptx_xsl_dir = get_ptx_xsl_path()
+    ptx_xsl_dir = common.get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, "extract-mom.xsl")
     # support publisher file, subtree argument
     if pub_file:
@@ -3295,10 +3289,10 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
     # Build list of id's into a scratch directory/file
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     id_filename = os.path.join(tmp_dir, "mom-ids.txt")
     log.debug("MyOpenMath id list temporarily in {}".format(id_filename))
-    xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
+    common.xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     images_dir = os.path.join(dest_dir, 'images')
     if not (os.path.isdir(images_dir)):
         os.mkdir(images_dir)
@@ -3546,7 +3540,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     chunk_level = '0'
 
     # Build into a scratch directory
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     log.debug("Braille manufacture in temporary directory: {}".format(tmp_dir))
 
     # use of  math_format is for consistency
@@ -3569,8 +3563,8 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     if pub_file:
         stringparams["publisher"] = pub_file
     preprint = os.path.join(tmp_dir, "preprint.xml")
-    braille_xslt = os.path.join(get_ptx_xsl_path(), "pretext-braille-preprint.xsl")
-    xsltproc(braille_xslt, xml_source, preprint, tmp_dir, stringparams)
+    braille_xslt = os.path.join(common.get_ptx_xsl_path(), "pretext-braille-preprint.xsl")
+    common.xsltproc(braille_xslt, xml_source, preprint, tmp_dir, stringparams)
 
     # use Python to format simplified BRF as a real BRF
     from . import braille_format as braille
@@ -3584,14 +3578,14 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     # chunk level is either '0' or '1' (exclusive "if" follow)
     if chunk_level == '0':
         # monolithic file
-        final_brf = get_output_filename(xml_source, out_file, dest_dir, ".brf")
+        final_brf = common.get_output_filename(xml_source, out_file, dest_dir, ".brf")
         shutil.copyfile(temp_brf, final_brf)
         log.info("Single BRF file deposited as {}".format(final_brf))
     if chunk_level == '1':
         # chunked into chapters
         # directory switch could be moved to split routine,
         # or it could be done in temporary directory and copied out
-        with working_directory(dest_dir):
+        with common.working_directory(dest_dir):
             _split_brf(temp_brf)
             log.info("BRF file chunked and deposited in {}".format(dest_dir))
 
@@ -3952,7 +3946,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
     )
 
     # Build into a scratch directory
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
     log.debug("EPUB manufacture in temporary directory: {}".format(tmp_dir))
 
     # Before making a zip file, the temporary directory should look
@@ -3967,8 +3961,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
     #     external images (customizable)
     # META-INF
 
-    source_dir = get_source_path(xml_source)
-    epub_xslt = os.path.join(get_ptx_xsl_path(), "pretext-epub.xsl")
+    source_dir = common.get_source_path(xml_source)
+    epub_xslt = os.path.join(common.get_ptx_xsl_path(), "pretext-epub.xsl")
     math_representations = os.path.join(
         tmp_dir, "math-representations-{}.xml".format(math_format)
     )
@@ -4014,7 +4008,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
     params["tmpdir"] = tmp_dir.replace(os.sep, "/")
     if pub_file:
         params["publisher"] = pub_file
-    xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, {**params, **stringparams})
+    common.xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, {**params, **stringparams})
 
     # XHTML files lack an overall namespace,
     # while EPUB validation expects it
@@ -4030,7 +4024,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
     # Also, print() here actual writes on the file, as
     # another facility of the fileinput module, but we need
     # to kill the "extra" newline that print() creates
-    with working_directory(xhtml_dir):
+    with common.working_directory(xhtml_dir):
         html_elt = re.compile(orig)
         for root, dirs, files in os.walk(xhtml_dir):
             for fn in files:
@@ -4052,10 +4046,10 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
 
     # All styles are baked into one of these two files
     if math_format == "kindle":
-        css = os.path.join(get_ptx_xsl_path(), "..", "css", "dist", "kindle.css")
+        css = os.path.join(common.get_ptx_xsl_path(), "..", "css", "dist", "kindle.css")
         shutil.copy2(css, css_dir)
     else:
-        css = os.path.join(get_ptx_xsl_path(), "..", "css", "dist", "epub.css")
+        css = os.path.join(common.get_ptx_xsl_path(), "..", "css", "dist", "epub.css")
         shutil.copy2(css, css_dir)
 
     # EPUB Cover File
@@ -4102,8 +4096,8 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
         log.info("attempting to construct cover image using LaTeX and ImageMagick")
         try:
             # process with the  xelatex  engine (better Unicode support)
-            latex_key = get_deprecated_tex_fallback("xelatex")
-            tex_executable_cmd = get_executable_cmd(latex_key)
+            latex_key = common.get_deprecated_tex_fallback("xelatex")
+            tex_executable_cmd = common.get_executable_cmd(latex_key)
             cover_tex_template = "\\documentclass[20pt]{{scrartcl}}\\begin{{document}}\\title{{ {} }}\\subtitle{{ {} }}\\author{{ {} }}\\date{{}}\\maketitle\\thispagestyle{{empty}}\\end{{document}}"
             if "xelatex" in tex_executable_cmd:
                 cover_tex = cover_tex_template.format(
@@ -4137,7 +4131,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
                 "100",
                 cover_source,
             ]
-            with working_directory(tmp_dir):
+            with common.working_directory(tmp_dir):
                 subprocess.run(latex_cmd)
                 subprocess.run(png_cmd)
         except:
@@ -4314,7 +4308,7 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
         title_file = ET.tostring(title_file_element, method="text").decode("ascii")
         epub_file = "{}-{}.epub".format(title_file, math_format)
         log.info("packaging an EPUB temporarily as {}".format(epub_file))
-        with working_directory(tmp_dir):
+        with common.working_directory(tmp_dir):
             with zipfile.ZipFile(epub_file, mode="w", compression=zipfile.ZIP_DEFLATED) as epub:
                 epub.write("mimetype", compress_type=zipfile.ZIP_STORED)
                 for root, dirs, files in os.walk("EPUB"):
@@ -4323,11 +4317,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
                 for root, dirs, files in os.walk("META-INF"):
                     for name in files:
                         epub.write(os.path.join(root, name))
-            derivedname = get_output_filename(xml_source, out_file, dest_dir, ".epub")
+            derivedname = common.get_output_filename(xml_source, out_file, dest_dir, ".epub")
             log.info("EPUB file deposited as {}".format(derivedname))
             shutil.copy2(epub_file, derivedname)
     elif file_format == 'nozip':
-        copy_build_directory(tmp_dir, dest_dir)
+        common.copy_build_directory(tmp_dir, dest_dir)
         msg = 'EPUB build files produced, but not zipped into a single file; results placed in {}'
         log.info(msg.format(dest_dir))
     else:
@@ -4599,7 +4593,7 @@ def _place_runestone_services(tmp_dir, stringparams, ext_rs_methods):
                 # tgz archive of Runestone Services.
                 ext_rs_methods(url=rs_cdn_url + services_file_name, out_path=services_build_path, format="tgz")
             else:
-                download_file(rs_cdn_url + services_file_name, services_build_path)
+                common.download_file(rs_cdn_url + services_file_name, services_build_path)
             log.info("Extracting Runestone Services from archive file")
             import tarfile
             services_file = tarfile.open(services_build_path)
@@ -4618,11 +4612,11 @@ def _place_runestone_services(tmp_dir, stringparams, ext_rs_methods):
 
 # Helper to move a prebuilt css theme into the build directory as theme.css
 def _move_prebuilt_theme(theme_name, theme_opts, tmp_dir):
-    css_src = os.path.join(get_ptx_path(), "css", "dist")
+    css_src = os.path.join(common.get_ptx_path(), "css", "dist")
     css_dest = os.path.join(tmp_dir, "_static", "pretext", "css")
 
-    src = os.path.join(get_ptx_path(), "css", "dist", "theme-{}.css".format(theme_name))
-    dest = os.path.join(get_ptx_path(), os.path.join(css_dest, "theme.css"))
+    src = os.path.join(common.get_ptx_path(), "css", "dist", "theme-{}.css".format(theme_name))
+    dest = os.path.join(common.get_ptx_path(), os.path.join(css_dest, "theme.css"))
 
     # ugly to have this here - it exists for more general use in _palette-dual.scss,
     # but to support prebuilt default theme we need to look up its colors here
@@ -4707,19 +4701,19 @@ def _move_prebuilt_theme(theme_name, theme_opts, tmp_dir):
 
 # Helper to build a custom version of a theme
 def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
-    ptx_path = get_ptx_path()
+    ptx_path = common.get_ptx_path()
     script = os.path.join(ptx_path, "script", "cssbuilder", "cssbuilder.mjs")
     css_dest = os.path.join(tmp_dir, "_static", "pretext", "css")
 
     # if doing building a completely custom theme, update entry-point to include full path as string
     if theme_name == "custom":
-        theme_opts['options']['entry-point'] = os.path.join(get_source_path(xml), theme_opts['options']['entry-point'])
+        theme_opts['options']['entry-point'] = os.path.join(common.get_source_path(xml), theme_opts['options']['entry-point'])
 
     # attempt build
     error_message = "Node.js is required to build themes other than default-modern. Make sure it is installed and in your PATH. Then do 'npm install' in the pretext/script/cssbuilder directory. https://pretextbook.org/doc/guide/html/node-and-npm.html"
     try:
         import subprocess, json
-        node_exec_cmd = get_executable_cmd("node")
+        node_exec_cmd = common.get_executable_cmd("node")
         # theme name is prefixed with "theme-" in the cssbuilder script output
         full_name = "theme-{}".format(theme_name)
         log.info("Building custom css theme: " + full_name)
@@ -4744,8 +4738,8 @@ def check_color_contrast(color1, color2):
         log.warning("The coloraide module is not available and is necessary for checking color contrast. Install it with 'pip install coloraide' or by using the requirements.txt file.")
 
 def build_or_copy_theme(xml, pub_var_dict, tmp_dir):
-    theme_name = get_publisher_variable(pub_var_dict, 'html-theme-name')
-    theme_opts_json = get_publisher_variable(pub_var_dict, 'html-theme-options')
+    theme_name = common.get_publisher_variable(pub_var_dict, 'html-theme-name')
+    theme_opts_json = common.get_publisher_variable(pub_var_dict, 'html-theme-options')
     import json
     theme_opts = json.loads(theme_opts_json)
 
@@ -4760,8 +4754,8 @@ def build_or_copy_theme(xml, pub_var_dict, tmp_dir):
         use_prerolled = True
     elif theme_name == "default-modern":
         try:
-            get_executable_cmd("node")
-            if not os.path.exists(os.path.join(get_ptx_path(), "script", "cssbuilder", "node_modules")):
+            common.get_executable_cmd("node")
+            if not os.path.exists(os.path.join(common.get_ptx_path(), "script", "cssbuilder", "node_modules")):
                 log.info("CSSBuilder packages not installed. Relying on prebuilt default-modern. To fix this, run 'npm install' in the pretext/script/cssbuilder directory. https://pretextbook.org/doc/guide/html/node-and-npm.html")
                 use_prerolled = True
         except Exception as e:
@@ -4775,56 +4769,12 @@ def build_or_copy_theme(xml, pub_var_dict, tmp_dir):
 
 # entry point for pretext script to only build the theme
 def update_theme(xml_source, publication_file, stringparams, dest_dir):
-    tmp_dir = get_temporary_directory()
-    pub_vars = get_publisher_variable_report(xml_source, publication_file, stringparams)
+    tmp_dir = common.get_temporary_directory()
+    pub_vars = common.get_publisher_variable_report(xml_source, publication_file, stringparams)
     build_or_copy_theme(xml_source, pub_vars, tmp_dir)
-    copy_build_directory(tmp_dir, dest_dir)
+    common.copy_build_directory(tmp_dir, dest_dir)
 
-# todo - rewrite other code that does similar things to use this function?
-def get_web_asset(url):
-    """Get the contents of an http request"""
-    try:
-        import requests
-    except ImportError:
-        msg = 'The "requests" module is not available and is necessary for downloading files.'
-        log.debug(msg)
-        raise Exception(msg)
 
-    # Set a user-agent to mimic a browser. This is what chrome on windows sends as of 2025-11-19.
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36'}
-
-    try:
-        services_response = requests.get(url, timeout=(1,10), headers=headers)
-    except requests.exceptions.RequestException as e:
-        msg = '\n'.join(['There was a network problem while trying to download "{}"',
-                            'and the reported problem is:',
-                            '{}'
-                            ])
-        log.debug(msg.format(url, e))
-        raise Exception(msg.format(url, e))
-
-    # Check that an online request was "OK", HTTP response code 200
-    response_status_code = services_response.status_code
-    if response_status_code != 200:
-        msg = '\n'.join(["The file {} was not found",
-                            "the server returned response code {}"
-                            ])
-        log.debug(msg.format(url, response_status_code))
-        raise Exception(msg.format(url, response_status_code))
-
-    return services_response.content
-
-def download_file(url, dest_filename):
-    """Write a web asset to a local file"""
-    contents = get_web_asset(url)
-    try:
-        dest_dir = os.path.dirname(dest_filename)
-        os.makedirs(dest_dir, exist_ok=True)
-
-        with open(dest_filename, 'wb') as f:
-            f.write(contents)
-    except Exception as e:
-        raise Exception("Failed to save download", dest_filename)
 
 def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir, ext_rs_methods):
     """Convert XML source to HTML files, in destination directory or as zip file"""
@@ -4836,15 +4786,15 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     time_logger = Stopwatch("html()", log_time_info)
 
     # Consult publisher file for locations of images
-    generated_abs, external_abs = get_managed_directories(xml, pub_file)
+    generated_abs, external_abs = common.get_managed_directories(xml, pub_file)
     # Consult source for additional files
-    data_dir = get_source_directories(xml)
+    data_dir = common.get_source_directories(xml)
 
     # names for scratch directories
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
 
-    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
-    include_static_files = get_publisher_variable(pub_vars, 'portable-html') != "yes"
+    pub_vars = common.get_publisher_variable_report(xml, pub_file, stringparams)
+    include_static_files = common.get_publisher_variable(pub_vars, 'portable-html') != "yes"
     time_logger.log("pubvars loaded")
 
     if include_static_files:
@@ -4869,11 +4819,11 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     if extra_xsl:
         extraction_xslt = extra_xsl
     else:
-        extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-html.xsl")
+        extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "pretext-html.xsl")
 
     # place managed directories - some of these (Asymptote HTML) are
     # consulted during the XSL run and so need to be placed beforehand
-    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
+    common.copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
     time_logger.log("managed directories copied")
 
     if include_static_files:
@@ -4885,7 +4835,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
-    xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
+    common.xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
     time_logger.log("xsltproc complete")
 
     if not(include_static_files):
@@ -4896,10 +4846,10 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
         # with multiple files, we need to copy a tree
         # see comments at  copy_build_directory()
         # before replacing with  shutil.copytree()
-        copy_build_directory(tmp_dir, dest_dir)
+        common.copy_build_directory(tmp_dir, dest_dir)
     elif file_format == "zip" or file_format == "scorm":
         # working in temporary directory gets simple paths in zip file
-        with working_directory(tmp_dir):
+        with common.working_directory(tmp_dir):
             zip_file = "html-output.zip"
             log.info(
                 "packaging a zip file temporarily as {}".format(
@@ -4916,7 +4866,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
                         #       Or, zip into some new temporary directory?
                         if name != zip_file:
                             epub.write(os.path.join(root, name))
-            derivedname = get_output_filename(xml, out_file, dest_dir, ".zip")
+            derivedname = common.get_output_filename(xml, out_file, dest_dir, ".zip")
             shutil.copy2(zip_file, derivedname)
             log.info("zip file of HTML output deposited as {}".format(derivedname))
     else:
@@ -4934,10 +4884,10 @@ def revealjs(
     stringparams = stringparams.copy()
 
     # Consult publisher file for locations of images
-    generated_abs, external_abs = get_managed_directories(xml, pub_file)
+    generated_abs, external_abs = common.get_managed_directories(xml, pub_file)
 
     # names for scratch directories
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
 
     # support publisher file, and subtree argument
     if pub_file:
@@ -4948,18 +4898,18 @@ def revealjs(
     if extra_xsl:
         extraction_xslt = extra_xsl
     else:
-        extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-revealjs.xsl")
+        extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "pretext-revealjs.xsl")
 
     # place managed directories - some of these (Asymptote HTML) are
     # consulted during the XSL run and so need to be placed beforehand
-    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+    common.copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
 
     # place JS in scratch directory
     # TODO: audit what JS is really needed/used
     copy_html_js(tmp_dir)
 
     # copy CSS
-    css_src = os.path.join(get_ptx_path(), "css", "dist", "pretext-reveal.css")
+    css_src = os.path.join(common.get_ptx_path(), "css", "dist", "pretext-reveal.css")
     css_dest = os.path.join(tmp_dir, "_static", "pretext", "css", "pretext-reveal.css")
     with open(css_src, 'r') as theme_file:
         filedata = theme_file.read()
@@ -4969,12 +4919,12 @@ def revealjs(
 
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
-    derivedname = get_output_filename(xml, out_file, dest_dir, ".html")
-    xsltproc(extraction_xslt, xml, derivedname, tmp_dir, stringparams)
+    derivedname = common.get_output_filename(xml, out_file, dest_dir, ".html")
+    common.xsltproc(extraction_xslt, xml, derivedname, tmp_dir, stringparams)
     # with multiple files, we need to copy a tree
     # see comments at  copy_build_directory()
     # before replacing with  shutil.copytree()
-    copy_build_directory(tmp_dir, dest_dir)
+    common.copy_build_directory(tmp_dir, dest_dir)
 
 
 ##################
@@ -5007,18 +4957,18 @@ def assembly(xml, pub_file, stringparams, out_file, dest_dir, method):
         log.error("assembly method {} not recognized".format(method))
     # "extra_xsl" would be silly in this context (?)
     extraction_xslt = os.path.join(
-        get_ptx_xsl_path(), "utilities", "pretext-enhanced-source.xsl"
+        common.get_ptx_xsl_path(), "utilities", "pretext-enhanced-source.xsl"
     )
     # form output filename based on source filename,
     # unless an  out_file  has been specified
-    derivedname = get_output_filename(xml, out_file, dest_dir, ".xml")
+    derivedname = common.get_output_filename(xml, out_file, dest_dir, ".xml")
     # Write output into working directory, no scratch space needed
     log.info(
         "converting {} to enhanced (pre-processed) PreTeXt source as {}".format(
             xml, derivedname
         )
     )
-    xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
+    common.xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
 # lxml element tree as return value. for use internally
 
@@ -5042,10 +4992,10 @@ def assembly_internal(xml, pub_file, stringparams, method):
         log.error("assembly method {} not recognized".format(method))
     # use the right xsl template
     extraction_xslt = os.path.join(
-        get_ptx_xsl_path(), "utilities", "pretext-enhanced-source.xsl"
+        common.get_ptx_xsl_path(), "utilities", "pretext-enhanced-source.xsl"
     )
     log.debug("converting {} to enhanced (pre-processed) PreTeXt source for internal use".format(xml))
-    return xsltproc(extraction_xslt, xml, None, None, stringparams)
+    return common.xsltproc(extraction_xslt, xml, None, None, stringparams)
 
 #####################
 # Conversion to LaTeX
@@ -5061,9 +5011,9 @@ def get_latex_style(xml, pub_file, stringparams):
       - If there is no journal-name publisher variable, or the variable is not in the
         list of journals, checks for the publisher variable 'latex-style' and returns this.
     """
-    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
-    journal_name = get_publisher_variable(pub_vars, "journal-name")
-    pub_latex_style = get_publisher_variable(pub_vars, "latex-style")
+    pub_vars = common.get_publisher_variable_report(xml, pub_file, stringparams)
+    journal_name = common.get_publisher_variable(pub_vars, "journal-name")
+    pub_latex_style = common.get_publisher_variable(pub_vars, "latex-style")
     if len(journal_name) > 0:
         journal_info = get_journal_info(journal_name)
         log.debug(f"Journal Info: {journal_info}")
@@ -5086,10 +5036,10 @@ def latex_package(xml, pub_file, stringparams, dest_dir):
     latex document in a particular journal's style (as specified by
     a texstyle file).  This always downloads a fresh version of the files.
     """
-    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
-    journal_name = get_publisher_variable(pub_vars, "journal-name")
+    pub_vars = common.get_publisher_variable_report(xml, pub_file, stringparams)
+    journal_name = common.get_publisher_variable(pub_vars, "journal-name")
     if journal_name:
-        tmp_dir = get_temporary_directory()
+        tmp_dir = common.get_temporary_directory()
         # place_latex_package_files checks if tmp_dir already has the files, which it won't, so new files will always be downloaded.
         dest_dir = os.path.join(dest_dir, journal_name)
         place_latex_package_files(dest_dir, journal_name, tmp_dir)
@@ -5121,15 +5071,15 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
             log.warning("Ignoring the publisher file's latex-style in favor of the extra XSL specified.")
     elif latex_style:
         log.debug("Using LaTeX style: {}".format(latex_style))
-        extraction_xslt = os.path.join(get_ptx_xsl_path(), "latex", f"pretext-latex-{latex_style}.xsl")
+        extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "latex", f"pretext-latex-{latex_style}.xsl")
     else:
-        extraction_xslt = os.path.join(get_ptx_xsl_path(), "pretext-latex.xsl")
+        extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "pretext-latex.xsl")
     # form output filename based on source filename,
     # unless an  out_file  has been specified
-    derivedname = get_output_filename(xml, out_file, dest_dir, ".tex")
+    derivedname = common.get_output_filename(xml, out_file, dest_dir, ".tex")
     # Write output into working directory, no scratch space needed
     log.info("converting {} to LaTeX as {}".format(xml, derivedname))
-    xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
+    common.xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
 
 ###################
@@ -5189,15 +5139,15 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
 
-    generated_abs, external_abs = get_managed_directories(xml, pub_file)
+    generated_abs, external_abs = common.get_managed_directories(xml, pub_file)
     # Consult source for additional files
-    data_dir = get_source_directories(xml)
+    data_dir = common.get_source_directories(xml)
 
     # perhaps necessary (so drop "if"), but maybe not; needs to be supported
     if pub_file:
         stringparams["publisher"] = pub_file
     # names for scratch directories
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
 
     # make the LaTeX source file in scratch directory
     # (1) pass None as out_file to derive from XML source filename
@@ -5215,28 +5165,28 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
     # (an empty string is impossible due to a slash always being present?)
 
     # Make data files available, such as for TikZ images
-    copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
+    common.copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
 
     # If we are building for a journal, we might need extra files
-    pub_vars = get_publisher_variable_report(xml, pub_file, stringparams)
-    journal_name = get_publisher_variable(pub_vars, "journal-name")
+    pub_vars = common.get_publisher_variable_report(xml, pub_file, stringparams)
+    journal_name = common.get_publisher_variable(pub_vars, "journal-name")
     if journal_name:
         place_latex_package_files(tmp_dir, journal_name, os.path.join(generated_abs, "latex-packages"))
 
     # If requested, copy the LaTeX source and asset folders to dest_dir.
     # Note that outputs == "all" needs to wait until after the build to copy build_dir.
     if outputs == "all-clean" or outputs == "prebuild":
-        copy_build_directory(tmp_dir, dest_dir)
+        common.copy_build_directory(tmp_dir, dest_dir)
         # prebuild means no pdf, so stop here.
         if outputs == "prebuild":
             return
 
     # now work in temporary directory since LaTeX is a bit incapable
     # of working outside of the current working directory
-    with working_directory(tmp_dir):
+    with common.working_directory(tmp_dir):
         # process with a  latex  engine
-        latex_key = get_deprecated_tex_fallback(method)
-        latex_exec_cmd = get_executable_cmd(latex_key)
+        latex_key = common.get_deprecated_tex_fallback(method)
+        latex_exec_cmd = common.get_executable_cmd(latex_key)
         # -halt-on-error will give an exit code to examine
         # First pass always needed, second resolves cross-references.
         # Additional passes may be required by packages like nicematrix
@@ -5250,7 +5200,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
         # If we want all outputs, we copy the entire build directory now that the PDF is built
         # so we can get the *.log, *.aux, etc build files.
         if outputs == "all":
-            copy_build_directory(tmp_dir, dest_dir)
+            common.copy_build_directory(tmp_dir, dest_dir)
         else:
             # Copy just the PDF output
             # out_file: not(None) only if provided in CLI
@@ -5266,149 +5216,6 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
 # XSLT Processing
 #################
 
-# Pythonic replacement for xsltproc executable
-def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
-    """
-    Apply an XSL stylesheet to an XML source, with control over location of results.
-
-    xsl          - filename (string) for XSL stylesheet
-    xml          - filename (string) for XML source
-    result       - filename (string) for result tree of the stylesheet
-                   None if stylesheet 100% writes its own files,
-                   i.e. expecting an empty result tree
-    output_dir   - a directory for exsl:document() templates to write to
-    stringparams - a dictionary of option/value string:string pairs to
-                   pass to  xsl:param  elements of the stylesheet
-
-    N.B. The value of a "publisher" string parameter passed in the
-    "stringparams" argument must be a complete path, since a relative
-    path can be rendered incorrect by the change to an "output_dir"
-    different than that at the time of the command-line invocation.
-
-    N.B. A stylesheet may output text to be captured in the "result"
-    file, and it may *also simultaneously* produce many files to be
-    collected in the "output_dir" directory.  An example is in the
-    formation of preview images for interactives.
-
-    Return: an lxml element tree data structure of the result.
-    This is whatever the stylesheet creates in the file whose name
-    is given by the `result` argument.  It could be empty, or it might
-    be only a partial result of the stylesheet, since the stylesheet
-    could independently produce multiple files with fixed names.  This
-    return value may be useful to consumers of this module (and that
-    is the intent).  Normally the return value is ignored.
-    """
-    import threading  # Thread()
-
-    log.info("XSL conversion of {} by {}".format(xml, xsl))
-    debug_string = (
-        "XSL conversion via {} of {} to {} and/or into directory {} with parameters {}"
-    )
-    log.debug(debug_string.format(xsl, xml, result, output_dir, stringparams))
-
-    # string parameters arrive in a "plain" string:string dictionary
-    # but the values need to be prepped for lxml use, always
-    stringparams = {
-        key: ET.XSLT.strparam(value) for (key, value) in stringparams.items()
-    }
-
-    # Parse source, no harm to assume
-    # xinclude modularization is necessary.
-    src_tree = guarded_xml_include_parser(xml)
-
-    # parse xsl, and build a transformation object
-    # allow writing if an output directory is given
-    # this is the default, but we are explicit here
-    control = None
-    if output_dir:
-        control = ET.XSLTAccessControl(write_file=True)
-    xsl_tree = ET.parse(xsl)
-    xslt = ET.XSLT(xsl_tree, access_control=control)
-
-    # do the transformation, with parameterization
-    # possibly change/restore directories to capture
-    # (multi-)file output from  exsl:document() calls
-    owd = os.getcwd()
-    if output_dir:
-        os.chdir(output_dir)
-    # clear global errors, apply the xsl transform
-    ET.clear_error_log()
-    result_tree = []
-    texc = None
-
-    def transform():
-        nonlocal result_tree, texc
-        try:
-            result_tree = xslt(src_tree, **stringparams)
-        except Exception as e:
-            texc = e
-
-    try:
-        parse_t = threading.Thread(target=transform)
-        parse_t.start()
-        still_alive = True
-        start = 0
-        while still_alive:
-            parse_t.join(0.5)  # Wait 0.5 seconds for thread to complete
-            still_alive = parse_t.is_alive()
-
-            end = len(xslt.error_log)
-
-            # if there are any messages and we are just
-            # starting out, produce an explanatory line
-            # start will be reset to non-zero, so this is
-            # one-time only, and never if there are no messages
-            if (start == 0) and (end > 0):
-                log.info("messages from the log for XSL processing:")
-            # print out any unprinted messages from error_log
-            for line in xslt.error_log[start:end]:
-                if "PTX:FATAL" in line.message:
-                    log.critical(f"* {line.message}")
-                elif "PTX:ERROR" in line.message or "PTX:BUG" in line.message:
-                    log.error(f"* {line.message}")
-                elif "PTX:WARNING" in line.message or "PTX:DEPRECATE" in line.message:
-                    log.warning(f"* {line.message}")
-                elif "PTX:DEBUG" in line.message:
-                    log.debug(f"* {line.message}")
-                else:
-                    log.info(f"* {line.message}")
-            start = end
-        if texc is None:
-            log.info("successful application of {}".format(xsl))
-        else:
-            raise (texc)
-    except Exception as e:
-        log.error("processing with {} has failed\n".format(xsl))
-        # report any errors on failure (indented)
-        raise (e)
-    finally:
-        # wait until thread is done
-        if parse_t.is_alive():
-            parse_t.join()
-        # restore directory in success or failure
-        os.chdir(owd)
-
-    # write a serialized version of `result_tree` to a file
-    # write_output() is an lxml method which respects/interprets
-    # the stylesheet's xsl:output/@encoding attribute value
-    # An error traced back here could be a stylesheet with no explicit
-    # encoding given, so determine which `xsl` is in use and check
-    try:
-        if result:
-            result_tree.write_output(result)
-        # Regardless, return the result_tree, which might be useful for the calling function
-        return result_tree
-    except LookupError as e:
-        root_cause = str(e)
-        msg = "".join(
-            [
-                "PTX:ERROR: the stylesheet: {}\n",
-                "has a problem with xsl:output/@encoding.\n",
-                "The lxml error message is:\n",
-                '"{}"',
-            ]
-        ).format(xsl, root_cause)
-        raise ValueError(msg)
 
 
 ########################
@@ -5431,7 +5238,7 @@ def validate(xml_source, out_file, dest_dir):
     # Alias for XInclude namespace
     NSMAP = {"xi": "http://www.w3.org/2001/XInclude"}
     # home for zip file construction
-    tmp_dir = get_temporary_directory()
+    tmp_dir = common.get_temporary_directory()
 
     # directory location of main source file, every filename collected
     # below (in *_files lists) is relative to this directory
@@ -5486,7 +5293,7 @@ def validate(xml_source, out_file, dest_dir):
     # zipfile.ZIP_DEFLATED is the "usual  ZIP compression method"
     zip_filename = os.path.join(tmp_dir, "test.zip")
     log.info("packaging source temporarily as {}".format(zip_filename))
-    with working_directory(d):
+    with common.working_directory(d):
         with zipfile.ZipFile(zip_filename, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
             # set() will avoid duplicate files included twice (or more)
             for f in set(all_files):
@@ -5494,13 +5301,13 @@ def validate(xml_source, out_file, dest_dir):
 
 
     # fresh schema from the PreTeXt distribution
-    schema_filename = os.path.join(get_ptx_path(), "schema", "pretext.rng")
+    schema_filename = os.path.join(common.get_ptx_path(), "schema", "pretext.rng")
     files = {'source': open(zip_filename,'rb'), 'rng': open(schema_filename,'rb')}
     data = {'mainfile': base}
     log.info("communicating with server at {}".format(server_url))
     r = requests.post(server_url, data=data, files=files)
 
-    derivedname = get_output_filename(xml_source, out_file, dest_dir, ".jing")
+    derivedname = common.get_output_filename(xml_source, out_file, dest_dir, ".jing")
     with open(derivedname, "w") as f:
         f.writelines(r.text)
     log.info("messages from validation in {}".format(derivedname))
@@ -5513,59 +5320,6 @@ def validate(xml_source, out_file, dest_dir):
 ###################
 
 
-def guarded_xml_include_parser(xml):
-    """
-    Attempt parsing of XML including xi:includes processing.
-    Returns an lxml element tree.
-    On error, generate readable exception trace.
-    """
-
-    # Seems a depth of 256 was exceeded for an SVG image:
-    # lxml.etree.XMLSyntaxError: Excessive depth in document: 256 use XML_PARSE_HUGE option
-    huge_parser = ET.XMLParser(huge_tree=True)
-    src_tree = ET.parse(xml, parser=huge_parser)
-    try:
-        # Try using default xinclude() first. But it does not generate good error messages.
-        # So on exception, we redo with a custom loader that will give better error messages.
-        # Undefined namespace prefixes (e.g. xi:) go in error log of XInclude object
-        # but do not cause it to fail/throw
-        includer = ET.XInclude()
-        includer(src_tree.getroot())
-        if includer.error_log:
-            namespace_xi_error = False
-            log.debug("XInclude error(s) found:")
-            for line in includer.error_log:
-                log.debug(f"* {line.message}")
-                if "Namespace prefix xi on include is not defined" in line.message:
-                    log.error("You are trying to use 'xi:include' in a file that does not contain 'xmlns:xi=\"http://www.w3.org/2001/XInclude\"' in its root element.")
-                    namespace_xi_error = True
-            # If the error was due to an undefined namespace prefix, raise an error
-            if namespace_xi_error:
-                raise ET.XIncludeError("Missing namespace declaration for 'xi'")
-        return src_tree
-    except ET.XIncludeError as e:
-        # xinclude() does not show what file a parsing error occured in
-        # So if there was an error, build a custom loader and redo with ElementInclude
-        # which will include the file name in the stack dump.
-        # ElementInclude is a limited version of xinclude(), so can't rely
-        # on it for the real include process.
-
-        # Generate custom loader
-        import lxml.ElementInclude
-        def my_loader(href, parse, encoding=None, parser=None):
-            try:
-                ret = lxml.ElementInclude._lxml_default_loader(href, parse, encoding, parser)
-            except Exception as e:
-                log.error(f"Error loading {href}: {e}")
-                raise
-            return ret
-
-        # Reparse the tree (was modified in try clause) and run ElementInclude
-        # This should also fail, but will give a better error message
-        # NB this might report false positives (duplicate xml:id even if controlled by versions)
-        src_tree = ET.parse(xml, parser=huge_parser)
-        lxml.ElementInclude.include(src_tree, loader=my_loader, max_depth=100)
-        return src_tree # should never actually reach
         
 
 def python_version():
@@ -5590,437 +5344,46 @@ def check_python_version():
         raise (OSError(msg.format(python_version())))
 
 
-def set_ptx_path(path=None):
-    """Set (or discover) path to root of PreTeXt distribution"""
-    # necessary to locate configuration files, XSL stylesheets
-    # since authors can drop distribution *anywhere* in their system
-    # Default (path=None) will assume the location is relative to
-    # this module in the PreTeXt distribution.  Otherwise, a
-    # simple assignment is made
-
-    global __ptx_path
-
-    if path:
-        __ptx_path = path
-    else:
-        # full path to pretext.py module file itself
-        # <distribution-root>/pretext/lib/pretext.py
-        this_file_path = os.path.abspath(__file__)
-        # split off "python.py" off module's full path
-        lib_path, _ = os.path.split(this_file_path)
-        # now split off the "lib" directory
-        module_dir, _ = os.path.split(lib_path)
-        # now split off "pretext" directory
-        # to arrive at the root of the distribution
-        __ptx_path, _ = os.path.split(module_dir)
-    return None
-
-
-def get_ptx_path():
-    """Returns path to root of PreTeXt distribution"""
-
-    return __ptx_path
-
-
-def get_ptx_xsl_path():
-    """Returns path of PreTeXt XSL directory"""
-
-    return os.path.join(get_ptx_path(), "xsl")
-
-
-def get_source_path(source_file):
-    """Returns path of source XML file"""
-
-    # split path off filename
-    source_dir, _ = os.path.split(source_file)
-    log.info("discovering source file's directory name: {}".format(source_dir))
-    return os.path.normpath(source_dir)
-
-
-def _git_symbolic_to_hash(symbolic):
-    '''Convert a branch name to its commit hash at the tip'''
-
-    repo = get_ptx_path();
-    # e.g. .git/refs/heads/master
-    commit_filename = os.path.join(repo, '.git', 'refs', 'heads', symbolic)
-    try:
-        with open(commit_filename, 'r') as f:
-            # always a commit hash in hex
-            # strip a trailing newline (OK assumption?)
-            return f.readline()[:-1]
-    except Exception as e:
-        log.critical(traceback.format_exc())
-        log.critical("the full PreTeXt repository may not be available, so determination of commits is not possible")
-        return None
-
-
-# presumes PreTeXt repo publishes "master" as mainline branchh
-def get_git_master_commit():
-    """Return the full commit hash of master branch"""
-    # Note: no guarantee this is the branch in use
-    return _git_symbolic_to_hash('master')
-
-
-def get_git_head():
-    '''Returns a pair for active branch: (symbolic name, hash)'''
-    # Note: in "detached state" the symbolic name is None
-
-    import string
-
-    repo = get_ptx_path();
-    # .git/refs/heads/master
-    branch_filename = os.path.join(repo, '.git', 'HEAD')
-    try:
-        with open(branch_filename, 'r') as f:
-            # strip a trailing newline (OK assumption?)
-            head = f.readline()[:-1]
-    except Exception as e:
-        log.critical(traceback.format_exc())
-        log.critical("the full PreTeXt repository may not be available, so determination of commits is not possible")
-        return (None, None)
-
-    # head is normally a full symbolic reference
-    # but on a "checkout" is "detached" and is a hash
-    # https://stackoverflow.com/questions/11592261/check-if-a-string-is-hexadecimal
-    # https://stackoverflow.com/a/11592279
-    if all(c in string.hexdigits for c in head):
-        return (None, head)
-    else:
-        # strip leading 16 characters: "ref: refs/heads/"
-        branch = head[16:]
-        commit = _git_symbolic_to_hash(branch)
-        return (branch, commit)
-
 
-def build_info_message():
-    '''Return a string with useful information about build environment'''
-    # Presumes the git repository is present, may need an override
-    branch, commit = get_git_head()
-    master = get_git_master_commit()
-    msg = 'built with {} using commit {} at tip of branch "{}" ("master": {})'
-    return msg.format("pretext/pretext script", commit, branch, master)
-
-
-def set_executables(adict):
-    global __executables
-
-    __executables = adict
-
-
-def get_executable_cmd(exec_name):
-    """Queries configuration file for executable name, verifies existence in Unix"""
-
-
-    # get the name, but then see if it really, really works
-    log.debug(
-        'locating "{}" in [executables] section of configuration file'.format(exec_name)
-    )
-    # 'tex' deprecated, and replaced by 'latex', 'pdflatex', and 'xelatex'
-    if exec_name == "tex":
-        msg = "\n".join(
-            [
-                "'tex'  is deprecated as a key for a LaTeX executable (2022-01-31)'",
-                "             and has been replaced by 'latex', 'pdflatex', or 'xelatex'.",
-                "***  We will attempt to honor your existing LaTeX engine choice.                ***",
-                '***  Edit the configuration file  ("pretext.cfg" or "project.ptx") accordingly  ***',
-            ]
-        )
-        # upgrade to an ERROR/exception after some interval
-        log.warning(msg)
-    config_cmd_line = __executables[exec_name].split()
-
-    # Returns the full-path version of the command, as if the PATH was employed
-    # "None" indicates the executable does not exist on the system
-    # https://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
-    normalized_exec = shutil.which(config_cmd_line[0])
-
-    error_messages = []
-    if normalized_exec == None:
-        error_messages += [
-            "PTX:ERROR: cannot locate executable with configuration name `{}` as command `{}`".format(
-                exec_name, config_cmd_line[0]
-            ),
-            '***  Edit the configuration file  ("pretext.cfg" or "project.ptx") and/or install  ***',
-            "***  the necessary program and/or make sure the executable is on your PATH         ***",
-        ]
-    if error_messages:
-        raise OSError("\n".join(error_messages))
-    log.debug(
-        "{} executable: {}, options: {}".format(
-            exec_name, config_cmd_line[0], " ".join(config_cmd_line[1:])
-        )
-    )
-    return config_cmd_line
-
-
-def get_deprecated_tex_fallback(key):
-    """Return the best executable key in light of deprecation"""
-
-    # Input: 'latex', 'pdflatex', or 'xelatex', as
-    #         enforced in the user interface
-    #
-    # Output: simply echo input, unless such an executable key
-    # does not exist AND there is a stale (deprecated) 'tex' key.
-    # In this case, generate the 'tex' key.  Warning will come
-    # from the  get_executable_cmd()  function.
-    if not (key in __executables) and ("tex" in __executables):
-        return "tex"
-    else:
-        return key
-
-
-def sanitize_url(url):
-    """Verify a server address"""
-    log.info("validating, cleaning server URL: {}".format(url))
-    try:
-        import requests  # test a URL
-    except ImportError:
-        raise ImportError(__module_warning.format("requests"))
-    try:
-        requests.get(url, timeout=10)
-    except requests.exceptions.RequestException as e:
-        root_cause = str(e)
-        msg = "PTX:ERROR: there was a problem with the server URL, {}\n".format(url)
-        raise ValueError(msg + root_cause)
-    return url
-
-
-def sanitize_alpha_num_underscore(param):
-    """Verify parameter is a string containing only alphanumeric and undescores"""
-    import string
-
-    allowed = set(string.ascii_letters + string.digits + "_")
-    log.info("verifying parameter: {}".format(param))
-    if not (set(param) <= allowed):
-        raise ValueError(
-            "PTX:ERROR: param {} contains characters other than a-zA-Z0-9_ ".format(
-                param
-            )
-        )
-    return param
-
-
-def get_temporary_directory():
-    """Create, record, and return a scratch directory"""
-    import tempfile  #  mkdtemp()
-
-
-    temp_dir = tempfile.mkdtemp(prefix="ptx-")
-    # Register the directory for cleanup at the end of successful
-    # execution iff the verbosity is set to level 2 ("debug")
-    # So errors, or requesting gross debugging info, will leave the
-    # directories behind for inspection, otherwise they get removed
-    __temps.append(temp_dir)
-    return temp_dir
-
-
-def get_output_filename(xml, out_file, dest_dir, suffix):
-    """Formulate a filename for single-file output"""
-    #  out_file  is None, or full path
-    #  dest_dir is at least current working directory
-
-    if out_file:
-        return out_file
-    # split off source filename, replace suffix
-    derivedname = os.path.splitext(os.path.split(xml)[1])[0] + suffix
-    return os.path.join(dest_dir, derivedname)
-
-
-def release_temporary_directories():
-    """Release scratch directories unless requesting debugging info"""
-
-    global __temps
-
-    # log.level is 10 for debug, greater for all other levels.
-    if log.level > 10:
-        for td in __temps:
-            log.info("Removing temporary directory {}".format(td))
-            # conservatively, raise exception on errors
-            shutil.rmtree(td, ignore_errors=False)
-            # reset list of temp direcotries to empty, to avoid duplicate requests
-            __temps = []
-    else:
-        log.debug("Temporary directories left behind for inspection: {}".format(__temps))
-
-
-def verify_input_directory(inputdir):
-    """Verify directory exists, or raise error.  Return absolute path"""
-
-    log.info("verifying and expanding input directory: {}".format(inputdir))
-    if not (os.path.isdir(inputdir)):
-        raise ValueError("directory {} does not exist".format(inputdir))
-    absdir = os.path.abspath(inputdir)
-    log.info("input directory expanded to absolute path: {}".format(absdir))
-    return absdir
-
-
-def get_managed_directories(xml_source, pub_file):
-    """Returns pair: (generated, external) absolute paths, derived from publisher file"""
-
-    # N.B. manage attributes carefully to distinguish
-    # absent (None) versus empty string value ('')
-
-    # Examine /publication/source/directories element carefully
-    # for attributes which we code here for convenience
-    gen_attr = "generated"
-    ext_attr = "external"
-
-    # prepare for relative paths later
-    source_dir = get_source_path(xml_source)
-    # some parameterized error messages used later
-    pub_abs_path_error = " ".join(
-        [
-            "the directory path for a managed directory, given in the",
-            'publisher file as "source/directories/@{}" must be relative to',
-            'the PreTeXt source file location, and not the absolute path "{}"',
-        ]
-    )
-    pub_missing_dir_error = " ".join(
-        [
-            'the directory "{}" implied by the value "{}" in the',
-            '"source/directories/@{}" entry of the publisher file does not',
-            "exist. Check the spelling, create the necessary directory, or entirely",
-            'remove the whole "source/directories" element of the publisher file.'
-        ]
-    )
-
-    # Unknown until running the gauntlet
-    generated = None
-    external = None
-    if pub_file:
-        # parse publisher file, xinclude is conceivable
-        # for multiple similar publisher files with common parts
-        pub_tree = ET.parse(pub_file)
-        pub_tree.xinclude()
-        # "source" element => single-item list
-        # no "source" element => empty list => triple of None returned
-        element_list = pub_tree.xpath("/publication/source/directories")
-        if element_list:
-            attributes_dict = element_list[0].attrib
-            # common error messages
-            # attribute absent => None
-            if gen_attr in attributes_dict.keys():
-                raw_path = attributes_dict[gen_attr]
-                if os.path.isabs(raw_path):
-                    raise ValueError(pub_abs_path_error.format(gen_attr, raw_path))
-                else:
-                    abs_path = os.path.join(source_dir, raw_path)
-                try:
-                    generated = verify_input_directory(abs_path)
-                except:
-                    raise ValueError(pub_missing_dir_error.format(abs_path, raw_path, gen_attr))
-            # attribute absent => None
-            if ext_attr in attributes_dict.keys():
-                raw_path = attributes_dict[ext_attr]
-                if os.path.isabs(raw_path):
-                    raise ValueError(pub_abs_path_error.format(ext_attr, raw_path))
-                else:
-                    abs_path = os.path.join(source_dir, raw_path)
-                try:
-                    external = verify_input_directory(abs_path)
-                except:
-                    raise ValueError(pub_missing_dir_error.format(abs_path, raw_path, ext_attr))
-
-    # pair of discovered absolute paths
-    return (generated, external)
-
-
-def get_source_directories(xml_source):
-    '''Directories given in source's "docinfo" element'''
-
-    # Examine <source>/docinfo/directories element carefully
-    # for attributes which we code here for convenience
-    data_attr = "data"
-
-    # prepare for relative paths later
-    source_dir = get_source_path(xml_source)
-
-    # some parameterized error messages used later
-    source_abs_path_error = " ".join(
-        [
-            "the directory path for a managed directory, given in the",
-            'source file as "docinfo/directories/@{}" must be relative to',
-            'the PreTeXt source file location, and not the absolute path "{}"',
-        ]
-    )
-    source_missing_dir_error = " ".join(
-        [
-            'the directory "{}" implied by the value "{}" in the',
-            '"docinfo/directories/@{}" entry of the source file does not',
-            "exist. Check the spelling, create the necessary directory, or entirely",
-            'remove the whole "docinfo/directories" element of the source file.'
-        ]
-    )
-
-    # Data holds files necessary for building parts
-    # of a project, and are only necessary for that role.
-    # As a component of the source it is given in the "docinfo"
-    data = None
-
-    src_tree = guarded_xml_include_parser(xml_source)
-    directories_list = src_tree.xpath("/pretext/docinfo/directories")
-    if directories_list:
-        attributes_dict = directories_list[0].attrib
-        if data_attr in attributes_dict:
-            raw_path = attributes_dict[data_attr]
-            if os.path.isabs(raw_path):
-                raise ValueError(source_abs_path_error.format(data_attr, raw_path))
-            else:
-                abs_path = os.path.join(source_dir, raw_path)
-            try:
-                data = verify_input_directory(abs_path)
-            except:
-                raise ValueError(source_missing_dir_error.format(abs_path, raw_path, data_attr))
-
-    return data
-
-
-def get_platform_host(pub_file):
-    '''Reports the html/platform/@host value from the publication file'''
-
-    # "web": the default
-    # "runestone": electing to host on a Runestone server
-
-    # NB: this interrogates the publisher file as authored, and provides
-    # a default value if not explicitly set otherwise. Thus, very different
-    # from  get_publisher_variable()  and a bit dangerous if the publisher
-    # file computations change.  In use by the PreTeXt-CLI to ascertain a
-    # Runestone build. (2024-09-25)
-
-    if not(pub_file):
-        return "web"
-
-    pub_tree = ET.parse(pub_file)
-    pub_tree.xinclude()
-    element_list = pub_tree.xpath("/publication/html/platform")
-    if not(element_list):
-        return "web"
-
-    # assume at most one, schema may enforce
-    platform = element_list[0]
-    attrs = platform.attrib
-    if not('host') in attrs:
-        return "web"
-
-    return attrs['host']
-
-
-def copy_managed_directories(build_dir, external_abs=None, generated_abs=None, data_abs=None):
-    # Copies external and generated directories from absolute paths set in external_abs
-    # and generated_abs (unless set to None) into a build directory.  Since the
-    # build directory is fresh for each build, these directories should not exist
-    # in advance and the  shutil.copytree()  function should raise an error.
-    if external_abs is not None:
-        external_dir = os.path.join(build_dir, "external")
-        shutil.copytree(external_abs, external_dir)
-
-    if generated_abs is not None:
-        generated_dir = os.path.join(build_dir, "generated")
-        shutil.copytree(generated_abs, generated_dir)
-
-    if data_abs is not None:
-        generated_dir = os.path.join(build_dir, "data")
-        shutil.copytree(data_abs, generated_dir)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def copy_html_js(work_dir):
@@ -6028,147 +5391,18 @@ def copy_html_js(work_dir):
 
     # Place support files where expected.
     # We are not careful about placing only modules that are needed, all are copied.
-    js_src = os.path.join(get_ptx_path(), "js")
+    js_src = os.path.join(common.get_ptx_path(), "js")
     js_dest = os.path.join(work_dir, "_static", "pretext", "js")
     shutil.copytree(js_src, js_dest)
 
 
-def copy_build_directory(build_dir, dest_dir):
-    '''Copy final product from build directory into desired destination directory'''
-
-    # Both directories exist when this is called.
-    # build_dir is a temporary directory we have created
-    # dest_dir will have been error-checked once specified
-
-    # 2024-01-17:  It is tempting to replace this function by
-    # shutil.copytree().  As of Python 3.8, this function allows
-    # the destination directory to exist beforehand, but will
-    # replace the permissions with those of the  build_dir.
-    # When the build_dir is a temporary directory, the permissions
-    # are 700 which was problematic.  We also choose not to
-    # touch, in any way, the permissions on whatever directory is
-    # given as the destination.
-    #
-    # So instead, we iterate over the top level of the build
-    # directory and copy files and directories there individually.
-
-    for filename in os.listdir(build_dir):
-        src = os.path.join(build_dir, filename)
-        if os.path.isfile(src):
-            shutil.copy2(src, dest_dir)
-        elif os.path.isdir(src):
-            dest = os.path.join(dest_dir, filename)
-            # repeated builds may land in the same place,
-            # so allow directories to clobber existing ones
-            shutil.copytree(src, dest, dirs_exist_ok=True)
-        else:
-            msg = "the build directory {} contained an unexpected object, {}"
-            log.debug(msg.format(build_dir, src))
 
 
-def targz(output, source_dir):
-    """Creates a zipped tar file, output; the root of the archive has a single folder, source_dir"""
-    import tarfile
-
-    with tarfile.open(output, "w:gz") as tar:
-        tar.add(source_dir, arcname=os.path.basename(source_dir))
-
-@contextlib.contextmanager
-def working_directory(path):
-    """
-    Temporarily change the current working directory.
-
-    Usage:
-    with working_directory(path):
-        do_things()   # working in the given path
-    do_other_things() # back to original path
-    """
-    current_directory = os.getcwd()
-    os.chdir(path)
-    log.debug(f"Now working in directory {path}")
-    try:
-        yield
-    finally:
-        os.chdir(current_directory)
-        log.debug(f"Successfully changed directory back to {current_directory}")
 
 
-def get_publisher_variable_report(xml_source, pub_file, params):
-    """Parse the pubfile and return a dict containing the variables"""
-
-    # IMPORTANT: to report the value of a (computed) publisher variable,
-    # two related routines are involved.  For a variable not previously
-    # supported, a developer must take action to implement a report. The
-    # XSL in the "utilities/report-publisher-variable.xsl" stylesheet must
-    # include the report of a value, which will be captured in a temporary
-    # file to be read by the Python routine "get_publisher_variable_report()".
-
-    # NB: this will always be consistent with what *is computed* from
-    # the publisher file.  An eception is given by the  get_platform_host()
-    # routine, which directly examines the authored file. (2024-09-25)
-
-    # NB: there may not be a publication file (pub_file = None)
-    # Variables are still computed and should have reasonable default values
-    log.debug("parsing the publisher file variables")
-
-    # to ensure provided stringparams aren't mutated unintentionally
-    params = params.copy()
-
-    if pub_file:
-        params["publisher"] = pub_file
-
-    # construct filename for the XSL to report variable/value pairs
-    reporting_xslt = os.path.join(get_ptx_xsl_path(), "utilities","report-publisher-variables.xsl")
-    # Short-circuit the assembly (pre-processor) stylesheet to only
-    # make the "version" tree.  This is as much as is needed for the
-    # determination of the publisher variables and will be significantly
-    # faster (by a factor of 15 or so wuih the sample article.  So every
-    # place we call "get_publisher_variable_report()" will see a reduction
-    # in time.   "assembly.version-only" is defined in pretext-assembly.xsl,
-    # which is im[ported by the stylesheet just defined.
-    params["assembly.version-only"] = "yes"
-
-    # file to receive result of stylesheet
-    tmp_dir = get_temporary_directory()
-    log.debug("temporary directory for publisher variables: {}".format(tmp_dir))
-    temp_file = os.path.join(tmp_dir, "pub_var.txt")
-    log.debug("file of publisher variables: {}".format(temp_file))
-
-    # Apply the stylesheet, with source and publication file
-    xsltproc(reporting_xslt, xml_source, temp_file, None, params)
-
-    # parse file into a dictionary
-    variables = {}
-    with open(temp_file, 'r') as f:
-        for line in f:
-            parts = line.split()
-            # careful: value could be empty string,
-            # then split() returns 1 part only
-            if len(parts) == 1:
-                variables[parts[0]] = ''
-            else:
-                # value could have spaces, so rejoin other parts
-                variables[parts[0]] = " ".join(parts[1:])
-
-    return variables
 
 
-def get_publisher_variable(variable_dict, variable_name):
-    """Get a computed publisher-variable's value via variable name"""
 
-    # Actually parsing the pub file is relatively expensive, so callers must do that
-    # and pass the resulting dict to this function, hopefully retaining the dict
-    # for any other calls within the scope of the computed dictionary.
-
-    log.debug("determining value of publisher variable '{}'".format(variable_name))
-
-    if variable_name in variable_dict:
-        return variable_dict[variable_name]
-    else:
-        msg = '\n'.join(["the publisher variable '{}' could not be located.",
-                        "Did you spell it correctly or does it need implementation?",
-                        "If the latter, read instructions in code comments in the relevant routines."])
-        raise ValueError(msg.format(variable_name))
 
 
 def get_journal_info(journal_name):
@@ -6179,7 +5413,7 @@ def get_journal_info(journal_name):
     Arguments:
     journal_name: The code name of the journal to look up, such as bull-amer-math-soc. This is the <code> element of the journals.xml file, and will usually agree with the name of the texstyle file.
     """
-    journal_xml = os.path.join(get_ptx_path(), "journals", "journals.xml")
+    journal_xml = os.path.join(common.get_ptx_path(), "journals", "journals.xml")
     log.debug("Reading list of journals in {}".format(journal_xml))
     journals_tree = ET.parse(journal_xml)
     journals_tree.xinclude()
@@ -6233,7 +5467,7 @@ def place_latex_package_files(dest_dir, journal_name, cache_dir):
     if texstyle_file is None:
         return
     # Otherwise, parse this file and check for any <file> elements.
-    texstyle_tree = ET.parse(os.path.join(get_ptx_path(), "journals", "texstyles", texstyle_file))
+    texstyle_tree = ET.parse(os.path.join(common.get_ptx_path(), "journals", "texstyles", texstyle_file))
     texstyle_file_elements = texstyle_tree.xpath("//required-files/file")
     if not texstyle_file_elements:
         log.debug("No required files found in the texstyle file.")
@@ -6253,13 +5487,13 @@ def place_latex_package_files(dest_dir, journal_name, cache_dir):
             # The url might be to the file, or to a compressed archive.  We do slightly different things in each case.  TODO: other archive formats.
             if url.endswith(".zip"):
                 tmp_zip = os.path.join(cache_dir, "tmp.zip")
-                download_file(url, tmp_zip)
+                common.download_file(url, tmp_zip)
                 with zipfile.ZipFile(tmp_zip, 'r') as zip_ref:
                     with open(file_path, 'wb') as f:
                         f.write(zip_ref.read(file.attrib["path"]))
                 os.remove(tmp_zip)
             else:
-                download_file(url, file_path)
+                common.download_file(url, file_path)
             log.debug("Saved file {} to {}".format(file.attrib["name"], file_path))
         else:
             log.debug("File {} already exists in the generated assets directory.".format(file.attrib["name"]))
@@ -6325,12 +5559,23 @@ class Stopwatch:
 # Convenience
 __xml_header = '<?xml version="1.0" encoding="UTF-8"?>\n'
 
-# Discover and set distribution path once at start-up
-__ptx_path = None
-set_ptx_path()
 
-# Configuration as a dictionary
-__executables = None
 
-#  cache of temporary directories
-__temps = []
+
+
+
+# Re-export helpers relocated to "common.py" so the public ptx.NAME
+# interface used by the driver script is unchanged.
+build_info_message = common.build_info_message
+download_file = common.download_file
+get_executable_cmd = common.get_executable_cmd
+get_managed_directories = common.get_managed_directories
+get_platform_host = common.get_platform_host
+get_ptx_path = common.get_ptx_path
+get_ptx_xsl_path = common.get_ptx_xsl_path
+get_publisher_variable_report = common.get_publisher_variable_report
+release_temporary_directories = common.release_temporary_directories
+set_executables = common.set_executables
+set_ptx_path = common.set_ptx_path
+verify_input_directory = common.verify_input_directory
+xsltproc = common.xsltproc
