@@ -278,7 +278,7 @@ def webwork_to_xml(
             + "                         Server: {}\n"
             + "                         You may want to use the AIM WeBWorK server at webwork-ptx.aimath.org.\n"
         )
-        raise ValueError(msg.format(ww_version, ww_domain))
+        raise ValueError(msg.format(webwork2_version, webwork2_domain))
 
     # using a "Session()" will pool connection information
     # since we always hit the same server, this should increase performance
