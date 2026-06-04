@@ -11111,33 +11111,61 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:if>
 </xsl:template>
 
-<!-- We warn about bad xml:id.  Our limits: -->
-<!-- 26 Latin letters (upper, lower case),  -->
-<!-- 10 digits, hyphen/dash, underscore     -->
-<!-- TODO: Added 2016-10-29, make into a fatal error later -->
-<!-- Unique UI id's added 2017-09-25 as fatal error -->
+<!-- We warn about a bad @xml:id or @label.  Both can become an element's -->
+<!-- HTML @id, so both are checked here.  Allowed characters: 26 Latin    -->
+<!-- letters (upper and lower case), 10 digits, hyphen/dash, underscore.  -->
+<!-- TODO: Added 2016-10-29, make into a fatal error later                -->
+<!-- Unique UI id's added 2017-09-25 as fatal error                       -->
 <xsl:template match="mathbook|pretext" mode="identifier-warning">
     <xsl:variable name="identifier-characters" select="concat('-_', &SIMPLECHAR;)" />
-    <xsl:for-each select=".//@xml:id">
+    <!-- Fixed HTML id values that PreTeXt's CSS/JS require; an authored  -->
+    <!-- identifier equal to one of these would collide and break the UI. -->
+    <!-- Audited against the HTML output, 2026-06-04.                     -->
+    <xsl:variable name="reserved-html-ids">
+        <xsl:text>ptx-masthead ptx-content ptx-content-footer ptx-page-footer </xsl:text>
+        <xsl:text>ptx-navbar ptx-sidebar ptx-toc mainmatter logo-link latex-macros </xsl:text>
+        <xsl:text>ptxsearch searchbutton searchresults searchresultsplaceholder searchempty closesearchresults </xsl:text>
+        <xsl:text>light-dark-button papersize-select highlight-workspace-checkbox </xsl:text>
+        <xsl:text>hide-hint-checkbox hide-answer-checkbox hide-solution-checkbox </xsl:text>
+        <xsl:text>print-first-page-header-checkbox print-running-header-checkbox </xsl:text>
+        <xsl:text>print-first-page-footer-checkbox print-running-footer-checkbox </xsl:text>
+        <xsl:text>calculator-toggle calculator-container geogebra-calculator </xsl:text>
+        <xsl:text>embed-button embed-popup embed-code-textbox copy-embed-button </xsl:text>
+        <!-- Runestone Services ids, banned always: these components can appear -->
+        <!-- even on a non-hosted build.  (When actually hosted on Runestone the -->
+        <!-- HTML ids are mangled, so the collision risk there is small.)        -->
+        <xsl:text>inst_peer_link ip_dropdown_link subchapterprogress </xsl:text>
+        <xsl:text>scprogresscontainer scprogressposs scprogresstotal</xsl:text>
+    </xsl:variable>
+    <!-- tokenize the reserved-id list once, for the membership test in the loop -->
+    <xsl:variable name="reserved-html-id-tokens" select="str:tokenize($reserved-html-ids)" />
+    <!-- Both @xml:id and @label are checked: each can become the HTML @id, and a   -->
+    <!-- reserved id must not be duplicated no matter which attribute supplies it.  -->
+    <!-- Mildly over-aggressive: when an element has a good @label, that becomes    -->
+    <!-- the HTML @id while the @xml:id is only an internal reference, never in the -->
+    <!-- output (the @label-precedence backward-compatibility enacted later, in     -->
+    <!-- assembly), so a reserved @xml:id shadowed by a @label could not really     -->
+    <!-- collide - yet we flag it anyway.                                           -->
+    <xsl:for-each select=".//@xml:id | .//@label">
+        <!-- the limited character set -->
         <xsl:if test="not(translate(., $identifier-characters, '') = '')">
             <xsl:message>
                 <xsl:text>PTX:ERROR:      </xsl:text>
-                <xsl:text>The @xml:id "</xsl:text>
+                <xsl:text>The @</xsl:text>
+                <xsl:value-of select="name()" />
+                <xsl:text> "</xsl:text>
                 <xsl:value-of select="." />
                 <xsl:text>" is invalid.  Use only letters, numbers, hyphens and underscores.</xsl:text>
             </xsl:message>
         </xsl:if>
-        <!-- unique HTML id's in use for PreTeXt-provided UI -->
-        <xsl:if test="(. = 'masthead') or
-                      (. = 'content') or
-                      (. = 'primary-navbar') or
-                      (. = 'sidebar-left') or
-                      (. = 'sidebar-right') or
-                      (. = 'toc') or
-                      (. = 'logo-link')">
+        <!-- a reserved UI id: "=" against the token node-set is true if this -->
+        <!-- identifier equals at least one token of the list                 -->
+        <xsl:if test=". = $reserved-html-id-tokens">
             <xsl:message terminate="yes">
                 <xsl:text>PTX:FATAL:   </xsl:text>
-                <xsl:text>The @xml:id "</xsl:text>
+                <xsl:text>The @</xsl:text>
+                <xsl:value-of select="name()" />
+                <xsl:text> "</xsl:text>
                 <xsl:value-of select="." />
                 <xsl:text>" is invalid since it will conflict with a unique HTML id in use by the user interface.  Please use a different string.  Quitting...</xsl:text>
             </xsl:message>
@@ -11147,22 +11175,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:if test=". = 'index'">
             <xsl:message terminate="no">
                 <xsl:text>PTX:ERROR:   </xsl:text>
-                <xsl:text>The @xml:id "</xsl:text>
-                <xsl:value-of select="."/>
-                <xsl:text>" is invalid since it will conflict with the construction of an automatic HTML "index.html" page.  Use some alternative for the real index - sorry.</xsl:text>
-            </xsl:message>
-        </xsl:if>
-    </xsl:for-each>
-    <!-- The same limited character set applies to @label, which serves      -->
-    <!-- similar identifier-like purposes.  The reserved-id and "index"      -->
-    <!-- checks above stay specific to @xml:id, since only it is an HTML id. -->
-    <xsl:for-each select=".//@label">
-        <xsl:if test="not(translate(., $identifier-characters, '') = '')">
-            <xsl:message>
-                <xsl:text>PTX:ERROR:      </xsl:text>
-                <xsl:text>The @label "</xsl:text>
+                <xsl:text>The @</xsl:text>
+                <xsl:value-of select="name()" />
+                <xsl:text> "</xsl:text>
                 <xsl:value-of select="." />
-                <xsl:text>" is invalid.  Use only letters, numbers, hyphens and underscores.</xsl:text>
+                <xsl:text>" is invalid since it will conflict with the construction of an automatic HTML "index.html" page.  Use some alternative for the real index - sorry.</xsl:text>
             </xsl:message>
         </xsl:if>
     </xsl:for-each>
