@@ -2917,6 +2917,27 @@
                 }
             BlockStatement |= Datafile
 
+# File element used to provide support files for programs.
+             # A "pre" child names a text file, so @format is optional
+             # (and necessarily "pre") when it is present, defaulting
+             # accordingly.  An external @source file is otherwise
+             # required to carry an explicit @format.
+             File =
+                 element file {
+                     UniqueID?,
+                     LabelID?,
+                     Component?,
+                     attribute filename {text},
+                     attribute rows {xsd:integer}?,
+                     attribute cols {xsd:integer}?,
+                     attribute user-interaction {"none" | "view" | "edit"}?,
+                     (
+                         (attribute format {"pre"}?, element pre {text}) |
+                         (attribute format {"binary" | "image" | "pre"}, attribute source {text})
+                     )
+                 }
+             BlockStatement |= File
+
             # Query (poll/survey) element; results are private to the
             # instructor unless @visibility says otherwise
             Query =
