@@ -11146,6 +11146,19 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             </xsl:message>
         </xsl:if>
     </xsl:for-each>
+    <!-- The same limited character set applies to @label, which serves      -->
+    <!-- similar identifier-like purposes.  The reserved-id and "index"      -->
+    <!-- checks above stay specific to @xml:id, since only it is an HTML id. -->
+    <xsl:for-each select=".//@label">
+        <xsl:if test="not(translate(., $identifier-characters, '') = '')">
+            <xsl:message>
+                <xsl:text>PTX:ERROR:      </xsl:text>
+                <xsl:text>The @label "</xsl:text>
+                <xsl:value-of select="." />
+                <xsl:text>" is invalid.  Use only letters, numbers, hyphens and underscores.</xsl:text>
+            </xsl:message>
+        </xsl:if>
+    </xsl:for-each>
 </xsl:template>
 
 
