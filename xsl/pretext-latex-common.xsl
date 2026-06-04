@@ -6163,6 +6163,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <!-- build it -->
+    <xsl:apply-templates select="." mode="newpage"/> 
     <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
     <!-- title may be default title -->
