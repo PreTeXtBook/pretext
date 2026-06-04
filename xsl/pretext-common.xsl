@@ -11110,9 +11110,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- TODO: Added 2016-10-29, make into a fatal error later -->
 <!-- Unique UI id's added 2017-09-25 as fatal error -->
 <xsl:template match="mathbook|pretext" mode="identifier-warning">
-    <xsl:variable name="xmlid-characters" select="concat('-_', &SIMPLECHAR;)" />
+    <xsl:variable name="identifier-characters" select="concat('-_', &SIMPLECHAR;)" />
     <xsl:for-each select=".//@xml:id">
-        <xsl:if test="not(translate(., $xmlid-characters, '') = '')">
+        <xsl:if test="not(translate(., $identifier-characters, '') = '')">
             <xsl:message>
                 <xsl:text>PTX:ERROR:      </xsl:text>
                 <xsl:text>The @xml:id "</xsl:text>
