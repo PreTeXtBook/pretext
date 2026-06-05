@@ -139,7 +139,7 @@
             
             Configuration |=
                 element blurb {
-                    attribute shelf {text},
+                    attribute shelf {text}?,
                     text
                 }
             
