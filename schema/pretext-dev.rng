@@ -282,7 +282,9 @@
   </define>
   <define name="Configuration" combine="choice">
     <element name="blurb">
-      <attribute name="shelf"/>
+      <optional>
+        <attribute name="shelf"/>
+      </optional>
       <text/>
     </element>
   </define>
