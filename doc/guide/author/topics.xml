@@ -1603,8 +1603,7 @@
 
                     <ol>
                         <li>
-                            <p>the <c>equation</c> environment, or display math:</p>
-                            <ul>
+                            <p>the <c>equation</c> environment, or display math:<ul>
                                 <li><c>\begin{equation}</c></li>
                                 <li><c>\begin {equation}</c></li>
                                 <li><c>\begin{equation*}</c></li>
@@ -1613,46 +1612,41 @@
                                 <li><c>\begin{displaymath}</c></li>
                                 <li><c>\begin{equs}</c></li>
                                 <li><c>\protect\[</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>the <c>eqnarray</c> environment:</p>
-                            <ul>
+                            <p>the <c>eqnarray</c> environment:<ul>
                                 <li><c>\begin{eqnarray}</c></li>
                                 <li><c>\begin{eqnarray*}</c></li>
                                 <li><c>\begin{eqnarray}\label{#1}</c></li>
                                 <li><c>\begin{eqnarray} \label{#1}</c></li>
                                 <li><c>\begin{eqnarray#1}</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>the <c>gather</c> environment:</p>
-                            <ul>
+                            <p>the <c>gather</c> environment:<ul>
                                 <li><c>\begin{gather}</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>the <c>enumerate</c> environment:</p>
-                            <ul>
+                            <p>the <c>enumerate</c> environment:<ul>
                                 <li><c>\begin{enumerate}</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>an <c>example</c>-like environment:</p>
-                            <ul>
+                            <p>an <c>example</c>-like environment:<ul>
                                 <li><c>\begin{exmple}</c></li>
                                 <li><c>\begin{example}\rm\label{#1}</c></li>
                                 <li><c>\begin{Example}</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>the Greek letter beta, possibly decorated:</p>
-                            <ul>
+                            <p>the Greek letter beta, possibly decorated:<ul>
                                 <li><c>\beta</c></li>
                                 <li><c>{\beta}</c></li>
                                 <li><c>\ensuremath{\beta}</c></li>
@@ -1662,12 +1656,11 @@
                                 <li><c>\beta_{\ep}</c></li>
                                 <li><c>{\bar \beta}</c></li>
                                 <li><c>\smash{\mkern2mu\overline{\mkern-2mu\phantom{\eta}}\mkern-9.583mu}\eta</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>a bold lowercase letter:</p>
-                            <ul>
+                            <p>a bold lowercase letter:<ul>
                                 <li><c>\mathbf{e}</c></li>
                                 <li><c>{\mathbf e}</c></li>
                                 <li><c>{\mathbf{e}}</c></li>
@@ -1682,32 +1675,29 @@
                                 <li><c>{\bf \textbf{e}}</c></li>
                                 <li><c>\mbox{\bf e}</c></li>
                                 <li><c>{\bold {\hat{e}}}</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>a bold or blackboard-bold uppercase E:</p>
-                            <ul>
+                            <p>a bold or blackboard-bold uppercase E:<ul>
                                 <li><c>\mathbb E</c></li>
                                 <li><c>\mathbb{E}</c></li>
                                 <li><c>\mathbf E</c></li>
                                 <li><c>\mbox{$\bf E$}</c></li>
                                 <li><c>\breve{E}</c></li>
                                 <li><c>\boldsymbol{\mathcal{E}}</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>a bold or barred digit:</p>
-                            <ul>
+                            <p>a bold or barred digit:<ul>
                                 <li><c>\mathbf{1}</c></li>
                                 <li><c>\bar{5}</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>a barred, fraktur, sans-serif, vector, or matrix lowercase letter:</p>
-                            <ul>
+                            <p>a barred, fraktur, sans-serif, vector, or matrix lowercase letter:<ul>
                                 <li><c>\bar e</c></li>
                                 <li><c>\bar{e}</c></li>
                                 <li><c>\bar{\e}</c></li>
@@ -1718,50 +1708,44 @@
                                 <li><c>\mathsf{o}</c></li>
                                 <li><c>\vec{e}</c></li>
                                 <li><c>\mtx{e}</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>horizontal spacing:</p>
-                            <ul>
+                            <p>horizontal spacing:<ul>
                                 <li><c>\mbox{}\hskip10pt</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>a partial derivative:</p>
-                            <ul>
+                            <p>a partial derivative:<ul>
                                 <li><c>\partial B_\lambda</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>a specific functor:</p>
-                            <ul>
+                            <p>a specific functor:<ul>
                                 <li><c>\Bord_n(H_n)</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>the Greek letters alpha or gamma:</p>
-                            <ul>
+                            <p>the Greek letters alpha or gamma:<ul>
                                 <li><c>\alpha</c></li>
                                 <li><c>\gamma</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>the infinity symbol:</p>
-                            <ul>
+                            <p>the infinity symbol:<ul>
                                 <li><c>\infty</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
 
                         <li>
-                            <p>the phrase <q>broken ergodicity</q>:</p>
-                            <ul>
+                            <p>the phrase <q>broken ergodicity</q>:<ul>
                                 <li><c>broken ergodicity</c></li>
-                            </ul>
+                            </ul></p>
                         </li>
                     </ol>
                 </list>
