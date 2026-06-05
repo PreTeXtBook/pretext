@@ -11959,39 +11959,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="book" select="false()"/>
     <xsl:param name="property"/>
     <xsl:param name="content"/>
+    <!-- Twitter/X carries the prefixed value in a "name" attribute,  -->
+    <!-- while OpenGraph and "book" use a "property" attribute.       -->
     <xsl:if test="$twitter">
-        <meta>
-            <xsl:attribute name="name">
-                <xsl:text>twitter:</xsl:text>
-                <xsl:value-of select="$property"/>
-            </xsl:attribute>
-            <xsl:attribute name="content">
-                <xsl:value-of select="$content"/>
-            </xsl:attribute>
-        </meta>
+        <xsl:call-template name="social-meta-tag">
+            <xsl:with-param name="attribute" select="'name'"/>
+            <xsl:with-param name="prefix" select="'twitter'"/>
+            <xsl:with-param name="property" select="$property"/>
+            <xsl:with-param name="content" select="$content"/>
+        </xsl:call-template>
     </xsl:if>
     <xsl:if test="$og">
-        <meta>
-            <xsl:attribute name="property">
-                <xsl:text>og:</xsl:text>
-                <xsl:value-of select="$property"/>
-            </xsl:attribute>
-            <xsl:attribute name="content">
-                <xsl:value-of select="$content"/>
-            </xsl:attribute>
-        </meta>
+        <xsl:call-template name="social-meta-tag">
+            <xsl:with-param name="attribute" select="'property'"/>
+            <xsl:with-param name="prefix" select="'og'"/>
+            <xsl:with-param name="property" select="$property"/>
+            <xsl:with-param name="content" select="$content"/>
+        </xsl:call-template>
     </xsl:if>
     <xsl:if test="$book">
-        <meta>
-            <xsl:attribute name="property">
-                <xsl:text>book:</xsl:text>
-                <xsl:value-of select="$property"/>
-            </xsl:attribute>
-            <xsl:attribute name="content">
-                <xsl:value-of select="$content"/>
-            </xsl:attribute>
-        </meta>
+        <xsl:call-template name="social-meta-tag">
+            <xsl:with-param name="attribute" select="'property'"/>
+            <xsl:with-param name="prefix" select="'book'"/>
+            <xsl:with-param name="property" select="$property"/>
+            <xsl:with-param name="content" select="$content"/>
+        </xsl:call-template>
     </xsl:if>
+</xsl:template>
+
+<!-- One "meta" element: a prefixed "name"/"property" plus its content -->
+<xsl:template name="social-meta-tag">
+    <xsl:param name="attribute"/>
+    <xsl:param name="prefix"/>
+    <xsl:param name="property"/>
+    <xsl:param name="content"/>
+    <meta>
+        <xsl:attribute name="{$attribute}">
+            <xsl:value-of select="$prefix"/>
+            <xsl:text>:</xsl:text>
+            <xsl:value-of select="$property"/>
+        </xsl:attribute>
+        <xsl:attribute name="content">
+            <xsl:value-of select="$content"/>
+        </xsl:attribute>
+    </meta>
 </xsl:template>
 
 
