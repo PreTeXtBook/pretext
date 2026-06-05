@@ -98,12 +98,8 @@
         </program>
 
         <p>
-            This ensures that the new variable has a default value (the button background color). Any palatte that targets multiple colors or dark mode will already have a value for <c>--button-background</c>, so your new variable will automatically work with those. Then, to customize the new variable for a particular palette like <c>_palette-dual.scss</c>, you would add an entry to the palette file, such as:
+            This ensures that the new variable has a default value (the button background color). Any palatte that targets multiple colors or dark mode will already have a value for <c>--button-background</c>, so your new variable will automatically work with those. Then, to customize the new variable for a particular palette like <c>_palette-dual.scss</c>, you would add an entry to the palette file, such as:<cd>"dropdown-background": var(--secondary-color),</cd>
         </p>
-
-        <code>
-            "dropdown-background": var(--secondary-color),
-        </code>
 
         <p>
             In a theme that uses the dual palette (like <c>default-modern</c>), the dropdown background will now be the secondary color, which is a different color than the button background. In a theme that uses a palette that does not customize <c>--dropdown-background</c>, the dropdown background will be the same as the button background.
@@ -142,9 +138,7 @@
     <section xml:id="css-sizing" label="css-sizing">
         <title>Sizing and Positioning Elements</title>
 
-        <p>Elements that are placed or sized relative to the page or other top level structures of the page will likely need to leverage <init>SCSS</init> variables to work well across different themes. Many files have variables defined that look like this one from <c>css/components/page-parts/_body.scss</c>:</p>
-
-        <code>$content-width: 600px !default;</code>
+        <p>Elements that are placed or sized relative to the page or other top level structures of the page will likely need to leverage <init>SCSS</init> variables to work well across different themes. Many files have variables defined that look like this one from <c>css/components/page-parts/_body.scss</c>:<cd>$content-width: 600px !default;</cd></p>
 
         <p>That variable can be overridden by a file that <c>@use</c>s it, but otherwise will have a default value of 600px. That variable can be used in style rules:</p>
 
