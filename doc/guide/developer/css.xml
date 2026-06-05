@@ -126,7 +126,7 @@
             When writing new CSS, you can use these variables to ensure that your new feature uses the same fonts as the rest of the theme.
         </p>
 
-        <p>Icons for various buttons and controls are provided for by the <url ref="https://fonts.google.com/icons">Google Material Symbols</url> font. To use an icon from this font, add the classes <c>icon material-symbols-outlined</c> to an element (typically a <tag>span</tag> or <tag>i</tag>) and set its content to the name of the icon you want. For example, to get a magnifying glass icon, you would write:</p>
+        <p>Icons for various buttons and controls are provided for by the <url href="https://fonts.google.com/icons">Google Material Symbols</url> font. To use an icon from this font, add the classes <c>icon material-symbols-outlined</c> to an element (typically a <tag>span</tag> or <tag>i</tag>) and set its content to the name of the icon you want. For example, to get a magnifying glass icon, you would write:</p>
 
         <program language="html">
             &lt;span class="icon material-symbols-outlined" aria-hidden="true">search&lt;/span>
