@@ -2703,13 +2703,9 @@ Book (with parts), "section" at level 3
 
 <!-- Plain subtitle: used for HTML <meta> tags -->
 <xsl:template match="*" mode="subtitle-plain">
-    <xsl:choose>
-        <xsl:when test="subtitle">
-            <xsl:apply-templates select="subtitle/node()[not(self::fn)]" mode="plain-title-edit"/>
-        </xsl:when>
-        <!-- just empty if there is no subtitles, no default -->
-        <xsl:otherwise/>
-    </xsl:choose>
+    <xsl:if test="subtitle">
+        <xsl:apply-templates select="subtitle/node()[not(self::fn)]" mode="plain-title-edit"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- We do not wrap an "m" element as part of a plain title -->
