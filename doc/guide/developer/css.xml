@@ -93,7 +93,7 @@
             If you want to add finer control over the colors used by a new feature, add a new color variable to <c>colors/_color-vars.scss</c>, and use it in your CSS. To do so, you would write something like:
         </p>
 
-        <program langauge="scss">
+        <program language="scss">
             "dropdown-background": var(--button-background),
         </program>
 
@@ -132,7 +132,7 @@
 
         <p>Icons for various buttons and controls are provided for by the <url ref="https://fonts.google.com/icons">Google Material Symbols</url> font. To use an icon from this font, add the classes <c>icon material-symbols-outlined</c> to an element (typically a <tag>span</tag> or <tag>i</tag>) and set its content to the name of the icon you want. For example, to get a magnifying glass icon, you would write:</p>
 
-        <program langage="html">
+        <program language="html">
             &lt;span class="icon material-symbols-outlined" aria-hidden="true">search&lt;/span>
         </program>
 
