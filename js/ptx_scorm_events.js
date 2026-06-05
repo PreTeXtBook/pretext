@@ -61,14 +61,35 @@
 (function () {
     'use strict';
 
+    // ── Debug logging (initialised first so it is available during API discovery)
+    //
+    // Enable by any of these methods before the page loads:
+    //   • Add  ?ptxscormdebug  to the page URL
+    //   • Run  localStorage.setItem('ptxscormdebug', '1')  in the console, then reload
+    //   • Set  window.ptxScormDebug = true  before this script runs
+    //
+    // When enabled, every Get/Set/Commit/Terminate call — and every step of the
+    // SCORM API discovery — is logged with its result and LMS error code.
+    var _debug = !!(
+        window.ptxScormDebug ||
+        (window.location.search.indexOf('ptxscormdebug') !== -1) ||
+        (typeof localStorage !== 'undefined' && localStorage.getItem('ptxscormdebug'))
+    );
+
+    function dbg(msg) {
+        if (_debug) console.log('[PTX-SCORM DEBUG] ' + msg);
+    }
+
+
     // ═══════════════════════════════════════════════════════════════════════
     // SECTION 1 — SCORM API DISCOVERY
     // ═══════════════════════════════════════════════════════════════════════
     //
     // The LMS embeds the SCO content in an iframe (or nested iframes).  The
     // SCORM API object lives somewhere on the parent window chain — usually
-    // window.parent, but sometimes higher up.  We walk up at most 10 levels
-    // to locate it.
+    // window.parent, but sometimes higher up.  We walk up to 50 levels to
+    // handle unusually deep LMS frame hierarchies (Blackboard Ultra, for
+    // example, nests content in several wrapper frames).
     //
     // SCORM 2004 exposes: window.API_1484_11
     // SCORM 1.2  exposes: window.API
@@ -80,28 +101,68 @@
     var _ver = null;   // '2004' or '1.2'
 
     (function discoverApi() {
-        var win = window;
-        for (var i = 0; i < 10; i++) {
-            // SCORM 2004 API object
-            if (win.API_1484_11) {
-                _api = win.API_1484_11;
+        // Try to read the SCORM API from a single window reference.
+        // Returns true and sets _api/_ver on success; false if not present;
+        // throws SecurityError if the window is cross-origin.
+        function checkWin(w, label) {
+            if (w.API_1484_11) {
+                _api = w.API_1484_11;
                 _ver = '2004';
-                return;
+                dbg('Found SCORM 2004 API at ' + label);
+                return true;
             }
-            // SCORM 1.2 API object
-            if (win.API) {
-                _api = win.API;
+            if (w.API) {
+                _api = w.API;
                 _ver = '1.2';
-                return;
+                dbg('Found SCORM 1.2 API at ' + label);
+                return true;
             }
-            // Stop climbing if we have reached the top of the frame hierarchy
-            if (win.parent === win) break;
+            dbg('No API at ' + label);
+            return false;
+        }
+
+        // ── 1. Walk up the parent-frame chain ──────────────────────────────
+        // Cross-origin frames throw on property access; we catch the error,
+        // log it, and keep climbing — the API may be on a higher same-origin
+        // frame above the cross-origin one.
+        var win = window;
+        for (var i = 0; i < 50; i++) {
+            try {
+                if (checkWin(win, 'frame level ' + i)) return;
+            } catch (e) {
+                dbg('Cross-origin frame at level ' + i + ' — skipping, continuing up.');
+                console.warn('[PTX-SCORM] Cross-origin frame at level ' + i +
+                             ' — cannot read API properties here, continuing to climb.');
+            }
+            if (win.parent === win) break;   // reached the topmost frame
             win = win.parent;
         }
+
+        // ── 2. Try window.top directly ─────────────────────────────────────
+        // This jumps straight to the topmost frame without iterating every
+        // level, which helps when the chain above is very deep or when an
+        // intermediate cross-origin frame blocked the loop.
+        try {
+            if (window.top !== win && checkWin(window.top, 'window.top')) return;
+        } catch (e) {
+            dbg('window.top is cross-origin — cannot check for API there.');
+        }
+
+        // ── 3. Try window.opener ───────────────────────────────────────────
+        // Some SCORM players open content in a popup; the API lives on the
+        // opener window rather than a parent frame.
+        try {
+            if (window.opener && checkWin(window.opener, 'window.opener')) return;
+        } catch (e) {
+            dbg('window.opener is cross-origin — cannot check for API there.');
+        }
+
         // Running without a SCORM LMS is fine — exercises still work, we just
         // cannot report to any grade book.
         console.warn('[PTX-SCORM] No SCORM API found. ' +
-                     'Exercises will work normally but scores will not be reported.');
+                     'Exercises will work normally but scores will not be reported. ' +
+                     'If this is inside a SCORM-capable LMS, verify the content was ' +
+                     'added as a SCORM package, not a plain file or web link.');
     })();
 
 
@@ -113,6 +174,9 @@
     // These three helpers (Get, Set, Commit) hide that difference so the rest
     // of the code can be version-agnostic.
 
+    // (_debug and dbg() are defined at the top of the IIFE so they are
+    // available during API discovery in Section 1.)
+
     /**
      * Read a SCORM data model element from the LMS.
      * Returns an empty string when no API is present.
@@ -122,7 +186,10 @@
         var val = (_ver === '2004')
             ? _api.GetValue(key)
             : _api.LMSGetValue(key);
-        return String(val);
+        var result = String(val);
+        var err = lastError();
+        dbg('Get(' + key + ') = ' + JSON.stringify(result) + '  err=' + err);
+        return result;
     }
 
     /**
@@ -131,11 +198,14 @@
      */
     function Set(key, val) {
         if (!_api) return;
+        var result;
         if (_ver === '2004') {
-            _api.SetValue(key, String(val));
+            result = _api.SetValue(key, String(val));
         } else {
-            _api.LMSSetValue(key, String(val));
+            result = _api.LMSSetValue(key, String(val));
         }
+        var err = lastError();
+        dbg('Set(' + key + ', ' + JSON.stringify(String(val)) + ') = ' + result + '  err=' + err);
     }
 
     /**
@@ -146,11 +216,34 @@
      */
     function Commit() {
         if (!_api) return;
+        var result;
         if (_ver === '2004') {
-            _api.Commit('');
+            result = _api.Commit('');
         } else {
-            _api.LMSCommit('');
+            result = _api.LMSCommit('');
         }
+        var err = lastError();
+        dbg('Commit() = ' + result + '  err=' + err);
+        return (err === '0' && result !== 'false');
+    }
+
+    /**
+     * End the SCORM session.  This is the signal most LMSes (Blackboard
+     * in particular) need before they will post the score to the gradebook.
+     * Sets _initialized = false so that a subsequent page in the same package
+     * will re-initialize cleanly.
+     */
+    function Terminate() {
+        if (!_api) return;
+        var result;
+        if (_ver === '2004') {
+            result = _api.Terminate('');
+        } else {
+            result = _api.LMSFinish('');
+        }
+        var err = lastError();
+        dbg('Terminate() = ' + result + '  err=' + err);
+        _initialized = false;
     }
 
     /**
@@ -193,6 +286,7 @@
     //              for cross-session restore.  suspend_data persists forever.)
 
     var _initialized = false;           // true once Initialize() has succeeded
+    var _submitted   = false;           // true after submitSession() commits the grade (session stays open)
     var _state = {
         correct: 0,   // sum of percentage scores for graded questions
         graded:  0,   // total number of graded question answers received
@@ -227,6 +321,10 @@
     // it is page-specific; for a single-page SCORM assignment (the expected case)
     // this is simply the total number of questions on the assignment.
     var _totalQuestions = 0;
+
+    // True once we have set completion_status / lesson_status to "completed" in
+    // this session.  Used to skip redundant Set calls on subsequent interactions.
+    var _statusCompleted = false;
 
     // ── localStorage persistence ──────────────────────────────────────────────
     //
@@ -271,6 +369,62 @@
         } catch (e) {
             return null;
         }
+    }
+
+    // ── suspend_data size budget ─────────────────────────────────────────────
+    //
+    // Our manifest declares SCORM 2004 3rd Edition, whose spec limit (SPM) for
+    // cmi.suspend_data is 4,000 characters (SCORM 1.2 likewise ~4K; only 2004
+    // 4th Edition raised it to 64,000).  A single answered DoenetActivity puts
+    // a 5-10 KB state blob into _state.answers[divId].answer, so serializing
+    // _state verbatim blows the limit immediately.
+    //
+    // Exceeding the limit does not fail cleanly: Blackboard's client API
+    // returns "true" (no client-side SPM check) but the server-side persist of
+    // the attempt can fail — taking the score committed in the SAME session
+    // down with it, while the gradebook shows the attempt stuck at "Draft".
+    // This matches the observed behavior: grade writes record fine in sessions
+    // where nothing was answered (small suspend_data) and never record in
+    // sessions where a Doenet exercise was answered.  Canvas's SCORM engine
+    // tolerates oversized suspend_data, which is why the same package works there.
+    //
+    // buildSuspendData() therefore serializes a SLIM copy of _state for the
+    // LMS: oversized answer payloads are dropped (they are only needed for
+    // same-device UI restore, which localStorage already covers — Doenet
+    // restore in particular reads localStorage via SPLICE.getState and never
+    // looks at answers[divId].answer).  Grading fields (correct/percent) are
+    // always kept, so cross-device score integrity is unaffected.
+
+    var SUSPEND_ANSWER_LIMIT = 600;   // per-answer cap inside suspend_data
+    var SUSPEND_TOTAL_LIMIT  = 3800;  // total budget; SPM is 4000, keep headroom
+
+    function buildSuspendData() {
+        var slim = {
+            correct: _state.correct,
+            graded:  _state.graded,
+            iCount:  _state.iCount,
+            answers: {}
+        };
+        Object.keys(_state.answers).forEach(function (divId) {
+            var a = _state.answers[divId];
+            var ans = a.answer;
+            if (typeof ans === 'string' && ans.length > SUSPEND_ANSWER_LIMIT) {
+                ans = '';  // too big for suspend_data; survives in localStorage
+            }
+            slim.answers[divId] = { answer: ans, correct: a.correct, percent: a.percent };
+        });
+        var json = JSON.stringify(slim);
+        if (json.length > SUSPEND_TOTAL_LIMIT) {
+            // Still over budget (page with many questions): drop all answer
+            // text and keep only the grading bookkeeping.
+            Object.keys(slim.answers).forEach(function (divId) {
+                slim.answers[divId].answer = '';
+            });
+            json = JSON.stringify(slim);
+        }
+        dbg('suspend_data: ' + json.length + ' chars' +
+            (json.length > SUSPEND_TOTAL_LIMIT ? '  (STILL OVER ' + SUSPEND_TOTAL_LIMIT + ')' : ''));
+        return json;
     }
 
     // ── Doenet / SPLICE state persistence ────────────────────────────────────
@@ -369,15 +523,28 @@
             return;
         }
         _initialized = true;
+        dbg('Initialize() = ' + result + '  err=' + err + '  ver=' + _ver);
+
+        // ── Log key LMS-supplied values so Blackboard behaviour is visible ──
+        var entryKey = _ver === '2004' ? 'cmi.entry' : 'cmi.core.entry';
+        var learnerId = Get(_ver === '2004' ? 'cmi.learner_id' : 'cmi.core.student_id');
+        var entry = Get(entryKey);
+        var rawForLog = Get('cmi.suspend_data');
+        dbg('entry=' + JSON.stringify(entry) +
+            '  learner_id=' + JSON.stringify(learnerId) +
+            '  suspend_data length=' + rawForLog.length);
 
         // ── Restore accumulated totals from previous pages ──────────────────
         // cmi.suspend_data is a free-form string that persists across pages
         // within a session.  We use it to store our running score as JSON.
-        var raw = Get('cmi.suspend_data');
+        var raw = rawForLog;
         if (raw) {
             try {
                 // Merge saved values into _state; unknown keys are ignored
                 Object.assign(_state, JSON.parse(raw));
+                dbg('Restored _state from suspend_data: correct=' + _state.correct +
+                    '  graded=' + _state.graded +
+                    '  answers=' + Object.keys(_state.answers || {}).length + ' keys');
             } catch (e) {
                 // Malformed suspend_data is not fatal; we just start fresh
                 console.warn('[PTX-SCORM] Could not parse suspend_data:', e);
@@ -401,12 +568,17 @@
             ? 'cmi.completion_status'
             : 'cmi.core.lesson_status';
         var currentStatus = Get(completionKey);
+        dbg('completion_status on entry = ' + JSON.stringify(currentStatus));
         if (currentStatus === 'not attempted' ||
             currentStatus === 'unknown'       ||
             currentStatus === '') {
             Set(completionKey, 'incomplete');
             Commit();
         }
+        // Remember if the LMS already shows "completed" (e.g. returning student on
+        // an LMS that preserves status across attempts, such as Blackboard).
+        _statusCompleted = (currentStatus === 'completed' || currentStatus === 'passed');
+        dbg('_statusCompleted=' + _statusCompleted);
 
         console.log('[PTX-SCORM] Session ready (SCORM ' + _ver + ').' +
                     '  Prior interactions: ' + _state.iCount + ',' +
@@ -440,12 +612,16 @@
         matching:                  'matching',     // Traditional matching exercise
         unittest:                  'performance',  // ActiveCode with unit tests (auto-graded)
         shortanswer:               'long-fill-in', // Short-answer / journal (no automatic grade)
-        splice:                    'performance',  // SPLICE protocol iframe activity (see Section 10)
+        // SPLICE/Doenet responses are JSON blobs.  SCORM 2004 validates
+        // learner_response per type, and "performance" demands a strict
+        // step[.]answer format — JSON is always rejected with error 406
+        // ("type mismatch").  Type "other" accepts a free characterstring.
+        splice:                    'other',        // SPLICE protocol iframe activity (see Section 10)
         // DoenetActivity events: Runestone's SpliceWrapper fires logBookEvent with
         // event="SPLICE.reportScoreAndState" (carries score/percent/answer) and
         // event="SPLICE.sendEvent" (notification only, no score).  Only the former
         // should be recorded; the latter has no score and is silently ignored.
-        'SPLICE.reportScoreAndState': 'performance',
+        'SPLICE.reportScoreAndState': 'other',     // JSON response — see "splice" note above
     };
 
 
@@ -565,10 +741,16 @@
     // SCORM 2004 wants timestamps in ISO-8601 format (e.g. "2025-01-15T14:23:00Z").
     // SCORM 1.2 wants a simpler "HH:MM:SS" string.
 
-    /** Return the current UTC time as an ISO-8601 string (SCORM 2004 format). */
+    /** Return the current local time as an ISO-8601 string (SCORM 2004 format). */
     function isoTimestamp() {
-        // Remove sub-second precision (.sssZ → Z) to keep strings compact
-        return new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+        // SCORM 2004's "time" type is a restricted ISO-8601: strict engines
+        // (Canvas) reject a trailing 'Z'/UTC designator with error 406
+        // ("not a valid time type").  Local time with NO timezone designator
+        // is accepted everywhere, and second precision satisfies the spec.
+        var d = new Date();
+        function p(n) { return ('0' + n).slice(-2); }
+        return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) +
+               'T' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
     }
 
     /** Return the current local time as "HH:MM:SS" (SCORM 1.2 format). */
@@ -601,6 +783,13 @@
             return;
         }
 
+        // Note: reports arriving after "Submit Assignment" are still handled.
+        // submitSession() does not terminate the session, so a late Doenet
+        // SPLICE.reportScoreAndState (they can lag an answer by seconds) is
+        // still written and committed — re-committing the freshly computed
+        // score so the submit never locks in a stale (under-credited) grade.
+        // The LMS honors the latest commit while the session is open.
+
         // ── b) Lazy session initialization ───────────────────────────────────
         initSession();
         if (!_initialized) {
@@ -609,9 +798,9 @@
             return;  // API unavailable; nothing to report
         }
 
-        // SCORM 1.2 does not support the "long-fill-in" interaction type
-        // (only SCORM 2004 does).  Narrow it to the closest valid 1.2 type.
-        if (_ver === '1.2' && scormType === 'long-fill-in') {
+        // SCORM 1.2 does not support the "long-fill-in" or "other" interaction
+        // types (only SCORM 2004 does).  Narrow to the closest valid 1.2 type.
+        if (_ver === '1.2' && (scormType === 'long-fill-in' || scormType === 'other')) {
             scormType = 'fill-in';
         }
 
@@ -741,26 +930,18 @@
             } else {
                 // SCORM 1.2 has a single score field (0–100 range)
                 Set('cmi.core.score.raw', (scaled * 100).toFixed(1));
-                // We do NOT set cmi.core.lesson_status to 'passed'/'failed';
-                // we set it to 'completed' (below) and let the LMS decide.
             }
         }
 
-        // ── e) Note: completion_status intentionally stays "incomplete" ──────
+        // ── e) Persist state for the next page ───────────────────────────────
         //
-        // Setting completion_status="completed" (or lesson_status="completed"
-        // in SCORM 1.2) causes Canvas — and many other LMSes — to treat the
-        // next visit as a brand-new attempt, resetting all runtime data
-        // including cmi.suspend_data.  Keeping the status as "incomplete"
-        // (set at session start in loadRestoreData) tells the LMS the student
-        // is still working and the same attempt should be resumed next time.
-        //
-        // Canvas records the score independently of completion status, so the
-        // grade will appear correctly in the gradebook.  For Canvas module
-        // completion requirements, instructors should use "must score at
-        // least X%" rather than "must complete this item."
-
-        // ── f) Persist state for the next page ───────────────────────────────
+        // NOTE: completion_status / lesson_status is intentionally NOT set here.
+        // Setting it to "completed" on the first answer is what caused Blackboard
+        // to treat a page-navigation-away (exit="suspend") as a finalized
+        // submission, locking the attempt.  We keep status as "incomplete" until
+        // the student explicitly clicks "Submit Assignment" (submitSession()).
+        // The score fields above are committed independently and remain visible
+        // in the LMS gradebook regardless of completion status.
         //
         // cmi.suspend_data is our cross-page scratchpad.  We serialise _state
         // to JSON and write it here so that when the learner navigates to the
@@ -782,7 +963,7 @@
             saveDoenetState(ev.div_id || 'unknown', ev.state);
         }
 
-        var suspendJson = JSON.stringify(_state);
+        var suspendJson = buildSuspendData();
         Set('cmi.suspend_data', suspendJson);
         var setErr = lastError();
         if (setErr !== '0') {
@@ -810,6 +991,9 @@
                     '" → ' + result +
                     '  Score: ' + pctLabel +
                     '  (' + _state.iCount + ' total interactions)');
+
+        // Keep the on-page score readout above the Submit button in sync.
+        updateScoreDisplay();
     }
 
 
@@ -883,6 +1067,7 @@
         requestParentResize();
         installWeBWorKSrcdocIntercept();
         installWeBWorKAjaxIntercept();
+        addSubmitButton();
 
         // Add status badges to WeBWorK problems that the student has already answered.
         // WeBWorK is not a RunestoneBase component so the restore hook's decorateStatus
@@ -1774,6 +1959,9 @@
             Set(completionKey, 'incomplete');
             Commit();
         }
+        // Remember if the LMS already shows "completed" (e.g. returning student on
+        // an LMS that preserves status across attempts, such as Blackboard).
+        _statusCompleted = (currentStatus === 'completed' || currentStatus === 'passed');
 
         // ── Build restore map from saved answers ─────────────────────────────
         //
@@ -1819,9 +2007,9 @@
             } else {
                 Set('cmi.core.score.raw', (restoredScaled * 100).toFixed(1));
             }
-            // Write back the full _state (now including the restored answers map)
-            // so suspend_data is always coherent with what we have in memory.
-            Set('cmi.suspend_data', JSON.stringify(_state));
+            // Write back the (slimmed) state so suspend_data stays coherent
+            // with what we have in memory without exceeding the LMS size limit.
+            Set('cmi.suspend_data', buildSuspendData());
             Commit();
 
             console.log('[PTX-SCORM] Restored score: ' +
@@ -1974,42 +2162,264 @@
 
 
     // ═══════════════════════════════════════════════════════════════════════
-    // SECTION 14 — PAGE-UNLOAD SAVE
+    // SECTION 14 — EXPLICIT SUBMIT
     // ═══════════════════════════════════════════════════════════════════════
     //
-    // When the learner navigates away from a page (clicking the Next button,
-    // closing the browser tab, etc.) we want to make sure any buffered writes
-    // are flushed to the LMS before the page is destroyed.
+    // submitSession() writes the final grade and commits it — and deliberately
+    // does NOT call Terminate() or set cmi.exit.  Blackboard testing showed a
+    // perfect separation: every sequence that ended with a bare Commit() and
+    // left the session open recorded its score in the gradebook, while every
+    // sequence that called Terminate() mid-page (regardless of exit value)
+    // left the attempt stuck at "draft saved" with no score — even when the
+    // grade had been committed successfully beforehand.  Terminating while
+    // Blackboard's player frame is still up apparently voids the attempt;
+    // terminating during real page unload (handlePageExit) finalizes it.
     //
-    // IMPORTANT: We call Commit() here but NOT Terminate()/LMSFinish().
-    // Terminate() would close the SCORM session entirely, which would prevent
-    // the learner from resuming later.  We only terminate when the learner
-    // explicitly exits the course (which the LMS typically handles itself).
+    // So the submit flow is: commit the grade here, leave the session open,
+    // and let handlePageExit() run its proven sequence (suspend_data,
+    // exit="suspend", Commit, Terminate) when the student leaves the page.
+    //
+    // addSubmitButton() injects a visible "Submit Assignment" button at the
+    // bottom of the page content.
 
-    window.addEventListener('beforeunload', function () {
-        if (!_initialized) return;
+    /**
+     * Record the student's final grade as a submission: completion + score,
+     * then Commit.  The SCORM session stays open; the attempt is finalized
+     * by handlePageExit() when the student navigates away.
+     */
+    function submitSession() {
+        if (!_api) {
+            console.warn('[PTX-SCORM] submitSession: no SCORM API — nothing to submit.');
+            return;
+        }
+        if (_submitted) {
+            dbg('submitSession: already submitted this session — ignoring repeat click.');
+            return;
+        }
+        initSession();  // normally a no-op — the session opens at page load
+        if (!_initialized) {
+            console.warn('[PTX-SCORM] submitSession: SCORM session is not open — nothing submitted.');
+            return;
+        }
 
-        // Re-save the current state in case anything changed since the last Commit.
-        // We write to both stores: suspend_data for LMSes that preserve it across
-        // sessions, and localStorage for LMSes (like Canvas) that reset suspend_data.
-        var json = JSON.stringify(_state);
-        Set('cmi.suspend_data', json);
+        // Mark the SCO completed and write the final score, then Commit.  This
+        // mirrors the sequence that reliably recorded a score in Blackboard:
+        // completion + full score set (+ success_status on 2004), then a bare
+        // Commit with no exit value pending and nothing else in the batch.
+        var compKey = (_ver === '2004') ? 'cmi.completion_status' : 'cmi.core.lesson_status';
+        Set(compKey, 'completed');
+        _statusCompleted = true;
 
-        // Set cmi.exit = "suspend" — the standard SCORM signal meaning "save this
-        // attempt and resume it next time the student opens this content."
-        //
-        // Without this the LMS may treat the next visit as a new attempt (ab-initio)
-        // and clear all saved data.  Combined with keeping completion_status as
-        // "incomplete" (never "completed"), this gives Canvas the clearest possible
-        // signal to preserve suspend_data across sessions.
-        //
-        // SCORM 2004: cmi.exit  (valid values: suspend, logout, time-out, "")
-        // SCORM 1.2:  cmi.core.exit  (valid values: suspend, logout, time-out, "")
-        Set(_ver === '2004' ? 'cmi.exit' : 'cmi.core.exit', 'suspend');
+        // Re-assert the final score so this Commit carries it even if an
+        // earlier per-question Commit was rejected.  A student who submits
+        // without answering anything records a 0, which is correct for a
+        // submitted assignment.
+        var denom = _totalQuestions > 0 ? _totalQuestions : _state.graded;
+        var scaled = denom > 0 ? (_state.correct / denom) : 0;
+        if (_ver === '2004') {
+            Set('cmi.score.scaled', scaled.toFixed(4));
+            Set('cmi.score.raw',    (scaled * 100).toFixed(1));
+            Set('cmi.score.min',    '0');
+            Set('cmi.score.max',    '100');
+            Set('cmi.success_status', 'passed');
+        } else {
+            Set('cmi.core.score.raw', (scaled * 100).toFixed(1));
+            Set('cmi.core.score.min', '0');
+            Set('cmi.core.score.max', '100');
+        }
 
         Commit();
+
+        // Deliberately NO cmi.exit write and NO Terminate() here.  On Blackboard,
+        // a mid-page Terminate() voided the attempt ("draft saved", committed
+        // grade discarded), while this bare grade-commit records the score.
+        // suspend_data is already current (recordInteraction commits it after
+        // every answer); the attempt is finalized by handlePageExit() when the
+        // student leaves the page.
         saveToLocalStorage();
-        console.log('[PTX-SCORM] Page unloading — state saved. exit=suspend set.');
-    });
+
+        _submitted = true;
+        dbg('submitSession() complete — grade committed (scaled=' + scaled.toFixed(4) +
+            '), session left open for page-exit finalization.');
+        console.log('[PTX-SCORM] Assignment submitted — score committed. ' +
+                    'The attempt is finalized when you leave this page.');
+    }
+
+    // Reference to the on-page score readout shown above the Submit button.
+    // Updated after every answer so the student always sees their live score.
+    var _scoreDisplayEl = null;
+
+    /**
+     * Refresh the on-page "current score" readout from _state.  Uses the same
+     * formula as the submitted grade — earned points over the total number of
+     * gradeable questions on the page — so unanswered questions count as zero,
+     * matching exactly what the LMS records when the student submits.
+     */
+    function updateScoreDisplay() {
+        if (!_scoreDisplayEl) return;
+        var denom = _totalQuestions > 0 ? _totalQuestions : _state.graded;
+        if (denom === 0) {           // no gradeable questions on this page
+            _scoreDisplayEl.style.display = 'none';
+            return;
+        }
+        var pct    = Math.round((_state.correct / denom) * 100);
+        var points = Math.round(_state.correct * 100) / 100;   // trim to 2 decimals
+        _scoreDisplayEl.style.display = 'block';
+        _scoreDisplayEl.innerHTML =
+            '<span style="font-size:1.15em;font-weight:bold;">Your current score: ' + pct + '%</span>' +
+            '<br><span style="font-size:0.85em;color:#666;">' +
+            points + ' of ' + denom + ' point' + (denom === 1 ? '' : 's') +
+            ' · ' + _state.graded + ' of ' + denom + ' question' + (denom === 1 ? '' : 's') + ' answered' +
+            '</span>';
+    }
+
+    /**
+     * Insert a "Submit Assignment" button at the bottom of the page content,
+     * just before the previous/next navigation footer.
+     * Only added when a SCORM API is present (i.e. we are inside an LMS).
+     */
+    function addSubmitButton() {
+        if (!_api) return;
+
+        var wrapper = document.createElement('div');
+        wrapper.id = 'ptx-scorm-submit-wrapper';
+        wrapper.style.cssText = 'margin:2em 0 1em;padding:1.2em 1em 0.8em;border-top:2px solid #ccc;text-align:center;';
+
+        // Live score readout, shown above the button and refreshed on every answer.
+        var scoreDisplay = document.createElement('div');
+        scoreDisplay.id = 'ptx-scorm-score';
+        scoreDisplay.style.cssText = 'margin:0 0 0.9em;line-height:1.4;';
+        _scoreDisplayEl = scoreDisplay;
+
+        var btn = document.createElement('button');
+        btn.id = 'ptx-scorm-submit-btn';
+        btn.type = 'button';
+        btn.textContent = 'Submit Assignment';
+        btn.style.cssText = [
+            'padding:0.55em 2em',
+            'font-size:1.05em',
+            'font-weight:bold',
+            'background:#006db0',
+            'color:#fff',
+            'border:none',
+            'border-radius:4px',
+            'cursor:pointer',
+        ].join(';');
+
+        var statusMsg = document.createElement('p');
+        statusMsg.style.cssText = 'margin:0.6em 0 0;font-size:1em;font-weight:bold;color:#155724;display:none;';
+
+        btn.addEventListener('mouseover', function () { this.style.background = '#00508a'; });
+        btn.addEventListener('mouseout',  function () { if (!_submitted) this.style.background = '#006db0'; });
+
+        btn.addEventListener('click', function () {
+            submitSession();
+
+            if (!_submitted) {
+                // submitSession could not run (no API, or session not open).
+                // Leave the button usable and say what happened rather than
+                // showing a misleading "Submitted ✓".
+                statusMsg.style.display = 'block';
+                statusMsg.style.color = '#a33';
+                statusMsg.textContent = 'Submission did not run — please reload the page and try again.';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Submitted ✓';
+            btn.style.background = '#5a9e6f';
+            btn.style.cursor = 'default';
+
+            // No Terminate happens here (see submitSession), so the LMS will
+            // not navigate away on its own — tell the student to leave, which
+            // is what finalizes the attempt.
+            statusMsg.style.display = 'block';
+            statusMsg.style.color = '#155724';
+            statusMsg.textContent = 'Assignment submitted. You may now close this window.';
+        });
+
+        wrapper.appendChild(scoreDisplay);
+        wrapper.appendChild(btn);
+        wrapper.appendChild(statusMsg);
+        updateScoreDisplay();   // reflect any score restored from a prior session
+
+        // Place the wrapper just before the previous/next navigation footer so
+        // the submit button sits at the end of the reading content, above the
+        // page navigation.  Fall back to appending to the content region (then
+        // main/body) if the footer is absent (e.g. bottom nav disabled).
+        var footer = document.getElementById('ptx-content-footer');
+        if (footer && footer.parentNode) {
+            footer.parentNode.insertBefore(wrapper, footer);
+        } else {
+            var content = document.getElementById('ptx-content') ||
+                          document.querySelector('main') ||
+                          document.body;
+            content.appendChild(wrapper);
+        }
+
+        console.log('[PTX-SCORM] Submit button added.');
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // SECTION 15 — PAGE-UNLOAD SAVE
+    // ═══════════════════════════════════════════════════════════════════════
+    //
+    // When the learner navigates away we flush state and terminate the SCORM
+    // session.  We register on BOTH beforeunload and pagehide:
+    //
+    //   beforeunload — fires synchronously during in-page navigation (reliable
+    //                  for browser Back, address-bar changes, link clicks).
+    //   pagehide     — fires on mobile browsers and when the *outer* Blackboard
+    //                  frame navigates away (destroying the SCORM iframe), which
+    //                  can bypass beforeunload.  We only act when event.persisted
+    //                  is false (page is truly being discarded, not cached).
+    //
+    // This unload sequence (suspend_data, exit="suspend", Commit, Terminate)
+    // is the one that finalized the attempt correctly — WITH the committed
+    // grade — in every successful Blackboard test.  A Terminate() issued
+    // mid-page instead (while Blackboard's player frame is still up) voided
+    // the attempt to "draft saved" every time, so this handler is the ONLY
+    // place we terminate.  It runs after "Submit Assignment" too: submit
+    // commits the grade and leaves the session open, and this handler closes
+    // the attempt when the student actually leaves.
+    // localStorage provides same-device restore without relying on the LMS to
+    // resume a suspended attempt.
+
+    function handlePageExit(isPersisted) {
+        if (isPersisted || !_initialized) return;
+
+        // Re-save the current state in case anything changed since the last Commit.
+        Set('cmi.suspend_data', buildSuspendData());
+
+        // exit="suspend" tells the LMS to preserve this attempt as "In Progress"
+        // so the student can resume where they left off.  The grade is already
+        // recorded from each question submission; "In Progress" is the correct
+        // display state until the student explicitly clicks "Submit Assignment".
+        //
+        // SCORM 2004: cmi.exit       (valid values: suspend, logout, time-out, "")
+        // SCORM 1.2:  cmi.core.exit  (valid values: suspend, logout, time-out, "")
+        var exitKey = _ver === '2004' ? 'cmi.exit' : 'cmi.core.exit';
+        Set(exitKey, 'suspend');
+
+        // Commit flushes pending data, then Terminate() formally closes the
+        // SCORM communication session.  Calling Terminate() here (not just Commit)
+        // is what clears Blackboard's "open session" flag — without it the next
+        // visit shows "You may have this course open in another window."
+        Commit();
+        Terminate();
+        saveToLocalStorage();
+
+        dbg('Page exit: suspend_data saved, exit=suspend, Terminated.');
+        console.log('[PTX-SCORM] Page unloading — state saved, session terminated (suspended).');
+    }
+
+    window.addEventListener('beforeunload', function () { handlePageExit(false); });
+
+    // pagehide is the reliable companion: fires on mobile and when Blackboard's
+    // outer frame navigates (which destroys the iframe without firing beforeunload).
+    // event.persisted === true means the page is going into the back-forward cache
+    // (not destroyed), so we skip Terminate() in that case.
+    window.addEventListener('pagehide', function (event) { handlePageExit(event.persisted); });
 
 })();  // end IIFE — no symbols leak into the global scope
