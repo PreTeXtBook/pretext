@@ -2888,7 +2888,6 @@
         <p>Notes: <ul>
             <li>Language tags go on the root element to affect variants of names of objects, like theorems.</li>
             <li>The <c>xinlude</c> mechanism may pass language tags down through the root element of included files to make them universally available.</li>
-            <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
             <li>The <c>component</c> attribute allows versions to be controlled by a publisher file.</li>
             <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <tag>plaintitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
@@ -2924,7 +2923,6 @@
                 element plaintitle {text}
             Creator =
                 element creator {TextShort}
-            XMLBase = attribute xml:base {text}
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
@@ -2935,7 +2933,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title,
                 Index*
@@ -2943,7 +2940,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title,
                 ShortTitle?,
@@ -2953,7 +2949,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
                 ShortTitle?,
@@ -2963,7 +2958,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title,
                 Subtitle?,
@@ -2974,7 +2968,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
                 (Subtitle | LinedSubtitle)?,
@@ -2985,7 +2978,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Index*
@@ -2993,7 +2985,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title, ShortTitle?, PlainTitle?)?,
                 Index*
@@ -3001,7 +2992,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Creator?,
@@ -3010,7 +3000,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Caption,
@@ -3347,7 +3336,6 @@
             <code>
             DocInfo =
                 element docinfo {
-                    XMLBase?,
                     XMLLang?,
                     Configuration+
                 }

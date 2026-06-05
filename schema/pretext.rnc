@@ -1415,7 +1415,6 @@
                 element plaintitle {text}
             Creator =
                 element creator {TextShort}
-            XMLBase = attribute xml:base {text}
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
@@ -1426,7 +1425,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title,
                 Index*
@@ -1434,7 +1432,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title,
                 ShortTitle?,
@@ -1444,7 +1441,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
                 ShortTitle?,
@@ -1454,7 +1450,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title,
                 Subtitle?,
@@ -1465,7 +1460,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
                 (Subtitle | LinedSubtitle)?,
@@ -1476,7 +1470,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Index*
@@ -1484,7 +1477,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title, ShortTitle?, PlainTitle?)?,
                 Index*
@@ -1492,7 +1484,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Creator?,
@@ -1501,7 +1492,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Caption,
@@ -1887,7 +1877,6 @@
             
             DocInfo =
                 element docinfo {
-                    XMLBase?,
                     XMLLang?,
                     Configuration+
                 }

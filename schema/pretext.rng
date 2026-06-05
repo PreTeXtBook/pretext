@@ -3633,9 +3633,6 @@
       <ref name="TextShort"/>
     </element>
   </define>
-  <define name="XMLBase">
-    <attribute name="xml:base"/>
-  </define>
   <define name="XMLLang">
     <attribute name="xml:lang"/>
   </define>
@@ -3664,9 +3661,6 @@
       <ref name="Component"/>
     </optional>
     <optional>
-      <ref name="XMLBase"/>
-    </optional>
-    <optional>
       <ref name="XMLLang"/>
     </optional>
     <ref name="Title"/>
@@ -3683,9 +3677,6 @@
     </optional>
     <optional>
       <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLBase"/>
     </optional>
     <optional>
       <ref name="XMLLang"/>
@@ -3710,9 +3701,6 @@
     </optional>
     <optional>
       <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLBase"/>
     </optional>
     <optional>
       <ref name="XMLLang"/>
@@ -3742,9 +3730,6 @@
       <ref name="Component"/>
     </optional>
     <optional>
-      <ref name="XMLBase"/>
-    </optional>
-    <optional>
       <ref name="XMLLang"/>
     </optional>
     <ref name="Title"/>
@@ -3770,9 +3755,6 @@
     </optional>
     <optional>
       <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLBase"/>
     </optional>
     <optional>
       <ref name="XMLLang"/>
@@ -3808,9 +3790,6 @@
       <ref name="Component"/>
     </optional>
     <optional>
-      <ref name="XMLBase"/>
-    </optional>
-    <optional>
       <ref name="XMLLang"/>
     </optional>
     <optional>
@@ -3829,9 +3808,6 @@
     </optional>
     <optional>
       <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLBase"/>
     </optional>
     <optional>
       <ref name="XMLLang"/>
@@ -3860,9 +3836,6 @@
       <ref name="Component"/>
     </optional>
     <optional>
-      <ref name="XMLBase"/>
-    </optional>
-    <optional>
       <ref name="XMLLang"/>
     </optional>
     <optional>
@@ -3884,9 +3857,6 @@
     </optional>
     <optional>
       <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLBase"/>
     </optional>
     <optional>
       <ref name="XMLLang"/>
@@ -4843,9 +4813,6 @@
   </define>
   <define name="DocInfo">
     <element name="docinfo">
-      <optional>
-        <ref name="XMLBase"/>
-      </optional>
       <optional>
         <ref name="XMLLang"/>
       </optional>
