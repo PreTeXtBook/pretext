@@ -540,12 +540,16 @@ def release_temporary_directories():
 
     # log.level is 10 for debug, greater for all other levels.
     if log.level > 10:
-        for td in __temps:
-            log.info("Removing temporary directory {}".format(td))
-            # conservatively, raise exception on errors
-            shutil.rmtree(td, ignore_errors=False)
-            # reset list of temp direcotries to empty, to avoid duplicate requests
+        try:
+            for td in __temps:
+                log.info("Removing temporary directory {}".format(td))
+                # conservatively, raise exception on errors
+                shutil.rmtree(td, ignore_errors=False)
+                log.warning("Removed temporary directory {}".format(td))
+            # reset list of temp directories to empty, to avoid duplicate requests
             __temps = []
+        except:
+            log.warning("Failed to remove temporary directories, starting with {} (and maybe some others)".format(td))
     else:
         log.debug("Temporary directories left behind for inspection: {}".format(__temps))
 
