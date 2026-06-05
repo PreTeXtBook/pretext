@@ -883,6 +883,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="pi:*" mode="version"/>
 <xsl:template match="@pi:*" mode="version"/>
 
+<!-- The xinclude mechanism stamps an @xml:base attribute onto the  -->
+<!-- root element of every included file.  We drop it during the    -->
+<!-- version pass, so the assembled source carries none, and the    -->
+<!-- schema need not permit it.  To retain the originating file URI -->
+<!-- (say, for diagnostics) mint a @pi:source-uri here instead,     -->
+<!-- consistent with the other "pi:" provenance attributes.         -->
+<xsl:template match="@xml:base" mode="version"/>
+
 <!-- The "custom" element, with a @name in an auxiliary file,     -->
 <!-- and a @ref in a source file, allows for custom substitutions -->
 

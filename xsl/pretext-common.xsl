@@ -11039,6 +11039,10 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:message>
             <xsl:text>PTX:DEBUG:   </xsl:text>
             <xsl:text>f: </xsl:text>
+            <!-- On assembled source the version pass has stripped @xml:base,  -->
+            <!-- so this yields nothing; to restore the originating file URI,  -->
+            <!-- mint a @pi:source-uri there (with the other "pi:" provenance) -->
+            <!-- and consume it here.                                          -->
             <xsl:choose>
                 <xsl:when test="@xml:base">
                     <xsl:value-of select="@xml:base" />
