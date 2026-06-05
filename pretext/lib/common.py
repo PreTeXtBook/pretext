@@ -533,13 +533,17 @@ def get_output_filename(xml, out_file, dest_dir, suffix):
     return os.path.join(dest_dir, derivedname)
 
 
-def release_temporary_directories():
-    """Release scratch directories unless requesting debugging info"""
+def release_temporary_directories(any_log_level):
+    """
+    Release scratch directories unless requesting debugging info
+    - any_log_level: can be set to True by an external tool to force cleanup even if log level is set to debug (log.level == 10)
+    """
+
 
     global __temps
 
     # log.level is 10 for debug, greater for all other levels.
-    if log.level > 10:
+    if log.level > 10 or any_log_level:
         try:
             for td in __temps:
                 log.info("Removing temporary directory {}".format(td))
