@@ -5362,7 +5362,7 @@
 
         <p>The <c>xinclude</c><idx><c>xinclude</c></idx> mechanism is not part of <pretext />, <foreign>per se</foreign>.  It is of some use for organizing your authoring, so you do not have mammoth files open in your text editor.  As discussed in <xref ref="processing-modular" /> there is very little value in modularizing so much that you have many very small files, and also almost no benefit whatsoever to using directory structure to duplicate the inherent tree-like structure of <init>XML</init>.  Many small files, or deeply-nested directories, seem to be of little help and can cause more headaches than they are worth.</p>
 
-        <p>Normally you might use <c>xi:include</c> to point to a file whose root element is some natural structural division, like a <tag>chapter</tag> or <tag>section</tag>.  Smaller units of content, like a <tag>theorem</tag> are possible, but of limited utility outside of special situations.
+        <p>Normally you might use <c>xi:include</c> to point to a file whose root element is some natural structural division, like a <tag>chapter</tag> or <tag>section</tag>.  Smaller units of content, like a <tag>theorem</tag> are possible, but of limited utility outside of special situations.</p>
 
         <p>One variation is including <em>pure</em> text files, containing absolutely no markup at all.  Two good examples are the <tag>code</tag> child of a <tag>program</tag> or the <tag>latex-image</tag> element used to describe an <tag>image</tag> by source code that <latex/> understands.</p>
 
