@@ -117,7 +117,7 @@ nav.ptx-navbar {
 .ptx-navbar :is(.index-button, .calculator-toggle)  .icon {
   display: none;
 }
-.ptx-navbar :is(.runestone-profile, .activecode-toggle, .searchbutton) .name {
+.ptx-navbar :is(.runestone-profile, .activecode-toggle, .ptx-search-button) .name {
   display: none;
 }
 
