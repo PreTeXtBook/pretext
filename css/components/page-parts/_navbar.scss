@@ -6,6 +6,8 @@ $border-width: 1px !default;
 $navbar-breakpoint: 800px !default;
 $center-content: true !default;
 
+@use 'components/helpers/accessibility' as accessibility;
+
 @use 'components/helpers/buttons-default' as buttons;
 
 @use 'components/page-parts/extras/navbar-btn-borders';
@@ -108,8 +110,8 @@ $center-content: true !default;
     display: none;
   }
 
-  :is(.runestone-profile, .activecode-toggle, .searchbutton, .calculator-toggle, .light-dark-button, .embed-button) .name {
-    display: none;
+  :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .calculator-toggle, .light-dark-button, .embed-button) .name {
+    @include accessibility.sr-only;
   }
 
   .index-button {

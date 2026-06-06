@@ -44,7 +44,7 @@ body.pretext {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
-.searchresultsplaceholder {
+.ptx-search-dialog {
   left: calc(50vw - 300px);
 }
 
@@ -298,7 +298,7 @@ body.pretext {
     padding: 0 25px;
   }
 
-  .searchresultsplaceholder {
+  .ptx-search-dialog {
     width: 80vw;
     left: 10vw;
     bottom: 10vh;

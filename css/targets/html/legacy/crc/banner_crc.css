@@ -330,7 +330,7 @@
     justify-self: stretch;
 }
 
-/* ptx-searchbox */
-.searchbox {
-    grid-area: ptx-searchbox;
+/* ptx-search-box */
+.ptx-search-box {
+    grid-area: ptx-search-box;
 }
