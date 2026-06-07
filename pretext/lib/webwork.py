@@ -624,7 +624,7 @@ def webwork_to_xml(
             ww_image_path, ww_image_filename = os.path.split(ww_image_full_path)
             # split the filename into (name, extension). extension can be empty or like '.png'.
             ww_image_name, image_extension = os.path.splitext(ww_image_filename)
-            # rename, eg, webwork-representations/webwork-5-image-3.png
+            # rename the image file to, e.g., webworkParentExerciseLabel-image-3.png
             ptx_image_name = problem + "-image-" + str(count)
             ptx_image_filename = ptx_image_name + image_extension
             if image_extension == ".tgz":
