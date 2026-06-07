@@ -930,7 +930,8 @@ def main():
         )
 
     # Cleanup, if execution does not raise errors
-    ptx.release_temporary_directories()
+    # "any_log_level" is False, since we want to keep temporary directories if the log level is set to debug
+    ptx.release_temporary_directories(any_log_level=False)
 
 
 # Do it - lone top-level command

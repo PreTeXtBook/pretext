@@ -533,18 +533,28 @@ def get_output_filename(xml, out_file, dest_dir, suffix):
     return os.path.join(dest_dir, derivedname)
 
 
-def release_temporary_directories():
-    """Release scratch directories unless requesting debugging info"""
+def release_temporary_directories(any_log_level):
+    """
+    Release scratch directories unless requesting debugging info
+    - any_log_level: can be set to True by an external tool to force cleanup even if log level is set to debug (log.level == 10)
+    """
 
     global __temps
 
     # log.level is 10 for debug, greater for all other levels.
-    if log.level > 10:
-        for td in __temps:
-            log.info("Removing temporary directory {}".format(td))
-            # conservatively, raise exception on errors
-            shutil.rmtree(td, ignore_errors=False)
-            # reset list of temp direcotries to empty, to avoid duplicate requests
+    if log.level > 10 or any_log_level:
+        try:
+            for td in __temps:
+                log.info("Removing temporary directory {}".format(td))
+                # let a removal failure raise, so it is caught and reported below
+                shutil.rmtree(td, ignore_errors=False)
+                log.debug("Removed temporary directory {}".format(td))
+        except Exception as e:
+            log.warning("Failed to remove temporary directories, starting with {} (and maybe some others): {}".format(td, str(e)))
+        finally:
+            # always empty the list, even if a removal raised partway, so a
+            # long-running caller (e.g. a server process) does not accumulate
+            # stale entries; this also avoids duplicate removal requests
             __temps = []
     else:
         log.debug("Temporary directories left behind for inspection: {}".format(__temps))
