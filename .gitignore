@@ -1,5 +1,4 @@
 user/*
-doc/guide/webwork-representations.ptx
 script/mjsre/node_modules/
 script/mjsre/package-lock.json
 script/dynsub/node_modules/
