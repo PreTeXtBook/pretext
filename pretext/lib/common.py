@@ -539,7 +539,6 @@ def release_temporary_directories(any_log_level):
     - any_log_level: can be set to True by an external tool to force cleanup even if log level is set to debug (log.level == 10)
     """
 
-
     global __temps
 
     # log.level is 10 for debug, greater for all other levels.
@@ -547,13 +546,16 @@ def release_temporary_directories(any_log_level):
         try:
             for td in __temps:
                 log.info("Removing temporary directory {}".format(td))
-                # conservatively, raise exception on errors
+                # let a removal failure raise, so it is caught and reported below
                 shutil.rmtree(td, ignore_errors=False)
-                log.warning("Removed temporary directory {}".format(td))
-            # reset list of temp directories to empty, to avoid duplicate requests
+                log.debug("Removed temporary directory {}".format(td))
+        except Exception as e:
+            log.warning("Failed to remove temporary directories, starting with {} (and maybe some others): {}".format(td, str(e)))
+        finally:
+            # always empty the list, even if a removal raised partway, so a
+            # long-running caller (e.g. a server process) does not accumulate
+            # stale entries; this also avoids duplicate removal requests
             __temps = []
-        except:
-            log.warning("Failed to remove temporary directories, starting with {} (and maybe some others)".format(td))
     else:
         log.debug("Temporary directories left behind for inspection: {}".format(__temps))
 
