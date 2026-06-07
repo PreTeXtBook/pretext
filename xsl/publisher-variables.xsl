@@ -1398,7 +1398,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <!-- the generated directory, declared or defaulted -->
             <xsl:otherwise>
-                <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/'), '&#x20;', '%20')"/>
+                <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/representations/'), '&#x20;', '%20')"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
