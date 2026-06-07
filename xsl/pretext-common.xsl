@@ -11128,7 +11128,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:variable name="reserved-html-ids">
         <xsl:text>ptx-masthead ptx-content ptx-content-footer ptx-page-footer </xsl:text>
         <xsl:text>ptx-navbar ptx-sidebar ptx-toc mainmatter logo-link latex-macros </xsl:text>
-        <xsl:text>ptxsearch searchbutton searchresults searchresultsplaceholder searchempty closesearchresults </xsl:text>
+        <xsl:text>ptx-search-button ptx-search-results ptx-search-dialog ptx-search-terms ptx-search-status ptx-search-empty ptx-search-close</xsl:text>
         <xsl:text>light-dark-button papersize-select highlight-workspace-checkbox </xsl:text>
         <xsl:text>hide-hint-checkbox hide-answer-checkbox hide-solution-checkbox </xsl:text>
         <xsl:text>print-first-page-header-checkbox print-running-header-checkbox </xsl:text>
