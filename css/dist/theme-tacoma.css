@@ -345,8 +345,15 @@ body.standalone-page .ptx-page {
 .ptx-navbar :is(.index-button) .icon {
   display: none;
 }
-.ptx-navbar :is(.runestone-profile, .activecode-toggle, .searchbutton, .calculator-toggle, .light-dark-button, .embed-button) .name {
-  display: none;
+.ptx-navbar :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .calculator-toggle, .light-dark-button, .embed-button) .name {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
 }
 .ptx-navbar .index-button {
   min-width: 70px;
@@ -2536,30 +2543,25 @@ article.theorem-like .emphasis {
 .searchwrapper .gsc-control-cse {
   padding: 5px;
 }
-.searchbox .searchwidget {
+.ptx-search-box .ptx-search-widget {
   height: 100%;
 }
-.searchbox .searchresultsplaceholder {
-  position: fixed;
-  top: 5vh;
-  bottom: 5vh;
-  padding: 1em;
-  left: max(10vw, (100vw - 800px) / 2);
+.ptx-search-box .ptx-search-dialog[open] {
   width: 80vw;
+  height: 100%;
   max-width: 800px;
   border: 2px solid var(--body-text-color);
   background: var(--knowl-background, #eaf0f6);
-  z-index: 5000;
   display: flex;
   flex-direction: column;
 }
-.searchbox .searchresultsplaceholder article {
+.ptx-search-box .ptx-search-dialog article {
   width: 60%;
   margin-left: auto;
   margin-right: auto;
   font-family: sans-serif;
 }
-.searchbox .search-results-controls {
+.ptx-search-box .ptx-search-dialog-controls {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
@@ -2567,10 +2569,10 @@ article.theorem-like .emphasis {
   margin-bottom: 1em;
   height: 35px;
 }
-.searchbox .ptxsearch {
+.ptx-search-box .ptx-search-terms {
   flex: 1 1;
 }
-.searchbox .closesearchresults {
+.ptx-search-box .ptx-search-close {
   font: inherit;
   display: flex;
   justify-content: center;
@@ -2590,33 +2592,43 @@ article.theorem-like .emphasis {
   cursor: pointer;
   user-select: none;
 }
-.searchbox .closesearchresults:hover:not(.disabled) {
+.ptx-search-box .ptx-search-close:hover:not(.disabled) {
   color: var(--button-hover-text-color);
   background-color: var(--button-hover-background);
 }
-.searchbox .closesearchresults:focus-visible {
+.ptx-search-box .ptx-search-close:focus-visible {
   outline: 2px solid var(--button-text-color);
   outline-offset: -2px;
 }
-.searchbox .closesearchresults.disabled {
+.ptx-search-box .ptx-search-close.disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
-.searchbox .closesearchresults.hidden {
+.ptx-search-box .ptx-search-close.hidden {
   display: none;
 }
-.searchbox .closesearchresults.open {
+.ptx-search-box .ptx-search-close.open {
   color: var(--button-hover-text-color);
   background-color: var(--button-hover-background);
 }
-.searchbox .detailed_result {
+.ptx-search-box .ptx-search-detailed-result {
   margin-bottom: 10px;
 }
-.searchbox .searchresults a:hover {
+.ptx-search-box .ptx-search-results a:hover {
   text-decoration: underline;
   background: var(--link-active-background);
 }
-.searchbox .searchresults {
+.ptx-search-box .ptx-search-status {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}
+.ptx-search-box .ptx-search-results {
   padding-left: 10px;
   margin-top: 0;
   overflow-y: auto;
@@ -2624,60 +2636,52 @@ article.theorem-like .emphasis {
   background: var(--content-background, white);
   border: 1px solid var(--page-border-color, #ccc);
 }
-.searchbox .searchresults:empty {
+.ptx-search-box .ptx-search-results:empty {
   display: none;
 }
-.searchbox .search-result-bullet {
+.ptx-search-box .ptx-search-result-bullet {
   list-style-type: none;
 }
-.searchbox .search-result-score {
+.ptx-search-box .ptx-search-result-score {
   display: none;
 }
-.searchbox .no_result {
+.ptx-search-box .ptx-search-result-none {
   font-size: 90%;
   font-weight: 200;
 }
-.searchbox .low_result {
+.ptx-search-box .ptx-search-result-low {
   font-weight: 200;
 }
-.searchbox .medium_result {
+.ptx-search-box .ptx-search-result-medium {
   font-weight: 500;
 }
-.searchbox .high_result {
+.ptx-search-box .ptx-search-result-high {
   font-weight: 700;
 }
-.searchbox .searchempty {
+.ptx-search-box .ptx-search-empty {
   display: none;
   padding-left: 10px;
   padding-top: 5px;
 }
-.searchbox .search-results-unshown-count {
-  margin-top: 0.6em;
+.ptx-search-box .ptx-search-result-clip-highlight {
+  background: var(--ptx-search-resultshighlight);
 }
-.searchbox .search-result-clip-highlight {
-  background: var(--searchresultshighlight);
-}
-.searchbox .searchresultsbackground {
-  position: fixed;
-  top: 0;
-  background: var(--searchresultsbackground, white);
-  width: 100vw;
-  height: 100%;
-  left: 0;
-  z-index: 4999;
+.ptx-search-box .ptx-search-dialog::backdrop {
+  background: var(--ptx-search-resultsbackground, white);
 }
 @media screen and (max-width: 800px) {
-  .searchbox .searchresultsplaceholder {
-    bottom: 10vh;
+  .ptx-search-box .ptx-search-dialog[open] {
+    max-width: revert;
+    width: 100vw;
   }
 }
 :root {
-  --searchresultsbackground: #fff8;
-  --searchresultshighlight: rgba(255, 255, 0, 50%);
+  --ptx-search-resultsbackground: #fff8;
+  --ptx-search-resultshighlight: rgba(255, 255, 0, 50%);
 }
 :root.dark-mode {
-  --searchresultsbackground: #0008;
-  --searchresultshighlight: rgba(255, 255, 0, 15%);
+  --ptx-search-resultsbackground: #0008;
+  --ptx-search-resultshighlight: rgba(255, 255, 0, 15%);
 }
 .ptx-content .ptx-runestone-container .runestone {
   margin: unset;
