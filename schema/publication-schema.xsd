@@ -264,7 +264,7 @@
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="chapter-start" type="xs:integer"/>
-      <xs:attribute name="parts-structure">
+      <xs:attribute name="part-structure">
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="decorative"/>

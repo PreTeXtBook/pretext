@@ -325,7 +325,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="parts-structure">
+        <attribute name="part-structure">
           <choice>
             <value>decorative</value>
             <value>structural</value>
