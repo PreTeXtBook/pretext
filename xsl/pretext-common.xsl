@@ -115,22 +115,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- basically an abstract implementation   -->
 <xsl:variable name="chunk-level" select="number(0)"/>
 
-<!-- Inline Exercises can optionally run on their own numbering scheme -->
-<!-- This is set (temporarily) in docinfo, which will change           -->
-<!-- We do no special error-checking here since this will change       -->
-<!-- The variable will be empty if not set                             -->
-<xsl:variable name="numbering-exercises">
-    <xsl:value-of select="$docinfo/numbering/exercises/@level"/>
-</xsl:variable>
-
-<!-- Figure-Like can optionally run on their own numbering scheme      -->
-<!-- This is set (temporarily) in docinfo, which will change           -->
-<!-- We do no special error-checking here since this will change       -->
-<!-- The variable will be empty if not set                             -->
-<xsl:variable name="numbering-figures">
-    <xsl:value-of select="$docinfo/numbering/figures/@level"/>
-</xsl:variable>
-
 <!-- The pre-processing stylesheet ("pretext-assembly.xsl") guarantees   -->
 <!-- a root "pretext" element with a valid @xml:lang, even if it is the  -->
 <!-- default "en-US".                                                    -->
@@ -206,21 +190,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-is-article" select="$document-root/self::article" />
 <!-- w/, w/o parts induces variants -->
 <xsl:variable name="b-has-parts" select="boolean($root/book/part)" />
-
-
-<!-- Some groups of elements are counted distinct -->
-<!-- from other blocks.  A configuration element  -->
-<!-- in "docinfo" is indicative of this           -->
-<!-- Note: the "docinfo/numbering" signals will     -->
-<!-- move to the publisher file once numbering gets -->
-<!-- refactored.  The elements work as signals, but -->
-<!-- actual usage needs @level to be effective.     -->
-<xsl:variable name="b-number-figure-distinct" select="boolean($docinfo/numbering/figures)" />
-<!-- project historical default, switch it     -->
-<!-- 2021-07-02: debug variable is unsupported -->
-<xsl:variable name="b-number-project-distinct" select="$debug.project.number = ''" />
-<!-- historically false -->
-<xsl:variable name="b-number-exercise-distinct" select="boolean($docinfo/numbering/exercises)" />
 
 <!-- File extensions can be set globally for a conversion, -->
 <!-- we set it here to something outlandish                -->
@@ -393,10 +362,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- MathJax SVG option (yes/no, could be generalized to -->
 <!-- specifying various options).  Totally unsupported.  -->
 <xsl:param name="debug.mathjax.svg" select="''"/>
-
-<!-- 2021-07-02: any non-empty string will cause project-like  -->
-<!-- to run on the same counter as other blocks. Un-supported. -->
-<xsl:param name="debug.project.number" select="''"/>
 
 <!-- 2022-01-30: transition to React components, get ReactJS -->
 <!-- bundles, etc, locally or globally.  'yes' to activate.  -->
@@ -11795,6 +11760,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="&quot;$docinfo/search&quot;" />
         <xsl:with-param name="date-string" select="'2019-04-14'" />
         <xsl:with-param name="message" select="'site-specific ID for HTML search services (Google) is no longer provided within &quot;docinfo/search&quot;.  Please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-06-07  distinct block numbering moved to the publisher file -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$docinfo/numbering/figures | $docinfo/numbering/exercises&quot;" />
+        <xsl:with-param name="date-string" select="'2026-06-07'" />
+        <xsl:with-param name="message" select="'distinct numbering of figure-like and inline exercise blocks has been replaced by the &quot;numbering/figures&quot; and &quot;numbering/exercises&quot; entries in the publisher file.  We will attempt to honor your intent.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'"/>
     </xsl:call-template>
     <!--  -->
     <!-- 2017-08-25  once deprecated named lists to be captioned lists -->

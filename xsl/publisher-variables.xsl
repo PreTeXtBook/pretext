@@ -1766,6 +1766,178 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="numbering-footnotes" select="number($numbering-footnotes-entered)"/>
 
+<!-- User-supplied Numbering for Figure-Like      -->
+<!-- Respect switch, or provide sensible defaults -->
+<xsl:variable name="numbering-figures-entered">
+    <xsl:variable name="default-figures">
+        <xsl:choose>
+            <xsl:when test="$version-root/book/part">3</xsl:when>
+            <xsl:when test="$version-root/book">2</xsl:when>
+            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
+            <xsl:when test="$version-root/article">0</xsl:when>
+            <xsl:when test="$version-root/slideshow">0</xsl:when>
+            <xsl:when test="$version-root/letter">0</xsl:when>
+            <xsl:when test="$version-root/memo">0</xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:BUG: a document type needs a default figure level defined</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="candidate-figures">
+        <xsl:choose>
+            <!-- go with publisher file, check for numerical value -->
+            <xsl:when test="$publication/numbering/figures/@level">
+                <xsl:variable name="the-number" select="$publication/numbering/figures/@level"/>
+                <xsl:choose>
+                    <!-- NaN does not equal *anything*, so tests if a number -->
+                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
+                        <xsl:message>PTX:WARNING:   numbering level for figures given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:value-of select="$default-figures"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$publication/numbering/figures/@level"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- otherwise honor a deprecated docinfo level (assembled tree); warned elsewhere -->
+            <xsl:when test="$version-docinfo/numbering/figures/@level">
+                <xsl:value-of select="$version-docinfo/numbering/figures/@level"/>
+            </xsl:when>
+            <!-- use a default -->
+            <xsl:otherwise>
+                <xsl:value-of select="$default-figures"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- check $candidate-figures against upper bound, $numbering-maxlevel -->
+    <xsl:choose>
+        <xsl:when test="$candidate-figures > $numbering-maxlevel">
+            <xsl:message>PTX:WARNING:   numbering level set for figures ("<xsl:value-of select="$candidate-figures"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:value-of select="$default-figures"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$candidate-figures"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="numbering-figures" select="number($numbering-figures-entered)"/>
+
+<!-- User-supplied Numbering for Inline Exercises -->
+<!-- Respect switch, or provide sensible defaults -->
+<xsl:variable name="numbering-exercises-entered">
+    <xsl:variable name="default-exercises">
+        <xsl:choose>
+            <xsl:when test="$version-root/book/part">3</xsl:when>
+            <xsl:when test="$version-root/book">2</xsl:when>
+            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
+            <xsl:when test="$version-root/article">0</xsl:when>
+            <xsl:when test="$version-root/slideshow">0</xsl:when>
+            <xsl:when test="$version-root/letter">0</xsl:when>
+            <xsl:when test="$version-root/memo">0</xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:BUG: a document type needs a default inline exercise level defined</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="candidate-exercises">
+        <xsl:choose>
+            <!-- go with publisher file, check for numerical value -->
+            <xsl:when test="$publication/numbering/exercises/@level">
+                <xsl:variable name="the-number" select="$publication/numbering/exercises/@level"/>
+                <xsl:choose>
+                    <!-- NaN does not equal *anything*, so tests if a number -->
+                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
+                        <xsl:message>PTX:WARNING:   numbering level for inline exercises given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:value-of select="$default-exercises"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$publication/numbering/exercises/@level"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- otherwise honor a deprecated docinfo level (assembled tree); warned elsewhere -->
+            <xsl:when test="$version-docinfo/numbering/exercises/@level">
+                <xsl:value-of select="$version-docinfo/numbering/exercises/@level"/>
+            </xsl:when>
+            <!-- use a default -->
+            <xsl:otherwise>
+                <xsl:value-of select="$default-exercises"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- check $candidate-exercises against upper bound, $numbering-maxlevel -->
+    <xsl:choose>
+        <xsl:when test="$candidate-exercises > $numbering-maxlevel">
+            <xsl:message>PTX:WARNING:   numbering level set for inline exercises ("<xsl:value-of select="$candidate-exercises"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:value-of select="$default-exercises"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$candidate-exercises"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="numbering-exercises" select="number($numbering-exercises-entered)"/>
+
+<!-- User-supplied Numbering for Open Problems    -->
+<!-- Respect switch, or provide sensible defaults -->
+<xsl:variable name="numbering-openproblems-entered">
+    <xsl:variable name="default-openproblems">
+        <xsl:choose>
+            <xsl:when test="$version-root/book/part">3</xsl:when>
+            <xsl:when test="$version-root/book">2</xsl:when>
+            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
+            <xsl:when test="$version-root/article">0</xsl:when>
+            <xsl:when test="$version-root/slideshow">0</xsl:when>
+            <xsl:when test="$version-root/letter">0</xsl:when>
+            <xsl:when test="$version-root/memo">0</xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:BUG: a document type needs a default open problem level defined</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="candidate-openproblems">
+        <xsl:choose>
+            <!-- go with publisher file, check for numerical value -->
+            <xsl:when test="$publication/numbering/openproblems/@level">
+                <xsl:variable name="the-number" select="$publication/numbering/openproblems/@level"/>
+                <xsl:choose>
+                    <!-- NaN does not equal *anything*, so tests if a number -->
+                    <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
+                        <xsl:message>PTX:WARNING:   numbering level for open problems given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:value-of select="$default-openproblems"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$publication/numbering/openproblems/@level"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- use a default -->
+            <xsl:otherwise>
+                <xsl:value-of select="$default-openproblems"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- check $candidate-openproblems against upper bound, $numbering-maxlevel -->
+    <xsl:choose>
+        <xsl:when test="$candidate-openproblems > $numbering-maxlevel">
+            <xsl:message>PTX:WARNING:   numbering level set for open problems ("<xsl:value-of select="$candidate-openproblems"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:value-of select="$default-openproblems"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$candidate-openproblems"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="numbering-openproblems" select="number($numbering-openproblems-entered)"/>
+
+<!-- A block group may run on its own counter.  When its publisher -->
+<!-- switch is absent, the deprecated source is honored, then the  -->
+<!-- default.  Warnings live with the other deprecations.          -->
+<xsl:variable name="b-number-figure-distinct"      select="($publication/numbering/figures/@distinct = 'yes') or (not($publication/numbering/figures/@distinct) and boolean($version-docinfo/numbering/figures))"/>
+<xsl:variable name="b-number-project-distinct"     select="($publication/numbering/projects/@distinct = 'yes') or (not($publication/numbering/projects/@distinct) and ($debug.project.number = ''))"/>
+<xsl:variable name="b-number-exercise-distinct"    select="($publication/numbering/exercises/@distinct = 'yes') or (not($publication/numbering/exercises/@distinct) and boolean($version-docinfo/numbering/exercises))"/>
+<xsl:variable name="b-number-openproblem-distinct" select="$publication/numbering/openproblems/@distinct = 'yes'"/>
+
 <xsl:variable name="chapter-start-entered">
     <xsl:choose>
         <xsl:when test="$publication/numbering/divisions/@chapter-start">
@@ -3886,6 +4058,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- parameter is deprecated and ineffective, deprecated 2024-02-16. -->
 <xsl:param name="commentary" select="''" />
 
+<!-- Deprecated 2026-06-07, but still respected -->
+<xsl:param name="debug.project.number" select="''" />
+
 <!-- ###################################### -->
 <!-- Parameter Deprecation Warning Messages -->
 <!-- ###################################### -->
@@ -4536,6 +4711,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="date-string" select="'2025-05-09'" />
         <xsl:with-param name="message" select="'the webwork/@coursepassword and @userpassword publication entries have been deprecated. Use @password instead.'" />
         <xsl:with-param name="incorrect-use" select="($publication/webwork/@coursepassword != '' or $publication/webwork/@userpassword != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2026-06-07'" />
+        <xsl:with-param name="message" select="'the  debug.project.number  parameter has been replaced by the  numbering/projects/@distinct  entry in the publisher file.  We will attempt to honor your intent.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($debug.project.number != '')" />
     </xsl:call-template>
     <!--  -->
 </xsl:template>
