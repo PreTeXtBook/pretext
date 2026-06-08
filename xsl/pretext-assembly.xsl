@@ -375,10 +375,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- no defaults: every caller passes the scopes explicitly -->
     <xsl:param name="eq-nodes"/>
     <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
     <xsl:copy>
         <xsl:apply-templates select="@*|node()" mode="serial-stamp">
             <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
             <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -417,21 +425,44 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- ITEMS (the family's items) and LEVEL (its numbering switch) are the    -->
 <!-- only per-family inputs; $b-terminal and the case structure are shared. -->
-<!-- Two families ride this structure, tagged "-eq" and "-fn": equations    -->
-<!-- ($numbering-equations; numbered mrows) and footnotes                   -->
-<!-- ($numbering-footnotes; every fn).                                      -->
+<!-- Seven families ride this structure: equations ("-eq") and footnotes    -->
+<!-- ("-fn") are single counters; the block families share the "blocks"     -->
+<!-- counter unless figure-likes, projects, inline exercises, or open       -->
+<!-- problems are set "distinct", each then opening its own counter.        -->
 <xsl:template match="book|article|part|chapter|appendix|frontmatter|backmatter|preface|section|subsection|subsubsection|exercises|worksheet|handout|reading-questions|references|glossary|solutions" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
     <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
     <xsl:variable name="b-terminal" select="not(part|chapter|appendix|section|subsection|subsubsection|preface)"/>
-    <xsl:variable name="b-open-eq" select="not($eq-nodes) and ($b-terminal or (@level &gt;= $numbering-equations))"/>
-    <xsl:variable name="b-open-fn" select="not($fn-nodes) and ($b-terminal or (@level &gt;= $numbering-footnotes))"/>
+    <xsl:variable name="b-open-eq"          select="not($eq-nodes)          and ($b-terminal or (@level &gt;= $numbering-equations))"/>
+    <xsl:variable name="b-open-fn"          select="not($fn-nodes)          and ($b-terminal or (@level &gt;= $numbering-footnotes))"/>
+    <xsl:variable name="b-open-blocks"      select="not($blocks-nodes)      and ($b-terminal or (@level &gt;= $numbering-blocks))"/>
+    <xsl:variable name="b-open-figure"      select="$b-number-figure-distinct      and not($figure-nodes)      and ($b-terminal or (@level &gt;= $numbering-figures))"/>
+    <xsl:variable name="b-open-project"     select="$b-number-project-distinct     and not($project-nodes)     and ($b-terminal or (@level &gt;= $numbering-projects))"/>
+    <xsl:variable name="b-open-exercise"    select="$b-number-exercise-distinct    and not($exercise-nodes)    and ($b-terminal or (@level &gt;= $numbering-exercises))"/>
     <xsl:variable name="next-eq" select="$eq-nodes | self::*[$b-open-eq]//mrow[@pi:numbered = 'yes']"/>
     <xsl:variable name="next-fn" select="$fn-nodes | self::*[$b-open-fn]//fn"/>
+    <!-- The shared "blocks" pool also gathers figure-likes, projects,  -->
+    <!-- inline exercises, and open problems that are not run distinct. -->
+    <xsl:variable name="next-blocks" select="$blocks-nodes
+        | self::*[$b-open-blocks]//*[&FUNDAMENTAL-BLOCK-FILTER;]
+        | self::*[$b-open-blocks and not($b-number-figure-distinct)]//*[&TOP-FIGURE-FILTER;]
+        | self::*[$b-open-blocks and not($b-number-project-distinct)]//*[&PROJECT-FILTER;]
+        | self::*[$b-open-blocks and not($b-number-exercise-distinct)]//exercise[&INLINE-EXERCISE-FILTER;]"/>
+    <xsl:variable name="next-figure"      select="$figure-nodes      | self::*[$b-open-figure]//*[&TOP-FIGURE-FILTER;]"/>
+    <xsl:variable name="next-project"     select="$project-nodes     | self::*[$b-open-project]//*[&PROJECT-FILTER;]"/>
+    <xsl:variable name="next-exercise"    select="$exercise-nodes    | self::*[$b-open-exercise]//exercise[&INLINE-EXERCISE-FILTER;]"/>
     <xsl:copy>
         <xsl:apply-templates select="@*|node()" mode="serial-stamp">
             <xsl:with-param name="eq-nodes" select="$next-eq"/>
             <xsl:with-param name="fn-nodes" select="$next-fn"/>
+            <xsl:with-param name="blocks-nodes" select="$next-blocks"/>
+            <xsl:with-param name="figure-nodes" select="$next-figure"/>
+            <xsl:with-param name="project-nodes" select="$next-project"/>
+            <xsl:with-param name="exercise-nodes" select="$next-exercise"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -446,12 +477,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="article/introduction | chapter/introduction | section/introduction | subsection/introduction | appendix/introduction | article/conclusion | chapter/conclusion | section/conclusion | subsection/conclusion | appendix/conclusion" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
     <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
     <xsl:variable name="next-eq" select="$eq-nodes | (../introduction | ../conclusion)[not($eq-nodes)]//mrow[@pi:numbered = 'yes']"/>
     <xsl:variable name="next-fn" select="$fn-nodes | (../introduction | ../conclusion)[not($fn-nodes)]//fn"/>
+    <xsl:variable name="next-blocks" select="$blocks-nodes
+        | (../introduction | ../conclusion)[not($blocks-nodes)]//*[&FUNDAMENTAL-BLOCK-FILTER;]
+        | (../introduction | ../conclusion)[not($blocks-nodes) and not($b-number-figure-distinct)]//*[&TOP-FIGURE-FILTER;]
+        | (../introduction | ../conclusion)[not($blocks-nodes) and not($b-number-project-distinct)]//*[&PROJECT-FILTER;]
+        | (../introduction | ../conclusion)[not($blocks-nodes) and not($b-number-exercise-distinct)]//exercise[&INLINE-EXERCISE-FILTER;]"/>
+    <xsl:variable name="next-figure"      select="$figure-nodes      | (../introduction | ../conclusion)[not($figure-nodes)      and $b-number-figure-distinct]//*[&TOP-FIGURE-FILTER;]"/>
+    <xsl:variable name="next-project"     select="$project-nodes     | (../introduction | ../conclusion)[not($project-nodes)     and $b-number-project-distinct]//*[&PROJECT-FILTER;]"/>
+    <xsl:variable name="next-exercise"    select="$exercise-nodes    | (../introduction | ../conclusion)[not($exercise-nodes)    and $b-number-exercise-distinct]//exercise[&INLINE-EXERCISE-FILTER;]"/>
     <xsl:copy>
         <xsl:apply-templates select="@*|node()" mode="serial-stamp">
             <xsl:with-param name="eq-nodes" select="$next-eq"/>
             <xsl:with-param name="fn-nodes" select="$next-fn"/>
+            <xsl:with-param name="blocks-nodes" select="$next-blocks"/>
+            <xsl:with-param name="figure-nodes" select="$next-figure"/>
+            <xsl:with-param name="project-nodes" select="$next-project"/>
+            <xsl:with-param name="exercise-nodes" select="$next-exercise"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -461,6 +508,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="mrow[@pi:numbered = 'yes']" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
     <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
     <xsl:copy>
         <xsl:attribute name="serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
@@ -470,6 +521,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="@*|node()" mode="serial-stamp">
             <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
             <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
@@ -479,6 +534,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fn" mode="serial-stamp">
     <xsl:param name="eq-nodes"/>
     <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
     <xsl:copy>
         <xsl:attribute name="serial">
             <xsl:apply-templates select="." mode="position-in-node-set">
@@ -488,12 +547,120 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="@*|node()" mode="serial-stamp">
             <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
             <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
 
-<!-- The position-in-node-set utility lives in pretext-numbers.xsl. -->
-<!-- It is called from the mrow and fn stamping templates above.    -->
+<!-- Block stamps: serial from the group's distinct counter, else the shared "blocks". -->
+<!-- A subnumbered side-by-side panel is not a "top" figure, so it falls to the         -->
+<!-- catch-all (no @serial) and earns a letter downstream instead.                      -->
+
+<!-- Fundamental blocks always share the "blocks" counter. -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$blocks-nodes"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Projects: distinct counter when split out, else the "blocks" counter. -->
+<xsl:template match="&PROJECT-LIKE;" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$project-nodes[$b-number-project-distinct] | $blocks-nodes[not($b-number-project-distinct)]"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Top-level figure-likes: distinct counter when split out, else "blocks". -->
+<xsl:template match="*[&TOP-FIGURE-FILTER;]" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$figure-nodes[$b-number-figure-distinct] | $blocks-nodes[not($b-number-figure-distinct)]"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Inline exercises: distinct counter when split out, else "blocks". -->
+<xsl:template match="exercise[&INLINE-EXERCISE-FILTER;]" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$exercise-nodes[$b-number-exercise-distinct] | $blocks-nodes[not($b-number-exercise-distinct)]"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- The position-in-node-set utility lives in pretext-numbers.xsl.  It -->
+<!-- is called from the mrow, fn, and block stamping templates above.   -->
 
 <xsl:template match="node()|@*" mode="exercise">
     <xsl:param name="division" select="''"/>
@@ -731,6 +898,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$augment" mode="serial-stamp">
         <xsl:with-param name="eq-nodes" select="/.."/>
         <xsl:with-param name="fn-nodes" select="/.."/>
+        <xsl:with-param name="blocks-nodes" select="/.."/>
+        <xsl:with-param name="figure-nodes" select="/.."/>
+        <xsl:with-param name="project-nodes" select="/.."/>
+        <xsl:with-param name="exercise-nodes" select="/.."/>
     </xsl:apply-templates>
 </xsl:variable>
 <xsl:variable name="serial-stamp" select="exsl:node-set($serial-stamp-rtf)"/>
