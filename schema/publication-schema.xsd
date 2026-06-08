@@ -243,6 +243,9 @@
         <xs:element ref="divisions"/>
         <xs:element ref="blocks"/>
         <xs:element ref="projects"/>
+        <xs:element ref="figures"/>
+        <xs:group ref="InlineExercises"/>
+        <xs:element ref="openproblems"/>
         <xs:element ref="equations"/>
         <xs:element ref="footnotes"/>
       </xs:choice>
@@ -293,7 +296,7 @@
   </xs:element>
   <xs:element name="projects">
     <xs:complexType>
-      <xs:attribute name="level" use="required">
+      <xs:attribute name="level">
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="0"/>
@@ -303,6 +306,93 @@
             <xs:enumeration value="4"/>
             <xs:enumeration value="5"/>
             <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="distinct">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="figures">
+    <xs:complexType>
+      <xs:attribute name="level">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="distinct">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="InlineExercises">
+    <xs:sequence>
+      <xs:element name="exercises">
+        <xs:complexType>
+          <xs:attribute name="level">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="0"/>
+                <xs:enumeration value="1"/>
+                <xs:enumeration value="2"/>
+                <xs:enumeration value="3"/>
+                <xs:enumeration value="4"/>
+                <xs:enumeration value="5"/>
+                <xs:enumeration value="6"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="distinct">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="openproblems">
+    <xs:complexType>
+      <xs:attribute name="level">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="distinct">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -510,7 +600,7 @@
         <xs:element ref="calculator"/>
         <xs:element ref="css"/>
         <xs:element ref="cross-references"/>
-        <xs:element ref="exercises"/>
+        <xs:group ref="Exercises"/>
         <xs:element ref="feedback"/>
         <xs:element ref="index-page"/>
         <xs:element ref="interactives"/>
@@ -609,20 +699,24 @@
       <xs:attribute name="shell"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="exercises">
-    <xs:complexType>
-      <xs:attribute name="tabbed-tasks" use="required">
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="divisional"/>
-            <xs:enumeration value="inline"/>
-            <xs:enumeration value="reading"/>
-            <xs:enumeration value="project"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-    </xs:complexType>
-  </xs:element>
+  <xs:group name="Exercises">
+    <xs:sequence>
+      <xs:element name="exercises">
+        <xs:complexType>
+          <xs:attribute name="tabbed-tasks" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="divisional"/>
+                <xs:enumeration value="inline"/>
+                <xs:enumeration value="reading"/>
+                <xs:enumeration value="project"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:element name="feedback">
     <xs:complexType>
       <xs:attribute name="href" use="required"/>

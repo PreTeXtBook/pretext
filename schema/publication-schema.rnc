@@ -117,6 +117,9 @@
                     Divisions? &
                     Blocks? &
                     Projects? &
+                    Figures? &
+                    InlineExercises? &
+                    OpenProblems? &
                     Equations? &
                     Footnotes?
                 }
@@ -135,7 +138,26 @@
 
             Projects =
                 element projects {
-                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
+                }
+
+            Figures =
+                element figures {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
+                }
+
+            InlineExercises =
+                element exercises {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
+                }
+
+            OpenProblems =
+                element openproblems {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
                 }
 
             Equations =
