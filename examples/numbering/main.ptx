@@ -64,16 +64,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <docinfo>
         <macros>
         </macros>
-        <!-- Split-out numbering for figure-like objects and inline       -->
-        <!-- exercises is consumed by the XSL from $docinfo/numbering,     -->
-        <!-- but the schema does not yet permit the entries.  Uncomment    -->
-        <!-- to test those families on their own counters; expect a        -->
-        <!-- schema warning until the schema is updated.                   -->
-        <!--                                                              -->
-        <!-- <numbering>                                                  -->
-        <!--     <figures   level="2"/>                                   -->
-        <!--     <exercises level="2"/>                                   -->
-        <!-- </numbering>                                                 -->
     </docinfo>
 
     <book xml:id="num-stress">

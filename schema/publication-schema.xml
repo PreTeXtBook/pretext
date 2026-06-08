@@ -240,6 +240,14 @@
             These options will affect multiplt output formats, all related to numbering.
         </p>
 
+        <p>
+            The <attr>distinct</attr> switch on <tag>projects</tag>,
+            <tag>figures</tag>, <tag>exercises</tag>, and <tag>openproblems</tag>
+            determines whether those blocks run on their own counter
+            (<c>distinct="yes"</c>, at the given <attr>level</attr>) or share the
+            overall blocks counter (<c>distinct="no"</c>, the default).
+        </p>
+
         <fragment xml:id="numbering">
             <title>Numbering Options</title>
             <code>
@@ -248,6 +256,9 @@
                     Divisions? &amp;
                     Blocks? &amp;
                     Projects? &amp;
+                    Figures? &amp;
+                    InlineExercises? &amp;
+                    OpenProblems? &amp;
                     Equations? &amp;
                     Footnotes?
                 }
@@ -266,7 +277,26 @@
 
             Projects =
                 element projects {
-                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
+                }
+
+            Figures =
+                element figures {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
+                }
+
+            InlineExercises =
+                element exercises {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
+                }
+
+            OpenProblems =
+                element openproblems {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
                 }
 
             Equations =
