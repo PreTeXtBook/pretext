@@ -4674,8 +4674,11 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <!-- Structure Numbers: Inline Exercises -->
-<!-- Follows the theorem/figure/etc scheme (can't poll parent) -->
-<xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="structure-number">
+<!-- Follows the theorem/figure/etc scheme.  The second alternative   -->
+<!-- adds an inline exercise in a division introduction or conclusion -->
+<!-- (its parent is not in the inline filter); divisional-container   -->
+<!-- exercises are handled by the next template instead.              -->
+<xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]|exercise[(parent::introduction or parent::conclusion) and not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" mode="structure-number">
     <xsl:variable name="exercise-levels">
         <xsl:choose>
             <xsl:when test="$b-number-exercise-distinct">
