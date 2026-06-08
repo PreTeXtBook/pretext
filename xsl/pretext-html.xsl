@@ -14046,9 +14046,9 @@ TODO:
 <!-- Div for native search -->
 <xsl:template name="native-search-box">
     <xsl:if test="$has-native-search">
-        <div class="searchbox">
-            <div class="searchwidget">
-                <button id="searchbutton" class="searchbutton button" type="button" title="Search book">
+        <div class="ptx-search-box">
+            <div class="ptx-search-widget">
+                <button id="ptx-search-button" type="button" class="ptx-search-button button" title="Search book" commandfor="ptx-search-dialog" command="show-modal" >
                     <xsl:call-template name="insert-symbol">
                         <xsl:with-param name="name" select="'search'"/>
                     </xsl:call-template>
@@ -14063,19 +14063,22 @@ TODO:
 <!-- Div for native search results -->
 <xsl:template name="native-search-results">
     <xsl:if test="$has-native-search">
-        <div id="searchresultsplaceholder" class="searchresultsplaceholder" style="display: none">
-            <div class="search-results-controls">
-                <input aria-label="Search term" id="ptxsearch" class="ptxsearch" type="text" name="terms" placeholder="Search term"/>
-                <button title="Close search" id="closesearchresults" class="closesearchresults"><span class="material-symbols-outlined">close</span></button>
+        <dialog id="ptx-search-dialog" class="ptx-search-dialog" closedby="closerequest">
+            <div class="ptx-search-dialog-controls">
+                <input aria-label="Search term" id="ptx-search-terms" class="ptx-search-terms" type="text" name="terms" placeholder="Search terms"/>
+                <button aria-label="Close search" id="ptx-search-close" class="ptx-search-close" commandfor="ptx-search-dialog"  command="close"><span class="material-symbols-outlined">close</span></button>
             </div>
-            <h2 class="search-results-heading">
+            <!-- Will contain notice about how many results there are for screen readers to announce-->
+            <div id="ptx-search-status" class="ptx-search-status" aria-live="polite" aria-atomic="true">
+            </div>
+            <h2 class="ptx-search-results-heading">
                 <xsl:apply-templates select="." mode="type-name">
                     <xsl:with-param name="string-id" select="'search-results-heading'"/>
                 </xsl:apply-templates>
                 <xsl:text>: </xsl:text>
             </h2>
-            <!-- div#searchempty is not visible when there are results -->
-            <div id="searchempty" class="searchempty">
+            <!-- div#ptx-search-empty is not visible when there are results -->
+            <div id="ptx-search-empty" class="ptx-search-empty">
                 <span>
                     <xsl:apply-templates select="." mode="type-name">
                         <xsl:with-param name="string-id" select="'no-search-results'"/>
@@ -14083,9 +14086,9 @@ TODO:
                     <xsl:text>.</xsl:text>
                 </span>
             </div>
-            <ol id="searchresults" class="searchresults">
+            <ol id="ptx-search-results" class="ptx-search-results">
             </ol>
-        </div>
+        </dialog>
     </xsl:if>
 </xsl:template>
 

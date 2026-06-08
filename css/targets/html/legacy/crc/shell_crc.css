@@ -126,7 +126,7 @@ body.pretext {
         z-index: 100;
     }
 }
-.ptx-masthead .searchbox {
+.ptx-masthead .ptx-search-box {
    bottom: 2px;
    margin-right: -19px;
 }
