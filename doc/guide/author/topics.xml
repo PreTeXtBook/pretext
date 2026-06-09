@@ -5355,8 +5355,39 @@
     </section>
 
     <section xml:id="topic-units-measure">
-        <title>(*) Units of Measure</title>
-        <p></p>
+        <title>Units of Measure</title>
+        <idx>scientific units</idx>
+        <idx><h>units</h><see>scientific units</see></idx>
+
+        <introduction>
+            <p>This section expands on <xref ref="overview-si-units"/>.  A physical quantity is authored with the <tag>quantity</tag> element, so that <pretext/> can typeset the magnitude and its units consistently<mdash/>with correct spacing and upright symbols<mdash/>in every output format.  Authoring units this way, rather than as ordinary text or as mathematics, also lets them migrate correctly to print, <init>HTML</init>, and braille.</p>
+        </introduction>
+
+        <subsection xml:id="quantity-structure">
+            <title>Building a Quantity</title>
+
+            <p>A <tag>quantity</tag> holds at most one <tag>mag</tag> (its <term>magnitude</term>, a number), followed by any number of <tag>unit</tag> and <tag>per</tag> elements.  A <tag>unit</tag> contributes a factor to the numerator and a <tag>per</tag> a factor to the denominator.  Each requires a <attr>base</attr> (such as <c>meter</c> or <c>gram</c>), and may add a <attr>prefix</attr> (such as <c>kilo</c> or <c>micro</c>) and an integer <attr>exp</attr> for a power.</p>
+
+            <pre>
+            &lt;quantity&gt;
+                &lt;mag&gt;9.8&lt;/mag&gt;
+                &lt;unit base="meter"/&gt;
+                &lt;per base="second" exp="2"/&gt;
+            &lt;/quantity&gt;
+            </pre>
+
+            <p>This renders as <quantity><mag>9.8</mag><unit base="meter"/><per base="second" exp="2"/></quantity>.  Every part is optional and independent.  A <tag>quantity</tag> may be unitless, holding only a <tag>mag</tag>, which helps keep a plain number typographically consistent with neighboring quantities that do carry units.  It may equally have units but no magnitude, as when a table explains what a unit means (a natural use within a <tag>tabular</tag>, see <xref ref="topic-tabular"/>).</p>
+
+            <p>The content of a <tag>mag</tag> may include simple <latex/> syntax, so a magnitude such as <c>2\pi</c> is recognized and rendered consistently in both <latex/> and <init>HTML</init> output.  See <xref ref="topic-mathematics"/> for more on authoring mathematics.</p>
+        </subsection>
+
+        <subsection xml:id="quantity-units-vocabulary">
+            <title>Prefixes and Base Units</title>
+
+            <p>The <attr>prefix</attr> and <attr>base</attr> attributes draw on a fixed, extensive vocabulary.  The prefixes are the full range of <init>SI</init> multipliers, from <c>yocto</c> through <c>yotta</c>.  The bases include the <init>SI</init> base and derived units<mdash/>among them <c>meter</c>, <c>gram</c>, <c>second</c>, <c>ampere</c>, <c>kelvin</c>, <c>mole</c>, <c>candela</c>, <c>newton</c>, <c>pascal</c>, <c>joule</c>, <c>watt</c>, <c>hertz</c>, and <c>radian</c><mdash/>together with a selection of non-<init>SI</init> and customary units such as <c>minute</c>, <c>hour</c>, <c>degreeCelsius</c>, <c>degreeFahrenheit</c>, <c>foot</c>, <c>pound</c>, and <c>gallon</c>.</p>
+
+            <p>Because this vocabulary is large, and is revised from time to time, we do not reproduce it in full here.  A prefix or base that <pretext/> does not recognize is reported to you when you process your document, so the safest course is to try the unit you have in mind.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-unicode">
