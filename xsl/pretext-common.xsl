@@ -3937,45 +3937,12 @@ Book (with parts), "section" at level 3
 <!-- options selected through the "docinfo/numbering" configuration.           -->
 
 
-<!-- Serial Numbers: Fundamental Blocks (Theorems, Etc.) -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="serial-number">
-    <xsl:apply-templates select="." mode="overall-blocks-serial-number" />
-</xsl:template>
-
-<!-- Serial Numbers: Projects -->
-<xsl:template match="&PROJECT-LIKE;" mode="serial-number">
-    <xsl:choose>
-        <xsl:when test="$b-number-project-distinct">
-            <xsl:apply-templates select="." mode="atomic-project-serial-number" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="overall-blocks-serial-number" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Serial Numbers: Figures -->
-<xsl:template match="&FIGURE-LIKE;" mode="serial-number">
-    <xsl:choose>
-        <xsl:when test="$b-number-figure-distinct">
-            <xsl:apply-templates select="." mode="atomic-figure-serial-number" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="overall-blocks-serial-number" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Serial Numbers: Inline Exercises -->
-<xsl:template match="exercise" mode="serial-number">
-    <xsl:choose>
-        <xsl:when test="$b-number-exercise-distinct">
-            <xsl:apply-templates select="." mode="atomic-exercise-serial-number" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="overall-blocks-serial-number" />
-        </xsl:otherwise>
-    </xsl:choose>
+<!-- Serial number of a block: read the @serial that the assembly -->
+<!-- "serial-stamp" pass stamped.  That pass decides, from the    -->
+<!-- publication "@distinct" switches, whether a group shares the -->
+<!-- overall blocks counter or runs on its own distinct counter.  -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|exercise" mode="serial-number">
+    <xsl:value-of select="@serial"/>
 </xsl:template>
 
 <!-- We accumulate counts for any elements     -->
@@ -4504,6 +4471,8 @@ Book (with parts), "section" at level 3
 <xsl:template match="&OPENPROBLEM-LIKE;" mode="structure-number">
     <xsl:text>M</xsl:text>
 </xsl:template>
+
+<!-- DISCUSSION-LIKE are appendages; their number is inherited from the parent. -->
 <xsl:template match="&DISCUSSION-LIKE;" mode="serial-number">
     <xsl:number select="parent::*" count="&DISCUSSION-LIKE;"/>
 </xsl:template>

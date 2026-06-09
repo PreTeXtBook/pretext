@@ -132,6 +132,13 @@
 <!ENTITY FIGURE-LIKE "figure|table|listing|list">
 <!ENTITY FIGURE-FILTER "self::figure or self::table or self::listing or self::list">
 
+<!-- Composite filters for the numbering "serial-stamp" pass.  The      -->
+<!-- "fundamental" blocks always share the overall blocks counter; a    -->
+<!-- "top" figure-like is a captioned display that earns a number (a    -->
+<!-- panel inside a captioned side-by-side earns a letter instead).     -->
+<!ENTITY FUNDAMENTAL-BLOCK-FILTER "(&DEFINITION-FILTER;) or (&THEOREM-FILTER;) or (&AXIOM-FILTER;) or (&REMARK-FILTER;) or (&COMPUTATION-FILTER;) or (&EXAMPLE-FILTER;)">
+<!ENTITY TOP-FIGURE-FILTER "(&FIGURE-FILTER;) and not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)">
+
 <!-- appendages of examples, exercises, tasks -->
 <!ENTITY SOLUTION-LIKE "hint|answer|solution">
 <!ENTITY SOLUTION-FILTER "self::hint or self::answer or self::solution">
