@@ -735,8 +735,8 @@ def copy_managed_directories(build_dir, external_abs=None, generated_abs=None, d
         shutil.copytree(generated_abs, generated_dir)
 
     if data_abs is not None:
-        generated_dir = os.path.join(build_dir, "data")
-        shutil.copytree(data_abs, generated_dir)
+        data_dir = os.path.join(build_dir, "data")
+        shutil.copytree(data_abs, data_dir)
 
 
 def copy_build_directory(build_dir, dest_dir):
