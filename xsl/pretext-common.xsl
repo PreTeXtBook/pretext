@@ -1688,6 +1688,12 @@ Book (with parts), "section" at level 3
 <!-- location.  Likely wise to move this to the top of this stylesheet.      -->
 <xsl:include href = "./pretext-text-utilities.xsl"/>
 
+<!-- Number consumers: serial-number, structure-number, "number",     -->
+<!-- xref-number, and division levels.  The native counting           -->
+<!-- primitives they build on live in the assembly pass, which every  -->
+<!-- conversion also imports.                                         -->
+<xsl:include href = "./pretext-numbers.xsl"/>
+
 
 <!-- When trying to represent XML source as it would have been authored, -->
 <!-- we "break" the escape characters to result in their authored form.  -->

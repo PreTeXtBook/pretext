@@ -114,8 +114,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- content, which may generally just produce a lot of text.      -->
 <!-- Which is no good, say as an attribute value.                  -->
 
-<!-- Isolate computation of numbers -->
-<xsl:import href="./pretext-numbers.xsl"/>
 <!-- Isolate conversion of Runestone/interactive to PreTeXt/static -->
 <xsl:import href="./pretext-runestone-static.xsl"/>
 
