@@ -8,14 +8,14 @@
 // stub for i18next to future-proof the code. We don't actually use it for
 // anything right now, but it will be needed if we want to localize the
 // accessibility search status messages.
-const i18next = window.i18next || class {
-    static t(key, params) {
+window.i18next = window.i18next || {
+    t(key, params = {}) {
         for (const param in params) {
             key = key.replace(`{{${param}}}`, params[param]);
         }
         return key;
     }
-}
+};
 
 
 function doSearch() {
@@ -186,11 +186,11 @@ function addResultToPage(searchterms, result, docs, numUnshown, resultArea) {
     if (len == 0) {
         document.getElementById("ptx-search-empty").style.display = "block";
         document.getElementById("ptx-search-dialog").style.display = null;
-        searchStatus.innerHTML = i18next.t('No results found for "{{terms}}".', { terms: searchterms });
+        searchStatus.innerHTML = window.i18next.t('No results found for "{{terms}}".', { terms: searchterms });
         return;
     }
     document.getElementById("ptx-search-empty").style.display = "none";
-    searchStatus.innerHTML = i18next.t('{{count}} results found.', { count: len });
+    searchStatus.innerHTML = window.i18next.t('{{count}} results found.', { count: len });
 
     let allScores = result.map(function (r) { return r.score });
     allScores.sort((a,b) => (a - b));

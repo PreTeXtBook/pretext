@@ -11,9 +11,17 @@
  *******************************************************************************
  */
 
-/*
-console.log("thisbrowser.userAgent", window.navigator.userAgent);
-*/
+// stub for i18next to future-proof the code. We don't actually use it for
+// anything right now, but it will be needed if we want to localize the
+// accessibility search status messages.
+window.i18next = window.i18next || {
+    t(key, params = {}) {
+        for (const param in params) {
+            key = key.replace(`{{${param}}}`, params[param]);
+        }
+        return key;
+    }
+};
 
 /* scrollbar width from https://stackoverflow.com/questions/13382516/getting-scroll-bar-width-using-javascript */
 function getScrollbarWidth() {
@@ -1244,7 +1252,7 @@ function setDarkMode(isDark) {
     const modeButton = document.getElementById("light-dark-button");
     if (modeButton) {
         modeButton.querySelector('.icon').innerText = isDark ? "light_mode" : "dark_mode";
-        modeButton.querySelector('.name').innerText = isDark ? "Light Mode" : "Dark Mode";
+        modeButton.querySelector('.name').innerText = isDark ? window.i18next.t("Light Mode") : window.i18next.t("Dark Mode");
     }
 }
 
