@@ -1455,8 +1455,18 @@
         </subsection>
 
         <subsection xml:id="topic-worksheet">
-            <title>(*) Worksheets</title>
-            <p></p>
+            <title>Worksheets</title>
+            <idx>worksheet</idx>
+
+            <p>This expands on <xref ref="overview-worksheet"/>.  A <tag>worksheet</tag> is a specialized division, a peer of a <tag>section</tag> or <tag>chapter</tag>, intended for an in-class activity or a printable handout.  Unlike most of <pretext/>, a worksheet gives precedence to <em>printed</em> output and the layout of a physical page; the <init>HTML</init> version is a faithful but less-capable representation.</p>
+
+            <p>A worksheet may open with a list of <tag>objectives</tag> and an <tag>introduction</tag>, and close with a <tag>conclusion</tag> and a list of <tag>outcomes</tag>.  Its body is one or more <tag>page</tag> elements, one of the few places in <pretext/> where an author deliberately forces a page break.  The principal content of a page is the <tag>exercise</tag>, authored exactly as in <xref ref="topic-exercises"/>, though a page may also hold paragraphs, figures, and other ordinary content.  A skeletal example to start from is given in <xref ref="basics-l-worksheet" text="type-global"/>.</p>
+
+            <p>Two layout features are unique to a worksheet.  An <tag>exercise</tag> (or a <tag>task</tag> within it) may carry a <attr>workspace</attr> attribute, requesting a measured amount of blank working room for the student, such as <c>workspace="4in"</c> or <c>workspace="1cm"</c>.  And only inside a worksheet may an <tag>exercise</tag> be placed within a <tag>sidebyside</tag> (<xref ref="topic-sidebyside"/>), so that exercises and figures can be arranged across the width of the page.</p>
+
+            <p>Because a worksheet is built for the printed page, the conversion to <latex/> realizes that layout directly: each <tag>page</tag> begins on a fresh sheet, and a requested <attr>workspace</attr> becomes genuine blank room for the student to write in.  The <init>HTML</init> version reads on screen like any other division, but also offers a print button<mdash/>a printer icon, driven by JavaScript<mdash/>that reflows the worksheet into the same paginated form, honoring the page breaks, the workspace, and the page margins, so a student can print a clean copy directly from a browser.</p>
+
+            <p>A publisher shapes the printed page without altering your source.  The four page margins may be set in the publication file (with a <attr>margin</attr> shortcut for all four), and a worksheet may be given custom headers and footers<mdash/>specified separately for the first page and the running pages, each with left, center, and right content<mdash/>so a worksheet can carry, for instance, a <q>Name</q> and <q>Date</q> line at the top.  See <xref ref="common-worksheet-margins"/> and <xref ref="common-worksheet-headers-footers"/> for these settings, and <xref ref="latex-worksheet-options"/> for finer control of the <latex/> page.</p>
         </subsection>
     </section>
 
