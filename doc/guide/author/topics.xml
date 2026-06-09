@@ -965,8 +965,76 @@
     </section>
 
     <section xml:id="topic-exercises">
-        <title>(*) Exercises, Inline and Divisional</title>
-        <p></p>
+        <title>Exercises, Inline and Divisional</title>
+        <idx>exercise</idx>
+
+        <introduction>
+            <p>This section expands on <xref ref="overview-exercises"/>, which describes the five places an <tag>exercise</tag> may appear: <term>inline</term> within a division, inside a divisional <tag>exercises</tag>, inside a <tag>reading-questions</tag> division, inside a <tag>worksheet</tag>, or as a <tag>project</tag> and its relatives.  The markup of the <tag>exercise</tag> is nearly the same in all five, so we describe it once here and note the differences as they arise.</p>
+
+            <p>Two large companion topics are treated separately.  The placement and collection of hints, answers, and solutions is the subject of <xref ref="topic-exercises-solutions"/>, while the many <em>interactive</em> exercise types<mdash/>multiple choice, Parson problems, matching, and more<mdash/>are described in <xref ref="topic-interactive-exercises"/>.  Which of these components is displayed, and where, is a decision for the publisher (see <xref ref="common-exercise-visibility"/>).</p>
+        </introduction>
+
+        <subsection xml:id="exercise-statement-structure">
+            <title>The Anatomy of an Exercise</title>
+
+            <p>In its simplest form an <tag>exercise</tag> is just a question, authored like any paragraph with <tag>p</tag> and the usual inline elements.  As soon as you add a <tag>hint</tag>, an <tag>answer</tag>, or a <tag>solution</tag>, the question itself must be enclosed in a <tag>statement</tag>, so that the parts can be distinguished.  When none of those three is present, the <tag>statement</tag> is optional and is usually omitted.</p>
+
+            <pre>
+            &lt;exercise&gt;
+                &lt;statement&gt;
+                    &lt;p&gt;Compute the derivative of &lt;m&gt;f(x) = x^2&lt;/m&gt;.&lt;/p&gt;
+                &lt;/statement&gt;
+                &lt;hint&gt;
+                    &lt;p&gt;Use the power rule.&lt;/p&gt;
+                &lt;/hint&gt;
+                &lt;answer&gt;
+                    &lt;p&gt;&lt;m&gt;2x&lt;/m&gt;&lt;/p&gt;
+                &lt;/answer&gt;
+            &lt;/exercise&gt;
+            </pre>
+
+            <p>Conceptually an <tag>answer</tag> is a short final result, while a <tag>solution</tag> shows the route to it, and you may provide several of each.  An <tag>exercise</tag> may also lead with a <tag>title</tag>.  A title is good practice everywhere, and is strongly encouraged for an inline exercise, since a conversion to <init>HTML</init> may present such an exercise in a knowl whose clickable text is the title; see <xref ref="best-practice-titles"/>.</p>
+        </subsection>
+
+        <subsection xml:id="exercise-tasks">
+            <title>Multi-Part Exercises</title>
+            <idx><h>exercise</h><h>multi-part</h></idx>
+            <idx>task</idx>
+
+            <p>A question with several parts is built from a sequence of <tag>task</tag>.  Each <tag>task</tag> is structured just like an exercise<mdash/>a bare paragraph, or a <tag>statement</tag> with its own <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag><mdash/>and the enclosing <tag>exercise</tag> may frame the parts with an <tag>introduction</tag> and a <tag>conclusion</tag>.</p>
+
+            <pre>
+            &lt;exercise&gt;
+                &lt;title&gt;A multi-part exercise&lt;/title&gt;
+                &lt;introduction&gt;
+                    &lt;p&gt;Background needed to begin.&lt;/p&gt;
+                &lt;/introduction&gt;
+                &lt;task&gt;
+                    &lt;statement&gt;&lt;p&gt;The first step.&lt;/p&gt;&lt;/statement&gt;
+                    &lt;hint&gt;&lt;p&gt;A little hint.&lt;/p&gt;&lt;/hint&gt;
+                &lt;/task&gt;
+                &lt;task&gt;
+                    &lt;statement&gt;&lt;p&gt;The second step.&lt;/p&gt;&lt;/statement&gt;
+                &lt;/task&gt;
+            &lt;/exercise&gt;
+            </pre>
+
+            <p>A <tag>task</tag> may itself contain tasks, nested up to three levels deep.  The limit reflects the nested list labels available in <latex/> output; deeper nesting is reported as an error.</p>
+        </subsection>
+
+        <subsection xml:id="exercise-inline-divisional">
+            <title>Inline, Divisional, and Other Contexts</title>
+            <idx><h>exercise</h><h>inline</h></idx>
+            <idx><h>exercise</h><h>divisional</h></idx>
+
+            <p>An <term>inline exercise</term> sits directly among the paragraphs and blocks of a division.  It interrupts the narrative and is numbered together with the theorems, examples, and remarks around it (see <xref ref="overview-math-results"/>), so it carries a fully-qualified number like an <tag>example</tag>.</p>
+
+            <p>A <term>divisional exercise</term> lives inside an <tag>exercises</tag> division, one of the specialized divisions (<xref ref="topic-specialized-divisions"/>).  An <tag>exercises</tag> division may appear wherever an ordinary division could, so a section, a chapter, or the entire book may each have one.  Its exercises are numbered sequentially within the division, apart from the block numbering.  A run of related divisional exercises may be wrapped in an <tag>exercisegroup</tag>, which carries common instructions in a required <tag>introduction</tag>, allows a <tag>conclusion</tag>, and takes an optional <tag>title</tag>.</p>
+
+            <p>The remaining contexts are close variations on the same element.  A <tag>reading-questions</tag> division holds exercises that check a reader's comprehension of the surrounding material.  A <tag>worksheet</tag> is a print-oriented division whose exercises gain some layout control (see <xref ref="topic-worksheet"/>).  A <tag>project</tag><mdash/>along with <tag>activity</tag>, <tag>exploration</tag>, and <tag>investigation</tag><mdash/>behaves like an inline exercise but may run on its own counter.  <xref ref="overview-exercises"/> tours all five at a glance.</p>
+
+            <p>A divisional exercise takes the next sequential number automatically.  You may pin a number with the <attr>number</attr> attribute to keep problem numbers stable as some may be deleted over time, but once you override one number you will usually have to set every number that follows, so this is best saved for a mature project.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-verbatim-literal">
