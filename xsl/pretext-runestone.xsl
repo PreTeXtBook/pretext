@@ -2544,6 +2544,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </xsl:if>
     </xsl:if>
+    <!-- GDScript (Godot WASM) needs to find the shell engine files -->
+    <xsl:if test="$active-language = 'gdscript'">
+        <xsl:attribute name="data-wasm">
+            <xsl:value-of select="$external-directory" />
+            <xsl:text>godot-shell</xsl:text>
+        </xsl:attribute>
+        <!-- Optional: per-exercise .pck file in the external directory -->
+        <xsl:if test="@pck">
+            <xsl:attribute name="data-pck">
+                <xsl:choose>
+                    <xsl:when test="$b-managed-directories">
+                        <xsl:value-of select="$external-directory"/>
+                        <xsl:value-of select="@pck"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@pck"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+        </xsl:if>
+        <!-- Scene path inside the .pck virtual filesystem -->
+        <xsl:if test="@scene">
+            <xsl:attribute name="data-scene">
+                <xsl:value-of select="@scene"/>
+            </xsl:attribute>
+        </xsl:if>
+    </xsl:if>
     <!-- interpreter arguments for hosted languages -->
     <xsl:variable name="interpreter-args">
         <xsl:call-template name="get-program-attr-or-default">
@@ -2715,9 +2742,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$language = 'javascript'">  <xsl:text>browser</xsl:text></xsl:when>
         <xsl:when test="$language = 'html'">        <xsl:text>browser</xsl:text></xsl:when>
         <xsl:when test="$language = 'sql'">         <xsl:text>browser</xsl:text></xsl:when>
+        <xsl:when test="$language = 'gdscript'">    <xsl:text>browser</xsl:text></xsl:when>
         <xsl:when test="$language = 'c'">           <xsl:text>jobeserver</xsl:text></xsl:when>
         <xsl:when test="$language = 'cpp'">         <xsl:text>jobeserver</xsl:text></xsl:when>
-        <xsl:when test="$language = 'gdscript'">    <xsl:text>jobeserver</xsl:text></xsl:when>
         <xsl:when test="$language = 'java'">        <xsl:text>jobeserver</xsl:text></xsl:when>
         <xsl:when test="$language = 'kotlin'">      <xsl:text>jobeserver</xsl:text></xsl:when>
         <xsl:when test="$language = 'python2'">     <xsl:text>jobeserver</xsl:text></xsl:when>

@@ -72,6 +72,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
+
+        <listing xml:id="program-notactive-gdscript">
+            <title>An non-interactive GDScript program, using <pubtitle>Runestone</pubtitle></title>
+            <program xml:id="gdscript-simple-hello-world"  language="gdscript" label="gd-simple-hello-world"
+                     pck="ch01_p1.pck"
+                     scene="res://practices/L1.P1.example/practice.tscn">
+                <code>
+                    extends Node
+
+                    func _ready():
+                        print("Hello, World!")
+                        
+
+                </code>
+            </program>
+        </listing>
+
     </section>
 
     <section xml:id="activecode">
@@ -117,20 +134,67 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
         </listing>
 
-        <p>A GDScript program will only be interactive if hosted on a Runestone server.</p>
-        <!-- Note: It may be possible to embed a mini ActiveCode Style IDE for GDScript  -->
-        <!--       on the web page, but it's not implemented yet. -->
-
-        <listing xml:id="program-activecode-gdscript">
+        <p>A GDScript program will run interactively in the browser.</p>
+        
+        <activity xml:id="program-activecode-gdscript">
             <title>An interactive GDScript program, using <pubtitle>Runestone</pubtitle></title>
-            <program xml:id="gdscript-hello-world" interactive='activecode' language="gdscript" label="gd-hello-world">
+            <statement><p>Run the following code. 
+        You'll need to define a function called `add_numbers` that takes 2 `int` parameters and returns an `int` for the test to pass.</p></statement>
+            <program xml:id="gdscript-hello-world" interactive='activecode' language="gdscript" label="gd-hello-world"
+                     pck="gdpractice/test_exercise.pck"
+                     scene="res://practices/test_example/practice.tscn">
                 <code>
-                    var language : String = "GDScript" 
-                    print("Hello, " + language)
+                    extends Node
+
+                    func _ready():
+                        pass
 
                 </code>
             </program>
-        </listing>
+        </activity>
+
+        <p>Here's a GDScript program with some graphics.</p>
+        
+        <activity xml:id="program-activecode-gdscript-graphics">
+            <title>An interactive GDScript program, with graphics</title>
+            <statement><p>This is the <em>first script</em> from the <url href="https://docs.godotengine.org/en/stable/getting_started/step_by_step/scripting_first_script.html#">Godot getting started step-by-step example</url>.
+            The first thing to try is adding the following code:
+            <program language="gdscript">
+                <code>
+                    var speed = 400
+                    var angular_speed = PI
+
+                    func _process(delta):
+	                    rotation += angular_speed * delta
+               </code>
+            </program>
+            Then change it to the following code:
+            <program language="gdscript">
+                <code>
+                    var speed = 400
+                    var angular_speed = PI
+
+                    func _process(delta):
+	                    rotation += angular_speed * delta
+
+                        var velocity = Vector2.UP.rotated(rotation) * speed
+
+                        position += velocity * delta
+               </code>
+            </program>
+            </p></statement>
+            <program xml:id="gdscript-first-script" interactive='activecode' language="gdscript" label="gd-first-script"
+                     pck="gdpractice/first_script.pck"
+                     scene="res://practices/first_script/practice.tscn">
+                <code>
+                    extends Sprite2D
+
+                    func _init():
+                        pass
+
+                </code>
+            </program>
+        </activity>
 
         <p>A Java program will only be interactive if hosted on a Runestone server.</p>
 
