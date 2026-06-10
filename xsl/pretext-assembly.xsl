@@ -1031,11 +1031,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
-<!-- Make static substitutions for dynamic exercises.  -->
+<!-- Make static substitutions for dynamic exercises.                -->
+<!-- The pass only acts on the elements enumerated in this presence  -->
+<!-- test (see the "dynamic-substitution" templates); without any of -->
+<!-- them it is the identity, so we skip the full-tree copy.  NB: a  -->
+<!-- new template in the mode must be reflected in this test.        -->
+<xsl:variable name="b-has-dynamic-markup" select="boolean($assembly//setup | $assembly//numcmp | $assembly//strcmp | $assembly//jscmp | $assembly//mathcmp | $assembly//logic | $assembly//fillin[@ansobj] | $assembly//eval[@obj])"/>
 <xsl:variable name="dynamic-rtf">
-    <xsl:apply-templates select="$assembly" mode="dynamic-substitution"/>
+    <xsl:if test="$b-has-dynamic-markup">
+        <xsl:apply-templates select="$assembly" mode="dynamic-substitution"/>
+    </xsl:if>
 </xsl:variable>
-<xsl:variable name="dynamic" select="exsl:node-set($dynamic-rtf)"/>
+<xsl:variable name="dynamic" select="exsl:node-set($dynamic-rtf)[$b-has-dynamic-markup] | $assembly[not($b-has-dynamic-markup)]"/>
 
 <!-- Exercises are "tagged" as to their nature (division, inline, -->
 <!-- worksheet, reading, project-like) and interactive exercises  -->
@@ -1698,6 +1705,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ##################################################### -->
 <!-- Dynamic Substitutions                                 -->
 <!-- Cut out dynamic setup and evaluation for static mode. -->
+<!-- NB: a new match in this mode must be reflected in the -->
+<!-- $b-has-dynamic-markup presence test gating the pass.  -->
 <!-- ##################################################### -->
 <xsl:template match="setup[de-object|setupScript]" mode="dynamic-substitution">
     <xsl:if test="$exercise-style = 'dynamic'">
