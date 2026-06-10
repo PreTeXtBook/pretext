@@ -1399,36 +1399,55 @@ class PTXDialog {
 
 // Share button and embed in LMS code
 window.addEventListener("DOMContentLoaded", function(event) {
-    const shareButton = document.getElementById("embed-button");
-    if (shareButton) {
-        const sharePopup = document.getElementById("embed-popup");
-        const embedCode = "<iframe src='" + window.location.href + "?embed' width='100%' height='1000px' frameborder='0'></iframe>";
-        const embedTextbox = document.getElementById("embed-code-textbox");
-        if (embedTextbox) {
-            embedTextbox.value = embedCode;
+    const shareButton = document.getElementById("ptx-embed-button");
+    const sharePopupElement = document.getElementById("ptx-embed-popup");
+    if (!shareButton || !sharePopupElement) {
+        return;
+    }
+    const closeBtn = document.getElementById("ptx-embed-close-button");
+
+    const sharePopup = new PTXDialog(
+        sharePopupElement,
+        shareButton,
+        {
+            kind: "light-close",
+            closeButton: closeBtn
         }
-        shareButton.addEventListener("click", function() {
-            sharePopup.classList.toggle("hidden");
-        });
-        const copyButton = document.getElementById("copy-embed-button");
-        if (copyButton) {
+    );
+
+    const embedCode = "<iframe src='" + window.location.href + "?embed' width='100%' height='1000px' frameborder='0'></iframe>";
+    const embedTextbox = document.getElementById("ptx-embed-code-textbox");
+    if (embedTextbox) {
+        embedTextbox.value = embedCode;
+    }
+
+    const copyButton = document.getElementById("ptx-embed-copy-button");
+    if (copyButton) {
+        if (navigator.clipboard) {
             copyButton.addEventListener("click", function() {
-                const embedTextbox = document.getElementById("embed-code-textbox");
+                const embedTextbox = document.getElementById("ptx-embed-code-textbox");
                 if (embedTextbox) {
-                    navigator.clipboard.writeText(embedCode).then(() => {
-                        console.log("Embed code copied to clipboard!");
-                    }).catch(err => {
-                        console.error("Failed to copy embed code: ", err);
-                    });
-                    //copyButton.innerHTML = "✓✓";
-                    // show confirmation for 2 seconds:
-                    copyButton.querySelector('.icon').innerText = "library_add_check";
-                    setTimeout(function() {
-                        copyButton.querySelector('.icon').innerText = "content_copy";
-                        sharePopup.classList.add("hidden");
-                    }, 450);
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(embedCode).then(() => {
+                            console.log("Embed code copied to clipboard!");
+                            copyButton.querySelector('.icon').innerText = "library_add_check";
+                            setTimeout(function() {
+                                copyButton.querySelector('.icon').innerText = "content_copy";
+                                sharePopup.close();
+                                shareButton.focus();
+                            }, 450);
+                        }).catch(err => {
+                            console.error("Failed to copy embed code: ", err);
+                        });
+                    } else {
+                        console.warn("Clipboard API not supported, falling back to manual copy.");
+                    }
                 }
             });
+        } else {
+            // If clipboard API is not supported, hide the copy button and
+            // rely on users to manually copy from the textbox
+            copyButton.style.display = "none";
         }
     }
 });
