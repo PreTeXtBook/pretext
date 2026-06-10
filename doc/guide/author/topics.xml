@@ -5462,8 +5462,41 @@
     </section>
 
     <section xml:id="topic-doctest-sage">
-        <title>(*) Testing Sage Examples</title>
-        <p></p>
+        <title>Testing Sage Examples</title>
+        <idx><h>Sage</h><h>doctesting</h></idx>
+        <idx>doctest</idx>
+
+        <introduction>
+            <p>This section gives the practical details behind <xref ref="processing-doctest-sage"/>, building on the <tag>sage</tag> element introduced in <xref ref="overview-sage"/>.  When an example pairs an <tag>input</tag> with the <tag>output</tag> that Sage actually produced, that pair can be extracted into a file in the format of Sage's own <c>doctest</c> framework, and Sage will re-run every input and compare its result against the recorded output.  Over the life of a book this is the surest way to learn, early, that an upgrade to Sage has changed what one of your examples produces.</p>
+        </introduction>
+
+        <subsection xml:id="doctest-sage-one-result">
+            <title>One Result per Cell</title>
+
+            <p>For the comparison to work, author each <tag>sage</tag> cell so that its <tag>input</tag> has at most one top-level statement that produces output.  Sage's doctester attaches the expected <tag>output</tag> to the <em>last</em> statement of the cell, so a cell whose input prints twice can never be matched against two separate results.  The remedy is simply to split such a cell into several, one result each.</p>
+
+            <pre>
+            &lt;sage&gt;
+                &lt;input&gt;
+                A = matrix(2, 2, [1, 2, 3, 4])
+                A.determinant()
+                &lt;/input&gt;
+                &lt;output&gt;
+                -2
+                &lt;/output&gt;
+            &lt;/sage&gt;
+            </pre>
+
+            <p>Here the assignment to <c>A</c> produces nothing and the determinant is the single result, so the cell tests cleanly.  A multi-line construction is no obstacle: a <c>for</c> loop, or any statement continued across several lines, is one top-level statement, and its continuation lines keep it together as a single block.  Only a <em>second</em> top-level statement that also prints needs a cell of its own.</p>
+        </subsection>
+
+        <subsection xml:id="doctest-sage-running">
+            <title>Generating and Running the Tests</title>
+
+            <p>The conversion is the <c>pretext/xsl/pretext-sage-doctest.xsl</c> stylesheet, applied to your source with <c>xsltproc</c> (see <xref ref="xsltproc-doctest-sage"/>).  It writes one or more files of Python, holding only the Sage input and expected output with your prose discarded.  Chunking controls how many files are produced (<xref ref="common-chunking-options"/>), which is convenient for testing one chapter at a time.</p>
+
+            <p>Hand the resulting file to Sage's testing facility, invoked with the <c>-t</c> option, as in <c>sage -t chapter.py</c>.  Sage reports any example whose result no longer matches the recorded <tag>output</tag>.  Such a report is your cue either to update the expected output, when the new result is correct, or to revisit the surrounding exposition when Sage's behavior has genuinely shifted.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-xinclude">
