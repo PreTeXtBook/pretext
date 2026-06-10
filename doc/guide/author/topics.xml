@@ -4769,9 +4769,22 @@
         </introduction>
 
         <subsection>
-            <title>(*) Appendices</title>
+            <title>Appendices</title>
+            <idx>appendix</idx>
 
-            <p>Automatic lists (<xref ref="topic-automatic-lists"/>) can appear anywhere, but an appendix is a very natural place to place one.</p>
+            <p>An <tag>appendix</tag> holds material that supports the main narrative but would interrupt it<mdash/>background a reader may already have, lengthy tables, or a sample of code.  Appendices live in the <tag>backmatter</tag>, after the final <tag>chapter</tag> or <tag>section</tag>, and you may have as many as you like.  They are numbered with capital letters, Appendix A, Appendix B, and so on, which keeps them visibly distinct from the numbered divisions of the body.</p>
+
+            <p>An appendix is structured like the division it follows: in a <tag>book</tag> it may contain <tag>section</tag>s, and in an <tag>article</tag> it may contain <tag>subsection</tag>s, or it may simply hold top-level content with no further divisions.  It may also carry the specialized divisions (<xref ref="topic-specialized-divisions"/>), so a substantial appendix can have its own <tag>exercises</tag> or <tag>references</tag>.</p>
+
+            <p>Automatic lists (<xref ref="topic-automatic-lists"/>) can appear anywhere, but an appendix is a very natural place to place one.  A list of notation, or a list of figures, is a common example, each gathered automatically from across the whole document.  An appendix can even consist of nothing but such a list, as in this list of every <tag>theorem</tag>, organized by <tag>chapter</tag>.</p>
+
+            <pre>
+            &lt;appendix&gt;
+                &lt;title&gt;List of Theorems&lt;/title&gt;
+                &lt;idx&gt;theorems, list of&lt;/idx&gt;
+                &lt;list-of elements="theorem" divisions="chapter"/&gt;
+            &lt;/appendix&gt;
+            </pre>
         </subsection>
 
         <subsection>
