@@ -3568,81 +3568,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Clickable Area    -->
 <!-- ActiveCode        -->
 
-<!-- TODO: definitely need better filters -->
-<!-- complement (not()), single attribute -->
-<!-- Also in Runestone manifest creation  -->
+<!-- The pattern grammar does not permit variable references, so the      -->
+<!-- list of Runestone interactivity types is a literal, fenced string    -->
+<!-- repeated for each element that can carry one.  Match exactly         -->
+<!-- whenever  @exercise-interactive  is one of the fenced values.        -->
+<!-- NB: also consulted in Runestone manifest creation.                   -->
 
-<xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                      |
-                      project[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                     activity[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                  exploration[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                investigation[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                         task[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]" mode="representations">
+<xsl:template match="exercise[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | project[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | activity[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | exploration[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | investigation[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | task[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]" mode="representations">
     <!-- always preserve "exercise/project" container here, with attributes -->
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
