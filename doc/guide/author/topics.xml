@@ -4812,9 +4812,12 @@
         </subsection>
 
         <subsection xml:id="topic-back-colophon">
-            <title>(*) Colophon</title>
+            <title>Colophon</title>
+            <idx>colophon</idx>
 
-            <p>The <em>back</em> colophon, what most authors think of as <em>the</em> colophon. (There is also a <em>front</em> colophon, see <xref ref="topic-front-colophon"/>).</p>
+            <p>A <term>colophon</term> is a traditional note on how a book was made.  This <em>back</em> colophon<mdash/>what most authors think of as <em>the</em> colophon<mdash/>is the last thing in the <tag>backmatter</tag>.  Unlike the <em>front</em> colophon (<xref ref="topic-front-colophon"/>), which is an automatically-generated copyright page, its content is entirely yours to author: a sequence of ordinary paragraphs, optionally with a <tag>sidebyside</tag>.  So it is a good place to record the typefaces and software (<pretext/>?) used to produce the book, the history of its editions, or an acknowledgement of support.</p>
+
+            <p>The front and back colophons share the single element name <tag>colophon</tag>, distinguished only by their placement, so take care to author this one as a child of <tag>backmatter</tag>.</p>
         </subsection>
     </section>
 
