@@ -919,10 +919,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- that they belong to might be part of a version (have a   -->
 <!-- @component attribute) and we don't want to miss that.    -->
 <!-- It can happen next.                                      -->
+<!-- Without a file of private solutions this pass is the identity, -->
+<!-- so we do not build (or hold) a copy of the entire source: the   -->
+<!-- result tree fragment stays empty, and the filtered union below  -->
+<!-- hands the authored source itself to the next pass.              -->
 <xsl:variable name="private-solutions-rtf">
-    <xsl:apply-templates select="/" mode="private-solutions"/>
+    <xsl:if test="$b-private-solutions">
+        <xsl:apply-templates select="/" mode="private-solutions"/>
+    </xsl:if>
 </xsl:variable>
-<xsl:variable name="private-solutions" select="exsl:node-set($private-solutions-rtf)"/>
+<xsl:variable name="private-solutions" select="exsl:node-set($private-solutions-rtf)[$b-private-solutions] | (/)[not($b-private-solutions)]"/>
 
 <xsl:variable name="version-rtf">
     <xsl:apply-templates select="$private-solutions" mode="version"/>
