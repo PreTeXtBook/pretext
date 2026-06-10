@@ -1273,6 +1273,130 @@ window.addEventListener("DOMContentLoaded", function(event) {
     });
 });
 
+
+class PTXDialog {
+    static hasNativeCommandInvokers() {
+        return 'commandForElement' in HTMLButtonElement.prototype;
+    }
+    // dialogElement: should be a <dialog> element
+    // openButton: is an optional element that triggers the dialog to open and will receive focus again when the dialog closes
+    //             if provided, will automatically have an event listener added to open the dialog on click
+    // options can include:
+    // - kind: whether the dialog is "modal" (the default), "light-close" or "non-modal"
+    //   - "modal" traps focus and must be dismissed with the close button or escape
+    //   - "light-close" are model, but close if the user clicks outside the dialog
+    //   - "non-modal" do not trap focus and can be interacted with while open
+    // - closeButton: button element that should close the dialog when clicked
+    //                If not provided for a modal dialog, one will be added.
+    constructor(dialogElement, openButton = null, options = {}) {
+        this.dialog = dialogElement;
+        this.controlElement = openButton;
+        this.kind = options.kind || "modal";
+        this.isModal = this.kind === "modal" || this.kind === "light-close";
+
+        this.openButton = openButton;
+        if (this.openButton && !PTXDialog.hasNativeCommandInvokers()) {
+            this.openButton.addEventListener("click", () => this.open());
+        }
+
+        this.closeButton = options.closeButton;
+        // add a close button unless the dialog already has one as identified in options
+        if (!this.closeButton && this.isModal) {
+            const topBar = document.createElement("div");
+            topBar.classList.add("ptx-dialog-topbar");
+            this.dialog.prepend(topBar);
+            this.closeButton = document.createElement("button");
+            this.closeButton.classList.add("ptx-dialog-close-button");
+            this.closeButton.setAttribute("aria-label", "Close dialog");
+            this.closeButton.innerHTML = `<span class="material-symbols-outlined">close</span>`;
+            topBar.appendChild(this.closeButton);
+        }
+        if (this.closeButton) {
+            this.closeButton.addEventListener("click", () => this.close());
+        }
+
+        if (PTXDialog.hasNativeCommandInvokers()) {
+            // If the browser supports command invokers, we can just use the native dialog element and its showModal and close methods.
+            this.open = () => {
+              if(this.isModal) {
+                this.dialog.showModal();
+              } else {
+                this.dialog.show();
+              }
+            };
+            this.close = () => {
+                this.dialog.close();
+                if (this.controlElement) {
+                    this.controlElement.focus();
+                }
+            };
+            this.toggle = () => {
+                if (this.dialog.open) {
+                    this.close();
+                } else {
+                    this.open();
+                }
+            };
+        } else {
+            // Otherwise, we use the fallback functions defined above to manage the dialog state.
+            this.open = () => this.openDialogFallback();
+            this.close = () => this.closeDialogFallback();
+            this.toggle = () => this.toggleDialogFallback();
+        }
+
+        if (this.kind === "light-close") {
+            // Add event listener to close the dialog if the user clicks outside of it
+            this.dialog.addEventListener("click", (event) => {
+                if (event.target === this.dialog) {
+                    // need to ask for bounding rext and do manual check
+                    // to include border and padding area of the dialog
+                    const rect = this.dialog.getBoundingClientRect();
+                    const isInDialog = (
+                        rect.top <= event.clientY &&
+                        event.clientY <= rect.top + rect.height &&
+                        rect.left <= event.clientX &&
+                        event.clientX <= rect.left + rect.width
+                    );
+                    if (!isInDialog) {
+                        this.close();
+                    }
+                }
+            });
+        }
+    }
+
+    openDialogFallback() {
+        if (this.dialog && typeof this.dialog.showModal === "function" && !this.dialog.open) {
+            if(this.isModal) {
+              this.dialog.showModal();
+            } else {
+              this.dialog.show();
+            }
+        }
+    }
+
+    closeDialogFallback() {
+        if (this.dialog && typeof this.dialog.close === "function" && this.dialog.open) {
+            this.dialog.close();
+        }
+        if (this.controlElement) {
+            this.controlElement.focus();
+        }
+    }
+
+    toggleDialogFallback() {
+        if (!this.dialog) {
+            return;
+        }
+        if (this.dialog.open) {
+            this.closeDialogFallback();
+        } else {
+            this.openDialogFallback();
+        }
+    }
+}
+
+
 // Share button and embed in LMS code
 window.addEventListener("DOMContentLoaded", function(event) {
     const shareButton = document.getElementById("embed-button");
