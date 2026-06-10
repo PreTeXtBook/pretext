@@ -1,28 +1,19 @@
 
 @use 'components/helpers/buttons-default' as buttons;
+@use 'components/helpers/dialogs' as dialogs;
 @use 'components/helpers/accessibility' as accessibility;
 
 .ptx-search-box {
-
-  .ptx-search-widget {
-    height: 100%;
+  .ptx-search-dialog {
+    @include dialogs.ptx-dialog-modal;
   }
-  
+
   .ptx-search-dialog[open] {
-    width: 80vw;
-    height: 100%;
-    max-width: 800px;
-    border: 2px solid var(--body-text-color);
-    background: var(--knowl-background, #eaf0f6);
     display: flex;
     flex-direction: column;
-  }
-
-  .ptx-search-dialog article {
-    width: 60%;
-    margin-left: auto;
-    margin-right: auto;
-    font-family: sans-serif;
+    max-width: 800px;
+    width: 80vw;
+    height: 100%;
   }
 
   .ptx-search-dialog-controls {
@@ -37,10 +28,11 @@
   .ptx-search-terms {
     flex: 1 1;
   }
-  
 
   .ptx-search-close {
-    @include buttons.ptx-button;
+    @include buttons.ptx-button(
+      $border-width: 0
+    );
   }
 
   .ptx-search-detailed-result {
@@ -56,7 +48,6 @@
     @include accessibility.sr-only;
   }
 
-
   .ptx-search-results {
     padding-left: 10px;
     margin-top: 0;
@@ -64,6 +55,11 @@
     flex: 1 1;
     background: var(--content-background, white);
     border: 1px solid var(--page-border-color, #ccc);
+    color: var(--body-text-color, black);
+  }
+
+  .ptx-search-results-heading {
+    margin-top: 0;
   }
 
   .ptx-search-results:empty {
@@ -103,10 +99,6 @@
 
   .ptx-search-result-clip-highlight {
     background: var(--ptx-search-resultshighlight);
-  }
-
-  .ptx-search-dialog::backdrop {
-    background: var(--ptx-search-resultsbackground, white);
   }
 
   @media screen and (max-width: 800px) {
