@@ -30,3 +30,8 @@
 //  margin-top: 0.5em;
 //}
 
+// Override default navbar based colors for any PTX dialogs
+:root {
+  --dialog-background: var(--knowl-background);
+  --dialog-text-color: var(--body-text-color);
+}
