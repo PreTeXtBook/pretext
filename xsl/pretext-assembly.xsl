@@ -1718,8 +1718,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fillin[@ansobj]" mode="dynamic-substitution">
     <xsl:choose>
         <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
+            <!-- The substitutions file is keyed by the late "visible-id",  -->
+            <!-- which prefers @label, then @xml:id.  This early pass runs  -->
+            <!-- before the promotion of @xml:id to @label, so consult both -->
+            <xsl:variable name="owner" select="ancestor::statement/.."/>
             <xsl:variable name="parent-id">
-                <xsl:apply-templates select="ancestor::statement/../@label" />
+                <xsl:apply-templates select="$owner/@label | $owner[not(@label)]/@xml:id" />
             </xsl:variable>
             <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
             <xsl:variable name="object" select="@ansobj"/>
@@ -1745,8 +1749,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- static, for multiple conversions, but primarily LaTeX -->
         <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
+            <!-- The substitutions file is keyed by the late "visible-id",  -->
+            <!-- which prefers @label, then @xml:id.  This early pass runs  -->
+            <!-- before the promotion of @xml:id to @label, so consult both -->
+            <xsl:variable name="owner" select="(ancestor::statement|ancestor::solution|ancestor::evaluation)/.."/>
             <xsl:variable name="parent-id">
-               <xsl:apply-templates select="(ancestor::statement|ancestor::solution|ancestor::evaluation)/../@label" />
+               <xsl:apply-templates select="$owner/@label | $owner[not(@label)]/@xml:id" />
             </xsl:variable>
             <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
             <xsl:variable name="object" select="@obj"/>
