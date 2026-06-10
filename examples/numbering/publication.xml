@@ -31,8 +31,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- divisions/@level is the maximum depth at which divisions themselves -->
 <!-- carry numbers.  The other entries are each bounded above by it.     -->
 <!--                                                                     -->
-<!-- The "distinct" switch on projects/figures/exercises below picks     -->
-<!-- an own counter ("yes") versus the shared blocks counter ("no").     -->
+<!-- The "distinct" switch on projects/figures/exercises/openproblems    -->
+<!-- below picks an own counter ("yes") versus the shared blocks         -->
+<!-- counter ("no").                                                     -->
 
 <publication>
 
@@ -60,10 +61,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- footnotes) are the knobs you edit between builds to test   -->
         <!-- different scenarios.                                       -->
         <divisions level="5" part-structure="structural"/>
-        <blocks    level="2"/>
-        <projects  level="2" distinct="yes"/>
-        <figures   level="2" distinct="no"/>
-        <exercises level="2" distinct="no"/>
+        <blocks       level="2"/>
+        <projects     level="2" distinct="yes"/>
+        <figures      level="2" distinct="no"/>
+        <exercises    level="2" distinct="no"/>
+        <openproblems level="2" distinct="yes"/>
         <equations level="2"/>
         <footnotes level="2"/>
     </numbering>
