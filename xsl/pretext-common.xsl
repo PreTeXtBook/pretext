@@ -11111,9 +11111,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- TODO: Added 2016-10-29, make into a fatal error later -->
 <!-- Unique UI id's added 2017-09-25 as fatal error -->
 <xsl:template match="mathbook|pretext" mode="identifier-warning">
-    <xsl:variable name="xmlid-characters" select="concat('-_', &SIMPLECHAR;)" />
+    <xsl:variable name="identifier-characters" select="concat('-_', &SIMPLECHAR;)" />
     <xsl:for-each select=".//@xml:id">
-        <xsl:if test="not(translate(., $xmlid-characters, '') = '')">
+        <xsl:if test="not(translate(., $identifier-characters, '') = '')">
             <xsl:message>
                 <xsl:text>PTX:ERROR:      </xsl:text>
                 <xsl:text>The @xml:id "</xsl:text>
@@ -11144,6 +11144,19 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <xsl:text>The @xml:id "</xsl:text>
                 <xsl:value-of select="."/>
                 <xsl:text>" is invalid since it will conflict with the construction of an automatic HTML "index.html" page.  Use some alternative for the real index - sorry.</xsl:text>
+            </xsl:message>
+        </xsl:if>
+    </xsl:for-each>
+    <!-- The same limited character set applies to @label, which serves      -->
+    <!-- similar identifier-like purposes.  The reserved-id and "index"      -->
+    <!-- checks above stay specific to @xml:id, since only it is an HTML id. -->
+    <xsl:for-each select=".//@label">
+        <xsl:if test="not(translate(., $identifier-characters, '') = '')">
+            <xsl:message>
+                <xsl:text>PTX:ERROR:      </xsl:text>
+                <xsl:text>The @label "</xsl:text>
+                <xsl:value-of select="." />
+                <xsl:text>" is invalid.  Use only letters, numbers, hyphens and underscores.</xsl:text>
             </xsl:message>
         </xsl:if>
     </xsl:for-each>
