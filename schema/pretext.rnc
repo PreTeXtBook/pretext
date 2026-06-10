@@ -500,7 +500,7 @@
             BlockDivision =
                 BlockStatement |
                 Remark | Computation | Theorem | Proof | Definition |
-                Axiom | Example | Exercise | Project |
+                Axiom | Example | Exercise | Project | OpenProblem |
                 Poem | Assemblage | ListGenerator | Fragment
             
             Prelude =
@@ -806,6 +806,36 @@
                         (IntroductionStatement?, Task+, ConclusionStatement?)
                     )
                 }
+            
+            OpenProblemLike =
+                MetaDataTitleOptional,
+                Prelude?,
+                (
+                    (Statement, Discussion*) |
+                    (IntroductionStatement?, OpenProblemTask+, ConclusionStatement?)
+                ),
+                Postlude?
+            OpenProblem =
+                element openproblem {OpenProblemLike} |
+                element openquestion {OpenProblemLike} |
+                element openconjecture {OpenProblemLike}
+            OpenProblemTask =
+                element task {
+                    MetaDataTitleOptional,
+                    (
+                        (Statement, Discussion*) |
+                        (IntroductionStatement?, OpenProblemTask+, ConclusionStatement?)
+                    )
+                }
+            Discussion =
+                element context {DiscussionLike} |
+                element discussion {DiscussionLike} |
+                element opinion {DiscussionLike} |
+                element status {DiscussionLike} |
+                element suggestion {DiscussionLike}
+            DiscussionLike =
+                MetaDataTitleOptional,
+                BlockStatement+
             
             RemarkLike =
                 MetaDataTitleOptional,
