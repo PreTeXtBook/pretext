@@ -2,8 +2,9 @@
 $border-width: 1px !default;
 
 @mixin navbar-btn-borders {
-  .ptx-navbar {
-    .button {
+  .ptx-navbar-contents {
+    & > .button,
+    & > :not(dialog) > .button {
       border-left-width: $border-width;
       border-right-width: $border-width;
       border-color: var(--page-border-color);

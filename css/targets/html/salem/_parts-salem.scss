@@ -37,8 +37,18 @@ $sidebar-breakpoint: $content-width + $sidebar-width + $content-side-padding * 2
   $navbar-breakpoint: $navbar-breakpoint,
 );
 
+.ptx-dialog {
+  --button-text-color: var(--dialog-text-color);
+  --button-background: var(--dialog-background);
+}
+
 :root {
   --page-width: 1100px;
+  --dialog-background: var(--primary-color-white-96);
+  --dialog-text-color: var(--body-text-color);
+}
+:root.dark-mode {
+  --dialog-background: var(--content-background);
 }
 
 .standalone-page {
