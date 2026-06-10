@@ -11134,7 +11134,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:text>print-first-page-header-checkbox print-running-header-checkbox </xsl:text>
         <xsl:text>print-first-page-footer-checkbox print-running-footer-checkbox </xsl:text>
         <xsl:text>calculator-toggle calculator-container geogebra-calculator </xsl:text>
-        <xsl:text>embed-button embed-popup embed-code-textbox copy-embed-button </xsl:text>
+        <xsl:text>ptx-embed-button ptx-embed-popup ptx-embed-close-button ptx-embed-code-textbox ptx-embed-copy-button </xsl:text>
         <!-- Runestone Services ids, banned always: these components can appear -->
         <!-- even on a non-hosted build.  (When actually hosted on Runestone the -->
         <!-- HTML ids are mangled, so the collision risk there is small.)        -->
