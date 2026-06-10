@@ -4415,11 +4415,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercise[//task/@exercise-interactive='fillin' and //task/setup]
-                   | project[//task/@exercise-interactive='fillin' and //task/setup]
-                   | activity[//task/@exercise-interactive='fillin' and //task/setup]
-                   | exploration[//task/@exercise-interactive='fillin' and //task/setup]
-                   | investigation[//task/@exercise-interactive='fillin' and //task/setup]"
+<xsl:template match="exercise[.//task/@exercise-interactive='fillin' and .//task/setup]
+                   | project[.//task/@exercise-interactive='fillin' and .//task/setup]
+                   | activity[.//task/@exercise-interactive='fillin' and .//task/setup]
+                   | exploration[.//task/@exercise-interactive='fillin' and .//task/setup]
+                   | investigation[.//task/@exercise-interactive='fillin' and .//task/setup]"
                    mode="standalone-filename">
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
