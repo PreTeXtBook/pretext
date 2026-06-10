@@ -171,6 +171,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <statement><p>An investigation (project-like) in chapter A.</p></statement>
                 </investigation>
 
+                <!-- open problems: run on a distinct counter (publisher      -->
+                <!-- openproblems/@distinct="yes").  All three element names,  -->
+                <!-- and both content models: statement-plus-discussion        -->
+                <!-- appendage, and task-structured.                           -->
+                <openproblem xml:id="op-1-chA">
+                    <statement><p>First open problem in chapter A.</p></statement>
+                    <discussion><p>A discussion appendage on the first open problem.</p></discussion>
+                </openproblem>
+                <openquestion xml:id="oq-1-chA">
+                    <statement><p>An open question (open-problem-like) in chapter A.</p></statement>
+                </openquestion>
+                <openconjecture xml:id="oc-1-chA">
+                    <introduction><p>A task-structured open conjecture.</p></introduction>
+                    <task xml:id="oc-1-chA-a"><statement><p>First part.</p></statement></task>
+                    <task xml:id="oc-1-chA-b"><statement><p>Second part.</p></statement></task>
+                    <conclusion><p>End of the open conjecture.</p></conclusion>
+                </openconjecture>
+
                 <!-- equations: a plain pair, plus a multi-line md with mixed -->
                 <!-- numbered and unnumbered rows (edge case).                -->
                 <p><md><mrow xml:id="eq-1-chA" number="yes">u_1 = v_1</mrow></md></p>
@@ -451,6 +469,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <theorem xml:id="t-intro-2-chC"><statement><p>Second theorem in the chapter C introduction.</p></statement></theorem>
                     <project xml:id="pj-intro-1-chC"><statement><p>First project in the chapter C introduction.</p></statement></project>
                     <project xml:id="pj-intro-2-chC"><statement><p>Second project in the chapter C introduction.</p></statement></project>
+                    <openproblem xml:id="op-intro-1-chC"><statement><p>First open problem in the chapter C introduction.</p></statement></openproblem>
+                    <openproblem xml:id="op-intro-2-chC"><statement><p>Second open problem in the chapter C introduction.</p></statement></openproblem>
                     <figure xml:id="fg-intro-1-chC">
                         <caption>First figure in the chapter C introduction.</caption>
                         <sidebyside><p>A placeholder.</p></sidebyside>
@@ -842,6 +862,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <theorem xml:id="t-concl-1-chC"><statement><p>First theorem in the chapter C conclusion.</p></statement></theorem>
                     <theorem xml:id="t-concl-2-chC"><statement><p>Second theorem in the chapter C conclusion.</p></statement></theorem>
                     <project xml:id="pj-concl-1-chC"><statement><p>Project in the chapter C conclusion.</p></statement></project>
+                    <openproblem xml:id="op-concl-1-chC"><statement><p>Open problem in the chapter C conclusion.</p></statement></openproblem>
                     <figure xml:id="fg-concl-1-chC">
                         <caption>Figure in the chapter C conclusion.</caption>
                         <sidebyside><p>A placeholder.</p></sidebyside>

@@ -221,7 +221,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "serial-stamp" pass stamped.  That pass decides, from the    -->
 <!-- publication "@distinct" switches, whether a group shares the -->
 <!-- overall blocks counter or runs on its own distinct counter.  -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|exercise" mode="serial-number">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|&OPENPROBLEM-LIKE;|exercise" mode="serial-number">
     <xsl:value-of select="@serial"/>
 </xsl:template>
 
@@ -507,13 +507,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number count="stage" from="static" />
 </xsl:template>
 
-<!-- TEMPORARY -->
-<!-- 2023-02-16: placeholder numbers for OPENPROBLEM-LIKE, DISCUSSION-LIKE -->
-<xsl:template match="&OPENPROBLEM-LIKE;" mode="serial-number">
-    <xsl:text>N</xsl:text>
-</xsl:template>
+<!-- OPENPROBLEM-LIKE are blocks: their serial number is read from @serial,  -->
+<!-- alongside the other block families above.  Their structure number      -->
+<!-- follows the figure/project pattern: the open-problem level when they    -->
+<!-- run on a distinct counter, otherwise the shared "blocks" level.         -->
 <xsl:template match="&OPENPROBLEM-LIKE;" mode="structure-number">
-    <xsl:text>M</xsl:text>
+    <xsl:variable name="openproblem-levels">
+        <xsl:choose>
+            <xsl:when test="$b-number-openproblem-distinct">
+                <xsl:value-of select="$numbering-openproblems" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$numbering-blocks" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="block-structure-number">
+        <xsl:with-param name="levels" select="$openproblem-levels"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- DISCUSSION-LIKE are appendages; their number is inherited from the parent. -->

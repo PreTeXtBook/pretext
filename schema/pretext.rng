@@ -1413,6 +1413,7 @@
       <ref name="Example"/>
       <ref name="Exercise"/>
       <ref name="Project"/>
+      <ref name="OpenProblem"/>
       <ref name="Poem"/>
       <ref name="Assemblage"/>
       <ref name="ListGenerator"/>
@@ -2231,6 +2232,96 @@
         </group>
       </choice>
     </element>
+  </define>
+  <define name="OpenProblemLike">
+    <ref name="MetaDataTitleOptional"/>
+    <optional>
+      <ref name="Prelude"/>
+    </optional>
+    <choice>
+      <group>
+        <ref name="Statement"/>
+        <zeroOrMore>
+          <ref name="Discussion"/>
+        </zeroOrMore>
+      </group>
+      <group>
+        <optional>
+          <ref name="IntroductionStatement"/>
+        </optional>
+        <oneOrMore>
+          <ref name="OpenProblemTask"/>
+        </oneOrMore>
+        <optional>
+          <ref name="ConclusionStatement"/>
+        </optional>
+      </group>
+    </choice>
+    <optional>
+      <ref name="Postlude"/>
+    </optional>
+  </define>
+  <define name="OpenProblem">
+    <choice>
+      <element name="openproblem">
+        <ref name="OpenProblemLike"/>
+      </element>
+      <element name="openquestion">
+        <ref name="OpenProblemLike"/>
+      </element>
+      <element name="openconjecture">
+        <ref name="OpenProblemLike"/>
+      </element>
+    </choice>
+  </define>
+  <define name="OpenProblemTask">
+    <element name="task">
+      <ref name="MetaDataTitleOptional"/>
+      <choice>
+        <group>
+          <ref name="Statement"/>
+          <zeroOrMore>
+            <ref name="Discussion"/>
+          </zeroOrMore>
+        </group>
+        <group>
+          <optional>
+            <ref name="IntroductionStatement"/>
+          </optional>
+          <oneOrMore>
+            <ref name="OpenProblemTask"/>
+          </oneOrMore>
+          <optional>
+            <ref name="ConclusionStatement"/>
+          </optional>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="Discussion">
+    <choice>
+      <element name="context">
+        <ref name="DiscussionLike"/>
+      </element>
+      <element name="discussion">
+        <ref name="DiscussionLike"/>
+      </element>
+      <element name="opinion">
+        <ref name="DiscussionLike"/>
+      </element>
+      <element name="status">
+        <ref name="DiscussionLike"/>
+      </element>
+      <element name="suggestion">
+        <ref name="DiscussionLike"/>
+      </element>
+    </choice>
+  </define>
+  <define name="DiscussionLike">
+    <ref name="MetaDataTitleOptional"/>
+    <oneOrMore>
+      <ref name="BlockStatement"/>
+    </oneOrMore>
   </define>
   <define name="RemarkLike">
     <ref name="MetaDataTitleOptional"/>

@@ -1038,7 +1038,7 @@
             BlockDivision =
                 BlockStatement |
                 Remark | Computation | Theorem | Proof | Definition |
-                Axiom | Example | Exercise | Project |
+                Axiom | Example | Exercise | Project | OpenProblem |
                 Poem | Assemblage | ListGenerator | Fragment
             </code>
         </fragment>
@@ -1569,6 +1569,47 @@
                         (IntroductionStatement?, Task+, ConclusionStatement?)
                     )
                 }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Open Problems</title>
+
+        <p>Open problems collect unsolved questions, perhaps the subject of current research.  They are numbered like a <c>project</c><mdash/>sharing the overall blocks counter, or running on their own counter when a publisher requests a <attr>distinct</attr> number.  Possibly structured with <c>task</c>.  The appendages are discussion-like (<tag>discussion</tag>, <tag>context</tag>, and similar), rather than the hints, answers, and solutions of an exercise or a project.</p>
+
+        <fragment xml:id="open-problem-like">
+            <title>Open problems, and similar</title>
+            <code>
+            OpenProblemLike =
+                MetaDataTitleOptional,
+                Prelude?,
+                (
+                    (Statement, Discussion*) |
+                    (IntroductionStatement?, OpenProblemTask+, ConclusionStatement?)
+                ),
+                Postlude?
+            OpenProblem =
+                element openproblem {OpenProblemLike} |
+                element openquestion {OpenProblemLike} |
+                element openconjecture {OpenProblemLike}
+            OpenProblemTask =
+                element task {
+                    MetaDataTitleOptional,
+                    (
+                        (Statement, Discussion*) |
+                        (IntroductionStatement?, OpenProblemTask+, ConclusionStatement?)
+                    )
+                }
+            Discussion =
+                element context {DiscussionLike} |
+                element discussion {DiscussionLike} |
+                element opinion {DiscussionLike} |
+                element status {DiscussionLike} |
+                element suggestion {DiscussionLike}
+            DiscussionLike =
+                MetaDataTitleOptional,
+                BlockStatement+
             </code>
         </fragment>
     </section>
@@ -3584,6 +3625,7 @@
             <fragref ref="axiom-like" />
             <fragref ref="example-like" />
             <fragref ref="project-like" />
+            <fragref ref="open-problem-like" />
             <fragref ref="remark-like" />
             <fragref ref="computation-like" />
             <fragref ref="aside" />

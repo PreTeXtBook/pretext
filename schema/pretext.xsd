@@ -1156,6 +1156,7 @@
       <xs:group ref="Example"/>
       <xs:group ref="Exercise"/>
       <xs:group ref="Project"/>
+      <xs:group ref="OpenProblem"/>
       <xs:element ref="poem"/>
       <xs:element ref="assemblage"/>
       <xs:element ref="list-of"/>
@@ -1862,6 +1863,79 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:complexType name="OpenProblemLike">
+    <xs:sequence>
+      <xs:group ref="MetaDataTitleOptional"/>
+      <xs:element minOccurs="0" ref="prelude"/>
+      <xs:choice>
+        <xs:sequence>
+          <xs:group ref="Statement"/>
+          <xs:group minOccurs="0" maxOccurs="unbounded" ref="Discussion"/>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:group minOccurs="0" ref="IntroductionStatement"/>
+          <xs:group maxOccurs="unbounded" ref="OpenProblemTask"/>
+          <xs:group minOccurs="0" ref="ConclusionStatement"/>
+        </xs:sequence>
+      </xs:choice>
+      <xs:element minOccurs="0" ref="postlude"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+  </xs:complexType>
+  <xs:group name="OpenProblem">
+    <xs:choice>
+      <xs:element ref="openproblem"/>
+      <xs:element ref="openquestion"/>
+      <xs:element ref="openconjecture"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="openproblem" type="OpenProblemLike"/>
+  <xs:element name="openquestion" type="OpenProblemLike"/>
+  <xs:element name="openconjecture" type="OpenProblemLike"/>
+  <xs:group name="OpenProblemTask">
+    <xs:sequence>
+      <xs:element name="task">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref="MetaDataTitleOptional"/>
+            <xs:choice>
+              <xs:sequence>
+                <xs:group ref="Statement"/>
+                <xs:group minOccurs="0" maxOccurs="unbounded" ref="Discussion"/>
+              </xs:sequence>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionStatement"/>
+                <xs:group maxOccurs="unbounded" ref="OpenProblemTask"/>
+                <xs:group minOccurs="0" ref="ConclusionStatement"/>
+              </xs:sequence>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTitleOptional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="Discussion">
+    <xs:choice>
+      <xs:element ref="context"/>
+      <xs:element ref="discussion"/>
+      <xs:element ref="opinion"/>
+      <xs:element ref="status"/>
+      <xs:element ref="suggestion"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="context" type="DiscussionLike"/>
+  <xs:element name="discussion" type="DiscussionLike"/>
+  <xs:element name="opinion" type="DiscussionLike"/>
+  <xs:element name="status" type="DiscussionLike"/>
+  <xs:element name="suggestion" type="DiscussionLike"/>
+  <xs:complexType name="DiscussionLike">
+    <xs:sequence>
+      <xs:group ref="MetaDataTitleOptional"/>
+      <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+  </xs:complexType>
   <xs:complexType name="RemarkLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>
