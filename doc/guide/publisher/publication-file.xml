@@ -261,14 +261,16 @@
             <cline>/publication/numbering/equations/@level</cline>
             <cline>/publication/numbering/footnotes/@level</cline>
         </cd> whose values should be integers (zero is a possibility) that do not exceed the maximum level specified for divisions.</p>
-        <p>By default that <q>blocks</q> sequence also numbers three further groups<mdash/><tag>project</tag>-like objects, the figure-like objects (<tag>figure</tag>, <tag>table</tag>, <tag>listing</tag>, <tag>list</tag>), and inline <tag>exercise</tag>.  Any one of these may instead run on its own independent sequence of serial numbers, by setting the matching <attr>distinct</attr> switch<cd>
+        <p>By default that <q>blocks</q> sequence also numbers four further groups<mdash/><tag>project</tag>-like objects, the figure-like objects (<tag>figure</tag>, <tag>table</tag>, <tag>listing</tag>, <tag>list</tag>), inline <tag>exercise</tag>, and the open problems (<tag>openproblem</tag>, <tag>openquestion</tag>, <tag>openconjecture</tag>).  Any one of these may instead run on its own independent sequence of serial numbers, by setting the matching <attr>distinct</attr> switch<cd>
             <cline>/publication/numbering/projects/@distinct</cline>
             <cline>/publication/numbering/figures/@distinct</cline>
             <cline>/publication/numbering/exercises/@distinct</cline>
+            <cline>/publication/numbering/openproblems/@distinct</cline>
         </cd> to <c>yes</c> (the default is <c>no</c>).  When a group runs distinct, the hierarchy of its independent numbers is set by its own <attr>level</attr><cd>
             <cline>/publication/numbering/projects/@level</cline>
             <cline>/publication/numbering/figures/@level</cline>
             <cline>/publication/numbering/exercises/@level</cline>
+            <cline>/publication/numbering/openproblems/@level</cline>
         </cd> which is ignored while the group shares the blocks count.  For why blocks otherwise share a single sequence, and which groups make sense to separate, see <xref ref="publisher-numbering"/>.</p>
         <p>Chapters of a <tag>book</tag> may start numbering from something other than one.  This feature is not available in a book with structural parts (rather than decorative parts).  Read about this at the end of <xref ref="publisher-numbering"/> and <xref ref="best-practice-chapter-zero"/>.  If you still want to proceed, then set the publication file entry<cd>
             <cline>/publication/numbering/divisions/@chapter-start</cline>

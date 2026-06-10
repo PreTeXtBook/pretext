@@ -72,7 +72,7 @@
 
         <p>If it is so important to not have separate sequences of serial numbers, then why do equations and footnotes get their own sequences?  These items are substantially different visually, and even their numbers are formatted quite differently, so scanning for blocks or equations or footnotes should be very distinct visually.  Notice that it is their <em>distinctive appearance</em> that is the criteria for an independent sequence of serial numbers.</p>
 
-        <p>We provide exactly this flexibility for three groups of blocks: the figure-like objects (<tag>figure</tag>, <tag>table</tag>, <tag>listing</tag>, <tag>list</tag>), <tag>project</tag>-like objects, and inline <tag>exercise</tag>.  By default each shares the single <q>blocks</q> sequence, but a publisher may split any of them out onto its own sequence of serial numbers.  See <xref ref="publication-file-numbering"/> for the switches that control this.</p>
+        <p>We provide exactly this flexibility for four groups of blocks: the figure-like objects (<tag>figure</tag>, <tag>table</tag>, <tag>listing</tag>, <tag>list</tag>), <tag>project</tag>-like objects, inline <tag>exercise</tag>, and the open problems (<tag>openproblem</tag>, <tag>openquestion</tag>, <tag>openconjecture</tag>).  By default each shares the single <q>blocks</q> sequence, but a publisher may split any of them out onto its own sequence of serial numbers.  See <xref ref="publication-file-numbering"/> for the switches that control this.</p>
 
         <note xml:id="best-practice-distinct-counters">
             <title>Use Separate Counters Sparingly</title>
