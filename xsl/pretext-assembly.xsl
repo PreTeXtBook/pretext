@@ -2281,7 +2281,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- generator will be implemented in conversions to do the right thing. -->
 <xsl:template match="titlepage[not(titlepage-items)]" mode="repair">
     <xsl:copy>
-        <xsl:apply-templates select="titlepage/@*" mode="repair"/>
+        <xsl:apply-templates select="@*" mode="repair"/>
         <titlepage-items/>
     </xsl:copy>
 </xsl:template>
@@ -2294,8 +2294,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy>
         <xsl:choose>
             <!-- Keep authored xml:id or label -->
-            <xsl:when test="colophon/@xml:id|colophon/@label">
-                <xsl:apply-templates select="colophon/@xml:id|colophon/@label" mode="repair"/>
+            <xsl:when test="@xml:id|@label">
+                <xsl:apply-templates select="@xml:id|@label" mode="repair"/>
             </xsl:when>
             <!-- Otherwise, use the label "front-colophon" -->
             <xsl:otherwise>
