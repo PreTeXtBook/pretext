@@ -3980,6 +3980,10 @@
                         <p>In languages that support Codelens (see <xref ref="interactive-program-codelens"/>), there will be a button that allows the user to run the program via Codelens. Set this to <c>no</c> to remove it. This may be desireable if you know the code uses features that are not supported by Codelens (e.g. turtle graphics or image).</p>
                     </li>
                     <li>
+                        <title>codetailor</title>
+                        <p>Set to <c>yes</c> to add a <q>Get Help</q> button to the ActiveCode (the default is <c>no</c>).  On a Runestone server, a reader who is stuck may press it to be given a personalized Parsons problem<mdash/>the lines of a correct solution, scrambled for them to reassemble<mdash/>generated for their current attempt.  This is most effective when the solution decomposes into a handful of clear lines.  See the <q>CodeTailor</q> exercise in <url href="https://runestone.academy/ns/books/published/PTXSB/coding-exercises.html">the Coding Exercises section of the Sample Book</url>.</p>
+                    </li>
+                    <li>
                         <title>compiler-args</title>
                         <p>(C/C++ only) A comma separated list of strings to be passed to the compiler. Ex: <c>-Wall, -std=c++17</c>. A book-level default can be specified - see <xref ref="program-default-values"/>.</p>
                     </li>

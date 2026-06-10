@@ -4,5 +4,4 @@
   <xs:import namespace="https://prefigure.org" schemaLocation="pf.xsd"/>
   <xs:attribute name="lang"/>
   <xs:attribute name="id"/>
-  <xs:attribute name="base"/>
 </xs:schema>
