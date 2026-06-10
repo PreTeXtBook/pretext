@@ -757,6 +757,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </answer>
         </exercise>
 
+        <p>An activecode exercise can offer extra help to a reader who gets stuck.  Setting <attr>codetailor</attr> to <c>yes</c> adds a <q>Get Help</q> button that, on a Runestone server, presents a personalized Parsons problem<mdash/>the lines of a correct solution, scrambled for the reader to reassemble.  It works best for an exercise whose solution decomposes into a handful of clear lines, as here.</p>
+
+        <exercise xml:id="codetailor-example" label="coding-exercise-codetailor">
+            <title>Coding Exercise, with CodeTailor Help</title>
+
+            <statement>
+                <p>Write a function <c>total</c> that returns the sum of a list of numbers.  If you get stuck, use the <q>Get Help</q> button to assemble a solution from scrambled lines.</p>
+            </statement>
+            <program interactive="activecode" language="python" codetailor="yes">
+                <code>
+                def total(numbers):
+                    return 0
+                </code>
+                <tests>
+                from unittest.gui import TestCaseGui
+
+                class myTests(TestCaseGui):
+
+                    def testOne(self):
+                        self.assertEqual(total([1, 2, 3]), 6, "Summing three integers")
+                        self.assertEqual(total([]), 0, "Summing an empty list")
+                        self.assertEqual(total([10, -4]), 6, "Summing with a negative")
+
+                myTests().main()
+                </tests>
+            </program>
+            <solution>
+                <p>Accumulate the numbers in a running total.</p>
+                <program language="python">
+                    <code>
+                    def total(numbers):
+                        result = 0
+                        for n in numbers:
+                            result = result + n
+                        return result
+                    </code>
+                </program>
+            </solution>
+        </exercise>
+
         <exercise xml:id="unit-test-example-java" label="coding-exercise-java-unit-test">
             <title>Java Exercise, with Unit Tests</title>
             <statement>
