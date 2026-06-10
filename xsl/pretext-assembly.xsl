@@ -4446,10 +4446,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
-<xsl:template match="*" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
-</xsl:template>
 
 <xsl:template match="exercise[@exercise-interactive='fillin' and setup]
                    | project[@exercise-interactive='fillin' and setup]
