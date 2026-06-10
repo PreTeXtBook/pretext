@@ -1583,7 +1583,6 @@
             </xs:sequence>
           </xs:choice>
           <xs:attributeGroup ref="MetaDataTarget"/>
-          <xs:attribute ref="xml:base"/>
           <xs:attribute ref="xml:lang"/>
         </xs:complexType>
       </xs:element>
@@ -2058,7 +2057,24 @@
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="valigns"/>
+    <xs:attribute name="valigns">
+      <xs:simpleType>
+        <xs:restriction>
+          <xs:simpleType>
+            <xs:list>
+              <xs:simpleType>
+                <xs:restriction base="xs:token">
+                  <xs:enumeration value="top"/>
+                  <xs:enumeration value="middle"/>
+                  <xs:enumeration value="bottom"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:list>
+          </xs:simpleType>
+          <xs:minLength value="1"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
   </xs:attributeGroup>
   <xs:group name="SideBySide">
     <xs:sequence>
@@ -2544,7 +2560,17 @@
       <xs:element name="ol">
         <xs:complexType>
           <xs:group maxOccurs="unbounded" ref="ExerciseListItem"/>
-          <xs:attribute name="cols"/>
+          <xs:attribute name="cols">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="2"/>
+                <xs:enumeration value="3"/>
+                <xs:enumeration value="4"/>
+                <xs:enumeration value="5"/>
+                <xs:enumeration value="6"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
           <xs:attribute name="marker"/>
         </xs:complexType>
       </xs:element>
@@ -3103,9 +3129,6 @@
       <xs:group ref="TextShort"/>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="XMLBase">
-    <xs:attribute ref="xml:base" use="required"/>
-  </xs:attributeGroup>
   <xs:attributeGroup name="XMLLang">
     <xs:attribute ref="xml:lang" use="required"/>
   </xs:attributeGroup>
@@ -3127,7 +3150,6 @@
     <xs:attribute ref="xml:id"/>
     <xs:attribute name="label"/>
     <xs:attribute name="component"/>
-    <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
   <xs:complexType name="MetaDataAltTitle">
@@ -3140,7 +3162,6 @@
     <xs:attribute ref="xml:id"/>
     <xs:attribute name="label"/>
     <xs:attribute name="component"/>
-    <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
   <xs:complexType name="MetaDataLinedTitle">
@@ -3156,7 +3177,6 @@
     <xs:attribute ref="xml:id"/>
     <xs:attribute name="label"/>
     <xs:attribute name="component"/>
-    <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
   <xs:group name="MetaDataSubtitle">
@@ -3172,7 +3192,6 @@
     <xs:attribute ref="xml:id"/>
     <xs:attribute name="label"/>
     <xs:attribute name="component"/>
-    <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:attributeGroup>
   <xs:complexType name="MetaDataLinedSubtitle">
@@ -3192,7 +3211,6 @@
     <xs:attribute ref="xml:id"/>
     <xs:attribute name="label"/>
     <xs:attribute name="component"/>
-    <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
   <xs:group name="MetaDataTitleOptional">
@@ -3205,7 +3223,6 @@
     <xs:attribute ref="xml:id"/>
     <xs:attribute name="label"/>
     <xs:attribute name="component"/>
-    <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:attributeGroup>
   <xs:complexType name="MetaDataAltTitleOptional">
@@ -3220,7 +3237,6 @@
     <xs:attribute ref="xml:id"/>
     <xs:attribute name="label"/>
     <xs:attribute name="component"/>
-    <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
   <xs:complexType name="MetaDataTitleCreatorOptional">
@@ -3232,7 +3248,6 @@
     <xs:attribute ref="xml:id"/>
     <xs:attribute name="label"/>
     <xs:attribute name="component"/>
-    <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
   <xs:complexType name="MetaDataCaption">
@@ -3244,7 +3259,6 @@
     <xs:attribute ref="xml:id"/>
     <xs:attribute name="label"/>
     <xs:attribute name="component"/>
-    <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
   <xs:group name="TextParagraph">
@@ -3481,6 +3495,25 @@
       </xs:choice>
     </xs:complexType>
   </xs:element>
+  <xs:simpleType name="TagSymbol">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="star"/>
+      <xs:enumeration value="dstar"/>
+      <xs:enumeration value="tstar"/>
+      <xs:enumeration value="dagger"/>
+      <xs:enumeration value="ddagger"/>
+      <xs:enumeration value="tdagger"/>
+      <xs:enumeration value="daggerdbl"/>
+      <xs:enumeration value="ddaggerdbl"/>
+      <xs:enumeration value="tdaggerdbl"/>
+      <xs:enumeration value="hash"/>
+      <xs:enumeration value="dhash"/>
+      <xs:enumeration value="thash"/>
+      <xs:enumeration value="maltese"/>
+      <xs:enumeration value="dmaltese"/>
+      <xs:enumeration value="tmaltese"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:element name="mrow">
     <xs:complexType mixed="true">
       <xs:sequence>
@@ -3500,27 +3533,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="tag">
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="star"/>
-            <xs:enumeration value="dstar"/>
-            <xs:enumeration value="tstar"/>
-            <xs:enumeration value="dagger"/>
-            <xs:enumeration value="ddagger"/>
-            <xs:enumeration value="tdagger"/>
-            <xs:enumeration value="daggerdbl"/>
-            <xs:enumeration value="ddaggerdbl"/>
-            <xs:enumeration value="tdaggerdbl"/>
-            <xs:enumeration value="hash"/>
-            <xs:enumeration value="dhash"/>
-            <xs:enumeration value="thash"/>
-            <xs:enumeration value="maltese"/>
-            <xs:enumeration value="dmaltese"/>
-            <xs:enumeration value="tmaltese"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
+      <xs:attribute name="tag" type="TagSymbol"/>
       <xs:attribute name="break">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -3550,12 +3563,16 @@
             <xs:element ref="mrow"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:element ref="mrow"/>
-              <xs:element ref="intertext"/>
+              <xs:sequence>
+                <xs:element ref="intertext"/>
+                <xs:element ref="mrow"/>
+              </xs:sequence>
             </xs:choice>
           </xs:sequence>
         </xs:choice>
       </xs:sequence>
       <xs:attribute name="component"/>
+      <xs:attribute ref="xml:id"/>
       <xs:attribute name="number">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -3564,7 +3581,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute ref="xml:id"/>
+      <xs:attribute name="tag" type="TagSymbol"/>
       <xs:attribute name="break">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -3573,7 +3590,15 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="alignment"/>
+      <xs:attribute name="alignment">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="align"/>
+            <xs:enumeration value="gather"/>
+            <xs:enumeration value="alignat"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="alignat-columns"/>
     </xs:complexType>
   </xs:element>
@@ -4164,7 +4189,6 @@
   <xs:element name="docinfo">
     <xs:complexType>
       <xs:group maxOccurs="unbounded" ref="Configuration"/>
-      <xs:attribute ref="xml:base"/>
       <xs:attribute ref="xml:lang"/>
     </xs:complexType>
   </xs:element>
