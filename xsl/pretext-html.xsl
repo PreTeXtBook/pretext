@@ -12501,27 +12501,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="embed-button">
-    <button id="embed-button" class="embed-button button" title="Embed this page">
+    <button id="ptx-embed-button" class="ptx-embed-button button" title="Embed this page" commandfor="ptx-embed-popup" command="show-modal">
         <xsl:call-template name="insert-symbol">
             <xsl:with-param name="name" select="'code'"/>
         </xsl:call-template>
         <span class="name">Embed</span>
 
     </button>
-    <div class="embed-popup hidden" id="embed-popup">
-        <p>Copy the code below to embed this page in your own website or LMS page.</p>
-        <div class="embed-code-container">
-            <textarea class="embed-code-textbox" id="embed-code-textbox" readonly="true" aria-label="textbox">
+    <dialog class="ptx-dialog ptx-embed-popup" id="ptx-embed-popup" closedby="closerequest">
+        <div class="ptx-embed-popup-controls">
+            <p>Copy the code below to embed this page in your own website or LMS page.</p>
+            <button class="ptx-embed-close-button button" id="ptx-embed-close-button" title="Close embed popup">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="ptx-embed-code-container">
+            <textarea class="ptx-embed-code-textbox" id="ptx-embed-code-textbox" readonly="true" aria-label="textbox">
                 <iframe src="https://example.com/embed" width="100%" height="1000"></iframe>
             </textarea>
-            <button class="copy-embed-button button" id="copy-embed-button" title="Copy embed code">
+            <button autofocus="autofocus" class="ptx-embed-copy-button button" id="ptx-embed-copy-button" title="Copy embed code">
                 <xsl:call-template name="insert-symbol">
                     <xsl:with-param name="name" select="'content_copy'"/>
                 </xsl:call-template>
                 <span class="name">Copy</span>
             </button>
         </div>
-    </div>
+    </dialog>
 </xsl:template>
 
 <xsl:template match="*" mode="print-button">
@@ -14063,7 +14068,7 @@ TODO:
 <!-- Div for native search results -->
 <xsl:template name="native-search-results">
     <xsl:if test="$has-native-search">
-        <dialog id="ptx-search-dialog" class="ptx-search-dialog" closedby="closerequest">
+        <dialog id="ptx-search-dialog" class="ptx-dialog ptx-search-dialog" closedby="closerequest">
             <div class="ptx-search-dialog-controls">
                 <input aria-label="Search term" id="ptx-search-terms" class="ptx-search-terms" type="text" name="terms" placeholder="Search terms"/>
                 <button aria-label="Close search" id="ptx-search-close" class="ptx-search-close" commandfor="ptx-search-dialog"  command="close"><span class="material-symbols-outlined">close</span></button>
