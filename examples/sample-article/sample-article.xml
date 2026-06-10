@@ -13527,13 +13527,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="open-problems" label="section-open-problems">
             <title>Open Problems</title>
 
-            <p>Like for mathematical research.  Experimental as of 2023-07-06.</p>
+            <p>Like for mathematical research.  An <c>openproblem</c>, <c>openquestion</c>, or <c>openconjecture</c> is numbered as a block, sharing the overall block counter by default, though a publisher can give them a counter of their own.</p>
 
             <openproblem>
                 <statement>
                     <p>Solve the Riemann Hypothesis<fn>Footnotes were once incomplete on open problems.</fn> <em>and</em> provide a short proof of Fermat's Last Theorem.</p>
                 </statement>
             </openproblem>
+
+            <openquestion>
+                <statement>
+                    <p>Is every even integer greater than two the sum of two primes?</p>
+                </statement>
+            </openquestion>
 
         </section>
 
