@@ -965,8 +965,76 @@
     </section>
 
     <section xml:id="topic-exercises">
-        <title>(*) Exercises, Inline and Divisional</title>
-        <p></p>
+        <title>Exercises, Inline and Divisional</title>
+        <idx>exercise</idx>
+
+        <introduction>
+            <p>This section expands on <xref ref="overview-exercises"/>, which describes the five places an <tag>exercise</tag> may appear: <term>inline</term> within a division, inside a divisional <tag>exercises</tag>, inside a <tag>reading-questions</tag> division, inside a <tag>worksheet</tag>, or as a <tag>project</tag> and its relatives.  The markup of the <tag>exercise</tag> is nearly the same in all five, so we describe it once here and note the differences as they arise.</p>
+
+            <p>Two large companion topics are treated separately.  The placement and collection of hints, answers, and solutions is the subject of <xref ref="topic-exercises-solutions"/>, while the many <em>interactive</em> exercise types<mdash/>multiple choice, Parson problems, matching, and more<mdash/>are described in <xref ref="topic-interactive-exercises"/>.  Which of these components is displayed, and where, is a decision for the publisher (see <xref ref="common-exercise-visibility"/>).</p>
+        </introduction>
+
+        <subsection xml:id="exercise-statement-structure">
+            <title>The Anatomy of an Exercise</title>
+
+            <p>In its simplest form an <tag>exercise</tag> is just a question, authored like any paragraph with <tag>p</tag> and the usual inline elements.  As soon as you add a <tag>hint</tag>, an <tag>answer</tag>, or a <tag>solution</tag>, the question itself must be enclosed in a <tag>statement</tag>, so that the parts can be distinguished.  When none of those three is present, the <tag>statement</tag> is optional and is usually omitted.</p>
+
+            <pre>
+            &lt;exercise&gt;
+                &lt;statement&gt;
+                    &lt;p&gt;Compute the derivative of &lt;m&gt;f(x) = x^2&lt;/m&gt;.&lt;/p&gt;
+                &lt;/statement&gt;
+                &lt;hint&gt;
+                    &lt;p&gt;Use the power rule.&lt;/p&gt;
+                &lt;/hint&gt;
+                &lt;answer&gt;
+                    &lt;p&gt;&lt;m&gt;2x&lt;/m&gt;&lt;/p&gt;
+                &lt;/answer&gt;
+            &lt;/exercise&gt;
+            </pre>
+
+            <p>Conceptually an <tag>answer</tag> is a short final result, while a <tag>solution</tag> shows the route to it, and you may provide several of each.  An <tag>exercise</tag> may also lead with a <tag>title</tag>.  A title is good practice everywhere, and is strongly encouraged for an inline exercise, since a conversion to <init>HTML</init> may present such an exercise in a knowl whose clickable text is the title; see <xref ref="best-practice-titles"/>.</p>
+        </subsection>
+
+        <subsection xml:id="exercise-tasks">
+            <title>Multi-Part Exercises</title>
+            <idx><h>exercise</h><h>multi-part</h></idx>
+            <idx>task</idx>
+
+            <p>A question with several parts is built from a sequence of <tag>task</tag>.  Each <tag>task</tag> is structured just like an exercise<mdash/>a bare paragraph, or a <tag>statement</tag> with its own <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag><mdash/>and the enclosing <tag>exercise</tag> may frame the parts with an <tag>introduction</tag> and a <tag>conclusion</tag>.</p>
+
+            <pre>
+            &lt;exercise&gt;
+                &lt;title&gt;A multi-part exercise&lt;/title&gt;
+                &lt;introduction&gt;
+                    &lt;p&gt;Background needed to begin.&lt;/p&gt;
+                &lt;/introduction&gt;
+                &lt;task&gt;
+                    &lt;statement&gt;&lt;p&gt;The first step.&lt;/p&gt;&lt;/statement&gt;
+                    &lt;hint&gt;&lt;p&gt;A little hint.&lt;/p&gt;&lt;/hint&gt;
+                &lt;/task&gt;
+                &lt;task&gt;
+                    &lt;statement&gt;&lt;p&gt;The second step.&lt;/p&gt;&lt;/statement&gt;
+                &lt;/task&gt;
+            &lt;/exercise&gt;
+            </pre>
+
+            <p>A <tag>task</tag> may itself contain tasks, nested up to three levels deep.  The limit reflects the nested list labels available in <latex/> output; deeper nesting is reported as an error.</p>
+        </subsection>
+
+        <subsection xml:id="exercise-inline-divisional">
+            <title>Inline, Divisional, and Other Contexts</title>
+            <idx><h>exercise</h><h>inline</h></idx>
+            <idx><h>exercise</h><h>divisional</h></idx>
+
+            <p>An <term>inline exercise</term> sits directly among the paragraphs and blocks of a division.  It interrupts the narrative and is numbered together with the theorems, examples, and remarks around it (see <xref ref="overview-math-results"/>), so it carries a fully-qualified number like an <tag>example</tag>.</p>
+
+            <p>A <term>divisional exercise</term> lives inside an <tag>exercises</tag> division, one of the specialized divisions (<xref ref="topic-specialized-divisions"/>).  An <tag>exercises</tag> division may appear wherever an ordinary division could, so a section, a chapter, or the entire book may each have one.  Its exercises are numbered sequentially within the division, apart from the block numbering.  A run of related divisional exercises may be wrapped in an <tag>exercisegroup</tag>, which carries common instructions in a required <tag>introduction</tag>, allows a <tag>conclusion</tag>, and takes an optional <tag>title</tag>.</p>
+
+            <p>The remaining contexts are close variations on the same element.  A <tag>reading-questions</tag> division holds exercises that check a reader's comprehension of the surrounding material.  A <tag>worksheet</tag> is a print-oriented division whose exercises gain some layout control (see <xref ref="topic-worksheet"/>).  A <tag>project</tag><mdash/>along with <tag>activity</tag>, <tag>exploration</tag>, and <tag>investigation</tag><mdash/>behaves like an inline exercise but may run on its own counter.  <xref ref="overview-exercises"/> tours all five at a glance.</p>
+
+            <p>A divisional exercise takes the next sequential number automatically.  You may pin a number with the <attr>number</attr> attribute to keep problem numbers stable as some may be deleted over time, but once you override one number you will usually have to set every number that follows, so this is best saved for a mature project.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-verbatim-literal">
@@ -1387,8 +1455,18 @@
         </subsection>
 
         <subsection xml:id="topic-worksheet">
-            <title>(*) Worksheets</title>
-            <p></p>
+            <title>Worksheets</title>
+            <idx>worksheet</idx>
+
+            <p>This expands on <xref ref="overview-worksheet"/>.  A <tag>worksheet</tag> is a specialized division, a peer of a <tag>section</tag> or <tag>chapter</tag>, intended for an in-class activity or a printable handout.  Unlike most of <pretext/>, a worksheet gives precedence to <em>printed</em> output and the layout of a physical page; the <init>HTML</init> version is a faithful but less-capable representation.</p>
+
+            <p>A worksheet may open with a list of <tag>objectives</tag> and an <tag>introduction</tag>, and close with a <tag>conclusion</tag> and a list of <tag>outcomes</tag>.  Its body is one or more <tag>page</tag> elements, one of the few places in <pretext/> where an author deliberately forces a page break.  The principal content of a page is the <tag>exercise</tag>, authored exactly as in <xref ref="topic-exercises"/>, though a page may also hold paragraphs, figures, and other ordinary content.  A skeletal example to start from is given in <xref ref="basics-l-worksheet" text="type-global"/>.</p>
+
+            <p>Two layout features are unique to a worksheet.  An <tag>exercise</tag> (or a <tag>task</tag> within it) may carry a <attr>workspace</attr> attribute, requesting a measured amount of blank working room for the student, such as <c>workspace="4in"</c> or <c>workspace="1cm"</c>.  And only inside a worksheet may an <tag>exercise</tag> be placed within a <tag>sidebyside</tag> (<xref ref="topic-sidebyside"/>), so that exercises and figures can be arranged across the width of the page.</p>
+
+            <p>Because a worksheet is built for the printed page, the conversion to <latex/> realizes that layout directly: each <tag>page</tag> begins on a fresh sheet, and a requested <attr>workspace</attr> becomes genuine blank room for the student to write in.  The <init>HTML</init> version reads on screen like any other division, but also offers a print button<mdash/>a printer icon, driven by JavaScript<mdash/>that reflows the worksheet into the same paginated form, honoring the page breaks, the workspace, and the page margins, so a student can print a clean copy directly from a browser.</p>
+
+            <p>A publisher shapes the printed page without altering your source.  The four page margins may be set in the publication file (with a <attr>margin</attr> shortcut for all four), and a worksheet may be given custom headers and footers<mdash/>specified separately for the first page and the running pages, each with left, center, and right content<mdash/>so a worksheet can carry, for instance, a <q>Name</q> and <q>Date</q> line at the top.  See <xref ref="common-worksheet-margins"/> and <xref ref="common-worksheet-headers-footers"/> for these settings, and <xref ref="latex-worksheet-options"/> for finer control of the <latex/> page.</p>
         </subsection>
     </section>
 
@@ -4691,9 +4769,22 @@
         </introduction>
 
         <subsection>
-            <title>(*) Appendices</title>
+            <title>Appendices</title>
+            <idx>appendix</idx>
 
-            <p>Automatic lists (<xref ref="topic-automatic-lists"/>) can appear anywhere, but an appendix is a very natural place to place one.</p>
+            <p>An <tag>appendix</tag> holds material that supports the main narrative but would interrupt it<mdash/>background a reader may already have, lengthy tables, or a sample of code.  Appendices live in the <tag>backmatter</tag>, after the final <tag>chapter</tag> or <tag>section</tag>, and you may have as many as you like.  They are numbered with capital letters, Appendix A, Appendix B, and so on, which keeps them visibly distinct from the numbered divisions of the body.</p>
+
+            <p>An appendix is structured like the division it follows: in a <tag>book</tag> it may contain <tag>section</tag>s, and in an <tag>article</tag> it may contain <tag>subsection</tag>s, or it may simply hold top-level content with no further divisions.  It may also carry the specialized divisions (<xref ref="topic-specialized-divisions"/>), so a substantial appendix can have its own <tag>exercises</tag> or <tag>references</tag>.</p>
+
+            <p>Automatic lists (<xref ref="topic-automatic-lists"/>) can appear anywhere, but an appendix is a very natural place to place one.  A list of notation, or a list of figures, is a common example, each gathered automatically from across the whole document.  An appendix can even consist of nothing but such a list, as in this list of every <tag>theorem</tag>, organized by <tag>chapter</tag>.</p>
+
+            <pre>
+            &lt;appendix&gt;
+                &lt;title&gt;List of Theorems&lt;/title&gt;
+                &lt;idx&gt;theorems, list of&lt;/idx&gt;
+                &lt;list-of elements="theorem" divisions="chapter"/&gt;
+            &lt;/appendix&gt;
+            </pre>
         </subsection>
 
         <subsection>
@@ -4721,9 +4812,12 @@
         </subsection>
 
         <subsection xml:id="topic-back-colophon">
-            <title>(*) Colophon</title>
+            <title>Colophon</title>
+            <idx>colophon</idx>
 
-            <p>The <em>back</em> colophon, what most authors think of as <em>the</em> colophon. (There is also a <em>front</em> colophon, see <xref ref="topic-front-colophon"/>).</p>
+            <p>A <term>colophon</term> is a traditional note on how a book was made.  This <em>back</em> colophon<mdash/>what most authors think of as <em>the</em> colophon<mdash/>is the last thing in the <tag>backmatter</tag>.  Unlike the <em>front</em> colophon (<xref ref="topic-front-colophon"/>), which is an automatically-generated copyright page, its content is entirely yours to author: a sequence of ordinary paragraphs, optionally with a <tag>sidebyside</tag>.  So it is a good place to record the typefaces and software (<pretext/>?) used to produce the book, the history of its editions, or an acknowledgement of support.</p>
+
+            <p>The front and back colophons share the single element name <tag>colophon</tag>, distinguished only by their placement, so take care to author this one as a child of <tag>backmatter</tag>.</p>
         </subsection>
     </section>
 
@@ -5277,8 +5371,39 @@
     </section>
 
     <section xml:id="topic-units-measure">
-        <title>(*) Units of Measure</title>
-        <p></p>
+        <title>Units of Measure</title>
+        <idx>scientific units</idx>
+        <idx><h>units</h><see>scientific units</see></idx>
+
+        <introduction>
+            <p>This section expands on <xref ref="overview-si-units"/>.  A physical quantity is authored with the <tag>quantity</tag> element, so that <pretext/> can typeset the magnitude and its units consistently<mdash/>with correct spacing and upright symbols<mdash/>in every output format.  Authoring units this way, rather than as ordinary text or as mathematics, also lets them migrate correctly to print, <init>HTML</init>, and braille.</p>
+        </introduction>
+
+        <subsection xml:id="quantity-structure">
+            <title>Building a Quantity</title>
+
+            <p>A <tag>quantity</tag> holds at most one <tag>mag</tag> (its <term>magnitude</term>, a number), followed by any number of <tag>unit</tag> and <tag>per</tag> elements.  A <tag>unit</tag> contributes a factor to the numerator and a <tag>per</tag> a factor to the denominator.  Each requires a <attr>base</attr> (such as <c>meter</c> or <c>gram</c>), and may add a <attr>prefix</attr> (such as <c>kilo</c> or <c>micro</c>) and an integer <attr>exp</attr> for a power.</p>
+
+            <pre>
+            &lt;quantity&gt;
+                &lt;mag&gt;9.8&lt;/mag&gt;
+                &lt;unit base="meter"/&gt;
+                &lt;per base="second" exp="2"/&gt;
+            &lt;/quantity&gt;
+            </pre>
+
+            <p>This renders as <quantity><mag>9.8</mag><unit base="meter"/><per base="second" exp="2"/></quantity>.  Every part is optional and independent.  A <tag>quantity</tag> may be unitless, holding only a <tag>mag</tag>, which helps keep a plain number typographically consistent with neighboring quantities that do carry units.  It may equally have units but no magnitude, as when a table explains what a unit means (a natural use within a <tag>tabular</tag>, see <xref ref="topic-tabular"/>).</p>
+
+            <p>The content of a <tag>mag</tag> may include simple <latex/> syntax, so a magnitude such as <c>2\pi</c> is recognized and rendered consistently in both <latex/> and <init>HTML</init> output.  See <xref ref="topic-mathematics"/> for more on authoring mathematics.</p>
+        </subsection>
+
+        <subsection xml:id="quantity-units-vocabulary">
+            <title>Prefixes and Base Units</title>
+
+            <p>The <attr>prefix</attr> and <attr>base</attr> attributes draw on a fixed, extensive vocabulary.  The prefixes are the full range of <init>SI</init> multipliers, from <c>yocto</c> through <c>yotta</c>.  The bases include the <init>SI</init> base and derived units<mdash/>among them <c>meter</c>, <c>gram</c>, <c>second</c>, <c>ampere</c>, <c>kelvin</c>, <c>mole</c>, <c>candela</c>, <c>newton</c>, <c>pascal</c>, <c>joule</c>, <c>watt</c>, <c>hertz</c>, and <c>radian</c><mdash/>together with a selection of non-<init>SI</init> and customary units such as <c>minute</c>, <c>hour</c>, <c>degreeCelsius</c>, <c>degreeFahrenheit</c>, <c>foot</c>, <c>pound</c>, and <c>gallon</c>.</p>
+
+            <p>Because this vocabulary is large, and is revised from time to time, we do not reproduce it in full here.  A prefix or base that <pretext/> does not recognize is reported to you when you process your document, so the safest course is to try the unit you have in mind.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-unicode">
@@ -5353,8 +5478,41 @@
     </section>
 
     <section xml:id="topic-doctest-sage">
-        <title>(*) Testing Sage Examples</title>
-        <p></p>
+        <title>Testing Sage Examples</title>
+        <idx><h>Sage</h><h>doctesting</h></idx>
+        <idx>doctest</idx>
+
+        <introduction>
+            <p>This section gives the practical details behind <xref ref="processing-doctest-sage"/>, building on the <tag>sage</tag> element introduced in <xref ref="overview-sage"/>.  When an example pairs an <tag>input</tag> with the <tag>output</tag> that Sage actually produced, that pair can be extracted into a file in the format of Sage's own <c>doctest</c> framework, and Sage will re-run every input and compare its result against the recorded output.  Over the life of a book this is the surest way to learn, early, that an upgrade to Sage has changed what one of your examples produces.</p>
+        </introduction>
+
+        <subsection xml:id="doctest-sage-one-result">
+            <title>One Result per Cell</title>
+
+            <p>For the comparison to work, author each <tag>sage</tag> cell so that its <tag>input</tag> has at most one top-level statement that produces output.  Sage's doctester attaches the expected <tag>output</tag> to the <em>last</em> statement of the cell, so a cell whose input prints twice can never be matched against two separate results.  The remedy is simply to split such a cell into several, one result each.</p>
+
+            <pre>
+            &lt;sage&gt;
+                &lt;input&gt;
+                A = matrix(2, 2, [1, 2, 3, 4])
+                A.determinant()
+                &lt;/input&gt;
+                &lt;output&gt;
+                -2
+                &lt;/output&gt;
+            &lt;/sage&gt;
+            </pre>
+
+            <p>Here the assignment to <c>A</c> produces nothing and the determinant is the single result, so the cell tests cleanly.  A multi-line construction is no obstacle: a <c>for</c> loop, or any statement continued across several lines, is one top-level statement, and its continuation lines keep it together as a single block.  Only a <em>second</em> top-level statement that also prints needs a cell of its own.</p>
+        </subsection>
+
+        <subsection xml:id="doctest-sage-running">
+            <title>Generating and Running the Tests</title>
+
+            <p>The conversion is the <c>pretext/xsl/pretext-sage-doctest.xsl</c> stylesheet, applied to your source with <c>xsltproc</c> (see <xref ref="xsltproc-doctest-sage"/>).  It writes one or more files of Python, holding only the Sage input and expected output with your prose discarded.  Chunking controls how many files are produced (<xref ref="common-chunking-options"/>), which is convenient for testing one chapter at a time.</p>
+
+            <p>Hand the resulting file to Sage's testing facility, invoked with the <c>-t</c> option, as in <c>sage -t chapter.py</c>.  Sage reports any example whose result no longer matches the recorded <tag>output</tag>.  Such a report is your cue either to update the expected output, when the new result is correct, or to revisit the surrounding exposition when Sage's behavior has genuinely shifted.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-xinclude">
