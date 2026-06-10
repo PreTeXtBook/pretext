@@ -2365,7 +2365,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:attribute>
         <xsl:apply-templates select="@*" mode="repair"/>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
+        <xsl:apply-templates select="node()" mode="repair"/>
     </xsl:copy>
 </xsl:template>
 
