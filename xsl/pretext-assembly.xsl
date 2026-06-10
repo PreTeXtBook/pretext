@@ -337,12 +337,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="node()|@*" mode="language">
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="language"/>
-    </xsl:copy>
-</xsl:template>
-
 <xsl:template match="node()|@*" mode="augment">
     <xsl:param name="parent-struct" select="''"/>
     <xsl:param name="level" select="0"/>
@@ -919,10 +913,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- that they belong to might be part of a version (have a   -->
 <!-- @component attribute) and we don't want to miss that.    -->
 <!-- It can happen next.                                      -->
+<!-- Without a file of private solutions this pass is the identity, -->
+<!-- so we do not build (or hold) a copy of the entire source: the   -->
+<!-- result tree fragment stays empty, and the filtered union below  -->
+<!-- hands the authored source itself to the next pass.              -->
 <xsl:variable name="private-solutions-rtf">
-    <xsl:apply-templates select="/" mode="private-solutions"/>
+    <xsl:if test="$b-private-solutions">
+        <xsl:apply-templates select="/" mode="private-solutions"/>
+    </xsl:if>
 </xsl:variable>
-<xsl:variable name="private-solutions" select="exsl:node-set($private-solutions-rtf)"/>
+<xsl:variable name="private-solutions" select="exsl:node-set($private-solutions-rtf)[$b-private-solutions] | (/)[not($b-private-solutions)]"/>
 
 <xsl:variable name="version-rtf">
     <xsl:apply-templates select="$private-solutions" mode="version"/>
@@ -1063,14 +1063,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
 
-<xsl:variable name="language-rtf">
-    <xsl:apply-templates select="$identification" mode="id-coherence-check"/>
-    <xsl:apply-templates select="$identification" mode="language"/>
-</xsl:variable>
-<xsl:variable name="language" select="exsl:node-set($language-rtf)"/>
-
 <xsl:variable name="augment-rtf">
-    <xsl:apply-templates select="$language" mode="augment"/>
+    <xsl:apply-templates select="$identification" mode="id-coherence-check"/>
+    <xsl:apply-templates select="$identification" mode="augment"/>
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
@@ -2281,7 +2276,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- generator will be implemented in conversions to do the right thing. -->
 <xsl:template match="titlepage[not(titlepage-items)]" mode="repair">
     <xsl:copy>
-        <xsl:apply-templates select="titlepage/@*" mode="repair"/>
+        <xsl:apply-templates select="@*" mode="repair"/>
         <titlepage-items/>
     </xsl:copy>
 </xsl:template>
@@ -2294,8 +2289,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy>
         <xsl:choose>
             <!-- Keep authored xml:id or label -->
-            <xsl:when test="colophon/@xml:id|colophon/@label">
-                <xsl:apply-templates select="colophon/@xml:id|colophon/@label" mode="repair"/>
+            <xsl:when test="@xml:id|@label">
+                <xsl:apply-templates select="@xml:id|@label" mode="repair"/>
             </xsl:when>
             <!-- Otherwise, use the label "front-colophon" -->
             <xsl:otherwise>
@@ -2365,7 +2360,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:attribute>
         <xsl:apply-templates select="@*" mode="repair"/>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
+        <xsl:apply-templates select="node()" mode="repair"/>
     </xsl:copy>
 </xsl:template>
 
@@ -2851,6 +2846,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- served as a string to generate various bits of output,   -->
 <!-- such as filenames in HTML output.                        -->
 
+<!-- This same walk also records language support (see the    -->
+<!-- "Languages" section for the $locales variable), since    -->
+<!-- both jobs are simple attribute additions and do not      -->
+<!-- deserve separate passes through the entire source.       -->
+
 <xsl:template match="*" mode="labels">
     <xsl:copy>
         <!-- duplicate all attributes -->
@@ -2869,6 +2869,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="@label">
             <xsl:attribute name="authored-label"/>
         </xsl:if>
+        <!-- A supported @xml:lang is recorded in an internal attribute -->
+        <!-- for use by localizations.  The root element is the         -->
+        <!-- fail-safe node on a language query up the tree, so there   -->
+        <!-- an absent, or unsupported, @xml:lang becomes the default,  -->
+        <!-- en-US.  An unsupported @xml:lang below the root is left    -->
+        <!-- alone, as it might be relevant for future features.        -->
+        <xsl:choose>
+            <xsl:when test="@xml:lang = $locales">
+                <xsl:attribute name="locale-lang">
+                    <xsl:value-of select="@xml:lang"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:when test="not(parent::*)">
+                <xsl:attribute name="xml:lang">
+                    <xsl:text>en-US</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="locale-lang">
+                    <xsl:text>en-US</xsl:text>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
         <!-- recurse -->
         <xsl:apply-templates select="node()" mode="labels"/>
     </xsl:copy>
@@ -3048,63 +3070,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- supported localization files.  A comparison of an @xml:lang (string) -->
 <!-- with $locales (node-set) will be true if the attribute value is a    -->
 <!-- string value of one of the nodes in the node-set.  So it is easy to  -->
-<!-- create a boolean value for localization support .                    -->
+<!-- create a boolean value for localization support.                     -->
+<!-- The recording of language support in @locale-lang attributes is part -->
+<!-- of the "labels" pass, since both jobs are simple attribute additions -->
+<!-- and do not deserve separate passes through the entire source.        -->
 <xsl:variable name="locales" select="document('localizations/localizations.xml')/localizations/locale" />
-
-<!-- We want the root node to always have full and accurate language         -->
-<!-- information since it will be the fail-safe node on a query up the tree. -->
-<!-- Earlier "repair" pass eliminates "mathbook".                            -->
-<xsl:template match="/pretext" mode="language">
-    <!-- see above description of $locales, false if missing -->
-    <xsl:variable name="b-is-supported" select="@xml:lang = $locales"/>
-    <!-- duplicate with better language information -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="language"/>
-        <xsl:choose>
-            <xsl:when test="$b-is-supported">
-                <!-- if supported, it was just duplicated, save off a -->
-                <!-- new attribute indicating use for localizations   -->
-                <xsl:attribute name="locale-lang">
-                    <xsl:value-of select="@xml:lang"/>
-                </xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- if missing we add the default          -->
-                <!-- if unsupported, overwrite with default -->
-                <xsl:attribute name="xml:lang">
-                    <xsl:text>en-US</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="locale-lang">
-                    <xsl:text>en-US</xsl:text>
-                </xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="node()" mode="language"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- An  @xml:id  is checked to see if it is supported for localizations.  -->
-<!-- If so, we augment the elment with an internal attribute.  If not,     -->
-<!-- we just leave a copy alone, it might be relevant for future features. -->
-<xsl:template match="*[@xml:lang]" mode="language">
-    <!-- see above description of $locales -->
-    <xsl:variable name="b-is-supported" select="@xml:lang = $locales"/>
-    <!-- duplicate with additional language information -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="language"/>
-        <xsl:if test="$b-is-supported">
-            <xsl:attribute name="locale-lang">
-                <xsl:value-of select="@xml:lang"/>
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="node()" mode="language"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Note: the $language tree is accessed (repeatedly) in the  -->
-<!-- $augment pass in order to determine the global default for  -->
-<!-- numbering equations.  So the order of these two must be  -->
-<!-- preserved.  See notes below for more explanation. -->
 
 
 <!-- ######### -->
@@ -3598,81 +3568,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Clickable Area    -->
 <!-- ActiveCode        -->
 
-<!-- TODO: definitely need better filters -->
-<!-- complement (not()), single attribute -->
-<!-- Also in Runestone manifest creation  -->
+<!-- The pattern grammar does not permit variable references, so the      -->
+<!-- list of Runestone interactivity types is a literal, fenced string    -->
+<!-- repeated for each element that can carry one.  Match exactly         -->
+<!-- whenever  @exercise-interactive  is one of the fenced values.        -->
+<!-- NB: also consulted in Runestone manifest creation.                   -->
 
-<xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                      |
-                      project[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                     activity[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                  exploration[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                investigation[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                         task[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]" mode="representations">
+<xsl:template match="exercise[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | project[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | activity[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | exploration[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | investigation[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | task[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]" mode="representations">
     <!-- always preserve "exercise/project" container here, with attributes -->
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
@@ -4445,10 +4352,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="audio|video|interactive" mode="standalone-filename">
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
-</xsl:template>
-<xsl:template match="*" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
 </xsl:template>
 
 <xsl:template match="exercise[@exercise-interactive='fillin' and setup]
