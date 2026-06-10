@@ -2275,6 +2275,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:with-param name="active-language" select="$active-language"/>
                                 <xsl:with-param name="hosting" select="$hosting"/>
                             </xsl:call-template>
+                            <!-- CodeTailor: when an author requests it, emit the data       -->
+                            <!-- attributes that have Runestone offer the reader an          -->
+                            <!-- automatically-personalized Parsons puzzle as scaffolding     -->
+                            <!-- (a "Get Help" button) when they are stuck on the exercise.   -->
+                            <xsl:if test="@codetailor = 'yes'">
+                                <xsl:attribute name="data-parsonspersonalize">movable</xsl:attribute>
+                                <xsl:attribute name="data-parsonsexample">LLM-example</xsl:attribute>
+                            </xsl:if>
                             <!-- This is a bit awful, but we need to figure out how much margin     -->
                             <!-- to add to runestone dividers. It must match indentation used for   -->
                             <!-- the overall program.                                               -->
