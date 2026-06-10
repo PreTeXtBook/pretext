@@ -337,12 +337,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="node()|@*" mode="language">
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="language"/>
-    </xsl:copy>
-</xsl:template>
-
 <xsl:template match="node()|@*" mode="augment">
     <xsl:param name="parent-struct" select="''"/>
     <xsl:param name="level" select="0"/>
@@ -1069,14 +1063,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
 
-<xsl:variable name="language-rtf">
-    <xsl:apply-templates select="$identification" mode="id-coherence-check"/>
-    <xsl:apply-templates select="$identification" mode="language"/>
-</xsl:variable>
-<xsl:variable name="language" select="exsl:node-set($language-rtf)"/>
-
 <xsl:variable name="augment-rtf">
-    <xsl:apply-templates select="$language" mode="augment"/>
+    <xsl:apply-templates select="$identification" mode="id-coherence-check"/>
+    <xsl:apply-templates select="$identification" mode="augment"/>
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
@@ -2857,6 +2846,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- served as a string to generate various bits of output,   -->
 <!-- such as filenames in HTML output.                        -->
 
+<!-- This same walk also records language support (see the    -->
+<!-- "Languages" section for the $locales variable), since    -->
+<!-- both jobs are simple attribute additions and do not      -->
+<!-- deserve separate passes through the entire source.       -->
+
 <xsl:template match="*" mode="labels">
     <xsl:copy>
         <!-- duplicate all attributes -->
@@ -2875,6 +2869,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="@label">
             <xsl:attribute name="authored-label"/>
         </xsl:if>
+        <!-- A supported @xml:lang is recorded in an internal attribute -->
+        <!-- for use by localizations.  The root element is the         -->
+        <!-- fail-safe node on a language query up the tree, so there   -->
+        <!-- an absent, or unsupported, @xml:lang becomes the default,  -->
+        <!-- en-US.  An unsupported @xml:lang below the root is left    -->
+        <!-- alone, as it might be relevant for future features.        -->
+        <xsl:choose>
+            <xsl:when test="@xml:lang = $locales">
+                <xsl:attribute name="locale-lang">
+                    <xsl:value-of select="@xml:lang"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:when test="not(parent::*)">
+                <xsl:attribute name="xml:lang">
+                    <xsl:text>en-US</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="locale-lang">
+                    <xsl:text>en-US</xsl:text>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
         <!-- recurse -->
         <xsl:apply-templates select="node()" mode="labels"/>
     </xsl:copy>
@@ -3054,63 +3070,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- supported localization files.  A comparison of an @xml:lang (string) -->
 <!-- with $locales (node-set) will be true if the attribute value is a    -->
 <!-- string value of one of the nodes in the node-set.  So it is easy to  -->
-<!-- create a boolean value for localization support .                    -->
+<!-- create a boolean value for localization support.                     -->
+<!-- The recording of language support in @locale-lang attributes is part -->
+<!-- of the "labels" pass, since both jobs are simple attribute additions -->
+<!-- and do not deserve separate passes through the entire source.        -->
 <xsl:variable name="locales" select="document('localizations/localizations.xml')/localizations/locale" />
-
-<!-- We want the root node to always have full and accurate language         -->
-<!-- information since it will be the fail-safe node on a query up the tree. -->
-<!-- Earlier "repair" pass eliminates "mathbook".                            -->
-<xsl:template match="/pretext" mode="language">
-    <!-- see above description of $locales, false if missing -->
-    <xsl:variable name="b-is-supported" select="@xml:lang = $locales"/>
-    <!-- duplicate with better language information -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="language"/>
-        <xsl:choose>
-            <xsl:when test="$b-is-supported">
-                <!-- if supported, it was just duplicated, save off a -->
-                <!-- new attribute indicating use for localizations   -->
-                <xsl:attribute name="locale-lang">
-                    <xsl:value-of select="@xml:lang"/>
-                </xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- if missing we add the default          -->
-                <!-- if unsupported, overwrite with default -->
-                <xsl:attribute name="xml:lang">
-                    <xsl:text>en-US</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="locale-lang">
-                    <xsl:text>en-US</xsl:text>
-                </xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="node()" mode="language"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- An  @xml:id  is checked to see if it is supported for localizations.  -->
-<!-- If so, we augment the elment with an internal attribute.  If not,     -->
-<!-- we just leave a copy alone, it might be relevant for future features. -->
-<xsl:template match="*[@xml:lang]" mode="language">
-    <!-- see above description of $locales -->
-    <xsl:variable name="b-is-supported" select="@xml:lang = $locales"/>
-    <!-- duplicate with additional language information -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="language"/>
-        <xsl:if test="$b-is-supported">
-            <xsl:attribute name="locale-lang">
-                <xsl:value-of select="@xml:lang"/>
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="node()" mode="language"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Note: the $language tree is accessed (repeatedly) in the  -->
-<!-- $augment pass in order to determine the global default for  -->
-<!-- numbering equations.  So the order of these two must be  -->
-<!-- preserved.  See notes below for more explanation. -->
 
 
 <!-- ######### -->
