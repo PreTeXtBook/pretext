@@ -744,6 +744,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2033;</xsl:text>
 </xsl:template>
 
+<!-- ################ -->
+<!-- Cross-References -->
+<!-- ################ -->
+
+<!-- pretext-common.xsl implements all of "xref" processing:      -->
+<!-- target identification, error checking, and generation of the -->
+<!-- visible text.  It finishes in the abstract modal "xref-link" -->
+<!-- template, which here passes the text through undecorated.    -->
+<!-- Live internal links (fo:basic-link) require @id decorations  -->
+<!-- on the rendered objects first, a refinement for later.       -->
+<xsl:template match="xref">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<xsl:template match="*" mode="xref-link">
+    <xsl:param name="target"/>
+    <xsl:param name="origin"/>
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
 <!-- ########### -->
 <!-- Mathematics -->
 <!-- ########### -->
