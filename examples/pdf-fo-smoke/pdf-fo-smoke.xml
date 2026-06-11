@@ -59,9 +59,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             and the paragraph then continues with a bit more text.</p>
 
             <remark xml:id="remark-placeholders" label="remark-placeholders">
-                <title>Blocks Come Later</title>
-                <p>This remark is a basic titled block, scheduled for an early phase of the development roadmap, so for now only this interior paragraph survives into the PDF.</p>
+                <title>Blocks Have Headings</title>
+                <p>This remark is a basic titled block, with a heading assembled from its type, its number, and its title.</p>
             </remark>
+
+            <theorem xml:id="theorem-pythagoras" label="theorem-pythagoras">
+                <title>Pythagoras</title>
+                <statement>
+                    <p>If a right triangle has legs <m>a</m> and <m>b</m>, and hypotenuse <m>c</m>, then <m>a^2 + b^2 = c^2</m>.</p>
+                </statement>
+                <proof>
+                    <p>Dissect a square with side length <m>a + b</m> in two different ways, and account for the areas.</p>
+                </proof>
+            </theorem>
+
+            <example xml:id="example-quadratic" label="example-quadratic">
+                <title>A Quadratic Equation</title>
+                <statement>
+                    <p>Solve <m>x^2 - 5x + 6 = 0</m>.</p>
+                </statement>
+                <solution>
+                    <p>The left side factors as <m>(x-2)(x-3)</m>, so the solutions are <m>x = 2</m> and <m>x = 3</m>.</p>
+                </solution>
+            </example>
 
             <subsection xml:id="subsection-depth" label="subsection-depth">
                 <title>Depth</title>
