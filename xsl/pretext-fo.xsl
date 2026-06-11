@@ -1207,10 +1207,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                   select="number(substring-before($svg/@height, 'ex')) * $math-points-per-ex"/>
     <xsl:choose>
         <xsl:when test="$svg and self::m">
+            <!-- for math sitting on the baseline (e.g. a lone digit), -->
+            <!-- MathJax writes "vertical-align: 0;", unitless, and the -->
+            <!-- parse of the "ex" quantity comes up empty, not zero    -->
+            <xsl:variable name="drop-raw" select="substring-before(substring-after($svg/@style, 'vertical-align:'), 'ex')"/>
             <xsl:variable name="drop-ex">
                 <xsl:choose>
-                    <xsl:when test="contains($svg/@style, 'vertical-align:')">
-                        <xsl:value-of select="number(substring-before(substring-after($svg/@style, 'vertical-align:'), 'ex'))"/>
+                    <xsl:when test="contains($svg/@style, 'vertical-align:') and not(string(number($drop-raw)) = 'NaN')">
+                        <xsl:value-of select="number($drop-raw)"/>
                     </xsl:when>
                     <xsl:otherwise>0</xsl:otherwise>
                 </xsl:choose>
