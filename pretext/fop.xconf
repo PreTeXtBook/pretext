@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<!--********************************************************************
+Copyright 2026 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- Configuration for Apache FOP when rendering the XSL-FO         -->
+<!-- produced by  xsl/pretext-fo.xsl  as a PDF (the "pdf-fo" format -->
+<!-- of the  pretext/pretext  script).  Seeded from the example     -->
+<!-- configuration distributed with FOP, radically reduced.         -->
+
+<fop version="1.0">
+
+    <!-- Base URL for resolving relative URLs -->
+    <base>.</base>
+
+    <!-- Source resolution in dpi (dots/pixels per inch) for determining -->
+    <!-- the size of pixels in SVG and bitmap images                     -->
+    <source-resolution>96</source-resolution>
+    <!-- Target resolution in dpi for generated bitmaps -->
+    <target-resolution>96</target-resolution>
+
+    <!-- Default page size, in case a value is specified as "auto" -->
+    <default-page-settings height="11in" width="8.5in"/>
+
+    <renderers>
+        <renderer mime="application/pdf">
+            <fonts>
+                <!-- Scan the operating system for available fonts.  The     -->
+                <!-- stylesheet requests "DejaVu Serif", a Unicode-capable   -->
+                <!-- family which is then located, and embedded, by name.    -->
+                <!-- The first run builds a font cache, so will be slower.   -->
+                <!-- Embedding specific fonts (including a math font) will   -->
+                <!-- be configured here explicitly as this format matures.   -->
+                <auto-detect/>
+            </fonts>
+        </renderer>
+    </renderers>
+
+</fop>
