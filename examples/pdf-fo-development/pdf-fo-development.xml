@@ -127,6 +127,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </tabular>
             </table>
 
+            <p>A side-by-side arranges panels horizontally: an image, beside a list of the sides of the pictured triangle, with the bottoms of the two panels aligned.</p>
+
+            <sidebyside widths="40% 35%" valign="bottom">
+                <image source="right-triangle.svg">
+                    <shortdescription>a right triangle</shortdescription>
+                </image>
+                <ul>
+                    <li>a leg of length <m>3</m></li>
+                    <li>a leg of length <m>4</m></li>
+                    <li>hypotenuse of length <m>5</m></li>
+                </ul>
+            </sidebyside>
+
             <figure xml:id="figure-triangle" label="figure-triangle">
                 <caption>A right triangle, now wrapped in a captioned figure.</caption>
                 <image source="right-triangle.svg" width="35%">
