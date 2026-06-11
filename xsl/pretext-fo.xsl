@@ -230,6 +230,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               text-align="center"
               space-after="2em"
               role="H1">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="." mode="title-full"/>
     </fo:block>
     <xsl:apply-templates/>
@@ -256,6 +257,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               space-after="0.75em"
               keep-with-next.within-page="always"
               role="H{count(ancestor::*[&STRUCTURAL-FILTER;]) + 1}">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:if test="not($the-number = '')">
             <xsl:apply-templates select="." mode="type-name"/>
             <xsl:text> </xsl:text>
@@ -296,6 +298,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the LaTeX treatment).                                        -->
 <xsl:template match="paragraphs">
     <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
             <fo:inline font-weight="bold" font-style="normal">
                 <xsl:apply-templates select="." mode="title-full"/>
@@ -390,6 +393,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- statement is italic, so a "definition" stays upright.)      -->
 <xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;">
     <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
             <xsl:apply-templates select="." mode="block-heading"/>
             <xsl:text> </xsl:text>
@@ -429,6 +433,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- refinement for later.                                       -->
 <xsl:template match="&PROOF-LIKE;">
     <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
             <fo:inline font-style="italic">
                 <xsl:apply-templates select="." mode="type-name"/>
@@ -950,6 +955,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- default mode, with the other metadata.                     -->
 <xsl:template match="figure|table">
     <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="*"/>
         <fo:block text-align="center" space-before="0.5em" keep-with-previous.within-page="always">
             <fo:inline font-weight="bold">
@@ -1217,6 +1223,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Hyperlinks -->
 <!-- ########## -->
 
+<!-- Each object an "xref" can target gets an @id, the landing   -->
+<!-- spot of an internal link, from the same "unique-id" used to -->
+<!-- key the mathematics files.  (N.B. the natural mode name     -->
+<!-- "id-attribute" belongs to a whole pass of the assembly      -->
+<!-- stylesheet; shadowing it destroys the assembled tree.)      -->
+<xsl:template match="*" mode="link-id-attribute">
+    <xsl:attribute name="id">
+        <xsl:apply-templates select="." mode="unique-id"/>
+    </xsl:attribute>
+</xsl:template>
+
 <!-- Active links are a conservative dark blue (well above the -->
 <!-- WCAG contrast threshold on white paper), and underlining  -->
 <!-- honors the publisher's LaTeX link-highlight choice.       -->
@@ -1405,6 +1422,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- clause-ending punctuation is already in the SVG    -->
         <xsl:when test="$svg">
             <fo:block text-align="center" space-before="0.5em" space-after="0.5em">
+                <xsl:apply-templates select="." mode="link-id-attribute"/>
                 <fo:instream-foreign-object>
                     <xsl:if test="not($speech = '')">
                         <xsl:attribute name="fox:alt-text">
