@@ -479,6 +479,63 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
+<!-- ###### -->
+<!-- Images -->
+<!-- ###### -->
+
+<!-- An image is a centered block, with the authored @width     -->
+<!-- percentage (or the documented defaults) honored by the     -->
+<!-- common machinery.  The percentage width of the graphic is  -->
+<!-- relative to the available width, and the image scales to   -->
+<!-- it, preserving the aspect ratio.  Restricted to externally -->
+<!-- provided and pre-generated images; the harness reports the -->
+<!-- born-in-source kinds (e.g. "latex-image"), which need      -->
+<!-- companion image-generation components.                     -->
+<xsl:template match="image[@source|@pi:generated][not(ancestor::sidebyside)]">
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-percentage"/>
+    </xsl:variable>
+    <fo:block text-align="center" space-before="0.5em" space-after="0.5em">
+        <fo:external-graphic width="{$width}"
+                             content-width="scale-to-fit"
+                             scaling="uniform">
+            <xsl:attribute name="src">
+                <xsl:text>url(</xsl:text>
+                <xsl:apply-templates select="." mode="image-filename"/>
+                <xsl:text>)</xsl:text>
+            </xsl:attribute>
+        </fo:external-graphic>
+    </fo:block>
+</xsl:template>
+
+<!-- The filename, relative to the directory where FOP runs: the  -->
+<!-- managed external or generated directory, the indicated file, -->
+<!-- and an absent extension means a manufactured SVG (all the    -->
+<!-- HTML conversion model).                                      -->
+<xsl:template match="image[@source|@pi:generated]" mode="image-filename">
+    <xsl:variable name="location">
+        <xsl:choose>
+            <xsl:when test="@pi:generated">
+                <xsl:value-of select="$generated-directory"/>
+                <xsl:value-of select="@pi:generated"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$external-directory"/>
+                <xsl:value-of select="@source"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="extension">
+        <xsl:call-template name="file-extension">
+            <xsl:with-param name="filename" select="$location"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="$location"/>
+    <xsl:if test="$extension = ''">
+        <xsl:text>.svg</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- ############# -->
 <!-- Inline Markup -->
 <!-- ############# -->

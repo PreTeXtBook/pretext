@@ -26,8 +26,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <fop version="1.0">
 
-    <!-- Base URL for resolving relative URLs -->
-    <base>.</base>
+    <!-- No "base" element: relative URLs (image files) then resolve -->
+    <!-- against the current working directory, and the  pdf_fo()    -->
+    <!-- routine runs FOP in the scratch directory holding the       -->
+    <!-- managed directories of images.  (A "base" element would     -->
+    <!-- resolve relative to the location of this very file.)        -->
 
     <!-- Source resolution in dpi (dots/pixels per inch) for determining -->
     <!-- the size of pixels in SVG and bitmap images                     -->

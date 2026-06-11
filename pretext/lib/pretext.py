@@ -4119,7 +4119,9 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     fop_cmd = fop_exec_cmd + ["-c", fop_xconf, "-fo", foname, "-pdf", pdfname]
     log.info("rendering {} as {} with Apache FOP".format(foname, pdfname))
     log.debug("FOP command: {}".format(" ".join(fop_cmd)))
-    result = subprocess.run(fop_cmd)
+    # run FOP in the scratch directory, where the managed directories
+    # were just copied, so relative image paths in the FO file resolve
+    result = subprocess.run(fop_cmd, cwd=tmp_dir)
     if result.returncode != 0:
         raise OSError("Apache FOP rendering of {} failed".format(foname))
 
