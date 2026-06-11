@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- Publication file for the XSL-FO smoke test.  The "latex" element -->
+<!-- Publication file for XSL-FO development.  The "latex" element    -->
 <!-- configures print/page properties that the XSL-FO conversion      -->
 <!-- honors: an 11 point font, and a one-sided (electronic) layout.   -->
 <!-- The managed directories hold externally produced images (and,    -->

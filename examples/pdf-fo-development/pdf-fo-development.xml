@@ -19,15 +19,15 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- A tiny article for exercising the (experimental) conversion to -->
-<!-- XSL-FO, and on to a PDF via Apache FOP.  Content here grows in -->
-<!-- concert with the capabilities of  xsl/pretext-fo.xsl, with the -->
-<!-- sample article as the eventual goal.                           -->
+<!-- A small article for developing the (experimental) conversion to -->
+<!-- XSL-FO, and on to a PDF via Apache FOP.  Content here grows in  -->
+<!-- concert with the capabilities of  xsl/pretext-fo.xsl, with the  -->
+<!-- sample article as the eventual goal.                            -->
 
 <pretext>
 
-    <article xml:id="pdf-fo-smoke" label="pdf-fo-smoke">
-        <title>A Smoke Test for the XSL-FO Conversion</title>
+    <article xml:id="pdf-fo-development" label="pdf-fo-development">
+        <title>XSL-FO Conversion Development</title>
 
         <section xml:id="section-prose" label="section-prose">
             <title>Prose</title>

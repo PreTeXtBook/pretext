@@ -45,8 +45,8 @@ console as `PTX:FO-TODO: <element-name>`.  The loop:
 1. Build (see below) and collect a counted summary of what remains:
 
        /home/rob/.claude/pretext-venv/bin/python3 pretext/pretext \
-           -v -c doc -f fo -p examples/pdf-fo-smoke/publication.xml \
-           -d /tmp/fo examples/pdf-fo-smoke/pdf-fo-smoke.xml \
+           -v -c doc -f fo -p examples/pdf-fo-development/publication.xml \
+           -d /tmp/fo examples/pdf-fo-development/pdf-fo-development.xml \
            2>&1 | grep 'PTX:FO-TODO' | sort | uniq -c | sort -rn
 
 2. Pick the most consequential element, implement it with a template
@@ -70,7 +70,7 @@ handles it — the report is the authoritative to-do list.
   publication file when they map cleanly (`$font-size`,
   `$latex-sides`, paper size).  The raw `$latex-page-geometry` string
   is LaTeX-specific: map the *intent*, never parse the string.
-* Test documents: `examples/pdf-fo-smoke/` now, growing toward the
+* Test documents: `examples/pdf-fo-development/` now, growing toward the
   sample article (`examples/sample-article/`), and eventually the
   sample book.
 * Build only with the repository script, `pretext/pretext`

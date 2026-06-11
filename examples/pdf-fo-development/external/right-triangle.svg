@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- A 3-4-5 right triangle, an externally provided image -->
-<!-- for the XSL-FO smoke-test article.                   -->
+<!-- for the XSL-FO development article.                   -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 170">
     <polygon points="10,160 210,160 210,10" fill="#cfe2f3" stroke="#1c4587" stroke-width="3" stroke-linejoin="round"/>
     <polyline points="190,160 190,140 210,140" fill="none" stroke="#1c4587" stroke-width="2"/>
