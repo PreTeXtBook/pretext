@@ -217,6 +217,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- An "introduction" or "conclusion" of a division is mostly a -->
+<!-- transparent container, but any title runs in, bold, to the  -->
+<!-- leading paragraph.                                          -->
+<xsl:template match="introduction|conclusion">
+    <xsl:choose>
+        <xsl:when test="title">
+            <fo:block space-before="1em" space-after="1em">
+                <xsl:variable name="heading">
+                    <fo:inline font-weight="bold" font-style="normal">
+                        <xsl:apply-templates select="." mode="title-full"/>
+                    </fo:inline>
+                    <xsl:text> </xsl:text>
+                </xsl:variable>
+                <xsl:call-template name="heading-then-content">
+                    <xsl:with-param name="heading" select="$heading"/>
+                </xsl:call-template>
+            </fo:block>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="*"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- A "paragraphs" is the lightweight, unnumbered division: just -->
 <!-- its title, bold, run in to the leading paragraph (exactly    -->
 <!-- the LaTeX treatment).                                        -->
