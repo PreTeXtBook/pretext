@@ -76,6 +76,14 @@ handles it — the report is the authoritative to-do list.
 * Build only with the repository script, `pretext/pretext`
   (`-c doc -f fo` or `-c doc -f pdf-fo`); never pretext-cli, never
   raw `xsltproc`.
+* **Accessible by default.**  Every construct is born accessible:
+  FOP runs with `accessibility` on and declares PDF/UA-1 (ISO
+  14289-1) conformance, *hard-failing* on violations.  So new
+  templates supply what the structure tree needs as they are
+  written: `role` tags (headings), `fox:alt-text` (math speech,
+  image `shortdescription`), `xml:lang`, embedded-font families
+  only (never generic `serif`/`monospace`), and WCAG 2.1 details
+  (contrast, no color-only signaling, language of parts).
 
 ## Phases
 
@@ -108,6 +116,8 @@ Targets: full coverage of the sample article, then the sample book
   chapter boundaries (`$latex-open-odd`).
 * Cross-references as live PDF links (`fo:basic-link`).
 * PDF bookmarks (`fo:bookmark-tree`) and document metadata.
-* Accessibility: tagged PDF (FOP's PDF/UA support).
+* Accessibility refinements: veraPDF validation in the development
+  loop; a true PDF "artifact" mechanism for decorative images;
+  PDF/UA-2 and MathML association are beyond FOP today.
 * A way to pass `-X` extra XSL through to the FO conversion, once
   there is a use case.
