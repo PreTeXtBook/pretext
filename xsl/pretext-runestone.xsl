@@ -2548,7 +2548,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$active-language = 'gdscript'">
         <xsl:attribute name="data-wasm">
             <xsl:value-of select="$external-directory" />
-            <xsl:text>godot-shell</xsl:text>
+            <xsl:text>../_static/godot-shell</xsl:text>
         </xsl:attribute>
         <!-- Optional: per-exercise .pck file in the external directory -->
         <xsl:if test="@pck">
