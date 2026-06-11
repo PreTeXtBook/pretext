@@ -236,6 +236,202 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
+<!-- ############# -->
+<!-- Inline Markup -->
+<!-- ############# -->
+
+<!-- Semantic inline markup, mostly by font change.  An "alert" -->
+<!-- gets both weight and style, distinct from "em" and "term". -->
+<xsl:template match="em|foreign|pubtitle|taxon">
+    <fo:inline font-style="italic">
+        <xsl:apply-templates/>
+    </fo:inline>
+</xsl:template>
+
+<xsl:template match="term">
+    <fo:inline font-weight="bold">
+        <xsl:apply-templates/>
+    </fo:inline>
+</xsl:template>
+
+<xsl:template match="alert">
+    <fo:inline font-weight="bold" font-style="italic">
+        <xsl:apply-templates/>
+    </fo:inline>
+</xsl:template>
+
+<!-- An "articletitle" is quoted, in the style of CMOS. -->
+<xsl:template match="articletitle">
+    <xsl:apply-templates select="." mode="lq-character"/>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="rq-character"/>
+</xsl:template>
+
+<!-- Edits: additions, and two flavors of subtractions. -->
+<xsl:template match="insert">
+    <fo:inline text-decoration="underline">
+        <xsl:apply-templates/>
+    </fo:inline>
+</xsl:template>
+
+<xsl:template match="delete|stale">
+    <fo:inline text-decoration="line-through">
+        <xsl:apply-templates/>
+    </fo:inline>
+</xsl:template>
+
+<!-- Abbreviations, acronyms, initialisms: no special typography. -->
+<xsl:template match="abbr|acro|init">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- Implementations of abstract templates from  pretext-common.xsl. -->
+<!-- The generic machinery there (inline verbatim text, bibliography -->
+<!-- entries, internal markup) calls on these for output-specific    -->
+<!-- font changes.                                                   -->
+<xsl:template name="code-wrapper">
+    <xsl:param name="content"/>
+    <fo:inline font-family="monospace">
+        <xsl:value-of select="$content"/>
+    </fo:inline>
+</xsl:template>
+
+<xsl:template match="*" mode="italic">
+    <fo:inline font-style="italic">
+        <xsl:apply-templates/>
+    </fo:inline>
+</xsl:template>
+
+<xsl:template match="*" mode="bold">
+    <fo:inline font-weight="bold">
+        <xsl:apply-templates/>
+    </fo:inline>
+</xsl:template>
+
+<xsl:template match="*" mode="monospace">
+    <fo:inline font-family="monospace">
+        <xsl:apply-templates/>
+    </fo:inline>
+</xsl:template>
+
+<!-- ########## -->
+<!-- Characters -->
+<!-- ########## -->
+
+<!-- pretext-common.xsl  implements the elements for special      -->
+<!-- characters, Latin abbreviations, quotation constructions,    -->
+<!-- verbatim snippets ("c", "tag", "tage", "attr"), and logos,   -->
+<!-- in terms of abstract "*-character" templates which receive   -->
+<!-- concrete Unicode values below.  The coverage harness shadows -->
+<!-- those default-mode templates, so an  xsl:apply-imports       -->
+<!-- reinstates each element here: an element leaves the harness  -->
+<!-- report only by deliberately joining this list.               -->
+<xsl:template match="pretext|prefigure[not(node())]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|tag|tage|attr">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- Quotation marks: fixed Unicode for now.  The HTML conversion -->
+<!-- localizes quotation style by language; port that here when   -->
+<!-- localization becomes a focus.                                -->
+<xsl:template match="*" mode="lsq-character">
+    <xsl:text>&#x2018;</xsl:text>
+</xsl:template>
+<xsl:template match="*" mode="rsq-character">
+    <xsl:text>&#x2019;</xsl:text>
+</xsl:template>
+<xsl:template match="*" mode="lq-character">
+    <xsl:text>&#x201c;</xsl:text>
+</xsl:template>
+<xsl:template match="*" mode="rq-character">
+    <xsl:text>&#x201d;</xsl:text>
+</xsl:template>
+
+<!-- The Unicode code points below match the HTML conversion. -->
+<xsl:template name="nbsp-character">
+    <xsl:text>&#xa0;</xsl:text>
+</xsl:template>
+<xsl:template name="ndash-character">
+    <xsl:text>&#x2013;</xsl:text>
+</xsl:template>
+<xsl:template name="mdash-character">
+    <xsl:text>&#x2014;</xsl:text>
+</xsl:template>
+<xsl:template name="thin-space-character">
+    <xsl:text>&#x2009;</xsl:text>
+</xsl:template>
+<xsl:template name="ldblbracket-character">
+    <xsl:text>&#x27e6;</xsl:text>
+</xsl:template>
+<xsl:template name="rdblbracket-character">
+    <xsl:text>&#x27e7;</xsl:text>
+</xsl:template>
+<xsl:template name="langle-character">
+    <xsl:text>&#x3008;</xsl:text>
+</xsl:template>
+<xsl:template name="rangle-character">
+    <xsl:text>&#x3009;</xsl:text>
+</xsl:template>
+<xsl:template name="ellipsis-character">
+    <xsl:text>&#x2026;</xsl:text>
+</xsl:template>
+<xsl:template name="midpoint-character">
+    <xsl:text>&#xb7;</xsl:text>
+</xsl:template>
+<xsl:template name="swungdash-character">
+    <xsl:text>&#x2053;</xsl:text>
+</xsl:template>
+<xsl:template name="permille-character">
+    <xsl:text>&#x2030;</xsl:text>
+</xsl:template>
+<xsl:template name="pilcrow-character">
+    <xsl:text>&#xb6;</xsl:text>
+</xsl:template>
+<xsl:template name="section-mark-character">
+    <xsl:text>&#xa7;</xsl:text>
+</xsl:template>
+<xsl:template name="minus-character">
+    <xsl:text>&#x2212;</xsl:text>
+</xsl:template>
+<xsl:template name="times-character">
+    <xsl:text>&#xd7;</xsl:text>
+</xsl:template>
+<xsl:template name="solidus-character">
+    <xsl:text>&#x2044;</xsl:text>
+</xsl:template>
+<xsl:template name="obelus-character">
+    <xsl:text>&#xf7;</xsl:text>
+</xsl:template>
+<xsl:template name="plusminus-character">
+    <xsl:text>&#xb1;</xsl:text>
+</xsl:template>
+<xsl:template name="copyright-character">
+    <xsl:text>&#xa9;</xsl:text>
+</xsl:template>
+<xsl:template name="phonomark-character">
+    <xsl:text>&#x2117;</xsl:text>
+</xsl:template>
+<xsl:template name="copyleft-character">
+    <xsl:text>&#x1f12f;</xsl:text>
+</xsl:template>
+<xsl:template name="registered-character">
+    <xsl:text>&#xae;</xsl:text>
+</xsl:template>
+<xsl:template name="trademark-character">
+    <xsl:text>&#x2122;</xsl:text>
+</xsl:template>
+<xsl:template name="servicemark-character">
+    <xsl:text>&#x2120;</xsl:text>
+</xsl:template>
+<xsl:template name="degree-character">
+    <xsl:text>&#xb0;</xsl:text>
+</xsl:template>
+<xsl:template name="prime-character">
+    <xsl:text>&#x2032;</xsl:text>
+</xsl:template>
+<xsl:template name="dblprime-character">
+    <xsl:text>&#x2033;</xsl:text>
+</xsl:template>
+
 <!-- ########################## -->
 <!-- Mathematics (Placeholders) -->
 <!-- ########################## -->
