@@ -226,12 +226,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Paragraphs -->
 <!-- ########## -->
 
-<!-- A first approximation: a real implementation must handle -->
-<!-- interruptions by displayed items (math, lists), titled   -->
-<!-- paragraphs, and the full complement of inline markup     -->
-<!-- (roadmap step 2).                                        -->
+<!-- The "run-in-heading" parameter carries the heading of a      -->
+<!-- surrounding block (theorem, proof, ...) for a paragraph that -->
+<!-- leads off that block's content; see "heading-then-content".  -->
 <xsl:template match="p">
+    <xsl:param name="run-in-heading"/>
     <fo:block text-align="justify" space-after="0.5em">
+        <xsl:copy-of select="$run-in-heading"/>
         <xsl:apply-templates/>
     </fo:block>
 </xsl:template>
@@ -240,11 +241,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Basic Blocks -->
 <!-- ############ -->
 
-<!-- The basic titled blocks: a bold heading from the localized    -->
-<!-- type-name, the number, and any title, then the contents.      -->
-<!-- All three block families use the one "block-heading" pattern. -->
+<!-- The basic titled blocks: a bold heading from the localized  -->
+<!-- type-name, the number, and any title, run in to the leading -->
+<!-- paragraph of the contents.                                  -->
+
+<!-- The heading, as an inline.  The font style is reset, since    -->
+<!-- the heading may land inside an italic THEOREM-LIKE statement. -->
 <xsl:template match="*" mode="block-heading">
-    <fo:block font-weight="bold" keep-with-next.within-page="always">
+    <fo:inline font-weight="bold" font-style="normal">
         <xsl:apply-templates select="." mode="type-name"/>
         <xsl:variable name="the-number">
             <xsl:apply-templates select="." mode="number"/>
@@ -258,53 +262,71 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="." mode="title-full"/>
         </xsl:if>
-    </fo:block>
+    </fo:inline>
 </xsl:template>
 
-<xsl:template match="&REMARK-LIKE;">
+<!-- XSL-FO has no run-in display, so a heading is passed as the  -->
+<!-- "run-in-heading" parameter to the leading paragraph, which   -->
+<!-- prepends it ("statement" forwards the parameter through).    -->
+<!-- When the content does not lead with a paragraph, the heading -->
+<!-- falls back to a standalone block.  The context node is the   -->
+<!-- block whose children are the content; "title" is metadata,   -->
+<!-- consumed by the heading, and so not content.                 -->
+<xsl:template name="heading-then-content">
+    <xsl:param name="heading"/>
+    <xsl:variable name="content" select="*[not(self::title)]"/>
+    <xsl:choose>
+        <xsl:when test="$content[1][self::p] or $content[1][self::statement and *[1][self::p]]">
+            <xsl:apply-templates select="$content[1]">
+                <xsl:with-param name="run-in-heading" select="$heading"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="$content[position() &gt; 1]"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:block keep-with-next.within-page="always">
+                <xsl:copy-of select="$heading"/>
+            </fo:block>
+            <xsl:apply-templates select="$content"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- The three block families are identical in structure; the   -->
+<!-- contents process in document order, so a "statement" leads -->
+<!-- and PROOF-LIKE or SOLUTION-LIKE follow.                    -->
+<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;">
     <fo:block space-before="1em" space-after="1em">
-        <xsl:apply-templates select="." mode="block-heading"/>
-        <xsl:apply-templates select="*"/>
+        <xsl:variable name="heading">
+            <xsl:apply-templates select="." mode="block-heading"/>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="heading-then-content">
+            <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
     </fo:block>
 </xsl:template>
 
-<!-- The statement of a THEOREM-LIKE is italic, by mathematical -->
-<!-- tradition, and any PROOF-LIKE follow it.                   -->
-<xsl:template match="&THEOREM-LIKE;">
-    <fo:block space-before="1em" space-after="1em">
-        <xsl:apply-templates select="." mode="block-heading"/>
-        <xsl:choose>
-            <xsl:when test="statement">
-                <fo:block font-style="italic">
-                    <xsl:apply-templates select="statement"/>
-                </fo:block>
-                <xsl:apply-templates select="&PROOF-LIKE;"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="*"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </fo:block>
-</xsl:template>
-
-<xsl:template match="&EXAMPLE-LIKE;">
-    <fo:block space-before="1em" space-after="1em">
-        <xsl:apply-templates select="." mode="block-heading"/>
-        <xsl:choose>
-            <xsl:when test="statement">
-                <xsl:apply-templates select="statement"/>
-                <xsl:apply-templates select="&SOLUTION-LIKE;"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="*"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </fo:block>
-</xsl:template>
-
-<!-- A general-purpose container, no possibilities enforced. -->
+<!-- A general-purpose container, otherwise transparent, though -->
+<!-- the statement of a THEOREM-LIKE is italic, by mathematical -->
+<!-- tradition.                                                 -->
 <xsl:template match="statement">
-    <xsl:apply-templates select="*"/>
+    <xsl:param name="run-in-heading"/>
+    <xsl:choose>
+        <xsl:when test="parent::*[&THEOREM-FILTER;]">
+            <fo:block font-style="italic">
+                <xsl:apply-templates select="*[1]">
+                    <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
+                </xsl:apply-templates>
+                <xsl:apply-templates select="*[position() &gt; 1]"/>
+            </fo:block>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="*[1]">
+                <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="*[position() &gt; 1]"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- An italic run-in heading, the contents, and a right-aligned -->
@@ -313,11 +335,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- refinement for later.                                       -->
 <xsl:template match="&PROOF-LIKE;">
     <fo:block space-before="1em" space-after="1em">
-        <fo:block font-style="italic" keep-with-next.within-page="always">
-            <xsl:apply-templates select="." mode="type-name"/>
-            <xsl:text>.</xsl:text>
-        </fo:block>
-        <xsl:apply-templates select="*"/>
+        <xsl:variable name="heading">
+            <fo:inline font-style="italic">
+                <xsl:apply-templates select="." mode="type-name"/>
+                <xsl:text>.</xsl:text>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="heading-then-content">
+            <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
         <fo:block text-align-last="justify">
             <fo:leader leader-pattern="space"/>
             <!-- "DejaVu Serif" lacks END OF PROOF, the sans variant has it -->
@@ -331,11 +358,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Solutions to EXAMPLE-LIKE, with an italic run-in heading. -->
 <xsl:template match="&SOLUTION-LIKE;">
     <fo:block space-before="1em">
-        <fo:block font-style="italic" keep-with-next.within-page="always">
-            <xsl:apply-templates select="." mode="type-name"/>
-            <xsl:text>.</xsl:text>
-        </fo:block>
-        <xsl:apply-templates select="*"/>
+        <xsl:variable name="heading">
+            <fo:inline font-style="italic">
+                <xsl:apply-templates select="." mode="type-name"/>
+                <xsl:text>.</xsl:text>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="heading-then-content">
+            <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
     </fo:block>
 </xsl:template>
 
