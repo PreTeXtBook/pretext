@@ -303,7 +303,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- killed in the default mode.  Likewise the other metadata:     -->
 <!-- "idx" (index entries), "notation", and image descriptions all -->
 <!-- render elsewhere (or not yet), never as in-place content.     -->
-<xsl:template match="title|subtitle|idx|notation|shortdescription|description"/>
+<xsl:template match="title|subtitle|caption|idx|notation|shortdescription|description"/>
 
 <!-- ########## -->
 <!-- Paragraphs -->
@@ -841,6 +841,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="line">
     <fo:block>
         <xsl:apply-templates/>
+    </fo:block>
+</xsl:template>
+
+<!-- ################### -->
+<!-- Figures and Caption -->
+<!-- ################### -->
+
+<!-- A "figure" (captioned) and a "table" (titled) wrap their   -->
+<!-- contents and finish with a centered caption line.  The     -->
+<!-- "caption" element is consumed here, so it is killed in the -->
+<!-- default mode, with the other metadata.                     -->
+<xsl:template match="figure|table">
+    <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="*"/>
+        <fo:block text-align="center" space-before="0.5em" keep-with-previous.within-page="always">
+            <fo:inline font-weight="bold">
+                <xsl:apply-templates select="." mode="type-name"/>
+                <xsl:variable name="the-number">
+                    <xsl:apply-templates select="." mode="number"/>
+                </xsl:variable>
+                <xsl:if test="not($the-number = '')">
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="$the-number"/>
+                </xsl:if>
+                <xsl:text>.</xsl:text>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+            <xsl:choose>
+                <xsl:when test="self::table">
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="caption/node()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </fo:block>
     </fo:block>
 </xsl:template>
 
