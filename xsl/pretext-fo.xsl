@@ -38,6 +38,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:svg="http://www.w3.org/2000/svg"
     xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
+    xmlns:exsl="http://exslt.org/common"
+    extension-element-prefixes="exsl"
     exclude-result-prefixes="pi svg"
 >
 
@@ -575,15 +577,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
-<!-- An image is a centered block, with the authored @width     -->
-<!-- percentage (or the documented defaults) honored by the     -->
-<!-- common machinery.  The percentage width of the graphic is  -->
-<!-- relative to the available width, and the image scales to   -->
-<!-- it, preserving the aspect ratio.  Restricted to externally -->
-<!-- provided and pre-generated images; the harness reports the -->
-<!-- born-in-source kinds (e.g. "latex-image"), which need      -->
-<!-- companion image-generation components.                     -->
-<xsl:template match="image[@source|@pi:generated][not(ancestor::sidebyside)]">
+<!-- An image is a centered block, with the authored @width      -->
+<!-- percentage (or the documented defaults) honored by the      -->
+<!-- common machinery, which makes an image fill its panel when  -->
+<!-- inside a "sidebyside".  The percentage width of the graphic -->
+<!-- is relative to the available width, and the image scales to -->
+<!-- it, preserving the aspect ratio.  Restricted to externally  -->
+<!-- provided and pre-generated images; the harness reports the  -->
+<!-- born-in-source kinds (e.g. "latex-image"), which need       -->
+<!-- companion image-generation components.                      -->
+<xsl:template match="image[@source|@pi:generated]">
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage"/>
     </xsl:variable>
@@ -850,6 +853,88 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <fo:block>
         <xsl:apply-templates/>
     </fo:block>
+</xsl:template>
+
+<!-- ############ -->
+<!-- Side-by-Side -->
+<!-- ############ -->
+
+<!-- A "sidebyside" lays out its panels horizontally, as an        -->
+<!-- fo:table with a single row.  pretext-common.xsl computes the  -->
+<!-- whole layout from the authored attributes: per-panel widths   -->
+<!-- and vertical alignments, outer margins, and the uniform space -->
+<!-- between panels.  Margins and inter-panel spaces become empty  -->
+<!-- columns.  The panel element list mirrors the one in the       -->
+<!-- "sidebyside" main template of pretext-common.xsl.             -->
+<xsl:template match="sidebyside">
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters"/>
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)"/>
+    <xsl:variable name="has-left-margin" select="number(substring-before($layout/left-margin, '%')) &gt; 0"/>
+    <xsl:variable name="has-right-margin" select="number(substring-before($layout/right-margin, '%')) &gt; 0"/>
+    <xsl:variable name="has-gaps" select="number(substring-before($layout/space-width, '%')) &gt; 0"/>
+    <fo:table table-layout="fixed" width="100%" space-before="0.5em" space-after="0.5em">
+        <xsl:if test="$has-left-margin">
+            <fo:table-column column-width="proportional-column-width({substring-before($layout/left-margin, '%')})"/>
+        </xsl:if>
+        <xsl:for-each select="$layout/width">
+            <xsl:if test="(position() &gt; 1) and $has-gaps">
+                <fo:table-column column-width="proportional-column-width({substring-before($layout/space-width, '%')})"/>
+            </xsl:if>
+            <fo:table-column column-width="proportional-column-width({substring-before(., '%')})"/>
+        </xsl:for-each>
+        <xsl:if test="$has-right-margin">
+            <fo:table-column column-width="proportional-column-width({substring-before($layout/right-margin, '%')})"/>
+        </xsl:if>
+        <fo:table-body>
+            <fo:table-row>
+                <xsl:if test="$has-left-margin">
+                    <fo:table-cell>
+                        <fo:block/>
+                    </fo:table-cell>
+                </xsl:if>
+                <xsl:for-each select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs">
+                    <xsl:variable name="panel-number" select="position()"/>
+                    <xsl:if test="($panel-number &gt; 1) and $has-gaps">
+                        <fo:table-cell>
+                            <fo:block/>
+                        </fo:table-cell>
+                    </xsl:if>
+                    <fo:table-cell>
+                        <xsl:attribute name="display-align">
+                            <xsl:choose>
+                                <xsl:when test="$layout/valign[$panel-number] = 'middle'">
+                                    <xsl:text>center</xsl:text>
+                                </xsl:when>
+                                <xsl:when test="$layout/valign[$panel-number] = 'bottom'">
+                                    <xsl:text>after</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>before</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="."/>
+                    </fo:table-cell>
+                </xsl:for-each>
+            </fo:table-row>
+        </fo:table-body>
+    </fo:table>
+</xsl:template>
+
+<!-- A "stack" stacks several items vertically within one panel; -->
+<!-- the child list again mirrors pretext-common.xsl.            -->
+<xsl:template match="sidebyside/stack">
+    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|audio|video|interactive|slate|program|console|exercise"/>
+</xsl:template>
+
+<!-- A "sbsgroup" is as pure a container as there can be: the -->
+<!-- "sidebyside" children just pile up vertically.  (Common  -->
+<!-- layout attributes on the group are consulted by each     -->
+<!-- "sidebyside" via the layout machinery.)                  -->
+<xsl:template match="sbsgroup">
+    <xsl:apply-templates select="sidebyside"/>
 </xsl:template>
 
 <!-- ################### -->
