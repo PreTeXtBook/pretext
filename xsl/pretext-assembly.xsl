@@ -114,6 +114,90 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- content, which may generally just produce a lot of text.      -->
 <!-- Which is no good, say as an attribute value.                  -->
 
+<!-- This stylesheet runs as a chain of full-tree passes.  Each    -->
+<!-- pass is a modal traversal that copies the previous tree and   -->
+<!-- alters only the elements it cares about, yielding a new       -->
+<!-- tree.  The new tree is built as a result tree fragment and    -->
+<!-- immediately turned into a real node-set with                  -->
+<!-- exsl:node-set(), so the next pass can walk it.  The chain is  -->
+<!-- wired in "The Assembly Pipeline" section as a sequence of     -->
+<!-- variables ($version, $assembly, ...); that sequence, not the  -->
+<!-- order of templates in this file, is the authoritative pass    -->
+<!-- order.                                                        -->
+<!--                                                               -->
+<!-- Most passes are the identity for almost every node.  The      -->
+<!-- low-priority identity templates that make each pass a         -->
+<!-- faithful copy by default are collected in "Source Assembly    -->
+<!-- Infrastructure"; the section for a pass then overrides them   -->
+<!-- (one section per pass, below, in execution order) for just    -->
+<!-- the handful of elements that pass transforms.                 -->
+<!--                                                               -->
+<!-- The passes, in the order they run (the identifier in          -->
+<!-- parentheses is the node-set each one produces):               -->
+<!--                                                               -->
+<!--    1. private-solutions   ($private-solutions)                -->
+<!--         Splice in an external file of instructor solutions.   -->
+<!--         Identity, and skipped, when no such file is named.    -->
+<!--    2. version             ($version)                          -->
+<!--         Resolve "version" and "custom" elements, *removing*   -->
+<!--         excluded content.  Result should be valid PreTeXt.    -->
+<!--    3. id-attribute        ($original-labeled)  @original-id   -->
+<!--         First of three identification stamps (see below).     -->
+<!--    4. assembly            ($assembly)                         -->
+<!--         *Add* computed content: the assembled bibliography,   -->
+<!--         copied WeBWorK problems, matching/card-sort pieces.   -->
+<!--    5. exercise            ($exercise)                         -->
+<!--         Tag each exercise with its kind (inline, divisional,  -->
+<!--         worksheet, ...) for later decisions.                  -->
+<!--    6. id-attribute        ($assembly-label)    @assembly-id   -->
+<!--         Second stamp: the early id passes coordinate on.      -->
+<!--    7. dynamic-substitution ($dynamic)                         -->
+<!--         Splice computed answers into fill-in-the-blank and    -->
+<!--         kindred dynamic exercises.  Skipped when none exist.  -->
+<!--    8. representations     ($representations)                  -->
+<!--         Render interactive exercises as static or dynamic     -->
+<!--         equivalents, per $exercise-style.                     -->
+<!--    9. repair              ($repair)                           -->
+<!--         *Change* source: fix deprecated constructions and     -->
+<!--         apply conveniences, for a canonical tree.             -->
+<!--   10. enrichment          ($enrichment)                       -->
+<!--         *Add* generated material, e.g. a GeoGebra preview     -->
+<!--         or visual text for a bare url.                        -->
+<!--   11. labels              ($labels)                           -->
+<!--         Promote an authored @xml:id to @label and record      -->
+<!--         localization support.  See "Labels".                  -->
+<!--   12. id-attribute        ($identification)    @unique-id     -->
+<!--         Third stamp: the final id conversions consume.        -->
+<!--   13. augment             ($augment)                          -->
+<!--         Annotate divisions with @level (and ordered lists     -->
+<!--         with @ordered-list-level), as numbering needs.        -->
+<!--   14. serial-stamp        ($serial-stamp)                     -->
+<!--         Stamp @serial on every numbered item.  See            -->
+<!--         "Numbering".                                          -->
+<!--                                                               -->
+<!-- After the chain, $root, $docinfo, $document-root and          -->
+<!-- $bibinfo are derived from the final tree for the conversion   -->
+<!-- stylesheets that import this one.                             -->
+<!--                                                               -->
+<!-- Three identifiers, one mechanism.  The id-attribute pass      -->
+<!-- runs three times (passes 3, 6, 12), each stamping one         -->
+<!-- attribute by a deterministic depth-first walk: @original-id   -->
+<!-- (authored structure), @assembly-id (early, so passes can      -->
+<!-- coordinate before filenames exist) and @unique-id (the final  -->
+<!-- identifier).  The three agree element-for-element only        -->
+<!-- because no intervening pass reorders siblings; that           -->
+<!-- invariant is stated in full at "Structural Contract for       -->
+<!-- Identification Passes" and checked, when assembly.debug is    -->
+<!-- set, by the id-coherence-check.                               -->
+<!--                                                               -->
+<!-- Two-pass extraction and substitution.  A few constructs       -->
+<!-- (fill-in-the-blank answers, WeBWorK, MOM, ...) need an        -->
+<!-- external round trip: this stylesheet first emits a tree that  -->
+<!-- drives the trip, then on a later run reads the results back.  -->
+<!-- The $b-extracting-* switches that select that mode are        -->
+<!-- described at "Controlling Two-Pass Extraction and             -->
+<!-- Substitution".                                                -->
+
 <!-- Isolate conversion of Runestone/interactive to PreTeXt/static -->
 <xsl:import href="./pretext-runestone-static.xsl"/>
 
@@ -392,6 +476,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- new tree as a (text) result tree fragment and then we     -->
 <!-- convert it into real XML nodes. These "real" trees have a -->
 <!-- root element, as a result of the node-set() manufacture.  -->
+
+<!-- The per-pass overview at the top of this file names what      -->
+<!-- each variable below contributes; this sequence of             -->
+<!-- variables is the authoritative pass order.                    -->
 
 <!-- Grab private solutions first.  The "exercise" (and more) -->
 <!-- that they belong to might be part of a version (have a   -->
@@ -779,6 +867,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############## -->
 <!-- Identification -->
 <!-- ############## -->
+
+<!-- This section is the id-attribute pass.  One mechanism (the    -->
+<!-- "id-attribute" templates below) is applied three times by     -->
+<!-- the chain (passes 3, 6 and 12), stamping @original-id,        -->
+<!-- @assembly-id and @unique-id in turn.  The "labels" pass       -->
+<!-- runs between the second and third of these (see "Labels"),    -->
+<!-- and the @label values it creates are what the @unique-id      -->
+<!-- stamp reads here.  The contract that follows is what lets     -->
+<!-- the three stampings agree element-for-element.                -->
 
 <!-- ################################################### -->
 <!-- Structural Contract for Identification Passes       -->
@@ -3346,6 +3443,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ###### -->
 <!-- Labels -->
 <!-- ###### -->
+
+<!-- The "labels" pass (pass 11).  It promotes an authored         -->
+<!-- @xml:id to @label and records localization support.  It is    -->
+<!-- deliberately separate from the id-attribute mechanism in      -->
+<!-- "Identification": it runs after @assembly-id is stamped and   -->
+<!-- before @unique-id, and the @label values created here are     -->
+<!-- read by that final @unique-id stamp.                          -->
 
 <!-- The "visible-id" template switched to prefer @label,         -->
 <!-- rather than @xml:id (at 1779e6dbc84c6ecc).  So to preserve   -->
