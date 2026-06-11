@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright 2026 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- A tiny article for exercising the (experimental) conversion to -->
+<!-- XSL-FO, and on to a PDF via Apache FOP.  Content here grows in -->
+<!-- concert with the capabilities of  xsl/pretext-fo.xsl, with the -->
+<!-- sample article as the eventual goal.                           -->
+
+<pretext>
+
+    <article xml:id="pdf-fo-smoke" label="pdf-fo-smoke">
+        <title>A Smoke Test for the XSL-FO Conversion</title>
+
+        <section xml:id="section-prose" label="section-prose">
+            <title>Prose</title>
+
+            <p>This is the first paragraph of a minimal article, used to exercise the conversion of PreTeXt source to XSL Formatting Objects, and then to a PDF by Apache FOP.  A paragraph is the fundamental unit of prose, so it is the first element implemented, and this one is long enough to demonstrate line-breaking and justification.</p>
+
+            <p>A second paragraph demonstrates inter-paragraph spacing.  It contains some inline markup, such as <em>emphasized text</em> and a <term>defined term</term>, which the conversion does not yet implement, and so will be reported on the console and dropped from the output.</p>
+        </section>
+
+        <section xml:id="section-mathematics" label="section-mathematics">
+            <title>Mathematics</title>
+
+            <p>Inline mathematics, such as <m>a^2 + b^2 = c^2</m>, renders as a boxed placeholder for now.  Display mathematics interrupts a paragraph,
+                <md>
+                    <mrow>\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</mrow>
+                </md>
+            and the paragraph then continues with a bit more text.</p>
+
+            <remark xml:id="remark-placeholders" label="remark-placeholders">
+                <title>Blocks Come Later</title>
+                <p>This remark is a basic titled block, scheduled for an early phase of the development roadmap, so for now only this interior paragraph survives into the PDF.</p>
+            </remark>
+        </section>
+    </article>
+</pretext>
