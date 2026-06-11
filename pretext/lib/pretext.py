@@ -4098,6 +4098,12 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     mathjax_latex(xml, pub_file, math_representations, None, "svg")
     stringparams["mathfile"] = math_representations.replace(os.sep, "/")
 
+    # Speech versions of the mathematics become the alternate text
+    # of the SVG images, as PDF/UA requires; again the model is epub()
+    speech_representations = os.path.join(tmp_dir, "math-representations-speech.xml")
+    mathjax_latex(xml, pub_file, speech_representations, None, "speech")
+    stringparams["speechfile"] = speech_representations.replace(os.sep, "/")
+
     # make the XSL-FO file in scratch directory
     # (1) pass None as out_file to derive from XML source filename
     # (2) pass tmp_dir (scratch) as destination directory

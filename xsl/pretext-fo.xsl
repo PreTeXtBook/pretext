@@ -37,6 +37,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
     exclude-result-prefixes="pi svg"
 >
 
@@ -77,6 +78,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "Mathematics" section below for both.                            -->
 <xsl:param name="mathfile" select="''"/>
 <xsl:variable name="math-repr" select="document($mathfile)/pi:math-representations"/>
+
+<!-- A second file of speech representations of the mathematics, -->
+<!-- by MathJax and the Speech Rule Engine, becomes alternate    -->
+<!-- text ("fox:alt-text") on each SVG image, as PDF/UA requires -->
+<!-- of any figure.                                              -->
+<xsl:param name="speechfile" select="''"/>
+<xsl:variable name="speech-repr" select="document($speechfile)/pi:math-representations"/>
 
 <!-- ########### -->
 <!-- Page Layout -->
@@ -911,6 +919,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="unique-id"/>
     </xsl:variable>
     <xsl:variable name="svg" select="$math-repr/pi:math[@id = $id]/div[@class = 'svg']/svg:svg"/>
+    <xsl:variable name="speech" select="normalize-space($speech-repr/pi:math[@id = $id]/div[@class = 'speech'])"/>
     <xsl:variable name="width-points"
                   select="number(substring-before($svg/@width, 'ex')) * $math-points-per-ex"/>
     <xsl:variable name="height-points"
@@ -926,6 +935,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:choose>
             </xsl:variable>
             <fo:instream-foreign-object alignment-adjust="{format-number($drop-ex * $math-points-per-ex, '0.####')}pt">
+                <xsl:if test="not($speech = '')">
+                    <xsl:attribute name="fox:alt-text">
+                        <xsl:value-of select="$speech"/>
+                    </xsl:attribute>
+                </xsl:if>
                 <xsl:apply-templates select="$svg" mode="svg-meld">
                     <xsl:with-param name="width-points" select="$width-points"/>
                     <xsl:with-param name="height-points" select="$height-points"/>
@@ -937,6 +951,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$svg">
             <fo:block text-align="center" space-before="0.5em" space-after="0.5em">
                 <fo:instream-foreign-object>
+                    <xsl:if test="not($speech = '')">
+                        <xsl:attribute name="fox:alt-text">
+                            <xsl:value-of select="$speech"/>
+                        </xsl:attribute>
+                    </xsl:if>
                     <xsl:apply-templates select="$svg" mode="svg-meld">
                         <xsl:with-param name="width-points" select="$width-points"/>
                         <xsl:with-param name="height-points" select="$height-points"/>
