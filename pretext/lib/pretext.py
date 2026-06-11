@@ -4060,6 +4060,100 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
                 shutil.copy2(pdfname, dest_dir)
 
 
+def _pdf_fo_link_descriptions(pdfname):
+    """
+    Post-process a FOP-rendered PDF so every link annotation carries
+    the alternate description PDF/UA requires.
+
+    Why this routine exists:
+
+    PDF/UA-1 (ISO 14289-1, Clause 7.18.5) requires each link
+    annotation to provide an alternate description in the /Contents
+    key of its annotation dictionary (per ISO 32000-1, 14.9.3); this
+    is what assistive technology announces for the link, and what a
+    validator such as veraPDF inspects.
+
+    The XSL-FO conversion decorates every "fo:basic-link" with a
+    description, via the "fox:alt-text" extension attribute.  But
+    Apache FOP (observed with version 2.8) records that description
+    only as the /Alt entry of the link's *structure element*, in the
+    structure tree -- it has no mechanism at all for writing the
+    /Contents key of the Link *annotation*.  So a PDF fresh from FOP
+    fails Clause 7.18.5, no matter what the FO file says.
+
+    The repair: walk the structure tree's /ParentTree to recover each
+    annotation's intended description from its structure element
+    (falling back to the link's URI, or generic text), write it into
+    /Contents, and save incrementally.  PyMuPDF is already a
+    dependency of this script, used for image format conversions.
+
+    N.B. Remove this routine (and its one call, in pdf_fo()) the day
+    FOP writes /Contents itself.  The test: render with a newer FOP,
+    skip this pass, and check the report of
+        verapdf --flavour ua1 <the-pdf>
+    for Clause 7.18.5.
+    """
+    try:
+        import fitz  # pyMuPDF
+    except ImportError:
+        log.warning("the 'pyMuPDF' module is not installed, so PDF link annotations lack the alternate descriptions PDF/UA requires")
+        return
+
+    import re
+
+    doc = fitz.open(pdfname)
+    # Map a /StructParent index to the /Alt of its structure element by
+    # walking the /ParentTree number tree, whose nodes are inline
+    # dictionaries or indirect objects, with /Kids subtrees or /Nums
+    # leaf arrays.  Entries mapping an index to an *array* (the marked
+    # content of a page) do not concern us, and do not match the pair
+    # pattern.  Any miss just engages the fallback below.
+    alternate_text = {}
+
+    def harvest(node_type, node_value):
+        if node_type == "xref":
+            node = int(node_value.split()[0])
+            kids = doc.xref_get_key(node, "Kids")
+            nums = doc.xref_get_key(node, "Nums")
+        elif node_type == "dict":
+            kids_match = re.search(r"/Kids\s*(\[[^\]]*\])", node_value)
+            kids = ("array", kids_match.group(1)) if kids_match else ("null", "null")
+            nums_match = re.search(r"/Nums\s*(\[[^\]]*\])", node_value)
+            nums = ("array", nums_match.group(1)) if nums_match else ("null", "null")
+        else:
+            return
+        if kids[0] == "array":
+            for reference in re.findall(r"(\d+)\s+0\s+R", kids[1]):
+                harvest("xref", reference + " 0 R")
+        if nums[0] == "array":
+            for index, element in re.findall(r"(\d+)\s+(\d+)\s+0\s+R", nums[1]):
+                alt = doc.xref_get_key(int(element), "Alt")
+                if alt[0] == "string":
+                    alternate_text[int(index)] = alt[1]
+
+    struct_root = doc.xref_get_key(doc.pdf_catalog(), "StructTreeRoot")
+    if struct_root[0] == "xref":
+        harvest(*doc.xref_get_key(int(struct_root[1].split()[0]), "ParentTree"))
+    additions = 0
+    for page in doc:
+        for link in page.links():
+            xref = link["xref"]
+            if doc.xref_get_key(xref, "Contents")[0] != "null":
+                continue
+            description = None
+            struct_parent = doc.xref_get_key(xref, "StructParent")
+            if struct_parent[0] == "int":
+                description = alternate_text.get(int(struct_parent[1]))
+            if description is None:
+                description = link.get("uri") or "internal cross-reference"
+            doc.xref_set_key(xref, "Contents", fitz.get_pdf_str(description))
+            additions += 1
+    if additions > 0:
+        doc.saveIncr()
+    doc.close()
+    log.debug("described {} link annotations in {}".format(additions, pdfname))
+
+
 def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     """
     Generate a PDF from an XML source using XSL-FO as an intermediate
@@ -4130,6 +4224,9 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     result = subprocess.run(fop_cmd, cwd=tmp_dir)
     if result.returncode != 0:
         raise OSError("Apache FOP rendering of {} failed".format(foname))
+
+    # post-process: describe link annotations, as PDF/UA requires
+    _pdf_fo_link_descriptions(pdfname)
 
     # Copy just the PDF output
     # out_file: not(None) only if provided in CLI

@@ -1294,7 +1294,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:copy-of select="$visible-text"/>
         </xsl:when>
         <xsl:otherwise>
-            <fo:basic-link external-destination="url({$uri})">
+            <!-- the description PDF/UA requires of a link annotation -->
+            <fo:basic-link external-destination="url({$uri})" fox:alt-text="{$uri}">
                 <xsl:call-template name="link-attributes"/>
                 <xsl:copy-of select="$visible-text"/>
             </fo:basic-link>
@@ -1304,7 +1305,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- An "email" address is an active "mailto:" link. -->
 <xsl:template match="email">
-    <fo:basic-link external-destination="url(mailto:{normalize-space(.)})">
+    <fo:basic-link external-destination="url(mailto:{normalize-space(.)})" fox:alt-text="mailto:{normalize-space(.)}">
         <xsl:call-template name="link-attributes"/>
         <fo:inline font-family="{$font-family-monospace}">
             <xsl:value-of select="normalize-space(.)"/>
@@ -1333,7 +1334,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="the-id">
         <xsl:apply-templates select="$target" mode="unique-id"/>
     </xsl:variable>
-    <fo:basic-link internal-destination="{$the-id}">
+    <!-- the link text doubles as the description PDF/UA requires -->
+    <fo:basic-link internal-destination="{$the-id}" fox:alt-text="{normalize-space(string($content))}">
         <xsl:call-template name="link-attributes"/>
         <xsl:copy-of select="$content"/>
     </fo:basic-link>
