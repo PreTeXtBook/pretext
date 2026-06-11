@@ -126,11 +126,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The "DejaVu Serif" font family is Unicode-capable and is located -->
 <!-- by the font auto-detection enabled in the  fop.xconf             -->
 <!-- configuration; generic "serif" is the fallback.                  -->
+<!-- The document language (via @xml:lang) and the document title (in -->
+<!-- the XMP metadata of  fo:declarations) propagate to the PDF,      -->
+<!-- where PDF/UA (ISO 14289) and WCAG require them.                  -->
 <xsl:template match="/">
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
     <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
     <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
-    <fo:root font-family="DejaVu Serif, serif" font-size="{$font-size}">
+    <fo:root font-family="DejaVu Serif, serif" font-size="{$font-size}" xml:lang="{$document-language}">
         <fo:layout-master-set>
             <fo:simple-page-master master-name="page-odd"
                                    page-width="{$page-width}"
@@ -157,6 +160,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </fo:repeatable-page-master-alternatives>
             </fo:page-sequence-master>
         </fo:layout-master-set>
+        <fo:declarations>
+            <x:xmpmeta xmlns:x="adobe:ns:meta/">
+                <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                        <dc:title>
+                            <xsl:variable name="document-title">
+                                <xsl:apply-templates select="$document-root" mode="title-simple"/>
+                            </xsl:variable>
+                            <xsl:value-of select="normalize-space($document-title)"/>
+                        </dc:title>
+                    </rdf:Description>
+                </rdf:RDF>
+            </x:xmpmeta>
+        </fo:declarations>
         <fo:page-sequence master-reference="pages">
             <fo:flow flow-name="xsl-region-body">
                 <xsl:apply-templates select="$document-root"/>
