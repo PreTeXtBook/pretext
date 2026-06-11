@@ -636,6 +636,214 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- ###### -->
+<!-- Tables -->
+<!-- ###### -->
+
+<!-- A PreTeXt "tabular" is an fo:table.  FOP only implements the -->
+<!-- fixed table layout, so the table spans the available width   -->
+<!-- and authored "col" percentage widths become proportional     -->
+<!-- column widths (a natural-width, centered table awaits a      -->
+<!-- smarter layout).  Header rows land in an fo:table-header,    -->
+<!-- which FOP tags as "TH" cells in the PDF structure tree, as   -->
+<!-- PDF/UA requires.  Not yet implemented: @header='vertical',   -->
+<!-- @row-headers (column-of-row-headers), and a @colspan in the  -->
+<!-- first row of a column-less tabular.                          -->
+<xsl:template match="tabular">
+    <fo:table table-layout="fixed" width="100%">
+        <xsl:call-template name="rule-attribute">
+            <xsl:with-param name="side" select="'top'"/>
+            <xsl:with-param name="thickness" select="@top"/>
+        </xsl:call-template>
+        <xsl:call-template name="rule-attribute">
+            <xsl:with-param name="side" select="'bottom'"/>
+            <xsl:with-param name="thickness" select="@bottom"/>
+        </xsl:call-template>
+        <xsl:call-template name="rule-attribute">
+            <xsl:with-param name="side" select="'left'"/>
+            <xsl:with-param name="thickness" select="@left"/>
+        </xsl:call-template>
+        <xsl:call-template name="rule-attribute">
+            <xsl:with-param name="side" select="'right'"/>
+            <xsl:with-param name="thickness" select="@right"/>
+        </xsl:call-template>
+        <xsl:choose>
+            <xsl:when test="col">
+                <xsl:apply-templates select="col"/>
+            </xsl:when>
+            <!-- no authored columns: equal widths, one per cell -->
+            <!-- of the first row                                -->
+            <xsl:otherwise>
+                <xsl:for-each select="row[1]/cell">
+                    <fo:table-column column-width="proportional-column-width(1)"/>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:if test="row[@header = 'yes']">
+            <fo:table-header>
+                <xsl:apply-templates select="row[@header = 'yes']"/>
+            </fo:table-header>
+        </xsl:if>
+        <fo:table-body>
+            <xsl:apply-templates select="row[not(@header = 'yes')]"/>
+        </fo:table-body>
+    </fo:table>
+</xsl:template>
+
+<xsl:template match="tabular/col">
+    <fo:table-column>
+        <xsl:attribute name="column-width">
+            <xsl:text>proportional-column-width(</xsl:text>
+            <xsl:choose>
+                <xsl:when test="@width">
+                    <xsl:value-of select="substring-before(@width, '%')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>1</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>)</xsl:text>
+        </xsl:attribute>
+    </fo:table-column>
+</xsl:template>
+
+<xsl:template match="tabular/row">
+    <fo:table-row>
+        <xsl:apply-templates select="cell"/>
+    </fo:table-row>
+</xsl:template>
+
+<!-- A header row is bold, a visual echo of its structural role. -->
+<xsl:template match="row/cell">
+    <fo:table-cell padding="2pt">
+        <xsl:if test="@colspan">
+            <xsl:attribute name="number-columns-spanned">
+                <xsl:value-of select="@colspan"/>
+            </xsl:attribute>
+        </xsl:if>
+        <!-- vertical alignment: row, else tabular, else the top -->
+        <xsl:attribute name="display-align">
+            <xsl:choose>
+                <xsl:when test="parent::row/@valign = 'middle' or (not(parent::row/@valign) and ancestor::tabular/@valign = 'middle')">
+                    <xsl:text>center</xsl:text>
+                </xsl:when>
+                <xsl:when test="parent::row/@valign = 'bottom' or (not(parent::row/@valign) and ancestor::tabular/@valign = 'bottom')">
+                    <xsl:text>after</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>before</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:call-template name="rule-attribute">
+            <xsl:with-param name="side" select="'bottom'"/>
+            <xsl:with-param name="thickness">
+                <xsl:choose>
+                    <xsl:when test="@bottom">
+                        <xsl:value-of select="@bottom"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="parent::row/@bottom"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="rule-attribute">
+            <xsl:with-param name="side" select="'right'"/>
+            <xsl:with-param name="thickness">
+                <xsl:choose>
+                    <xsl:when test="@right">
+                        <xsl:value-of select="@right"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="the-position" select="count(preceding-sibling::cell[not(@colspan)]) + sum(preceding-sibling::cell/@colspan) + 1"/>
+                        <xsl:value-of select="ancestor::tabular/col[position() = $the-position]/@right"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
+        </xsl:call-template>
+        <fo:block>
+            <xsl:attribute name="text-align">
+                <xsl:apply-templates select="." mode="cell-halign"/>
+            </xsl:attribute>
+            <xsl:if test="parent::row/@header = 'yes'">
+                <xsl:attribute name="font-weight">
+                    <xsl:text>bold</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:choose>
+                <!-- structured: paragraphs or lines as blocks -->
+                <xsl:when test="p|line">
+                    <xsl:apply-templates select="*"/>
+                </xsl:when>
+                <!-- mixed content, right here -->
+                <xsl:otherwise>
+                    <xsl:apply-templates/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </fo:block>
+    </fo:table-cell>
+</xsl:template>
+
+<!-- Horizontal alignment: the cell, else its row, else its -->
+<!-- column, else the tabular, else flush left.  ("justify" -->
+<!-- passes through with the same meaning in XSL-FO.)       -->
+<xsl:template match="row/cell" mode="cell-halign">
+    <xsl:variable name="the-position" select="count(preceding-sibling::cell[not(@colspan)]) + sum(preceding-sibling::cell/@colspan) + 1"/>
+    <xsl:choose>
+        <xsl:when test="@halign">
+            <xsl:value-of select="@halign"/>
+        </xsl:when>
+        <xsl:when test="parent::row/@halign">
+            <xsl:value-of select="parent::row/@halign"/>
+        </xsl:when>
+        <xsl:when test="ancestor::tabular/col[position() = $the-position]/@halign">
+            <xsl:value-of select="ancestor::tabular/col[position() = $the-position]/@halign"/>
+        </xsl:when>
+        <xsl:when test="ancestor::tabular/@halign">
+            <xsl:value-of select="ancestor::tabular/@halign"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>left</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- The schema's rule thicknesses, emitted as a border on the -->
+<!-- given side; "none", or no specification, means no border. -->
+<xsl:template name="rule-attribute">
+    <xsl:param name="side"/>
+    <xsl:param name="thickness"/>
+    <xsl:variable name="width">
+        <xsl:choose>
+            <xsl:when test="$thickness = 'minor'">
+                <xsl:text>0.5pt</xsl:text>
+            </xsl:when>
+            <xsl:when test="$thickness = 'medium'">
+                <xsl:text>1pt</xsl:text>
+            </xsl:when>
+            <xsl:when test="$thickness = 'major'">
+                <xsl:text>2pt</xsl:text>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="not($width = '')">
+        <xsl:attribute name="border-{$side}">
+            <xsl:value-of select="$width"/>
+            <xsl:text> solid</xsl:text>
+        </xsl:attribute>
+    </xsl:if>
+</xsl:template>
+
+<!-- A "line" is one line of several, in a cell, an address, an   -->
+<!-- attribution: its own block, alignment from the surroundings. -->
+<xsl:template match="line">
+    <fo:block>
+        <xsl:apply-templates/>
+    </fo:block>
+</xsl:template>
+
 <!-- ############# -->
 <!-- Inline Markup -->
 <!-- ############# -->
