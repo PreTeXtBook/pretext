@@ -140,6 +140,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </ul>
             </sidebyside>
 
+            <p>Some prose separates the bare side-by-side above from the captioned figure below, so the two layout devices read as distinct.</p>
+
             <figure xml:id="figure-triangle" label="figure-triangle">
                 <caption>A right triangle, now wrapped in a captioned figure.</caption>
                 <image source="right-triangle.svg" width="35%">
