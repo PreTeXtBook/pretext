@@ -141,8 +141,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Deprecation warnings are universal, so issued here on the        -->
 <!-- original source, before attention turns to the assembled source. -->
-<!-- The font families are Unicode-capable and located by the font    -->
-<!-- auto-detection enabled in the  fop.xconf  configuration.         -->
+<!-- The font families are Unicode-capable, and declared, fully       -->
+<!-- embedded, in the  fop.xconf  configuration.                       -->
 <!-- The document language (via @xml:lang) and the document title (in -->
 <!-- the XMP metadata of  fo:declarations) propagate to the PDF,      -->
 <!-- where PDF/UA (ISO 14289) and WCAG require them.                  -->
