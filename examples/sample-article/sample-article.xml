@@ -13529,6 +13529,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Like for mathematical research.  An <c>openproblem</c>, <c>openquestion</c>, or <c>openconjecture</c> is numbered as a block, sharing the overall block counter by default, though a publisher can give them a counter of their own.</p>
 
+            <p>Beyond a <c>statement</c>, an open problem can be followed by discussion appendages such as <c>status</c>, <c>discussion</c>, <c>opinion</c>, <c>suggestion</c>, or <c>context</c>, and, like a <c>project</c>, it may be divided into <c>task</c>s.</p>
+
             <openproblem>
                 <statement>
                     <p>Solve the Riemann Hypothesis<fn>Footnotes were once incomplete on open problems.</fn> <em>and</em> provide a short proof of Fermat's Last Theorem.</p>
@@ -13539,7 +13541,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <statement>
                     <p>Is every even integer greater than two the sum of two primes?</p>
                 </statement>
+                <status>
+                    <p>Verified by Oliveira e Silva for every even integer below <m>4\times10^{18}</m>.  The ternary version<mdash/>every odd number above five is a sum of three primes<mdash/>was settled by Helfgott in 2013, but the binary question is the one our seminar is after.</p>
+                </status>
+                <discussion>
+                    <p>The circle method predicts on the order of <m>n/(\log n)^2</m> representations of a large even <m>n</m>, comfortably positive; the stubborn obstruction is controlling the minor-arc contribution, where we have made no real progress.</p>
+                </discussion>
             </openquestion>
+
+            <openconjecture>
+                <title>Sum-free Sets of Squares</title>
+                <introduction>
+                    <p>This is the current focus of a project with our collaborators.  Write <m>S_N = \{1, 4, 9, \ldots, N^2\}</m> for the first <m>N</m> perfect squares, and call a set <term>sum-free</term> when it contains no solution of <m>a + b = c</m>.  We conjecture the following, listed in increasing order of difficulty.</p>
+                </introduction>
+                <task>
+                    <statement>
+                        <p>There is an absolute constant <m>c \gt 0</m> and, for every large <m>N</m>, a sum-free subset <m>A \subseteq S_N</m> with <m>|A| \geq (1/2 + c)\,N</m>.</p>
+                    </statement>
+                    <status>
+                        <p>For every <m>N \leq 60</m> the largest sum-free subset we have found has exactly the size of the odd squares, so we cannot yet exhibit a single configuration that provably beats that baseline.</p>
+                    </status>
+                    <discussion>
+                        <p>The odd squares <m>\{1, 9, 25, \ldots\}</m> are already sum-free, since a sum of two of them is congruent to <m>2</m> modulo <m>4</m> while no square is; this gives density <m>1/2</m>, so the whole content of the conjecture is the gain <m>c</m>.</p>
+                    </discussion>
+                </task>
+                <task>
+                    <statement>
+                        <p>The limiting density <m>d = \lim_{N \to \infty} \frac{1}{N} \max_{A} |A|</m> exists.</p>
+                    </statement>
+                    <suggestion>
+                        <p>One of our collaborators proposes a Fekete-style subadditivity argument to force the limit to exist, even before we can name its value.</p>
+                    </suggestion>
+                </task>
+                <task>
+                    <statement>
+                        <p>Replacing the squares by the cubes <m>\{1, 8, 27, \ldots\}</m> yields the same limiting density <m>d</m>.</p>
+                    </statement>
+                </task>
+                <conclusion>
+                    <p>Even the bare existence claim of the second part is open; we would be glad of either a proof or a numerical counterexample.</p>
+                </conclusion>
+            </openconjecture>
 
         </section>
 
