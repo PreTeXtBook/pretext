@@ -98,6 +98,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </image>
         </section>
 
+        <section xml:id="section-tables" label="section-tables">
+            <title>Tables and Figures</title>
+
+            <p>A small table of tree data follows, with a header row, rules, and varied column alignment.</p>
+
+            <table xml:id="table-trees" label="table-trees">
+                <title>Some Trees and Their Habits</title>
+                <tabular halign="center" top="major" bottom="major" left="medium" right="medium">
+                    <col halign="left" width="40%"/>
+                    <col width="30%"/>
+                    <col width="30%"/>
+                    <row header="yes" bottom="medium">
+                        <cell>Species</cell>
+                        <cell>Family</cell>
+                        <cell halign="right">Height (m)</cell>
+                    </row>
+                    <row>
+                        <cell>Garry oak</cell>
+                        <cell>Beech</cell>
+                        <cell halign="right">20</cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Douglas fir</cell>
+                        <cell>Pine</cell>
+                        <cell halign="right">100</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <figure xml:id="figure-triangle" label="figure-triangle">
+                <caption>A right triangle, now wrapped in a captioned figure.</caption>
+                <image source="right-triangle.svg" width="35%">
+                    <shortdescription>a right triangle</shortdescription>
+                </image>
+            </figure>
+        </section>
+
         <section xml:id="section-mathematics" label="section-mathematics">
             <title>Mathematics</title>
 
