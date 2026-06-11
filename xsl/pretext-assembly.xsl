@@ -1031,19 +1031,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
-<!-- Make static substitutions for dynamic exercises.                -->
-<!-- The pass only acts on the elements enumerated in this presence  -->
-<!-- test (see the "dynamic-substitution" templates); without any of -->
-<!-- them it is the identity, so we skip the full-tree copy.  NB: a  -->
-<!-- new template in the mode must be reflected in this test.        -->
-<xsl:variable name="b-has-dynamic-markup" select="boolean($assembly//setup | $assembly//numcmp | $assembly//strcmp | $assembly//jscmp | $assembly//mathcmp | $assembly//logic | $assembly//fillin[@ansobj] | $assembly//eval[@obj])"/>
-<xsl:variable name="dynamic-rtf">
-    <xsl:if test="$b-has-dynamic-markup">
-        <xsl:apply-templates select="$assembly" mode="dynamic-substitution"/>
-    </xsl:if>
-</xsl:variable>
-<xsl:variable name="dynamic" select="exsl:node-set($dynamic-rtf)[$b-has-dynamic-markup] | $assembly[not($b-has-dynamic-markup)]"/>
-
 <!-- Exercises are "tagged" as to their nature (division, inline, -->
 <!-- worksheet, reading, project-like) and interactive exercises  -->
 <!-- get more precise categorization.  The latter is used to      -->
@@ -1051,7 +1038,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="exercise-rtf">
     <!-- initialize with default, 'inline' -->
-    <xsl:apply-templates select="$dynamic" mode="exercise">
+    <xsl:apply-templates select="$assembly" mode="exercise">
         <xsl:with-param name="division" select="'inline'"/>
     </xsl:apply-templates>
 </xsl:variable>
@@ -1065,12 +1052,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly-label" select="exsl:node-set($assembly-label-rtf)"/>
 
+<!-- Make static substitutions for dynamic exercises.  This runs AFTER  -->
+<!-- the @assembly-id stamp because the substitution round trip keys on  -->
+<!-- @assembly-id: extract-dynamic.xsl writes it as the exercise_id, and -->
+<!-- the lookup below reads it.  @assembly-id is the early identifier    -->
+<!-- both ends can compute consistently (the authored @label would only  -->
+<!-- match for labeled exercises, missing unlabeled ones and tasks).     -->
+<!-- The pass only acts on the elements enumerated in this presence      -->
+<!-- test (see the "dynamic-substitution" templates); without any of     -->
+<!-- them it is the identity, so we skip the full-tree copy.  NB: a      -->
+<!-- new template in the mode must be reflected in this test.            -->
+<xsl:variable name="b-has-dynamic-markup" select="boolean($assembly-label//setup | $assembly-label//numcmp | $assembly-label//strcmp | $assembly-label//jscmp | $assembly-label//mathcmp | $assembly-label//logic | $assembly-label//fillin[@ansobj] | $assembly-label//eval[@obj])"/>
+<xsl:variable name="dynamic-rtf">
+    <xsl:if test="$b-has-dynamic-markup">
+        <xsl:apply-templates select="$assembly-label" mode="dynamic-substitution"/>
+    </xsl:if>
+</xsl:variable>
+<xsl:variable name="dynamic" select="exsl:node-set($dynamic-rtf)[$b-has-dynamic-markup] | $assembly-label[not($b-has-dynamic-markup)]"/>
+
 <xsl:variable name="representations-rtf">
     <xsl:choose>
         <!-- short-circuit to stop after adding @assembly-id -->
         <xsl:when test="$b-assembly-id-only"/>
         <xsl:otherwise>
-            <xsl:apply-templates select="$assembly-label" mode="representations"/>
+            <xsl:apply-templates select="$dynamic" mode="representations"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -1727,12 +1732,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fillin[@ansobj]" mode="dynamic-substitution">
     <xsl:choose>
         <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
-            <!-- The substitutions file is keyed by the late "visible-id",  -->
-            <!-- which prefers @label, then @xml:id.  This early pass runs  -->
-            <!-- before the promotion of @xml:id to @label, so consult both -->
+            <!-- The substitutions file is keyed by @assembly-id, which     -->
+            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass   -->
+            <!-- runs after the @assembly-id stamp, so the owner carries it. -->
             <xsl:variable name="owner" select="ancestor::statement/.."/>
             <xsl:variable name="parent-id">
-                <xsl:apply-templates select="$owner/@label | $owner[not(@label)]/@xml:id" />
+                <xsl:apply-templates select="$owner" mode="assembly-id"/>
             </xsl:variable>
             <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
             <xsl:variable name="object" select="@ansobj"/>
@@ -1758,12 +1763,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- static, for multiple conversions, but primarily LaTeX -->
         <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
-            <!-- The substitutions file is keyed by the late "visible-id",  -->
-            <!-- which prefers @label, then @xml:id.  This early pass runs  -->
-            <!-- before the promotion of @xml:id to @label, so consult both -->
+            <!-- The substitutions file is keyed by @assembly-id, which     -->
+            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass   -->
+            <!-- runs after the @assembly-id stamp, so the owner carries it. -->
             <xsl:variable name="owner" select="(ancestor::statement|ancestor::solution|ancestor::evaluation)/.."/>
             <xsl:variable name="parent-id">
-               <xsl:apply-templates select="$owner/@label | $owner[not(@label)]/@xml:id" />
+               <xsl:apply-templates select="$owner" mode="assembly-id"/>
             </xsl:variable>
             <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
             <xsl:variable name="object" select="@obj"/>
@@ -2850,6 +2855,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                    | activity[.//task and .//task/@exercise-interactive='fillin' and .//setup]
                    | exploration[.//task and .//task/@exercise-interactive='fillin' and .//setup]
                    | investigation[.//task and .//task/@exercise-interactive='fillin' and .//setup]"
+                   mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+<!-- A fill-in "task" is the "owner" that the dynamic-substitution lookup -->
+<!-- keys on, so it too must report its "@assembly-id" (matching the      -->
+<!-- "exercise//task" extraction in extract-dynamic.xsl).                 -->
+<xsl:template match="exercise//task[@exercise-interactive='fillin' and setup]
+                   | project//task[@exercise-interactive='fillin' and setup]
+                   | activity//task[@exercise-interactive='fillin' and setup]
+                   | exploration//task[@exercise-interactive='fillin' and setup]
+                   | investigation//task[@exercise-interactive='fillin' and setup]"
                    mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
