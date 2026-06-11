@@ -642,8 +642,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Semantic inline markup, mostly by font change.  An "alert" -->
 <!-- gets both weight and style, distinct from "em" and "term". -->
-<xsl:template match="em|foreign|pubtitle|taxon">
+<xsl:template match="em|pubtitle|taxon">
     <fo:inline font-style="italic">
+        <xsl:apply-templates/>
+    </fo:inline>
+</xsl:template>
+
+<!-- A "foreign" phrase carries its language into the PDF -->
+<!-- structure (WCAG 3.1.2, Language of Parts).           -->
+<xsl:template match="foreign">
+    <fo:inline font-style="italic">
+        <xsl:if test="@xml:lang">
+            <xsl:attribute name="xml:lang">
+                <xsl:value-of select="@xml:lang"/>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates/>
     </fo:inline>
 </xsl:template>
