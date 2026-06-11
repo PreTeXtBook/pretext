@@ -96,7 +96,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,&#xa;</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:text>  "exercise_id": "</xsl:text>
-    <xsl:apply-templates select="." mode="visible-id" />
+    <!-- Key the round trip on @assembly-id, the early identifier the   -->
+    <!-- substitution pass reads back.  @label only exists for labeled  -->
+    <!-- exercises, so it would miss unlabeled exercises and tasks.      -->
+    <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>",&#xa;</xsl:text>
     <xsl:text>  "exercise_setup": </xsl:text>
     <xsl:call-template name="dynamic-setup" />
