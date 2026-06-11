@@ -53,7 +53,11 @@ console as `PTX:FO-TODO: <element-name>`.  The loop:
    in `pretext-fo.xsl` (which removes it from the report).
 3. Verify the `*.fo` file is well-formed (`xmllint --noout`), then
    render with `-f pdf-fo` and inspect the PDF.
-4. Commit granularly, one focused topic per commit.
+4. Validate PDF/UA-1 conformance (veraPDF is installed locally):
+
+       ~/mathbook/verapdf/verapdf --flavour ua1 <the-pdf>
+
+5. Commit granularly, one focused topic per commit.
 
 Because the harness has higher import precedence than everything
 imported, an element only leaves the report when *this* stylesheet
@@ -116,8 +120,8 @@ Targets: full coverage of the sample article, then the sample book
   chapter boundaries (`$latex-open-odd`).
 * Cross-references as live PDF links (`fo:basic-link`).
 * PDF bookmarks (`fo:bookmark-tree`) and document metadata.
-* Accessibility refinements: veraPDF validation in the development
-  loop; a true PDF "artifact" mechanism for decorative images;
-  PDF/UA-2 and MathML association are beyond FOP today.
+* Accessibility refinements: a true PDF "artifact" mechanism for
+  decorative images; PDF/UA-2 and MathML association are beyond
+  FOP today.
 * A way to pass `-X` extra XSL through to the FO conversion, once
   there is a use case.
