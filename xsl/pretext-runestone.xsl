@@ -255,7 +255,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="name" select="'person'"/>
             </xsl:call-template>
             <span class="name"><xsl:text>Profile</xsl:text></span>
-            <div class="dropdown-content">
+            <div id="ptx-user-dropdown_rs-content" class="dropdown-content">
+            </div>
+            <!-- clone template, modify href and innertext, and append to ptx-rs-dropdown-content -->
+            <template id="ptx-user-dropdown-content_item-template">
+              <a href="url here" >title here</a>
+            </template>
+            <!-- clone and append to dropdown contenet area add a separator within the menu -->
+            <template id="ptx-user-dropdown-content_separator-template">
+              <hr/>
+            </template>
+            <div class="dropdown-content" data-deprecated="true">
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>{% if settings.academy_mode: %}&#xa;</xsl:text>
                 <a href="/ns/course/index">Course Home</a>
