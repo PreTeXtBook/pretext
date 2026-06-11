@@ -50,6 +50,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Blocks Come Later</title>
                 <p>This remark is a basic titled block, scheduled for an early phase of the development roadmap, so for now only this interior paragraph survives into the PDF.</p>
             </remark>
+
+            <subsection xml:id="subsection-depth" label="subsection-depth">
+                <title>Depth</title>
+
+                <p>A subsection exercises a deeper heading, and a two-level number.</p>
+
+                <subsubsection xml:id="subsubsection-depth" label="subsubsection-depth">
+                    <title>More Depth</title>
+
+                    <p>A subsubsection is the deepest traditional division, with a three-level number.</p>
+                </subsubsection>
+            </subsection>
         </section>
     </article>
 </pretext>
