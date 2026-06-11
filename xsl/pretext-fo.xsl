@@ -583,6 +583,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <fo:external-graphic width="{$width}"
                              content-width="scale-to-fit"
                              scaling="uniform">
+            <xsl:choose>
+                <!-- a decorative image wants to be a PDF "artifact", -->
+                <!-- invisible to assistive technology; FOP has no    -->
+                <!-- mechanism yet, so it gets empty alternate text   -->
+                <xsl:when test="@decorative = 'yes'">
+                    <xsl:attribute name="fox:alt-text"/>
+                </xsl:when>
+                <!-- authored alternate text, as PDF/UA requires of -->
+                <!-- any figure; absent it, FOP will complain       -->
+                <xsl:when test="shortdescription">
+                    <xsl:attribute name="fox:alt-text">
+                        <xsl:value-of select="normalize-space(shortdescription)"/>
+                    </xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise/>
+            </xsl:choose>
             <xsl:attribute name="src">
                 <xsl:text>url(</xsl:text>
                 <xsl:apply-templates select="." mode="image-filename"/>
