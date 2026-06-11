@@ -202,11 +202,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The document root.  A real title page is far in the future, -->
 <!-- so the document title renders as a large, centered heading. -->
+<!-- The @role attributes here and below become PDF structure    -->
+<!-- tags (H1, H2, ...) in FOP's Tagged PDF output, the heading  -->
+<!-- outline PDF/UA and WCAG call for; division nesting means    -->
+<!-- levels are never skipped.                                   -->
 <xsl:template match="article|book">
     <fo:block font-size="200%"
               font-weight="bold"
               text-align="center"
-              space-after="2em">
+              space-after="2em"
+              role="H1">
         <xsl:apply-templates select="." mode="title-full"/>
     </fo:block>
     <xsl:apply-templates/>
@@ -231,7 +236,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               font-weight="bold"
               space-before="1.5em"
               space-after="0.75em"
-              keep-with-next.within-page="always">
+              keep-with-next.within-page="always"
+              role="H{count(ancestor::*[&STRUCTURAL-FILTER;]) + 1}">
         <xsl:if test="not($the-number = '')">
             <xsl:apply-templates select="." mode="type-name"/>
             <xsl:text> </xsl:text>
