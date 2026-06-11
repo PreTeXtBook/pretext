@@ -90,6 +90,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- we will map the *intent* of such requests as this conversion      -->
 <!-- matures.                                                          -->
 
+<!-- PDF/UA (ISO 14289) requires every font to be embedded, so    -->
+<!-- each font family must name a real, available font: a generic -->
+<!-- family (serif, monospace) would fall back to a base-14 PDF   -->
+<!-- font, which is never embedded.  The choices are centralized  -->
+<!-- here, on the way to becoming publisher-configurable.         -->
+<xsl:variable name="font-family-main" select="'DejaVu Serif'"/>
+<xsl:variable name="font-family-monospace" select="'DejaVu Sans Mono'"/>
+<!-- for symbols absent from the main font (e.g. the tombstone) -->
+<xsl:variable name="font-family-symbol" select="'DejaVu Sans'"/>
+
 <!-- US Letter, matching the LaTeX conversion default -->
 <xsl:variable name="page-width" select="'8.5in'"/>
 <xsl:variable name="page-height" select="'11in'"/>
@@ -123,9 +133,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Deprecation warnings are universal, so issued here on the        -->
 <!-- original source, before attention turns to the assembled source. -->
-<!-- The "DejaVu Serif" font family is Unicode-capable and is located -->
-<!-- by the font auto-detection enabled in the  fop.xconf             -->
-<!-- configuration; generic "serif" is the fallback.                  -->
+<!-- The font families are Unicode-capable and located by the font    -->
+<!-- auto-detection enabled in the  fop.xconf  configuration.         -->
 <!-- The document language (via @xml:lang) and the document title (in -->
 <!-- the XMP metadata of  fo:declarations) propagate to the PDF,      -->
 <!-- where PDF/UA (ISO 14289) and WCAG require them.                  -->
@@ -133,7 +142,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
     <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
     <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
-    <fo:root font-family="DejaVu Serif, serif" font-size="{$font-size}" xml:lang="{$document-language}">
+    <fo:root font-family="{$font-family-main}" font-size="{$font-size}" xml:lang="{$document-language}">
         <fo:layout-master-set>
             <fo:simple-page-master master-name="page-odd"
                                    page-width="{$page-width}"
@@ -408,8 +417,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
         <fo:block text-align-last="justify">
             <fo:leader leader-pattern="space"/>
-            <!-- "DejaVu Serif" lacks END OF PROOF, the sans variant has it -->
-            <fo:inline font-family="DejaVu Sans, sans-serif">
+            <!-- the main (serif) font lacks END OF PROOF, the symbol font has it -->
+            <fo:inline font-family="{$font-family-symbol}">
                 <xsl:text>&#x220e;</xsl:text>
             </fo:inline>
         </fo:block>
@@ -649,14 +658,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Keyboard keys, visibly boxed.  A @name indexes the Unicode -->
 <!-- column of the key table in  pretext-common.xsl.            -->
 <xsl:template match="kbd[not(@name)]">
-    <fo:inline font-family="monospace" border="0.5pt solid #888888" padding="0pt 2pt">
+    <fo:inline font-family="{$font-family-monospace}" border="0.5pt solid #888888" padding="0pt 2pt">
         <xsl:value-of select="."/>
     </fo:inline>
 </xsl:template>
 
 <xsl:template match="kbd[@name]">
     <xsl:variable name="kbdkey-name" select="@name"/>
-    <fo:inline font-family="monospace" border="0.5pt solid #888888" padding="0pt 2pt">
+    <fo:inline font-family="{$font-family-monospace}" border="0.5pt solid #888888" padding="0pt 2pt">
         <!-- for-each is just one node, but sets context for key() -->
         <xsl:for-each select="$kbdkey-table">
             <xsl:value-of select="key('kbdkey-key', $kbdkey-name)/@unicode"/>
@@ -670,7 +679,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- font changes.                                                   -->
 <xsl:template name="code-wrapper">
     <xsl:param name="content"/>
-    <fo:inline font-family="monospace">
+    <fo:inline font-family="{$font-family-monospace}">
         <xsl:value-of select="$content"/>
     </fo:inline>
 </xsl:template>
@@ -688,7 +697,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="monospace">
-    <fo:inline font-family="monospace">
+    <fo:inline font-family="{$font-family-monospace}">
         <xsl:apply-templates/>
     </fo:inline>
 </xsl:template>
@@ -960,13 +969,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Placeholders: the authored LaTeX, visibly boxed, in a -->
 <!-- monospace font.                                       -->
 <xsl:template match="m" mode="math-placeholder">
-    <fo:inline font-family="monospace" border="0.5pt solid #888888" padding="0pt 2pt">
+    <fo:inline font-family="{$font-family-monospace}" border="0.5pt solid #888888" padding="0pt 2pt">
         <xsl:value-of select="."/>
     </fo:inline>
 </xsl:template>
 
 <xsl:template match="me|men|md|mdn" mode="math-placeholder">
-    <fo:block font-family="monospace"
+    <fo:block font-family="{$font-family-monospace}"
               border="0.5pt solid #888888"
               padding="2pt"
               space-before="0.5em"
