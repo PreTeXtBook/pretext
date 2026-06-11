@@ -22,7 +22,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Publication file for the XSL-FO smoke test.  The "latex" element -->
 <!-- configures print/page properties that the XSL-FO conversion      -->
 <!-- honors: an 11 point font, and a one-sided (electronic) layout.   -->
+<!-- The managed directories hold externally produced images (and,    -->
+<!-- one day, generated ones).                                        -->
 
 <publication>
+    <source>
+        <directories external="external" generated="generated"/>
+    </source>
     <latex font-size="11" print="no"/>
 </publication>

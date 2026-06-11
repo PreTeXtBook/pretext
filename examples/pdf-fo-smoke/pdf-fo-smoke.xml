@@ -86,6 +86,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </dl>
         </section>
 
+        <section xml:id="section-images" label="section-images">
+            <title>Images</title>
+
+            <p>An externally produced image, a right triangle, follows at half of the available width.</p>
+
+            <image source="right-triangle.svg" width="50%">
+                <shortdescription>a right triangle</shortdescription>
+            </image>
+        </section>
+
         <section xml:id="section-mathematics" label="section-mathematics">
             <title>Mathematics</title>
 
