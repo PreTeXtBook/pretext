@@ -4091,6 +4091,13 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     # name for scratch directory
     tmp_dir = common.get_temporary_directory()
 
+    # Mathematics as SVG images, produced by MathJax, and passed to
+    # the FO stylesheet as the  $mathfile  string parameter, which
+    # melds each image into the page (the model is  epub()  above)
+    math_representations = os.path.join(tmp_dir, "math-representations-svg.xml")
+    mathjax_latex(xml, pub_file, math_representations, None, "svg")
+    stringparams["mathfile"] = math_representations.replace(os.sep, "/")
+
     # make the XSL-FO file in scratch directory
     # (1) pass None as out_file to derive from XML source filename
     # (2) pass tmp_dir (scratch) as destination directory
@@ -4104,10 +4111,6 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
 
     # Make image files available, relative to the FO file
     common.copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
-
-    # Mathematics as SVG images, produced by  mathjax_latex(..., 'svg')
-    # and passed to the stylesheet as the  $mathfile  string parameter,
-    # will be wired in here, exactly as in the  epub()  routine
 
     # render the FO file as a PDF with Apache FOP, configured
     # by the  fop.xconf  file maintained in this distribution

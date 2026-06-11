@@ -36,7 +36,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    exclude-result-prefixes="pi"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    exclude-result-prefixes="pi svg"
 >
 
 <!-- Standard conversion groundwork -->
@@ -66,15 +67,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Incorporate (Meld) Mathematics -->
 <!-- ############################## -->
 
-<!-- Mathematics will be rendered by MathJax as SVG images, exactly as -->
-<!-- the EPUB conversion does (see  pretext-epub.xsl  and the  epub()  -->
-<!-- routine in  pretext/lib/pretext.py).  The  mathjax_latex()        -->
-<!-- routine produces a file of  pi:math-representations  elements,    -->
-<!-- passed in here as the  $mathfile  string parameter.  Eventually   -->
-<!-- (roadmap step 5) each math placeholder template below becomes a   -->
-<!-- lookup in  $math-repr, keyed on the "visible-id" of the math      -->
-<!-- element, whose SVG payload lands in an                            -->
-<!-- fo:instream-foreign-object.                                       -->
+<!-- Mathematics is rendered by MathJax as SVG images, exactly as the -->
+<!-- EPUB conversion does (see  pretext-epub.xsl  and the  epub()     -->
+<!-- routine in  pretext/lib/pretext.py).  The  mathjax_latex()       -->
+<!-- routine produces a file of  pi:math-representations  elements,   -->
+<!-- passed in here as the  $mathfile  string parameter by the        -->
+<!-- pdf_fo()  routine.  Absent the parameter (e.g. a bare "-f fo"    -->
+<!-- build), mathematics renders as boxed placeholders; see the       -->
+<!-- "Mathematics" section below for both.                            -->
 <xsl:param name="mathfile" select="''"/>
 <xsl:variable name="math-repr" select="document($mathfile)/pi:math-representations"/>
 
@@ -567,20 +567,104 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2033;</xsl:text>
 </xsl:template>
 
-<!-- ########################## -->
-<!-- Mathematics (Placeholders) -->
-<!-- ########################## -->
+<!-- ########### -->
+<!-- Mathematics -->
+<!-- ########### -->
 
-<!-- Placeholders: the authored LaTeX, visibly boxed, in a monospace -->
-<!-- font.  To be replaced by MathJax-produced SVG images via the    -->
-<!-- $math-repr  variable above (roadmap step 5).                    -->
-<xsl:template match="m">
+<!-- Each math element looks up its MathJax-produced SVG in the    -->
+<!-- $math-repr file by its "unique-id" (the EPUB model), and the  -->
+<!-- SVG embeds in the page as an fo:instream-foreign-object.      -->
+<!-- MathJax sizes its SVG in "ex" units of its TeX fonts, where   -->
+<!-- one "ex" is 0.442em (visible in any "viewBox", which uses     -->
+<!-- thousandths of an em).  Batik, FOP's SVG engine, cannot use   -->
+<!-- "ex" lengths, nor does FOP scale an SVG to a "content-width", -->
+<!-- so all measurements convert to points, via the body font      -->
+<!-- size, and are written directly onto the SVG element.          -->
+<xsl:variable name="mathjax-em-per-ex" select="0.442"/>
+<!-- $font-size is a number with "pt" attached -->
+<xsl:variable name="math-points-per-ex"
+              select="$mathjax-em-per-ex * number(substring-before($font-size, 'pt'))"/>
+
+<!-- For inline math, the CSS "vertical-align" drop below the     -->
+<!-- baseline (on the SVG's @style) carries over directly as the  -->
+<!-- FO "alignment-adjust": FOP raises the object by the length,  -->
+<!-- so the (negative) drop lowers it below the baseline, exactly -->
+<!-- as in CSS (verified empirically, 2026-06-11).                -->
+<xsl:template match="m|me|men|md|mdn">
+    <xsl:variable name="id">
+        <xsl:apply-templates select="." mode="unique-id"/>
+    </xsl:variable>
+    <xsl:variable name="svg" select="$math-repr/pi:math[@id = $id]/div[@class = 'svg']/svg:svg"/>
+    <xsl:variable name="width-points"
+                  select="number(substring-before($svg/@width, 'ex')) * $math-points-per-ex"/>
+    <xsl:variable name="height-points"
+                  select="number(substring-before($svg/@height, 'ex')) * $math-points-per-ex"/>
+    <xsl:choose>
+        <xsl:when test="$svg and self::m">
+            <xsl:variable name="drop-ex">
+                <xsl:choose>
+                    <xsl:when test="contains($svg/@style, 'vertical-align:')">
+                        <xsl:value-of select="number(substring-before(substring-after($svg/@style, 'vertical-align:'), 'ex'))"/>
+                    </xsl:when>
+                    <xsl:otherwise>0</xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <fo:instream-foreign-object alignment-adjust="{format-number($drop-ex * $math-points-per-ex, '0.####')}pt">
+                <xsl:apply-templates select="$svg" mode="svg-meld">
+                    <xsl:with-param name="width-points" select="$width-points"/>
+                    <xsl:with-param name="height-points" select="$height-points"/>
+                </xsl:apply-templates>
+            </fo:instream-foreign-object>
+        </xsl:when>
+        <!-- display mathematics, in a centered block; absorbed -->
+        <!-- clause-ending punctuation is already in the SVG    -->
+        <xsl:when test="$svg">
+            <fo:block text-align="center" space-before="0.5em" space-after="0.5em">
+                <fo:instream-foreign-object>
+                    <xsl:apply-templates select="$svg" mode="svg-meld">
+                        <xsl:with-param name="width-points" select="$width-points"/>
+                        <xsl:with-param name="height-points" select="$height-points"/>
+                    </xsl:apply-templates>
+                </fo:instream-foreign-object>
+            </fo:block>
+        </xsl:when>
+        <!-- absent a math representations file (a bare "-f fo" -->
+        <!-- build, with no $mathfile), a placeholder           -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="math-placeholder"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A copy of the SVG with computed sizes: the "ex" lengths of   -->
+<!-- @width, @height, and @style drop, replaced by point lengths; -->
+<!-- the retained @viewBox supplies the aspect ratio.             -->
+<xsl:template match="svg:svg" mode="svg-meld">
+    <xsl:param name="width-points"/>
+    <xsl:param name="height-points"/>
+    <xsl:copy>
+        <xsl:copy-of select="@*[not(name() = 'style') and not(name() = 'width') and not(name() = 'height')]"/>
+        <xsl:attribute name="width">
+            <xsl:value-of select="format-number($width-points, '0.####')"/>
+            <xsl:text>pt</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:value-of select="format-number($height-points, '0.####')"/>
+            <xsl:text>pt</xsl:text>
+        </xsl:attribute>
+        <xsl:copy-of select="node()"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Placeholders: the authored LaTeX, visibly boxed, in a -->
+<!-- monospace font.                                       -->
+<xsl:template match="m" mode="math-placeholder">
     <fo:inline font-family="monospace" border="0.5pt solid #888888" padding="0pt 2pt">
         <xsl:value-of select="."/>
     </fo:inline>
 </xsl:template>
 
-<xsl:template match="me|men|md|mdn">
+<xsl:template match="me|men|md|mdn" mode="math-placeholder">
     <fo:block font-family="monospace"
               border="0.5pt solid #888888"
               padding="2pt"
