@@ -1213,6 +1213,88 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2033;</xsl:text>
 </xsl:template>
 
+<!-- ########## -->
+<!-- Hyperlinks -->
+<!-- ########## -->
+
+<!-- Active links are a conservative dark blue (well above the -->
+<!-- WCAG contrast threshold on white paper), and underlining  -->
+<!-- honors the publisher's LaTeX link-highlight choice.       -->
+<xsl:template name="link-attributes">
+    <xsl:attribute name="color">
+        <xsl:text>#000080</xsl:text>
+    </xsl:attribute>
+    <xsl:if test="$latex-link-highlight = 'underline'">
+        <xsl:attribute name="text-decoration">
+            <xsl:text>underline</xsl:text>
+        </xsl:attribute>
+    </xsl:if>
+</xsl:template>
+
+<!-- A "url" (or "dataurl") is an active external link.  Visible -->
+<!-- text is the element's content, or else the "visual" URL     -->
+<!-- (authored, or manufactured during assembly) in a monospace  -->
+<!-- font.  Inside a title the link is inactive, as in the HTML  -->
+<!-- conversion.                                                 -->
+<xsl:template match="url|dataurl">
+    <xsl:variable name="uri">
+        <xsl:choose>
+            <!-- "url" and "dataurl" both support external @href -->
+            <xsl:when test="@href">
+                <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- a "dataurl" might be local, @source is      -->
+            <!-- indication, so prefix with a local path/URI -->
+            <xsl:when test="self::dataurl and @source">
+                <xsl:value-of select="$external-directory"/>
+                <xsl:value-of select="@source"/>
+            </xsl:when>
+            <!-- empty will be non-functional -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="visible-text">
+        <xsl:choose>
+            <xsl:when test="node()">
+                <xsl:apply-templates/>
+            </xsl:when>
+            <xsl:otherwise>
+                <fo:inline font-family="{$font-family-monospace}">
+                    <xsl:choose>
+                        <xsl:when test="@visual">
+                            <xsl:value-of select="@visual"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$uri"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </fo:inline>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="ancestor::title|ancestor::shorttitle|ancestor::subtitle">
+            <xsl:copy-of select="$visible-text"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:basic-link external-destination="url({$uri})">
+                <xsl:call-template name="link-attributes"/>
+                <xsl:copy-of select="$visible-text"/>
+            </fo:basic-link>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- An "email" address is an active "mailto:" link. -->
+<xsl:template match="email">
+    <fo:basic-link external-destination="url(mailto:{normalize-space(.)})">
+        <xsl:call-template name="link-attributes"/>
+        <fo:inline font-family="{$font-family-monospace}">
+            <xsl:value-of select="normalize-space(.)"/>
+        </fo:inline>
+    </fo:basic-link>
+</xsl:template>
+
 <!-- ################ -->
 <!-- Cross-References -->
 <!-- ################ -->
