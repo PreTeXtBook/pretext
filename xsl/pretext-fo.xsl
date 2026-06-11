@@ -217,6 +217,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- A "paragraphs" is the lightweight, unnumbered division: just -->
+<!-- its title, bold, run in to the leading paragraph (exactly    -->
+<!-- the LaTeX treatment).                                        -->
+<xsl:template match="paragraphs">
+    <fo:block space-before="1em" space-after="1em">
+        <xsl:variable name="heading">
+            <fo:inline font-weight="bold" font-style="normal">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="heading-then-content">
+            <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
 <!-- A "title" is consumed by modal templates reached from the     -->
 <!-- parent element, and is never traversed as content, so it is   -->
 <!-- killed in the default mode.  Likewise the other metadata:     -->
