@@ -62,7 +62,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- * The "repair" templates will automatically repair deprecated -->
 <!--   constructions so that actual conversions can remove         -->
 <!--   orphaned code.  Despite the name, we also implement         -->
-<!--   conveniences that are universal accross all conversions, so -->
+<!--   conveniences that are universal across all conversions, so  -->
 <!--   that conversions can assume a more canonical version of the -->
 <!--   source, or remove the need for additional templates to      -->
 <!--   realize certain constructions.  This creates the            -->
@@ -223,7 +223,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   * We default here to "static".  HTML production will override     -->
 <!--     to "dynamic" and then any importing stylesheet will need to     -->
 <!--     override back to "static".                                      -->
-<!--   * 'pg-problems' are WeBWork problems for an archive               -->
+<!--   * 'pg-problems' are WeBWorK problems for an archive               -->
 <!--   * If testing, the pretext-enhanced-source.xsl  stylesheet will    -->
 <!--     need a stringparam override to view and test dynamic versions.  -->
 <xsl:variable name="exercise-style" select="'static'"/>
@@ -237,7 +237,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- publisher features.  When we stop this early, "exercise-style" is     -->
 <!-- irrelevant.                                                           -->
 
-<!-- default is empty, so we ccan detect non-use -->
+<!-- default is empty, so we can detect non-use -->
 <xsl:param name="assembly.version-only" select="''"/>
 <xsl:param name="assembly.assembly-id-only" select="''"/>
 
@@ -247,7 +247,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="assembly.debug" select="''"/>
 <xsl:variable name="b-assembly-debug" select="$assembly.debug = 'yes'"/>
 
-<!-- onvert to a boolean, with error-checking -->
+<!-- convert to a boolean, with error-checking -->
 <xsl:variable name="version-only">
     <xsl:choose>
         <xsl:when test="$assembly.version-only = ''">
@@ -301,7 +301,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Other objects are extracted, then processed (sent to a server   -->
 <!-- typically), and a "static" PreTeXt version, in valid PreTeXt    -->
 <!-- syntax, is returned and captured in files by the Python         -->
-<!-- extraction step.  Then in a general aplication of this          -->
+<!-- extraction step.  Then in a general application of this         -->
 <!-- stylesheet to produce static output formats, those files are    -->
 <!-- read and the static versions are substituted into the eventual  -->
 <!-- source, for processing by stylesheets producing less-capable    -->
@@ -313,7 +313,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   Dynamic Fill-in-the-Blank (FITB), bibliography                -->
 <!--   entries, and QR codes                                         -->
 <!--                                                                 -->
-<!-- But there is a "cicken-and-egg condition" if two such objects   -->
+<!-- But there is a "chicken-and-egg condition" if two such objects  -->
 <!-- are present in a fresh, un-processed, source document.  The     -->
 <!-- extraction of the first object will also try to "sub in" the    -->
 <!-- static versions of the second object from its                   -->
@@ -936,7 +936,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- reset when provided by authors on elements (ideally via @label).  -->
 <!-- Otherwise the tree structure is reflected by location at each     -->
 <!-- level of the subtree rooted at the last authored string.  A bit   -->
-<!-- unsightly, and only partialy effective to unwind the numers back  -->
+<!-- unsightly, and only partially effective to unwind numbers back    -->
 <!-- to an element.  But super-fast to construct and reliably unique   -->
 <!-- (though an author could provide two strings that make a conflict, -->
 <!-- we believe).                                                      -->
@@ -962,7 +962,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <!-- This mimics the upgrade of an authored xml:id to a label -->
                 <!-- NB: this might not ever happen in some passes, when an   -->
-                <!-- @xml:id value has been upgraed to a @label value in a    -->
+                <!-- @xml:id value has been upgraded to a @label value in a   -->
                 <!-- prior pass, because if there was an @xml:id, then it     -->
                 <!-- was upgraded to being a @label and if this "choose" gets -->
                 <!-- here, then the next test is false.                       -->
@@ -1459,7 +1459,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy>
         <!-- Record one of five categories for customization, which    -->
         <!-- are not relevant for "example" (always inline), or "task" -->
-        <!-- (always just a component of something larger).  WeBWork   -->
+        <!-- (always just a component of something larger).  WeBWorK   -->
         <!-- problems are interactive or static, inline or not, based  -->
         <!-- on publisher options.                                     -->
         <xsl:if test="not(self::task)">
@@ -1551,7 +1551,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="select">
                 <xsl:text>select</xsl:text>
             </xsl:when>
-            <!-- noted WeBWork earlier, so this is Runestone fillin -->
+            <!-- noted WeBWorK earlier, so this is Runestone fillin -->
             <xsl:when test="statement//var">
                 <xsl:text>fillin-basic</xsl:text>
             </xsl:when>
