@@ -338,6 +338,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- The indicated portion will be localized.  "heading" might be   -->
     <!-- replaced by "description" if that is easier to translate.      -->
     <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
+    <!-- Permalink toggle button in navbar -->
+    <localization string-id='permalink-enable'>Enable Permalinks</localization>
+    <localization string-id='permalink-disable'>Disable Permalinks</localization>
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->
