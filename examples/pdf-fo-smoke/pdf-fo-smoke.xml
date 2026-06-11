@@ -52,7 +52,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-mathematics" label="section-mathematics">
             <title>Mathematics</title>
 
-            <p>Inline mathematics, such as <m>a^2 + b^2 = c^2</m>, renders as a boxed placeholder for now.  Display mathematics interrupts a paragraph,
+            <p>Inline mathematics, such as <m>a^2 + b^2 = c^2</m>, renders from an SVG image produced by MathJax, sized and placed on the baseline.  Display mathematics interrupts a paragraph,
                 <md>
                     <mrow>\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</mrow>
                 </md>
