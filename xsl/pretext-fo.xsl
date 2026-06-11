@@ -217,10 +217,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
-<!-- A "title" is consumed by modal templates reached from the   -->
-<!-- parent element, and is never traversed as content, so it is -->
-<!-- killed in the default mode ("subtitle" likewise).           -->
-<xsl:template match="title|subtitle"/>
+<!-- A "title" is consumed by modal templates reached from the     -->
+<!-- parent element, and is never traversed as content, so it is   -->
+<!-- killed in the default mode.  Likewise the other metadata:     -->
+<!-- "idx" (index entries), "notation", and image descriptions all -->
+<!-- render elsewhere (or not yet), never as in-place content.     -->
+<xsl:template match="title|subtitle|idx|notation|shortdescription|description"/>
 
 <!-- ########## -->
 <!-- Paragraphs -->
