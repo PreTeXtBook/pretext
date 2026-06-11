@@ -371,6 +371,114 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
+<!-- ##### -->
+<!-- Lists -->
+<!-- ##### -->
+
+<!-- Ordered and unordered lists are fo:list-block constructions. -->
+<!-- The provisional label width is fixed, and generous; deep or  -->
+<!-- wide markers (e.g. "xviii.") may eventually warrant a width  -->
+<!-- computed from the actual labels.                             -->
+<xsl:template match="ol|ul">
+    <fo:list-block provisional-distance-between-starts="2em"
+                   provisional-label-separation="0.25em"
+                   space-before="0.5em"
+                   space-after="0.5em">
+        <xsl:apply-templates select="li"/>
+    </fo:list-block>
+</xsl:template>
+
+<xsl:template match="ol/li|ul/li">
+    <fo:list-item>
+        <fo:list-item-label end-indent="label-end()">
+            <fo:block text-align="end">
+                <xsl:apply-templates select="." mode="list-label"/>
+            </fo:block>
+        </fo:list-item-label>
+        <fo:list-item-body start-indent="body-start()">
+            <xsl:apply-templates select="." mode="list-item-content"/>
+        </fo:list-item-body>
+    </fo:list-item>
+</xsl:template>
+
+<!-- The assembly stylesheet stamps every "ol" with @format-code  -->
+<!-- ('1', 'a', 'A', 'i', 'I', or '0' for a zero-based list), and -->
+<!-- with @marker-prefix and @marker-suffix adornments, all       -->
+<!-- deconstructed from any authored @marker.                     -->
+<xsl:template match="ol/li" mode="list-label">
+    <xsl:variable name="the-position" select="count(preceding-sibling::li) + 1"/>
+    <xsl:value-of select="parent::ol/@marker-prefix"/>
+    <xsl:choose>
+        <!-- a zero-based list counts from zero, in arabic numerals -->
+        <xsl:when test="parent::ol/@format-code = '0'">
+            <xsl:number value="$the-position - 1" format="1"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:number value="$the-position" format="{parent::ol/@format-code}"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="parent::ol/@marker-suffix"/>
+</xsl:template>
+
+<!-- Bullets via the "format-code" machinery of pretext-common.xsl, -->
+<!-- which cycles disc, circle, square by level, and honors an      -->
+<!-- authored @marker (the empty @marker giving no bullet at all).  -->
+<xsl:template match="ul/li" mode="list-label">
+    <xsl:variable name="format-code">
+        <xsl:apply-templates select="parent::ul" mode="format-code"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$format-code = 'disc'">
+            <xsl:text>&#x2022;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$format-code = 'circle'">
+            <xsl:text>&#x25e6;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$format-code = 'square'">
+            <xsl:text>&#x25aa;</xsl:text>
+        </xsl:when>
+        <!-- 'none' -->
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Any of these children indicates a structured list item,  -->
+<!-- per the schema; otherwise the item is mixed content, set -->
+<!-- as a single paragraph.                                   -->
+<xsl:template match="li" mode="list-item-content">
+    <xsl:choose>
+        <xsl:when test="p|blockquote|pre|image|video|program|console|tabular|&FIGURE-LIKE;|&ASIDE-LIKE;|sidebyside|sbsgroup|sage">
+            <xsl:apply-templates select="*"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:block text-align="justify" space-after="0.5em">
+                <xsl:apply-templates/>
+            </fo:block>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A description list is a sequence of blocks, each with the -->
+<!-- (required) title of the item as a bold run-in heading.  A -->
+<!-- "dl/li" is always structured.                             -->
+<xsl:template match="dl">
+    <fo:block space-before="0.5em" space-after="0.5em">
+        <xsl:apply-templates select="li"/>
+    </fo:block>
+</xsl:template>
+
+<xsl:template match="dl/li">
+    <xsl:variable name="heading">
+        <fo:inline font-weight="bold" font-style="normal">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </fo:inline>
+        <xsl:text> </xsl:text>
+    </xsl:variable>
+    <xsl:call-template name="heading-then-content">
+        <xsl:with-param name="heading" select="$heading"/>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- ############# -->
 <!-- Inline Markup -->
 <!-- ############# -->
