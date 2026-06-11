@@ -34,7 +34,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>This is the first paragraph of a minimal article, used to exercise the conversion of PreTeXt source to XSL Formatting Objects, and then to a PDF by Apache FOP.  A paragraph is the fundamental unit of prose, so it is the first element implemented, and this one is long enough to demonstrate line-breaking and justification.</p>
 
-            <p>A second paragraph demonstrates inter-paragraph spacing.  It contains some inline markup, such as <em>emphasized text</em> and a <term>defined term</term>, which the conversion does not yet implement, and so will be reported on the console and dropped from the output.</p>
+            <p>A second paragraph demonstrates inter-paragraph spacing.  It contains some inline markup, such as <em>emphasized text</em> and a <term>defined term</term>, rendered with italic and bold fonts.</p>
+        </section>
+
+        <section xml:id="section-inline" label="section-inline">
+            <title>Inline Markup</title>
+
+            <p>Semantic markup, mostly by font: <em>emphasis</em>, a <term>defined term</term>, an <alert>alert</alert>, a <foreign xml:lang="la">lingua aliena</foreign>, the book <pubtitle>A First Course in Linear Algebra</pubtitle>, the paper <articletitle>On Computable Numbers</articletitle>, and the species <taxon>Quercus garryana</taxon>.</p>
+
+            <p>Edits as <insert>inserted</insert>, <delete>deleted</delete>, and <stale>stale</stale> text.  Verbatim text such as <c>print("Hello, world")</c>, and markup-language fragments like <tag>section</tag>, <tage>mdash</tage>, and <attr>xml:id</attr>.</p>
+
+            <p>Quotations, <q>double</q> and <sq>single</sq>.  Dashes for ranges, 2023<ndash/>2024, and for asides<mdash/>like this one.  An ellipsis<ellipsis/> and a few characters: 98.6<degree/>, 3<times/>5, <copyright/>, <trademark/>, and the <pretext/> logo itself.</p>
+
+            <p>Abbreviations render plainly: an acronym like <acro>SCUBA</acro>, an initialism like <init>XML</init>, and Latin abbreviations, <eg/>, this very sentence.</p>
         </section>
 
         <section xml:id="section-mathematics" label="section-mathematics">
