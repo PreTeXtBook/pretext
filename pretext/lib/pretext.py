@@ -3909,6 +3909,28 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     common.xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
 
+# Like latex() above, this is mostly a convenience for developers:
+# the XSL-FO file is an intermediate format on the way to a PDF,
+# though it does stand alone as the input to any XSL-FO formatter.
+def fo(xml, pub_file, stringparams, out_file, dest_dir):
+    """Convert XML source to XSL-FO in destination directory"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    # support publisher file, not subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+
+    extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "pretext-fo.xsl")
+    # form output filename based on source filename,
+    # unless an  out_file  has been specified
+    derivedname = common.get_output_filename(xml, out_file, dest_dir, ".fo")
+    # Write output into working directory, no scratch space needed
+    log.info("converting {} to XSL-FO as {}".format(xml, derivedname))
+    common.xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
+
+
 ###################
 # Conversion to PDF
 ###################
@@ -4037,6 +4059,74 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
             else:
                 shutil.copy2(pdfname, dest_dir)
 
+
+def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
+    """
+    Generate a PDF from an XML source using XSL-FO as an intermediate
+    format, rendered by Apache FOP.  This is a LaTeX-free route to a
+    PDF, experimental and very incomplete.
+
+    Args:
+        xml (str): Path to the XML source file.
+        pub_file (str or None): Path to the publisher configuration file, or None if not used.
+        stringparams (dict): Dictionary of string parameters to control the transformation.
+        out_file (str or None): Path to the output PDF file. If None, the PDF is copied to dest_dir.
+        dest_dir (str): Directory where the output PDF should be placed if out_file is not specified.
+
+    Returns:
+        None
+
+    Side Effects:
+        - Copies the generated PDF to the specified output location.
+    """
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    generated_abs, external_abs = common.get_managed_directories(xml, pub_file)
+    # Consult source for additional files
+    data_dir = common.get_source_directories(xml)
+
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    # name for scratch directory
+    tmp_dir = common.get_temporary_directory()
+
+    # make the XSL-FO file in scratch directory
+    # (1) pass None as out_file to derive from XML source filename
+    # (2) pass tmp_dir (scratch) as destination directory
+    fo(xml, pub_file, stringparams, None, tmp_dir)
+
+    # Create localized filenames for the FOP rendering step
+    # foname  needs to match behavior of fo() with above arguments
+    basename = os.path.splitext(os.path.split(xml)[1])[0]
+    foname = os.path.join(tmp_dir, basename + ".fo")
+    pdfname = os.path.join(tmp_dir, basename + ".pdf")
+
+    # Make image files available, relative to the FO file
+    common.copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
+
+    # Mathematics as SVG images, produced by  mathjax_latex(..., 'svg')
+    # and passed to the stylesheet as the  $mathfile  string parameter,
+    # will be wired in here, exactly as in the  epub()  routine
+
+    # render the FO file as a PDF with Apache FOP, configured
+    # by the  fop.xconf  file maintained in this distribution
+    fop_exec_cmd = common.get_executable_cmd("fop")
+    fop_xconf = os.path.join(common.get_ptx_path(), "pretext", "fop.xconf")
+    fop_cmd = fop_exec_cmd + ["-c", fop_xconf, "-fo", foname, "-pdf", pdfname]
+    log.info("rendering {} as {} with Apache FOP".format(foname, pdfname))
+    log.debug("FOP command: {}".format(" ".join(fop_cmd)))
+    result = subprocess.run(fop_cmd)
+    if result.returncode != 0:
+        raise OSError("Apache FOP rendering of {} failed".format(foname))
+
+    # Copy just the PDF output
+    # out_file: not(None) only if provided in CLI
+    # dest_dir: always defined, if only current directory of CLI invocation
+    if out_file:
+        shutil.copy2(pdfname, out_file)
+    else:
+        shutil.copy2(pdfname, dest_dir)
 
 
 #################
