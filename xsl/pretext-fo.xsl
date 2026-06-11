@@ -165,6 +165,63 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:root>
 </xsl:template>
 
+<!-- ##################### -->
+<!-- Traditional Divisions -->
+<!-- ##################### -->
+
+<!-- The traditional divisions: titled headings, then a recursion  -->
+<!-- through the contents.  Numbers, localized type names, and     -->
+<!-- titles all come from the machinery of  pretext-common.xsl.    -->
+<!-- Specialized divisions, and front and back matter, come later. -->
+
+<!-- The document root.  A real title page is far in the future, -->
+<!-- so the document title renders as a large, centered heading. -->
+<xsl:template match="article|book">
+    <fo:block font-size="200%"
+              font-weight="bold"
+              text-align="center"
+              space-after="2em">
+        <xsl:apply-templates select="." mode="title-full"/>
+    </fo:block>
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- A heading: optional localized "type-name number", then the     -->
+<!-- title.  An unnumbered division (perhaps numbering is limited   -->
+<!-- by the publisher's numbering level) gets a title-only heading. -->
+<xsl:template match="chapter|section|subsection|subsubsection">
+    <xsl:variable name="heading-size">
+        <xsl:choose>
+            <xsl:when test="self::chapter">170%</xsl:when>
+            <xsl:when test="self::section">140%</xsl:when>
+            <xsl:when test="self::subsection">120%</xsl:when>
+            <xsl:when test="self::subsubsection">100%</xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="number"/>
+    </xsl:variable>
+    <fo:block font-size="{$heading-size}"
+              font-weight="bold"
+              space-before="1.5em"
+              space-after="0.75em"
+              keep-with-next.within-page="always">
+        <xsl:if test="not($the-number = '')">
+            <xsl:apply-templates select="." mode="type-name"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$the-number"/>
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="title-full"/>
+    </fo:block>
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- A "title" is consumed by modal templates reached from the   -->
+<!-- parent element, and is never traversed as content, so it is -->
+<!-- killed in the default mode ("subtitle" likewise).           -->
+<xsl:template match="title|subtitle"/>
+
 <!-- ########## -->
 <!-- Paragraphs -->
 <!-- ########## -->
