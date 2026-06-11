@@ -26,6 +26,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <fop version="1.0">
 
+    <!-- Always-on accessibility: FOP derives a Tagged PDF structure -->
+    <!-- tree from the formatting objects, honoring @role and        -->
+    <!-- @fox:alt-text decorations made by  pretext-fo.xsl.          -->
+    <accessibility>true</accessibility>
+
     <!-- No "base" element: relative URLs (image files) then resolve -->
     <!-- against the current working directory, and the  pdf_fo()    -->
     <!-- routine runs FOP in the scratch directory holding the       -->
@@ -43,6 +48,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <renderers>
         <renderer mime="application/pdf">
+            <!-- Declare conformance with PDF/UA-1 (ISO 14289-1, the  -->
+            <!-- accessibility standard).  FOP then *refuses* to      -->
+            <!-- render a violation (a missing document title, a      -->
+            <!-- non-embedded font), so a regression cannot slip by.  -->
+            <pdf-ua-mode>PDF/UA-1</pdf-ua-mode>
             <fonts>
                 <!-- Scan the operating system for available fonts.  The     -->
                 <!-- stylesheet requests "DejaVu Serif", a Unicode-capable   -->
