@@ -587,6 +587,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- Keyboard keys, visibly boxed.  A @name indexes the Unicode -->
+<!-- column of the key table in  pretext-common.xsl.            -->
+<xsl:template match="kbd[not(@name)]">
+    <fo:inline font-family="monospace" border="0.5pt solid #888888" padding="0pt 2pt">
+        <xsl:value-of select="."/>
+    </fo:inline>
+</xsl:template>
+
+<xsl:template match="kbd[@name]">
+    <xsl:variable name="kbdkey-name" select="@name"/>
+    <fo:inline font-family="monospace" border="0.5pt solid #888888" padding="0pt 2pt">
+        <!-- for-each is just one node, but sets context for key() -->
+        <xsl:for-each select="$kbdkey-table">
+            <xsl:value-of select="key('kbdkey-key', $kbdkey-name)/@unicode"/>
+        </xsl:for-each>
+    </fo:inline>
+</xsl:template>
+
 <!-- Implementations of abstract templates from  pretext-common.xsl. -->
 <!-- The generic machinery there (inline verbatim text, bibliography -->
 <!-- entries, internal markup) calls on these for output-specific    -->
