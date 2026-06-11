@@ -56,19 +56,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   valid PreTeXt (when perhaps the authored source was not).   -->
 <!-- * The modal "assembly" templates are applied to the source    -->
 <!--   root element, creating a new version of the source, which   -->
-<!--   has been "enhanced".  Various things happen in this pass,   -->
-<!--   such as assembling auxiliary files of content (WeBWorK      -->
-<!--   representations, private solutions, bibliographic items).   -->
-<!--   This creates the $assembly source tree by *adding* new      -->
-<!--   source elements.                                            -->
+<!--   has been "enhanced".  This pass assembles computed          -->
+<!--   content (most visibly the bibliography), creating the       -->
+<!--   $assembly source tree by *adding* new source elements.      -->
 <!-- * The "repair" templates will automatically repair deprecated -->
 <!--   constructions so that actual conversions can remove         -->
 <!--   orphaned code.  Despite the name, we also implement         -->
 <!--   conveniences that are universal accross all conversions, so -->
 <!--   that conversions can assume a more canonical version of the -->
 <!--   source, or remove the need for additional templates to      -->
-<!--   realize certain constructions (e.g. url/@visual).  This     -->
-<!--   creates the $repair source tree by *changing* source.       -->
+<!--   realize certain constructions.  This creates the            -->
+<!--   $repair source tree by *changing* source.                   -->
 <!-- * $root will point to the root of the final enhanced          -->
 <!--   source file/tree/XML.                                       -->
 <!-- * Derived variables, $docinfo and $document-root, will        -->
@@ -311,8 +309,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                 -->
 <!-- Such objects are:                                               -->
 <!--                                                                 -->
-<!--   WeBWorK (WW/PG), MyOpenMath (MOM),                            -->
-<!--   Dynamic Fill-in-the-Blank (FITB)                              -->
+<!--   WeBWorK (WW/PG), MyOpenMath (MOM), STACK,                     -->
+<!--   Dynamic Fill-in-the-Blank (FITB), bibliography                -->
+<!--   entries, and QR codes                                         -->
 <!--                                                                 -->
 <!-- But there is a "cicken-and-egg condition" if two such objects   -->
 <!-- are present in a fresh, un-processed, source document.  The     -->
