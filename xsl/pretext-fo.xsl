@@ -181,11 +181,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <x:xmpmeta xmlns:x="adobe:ns:meta/">
                 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
                     <rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                        <!-- The XMP specification requires "dc:title" to be a   -->
+                        <!-- language-alternative array, never bare text, and    -->
+                        <!-- PDF/UA validators check the structure (ISO 14289-1, -->
+                        <!-- clause 7.1).                                        -->
                         <dc:title>
-                            <xsl:variable name="document-title">
-                                <xsl:apply-templates select="$document-root" mode="title-simple"/>
-                            </xsl:variable>
-                            <xsl:value-of select="normalize-space($document-title)"/>
+                            <rdf:Alt>
+                                <rdf:li xml:lang="x-default">
+                                    <xsl:variable name="document-title">
+                                        <xsl:apply-templates select="$document-root" mode="title-simple"/>
+                                    </xsl:variable>
+                                    <xsl:value-of select="normalize-space($document-title)"/>
+                                </rdf:li>
+                            </rdf:Alt>
                         </dc:title>
                     </rdf:Description>
                 </rdf:RDF>
