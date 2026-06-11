@@ -141,13 +141,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Entry -->
 <!-- ##### -->
 
-<!-- Deprecation warnings are universal, so issued here on the        -->
-<!-- original source, before attention turns to the assembled source. -->
-<!-- The font families are Unicode-capable, and declared, fully       -->
+<!-- Deprecation warnings are universal, so issued here on the         -->
+<!-- original source, before attention turns to the assembled source.  -->
+<!-- The font families are Unicode-capable, and declared, fully        -->
 <!-- embedded, in the  fop.xconf  configuration.                       -->
-<!-- The document language (via @xml:lang) and the document title (in -->
-<!-- the XMP metadata of  fo:declarations) propagate to the PDF,      -->
-<!-- where PDF/UA (ISO 14289) and WCAG require them.                  -->
+<!-- The document language (via @xml:lang) and the document title (in  -->
+<!-- the XMP metadata of  fo:declarations) propagate to the PDF,       -->
+<!-- where PDF/UA (ISO 14289) and WCAG require them.                   -->
 <xsl:template match="/">
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
     <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
@@ -585,7 +585,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it, preserving the aspect ratio.  Restricted to externally  -->
 <!-- provided and pre-generated images; the harness reports the  -->
 <!-- born-in-source kinds (e.g. "latex-image"), which need       -->
-<!-- companion image-generation components.                      -->
+<!-- companion image-generation components.  N.B. an SVG file    -->
+<!-- must carry its intrinsic @width and @height: with only a    -->
+<!-- @viewBox, FOP assumes a square, and the drawing floats in   -->
+<!-- extra vertical space.                                       -->
 <xsl:template match="image[@source|@pi:generated]">
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage"/>
@@ -1292,7 +1295,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                   select="number(substring-before($svg/@height, 'ex')) * $math-points-per-ex"/>
     <xsl:choose>
         <xsl:when test="$svg and self::m">
-            <!-- for math sitting on the baseline (e.g. a lone digit), -->
+            <!-- for math sitting on the baseline (e.g. a lone digit),  -->
             <!-- MathJax writes "vertical-align: 0;", unitless, and the -->
             <!-- parse of the "ex" quantity comes up empty, not zero    -->
             <xsl:variable name="drop-raw" select="substring-before(substring-after($svg/@style, 'vertical-align:'), 'ex')"/>
