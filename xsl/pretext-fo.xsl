@@ -1319,9 +1319,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pretext-common.xsl implements all of "xref" processing:      -->
 <!-- target identification, error checking, and generation of the -->
 <!-- visible text.  It finishes in the abstract modal "xref-link" -->
-<!-- template, which here passes the text through undecorated.    -->
-<!-- Live internal links (fo:basic-link) require @id decorations  -->
-<!-- on the rendered objects first, a refinement for later.       -->
+<!-- template: an active internal link to the @id of the target.  -->
+<!-- A not-yet-implemented target has no @id in the output, and   -->
+<!-- the link is simply dead until its element joins up.          -->
 <xsl:template match="xref">
     <xsl:apply-imports/>
 </xsl:template>
@@ -1330,7 +1330,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="target"/>
     <xsl:param name="origin"/>
     <xsl:param name="content"/>
-    <xsl:copy-of select="$content"/>
+    <xsl:variable name="the-id">
+        <xsl:apply-templates select="$target" mode="unique-id"/>
+    </xsl:variable>
+    <fo:basic-link internal-destination="{$the-id}">
+        <xsl:call-template name="link-attributes"/>
+        <xsl:copy-of select="$content"/>
+    </fo:basic-link>
 </xsl:template>
 
 <!-- Hard-coded numbers, as in the HTML conversion: the number of -->
