@@ -236,6 +236,109 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Basic Blocks -->
+<!-- ############ -->
+
+<!-- The basic titled blocks: a bold heading from the localized    -->
+<!-- type-name, the number, and any title, then the contents.      -->
+<!-- All three block families use the one "block-heading" pattern. -->
+<xsl:template match="*" mode="block-heading">
+    <fo:block font-weight="bold" keep-with-next.within-page="always">
+        <xsl:apply-templates select="." mode="type-name"/>
+        <xsl:variable name="the-number">
+            <xsl:apply-templates select="." mode="number"/>
+        </xsl:variable>
+        <xsl:if test="not($the-number = '')">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$the-number"/>
+        </xsl:if>
+        <xsl:text>.</xsl:text>
+        <xsl:if test="title">
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:if>
+    </fo:block>
+</xsl:template>
+
+<xsl:template match="&REMARK-LIKE;">
+    <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="block-heading"/>
+        <xsl:apply-templates select="*"/>
+    </fo:block>
+</xsl:template>
+
+<!-- The statement of a THEOREM-LIKE is italic, by mathematical -->
+<!-- tradition, and any PROOF-LIKE follow it.                   -->
+<xsl:template match="&THEOREM-LIKE;">
+    <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="block-heading"/>
+        <xsl:choose>
+            <xsl:when test="statement">
+                <fo:block font-style="italic">
+                    <xsl:apply-templates select="statement"/>
+                </fo:block>
+                <xsl:apply-templates select="&PROOF-LIKE;"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="*"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </fo:block>
+</xsl:template>
+
+<xsl:template match="&EXAMPLE-LIKE;">
+    <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="block-heading"/>
+        <xsl:choose>
+            <xsl:when test="statement">
+                <xsl:apply-templates select="statement"/>
+                <xsl:apply-templates select="&SOLUTION-LIKE;"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="*"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </fo:block>
+</xsl:template>
+
+<!-- A general-purpose container, no possibilities enforced. -->
+<xsl:template match="statement">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- An italic run-in heading, the contents, and a right-aligned -->
+<!-- tombstone to finish.  The tombstone occupies its own line;  -->
+<!-- attaching it to the final line of the final paragraph is a  -->
+<!-- refinement for later.                                       -->
+<xsl:template match="&PROOF-LIKE;">
+    <fo:block space-before="1em" space-after="1em">
+        <fo:block font-style="italic" keep-with-next.within-page="always">
+            <xsl:apply-templates select="." mode="type-name"/>
+            <xsl:text>.</xsl:text>
+        </fo:block>
+        <xsl:apply-templates select="*"/>
+        <fo:block text-align-last="justify">
+            <fo:leader leader-pattern="space"/>
+            <!-- "DejaVu Serif" lacks END OF PROOF, the sans variant has it -->
+            <fo:inline font-family="DejaVu Sans, sans-serif">
+                <xsl:text>&#x220e;</xsl:text>
+            </fo:inline>
+        </fo:block>
+    </fo:block>
+</xsl:template>
+
+<!-- Solutions to EXAMPLE-LIKE, with an italic run-in heading. -->
+<xsl:template match="&SOLUTION-LIKE;">
+    <fo:block space-before="1em">
+        <fo:block font-style="italic" keep-with-next.within-page="always">
+            <xsl:apply-templates select="." mode="type-name"/>
+            <xsl:text>.</xsl:text>
+        </fo:block>
+        <xsl:apply-templates select="*"/>
+    </fo:block>
+</xsl:template>
+
 <!-- ############# -->
 <!-- Inline Markup -->
 <!-- ############# -->
