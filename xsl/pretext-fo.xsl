@@ -293,10 +293,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- The three block families are identical in structure; the   -->
-<!-- contents process in document order, so a "statement" leads -->
-<!-- and PROOF-LIKE or SOLUTION-LIKE follow.                    -->
-<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;">
+<!-- The block families are identical in structure; the contents -->
+<!-- process in document order, so a "statement" leads and       -->
+<!-- PROOF-LIKE or SOLUTION-LIKE follow.  (Only a THEOREM-LIKE   -->
+<!-- statement is italic, so a "definition" stays upright.)      -->
+<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;">
     <fo:block space-before="1em" space-after="1em">
         <xsl:variable name="heading">
             <xsl:apply-templates select="." mode="block-heading"/>
