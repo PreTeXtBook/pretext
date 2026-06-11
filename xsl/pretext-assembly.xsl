@@ -2853,6 +2853,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                    mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
 </xsl:template>
+<!-- A fill-in "task" is the "owner" that the dynamic-substitution lookup -->
+<!-- keys on, so it too must report its "@assembly-id" (matching the      -->
+<!-- "exercise//task" extraction in extract-dynamic.xsl).                 -->
+<xsl:template match="exercise//task[@exercise-interactive='fillin' and setup]
+                   | project//task[@exercise-interactive='fillin' and setup]
+                   | activity//task[@exercise-interactive='fillin' and setup]
+                   | exploration//task[@exercise-interactive='fillin' and setup]
+                   | investigation//task[@exercise-interactive='fillin' and setup]"
+                   mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
 
 <xsl:template match="datafile" mode="assembly-id">
     <xsl:value-of select="@assembly-id"/>
