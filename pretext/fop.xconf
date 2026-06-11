@@ -54,13 +54,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- non-embedded font), so a regression cannot slip by.  -->
             <pdf-ua-mode>PDF/UA-1</pdf-ua-mode>
             <fonts>
-                <!-- Scan the operating system for available fonts.  The     -->
-                <!-- stylesheet requests "DejaVu Serif", a Unicode-capable   -->
-                <!-- family which is then located, and embedded, by name.    -->
-                <!-- The first run builds a font cache, so will be slower.   -->
-                <!-- Embedding specific fonts (including a math font) will   -->
-                <!-- be configured here explicitly as this format matures.   -->
-                <auto-detect/>
+                <!-- Explicit, *fully* embedded fonts (no subsetting):     -->
+                <!-- FOP's subset embedding writes an incomplete CIDSet    -->
+                <!-- stream, which fails PDF/UA-1 validation (ISO 14289-1, -->
+                <!-- clause 7.21.4.2, observed with veraPDF).  Explicit    -->
+                <!-- declarations also avoid a slow, noisy scan of every   -->
+                <!-- system font.  The paths are Debian's; font choices    -->
+                <!-- will become publisher-configurable eventually.        -->
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf">
+                    <font-triplet name="DejaVu Serif" style="normal" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf">
+                    <font-triplet name="DejaVu Serif" style="normal" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf">
+                    <font-triplet name="DejaVu Serif" style="italic" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf">
+                    <font-triplet name="DejaVu Serif" style="italic" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf">
+                    <font-triplet name="DejaVu Sans Mono" style="normal" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf">
+                    <font-triplet name="DejaVu Sans Mono" style="normal" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf">
+                    <font-triplet name="DejaVu Sans Mono" style="italic" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf">
+                    <font-triplet name="DejaVu Sans Mono" style="italic" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf">
+                    <font-triplet name="DejaVu Sans" style="normal" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf">
+                    <font-triplet name="DejaVu Sans" style="normal" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf">
+                    <font-triplet name="DejaVu Sans" style="italic" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf">
+                    <font-triplet name="DejaVu Sans" style="italic" weight="bold"/>
+                </font>
             </fonts>
         </renderer>
     </renderers>
