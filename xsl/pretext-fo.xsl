@@ -825,6 +825,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="$content"/>
 </xsl:template>
 
+<!-- Hard-coded numbers, as in the HTML conversion: the number of -->
+<!-- the target, prefixed by a part number when the reference     -->
+<!-- crosses a part boundary under "structural" part numbering.   -->
+<xsl:template match="*" mode="xref-number">
+    <xsl:param name="xref" select="/.."/>
+    <xsl:variable name="needs-part-prefix">
+        <xsl:apply-templates select="." mode="crosses-part-boundary">
+            <xsl:with-param name="xref" select="$xref"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:if test="$needs-part-prefix = 'true'">
+        <xsl:apply-templates select="ancestor::part" mode="serial-number"/>
+        <xsl:text>.</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="number"/>
+</xsl:template>
+
+<!-- The exception: a local @tag on display mathematics -->
+<xsl:template match="mrow[@tag]" mode="xref-number">
+    <xsl:apply-templates select="@tag" mode="tag-symbol"/>
+</xsl:template>
+
+<xsl:template match="md[@pi:authored-one-line and mrow/@tag]" mode="xref-number">
+    <xsl:apply-templates select="mrow/@tag" mode="tag-symbol"/>
+</xsl:template>
+
 <!-- ########### -->
 <!-- Mathematics -->
 <!-- ########### -->
