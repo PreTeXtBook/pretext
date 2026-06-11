@@ -47,6 +47,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <p>Quotations, <q>double</q> and <sq>single</sq>.  Dashes for ranges, 2023<ndash/>2024, and for asides<mdash/>like this one.  An ellipsis<ellipsis/> and a few characters: 98.6<degree/>, 3<times/>5, <copyright/>, <trademark/>, and the <pretext/> logo itself.</p>
 
             <p>Abbreviations render plainly: an acronym like <acro>SCUBA</acro>, an initialism like <init>XML</init>, and Latin abbreviations, <eg/>, this very sentence.</p>
+
+            <p>Keyboard keys, named like <kbd name="enter"/> and <kbd name="shift"/>, or verbatim like <kbd>q</kbd>, render visibly boxed.</p>
         </section>
 
         <section xml:id="section-lists" label="section-lists">
@@ -99,41 +101,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-mathematics" label="section-mathematics">
             <title>Mathematics</title>
 
-            <p>Inline mathematics, such as <m>a^2 + b^2 = c^2</m>, renders from an SVG image produced by MathJax, sized and placed on the baseline.  Display mathematics interrupts a paragraph,
-                <md>
-                    <mrow>\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</mrow>
-                </md>
-            and the paragraph then continues with a bit more text.</p>
+            <introduction>
+                <p>Inline mathematics, such as <m>a^2 + b^2 = c^2</m>, renders from an SVG image produced by MathJax, sized and placed on the baseline.  Display mathematics interrupts a paragraph,
+                    <md>
+                        <mrow>\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</mrow>
+                    </md>
+                and the paragraph then continues with a bit more text.</p>
 
-            <remark xml:id="remark-placeholders" label="remark-placeholders">
-                <title>Blocks Have Headings</title>
-                <p>This remark is a basic titled block, with a heading assembled from its type, its number, and its title.</p>
-            </remark>
+                <remark xml:id="remark-placeholders" label="remark-placeholders">
+                    <title>Blocks Have Headings</title>
+                    <p>This remark is a basic titled block, with a heading assembled from its type, its number, and its title.</p>
+                </remark>
 
-            <theorem xml:id="theorem-pythagoras" label="theorem-pythagoras">
-                <title>Pythagoras</title>
-                <statement>
-                    <p>If a right triangle has legs <m>a</m> and <m>b</m>, and hypotenuse <m>c</m>, then <m>a^2 + b^2 = c^2</m>.</p>
-                </statement>
-                <proof>
-                    <p>Dissect a square with side length <m>a + b</m> in two different ways, and account for the areas.</p>
-                </proof>
-            </theorem>
+                <theorem xml:id="theorem-pythagoras" label="theorem-pythagoras">
+                    <title>Pythagoras</title>
+                    <statement>
+                        <p>If a right triangle has legs <m>a</m> and <m>b</m>, and hypotenuse <m>c</m>, then <m>a^2 + b^2 = c^2</m>.</p>
+                    </statement>
+                    <proof>
+                        <p>Dissect a square with side length <m>a + b</m> in two different ways, and account for the areas.</p>
+                    </proof>
+                </theorem>
 
-            <example xml:id="example-quadratic" label="example-quadratic">
-                <title>A Quadratic Equation</title>
-                <statement>
-                    <p>Solve <m>x^2 - 5x + 6 = 0</m>.</p>
-                </statement>
-                <solution>
-                    <p>The left side factors as <m>(x-2)(x-3)</m>, so the solutions are <m>x = 2</m> and <m>x = 3</m>.</p>
-                </solution>
-            </example>
+                <example xml:id="example-quadratic" label="example-quadratic">
+                    <title>A Quadratic Equation</title>
+                    <statement>
+                        <p>Solve <m>x^2 - 5x + 6 = 0</m>.</p>
+                    </statement>
+                    <solution>
+                        <p>The left side factors as <m>(x-2)(x-3)</m>, so the solutions are <m>x = 2</m> and <m>x = 3</m>.</p>
+                    </solution>
+                </example>
+
+                <definition xml:id="definition-hypotenuse" label="definition-hypotenuse">
+                    <title>Hypotenuse</title>
+                    <statement>
+                        <p>The <term>hypotenuse</term> of a right triangle is the side opposite the right angle.</p>
+                    </statement>
+                </definition>
+
+                <paragraphs xml:id="paragraphs-history" label="paragraphs-history">
+                    <title>A Little History</title>
+                    <p>The lightweight <tag>paragraphs</tag> division has just a title, run in to this paragraph.  Cross-references work too: see <xref ref="theorem-pythagoras"/>, <xref ref="definition-hypotenuse"/>, and <xref ref="section-images"/>, all referenced from <xref ref="paragraphs-history" text="title"/>.</p>
+                </paragraphs>
+            </introduction>
 
             <subsection xml:id="subsection-depth" label="subsection-depth">
                 <title>Depth</title>
 
-                <p>A subsection exercises a deeper heading, and a two-level number.</p>
+                <introduction>
+                    <p>A subsection exercises a deeper heading, and a two-level number.</p>
+                </introduction>
 
                 <subsubsection xml:id="subsubsection-depth" label="subsubsection-depth">
                     <title>More Depth</title>
