@@ -628,8 +628,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- those default-mode templates, so an  xsl:apply-imports       -->
 <!-- reinstates each element here: an element leaves the harness  -->
 <!-- report only by deliberately joining this list.               -->
-<xsl:template match="pretext|prefigure[not(node())]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|tag|tage|attr">
+<xsl:template match="pretext|prefigure[not(node())]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|tag|tage|attr|icon|pi:localize">
     <xsl:apply-imports/>
+</xsl:template>
+
+<!-- The TeX-family logos have no implementation in the imported -->
+<!-- stylesheets (the HTML conversion styles them with CSS), so  -->
+<!-- they are plain text here.                                   -->
+<xsl:template match="tex">
+    <xsl:text>TeX</xsl:text>
+</xsl:template>
+<xsl:template match="latex">
+    <xsl:text>LaTeX</xsl:text>
 </xsl:template>
 
 <!-- Quotation marks: fixed Unicode for now.  The HTML conversion -->
