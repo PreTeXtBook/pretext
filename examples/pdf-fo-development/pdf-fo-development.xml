@@ -381,6 +381,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </exercisegroup>
         </exercises>
 
+        <worksheet xml:id="worksheet-development" label="worksheet-development">
+            <title>A Worksheet with Workspace</title>
+
+            <introduction>
+                <p>A worksheet is a printout, so an exercise may request <attr>workspace</attr><mdash/>blank space below, where a reader works.  The space is elastic: it can stretch to fill out the printout's page, or surrender a bit when the page is crowded.</p>
+            </introduction>
+
+            <page>
+                <exercise xml:id="worksheet-exercise-sum" label="worksheet-exercise-sum" workspace="1.5in">
+                    <statement>
+                        <p>Add the first ten positive integers.</p>
+                    </statement>
+                </exercise>
+
+                <exercise xml:id="worksheet-exercise-product" label="worksheet-exercise-product" workspace="2in">
+                    <statement>
+                        <p>Now multiply them.  This deserves the larger workspace.</p>
+                    </statement>
+                </exercise>
+            </page>
+
+            <page>
+                <exercise xml:id="worksheet-exercise-conjecture" label="worksheet-exercise-conjecture" workspace="3in">
+                    <statement>
+                        <p>This exercise begins an authored second page.  Formulate a conjecture relating the two preceding answers, with plenty of room to think.</p>
+                    </statement>
+                </exercise>
+            </page>
+
+            <conclusion>
+                <p>The conclusion of the worksheet follows the final workspace.</p>
+            </conclusion>
+        </worksheet>
+
         <references xml:id="references-development" label="references-development">
             <title>References</title>
 
