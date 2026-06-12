@@ -672,7 +672,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- killed in the default mode.  Likewise the other metadata:     -->
 <!-- "notation" and image descriptions render elsewhere (or not    -->
 <!-- yet), never as in-place content.                              -->
-<xsl:template match="title|subtitle|shorttitle|caption|notation|shortdescription|description|creator"/>
+<xsl:template match="title|subtitle|shorttitle|caption|plaintitle|notation|shortdescription|description|creator"/>
 
 <!-- An "idx" is invisible at its location, but the location is   -->
 <!-- the whole point: an empty wrapper carries an id, the target  -->
@@ -692,6 +692,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pass through (the XSLT built-in rules); the coverage harness   -->
 <!-- would otherwise swallow them.                                  -->
 <xsl:template match="idx/h|idx/see|idx/seealso">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- The "type-name" machinery of pretext-common.xsl applies the -->
+<!-- matching "rename" of an author's "docinfo", expecting its   -->
+<!-- text to pass through; the coverage harness would otherwise  -->
+<!-- swallow it, and every renamed type would go blank.          -->
+<xsl:template match="docinfo/rename">
     <xsl:apply-templates/>
 </xsl:template>
 
