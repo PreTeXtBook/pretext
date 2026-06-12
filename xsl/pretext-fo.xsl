@@ -529,6 +529,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- a "solutions" division is empty; its content is mined -->
         <!-- from its scope by the generator in pretext-common.xsl -->
         <xsl:when test="self::solutions">
+            <xsl:apply-templates select="idx"/>
             <xsl:apply-templates select="." mode="solutions">
                 <xsl:with-param name="heading-level" select="count(ancestor::*[&STRUCTURAL-FILTER;]) + 1"/>
             </xsl:apply-templates>
@@ -663,9 +664,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A "title" is consumed by modal templates reached from the     -->
 <!-- parent element, and is never traversed as content, so it is   -->
 <!-- killed in the default mode.  Likewise the other metadata:     -->
-<!-- "idx" (index entries), "notation", and image descriptions all -->
-<!-- render elsewhere (or not yet), never as in-place content.     -->
-<xsl:template match="title|subtitle|shorttitle|caption|idx|notation|shortdescription|description"/>
+<!-- "notation" and image descriptions render elsewhere (or not    -->
+<!-- yet), never as in-place content.                              -->
+<xsl:template match="title|subtitle|shorttitle|caption|notation|shortdescription|description"/>
+
+<!-- An "idx" is invisible at its location, but the location is   -->
+<!-- the whole point: an empty wrapper carries an id, the target  -->
+<!-- of the page-number locators of the generated index.  Killed  -->
+<!-- inside a title, which is rendered repeatedly (the heading,   -->
+<!-- the bookmark outline), where the ids would then duplicate.   -->
+<xsl:template match="idx">
+    <fo:wrapper>
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+    </fo:wrapper>
+</xsl:template>
+
+<xsl:template match="idx[ancestor::title or ancestor::subtitle or ancestor::shorttitle]"/>
+
+<!-- The pieces of an "idx" are processed by the index-construction -->
+<!-- machinery of pretext-common.xsl, which expects the contents to -->
+<!-- pass through (the XSLT built-in rules); the coverage harness   -->
+<!-- would otherwise swallow them.                                  -->
+<xsl:template match="idx/h|idx/see|idx/seealso">
+    <xsl:apply-templates/>
+</xsl:template>
 
 <!-- ########## -->
 <!-- Paragraphs -->
@@ -878,6 +900,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <!-- index anchors; the components machinery below will not visit them -->
+        <xsl:apply-templates select="idx"/>
         <xsl:variable name="heading">
             <fo:inline font-weight="bold" font-style="normal">
                 <xsl:choose>
@@ -925,6 +949,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="task">
     <fo:block space-before="0.75em" space-after="0.75em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:apply-templates select="idx"/>
         <xsl:variable name="heading">
             <fo:inline font-weight="bold" font-style="normal">
                 <xsl:text>(</xsl:text>
@@ -1061,6 +1086,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercisegroup">
     <fo:block>
         <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:apply-templates select="idx"/>
         <xsl:apply-templates select="introduction"/>
         <xsl:apply-templates select="exercise"/>
         <xsl:apply-templates select="conclusion"/>
@@ -2066,6 +2092,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="title-full"/>
             </fo:block>
         </xsl:if>
+        <xsl:apply-templates select="idx"/>
         <xsl:apply-templates select="stanza|line"/>
         <xsl:apply-templates select="author" mode="poem-author"/>
     </fo:block>
@@ -2073,6 +2100,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="stanza">
     <fo:block space-after="0.75em">
+        <xsl:apply-templates select="idx"/>
         <xsl:apply-templates select="line"/>
     </fo:block>
 </xsl:template>
@@ -3024,6 +3052,109 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- since a missing named template is a *fatal* runtime error. -->
 <xsl:template name="margin-warning">
     <xsl:param name="warning"/>
+</xsl:template>
+
+<!-- ############### -->
+<!-- Generated Lists -->
+<!-- ############### -->
+
+<!-- The Index -->
+
+<!-- pretext-common.xsl collects, sorts, and groups the "idx"      -->
+<!-- elements when it encounters "index-list"; this conversion     -->
+<!-- supplies the presentation through the abstract "present-*"    -->
+<!-- named templates below.  A locator is the page number of the   -->
+<!-- "idx" location (the anchors made in the default "idx"         -->
+<!-- template), each a native XSL-FO page-number citation, so a    -->
+<!-- complete back-of-the-book index emerges in a single pass:     -->
+<!-- no  makeindex , no second run.                                -->
+
+<!-- the harness would otherwise shadow the machinery -->
+<xsl:template match="index-list">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- the body of the index passes through -->
+<xsl:template name="present-index">
+    <xsl:param name="content"/>
+
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<!-- a vertical gap separates letter groups, in the manner -->
+<!-- of the Chicago Manual of Style (and LaTeX defaults)   -->
+<xsl:template name="present-letter-group">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="letter-group"/>
+    <xsl:param name="current-letter"/>
+    <xsl:param name="content"/>
+
+    <fo:block space-after="1em">
+        <xsl:copy-of select="$content"/>
+    </fo:block>
+</xsl:template>
+
+<!-- One index entry: the heading at its level (12pt of indentation -->
+<!-- per level), wrapped lines hanging a step further, and then the -->
+<!-- locators, when this heading is the deepest of its entry.       -->
+<xsl:template name="present-index-heading">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="heading-group"/>
+    <xsl:param name="b-write-locators"/>
+    <xsl:param name="heading-level"/>
+    <xsl:param name="content"/>
+
+    <fo:block start-indent="{12 * $heading-level}pt" text-indent="-12pt">
+        <xsl:copy-of select="$content"/>
+        <xsl:if test="$b-write-locators">
+            <xsl:call-template name="locator-list">
+                <xsl:with-param name="the-index-list" select="$the-index-list"/>
+                <xsl:with-param name="heading-group" select="$heading-group"/>
+                <xsl:with-param name="cross-reference-separator" select="', '"/>
+            </xsl:call-template>
+        </xsl:if>
+    </fo:block>
+</xsl:template>
+
+<!-- the pieces of a locator: processed content suffices -->
+<xsl:template name="present-index-locator">
+    <xsl:param name="content"/>
+
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<xsl:template name="present-index-see">
+    <xsl:param name="content"/>
+
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<xsl:template name="present-index-see-also">
+    <xsl:param name="content"/>
+
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<xsl:template name="present-index-italics">
+    <xsl:param name="content"/>
+
+    <fo:inline font-style="italic">
+        <xsl:copy-of select="$content"/>
+    </fo:inline>
+</xsl:template>
+
+<!-- One locator: the page number where the "idx" element sits, -->
+<!-- which doubles as a live link in an electronic PDF.         -->
+<xsl:template match="index-list" mode="index-enclosure">
+    <xsl:param name="enclosure"/>
+
+    <xsl:variable name="the-id">
+        <xsl:apply-templates select="$enclosure" mode="unique-id"/>
+    </xsl:variable>
+    <fo:basic-link internal-destination="{$the-id}" fox:alt-text="page of this index entry">
+        <xsl:call-template name="link-attributes"/>
+        <fo:page-number-citation ref-id="{$the-id}"/>
+    </fo:basic-link>
 </xsl:template>
 
 <!-- ################ -->
