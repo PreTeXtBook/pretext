@@ -39,9 +39,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:svg="http://www.w3.org/2000/svg"
     xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
     xmlns:exsl="http://exslt.org/common"
+    xmlns:str="http://exslt.org/strings"
     xmlns:pf="https://prefigure.org"
-    extension-element-prefixes="exsl"
-    exclude-result-prefixes="pi svg pf"
+    extension-element-prefixes="exsl str"
+    exclude-result-prefixes="pi svg pf str"
 >
 
 <!-- Standard conversion groundwork -->
@@ -511,10 +512,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
+        <!-- the publisher names this division for a forced break -->
+        <xsl:when test="@xml:id = str:tokenize($latex-pagebreaks-string)">
+            <xsl:text>page</xsl:text>
+        </xsl:when>
         <xsl:when test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
             <xsl:text>page</xsl:text>
         </xsl:when>
     </xsl:choose>
+</xsl:template>
+
+<!-- The publisher's "insertions" entries name elements, by their   -->
+<!-- @xml:id, that should begin a fresh page, a tool for the final  -->
+<!-- massage of a print run.  An empty block carries the break, so  -->
+<!-- this hook works wherever block content is legal; it is         -->
+<!-- consulted by the same sort of elements as honor a request in   -->
+<!-- the LaTeX conversion (divisions just above, via the heading's  -->
+<!-- own break attribute).                                          -->
+<xsl:template match="*" mode="forced-pagebreak">
+    <xsl:if test="@xml:id = str:tokenize($latex-pagebreaks-string)">
+        <fo:block break-after="page"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- A worksheet or handout "page" is a pagination request, -->
@@ -558,6 +576,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- its title, bold, run in to the leading paragraph (exactly    -->
 <!-- the LaTeX treatment).                                        -->
 <xsl:template match="paragraphs">
+    <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
@@ -605,6 +624,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- leads off that block's content; see "heading-then-content".  -->
 <xsl:template match="p">
     <xsl:param name="run-in-heading"/>
+    <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block text-align="{$text-alignment}" space-after="0.5em">
         <xsl:copy-of select="$run-in-heading"/>
         <xsl:apply-templates/>
@@ -674,6 +694,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "Exercises" section.  PROJECT-LIKE blocks may also be       -->
 <!-- structured by "task", arriving among the contents.          -->
 <xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&AXIOM-LIKE;|&OPENPROBLEM-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|assemblage|objectives|outcomes">
+    <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
@@ -802,6 +823,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- number; a *divisional* one (in an "exercises" division, a     -->
 <!-- "worksheet", or "reading-questions") a compact serial number. -->
 <xsl:template match="exercise|&PROJECT-LIKE;">
+    <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
@@ -2171,6 +2193,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- columns.  The panel element list mirrors the one in the       -->
 <!-- "sidebyside" main template of pretext-common.xsl.             -->
 <xsl:template match="sidebyside">
+    <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <xsl:variable name="panels" select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs"/>
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters"/>
@@ -2242,6 +2265,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- layout attributes on the group are consulted by each     -->
 <!-- "sidebyside" via the layout machinery.)                  -->
 <xsl:template match="sbsgroup">
+    <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <xsl:apply-templates select="sidebyside"/>
 </xsl:template>
 
@@ -2255,6 +2279,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The "caption" element is consumed here, so it is killed in   -->
 <!-- the default mode, with the other metadata.                   -->
 <xsl:template match="&FIGURE-LIKE;">
+    <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="*"/>
