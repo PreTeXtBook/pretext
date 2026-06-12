@@ -475,6 +475,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
+<!-- A "case" of a proof: an italic run-in heading built from the -->
+<!-- direction arrow and/or the title (an untitled, undirected    -->
+<!-- case earns the default title, "Case."), as in the HTML       -->
+<!-- conversion.                                                  -->
+<xsl:template match="case">
+    <fo:block space-before="0.75em" space-after="0.5em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:variable name="heading">
+            <fo:inline font-style="italic">
+                <xsl:apply-templates select="." mode="case-direction"/>
+                <xsl:if test="boolean(title) or not(@direction)">
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </xsl:if>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="heading-then-content">
+            <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
+<!-- The implication arrows of a "case" direction, and the spacing -->
+<!-- inside a "cycle" decoration, expected by pretext-common.xsl.  -->
+<xsl:template name="double-right-arrow-symbol">
+    <!-- RIGHTWARDS DOUBLE ARROW -->
+    <xsl:text>&#x21d2;</xsl:text>
+</xsl:template>
+<xsl:template name="double-left-arrow-symbol">
+    <!-- LEFTWARDS DOUBLE ARROW -->
+    <xsl:text>&#x21d0;</xsl:text>
+</xsl:template>
+<xsl:template name="case-cycle-delimiter-space">
+    <!-- THIN SPACE -->
+    <xsl:text>&#x2009;</xsl:text>
+</xsl:template>
+
 <!-- Solutions to EXAMPLE-LIKE, with an italic run-in heading. -->
 <xsl:template match="&SOLUTION-LIKE;">
     <fo:block space-before="1em">
