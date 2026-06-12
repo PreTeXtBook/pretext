@@ -712,14 +712,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- leads off that block's content; see "heading-then-content".  -->
 <xsl:template match="p">
     <xsl:param name="run-in-heading"/>
+    <xsl:param name="trailing-tombstone"/>
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block text-align="{$text-alignment}" space-after="0.5em">
+        <!-- a tombstone arriving from an enclosing PROOF-LIKE rides -->
+        <!-- the final line, whose elastic leader needs the line     -->
+        <!-- justified to push the tombstone to the right margin     -->
+        <xsl:if test="not(string($trailing-tombstone) = '')">
+            <xsl:attribute name="text-align-last">
+                <xsl:text>justify</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <!-- a top-level paragraph can enclose a "notation", whose   -->
         <!-- generated list then links here, so every "p" carries an -->
         <!-- id (and becomes a cross-reference target generally)     -->
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:copy-of select="$run-in-heading"/>
         <xsl:apply-templates/>
+        <xsl:copy-of select="$trailing-tombstone"/>
     </fo:block>
 </xsl:template>
 
@@ -828,10 +838,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- An italic run-in heading, the contents, and a right-aligned -->
-<!-- tombstone to finish.  The tombstone occupies its own line;  -->
-<!-- attaching it to the final line of the final paragraph is a  -->
-<!-- refinement for later.                                       -->
+<!-- An italic run-in heading, the contents, and a right-aligned  -->
+<!-- tombstone to finish.  When the proof closes with a paragraph, -->
+<!-- the tombstone rides on its final line (an elastic leader      -->
+<!-- pushes it to the right margin); otherwise it makes a line of  -->
+<!-- its own, kept on the page of whatever display ended the       -->
+<!-- proof, so it can never lead an orphaned page.                 -->
 <xsl:template match="&PROOF-LIKE;">
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
@@ -842,16 +854,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </fo:inline>
             <xsl:text> </xsl:text>
         </xsl:variable>
-        <xsl:call-template name="heading-then-content">
-            <xsl:with-param name="heading" select="$heading"/>
-        </xsl:call-template>
-        <fo:block text-align-last="justify">
+        <xsl:variable name="tombstone">
             <fo:leader leader-pattern="space"/>
             <!-- the main (serif) font lacks END OF PROOF, the symbol font has it -->
             <fo:inline font-family="{$font-family-symbol}">
                 <xsl:text>&#x220e;</xsl:text>
             </fo:inline>
-        </fo:block>
+        </xsl:variable>
+        <xsl:variable name="content" select="*[not(self::title)]"/>
+        <xsl:variable name="b-tombstone-rides" select="boolean($content[last()][self::p])"/>
+        <!-- the heading runs in to a leading paragraph -->
+        <xsl:choose>
+            <xsl:when test="$content[1][self::p]">
+                <xsl:apply-templates select="$content[1]">
+                    <xsl:with-param name="run-in-heading" select="$heading"/>
+                    <xsl:with-param name="trailing-tombstone">
+                        <xsl:if test="count($content) = 1">
+                            <xsl:copy-of select="$tombstone"/>
+                        </xsl:if>
+                    </xsl:with-param>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <fo:block keep-with-next.within-page="always">
+                    <xsl:copy-of select="$heading"/>
+                </fo:block>
+                <xsl:apply-templates select="$content[1]"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates select="$content[(position() &gt; 1) and (position() &lt; last())]"/>
+        <xsl:if test="count($content) &gt; 1">
+            <xsl:apply-templates select="$content[last()]">
+                <xsl:with-param name="trailing-tombstone">
+                    <xsl:if test="$b-tombstone-rides">
+                        <xsl:copy-of select="$tombstone"/>
+                    </xsl:if>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:if>
+        <xsl:if test="not($b-tombstone-rides)">
+            <fo:block text-align-last="justify" keep-with-previous.within-page="always">
+                <xsl:copy-of select="$tombstone"/>
+            </fo:block>
+        </xsl:if>
     </fo:block>
 </xsl:template>
 
