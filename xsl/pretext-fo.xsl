@@ -357,7 +357,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- killed in the default mode.  Likewise the other metadata:     -->
 <!-- "idx" (index entries), "notation", and image descriptions all -->
 <!-- render elsewhere (or not yet), never as in-place content.     -->
-<xsl:template match="title|subtitle|caption|idx|notation|shortdescription|description"/>
+<xsl:template match="title|subtitle|shorttitle|caption|idx|notation|shortdescription|description"/>
 
 <!-- ########## -->
 <!-- Paragraphs -->
@@ -606,6 +606,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="heading" select="$heading"/>
         </xsl:call-template>
     </fo:block>
+</xsl:template>
+
+<!-- A "prelude", "interlude", or "postlude" decorates a project -->
+<!-- or listing with surrounding prose; the contents just flow.  -->
+<xsl:template match="prelude|interlude|postlude">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- A "subexercises" groups exercises under an interior heading. -->
+<xsl:template match="subexercises">
+    <xsl:if test="title">
+        <fo:block font-weight="bold"
+                  space-before="1em"
+                  space-after="0.5em"
+                  keep-with-next.within-page="always">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </fo:block>
+    </xsl:if>
+    <xsl:apply-templates select="*[not(self::title)]"/>
 </xsl:template>
 
 <!-- An "exercisegroup" supplies common context for consecutive -->
@@ -1594,7 +1613,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- those default-mode templates, so an  xsl:apply-imports       -->
 <!-- reinstates each element here: an element leaves the harness  -->
 <!-- report only by deliberately joining this list.               -->
-<xsl:template match="pretext|prefigure[not(node())]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|cline|tag|tage|attr|icon|pi:localize">
+<xsl:template match="pretext|prefigure[not(node())]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|cline|tag|tage|attr|icon|today|timeofday|pi:localize">
     <xsl:apply-imports/>
 </xsl:template>
 
@@ -1975,7 +1994,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Assembly hoists an "intertext" out of its "md", to sit among -->
 <!-- the children of the paragraph, between two displays; its     -->
 <!-- prose just continues the paragraph.                          -->
-<xsl:template match="intertext">
+<xsl:template match="pi:intertext">
     <xsl:apply-templates/>
 </xsl:template>
 
