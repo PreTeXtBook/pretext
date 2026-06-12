@@ -700,6 +700,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="run-in-heading"/>
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block text-align="{$text-alignment}" space-after="0.5em">
+        <!-- a top-level paragraph can enclose a "notation", whose   -->
+        <!-- generated list then links here, so every "p" carries an -->
+        <!-- id (and becomes a cross-reference target generally)     -->
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:copy-of select="$run-in-heading"/>
         <xsl:apply-templates/>
     </fo:block>
@@ -3155,6 +3159,112 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="link-attributes"/>
         <fo:page-number-citation ref-id="{$the-id}"/>
     </fo:basic-link>
+</xsl:template>
+
+<!-- The Notation List -->
+
+<!-- pretext-common.xsl walks every "notation" of the document, in -->
+<!-- order, when it meets "notation-list"; here, a table of the    -->
+<!-- sample usage (as mathematics), the narrative description, and -->
+<!-- a cross-reference to the enclosing environment.               -->
+
+<!-- the harness would otherwise shadow the machinery -->
+<xsl:template match="notation-list">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<xsl:template name="present-notation-list">
+    <xsl:param name="content"/>
+
+    <fo:table table-layout="fixed" width="100%" space-before="1em" space-after="1em">
+        <fo:table-column column-width="proportional-column-width(2)"/>
+        <fo:table-column column-width="proportional-column-width(4)"/>
+        <fo:table-column column-width="proportional-column-width(2)"/>
+        <fo:table-header>
+            <fo:table-row>
+                <fo:table-cell padding="2pt" border-bottom-style="solid" border-bottom-width="0.7pt">
+                    <fo:block font-weight="bold">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'symbol'"/>
+                        </xsl:apply-templates>
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell padding="2pt" border-bottom-style="solid" border-bottom-width="0.7pt">
+                    <fo:block font-weight="bold">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'description'"/>
+                        </xsl:apply-templates>
+                    </fo:block>
+                </fo:table-cell>
+                <fo:table-cell padding="2pt" border-bottom-style="solid" border-bottom-width="0.7pt">
+                    <fo:block font-weight="bold">
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'location'"/>
+                        </xsl:apply-templates>
+                    </fo:block>
+                </fo:table-cell>
+            </fo:table-row>
+        </fo:table-header>
+        <fo:table-body>
+            <xsl:copy-of select="$content"/>
+        </fo:table-body>
+    </fo:table>
+</xsl:template>
+
+<!-- exactly one "m" of the usage; the description duplicated; -->
+<!-- a cross-reference to the enclosure, with its page number  -->
+<!-- in print (automatic, from "xref-link")                    -->
+<xsl:template match="notation" mode="present-notation-item">
+    <fo:table-row>
+        <fo:table-cell padding="2pt" display-align="before">
+            <fo:block>
+                <xsl:apply-templates select="usage/m[1]"/>
+            </fo:block>
+        </fo:table-cell>
+        <fo:table-cell padding="2pt" display-align="before">
+            <fo:block>
+                <xsl:apply-templates select="description/node()"/>
+            </fo:block>
+        </fo:table-cell>
+        <fo:table-cell padding="2pt" display-align="before">
+            <fo:block>
+                <xsl:apply-templates select="." mode="enclosure-xref"/>
+            </fo:block>
+        </fo:table-cell>
+    </fo:table-row>
+</xsl:template>
+
+<!-- Climb the tree to the first enclosure that is a block or is -->
+<!-- structural, and make a cross-reference to it; recursion     -->
+<!-- always halts, since the document root is structural.        -->
+<xsl:template match="*" mode="enclosure-xref">
+    <xsl:variable name="structural">
+        <xsl:apply-templates select="." mode="is-structural"/>
+    </xsl:variable>
+    <xsl:variable name="block">
+        <xsl:apply-templates select="." mode="is-block"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="($structural = 'true') or ($block = 'true')">
+            <xsl:apply-templates select="." mode="xref-link">
+                <xsl:with-param name="target" select="."/>
+                <xsl:with-param name="origin" select="'notation'"/>
+                <xsl:with-param name="content">
+                    <xsl:apply-templates select="." mode="type-name"/>
+                    <xsl:variable name="enclosure-number">
+                        <xsl:apply-templates select="." mode="number"/>
+                    </xsl:variable>
+                    <xsl:if test="not($enclosure-number = '')">
+                        <xsl:text> </xsl:text>
+                        <xsl:value-of select="$enclosure-number"/>
+                    </xsl:if>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="enclosure-xref"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ################ -->
