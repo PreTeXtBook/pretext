@@ -986,6 +986,80 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
+<!-- ################ -->
+<!-- Quoted and Lined -->
+<!-- ################ -->
+
+<!-- A "blockquote" indents on both sides; any "attribution" -->
+<!-- finishes it, right-aligned, introduced by an em-dash.   -->
+<xsl:template match="blockquote">
+    <fo:block margin-left="2.5em" margin-right="2.5em" space-before="0.75em" space-after="0.75em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:apply-templates select="*"/>
+    </fo:block>
+</xsl:template>
+
+<xsl:template match="attribution">
+    <fo:block text-align="end">
+        <xsl:call-template name="mdash-character"/>
+        <xsl:choose>
+            <xsl:when test="line">
+                <xsl:apply-templates select="line"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </fo:block>
+</xsl:template>
+
+<!-- A "poem": title centered, stanzas of lines, a right-aligned -->
+<!-- author.  Fancy authored alignment/indentation of individual -->
+<!-- lines is a refinement for later.                            -->
+<xsl:template match="poem">
+    <fo:block margin-left="2.5em" margin-right="2.5em" space-before="0.75em" space-after="0.75em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:if test="title">
+            <fo:block font-weight="bold" text-align="center" space-after="0.5em">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </fo:block>
+        </xsl:if>
+        <xsl:apply-templates select="stanza|line"/>
+        <xsl:apply-templates select="author" mode="poem-author"/>
+    </fo:block>
+</xsl:template>
+
+<xsl:template match="stanza">
+    <fo:block space-after="0.75em">
+        <xsl:apply-templates select="line"/>
+    </fo:block>
+</xsl:template>
+
+<!-- "author" is metadata, killed in the default mode by -->
+<!-- pretext-common.xsl, so a modal template places it   -->
+<xsl:template match="poem/author" mode="poem-author">
+    <fo:block text-align="end" font-style="italic">
+        <xsl:apply-templates/>
+    </fo:block>
+</xsl:template>
+
+<!-- A "fillin" blank: an underline rule sized by @characters  -->
+<!-- (ten if unspecified).  Fill-ins inside mathematics travel -->
+<!-- with the LaTeX, where MathJax renders them.               -->
+<xsl:template match="fillin[not(parent::m or parent::mrow)]">
+    <fo:leader leader-pattern="rule"
+               rule-thickness="0.5pt"
+               rule-style="solid"
+               leader-length="{format-number(0.55 * 10, '0.##')}em">
+        <xsl:if test="@characters">
+            <xsl:attribute name="leader-length">
+                <xsl:value-of select="format-number(0.55 * @characters, '0.##')"/>
+                <xsl:text>em</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
+    </fo:leader>
+</xsl:template>
+
 <!-- ######## -->
 <!-- Verbatim -->
 <!-- ######## -->
