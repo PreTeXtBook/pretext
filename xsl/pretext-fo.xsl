@@ -717,7 +717,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- must carry its intrinsic @width and @height: with only a    -->
 <!-- @viewBox, FOP assumes a square, and the drawing floats in   -->
 <!-- extra vertical space.                                       -->
-<xsl:template match="image[@source|@pi:generated]">
+<xsl:template match="image[@source|@pi:generated]|image[latex-image]|image[sageplot]|image[asymptote]">
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage"/>
     </xsl:variable>
@@ -776,6 +776,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$extension = ''">
         <xsl:text>.svg</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Born-in-source images live in kind-specific subdirectories  -->
+<!-- of the generated directory, with filenames decided by the   -->
+<!-- "image-source-basename" machinery, as manufactured SVG;     -->
+<!-- companion generation components produce the files.  (A 3-D  -->
+<!-- "sageplot" has no useful print representation yet.)         -->
+<xsl:template match="image[latex-image]|image[sageplot]|image[asymptote]" mode="image-filename">
+    <xsl:value-of select="$generated-directory"/>
+    <xsl:if test="$b-managed-directories">
+        <xsl:choose>
+            <xsl:when test="latex-image">
+                <xsl:text>latex-image/</xsl:text>
+            </xsl:when>
+            <xsl:when test="sageplot">
+                <xsl:text>sageplot/</xsl:text>
+            </xsl:when>
+            <xsl:when test="asymptote">
+                <xsl:text>asymptote/</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:if>
+    <xsl:apply-templates select="latex-image|sageplot|asymptote" mode="image-source-basename"/>
+    <xsl:text>.svg</xsl:text>
 </xsl:template>
 
 <!-- ###### -->
