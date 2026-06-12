@@ -433,6 +433,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               space-after="0.75em"
               keep-with-next.within-page="always"
               role="H{count(ancestor::*[&STRUCTURAL-FILTER;]) + 1}">
+        <!-- a formatted printout occupies pages of its own -->
+        <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
+            <xsl:attribute name="break-before">
+                <xsl:text>page</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:if test="not($the-number = '')">
             <xsl:apply-templates select="." mode="type-name"/>
@@ -454,12 +460,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- material following a formatted printout begins a fresh page -->
+    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
+        <fo:block break-after="page"/>
+    </xsl:if>
 </xsl:template>
 
-<!-- A worksheet "page" is a pagination request; its contents    -->
-<!-- just flow, and real page-break control is a refinement.     -->
-<xsl:template match="worksheet/page">
-    <xsl:apply-templates select="*"/>
+<!-- A worksheet or handout "page" is a pagination request, -->
+<!-- honored whenever the printout is formatted as such.    -->
+<xsl:template match="worksheet/page|handout/page">
+    <fo:block>
+        <xsl:if test="$b-latex-worksheet-formatted and preceding-sibling::page">
+            <xsl:attribute name="break-before">
+                <xsl:text>page</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="*"/>
+    </fo:block>
 </xsl:template>
 
 <!-- An "introduction" or "conclusion" of a division is mostly a -->
