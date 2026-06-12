@@ -436,7 +436,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- divisional one matches a more specific pattern in the       -->
 <!-- "Exercises" section.  PROJECT-LIKE blocks may also be       -->
 <!-- structured by "task", arriving among the contents.          -->
-<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|assemblage|objectives|outcomes|exercise">
+<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&AXIOM-LIKE;|&OPENPROBLEM-LIKE;|&COMPUTATION-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|assemblage|objectives|outcomes|exercise">
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
@@ -1498,7 +1498,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Semantic inline markup, mostly by font change.  An "alert" -->
 <!-- gets both weight and style, distinct from "em" and "term". -->
-<xsl:template match="em|pubtitle|taxon">
+<xsl:template match="em|pubtitle|taxon|taxon/genus|taxon/species">
     <fo:inline font-style="italic">
         <xsl:apply-templates/>
     </fo:inline>
