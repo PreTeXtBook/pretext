@@ -1815,11 +1815,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fixed table layout, so the table spans the available width   -->
 <!-- and authored "col" percentage widths become proportional     -->
 <!-- column widths (a natural-width, centered table awaits a      -->
-<!-- smarter layout).  Header rows land in an fo:table-header,    -->
-<!-- which FOP tags as "TH" cells in the PDF structure tree, as   -->
-<!-- PDF/UA requires.  Not yet implemented: @header='vertical',   -->
-<!-- @row-headers (column-of-row-headers), and a @colspan in the  -->
-<!-- first row of a column-less tabular.                          -->
+<!-- smarter layout).  Header rows, horizontal or vertical        -->
+<!-- (rotated), land in an fo:table-header, which FOP tags as     -->
+<!-- "TH" cells in the PDF structure tree, as PDF/UA requires.    -->
+<!-- The @row-headers request bolds the leading column; FOP can   -->
+<!-- mark only an fo:table-header as "TH", so those cells stay    -->
+<!-- "TD" in the structure tree, a known FOP limit.               -->
 <xsl:template match="tabular">
     <fo:table table-layout="fixed" width="100%">
         <xsl:call-template name="rule-attribute">
@@ -1853,13 +1854,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:if test="row[@header = 'yes']">
+        <xsl:if test="row[(@header = 'yes') or (@header = 'vertical')]">
             <fo:table-header>
-                <xsl:apply-templates select="row[@header = 'yes']"/>
+                <xsl:apply-templates select="row[(@header = 'yes') or (@header = 'vertical')]"/>
             </fo:table-header>
         </xsl:if>
         <fo:table-body>
-            <xsl:apply-templates select="row[not(@header = 'yes')]"/>
+            <xsl:apply-templates select="row[not(@header = 'yes') and not(@header = 'vertical')]"/>
         </fo:table-body>
     </fo:table>
 </xsl:template>
@@ -1985,26 +1986,54 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:choose>
             </xsl:with-param>
         </xsl:call-template>
-        <fo:block>
-            <xsl:attribute name="text-align">
-                <xsl:apply-templates select="." mode="cell-halign"/>
-            </xsl:attribute>
-            <xsl:if test="parent::row/@header = 'yes'">
-                <xsl:attribute name="font-weight">
-                    <xsl:text>bold</xsl:text>
+        <xsl:variable name="the-block">
+            <fo:block>
+                <xsl:attribute name="text-align">
+                    <xsl:apply-templates select="." mode="cell-halign"/>
                 </xsl:attribute>
-            </xsl:if>
-            <xsl:choose>
-                <!-- structured: paragraphs or lines as blocks -->
-                <xsl:when test="p|line">
-                    <xsl:apply-templates select="*"/>
-                </xsl:when>
-                <!-- mixed content, right here -->
-                <xsl:otherwise>
-                    <xsl:apply-templates/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </fo:block>
+                <!-- headers are bold: a header row (horizontal or  -->
+                <!-- vertical), or the leading cell of each row     -->
+                <!-- when the tabular requests row headers          -->
+                <xsl:if test="(parent::row/@header = 'yes') or (parent::row/@header = 'vertical') or ((ancestor::tabular/@row-headers = 'yes') and not(preceding-sibling::cell))">
+                    <xsl:attribute name="font-weight">
+                        <xsl:text>bold</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:choose>
+                    <!-- structured: paragraphs or lines as blocks -->
+                    <xsl:when test="p|line">
+                        <xsl:apply-templates select="*"/>
+                    </xsl:when>
+                    <!-- mixed content, right here -->
+                    <xsl:otherwise>
+                        <xsl:apply-templates/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </fo:block>
+        </xsl:variable>
+        <xsl:choose>
+            <!-- A vertical header rotates a quarter-turn, reading    -->
+            <!-- bottom-up.  FOP wants the extent of the rotated text -->
+            <!-- declared, so the longest text (or "line") among the  -->
+            <!-- row's cells estimates a common height for the row.   -->
+            <xsl:when test="parent::row/@header = 'vertical'">
+                <xsl:variable name="longest-text">
+                    <xsl:for-each select="parent::row/cell/line|parent::row/cell[not(line)]">
+                        <xsl:sort select="string-length(normalize-space(.))" data-type="number" order="descending"/>
+                        <xsl:if test="position() = 1">
+                            <xsl:value-of select="string-length(normalize-space(.))"/>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:variable>
+                <fo:block-container reference-orientation="90"
+                                    inline-progression-dimension="{format-number(0.5 * $longest-text + 1.5, '0.#')}em">
+                    <xsl:copy-of select="$the-block"/>
+                </fo:block-container>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="$the-block"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </fo:table-cell>
 </xsl:template>
 
