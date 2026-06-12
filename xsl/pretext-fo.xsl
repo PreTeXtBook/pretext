@@ -986,6 +986,104 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Bibliography -->
+<!-- ############ -->
+
+<!-- pretext-common.xsl implements "biblio" entries (raw, BibTeX,  -->
+<!-- and CSL flavors) and the typography of their fields, via the  -->
+<!-- abstract font modes implemented in "Inline Markup".  Here:    -->
+<!-- the entry wrapper, a hanging "[N]" label, and the unshadowing -->
+<!-- of the imported templates.  (A field common does not style    -->
+<!-- falls through apply-imports to the built-in rules, i.e. its   -->
+<!-- text, which is right for raw mixed content.)                  -->
+<xsl:template match="biblio|biblio/*">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<xsl:template match="biblio" mode="bibentry-wrapper">
+    <xsl:param name="content"/>
+    <fo:list-block provisional-distance-between-starts="2.5em"
+                   provisional-label-separation="0.5em"
+                   space-after="0.5em">
+        <fo:list-item>
+            <fo:list-item-label end-indent="label-end()">
+                <fo:block text-align="end">
+                    <xsl:apply-templates select="." mode="link-id-attribute"/>
+                    <xsl:text>[</xsl:text>
+                    <xsl:apply-templates select="." mode="serial-number"/>
+                    <xsl:text>]</xsl:text>
+                </fo:block>
+            </fo:list-item-label>
+            <fo:list-item-body start-indent="body-start()">
+                <fo:block text-align="justify">
+                    <xsl:copy-of select="$content"/>
+                </fo:block>
+            </fo:list-item-body>
+        </fo:list-item>
+    </fo:list-block>
+</xsl:template>
+
+<!-- the period finishing a structured entry -->
+<xsl:template name="biblio-period">
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
+<!-- ###### -->
+<!-- Units  -->
+<!-- ###### -->
+
+<!-- A "quantity" is a magnitude and/or units, in the manner of   -->
+<!-- the LaTeX "siunitx" package: prefixes and bases become their -->
+<!-- abbreviations (the lookup tables of pretext-units.xsl), with -->
+<!-- superscript exponents, and a solidus before "per" units.     -->
+<xsl:key name="prefix-key" match="prefix" use="concat(../@name, @full)"/>
+<xsl:key name="base-key" match="base" use="concat(../@name, @full)"/>
+
+<xsl:template match="quantity">
+    <xsl:apply-templates select="mag"/>
+    <xsl:if test="mag and (unit or per)">
+        <!-- a thin space, as siunitx -->
+        <xsl:text>&#x2009;</xsl:text>
+    </xsl:if>
+    <xsl:if test="not(unit) and per">
+        <xsl:text>1</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="unit"/>
+    <xsl:if test="per">
+        <xsl:text>/</xsl:text>
+        <xsl:apply-templates select="per"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- magnitudes are typically numbers; authored LaTeX macros -->
+<!-- (e.g. "\pi") will await the math machinery              -->
+<xsl:template match="quantity/mag">
+    <xsl:value-of select="."/>
+</xsl:template>
+
+<xsl:template match="quantity/unit|quantity/per">
+    <!-- multiple units separated by a thin space -->
+    <xsl:if test="(self::unit and preceding-sibling::unit) or (self::per and preceding-sibling::per)">
+        <xsl:text>&#x2009;</xsl:text>
+    </xsl:if>
+    <xsl:variable name="the-prefix" select="@prefix"/>
+    <xsl:if test="@prefix">
+        <xsl:for-each select="document('pretext-units.xsl')">
+            <xsl:value-of select="key('prefix-key', concat('prefixes', $the-prefix))/@short"/>
+        </xsl:for-each>
+    </xsl:if>
+    <xsl:variable name="the-base" select="@base"/>
+    <xsl:for-each select="document('pretext-units.xsl')">
+        <xsl:value-of select="key('base-key', concat('bases', $the-base))/@short"/>
+    </xsl:for-each>
+    <xsl:if test="@exp">
+        <fo:inline baseline-shift="super" font-size="70%">
+            <xsl:value-of select="@exp"/>
+        </fo:inline>
+    </xsl:if>
+</xsl:template>
+
 <!-- ################ -->
 <!-- Quoted and Lined -->
 <!-- ################ -->
