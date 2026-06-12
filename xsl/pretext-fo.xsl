@@ -666,7 +666,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- killed in the default mode.  Likewise the other metadata:     -->
 <!-- "notation" and image descriptions render elsewhere (or not    -->
 <!-- yet), never as in-place content.                              -->
-<xsl:template match="title|subtitle|shorttitle|caption|notation|shortdescription|description"/>
+<xsl:template match="title|subtitle|shorttitle|caption|notation|shortdescription|description|creator"/>
 
 <!-- An "idx" is invisible at its location, but the location is   -->
 <!-- the whole point: an empty wrapper carries an id, the target  -->
@@ -728,6 +728,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="not($the-number = '')">
             <xsl:text> </xsl:text>
             <xsl:value-of select="$the-number"/>
+        </xsl:if>
+        <!-- attribution of a theorem or axiom, as in the HTML conversion -->
+        <xsl:if test="creator and (&THEOREM-FILTER; or &AXIOM-FILTER;)">
+            <xsl:text> (</xsl:text>
+            <xsl:apply-templates select="." mode="creator-full"/>
+            <xsl:text>)</xsl:text>
         </xsl:if>
         <xsl:text>.</xsl:text>
         <xsl:if test="title">
