@@ -204,6 +204,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </rdf:RDF>
             </x:xmpmeta>
         </fo:declarations>
+        <fo:bookmark-tree>
+            <xsl:apply-templates select="$document-root/*" mode="bookmark"/>
+        </fo:bookmark-tree>
         <fo:page-sequence master-reference="pages">
             <fo:static-content flow-name="xsl-region-after">
                 <fo:block text-align="center" font-size="90%">
@@ -220,6 +223,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </fo:flow>
         </fo:page-sequence>
     </fo:root>
+</xsl:template>
+
+<!-- ############# -->
+<!-- PDF Bookmarks -->
+<!-- ############# -->
+
+<!-- The bookmark tree (the PDF "outline") mirrors the division   -->
+<!-- structure, each entry an internal link to its heading's @id. -->
+<!-- Titles must be plain text, so the simple/plain title modes.  -->
+<xsl:template match="*" mode="bookmark"/>
+
+<!-- pure containers: recurse to the divisions inside -->
+<xsl:template match="frontmatter|backmatter" mode="bookmark">
+    <xsl:apply-templates select="*" mode="bookmark"/>
+</xsl:template>
+
+<xsl:template match="chapter|section|subsection|subsubsection|appendix|exercises|worksheet|reading-questions|solutions|references|glossary|preface|acknowledgement|foreword|dedication|biography|colophon|index" mode="bookmark">
+    <fo:bookmark>
+        <xsl:attribute name="internal-destination">
+            <xsl:apply-templates select="." mode="unique-id"/>
+        </xsl:attribute>
+        <fo:bookmark-title>
+            <xsl:variable name="the-number">
+                <xsl:apply-templates select="." mode="number"/>
+            </xsl:variable>
+            <xsl:if test="not($the-number = '')">
+                <xsl:value-of select="$the-number"/>
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:variable name="the-title">
+                <xsl:apply-templates select="." mode="title-simple"/>
+            </xsl:variable>
+            <xsl:value-of select="normalize-space($the-title)"/>
+        </fo:bookmark-title>
+        <xsl:apply-templates select="*" mode="bookmark"/>
+    </fo:bookmark>
 </xsl:template>
 
 <!-- ###################### -->
