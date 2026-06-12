@@ -246,6 +246,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- User Menu (aka Bust Menu)                    -->
 <!-- Conditional on a build for Runestone hosting -->
+<!-- "template" elements are not visible, ever,   -->
+<!-- but rather serve as a model for Javascript   -->
 
 <xsl:template name="runestone-bust-menu">
     <!-- "Bust w/ Silhoutte" is U+1F464, used as menu icon -->
@@ -257,11 +259,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <span class="name"><xsl:text>Profile</xsl:text></span>
             <div id="ptx-user-dropdown_rs-content" class="dropdown-content">
             </div>
-            <!-- clone template, modify href and innertext, and append to ptx-rs-dropdown-content -->
+            <!-- clone template, modify href and inner text, and append to ptx-user-dropdown_rs-content -->
             <template id="ptx-user-dropdown-content_item-template">
-              <a href="url here" >title here</a>
+              <a href="url here">title here</a>
             </template>
-            <!-- clone and append to dropdown contenet area add a separator within the menu -->
+            <!-- clone and append to dropdown content area and add a separator within the menu -->
             <template id="ptx-user-dropdown-content_separator-template">
               <hr/>
             </template>
