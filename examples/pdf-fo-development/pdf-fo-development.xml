@@ -250,9 +250,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </statement>
                 </definition>
 
-                <paragraphs xml:id="paragraphs-history" label="paragraphs-history">
+                <theorem xml:id="theorem-even" label="theorem-even">
+                <title>Characterizing Even Squares</title>
+                <statement>
+                    <p>An integer <m>n</m> is even if and only if <m>n^2</m> is even, a fact worth a reference number,
+                        <md>
+                            <mrow xml:id="equation-even" label="equation-even" tag="star">2 \mid n \iff 4 \mid n^2</mrow>
+                        </md>
+                    which earns a decorative tag instead.</p>
+                </statement>
+                <proof>
+                    <case direction="forward">
+                        <p>If <m>n = 2k</m>, then <m>n^2 = 4k^2</m>, so <m>n^2</m> is even.</p>
+                    </case>
+                    <case direction="backward">
+                        <p>If <m>n</m> is odd, say <m>n = 2k+1</m>, then <m>n^2 = 4k^2 + 4k + 1</m> is odd; the contrapositive completes the case.</p>
+                    </case>
+                </proof>
+            </theorem>
+
+            <paragraphs xml:id="paragraphs-history" label="paragraphs-history">
                     <title>A Little History</title>
-                    <p>The lightweight <tag>paragraphs</tag> division has just a title, run in to this paragraph.  Cross-references work too: see <xref ref="theorem-pythagoras"/>, <xref ref="definition-hypotenuse"/>, and <xref ref="section-images"/>, all referenced from <xref ref="paragraphs-history" text="title"/>.</p>
+                    <p>The lightweight <tag>paragraphs</tag> division has just a title, run in to this paragraph.  Cross-references work too: see <xref ref="theorem-pythagoras"/>, <xref ref="definition-hypotenuse"/>, and <xref ref="section-images"/>, all referenced from <xref ref="paragraphs-history" text="title"/>.  Even the starred equation <xref ref="equation-even"/> answers to its decoration.</p>
                 </paragraphs>
             </introduction>
 
