@@ -161,6 +161,53 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-pageref"
               select="($latex-pageref = 'yes') or (($latex-pageref = '') and $b-latex-print)"/>
 
+<!-- The publisher's watermark ($watermark-text, with a scale       -->
+<!-- factor) becomes light gray text, rotated diagonally and        -->
+<!-- centered behind every page's content.  The implementation is   -->
+<!-- a small SVG image, written as  watermark.svg  beside the .fo   -->
+<!-- file (FOP reads a "data" URI only in base64 form, beyond XSLT  -->
+<!-- 1.0), and painted as the background of the body region; a      -->
+<!-- background is never content, so the structure tree of the      -->
+<!-- tagged PDF is undisturbed.  The historical default font is     -->
+<!-- 5cm (141.73pt), tamed by the scale factor, exactly as in the   -->
+<!-- LaTeX conversion.                                              -->
+<xsl:template name="watermark-attributes">
+    <xsl:if test="not($watermark-text = '')">
+        <xsl:attribute name="background-image">
+            <xsl:text>url('watermark.svg')</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="background-repeat">
+            <xsl:text>no-repeat</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="background-position-horizontal">
+            <xsl:text>center</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="background-position-vertical">
+            <xsl:text>center</xsl:text>
+        </xsl:attribute>
+    </xsl:if>
+</xsl:template>
+
+<!-- The image itself: sized to sit within the body region of the -->
+<!-- default page (6.5in by 9in, expressed in points), the text   -->
+<!-- rotated about the center.                                    -->
+<xsl:template name="watermark-image-file">
+    <xsl:if test="not($watermark-text = '')">
+        <exsl:document href="watermark.svg" method="xml" indent="no">
+            <svg:svg width="468pt" height="648pt" viewBox="0 0 468 648">
+                <svg:text x="234" y="324"
+                          font-family="DejaVu Sans"
+                          font-size="{format-number(141.73 * $watermark-scale, '0.##')}"
+                          fill="#CCCCCC"
+                          text-anchor="middle"
+                          transform="rotate(-45 234 324)">
+                    <xsl:value-of select="$watermark-text"/>
+                </svg:text>
+            </svg:svg>
+        </exsl:document>
+    </xsl:if>
+</xsl:template>
+
 <!-- ##### -->
 <!-- Entry -->
 <!-- ##### -->
@@ -176,6 +223,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$original" mode="generic-warnings"/>
     <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
     <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
+    <xsl:call-template name="watermark-image-file"/>
     <fo:root font-family="{$font-family-main}" font-size="{$font-size}" xml:lang="{$document-language}">
         <fo:layout-master-set>
             <fo:simple-page-master master-name="page-odd"
@@ -185,7 +233,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                    margin-bottom="0.6in"
                                    margin-left="{$margin-inner}"
                                    margin-right="{$margin-outer}">
-                <fo:region-body margin-bottom="0.4in"/>
+                <fo:region-body margin-bottom="0.4in">
+                    <xsl:call-template name="watermark-attributes"/>
+                </fo:region-body>
                 <fo:region-after extent="0.4in"/>
             </fo:simple-page-master>
             <fo:simple-page-master master-name="page-even"
@@ -195,7 +245,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                    margin-bottom="0.6in"
                                    margin-left="{$margin-outer}"
                                    margin-right="{$margin-inner}">
-                <fo:region-body margin-bottom="0.4in"/>
+                <fo:region-body margin-bottom="0.4in">
+                    <xsl:call-template name="watermark-attributes"/>
+                </fo:region-body>
                 <fo:region-after extent="0.4in"/>
             </fo:simple-page-master>
             <fo:page-sequence-master master-name="pages">
