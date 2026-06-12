@@ -601,6 +601,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
+<!-- A "headnote" introduces a glossary or a structured       -->
+<!-- bibliography with explanatory prose; contents just flow. -->
+<xsl:template match="headnote">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
 <!-- An "introduction" or "conclusion" of a division is mostly a -->
 <!-- transparent container, but any title runs in, bold, to the  -->
 <!-- leading paragraph.                                          -->
