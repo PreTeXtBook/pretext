@@ -909,6 +909,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
+<!-- The DISCUSSION-LIKE family appends commentary to an           -->
+<!-- OPENPROBLEM-LIKE block (a "status" report, a "discussion", a  -->
+<!-- "suggestion", ...): a bold run-in heading of the type-name,   -->
+<!-- serial number, and any title, as in the LaTeX conversion.     -->
+<xsl:template match="&DISCUSSION-LIKE;">
+    <fo:block space-before="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:variable name="heading">
+            <fo:inline font-weight="bold" font-style="normal">
+                <xsl:apply-templates select="." mode="type-name"/>
+                <xsl:variable name="the-number">
+                    <xsl:apply-templates select="." mode="serial-number"/>
+                </xsl:variable>
+                <xsl:if test="not($the-number = '')">
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="$the-number"/>
+                </xsl:if>
+                <xsl:if test="title">
+                    <xsl:text> (</xsl:text>
+                    <xsl:apply-templates select="." mode="title-full"/>
+                    <xsl:text>)</xsl:text>
+                </xsl:if>
+                <xsl:text>.</xsl:text>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="heading-then-content">
+            <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
 <!-- ######### -->
 <!-- Exercises -->
 <!-- ######### -->
