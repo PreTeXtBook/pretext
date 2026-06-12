@@ -288,6 +288,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </project>
         </section>
 
+        <section xml:id="section-quotations" label="section-quotations">
+            <title>Quotations, Verse, Quantities</title>
+
+            <p>Fill in the blank: the answer is <fillin characters="8"/> here.  And a quantity with units: the speed limit is <quantity><mag>100</mag><unit prefix="kilo" base="meter"/><per base="hour"/></quantity>.</p>
+
+            <blockquote>
+                <p>The grand thing is to be able to reason backwards.</p>
+                <attribution><q>A Study in Scarlet</q>, 1887</attribution>
+            </blockquote>
+
+            <poem xml:id="poem-fog" label="poem-fog">
+                <title>Fog</title>
+                <author>Carl Sandburg</author>
+                <stanza>
+                    <line>The fog comes</line>
+                    <line>on little cat feet.</line>
+                </stanza>
+                <stanza>
+                    <line>It sits looking</line>
+                    <line>over harbor and city</line>
+                    <line>on silent haunches</line>
+                    <line>and then moves on.</line>
+                </stanza>
+            </poem>
+        </section>
+
         <exercises xml:id="exercises-development" label="exercises-development">
             <title>A Few Exercises</title>
 
@@ -316,5 +342,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
             </exercisegroup>
         </exercises>
+
+        <references xml:id="references-development" label="references-development">
+            <title>References</title>
+
+            <biblio type="raw" xml:id="biblio-fcla" label="biblio-fcla">
+                <author>R. A. Beezer</author>, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
+            </biblio>
+            <biblio type="raw" xml:id="biblio-judson" label="biblio-judson">
+                <author>T. W. Judson</author>, <title>Abstract Algebra: Theory and Applications</title>, Orthogonal Publishing, 2024.
+            </biblio>
+        </references>
     </article>
 </pretext>
