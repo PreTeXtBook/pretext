@@ -1655,8 +1655,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:if test="not($width = '')">
         <xsl:attribute name="border-{$side}">
+            <xsl:text>solid </xsl:text>
             <xsl:value-of select="$width"/>
-            <xsl:text> solid</xsl:text>
+            <xsl:text> #000000</xsl:text>
         </xsl:attribute>
     </xsl:if>
 </xsl:template>
@@ -1871,7 +1872,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               space-after="0.5em">
         <xsl:if test="$boxed">
             <xsl:attribute name="border">
-                <xsl:text>0.5pt solid #888888</xsl:text>
+                <xsl:text>solid 0.5pt #888888</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="padding">
                 <xsl:text>3pt</xsl:text>
@@ -2171,7 +2172,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Keyboard keys, visibly boxed.  A @name indexes the Unicode -->
 <!-- column of the key table in  pretext-common.xsl.            -->
 <xsl:template match="kbd[not(@name)]">
-    <fo:inline font-family="{$font-family-monospace}" border="0.5pt solid #888888" padding="0pt 2pt">
+    <fo:inline font-family="{$font-family-monospace}" border="solid 0.5pt #888888" padding-left="2pt" padding-right="2pt">
         <xsl:value-of select="."/>
     </fo:inline>
 </xsl:template>
@@ -2181,7 +2182,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- face, so the classic return symbol (U+21B5) stands in.       -->
 <xsl:template match="kbd[@name]">
     <xsl:variable name="kbdkey-name" select="@name"/>
-    <fo:inline font-family="{$font-family-symbol}" border="0.5pt solid #888888" padding="0pt 2pt">
+    <fo:inline font-family="{$font-family-symbol}" border="solid 0.5pt #888888" padding-left="2pt" padding-right="2pt">
         <xsl:choose>
             <xsl:when test="@name = 'enter'">
                 <xsl:text>&#x21b5;</xsl:text>
@@ -2691,14 +2692,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Placeholders: the authored LaTeX, visibly boxed, in a -->
 <!-- monospace font.                                       -->
 <xsl:template match="m" mode="math-placeholder">
-    <fo:inline font-family="{$font-family-monospace}" border="0.5pt solid #888888" padding="0pt 2pt">
+    <fo:inline font-family="{$font-family-monospace}" border="solid 0.5pt #888888" padding-left="2pt" padding-right="2pt">
         <xsl:value-of select="."/>
     </fo:inline>
 </xsl:template>
 
 <xsl:template match="me|men|md|mdn" mode="math-placeholder">
     <fo:block font-family="{$font-family-monospace}"
-              border="0.5pt solid #888888"
+              border="solid 0.5pt #888888"
               padding="2pt"
               space-before="0.5em"
               space-after="0.5em"
