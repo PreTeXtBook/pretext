@@ -2644,9 +2644,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x201d;</xsl:text>
 </xsl:template>
 
-<!-- The adornments of manually-tagged equations -->
+<!-- The adornments of manually-tagged equations.  The star and -->
+<!-- the maltese cross are missing from the main (serif) face,  -->
+<!-- so they borrow the symbol font.                            -->
 <xsl:template name="tag-star">
-    <xsl:text>&#x2736;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2736;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="tag-dagger">
     <xsl:text>&#x2020;</xsl:text>
@@ -2658,7 +2662,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>#</xsl:text>
 </xsl:template>
 <xsl:template name="tag-maltese">
-    <xsl:text>&#x2720;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2720;</xsl:text>
+    </fo:inline>
 </xsl:template>
 
 <!-- The Unicode code points below match the HTML conversion. -->
@@ -2674,17 +2680,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="thin-space-character">
     <xsl:text>&#x2009;</xsl:text>
 </xsl:template>
+<!-- the white square brackets are missing from the main (serif)  -->
+<!-- face, so they borrow the symbol font, as the tombstone does  -->
 <xsl:template name="ldblbracket-character">
-    <xsl:text>&#x27e6;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x27e6;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="rdblbracket-character">
-    <xsl:text>&#x27e7;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x27e7;</xsl:text>
+    </fo:inline>
 </xsl:template>
+<!-- the *mathematical* angle brackets (U+27E8, U+27E9); the CJK -->
+<!-- pair (U+3008, U+3009) is not in the embedded fonts at all   -->
 <xsl:template name="langle-character">
-    <xsl:text>&#x3008;</xsl:text>
+    <xsl:text>&#x27e8;</xsl:text>
 </xsl:template>
 <xsl:template name="rangle-character">
-    <xsl:text>&#x3009;</xsl:text>
+    <xsl:text>&#x27e9;</xsl:text>
 </xsl:template>
 <xsl:template name="ellipsis-character">
     <xsl:text>&#x2026;</xsl:text>
@@ -2722,11 +2736,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="copyright-character">
     <xsl:text>&#xa9;</xsl:text>
 </xsl:template>
+<!-- the sound-recording and service marks borrow the symbol font -->
 <xsl:template name="phonomark-character">
-    <xsl:text>&#x2117;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2117;</xsl:text>
+    </fo:inline>
 </xsl:template>
+<!-- The copyleft symbol (U+1F12F) is in none of the embedded   -->
+<!-- fonts; a reversed-c in parentheses is its construction     -->
+<!-- anyway, so an open-o (U+0254) stands in until fonts become -->
+<!-- publisher-configurable.                                    -->
 <xsl:template name="copyleft-character">
-    <xsl:text>&#x1f12f;</xsl:text>
+    <xsl:text>(&#x254;)</xsl:text>
 </xsl:template>
 <xsl:template name="registered-character">
     <xsl:text>&#xae;</xsl:text>
@@ -2735,7 +2756,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2122;</xsl:text>
 </xsl:template>
 <xsl:template name="servicemark-character">
-    <xsl:text>&#x2120;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2120;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="degree-character">
     <xsl:text>&#xb0;</xsl:text>
