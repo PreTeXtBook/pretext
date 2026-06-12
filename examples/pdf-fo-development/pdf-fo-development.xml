@@ -375,6 +375,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
         <backmatter xml:id="backmatter" label="backmatter">
             <title>Back Matter</title>
+
+            <solutions xml:id="solutions-backmatter" label="solutions-backmatter" divisional="answer solution" project="solution" inline="answer">
+                <title>Answers and Solutions</title>
+            </solutions>
             <colophon xml:id="colophon" label="colophon">
                 <p>This article was authored in, and produced with, <pretext/>, rendered by Apache FOP by way of XSL Formatting Objects.</p>
             </colophon>
