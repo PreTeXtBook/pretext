@@ -455,10 +455,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               space-after="0.75em"
               keep-with-next.within-page="always"
               role="H{count(ancestor::*[&STRUCTURAL-FILTER;]) + 1}">
-        <!-- a formatted printout occupies pages of its own -->
-        <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
+        <xsl:variable name="page-break">
+            <xsl:apply-templates select="." mode="division-break"/>
+        </xsl:variable>
+        <xsl:if test="not($page-break = '')">
             <xsl:attribute name="break-before">
-                <xsl:text>page</xsl:text>
+                <xsl:value-of select="$page-break"/>
             </xsl:attribute>
         </xsl:if>
         <xsl:apply-templates select="." mode="link-id-attribute"/>
@@ -486,6 +488,33 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
         <fo:block break-after="page"/>
     </xsl:if>
+</xsl:template>
+
+<!-- The page break, if any, opening a division.  A chapter-level   -->
+<!-- division of a book begins a fresh page: the odd (recto) page   -->
+<!-- of a spread for a two-sided layout, and also for one-sided     -->
+<!-- when the publisher elects "open-odd" pagination to match a     -->
+<!-- two-sided copy page-for-page.  (The publisher's "skip-pages"   -->
+<!-- flavor of open-odd asks for a *omitted* page number instead of -->
+<!-- a blank page, which a single XSL-FO page-sequence cannot       -->
+<!-- express; it degrades to the blank page.)  And a formatted      -->
+<!-- printout (worksheet, handout) occupies pages of its own.       -->
+<xsl:template match="*" mode="division-break">
+    <xsl:choose>
+        <xsl:when test="parent::book or parent::part or (ancestor::book and (parent::frontmatter or parent::backmatter))">
+            <xsl:choose>
+                <xsl:when test="$b-latex-two-sides or not($latex-open-odd = 'no')">
+                    <xsl:text>odd-page</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>page</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
+            <xsl:text>page</xsl:text>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- A worksheet or handout "page" is a pagination request, -->
