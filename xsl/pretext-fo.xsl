@@ -159,19 +159,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                    page-width="{$page-width}"
                                    page-height="{$page-height}"
                                    margin-top="1in"
-                                   margin-bottom="1in"
+                                   margin-bottom="0.6in"
                                    margin-left="{$margin-inner}"
                                    margin-right="{$margin-outer}">
-                <fo:region-body/>
+                <fo:region-body margin-bottom="0.4in"/>
+                <fo:region-after extent="0.4in"/>
             </fo:simple-page-master>
             <fo:simple-page-master master-name="page-even"
                                    page-width="{$page-width}"
                                    page-height="{$page-height}"
                                    margin-top="1in"
-                                   margin-bottom="1in"
+                                   margin-bottom="0.6in"
                                    margin-left="{$margin-outer}"
                                    margin-right="{$margin-inner}">
-                <fo:region-body/>
+                <fo:region-body margin-bottom="0.4in"/>
+                <fo:region-after extent="0.4in"/>
             </fo:simple-page-master>
             <fo:page-sequence-master master-name="pages">
                 <fo:repeatable-page-master-alternatives>
@@ -203,6 +205,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </x:xmpmeta>
         </fo:declarations>
         <fo:page-sequence master-reference="pages">
+            <fo:static-content flow-name="xsl-region-after">
+                <fo:block text-align="center" font-size="90%">
+                    <fo:page-number/>
+                </fo:block>
+            </fo:static-content>
             <fo:static-content flow-name="xsl-footnote-separator">
                 <fo:block end-indent="70%" space-before="4pt" space-after="4pt">
                     <fo:leader leader-pattern="rule" leader-length="100%" rule-thickness="0.5pt"/>
