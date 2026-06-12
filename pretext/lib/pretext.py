@@ -4060,38 +4060,42 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
                 shutil.copy2(pdfname, dest_dir)
 
 
-def _pdf_fo_link_descriptions(pdfname):
+def _pdf_fo_accessibility_repairs(pdfname):
     """
-    Post-process a FOP-rendered PDF so every link annotation carries
-    the alternate description PDF/UA requires.
+    Post-process a FOP-rendered PDF to repair two PDF/UA conformance
+    gaps that Apache FOP (observed with version 2.8) cannot fill from
+    the XSL-FO side.  PyMuPDF performs the (small, incremental)
+    repairs; it is already a dependency of this script, used for
+    image format conversions.
 
-    Why this routine exists:
+    Repair one, link descriptions:
 
     PDF/UA-1 (ISO 14289-1, Clause 7.18.5) requires each link
     annotation to provide an alternate description in the /Contents
     key of its annotation dictionary (per ISO 32000-1, 14.9.3); this
     is what assistive technology announces for the link, and what a
-    validator such as veraPDF inspects.
-
-    The XSL-FO conversion decorates every "fo:basic-link" with a
-    description, via the "fox:alt-text" extension attribute.  But
-    Apache FOP (observed with version 2.8) records that description
-    only as the /Alt entry of the link's *structure element*, in the
+    validator such as veraPDF inspects.  The XSL-FO conversion
+    decorates every "fo:basic-link" with a description, via the
+    "fox:alt-text" extension attribute, but FOP records it only as
+    the /Alt entry of the link's *structure element*, in the
     structure tree -- it has no mechanism at all for writing the
-    /Contents key of the Link *annotation*.  So a PDF fresh from FOP
-    fails Clause 7.18.5, no matter what the FO file says.
+    /Contents key of the Link *annotation*.  So walk the structure
+    tree's /ParentTree to recover each annotation's intended
+    description from its structure element (falling back to the
+    link's URI, or generic text) and write it into /Contents.
 
-    The repair: walk the structure tree's /ParentTree to recover each
-    annotation's intended description from its structure element
-    (falling back to the link's URI, or generic text), write it into
-    /Contents, and save incrementally.  PyMuPDF is already a
-    dependency of this script, used for image format conversions.
+    Repair two, footnote identifiers:
+
+    PDF/UA-1 (Clause 7.9) requires each /Note structure element
+    (FOP's tag for the body of a footnote) to carry a unique /ID
+    entry, which FOP never writes.  Manufacture one from the
+    object number.
 
     N.B. Remove this routine (and its one call, in pdf_fo()) the day
-    FOP writes /Contents itself.  The test: render with a newer FOP,
+    FOP handles both itself.  The test: render with a newer FOP,
     skip this pass, and check the report of
         verapdf --flavour ua1 <the-pdf>
-    for Clause 7.18.5.
+    for Clauses 7.18.5 and 7.9.
     """
     try:
         import fitz  # pyMuPDF
@@ -4148,10 +4152,15 @@ def _pdf_fo_link_descriptions(pdfname):
                 description = link.get("uri") or "internal cross-reference"
             doc.xref_set_key(xref, "Contents", fitz.get_pdf_str(description))
             additions += 1
+    # repair two: a unique /ID for each /Note structure element
+    for xref in range(1, doc.xref_length()):
+        if doc.xref_get_key(xref, "S")[1] == "/Note" and doc.xref_get_key(xref, "ID")[0] == "null":
+            doc.xref_set_key(xref, "ID", "(Note-{})".format(xref))
+            additions += 1
     if additions > 0:
         doc.saveIncr()
     doc.close()
-    log.debug("described {} link annotations in {}".format(additions, pdfname))
+    log.debug("made {} accessibility repairs in {}".format(additions, pdfname))
 
 
 def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
@@ -4225,8 +4234,8 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     if result.returncode != 0:
         raise OSError("Apache FOP rendering of {} failed".format(foname))
 
-    # post-process: describe link annotations, as PDF/UA requires
-    _pdf_fo_link_descriptions(pdfname)
+    # post-process: repair PDF/UA conformance gaps FOP leaves behind
+    _pdf_fo_accessibility_repairs(pdfname)
 
     # Copy just the PDF output
     # out_file: not(None) only if provided in CLI

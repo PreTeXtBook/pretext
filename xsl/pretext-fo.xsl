@@ -202,6 +202,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </x:xmpmeta>
         </fo:declarations>
         <fo:page-sequence master-reference="pages">
+            <fo:static-content flow-name="xsl-footnote-separator">
+                <fo:block end-indent="70%" space-before="4pt" space-after="4pt">
+                    <fo:leader leader-pattern="rule" leader-length="100%" rule-thickness="0.5pt"/>
+                </fo:block>
+            </fo:static-content>
             <fo:flow flow-name="xsl-region-body">
                 <xsl:apply-templates select="$document-root"/>
             </fo:flow>
@@ -1431,6 +1436,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template name="dblprime-character">
     <xsl:text>&#x2033;</xsl:text>
+</xsl:template>
+
+<!-- ######### -->
+<!-- Footnotes -->
+<!-- ######### -->
+
+<!-- A "fn" is a native fo:footnote: a superscript mark in the    -->
+<!-- text, and the body, marked again, collected at the bottom of -->
+<!-- the page above the separator rule defined in the entry       -->
+<!-- template.  The footnote number is the serial machinery's.    -->
+<xsl:template match="fn">
+    <xsl:variable name="the-mark">
+        <xsl:apply-templates select="." mode="serial-number"/>
+    </xsl:variable>
+    <fo:footnote>
+        <fo:inline baseline-shift="super" font-size="70%">
+            <xsl:value-of select="$the-mark"/>
+        </fo:inline>
+        <fo:footnote-body>
+            <fo:block font-size="80%" text-align="justify" space-before="0.25em">
+                <xsl:apply-templates select="." mode="link-id-attribute"/>
+                <fo:inline baseline-shift="super" font-size="70%">
+                    <xsl:value-of select="$the-mark"/>
+                </fo:inline>
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates/>
+            </fo:block>
+        </fo:footnote-body>
+    </fo:footnote>
 </xsl:template>
 
 <!-- ########## -->
