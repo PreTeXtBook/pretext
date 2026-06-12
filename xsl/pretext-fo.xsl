@@ -1080,11 +1080,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Figures and Caption -->
 <!-- ################### -->
 
-<!-- A "figure" (captioned) and a "table" (titled) wrap their   -->
-<!-- contents and finish with a centered caption line.  The     -->
-<!-- "caption" element is consumed here, so it is killed in the -->
-<!-- default mode, with the other metadata.                     -->
-<xsl:template match="figure|table">
+<!-- The FIGURE-LIKE blocks (a captioned "figure"; and "table",   -->
+<!-- "listing", "list", each titled) wrap their contents and      -->
+<!-- finish with a centered caption line; all share one counter.  -->
+<!-- The "caption" element is consumed here, so it is killed in   -->
+<!-- the default mode, with the other metadata.                   -->
+<xsl:template match="&FIGURE-LIKE;">
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="*"/>
@@ -1102,11 +1103,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </fo:inline>
             <xsl:text> </xsl:text>
             <xsl:choose>
-                <xsl:when test="self::table">
-                    <xsl:apply-templates select="." mode="title-full"/>
-                </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="self::figure">
                     <xsl:apply-templates select="caption/node()"/>
+                </xsl:when>
+                <!-- "table", "listing", "list" are titled -->
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="title-full"/>
                 </xsl:otherwise>
             </xsl:choose>
         </fo:block>
