@@ -34,7 +34,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>This is the first paragraph of a minimal article, used to exercise the conversion of PreTeXt source to XSL Formatting Objects, and then to a PDF by Apache FOP.  A paragraph is the fundamental unit of prose, so it is the first element implemented, and this one is long enough to demonstrate line-breaking and justification.</p>
 
-            <p>A second paragraph demonstrates inter-paragraph spacing.  It contains some inline markup, such as <em>emphasized text</em> and a <term>defined term</term>, rendered with italic and bold fonts.</p>
+            <p>A second paragraph demonstrates inter-paragraph spacing.  It contains some inline markup, such as <em>emphasized text</em> and a <term>defined term</term>, rendered with italic and bold fonts.  A footnote<fn>The footnote drops to the bottom of the page, below a separator rule.</fn> hangs off this sentence.</p>
         </section>
 
         <section xml:id="section-inline" label="section-inline">
