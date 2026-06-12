@@ -413,6 +413,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="self::section">140%</xsl:when>
             <xsl:when test="self::subsection">120%</xsl:when>
             <xsl:when test="self::subsubsection">100%</xsl:when>
+            <!-- a specialized division sizes by its depth -->
+            <xsl:otherwise>
+                <xsl:variable name="depth" select="count(ancestor::*[&STRUCTURAL-FILTER;])"/>
+                <xsl:choose>
+                    <xsl:when test="$depth &lt;= 1">140%</xsl:when>
+                    <xsl:when test="$depth = 2">120%</xsl:when>
+                    <xsl:otherwise>100%</xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="the-number">
@@ -1469,12 +1478,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="col">
                 <xsl:apply-templates select="col"/>
             </xsl:when>
-            <!-- no authored columns: equal widths, one per cell -->
-            <!-- of the first row                                -->
+            <!-- no authored columns: equal widths, as many as the -->
+            <!-- widest row, with any @colspan unrolled            -->
             <xsl:otherwise>
-                <xsl:for-each select="row[1]/cell">
-                    <fo:table-column column-width="proportional-column-width(1)"/>
-                </xsl:for-each>
+                <xsl:variable name="column-count">
+                    <xsl:for-each select="row">
+                        <xsl:sort select="count(cell[not(@colspan)]) + sum(cell/@colspan)" data-type="number" order="descending"/>
+                        <xsl:if test="position() = 1">
+                            <xsl:value-of select="count(cell[not(@colspan)]) + sum(cell/@colspan)"/>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:variable>
+                <xsl:call-template name="equal-table-columns">
+                    <xsl:with-param name="remaining" select="$column-count"/>
+                </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="row[@header = 'yes']">
@@ -1486,6 +1503,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="row[not(@header = 'yes')]"/>
         </fo:table-body>
     </fo:table>
+</xsl:template>
+
+<xsl:template name="equal-table-columns">
+    <xsl:param name="remaining"/>
+    <xsl:if test="$remaining &gt; 0">
+        <fo:table-column column-width="proportional-column-width(1)"/>
+        <xsl:call-template name="equal-table-columns">
+            <xsl:with-param name="remaining" select="$remaining - 1"/>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="tabular/col">
@@ -1966,6 +1993,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- columns.  The panel element list mirrors the one in the       -->
 <!-- "sidebyside" main template of pretext-common.xsl.             -->
 <xsl:template match="sidebyside">
+    <xsl:variable name="panels" select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs"/>
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters"/>
     </xsl:variable>
@@ -1973,6 +2001,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="has-left-margin" select="number(substring-before($layout/left-margin, '%')) &gt; 0"/>
     <xsl:variable name="has-right-margin" select="number(substring-before($layout/right-margin, '%')) &gt; 0"/>
     <xsl:variable name="has-gaps" select="number(substring-before($layout/space-width, '%')) &gt; 0"/>
+    <!-- a row without cells is fatal to FOP, so no panels, no table -->
+    <xsl:if test="$panels">
     <fo:table table-layout="fixed" width="100%" space-before="0.5em" space-after="0.5em">
         <xsl:if test="$has-left-margin">
             <fo:table-column column-width="proportional-column-width({substring-before($layout/left-margin, '%')})"/>
@@ -1993,7 +2023,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <fo:block/>
                     </fo:table-cell>
                 </xsl:if>
-                <xsl:for-each select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs">
+                <xsl:for-each select="$panels">
                     <xsl:variable name="panel-number" select="position()"/>
                     <xsl:if test="($panel-number &gt; 1) and $has-gaps">
                         <fo:table-cell>
@@ -2020,6 +2050,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </fo:table-row>
         </fo:table-body>
     </fo:table>
+    </xsl:if>
 </xsl:template>
 
 <!-- A "stack" stacks several items vertically within one panel; -->
@@ -2236,6 +2267,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x201d;</xsl:text>
 </xsl:template>
 
+<!-- The adornments of manually-tagged equations -->
+<xsl:template name="tag-star">
+    <xsl:text>&#x2736;</xsl:text>
+</xsl:template>
+<xsl:template name="tag-dagger">
+    <xsl:text>&#x2020;</xsl:text>
+</xsl:template>
+<xsl:template name="tag-daggerdbl">
+    <xsl:text>&#x2021;</xsl:text>
+</xsl:template>
+<xsl:template name="tag-hash">
+    <xsl:text>#</xsl:text>
+</xsl:template>
+<xsl:template name="tag-maltese">
+    <xsl:text>&#x2720;</xsl:text>
+</xsl:template>
+
 <!-- The Unicode code points below match the HTML conversion. -->
 <xsl:template name="nbsp-character">
     <xsl:text>&#xa0;</xsl:text>
@@ -2425,6 +2473,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="ancestor::title|ancestor::shorttitle|ancestor::subtitle">
             <xsl:copy-of select="$visible-text"/>
         </xsl:when>
+        <!-- an empty destination is fatal to FOP -->
+        <xsl:when test="$uri = ''">
+            <xsl:copy-of select="$visible-text"/>
+        </xsl:when>
         <xsl:otherwise>
             <!-- the description PDF/UA requires of a link annotation -->
             <fo:basic-link external-destination="url({$uri})" fox:alt-text="{$uri}">
@@ -2466,11 +2518,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="the-id">
         <xsl:apply-templates select="$target" mode="unique-id"/>
     </xsl:variable>
-    <!-- the link text doubles as the description PDF/UA requires -->
-    <fo:basic-link internal-destination="{$the-id}" fox:alt-text="{normalize-space(string($content))}">
-        <xsl:call-template name="link-attributes"/>
-        <xsl:copy-of select="$content"/>
-    </fo:basic-link>
+    <xsl:choose>
+        <!-- an empty destination is fatal to FOP -->
+        <xsl:when test="$the-id = ''">
+            <xsl:copy-of select="$content"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- the link text doubles as the description PDF/UA requires -->
+            <fo:basic-link internal-destination="{$the-id}" fox:alt-text="{normalize-space(string($content))}">
+                <xsl:call-template name="link-attributes"/>
+                <xsl:copy-of select="$content"/>
+            </fo:basic-link>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Hard-coded numbers, as in the HTML conversion: the number of -->
@@ -2528,8 +2588,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="svg" select="$math-repr/pi:math[@id = $id]/div[@class = 'svg']/svg:svg"/>
     <xsl:variable name="speech" select="normalize-space($speech-repr/pi:math[@id = $id]/div[@class = 'speech'])"/>
-    <xsl:variable name="width-points"
-                  select="number(substring-before($svg/@width, 'ex')) * $math-points-per-ex"/>
+    <xsl:variable name="width-points">
+        <xsl:choose>
+            <xsl:when test="contains($svg/@width, 'ex')">
+                <xsl:value-of select="number(substring-before($svg/@width, 'ex')) * $math-points-per-ex"/>
+            </xsl:when>
+            <!-- a wide, aligned display gets width="100%" from   -->
+            <!-- MathJax, with the true width as a "min-width" in -->
+            <!-- the @style                                       -->
+            <xsl:when test="contains($svg/@style, 'min-width:')">
+                <xsl:value-of select="number(substring-before(substring-after($svg/@style, 'min-width:'), 'ex')) * $math-points-per-ex"/>
+            </xsl:when>
+            <!-- last resort: the third entry of the @viewBox, in -->
+            <!-- thousandths of an em                             -->
+            <xsl:otherwise>
+                <xsl:variable name="past-origin" select="substring-after(substring-after(normalize-space($svg/@viewBox), ' '), ' ')"/>
+                <xsl:value-of select="(number(substring-before($past-origin, ' ')) div 1000) * number(substring-before($font-size, 'pt'))"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:variable name="height-points"
                   select="number(substring-before($svg/@height, 'ex')) * $math-points-per-ex"/>
     <xsl:choose>
@@ -2632,6 +2709,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="get-clause-punctuation-mark"/>
         </xsl:if>
     </fo:block>
+</xsl:template>
+
+<!-- ############ -->
+<!-- Author Tools -->
+<!-- ############ -->
+
+<!-- An author-tools warning, placed in the margin by the HTML  -->
+<!-- conversion.  Quietly dropped here, for now: margin notes   -->
+<!-- await a layout treatment.  The named template must exist,  -->
+<!-- since a missing named template is a *fatal* runtime error. -->
+<xsl:template name="margin-warning">
+    <xsl:param name="warning"/>
 </xsl:template>
 
 <!-- ################ -->
