@@ -154,10 +154,20 @@ What remains, roughly in order of value:
 1. **Structured bibliography** — `biblio[@type='book'|'article']`
    with `author/name/given|family`, `collection-title`, `issued`;
    currently only `@type='raw'` renders.
-2. **Refinements flagged in stylesheet comments** —
-   `@header='vertical'` and `@row-headers` tables,
-   `exercisegroup/@cols`, a keep for the proof tombstone, a
-   two-column index (needs its own page-sequence).
+2. **Refinements still flagged in stylesheet comments** — poem
+   line alignment, program line numbers and highlighting, console
+   continuation lines, `@colspan` in the first row of a
+   column-less `tabular`.
+
+Done in the refinements round: the proof tombstone rides the
+closing paragraph's final line (elastic leader; kept standalone
+line otherwise), `exercisegroup/@cols` as an equal-column raster,
+`row/@header='vertical'` as rotated (quarter-turn) header text
+inside `fo:table-header`, `tabular/@row-headers` bolding the
+leading column (FOP can tag only an `fo:table-header` as "TH"),
+and a **two-column index**: the document partitions into page
+sequences around a `backmatter/index`, whose body region sets
+`column-count="2"` (pagination just continues across sequences).
 
 Targets: full coverage of the sample article, then the sample book
 (parts, Runestone static exercises).
