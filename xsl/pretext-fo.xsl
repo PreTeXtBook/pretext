@@ -863,6 +863,137 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
+<!-- ######## -->
+<!-- Verbatim -->
+<!-- ######## -->
+
+<!-- The workhorse: one block of literal text in a monospace font,  -->
+<!-- slightly reduced, with every space and linefeed preserved, and -->
+<!-- no line-wrapping.  Optionally boxed (e.g. Sage input).         -->
+<xsl:template name="verbatim-block">
+    <xsl:param name="content"/>
+    <xsl:param name="boxed" select="false()"/>
+    <fo:block font-family="{$font-family-monospace}"
+              font-size="90%"
+              white-space-collapse="false"
+              white-space-treatment="preserve"
+              linefeed-treatment="preserve"
+              wrap-option="no-wrap"
+              text-align="start"
+              space-before="0.5em"
+              space-after="0.5em">
+        <xsl:if test="$boxed">
+            <xsl:attribute name="border">
+                <xsl:text>0.5pt solid #888888</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="padding">
+                <xsl:text>3pt</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:copy-of select="$content"/>
+    </fo:block>
+</xsl:template>
+
+<!-- "pre" is the pure display of literal text; the "interior" -->
+<!-- machinery of pretext-common.xsl scrubs the indentation,   -->
+<!-- handling text or "cline" structure alike.                 -->
+<xsl:template match="pre">
+    <xsl:call-template name="verbatim-block">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="interior"/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- A "cd" (code display) interrupts a paragraph with a short -->
+<!-- hunk of verbatim text, either mixed content or "cline"s.  -->
+<xsl:template match="cd">
+    <xsl:call-template name="verbatim-block">
+        <xsl:with-param name="content">
+            <xsl:choose>
+                <xsl:when test="cline">
+                    <xsl:apply-templates select="cline"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="."/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- A "program" renders its visible source code; line numbers, -->
+<!-- line highlighting, and visible preambles/postambles are    -->
+<!-- refinements for later.                                     -->
+<xsl:template match="program">
+    <xsl:call-template name="verbatim-block">
+        <xsl:with-param name="content">
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text">
+                    <xsl:choose>
+                        <xsl:when test="code">
+                            <xsl:value-of select="code"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="."/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- A "console" session: each "input" line carries its prompt   -->
+<!-- (resolved by pretext-common.xsl) and is bold, distinct from -->
+<!-- plain "output".  Continuation lines are a refinement.       -->
+<xsl:template match="console">
+    <xsl:call-template name="verbatim-block">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="input|output"/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="console/input">
+    <fo:inline font-weight="bold">
+        <xsl:apply-templates select="." mode="determine-console-prompt"/>
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="."/>
+        </xsl:call-template>
+    </fo:inline>
+</xsl:template>
+
+<xsl:template match="console/output">
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- A "sage" cell: the input boxed, any output following plain.   -->
+<!-- An empty cell is an interactive invitation, nothing on paper. -->
+<xsl:template match="sage">
+    <xsl:if test="input">
+        <xsl:call-template name="verbatim-block">
+            <xsl:with-param name="boxed" select="true()"/>
+            <xsl:with-param name="content">
+                <xsl:call-template name="sanitize-text">
+                    <xsl:with-param name="text" select="input"/>
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="output">
+        <xsl:call-template name="verbatim-block">
+            <xsl:with-param name="content">
+                <xsl:call-template name="sanitize-text">
+                    <xsl:with-param name="text" select="output"/>
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
 <!-- ############ -->
 <!-- Side-by-Side -->
 <!-- ############ -->
@@ -1103,7 +1234,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- those default-mode templates, so an  xsl:apply-imports       -->
 <!-- reinstates each element here: an element leaves the harness  -->
 <!-- report only by deliberately joining this list.               -->
-<xsl:template match="pretext|prefigure[not(node())]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|tag|tage|attr|icon|pi:localize">
+<xsl:template match="pretext|prefigure[not(node())]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|cline|tag|tage|attr|icon|pi:localize">
     <xsl:apply-imports/>
 </xsl:template>
 
