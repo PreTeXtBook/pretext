@@ -790,6 +790,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
             <xsl:with-param name="run-in-heading" select="$heading"/>
         </xsl:apply-templates>
+        <!-- writing space below, in a printout, when requested -->
+        <xsl:apply-templates select="." mode="workspace"/>
     </fo:block>
 </xsl:template>
 
@@ -813,6 +815,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="exercise-components">
             <xsl:with-param name="run-in-heading" select="$heading"/>
         </xsl:apply-templates>
+        <!-- writing space below a terminal task, in a printout -->
+        <xsl:apply-templates select="." mode="workspace"/>
     </fo:block>
 </xsl:template>
 
@@ -936,6 +940,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="exercise"/>
         <xsl:apply-templates select="conclusion"/>
     </fo:block>
+</xsl:template>
+
+<!-- Workspace in a Printout -->
+<!-- ####################### -->
+
+<!-- A worksheet or handout is a printout, and an author may request -->
+<!-- blank space below an exercise (or terminal task) where a reader -->
+<!-- works: "sanitize-workspace" (pretext-common.xsl) reduces the    -->
+<!-- @workspace in effect to an absolute length, or to nothing.  The -->
+<!-- space is elastic, in the manner of the LaTeX conversion's       -->
+<!-- "vfill": the request is the natural size, a minimum in spirit;  -->
+<!-- the space may surrender a quarter on a crowded page, and it can -->
+<!-- grow severalfold, so the workspace of a page's final exercise   -->
+<!-- expands to fill the remainder of the printout's page.  The      -->
+<!-- "retain" sends a space interrupted by a page break wholly onto  -->
+<!-- the next page, rather than quietly discarding it.               -->
+<xsl:template match="*" mode="workspace">
+    <xsl:variable name="vertical-space">
+        <xsl:apply-templates select="." mode="sanitize-workspace"/>
+    </xsl:variable>
+    <xsl:if test="not($vertical-space = '')">
+        <xsl:variable name="magnitude" select="substring($vertical-space, 1, string-length($vertical-space) - 2)"/>
+        <xsl:variable name="unit" select="substring($vertical-space, string-length($vertical-space) - 1)"/>
+        <fo:block space-before.minimum="{format-number(0.75 * $magnitude, '0.##')}{$unit}"
+                  space-before.optimum="{$vertical-space}"
+                  space-before.maximum="{format-number(4 * $magnitude, '0.##')}{$unit}"
+                  space-before.conditionality="retain"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- The publisher may decline printout formatting wholesale     -->
+<!-- (pagination, workspace); then workspace requests evaporate, -->
+<!-- exactly as in the LaTeX conversion.                         -->
+<xsl:template match="*" mode="sanitize-workspace">
+    <xsl:if test="$b-latex-worksheet-formatted">
+        <xsl:apply-imports/>
+    </xsl:if>
 </xsl:template>
 
 <!-- Components of an Exercise  -->
