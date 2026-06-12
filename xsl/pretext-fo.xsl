@@ -239,7 +239,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" mode="bookmark"/>
 </xsl:template>
 
-<xsl:template match="chapter|section|subsection|subsubsection|appendix|exercises|worksheet|reading-questions|solutions|references|glossary|preface|acknowledgement|foreword|dedication|biography|colophon|index" mode="bookmark">
+<xsl:template match="chapter|section|subsection|subsubsection|appendix|exercises|worksheet|handout|reading-questions|solutions|references|glossary|preface|acknowledgement|foreword|dedication|biography|colophon|index" mode="bookmark">
     <fo:bookmark>
         <xsl:attribute name="internal-destination">
             <xsl:apply-templates select="." mode="unique-id"/>
@@ -406,7 +406,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The specialized divisions ("exercises", "references", ...)     -->
 <!-- take the very same heading; their specialized *contents* are   -->
 <!-- implemented (or not, yet) elsewhere.                           -->
-<xsl:template match="chapter|section|subsection|subsubsection|appendix|exercises|worksheet|reading-questions|solutions|references|glossary|preface|acknowledgement|foreword|dedication|biography|colophon|index">
+<xsl:template match="chapter|section|subsection|subsubsection|appendix|exercises|worksheet|handout|reading-questions|solutions|references|glossary|preface|acknowledgement|foreword|dedication|biography|colophon|index">
     <xsl:variable name="heading-size">
         <xsl:choose>
             <xsl:when test="self::chapter">170%</xsl:when>
