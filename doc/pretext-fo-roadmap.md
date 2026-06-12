@@ -126,17 +126,28 @@ second pass), `open-odd` (chapter-level divisions of a book;
 file painted as the body-region background, so the structure tree
 is undisturbed).
 
+The generated lists are done, all on the abstract hooks of
+`pretext-common.xsl`: the back-of-the-book index (`index-list`,
+every `idx` dropping an invisible `fo:wrapper` anchor, locators as
+live page-number citations — no `makeindex`, no second run), the
+notation list (a table; sample usage, description, a link to the
+enclosure), and `list-of` (scoped lists of blocks as live
+cross-references).  Every `p` now carries an id, so a top-level
+paragraph works as a link target (the notation list needs this).
+
 What remains, roughly in order of value:
 
-1. **Coverage leftovers** — contributors detail, `index-list` and
-   `notation-list`, `list-of`.
+1. **Structured bibliography** — `biblio[@type='book'|'article']`
+   with `author/name/given|family`, `collection-title`, `issued`;
+   currently only `@type='raw'` renders.
 2. **Runestone static internals** — matching/select exercises
-   (`premise`, `response`, ...), embedded HTML (`div`, `br`),
-   interactive previews.
+   (`premise`, `response`, ...), embedded HTML (`div`, `br`,
+   `code`), interactive previews; also `fragment`/`fragref`
+   (literate programming) and stray `docinfo/rename` leakage.
 3. **Refinements flagged in stylesheet comments** —
    `@header='vertical'` and `@row-headers` tables,
-   `exercisegroup/@cols`, literate-programming fragments, a keep
-   for the proof tombstone.
+   `exercisegroup/@cols`, a keep for the proof tombstone, a
+   two-column index (needs its own page-sequence).
 
 Targets: full coverage of the sample article, then the sample book
 (parts, Runestone static exercises).
