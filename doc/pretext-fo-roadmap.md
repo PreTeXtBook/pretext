@@ -135,16 +135,26 @@ enclosure), and `list-of` (scoped lists of blocks as live
 cross-references).  Every `p` now carries an id, so a top-level
 paragraph works as a link target (the notation list needs this).
 
+The static forms of interactive content render: cardsort/matching
+solutions (`premise`/`response`), server-rendered text blanks
+(XHTML `input` becomes a fill-in rule of the same width), STACK's
+`div`/`br` scraps, an `interactive`'s authored `static` image.
+Also: literate programming (`fragment`, `fragref` with linked page
+numbers), the DISCUSSION-LIKE commentary of open problems, `pf`,
+`docinfo` renames (the harness had been blanking renamed type
+names), and symbol-font fallbacks for glyphs the serif face lacks
+(angle brackets, the equation-tag star, white square brackets —
+FOP prints `#` for a missing glyph).
+
+**Element coverage of the sample article is complete except for
+the structured bibliography.**
+
 What remains, roughly in order of value:
 
 1. **Structured bibliography** — `biblio[@type='book'|'article']`
    with `author/name/given|family`, `collection-title`, `issued`;
    currently only `@type='raw'` renders.
-2. **Runestone static internals** — matching/select exercises
-   (`premise`, `response`, ...), embedded HTML (`div`, `br`,
-   `code`), interactive previews; also `fragment`/`fragref`
-   (literate programming) and stray `docinfo/rename` leakage.
-3. **Refinements flagged in stylesheet comments** —
+2. **Refinements flagged in stylesheet comments** —
    `@header='vertical'` and `@row-headers` tables,
    `exercisegroup/@cols`, a keep for the proof tombstone, a
    two-column index (needs its own page-sequence).
