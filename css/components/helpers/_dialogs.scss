@@ -1,0 +1,39 @@
+@use "components/helpers/buttons-default" as buttons;
+
+$border-radius: 0 !default;
+
+// see also, related logic in ptx-dialog in pretext_add_on.js
+
+@mixin ptx-dialog {
+  border: 1px solid var(--dialog-border-color);
+  border-radius: $border-radius;
+  background: var(--dialog-background);
+  box-shadow: 0 0 5px var(--dialog-shadow-color);
+  color: var(--dialog-text-color);
+
+  & .ptx-dialog-close-button {
+    @include buttons.ptx-button(
+      $border-width: 0
+    );
+  }
+}
+
+@mixin ptx-dialog-modal {
+  @include ptx-dialog;
+
+  &::backdrop {
+    background: var(--dialog-background);
+    opacity: 0.6;
+  }
+}
+
+:root {
+  --dialog-border-color: var(--page-border-color);
+  --dialog-background: var(--navbar-background);
+  --dialog-shadow-color: var(--primary-color-gray-80);
+  --dialog-text-color: var(--button-text-color);
+}
+
+:root.dark-mode {
+  --dialog-shadow-color: var(--primary-color-black-80);
+}

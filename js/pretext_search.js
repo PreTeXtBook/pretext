@@ -8,14 +8,14 @@
 // stub for i18next to future-proof the code. We don't actually use it for
 // anything right now, but it will be needed if we want to localize the
 // accessibility search status messages.
-const i18next = window.i18next || class {
-    static t(key, params) {
+window.i18next = window.i18next || {
+    t(key, params = {}) {
         for (const param in params) {
             key = key.replace(`{{${param}}}`, params[param]);
         }
         return key;
     }
-}
+};
 
 
 function doSearch() {
@@ -186,11 +186,11 @@ function addResultToPage(searchterms, result, docs, numUnshown, resultArea) {
     if (len == 0) {
         document.getElementById("ptx-search-empty").style.display = "block";
         document.getElementById("ptx-search-dialog").style.display = null;
-        searchStatus.innerHTML = i18next.t('No results found for "{{terms}}".', { terms: searchterms });
+        searchStatus.innerHTML = window.i18next.t('No results found for "{{terms}}".', { terms: searchterms });
         return;
     }
     document.getElementById("ptx-search-empty").style.display = "none";
-    searchStatus.innerHTML = i18next.t('{{count}} results found.', { count: len });
+    searchStatus.innerHTML = window.i18next.t('{{count}} results found.', { count: len });
 
     let allScores = result.map(function (r) { return r.score });
     allScores.sort((a,b) => (a - b));
@@ -260,15 +260,15 @@ function addResultToPage(searchterms, result, docs, numUnshown, resultArea) {
 }
 
 window.addEventListener("load", function (event) {
-    const resultsDiv = document.getElementById('ptx-search-dialog');
-    const hasNativeInvokers = 'commandFor' in HTMLButtonElement.prototype;
+    const searchDialogElement = document.getElementById('ptx-search-dialog');
+    const searchButtonElement = document.getElementById('ptx-search-button');
+    const closeBtn = document.getElementById("ptx-search-close");
+    const searchDialog = new PTXDialog(searchDialogElement, searchButtonElement, {
+        closeButton: closeBtn,
+    });
 
-    document.getElementById("ptx-search-button").addEventListener('click', (e) => {
-        const dialog = document.getElementById("ptx-search-dialog");
-        if (!hasNativeInvokers && dialog && typeof dialog.showModal === "function" && !dialog.open) {
-            dialog.showModal();
-        }
-
+    searchButtonElement.addEventListener('click', (e) => {
+        // Attempt to restore last search
         const lastSearch = localStorage.getItem("last-search-terms");
         let searchInput = document.getElementById("ptx-search-terms");
         searchInput.value = lastSearch ? (JSON.parse(lastSearch)?.terms || "") : "";
@@ -277,16 +277,6 @@ window.addEventListener("load", function (event) {
             doSearch();
         }
     });
-
-    const closeBtn = document.getElementById("ptx-search-close");
-    if (closeBtn && !hasNativeInvokers) {
-        closeBtn.addEventListener('click', (e) => {
-            const dialog = document.getElementById("ptx-search-dialog");
-            if (dialog && typeof dialog.close === "function" && dialog.open) {
-                dialog.close();
-            }
-        });
-    }
 
     document.getElementById("ptx-search-terms").addEventListener('input', (e) => {
         doSearch();

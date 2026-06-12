@@ -1,7 +1,9 @@
 $border-radius: 0 !default;
+$border-width: 1px !default;
 
 @mixin ptx-button(
-  $border-radius: $border-radius
+  $border-radius: $border-radius,
+  $border-width: $border-width
 ) {
   font: inherit;
   display: flex;
@@ -12,7 +14,7 @@ $border-radius: 0 !default;
   min-height: 34px;
   color: var(--button-text-color);
   background-color: var(--button-background);
-  border-width: 1px;
+  border-width: $border-width;
   border-color: var(--button-border-color);
   border-style: solid;
   border-radius: $border-radius;
