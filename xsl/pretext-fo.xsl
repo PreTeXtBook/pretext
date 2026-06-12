@@ -215,6 +215,118 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:root>
 </xsl:template>
 
+<!-- ###################### -->
+<!-- Front and Back Matter  -->
+<!-- ###################### -->
+
+<!-- The "frontmatter" flows: the title page, an abstract, and any -->
+<!-- front divisions (preface, foreword, ...) in order.  The       -->
+<!-- "bibinfo" is pure metadata, consumed from the $bibinfo        -->
+<!-- variable by the title page.                                   -->
+<xsl:template match="frontmatter">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<xsl:template match="bibinfo"/>
+
+<!-- The "titlepage-items" element is the hook requesting the  -->
+<!-- default sequence: authors and editors, credits, the date. -->
+<!-- (The document title itself renders at the document root.) -->
+<xsl:template match="titlepage">
+    <xsl:apply-templates select="titlepage-items"/>
+</xsl:template>
+
+<xsl:template match="titlepage-items">
+    <xsl:apply-templates select="$bibinfo/author|$bibinfo/editor" mode="full-info"/>
+    <xsl:apply-templates select="$bibinfo/credit[title]"/>
+    <xsl:apply-templates select="$bibinfo/date" mode="titlepage-date"/>
+</xsl:template>
+
+<!-- One author or editor, centered: name, affiliation, -->
+<!-- electronic address, support acknowledgement.       -->
+<xsl:template match="author|editor" mode="full-info">
+    <fo:block text-align="center" space-after="1em">
+        <fo:block font-size="120%">
+            <xsl:apply-templates select="personname"/>
+            <xsl:if test="self::editor">
+                <xsl:text>, </xsl:text>
+                <xsl:apply-templates select="." mode="type-name"/>
+            </xsl:if>
+        </fo:block>
+        <xsl:apply-templates select="affiliation"/>
+        <xsl:if test="email">
+            <fo:block>
+                <xsl:apply-templates select="email"/>
+            </fo:block>
+        </xsl:if>
+        <xsl:if test="support">
+            <fo:block font-size="90%">
+                <xsl:apply-templates select="support/node()"/>
+            </fo:block>
+        </xsl:if>
+    </fo:block>
+</xsl:template>
+
+<xsl:template match="personname">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="affiliation">
+    <xsl:apply-templates select="department|institution|location"/>
+</xsl:template>
+
+<!-- each is a line, or authored "line"s, of the address block -->
+<xsl:template match="department|institution|location">
+    <xsl:choose>
+        <xsl:when test="line">
+            <xsl:apply-templates select="line"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:block>
+                <xsl:apply-templates/>
+            </fo:block>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A "credit" is a lesser contribution, with a title -->
+<xsl:template match="bibinfo/credit[title]">
+    <fo:block text-align="center" space-after="1em">
+        <fo:block font-style="italic">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </fo:block>
+        <xsl:apply-templates select="author" mode="full-info"/>
+    </fo:block>
+</xsl:template>
+
+<xsl:template match="bibinfo/date" mode="titlepage-date">
+    <fo:block text-align="center" space-after="1em">
+        <xsl:apply-templates/>
+    </fo:block>
+</xsl:template>
+
+<!-- The "abstract", indented, with a run-in localized heading. -->
+<xsl:template match="abstract">
+    <fo:block margin-left="2.5em" margin-right="2.5em" space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:variable name="heading">
+            <fo:inline font-weight="bold" font-style="normal">
+                <xsl:apply-templates select="." mode="type-name"/>
+                <xsl:text>.</xsl:text>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="heading-then-content">
+            <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
+<!-- The "backmatter" also just flows -->
+<xsl:template match="backmatter">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
 <!-- ##################### -->
 <!-- Traditional Divisions -->
 <!-- ##################### -->
@@ -248,7 +360,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The specialized divisions ("exercises", "references", ...)     -->
 <!-- take the very same heading; their specialized *contents* are   -->
 <!-- implemented (or not, yet) elsewhere.                           -->
-<xsl:template match="chapter|section|subsection|subsubsection|appendix|exercises|worksheet|reading-questions|solutions|references|glossary">
+<xsl:template match="chapter|section|subsection|subsubsection|appendix|exercises|worksheet|reading-questions|solutions|references|glossary|preface|acknowledgement|foreword|dedication|biography|colophon|index">
     <xsl:variable name="heading-size">
         <xsl:choose>
             <xsl:when test="self::chapter">170%</xsl:when>
@@ -1562,13 +1674,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:inline>
 </xsl:template>
 
+<!-- Symbol keys set in the symbol font, which covers the arrows. -->
+<!-- The official "enter" code point (U+2BA0) is in no DejaVu     -->
+<!-- face, so the classic return symbol (U+21B5) stands in.       -->
 <xsl:template match="kbd[@name]">
     <xsl:variable name="kbdkey-name" select="@name"/>
-    <fo:inline font-family="{$font-family-monospace}" border="0.5pt solid #888888" padding="0pt 2pt">
-        <!-- for-each is just one node, but sets context for key() -->
-        <xsl:for-each select="$kbdkey-table">
-            <xsl:value-of select="key('kbdkey-key', $kbdkey-name)/@unicode"/>
-        </xsl:for-each>
+    <fo:inline font-family="{$font-family-symbol}" border="0.5pt solid #888888" padding="0pt 2pt">
+        <xsl:choose>
+            <xsl:when test="@name = 'enter'">
+                <xsl:text>&#x21b5;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- for-each is just one node, but sets context for key() -->
+                <xsl:for-each select="$kbdkey-table">
+                    <xsl:value-of select="key('kbdkey-key', $kbdkey-name)/@unicode"/>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
     </fo:inline>
 </xsl:template>
 
