@@ -239,13 +239,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A heading: optional localized "type-name number", then the     -->
 <!-- title.  An unnumbered division (perhaps numbering is limited   -->
 <!-- by the publisher's numbering level) gets a title-only heading. -->
-<xsl:template match="chapter|section|subsection|subsubsection">
+<!-- The specialized divisions ("exercises", "references", ...)     -->
+<!-- take the very same heading; their specialized *contents* are   -->
+<!-- implemented (or not, yet) elsewhere.                           -->
+<xsl:template match="chapter|section|subsection|subsubsection|appendix|exercises|worksheet|reading-questions|solutions|references|glossary">
     <xsl:variable name="heading-size">
         <xsl:choose>
             <xsl:when test="self::chapter">170%</xsl:when>
             <xsl:when test="self::section">140%</xsl:when>
             <xsl:when test="self::subsection">120%</xsl:when>
             <xsl:when test="self::subsubsection">100%</xsl:when>
+            <!-- a specialized division sizes by its depth -->
+            <xsl:otherwise>
+                <xsl:variable name="depth" select="count(ancestor::*[&STRUCTURAL-FILTER;])"/>
+                <xsl:choose>
+                    <xsl:when test="$depth &lt;= 1">140%</xsl:when>
+                    <xsl:when test="$depth = 2">120%</xsl:when>
+                    <xsl:otherwise>100%</xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="the-number">
@@ -391,7 +403,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- process in document order, so a "statement" leads and       -->
 <!-- PROOF-LIKE or SOLUTION-LIKE follow.  (Only a THEOREM-LIKE   -->
 <!-- statement is italic, so a "definition" stays upright.)      -->
-<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;">
+<!-- An "exercise" matching here is the *inline* flavor; a       -->
+<!-- divisional one matches a more specific pattern in the       -->
+<!-- "Exercises" section.  PROJECT-LIKE blocks may also be       -->
+<!-- structured by "task", arriving among the contents.          -->
+<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&PROJECT-LIKE;|exercise">
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
@@ -468,6 +484,71 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="heading" select="$heading"/>
         </xsl:call-template>
     </fo:block>
+</xsl:template>
+
+<!-- ######### -->
+<!-- Exercises -->
+<!-- ######### -->
+
+<!-- An *inline* exercise ("Checkpoint") is a titled block, joining -->
+<!-- the block families pattern with its own counter, as do the     -->
+<!-- PROJECT-LIKE blocks; see the "Basic Blocks" section.  Here:    -->
+<!-- the *divisional* exercises (in an "exercises" division, a      -->
+<!-- "worksheet", or "reading-questions") with a compact, run-in    -->
+<!-- serial number.  The publisher's component-visibility switches  -->
+<!-- (hints in the main text, etc.) are not yet consulted: every    -->
+<!-- authored component renders, which is the default behavior.     -->
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise">
+    <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:variable name="heading">
+            <fo:inline font-weight="bold" font-style="normal">
+                <xsl:apply-templates select="." mode="serial-number"/>
+                <xsl:text>.</xsl:text>
+                <xsl:if test="title">
+                    <xsl:text> </xsl:text>
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </xsl:if>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="heading-then-content">
+            <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
+<!-- A "task" is a structured piece of an exercise or project, -->
+<!-- labeled like a list item, "(a)", nesting as "(i)", "(A)"  -->
+<!-- (the "list-number" machinery of pretext-numbers.xsl).     -->
+<xsl:template match="task">
+    <fo:block space-before="0.75em" space-after="0.75em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:variable name="heading">
+            <fo:inline font-weight="bold" font-style="normal">
+                <xsl:text>(</xsl:text>
+                <xsl:apply-templates select="." mode="list-number"/>
+                <xsl:text>)</xsl:text>
+                <xsl:if test="title">
+                    <xsl:text> </xsl:text>
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </xsl:if>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="heading-then-content">
+            <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
+<!-- An "exercisegroup" supplies common context for consecutive -->
+<!-- exercises; numbering just continues through it.  The @cols -->
+<!-- layout request is a refinement for later.                  -->
+<xsl:template match="exercisegroup">
+    <xsl:apply-templates select="introduction"/>
+    <xsl:apply-templates select="exercise"/>
+    <xsl:apply-templates select="conclusion"/>
 </xsl:template>
 
 <!-- ##### -->
