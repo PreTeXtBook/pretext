@@ -2563,13 +2563,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
 </xsl:template>
 
-<!-- Active links are a conservative dark blue (well above the -->
-<!-- WCAG contrast threshold on white paper), and underlining  -->
-<!-- honors the publisher's LaTeX link-highlight choice.       -->
+<!-- In an electronic PDF, active links are a conservative dark   -->
+<!-- blue (well above the WCAG contrast threshold on white        -->
+<!-- paper); in a print PDF the color would just be a distracting -->
+<!-- reminder of links a reader cannot follow, so text stays      -->
+<!-- black, as in the LaTeX conversion.  Underlining honors the   -->
+<!-- publisher's link-highlight choice either way.                -->
 <xsl:template name="link-attributes">
-    <xsl:attribute name="color">
-        <xsl:text>#000080</xsl:text>
-    </xsl:attribute>
+    <xsl:if test="not($b-latex-print)">
+        <xsl:attribute name="color">
+            <xsl:text>#000080</xsl:text>
+        </xsl:attribute>
+    </xsl:if>
     <xsl:if test="$latex-link-highlight = 'underline'">
         <xsl:attribute name="text-decoration">
             <xsl:text>underline</xsl:text>
