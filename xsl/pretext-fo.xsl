@@ -3150,6 +3150,57 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="warning"/>
 </xsl:template>
 
+<!-- ################################### -->
+<!-- Static Forms of Interactive Content -->
+<!-- ################################### -->
+
+<!-- The static representations built by pretext-runestone-static.xsl -->
+<!-- (and by server-rendered problems, e.g. MyOpenMath and STACK) can -->
+<!-- carry pieces of the original interactive markup.                 -->
+
+<!-- In the generated solution of a cardsort or matching problem,   -->
+<!-- "premise" and "response" are transparent wrappers within the   -->
+<!-- list structure.                                                -->
+<xsl:template match="premise|response">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- A server-rendered problem's text-entry blank arrives as an   -->
+<!-- XHTML-flavored "input" with a width in characters; on paper  -->
+<!-- it is a fill-in blank of (about) the same width.             -->
+<xsl:template match="input[@type = 'text']">
+    <xsl:variable name="characters">
+        <xsl:choose>
+            <xsl:when test="starts-with(@style, 'width:') and contains(@style, 'ch')">
+                <xsl:value-of select="substring-before(substring-after(@style, 'width:'), 'ch')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>10</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <fo:leader leader-pattern="rule"
+               rule-thickness="0.5pt"
+               rule-style="solid"
+               leader-length="{format-number(0.55 * $characters, '0.##')}em"/>
+</xsl:template>
+
+<!-- more XHTML scraps: a "div" is a transparent grouping, -->
+<!-- and a "br" abandons the current line                  -->
+<xsl:template match="div">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="br">
+    <fo:block/>
+</xsl:template>
+
+<!-- An author-supplied "static" representation is exactly what -->
+<!-- the printed form of an "interactive" should show.          -->
+<xsl:template match="static">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
 <!-- ############### -->
 <!-- Generated Lists -->
 <!-- ############### -->
