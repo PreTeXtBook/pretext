@@ -3536,7 +3536,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--     pretext/pretext -v ... 2>&1 | grep 'PTX:FO-TODO' \            -->
 <!--         | sort | uniq -c | sort -rn                               -->
 <xsl:template match="*">
-    <xsl:message>PTX:FO-TODO: <xsl:value-of select="local-name()"/></xsl:message>
+    <xsl:message>PTX:FO-TODO: <xsl:value-of select="local-name()"/> (child of "<xsl:value-of select="local-name(parent::*)"/>")</xsl:message>
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
