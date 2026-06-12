@@ -2033,21 +2033,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
-<!-- A "fillin" blank: an underline rule sized by @characters  -->
-<!-- (ten if unspecified).  Fill-ins inside mathematics travel -->
-<!-- with the LaTeX, where MathJax renders them.               -->
+<!-- A "fillin" blank, sized by @characters (ten if unspecified), -->
+<!-- in the publisher's chosen text style: an underline rule (the -->
+<!-- default), an empty outlined box, or a shaded box.  Fill-ins  -->
+<!-- inside mathematics travel with the LaTeX, where MathJax      -->
+<!-- renders them in the publisher's math style.                  -->
 <xsl:template match="fillin[not(parent::m or parent::mrow)]">
-    <fo:leader leader-pattern="rule"
-               rule-thickness="0.5pt"
-               rule-style="solid"
-               leader-length="{format-number(0.55 * 10, '0.##')}em">
-        <xsl:if test="@characters">
-            <xsl:attribute name="leader-length">
+    <xsl:variable name="blank-length">
+        <xsl:choose>
+            <xsl:when test="@characters">
                 <xsl:value-of select="format-number(0.55 * @characters, '0.##')"/>
-                <xsl:text>em</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
-    </fo:leader>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="format-number(0.55 * 10, '0.##')"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>em</xsl:text>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$fillin-text-style = 'box'">
+            <fo:inline border-style="solid" border-width="0.5pt">
+                <fo:leader leader-pattern="space" leader-length="{$blank-length}"/>
+            </fo:inline>
+        </xsl:when>
+        <xsl:when test="$fillin-text-style = 'shade'">
+            <fo:inline background-color="#D9D9D9">
+                <fo:leader leader-pattern="space" leader-length="{$blank-length}"/>
+            </fo:inline>
+        </xsl:when>
+        <!-- "underline", the default -->
+        <xsl:otherwise>
+            <fo:leader leader-pattern="rule"
+                       rule-thickness="0.5pt"
+                       rule-style="solid"
+                       leader-length="{$blank-length}"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ######## -->
