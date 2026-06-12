@@ -138,6 +138,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- The publisher's right-alignment choice: text justified to both -->
+<!-- margins ("flush", the default), or an even word space and a    -->
+<!-- ragged right margin.                                           -->
+<xsl:variable name="text-alignment">
+    <xsl:choose>
+        <xsl:when test="$latex-right-alignment = 'ragged'">
+            <xsl:text>start</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>justify</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- ##### -->
 <!-- Entry -->
 <!-- ##### -->
@@ -554,7 +568,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- leads off that block's content; see "heading-then-content".  -->
 <xsl:template match="p">
     <xsl:param name="run-in-heading"/>
-    <fo:block text-align="justify" space-after="0.5em">
+    <fo:block text-align="{$text-alignment}" space-after="0.5em">
         <xsl:copy-of select="$run-in-heading"/>
         <xsl:apply-templates/>
     </fo:block>
@@ -1377,7 +1391,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="*"/>
         </xsl:when>
         <xsl:otherwise>
-            <fo:block text-align="justify" space-after="0.5em">
+            <fo:block text-align="{$text-alignment}" space-after="0.5em">
                 <xsl:apply-templates/>
             </fo:block>
         </xsl:otherwise>
@@ -1825,7 +1839,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </fo:block>
             </fo:list-item-label>
             <fo:list-item-body start-indent="body-start()">
-                <fo:block text-align="justify">
+                <fo:block text-align="{$text-alignment}">
                     <xsl:copy-of select="$content"/>
                 </fo:block>
             </fo:list-item-body>
@@ -2504,7 +2518,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$the-mark"/>
         </fo:inline>
         <fo:footnote-body>
-            <fo:block font-size="80%" text-align="justify" space-before="0.25em">
+            <fo:block font-size="80%" text-align="{$text-alignment}" space-before="0.25em">
                 <xsl:apply-templates select="." mode="link-id-attribute"/>
                 <fo:inline baseline-shift="super" font-size="70%">
                     <xsl:value-of select="$the-mark"/>
