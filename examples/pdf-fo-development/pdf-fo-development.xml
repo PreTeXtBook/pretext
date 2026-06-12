@@ -29,6 +29,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <article xml:id="pdf-fo-development" label="pdf-fo-development">
         <title>XSL-FO Conversion Development</title>
 
+        <frontmatter xml:id="frontmatter" label="frontmatter">
+            <bibinfo>
+                <author>
+                    <personname>Robert Beezer</personname>
+                    <affiliation>
+                        <institution>University of Puget Sound</institution>
+                    </affiliation>
+                    <email>beezer@pugetsound.edu</email>
+                </author>
+                <date><today/></date>
+            </bibinfo>
+            <titlepage>
+                <titlepage-items/>
+            </titlepage>
+            <abstract>
+                <p>A small article exercising the conversion of PreTeXt to XSL Formatting Objects, rendered as an accessible PDF by Apache FOP.  It grows in concert with the capabilities of the conversion.</p>
+            </abstract>
+        </frontmatter>
+
         <section xml:id="section-prose" label="section-prose">
             <title>Prose</title>
 
@@ -353,5 +372,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <author>T. W. Judson</author>, <title>Abstract Algebra: Theory and Applications</title>, Orthogonal Publishing, 2024.
             </biblio>
         </references>
+
+        <backmatter xml:id="backmatter" label="backmatter">
+            <title>Back Matter</title>
+            <colophon xml:id="colophon" label="colophon">
+                <p>This article was authored in, and produced with, <pretext/>, rendered by Apache FOP by way of XSL Formatting Objects.</p>
+            </colophon>
+        </backmatter>
     </article>
 </pretext>
