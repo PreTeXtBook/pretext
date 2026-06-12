@@ -152,6 +152,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Page numbers within cross-references, via the publisher's      -->
+<!-- "pageref" choice: explicitly "yes" or "no", or else defaulting -->
+<!-- by utility, on for a print PDF (chase a reference by flipping  -->
+<!-- pages) and off for an electronic PDF (just follow the link).   -->
+<!-- The same logic as the LaTeX conversion.                        -->
+<xsl:variable name="b-pageref"
+              select="($latex-pageref = 'yes') or (($latex-pageref = '') and $b-latex-print)"/>
+
 <!-- ##### -->
 <!-- Entry -->
 <!-- ##### -->
@@ -2670,6 +2678,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="link-attributes"/>
                 <xsl:copy-of select="$content"/>
             </fo:basic-link>
+            <!-- Trail the link with the target's page number, when the     -->
+            <!-- publisher wants them, via a native XSL-FO page-number      -->
+            <!-- citation (no second pass needed).  Exceptions echo the     -->
+            <!-- LaTeX conversion: a bibliographic citation or an equation  -->
+            <!-- number stands alone, and a title is no place for either.   -->
+            <xsl:if test="$b-pageref and not($target/self::biblio or $target/self::mrow or $target/self::md or ancestor::title)">
+                <xsl:text>, p.&#xa0;</xsl:text>
+                <fo:page-number-citation ref-id="{$the-id}"/>
+            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
