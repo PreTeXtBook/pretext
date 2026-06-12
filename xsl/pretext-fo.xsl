@@ -1181,15 +1181,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
-<!-- An "exercisegroup" supplies common context for consecutive -->
-<!-- exercises; numbering just continues through it.  The @cols -->
-<!-- layout request is a refinement for later.                  -->
+<!-- An "exercisegroup" supplies common context for consecutive  -->
+<!-- exercises; numbering just continues through it.  An author's -->
+<!-- @cols request (2 to 6, by the schema) arranges the exercises -->
+<!-- in that many equal columns, progressing across each row; a   -->
+<!-- final short row pads with empty cells, since the rows of a   -->
+<!-- tagged table must share a common width (ISO 14289-1).        -->
 <xsl:template match="exercisegroup">
     <fo:block>
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="idx"/>
         <xsl:apply-templates select="introduction"/>
-        <xsl:apply-templates select="exercise"/>
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:variable name="cols" select="@cols"/>
+                <fo:table table-layout="fixed" width="100%">
+                    <xsl:call-template name="equal-table-columns">
+                        <xsl:with-param name="remaining" select="$cols"/>
+                    </xsl:call-template>
+                    <fo:table-body>
+                        <xsl:for-each select="exercise[(position() mod $cols) = 1]">
+                            <fo:table-row>
+                                <xsl:variable name="row-exercises" select=".|following-sibling::exercise[position() &lt; $cols]"/>
+                                <xsl:for-each select="$row-exercises">
+                                    <fo:table-cell padding-right="6pt">
+                                        <xsl:apply-templates select="."/>
+                                    </fo:table-cell>
+                                </xsl:for-each>
+                                <xsl:call-template name="empty-table-cells">
+                                    <xsl:with-param name="remaining" select="$cols - count($row-exercises)"/>
+                                </xsl:call-template>
+                            </fo:table-row>
+                        </xsl:for-each>
+                    </fo:table-body>
+                </fo:table>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="exercise"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:apply-templates select="conclusion"/>
     </fo:block>
 </xsl:template>
