@@ -250,10 +250,41 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </fo:region-body>
                 <fo:region-after extent="0.4in"/>
             </fo:simple-page-master>
+            <!-- the pages of a back-of-the-book index set in two columns -->
+            <fo:simple-page-master master-name="page-index-odd"
+                                   page-width="{$page-width}"
+                                   page-height="{$page-height}"
+                                   margin-top="1in"
+                                   margin-bottom="0.6in"
+                                   margin-left="{$margin-inner}"
+                                   margin-right="{$margin-outer}">
+                <fo:region-body margin-bottom="0.4in" column-count="2" column-gap="2em">
+                    <xsl:call-template name="watermark-attributes"/>
+                </fo:region-body>
+                <fo:region-after extent="0.4in"/>
+            </fo:simple-page-master>
+            <fo:simple-page-master master-name="page-index-even"
+                                   page-width="{$page-width}"
+                                   page-height="{$page-height}"
+                                   margin-top="1in"
+                                   margin-bottom="0.6in"
+                                   margin-left="{$margin-outer}"
+                                   margin-right="{$margin-inner}">
+                <fo:region-body margin-bottom="0.4in" column-count="2" column-gap="2em">
+                    <xsl:call-template name="watermark-attributes"/>
+                </fo:region-body>
+                <fo:region-after extent="0.4in"/>
+            </fo:simple-page-master>
             <fo:page-sequence-master master-name="pages">
                 <fo:repeatable-page-master-alternatives>
                     <fo:conditional-page-master-reference master-reference="page-odd" odd-or-even="odd"/>
                     <fo:conditional-page-master-reference master-reference="page-even" odd-or-even="even"/>
+                </fo:repeatable-page-master-alternatives>
+            </fo:page-sequence-master>
+            <fo:page-sequence-master master-name="pages-index">
+                <fo:repeatable-page-master-alternatives>
+                    <fo:conditional-page-master-reference master-reference="page-index-odd" odd-or-even="odd"/>
+                    <fo:conditional-page-master-reference master-reference="page-index-even" odd-or-even="even"/>
                 </fo:repeatable-page-master-alternatives>
             </fo:page-sequence-master>
         </fo:layout-master-set>
@@ -282,22 +313,70 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <fo:bookmark-tree>
             <xsl:apply-templates select="$document-root/*" mode="bookmark"/>
         </fo:bookmark-tree>
-        <fo:page-sequence master-reference="pages">
-            <fo:static-content flow-name="xsl-region-after">
-                <fo:block text-align="center" font-size="90%">
-                    <fo:page-number/>
-                </fo:block>
-            </fo:static-content>
-            <fo:static-content flow-name="xsl-footnote-separator">
-                <fo:block end-indent="70%" space-before="4pt" space-after="4pt">
-                    <fo:leader leader-pattern="rule" leader-length="100%" rule-thickness="0.5pt"/>
-                </fo:block>
-            </fo:static-content>
-            <fo:flow flow-name="xsl-region-body">
-                <xsl:apply-templates select="$document-root"/>
-            </fo:flow>
-        </fo:page-sequence>
+        <!-- A back-of-the-book index earns a page sequence of its    -->
+        <!-- own, with a two-column body region, so the document       -->
+        <!-- partitions around it (page numbering just continues), and -->
+        <!-- back matter following the index gets a third, ordinary    -->
+        <!-- sequence.  Without an index, one sequence carries all.    -->
+        <xsl:variable name="the-index" select="$document-root/backmatter/index[index-list]"/>
+        <xsl:choose>
+            <xsl:when test="$the-index">
+                <xsl:call-template name="content-page-sequence">
+                    <xsl:with-param name="master" select="'pages'"/>
+                    <xsl:with-param name="content">
+                        <xsl:apply-templates select="$document-root" mode="document-title-block"/>
+                        <xsl:apply-templates select="$document-root/*[not(self::backmatter)]"/>
+                        <xsl:apply-templates select="$document-root/backmatter/*[not(self::index[index-list]) and not(preceding-sibling::index[index-list])]"/>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="content-page-sequence">
+                    <xsl:with-param name="master" select="'pages-index'"/>
+                    <xsl:with-param name="content">
+                        <xsl:apply-templates select="$the-index" mode="division-heading"/>
+                        <xsl:apply-templates select="$the-index/*[not(self::title)]"/>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:if test="$the-index/following-sibling::*">
+                    <xsl:call-template name="content-page-sequence">
+                        <xsl:with-param name="master" select="'pages'"/>
+                        <xsl:with-param name="content">
+                            <xsl:apply-templates select="$the-index/following-sibling::*"/>
+                        </xsl:with-param>
+                    </xsl:call-template>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="content-page-sequence">
+                    <xsl:with-param name="master" select="'pages'"/>
+                    <xsl:with-param name="content">
+                        <xsl:apply-templates select="$document-root"/>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
     </fo:root>
+</xsl:template>
+
+<!-- One page sequence: the folio in the footer, the footnote   -->
+<!-- separator rule, and the supplied content in the body.      -->
+<xsl:template name="content-page-sequence">
+    <xsl:param name="master"/>
+    <xsl:param name="content"/>
+    <fo:page-sequence master-reference="{$master}">
+        <fo:static-content flow-name="xsl-region-after">
+            <fo:block text-align="center" font-size="90%">
+                <fo:page-number/>
+            </fo:block>
+        </fo:static-content>
+        <fo:static-content flow-name="xsl-footnote-separator">
+            <fo:block end-indent="70%" space-before="4pt" space-after="4pt">
+                <fo:leader leader-pattern="rule" leader-length="100%" rule-thickness="0.5pt"/>
+            </fo:block>
+        </fo:static-content>
+        <fo:flow flow-name="xsl-region-body">
+            <xsl:copy-of select="$content"/>
+        </fo:flow>
+    </fo:page-sequence>
 </xsl:template>
 
 <!-- ############# -->
@@ -464,6 +543,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- outline PDF/UA and WCAG call for; division nesting means    -->
 <!-- levels are never skipped.                                   -->
 <xsl:template match="article|book">
+    <xsl:apply-templates select="." mode="document-title-block"/>
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- factored out, so the partitioned page sequences of a -->
+<!-- document with a two-column index can also lead with  -->
+<!-- the document title                                   -->
+<xsl:template match="article|book" mode="document-title-block">
     <fo:block font-size="200%"
               font-weight="bold"
               text-align="center"
@@ -472,7 +559,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="." mode="title-full"/>
     </fo:block>
-    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- A heading: optional localized "type-name number", then the     -->
@@ -482,6 +568,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- take the very same heading; their specialized *contents* are   -->
 <!-- implemented (or not, yet) elsewhere.                           -->
 <xsl:template match="chapter|section|subsection|subsubsection|appendix|exercises|worksheet|handout|reading-questions|solutions|references|glossary|preface|acknowledgement|foreword|dedication|biography|colophon|index">
+    <xsl:apply-templates select="." mode="division-heading"/>
+    <xsl:choose>
+        <!-- a "solutions" division is empty; its content is mined -->
+        <!-- from its scope by the generator in pretext-common.xsl -->
+        <xsl:when test="self::solutions">
+            <xsl:apply-templates select="idx"/>
+            <xsl:apply-templates select="." mode="solutions">
+                <xsl:with-param name="heading-level" select="count(ancestor::*[&STRUCTURAL-FILTER;]) + 1"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- material following a formatted printout begins a fresh page -->
+    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
+        <fo:block break-after="page"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- The heading of a division, factored out so the two-column     -->
+<!-- index (its own page sequence) can reuse it.                    -->
+<xsl:template match="*" mode="division-heading">
     <xsl:variable name="heading-size">
         <xsl:choose>
             <xsl:when test="self::chapter">170%</xsl:when>
@@ -525,23 +634,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:apply-templates select="." mode="title-full"/>
     </fo:block>
-    <xsl:choose>
-        <!-- a "solutions" division is empty; its content is mined -->
-        <!-- from its scope by the generator in pretext-common.xsl -->
-        <xsl:when test="self::solutions">
-            <xsl:apply-templates select="idx"/>
-            <xsl:apply-templates select="." mode="solutions">
-                <xsl:with-param name="heading-level" select="count(ancestor::*[&STRUCTURAL-FILTER;]) + 1"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates/>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- material following a formatted printout begins a fresh page -->
-    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
-        <fo:block break-after="page"/>
-    </xsl:if>
 </xsl:template>
 
 <!-- The page break, if any, opening a division.  A chapter-level   -->
