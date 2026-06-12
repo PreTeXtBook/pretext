@@ -1133,14 +1133,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- the identity copy, with @id attributes withheld -->
+<!-- The identity copy, with the @id of formatting objects         -->
+<!-- withheld.  An @id interior to an SVG (a glyph definition, the -->
+<!-- target of a "use") must survive, or the drawing collapses;    -->
+<!-- FOP only polices uniqueness of formatting object ids.         -->
 <xsl:template match="node()|@*" mode="strip-id-attributes">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="strip-id-attributes"/>
     </xsl:copy>
 </xsl:template>
 
-<xsl:template match="@id" mode="strip-id-attributes"/>
+<xsl:template match="fo:*/@id" mode="strip-id-attributes"/>
 
 <!-- the wrappers pass everything through, with their prose -->
 <!-- gated on statements being shown                        -->
@@ -2641,6 +2644,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$svg">
             <fo:block text-align="center" space-before="0.5em" space-after="0.5em">
                 <xsl:apply-templates select="." mode="link-id-attribute"/>
+                <!-- an "xref" targets a constituent "mrow", so each -->
+                <!-- contributes an invisible anchor                 -->
+                <xsl:for-each select="mrow">
+                    <fo:inline>
+                        <xsl:apply-templates select="." mode="link-id-attribute"/>
+                    </fo:inline>
+                </xsl:for-each>
                 <fo:instream-foreign-object>
                     <xsl:if test="not($speech = '')">
                         <xsl:attribute name="fox:alt-text">
