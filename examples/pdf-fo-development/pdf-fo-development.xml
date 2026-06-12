@@ -251,5 +251,70 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </subsubsection>
             </subsection>
         </section>
+
+        <section xml:id="section-projects" label="section-projects">
+            <title>Projects and Checkpoints</title>
+
+            <p>An inline exercise is a <q>checkpoint</q>, numbered with the blocks.</p>
+
+            <exercise xml:id="checkpoint-triangle" label="checkpoint-triangle">
+                <title>A Quick Check</title>
+                <statement>
+                    <p>A right triangle has legs <m>5</m> and <m>12</m>.  How long is the hypotenuse?</p>
+                </statement>
+                <answer>
+                    <p><m>13</m>.</p>
+                </answer>
+            </exercise>
+
+            <project xml:id="project-tasks" label="project-tasks">
+                <title>A Project in Pieces</title>
+                <introduction>
+                    <p>Projects often divide into tasks.</p>
+                </introduction>
+                <task xml:id="task-one" label="task-one">
+                    <statement>
+                        <p>Compute the area of the <m>3</m>-<m>4</m>-<m>5</m> right triangle.</p>
+                    </statement>
+                    <solution>
+                        <p>One half of <m>3 \cdot 4</m>, so <m>6</m>.</p>
+                    </solution>
+                </task>
+                <task xml:id="task-two" label="task-two">
+                    <statement>
+                        <p>Compute its perimeter.</p>
+                    </statement>
+                </task>
+            </project>
+        </section>
+
+        <exercises xml:id="exercises-development" label="exercises-development">
+            <title>A Few Exercises</title>
+
+            <exercise xml:id="exercise-one" label="exercise-one">
+                <statement>
+                    <p>Multiply <m>13 \cdot 31</m>.</p>
+                </statement>
+                <hint>
+                    <p>A calculator might help.</p>
+                </hint>
+            </exercise>
+
+            <exercisegroup xml:id="exercisegroup-squares" label="exercisegroup-squares">
+                <introduction>
+                    <p>Square each of the following.</p>
+                </introduction>
+                <exercise xml:id="exercise-two" label="exercise-two">
+                    <statement>
+                        <p><m>7</m>.</p>
+                    </statement>
+                </exercise>
+                <exercise xml:id="exercise-three" label="exercise-three">
+                    <statement>
+                        <p><m>2x - 3</m>.</p>
+                    </statement>
+                </exercise>
+            </exercisegroup>
+        </exercises>
     </article>
 </pretext>
