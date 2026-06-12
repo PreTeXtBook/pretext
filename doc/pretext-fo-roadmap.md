@@ -91,22 +91,24 @@ handles it — the report is the authoritative to-do list.
 
 ## Phases
 
-1. **Traditional divisions** — `book`, `article`, `chapter`,
-   `section`, `subsection`, `subsubsection`: titled headings, then
-   recurse.  Skip specialized divisions and front/back matter for now.
-2. **Paragraphs** — complete `p` handling: interruptions by displayed
-   items, and the rich inline markup (`em`, `term`, `c`, `q`, foreign,
-   quotes, dashes, ...).
-3. **Basic blocks** — theorem-like, remark-like, example-like:
-   titled, numbered blocks via the machinery of `pretext-common.xsl`.
-4. **Lists** — `ol`, `ul`, `dl` as `fo:list-block`.
-5. **Mathematics** — wire the MathJax-SVG meld (`$mathfile`,
-   `fo:instream-foreign-object`), replacing the placeholders;
-   model is `epub()` and `pretext-epub.xsl`.
-6. **Images** — `fo:external-graphic`, again on the EPUB model.
-7. **The hard parts, later** — `sidebyside`, tables, figures and
-   captions, front and back matter, specialized divisions, footnotes,
-   index, Runestone static versions.
+Phases one through six are **done** (divisions, paragraphs and
+inlines, blocks with run-in headings, lists, the MathJax-SVG math
+meld, images), as is the bulk of phase seven: tables, figures and
+captions, `sidebyside`, footnotes, active links (`url`, `email`,
+live `xref`), the verbatim family, exercises and projects and tasks,
+specialized divisions, bibliographies, units, poetry, and more.
+
+What remains, roughly in order of value:
+
+1. **Front and back matter** — `titlepage`, `abstract`,
+   contributors, `colophon`; `index-list` and `notation-list`.
+2. **Runestone static internals** — matching/select exercises
+   (`premise`, `response`, ...), embedded HTML (`div`, `br`),
+   interactive previews.
+3. **Refinements flagged in stylesheet comments** — publisher
+   exercise-component switches, `@header='vertical'` and
+   `@row-headers` tables, worksheet page breaks, `list-of`,
+   literate-programming fragments.
 
 Targets: full coverage of the sample article, then the sample book
 (parts, Runestone static exercises).
