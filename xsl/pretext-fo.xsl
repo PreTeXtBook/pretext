@@ -708,6 +708,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Solutions to EXAMPLE-LIKE, with an italic run-in heading. -->
 <xsl:template match="&SOLUTION-LIKE;">
     <fo:block space-before="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
             <fo:inline font-style="italic">
                 <xsl:apply-templates select="." mode="type-name"/>
@@ -894,24 +895,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A "subexercises" groups exercises under an interior heading. -->
 <xsl:template match="subexercises">
-    <xsl:if test="title">
-        <fo:block font-weight="bold"
-                  space-before="1em"
-                  space-after="0.5em"
-                  keep-with-next.within-page="always">
-            <xsl:apply-templates select="." mode="title-full"/>
-        </fo:block>
-    </xsl:if>
-    <xsl:apply-templates select="*[not(self::title)]"/>
+    <fo:block>
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:if test="title">
+            <fo:block font-weight="bold"
+                      space-before="1em"
+                      space-after="0.5em"
+                      keep-with-next.within-page="always">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </fo:block>
+        </xsl:if>
+        <xsl:apply-templates select="*[not(self::title)]"/>
+    </fo:block>
 </xsl:template>
 
 <!-- An "exercisegroup" supplies common context for consecutive -->
 <!-- exercises; numbering just continues through it.  The @cols -->
 <!-- layout request is a refinement for later.                  -->
 <xsl:template match="exercisegroup">
-    <xsl:apply-templates select="introduction"/>
-    <xsl:apply-templates select="exercise"/>
-    <xsl:apply-templates select="conclusion"/>
+    <fo:block>
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:apply-templates select="introduction"/>
+        <xsl:apply-templates select="exercise"/>
+        <xsl:apply-templates select="conclusion"/>
+    </fo:block>
 </xsl:template>
 
 <!-- Components of an Exercise  -->
@@ -1250,6 +1257,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="ol/li|ul/li">
     <fo:list-item>
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
         <fo:list-item-label end-indent="label-end()">
             <fo:block text-align="end">
                 <xsl:apply-templates select="." mode="list-label"/>
@@ -1328,15 +1336,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="dl/li">
-    <xsl:variable name="heading">
-        <fo:inline font-weight="bold" font-style="normal">
-            <xsl:apply-templates select="." mode="title-full"/>
-        </fo:inline>
-        <xsl:text> </xsl:text>
-    </xsl:variable>
-    <xsl:call-template name="heading-then-content">
-        <xsl:with-param name="heading" select="$heading"/>
-    </xsl:call-template>
+    <fo:block>
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:variable name="heading">
+            <fo:inline font-weight="bold" font-style="normal">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="heading-then-content">
+            <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
+    </fo:block>
 </xsl:template>
 
 <!-- ###### -->
@@ -1686,6 +1697,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- text, which is right for raw mixed content.)                  -->
 <xsl:template match="biblio|biblio/*">
     <xsl:apply-imports/>
+</xsl:template>
+
+<!-- A "note" of a bibliography entry is annotation prose, and an  -->
+<!-- "xref" target.                                                -->
+<xsl:template match="biblio/note">
+    <fo:inline>
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates/>
+    </fo:inline>
 </xsl:template>
 
 <!-- pretext-common.xsl kills "author" and "editor" globally, as -->
@@ -2714,6 +2735,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               space-before="0.5em"
               space-after="0.5em"
               text-align="center">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:for-each select="mrow">
+            <fo:inline>
+                <xsl:apply-templates select="." mode="link-id-attribute"/>
+            </fo:inline>
+        </xsl:for-each>
         <xsl:value-of select="."/>
         <!-- reclaim any clause-ending punctuation absorbed by display math -->
         <xsl:if test="self::md">
