@@ -61,8 +61,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- declarations also avoid a slow, noisy scan of every   -->
                 <!-- system font.  The paths are Debian's; font choices    -->
                 <!-- will become publisher-configurable eventually.        -->
+                <!-- Generic and legacy family names (e.g. inside an  -->
+                <!-- author's SVG image) alias to embedded faces, since -->
+                <!-- the base-14 fallbacks would violate PDF/UA.        -->
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf">
                     <font-triplet name="DejaVu Serif" style="normal" weight="normal"/>
+                    <font-triplet name="serif" style="normal" weight="normal"/>
+                    <font-triplet name="Times" style="normal" weight="normal"/>
+                    <font-triplet name="Times New Roman" style="normal" weight="normal"/>
+                    <font-triplet name="any" style="normal" weight="normal"/>
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf">
                     <font-triplet name="DejaVu Serif" style="normal" weight="bold"/>
@@ -75,6 +82,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf">
                     <font-triplet name="DejaVu Sans Mono" style="normal" weight="normal"/>
+                    <font-triplet name="monospace" style="normal" weight="normal"/>
+                    <font-triplet name="Courier" style="normal" weight="normal"/>
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf">
                     <font-triplet name="DejaVu Sans Mono" style="normal" weight="bold"/>
@@ -87,6 +96,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf">
                     <font-triplet name="DejaVu Sans" style="normal" weight="normal"/>
+                    <font-triplet name="sans-serif" style="normal" weight="normal"/>
+                    <font-triplet name="Helvetica" style="normal" weight="normal"/>
+                    <font-triplet name="Arial" style="normal" weight="normal"/>
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf">
                     <font-triplet name="DejaVu Sans" style="normal" weight="bold"/>
