@@ -3267,6 +3267,47 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Lists of Blocks ("list-of") -->
+
+<!-- pretext-common.xsl ranges over a scope of the document when -->
+<!-- it meets a "list-of", emitting division headings and the    -->
+<!-- elements the author requested; here, each element is one    -->
+<!-- line, a live cross-reference followed by any title.         -->
+
+<!-- the harness would otherwise shadow the machinery -->
+<xsl:template match="list-of">
+    <xsl:apply-imports/>
+</xsl:template>
+
+<!-- no surrounding infrastructure necessary -->
+<xsl:template name="list-of-begin"/>
+<xsl:template name="list-of-end"/>
+
+<!-- Division headings reuse the stack-aware heading machinery -->
+<!-- of the solutions generator, which sizes uniformly, so the -->
+<!-- machinery's $heading-level goes unused here.              -->
+<xsl:template match="*" mode="list-of-heading">
+    <xsl:apply-templates select="." mode="duplicate-heading"/>
+</xsl:template>
+
+<xsl:template match="*" mode="list-of-element">
+    <fo:block>
+        <xsl:apply-templates select="." mode="xref-link">
+            <xsl:with-param name="target" select="."/>
+            <xsl:with-param name="origin" select="'list-of'"/>
+            <xsl:with-param name="content">
+                <xsl:apply-templates select="." mode="type-name"/>
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="." mode="number"/>
+            </xsl:with-param>
+        </xsl:apply-templates>
+        <xsl:if test="title">
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-xref"/>
+        </xsl:if>
+    </fo:block>
+</xsl:template>
+
 <!-- ################ -->
 <!-- Coverage Harness -->
 <!-- ################ -->
