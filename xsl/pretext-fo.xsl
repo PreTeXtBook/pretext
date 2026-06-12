@@ -1001,6 +1001,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-imports/>
 </xsl:template>
 
+<!-- pretext-common.xsl kills "author" and "editor" globally, as -->
+<!-- metadata, and styles them only in a BibTeX-flavored entry;  -->
+<!-- in a raw entry they are authored display text, passing      -->
+<!-- through (and so shadowing the kill reached by the           -->
+<!-- apply-imports above).                                       -->
+<xsl:template match="biblio[@type = 'raw']/author|biblio[@type = 'raw']/editor">
+    <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="biblio" mode="bibentry-wrapper">
     <xsl:param name="content"/>
     <fo:list-block provisional-distance-between-starts="2.5em"
