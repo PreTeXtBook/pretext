@@ -1496,12 +1496,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- widest row, with any @colspan unrolled            -->
             <xsl:otherwise>
                 <xsl:variable name="column-count">
-                    <xsl:for-each select="row">
-                        <xsl:sort select="count(cell[not(@colspan)]) + sum(cell/@colspan)" data-type="number" order="descending"/>
-                        <xsl:if test="position() = 1">
-                            <xsl:value-of select="count(cell[not(@colspan)]) + sum(cell/@colspan)"/>
-                        </xsl:if>
-                    </xsl:for-each>
+                    <xsl:apply-templates select="." mode="column-count"/>
                 </xsl:variable>
                 <xsl:call-template name="equal-table-columns">
                     <xsl:with-param name="remaining" select="$column-count"/>
@@ -1529,6 +1524,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- The width of a "tabular", in columns: as authored, else the -->
+<!-- widest row, with any @colspan unrolled.                     -->
+<xsl:template match="tabular" mode="column-count">
+    <xsl:choose>
+        <xsl:when test="col">
+            <xsl:value-of select="count(col)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:for-each select="row">
+                <xsl:sort select="count(cell[not(@colspan)]) + sum(cell/@colspan)" data-type="number" order="descending"/>
+                <xsl:if test="position() = 1">
+                    <xsl:value-of select="count(cell[not(@colspan)]) + sum(cell/@colspan)"/>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <xsl:template match="tabular/col">
     <fo:table-column>
         <xsl:attribute name="column-width">
@@ -1549,7 +1562,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="tabular/row">
     <fo:table-row>
         <xsl:apply-templates select="cell"/>
+        <!-- A row narrower than its table makes the tagged-table     -->
+        <!-- structure tree irregular, failing PDF/UA-1 validation    -->
+        <!-- (ISO 14289-1, via ISO 32000-1 Table 337); pad to width.  -->
+        <xsl:variable name="table-width">
+            <xsl:apply-templates select="parent::tabular" mode="column-count"/>
+        </xsl:variable>
+        <xsl:call-template name="empty-table-cells">
+            <xsl:with-param name="remaining" select="$table-width - (count(cell[not(@colspan)]) + sum(cell/@colspan))"/>
+        </xsl:call-template>
     </fo:table-row>
+</xsl:template>
+
+<xsl:template name="empty-table-cells">
+    <xsl:param name="remaining"/>
+    <xsl:if test="$remaining &gt; 0">
+        <fo:table-cell padding="2pt">
+            <fo:block/>
+        </fo:table-cell>
+        <xsl:call-template name="empty-table-cells">
+            <xsl:with-param name="remaining" select="$remaining - 1"/>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 <!-- A header row is bold, a visual echo of its structural role. -->
