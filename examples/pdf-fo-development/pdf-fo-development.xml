@@ -152,6 +152,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </figure>
         </section>
 
+        <section xml:id="section-verbatim" label="section-verbatim">
+            <title>Verbatim</title>
+
+            <p>Code display interrupts a paragraph,
+                <cd>
+                    <cline>s = "Hello, World!"</cline>
+                    <cline>print(s)</cline>
+                </cd>
+            and then it continues.</p>
+
+            <listing xml:id="listing-greeting" label="listing-greeting">
+                <title>A Counting Program</title>
+                <program language="python">
+                    <code>
+                    total = 0
+                    for i in range(1, 11):
+                        total = total + i
+                    print(total)
+                    </code>
+                </program>
+            </listing>
+
+            <p>A console session, with prompt, bold input, and plain output.</p>
+
+            <console prompt="$ ">
+                <input>date --utc</input>
+                <output>Thu Jun 11 23:30:00 UTC 2026</output>
+            </console>
+
+            <p>A Sage cell, input boxed, output following.</p>
+
+            <sage>
+                <input>factorial(8)</input>
+                <output>40320</output>
+            </sage>
+        </section>
+
         <section xml:id="section-mathematics" label="section-mathematics">
             <title>Mathematics</title>
 
