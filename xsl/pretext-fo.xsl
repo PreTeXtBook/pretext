@@ -2567,6 +2567,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:inline>
 </xsl:template>
 
+<!-- An inline program fragment ("pf") is monospace, exactly as -->
+<!-- "c"; syntax highlighting by @language is a refinement.     -->
+<xsl:template match="pf">
+    <xsl:call-template name="code-wrapper">
+        <xsl:with-param name="content">
+            <xsl:value-of select="."/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- An "element" names an XML or HTML element in documentation  -->
+<!-- prose; no other conversion decorates it (the built-in rules -->
+<!-- apply), so the text just passes through.                    -->
+<xsl:template match="element">
+    <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="*" mode="italic">
     <fo:inline font-style="italic">
         <xsl:apply-templates/>
