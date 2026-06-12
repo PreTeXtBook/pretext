@@ -980,7 +980,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <fo:block space-before.minimum="{format-number(0.75 * $magnitude, '0.##')}{$unit}"
                   space-before.optimum="{$vertical-space}"
                   space-before.maximum="{format-number(4 * $magnitude, '0.##')}{$unit}"
-                  space-before.conditionality="retain"/>
+                  space-before.conditionality="retain">
+            <!-- The publisher's draft mode makes the workspace visible -->
+            <!-- with a faint hairline along its bottom edge, akin to   -->
+            <!-- the visible strut of the LaTeX conversion.             -->
+            <xsl:if test="$b-latex-draft-mode">
+                <fo:leader leader-pattern="rule"
+                           leader-length.optimum="100%"
+                           rule-thickness="0.5pt"
+                           color="#999999"/>
+            </xsl:if>
+        </fo:block>
     </xsl:if>
 </xsl:template>
 
