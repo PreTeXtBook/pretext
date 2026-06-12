@@ -51,8 +51,14 @@ console as `PTX:FO-TODO: <element-name>`.  The loop:
 
 2. Pick the most consequential element, implement it with a template
    in `pretext-fo.xsl` (which removes it from the report).
-3. Verify the `*.fo` file is well-formed (`xmllint --noout`), then
-   render with `-f pdf-fo` and inspect the PDF.
+3. Validate the `*.fo` file against the (locally amended) schema of
+   FOP's FO subset, which catches in one pass the structural errors
+   FOP would otherwise report fatally, one render at a time
+   (see `~/mathbook/fo-schema/README.md`):
+
+       xmllint --noout --schema ~/mathbook/fo-schema/fop-amended.xsd <the-fo>
+
+   Then render with `-f pdf-fo` and inspect the PDF.
 4. Validate PDF/UA-1 conformance (veraPDF is installed locally):
 
        ~/mathbook/verapdf/verapdf --flavour ua1 <the-pdf>
