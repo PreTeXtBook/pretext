@@ -3926,9 +3926,13 @@ def fo(xml, pub_file, stringparams, out_file, dest_dir):
     # form output filename based on source filename,
     # unless an  out_file  has been specified
     derivedname = common.get_output_filename(xml, out_file, dest_dir, ".fo")
-    # Write output into working directory, no scratch space needed
+    # The stylesheet may write companion files (e.g. a publisher's
+    # watermark image) via exsl:document, which resolve against the
+    # current working directory; aim them beside the FO file, where
+    # relative references resolve when Apache FOP renders it
+    companion_dir = os.path.dirname(os.path.abspath(derivedname))
     log.info("converting {} to XSL-FO as {}".format(xml, derivedname))
-    common.xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
+    common.xsltproc(extraction_xslt, xml, derivedname, companion_dir, stringparams)
 
 
 ###################
