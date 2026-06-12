@@ -39,8 +39,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:svg="http://www.w3.org/2000/svg"
     xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
     xmlns:exsl="http://exslt.org/common"
+    xmlns:pf="https://prefigure.org"
     extension-element-prefixes="exsl"
-    exclude-result-prefixes="pi svg"
+    exclude-result-prefixes="pi svg pf"
 >
 
 <!-- Standard conversion groundwork -->
@@ -286,6 +287,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- A worksheet "page" is a pagination request; its contents    -->
+<!-- just flow, and real page-break control is a refinement.     -->
+<xsl:template match="worksheet/page">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
 <!-- An "introduction" or "conclusion" of a division is mostly a -->
 <!-- transparent container, but any title runs in, bold, to the  -->
 <!-- leading paragraph.                                          -->
@@ -315,6 +322,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the LaTeX treatment).                                        -->
 <xsl:template match="paragraphs">
     <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:variable name="heading">
+            <fo:inline font-weight="bold" font-style="normal">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="heading-then-content">
+            <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
+<!-- A glossary item ("gi") reads as a description list entry:   -->
+<!-- its title, bold, run in to the explanation.                 -->
+<xsl:template match="gi">
+    <fo:block space-after="0.5em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
             <fo:inline font-weight="bold" font-style="normal">
@@ -412,7 +436,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- divisional one matches a more specific pattern in the       -->
 <!-- "Exercises" section.  PROJECT-LIKE blocks may also be       -->
 <!-- structured by "task", arriving among the contents.          -->
-<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&PROJECT-LIKE;|exercise">
+<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|assemblage|objectives|outcomes|exercise">
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
@@ -717,7 +741,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- must carry its intrinsic @width and @height: with only a    -->
 <!-- @viewBox, FOP assumes a square, and the drawing floats in   -->
 <!-- extra vertical space.                                       -->
-<xsl:template match="image[@source|@pi:generated]|image[latex-image]|image[sageplot]|image[asymptote]">
+<xsl:template match="image[@source|@pi:generated]|image[latex-image]|image[sageplot]|image[asymptote]|image[pf:prefigure]|image[mermaid]">
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage"/>
     </xsl:variable>
@@ -783,7 +807,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "image-source-basename" machinery, as manufactured SVG;     -->
 <!-- companion generation components produce the files.  (A 3-D  -->
 <!-- "sageplot" has no useful print representation yet.)         -->
-<xsl:template match="image[latex-image]|image[sageplot]|image[asymptote]" mode="image-filename">
+<xsl:template match="image[latex-image]|image[sageplot]|image[asymptote]|image[pf:prefigure]|image[mermaid]" mode="image-filename">
     <xsl:value-of select="$generated-directory"/>
     <xsl:if test="$b-managed-directories">
         <xsl:choose>
@@ -796,9 +820,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="asymptote">
                 <xsl:text>asymptote/</xsl:text>
             </xsl:when>
+            <xsl:when test="pf:prefigure">
+                <xsl:text>prefigure/</xsl:text>
+            </xsl:when>
+            <xsl:when test="mermaid">
+                <xsl:text>mermaid/</xsl:text>
+            </xsl:when>
         </xsl:choose>
     </xsl:if>
-    <xsl:apply-templates select="latex-image|sageplot|asymptote" mode="image-source-basename"/>
+    <xsl:apply-templates select="latex-image|sageplot|asymptote|pf:prefigure|mermaid" mode="image-source-basename"/>
     <xsl:text>.svg</xsl:text>
 </xsl:template>
 
@@ -1940,6 +1970,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="math-placeholder"/>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Assembly hoists an "intertext" out of its "md", to sit among -->
+<!-- the children of the paragraph, between two displays; its     -->
+<!-- prose just continues the paragraph.                          -->
+<xsl:template match="intertext">
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- A copy of the SVG with computed sizes: the "ex" lengths of   -->
