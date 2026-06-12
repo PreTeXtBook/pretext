@@ -102,32 +102,57 @@ inlines, blocks with run-in headings, lists, the MathJax-SVG math
 meld, images), as is the bulk of phase seven: tables, figures and
 captions, `sidebyside`, footnotes, active links (`url`, `email`,
 live `xref`), the verbatim family, exercises and projects and tasks,
-specialized divisions, bibliographies, units, poetry, and more.
+specialized divisions, bibliographies, units, poetry, front and back
+matter (titlepage, abstract, colophon, generated `solutions`), page
+folios, PDF bookmarks, and more.  **The complete sample article
+passes veraPDF validation of PDF/UA-1, with no exceptions.**
+
+Worksheets and handouts are full printouts: their own pages,
+authored `page` pagination, and elastic `@workspace` below
+exercises (the request is the natural size; the space stretches to
+fill out a page, in the manner of LaTeX's `\vfill`, or surrenders a
+quarter when crowded; `space-before.conditionality="retain"` sends
+space interrupted by a page break wholly onto the next page).
+
+Publisher variables honored so far, beyond `$font-size` and
+`$latex-sides`: `right-alignment` (flush/ragged), `print` (link
+color, pageref default, sidedness default), `pageref` (page numbers
+in cross-references via native `fo:page-number-citation` — no
+second pass), `open-odd` (chapter-level divisions of a book;
+`skip-pages` degrades to `add-blanks`), `worksheet/@formatted`,
+`draft` (visible workspace hairlines), `insertions/@pagebreaks`
+(forced page breaks by `@xml:id`), `fillin` text styles
+(underline/box/shade), and the `common/watermark` (an SVG companion
+file painted as the body-region background, so the structure tree
+is undisturbed).
 
 What remains, roughly in order of value:
 
-1. **Front and back matter** — `titlepage`, `abstract`,
-   contributors, `colophon`; `index-list` and `notation-list`.
+1. **Coverage leftovers** — contributors detail, `index-list` and
+   `notation-list`, `list-of`.
 2. **Runestone static internals** — matching/select exercises
    (`premise`, `response`, ...), embedded HTML (`div`, `br`),
    interactive previews.
-3. **Refinements flagged in stylesheet comments** — publisher
-   exercise-component switches, `@header='vertical'` and
-   `@row-headers` tables, worksheet page breaks, `list-of`,
-   literate-programming fragments.
+3. **Refinements flagged in stylesheet comments** —
+   `@header='vertical'` and `@row-headers` tables,
+   `exercisegroup/@cols`, literate-programming fragments, a keep
+   for the proof tombstone.
 
 Targets: full coverage of the sample article, then the sample book
 (parts, Runestone static exercises).
 
 ## Saved for later
 
-* Explicit font embedding in `fop.xconf`, including a math-compatible
-  font, replacing reliance on operating-system font auto-detection.
-* Page headers and footers (`fo:static-content`), page numbers.
-* Two-page-spread refinements: running heads, blank verso pages at
-  chapter boundaries (`$latex-open-odd`).
-* Cross-references as live PDF links (`fo:basic-link`).
-* PDF bookmarks (`fo:bookmark-tree`) and document metadata.
+* Publisher-configurable fonts (a math-compatible face) in
+  `fop.xconf`; page geometry intent (`top`/`bottom`/`margin` of
+  formatted worksheets).
+* `bottom-alignment` flush: FO expresses it only through stretchy
+  space everywhere; ragged (the FO default) matches LaTeX's
+  one-sided default anyway.
+* `skip-pages` flavor of `open-odd`: a single `fo:page-sequence`
+  cannot omit a page number; would need a page-sequence per
+  chapter.
+* Crop marks, front/back cover images.
 * Accessibility refinements: a true PDF "artifact" mechanism for
   decorative images; PDF/UA-2 and MathML association are beyond
   FOP today.
