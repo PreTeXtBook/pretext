@@ -3201,6 +3201,76 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
+<!-- #################### -->
+<!-- Literate Programming -->
+<!-- #################### -->
+
+<!-- A "fragment" of a literate program: a heading line with the   -->
+<!-- traditional angle-bracket name and defined-to-be symbol, then -->
+<!-- verbatim "code" interleaved with "fragref" pointers to other  -->
+<!-- fragments.                                                    -->
+<xsl:template match="fragment">
+    <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <fo:block>
+            <xsl:call-template name="langle-character"/>
+            <xsl:apply-templates select="." mode="number"/>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+            <xsl:call-template name="rangle-character"/>
+            <xsl:text> </xsl:text>
+            <xsl:text>&#x2261;</xsl:text>
+        </fo:block>
+        <xsl:if test="@filename">
+            <fo:block>
+                <xsl:text>Root of file: </xsl:text>
+                <fo:inline font-family="{$font-family-monospace}">
+                    <xsl:value-of select="@filename"/>
+                </fo:inline>
+            </fo:block>
+        </xsl:if>
+        <xsl:apply-templates select="code|fragref"/>
+    </fo:block>
+</xsl:template>
+
+<!-- code of a fragment displays verbatim; whitespace-only chunks -->
+<!-- (text between two adjacent "fragref") just disappear         -->
+<xsl:template match="fragment/code">
+    <xsl:if test="not(normalize-space(.) = '')">
+        <xsl:call-template name="verbatim-block">
+            <xsl:with-param name="content">
+                <xsl:call-template name="sanitize-text">
+                    <xsl:with-param name="text" select="."/>
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<!-- A "fragref" points to another fragment: its angle-bracket -->
+<!-- name, with the number and page of the target, linked.     -->
+<xsl:template match="fragref">
+    <xsl:variable name="target" select="id(@ref)"/>
+    <xsl:variable name="the-id">
+        <xsl:apply-templates select="$target" mode="unique-id"/>
+    </xsl:variable>
+    <fo:block start-indent="2em">
+        <xsl:call-template name="langle-character"/>
+        <xsl:apply-templates select="$target" mode="title-full"/>
+        <xsl:text> </xsl:text>
+        <fo:inline font-size="70%">
+            <xsl:apply-templates select="$target" mode="number"/>
+            <xsl:text> [</xsl:text>
+            <fo:basic-link internal-destination="{$the-id}" fox:alt-text="page of this fragment">
+                <xsl:call-template name="link-attributes"/>
+                <fo:page-number-citation ref-id="{$the-id}"/>
+            </fo:basic-link>
+            <xsl:text>]</xsl:text>
+        </fo:inline>
+        <xsl:call-template name="rangle-character"/>
+    </fo:block>
+</xsl:template>
+
 <!-- ############### -->
 <!-- Generated Lists -->
 <!-- ############### -->
