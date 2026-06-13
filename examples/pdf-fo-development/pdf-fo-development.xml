@@ -114,7 +114,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>An externally produced image, a right triangle, follows at half of the available width.</p>
 
-            <image source="right-triangle.svg" width="50%">
+            <image source="right-triangle" width="50%">
                 <shortdescription>a right triangle</shortdescription>
             </image>
         </section>
@@ -151,7 +151,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <p>A side-by-side arranges panels horizontally: an image, beside a list of the sides of the pictured triangle, with the bottoms of the two panels aligned.</p>
 
             <sidebyside widths="40% 35%" valign="bottom">
-                <image source="right-triangle.svg">
+                <image source="right-triangle">
                     <shortdescription>a right triangle</shortdescription>
                 </image>
                 <ul>
@@ -165,7 +165,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <figure xml:id="figure-triangle" label="figure-triangle">
                 <caption>A right triangle, now wrapped in a captioned figure.</caption>
-                <image source="right-triangle.svg" width="35%">
+                <image source="right-triangle" width="35%">
                     <shortdescription>a right triangle</shortdescription>
                 </image>
             </figure>
