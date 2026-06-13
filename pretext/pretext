@@ -377,6 +377,7 @@ def get_cli_arguments():
         ("svg", "Scalable Vector Graphics file(s)"),
         ("pdf", "Portable Document Format file(s)"),
         ("pdf-plus", "PDF and LaTeX, asset, and log files used/generated when building PDF"),
+        ("pdf-fo", "PDF file(s), LaTeX-free, via XSL-FO and Apache FOP (experimental)"),
         ("png", "Portable Network Graphics file(s)"),
         ("eps", "Encapsulated Post Script file(s)"),
         ("mml", "MathML (math elements)"),
@@ -388,6 +389,7 @@ def get_cli_arguments():
         ("source", "Standalone source files"),
         ("latex", "LaTeX source file (only, an intermediate format for developers)"),
         ("latex-plus", "LaTeX source file and all necessary build files"),
+        ("fo", "XSL-FO source file (only, an intermediate format for developers, experimental)"),
         ("html", "HyperText Markup Language (online/web pages)"),
         ("html-zip", "HyperText Markup Language (single zip file)"),
         ("html-scorm", "HyperText Markup Language (single zip file including SCORM manifest)"),
@@ -842,12 +844,28 @@ def main():
                 method,
                 "all",
             )
+        elif args.format == "pdf-fo":
+            ptx.pdf_fo(
+                xml_source,
+                publication_file,
+                stringparams,
+                out_file,
+                dest_dir,
+            )
         elif args.format == "latex":
             ptx.latex(
                 xml_source,
                 publication_file,
                 stringparams,
                 extra_stylesheet,
+                out_file,
+                dest_dir,
+            )
+        elif args.format == "fo":
+            ptx.fo(
+                xml_source,
+                publication_file,
+                stringparams,
                 out_file,
                 dest_dir,
             )

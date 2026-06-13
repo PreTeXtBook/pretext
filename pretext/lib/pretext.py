@@ -3909,6 +3909,32 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     common.xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
 
+# Like latex() above, this is mostly a convenience for developers:
+# the XSL-FO file is an intermediate format on the way to a PDF,
+# though it does stand alone as the input to any XSL-FO formatter.
+def fo(xml, pub_file, stringparams, out_file, dest_dir):
+    """Convert XML source to XSL-FO in destination directory"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    # support publisher file, not subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+
+    extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "pretext-fo.xsl")
+    # form output filename based on source filename,
+    # unless an  out_file  has been specified
+    derivedname = common.get_output_filename(xml, out_file, dest_dir, ".fo")
+    # The stylesheet may write companion files (e.g. a publisher's
+    # watermark image) via exsl:document, which resolve against the
+    # current working directory; aim them beside the FO file, where
+    # relative references resolve when Apache FOP renders it
+    companion_dir = os.path.dirname(os.path.abspath(derivedname))
+    log.info("converting {} to XSL-FO as {}".format(xml, derivedname))
+    common.xsltproc(extraction_xslt, xml, derivedname, companion_dir, stringparams)
+
+
 ###################
 # Conversion to PDF
 ###################
@@ -4037,6 +4063,191 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
             else:
                 shutil.copy2(pdfname, dest_dir)
 
+
+def _pdf_fo_accessibility_repairs(pdfname):
+    """
+    Post-process a FOP-rendered PDF to repair two PDF/UA conformance
+    gaps that Apache FOP (observed with version 2.8) cannot fill from
+    the XSL-FO side.  PyMuPDF performs the (small, incremental)
+    repairs; it is already a dependency of this script, used for
+    image format conversions.
+
+    Repair one, link descriptions:
+
+    PDF/UA-1 (ISO 14289-1, Clause 7.18.5) requires each link
+    annotation to provide an alternate description in the /Contents
+    key of its annotation dictionary (per ISO 32000-1, 14.9.3); this
+    is what assistive technology announces for the link, and what a
+    validator such as veraPDF inspects.  The XSL-FO conversion
+    decorates every "fo:basic-link" with a description, via the
+    "fox:alt-text" extension attribute, but FOP records it only as
+    the /Alt entry of the link's *structure element*, in the
+    structure tree -- it has no mechanism at all for writing the
+    /Contents key of the Link *annotation*.  So walk the structure
+    tree's /ParentTree to recover each annotation's intended
+    description from its structure element (falling back to the
+    link's URI, or generic text) and write it into /Contents.
+
+    Repair two, footnote identifiers:
+
+    PDF/UA-1 (Clause 7.9) requires each /Note structure element
+    (FOP's tag for the body of a footnote) to carry a unique /ID
+    entry, which FOP never writes.  Manufacture one from the
+    object number.
+
+    N.B. Remove this routine (and its one call, in pdf_fo()) the day
+    FOP handles both itself.  The test: render with a newer FOP,
+    skip this pass, and check the report of
+        verapdf --flavour ua1 <the-pdf>
+    for Clauses 7.18.5 and 7.9.
+    """
+    try:
+        import fitz  # pyMuPDF
+    except ImportError:
+        log.warning("the 'pyMuPDF' module is not installed, so PDF link annotations lack the alternate descriptions PDF/UA requires")
+        return
+
+    import re
+
+    doc = fitz.open(pdfname)
+    # Map a /StructParent index to the /Alt of its structure element by
+    # walking the /ParentTree number tree, whose nodes are inline
+    # dictionaries or indirect objects, with /Kids subtrees or /Nums
+    # leaf arrays.  Entries mapping an index to an *array* (the marked
+    # content of a page) do not concern us, and do not match the pair
+    # pattern.  Any miss just engages the fallback below.
+    alternate_text = {}
+
+    def harvest(node_type, node_value):
+        if node_type == "xref":
+            node = int(node_value.split()[0])
+            kids = doc.xref_get_key(node, "Kids")
+            nums = doc.xref_get_key(node, "Nums")
+        elif node_type == "dict":
+            kids_match = re.search(r"/Kids\s*(\[[^\]]*\])", node_value)
+            kids = ("array", kids_match.group(1)) if kids_match else ("null", "null")
+            nums_match = re.search(r"/Nums\s*(\[[^\]]*\])", node_value)
+            nums = ("array", nums_match.group(1)) if nums_match else ("null", "null")
+        else:
+            return
+        if kids[0] == "array":
+            for reference in re.findall(r"(\d+)\s+0\s+R", kids[1]):
+                harvest("xref", reference + " 0 R")
+        if nums[0] == "array":
+            for index, element in re.findall(r"(\d+)\s+(\d+)\s+0\s+R", nums[1]):
+                alt = doc.xref_get_key(int(element), "Alt")
+                if alt[0] == "string":
+                    alternate_text[int(index)] = alt[1]
+
+    struct_root = doc.xref_get_key(doc.pdf_catalog(), "StructTreeRoot")
+    if struct_root[0] == "xref":
+        harvest(*doc.xref_get_key(int(struct_root[1].split()[0]), "ParentTree"))
+    additions = 0
+    for page in doc:
+        for link in page.links():
+            xref = link["xref"]
+            if doc.xref_get_key(xref, "Contents")[0] != "null":
+                continue
+            description = None
+            struct_parent = doc.xref_get_key(xref, "StructParent")
+            if struct_parent[0] == "int":
+                description = alternate_text.get(int(struct_parent[1]))
+            if description is None:
+                description = link.get("uri") or "internal cross-reference"
+            doc.xref_set_key(xref, "Contents", fitz.get_pdf_str(description))
+            additions += 1
+    # repair two: a unique /ID for each /Note structure element
+    for xref in range(1, doc.xref_length()):
+        if doc.xref_get_key(xref, "S")[1] == "/Note" and doc.xref_get_key(xref, "ID")[0] == "null":
+            doc.xref_set_key(xref, "ID", "(Note-{})".format(xref))
+            additions += 1
+    if additions > 0:
+        doc.saveIncr()
+    doc.close()
+    log.debug("made {} accessibility repairs in {}".format(additions, pdfname))
+
+
+def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
+    """
+    Generate a PDF from an XML source using XSL-FO as an intermediate
+    format, rendered by Apache FOP.  This is a LaTeX-free route to a
+    PDF, experimental and very incomplete.
+
+    Args:
+        xml (str): Path to the XML source file.
+        pub_file (str or None): Path to the publisher configuration file, or None if not used.
+        stringparams (dict): Dictionary of string parameters to control the transformation.
+        out_file (str or None): Path to the output PDF file. If None, the PDF is copied to dest_dir.
+        dest_dir (str): Directory where the output PDF should be placed if out_file is not specified.
+
+    Returns:
+        None
+
+    Side Effects:
+        - Copies the generated PDF to the specified output location.
+    """
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    generated_abs, external_abs = common.get_managed_directories(xml, pub_file)
+    # Consult source for additional files
+    data_dir = common.get_source_directories(xml)
+
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    # name for scratch directory
+    tmp_dir = common.get_temporary_directory()
+
+    # Mathematics as SVG images, produced by MathJax, and passed to
+    # the FO stylesheet as the  $mathfile  string parameter, which
+    # melds each image into the page (the model is  epub()  above)
+    math_representations = os.path.join(tmp_dir, "math-representations-svg.xml")
+    mathjax_latex(xml, pub_file, math_representations, None, "svg")
+    stringparams["mathfile"] = math_representations.replace(os.sep, "/")
+
+    # Speech versions of the mathematics become the alternate text
+    # of the SVG images, as PDF/UA requires; again the model is epub()
+    speech_representations = os.path.join(tmp_dir, "math-representations-speech.xml")
+    mathjax_latex(xml, pub_file, speech_representations, None, "speech")
+    stringparams["speechfile"] = speech_representations.replace(os.sep, "/")
+
+    # make the XSL-FO file in scratch directory
+    # (1) pass None as out_file to derive from XML source filename
+    # (2) pass tmp_dir (scratch) as destination directory
+    fo(xml, pub_file, stringparams, None, tmp_dir)
+
+    # Create localized filenames for the FOP rendering step
+    # foname  needs to match behavior of fo() with above arguments
+    basename = os.path.splitext(os.path.split(xml)[1])[0]
+    foname = os.path.join(tmp_dir, basename + ".fo")
+    pdfname = os.path.join(tmp_dir, basename + ".pdf")
+
+    # Make image files available, relative to the FO file
+    common.copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
+
+    # render the FO file as a PDF with Apache FOP, configured
+    # by the  fop.xconf  file maintained in this distribution
+    fop_exec_cmd = common.get_executable_cmd("fop")
+    fop_xconf = os.path.join(common.get_ptx_path(), "pretext", "fop.xconf")
+    fop_cmd = fop_exec_cmd + ["-c", fop_xconf, "-fo", foname, "-pdf", pdfname]
+    log.info("rendering {} as {} with Apache FOP".format(foname, pdfname))
+    log.debug("FOP command: {}".format(" ".join(fop_cmd)))
+    # run FOP in the scratch directory, where the managed directories
+    # were just copied, so relative image paths in the FO file resolve
+    result = subprocess.run(fop_cmd, cwd=tmp_dir)
+    if result.returncode != 0:
+        raise OSError("Apache FOP rendering of {} failed".format(foname))
+
+    # post-process: repair PDF/UA conformance gaps FOP leaves behind
+    _pdf_fo_accessibility_repairs(pdfname)
+
+    # Copy just the PDF output
+    # out_file: not(None) only if provided in CLI
+    # dest_dir: always defined, if only current directory of CLI invocation
+    if out_file:
+        shutil.copy2(pdfname, out_file)
+    else:
+        shutil.copy2(pdfname, dest_dir)
 
 
 #################

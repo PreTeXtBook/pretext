@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+
+<!--********************************************************************
+Copyright 2026 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- Configuration for Apache FOP when rendering the XSL-FO         -->
+<!-- produced by  xsl/pretext-fo.xsl  as a PDF (the "pdf-fo" format -->
+<!-- of the  pretext/pretext  script).  Seeded from the example     -->
+<!-- configuration distributed with FOP, radically reduced.         -->
+
+<fop version="1.0">
+
+    <!-- Always-on accessibility: FOP derives a Tagged PDF structure -->
+    <!-- tree from the formatting objects, honoring @role and        -->
+    <!-- @fox:alt-text decorations made by  pretext-fo.xsl.          -->
+    <accessibility>true</accessibility>
+
+    <!-- No "base" element: relative URLs (image files) then resolve -->
+    <!-- against the current working directory, and the  pdf_fo()    -->
+    <!-- routine runs FOP in the scratch directory holding the       -->
+    <!-- managed directories of images.  (A "base" element would     -->
+    <!-- resolve relative to the location of this very file.)        -->
+
+    <!-- Source resolution in dpi (dots/pixels per inch) for determining -->
+    <!-- the size of pixels in SVG and bitmap images                     -->
+    <source-resolution>96</source-resolution>
+    <!-- Target resolution in dpi for generated bitmaps -->
+    <target-resolution>96</target-resolution>
+
+    <!-- Default page size, in case a value is specified as "auto" -->
+    <default-page-settings height="11in" width="8.5in"/>
+
+    <renderers>
+        <renderer mime="application/pdf">
+            <!-- Declare conformance with PDF/UA-1 (ISO 14289-1, the  -->
+            <!-- accessibility standard).  FOP then *refuses* to      -->
+            <!-- render a violation (a missing document title, a      -->
+            <!-- non-embedded font), so a regression cannot slip by.  -->
+            <pdf-ua-mode>PDF/UA-1</pdf-ua-mode>
+            <fonts>
+                <!-- Explicit, *fully* embedded fonts (no subsetting):     -->
+                <!-- FOP's subset embedding writes an incomplete CIDSet    -->
+                <!-- stream, which fails PDF/UA-1 validation (ISO 14289-1, -->
+                <!-- clause 7.21.4.2, observed with veraPDF).  Explicit    -->
+                <!-- declarations also avoid a slow, noisy scan of every   -->
+                <!-- system font.  The paths are Debian's; font choices    -->
+                <!-- will become publisher-configurable eventually.        -->
+                <!-- Generic and legacy family names (e.g. inside an  -->
+                <!-- author's SVG image) alias to embedded faces, since -->
+                <!-- the base-14 fallbacks would violate PDF/UA.        -->
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf">
+                    <font-triplet name="DejaVu Serif" style="normal" weight="normal"/>
+                    <font-triplet name="serif" style="normal" weight="normal"/>
+                    <font-triplet name="Times" style="normal" weight="normal"/>
+                    <font-triplet name="Times New Roman" style="normal" weight="normal"/>
+                    <font-triplet name="any" style="normal" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf">
+                    <font-triplet name="DejaVu Serif" style="normal" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf">
+                    <font-triplet name="DejaVu Serif" style="italic" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf">
+                    <font-triplet name="DejaVu Serif" style="italic" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf">
+                    <font-triplet name="DejaVu Sans Mono" style="normal" weight="normal"/>
+                    <font-triplet name="monospace" style="normal" weight="normal"/>
+                    <font-triplet name="Courier" style="normal" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf">
+                    <font-triplet name="DejaVu Sans Mono" style="normal" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf">
+                    <font-triplet name="DejaVu Sans Mono" style="italic" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf">
+                    <font-triplet name="DejaVu Sans Mono" style="italic" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf">
+                    <font-triplet name="DejaVu Sans" style="normal" weight="normal"/>
+                    <font-triplet name="sans-serif" style="normal" weight="normal"/>
+                    <font-triplet name="Helvetica" style="normal" weight="normal"/>
+                    <font-triplet name="Arial" style="normal" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf">
+                    <font-triplet name="DejaVu Sans" style="normal" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf">
+                    <font-triplet name="DejaVu Sans" style="italic" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf">
+                    <font-triplet name="DejaVu Sans" style="italic" weight="bold"/>
+                </font>
+            </fonts>
+        </renderer>
+    </renderers>
+
+</fop>
