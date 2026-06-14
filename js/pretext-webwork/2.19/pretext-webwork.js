@@ -384,7 +384,7 @@ async function handleWW(ww_id, action) {
                 };
             </script>` +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/mathjax/es5/tex-chtml.js" id="MathJax-script" defer></script>' +
-            `<script src="${courseUrlBase}_static/pretext/js/lib/knowl.js" defer></script>` +
+            `<script src="${courseUrlBase}_static/pretext/js/dist/knowl.js" defer></script>` +
             '<link rel="stylesheet" href="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/css/bootstrap.min.css"/>' +
             '<script src="' + ww_domain + '/webwork2_files/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>';
 
