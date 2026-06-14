@@ -1506,3 +1506,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 // END Support for code-copy button functionality
+
+// PTXDialog is used by pretext_search.js, which is a separately-loaded script.
+// isDarkMode is called from XSL-generated inline <script> blocks (e.g. mermaid).
+// When this file is bundled into pretext-core.js (IIFE format), both are scoped
+// to the bundle. Assigning them to window makes them reachable globally.
+window.PTXDialog = PTXDialog;
+window.isDarkMode = isDarkMode;

@@ -20,3 +20,6 @@ examples/webwork/Makefile.paths
 
 # cssbuilder output
 css/dist/*.map
+
+# jsbuilder output
+js/dist/**/*.map

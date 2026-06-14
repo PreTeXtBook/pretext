@@ -112,7 +112,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- But this is not the intent, nor supported, and thus can   -->
 <!-- change without warning.                                   -->
 <xsl:variable name="html.css.dir" select="concat($cdn-prefix, '_static/pretext/css')"/>
-<xsl:variable name="html.js.dir" select="concat($cdn-prefix, '_static/pretext/js')"/>
+<!-- Root of the static JS tree (js/ from the pretext core repo) -->
+<xsl:variable name="html.js.root" select="concat($cdn-prefix, '_static/pretext/js')"/>
+<!-- Built distribution files live in a dist/ subdirectory -->
+<xsl:variable name="html.js.dir" select="concat($html.js.root, '/dist')"/>
 
 <!-- Add a prefix for the cdn url, which is empty unless the portable html variable is true -->
 <!-- We use version "latest" unless the CLI provides a version -->
@@ -14100,7 +14103,7 @@ TODO:
 <!-- Knowl header -->
 <xsl:template match="*" mode="knowl">
     <xsl:if test="not($b-debug-react)">
-        <script src="{$html.js.dir}/knowl.js"></script>
+        <!-- knowl.js is bundled into pretext-core.js; no separate <script> needed here -->
         <!-- Variables are defined to defaults in knowl.js and  -->
         <!-- we can override them with new values here          -->
         <xsl:comment>knowl.js code controls Sage Cells within knowls</xsl:comment>
@@ -14167,10 +14170,15 @@ TODO:
 <xsl:template name="pretext-js">
     <xsl:choose>
         <xsl:when test="not($b-debug-react)">
-            <!-- condition first on toc present? -->
-            <script src="{$html.js.dir}/jquery.min.js"></script>
-            <script src="{$html.js.dir}/pretext.js"></script>
-            <script src="{$html.js.dir}/pretext_add_on.js?x=1"></script>
+            <!-- jQuery: loaded from the js/ root (not dist/) since it is a
+                 third-party library, not a built artifact.  Required by the
+                 WeBWorK integration scripts and by Runestone. -->
+            <script src="{$html.js.root}/jquery.min.js"></script>
+            <!-- Core bundle: pretext.js + pretext_add_on.js + knowl.js combined.
+                 Built by script/jsbuilder/jsbuilder.mjs; source lives in js/src/pretext-core.js.
+                 ?v= query string busts the browser cache when the CLI version changes,
+                 restoring the cache-busting that pretext_add_on.js?x=1 previously provided. -->
+            <script src="{$html.js.dir}/pretext-core.js?v={$cli.version}"></script>
         </xsl:when>
         <xsl:when test="$b-debug-react-local">
             <script type="module" defer="" src="./static/js/main.js"></script>
