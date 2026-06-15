@@ -910,9 +910,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- type-name, the number, and any title, run in to the leading -->
 <!-- paragraph of the contents.                                  -->
 
-<!-- The heading, as an inline.  The font style is reset, since    -->
-<!-- the heading may land inside an italic THEOREM-LIKE statement. -->
-<xsl:template match="*" mode="block-heading">
+<!-- A run-in heading is a bold inline, built by one of a few modes -->
+<!-- that vary in the number they show.  The font style is reset,   -->
+<!-- since the heading may land inside an italic THEOREM-LIKE       -->
+<!-- statement.  Each ends with a period and an optional title.     -->
+
+<!-- "heading-full": type-name, full number, and (for a THEOREM or  -->
+<!-- AXIOM) the attributing creator.  Basic blocks and inline       -->
+<!-- exercises and projects.                                        -->
+<xsl:template match="*" mode="heading-full">
     <fo:inline font-weight="bold" font-style="normal">
         <xsl:apply-templates select="." mode="type-name"/>
         <xsl:variable name="the-number">
@@ -934,6 +940,50 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="title-full"/>
         </xsl:if>
     </fo:inline>
+</xsl:template>
+
+<!-- "heading-serial": just the compact serial number, no type-name. -->
+<!-- A divisional exercise (in "exercises", a "worksheet", or         -->
+<!-- "reading-questions").                                            -->
+<xsl:template match="*" mode="heading-serial">
+    <fo:inline font-weight="bold" font-style="normal">
+        <xsl:apply-templates select="." mode="serial-number"/>
+        <xsl:text>.</xsl:text>
+        <xsl:if test="title">
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:if>
+    </fo:inline>
+</xsl:template>
+
+<!-- "heading-list-number": a parenthesized list number, no type-name. -->
+<!-- A "task".                                                         -->
+<xsl:template match="*" mode="heading-list-number">
+    <fo:inline font-weight="bold" font-style="normal">
+        <xsl:text>(</xsl:text>
+        <xsl:apply-templates select="." mode="list-number"/>
+        <xsl:text>)</xsl:text>
+        <xsl:if test="title">
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:if>
+    </fo:inline>
+</xsl:template>
+
+<!-- An exercise or project run-in heading.  The assembly stamps    -->
+<!-- "@exercise-customization" with the exercise's category; the     -->
+<!-- divisional kinds (divisional, worksheet, reading) show a bare   -->
+<!-- serial number, while an inline exercise or a project carries    -->
+<!-- the full type-name and number.                                  -->
+<xsl:template match="*" mode="exercise-heading">
+    <xsl:choose>
+        <xsl:when test="@exercise-customization = 'inline' or @exercise-customization = 'project'">
+            <xsl:apply-templates select="." mode="heading-full"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="heading-serial"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- XSL-FO has no run-in display, so a heading is passed as the  -->
@@ -975,7 +1025,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
-            <xsl:apply-templates select="." mode="block-heading"/>
+            <xsl:apply-templates select="." mode="heading-full"/>
             <xsl:text> </xsl:text>
         </xsl:variable>
         <xsl:call-template name="heading-then-content">
@@ -1189,21 +1239,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- index anchors; the components machinery below will not visit them -->
         <xsl:apply-templates select="idx"/>
         <xsl:variable name="heading">
-            <fo:inline font-weight="bold" font-style="normal">
-                <xsl:choose>
-                    <xsl:when test="self::exercise and (ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)">
-                        <xsl:apply-templates select="." mode="serial-number"/>
-                        <xsl:text>.</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="." mode="block-heading-text"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <xsl:if test="title">
-                    <xsl:text> </xsl:text>
-                    <xsl:apply-templates select="." mode="title-full"/>
-                </xsl:if>
-            </fo:inline>
+            <xsl:apply-templates select="." mode="exercise-heading"/>
             <xsl:text> </xsl:text>
         </xsl:variable>
         <xsl:apply-templates select="." mode="exercise-components">
@@ -1237,15 +1273,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="idx"/>
         <xsl:variable name="heading">
-            <fo:inline font-weight="bold" font-style="normal">
-                <xsl:text>(</xsl:text>
-                <xsl:apply-templates select="." mode="list-number"/>
-                <xsl:text>)</xsl:text>
-                <xsl:if test="title">
-                    <xsl:text> </xsl:text>
-                    <xsl:apply-templates select="." mode="title-full"/>
-                </xsl:if>
-            </fo:inline>
+            <xsl:apply-templates select="." mode="heading-list-number"/>
             <xsl:text> </xsl:text>
         </xsl:variable>
         <xsl:apply-templates select="." mode="exercise-components">
@@ -1254,19 +1282,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- writing space below a terminal task, in a printout -->
         <xsl:apply-templates select="." mode="workspace"/>
     </fo:block>
-</xsl:template>
-
-<!-- the type-name and number of a block heading, sans title -->
-<xsl:template match="*" mode="block-heading-text">
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:variable name="the-number">
-        <xsl:apply-templates select="." mode="number"/>
-    </xsl:variable>
-    <xsl:if test="not($the-number = '')">
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$the-number"/>
-    </xsl:if>
-    <xsl:text>.</xsl:text>
 </xsl:template>
 
 <!-- The publisher's main-text visibility switch for one component -->
@@ -1631,26 +1646,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($dry-run = '')">
         <fo:block space-before="1em" space-after="1em">
             <xsl:variable name="heading">
-                <fo:inline font-weight="bold" font-style="normal">
-                    <xsl:choose>
-                        <!-- divisional flavors: just the serial number -->
-                        <xsl:when test="self::exercise and (ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)">
-                            <xsl:apply-templates select="." mode="serial-number"/>
-                            <xsl:text>.</xsl:text>
-                        </xsl:when>
-                        <!-- inline exercises and projects carry full identification -->
-                        <xsl:otherwise>
-                            <xsl:apply-templates select="." mode="type-name"/>
-                            <xsl:text> </xsl:text>
-                            <xsl:apply-templates select="." mode="number"/>
-                            <xsl:text>.</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:if test="title">
-                        <xsl:text> </xsl:text>
-                        <xsl:apply-templates select="." mode="title-full"/>
-                    </xsl:if>
-                </fo:inline>
+                <xsl:apply-templates select="." mode="exercise-heading"/>
                 <xsl:text> </xsl:text>
             </xsl:variable>
             <!-- The duplicate's interior may contain objects (a    -->
