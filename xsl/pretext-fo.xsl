@@ -1577,9 +1577,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- here.  A division visited along the way repeats its heading; -->
 <!-- the generator supplies a stack of divisions needing mention. -->
 <xsl:template match="*" mode="duplicate-heading">
+    <xsl:param name="heading-level"/>
     <xsl:param name="heading-stack" select="."/>
+    <!-- Size by depth, matching the LaTeX "get-heading-text-size":  -->
+    <!-- the 11pt-class ratios for Huge/huge/Large/large/normalsize. -->
+    <xsl:variable name="heading-size">
+        <xsl:choose>
+            <xsl:when test="$heading-level = 1">227%</xsl:when>
+            <xsl:when test="$heading-level = 2">182%</xsl:when>
+            <xsl:when test="$heading-level = 3">127%</xsl:when>
+            <xsl:when test="$heading-level = 4">109%</xsl:when>
+            <xsl:when test="$heading-level = 5">100%</xsl:when>
+            <xsl:otherwise>100%</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <fo:block font-weight="bold"
-              font-size="120%"
+              font-size="{$heading-size}"
               space-before="1.5em"
               space-after="0.75em"
               keep-with-next.within-page="always">
