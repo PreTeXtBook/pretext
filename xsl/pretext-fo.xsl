@@ -1106,15 +1106,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2009;</xsl:text>
 </xsl:template>
 
-<!-- Solutions to EXAMPLE-LIKE, with an italic run-in heading. -->
+<!-- A hint, answer, or solution, with a bold run-in heading of the -->
+<!-- type-name, as in the LaTeX conversion.  A serial number joins  -->
+<!-- the type-name only when there are siblings of the same kind    -->
+<!-- ("Hint" alone, but "Hint 1", "Hint 2", ...); any title rides   -->
+<!-- in parentheses, outside the bold.                              -->
 <xsl:template match="&SOLUTION-LIKE;">
     <fo:block space-before="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
-            <fo:inline font-style="italic">
+            <xsl:variable name="the-number">
+                <xsl:apply-templates select="." mode="non-singleton-number"/>
+            </xsl:variable>
+            <fo:inline font-weight="bold" font-style="normal">
                 <xsl:apply-templates select="." mode="type-name"/>
-                <xsl:text>.</xsl:text>
+                <xsl:if test="not($the-number = '')">
+                    <xsl:text> </xsl:text>
+                    <xsl:apply-templates select="." mode="serial-number"/>
+                </xsl:if>
             </fo:inline>
+            <xsl:if test="title">
+                <xsl:text> (</xsl:text>
+                <xsl:apply-templates select="." mode="title-full"/>
+                <xsl:text>)</xsl:text>
+            </xsl:if>
+            <xsl:text>.</xsl:text>
             <xsl:text> </xsl:text>
         </xsl:variable>
         <xsl:call-template name="heading-then-content">
