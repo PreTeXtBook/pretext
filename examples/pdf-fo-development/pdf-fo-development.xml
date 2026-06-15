@@ -117,6 +117,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <image source="right-triangle" width="50%">
                 <shortdescription>a right triangle</shortdescription>
             </image>
+
+            <p>A born-in-source image, authored in <prefigure/> syntax, follows.  It is generated to <init>SVG</init>, which Apache FOP embeds directly; the diagram carries an intrinsic width and height, so it occupies only the vertical space it needs.</p>
+
+            <image width="60%">
+                <shortdescription>the decaying oscillation that solves a damped harmonic oscillator, with its derivative</shortdescription>
+                <prefigure label="prefigure-diffeq"
+                           xmlns="https://prefigure.org">
+                    <diagram dimensions="(300,300)" margins="5">
+                        <definition>f(t,y) = (y[1], -pi*y[0]-0.3*y[1])</definition>
+                        <coordinates bbox="[-1,-3,6,3]">
+                            <grid-axes xlabel="t"/>
+                            <de-solve function="f" t0="0" t1="bbox[2]"
+                                      y0="(0,2)" name="oscillator"
+                                      N="200"/>
+                            <plot-de-solution at="x" solution="oscillator"
+                                              axes="(t,y0)"/>
+                            <plot-de-solution at="xprime" solution="oscillator"
+                                              axes="(t,y1)" stroke="red"
+                                              tactile-dash="9 9"/>
+                            <legend at="legend" anchor="(bbox[2], bbox[3])"
+                                    alignment="sw" scale="0.9" opacity="0.5">
+                                <item ref="x"><m>x(t)</m></item>
+                                <item ref="xprime"><m>x'(t)</m></item>
+                            </legend>
+                        </coordinates>
+                    </diagram>
+                </prefigure>
+            </image>
         </section>
 
         <section xml:id="section-tables" label="section-tables">
