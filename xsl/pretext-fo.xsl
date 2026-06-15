@@ -588,52 +588,109 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- The heading of a division, factored out so the two-column     -->
-<!-- index (its own page sequence) can reuse it.                    -->
+<!-- The heading of a division, factored out so the two-column      -->
+<!-- index (its own page sequence) can reuse it.  Shape and sizes    -->
+<!-- follow the LaTeX conversion's "titlesec" styling: "part" and    -->
+<!-- "chapter" use a "display" shape, the type-name and number on    -->
+<!-- their own line above the title (centered for a "part"), while   -->
+<!-- "section" down to "paragraph" level use a "hang" shape, the     -->
+<!-- number run into the title on one line, with no type-name.       -->
 <xsl:template match="*" mode="division-heading">
-    <xsl:variable name="heading-size">
-        <xsl:choose>
-            <xsl:when test="self::chapter">170%</xsl:when>
-            <xsl:when test="self::section">140%</xsl:when>
-            <xsl:when test="self::subsection">120%</xsl:when>
-            <xsl:when test="self::subsubsection">100%</xsl:when>
-            <!-- a specialized division sizes by its depth -->
-            <xsl:otherwise>
-                <xsl:variable name="depth" select="count(ancestor::*[&STRUCTURAL-FILTER;])"/>
-                <xsl:choose>
-                    <xsl:when test="$depth &lt;= 1">140%</xsl:when>
-                    <xsl:when test="$depth = 2">120%</xsl:when>
-                    <xsl:otherwise>100%</xsl:otherwise>
-                </xsl:choose>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:variable name="level">
+        <xsl:apply-templates select="." mode="division-name"/>
     </xsl:variable>
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="number"/>
     </xsl:variable>
-    <fo:block font-size="{$heading-size}"
-              font-weight="bold"
-              space-before="1.5em"
-              space-after="0.75em"
-              keep-with-next.within-page="always"
-              role="H{count(ancestor::*[&STRUCTURAL-FILTER;]) + 1}">
-        <xsl:variable name="page-break">
-            <xsl:apply-templates select="." mode="division-break"/>
-        </xsl:variable>
-        <xsl:if test="not($page-break = '')">
-            <xsl:attribute name="break-before">
-                <xsl:value-of select="$page-break"/>
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="link-id-attribute"/>
-        <xsl:if test="not($the-number = '')">
-            <xsl:apply-templates select="." mode="type-name"/>
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="$the-number"/>
-            <xsl:text> </xsl:text>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="title-full"/>
-    </fo:block>
+    <xsl:variable name="page-break">
+        <xsl:apply-templates select="." mode="division-break"/>
+    </xsl:variable>
+    <xsl:variable name="hN" select="count(ancestor::*[&STRUCTURAL-FILTER;]) + 1"/>
+    <xsl:choose>
+        <!-- "display" shape: "part" and "chapter" -->
+        <xsl:when test="($level = 'part') or ($level = 'chapter')">
+            <!-- "part" is grander and centered, its label at title size -->
+            <xsl:variable name="label-size">
+                <xsl:choose>
+                    <xsl:when test="$level = 'part'">227%</xsl:when>
+                    <xsl:otherwise>182%</xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="label-gap">
+                <xsl:choose>
+                    <xsl:when test="$level = 'part'">30pt</xsl:when>
+                    <xsl:otherwise>20pt</xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <fo:block font-weight="bold"
+                      space-before="50pt"
+                      space-after="40pt"
+                      keep-with-next.within-page="always"
+                      role="H{$hN}">
+                <xsl:if test="$level = 'part'">
+                    <xsl:attribute name="text-align">center</xsl:attribute>
+                </xsl:if>
+                <xsl:if test="not($page-break = '')">
+                    <xsl:attribute name="break-before">
+                        <xsl:value-of select="$page-break"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:apply-templates select="." mode="link-id-attribute"/>
+                <!-- "Type N" on its own line, dropped when numberless -->
+                <xsl:if test="not($the-number = '')">
+                    <fo:block font-size="{$label-size}" space-after="{$label-gap}">
+                        <xsl:apply-templates select="." mode="type-name"/>
+                        <xsl:text> </xsl:text>
+                        <xsl:value-of select="$the-number"/>
+                    </fo:block>
+                </xsl:if>
+                <fo:block font-size="227%">
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </fo:block>
+            </fo:block>
+        </xsl:when>
+        <!-- "hang" shape: "section" through "paragraph" level -->
+        <xsl:otherwise>
+            <xsl:variable name="hang-size">
+                <xsl:choose>
+                    <xsl:when test="$level = 'section'">127%</xsl:when>
+                    <xsl:when test="$level = 'subsection'">109%</xsl:when>
+                    <xsl:otherwise>100%</xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="gap-before">
+                <xsl:choose>
+                    <xsl:when test="$level = 'section'">1.75em</xsl:when>
+                    <xsl:otherwise>1.6em</xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="gap-after">
+                <xsl:choose>
+                    <xsl:when test="$level = 'section'">1.15em</xsl:when>
+                    <xsl:when test="$level = 'paragraph'">1.5em</xsl:when>
+                    <xsl:otherwise>0.75em</xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <fo:block font-size="{$hang-size}"
+                      font-weight="bold"
+                      space-before="{$gap-before}"
+                      space-after="{$gap-after}"
+                      keep-with-next.within-page="always"
+                      role="H{$hN}">
+                <xsl:if test="not($page-break = '')">
+                    <xsl:attribute name="break-before">
+                        <xsl:value-of select="$page-break"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:apply-templates select="." mode="link-id-attribute"/>
+                <xsl:if test="not($the-number = '')">
+                    <xsl:value-of select="$the-number"/>
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+                <xsl:apply-templates select="." mode="title-full"/>
+            </fo:block>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- The page break, if any, opening a division.  A chapter-level   -->
