@@ -73,12 +73,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf">
                     <font-triplet name="DejaVu Serif" style="normal" weight="bold"/>
+                    <font-triplet name="serif" style="normal" weight="bold"/>
+                    <font-triplet name="Times" style="normal" weight="bold"/>
+                    <font-triplet name="Times New Roman" style="normal" weight="bold"/>
+                    <font-triplet name="any" style="normal" weight="bold"/>
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf">
                     <font-triplet name="DejaVu Serif" style="italic" weight="normal"/>
+                    <font-triplet name="serif" style="italic" weight="normal"/>
+                    <font-triplet name="Times" style="italic" weight="normal"/>
+                    <font-triplet name="Times New Roman" style="italic" weight="normal"/>
+                    <font-triplet name="any" style="italic" weight="normal"/>
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf">
                     <font-triplet name="DejaVu Serif" style="italic" weight="bold"/>
+                    <font-triplet name="serif" style="italic" weight="bold"/>
+                    <font-triplet name="Times" style="italic" weight="bold"/>
+                    <font-triplet name="Times New Roman" style="italic" weight="bold"/>
+                    <font-triplet name="any" style="italic" weight="bold"/>
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf">
                     <font-triplet name="DejaVu Sans Mono" style="normal" weight="normal"/>
@@ -102,12 +114,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf">
                     <font-triplet name="DejaVu Sans" style="normal" weight="bold"/>
+                    <font-triplet name="sans-serif" style="normal" weight="bold"/>
+                    <font-triplet name="Helvetica" style="normal" weight="bold"/>
+                    <font-triplet name="Arial" style="normal" weight="bold"/>
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf">
                     <font-triplet name="DejaVu Sans" style="italic" weight="normal"/>
+                    <font-triplet name="sans-serif" style="italic" weight="normal"/>
+                    <font-triplet name="Helvetica" style="italic" weight="normal"/>
+                    <font-triplet name="Arial" style="italic" weight="normal"/>
                 </font>
                 <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf">
                     <font-triplet name="DejaVu Sans" style="italic" weight="bold"/>
+                    <font-triplet name="sans-serif" style="italic" weight="bold"/>
+                    <font-triplet name="Helvetica" style="italic" weight="bold"/>
+                    <font-triplet name="Arial" style="italic" weight="bold"/>
                 </font>
             </fonts>
         </renderer>
