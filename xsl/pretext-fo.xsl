@@ -1156,31 +1156,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2009;</xsl:text>
 </xsl:template>
 
-<!-- A hint, answer, or solution, with a bold run-in heading of the -->
-<!-- type-name, as in the LaTeX conversion.  A serial number joins  -->
-<!-- the type-name only when there are siblings of the same kind    -->
-<!-- ("Hint" alone, but "Hint 1", "Hint 2", ...); any title rides   -->
-<!-- in parentheses, outside the bold.                              -->
-<xsl:template match="&SOLUTION-LIKE;">
+<!-- A hint, answer, or solution appends an exercise or example; a  -->
+<!-- context, discussion, opinion, status, or suggestion appends an -->
+<!-- open problem.  All render alike: a bold run-in type-name, a    -->
+<!-- serial number, an optional parenthesized title, and a period,  -->
+<!-- rendered run-in via heading-then-content as for any block.     -->
+<xsl:template match="&SOLUTION-LIKE;|&DISCUSSION-LIKE;">
     <fo:block space-before="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:variable name="heading">
-            <xsl:variable name="the-number">
-                <xsl:apply-templates select="." mode="non-singleton-number"/>
-            </xsl:variable>
-            <fo:inline font-weight="bold" font-style="normal">
-                <xsl:apply-templates select="." mode="type-name"/>
-                <xsl:if test="not($the-number = '')">
-                    <xsl:text> </xsl:text>
-                    <xsl:apply-templates select="." mode="serial-number"/>
-                </xsl:if>
-            </fo:inline>
-            <xsl:if test="title">
-                <xsl:text> (</xsl:text>
-                <xsl:apply-templates select="." mode="title-full"/>
-                <xsl:text>)</xsl:text>
-            </xsl:if>
-            <xsl:text>.</xsl:text>
+            <xsl:apply-templates select="." mode="appendage-heading"/>
             <xsl:text> </xsl:text>
         </xsl:variable>
         <xsl:call-template name="heading-then-content">
@@ -1189,36 +1174,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
-<!-- The DISCUSSION-LIKE family appends commentary to an           -->
-<!-- OPENPROBLEM-LIKE block (a "status" report, a "discussion", a  -->
-<!-- "suggestion", ...): a bold run-in heading of the type-name,   -->
-<!-- serial number, and any title, as in the LaTeX conversion.     -->
-<xsl:template match="&DISCUSSION-LIKE;">
-    <fo:block space-before="1em">
-        <xsl:apply-templates select="." mode="link-id-attribute"/>
-        <xsl:variable name="heading">
-            <fo:inline font-weight="bold" font-style="normal">
-                <xsl:apply-templates select="." mode="type-name"/>
-                <xsl:variable name="the-number">
-                    <xsl:apply-templates select="." mode="serial-number"/>
-                </xsl:variable>
-                <xsl:if test="not($the-number = '')">
-                    <xsl:text> </xsl:text>
-                    <xsl:value-of select="$the-number"/>
-                </xsl:if>
-                <xsl:if test="title">
-                    <xsl:text> (</xsl:text>
-                    <xsl:apply-templates select="." mode="title-full"/>
-                    <xsl:text>)</xsl:text>
-                </xsl:if>
-                <xsl:text>.</xsl:text>
-            </fo:inline>
+<!-- The run-in heading of an appendage: a bold type-name and a  -->
+<!-- serial number, with an optional parenthesized title and a   -->
+<!-- period.  A hint, answer, or solution shows its number only  -->
+<!-- with same-kind siblings ("Hint" alone, else "Hint 1", ...); -->
+<!-- open-problem appendages are always numbered, as in LaTeX.   -->
+<xsl:template match="*" mode="appendage-heading">
+    <xsl:variable name="the-number">
+        <xsl:choose>
+            <xsl:when test="self::hint or self::answer or self::solution">
+                <xsl:apply-templates select="." mode="non-singleton-number"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="serial-number"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <fo:inline font-weight="bold" font-style="normal">
+        <xsl:apply-templates select="." mode="type-name"/>
+        <xsl:if test="not($the-number = '')">
             <xsl:text> </xsl:text>
-        </xsl:variable>
-        <xsl:call-template name="heading-then-content">
-            <xsl:with-param name="heading" select="$heading"/>
-        </xsl:call-template>
-    </fo:block>
+            <xsl:value-of select="$the-number"/>
+        </xsl:if>
+    </fo:inline>
+    <xsl:if test="title">
+        <xsl:text> (</xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:text>)</xsl:text>
+    </xsl:if>
+    <xsl:text>.</xsl:text>
 </xsl:template>
 
 <!-- ######### -->
