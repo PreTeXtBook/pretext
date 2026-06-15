@@ -588,6 +588,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- The back colophon is centered with side margins like the LaTeX  -->
+<!-- "backcolophonstyle": centered "large" bold title, centered body. -->
+<xsl:template match="backmatter/colophon">
+    <fo:block start-indent="15%" end-indent="15%" text-align="center">
+        <fo:block font-size="109%"
+                  font-weight="bold"
+                  space-before="2.5em"
+                  space-after="1em"
+                  keep-with-next.within-page="always"
+                  role="H{count(ancestor::*[&STRUCTURAL-FILTER;]) + 1}">
+            <xsl:apply-templates select="." mode="link-id-attribute"/>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </fo:block>
+        <xsl:apply-templates>
+            <xsl:with-param name="alignment" select="'center'"/>
+        </xsl:apply-templates>
+    </fo:block>
+</xsl:template>
+
 <!-- The heading of a division, factored out so the two-column      -->
 <!-- index (its own page sequence) can reuse it.  Shape and sizes    -->
 <!-- follow the LaTeX conversion's "titlesec" styling: "part" and    -->
@@ -862,8 +881,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="p">
     <xsl:param name="run-in-heading"/>
     <xsl:param name="trailing-tombstone"/>
+    <xsl:param name="alignment" select="$text-alignment"/>
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
-    <fo:block text-align="{$text-alignment}" space-after="0.5em">
+    <fo:block text-align="{$alignment}" space-after="0.5em">
         <!-- a tombstone arriving from an enclosing PROOF-LIKE rides -->
         <!-- the final line, whose elastic leader needs the line     -->
         <!-- justified to push the tombstone to the right margin     -->
