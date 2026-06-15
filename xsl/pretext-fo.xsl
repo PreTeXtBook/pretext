@@ -1583,25 +1583,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               space-before="1.5em"
               space-after="0.75em"
               keep-with-next.within-page="always">
+        <!-- Each division of the stack on its own line, as in the LaTeX -->
+        <!-- conversion: the number and title joined by a middle dot,     -->
+        <!-- with no type-name.  An unnumbered (specialized) division     -->
+        <!-- leads with the dot.                                          -->
         <xsl:for-each select="$heading-stack">
-            <xsl:if test="position() &gt; 1">
-                <xsl:text>, </xsl:text>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="type-name"/>
-            <xsl:variable name="the-number">
-                <xsl:apply-templates select="." mode="number"/>
-            </xsl:variable>
-            <xsl:if test="not($the-number = '')">
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="$the-number"/>
-            </xsl:if>
-            <xsl:variable name="the-title">
-                <xsl:apply-templates select="." mode="title-simple"/>
-            </xsl:variable>
-            <xsl:if test="not(normalize-space($the-title) = '')">
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="normalize-space($the-title)"/>
-            </xsl:if>
+            <fo:block>
+                <xsl:variable name="the-number">
+                    <xsl:apply-templates select="." mode="number"/>
+                </xsl:variable>
+                <xsl:if test="not($the-number = '')">
+                    <xsl:value-of select="$the-number"/>
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+                <!-- MIDDLE DOT -->
+                <xsl:text>&#xB7; </xsl:text>
+                <xsl:apply-templates select="." mode="title-full"/>
+            </fo:block>
         </xsl:for-each>
     </fo:block>
 </xsl:template>
@@ -3765,11 +3763,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="list-of-begin"/>
 <xsl:template name="list-of-end"/>
 
-<!-- Division headings reuse the stack-aware heading machinery -->
-<!-- of the solutions generator, which sizes uniformly, so the -->
-<!-- machinery's $heading-level goes unused here.              -->
+<!-- Subdivision headings within a "list-of": type-name, number, title. -->
 <xsl:template match="*" mode="list-of-heading">
-    <xsl:apply-templates select="." mode="duplicate-heading"/>
+    <fo:block font-weight="bold"
+              font-size="120%"
+              space-before="1.5em"
+              space-after="0.75em"
+              keep-with-next.within-page="always">
+        <xsl:apply-templates select="." mode="type-name"/>
+        <xsl:variable name="the-number">
+            <xsl:apply-templates select="." mode="number"/>
+        </xsl:variable>
+        <xsl:if test="not($the-number = '')">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$the-number"/>
+        </xsl:if>
+        <xsl:variable name="the-title">
+            <xsl:apply-templates select="." mode="title-simple"/>
+        </xsl:variable>
+        <xsl:if test="not(normalize-space($the-title) = '')">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="normalize-space($the-title)"/>
+        </xsl:if>
+    </fo:block>
 </xsl:template>
 
 <xsl:template match="*" mode="list-of-element">
