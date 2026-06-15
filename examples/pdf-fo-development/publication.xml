@@ -22,8 +22,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Publication file for XSL-FO development.  The "latex" element    -->
 <!-- configures print/page properties that the XSL-FO conversion      -->
 <!-- honors: an 11 point font, and a one-sided (electronic) layout.   -->
-<!-- The managed directories hold externally produced images (and,    -->
-<!-- one day, generated ones).                                        -->
+<!-- The managed directories hold externally produced images and the  -->
+<!-- generated PreFigure diagram of the "Images" section.             -->
 
 <publication>
     <source>
