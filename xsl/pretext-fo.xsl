@@ -2740,7 +2740,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="has-gaps" select="number(substring-before($layout/space-width, '%')) &gt; 0"/>
     <!-- a row without cells is fatal to FOP, so no panels, no table -->
     <xsl:if test="$panels">
-    <fo:table table-layout="fixed" width="100%" space-before="0.5em" space-after="0.5em">
+    <!-- Keep a "sidebyside" whole on a page when it fits, matching  -->
+    <!-- LaTeX, where its panels are an unbreakable "tcbraster".  As -->
+    <!-- for a "tabular", the finite strength lets FOP break one too -->
+    <!-- tall for a page instead of clipping it; tune it if needed.  -->
+    <fo:table table-layout="fixed" width="100%" space-before="0.5em" space-after="0.5em" keep-together.within-page="5">
         <xsl:if test="$has-left-margin">
             <fo:table-column column-width="proportional-column-width({substring-before($layout/left-margin, '%')})"/>
         </xsl:if>
