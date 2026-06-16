@@ -116,6 +116,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="page-width" select="'8.5in'"/>
 <xsl:variable name="page-height" select="'11in'"/>
 
+<!-- The body text width, in points: an 8.5in page less the two    -->
+<!-- margins, which sum to 2in whether one- or two-sided.  A        -->
+<!-- "tabular" estimates its natural width in points, then claims   -->
+<!-- that as a percentage of this reference (see the table code).   -->
+<xsl:variable name="text-width-points" select="468"/>
+
 <!-- Mirrored margins for a two-sided document: the inner (binding) -->
 <!-- margin is larger.  Equal margins for a one-sided document.     -->
 <xsl:variable name="margin-inner">
@@ -1993,18 +1999,55 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Tables -->
 <!-- ###### -->
 
-<!-- A PreTeXt "tabular" is an fo:table.  FOP only implements the -->
-<!-- fixed table layout, so the table spans the available width   -->
-<!-- and authored "col" percentage widths become proportional     -->
-<!-- column widths (a natural-width, centered table awaits a      -->
-<!-- smarter layout).  Header rows, horizontal or vertical        -->
-<!-- (rotated), land in an fo:table-header, which FOP tags as     -->
-<!-- "TH" cells in the PDF structure tree, as PDF/UA requires.    -->
-<!-- The @row-headers request bolds the leading column; FOP can   -->
-<!-- mark only an fo:table-header as "TH", so those cells stay    -->
-<!-- "TD" in the structure tree, a known FOP limit.               -->
+<!-- A PreTeXt "tabular" is an fo:table.  FOP only implements the   -->
+<!-- fixed table layout, so it cannot size columns to content the   -->
+<!-- way LaTeX does; instead the converter estimates a natural      -->
+<!-- width for each column (see "tabular-column-widths"), sums them -->
+<!-- to a natural table width, and claims that as a percentage of   -->
+<!-- the text width, centering the result.  A table whose content   -->
+<!-- needs the whole text width (or more) falls back to the full    -->
+<!-- width.  The estimates also serve as the proportional column    -->
+<!-- widths, so the columns keep their relative sizes.  Header rows, -->
+<!-- horizontal or vertical (rotated), land in an fo:table-header,  -->
+<!-- which FOP tags as "TH" cells in the PDF structure tree, as     -->
+<!-- PDF/UA requires.  The @row-headers request bolds the leading   -->
+<!-- column; FOP can mark only an fo:table-header as "TH", so those -->
+<!-- cells stay "TD" in the structure tree, a known FOP limit.      -->
 <xsl:template match="tabular">
-    <fo:table table-layout="fixed" width="100%">
+    <xsl:variable name="column-count">
+        <xsl:apply-templates select="." mode="column-count"/>
+    </xsl:variable>
+    <xsl:variable name="widths-rtf">
+        <xsl:call-template name="tabular-column-widths">
+            <xsl:with-param name="count" select="number($column-count)"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="widths" select="exsl:node-set($widths-rtf)/w"/>
+    <xsl:variable name="natural-width" select="sum($widths)"/>
+    <!-- the natural width as a percentage of the text width, but    -->
+    <!-- never wider than the full text width.  A table in a          -->
+    <!-- "sidebyside" panel fills the panel: the panel width, not the -->
+    <!-- text width, is its reference, and it is unknown here, so the -->
+    <!-- estimate only orders the columns (still proportional below). -->
+    <xsl:variable name="table-percent">
+        <xsl:choose>
+            <xsl:when test="ancestor::sidebyside">
+                <xsl:text>100</xsl:text>
+            </xsl:when>
+            <xsl:when test="$natural-width &gt;= $text-width-points">
+                <xsl:text>100</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="round($natural-width * 100 div $text-width-points)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- center a less-than-full-width table by indenting both edges -->
+    <!-- half of the leftover width each (FOP supports no "auto"      -->
+    <!-- margin, and derives the width from the indents, so both are  -->
+    <!-- set to keep the table centered rather than stretched right). -->
+    <xsl:variable name="side-indent" select="round((100 - $table-percent) div 2)"/>
+    <fo:table table-layout="fixed" width="{$table-percent}%" start-indent="{$side-indent}%" end-indent="{$side-indent}%" space-before="0.75em" space-after="0.75em">
         <xsl:call-template name="rule-attribute">
             <xsl:with-param name="side" select="'top'"/>
             <xsl:with-param name="thickness" select="@top"/>
@@ -2021,21 +2064,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="side" select="'right'"/>
             <xsl:with-param name="thickness" select="@right"/>
         </xsl:call-template>
-        <xsl:choose>
-            <xsl:when test="col">
-                <xsl:apply-templates select="col"/>
-            </xsl:when>
-            <!-- no authored columns: equal widths, as many as the -->
-            <!-- widest row, with any @colspan unrolled            -->
-            <xsl:otherwise>
-                <xsl:variable name="column-count">
-                    <xsl:apply-templates select="." mode="column-count"/>
-                </xsl:variable>
-                <xsl:call-template name="equal-table-columns">
-                    <xsl:with-param name="remaining" select="$column-count"/>
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:for-each select="$widths">
+            <fo:table-column column-width="proportional-column-width({.})"/>
+        </xsl:for-each>
         <xsl:if test="row[(@header = 'yes') or (@header = 'vertical')]">
             <fo:table-header>
                 <xsl:apply-templates select="row[(@header = 'yes') or (@header = 'vertical')]"/>
@@ -2045,6 +2076,61 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="row[not(@header = 'yes') and not(@header = 'vertical')]"/>
         </fo:table-body>
     </fo:table>
+</xsl:template>
+
+<!-- An estimated width, in points, for each of a tabular's columns, -->
+<!-- emitted as a "w" element apiece.  A column whose cells hold     -->
+<!-- paragraphs takes a fraction of the text width: its authored     -->
+<!-- "col/@width", else a default fraction (mirroring the LaTeX      -->
+<!-- converter, which a paragraph needs a settled width to wrap in). -->
+<!-- Every other column is measured from its widest piece of content -->
+<!-- among the rows that span no columns: the longest "line", the    -->
+<!-- longest line-free cell, or the longest visual URL.  Seven points -->
+<!-- per character plus padding is a deliberately generous estimate  -->
+<!-- (a capital or digit in the serif font runs near that wide), so  -->
+<!-- content is unlikely to overflow its column.                     -->
+<xsl:template name="tabular-column-widths">
+    <xsl:param name="count"/>
+    <xsl:param name="index" select="1"/>
+    <xsl:if test="$index &lt;= $count">
+        <xsl:variable name="column-cells" select="row[(count(cell) = $count) and not(cell/@colspan)]/cell[$index]"/>
+        <w>
+            <xsl:choose>
+                <!-- a paragraph column: a fraction of the text width -->
+                <xsl:when test="$column-cells/p">
+                    <xsl:variable name="fraction">
+                        <xsl:choose>
+                            <xsl:when test="col[$index]/@width">
+                                <xsl:value-of select="substring-before(col[$index]/@width, '%') div 100"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>0.2</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:value-of select="round($fraction * $text-width-points)"/>
+                </xsl:when>
+                <!-- a natural column: measured from its widest content; -->
+                <!-- a footnote's text is set elsewhere, not in the cell, -->
+                <!-- so it does not count toward the column's width       -->
+                <xsl:otherwise>
+                    <xsl:variable name="longest">
+                        <xsl:for-each select="$column-cells/line | $column-cells[not(line)] | $column-cells//url/@visual">
+                            <xsl:sort select="string-length(normalize-space(.)) - string-length(normalize-space(.//fn))" data-type="number" order="descending"/>
+                            <xsl:if test="position() = 1">
+                                <xsl:value-of select="string-length(normalize-space(.)) - string-length(normalize-space(.//fn))"/>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:variable>
+                    <xsl:value-of select="7 * $longest + 8"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </w>
+        <xsl:call-template name="tabular-column-widths">
+            <xsl:with-param name="count" select="$count"/>
+            <xsl:with-param name="index" select="$index + 1"/>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template name="equal-table-columns">
@@ -2075,23 +2161,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="tabular/col">
-    <fo:table-column>
-        <xsl:attribute name="column-width">
-            <xsl:text>proportional-column-width(</xsl:text>
-            <xsl:choose>
-                <xsl:when test="@width">
-                    <xsl:value-of select="substring-before(@width, '%')"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>1</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>)</xsl:text>
-        </xsl:attribute>
-    </fo:table-column>
-</xsl:template>
-
 <xsl:template match="tabular/row">
     <fo:table-row>
         <xsl:apply-templates select="cell"/>
@@ -2110,7 +2179,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="empty-table-cells">
     <xsl:param name="remaining"/>
     <xsl:if test="$remaining &gt; 0">
-        <fo:table-cell padding="2pt">
+        <fo:table-cell padding="2pt" start-indent="0pt" end-indent="0pt">
             <fo:block/>
         </fo:table-cell>
         <xsl:call-template name="empty-table-cells">
@@ -2121,7 +2190,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- A header row is bold, a visual echo of its structural role. -->
 <xsl:template match="row/cell">
-    <fo:table-cell padding="2pt">
+    <!-- start-indent and end-indent are inherited; a centered table  -->
+    <!-- sets them on the fo:table, so reset them here or FOP shifts   -->
+    <!-- and narrows the cell content by the table's indent.           -->
+    <fo:table-cell padding="2pt" start-indent="0pt" end-indent="0pt">
         <xsl:if test="@colspan">
             <xsl:attribute name="number-columns-spanned">
                 <xsl:value-of select="@colspan"/>
@@ -2162,8 +2234,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="@right"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:variable name="the-position" select="count(preceding-sibling::cell[not(@colspan)]) + sum(preceding-sibling::cell/@colspan) + 1"/>
-                        <xsl:value-of select="ancestor::tabular/col[position() = $the-position]/@right"/>
+                        <!-- a right border comes from the last column the   -->
+                        <!-- cell occupies, so a spanning cell reaches past  -->
+                        <!-- its starting column to the end of its span      -->
+                        <xsl:variable name="start-position" select="count(preceding-sibling::cell[not(@colspan)]) + sum(preceding-sibling::cell/@colspan) + 1"/>
+                        <xsl:variable name="span">
+                            <xsl:choose>
+                                <xsl:when test="@colspan">
+                                    <xsl:value-of select="@colspan"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>1</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <xsl:value-of select="ancestor::tabular/col[position() = $start-position + $span - 1]/@right"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:with-param>
