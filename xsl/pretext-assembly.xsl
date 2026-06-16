@@ -1613,6 +1613,78 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
 </xsl:template>
 
+<!-- Insert a default correct "test" for a FITB "exercise" or -->
+<!-- PROJECT-LIKE when an "evaluate" has no explicit correct  -->
+<!-- "test": the corresponding "fillin" has a static @answer, -->
+<!-- so synthesize a "test" and let all downstream processing -->
+<!-- follow a single code path.  Only @mode "string" and      -->
+<!-- "number" are handled here; "math" uses separate logic.   -->
+<xsl:template match="evaluation/evaluate[
+    not(@all = 'yes') and
+    not(test[@correct = 'yes']) and
+    not(
+        count(../../statement//fillin) > 1
+        and
+        ../evaluate[@all = 'yes']/test
+    )
+    ]" mode="exercise">
+    <xsl:param name="division"/>
+
+    <!-- Identify this evaluate's position among its siblings and its name, -->
+    <!-- to locate the corresponding fillin by name first, position second. -->
+    <xsl:variable name="eval-position" select="count(preceding-sibling::evaluate) + 1"/>
+    <xsl:variable name="eval-name" select="@name"/>
+
+    <!-- Navigate to the exercise/project/task parent of evaluation -->
+    <xsl:variable name="exercise-parent" select="parent::evaluation/parent::*"/>
+
+    <!-- Find the corresponding fillin (name-based match takes priority) -->
+    <xsl:variable name="match-fillin">
+        <xsl:choose>
+            <xsl:when test="$eval-name != '' and
+                            $exercise-parent/statement//fillin[@name = $eval-name]">
+                <xsl:copy-of select="$exercise-parent/statement//fillin[@name = $eval-name]"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="$exercise-parent/statement//fillin[$eval-position]"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="fillin" select="exsl:node-set($match-fillin)/fillin"/>
+
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="exercise">
+            <xsl:with-param name="division" select="$division"/>
+        </xsl:apply-templates>
+        <!-- Synthesize a correct test when the fillin has a static @answer -->
+        <!-- and a recognized mode. Place it first so it takes precedence.  -->
+        <xsl:if test="$fillin/@answer and not($fillin/@ansobj)">
+            <xsl:choose>
+                <xsl:when test="$fillin/@mode = 'number'">
+                    <test correct="yes">
+                        <numcmp use-answer="yes"/>
+                    </test>
+                </xsl:when>
+                <xsl:when test="$fillin/@mode = 'string'">
+                    <test correct="yes">
+                        <strcmp use-answer="yes"/>
+                    </test>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:WARNING: fillin in "<xsl:value-of
+                        select="$exercise-parent/@visible-id"/>" has @answer but
+                        @mode is missing or not recognized (expected 'number' or
+                        'string'). No default correct test synthesized.</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+        <!-- Copy existing children (non-correct tests, feedback, etc.) -->
+        <xsl:apply-templates select="node()" mode="exercise">
+            <xsl:with-param name="division" select="$division"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
 <!-- ##################################################### -->
 <!-- Dynamic Substitutions                                 -->
 <!-- Cut out dynamic setup and evaluation for static mode. -->
