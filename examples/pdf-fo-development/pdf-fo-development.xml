@@ -317,6 +317,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                     <p>A subsubsection is the deepest traditional division, with a three-level number.</p>
                 </subsubsection>
+
+                <subsubsection xml:id="subsubsection-deeper" label="subsubsection-deeper">
+                    <title>Deeper Still</title>
+
+                    <p>A second subsubsection confirms that the numbering increments within the subsection.</p>
+                </subsubsection>
+
+                <conclusion>
+                    <p>A subsection may also close with a conclusion, set after its subsubsections.</p>
+                </conclusion>
             </subsection>
         </section>
 
