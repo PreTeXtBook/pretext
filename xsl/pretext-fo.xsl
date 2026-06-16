@@ -2047,7 +2047,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- margin, and derives the width from the indents, so both are  -->
     <!-- set to keep the table centered rather than stretched right). -->
     <xsl:variable name="side-indent" select="round((100 - $table-percent) div 2)"/>
-    <fo:table table-layout="fixed" width="{$table-percent}%" start-indent="{$side-indent}%" end-indent="{$side-indent}%" space-before="0.75em" space-after="0.75em">
+    <!-- Keep a "tabular" whole on a page when it fits there, so one  -->
+    <!-- that would otherwise split at a page boundary moves forward  -->
+    <!-- intact.  This matches LaTeX, where a tabular sits inside an  -->
+    <!-- unbreakable tcolorbox.  A finite keep strength (not the      -->
+    <!-- forcing "always") lets FOP override it and break a tabular   -->
+    <!-- too tall for one page, rather than overflow and clip it as   -->
+    <!-- "always" would.  Tune the strength if the keeping proves     -->
+    <!-- too eager or too weak.                                       -->
+    <fo:table table-layout="fixed" width="{$table-percent}%" start-indent="{$side-indent}%" end-indent="{$side-indent}%" space-before="0.75em" space-after="0.75em" keep-together.within-page="5">
         <xsl:call-template name="rule-attribute">
             <xsl:with-param name="side" select="'top'"/>
             <xsl:with-param name="thickness" select="@top"/>
