@@ -1840,13 +1840,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- per the schema; otherwise the item is mixed content, set -->
 <!-- as a single paragraph.                                   -->
 <xsl:template match="li" mode="list-item-content">
+    <!-- An optional title leads as an italic heading line, kept with the content that follows -->
+    <xsl:if test="title">
+        <fo:block font-style="italic" keep-with-next.within-page="always">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </fo:block>
+    </xsl:if>
     <xsl:choose>
         <xsl:when test="p|blockquote|pre|image|video|program|console|tabular|&FIGURE-LIKE;|&ASIDE-LIKE;|sidebyside|sbsgroup|sage">
-            <xsl:apply-templates select="*"/>
+            <xsl:apply-templates select="*[not(self::title)]"/>
         </xsl:when>
         <xsl:otherwise>
             <fo:block text-align="{$text-alignment}" space-after="0.5em">
-                <xsl:apply-templates/>
+                <xsl:apply-templates select="node()[not(self::title)]"/>
             </fo:block>
         </xsl:otherwise>
     </xsl:choose>
