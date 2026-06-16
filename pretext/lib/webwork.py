@@ -926,8 +926,13 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz, need_macros)
     tmp_dir = common.get_temporary_directory()
     common.xsltproc(extraction_xslt, xml_source, None, output_dir=tmp_dir, stringparams=stringparams)
     # We don't explicitly know the name of the folder that has all of the sets
-    # But it is the only thing in the tmp_dir
-    folder_name = os.listdir(tmp_dir)[0]
+    # But it is the only thing in the tmp_dir.  A document with no WeBWorK
+    # problems produces no folder, so there are no sets to collect.
+    set_folders = os.listdir(tmp_dir)
+    if not set_folders:
+        log.info("no WeBWorK problem sets to construct")
+        return
+    folder_name = set_folders[0]
     folder = os.path.join(tmp_dir, folder_name)
     macros_folder = os.path.join(folder, 'macros')
     os.mkdir(macros_folder)
