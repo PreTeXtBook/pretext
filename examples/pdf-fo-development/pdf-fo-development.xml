@@ -271,7 +271,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <example xml:id="example-quadratic" label="example-quadratic">
                     <title>A Quadratic Equation</title>
                     <statement>
-                        <p>Solve <m>x^2 - 5x + 6 = 0</m>.</p>
+                        <p>Solve the equation<md>
+                            <mrow number="yes">x^2 - 5x + 6 = 0.</mrow>
+                        </md></p>
                     </statement>
                     <solution>
                         <p>The left side factors as <m>(x-2)(x-3)</m>, so the solutions are <m>x = 2</m> and <m>x = 3</m>.</p>
