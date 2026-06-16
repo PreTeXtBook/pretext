@@ -154,10 +154,23 @@ article.theorem-like .emphasis {
 /* Adapted from William Hammond (attributed to David Carlisle) */
 /* "mathjax-users" Google Group, 2015-12-27 */
 
-.latex-logo {font-family: "PT Serif", "Times New Roman", Times, serif;}
+.latex-logo {
+    font-family: "PT Serif", "Times New Roman", Times, serif;
+}
 
-.latex-logo .A {font-size: 75%; text-transform: uppercase; vertical-align: .5ex;
-         margin-left: -.48em; margin-right: -.2em;}
+.latex-logo .A {
+    font-size: 75%;
+    text-transform: uppercase;
+    margin-left: -.48em;
+    margin-right: -.2em;
+    display: inline-block;
+    translate: 0 -0.5ex;
+}
 
-.latex-logo .E {vertical-align:-.5ex; text-transform: uppercase;
-         margin-left: -.18em; margin-right: -.12em; }
+.latex-logo .E {
+    text-transform: uppercase;
+    margin-left: -.18em;
+    margin-right: -.12em;
+    display: inline-block;
+    translate: 0 0.4ex;
+}
