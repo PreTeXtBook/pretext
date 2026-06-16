@@ -2047,7 +2047,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- margin, and derives the width from the indents, so both are  -->
     <!-- set to keep the table centered rather than stretched right). -->
     <xsl:variable name="side-indent" select="round((100 - $table-percent) div 2)"/>
-    <fo:table table-layout="fixed" width="{$table-percent}%" start-indent="{$side-indent}%" end-indent="{$side-indent}%">
+    <fo:table table-layout="fixed" width="{$table-percent}%" start-indent="{$side-indent}%" end-indent="{$side-indent}%" space-before="0.75em" space-after="0.75em">
         <xsl:call-template name="rule-attribute">
             <xsl:with-param name="side" select="'top'"/>
             <xsl:with-param name="thickness" select="@top"/>
