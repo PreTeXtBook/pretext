@@ -251,6 +251,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <p>This remark is a basic titled block, with a heading assembled from its type, its number, and its title.</p>
                 </remark>
 
+                <definition xml:id="definition-hypotenuse" label="definition-hypotenuse">
+                    <title>Hypotenuse</title>
+                    <statement>
+                        <p>The <term>hypotenuse</term> of a right triangle is the side opposite the right angle.</p>
+                    </statement>
+                </definition>
+
                 <theorem xml:id="theorem-pythagoras" label="theorem-pythagoras">
                     <title>Pythagoras</title>
                     <statement>
@@ -270,13 +277,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <p>The left side factors as <m>(x-2)(x-3)</m>, so the solutions are <m>x = 2</m> and <m>x = 3</m>.</p>
                     </solution>
                 </example>
-
-                <definition xml:id="definition-hypotenuse" label="definition-hypotenuse">
-                    <title>Hypotenuse</title>
-                    <statement>
-                        <p>The <term>hypotenuse</term> of a right triangle is the side opposite the right angle.</p>
-                    </statement>
-                </definition>
 
                 <theorem xml:id="theorem-even" label="theorem-even">
                 <title>Characterizing Even Squares</title>
