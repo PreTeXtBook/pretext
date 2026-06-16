@@ -115,6 +115,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <p>An externally produced image, a right triangle, follows at half of the available width.</p>
 
             <image source="right-triangle" width="50%">
+                <description>
+                    <p>The legs are labeled <m>a</m> and <m>b</m>, and the hypotenuse, opposite the right angle, is <m>c</m>.</p>
+                </description>
                 <shortdescription>a right triangle</shortdescription>
             </image>
 
@@ -180,6 +183,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <sidebyside widths="40% 35%" valign="bottom">
                 <image source="right-triangle">
+                    <description>
+                        <p>The legs are labeled <m>a</m> and <m>b</m>, and the hypotenuse, opposite the right angle, is <m>c</m>.</p>
+                    </description>
                     <shortdescription>a right triangle</shortdescription>
                 </image>
                 <ul>
@@ -194,6 +200,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <figure xml:id="figure-triangle" label="figure-triangle">
                 <caption>A right triangle, now wrapped in a captioned figure.</caption>
                 <image source="right-triangle" width="35%">
+                    <description>
+                        <p>The legs are labeled <m>a</m> and <m>b</m>, and the hypotenuse, opposite the right angle, is <m>c</m>.</p>
+                    </description>
                     <shortdescription>a right triangle</shortdescription>
                 </image>
             </figure>
