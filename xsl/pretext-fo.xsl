@@ -2894,7 +2894,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- those default-mode templates, so an  xsl:apply-imports       -->
 <!-- reinstates each element here: an element leaves the harness  -->
 <!-- report only by deliberately joining this list.               -->
-<xsl:template match="pretext|prefigure[not(node())]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|cline|tag|tage|attr|icon|today|timeofday|pi:localize">
+<xsl:template match="pretext|prefigure[not(node())]|webwork[not(* or @copy or @source)]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|cline|tag|tage|attr|icon|today|timeofday|pi:localize">
     <xsl:apply-imports/>
 </xsl:template>
 

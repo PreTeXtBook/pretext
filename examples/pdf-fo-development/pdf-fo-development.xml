@@ -44,14 +44,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <titlepage-items/>
             </titlepage>
             <abstract>
-                <p>A small article exercising the conversion of PreTeXt to XSL Formatting Objects, rendered as an accessible PDF by Apache FOP.  It grows in concert with the capabilities of the conversion.</p>
+                <p>A small article exercising the conversion of <pretext/> to <init>XSL</init> Formatting Objects, rendered as an accessible <init>PDF</init> by Apache <init>FOP</init>.  It grows in concert with the capabilities of the conversion.</p>
             </abstract>
         </frontmatter>
 
         <section xml:id="section-prose" label="section-prose">
             <title>Prose</title>
 
-            <p>This is the first paragraph of a minimal article, used to exercise the conversion of PreTeXt source to XSL Formatting Objects, and then to a PDF by Apache FOP.  A paragraph is the fundamental unit of prose, so it is the first element implemented, and this one is long enough to demonstrate line-breaking and justification.</p>
+            <p>This is the first paragraph of a minimal article, used to exercise the conversion of <pretext/> source to <init>XSL</init> Formatting Objects, and then to a <init>PDF</init> by Apache <init>FOP</init>.  A paragraph is the fundamental unit of prose, so it is the first element implemented, and this one is long enough to demonstrate line-breaking and justification.</p>
 
             <p>A second paragraph demonstrates inter-paragraph spacing.  It contains some inline markup, such as <em>emphasized text</em> and a <term>defined term</term>, rendered with italic and bold fonts.  A footnote<fn>The footnote drops to the bottom of the page, below a separator rule.</fn> hangs off this sentence.</p>
         </section>
@@ -63,13 +63,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Edits as <insert>inserted</insert>, <delete>deleted</delete>, and <stale>stale</stale> text.  Verbatim text such as <c>print("Hello, world")</c>, and markup-language fragments like <tag>section</tag>, <tage>mdash</tage>, and <attr>xml:id</attr>.</p>
 
-            <p>Quotations, <q>double</q> and <sq>single</sq>.  Dashes for ranges, 2023<ndash/>2024, and for asides<mdash/>like this one.  An ellipsis<ellipsis/> and a few characters: 98.6<degree/>, 3<times/>5, <copyright/>, <trademark/>, and the <pretext/> logo itself.</p>
+            <p>Quotations, <q>double</q> and <sq>single</sq>.  Dashes for ranges, 2023<ndash/>2024, and for asides<mdash/>like this one.  An ellipsis<ellipsis/> and a few characters: 98.6<degree/>, 3<times/>5, <copyright/>, <trademark/>, and several logos: <pretext/>, <latex/>, <tex/>, <xetex/>, <xelatex/>, and <webwork/>.</p>
 
             <p>Abbreviations render plainly: an acronym like <acro>SCUBA</acro>, an initialism like <init>XML</init>, and Latin abbreviations, <eg/>, this very sentence.</p>
 
             <p>Keyboard keys, named like <kbd name="enter"/> and <kbd name="shift"/>, or verbatim like <kbd>q</kbd>, render visibly boxed.</p>
 
-            <p>External references are active links: the <url href="https://pretextbook.org/">PreTeXt website</url>, the bare URL <url href="https://pretextbook.org/"/>, and an address for writing, <email>info@pretextbook.org</email>.  Cross-references, like one to <xref ref="theorem-pythagoras"/> ahead, are internal links.</p>
+            <p>External references are active links: the <url href="https://pretextbook.org/"><pretext/> website</url>, the bare <init>URL</init> <url href="https://pretextbook.org/"/>, and an address for writing, <email>info@pretextbook.org</email>.  Cross-references, like one to <xref ref="theorem-pythagoras"/> ahead, are internal links.</p>
         </section>
 
         <section xml:id="section-lists" label="section-lists">
@@ -115,10 +115,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <p>An externally produced image, a right triangle, follows at half of the available width.</p>
 
             <image source="right-triangle" width="50%">
+                <description>
+                    <p>The legs are labeled <m>a</m> and <m>b</m>, and the hypotenuse, opposite the right angle, is <m>c</m>.</p>
+                </description>
                 <shortdescription>a right triangle</shortdescription>
             </image>
 
-            <p>A born-in-source image, authored in <prefigure/> syntax, follows.  It is generated to <init>SVG</init>, which Apache FOP embeds directly; the diagram carries an intrinsic width and height, so it occupies only the vertical space it needs.</p>
+            <p>A born-in-source image, authored in <prefigure/> syntax, follows.  It is generated to <init>SVG</init>, which Apache <init>FOP</init> embeds directly; the diagram carries an intrinsic width and height, so it occupies only the vertical space it needs.</p>
 
             <image width="60%">
                 <shortdescription>the decaying oscillation that solves a damped harmonic oscillator, with its derivative</shortdescription>
@@ -180,6 +183,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <sidebyside widths="40% 35%" valign="bottom">
                 <image source="right-triangle">
+                    <description>
+                        <p>The legs are labeled <m>a</m> and <m>b</m>, and the hypotenuse, opposite the right angle, is <m>c</m>.</p>
+                    </description>
                     <shortdescription>a right triangle</shortdescription>
                 </image>
                 <ul>
@@ -194,6 +200,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <figure xml:id="figure-triangle" label="figure-triangle">
                 <caption>A right triangle, now wrapped in a captioned figure.</caption>
                 <image source="right-triangle" width="35%">
+                    <description>
+                        <p>The legs are labeled <m>a</m> and <m>b</m>, and the hypotenuse, opposite the right angle, is <m>c</m>.</p>
+                    </description>
                     <shortdescription>a right triangle</shortdescription>
                 </image>
             </figure>
@@ -240,7 +249,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <title>Mathematics</title>
 
             <introduction>
-                <p>Inline mathematics, such as <m>a^2 + b^2 = c^2</m>, renders from an SVG image produced by MathJax, sized and placed on the baseline.  Display mathematics interrupts a paragraph,
+                <p>Inline mathematics, such as <m>a^2 + b^2 = c^2</m>, renders from an <init>SVG</init> image produced by MathJax, sized and placed on the baseline.  Display mathematics interrupts a paragraph,
                     <md>
                         <mrow>\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</mrow>
                     </md>
@@ -250,6 +259,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <title>Blocks Have Headings</title>
                     <p>This remark is a basic titled block, with a heading assembled from its type, its number, and its title.</p>
                 </remark>
+
+                <definition xml:id="definition-hypotenuse" label="definition-hypotenuse">
+                    <title>Hypotenuse</title>
+                    <statement>
+                        <p>The <term>hypotenuse</term> of a right triangle is the side opposite the right angle.</p>
+                    </statement>
+                </definition>
 
                 <theorem xml:id="theorem-pythagoras" label="theorem-pythagoras">
                     <title>Pythagoras</title>
@@ -264,19 +280,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <example xml:id="example-quadratic" label="example-quadratic">
                     <title>A Quadratic Equation</title>
                     <statement>
-                        <p>Solve <m>x^2 - 5x + 6 = 0</m>.</p>
+                        <p>Solve the equation<md>
+                            <mrow number="yes">x^2 - 5x + 6 = 0.</mrow>
+                        </md></p>
                     </statement>
                     <solution>
                         <p>The left side factors as <m>(x-2)(x-3)</m>, so the solutions are <m>x = 2</m> and <m>x = 3</m>.</p>
                     </solution>
                 </example>
-
-                <definition xml:id="definition-hypotenuse" label="definition-hypotenuse">
-                    <title>Hypotenuse</title>
-                    <statement>
-                        <p>The <term>hypotenuse</term> of a right triangle is the side opposite the right angle.</p>
-                    </statement>
-                </definition>
 
                 <theorem xml:id="theorem-even" label="theorem-even">
                 <title>Characterizing Even Squares</title>
@@ -315,6 +326,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                     <p>A subsubsection is the deepest traditional division, with a three-level number.</p>
                 </subsubsection>
+
+                <subsubsection xml:id="subsubsection-deeper" label="subsubsection-deeper">
+                    <title>Deeper Still</title>
+
+                    <p>A second subsubsection confirms that the numbering increments within the subsection.</p>
+                </subsubsection>
+
+                <conclusion>
+                    <p>A subsection may also close with a conclusion, set after its subsubsections.</p>
+                </conclusion>
             </subsection>
         </section>
 
@@ -459,7 +480,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Answers and Solutions</title>
             </solutions>
             <colophon xml:id="colophon" label="colophon">
-                <p>This article was authored in, and produced with, <pretext/>, rendered by Apache FOP by way of XSL Formatting Objects.</p>
+                <p>This article was authored in, and produced with, <pretext/>, rendered by Apache <init>FOP</init> by way of <init>XSL</init> Formatting Objects.</p>
             </colophon>
         </backmatter>
     </article>
