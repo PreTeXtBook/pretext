@@ -2234,8 +2234,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="@right"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:variable name="the-position" select="count(preceding-sibling::cell[not(@colspan)]) + sum(preceding-sibling::cell/@colspan) + 1"/>
-                        <xsl:value-of select="ancestor::tabular/col[position() = $the-position]/@right"/>
+                        <!-- a right border comes from the last column the   -->
+                        <!-- cell occupies, so a spanning cell reaches past  -->
+                        <!-- its starting column to the end of its span      -->
+                        <xsl:variable name="start-position" select="count(preceding-sibling::cell[not(@colspan)]) + sum(preceding-sibling::cell/@colspan) + 1"/>
+                        <xsl:variable name="span">
+                            <xsl:choose>
+                                <xsl:when test="@colspan">
+                                    <xsl:value-of select="@colspan"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>1</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <xsl:value-of select="ancestor::tabular/col[position() = $start-position + $span - 1]/@right"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:with-param>
