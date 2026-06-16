@@ -44,14 +44,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <titlepage-items/>
             </titlepage>
             <abstract>
-                <p>A small article exercising the conversion of PreTeXt to <init>XSL</init> Formatting Objects, rendered as an accessible <init>PDF</init> by Apache <init>FOP</init>.  It grows in concert with the capabilities of the conversion.</p>
+                <p>A small article exercising the conversion of <pretext/> to <init>XSL</init> Formatting Objects, rendered as an accessible <init>PDF</init> by Apache <init>FOP</init>.  It grows in concert with the capabilities of the conversion.</p>
             </abstract>
         </frontmatter>
 
         <section xml:id="section-prose" label="section-prose">
             <title>Prose</title>
 
-            <p>This is the first paragraph of a minimal article, used to exercise the conversion of PreTeXt source to <init>XSL</init> Formatting Objects, and then to a <init>PDF</init> by Apache <init>FOP</init>.  A paragraph is the fundamental unit of prose, so it is the first element implemented, and this one is long enough to demonstrate line-breaking and justification.</p>
+            <p>This is the first paragraph of a minimal article, used to exercise the conversion of <pretext/> source to <init>XSL</init> Formatting Objects, and then to a <init>PDF</init> by Apache <init>FOP</init>.  A paragraph is the fundamental unit of prose, so it is the first element implemented, and this one is long enough to demonstrate line-breaking and justification.</p>
 
             <p>A second paragraph demonstrates inter-paragraph spacing.  It contains some inline markup, such as <em>emphasized text</em> and a <term>defined term</term>, rendered with italic and bold fonts.  A footnote<fn>The footnote drops to the bottom of the page, below a separator rule.</fn> hangs off this sentence.</p>
         </section>
@@ -63,13 +63,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Edits as <insert>inserted</insert>, <delete>deleted</delete>, and <stale>stale</stale> text.  Verbatim text such as <c>print("Hello, world")</c>, and markup-language fragments like <tag>section</tag>, <tage>mdash</tage>, and <attr>xml:id</attr>.</p>
 
-            <p>Quotations, <q>double</q> and <sq>single</sq>.  Dashes for ranges, 2023<ndash/>2024, and for asides<mdash/>like this one.  An ellipsis<ellipsis/> and a few characters: 98.6<degree/>, 3<times/>5, <copyright/>, <trademark/>, and the <pretext/> logo itself.</p>
+            <p>Quotations, <q>double</q> and <sq>single</sq>.  Dashes for ranges, 2023<ndash/>2024, and for asides<mdash/>like this one.  An ellipsis<ellipsis/> and a few characters: 98.6<degree/>, 3<times/>5, <copyright/>, <trademark/>, and several logos: <pretext/>, <latex/>, <tex/>, <xetex/>, <xelatex/>, and <webwork/>.</p>
 
             <p>Abbreviations render plainly: an acronym like <acro>SCUBA</acro>, an initialism like <init>XML</init>, and Latin abbreviations, <eg/>, this very sentence.</p>
 
             <p>Keyboard keys, named like <kbd name="enter"/> and <kbd name="shift"/>, or verbatim like <kbd>q</kbd>, render visibly boxed.</p>
 
-            <p>External references are active links: the <url href="https://pretextbook.org/">PreTeXt website</url>, the bare <init>URL</init> <url href="https://pretextbook.org/"/>, and an address for writing, <email>info@pretextbook.org</email>.  Cross-references, like one to <xref ref="theorem-pythagoras"/> ahead, are internal links.</p>
+            <p>External references are active links: the <url href="https://pretextbook.org/"><pretext/> website</url>, the bare <init>URL</init> <url href="https://pretextbook.org/"/>, and an address for writing, <email>info@pretextbook.org</email>.  Cross-references, like one to <xref ref="theorem-pythagoras"/> ahead, are internal links.</p>
         </section>
 
         <section xml:id="section-lists" label="section-lists">
