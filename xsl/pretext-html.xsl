@@ -12488,7 +12488,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <div class="ptx-embed-popup-controls">
             <p>Copy the code below to embed this page in your own website or LMS page.</p>
             <button class="ptx-embed-close-button button" id="ptx-embed-close-button" title="Close embed popup">
-                <span class="material-symbols-outlined">close</span>
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'close'"/>
+                </xsl:call-template>
             </button>
         </div>
         <div class="ptx-embed-code-container">
@@ -14020,7 +14022,11 @@ TODO:
         <dialog id="ptx-search-dialog" class="ptx-dialog ptx-search-dialog">
             <div class="ptx-search-dialog-controls">
                 <input aria-label="Search term" id="ptx-search-terms" class="ptx-search-terms" type="text" name="terms" placeholder="Search terms"/>
-                <button aria-label="Close search" id="ptx-search-close" class="ptx-search-close"><span class="material-symbols-outlined">close</span></button>
+                <button aria-label="Close search" id="ptx-search-close" class="ptx-search-close">
+                    <xsl:call-template name="insert-symbol">
+                        <xsl:with-param name="name" select="'close'"/>
+                    </xsl:call-template>
+                </button>
             </div>
             <!-- Will contain notice about how many results there are for screen readers to announce-->
             <div id="ptx-search-status" class="ptx-search-status" aria-live="polite" aria-atomic="true">
