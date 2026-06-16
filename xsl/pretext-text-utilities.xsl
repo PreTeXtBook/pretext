@@ -1010,6 +1010,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="str:replace($text, $json-replacements-search-set, $json-replacements-replace-set)" />
 </xsl:template>
 
+<!-- REGEX Escaped Strings -->
+<!-- When a string will be passed for comparison using regexp   -->
+<!-- but we want a literal match, we need to escape all of the  -->
+<!-- special characters by putting a slash in front.            -->
+<xsl:variable name="regexp-replacements">
+    <search>\</search>
+    <replace>\\</replace>
+    <search>.</search>
+    <replace>\.</replace>
+    <search>^</search>
+    <replace>\^</replace>
+    <search>$</search>
+    <replace>\$</replace>
+    <search>*</search>
+    <replace>\*</replace>
+    <search>+</search>
+    <replace>\+</replace>
+    <search>?</search>
+    <replace>\?</replace>
+    <search>{</search>
+    <replace>\{</replace>
+    <search>}</search>
+    <replace>\}</replace>
+    <search>[</search>
+    <replace>\[</replace>
+    <search>]</search>
+    <replace>\]</replace>
+    <search>(</search>
+    <replace>\(</replace>
+    <search>)</search>
+    <replace>\)</replace>
+    <search>|</search>
+    <replace>\|</replace>
+</xsl:variable>
+<xsl:variable name="regexp-replacements-search-set" select="exsl:node-set($regexp-replacements)/search" />
+<xsl:variable name="regexp-replacements-replace-set" select="exsl:node-set($regexp-replacements)/replace" />
+
+<xsl:template name="escape-regexp-literal">
+    <xsl:param name="text"/>
+
+    <xsl:value-of select="str:replace($text, $regexp-replacements-search-set, $regexp-replacements-replace-set)" />
+</xsl:template>
+
 <xsl:template name="quote-string">
     <xsl:param name="text" />
     <xsl:text>"</xsl:text>
