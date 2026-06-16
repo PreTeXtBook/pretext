@@ -4167,6 +4167,89 @@ def _pdf_fo_accessibility_repairs(pdfname):
     log.debug("made {} accessibility repairs in {}".format(additions, pdfname))
 
 
+def _downgrade_svg2_for_batik(directory):
+    """Rewrite the SVG 2 constructs that Apache Batik cannot render.
+
+    Apache FOP rasterizes SVG with Batik, an SVG 1.1 implementation, so
+    SVG 2 syntax inside an image aborts the whole graphic.  Two such
+    constructs occur in PreFigure output; this rewrites the SVG copies
+    staged for FOP, leaving the managed source assets untouched.
+
+      * "orient" of "auto-start-reverse" on a "marker".  Its value
+        differs from "auto" only at a "marker-start" placement, so the
+        marker becomes plain "auto"; a marker actually placed at a start
+        also gets a companion rotated 180 degrees, with that start
+        reference repointed to the companion.
+
+      * a "use" element carrying a plain "href" rather than "xlink:href".
+    """
+    import glob
+    import copy
+    import lxml.etree as ET
+
+    svg_namespace = "http://www.w3.org/2000/svg"
+    xlink_namespace = "http://www.w3.org/1999/xlink"
+    ET.register_namespace("xlink", xlink_namespace)
+    use_tag = "{{{}}}use".format(svg_namespace)
+    marker_tag = "{{{}}}marker".format(svg_namespace)
+    group_tag = "{{{}}}g".format(svg_namespace)
+    xlink_href = "{{{}}}href".format(xlink_namespace)
+
+    for svg_file in glob.glob(os.path.join(directory, "**", "*.svg"), recursive=True):
+        try:
+            tree = ET.parse(svg_file)
+        except ET.XMLSyntaxError:
+            continue
+        root = tree.getroot()
+        changed = False
+
+        # SVG 2 plain "href" on a "use" becomes SVG 1.1 "xlink:href"
+        for use in root.iter(use_tag):
+            target = use.get("href")
+            if target is not None and use.get(xlink_href) is None:
+                use.set(xlink_href, target)
+                del use.attrib["href"]
+                changed = True
+
+        # a marker placed at a "marker-start" needs a 180-degree twin,
+        # since SVG 1.1 "auto" cannot express the reversal "auto-start-reverse"
+        start_references = set(
+            element.get("marker-start")
+            for element in root.iter()
+            if element.get("marker-start")
+        )
+        reversed_twin = {}
+        for marker in list(root.iter(marker_tag)):
+            if marker.get("orient") != "auto-start-reverse":
+                continue
+            marker.set("orient", "auto")
+            changed = True
+            marker_id = marker.get("id")
+            reference = "url(#{})".format(marker_id) if marker_id else None
+            if reference and reference in start_references:
+                twin = copy.deepcopy(marker)
+                twin.set("id", "{}-start".format(marker_id))
+                rotation = ET.Element(group_tag)
+                rotation.set(
+                    "transform",
+                    "rotate(180 {} {})".format(twin.get("refX", "0"), twin.get("refY", "0")),
+                )
+                for child in list(twin):
+                    twin.remove(child)
+                    rotation.append(child)
+                twin.append(rotation)
+                marker.getparent().append(twin)
+                reversed_twin[reference] = "url(#{}-start)".format(marker_id)
+
+        for element in root.iter():
+            replacement = reversed_twin.get(element.get("marker-start"))
+            if replacement is not None:
+                element.set("marker-start", replacement)
+
+        if changed:
+            tree.write(svg_file)
+
+
 def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     """
     Generate a PDF from an XML source using XSL-FO as an intermediate
@@ -4224,6 +4307,10 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
 
     # Make image files available, relative to the FO file
     common.copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
+
+    # FOP renders SVG through Batik (SVG 1.1); downgrade the SVG 2
+    # constructs in the staged images so the diagrams render
+    _downgrade_svg2_for_batik(tmp_dir)
 
     # render the FO file as a PDF with Apache FOP, configured
     # by the  fop.xconf  file maintained in this distribution
