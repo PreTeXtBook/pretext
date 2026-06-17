@@ -369,9 +369,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </solution>
                 </task>
                 <task xml:id="task-two" label="task-two">
-                    <statement>
-                        <p>Compute its perimeter.</p>
-                    </statement>
+                    <introduction>
+                        <p>Now find its perimeter, in two steps.</p>
+                    </introduction>
+                    <task xml:id="task-two-legs" label="task-two-legs">
+                        <statement>
+                            <p>Add the two legs.</p>
+                        </statement>
+                    </task>
+                    <task xml:id="task-two-hypotenuse" label="task-two-hypotenuse">
+                        <statement>
+                            <p>Add in the hypotenuse.</p>
+                        </statement>
+                    </task>
                 </task>
             </project>
         </section>
