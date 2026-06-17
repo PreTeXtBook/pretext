@@ -2581,7 +2581,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- A "poem": title centered, stanzas of lines, a right-aligned -->
+<!-- A "poem": title centered, stanzas of lines, a flush-left   -->
 <!-- author.  Fancy authored alignment/indentation of individual -->
 <!-- lines is a refinement for later.                            -->
 <xsl:template match="poem">
@@ -2608,7 +2608,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "author" is metadata, killed in the default mode by -->
 <!-- pretext-common.xsl, so a modal template places it   -->
 <xsl:template match="poem/author" mode="poem-author">
-    <fo:block text-align="end" font-style="italic">
+    <fo:block text-align="start" font-style="italic">
         <xsl:apply-templates/>
     </fo:block>
 </xsl:template>
