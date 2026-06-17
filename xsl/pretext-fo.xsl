@@ -1296,6 +1296,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- EXAMPLE-LIKE): its label and all its components.            -->
 <xsl:template match="task">
     <fo:block space-before="0.75em" space-after="0.75em">
+        <!-- a sub-task indents one step deeper than its parent -->
+        <xsl:attribute name="start-indent">
+            <xsl:value-of select="count(ancestor-or-self::task) * 2"/>
+            <xsl:text>em</xsl:text>
+        </xsl:attribute>
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="idx"/>
         <xsl:variable name="heading">
@@ -1540,6 +1545,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:variable>
         <xsl:if test="not($dry-run = '')">
             <fo:block space-before="0.75em" space-after="0.75em">
+                <!-- a sub-task indents one step deeper than its parent -->
+                <xsl:attribute name="start-indent">
+                    <xsl:value-of select="count(ancestor-or-self::task) * 2"/>
+                    <xsl:text>em</xsl:text>
+                </xsl:attribute>
                 <!-- a duplicate (in a solutions division) cannot -->
                 <!-- reuse the @id of the original                -->
                 <xsl:if test="$b-original">
