@@ -2175,7 +2175,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:if>
                         </xsl:for-each>
                     </xsl:variable>
-                    <xsl:value-of select="7 * $longest + 8"/>
+                    <xsl:choose>
+                        <!-- no row supplies the full column-count of un-spanned -->
+                        <!-- cells, so this column has nothing to size from; use -->
+                        <!-- the paragraph-column default rather than emit a NaN -->
+                        <!-- width that FOP rejects                              -->
+                        <xsl:when test="$longest = ''">
+                            <xsl:value-of select="round(0.2 * $text-width-points)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="7 * $longest + 8"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
         </w>
