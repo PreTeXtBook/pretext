@@ -2,10 +2,16 @@
 
 // Breakpoint at which the navbar moves to the bottom of the screen
 $navbar-breakpoint: 800px !default;
+// set a default line-height for the content
+$line-height: 1.35 !default;
 
 // all styling assumes border-box layout measurement
 * {
   box-sizing: border-box;
+}
+
+.ptx-content {
+  --content-line-height: 1.35;
 }
 
 //----------------------------------------------------------
