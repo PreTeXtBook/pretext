@@ -268,7 +268,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </definition>
 
                 <theorem xml:id="theorem-pythagoras" label="theorem-pythagoras">
-                    <title>Pythagoras</title>
+                    <title>Pythagorean Theorem</title>
+                    <creator>Pythagoras</creator>
                     <statement>
                         <p>If a right triangle has legs <m>a</m> and <m>b</m>, and hypotenuse <m>c</m>, then <m>a^2 + b^2 = c^2</m>.</p>
                     </statement>
