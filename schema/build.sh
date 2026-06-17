@@ -68,14 +68,22 @@ declare XSL=${PTX}/xsl
 # ******************
 
 # PreTeXt extraction of RELAX-NG compact schema
+# Also emits the PreFigure adapter, "pf-adapter.rnc"
 xsltproc ${XSL}/pretext-litprog.xsl pretext.xml
 
 # System trang conversion to RELAX-NG XML schema
 trang -I rnc -O rng pretext.rnc pretext.rng
 trang -I rnc -O rng pretext-dev.rnc pretext-dev.rng
 
+# PreFigure adapter, which "externalRef" reaches from "pretext.rnc";
+# it in turn "include"s the upstream "pf_schema.rnc"/"pf_schema.rng"
+trang -I rnc -O rng pf-adapter.rnc pf-adapter.rng
+
 # System trang conversion to W3C XSD schema
 # "abstract groups" make schema browser too obtuse
+# NOTE: trang cannot follow the PreFigure "externalRef" when emitting XSD
+# ("sorry, externalRef is not yet supported"), so the XSD path does not yet
+# carry structural PreFigure validation.
 trang -o disable-abstract-elements -I rnc -O xsd pretext.rnc pretext.xsd
 
 # And the same steps for the publication-schema

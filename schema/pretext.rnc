@@ -1004,7 +1004,6 @@
                     Component?,
                     text
                 }
-            AnyPFContent = text | element * { attribute * { text }*, AnyPFContent* }
             ImageCode =
                 element image {
                     UniqueID?,
@@ -1040,7 +1039,7 @@
                             } |
                             element pf:prefigure {
                                 attribute label {text}?,
-                                AnyPFContent*
+                                external "pf-adapter.rnc"
                             }
                           )
                         )
