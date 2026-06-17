@@ -1048,7 +1048,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- divisional one matches a more specific pattern in the       -->
 <!-- "Exercises" section.  PROJECT-LIKE blocks may also be       -->
 <!-- structured by "task", arriving among the contents.          -->
-<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&AXIOM-LIKE;|&OPENPROBLEM-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|assemblage|objectives|outcomes">
+<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&AXIOM-LIKE;|&OPENPROBLEM-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|objectives|outcomes">
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
@@ -1059,6 +1059,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="heading-then-content">
             <xsl:with-param name="heading" select="$heading"/>
         </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
+<!-- An "assemblage" is an informal, decorative box.  Unlike the    -->
+<!-- run-in headings of the theorem-like families, its optional     -->
+<!-- title is a centered heading above the content, as in the HTML  -->
+<!-- and LaTeX conversions; an untitled assemblage has no heading.  -->
+<xsl:template match="assemblage">
+    <xsl:apply-templates select="." mode="forced-pagebreak"/>
+    <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:if test="title">
+            <fo:block font-weight="bold" text-align="center" space-after="0.5em" keep-with-next.within-page="always">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </fo:block>
+        </xsl:if>
+        <xsl:apply-templates select="*[not(self::title)]"/>
     </fo:block>
 </xsl:template>
 
