@@ -19,6 +19,9 @@
           <ref name="Latex"/>
         </optional>
         <optional>
+          <ref name="Pdf"/>
+        </optional>
+        <optional>
           <ref name="Html"/>
         </optional>
         <optional>
@@ -659,6 +662,18 @@
           <choice>
             <value>yes</value>
             <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Pdf">
+    <element name="pdf">
+      <optional>
+        <attribute name="font">
+          <choice>
+            <value>latin-modern</value>
+            <value>dejavu</value>
           </choice>
         </attribute>
       </optional>
