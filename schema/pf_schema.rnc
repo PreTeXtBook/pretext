@@ -297,6 +297,7 @@ StrokeAttributes =
     attribute linejoin {text}?,
     attribute linecap {text}?,
     attribute dash {text}?,
+    attribute tactile-dash {text}?,
     attribute cliptobbox {"yes"|"no"}?,
     attribute outline {"yes"|"no"}?
 
@@ -433,12 +434,10 @@ Grid = element grid {
     attribute basis {text}?,
     attribute h-pi-format {"yes"|"no"}?,
     attribute v-pi-format {"yes"|"no"}?,
-    attribute stroke {text}?,
-    attribute thickness {text}?,
     attribute coordinates {text}?,
     attribute spacing-degrees {"yes"|"no"}?,
     attribute scales {"linear"|"semilogx"|"semilogy"|"loglog"}?,
-    Stroke-Attributes,
+    StrokeAttributes,
     CommonAttributes
 }
 
@@ -473,9 +472,7 @@ Tick-Mark = element tick-mark {
     attribute at {text}?,
     attribute location {text},
     attribute axis {text}?,
-    attribute stroke {text}?,
     attribute size {text}?,
-    attribute thickness {text}?,
     StrokeAttributes,
     LabelAttributes,
     LabelText?
@@ -543,8 +540,6 @@ Histogram = element histogram {
     attribute max {text}?,
     attribute bins {text}?,
     attribute bin-text {text}?,
-    attribute annotate {"yes"|"no"}?,
-    attribute text {text}?,
     FillAttributes,
     CommonAttributes
 }
@@ -597,7 +592,7 @@ Network = element network {
     attribute directed {"yes"|"no"}?,
     attribute arrows {"end"|"middle"}?,
     attribute bipartite-set {text}?,
-    attribute alignment {'vertical', 'horizontal'}?,
+    attribute alignment {'vertical' | 'horizontal'}?,
     attribute loop-scale {text}?,
     attribute layout {text}?,
     attribute seed {text}?,
@@ -730,10 +725,8 @@ Riemann-Sum = element riemann-sum {
     attribute N {text},
     attribute domain {text}?,
     attribute rule {text}?,
-    attribute annotate {"yes"|"no"}?,
     FillAttributes,
-    CommonAttributes,
-    AnnotatedElementAttributes
+    CommonAttributes
 }
 
 Scatter = element scatter {
@@ -744,8 +737,6 @@ Scatter = element scatter {
     attribute y {text}?,
     attribute filter {text}?,
     attribute point-text {text}?,
-    attribute annotate {"yes"|"no"}?,
-    attribute text {text}?,
     FillAttributes,
     CommonAttributes
 }
@@ -813,7 +804,6 @@ Vector = element vector {
     attribute at {text}?,
     attribute v {text},
     attribute tail {text}?,
-    attribute scale {text}?,
     attribute head-location {text}?,
     attribute arrow-width {text}?,
     attribute arrow-angles {text}?,
