@@ -790,7 +790,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An "introduction" or "conclusion" of a division is mostly a -->
 <!-- transparent container, but any title runs in, bold, to the  -->
 <!-- leading paragraph.                                          -->
+<!-- A task-structured block passes its heading the same way.    -->
 <xsl:template match="introduction|conclusion">
+    <xsl:param name="run-in-heading"/>
     <xsl:choose>
         <xsl:when test="title">
             <fo:block space-before="1em" space-after="1em">
@@ -804,6 +806,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="heading" select="$heading"/>
                 </xsl:call-template>
             </fo:block>
+        </xsl:when>
+        <xsl:when test="$run-in-heading">
+            <xsl:call-template name="heading-then-content">
+                <xsl:with-param name="heading" select="$run-in-heading"/>
+            </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="*"/>
@@ -1509,11 +1516,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" select="true()"/>
     <xsl:param name="b-has-solution" select="true()"/>
     <xsl:param name="run-in-heading"/>
-    <xsl:if test="$b-has-statement">
-        <xsl:apply-templates select="introduction">
-            <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
-        </xsl:apply-templates>
-    </xsl:if>
+    <!-- the block heading: run in to the introduction, else alone -->
+    <xsl:choose>
+        <xsl:when test="$b-has-statement and introduction">
+            <xsl:apply-templates select="introduction">
+                <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:block keep-with-next.within-page="always">
+                <xsl:copy-of select="$run-in-heading"/>
+            </fo:block>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:for-each select="task">
         <xsl:variable name="dry-run">
             <xsl:apply-templates select="." mode="dry-run">
