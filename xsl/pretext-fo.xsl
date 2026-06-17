@@ -105,10 +105,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PDF/UA (ISO 14289) requires every font to be embedded, so    -->
 <!-- each font family must name a real, available font: a generic -->
 <!-- family (serif, monospace) would fall back to a base-14 PDF   -->
-<!-- font, which is never embedded.  The choices are centralized  -->
-<!-- here, on the way to becoming publisher-configurable.         -->
-<xsl:variable name="font-family-main" select="'DejaVu Serif'"/>
-<xsl:variable name="font-family-monospace" select="'DejaVu Sans Mono'"/>
+<!-- font, which is never embedded.  Each named family must have a -->
+<!-- matching declaration in  pretext/fop.xconf.  The body and     -->
+<!-- monospace faces follow the  pdf/@font  publication key; the    -->
+<!-- symbol fallback stays on DejaVu Sans, which carries glyphs     -->
+<!-- (the tombstone, the U+2BA0 "enter" key) that Latin Modern      -->
+<!-- lacks.                                                         -->
+<xsl:variable name="font-family-main">
+    <xsl:choose>
+        <xsl:when test="$pdf-font = 'dejavu'">
+            <xsl:text>DejaVu Serif</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>Latin Modern Roman</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="font-family-monospace">
+    <xsl:choose>
+        <xsl:when test="$pdf-font = 'dejavu'">
+            <xsl:text>DejaVu Sans Mono</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>Latin Modern Mono</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 <!-- for symbols absent from the main font (e.g. the tombstone) -->
 <xsl:variable name="font-family-symbol" select="'DejaVu Sans'"/>
 
