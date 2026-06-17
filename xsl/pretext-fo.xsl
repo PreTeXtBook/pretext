@@ -1147,15 +1147,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:block>
 </xsl:template>
 
-<!-- The implication arrows of a "case" direction, and the spacing -->
-<!-- inside a "cycle" decoration, expected by pretext-common.xsl.  -->
+<!-- The implication arrows of a "case" direction, and the spacing  -->
+<!-- inside a "cycle" decoration, expected by pretext-common.xsl.    -->
+<!-- The double arrows are taken from the symbol font: the main body -->
+<!-- font (e.g. Latin Modern Roman) need not carry them.             -->
 <xsl:template name="double-right-arrow-symbol">
-    <!-- RIGHTWARDS DOUBLE ARROW -->
-    <xsl:text>&#x21d2;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <!-- RIGHTWARDS DOUBLE ARROW -->
+        <xsl:text>&#x21d2;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="double-left-arrow-symbol">
-    <!-- LEFTWARDS DOUBLE ARROW -->
-    <xsl:text>&#x21d0;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <!-- LEFTWARDS DOUBLE ARROW -->
+        <xsl:text>&#x21d0;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="case-cycle-delimiter-space">
     <!-- THIN SPACE -->
