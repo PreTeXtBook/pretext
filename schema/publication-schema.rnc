@@ -9,6 +9,7 @@
                     Source? &
                     Numbering? &
                     Latex? &
+                    Pdf? &
                     Html? &
                     Revealjs? &
                     Epub? &
@@ -206,6 +207,11 @@
             Asymptote =
                 element asymptote {
                     attribute links { "yes" | "no" }?
+                }
+            
+            Pdf =
+                element pdf {
+                    attribute font { "latin-modern" | "dejavu" }?
                 }
             
             Html =

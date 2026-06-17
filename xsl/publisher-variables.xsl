@@ -3214,6 +3214,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Font selection for the XSL-FO PDF route ("pdf-fo").  A key names a -->
+<!-- tested font set; the FO conversion maps the key to concrete font  -->
+<!-- family names, which  pretext/fop.xconf  embeds.  Guaranteed to be  -->
+<!-- 'latin-modern' (default, matching the LaTeX route) or 'dejavu'.    -->
+<xsl:variable name="pdf-font">
+    <xsl:variable name="default-pdf-font" select="'latin-modern'"/>
+    <xsl:choose>
+        <xsl:when test="$publication/pdf/@font = 'latin-modern'">
+            <xsl:text>latin-modern</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/pdf/@font = 'dejavu'">
+            <xsl:text>dejavu</xsl:text>
+        </xsl:when>
+        <!-- attempted to set, but not a recognized key -->
+        <xsl:when test="$publication/pdf/@font">
+            <xsl:message>PTX:WARNING: PDF (XSL-FO) font setting in publisher file should be "latin-modern" or "dejavu", not "<xsl:value-of select="$publication/pdf/@font"/>". Proceeding with default value: "<xsl:value-of select="$default-pdf-font"/>"</xsl:message>
+            <xsl:value-of select="$default-pdf-font"/>
+        </xsl:when>
+        <!-- no attempt at all, so default -->
+        <xsl:otherwise>
+            <xsl:value-of select="$default-pdf-font"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- Simple - just feeds into a LaTeX \geometry{} -->
 <xsl:variable name="latex-page-geometry">
     <xsl:choose>

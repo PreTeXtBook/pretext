@@ -100,6 +100,7 @@
                     Source? &amp;
                     Numbering? &amp;
                     Latex? &amp;
+                    Pdf? &amp;
                     Html? &amp;
                     Revealjs? &amp;
                     Epub? &amp;
@@ -358,6 +359,24 @@
             Asymptote =
                 element asymptote {
                     attribute links { "yes" | "no" }?
+                }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>PDF (XSL-FO) Options</title>
+
+        <p>
+            These options control the experimental <c>pdf</c> output produced directly from <init>XSL-FO</init> by Apache <init>FOP</init>, without an intermediate <latex /> stage.
+        </p>
+
+        <fragment xml:id="pdf">
+            <title>PDF (XSL-FO) Options</title>
+            <code>
+            Pdf =
+                element pdf {
+                    attribute font { "latin-modern" | "dejavu" }?
                 }
             </code>
         </fragment>
@@ -641,6 +660,7 @@
             <fragref ref="source" />
             <fragref ref="numbering" />
             <fragref ref="latex" />
+            <fragref ref="pdf" />
             <fragref ref="html" />
             <fragref ref="revealjs" />
             <fragref ref="epub" />

@@ -294,4 +294,15 @@
 
         <p>If you suspect some packages are not playing well with each other, this record might be helpful for debugging this (rare) situation.  It can also be useful if you wish to have a perfect archive of how some publication was produced.  See the package documentation for more on the format and use.</p>
     </section>
+
+    <section xml:id="pdf-xsl-fo">
+        <title>Direct <init>PDF</init> via <init>XSL-FO</init></title>
+        <idx><h>PDF</h><h>XSL-FO</h></idx>
+        <idx><h>XSL-FO</h></idx>
+        <idx>FOP</idx>
+
+        <p>The conversions described so far in this chapter reach a <init>PDF</init> by way of <latex/>, as an intermediate format (<xref ref="latex-file"/>).  An experimental alternative produces a <init>PDF</init> directly from an <init>XSL-FO</init> rendering of your source, formatted by Apache <init>FOP</init>, with no <latex/> stage at all.  This route is under active development and does not yet match the maturity or typographic polish of the <latex/> route, so it is not yet a substitute for it.</p>
+
+        <p>One motivation for this route is accessibility: it produces a tagged, <init>PDF/UA</init> <init>PDF</init>, and every font it uses is fully embedded.  Because there is no <latex/> in the pipeline, the available fonts are a small, curated set rather than the whole <tex/> ecosystem.  You may choose the font set with a publication option; by default it matches the Latin Modern fonts of the <latex/> route.  See <xref ref="pdf-fo-font-options"/> for the option and its values.</p>
+    </section>
 </chapter>

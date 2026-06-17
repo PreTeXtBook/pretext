@@ -7,6 +7,7 @@
         <xs:element ref="source"/>
         <xs:element ref="numbering"/>
         <xs:element ref="latex"/>
+        <xs:element ref="pdf"/>
         <xs:element ref="html"/>
         <xs:element ref="revealjs"/>
         <xs:element ref="epub"/>
@@ -586,6 +587,18 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="yes"/>
             <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="pdf">
+    <xs:complexType>
+      <xs:attribute name="font">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="latin-modern"/>
+            <xs:enumeration value="dejavu"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>

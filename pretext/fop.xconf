@@ -130,6 +130,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <font-triplet name="Helvetica" style="italic" weight="bold"/>
                     <font-triplet name="Arial" style="italic" weight="bold"/>
                 </font>
+                <!-- Latin Modern: the default body and monospace faces, matching -->
+                <!-- the LaTeX route (lmodern).  Selected by the publication       -->
+                <!-- option  pdf/@font="latin-modern".  Declaring these alongside  -->
+                <!-- the DejaVu faces costs nothing in an output that uses only one -->
+                <!-- set, since FOP embeds only the faces a document actually uses. -->
+                <!-- Paths are Debian's texmf tree (the OTF/CFF Latin Modern); a    -->
+                <!-- later refinement will resolve them per host.  No generic       -->
+                <!-- aliases here: the XSL names these families explicitly, and the -->
+                <!-- DejaVu blocks above keep the generic/legacy fallbacks.         -->
+                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf">
+                    <font-triplet name="Latin Modern Roman" style="normal" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmroman10-bold.otf">
+                    <font-triplet name="Latin Modern Roman" style="normal" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf">
+                    <font-triplet name="Latin Modern Roman" style="italic" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf">
+                    <font-triplet name="Latin Modern Roman" style="italic" weight="bold"/>
+                </font>
+                <!-- Latin Modern Mono ships regular and italic only at this design -->
+                <!-- weight (lmmono10); the bold cells borrow the Mono Light family -->
+                <!-- (lmmonolt10), the closest embeddable bold.  Bold monospace is  -->
+                <!-- rare, so the slight weight mismatch is an accepted stopgap.    -->
+                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmmono10-regular.otf">
+                    <font-triplet name="Latin Modern Mono" style="normal" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmmonolt10-bold.otf">
+                    <font-triplet name="Latin Modern Mono" style="normal" weight="bold"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmmono10-italic.otf">
+                    <font-triplet name="Latin Modern Mono" style="italic" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmmonolt10-boldoblique.otf">
+                    <font-triplet name="Latin Modern Mono" style="italic" weight="bold"/>
+                </font>
             </fonts>
         </renderer>
     </renderers>
