@@ -138,34 +138,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="page-width" select="'8.5in'"/>
 <xsl:variable name="page-height" select="'11in'"/>
 
-<!-- The body text width, in points: an 8.5in page less the two    -->
-<!-- margins, which sum to 2in whether one- or two-sided.  A        -->
-<!-- "tabular" estimates its natural width in points, then claims   -->
-<!-- that as a percentage of this reference (see the table code).   -->
-<xsl:variable name="text-width-points" select="468"/>
+<!-- The body text width, in points, matches the LaTeX conversion:  -->
+<!-- Bringhurst's measure of 34 times the point size (close to 75   -->
+<!-- characters per line), so 340pt at a 10pt size.  A "tabular"    -->
+<!-- estimates its natural width in points, then claims that as a   -->
+<!-- percentage of this reference (see the table code).             -->
+<xsl:variable name="text-width-points" select="34 * number(substring-before($font-size, 'pt'))"/>
 
-<!-- Mirrored margins for a two-sided document: the inner (binding) -->
-<!-- margin is larger.  Equal margins for a one-sided document.     -->
-<xsl:variable name="margin-inner">
-    <xsl:choose>
-        <xsl:when test="$b-latex-two-sides">
-            <xsl:text>1.25in</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>1in</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="margin-outer">
-    <xsl:choose>
-        <xsl:when test="$b-latex-two-sides">
-            <xsl:text>0.75in</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>1in</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
+<!-- The LaTeX "\geometry{...total=...}" centers the text block on   -->
+<!-- the page, so the side margins are equal (no binding offset)    -->
+<!-- and the block is identical to the LaTeX route.  The 8.5in page -->
+<!-- is 612pt wide; the leftover splits evenly between the margins.  -->
+<xsl:variable name="margin-side" select="concat((612 - $text-width-points) div 2, 'pt')"/>
 
 <!-- The publisher's right-alignment choice: text justified to both -->
 <!-- margins ("flush", the default), or an even word space and a    -->
@@ -259,8 +243,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                    page-height="{$page-height}"
                                    margin-top="1in"
                                    margin-bottom="0.6in"
-                                   margin-left="{$margin-inner}"
-                                   margin-right="{$margin-outer}">
+                                   margin-left="{$margin-side}"
+                                   margin-right="{$margin-side}">
                 <fo:region-body margin-bottom="0.4in">
                     <xsl:call-template name="watermark-attributes"/>
                 </fo:region-body>
@@ -271,8 +255,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                    page-height="{$page-height}"
                                    margin-top="1in"
                                    margin-bottom="0.6in"
-                                   margin-left="{$margin-outer}"
-                                   margin-right="{$margin-inner}">
+                                   margin-left="{$margin-side}"
+                                   margin-right="{$margin-side}">
                 <fo:region-body margin-bottom="0.4in">
                     <xsl:call-template name="watermark-attributes"/>
                 </fo:region-body>
@@ -284,8 +268,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                    page-height="{$page-height}"
                                    margin-top="1in"
                                    margin-bottom="0.6in"
-                                   margin-left="{$margin-inner}"
-                                   margin-right="{$margin-outer}">
+                                   margin-left="{$margin-side}"
+                                   margin-right="{$margin-side}">
                 <fo:region-body margin-bottom="0.4in" column-count="2" column-gap="2em">
                     <xsl:call-template name="watermark-attributes"/>
                 </fo:region-body>
@@ -296,8 +280,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                    page-height="{$page-height}"
                                    margin-top="1in"
                                    margin-bottom="0.6in"
-                                   margin-left="{$margin-outer}"
-                                   margin-right="{$margin-inner}">
+                                   margin-left="{$margin-side}"
+                                   margin-right="{$margin-side}">
                 <fo:region-body margin-bottom="0.4in" column-count="2" column-gap="2em">
                     <xsl:call-template name="watermark-attributes"/>
                 </fo:region-body>
