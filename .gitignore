@@ -5,6 +5,7 @@ script/dynsub/node_modules/
 script/dynsub/package-lock.json
 pretext/__pycache__/**
 pretext/lib/__pycache__/**
+**/__pycache__/
 .error_schema.log
 # WW examples
 examples/webwork/Makefile.paths
