@@ -36,6 +36,7 @@ pre[class*="language-"] {
   &.code-inline {
     // unclobber some inline code styles
     @include codelike.code-inline-spacing();
+    border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
   }
 
   &::selection,
