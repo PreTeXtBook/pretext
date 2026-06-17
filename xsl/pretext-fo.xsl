@@ -594,8 +594,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
-    <!-- material following a formatted printout begins a fresh page -->
-    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
+    <!-- material following a formatted printout begins a fresh page; -->
+    <!-- a conclusion, when present, carries that break itself         -->
+    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted and not(conclusion)">
         <fo:block break-after="page"/>
     </xsl:if>
 </xsl:template>
@@ -811,6 +812,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="heading-then-content">
                 <xsl:with-param name="heading" select="$run-in-heading"/>
             </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="*"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A worksheet or handout conclusion is pinned to the foot of  -->
+<!-- the last page: an overestimated, fully shrinkable space      -->
+<!-- overflows the page, and FOP (which shrinks but never grows   -->
+<!-- a space) pulls it back to the slack.  Else it simply flows.  -->
+<xsl:template match="worksheet/conclusion|handout/conclusion">
+    <xsl:choose>
+        <xsl:when test="$b-latex-worksheet-formatted">
+            <!-- "break-after" here, rather than a trailing empty block -->
+            <!-- in the division, so a conclusion that fills the page   -->
+            <!-- does not spill the break onto a blank page             -->
+            <fo:block space-before.minimum="0pt"
+                      space-before.optimum="1000pt"
+                      space-before.maximum="1000pt"
+                      space-before.conditionality="discard"
+                      break-after="page">
+                <xsl:apply-templates select="*"/>
+            </fo:block>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="*"/>
