@@ -2943,14 +2943,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="rq-character"/>
 </xsl:template>
 
-<!-- Edits: additions, and two flavors of subtractions. -->
+<!-- Edits: an "insert" is underlined, a "delete" and a "stale"  -->
+<!-- are struck through.  Mirroring the LaTeX conversion, an      -->
+<!-- electronic PDF (the default) colors "insert" green and      -->
+<!-- "delete" red; a print PDF, and "stale" always, stays black. -->
 <xsl:template match="insert">
     <fo:inline text-decoration="underline">
+        <xsl:if test="not($b-latex-print)">
+            <xsl:attribute name="color">#00FF00</xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates/>
     </fo:inline>
 </xsl:template>
 
-<xsl:template match="delete|stale">
+<xsl:template match="delete">
+    <fo:inline text-decoration="line-through">
+        <xsl:if test="not($b-latex-print)">
+            <xsl:attribute name="color">red</xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates/>
+    </fo:inline>
+</xsl:template>
+
+<xsl:template match="stale">
     <fo:inline text-decoration="line-through">
         <xsl:apply-templates/>
     </fo:inline>
