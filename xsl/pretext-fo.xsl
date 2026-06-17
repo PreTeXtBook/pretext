@@ -138,34 +138,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="page-width" select="'8.5in'"/>
 <xsl:variable name="page-height" select="'11in'"/>
 
-<!-- The body text width, in points: an 8.5in page less the two    -->
-<!-- margins, which sum to 2in whether one- or two-sided.  A        -->
-<!-- "tabular" estimates its natural width in points, then claims   -->
-<!-- that as a percentage of this reference (see the table code).   -->
-<xsl:variable name="text-width-points" select="468"/>
+<!-- The body text width, in points, matches the LaTeX conversion:  -->
+<!-- Bringhurst's measure of 34 times the point size (close to 75   -->
+<!-- characters per line), so 340pt at a 10pt size.  A "tabular"    -->
+<!-- estimates its natural width in points, then claims that as a   -->
+<!-- percentage of this reference (see the table code).             -->
+<xsl:variable name="text-width-points" select="34 * number(substring-before($font-size, 'pt'))"/>
 
-<!-- Mirrored margins for a two-sided document: the inner (binding) -->
-<!-- margin is larger.  Equal margins for a one-sided document.     -->
-<xsl:variable name="margin-inner">
-    <xsl:choose>
-        <xsl:when test="$b-latex-two-sides">
-            <xsl:text>1.25in</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>1in</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="margin-outer">
-    <xsl:choose>
-        <xsl:when test="$b-latex-two-sides">
-            <xsl:text>0.75in</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>1in</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
+<!-- The LaTeX "\geometry{...total=...}" centers the text block on   -->
+<!-- the page, so the side margins are equal (no binding offset)    -->
+<!-- and the block is identical to the LaTeX route.  The 8.5in page -->
+<!-- is 612pt wide; the leftover splits evenly between the margins.  -->
+<xsl:variable name="margin-side" select="concat((612 - $text-width-points) div 2, 'pt')"/>
 
 <!-- The publisher's right-alignment choice: text justified to both -->
 <!-- margins ("flush", the default), or an even word space and a    -->
@@ -259,8 +243,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                    page-height="{$page-height}"
                                    margin-top="1in"
                                    margin-bottom="0.6in"
-                                   margin-left="{$margin-inner}"
-                                   margin-right="{$margin-outer}">
+                                   margin-left="{$margin-side}"
+                                   margin-right="{$margin-side}">
                 <fo:region-body margin-bottom="0.4in">
                     <xsl:call-template name="watermark-attributes"/>
                 </fo:region-body>
@@ -271,8 +255,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                    page-height="{$page-height}"
                                    margin-top="1in"
                                    margin-bottom="0.6in"
-                                   margin-left="{$margin-outer}"
-                                   margin-right="{$margin-inner}">
+                                   margin-left="{$margin-side}"
+                                   margin-right="{$margin-side}">
                 <fo:region-body margin-bottom="0.4in">
                     <xsl:call-template name="watermark-attributes"/>
                 </fo:region-body>
@@ -284,8 +268,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                    page-height="{$page-height}"
                                    margin-top="1in"
                                    margin-bottom="0.6in"
-                                   margin-left="{$margin-inner}"
-                                   margin-right="{$margin-outer}">
+                                   margin-left="{$margin-side}"
+                                   margin-right="{$margin-side}">
                 <fo:region-body margin-bottom="0.4in" column-count="2" column-gap="2em">
                     <xsl:call-template name="watermark-attributes"/>
                 </fo:region-body>
@@ -296,8 +280,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                    page-height="{$page-height}"
                                    margin-top="1in"
                                    margin-bottom="0.6in"
-                                   margin-left="{$margin-outer}"
-                                   margin-right="{$margin-inner}">
+                                   margin-left="{$margin-side}"
+                                   margin-right="{$margin-side}">
                 <fo:region-body margin-bottom="0.4in" column-count="2" column-gap="2em">
                     <xsl:call-template name="watermark-attributes"/>
                 </fo:region-body>
@@ -1048,7 +1032,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- divisional one matches a more specific pattern in the       -->
 <!-- "Exercises" section.  PROJECT-LIKE blocks may also be       -->
 <!-- structured by "task", arriving among the contents.          -->
-<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&AXIOM-LIKE;|&OPENPROBLEM-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|assemblage|objectives|outcomes">
+<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&AXIOM-LIKE;|&OPENPROBLEM-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|objectives|outcomes">
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
@@ -1059,6 +1043,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="heading-then-content">
             <xsl:with-param name="heading" select="$heading"/>
         </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
+<!-- An "assemblage" is an informal, decorative box.  Unlike the    -->
+<!-- run-in headings of the theorem-like families, its optional     -->
+<!-- title is a centered heading above the content, as in the HTML  -->
+<!-- and LaTeX conversions; an untitled assemblage has no heading.  -->
+<xsl:template match="assemblage">
+    <xsl:apply-templates select="." mode="forced-pagebreak"/>
+    <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:if test="title">
+            <fo:block font-weight="bold" text-align="center" space-after="0.5em" keep-with-next.within-page="always">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </fo:block>
+        </xsl:if>
+        <xsl:apply-templates select="*[not(self::title)]"/>
     </fo:block>
 </xsl:template>
 
@@ -2158,7 +2159,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:if>
                         </xsl:for-each>
                     </xsl:variable>
-                    <xsl:value-of select="7 * $longest + 8"/>
+                    <xsl:choose>
+                        <!-- no row supplies the full column-count of un-spanned -->
+                        <!-- cells, so this column has nothing to size from; use -->
+                        <!-- the paragraph-column default rather than emit a NaN -->
+                        <!-- width that FOP rejects                              -->
+                        <xsl:when test="$longest = ''">
+                            <xsl:value-of select="round(0.2 * $text-width-points)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="7 * $longest + 8"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
         </w>
@@ -2531,17 +2543,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="attribution">
-    <fo:block text-align="end">
-        <xsl:call-template name="mdash-character"/>
-        <xsl:choose>
-            <xsl:when test="line">
-                <xsl:apply-templates select="line"/>
-            </xsl:when>
-            <xsl:otherwise>
+    <xsl:choose>
+        <!-- several "line"s: each right-aligned, the dash leading the    -->
+        <!-- first, since a bare "line" is its own block and would strand -->
+        <!-- the dash on a line of its own                                -->
+        <xsl:when test="line">
+            <xsl:for-each select="line">
+                <fo:block text-align="end">
+                    <xsl:if test="position() = 1">
+                        <xsl:call-template name="mdash-character"/>
+                    </xsl:if>
+                    <xsl:apply-templates/>
+                </fo:block>
+            </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:block text-align="end">
+                <xsl:call-template name="mdash-character"/>
                 <xsl:apply-templates/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </fo:block>
+            </fo:block>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- A "poem": title centered, stanzas of lines, a right-aligned -->
@@ -3198,7 +3220,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$the-mark"/>
         </fo:inline>
         <fo:footnote-body>
-            <fo:block font-size="80%" text-align="{$text-alignment}" space-before="0.25em">
+            <!-- "text-align-last" keeps the final line ragged: inside a -->
+            <!-- "footnote-body" FOP justifies even the last line, which  -->
+            <!-- stretches a one-line note across the whole measure       -->
+            <fo:block font-size="80%" text-align="{$text-alignment}" text-align-last="start" space-before="0.25em">
                 <xsl:apply-templates select="." mode="link-id-attribute"/>
                 <fo:inline baseline-shift="super" font-size="70%">
                     <xsl:value-of select="$the-mark"/>
