@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar ns="https://prefigure.org" xmlns="http://relaxng.org/ns/structure/1.0">
+  <include href="pf_schema.rng"/>
+</grammar>

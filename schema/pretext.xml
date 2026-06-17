@@ -1918,6 +1918,8 @@
 
         <p>Note: the <c>ImageCode</c> pattern allows an <attr>xml:id</attr> attribute since it is used to construct a filename.</p>
 
+        <p>A <c>pf:prefigure</c> image holds a <pretext/>-namespaced <c>label</c> attribute followed by a single <init>PreFigure</init> diagram.  Rather than validate the diagram with a permissive wildcard, we defer to <init>PreFigure</init>'s own schema by way of an <c>externalRef</c> to the adapter described below.  This isolates the two grammars, so the many pattern names they share (such as <c>Label</c>, <c>Image</c>, and <c>Caption</c>) do not collide.</p>
+
         <fragment xml:id="image">
             <title>Images</title>
             <code>
@@ -1953,7 +1955,6 @@
                     Component?,
                     text
                 }
-            AnyPFContent = text | element * { attribute * { text }*, AnyPFContent* }
             ImageCode =
                 element image {
                     UniqueID?,
@@ -1989,7 +1990,7 @@
                             } |
                             element pf:prefigure {
                                 attribute label {text}?,
-                                AnyPFContent*
+                                external "pf-adapter.rnc"
                             }
                           )
                         )
@@ -3587,6 +3588,25 @@
             <title>Experimental Document Info</title>
             <fragref ref="blurb"/>
             <fragref ref="document-id"/>
+        </fragment>
+    </section>
+
+    <section>
+        <title>PreFigure Schema
+                Adapter</title>
+
+        <p>The <init>PreFigure</init> project publishes its own <init>RELAX-NG</init> compact schema (<c>pf_schema.rnc</c>), which we copy into this directory nearly verbatim (carrying only a handful of minimal upstream bug fixes needed for the grammar to load).  That schema defines every <init>PreFigure</init> element in no namespace, with a start pattern of the <c>diagram</c> element.  <pretext/>, however, expects <init>PreFigure</init> content in the <c>https://prefigure.org</c> namespace, signalled by the <attr>xmlns</attr> on a <c>prefigure</c> element.</p>
+
+        <p>This adapter reconciles the two.  Declaring a default namespace and then including the upstream schema remaps every one of its elements into the <init>PreFigure</init> namespace, all without restructuring the upstream file.  The included grammar's start pattern (the <c>diagram</c> element) becomes this adapter's start pattern, which is exactly what the <c>externalRef</c> in <c>ImageCode</c> reaches.  Keeping our edits to the upstream schema minimal means a future <init>PreFigure</init> release can be re-synced by copying a single file.</p>
+
+        <fragment filename="pf-adapter.rnc">
+            <title>PreFigure Schema Adapter</title>
+            <code>
+                default namespace = "https://prefigure.org"
+                grammar {
+                    include "pf_schema.rnc"
+                }
+            </code>
         </fragment>
     </section>
 

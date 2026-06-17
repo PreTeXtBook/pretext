@@ -2647,22 +2647,6 @@
       <text/>
     </element>
   </define>
-  <define name="AnyPFContent">
-    <choice>
-      <text/>
-      <element>
-        <anyName/>
-        <zeroOrMore>
-          <attribute>
-            <anyName/>
-          </attribute>
-        </zeroOrMore>
-        <zeroOrMore>
-          <ref name="AnyPFContent"/>
-        </zeroOrMore>
-      </element>
-    </choice>
-  </define>
   <define name="ImageCode">
     <element name="image">
       <optional>
@@ -2741,9 +2725,7 @@
                 <optional>
                   <attribute name="label"/>
                 </optional>
-                <zeroOrMore>
-                  <ref name="AnyPFContent"/>
-                </zeroOrMore>
+                <externalRef href="pf-adapter.rng"/>
               </element>
             </choice>
           </interleave>
