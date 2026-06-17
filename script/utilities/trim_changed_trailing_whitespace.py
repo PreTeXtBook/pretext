@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 # Usage:
-#   script/trim_changed_trailing_whitespace.py [--base <ref>] [--check]
+#   script/utilities/trim_changed_trailing_whitespace.py [--base <ref>] [--check]
 # This script identifies lines with trailing whitespace that have been
 # changed in the current branch compared to a specified base.
 # By default, it compares against the merge-base with the upstream branch or origin/HEAD.
-# With --check, it reports the files and line counts without modifying them.
+# With --check, it reports the files and line counts without modifying them,
+# exiting non-zero if any are found.
 
 import argparse
 import re
@@ -15,19 +16,15 @@ from pathlib import Path
 
 HUNK_RE = re.compile(r"^@@ -(?:\d+)(?:,\d+)? \+(\d+)(?:,(\d+))? @@")
 
+
 def run_git(args):
-    try:
-        result = subprocess.run(
-            ["git", *args],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-    except Exception as e:
-        print(e)
-        pass
-    result_str = str(result.stdout)
-    return result_str.strip()
+    result = subprocess.run(
+        ["git", *args],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout.strip()
 
 
 def resolve_default_base():
@@ -47,7 +44,10 @@ def resolve_default_base():
 
 
 def changed_lines(base_ref):
-    diff_output = run_git(["diff", "--unified=0", "--no-color", "--no-ext-diff", base_ref, "--"])
+    diff_output = run_git(
+        ["-c", "core.quotePath=false",
+         "diff", "--unified=0", "--no-color", "--no-ext-diff", base_ref, "--"]
+    )
     files = {}
     current_file = None
 
@@ -75,52 +75,49 @@ def changed_lines(base_ref):
     return files
 
 
-def trim_file_lines(file_path, line_numbers):
+def process_file(file_path, line_numbers, fix):
+    # Return the changed line numbers that have trailing whitespace, in order.
+    # When fix is True, also rewrite the file with those lines trimmed,
+    # preserving each line's original ending. Files that are missing, binary,
+    # or not valid UTF-8 are skipped (treated as having no offending lines).
     path = Path(file_path)
-    if not path.exists() or not path.is_file():
-        return 0
+    if not path.is_file():
+        return []
 
     raw = path.read_bytes()
     if b"\0" in raw:
-        return 0
-
+        return []
     try:
         content = raw.decode("utf-8")
     except UnicodeDecodeError:
-        return 0
+        return []
 
     lines = content.splitlines(keepends=True)
-    changed = 0
+    hits = []
 
     for line_number in sorted(line_numbers):
         index = line_number - 1
-        if index < 0 or index >= len(lines):
+        if not 0 <= index < len(lines):
             continue
 
         original = lines[index]
-        line_ending = ""
-        if original.endswith("\r\n"):
-            line_ending = "\r\n"
-            body = original[:-2]
-        elif original.endswith("\n"):
-            line_ending = "\n"
-            body = original[:-1]
-        elif original.endswith("\r"):
-            line_ending = "\r"
-            body = original[:-1]
+        for ending in ("\r\n", "\n", "\r"):
+            if original.endswith(ending):
+                body = original[: -len(ending)]
+                break
         else:
+            ending = ""
             body = original
 
-        trimmed = body.rstrip(" \t") + line_ending
+        trimmed = body.rstrip(" \t") + ending
         if trimmed != original:
+            hits.append(line_number)
             lines[index] = trimmed
-            changed += 1
 
-    if changed:
-        print("writing ", path)
+    if fix and hits:
         path.write_text("".join(lines), encoding="utf-8", newline="")
 
-    return changed
+    return hits
 
 
 def parse_args():
@@ -152,44 +149,17 @@ def main():
     changed_files = 0
 
     for file_path in sorted(files_to_lines):
+        hits = process_file(file_path, files_to_lines[file_path], fix=not args.check)
+        if not hits:
+            continue
+
+        changed_files += 1
+        total_lines += len(hits)
         if args.check:
-            raw = Path(file_path).read_bytes() if Path(file_path).exists() else b""
-            if b"\0" in raw:
-                continue
-            try:
-                content = raw.decode("utf-8")
-            except UnicodeDecodeError:
-                continue
-
-            lines = content.splitlines(keepends=True)
-            pending = 0
-            pending_lines = []
-            for line_number in files_to_lines[file_path]:
-                index = line_number - 1
-                if index < 0 or index >= len(lines):
-                    continue
-                original = lines[index]
-                if original.endswith("\r\n"):
-                    body = original[:-2]
-                elif original.endswith("\n") or original.endswith("\r"):
-                    body = original[:-1]
-                else:
-                    body = original
-                if body.rstrip(" \t") != body:
-                    pending += 1
-                    pending_lines.append(line_number)
-
-            if pending:
-                changed_files += 1
-                total_lines += pending
-                print(f"{file_path}: {pending} line(s) with trailing whitespace")
-                print(f"  line numbers: {', '.join(str(n) for n in sorted(pending_lines))}")
+            print(f"{file_path}: {len(hits)} line(s) with trailing whitespace")
+            print(f"  line numbers: {', '.join(str(n) for n in hits)}")
         else:
-            changed = trim_file_lines(file_path, files_to_lines[file_path])
-            if changed:
-                changed_files += 1
-                total_lines += changed
-                print(f"Trimmed {changed} line(s) in {file_path}")
+            print(f"Trimmed {len(hits)} line(s) in {file_path}")
 
     if total_lines == 0:
         print("No trailing whitespace found on changed lines.")
