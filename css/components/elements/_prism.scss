@@ -21,7 +21,7 @@ pre[class*="language-"] {
 code[class*="language-"],
 pre[class*="language-"] {
   color: black;
-  background: #fdfdfd;
+  background: var(--code-background);
   text-shadow: none;
   font-family: var(--font-monospace);
   text-align: left;
