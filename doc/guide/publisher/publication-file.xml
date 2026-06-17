@@ -488,6 +488,26 @@
         </subsection>
     </section>
 
+    <section xml:id="publication-file-pdf-fo">
+        <title>PDF (<init>XSL-FO</init>) Options</title>
+        <idx><h>publisher options</h><h>PDF, XSL-FO</h></idx>
+        <idx><h>XSL-FO</h><h>publisher options</h></idx>
+
+        <introduction>
+            <p>These options affect the experimental conversion that produces <init>PDF</init> directly from <init>XSL-FO</init> with Apache <init>FOP</init>, without an intermediate <latex/> stage.  This conversion is under active development.  See <xref ref="pdf-xsl-fo"/> for an overview.</p>
+        </introduction>
+
+        <subsection xml:id="pdf-fo-font-options">
+            <title>Font Selection</title>
+            <idx><h>font selection</h><h>PDF, XSL-FO</h></idx>
+            <idx><h>XSL-FO</h><h>font selection</h></idx>
+
+            <p>The text and monospace fonts of the <init>PDF</init> are chosen with the<cd>
+                <cline>/publication/pdf/@font</cline>
+            </cd>attribute, whose value is a key naming a tested font set.  The value <c>latin-modern</c> (the default) selects Latin Modern, matching the <latex/> conversion, while <c>dejavu</c> selects the DejaVu families.  In either case a small number of symbols absent from the chosen font are supplied from a fallback font.  Every font is fully embedded, as required for the accessible (<init>PDF/UA</init>) output this conversion produces.</p>
+        </subsection>
+    </section>
+
     <section xml:id="publication-file-online">
         <title>Online (HTML) Options</title>
         <idx>HTML publisher options</idx>
