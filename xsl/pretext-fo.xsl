@@ -1918,28 +1918,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- A description list is a sequence of blocks, each with the -->
-<!-- (required) title of the item as a bold run-in heading.  A -->
-<!-- "dl/li" is always structured.                             -->
+<!-- A description list lays out each item in two columns: a     -->
+<!-- bold title in a label column, then its content.  The        -->
+<!-- "@width" hint sizes that label column; a narrow one         -->
+<!-- flush-lefts its title, the others flush-right.              -->
 <xsl:template match="dl">
-    <fo:block space-before="0.5em" space-after="0.5em">
+    <xsl:variable name="label-width">
+        <xsl:choose>
+            <xsl:when test="@width = 'narrow'">6em</xsl:when>
+            <xsl:when test="@width = 'wide'">14em</xsl:when>
+            <!-- 'medium', the default, and any typo (the schema checks) -->
+            <xsl:otherwise>10em</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <fo:list-block provisional-distance-between-starts="{$label-width}"
+                   provisional-label-separation="1em"
+                   space-before="0.5em"
+                   space-after="0.5em">
         <xsl:apply-templates select="li"/>
-    </fo:block>
+    </fo:list-block>
 </xsl:template>
 
 <xsl:template match="dl/li">
-    <fo:block>
+    <xsl:variable name="label-align">
+        <xsl:choose>
+            <xsl:when test="parent::dl/@width = 'narrow'">start</xsl:when>
+            <xsl:otherwise>end</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <fo:list-item space-before="0.5em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
-        <xsl:variable name="heading">
-            <fo:inline font-weight="bold" font-style="normal">
+        <fo:list-item-label end-indent="label-end()">
+            <fo:block font-weight="bold" text-align="{$label-align}">
                 <xsl:apply-templates select="." mode="title-full"/>
-            </fo:inline>
-            <xsl:text> </xsl:text>
-        </xsl:variable>
-        <xsl:call-template name="heading-then-content">
-            <xsl:with-param name="heading" select="$heading"/>
-        </xsl:call-template>
-    </fo:block>
+            </fo:block>
+        </fo:list-item-label>
+        <fo:list-item-body start-indent="body-start()">
+            <xsl:apply-templates select="*[not(self::title)]"/>
+        </fo:list-item-body>
+    </fo:list-item>
 </xsl:template>
 
 <!-- ###### -->
