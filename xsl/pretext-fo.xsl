@@ -2531,17 +2531,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="attribution">
-    <fo:block text-align="end">
-        <xsl:call-template name="mdash-character"/>
-        <xsl:choose>
-            <xsl:when test="line">
-                <xsl:apply-templates select="line"/>
-            </xsl:when>
-            <xsl:otherwise>
+    <xsl:choose>
+        <!-- several "line"s: each right-aligned, the dash leading the    -->
+        <!-- first, since a bare "line" is its own block and would strand -->
+        <!-- the dash on a line of its own                                -->
+        <xsl:when test="line">
+            <xsl:for-each select="line">
+                <fo:block text-align="end">
+                    <xsl:if test="position() = 1">
+                        <xsl:call-template name="mdash-character"/>
+                    </xsl:if>
+                    <xsl:apply-templates/>
+                </fo:block>
+            </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:block text-align="end">
+                <xsl:call-template name="mdash-character"/>
                 <xsl:apply-templates/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </fo:block>
+            </fo:block>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- A "poem": title centered, stanzas of lines, a right-aligned -->
