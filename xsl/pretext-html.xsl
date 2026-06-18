@@ -12460,7 +12460,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="calculator-toggle">
-    <button id="calculator-toggle" class="calculator-toggle button" title="Show calculator" aria-expanded="false" aria-controls="calculator-container">
+    <button type="button" id="ptx-calculator-toggle" class="ptx-calculator-toggle button" title="Show calculator">
         <xsl:call-template name="insert-symbol">
             <xsl:with-param name="name" select="'calculate'"/>
         </xsl:call-template>
@@ -12812,9 +12812,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="calculator">
     <xsl:if test="contains($html-calculator,'geogebra')">
-        <div id="calculator-container" class="calculator-container" style="display: none; z-index:100;">
-            <div id="geogebra-calculator"></div>
-        </div>
         <script>
             <xsl:text>&#xa;</xsl:text>
             <!-- Here is where we could initialize some things to customize the display.                    -->
@@ -12851,6 +12848,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!--   ggbApp.inject('geogebra-calculator');           -->
             <!--   which is inserted by code in pretext_add_on.js  -->
         </script>
+        <dialog id="ptx-calculator-container" class="ptx-dialog ptx-calculator-container">
+            <div id="ptx-geogebra-calculator" class="ptx-geogebra-calculator"></div>
+        </dialog>
     </xsl:if>
 </xsl:template>
 
