@@ -13629,7 +13629,7 @@ TODO:
     <!-- MathJax 4 CDN -->
     <script defer="true">
         <xsl:attribute name="src">
-            <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@4/</xsl:text>
+            <xsl:text>https://cdn.jsdelivr.net/npm/mathjax@4.1.1/</xsl:text>
             <xsl:choose>
                 <xsl:when test="$debug.mathjax.svg = 'yes'">
                     <xsl:text>tex-svg.js</xsl:text>
