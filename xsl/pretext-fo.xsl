@@ -3143,20 +3143,41 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>LaTeX</xsl:text>
 </xsl:template>
 
-<!-- Quotation marks: fixed Unicode for now.  The HTML conversion -->
-<!-- localizes quotation style by language; port that here when   -->
-<!-- localization becomes a focus.                                -->
+<!-- Quotation marks follow the document's language: each side  -->
+<!-- resolves the ambient quotation style (primary for double,  -->
+<!-- secondary for single) to its Unicode character, exactly as -->
+<!-- the HTML conversion does, through the shared lookup.       -->
 <xsl:template match="*" mode="lsq-character">
-    <xsl:text>&#x2018;</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-unicode">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-secondary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'left'"/>
+    </xsl:apply-templates>
 </xsl:template>
 <xsl:template match="*" mode="rsq-character">
-    <xsl:text>&#x2019;</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-unicode">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-secondary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'right'"/>
+    </xsl:apply-templates>
 </xsl:template>
 <xsl:template match="*" mode="lq-character">
-    <xsl:text>&#x201c;</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-unicode">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-primary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'left'"/>
+    </xsl:apply-templates>
 </xsl:template>
 <xsl:template match="*" mode="rq-character">
-    <xsl:text>&#x201d;</xsl:text>
+    <xsl:apply-templates select="." mode="quote-character-unicode">
+        <xsl:with-param name="style">
+            <xsl:apply-templates select="." mode="get-quote-primary"/>
+        </xsl:with-param>
+        <xsl:with-param name="side" select="'right'"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- The adornments of manually-tagged equations.  The star and -->
