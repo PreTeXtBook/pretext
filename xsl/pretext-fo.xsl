@@ -3148,36 +3148,72 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- secondary for single) to its Unicode character, exactly as -->
 <!-- the HTML conversion does, through the shared lookup.       -->
 <xsl:template match="*" mode="lsq-character">
-    <xsl:apply-templates select="." mode="quote-character-unicode">
+    <xsl:call-template name="fo-localized-quote-character">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-secondary"/>
         </xsl:with-param>
         <xsl:with-param name="side" select="'left'"/>
-    </xsl:apply-templates>
+    </xsl:call-template>
 </xsl:template>
 <xsl:template match="*" mode="rsq-character">
-    <xsl:apply-templates select="." mode="quote-character-unicode">
+    <xsl:call-template name="fo-localized-quote-character">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-secondary"/>
         </xsl:with-param>
         <xsl:with-param name="side" select="'right'"/>
-    </xsl:apply-templates>
+    </xsl:call-template>
 </xsl:template>
 <xsl:template match="*" mode="lq-character">
-    <xsl:apply-templates select="." mode="quote-character-unicode">
+    <xsl:call-template name="fo-localized-quote-character">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-primary"/>
         </xsl:with-param>
         <xsl:with-param name="side" select="'left'"/>
-    </xsl:apply-templates>
+    </xsl:call-template>
 </xsl:template>
 <xsl:template match="*" mode="rq-character">
-    <xsl:apply-templates select="." mode="quote-character-unicode">
+    <xsl:call-template name="fo-localized-quote-character">
         <xsl:with-param name="style">
             <xsl:apply-templates select="." mode="get-quote-primary"/>
         </xsl:with-param>
         <xsl:with-param name="side" select="'right'"/>
-    </xsl:apply-templates>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Look a quotation mark up in the shared table, then emit it -->
+<!-- with any narrow no-break space drawn from the symbol font: -->
+<!-- Latin Modern lacks that glyph, so a literal U+202F would   -->
+<!-- print as a missing-glyph box next to the guillemets.       -->
+<xsl:template name="fo-localized-quote-character">
+    <xsl:param name="style"/>
+    <xsl:param name="side"/>
+    <xsl:variable name="mark">
+        <xsl:apply-templates select="." mode="quote-character-unicode">
+            <xsl:with-param name="style" select="$style"/>
+            <xsl:with-param name="side" select="$side"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:call-template name="isolate-narrow-no-break-space">
+        <xsl:with-param name="text" select="$mark"/>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Emit a string, drawing each narrow no-break space (U+202F) -->
+<!-- from the symbol font, passing the rest unchanged.          -->
+<xsl:template name="isolate-narrow-no-break-space">
+    <xsl:param name="text"/>
+    <xsl:choose>
+        <xsl:when test="contains($text, '&#x202f;')">
+            <xsl:value-of select="substring-before($text, '&#x202f;')"/>
+            <xsl:call-template name="narrow-no-break-space-character"/>
+            <xsl:call-template name="isolate-narrow-no-break-space">
+                <xsl:with-param name="text" select="substring-after($text, '&#x202f;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$text"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- The adornments of manually-tagged equations.  The star and -->
@@ -3215,6 +3251,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template name="thin-space-character">
     <xsl:text>&#x2009;</xsl:text>
+</xsl:template>
+<!-- the narrow no-break space is missing from the main (serif) -->
+<!-- face, so it borrows the symbol font, as the tombstone does -->
+<xsl:template name="narrow-no-break-space-character">
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x202f;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <!-- the white square brackets are missing from the main (serif)  -->
 <!-- face, so they borrow the symbol font, as the tombstone does  -->
