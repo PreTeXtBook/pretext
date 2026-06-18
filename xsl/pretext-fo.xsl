@@ -133,6 +133,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <!-- for symbols absent from the main font (e.g. the tombstone) -->
 <xsl:variable name="font-family-symbol" select="'DejaVu Sans'"/>
+<!-- the <icon> faces, declared in fop.xconf: FontAwesome 5 Solid   -->
+<!-- for the "classic" icons, Brands for the Creative Commons marks -->
+<xsl:variable name="font-family-icon" select="'Font Awesome 5 Free Solid'"/>
+<xsl:variable name="font-family-icon-brands" select="'Font Awesome 5 Brands'"/>
 
 <!-- US Letter, matching the LaTeX conversion default -->
 <xsl:variable name="page-width" select="'8.5in'"/>
@@ -3129,8 +3133,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- those default-mode templates, so an  xsl:apply-imports       -->
 <!-- reinstates each element here: an element leaves the harness  -->
 <!-- report only by deliberately joining this list.               -->
-<xsl:template match="pretext|prefigure[not(node())]|webwork[not(* or @copy or @source)]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|cline|tag|tage|attr|icon|today|timeofday|pi:localize">
+<xsl:template match="pretext|prefigure[not(node())]|webwork[not(* or @copy or @source)]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|cline|tag|tage|attr|today|timeofday|pi:localize">
     <xsl:apply-imports/>
+</xsl:template>
+
+<!-- An <icon> is a FontAwesome 5 glyph, as in the LaTeX route: the -->
+<!-- face follows  iconinfo/@font-awesome-family  and the glyph is  -->
+<!-- the Private-Use codepoint  iconinfo/@fa-codepoint.             -->
+<xsl:template match="icon">
+    <xsl:variable name="icon-name" select="string(@name)"/>
+    <!-- for-each is one node, but sets the context for key() -->
+    <xsl:for-each select="$icon-table">
+        <xsl:variable name="info" select="key('icon-key', $icon-name)"/>
+        <xsl:variable name="family">
+            <xsl:choose>
+                <xsl:when test="$info/@font-awesome-family = 'brands'">
+                    <xsl:value-of select="$font-family-icon-brands"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$font-family-icon"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <fo:inline font-family="{$family}">
+            <xsl:value-of select="$info/@fa-codepoint"/>
+        </fo:inline>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- The TeX-family logos have no implementation in the imported -->

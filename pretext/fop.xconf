@@ -167,6 +167,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmmonolt10-boldoblique.otf">
                     <font-triplet name="Latin Modern Mono" style="italic" weight="bold"/>
                 </font>
+                <!-- FontAwesome 5 (free) supplies the <icon> glyphs: Solid for  -->
+                <!-- the "classic" icons, Brands for the Creative Commons marks. -->
+                <!-- The XSL picks the face from  iconinfo/@font-awesome-family, -->
+                <!-- emitting the  @fa-codepoint  Private-Use glyph.  The same   -->
+                <!-- v5.15.4 faces the LaTeX route uses (texlive fontawesome5);  -->
+                <!-- per-host path resolution is deferred, like the faces above. -->
+                <font embedding-mode="full" embed-url="/usr/share/texlive/texmf-dist/fonts/opentype/public/fontawesome5/FontAwesome5Free-Solid-900.otf">
+                    <font-triplet name="Font Awesome 5 Free Solid" style="normal" weight="normal"/>
+                </font>
+                <font embedding-mode="full" embed-url="/usr/share/texlive/texmf-dist/fonts/opentype/public/fontawesome5/FontAwesome5Brands-Regular-400.otf">
+                    <font-triplet name="Font Awesome 5 Brands" style="normal" weight="normal"/>
+                </font>
             </fonts>
         </renderer>
     </renderers>
