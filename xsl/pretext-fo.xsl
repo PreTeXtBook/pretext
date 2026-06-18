@@ -3650,16 +3650,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="svg" select="$math-repr/pi:math[@id = $id]/div[@class = 'svg']/svg:svg"/>
     <xsl:variable name="speech" select="normalize-space($speech-repr/pi:math[@id = $id]/div[@class = 'speech'])"/>
+    <!-- A display fills the full text measure only when no     -->
+    <!-- ancestor narrows the line: a "sidebyside" panel, an    -->
+    <!-- "ol"/"ul"/"dl" list item, a "blockquote", a "tabular"  -->
+    <!-- cell, a "task", or a multicolumn "exercisegroup" each  -->
+    <!-- reduce the width (and a cell's width is not known here -->
+    <!-- in points).                                            -->
+    <xsl:variable name="b-full-measure" select="not(ancestor::sidebyside or ancestor::ol or ancestor::ul or ancestor::dl or ancestor::blockquote or ancestor::tabular or ancestor::task or ancestor::exercisegroup[@cols])"/>
     <xsl:variable name="width-points">
         <xsl:choose>
             <xsl:when test="contains($svg/@width, 'ex')">
                 <xsl:value-of select="number(substring-before($svg/@width, 'ex')) * $math-points-per-ex"/>
             </xsl:when>
-            <!-- a wide, aligned display gets width="100%" from   -->
-            <!-- MathJax, with the true width as a "min-width" in -->
-            <!-- the @style                                       -->
+            <!-- a wide, aligned display arrives as width="100%" with    -->
+            <!-- no viewBox and its true width as a "min-width" in the   -->
+            <!-- @style; MathJax's own layout then centers the body and  -->
+            <!-- drives any tag to the right edge of whatever width we   -->
+            <!-- assign.  At the full text measure that reproduces the   -->
+            <!-- LaTeX result (tag at the margin); in a narrower         -->
+            <!-- container we cannot know the available width in points, -->
+            <!-- so we fall back to the content (min-width) and let      -->
+            <!-- "text-align-last" center it.                            -->
             <xsl:when test="contains($svg/@style, 'min-width:')">
-                <xsl:value-of select="number(substring-before(substring-after($svg/@style, 'min-width:'), 'ex')) * $math-points-per-ex"/>
+                <xsl:variable name="content-width-points" select="number(substring-before(substring-after($svg/@style, 'min-width:'), 'ex')) * $math-points-per-ex"/>
+                <xsl:choose>
+                    <xsl:when test="$b-full-measure and ($content-width-points &lt; $text-width-points)">
+                        <xsl:value-of select="$text-width-points"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$content-width-points"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
             <!-- last resort: the third entry of the @viewBox, in -->
             <!-- thousandths of an em                             -->
