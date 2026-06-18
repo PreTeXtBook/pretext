@@ -12478,14 +12478,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="embed-button">
-    <button id="ptx-embed-button" class="ptx-embed-button button" title="Embed this page" commandfor="ptx-embed-popup" command="show-modal">
+    <button id="ptx-embed-button" class="ptx-embed-button button" title="Embed this page">
         <xsl:call-template name="insert-symbol">
             <xsl:with-param name="name" select="'code'"/>
         </xsl:call-template>
         <span class="name">Embed</span>
-
     </button>
-    <dialog class="ptx-dialog ptx-embed-popup" id="ptx-embed-popup" closedby="closerequest">
+    <dialog class="ptx-dialog ptx-embed-popup" id="ptx-embed-popup">
         <div class="ptx-embed-popup-controls">
             <p>Copy the code below to embed this page in your own website or LMS page.</p>
             <button class="ptx-embed-close-button button" id="ptx-embed-close-button" title="Close embed popup">
@@ -14030,7 +14029,7 @@ TODO:
     <xsl:if test="$has-native-search">
         <div class="ptx-search-box">
             <div class="ptx-search-widget">
-                <button id="ptx-search-button" type="button" class="ptx-search-button button" title="Search book" commandfor="ptx-search-dialog" command="show-modal" >
+                <button id="ptx-search-button" type="button" class="ptx-search-button button" title="Search book">
                     <xsl:call-template name="insert-symbol">
                         <xsl:with-param name="name" select="'search'"/>
                     </xsl:call-template>
@@ -14045,10 +14044,10 @@ TODO:
 <!-- Div for native search results -->
 <xsl:template name="native-search-results">
     <xsl:if test="$has-native-search">
-        <dialog id="ptx-search-dialog" class="ptx-dialog ptx-search-dialog" closedby="closerequest">
+        <dialog id="ptx-search-dialog" class="ptx-dialog ptx-search-dialog">
             <div class="ptx-search-dialog-controls">
                 <input aria-label="Search term" id="ptx-search-terms" class="ptx-search-terms" type="text" name="terms" placeholder="Search terms"/>
-                <button aria-label="Close search" id="ptx-search-close" class="ptx-search-close" commandfor="ptx-search-dialog"  command="close"><span class="material-symbols-outlined">close</span></button>
+                <button aria-label="Close search" id="ptx-search-close" class="ptx-search-close"><span class="material-symbols-outlined">close</span></button>
             </div>
             <!-- Will contain notice about how many results there are for screen readers to announce-->
             <div id="ptx-search-status" class="ptx-search-status" aria-live="polite" aria-atomic="true">
