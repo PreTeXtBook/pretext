@@ -5720,6 +5720,11 @@
                 <p>Periods, commas, and semi-colons that follow directly after mathematics are handled differently by <pretext/> for visual formats versus non-visual ones (e.g. braille, audio).   But this only happens if you author the punctuation in the <em>logically</em> correct location and let <pretext/> do the rest for you.  See <xref ref="authoring-math-punctuation"/> and <xref ref="punctuation-display-math"/> for details.</p>
             </li>
 
+            <li>
+                <title>Multiple Columns</title>
+                <p>The <attr>cols</attr> attribute on a list (<tag>ol</tag>, <tag>ul</tag>) or on an <tag>exercisegroup</tag> is purely presentational<mdash/>it packs items into several columns to save space.  Prefer to leave it off.  Multiple columns are of no help to a screen reader, and in some conversions they carry a cost: the conversion to <init>PDF</init> via <init>XSL-FO</init> cannot flow a single block into balanced columns, so a multi-column list must be built as a table.  Each item keeps its marker, but a screen reader then navigates the result cell by cell<mdash/>each cell announced as its own one-item list<mdash/>rather than reading a single list; an <tag>exercisegroup</tag> is likewise announced as a table.  Column layout is better left as a publisher or styling choice than fixed in your source.</p>
+            </li>
+
         </dl></p>
     </subsection>
 
