@@ -594,8 +594,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
-    <!-- material following a formatted printout begins a fresh page -->
-    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted">
+    <!-- material following a formatted printout begins a fresh page; -->
+    <!-- a conclusion, when present, carries that break itself         -->
+    <xsl:if test="(self::worksheet or self::handout) and $b-latex-worksheet-formatted and not(conclusion)">
         <fo:block break-after="page"/>
     </xsl:if>
 </xsl:template>
@@ -790,7 +791,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An "introduction" or "conclusion" of a division is mostly a -->
 <!-- transparent container, but any title runs in, bold, to the  -->
 <!-- leading paragraph.                                          -->
+<!-- A task-structured block passes its heading the same way.    -->
 <xsl:template match="introduction|conclusion">
+    <xsl:param name="run-in-heading"/>
     <xsl:choose>
         <xsl:when test="title">
             <fo:block space-before="1em" space-after="1em">
@@ -803,6 +806,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="heading-then-content">
                     <xsl:with-param name="heading" select="$heading"/>
                 </xsl:call-template>
+            </fo:block>
+        </xsl:when>
+        <xsl:when test="$run-in-heading">
+            <xsl:call-template name="heading-then-content">
+                <xsl:with-param name="heading" select="$run-in-heading"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="*"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A worksheet or handout conclusion is pinned to the foot of  -->
+<!-- the last page: an overestimated, fully shrinkable space      -->
+<!-- overflows the page, and FOP (which shrinks but never grows   -->
+<!-- a space) pulls it back to the slack.  Else it simply flows.  -->
+<xsl:template match="worksheet/conclusion|handout/conclusion">
+    <xsl:choose>
+        <xsl:when test="$b-latex-worksheet-formatted">
+            <!-- "break-after" here, rather than a trailing empty block -->
+            <!-- in the division, so a conclusion that fills the page   -->
+            <!-- does not spill the break onto a blank page             -->
+            <fo:block space-before.minimum="0pt"
+                      space-before.optimum="1000pt"
+                      space-before.maximum="1000pt"
+                      space-before.conditionality="discard"
+                      break-after="page">
+                <xsl:apply-templates select="*"/>
             </fo:block>
         </xsl:when>
         <xsl:otherwise>
@@ -1289,6 +1321,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- EXAMPLE-LIKE): its label and all its components.            -->
 <xsl:template match="task">
     <fo:block space-before="0.75em" space-after="0.75em">
+        <!-- a sub-task indents one step deeper than its parent -->
+        <xsl:attribute name="start-indent">
+            <xsl:value-of select="count(ancestor-or-self::task) * 2"/>
+            <xsl:text>em</xsl:text>
+        </xsl:attribute>
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="idx"/>
         <xsl:variable name="heading">
@@ -1509,11 +1546,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" select="true()"/>
     <xsl:param name="b-has-solution" select="true()"/>
     <xsl:param name="run-in-heading"/>
-    <xsl:if test="$b-has-statement">
-        <xsl:apply-templates select="introduction">
-            <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
-        </xsl:apply-templates>
-    </xsl:if>
+    <!-- the block heading: run in to the introduction, else alone -->
+    <xsl:choose>
+        <xsl:when test="$b-has-statement and introduction">
+            <xsl:apply-templates select="introduction">
+                <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:block keep-with-next.within-page="always">
+                <xsl:copy-of select="$run-in-heading"/>
+            </fo:block>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:for-each select="task">
         <xsl:variable name="dry-run">
             <xsl:apply-templates select="." mode="dry-run">
@@ -1525,6 +1570,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:variable>
         <xsl:if test="not($dry-run = '')">
             <fo:block space-before="0.75em" space-after="0.75em">
+                <!-- a sub-task indents one step deeper than its parent -->
+                <xsl:attribute name="start-indent">
+                    <xsl:value-of select="count(ancestor-or-self::task) * 2"/>
+                    <xsl:text>em</xsl:text>
+                </xsl:attribute>
                 <!-- a duplicate (in a solutions division) cannot -->
                 <!-- reuse the @id of the original                -->
                 <xsl:if test="$b-original">
@@ -1893,28 +1943,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- A description list is a sequence of blocks, each with the -->
-<!-- (required) title of the item as a bold run-in heading.  A -->
-<!-- "dl/li" is always structured.                             -->
+<!-- A description list lays out each item in two columns: a     -->
+<!-- bold title in a label column, then its content.  The        -->
+<!-- "@width" hint sizes that label column; a narrow one         -->
+<!-- flush-lefts its title, the others flush-right.              -->
 <xsl:template match="dl">
-    <fo:block space-before="0.5em" space-after="0.5em">
+    <xsl:variable name="label-width">
+        <xsl:choose>
+            <xsl:when test="@width = 'narrow'">6em</xsl:when>
+            <xsl:when test="@width = 'wide'">14em</xsl:when>
+            <!-- 'medium', the default, and any typo (the schema checks) -->
+            <xsl:otherwise>10em</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <fo:list-block provisional-distance-between-starts="{$label-width}"
+                   provisional-label-separation="1em"
+                   space-before="0.5em"
+                   space-after="0.5em">
         <xsl:apply-templates select="li"/>
-    </fo:block>
+    </fo:list-block>
 </xsl:template>
 
 <xsl:template match="dl/li">
-    <fo:block>
+    <xsl:variable name="label-align">
+        <xsl:choose>
+            <xsl:when test="parent::dl/@width = 'narrow'">start</xsl:when>
+            <xsl:otherwise>end</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <fo:list-item space-before="0.5em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
-        <xsl:variable name="heading">
-            <fo:inline font-weight="bold" font-style="normal">
+        <fo:list-item-label end-indent="label-end()">
+            <fo:block font-weight="bold" text-align="{$label-align}">
                 <xsl:apply-templates select="." mode="title-full"/>
-            </fo:inline>
-            <xsl:text> </xsl:text>
-        </xsl:variable>
-        <xsl:call-template name="heading-then-content">
-            <xsl:with-param name="heading" select="$heading"/>
-        </xsl:call-template>
-    </fo:block>
+            </fo:block>
+        </fo:list-item-label>
+        <fo:list-item-body start-indent="body-start()">
+            <xsl:apply-templates select="*[not(self::title)]"/>
+        </fo:list-item-body>
+    </fo:list-item>
 </xsl:template>
 
 <!-- ###### -->
@@ -2566,7 +2633,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- A "poem": title centered, stanzas of lines, a right-aligned -->
+<!-- A "poem": title centered, stanzas of lines, a flush-left   -->
 <!-- author.  Fancy authored alignment/indentation of individual -->
 <!-- lines is a refinement for later.                            -->
 <xsl:template match="poem">
@@ -2593,7 +2660,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "author" is metadata, killed in the default mode by -->
 <!-- pretext-common.xsl, so a modal template places it   -->
 <xsl:template match="poem/author" mode="poem-author">
-    <fo:block text-align="end" font-style="italic">
+    <fo:block text-align="start" font-style="italic">
         <xsl:apply-templates/>
     </fo:block>
 </xsl:template>
@@ -2943,14 +3010,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="rq-character"/>
 </xsl:template>
 
-<!-- Edits: additions, and two flavors of subtractions. -->
+<!-- Edits: an "insert" is underlined, a "delete" and a "stale"  -->
+<!-- are struck through.  Mirroring the LaTeX conversion, an      -->
+<!-- electronic PDF (the default) colors "insert" green and      -->
+<!-- "delete" red; a print PDF, and "stale" always, stays black. -->
 <xsl:template match="insert">
     <fo:inline text-decoration="underline">
+        <xsl:if test="not($b-latex-print)">
+            <xsl:attribute name="color">#00FF00</xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates/>
     </fo:inline>
 </xsl:template>
 
-<xsl:template match="delete|stale">
+<xsl:template match="delete">
+    <fo:inline text-decoration="line-through">
+        <xsl:if test="not($b-latex-print)">
+            <xsl:attribute name="color">red</xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates/>
+    </fo:inline>
+</xsl:template>
+
+<xsl:template match="stale">
     <fo:inline text-decoration="line-through">
         <xsl:apply-templates/>
     </fo:inline>
