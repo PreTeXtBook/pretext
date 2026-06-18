@@ -11464,6 +11464,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$external-directory"/>
             <xsl:value-of select="@source"/>
         </xsl:attribute>
+        <xsl:apply-templates select="." mode="html-id-attribute"/>
         <xsl:if test="@qname != ''">
             <xsl:attribute name="data-qname">
                 <xsl:value-of select="@qname" />
