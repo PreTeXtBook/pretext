@@ -59,6 +59,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="rs-css" select="''"/>
 <xsl:param name="rs-version" select="''"/>
 
+<!-- The default godot version is 4.6.3, this parameter allows         -->
+<!-- publishers to use a different version as newer versions become    -->
+<!-- available.                                                        -->
+<xsl:param name="godot.version" select="'4.6.3'"/>
+<xsl:param name="godot.shell" select="'https://runestone.academy/cdn/runestone/godot-shell-'"/>
+
+
 <!-- The Runestone Services version actually in use is -->
 <!-- needed several places, so we compute it once now. -->
 <!-- Manifest, two "ebookConfig".                      -->
@@ -2546,9 +2553,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- GDScript (Godot WASM) needs to find the shell engine files -->
     <xsl:if test="$active-language = 'gdscript'">
+        
         <xsl:attribute name="data-wasm">
-            <xsl:value-of select="$external-directory" />
-            <xsl:text>../_static/godot-shell</xsl:text>
+           <xsl:value-of select="$godot.shell" />
+           <xsl:value-of select="$godot.version" />
+            
         </xsl:attribute>
         <!-- Optional: per-exercise .pck file in the external directory -->
         <xsl:if test="@pck">
