@@ -12812,44 +12812,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="calculator">
     <xsl:if test="contains($html-calculator,'geogebra')">
-        <script>
-            <xsl:text>&#xa;</xsl:text>
-            <!-- Here is where we could initialize some things to customize the display.                    -->
-            <!-- But the customization should be different depending on classic, graphing, geometry, or 3d. -->
-            <!-- For instance geometry probably does not benefit from showing the grid.                     -->
-            <!-- If this is not in use, no need to set "appletOnLoad" further below.                        -->
-            <!-- var onLoad = function(applet) {
-                applet.setAxisLabels(1,'x','y','z');
-                applet.setGridVisible(1,true);
-                applet.showFullscreenButton(true);
-            }; -->
-            <xsl:text>var ggbApp = new GGBApplet({"appName": "</xsl:text>
-            <xsl:value-of select="substring-after($html-calculator,'-')"/>
-            <xsl:text>",&#xa;</xsl:text>
-            <!-- width and height are required parameters                   -->
-            <!-- All the rest is customizing some things away from defaults -->
-            <!-- (or maybe in some cases explicitly using the defaults)     -->
-            <!-- The last parameters have to do with scaling. This combination allows the 330x600 applet -->
-            <!-- to scale up or down to the width of the contining div with class calculator-container.  -->
-            <!-- The applet's height will scale proportionately.                                         -->
-            <xsl:text>    "width": 330,&#xa;</xsl:text>
-            <xsl:text>    "height": 600,&#xa;</xsl:text>
-            <xsl:text>    "showToolBar": true,&#xa;</xsl:text>
-            <xsl:text>    "showAlgebraInput": true,&#xa;</xsl:text>
-            <xsl:text>    "perspective": "G/A",&#xa;</xsl:text>
-            <xsl:text>    "algebraInputPosition": "bottom",&#xa;</xsl:text>
-            <!--          "appletOnLoad": onLoad, -->
-            <xsl:text>    "scaleContainerClass": "calculator-container",&#xa;</xsl:text>
-            <xsl:text>    "allowUpscale": true,&#xa;</xsl:text>
-            <xsl:text>    "autoHeight": true,&#xa;</xsl:text>
-            <xsl:text>    "disableAutoScale": false},&#xa;</xsl:text>
-            <xsl:text>true);&#xa;</xsl:text>
-            <!--   The calculator is created by                    -->
-            <!--   ggbApp.inject('geogebra-calculator');           -->
-            <!--   which is inserted by code in pretext_add_on.js  -->
-        </script>
         <dialog id="ptx-calculator-container" class="ptx-dialog ptx-calculator-container">
             <div id="ptx-geogebra-calculator" class="ptx-geogebra-calculator"></div>
+            <script id="ptx-geogebra-calculator-params">
+                <!-- params for Geogebra that can be set from PTX -->
+                <xsl:text>&#xa;</xsl:text>
+                <xsl:text>let ggbParams = {&#xa;</xsl:text>
+                <xsl:text>    "appName": "</xsl:text>
+                <xsl:value-of select="substring-after($html-calculator,'-')"/>
+                <xsl:text>"&#xa;</xsl:text>
+                <xsl:text>};&#xa;</xsl:text>
+            </script>
         </dialog>
     </xsl:if>
 </xsl:template>
