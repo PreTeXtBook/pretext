@@ -541,10 +541,11 @@ function runMathJax() {
 // find every STACK question on the page and build its UI shell
 function createQuestionBlocks() {
   const questionBlocks = document.getElementsByClassName("que stack");
-  let i = 0;
   for (const questionblock of questionBlocks) {
-    i++;
-    const questionPrefix = "q" + i.toString() + "_";
+    // every "que stack" div is guaranteed an id by the XSL (from @label/@xml:id),
+    // so reuse it instead of a positional counter -- keeps the prefix stable and
+    // tied to the actual exercise instead of the div's order on the page
+    const questionPrefix = questionblock.id + "_";
     const qfile = questionblock.dataset.qfile;
     const qname = questionblock.dataset.qname || "";
     questionblock.id = questionPrefix + "boundary";
