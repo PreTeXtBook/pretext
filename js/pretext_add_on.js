@@ -1294,9 +1294,28 @@ class PTXDialog {
         this.kind = options.kind || "modal";
         this.isModal = this.kind === "modal" || this.kind === "light-close";
 
-        this.openButton = openButton;
-        if (this.openButton && !PTXDialog.hasNativeCommandInvokers()) {
-            this.openButton.addEventListener("click", () => this.open());
+        // verify we have a dialog and set some basic attributes on the dialog
+        if (!this.dialog) {
+            console.log("PTXDialog: No dialog element provided.");
+            return;
+        }
+        this.dialog.setAttribute("aria-modal", this.isModal ? "true" : "false");
+        if (PTXDialog.hasNativeCommandInvokers()) {
+            this.dialog.closedBy = (this.kind !== "light-close") ? "closerequest" : "any";
+        }
+
+        // set up the control element if provided
+        if (this.controlElement ) {
+            this.controlElement.setAttribute('aria-expanded', "false");
+            this.controlElement.setAttribute('aria-controls', this.dialog.id);
+            if(PTXDialog.hasNativeCommandInvokers()) {
+                this.controlElement.commandFor = this.dialog.id;
+            }
+            if (this.isModal) {
+                this.controlElement.addEventListener("click", () => this.open());
+            } else {
+                this.controlElement.addEventListener("click", () => this.toggle());
+            }
         }
 
         this.closeButton = options.closeButton;
@@ -1318,9 +1337,14 @@ class PTXDialog {
         if (PTXDialog.hasNativeCommandInvokers()) {
             // If the browser supports command invokers, we can just use the native dialog element and its showModal and close methods.
             this.open = () => {
-              if(this.isModal) {
+              if (this.isModal) {
                 this.dialog.showModal();
               } else {
+                if (this.controlElement) {
+                    const isExpanded = this.controlElement.getAttribute('aria-expanded') === 'true';
+                    this.controlElement.setAttribute('aria-expanded', !isExpanded);
+                    this.controlElement.classList.add('open');
+                }
                 this.dialog.show();
               }
             };
@@ -1328,6 +1352,9 @@ class PTXDialog {
                 this.dialog.close();
                 if (this.controlElement) {
                     this.controlElement.focus();
+                    const isExpanded = this.controlElement.getAttribute('aria-expanded') === 'true';
+                    this.controlElement.setAttribute('aria-expanded', !isExpanded);
+                    this.controlElement.classList.remove('open');
                 }
             };
             this.toggle = () => {
