@@ -2,7 +2,7 @@
 
 $navbar-breakpoint: 856px !default;
 
-.calculator-container {
+.ptx-calculator-container {
   position: fixed;
   z-index: 100;
   bottom: 5px;
@@ -12,7 +12,7 @@ $navbar-breakpoint: 856px !default;
 }
 
 @media screen and (max-width: $navbar-breakpoint) {
-  .calculator-container {
+  .ptx-calculator-container {
     //assumes navbar moves to bottom of screen
     bottom: 50px !important;
   }

@@ -7,11 +7,11 @@
 }
 
 .ptx-navbar .previous-button, .ptx-navbar .up-button, .ptx-navbar .next-button,
-.ptx-navbar .index-button, .ptx-navbar .calculator-toggle, .ptx-navbar .toc-toggle {
+.ptx-navbar .index-button, .ptx-navbar .ptx-calculator-toggle, .ptx-navbar .toc-toggle {
   width: unset;
 }
 
-.ptx-navbar .calculator-toggle {
+.ptx-navbar .ptx-calculator-toggle {
   margin-left: unset;
   margin-right: unset;
 }
@@ -136,7 +136,7 @@ nav.ptx-navbar::after {
     grid-area: MH-extras-area1;
     justify-self: right;
 }
-.calculator-toggle {
+.ptx-calculator-toggle {
     grid-area: MH-extras-area2;
     justify-self: left;
 }
@@ -236,11 +236,11 @@ nav.ptx-navbar::after {
         justify-content: center;
     }
     
-    .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
+    .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button) .name {
         display: none;
     }
 
-    .pretext .ptx-navbar :is(.calculator-toggle, .index-button) .icon {
+    .pretext .ptx-navbar :is(.ptx-calculator-toggle, .index-button) .icon {
         display: inline-block;
     }
 
@@ -289,10 +289,10 @@ nav.ptx-navbar::after {
     display: none;
 }
 
-.ptx-navbar .calculator-toggle .name {
+.ptx-navbar .ptx-calculator-toggle .name {
     /*  Nada */
 }
-.ptx-navbar .calculator-toggle .icon {
+.ptx-navbar .ptx-calculator-toggle .icon {
     display: none;
 }
 
@@ -357,7 +357,7 @@ nav.ptx-navbar::after {
         margin: 0;
     }
 
-    .ptx-navbar .calculator-toggle .icon {
+    .ptx-navbar .ptx-calculator-toggle .icon {
         padding-top: 5px;
     }
 }

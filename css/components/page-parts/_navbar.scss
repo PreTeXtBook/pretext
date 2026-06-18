@@ -109,7 +109,7 @@ $center-content: true !default;
     display: none;
   }
 
-  :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .calculator-toggle, .light-dark-button, .ptx-embed-button) .name {
+  :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .ptx-calculator-toggle, .light-dark-button, .ptx-embed-button) .name {
     @include accessibility.sr-only;
   }
 
@@ -191,7 +191,7 @@ $center-content: true !default;
       bottom: $nav-height;
     }
 
-    :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button, .ptx-embed-button) .name {
+    :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button, .ptx-embed-button) .name {
       display: none;
     }
   }
