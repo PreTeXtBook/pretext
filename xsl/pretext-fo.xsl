@@ -1862,12 +1862,50 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- wide markers (e.g. "xviii.") may eventually warrant a width  -->
 <!-- computed from the actual labels.                             -->
 <xsl:template match="ol|ul">
-    <fo:list-block provisional-distance-between-starts="2em"
-                   provisional-label-separation="0.25em"
-                   space-before="0.5em"
-                   space-after="0.5em">
-        <xsl:apply-templates select="li"/>
-    </fo:list-block>
+    <xsl:choose>
+        <!-- A "cols" request (2 to 6) lays the items out in that many    -->
+        <!-- equal columns.  XSL-FO has no block-level multicolumn (only  -->
+        <!-- a page region carries "column-count"), so the columns are an -->
+        <!-- fo:table, filled across each row, padding a short final row  -->
+        <!-- for the equal-width rows a tagged table needs (ISO 14289-1). -->
+        <!-- Each cell is a one-item fo:list-block, so the marker shows   -->
+        <!-- and the item keeps "L"/"LI" structure for a screen reader    -->
+        <!-- despite the table layout.                                    -->
+        <xsl:when test="@cols">
+            <xsl:variable name="cols" select="@cols"/>
+            <fo:table table-layout="fixed" width="100%" space-before="0.5em" space-after="0.5em">
+                <xsl:call-template name="equal-table-columns">
+                    <xsl:with-param name="remaining" select="$cols"/>
+                </xsl:call-template>
+                <fo:table-body>
+                    <xsl:for-each select="li[(position() mod $cols) = 1]">
+                        <fo:table-row>
+                            <xsl:variable name="row-items" select=".|following-sibling::li[position() &lt; $cols]"/>
+                            <xsl:for-each select="$row-items">
+                                <fo:table-cell padding-right="6pt">
+                                    <fo:list-block provisional-distance-between-starts="2em"
+                                                   provisional-label-separation="0.25em">
+                                        <xsl:apply-templates select="."/>
+                                    </fo:list-block>
+                                </fo:table-cell>
+                            </xsl:for-each>
+                            <xsl:call-template name="empty-table-cells">
+                                <xsl:with-param name="remaining" select="$cols - count($row-items)"/>
+                            </xsl:call-template>
+                        </fo:table-row>
+                    </xsl:for-each>
+                </fo:table-body>
+            </fo:table>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:list-block provisional-distance-between-starts="2em"
+                           provisional-label-separation="0.25em"
+                           space-before="0.5em"
+                           space-after="0.5em">
+                <xsl:apply-templates select="li"/>
+            </fo:list-block>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="ol/li|ul/li">
