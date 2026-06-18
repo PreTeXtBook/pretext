@@ -11,10 +11,15 @@ $border-radius: 0 !default;
   box-shadow: 0 0 5px var(--dialog-shadow-color);
   color: var(--dialog-text-color);
 
-  & .ptx-dialog-close-button {
+  .ptx-dialog-close-button {
     @include buttons.ptx-button(
       $border-width: 0
     );
+  }
+
+  .ptx-dialog-topbar {
+    min-height: 15px;
+    user-select: none;
   }
 }
 

@@ -1319,19 +1319,26 @@ class PTXDialog {
         }
 
         this.closeButton = options.closeButton;
-        // add a close button unless the dialog already has one as identified in options
+        // add a close button to modals unless the dialog already has one as identified in options
         if (!this.closeButton && this.isModal) {
             const topBar = document.createElement("div");
             topBar.classList.add("ptx-dialog-topbar");
             this.dialog.prepend(topBar);
             this.closeButton = document.createElement("button");
-            this.closeButton.classList.add("ptx-dialog-close-button");
+            this.closeButton.classList.add("button", "ptx-dialog-close-button");
             this.closeButton.setAttribute("aria-label", "Close dialog");
             this.closeButton.innerHTML = `<span class="material-symbols-outlined">close</span>`;
             topBar.appendChild(this.closeButton);
         }
         if (this.closeButton) {
             this.closeButton.addEventListener("click", () => this.close());
+        }
+        if (!this.isModal) {
+            // For non-modal dialogs, make a top bar as a grab area for dragging
+            const topBar = document.createElement("div");
+            topBar.classList.add("ptx-dialog-topbar");
+            this.topBar = topBar;
+            this.dialog.prepend(topBar);
         }
 
         if (PTXDialog.hasNativeCommandInvokers()) {
@@ -1371,7 +1378,7 @@ class PTXDialog {
             this.toggle = () => this.toggleDialogFallback();
         }
 
-        if (this.kind === "light-close") {
+        if (!PTXDialog.hasNativeCommandInvokers() && this.kind === "light-close") {
             // Add event listener to close the dialog if the user clicks outside of it
             this.dialog.addEventListener("click", (event) => {
                 if (event.target === this.dialog) {
@@ -1387,6 +1394,63 @@ class PTXDialog {
                     if (!isInDialog) {
                         this.close();
                     }
+                }
+            });
+        }
+
+        // make non-modal dialogs draggable by their top bar
+        if (!this.isModal) {
+            const topBar = this.dialog.querySelector(".ptx-dialog-topbar");
+            let isDragging = false;
+            let offsetX = 0;
+            let offsetY = 0;
+            
+            topBar.addEventListener("pointerover", (e) => {
+                topBar.style.cursor = "move";
+            });
+
+            // Trigger when the user presses down on the element
+            topBar.addEventListener("pointerdown", (e) => {
+                isDragging = true;
+
+                const dialogRect = this.dialog.getBoundingClientRect();
+
+                // Track the pointer offset within the dialog so movement stays smooth.
+                offsetX = e.clientX - dialogRect.left;
+                offsetY = e.clientY - dialogRect.top;
+                
+                // Lock pointer to capture movement even outside the element boundaries
+                topBar.setPointerCapture(e.pointerId);
+            });
+
+            // Trigger as the user moves the pointer
+            topBar.addEventListener("pointermove", (e) => {
+                if (!isDragging) return;
+
+                // Calculate new coordinates from the current pointer position.
+                const newX = e.clientX - offsetX;
+                const newY = e.clientY - offsetY;
+
+                // Apply styles to move the element.
+                this.dialog.style.left = `${newX}px`;
+                this.dialog.style.top = `${newY}px`;
+                this.dialog.style.bottom = "auto"; // Reset bottom to auto to allow top positioning
+                this.dialog.style.right = "auto"; // Reset right to auto to allow left positioning
+            });
+
+            // Trigger when the user releases the pointer
+            topBar.addEventListener("pointerup", (e) => {
+                isDragging = false;
+                topBar.releasePointerCapture(e.pointerId);
+            });
+            
+            // Make sure we stay in view during resizes
+            window.addEventListener('resize', (event) => {
+                this.dialog.style.left = '';
+                this.dialog.style.right = '';
+                // make sure top is in viewport
+                if (this.dialog.getBoundingClientRect().top > window.innerHeight) {
+                    this.dialog.style.top = '20px';
                 }
             });
         }
