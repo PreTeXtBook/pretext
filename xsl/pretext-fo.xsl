@@ -3671,6 +3671,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="height-points"
                   select="number(substring-before($svg/@height, 'ex')) * $math-points-per-ex"/>
+    <!-- a display is centered, but when it is wider than the -->
+    <!-- text measure, flushing it left lets it overrun only  -->
+    <!-- the right margin rather than both                    -->
+    <xsl:variable name="display-align">
+        <xsl:choose>
+            <xsl:when test="$width-points &gt; $text-width-points">left</xsl:when>
+            <xsl:otherwise>center</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
         <xsl:when test="$svg and self::m">
             <!-- for math sitting on the baseline (e.g. a lone digit),  -->
@@ -3697,10 +3706,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </fo:instream-foreign-object>
         </xsl:when>
-        <!-- display mathematics, in a centered block; absorbed -->
-        <!-- clause-ending punctuation is already in the SVG    -->
+        <!-- display mathematics in its own block; absorbed         -->
+        <!-- clause-ending punctuation is already in the SVG.       -->
+        <!-- "text-align-last" repeats the choice because a         -->
+        <!-- justified paragraph passes its own down to this lone   -->
+        <!-- line, which would otherwise justify (left-pin) the SVG -->
         <xsl:when test="$svg">
-            <fo:block text-align="center" space-before="0.5em" space-after="0.5em">
+            <fo:block text-align="{$display-align}" text-align-last="{$display-align}" space-before="0.5em" space-after="0.5em">
                 <xsl:apply-templates select="." mode="link-id-attribute"/>
                 <!-- an "xref" targets a constituent "mrow", so each -->
                 <!-- contributes an invisible anchor                 -->
