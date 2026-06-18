@@ -9145,32 +9145,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Special Characters -->
 <!-- ################## -->
 
-<!-- Quotation marks come in left and right variants. -->
-<!-- The lookup table is in pretext-common.xsl.       -->
-<xsl:template match="*" mode="quote-character-unicode">
-    <xsl:param name="style"/>
-    <xsl:param name="side"/>
-    <xsl:variable name="unicode-character">
-        <xsl:for-each select="$quote-character-table">
-            <xsl:value-of select="key('quote-character-key',
-                concat($style, '|', $side))/@unicode-character"/>
-        </xsl:for-each>
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$unicode-character != ''">
-            <xsl:value-of select="$unicode-character"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>
-                <xsl:text>PTX:BUG:  a quotation style ("</xsl:text>
-                <xsl:value-of select="$style"/>
-                <xsl:text>") for a left quote character in HTML was not recognized</xsl:text>
-            </xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-
 <!-- Left Single Quote -->
 <xsl:template match="*" mode="lsq-character">
     <xsl:apply-templates select="." mode="quote-character-unicode">
