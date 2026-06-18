@@ -39,7 +39,10 @@
   -->
   <define name="Annotations">
     <element name="annotations">
-      <ref name="Annotation"/>
+      <zeroOrMore>
+        <ref name="Annotation"/>
+      </zeroOrMore>
+      <attribute name="text"/>
     </element>
   </define>
   <define name="AnnotationAttributes">
@@ -348,6 +351,11 @@
           <attribute name="by"/>
         </element>
       </zeroOrMore>
+      <zeroOrMore>
+        <element name="change-basis">
+          <attribute name="basis"/>
+        </element>
+      </zeroOrMore>
     </interleave>
   </define>
   <!-- attributes and text for labels -->
@@ -395,6 +403,46 @@
     </optional>
     <optional>
       <attribute name="font-size"/>
+    </optional>
+    <optional>
+      <ref name="TactileLabelAttributes"/>
+    </optional>
+  </define>
+  <define name="TactileLabelAttributes">
+    <optional>
+      <attribute name="tactile-alignment"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-offset"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-justify">
+        <choice>
+          <value>right</value>
+          <value>left</value>
+          <value>center</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="tactile-interline"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-scale"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-rotate"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-clear-background">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="tactile-background-margin"/>
     </optional>
   </define>
   <define name="Math">
@@ -721,9 +769,6 @@
       <attribute name="dash"/>
     </optional>
     <optional>
-      <attribute name="tactile-dash"/>
-    </optional>
-    <optional>
       <attribute name="cliptobbox">
         <choice>
           <value>yes</value>
@@ -733,6 +778,37 @@
     </optional>
     <optional>
       <attribute name="outline">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <ref name="TactileStrokeAttributes"/>
+    </optional>
+  </define>
+  <define name="TactileStrokeAttributes">
+    <optional>
+      <attribute name="tactile-stroke"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-thickness"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-miterlimit"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-linejoin"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-linecap"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-dash"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-cliptobbox">
         <choice>
           <value>yes</value>
           <value>no</value>
@@ -750,6 +826,15 @@
     </optional>
     <optional>
       <attribute name="fill-rule"/>
+    </optional>
+  </define>
+  <define name="TactileFillAttributes">
+    <ref name="TactileStrokeAttributes"/>
+    <optional>
+      <attribute name="tactile-fill"/>
+    </optional>
+    <optional>
+      <attribute name="tactile-fill-rule"/>
     </optional>
   </define>
   <!-- start defining the graphical elements -->
@@ -867,6 +952,9 @@
       <attribute name="points"/>
       <optional>
         <attribute name="radius"/>
+      </optional>
+      <optional>
+        <attribute name="tactile-radius"/>
       </optional>
       <optional>
         <attribute name="arrow">
@@ -2174,6 +2262,9 @@
         <attribute name="tail"/>
       </optional>
       <optional>
+        <attribute name="scale-length"/>
+      </optional>
+      <optional>
         <attribute name="head-location"/>
       </optional>
       <optional>
@@ -2181,6 +2272,9 @@
       </optional>
       <optional>
         <attribute name="arrow-angles"/>
+      </optional>
+      <optional>
+        <attribute name="label-location"/>
       </optional>
       <ref name="StrokeAttributes"/>
       <ref name="CommonAttributes"/>
