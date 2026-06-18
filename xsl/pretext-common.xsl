@@ -3345,6 +3345,35 @@ Book (with parts), "section" at level 3
 <xsl:key name="quote-character-key" match="quote-character"
     use="concat(@style, '|', @side)"/>
 
+<!-- Given a quotation "style" and a "side", return the Unicode -->
+<!-- character from the table above.  Output formats that quote  -->
+<!-- with literal characters (HTML, XSL-FO) route their          -->
+<!-- "*-character" templates through here.                       -->
+<xsl:template match="*" mode="quote-character-unicode">
+    <xsl:param name="style"/>
+    <xsl:param name="side"/>
+    <xsl:variable name="unicode-character">
+        <xsl:for-each select="$quote-character-table">
+            <xsl:value-of select="key('quote-character-key',
+                concat($style, '|', $side))/@unicode-character"/>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$unicode-character != ''">
+            <xsl:value-of select="$unicode-character"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>
+                <xsl:text>PTX:BUG:  the quotation style "</xsl:text>
+                <xsl:value-of select="$style"/>
+                <xsl:text>" (</xsl:text>
+                <xsl:value-of select="$side"/>
+                <xsl:text>) was not recognized</xsl:text>
+            </xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ##### -->
 <!-- Icons -->
