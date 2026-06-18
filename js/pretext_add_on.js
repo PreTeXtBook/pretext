@@ -1382,6 +1382,15 @@ class PTXDialog {
             });
         }
 
+        // Should be handled natively, but Sagecells currently break native esc handling
+        if (this.isModal) {
+            this.dialog.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    this.close();
+                }
+            });
+        }
+
         // make non-modal dialogs draggable by their top bar
         if (!this.isModal) {
             const topBar = this.dialog.querySelector(".ptx-dialog-topbar");
