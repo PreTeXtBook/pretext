@@ -12498,6 +12498,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:call-template>
             </button>
         </div>
+        <div class="ptx-readability-options-group">
+            <label class="ptx-readability-slider-label" for="ptx-readability-line-height">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'format_line_spacing'"/>
+                </xsl:call-template>
+                <span>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'readability-line-height'"/>
+                    </xsl:apply-templates>
+                </span>
+                <output id="ptx-readability-line-height-value" for="ptx-readability-line-height">1.35</output>
+            </label>
+            <input type="range" id="ptx-readability-line-height" min="1.10" max="3" step="0.05" value="1.35"/>
+        </div>
         <xsl:if test="$b-theme-has-darkmode">
             <fieldset class="ptx-readability-options-group ptx-readability-options-group-theme">
                 <legend>
