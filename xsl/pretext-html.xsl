@@ -12197,11 +12197,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="." mode="tooltip-text"/>
     </xsl:variable>
-    <div class="autopermalink">
+    <!-- JS will selectively unhide and make tab selectable -->
+    <div class="autopermalink" aria-hidden="true">
         <xsl:attribute name="data-description">
             <xsl:apply-templates select="." mode="tooltip-text"/>
         </xsl:attribute>
-        <a>
+        <a tabindex="-1">
             <xsl:attribute name="href">
                 <xsl:text>#</xsl:text>
                 <xsl:apply-templates select="." mode="unique-id"/>
