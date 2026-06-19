@@ -55,6 +55,7 @@ body {
   max-width: $content-with-padding-width;   // bad for worksheets
   padding: 24px $content-side-padding 60px;
   line-height: var(--ptx-content-line-height, normal);
+  font-size: var(--ptx-content-font-size, inherit);
 
   @if $centered-content {
     margin-left: auto;
@@ -77,7 +78,7 @@ body.pretext,
 body.standalone {
   margin: 0;
   padding: 0;
-  font-size: 16px;
+  font-size: 1rem;
   background: var(--page-color, white);
 }
 
