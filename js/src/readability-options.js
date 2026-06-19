@@ -104,11 +104,43 @@ function updateLineHeightOutput(output, lineHeight) {
 }
 
 //-----------------------------------------------------------------
+// Font size controls
+
+function getSavedFontSize() {
+    const savedFontSize = localStorage.getItem("fontSize");
+    if (isValidFontSize(savedFontSize)) {
+        return savedFontSize;
+    }
+    return null;
+}
+
+function isValidFontSize(value) {
+    return value !== null && !isNaN(value) && Number(value) > 0 && Number(value) < 5;
+}
+
+function formatFontSize(value) {
+    return `${Math.round(Number(value) * 100)}%`;
+}
+
+function applyFontSize(fontSize) {
+    if (isValidFontSize(fontSize)) {
+        document.documentElement.style.setProperty("--ptx-content-font-size", formatFontSize(fontSize));
+    }
+}
+
+function updateFontSizeOutput(output, fontSize) {
+    if (output) {
+        output.value = formatFontSize(fontSize);
+    }
+}
+
+//-----------------------------------------------------------------
 // Core functionality
 
 function resetReadabilityOptions(options) {
     localStorage.removeItem("theme");
     localStorage.removeItem("lineHeight");
+    localStorage.removeItem("fontSize");
 
     const systemThemeInput = document.getElementById("ptx-readability-theme-system");
     if (systemThemeInput) {
@@ -120,6 +152,12 @@ function resetReadabilityOptions(options) {
         options.lineHeightInput.value = options.defaultLineHeight;
         updateLineHeightOutput(options.lineHeightOutput, options.defaultLineHeight);
         document.documentElement.style.removeProperty("--ptx-content-line-height");
+    }
+
+    if (options.fontSizeInput) {
+        options.fontSizeInput.value = options.defaultFontSize;
+        updateFontSizeOutput(options.fontSizeOutput, options.defaultFontSize);
+        applyFontSize(options.defaultFontSize);
     }
 }
 
@@ -186,10 +224,35 @@ window.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    const fontSizeInput = document.getElementById("ptx-readability-font-size");
+    const fontSizeOutput = document.getElementById("ptx-readability-font-size-value");
+    const defaultFontSize = fontSizeInput ? fontSizeInput.defaultValue : null;
+    const savedFontSize = getSavedFontSize();
+
+    if (fontSizeInput) {
+        if (savedFontSize) {
+            fontSizeInput.value = savedFontSize;
+            applyFontSize(savedFontSize);
+        }
+        updateFontSizeOutput(fontSizeOutput, fontSizeInput.value);
+
+        fontSizeInput.addEventListener("input", function() {
+            updateFontSizeOutput(fontSizeOutput, this.value);
+            if (!isValidFontSize(this.value)) {
+                return;
+            }
+            localStorage.setItem("fontSize", this.value);
+            applyFontSize(this.value);
+        });
+    }
+
     const resetButton = document.getElementById("ptx-readability-reset-button");
     if (resetButton) {
         resetButton.addEventListener("click", function() {
             resetReadabilityOptions({
+                fontSizeInput: fontSizeInput,
+                fontSizeOutput: fontSizeOutput,
+                defaultFontSize: defaultFontSize,
                 defaultLineHeight: defaultLineHeight,
                 lineHeightInput: lineHeightInput,
                 lineHeightOutput: lineHeightOutput
@@ -204,6 +267,7 @@ window.addEventListener("DOMContentLoaded", function() {
 // of a flash of unstyled content for users who have changed defaults from the system settings
 setDarkMode(isDarkMode());
 applyLineHeight(getSavedLineHeight());
+applyFontSize(getSavedFontSize());
 
 
 // isDarkMode is called from XSL-generated inline <script> blocks (e.g. mermaid).
