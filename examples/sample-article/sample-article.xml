@@ -2457,6 +2457,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </md>.  There should not be anything to see in <latex/>/<init>PDF</init> output. (2021-10-21)</p>
 
             </subsection>
+
+            <subsection>
+                <title>Wide and Narrow Displays</title>
+
+                <p>This subsection stresses how a displayed equation is placed when it does, or does not, fit the width of the text, and how a number or a custom tag interacts with that placement.  In print (<init>PDF</init>) output a display that fits is centered, with any number at the right margin; a display too wide to fit is set flush with the left margin, so it overruns only the right margin and never the left.</p>
+
+                <p>A narrow display, numbered, centers with its number at the right margin:<md number="yes">a^2 + b^2 = c^2</md></p>
+
+                <p>The same narrow display, unnumbered, simply centers:<md>a^2 + b^2 = c^2</md></p>
+
+                <p>A display wider than the text, numbered, is set flush left and overruns the right margin (and triggers an authoring warning):<md number="yes">x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 + x_8 + x_9 + x_{10} + x_{11} + x_{12} + x_{13} + x_{14} + x_{15} = \sum_{i=1}^{15} x_i</md></p>
+
+                <p>The same wide display, unnumbered, behaves the same way:<md>x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 + x_8 + x_9 + x_{10} + x_{11} + x_{12} + x_{13} + x_{14} + x_{15} = \sum_{i=1}^{15} x_i</md></p>
+
+                <p>A wide display with a custom tag flushes left as well, the tag taking the place of a number:<md><mrow tag="star">x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 + x_8 + x_9 + x_{10} + x_{11} + x_{12} + x_{13} + x_{14} + x_{15} = \sum_{i=1}^{15} x_i</mrow></md></p>
+
+                <p>A multi-line display, numbered, with one narrow line and one too wide, exercises per-line numbering:<md number="yes">
+                    <mrow>a + b = c</mrow>
+                    <mrow>x_1 + x_2 + x_3 + x_4 + x_5 + x_6 + x_7 + x_8 + x_9 + x_{10} + x_{11} + x_{12} + x_{13} + x_{14} + x_{15} = \sum_{i=1}^{15} x_i</mrow>
+                </md></p>
+
+                <p>Inside a narrow container the available width is smaller, so a display centers within the container rather than the full text.  Pushing a number all the way out to such a container's own right margin awaits a future refinement, so for now a number stays beside its centered equation.  Here are two panels side by side, each with a numbered display.</p>
+
+                <sidebyside widths="45% 45%">
+                    <p>A panel display:<md number="yes">a^2 + b^2 = c^2</md></p>
+                    <p>Another panel display:<md number="yes">u + v = w</md></p>
+                </sidebyside>
+
+                <p>A numbered display inside a block quotation, which is indented on both sides:</p>
+
+                <blockquote>
+                    <p>An indented, numbered display:<md number="yes">e^{i\pi} + 1 = 0</md></p>
+                </blockquote>
+
+                <p>A numbered display inside a doubly-nested list, where the item is indented twice:<ol>
+                    <li><p>Outer item.<ol>
+                        <li><p>Inner item, with a numbered display:<md number="yes">\int_0^1 x^2 \, dx = \frac{1}{3}</md></p></li>
+                    </ol></p></li>
+                </ol></p>
+            </subsection>
         </section>
 
         <section xml:id="block-samples">

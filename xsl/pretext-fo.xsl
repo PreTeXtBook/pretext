@@ -3650,16 +3650,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="svg" select="$math-repr/pi:math[@id = $id]/div[@class = 'svg']/svg:svg"/>
     <xsl:variable name="speech" select="normalize-space($speech-repr/pi:math[@id = $id]/div[@class = 'speech'])"/>
+    <!-- A display fills the full text measure only when no     -->
+    <!-- ancestor narrows the line: a "sidebyside" panel, an    -->
+    <!-- "ol"/"ul"/"dl" list item, a "blockquote", a "tabular"  -->
+    <!-- cell, a "task", or a multicolumn "exercisegroup" each  -->
+    <!-- reduce the width (and a cell's width is not known here -->
+    <!-- in points).                                            -->
+    <xsl:variable name="b-full-measure" select="not(ancestor::sidebyside or ancestor::ol or ancestor::ul or ancestor::dl or ancestor::blockquote or ancestor::tabular or ancestor::task or ancestor::exercisegroup[@cols])"/>
     <xsl:variable name="width-points">
         <xsl:choose>
             <xsl:when test="contains($svg/@width, 'ex')">
                 <xsl:value-of select="number(substring-before($svg/@width, 'ex')) * $math-points-per-ex"/>
             </xsl:when>
-            <!-- a wide, aligned display gets width="100%" from   -->
-            <!-- MathJax, with the true width as a "min-width" in -->
-            <!-- the @style                                       -->
+            <!-- a wide, aligned display arrives as width="100%" with    -->
+            <!-- no viewBox and its true width as a "min-width" in the   -->
+            <!-- @style; MathJax's own layout then centers the body and  -->
+            <!-- drives any tag to the right edge of whatever width we   -->
+            <!-- assign.  At the full text measure that reproduces the   -->
+            <!-- LaTeX result (tag at the margin); in a narrower         -->
+            <!-- container we cannot know the available width in points, -->
+            <!-- so we fall back to the content (min-width) and let      -->
+            <!-- "text-align-last" center it.                            -->
             <xsl:when test="contains($svg/@style, 'min-width:')">
-                <xsl:value-of select="number(substring-before(substring-after($svg/@style, 'min-width:'), 'ex')) * $math-points-per-ex"/>
+                <xsl:variable name="content-width-points" select="number(substring-before(substring-after($svg/@style, 'min-width:'), 'ex')) * $math-points-per-ex"/>
+                <xsl:choose>
+                    <xsl:when test="$b-full-measure and ($content-width-points &lt; $text-width-points)">
+                        <xsl:value-of select="$text-width-points"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$content-width-points"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
             <!-- last resort: the third entry of the @viewBox, in -->
             <!-- thousandths of an em                             -->
@@ -3671,6 +3692,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="height-points"
                   select="number(substring-before($svg/@height, 'ex')) * $math-points-per-ex"/>
+    <!-- a display is centered, but when it is wider than the -->
+    <!-- text measure, flushing it left lets it overrun only  -->
+    <!-- the right margin rather than both                    -->
+    <xsl:variable name="display-align">
+        <xsl:choose>
+            <xsl:when test="$width-points &gt; $text-width-points">left</xsl:when>
+            <xsl:otherwise>center</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- the number or symbol of the display's first numbered or -->
+    <!-- tagged "mrow" (@pi:numbered="yes" or @tag); empty for   -->
+    <!-- inline math (no "mrow") and fully unnumbered displays.  -->
+    <xsl:variable name="numbered-row" select="mrow[@pi:numbered = 'yes' or @tag][1]"/>
+    <xsl:variable name="eqn-number">
+        <xsl:choose>
+            <xsl:when test="$numbered-row/@tag">
+                <xsl:apply-templates select="$numbered-row/@tag" mode="tag-symbol"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="$numbered-row" mode="number"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
         <xsl:when test="$svg and self::m">
             <!-- for math sitting on the baseline (e.g. a lone digit),  -->
@@ -3697,10 +3741,41 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </fo:instream-foreign-object>
         </xsl:when>
-        <!-- display mathematics, in a centered block; absorbed -->
-        <!-- clause-ending punctuation is already in the SVG    -->
+        <!-- display mathematics in its own block; absorbed         -->
+        <!-- clause-ending punctuation is already in the SVG.       -->
+        <!-- "text-align-last" repeats the choice because a         -->
+        <!-- justified paragraph passes its own down to this lone   -->
+        <!-- line, which would otherwise justify (left-pin) the SVG -->
         <xsl:when test="$svg">
-            <fo:block text-align="center" space-before="0.5em" space-after="0.5em">
+            <!-- a display wider than the measure cannot be placed well;  -->
+            <!-- warn the author, by number when there is one, and report -->
+            <!-- its location                                             -->
+            <xsl:if test="$width-points &gt; $text-width-points">
+                <xsl:message>
+                    <xsl:text>PTX:WARNING: a display </xsl:text>
+                    <xsl:if test="not(normalize-space($eqn-number) = '')">
+                        <xsl:text>(</xsl:text>
+                        <xsl:value-of select="normalize-space($eqn-number)"/>
+                        <xsl:text>) </xsl:text>
+                    </xsl:if>
+                    <xsl:text>is wider than the text and overruns the right margin in the XSL-FO output</xsl:text>
+                </xsl:message>
+                <xsl:apply-templates select="." mode="location-report"/>
+            </xsl:if>
+            <fo:block text-align="{$display-align}" text-align-last="{$display-align}" space-before="0.5em" space-after="0.5em">
+                <!-- an over-wide numbered display is a centered body in a -->
+                <!-- "min-width" SVG, so its body sits one number-width in -->
+                <!-- from the left.  At the full measure (inherited        -->
+                <!-- start-indent zero) pull left by a conservative under- -->
+                <!-- estimate of that width, flushing the body toward the  -->
+                <!-- margin without crossing it                            -->
+                <xsl:if test="$b-full-measure and ($width-points &gt; $text-width-points) and contains($svg/@style, 'min-width:') and not(normalize-space($eqn-number) = '')">
+                    <xsl:attribute name="start-indent">
+                        <xsl:text>-</xsl:text>
+                        <xsl:value-of select="format-number((string-length(normalize-space($eqn-number)) + 2) * 0.5 * number(substring-before($font-size, 'pt')), '0.##')"/>
+                        <xsl:text>pt</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
                 <xsl:apply-templates select="." mode="link-id-attribute"/>
                 <!-- an "xref" targets a constituent "mrow", so each -->
                 <!-- contributes an invisible anchor                 -->
