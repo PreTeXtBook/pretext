@@ -3747,6 +3747,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- justified paragraph passes its own down to this lone   -->
         <!-- line, which would otherwise justify (left-pin) the SVG -->
         <xsl:when test="$svg">
+            <!-- a display wider than the measure cannot be placed well;  -->
+            <!-- warn the author, by number when there is one, and report -->
+            <!-- its location                                             -->
+            <xsl:if test="$width-points &gt; $text-width-points">
+                <xsl:message>
+                    <xsl:text>PTX:WARNING: a display </xsl:text>
+                    <xsl:if test="not(normalize-space($eqn-number) = '')">
+                        <xsl:text>(</xsl:text>
+                        <xsl:value-of select="normalize-space($eqn-number)"/>
+                        <xsl:text>) </xsl:text>
+                    </xsl:if>
+                    <xsl:text>is wider than the text and overruns the right margin in the XSL-FO output</xsl:text>
+                </xsl:message>
+                <xsl:apply-templates select="." mode="location-report"/>
+            </xsl:if>
             <fo:block text-align="{$display-align}" text-align-last="{$display-align}" space-before="0.5em" space-after="0.5em">
                 <!-- an over-wide numbered display is a centered body in a -->
                 <!-- "min-width" SVG, so its body sits one number-width in -->
