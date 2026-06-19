@@ -1186,74 +1186,6 @@ window.addEventListener("DOMContentLoaded", async function(event) {
 });
 
 
-
-//-----------------------------------------------------------------
-// Dark/Light mode swiching
-
-function isDarkMode() {
-    if (document.documentElement.dataset.darkmode === 'disabled')
-        return false;
-
-    const currentTheme = localStorage.getItem("theme");
-    if (currentTheme === "dark")
-        return true;
-    else if (currentTheme === "light")
-        return false;
-
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
-function setDarkMode(isDark) {
-    if(document.documentElement.dataset.darkmode === 'disabled')
-        return;
-
-    const parentHtml = document.documentElement;
-    const iframes = document.querySelectorAll("iframe[data-dark-mode-enabled]");
-
-    // Update the parent document
-    if (isDark) {
-        parentHtml.classList.add("dark-mode");
-    } else {
-        parentHtml.classList.remove("dark-mode");
-    }
-
-    // Sync each iframe's <html> class with the parent
-    for (const iframe of iframes) {
-        try {
-            const iframeHtml = iframe.contentWindow.document.documentElement;
-            if (isDark) {
-              iframeHtml.classList.add("dark-mode")
-            } else {
-              iframeHtml.classList.remove("dark-mode")
-            }
-        } catch (err) {
-            console.warn("Dark mode sync to iframe failed:", err);
-        }
-    }
-
-    const modeButton = document.getElementById("light-dark-button");
-    if (modeButton) {
-        modeButton.querySelector('.icon').innerText = isDark ? "light_mode" : "dark_mode";
-        modeButton.querySelector('.name').innerText = isDark ? window.i18next.t("Light Mode") : window.i18next.t("Dark Mode");
-    }
-}
-
-// Run this as soon as possible to avoid flicker
-setDarkMode(isDarkMode());
-
-// Rest of dark mode setup logic waits until after load
-window.addEventListener("DOMContentLoaded", function(event) {
-    // Rerun setDarkMode now that it can update buttons
-    const isDark = isDarkMode();
-    setDarkMode(isDark);
-
-    const modeButton = document.getElementById("light-dark-button");
-    modeButton.addEventListener("click", function() {
-        const wasDark = isDarkMode();
-        setDarkMode(!wasDark);
-        localStorage.setItem("theme", wasDark ? "light" : "dark");
-    });
-});
 // Share button and embed in LMS code
 window.addEventListener("DOMContentLoaded", function(event) {
     const shareButton = document.getElementById("ptx-embed-button");
@@ -1363,5 +1295,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 // END Support for code-copy button functionality
-
-window.isDarkMode = isDarkMode;
