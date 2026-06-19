@@ -135,12 +135,45 @@ function updateFontSizeOutput(output, fontSize) {
 }
 
 //-----------------------------------------------------------------
+// Permalink accessibility controls
+
+function getSavedAccessiblePermalinks() {
+    return localStorage.getItem("accessiblePermalinks") === "true";
+}
+
+function setSavedAccessiblePermalinks(accessiblePermalinks) {
+    if (accessiblePermalinks) {
+        localStorage.setItem("accessiblePermalinks", "true");
+    } else {
+        localStorage.removeItem("accessiblePermalinks");
+    }
+}
+
+function setAutopermalinksAccessible(accessible) {
+    const autopermalinks = document.querySelectorAll('.autopermalink');
+    autopermalinks.forEach(permalink => {
+        const link = permalink.querySelector('a');
+        if (!link) {
+            return;
+        }
+        if (accessible) {
+            permalink.removeAttribute('aria-hidden');
+            link.setAttribute('tabindex', '0');
+        } else {
+            permalink.setAttribute('aria-hidden', 'true');
+            link.setAttribute('tabindex', '-1');
+        }
+    });
+}
+
+//-----------------------------------------------------------------
 // Core functionality
 
 function resetReadabilityOptions(options) {
     localStorage.removeItem("theme");
     localStorage.removeItem("lineHeight");
     localStorage.removeItem("fontSize");
+    localStorage.removeItem("accessiblePermalinks");
 
     const systemThemeInput = document.getElementById("ptx-readability-theme-system");
     if (systemThemeInput) {
@@ -158,6 +191,11 @@ function resetReadabilityOptions(options) {
         options.fontSizeInput.value = options.defaultFontSize;
         updateFontSizeOutput(options.fontSizeOutput, options.defaultFontSize);
         applyFontSize(options.defaultFontSize);
+    }
+
+    if (options.accessiblePermalinksInput) {
+        options.accessiblePermalinksInput.checked = false;
+        setAutopermalinksAccessible(false);
     }
 }
 
@@ -246,6 +284,16 @@ window.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    const accessiblePermalinksInput = document.getElementById("ptx-readability-accessible-permalinks");
+    if (accessiblePermalinksInput) {
+        accessiblePermalinksInput.checked = getSavedAccessiblePermalinks();
+        accessiblePermalinksInput.addEventListener("change", function() {
+            setSavedAccessiblePermalinks(this.checked);
+            setAutopermalinksAccessible(this.checked);
+        });
+    }
+    setAutopermalinksAccessible(localStorage.getItem("accessiblePermalinks") === "true");
+
     const resetButton = document.getElementById("ptx-readability-reset-button");
     if (resetButton) {
         resetButton.addEventListener("click", function() {
@@ -253,6 +301,7 @@ window.addEventListener("DOMContentLoaded", function() {
                 fontSizeInput: fontSizeInput,
                 fontSizeOutput: fontSizeOutput,
                 defaultFontSize: defaultFontSize,
+                accessiblePermalinksInput: accessiblePermalinksInput,
                 defaultLineHeight: defaultLineHeight,
                 lineHeightInput: lineHeightInput,
                 lineHeightOutput: lineHeightOutput
