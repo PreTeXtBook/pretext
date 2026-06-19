@@ -21,6 +21,11 @@ $border-radius: 0 !default;
     min-height: 15px;
     user-select: none;
   }
+
+  .heading:is(h2) {
+    font-size: 1.5em;
+    margin: 0.5em 0;
+  }
 }
 
 @mixin ptx-dialog-modal {
