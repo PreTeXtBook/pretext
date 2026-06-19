@@ -298,4 +298,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='print-preview'>Pré-visualização da impressão</localization>
     <localization string-id='close'>Fechar</localization>
     <localization string-id='open-new-tab'>Abrir em nova aba</localization>
+    <!-- <localization string-id='readability-settings'>Readability settings</localization> -->
+    <!-- <localization string-id='readability-line-height'>Line height</localization> -->
+    <!-- <localization string-id='readability-content-font-size'>Content font size</localization> -->
+    <!-- <localization string-id='readability-theme'>Theme</localization> -->
+    <!-- <localization string-id='readability-theme-system'>System</localization> -->
+    <!-- <localization string-id='readability-theme-light'>Light</localization> -->
+    <!-- <localization string-id='readability-theme-dark'>Dark</localization> -->
+    <!-- <localization string-id='readability-assistive-technologies'>Assistive technologies</localization> -->
+    <!-- <localization string-id='readability-expose-permalinks'>Expose permalinks</localization> -->
+    <!-- <localization string-id='reset-all'>Reset All</localization> -->
 </locale>
