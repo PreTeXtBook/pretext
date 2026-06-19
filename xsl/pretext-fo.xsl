@@ -2632,7 +2632,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="key('base-key', concat('bases', $the-base))/@short"/>
     </xsl:for-each>
     <xsl:if test="@exp">
-        <fo:inline baseline-shift="super" font-size="70%">
+        <!-- a raised exponent, shifted a fixed fraction of the line-height -->
+        <fo:inline baseline-shift="35%" font-size="70%">
             <xsl:value-of select="@exp"/>
         </fo:inline>
     </xsl:if>
@@ -3428,7 +3429,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="serial-number"/>
     </xsl:variable>
     <fo:footnote>
-        <fo:inline baseline-shift="super" font-size="70%">
+        <!-- A fixed fraction of the line-height raises the mark; FOP's -->
+        <!-- "super" keyword shifts so far it inflates the line box and -->
+        <!-- drops a list item's first line below its label.            -->
+        <fo:inline baseline-shift="35%" font-size="70%">
             <xsl:value-of select="$the-mark"/>
         </fo:inline>
         <fo:footnote-body>
@@ -3437,7 +3441,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- stretches a one-line note across the whole measure       -->
             <fo:block font-size="80%" text-align="{$text-alignment}" text-align-last="start" space-before="0.25em">
                 <xsl:apply-templates select="." mode="link-id-attribute"/>
-                <fo:inline baseline-shift="super" font-size="70%">
+                <fo:inline baseline-shift="35%" font-size="70%">
                     <xsl:value-of select="$the-mark"/>
                 </fo:inline>
                 <xsl:text> </xsl:text>
