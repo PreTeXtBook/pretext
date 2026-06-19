@@ -54,6 +54,7 @@ body {
 .ptx-main .ptx-content {
   max-width: $content-with-padding-width;   // bad for worksheets
   padding: 24px $content-side-padding 60px;
+  line-height: var(--ptx-content-line-height, normal);
 
   @if $centered-content {
     margin-left: auto;

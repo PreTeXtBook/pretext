@@ -72,18 +72,55 @@ function setDarkMode(isDark) {
 
 }
 
+//-----------------------------------------------------------------
+// Line height controls
+
+function getSavedLineHeight() {
+    const savedLineHeight = localStorage.getItem("lineHeight");
+    if (isValidLineHeight(savedLineHeight)) {
+        return savedLineHeight;
+    }
+    return null;
+}
+
+function isValidLineHeight(value) {
+    return value !== null && !isNaN(value) && Number(value) > 0 && Number(value) < 5;
+}
+
+function formatLineHeight(value) {
+    return Number(value).toFixed(2);
+}
+
+function applyLineHeight(lineHeight) {
+    if (isValidLineHeight(lineHeight)) {
+        document.documentElement.style.setProperty("--ptx-content-line-height", lineHeight);
+    }
+}
+
+function updateLineHeightOutput(output, lineHeight) {
+    if (output) {
+        output.value = formatLineHeight(lineHeight);
+    }
+}
 
 //-----------------------------------------------------------------
 // Core functionality
 
 function resetReadabilityOptions(options) {
     localStorage.removeItem("theme");
+    localStorage.removeItem("lineHeight");
 
     const systemThemeInput = document.getElementById("ptx-readability-theme-system");
     if (systemThemeInput) {
         systemThemeInput.checked = true;
     }
     applyThemeChoice("system");
+
+    if (options.lineHeightInput) {
+        options.lineHeightInput.value = options.defaultLineHeight;
+        updateLineHeightOutput(options.lineHeightOutput, options.defaultLineHeight);
+        document.documentElement.style.removeProperty("--ptx-content-line-height");
+    }
 }
 
 window.addEventListener("DOMContentLoaded", function() {
@@ -127,10 +164,35 @@ window.addEventListener("DOMContentLoaded", function() {
     // apply again once DOM is loadedto make sure iframes are in sync
     setDarkMode(isDarkMode());
 
+    const lineHeightInput = document.getElementById("ptx-readability-line-height");
+    const lineHeightOutput = document.getElementById("ptx-readability-line-height-value");
+    const defaultLineHeight = lineHeightInput ? lineHeightInput.defaultValue : null;
+    const savedLineHeight = getSavedLineHeight();
+
+    if (lineHeightInput) {
+        if (savedLineHeight) {
+            lineHeightInput.value = savedLineHeight;
+            applyLineHeight(savedLineHeight);
+        }
+        updateLineHeightOutput(lineHeightOutput, lineHeightInput.value);
+
+        lineHeightInput.addEventListener("input", function() {
+            updateLineHeightOutput(lineHeightOutput, this.value);
+            if (!isValidLineHeight(this.value)) {
+                return;
+            }
+            localStorage.setItem("lineHeight", this.value);
+            applyLineHeight(this.value);
+        });
+    }
+
     const resetButton = document.getElementById("ptx-readability-reset-button");
     if (resetButton) {
         resetButton.addEventListener("click", function() {
             resetReadabilityOptions({
+                defaultLineHeight: defaultLineHeight,
+                lineHeightInput: lineHeightInput,
+                lineHeightOutput: lineHeightOutput
             });
         });
     }
@@ -141,6 +203,7 @@ window.addEventListener("DOMContentLoaded", function() {
 // They may be re-applied on DOMContentLoaded, but this way we minimize the chance
 // of a flash of unstyled content for users who have changed defaults from the system settings
 setDarkMode(isDarkMode());
+applyLineHeight(getSavedLineHeight());
 
 
 // isDarkMode is called from XSL-generated inline <script> blocks (e.g. mermaid).
