@@ -12568,6 +12568,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </label>
             </fieldset>
         </xsl:if>
+        <fieldset class="ptx-readability-options-group">
+            <legend>
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'readability-assistive-technologies'"/>
+                </xsl:apply-templates>
+            </legend>
+            <label for="ptx-readability-accessible-permalinks">
+                <input type="checkbox" id="ptx-readability-accessible-permalinks"/>
+                <span>🔗</span>
+                <span>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'readability-expose-permalinks'"/>
+                    </xsl:apply-templates>
+                </span>
+            </label>
+        </fieldset>
         <div class="ptx-readability-options-group">
             <button type="button" class="ptx-readability-reset-button button" id="ptx-readability-reset-button">
                 <xsl:call-template name="insert-symbol">
