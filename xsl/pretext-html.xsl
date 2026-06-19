@@ -12468,13 +12468,91 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </button>
 </xsl:template>
 
-<xsl:template name="light-dark-button">
-    <button id="light-dark-button" class="light-dark-button button" title="Dark Mode">
+<xsl:template name="readability-options">
+    <xsl:variable name="reading-settings-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'readability-settings'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="close-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'close'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <button id="ptx-readability-options-button" class="ptx-readability-options-button button" title="{$reading-settings-localization}">
         <xsl:call-template name="insert-symbol">
-            <xsl:with-param name="name" select="'dark_mode'"/>
+            <xsl:with-param name="name" select="'match_case'"/>
         </xsl:call-template>
-        <span class="name">Dark Mode</span>
+        <span class="name">
+            <xsl:value-of select="$reading-settings-localization"/>
+        </span>
     </button>
+    <dialog class="ptx-dialog ptx-readability-options-popup" id="ptx-readability-options-popup">
+        <div class="ptx-readability-options-popup-controls">
+            <h2 class="heading">
+                <xsl:value-of select="$reading-settings-localization"/>
+            </h2>
+            <button class="ptx-readability-options-close-button button" id="ptx-readability-options-close-button" title="{$close-localization}">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'close'"/>
+                </xsl:call-template>
+            </button>
+        </div>
+        <xsl:if test="$b-theme-has-darkmode">
+            <fieldset class="ptx-readability-options-group ptx-readability-options-group-theme">
+                <legend>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'readability-theme'"/>
+                    </xsl:apply-templates>
+                </legend>
+                <label for="ptx-readability-theme-system">
+                    <input type="radio" name="ptx-readability-theme" id="ptx-readability-theme-system" value="system"/>
+                    <xsl:call-template name="insert-symbol">
+                        <xsl:with-param name="name" select="'brightness_auto'"/>
+                    </xsl:call-template>
+                    <span>
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'readability-theme-system'"/>
+                        </xsl:apply-templates>
+                    </span>
+                </label>
+                <label for="ptx-readability-theme-light">
+                    <input type="radio" name="ptx-readability-theme" id="ptx-readability-theme-light" value="light"/>
+                    <xsl:call-template name="insert-symbol">
+                        <xsl:with-param name="name" select="'light_mode'"/>
+                    </xsl:call-template>
+                    <span>
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'readability-theme-light'"/>
+                        </xsl:apply-templates>
+                    </span>
+                </label>
+                <label for="ptx-readability-theme-dark">
+                    <input type="radio" name="ptx-readability-theme" id="ptx-readability-theme-dark" value="dark"/>
+                    <xsl:call-template name="insert-symbol">
+                        <xsl:with-param name="name" select="'dark_mode'"/>
+                    </xsl:call-template>
+                    <span>
+                        <xsl:apply-templates select="." mode="type-name">
+                            <xsl:with-param name="string-id" select="'readability-theme-dark'"/>
+                        </xsl:apply-templates>
+                    </span>
+                </label>
+            </fieldset>
+        </xsl:if>
+        <div class="ptx-readability-options-group">
+            <button type="button" class="ptx-readability-reset-button button" id="ptx-readability-reset-button">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'restart_alt'"/>
+                </xsl:call-template>
+                <span class="name">
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'reset-all'"/>
+                    </xsl:apply-templates>
+                </span>
+            </button>
+        </div>
+    </dialog>
 </xsl:template>
 
 <xsl:template name="embed-button">
@@ -12728,9 +12806,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
          <xsl:if test="$b-has-embed-button">
              <xsl:call-template name="embed-button" />
         </xsl:if>
-        <xsl:if test="$b-theme-has-darkmode">
-            <xsl:call-template name="light-dark-button" />
-        </xsl:if>
+        <xsl:call-template name="readability-options" />
     </span>
 </xsl:template>
 
