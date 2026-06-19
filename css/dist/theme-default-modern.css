@@ -864,14 +864,14 @@ body.standalone-page .ptx-page {
   white-space: pre;
   color: var(--body-text-color);
   background: var(--code-inline-background);
-  border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
   border-radius: 0.2em;
   display: inline-block;
   overflow-x: auto;
   max-width: 100%;
   vertical-align: middle;
-  line-height: normal;
-  padding: 0.0625em 0.15em;
+  padding: 0 0.15em;
+  translate: 0 -1px;
+  line-height: calc(var(--content-line-height) - 0.15);
 }
 .prompt.unselectable {
   user-select: none;
@@ -1376,6 +1376,9 @@ article > .heading:first-child + :is(.para, .para.logical, .introduction) > .par
 }
 * {
   box-sizing: border-box;
+}
+.ptx-content {
+  --content-line-height: 1.35;
 }
 @layer spacing {
   :is(section, article, .knowl__content) > *:not(:first-child) {
@@ -2324,7 +2327,7 @@ pre[class*=language-] {
 code[class*=language-],
 pre[class*=language-] {
   color: black;
-  background: #fdfdfd;
+  background: var(--code-background);
   text-shadow: none;
   font-family: var(--font-monospace);
   text-align: left;
@@ -2338,8 +2341,10 @@ pre[class*=language-] {
 }
 code[class*=language-].code-inline,
 pre[class*=language-].code-inline {
-  line-height: normal;
-  padding: 0.0625em 0.15em;
+  padding: 0 0.15em;
+  translate: 0 -1px;
+  line-height: calc(var(--content-line-height) - 0.15);
+  border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
 }
 code[class*=language-]::selection,
 code[class*=language-] ::selection,
@@ -2538,6 +2543,9 @@ pre[class*=language-] .line-highlight {
   overflow-x: auto;
   overflow-y: hidden;
 }
+mjx-container {
+  line-height: 0;
+}
 .displaymath mjx-container[jax=CHTML][display=true] {
   margin: 0 0 0 0;
   padding-top: 0.3em;
@@ -2681,15 +2689,17 @@ article.theorem-like .emphasis {
 .latex-logo .A {
   font-size: 75%;
   text-transform: uppercase;
-  vertical-align: 0.5ex;
   margin-left: -0.48em;
   margin-right: -0.2em;
+  display: inline-block;
+  translate: 0 -0.5ex;
 }
 .latex-logo .E {
-  vertical-align: -0.5ex;
   text-transform: uppercase;
   margin-left: -0.18em;
   margin-right: -0.12em;
+  display: inline-block;
+  translate: 0 0.4ex;
 }
 @media print {
   .pretext .ptx-masthead,
@@ -3585,7 +3595,7 @@ section > h3.heading {
   --dropdown-hover-background: var(--tocitem-active-background);
   --dropdown-hover-text-color: var(--tocitem-active-text-color);
   --code-background: #fdfdfd;
-  --code-inline-background: #ededed;
+  --code-inline-background: #f4f4f4;
   --assemblage-like-body-background: var(--knowl-background);
   --assemblage-like-border-color: var(--knowl-border-color);
   --definition-like-body-background: var(--block-body-background);
@@ -3829,7 +3839,7 @@ section > h3.heading {
   --dropdown-hover-background: var(--tocitem-active-background);
   --dropdown-hover-text-color: var(--tocitem-active-text-color);
   --code-background: var(--background-color-gray-20);
-  --code-inline-background: var(--background-color-gray-20);
+  --code-inline-background: var(--background-color-gray-25);
   --assemblage-like-body-background: var(--block-body-background);
   --assemblage-like-border-color: var(--block-border-color);
   --definition-like-body-background: var(--block-body-background);

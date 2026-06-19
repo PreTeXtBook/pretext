@@ -5,6 +5,10 @@
   overflow-y: hidden;
 }
 
+mjx-container {
+  line-height: 0;  //match MJ3 behavior, which prevents extra vertical space around inline math
+}
+
 .displaymath mjx-container[jax="CHTML"][display="true"] {
   margin: 0 0 0 0;  // container is going to apply margin, so remove it from mjx-container
   padding-top: .3em; // backport MJ4 padding to MJ3
