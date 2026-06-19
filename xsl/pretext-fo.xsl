@@ -3701,6 +3701,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:otherwise>center</xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- the number or symbol of the display's first numbered or -->
+    <!-- tagged "mrow" (@pi:numbered="yes" or @tag); empty for   -->
+    <!-- inline math (no "mrow") and fully unnumbered displays.  -->
+    <xsl:variable name="numbered-row" select="mrow[@pi:numbered = 'yes' or @tag][1]"/>
+    <xsl:variable name="eqn-number">
+        <xsl:choose>
+            <xsl:when test="$numbered-row/@tag">
+                <xsl:apply-templates select="$numbered-row/@tag" mode="tag-symbol"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="$numbered-row" mode="number"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
         <xsl:when test="$svg and self::m">
             <!-- for math sitting on the baseline (e.g. a lone digit),  -->
@@ -3734,6 +3748,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- line, which would otherwise justify (left-pin) the SVG -->
         <xsl:when test="$svg">
             <fo:block text-align="{$display-align}" text-align-last="{$display-align}" space-before="0.5em" space-after="0.5em">
+                <!-- an over-wide numbered display is a centered body in a -->
+                <!-- "min-width" SVG, so its body sits one number-width in -->
+                <!-- from the left.  At the full measure (inherited        -->
+                <!-- start-indent zero) pull left by a conservative under- -->
+                <!-- estimate of that width, flushing the body toward the  -->
+                <!-- margin without crossing it                            -->
+                <xsl:if test="$b-full-measure and ($width-points &gt; $text-width-points) and contains($svg/@style, 'min-width:') and not(normalize-space($eqn-number) = '')">
+                    <xsl:attribute name="start-indent">
+                        <xsl:text>-</xsl:text>
+                        <xsl:value-of select="format-number((string-length(normalize-space($eqn-number)) + 2) * 0.5 * number(substring-before($font-size, 'pt')), '0.##')"/>
+                        <xsl:text>pt</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
                 <xsl:apply-templates select="." mode="link-id-attribute"/>
                 <!-- an "xref" targets a constituent "mrow", so each -->
                 <!-- contributes an invisible anchor                 -->
