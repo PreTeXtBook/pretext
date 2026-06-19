@@ -12512,6 +12512,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </label>
             <input type="range" id="ptx-readability-line-height" min="1.10" max="3" step="0.05" value="1.35"/>
         </div>
+        <div class="ptx-readability-options-group">
+            <label class="ptx-readability-slider-label" for="ptx-readability-font-size">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'format_size'"/>
+                </xsl:call-template>
+                <span>
+                    <xsl:apply-templates select="." mode="type-name">
+                        <xsl:with-param name="string-id" select="'readability-content-font-size'"/>
+                    </xsl:apply-templates>
+                </span>
+                <output id="ptx-readability-font-size-value" for="ptx-readability-font-size">100%</output>
+            </label>
+            <input type="range" id="ptx-readability-font-size" min="0.8" max="1.5" step="0.05" value="1"/>
+        </div>
         <xsl:if test="$b-theme-has-darkmode">
             <fieldset class="ptx-readability-options-group ptx-readability-options-group-theme">
                 <legend>
