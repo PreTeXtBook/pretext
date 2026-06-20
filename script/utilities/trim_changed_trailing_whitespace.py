@@ -23,6 +23,7 @@ def run_git(args):
         check=True,
         capture_output=True,
         text=True,
+        encoding="utf-8",
     )
     return result.stdout.strip()
 
