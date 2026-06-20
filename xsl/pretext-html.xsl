@@ -14197,7 +14197,7 @@ TODO:
             <!-- Will contain notice about how many results there are for screen readers to announce-->
             <div id="ptx-search-status" class="ptx-search-status" aria-live="polite" aria-atomic="true">
             </div>
-            <h2 class="ptx-search-results-heading">
+            <h2 class="heading ptx-search-results-heading">
                 <xsl:apply-templates select="." mode="type-name">
                     <xsl:with-param name="string-id" select="'search-results-heading'"/>
                 </xsl:apply-templates>
