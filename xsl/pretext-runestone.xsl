@@ -257,24 +257,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="string-id" select="'profile'"/>
             </xsl:apply-templates>
         </xsl:variable>
-        <button class="runestone-profile dropdown button" title="{$profile-localization}">
+        <!-- note: as of 6/20/2026, anchor positioning is not widely supported -->
+        <!-- when it becomes supported, would make sense to use popover API    -->
+        <button type="button" id="ptx-user-dropdown-button" class="runestone-profile button ptx-dropdown-button" aria-haspopup="menu" aria-controls="ptx-user-dropdown-content" aria-expanded="false" title="{$profile-localization}">
             <xsl:call-template name="insert-symbol">
                 <xsl:with-param name="name" select="'person'"/>
             </xsl:call-template>
             <span class="name">
                 <xsl:value-of select="$profile-localization"/>
             </span>
-            <div id="ptx-user-dropdown_rs-content" class="dropdown-content">
-            </div>
-            <!-- clone template, modify href and inner text, and append to ptx-user-dropdown_rs-content -->
-            <template id="ptx-user-dropdown-content_item-template">
-              <a href="url here">title here</a>
-            </template>
-            <!-- clone and append to dropdown content area and add a separator within the menu -->
-            <template id="ptx-user-dropdown-content_separator-template">
-              <hr/>
-            </template>
         </button>
+        <div id="ptx-user-dropdown-content" class="ptx-dropdown-content" aria-labelledby="ptx-user-dropdown-button" role="menu">
+            <ul id="ptx-user-dropdown_rs-content" role="group" aria-label="Runestone"></ul>
+        </div>
+        <!-- clone template, modify href and inner text, and append to ptx-user-dropdown_rs-content -->
+        <template id="ptx-user-dropdown-content_item-template">
+            <li role="presentation" class="ptx-dropdown-item">
+                <a href="url here" role="menuitem">title here</a>
+            </li>
+        </template>
+        <!-- clone and append to dropdown content area and add a separator within the menu -->
+        <template id="ptx-user-dropdown-content_separator-template">
+            <li role="presentation" class="ptx-dropdown-separator"></li>
+        </template>
     </xsl:if>
 </xsl:template>
 
