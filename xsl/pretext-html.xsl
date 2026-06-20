@@ -11702,11 +11702,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </div>
                     <div id="ptx-content-footer" class="ptx-content-footer">
                         <xsl:apply-templates select="." mode="previous-button"/>
-                        <a class="top-button button" href="#" title="Top">
+                        <xsl:variable name="top-localization">
+                            <xsl:apply-templates select="." mode="type-name">
+                                <xsl:with-param name="string-id" select="'top'"/>
+                            </xsl:apply-templates>
+                        </xsl:variable>
+                        <a class="top-button button" href="#" title="{$top-localization}">
                             <xsl:call-template name="insert-symbol">
                                 <xsl:with-param name="name" select="'expand_less'"/>
                             </xsl:call-template>
-                            <span class="name">Top</span>
+                            <span class="name">
+                                <xsl:value-of select="$top-localization"/>
+                            </span>
                         </a>
                         <xsl:apply-templates select="." mode="next-button"/>
                     </div>
@@ -12461,11 +12468,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="calculator-toggle">
-    <button type="button" id="ptx-calculator-toggle" class="ptx-calculator-toggle button" title="Show calculator">
+    <xsl:variable name="calculator-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'calculator'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <button type="button" id="ptx-calculator-toggle" class="ptx-calculator-toggle button" title="{$calculator-localization}">
         <xsl:call-template name="insert-symbol">
             <xsl:with-param name="name" select="'calculate'"/>
         </xsl:call-template>
-        <span class="name">Calc</span>
+        <span class="name">
+            <xsl:value-of select="$calculator-localization"/>
+        </span>
     </button>
 </xsl:template>
 
@@ -12601,28 +12615,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="embed-button">
-    <button id="ptx-embed-button" class="ptx-embed-button button" title="Embed this page">
+    <xsl:variable name="embed-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'embed'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="embed-page-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'embed-this-page'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="close-embed-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'close'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="copy-localization">
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'copy'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <button id="ptx-embed-button" class="ptx-embed-button button" title="{$embed-page-localization}">
         <xsl:call-template name="insert-symbol">
             <xsl:with-param name="name" select="'code'"/>
         </xsl:call-template>
-        <span class="name">Embed</span>
+        <span class="name">
+            <xsl:value-of select="$embed-localization"/>
+        </span>
     </button>
     <dialog class="ptx-dialog ptx-embed-popup" id="ptx-embed-popup">
         <div class="ptx-embed-popup-controls">
             <p>Copy the code below to embed this page in your own website or LMS page.</p>
-            <button class="ptx-embed-close-button button" id="ptx-embed-close-button" title="Close embed popup">
-                <span class="material-symbols-outlined">close</span>
+            <button class="ptx-embed-close-button button" id="ptx-embed-close-button" title="{$close-embed-localization}">
+                <xsl:call-template name="insert-symbol">
+                    <xsl:with-param name="name" select="'close'"/>
+                </xsl:call-template>
             </button>
         </div>
         <div class="ptx-embed-code-container">
             <textarea class="ptx-embed-code-textbox" id="ptx-embed-code-textbox" readonly="true" aria-label="textbox">
                 <iframe src="https://example.com/embed" width="100%" height="1000"></iframe>
             </textarea>
-            <button autofocus="autofocus" class="ptx-embed-copy-button button" id="ptx-embed-copy-button" title="Copy embed code">
+            <button autofocus="autofocus" class="ptx-embed-copy-button button" id="ptx-embed-copy-button" title="{$copy-localization}">
                 <xsl:call-template name="insert-symbol">
                     <xsl:with-param name="name" select="'content_copy'"/>
                 </xsl:call-template>
-                <span class="name">Copy</span>
+                <span class="name">
+                    <xsl:value-of select="$copy-localization"/>
+                </span>
             </button>
         </div>
     </dialog>
@@ -14121,13 +14161,20 @@ TODO:
 <!-- Div for native search -->
 <xsl:template name="native-search-box">
     <xsl:if test="$has-native-search">
+        <xsl:variable name="search-book-localization">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'search-book'"/>
+            </xsl:apply-templates>
+        </xsl:variable>
         <div class="ptx-search-box">
             <div class="ptx-search-widget">
-                <button id="ptx-search-button" type="button" class="ptx-search-button button" title="Search book">
+                <button id="ptx-search-button" type="button" class="ptx-search-button button" title="{$search-book-localization}">
                     <xsl:call-template name="insert-symbol">
                         <xsl:with-param name="name" select="'search'"/>
                     </xsl:call-template>
-                    <span class="name">Search Book</span>
+                    <span class="name">
+                        <xsl:value-of select="$search-book-localization"/>
+                    </span>
                 </button>
             </div>
             <xsl:call-template name="native-search-results"/>
@@ -14141,7 +14188,11 @@ TODO:
         <dialog id="ptx-search-dialog" class="ptx-dialog ptx-search-dialog">
             <div class="ptx-search-dialog-controls">
                 <input aria-label="Search term" id="ptx-search-terms" class="ptx-search-terms" type="text" name="terms" placeholder="Search terms"/>
-                <button aria-label="Close search" id="ptx-search-close" class="ptx-search-close"><span class="material-symbols-outlined">close</span></button>
+                <button aria-label="Close search" id="ptx-search-close" class="ptx-search-close">
+                    <xsl:call-template name="insert-symbol">
+                        <xsl:with-param name="name" select="'close'"/>
+                    </xsl:call-template>
+                </button>
             </div>
             <!-- Will contain notice about how many results there are for screen readers to announce-->
             <div id="ptx-search-status" class="ptx-search-status" aria-live="polite" aria-atomic="true">
