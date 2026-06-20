@@ -312,7 +312,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>From</localization>
     <localization string-id='subject'>Subject</localization>
     <localization string-id='date'>Date</localization>
-    <localization string-id='copy'>cc</localization>
+    <localization string-id='cc'>cc</localization>
     <localization string-id='enclosure'>encl</localization>
     <!-- Various -->
     <localization string-id='todo'>To Do</localization>

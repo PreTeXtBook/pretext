@@ -244,7 +244,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>De</localization>
     <localization string-id='subject'>Asunto</localization>
     <localization string-id='date'>Fecha</localization>
-    <localization string-id='copy'>Copia a</localization>
+    <localization string-id='cc'>Copia a</localization>
     <localization string-id='enclosure'>Adjunto</localization>
     <!-- Various -->
     <localization string-id='todo'>Para hacer</localization>

@@ -275,7 +275,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>来自</localization>
     <localization string-id='subject'>主题</localization>
     <localization string-id='date'>日期</localization>
-    <localization string-id='copy'>抄送</localization>
+    <localization string-id='cc'>抄送</localization>
     <localization string-id='enclosure'>附件</localization>
     <!-- Various -->
     <localization string-id='todo'>待办</localization>

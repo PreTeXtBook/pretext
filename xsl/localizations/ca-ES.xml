@@ -242,7 +242,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>De</localization>
     <localization string-id='subject'>Assumpte</localization>
     <localization string-id='date'>Data</localization>
-    <localization string-id='copy'>Còpia a</localization>
+    <localization string-id='cc'>Còpia a</localization>
     <localization string-id='enclosure'>Adjunt</localization>
     <!-- Various -->
     <localization string-id='todo'>A fer</localization>
