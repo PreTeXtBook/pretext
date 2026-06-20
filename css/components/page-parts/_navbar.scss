@@ -262,6 +262,10 @@ $center-content: true !default;
       bottom: $nav-height;
     }
 
+    .ptx-embed-button {
+      display: none;
+    }
+
     :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button, .ptx-embed-button, .ptx-readability-options-button) .name {
       display: none;
     }
