@@ -274,40 +274,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <template id="ptx-user-dropdown-content_separator-template">
               <hr/>
             </template>
-            <div class="dropdown-content" data-deprecated="true">
-                <xsl:text>&#xa;</xsl:text>
-                <xsl:text>{% if settings.academy_mode: %}&#xa;</xsl:text>
-                <a href="/ns/course/index">Course Home</a>
-                <a href="/runestone/assignments/chooseAssignment">Assignments</a>
-                <a href="/runestone/assignments/practice">Practice</a>
-                <hr/>
-                <!-- NB: next two entries were once templated with "appname" and           -->
-                <!-- the requisite spaces were percent-encoded by XSLT since it is         -->
-                <!-- known to be forming a  a/@href.                                       -->
-                <!-- Short-term fix: hard-code "runestone" as the appname, which should    -->
-                <!-- migrate to "assignment" when peer-instruction code moves.             -->
-                <!-- Long-term might suggest some XSL variables for the names of the apps. -->
-                <!-- if reader is not an instructor the next link will be removed by javascript -->
-                <a id="inst_peer_link" href="/runestone/peer/instructor.html">Peer Instruction (Instructor)</a>
-                <a href="/runestone/peer/student.html">Peer Instruction (Student)</a>
-                <hr/>
-                <a href="/runestone/default/courses">Change Course</a>
-                <hr/>
-                <a id="ip_dropdown_link" href="/admin/instructor/menu">Instructor Dashboard</a>
-                <hr/>
-                <xsl:text>&#xa;</xsl:text>
-                <xsl:text>{% endif %}&#xa;</xsl:text>
-                <a href="/runestone/dashboard/studentreport">Progress Page</a>
-                <hr/>
-                <xsl:text>&#xa;{% if is_logged_in %}&#xa;</xsl:text>
-                <a href="/runestone/default/user/profile">Edit Profile</a>
-                <a href="/runestone/default/user/change_password">Change Password</a>
-                <a href="/runestone/default/user/logout">Log Out</a>
-                <xsl:text>&#xa;{% else %}&#xa;</xsl:text>
-                <a href="/runestone/default/user/register">Register</a>
-                <a href="/runestone/default/user/login">Login</a>
-                <xsl:text>&#xa;{% endif %}&#xa;</xsl:text>
-            </div>
         </button>
     </xsl:if>
 </xsl:template>
