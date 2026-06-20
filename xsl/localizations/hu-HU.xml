@@ -199,6 +199,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='uncategorized'>Uncategorized</localization> -->
     <!-- <localization string-id='query'>Query</localization> -->
     <localization string-id='program-activecode'>ActiveCode</localization>
+    <!-- <localization string-id='scratch-activecode'>Scratch ActiveCode</localization> -->
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
@@ -225,11 +226,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='previous-short'>El.</localization>
     <localization string-id='up-short'>Fel</localization>
     <localization string-id='next-short'>Köv.</localization>
+    <!-- <localization string-id='top'>Top</localization> -->
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'>Magyarázatok</localization>
     <localization string-id='feedback'>Visszacsatolás</localization>
     <localization string-id='authored'>Authored in</localization>
     <!-- Search Results display/dialog -->
+    <!-- <localization string-id='search-book'>Search Book</localization> -->
     <!-- <localization string-id='search-results-heading'>Search Results</localization> -->
     <!-- <localization string-id='no-search-results'>No results</localization> -->
     <!-- Parts of memos and letters -->
@@ -253,11 +256,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='standalone'>Standalone</localization> -->
     <!-- Static representation link to the embeddable iframe version ("embed") -->
     <!-- <localization string-id='embed'>Embed</localization> -->
+    <!-- <localization string-id='embed-this-page'>Embed this page</localization> -->
+    <!-- <localization string-id='copy'>Copy</localization> -->
+    <!-- <localization string-id='profile'>Profile</localization> -->
     <!-- Following is in ENGLISH and should be translated.  Due to its -->
     <!-- ubiquitous nature we have not left it undefined.  See the     -->
     <!-- "en-US" file for a more complete explanation of its use.      -->
     <!-- Please remove this entire comment when translated.  Thanks.   -->
     <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
+    <!-- <localization string-id='calculator'>Calculator</localization> -->
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->

@@ -228,6 +228,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='query'>Query</localization> -->    <!-- "ActiveCode" and "CodeLens" are Runestone-constructs -->
     <!-- and so really *should not* be translated.            -->
     <localization string-id='program-activecode'>ActiveCode</localization>
+    <!-- <localization string-id='scratch-activecode'>Scratch ActiveCode</localization> -->
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
@@ -254,6 +255,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='previous-short'>向前</localization>
     <localization string-id='up-short'>向上</localization>
     <localization string-id='next-short'>向后</localization>
+    <!-- <localization string-id='top'>Top</localization> -->
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'>注释</localization>
     <localization string-id='feedback'>反馈</localization>
@@ -267,6 +269,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- When a reader uses a term that produces no results (perhaps they  -->
     <!-- misspell the search term) then they get a message to that effect. -->
     <!-- Capitalize "Search Results" - used as a heading, no punctuation   -->
+    <!-- <localization string-id='search-book'>Search Book</localization> -->
     <localization string-id='search-results-heading'>搜索结果</localization>
     <!-- Short phrase, no punctuation -->
     <localization string-id='no-search-results'>没有结果</localization>
@@ -290,6 +293,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='standalone'>Standalone</localization> -->
     <!-- Static representation link to the embeddable iframe version ("embed") -->
     <!-- <localization string-id='embed'>Embed</localization> -->
+    <!-- <localization string-id='embed-this-page'>Embed this page</localization> -->
+    <!-- <localization string-id='copy'>Copy</localization> -->
+    <!-- <localization string-id='profile'>Profile</localization> -->
+    <!-- <localization string-id='calculator'>Calculator</localization> -->
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->
