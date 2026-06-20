@@ -237,7 +237,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>Kitől:</localization>
     <localization string-id='subject'>Tárgy</localization>
     <localization string-id='date'>Dátum</localization>
-    <localization string-id='copy'>cc</localization>
+    <localization string-id='cc'>cc</localization>
     <localization string-id='enclosure'>beleértve</localization>
     <!-- Various -->
     <localization string-id='todo'>Tennivaló</localization>

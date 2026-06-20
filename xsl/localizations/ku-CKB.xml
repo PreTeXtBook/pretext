@@ -267,7 +267,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>لە</localization>
     <localization string-id='subject'>بابەت</localization>
     <localization string-id='date'>بەروار</localization>
-    <localization string-id='copy'>cc</localization>
+    <localization string-id='cc'>cc</localization>
     <localization string-id='enclosure'>پیچانەوە</localization>
     <!-- Various -->
     <localization string-id='todo'>بۆ کردنی</localization>

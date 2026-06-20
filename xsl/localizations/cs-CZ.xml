@@ -237,7 +237,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>Od</localization>
     <localization string-id='subject'>Předmět</localization>
     <localization string-id='date'>Datum</localization>
-    <localization string-id='copy'>Kopie</localization>
+    <localization string-id='cc'>Kopie</localization>
     <localization string-id='enclosure'>Příloha</localization>
     <!-- Various -->
     <localization string-id='todo'>To Do</localization>

@@ -249,7 +249,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>Lähettäjä</localization>
     <localization string-id='subject'>Aihe</localization>
     <localization string-id='date'>Pvm</localization>
-    <localization string-id='copy'>cc</localization>
+    <localization string-id='cc'>cc</localization>
     <localization string-id='enclosure'>liite</localization>
     <!-- Various -->
     <localization string-id='todo'>To Do</localization>

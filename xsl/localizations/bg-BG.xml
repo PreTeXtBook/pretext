@@ -259,7 +259,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>От</localization>
     <localization string-id='subject'>Тема</localization>
     <localization string-id='date'>Дата</localization>
-    <localization string-id='copy'>Също до</localization>
+    <localization string-id='cc'>Също до</localization>
     <localization string-id='enclosure'>Прикачено</localization>
     <!-- Various -->
 <!--

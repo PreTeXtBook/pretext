@@ -233,7 +233,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>Da</localization>
     <localization string-id='subject'>Oggetto</localization>
     <localization string-id='date'>Data</localization>
-    <localization string-id='copy'>e p.c.</localization>
+    <localization string-id='cc'>e p.c.</localization>
     <localization string-id='enclosure'>allegati</localization>
     <!-- Various -->
     <localization string-id='todo'>Da fare</localization>

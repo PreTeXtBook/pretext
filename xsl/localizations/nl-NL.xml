@@ -281,7 +281,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>Van</localization>
     <localization string-id='subject'>Onderwerp</localization>
     <localization string-id='date'>Datum</localization>
-    <localization string-id='copy'>kopie</localization>
+    <localization string-id='cc'>kopie</localization>
     <localization string-id='enclosure'>bijgevoegd</localization>
     <!-- Various -->
     <localization string-id='todo'>Takenlijst</localization>
