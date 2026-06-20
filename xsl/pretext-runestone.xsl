@@ -252,11 +252,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="runestone-bust-menu">
     <!-- "Bust w/ Silhoutte" is U+1F464, used as menu icon -->
     <xsl:if test="$b-host-runestone">
-        <button class="runestone-profile dropdown button" title="Profile">
+        <xsl:variable name="profile-localization">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'profile'"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <button class="runestone-profile dropdown button" title="{$profile-localization}">
             <xsl:call-template name="insert-symbol">
                 <xsl:with-param name="name" select="'person'"/>
             </xsl:call-template>
-            <span class="name"><xsl:text>Profile</xsl:text></span>
+            <span class="name">
+                <xsl:value-of select="$profile-localization"/>
+            </span>
             <div id="ptx-user-dropdown_rs-content" class="dropdown-content">
             </div>
             <!-- clone template, modify href and inner text, and append to ptx-user-dropdown_rs-content -->
@@ -311,11 +318,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Unicode Character 'PENCIL' (U+270F)                               -->
 <xsl:template name="runestone-scratch-activecode">
     <xsl:if test="$b-has-scratch-activecode">
-        <button onclick="runestoneComponents.popupScratchAC()" class="activecode-toggle button" title="Open Scratch ActiveCode">
+        <xsl:variable name="scratch-localization">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'scratch-activecode'"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <button onclick="runestoneComponents.popupScratchAC()" class="activecode-toggle button" title="{$scratch-localization}">
             <xsl:call-template name="insert-symbol">
                 <xsl:with-param name="name" select="'edit'"/>
             </xsl:call-template>
-            <span class="name">Scratch ActiveCode</span>
+            <span class="name">
+                <xsl:value-of select="$scratch-localization"/>
+            </span>
         </button>
     </xsl:if>
 </xsl:template>
