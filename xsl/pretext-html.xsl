@@ -12460,7 +12460,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="calculator-toggle">
-    <button id="calculator-toggle" class="calculator-toggle button" title="Show calculator" aria-expanded="false" aria-controls="calculator-container">
+    <button type="button" id="ptx-calculator-toggle" class="ptx-calculator-toggle button" title="Show calculator">
         <xsl:call-template name="insert-symbol">
             <xsl:with-param name="name" select="'calculate'"/>
         </xsl:call-template>
@@ -12478,14 +12478,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="embed-button">
-    <button id="ptx-embed-button" class="ptx-embed-button button" title="Embed this page" commandfor="ptx-embed-popup" command="show-modal">
+    <button id="ptx-embed-button" class="ptx-embed-button button" title="Embed this page">
         <xsl:call-template name="insert-symbol">
             <xsl:with-param name="name" select="'code'"/>
         </xsl:call-template>
         <span class="name">Embed</span>
-
     </button>
-    <dialog class="ptx-dialog ptx-embed-popup" id="ptx-embed-popup" closedby="closerequest">
+    <dialog class="ptx-dialog ptx-embed-popup" id="ptx-embed-popup">
         <div class="ptx-embed-popup-controls">
             <p>Copy the code below to embed this page in your own website or LMS page.</p>
             <button class="ptx-embed-close-button button" id="ptx-embed-close-button" title="Close embed popup">
@@ -12813,45 +12812,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="calculator">
     <xsl:if test="contains($html-calculator,'geogebra')">
-        <div id="calculator-container" class="calculator-container" style="display: none; z-index:100;">
-            <div id="geogebra-calculator"></div>
-        </div>
-        <script>
-            <xsl:text>&#xa;</xsl:text>
-            <!-- Here is where we could initialize some things to customize the display.                    -->
-            <!-- But the customization should be different depending on classic, graphing, geometry, or 3d. -->
-            <!-- For instance geometry probably does not benefit from showing the grid.                     -->
-            <!-- If this is not in use, no need to set "appletOnLoad" further below.                        -->
-            <!-- var onLoad = function(applet) {
-                applet.setAxisLabels(1,'x','y','z');
-                applet.setGridVisible(1,true);
-                applet.showFullscreenButton(true);
-            }; -->
-            <xsl:text>var ggbApp = new GGBApplet({"appName": "</xsl:text>
-            <xsl:value-of select="substring-after($html-calculator,'-')"/>
-            <xsl:text>",&#xa;</xsl:text>
-            <!-- width and height are required parameters                   -->
-            <!-- All the rest is customizing some things away from defaults -->
-            <!-- (or maybe in some cases explicitly using the defaults)     -->
-            <!-- The last parameters have to do with scaling. This combination allows the 330x600 applet -->
-            <!-- to scale up or down to the width of the contining div with class calculator-container.  -->
-            <!-- The applet's height will scale proportionately.                                         -->
-            <xsl:text>    "width": 330,&#xa;</xsl:text>
-            <xsl:text>    "height": 600,&#xa;</xsl:text>
-            <xsl:text>    "showToolBar": true,&#xa;</xsl:text>
-            <xsl:text>    "showAlgebraInput": true,&#xa;</xsl:text>
-            <xsl:text>    "perspective": "G/A",&#xa;</xsl:text>
-            <xsl:text>    "algebraInputPosition": "bottom",&#xa;</xsl:text>
-            <!--          "appletOnLoad": onLoad, -->
-            <xsl:text>    "scaleContainerClass": "calculator-container",&#xa;</xsl:text>
-            <xsl:text>    "allowUpscale": true,&#xa;</xsl:text>
-            <xsl:text>    "autoHeight": true,&#xa;</xsl:text>
-            <xsl:text>    "disableAutoScale": false},&#xa;</xsl:text>
-            <xsl:text>true);&#xa;</xsl:text>
-            <!--   The calculator is created by                    -->
-            <!--   ggbApp.inject('geogebra-calculator');           -->
-            <!--   which is inserted by code in pretext_add_on.js  -->
-        </script>
+        <dialog id="ptx-calculator-container" class="ptx-dialog ptx-calculator-container">
+            <div id="ptx-geogebra-calculator" class="ptx-geogebra-calculator"></div>
+            <script id="ptx-geogebra-calculator-params">
+                <!-- params for Geogebra that can be set from PTX -->
+                <xsl:text>&#xa;</xsl:text>
+                <xsl:text>let ggbParams = {&#xa;</xsl:text>
+                <xsl:text>    "appName": "</xsl:text>
+                <xsl:value-of select="substring-after($html-calculator,'-')"/>
+                <xsl:text>"&#xa;</xsl:text>
+                <xsl:text>};&#xa;</xsl:text>
+            </script>
+        </dialog>
     </xsl:if>
 </xsl:template>
 
@@ -14030,7 +14002,7 @@ TODO:
     <xsl:if test="$has-native-search">
         <div class="ptx-search-box">
             <div class="ptx-search-widget">
-                <button id="ptx-search-button" type="button" class="ptx-search-button button" title="Search book" commandfor="ptx-search-dialog" command="show-modal" >
+                <button id="ptx-search-button" type="button" class="ptx-search-button button" title="Search book">
                     <xsl:call-template name="insert-symbol">
                         <xsl:with-param name="name" select="'search'"/>
                     </xsl:call-template>
@@ -14045,10 +14017,10 @@ TODO:
 <!-- Div for native search results -->
 <xsl:template name="native-search-results">
     <xsl:if test="$has-native-search">
-        <dialog id="ptx-search-dialog" class="ptx-dialog ptx-search-dialog" closedby="closerequest">
+        <dialog id="ptx-search-dialog" class="ptx-dialog ptx-search-dialog">
             <div class="ptx-search-dialog-controls">
                 <input aria-label="Search term" id="ptx-search-terms" class="ptx-search-terms" type="text" name="terms" placeholder="Search terms"/>
-                <button aria-label="Close search" id="ptx-search-close" class="ptx-search-close" commandfor="ptx-search-dialog"  command="close"><span class="material-symbols-outlined">close</span></button>
+                <button aria-label="Close search" id="ptx-search-close" class="ptx-search-close"><span class="material-symbols-outlined">close</span></button>
             </div>
             <!-- Will contain notice about how many results there are for screen readers to announce-->
             <div id="ptx-search-status" class="ptx-search-status" aria-live="polite" aria-atomic="true">

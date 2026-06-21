@@ -96,10 +96,10 @@
     background-color: #fafafa;
     color: #000;
   }
-  .ptx-navbar .calculator-toggle {
+  .ptx-navbar .ptx-calculator-toggle {
     background-color: #336;
   }
-  .ptx-navbar .calculator-toggle:hover {
+  .ptx-navbar .ptx-calculator-toggle:hover {
     background-color: #fce;
   }
 

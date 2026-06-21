@@ -10163,7 +10163,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:text>hide-hint-checkbox hide-answer-checkbox hide-solution-checkbox </xsl:text>
         <xsl:text>print-first-page-header-checkbox print-running-header-checkbox </xsl:text>
         <xsl:text>print-first-page-footer-checkbox print-running-footer-checkbox </xsl:text>
-        <xsl:text>calculator-toggle calculator-container geogebra-calculator </xsl:text>
+        <xsl:text>ptx-calculator-toggle ptx-calculator-container ptx-geogebra-calculator </xsl:text>
         <xsl:text>ptx-user-dropdown_rs-content ptx-user-dropdown-content_item-template ptx-user-dropdown-content_separator-template </xsl:text>
         <xsl:text>ptx-embed-button ptx-embed-popup ptx-embed-close-button ptx-embed-code-textbox ptx-embed-copy-button </xsl:text>
         <!-- Runestone Services ids, banned always: these components can appear -->

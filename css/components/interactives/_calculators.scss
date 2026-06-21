@@ -1,19 +1,30 @@
 // GeoGebra calculator
+@use 'components/helpers/dialogs' as dialogs;
 
 $navbar-breakpoint: 856px !default;
 
-.calculator-container {
+.ptx-calculator-container {
   position: fixed;
   z-index: 100;
-  bottom: 5px;
-  right: 5px;
-  width: 253px;
-  height: 460px;
+  top: max(10px, calc(100vh - 650px));
+  left: max(10px, calc(100vw - 350px));
+  padding: 0;
+  width: 330px;
+  height: 600px;
+  resize: both;
+  overflow: hidden;
+  flex-direction: column;
+  @include dialogs.ptx-dialog-modal;
 }
 
-@media screen and (max-width: $navbar-breakpoint) {
-  .calculator-container {
-    //assumes navbar moves to bottom of screen
-    bottom: 50px !important;
+.ptx-calculator-container[open] {
+  display: flex;
+}
+
+.ptx-geogebra-calculator {
+  flex: 1;
+
+  .button {
+    all: unset;  //get rid of ptx ".button" styles that interfere with geogebra's buttons
   }
 }

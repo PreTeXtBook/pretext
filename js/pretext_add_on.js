@@ -23,32 +23,6 @@ window.i18next = window.i18next || {
     }
 };
 
-/* scrollbar width from https://stackoverflow.com/questions/13382516/getting-scroll-bar-width-using-javascript */
-function getScrollbarWidth() {
-    var outer = document.createElement("div");
-    outer.style.visibility = "hidden";
-    outer.style.width = "100px";
-    outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
-
-    document.body.appendChild(outer);
-
-    var widthNoScroll = outer.offsetWidth;
-    // force scrollbars
-    outer.style.overflow = "scroll";
-
-    // add innerdiv
-    var inner = document.createElement("div");
-    inner.style.width = "100%";
-    outer.appendChild(inner);
-
-    var widthWithScroll = inner.offsetWidth;
-
-    // remove divs
-    outer.parentNode.removeChild(outer);
-
-    return widthNoScroll - widthWithScroll;
-}
-
 /*
   copy permalink address to clipboard
   requires browser support, otherwise does nothing
@@ -312,61 +286,69 @@ function process_workspace() {
     console.log("processing workspace");
     MathJax.typesetPromise();
 }
-/* for the GeoGebra calculator */
 
-function pretext_geogebra_calculator_onload() {
-    $("#calculator-toggle").focus();
-    var inputfield = $("input.gwt-SuggestBox.TextField")[0];
-    console.log("inputfield", inputfield);
-    inputfield.focus();
-}
 window.addEventListener("load",function(event) {
+    const calcDialogElement = document.getElementById('ptx-calculator-container');
+    const calcButtonElement = document.getElementById('ptx-calculator-toggle');
+    if (!calcDialogElement || !calcButtonElement) {
+        return;
+    }
+    const calcDialog = new PTXDialog(calcDialogElement, calcButtonElement, {"kind": "non-modal"});
 
-   /* scrolling on GG plot should scale, not move browser body */
-//     var scrollWidth = 15;  //currently correct for FF, Ch, and Saf, but would be better to calculate
-     var scrollWidth = getScrollbarWidth();
-     if ( (navigator.userAgent.match(/Mozilla/i) != null) ) {
-        // scrollWidth += 0.5
-     }
-     console.log("scrollWidth", scrollWidth);
-     calcoffsetR = 5;
-     calcoffsetB = 5;
-     $('body').on('mouseover','#geogebra-calculator canvas', function(){
-         $('body').css('overflow', 'hidden');
-         $('html').css('margin-right', '15px');
-         $('#calculator-container').css('right', (calcoffsetR+scrollWidth).toString() + 'px');
-         $('#calculator-container').css('bottom', (calcoffsetB+scrollWidth).toString() + 'px');
-     });
+    const focusCalcInput = function() {
+        const inputField = document.querySelector("#ptx-geogebra-calculator input.gwt-SuggestBox.TextField");
+        if (inputField) {
+            inputField.focus();
+        }
+    }
+    function initGeogebra() {
+        const geoGebraDiv = document.getElementById('ptx-geogebra-calculator');
+        // Some paramaters are fixed here, others are set by publisher options in the HTML source
+        // and stored in ggbParams. Merge those here.
+        const fixedParams = {
+            showToolBar: true,
+            showAlgebraInput: true,
+            perspective: "G/A",
+            algebraInputPosition: "bottom",
+            appletOnLoad: focusCalcInput,
+            scaleContainerClass: "ptx-calculator-container",
+            allowUpscale: false,
+            autoHeight: false,
+        }
+        const generatedParams = (typeof ggbParams === "object" && ggbParams) ? ggbParams : {};
+        const params = {...generatedParams, ...fixedParams};
+        let applet = new GGBApplet(params, true);
+        applet.inject('ptx-geogebra-calculator');
+        return applet;
+    }
 
-     $('body').on('mouseout','#geogebra-calculator canvas', function(){
-         $('body').css('overflow', 'scroll')
-         $('html').css('margin-right', '0');
-         $('#calculator-container').css('right', calcoffsetR.toString() + 'px');
-         $('#calculator-container').css('bottom', calcoffsetB.toString() + 'px');
-     });
+    let applet;
+    calcButtonElement.addEventListener('click', function() {
+        if (calcDialog.dialog.open) {
+            let initialized = calcDialogElement.dataset.initialized || false;
+            if (!initialized) {
+                applet = initGeogebra();
+                calcDialogElement.dataset.initialized = true;
+            } else {
+                focusCalcInput();
+            }
+        }
+    });
 
-     $('body').on('click', '#calculator-toggle', function() {
-         if ($('#calculator-container').css('display') == 'none') {
-             $('#calculator-container').css('display', 'block');
-             $('#calculator-toggle').addClass('open');
-             $('#calculator-toggle').attr('title', 'Hide calculator');
-             $('#calculator-toggle').attr('aria-expanded', 'true');
-             create_calc_script = document.getElementById("create_ggb_calc");
-             if (!create_calc_script) {
-                 var ggbscript = document.createElement("script");
-                 ggbscript.id = "create_ggb_calc";
-                 ggbscript.innerHTML = "ggbApp.inject('geogebra-calculator')";
-                 document.body.appendChild(ggbscript);
-             } else {
-                 pretext_geogebra_calculator_onload();
-             }
-         } else {
-             $('#calculator-container').css('display', 'none');
-             $('#calculator-toggle').removeClass('open');
-             $('#calculator-toggle').attr('title', 'Show calculator');
-             $('#calculator-toggle').attr('aria-expanded', 'false');
-         }
-     });
+    //add resize observer for dialog
+    const resizeObserver = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            if (entry.target === calcDialogElement && applet && applet.getAppletObject()) {
+                const width = entry.contentRect.width;
+                const height = entry.contentRect.height;
+                const geoGebraDiv = document.getElementById('ptx-geogebra-calculator');
+                const topBarHeight = calcDialogElement.querySelector('.ptx-dialog-topbar').clientHeight || 0;
+                applet.getAppletObject().setSize(width, height - topBarHeight);
+                applet.getAppletObject().recalculateEnvironments();
+            }
+        }
+    });
+    resizeObserver.observe(calcDialogElement);
 });
 
 
@@ -1294,19 +1276,44 @@ class PTXDialog {
         this.kind = options.kind || "modal";
         this.isModal = this.kind === "modal" || this.kind === "light-close";
 
-        this.openButton = openButton;
-        if (this.openButton && !PTXDialog.hasNativeCommandInvokers()) {
-            this.openButton.addEventListener("click", () => this.open());
+        // verify we have a dialog and set some basic attributes on the dialog
+        if (!this.dialog) {
+            console.log("PTXDialog: No dialog element provided.");
+            return;
+        }
+        this.dialog.setAttribute("aria-modal", this.isModal ? "true" : "false");
+        if (PTXDialog.hasNativeCommandInvokers()) {
+            if (this.isModal) {
+                this.dialog.closedBy = (this.kind !== "light-close") ? "closerequest" : "any";
+            } else {
+                // non-modal dialogs don't have a native closedBy behavior
+                // but make explicit
+                this.dialog.closedBy = "none";
+            }
+        }
+
+        // set up the control element if provided
+        if (this.controlElement ) {
+            this.controlElement.setAttribute('aria-expanded', "false");
+            this.controlElement.setAttribute('aria-controls', this.dialog.id);
+            if(PTXDialog.hasNativeCommandInvokers()) {
+                this.controlElement.commandFor = this.dialog.id;
+            }
+            if (this.isModal) {
+                this.controlElement.addEventListener("click", () => this.open());
+            } else {
+                this.controlElement.addEventListener("click", () => this.toggle());
+            }
         }
 
         this.closeButton = options.closeButton;
-        // add a close button unless the dialog already has one as identified in options
+        // add a close button to modals unless the dialog already has one as identified in options
         if (!this.closeButton && this.isModal) {
             const topBar = document.createElement("div");
             topBar.classList.add("ptx-dialog-topbar");
             this.dialog.prepend(topBar);
             this.closeButton = document.createElement("button");
-            this.closeButton.classList.add("ptx-dialog-close-button");
+            this.closeButton.classList.add("button", "ptx-dialog-close-button");
             this.closeButton.setAttribute("aria-label", "Close dialog");
             this.closeButton.innerHTML = `<span class="material-symbols-outlined">close</span>`;
             topBar.appendChild(this.closeButton);
@@ -1314,13 +1321,23 @@ class PTXDialog {
         if (this.closeButton) {
             this.closeButton.addEventListener("click", () => this.close());
         }
+        if (!this.isModal) {
+            // For non-modal dialogs, make a top bar as a grab area for dragging
+            const topBar = document.createElement("div");
+            topBar.classList.add("ptx-dialog-topbar");
+            this.topBar = topBar;
+            this.dialog.prepend(topBar);
+        }
 
         if (PTXDialog.hasNativeCommandInvokers()) {
             // If the browser supports command invokers, we can just use the native dialog element and its showModal and close methods.
             this.open = () => {
-              if(this.isModal) {
+              if (this.isModal) {
                 this.dialog.showModal();
               } else {
+                if (this.controlElement) {
+                    this.setExpanded(true);
+                }
                 this.dialog.show();
               }
             };
@@ -1328,6 +1345,7 @@ class PTXDialog {
                 this.dialog.close();
                 if (this.controlElement) {
                     this.controlElement.focus();
+                    this.setExpanded(false);
                 }
             };
             this.toggle = () => {
@@ -1344,7 +1362,7 @@ class PTXDialog {
             this.toggle = () => this.toggleDialogFallback();
         }
 
-        if (this.kind === "light-close") {
+        if (!PTXDialog.hasNativeCommandInvokers() && this.kind === "light-close") {
             // Add event listener to close the dialog if the user clicks outside of it
             this.dialog.addEventListener("click", (event) => {
                 if (event.target === this.dialog) {
@@ -1363,6 +1381,83 @@ class PTXDialog {
                 }
             });
         }
+
+        // Should be handled natively, but Sagecells currently break native esc handling
+        if (this.isModal) {
+            this.dialog.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    this.close();
+                }
+            });
+        }
+
+        // make non-modal dialogs draggable by their top bar
+        if (!this.isModal) {
+            const topBar = this.dialog.querySelector(".ptx-dialog-topbar");
+            let isDragging = false;
+            let offsetX = 0;
+            let offsetY = 0;
+
+            topBar.addEventListener("pointerover", (e) => {
+                topBar.style.cursor = "move";
+            });
+
+            // Trigger when the user presses down on the element
+            topBar.addEventListener("pointerdown", (e) => {
+                isDragging = true;
+
+                const dialogRect = this.dialog.getBoundingClientRect();
+
+                // Track the pointer offset within the dialog so movement stays smooth.
+                offsetX = e.clientX - dialogRect.left;
+                offsetY = e.clientY - dialogRect.top;
+
+                // Lock pointer to capture movement even outside the element boundaries
+                topBar.setPointerCapture(e.pointerId);
+            });
+
+            // Trigger as the user moves the pointer
+            topBar.addEventListener("pointermove", (e) => {
+                if (!isDragging) return;
+
+                // Calculate new coordinates from the current pointer position.
+                const newX = e.clientX - offsetX;
+                const newY = e.clientY - offsetY;
+
+                // Apply styles to move the element.
+                this.dialog.style.left = `${newX}px`;
+                this.dialog.style.top = `${newY}px`;
+                this.dialog.style.bottom = "auto"; // Reset bottom to auto to allow top positioning
+                this.dialog.style.right = "auto"; // Reset right to auto to allow left positioning
+            });
+
+            // Trigger when the user releases the pointer
+            topBar.addEventListener("pointerup", (e) => {
+                isDragging = false;
+                topBar.releasePointerCapture(e.pointerId);
+            });
+
+            // Make sure we stay in view during resizes
+            window.addEventListener('resize', (event) => {
+                this.dialog.style.left = '';
+                this.dialog.style.right = '';
+                // make sure top is in viewport
+                if (this.dialog.getBoundingClientRect().top > window.innerHeight) {
+                    this.dialog.style.top = '20px';
+                }
+            });
+        }
+    }
+
+    setExpanded(expanded) {
+        if (this.controlElement) {
+            this.controlElement.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            if (expanded) {
+                this.controlElement.classList.add('open');
+            } else {
+                this.controlElement.classList.remove('open');
+            }
+        }
     }
 
     openDialogFallback() {
@@ -1372,12 +1467,14 @@ class PTXDialog {
             } else {
               this.dialog.show();
             }
+            this.setExpanded(true);
         }
     }
 
     closeDialogFallback() {
         if (this.dialog && typeof this.dialog.close === "function" && this.dialog.open) {
             this.dialog.close();
+            this.setExpanded(false);
         }
         if (this.controlElement) {
             this.controlElement.focus();
