@@ -2866,8 +2866,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- A "cd" (code display) interrupts a paragraph with a short -->
-<!-- hunk of verbatim text, either mixed content or "cline"s.  -->
+<!-- A "cd" (code display) interrupts a paragraph with a short    -->
+<!-- hunk of verbatim text, either mixed content or "cline"s.     -->
+<!-- With @showspaces="all" every space becomes a visible OPEN    -->
+<!-- BOX, as in the HTML conversion (the monospace font carries    -->
+<!-- the glyph); the "cline" flavor is handled in a variant below. -->
 <xsl:template match="cd">
     <xsl:call-template name="verbatim-block">
         <xsl:with-param name="content">
@@ -2875,12 +2878,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="cline">
                     <xsl:apply-templates select="cline"/>
                 </xsl:when>
+                <xsl:when test="@showspaces = 'all'">
+                    <xsl:value-of select="str:replace(., '&#x20;', '&#x2423;')"/>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="."/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:with-param>
     </xsl:call-template>
+</xsl:template>
+
+<!-- A "cline" of a "cd" with visible spaces, as in the HTML -->
+<!-- conversion: each space becomes the OPEN BOX glyph.      -->
+<xsl:template match="cline[parent::cd/@showspaces = 'all']">
+    <xsl:value-of select="str:replace(., '&#x20;', '&#x2423;')"/>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- A "program" renders its visible source code; line numbers, -->
