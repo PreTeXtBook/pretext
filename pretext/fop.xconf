@@ -179,6 +179,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <font embedding-mode="full" embed-url="/usr/share/texlive/texmf-dist/fonts/opentype/public/fontawesome5/FontAwesome5Brands-Regular-400.otf">
                     <font-triplet name="Font Awesome 5 Brands" style="normal" weight="normal"/>
                 </font>
+                <!-- PreTeXt Symbols: the symbol fallback face, bundled with -->
+                <!-- this distribution (see  fonts/README.md ) and copied by -->
+                <!-- the  pdf_fo()  routine into the build directory, so the  -->
+                <!-- path is relative to there.  FOP consults a font-family   -->
+                <!-- list per glyph, so naming this face after the body font  -->
+                <!-- on  fo:root  draws from it any character Latin Modern     -->
+                <!-- lacks: currency signs, primes, the geometric end-marks,  -->
+                <!-- dingbats.  These symbols have no bold or italic form, so  -->
+                <!-- the one regular face answers all four style/weight slots, -->
+                <!-- letting the fallback work inside bold or italic text too. -->
+                <font embedding-mode="full" embed-url="fonts/PreTeXtSymbols.otf">
+                    <font-triplet name="PreTeXt Symbols" style="normal" weight="normal"/>
+                    <font-triplet name="PreTeXt Symbols" style="normal" weight="bold"/>
+                    <font-triplet name="PreTeXt Symbols" style="italic" weight="normal"/>
+                    <font-triplet name="PreTeXt Symbols" style="italic" weight="bold"/>
+                </font>
             </fonts>
         </renderer>
     </renderers>
