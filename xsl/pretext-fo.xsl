@@ -108,9 +108,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- font, which is never embedded.  Each named family must have a -->
 <!-- matching declaration in  pretext/fop.xconf.  The body and     -->
 <!-- monospace faces follow the  pdf/@font  publication key; the    -->
-<!-- symbol fallback stays on DejaVu Sans, which carries glyphs     -->
-<!-- (the tombstone, the U+2BA0 "enter" key) that Latin Modern      -->
-<!-- lacks.                                                         -->
+<!-- symbol family is "PreTeXt Symbols", the bundled FreeSerif      -->
+<!-- subset (see  fonts/README.md ), which carries the currency     -->
+<!-- signs, primes, geometric end-marks, and dingbats that Latin    -->
+<!-- Modern lacks.  It is named after the body font on  fo:root ,   -->
+<!-- so FOP falls back to it for any glyph the body font is         -->
+<!-- missing, and named outright where a specific symbol is drawn.  -->
 <xsl:variable name="font-family-main">
     <xsl:choose>
         <xsl:when test="$pdf-font = 'dejavu'">
@@ -131,8 +134,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
-<!-- for symbols absent from the main font (e.g. the tombstone) -->
-<xsl:variable name="font-family-symbol" select="'DejaVu Sans'"/>
+<!-- for symbols absent from the main font (e.g. the end-marks) -->
+<xsl:variable name="font-family-symbol" select="'PreTeXt Symbols'"/>
 <!-- the <icon> faces, declared in fop.xconf: FontAwesome 5 Solid   -->
 <!-- for the "classic" icons, Brands for the Creative Commons marks -->
 <xsl:variable name="font-family-icon" select="'Font Awesome 5 Free Solid'"/>
@@ -240,7 +243,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
     <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
     <xsl:call-template name="watermark-image-file"/>
-    <fo:root font-family="{$font-family-main}" font-size="{$font-size}" xml:lang="{$document-language}">
+    <!-- The body font-family is a list: the main face, then the symbol  -->
+    <!-- face.  FOP selects per glyph, so any character missing from the  -->
+    <!-- main font (a currency sign, a prime, a list-marker square) is    -->
+    <!-- drawn from "PreTeXt Symbols" without any per-character markup.   -->
+    <fo:root font-family="{$font-family-main}, {$font-family-symbol}" font-size="{$font-size}" xml:lang="{$document-language}">
         <fo:layout-master-set>
             <fo:simple-page-master master-name="page-odd"
                                    page-width="{$page-width}"
@@ -3094,12 +3101,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:inline>
 </xsl:template>
 
-<!-- Symbol keys set in the symbol font, which covers the arrows. -->
-<!-- The official "enter" code point (U+2BA0) is in no DejaVu     -->
-<!-- face, so the classic return symbol (U+21B5) stands in.       -->
+<!-- Named keys.  Each key glyph stands alone, so the font-family   -->
+<!-- list resolves per glyph: the ASCII keys (#, &amp;, ~, ...) come -->
+<!-- from the monospace face, matching an unnamed boxed key, while   -->
+<!-- the arrow and symbol keys fall back to the symbol font.  The    -->
+<!-- official "enter" code point (U+2BA0) is in no embeddable face,  -->
+<!-- so the classic return symbol (U+21B5) stands in.                -->
 <xsl:template match="kbd[@name]">
     <xsl:variable name="kbdkey-name" select="@name"/>
-    <fo:inline font-family="{$font-family-symbol}" border="solid 0.5pt #888888" padding-left="2pt" padding-right="2pt">
+    <fo:inline font-family="{$font-family-monospace}, {$font-family-symbol}" border="solid 0.5pt #888888" padding-left="2pt" padding-right="2pt">
         <xsl:choose>
             <xsl:when test="@name = 'enter'">
                 <xsl:text>&#x21b5;</xsl:text>
@@ -3316,8 +3326,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="mdash-character">
     <xsl:text>&#x2014;</xsl:text>
 </xsl:template>
+<!-- the thin space is missing from the main (serif) face, so it -->
+<!-- borrows the symbol font, as the narrow no-break space does   -->
 <xsl:template name="thin-space-character">
-    <xsl:text>&#x2009;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2009;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <!-- the narrow no-break space is missing from the main (serif) -->
 <!-- face, so it borrows the symbol font, as the tombstone does -->
@@ -3338,13 +3352,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#x27e7;</xsl:text>
     </fo:inline>
 </xsl:template>
-<!-- the *mathematical* angle brackets (U+27E8, U+27E9); the CJK -->
-<!-- pair (U+3008, U+3009) is not in the embedded fonts at all   -->
+<!-- the *mathematical* angle brackets (U+27E8, U+27E9), missing  -->
+<!-- from the main (serif) face, so they borrow the symbol font;  -->
+<!-- the CJK pair (U+3008, U+3009) is in no embedded font at all   -->
 <xsl:template name="langle-character">
-    <xsl:text>&#x27e8;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x27e8;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="rangle-character">
-    <xsl:text>&#x27e9;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x27e9;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="ellipsis-character">
     <xsl:text>&#x2026;</xsl:text>
@@ -3352,8 +3371,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="midpoint-character">
     <xsl:text>&#xb7;</xsl:text>
 </xsl:template>
+<!-- the swung dash is missing from the main (serif) face, so it -->
+<!-- borrows the symbol font, as the tombstone does              -->
 <xsl:template name="swungdash-character">
-    <xsl:text>&#x2053;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2053;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="permille-character">
     <xsl:text>&#x2030;</xsl:text>
@@ -3388,12 +3411,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#x2117;</xsl:text>
     </fo:inline>
 </xsl:template>
-<!-- The copyleft symbol (U+1F12F) is in none of the embedded   -->
-<!-- fonts; a reversed-c in parentheses is its construction     -->
-<!-- anyway, so an open-o (U+0254) stands in until fonts become -->
-<!-- publisher-configurable.                                    -->
+<!-- The copyleft symbol (U+1F12F) is in no embeddable font, so it  -->
+<!-- is built, as in its name, from a reversed "c" (U+2184) set in  -->
+<!-- parentheses.  The main font lacks the reversed "c", and it sits -->
+<!-- between the parentheses with no surrounding space, so it is     -->
+<!-- named from the symbol font explicitly, as the primes are.       -->
 <xsl:template name="copyleft-character">
-    <xsl:text>(&#x254;)</xsl:text>
+    <xsl:text>(</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2184;</xsl:text>
+    </fo:inline>
+    <xsl:text>)</xsl:text>
 </xsl:template>
 <xsl:template name="registered-character">
     <xsl:text>&#xae;</xsl:text>
@@ -3409,11 +3437,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="degree-character">
     <xsl:text>&#xb0;</xsl:text>
 </xsl:template>
+<!-- the prime and double prime (minutes and seconds, feet and       -->
+<!-- inches) are missing from the main (serif) face; because they     -->
+<!-- sit *within* a measurement, with no surrounding space, FOP's     -->
+<!-- per-word font selection cannot reach the symbol font for them,   -->
+<!-- so each is named explicitly, as the tombstone is.                -->
 <xsl:template name="prime-character">
-    <xsl:text>&#x2032;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2032;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="dblprime-character">
-    <xsl:text>&#x2033;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2033;</xsl:text>
+    </fo:inline>
 </xsl:template>
 
 <!-- ######### -->
