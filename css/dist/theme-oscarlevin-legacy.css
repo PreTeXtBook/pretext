@@ -3332,7 +3332,7 @@ body.standalone.worksheet .ptx-content section.worksheet > .heading + .para {
 .ptx-content .poem .tab {
   margin-left: 2em;
 }
-.calculator-container {
+.ptx-calculator-container {
   position: fixed;
   z-index: 100;
   bottom: 5px;
@@ -3341,7 +3341,7 @@ body.standalone.worksheet .ptx-content section.worksheet > .heading + .para {
   height: 460px;
 }
 @media screen and (max-width: 800px) {
-  .calculator-container {
+  .ptx-calculator-container {
     bottom: 50px !important;
   }
 }
@@ -4193,7 +4193,7 @@ nav.ptx-navbar {
 .ptx-navbar .treebuttons .icon {
   margin: 0 -7px;
 }
-.ptx-navbar :is(.index-button, .calculator-toggle) .icon {
+.ptx-navbar :is(.index-button, .ptx-calculator-toggle) .icon {
   display: none;
 }
 .ptx-navbar :is(.runestone-profile, .activecode-toggle, .ptx-search-button) .name {
@@ -4202,7 +4202,7 @@ nav.ptx-navbar {
 .ptx-navbar .index-button {
   width: 70px;
 }
-.ptx-navbar .calculator-toggle {
+.ptx-navbar .ptx-calculator-toggle {
   width: 60px;
   min-height: 32px;
   text-align: center;
@@ -4213,7 +4213,7 @@ nav.ptx-navbar {
   margin-top: 1px;
   background-color: #eef;
 }
-.ptx-navbar .calculator-toggle.open {
+.ptx-navbar .ptx-calculator-toggle.open {
   background: #fee;
   border: 2px solid #f66;
 }
@@ -4246,16 +4246,16 @@ nav.ptx-navbar {
   .ptx-navbar :is(.treebuttons) > *:first-child {
     border-left: 0;
   }
-  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
+  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button) .name {
     display: none;
   }
-  .pretext .ptx-navbar :is(.calculator-toggle, .index-button) .icon {
+  .pretext .ptx-navbar :is(.ptx-calculator-toggle, .index-button) .icon {
     display: inline-block;
   }
   .ptx-navbar .nav-runestone-controls > *:first-child {
     border-left: 0;
   }
-  .ptx-navbar .calculator-toggle {
+  .ptx-navbar .ptx-calculator-toggle {
     width: auto;
     height: 35px;
     border-radius: 0;
@@ -5097,10 +5097,10 @@ summary.knowl__link {
     background-color: #fafafa;
     color: #000;
   }
-  .ptx-navbar .calculator-toggle {
+  .ptx-navbar .ptx-calculator-toggle {
     background-color: #336;
   }
-  .ptx-navbar .calculator-toggle:hover {
+  .ptx-navbar .ptx-calculator-toggle:hover {
     background-color: #fce;
   }
   .pretext .ptx-masthead {
@@ -5861,10 +5861,10 @@ body.pretext {
   background-color: var(--linkbackgroundhighlight);
   color: var(--bodyfontcolorhighlight);
 }
-.pretext[data-atmosphere*=dark] .ptx-navbar .calculator-toggle {
+.pretext[data-atmosphere*=dark] .ptx-navbar .ptx-calculator-toggle {
   background-color: var(--buttonbackground);
 }
-.pretext[data-atmosphere*=dark] .ptx-navbar .calculator-toggle:hover {
+.pretext[data-atmosphere*=dark] .ptx-navbar .ptx-calculator-toggle:hover {
   background-color: var(--linkbackgroundhighlight);
   color: var(--bodyfontcolorhighlight);
 }
