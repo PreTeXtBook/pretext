@@ -1075,7 +1075,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- divisional one matches a more specific pattern in the       -->
 <!-- "Exercises" section.  PROJECT-LIKE blocks may also be       -->
 <!-- structured by "task", arriving among the contents.          -->
-<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&AXIOM-LIKE;|&OPENPROBLEM-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|objectives|outcomes">
+<!-- DEFINITION-LIKE and EXAMPLE-LIKE are exceptions, closing    -->
+<!-- with an end-mark, and so match a more specific pattern.     -->
+<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&OPENPROBLEM-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|objectives|outcomes">
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
@@ -1085,6 +1087,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:variable>
         <xsl:call-template name="heading-then-content">
             <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
+<!-- DEFINITION-LIKE and EXAMPLE-LIKE close with an end-mark, as  -->
+<!-- in the LaTeX conversion: a filled diamond for a definition,  -->
+<!-- a filled triangle for an example (the family of the          -->
+<!-- PROOF-LIKE square).  Otherwise these are ordinary run-in     -->
+<!-- titled blocks; "block-with-end-mark" supplies the heading    -->
+<!-- run-in, the contents, and the riding-or-own-line mark.       -->
+<xsl:template match="&DEFINITION-LIKE;|&EXAMPLE-LIKE;">
+    <xsl:apply-templates select="." mode="forced-pagebreak"/>
+    <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:variable name="heading">
+            <xsl:apply-templates select="." mode="heading-full"/>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="block-with-end-mark">
+            <xsl:with-param name="heading" select="$heading"/>
+            <xsl:with-param name="mark">
+                <xsl:choose>
+                    <!-- BLACK DIAMOND -->
+                    <xsl:when test="&DEFINITION-FILTER;">
+                        <xsl:text>&#x25c6;</xsl:text>
+                    </xsl:when>
+                    <!-- BLACK UP-POINTING TRIANGLE -->
+                    <xsl:otherwise>
+                        <xsl:text>&#x25b2;</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
         </xsl:call-template>
     </fo:block>
 </xsl:template>
@@ -1109,32 +1143,107 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A general-purpose container, otherwise transparent, though -->
 <!-- the statement of a THEOREM-LIKE is italic, by mathematical -->
 <!-- tradition.                                                 -->
+<!-- A "statement" is transparent, but threads a run-in heading to    -->
+<!-- its first child and an end-mark to its last, so a block whose     -->
+<!-- content is wrapped in a "statement" (a "definition", say) still   -->
+<!-- runs its heading in and rides its closing mark.                   -->
 <xsl:template match="statement">
     <xsl:param name="run-in-heading"/>
-    <xsl:choose>
-        <xsl:when test="parent::*[&THEOREM-FILTER;]">
-            <fo:block font-style="italic">
+    <xsl:param name="trailing-tombstone"/>
+    <xsl:variable name="body">
+        <xsl:choose>
+            <xsl:when test="count(*) = 1">
+                <xsl:apply-templates select="*[1]">
+                    <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
+                    <xsl:with-param name="trailing-tombstone" select="$trailing-tombstone"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
                 <xsl:apply-templates select="*[1]">
                     <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
                 </xsl:apply-templates>
-                <xsl:apply-templates select="*[position() &gt; 1]"/>
+                <xsl:apply-templates select="*[(position() &gt; 1) and (position() &lt; last())]"/>
+                <xsl:apply-templates select="*[last()]">
+                    <xsl:with-param name="trailing-tombstone" select="$trailing-tombstone"/>
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="parent::*[&THEOREM-FILTER;]">
+            <fo:block font-style="italic">
+                <xsl:copy-of select="$body"/>
             </fo:block>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="*[1]">
-                <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
-            </xsl:apply-templates>
-            <xsl:apply-templates select="*[position() &gt; 1]"/>
+            <xsl:copy-of select="$body"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- An italic run-in heading, the contents, and a right-aligned  -->
-<!-- tombstone to finish.  When the proof closes with a paragraph, -->
-<!-- the tombstone rides on its final line (an elastic leader      -->
-<!-- pushes it to the right margin); otherwise it makes a line of  -->
-<!-- its own, kept on the page of whatever display ended the       -->
-<!-- proof, so it can never lead an orphaned page.                 -->
+<!-- A titled block whose family closes with an end-mark: the      -->
+<!-- PROOF-LIKE tombstone, or the DEFINITION-LIKE / EXAMPLE-LIKE    -->
+<!-- mark.  When the block ends in a paragraph the mark rides its   -->
+<!-- final line, an elastic leader pushing it to the right margin;  -->
+<!-- the closing paragraph may be wrapped in a "statement" (the     -->
+<!-- usual shape of a "definition"), which threads the mark on      -->
+<!-- through.  Otherwise (a closing display, list, "case", or       -->
+<!-- "solution") the mark takes a line of its own, kept on the page -->
+<!-- where the content ended so it never leads an orphaned page;    -->
+<!-- chasing the mark down into those would be heroics.  The        -->
+<!-- heading runs into a leading paragraph, directly or within a    -->
+<!-- "statement", as in "heading-then-content".  The mark glyph     -->
+<!-- (passed as a code point) comes from the symbol font.           -->
+<xsl:template name="block-with-end-mark">
+    <xsl:param name="heading"/>
+    <xsl:param name="mark"/>
+    <xsl:variable name="end-mark">
+        <fo:leader leader-pattern="space"/>
+        <fo:inline font-family="{$font-family-symbol}">
+            <xsl:value-of select="$mark"/>
+        </fo:inline>
+    </xsl:variable>
+    <xsl:variable name="content" select="*[not(self::title)]"/>
+    <xsl:variable name="last" select="$content[last()]"/>
+    <xsl:variable name="b-mark-rides" select="boolean($last[self::p] or ($last[self::statement] and $last/*[last()][self::p]))"/>
+    <!-- the heading runs in to a leading paragraph, plain or in a "statement" -->
+    <xsl:choose>
+        <xsl:when test="$content[1][self::p] or ($content[1][self::statement] and $content[1]/*[1][self::p])">
+            <xsl:apply-templates select="$content[1]">
+                <xsl:with-param name="run-in-heading" select="$heading"/>
+                <xsl:with-param name="trailing-tombstone">
+                    <xsl:if test="(count($content) = 1) and $b-mark-rides">
+                        <xsl:copy-of select="$end-mark"/>
+                    </xsl:if>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:block keep-with-next.within-page="always">
+                <xsl:copy-of select="$heading"/>
+            </fo:block>
+            <xsl:apply-templates select="$content[1]"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="$content[(position() &gt; 1) and (position() &lt; last())]"/>
+    <xsl:if test="count($content) &gt; 1">
+        <xsl:apply-templates select="$content[last()]">
+            <xsl:with-param name="trailing-tombstone">
+                <xsl:if test="$b-mark-rides">
+                    <xsl:copy-of select="$end-mark"/>
+                </xsl:if>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="not($b-mark-rides)">
+        <fo:block text-align-last="justify" keep-with-previous.within-page="always">
+            <xsl:copy-of select="$end-mark"/>
+        </fo:block>
+    </xsl:if>
+</xsl:template>
+
+<!-- An italic run-in heading, the contents, and a filled square -->
+<!-- (QED, Halmos) to finish, matching the LaTeX conversion.     -->
 <xsl:template match="&PROOF-LIKE;">
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
@@ -1145,49 +1254,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </fo:inline>
             <xsl:text> </xsl:text>
         </xsl:variable>
-        <xsl:variable name="tombstone">
-            <fo:leader leader-pattern="space"/>
-            <!-- the main (serif) font lacks END OF PROOF, the symbol font has it -->
-            <fo:inline font-family="{$font-family-symbol}">
-                <xsl:text>&#x220e;</xsl:text>
-            </fo:inline>
-        </xsl:variable>
-        <xsl:variable name="content" select="*[not(self::title)]"/>
-        <xsl:variable name="b-tombstone-rides" select="boolean($content[last()][self::p])"/>
-        <!-- the heading runs in to a leading paragraph -->
-        <xsl:choose>
-            <xsl:when test="$content[1][self::p]">
-                <xsl:apply-templates select="$content[1]">
-                    <xsl:with-param name="run-in-heading" select="$heading"/>
-                    <xsl:with-param name="trailing-tombstone">
-                        <xsl:if test="count($content) = 1">
-                            <xsl:copy-of select="$tombstone"/>
-                        </xsl:if>
-                    </xsl:with-param>
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
-                <fo:block keep-with-next.within-page="always">
-                    <xsl:copy-of select="$heading"/>
-                </fo:block>
-                <xsl:apply-templates select="$content[1]"/>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="$content[(position() &gt; 1) and (position() &lt; last())]"/>
-        <xsl:if test="count($content) &gt; 1">
-            <xsl:apply-templates select="$content[last()]">
-                <xsl:with-param name="trailing-tombstone">
-                    <xsl:if test="$b-tombstone-rides">
-                        <xsl:copy-of select="$tombstone"/>
-                    </xsl:if>
-                </xsl:with-param>
-            </xsl:apply-templates>
-        </xsl:if>
-        <xsl:if test="not($b-tombstone-rides)">
-            <fo:block text-align-last="justify" keep-with-previous.within-page="always">
-                <xsl:copy-of select="$tombstone"/>
-            </fo:block>
-        </xsl:if>
+        <xsl:call-template name="block-with-end-mark">
+            <xsl:with-param name="heading" select="$heading"/>
+            <!-- BLACK SQUARE -->
+            <xsl:with-param name="mark" select="'&#x25a0;'"/>
+        </xsl:call-template>
     </fo:block>
 </xsl:template>
 
