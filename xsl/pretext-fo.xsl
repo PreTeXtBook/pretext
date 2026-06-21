@@ -108,9 +108,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- font, which is never embedded.  Each named family must have a -->
 <!-- matching declaration in  pretext/fop.xconf.  The body and     -->
 <!-- monospace faces follow the  pdf/@font  publication key; the    -->
-<!-- symbol fallback stays on DejaVu Sans, which carries glyphs     -->
-<!-- (the tombstone, the U+2BA0 "enter" key) that Latin Modern      -->
-<!-- lacks.                                                         -->
+<!-- symbol family is "PreTeXt Symbols", the bundled FreeSerif      -->
+<!-- subset (see  fonts/README.md ), which carries the currency     -->
+<!-- signs, primes, geometric end-marks, and dingbats that Latin    -->
+<!-- Modern lacks.  It is named after the body font on  fo:root ,   -->
+<!-- so FOP falls back to it for any glyph the body font is         -->
+<!-- missing, and named outright where a specific symbol is drawn.  -->
 <xsl:variable name="font-family-main">
     <xsl:choose>
         <xsl:when test="$pdf-font = 'dejavu'">
@@ -131,8 +134,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
-<!-- for symbols absent from the main font (e.g. the tombstone) -->
-<xsl:variable name="font-family-symbol" select="'DejaVu Sans'"/>
+<!-- for symbols absent from the main font (e.g. the end-marks) -->
+<xsl:variable name="font-family-symbol" select="'PreTeXt Symbols'"/>
 <!-- the <icon> faces, declared in fop.xconf: FontAwesome 5 Solid   -->
 <!-- for the "classic" icons, Brands for the Creative Commons marks -->
 <xsl:variable name="font-family-icon" select="'Font Awesome 5 Free Solid'"/>
@@ -240,7 +243,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
     <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
     <xsl:call-template name="watermark-image-file"/>
-    <fo:root font-family="{$font-family-main}" font-size="{$font-size}" xml:lang="{$document-language}">
+    <!-- The body font-family is a list: the main face, then the symbol  -->
+    <!-- face.  FOP selects per glyph, so any character missing from the  -->
+    <!-- main font (a currency sign, a prime, a list-marker square) is    -->
+    <!-- drawn from "PreTeXt Symbols" without any per-character markup.   -->
+    <fo:root font-family="{$font-family-main}, {$font-family-symbol}" font-size="{$font-size}" xml:lang="{$document-language}">
         <fo:layout-master-set>
             <fo:simple-page-master master-name="page-odd"
                                    page-width="{$page-width}"
@@ -1068,7 +1075,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- divisional one matches a more specific pattern in the       -->
 <!-- "Exercises" section.  PROJECT-LIKE blocks may also be       -->
 <!-- structured by "task", arriving among the contents.          -->
-<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&EXAMPLE-LIKE;|&DEFINITION-LIKE;|&AXIOM-LIKE;|&OPENPROBLEM-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|objectives|outcomes">
+<!-- DEFINITION-LIKE and EXAMPLE-LIKE are exceptions, closing    -->
+<!-- with an end-mark, and so match a more specific pattern.     -->
+<xsl:template match="&REMARK-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&OPENPROBLEM-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|objectives|outcomes">
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
@@ -1078,6 +1087,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:variable>
         <xsl:call-template name="heading-then-content">
             <xsl:with-param name="heading" select="$heading"/>
+        </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
+<!-- DEFINITION-LIKE and EXAMPLE-LIKE close with an end-mark, as  -->
+<!-- in the LaTeX conversion: a filled diamond for a definition,  -->
+<!-- a filled triangle for an example (the family of the          -->
+<!-- PROOF-LIKE square).  Otherwise these are ordinary run-in     -->
+<!-- titled blocks; "block-with-end-mark" supplies the heading    -->
+<!-- run-in, the contents, and the riding-or-own-line mark.       -->
+<xsl:template match="&DEFINITION-LIKE;|&EXAMPLE-LIKE;">
+    <xsl:apply-templates select="." mode="forced-pagebreak"/>
+    <fo:block space-before="1em" space-after="1em">
+        <xsl:apply-templates select="." mode="link-id-attribute"/>
+        <xsl:variable name="heading">
+            <xsl:apply-templates select="." mode="heading-full"/>
+            <xsl:text> </xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="block-with-end-mark">
+            <xsl:with-param name="heading" select="$heading"/>
+            <xsl:with-param name="mark">
+                <xsl:choose>
+                    <!-- BLACK DIAMOND -->
+                    <xsl:when test="&DEFINITION-FILTER;">
+                        <xsl:text>&#x25c6;</xsl:text>
+                    </xsl:when>
+                    <!-- BLACK UP-POINTING TRIANGLE -->
+                    <xsl:otherwise>
+                        <xsl:text>&#x25b2;</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
         </xsl:call-template>
     </fo:block>
 </xsl:template>
@@ -1102,32 +1143,107 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A general-purpose container, otherwise transparent, though -->
 <!-- the statement of a THEOREM-LIKE is italic, by mathematical -->
 <!-- tradition.                                                 -->
+<!-- A "statement" is transparent, but threads a run-in heading to    -->
+<!-- its first child and an end-mark to its last, so a block whose     -->
+<!-- content is wrapped in a "statement" (a "definition", say) still   -->
+<!-- runs its heading in and rides its closing mark.                   -->
 <xsl:template match="statement">
     <xsl:param name="run-in-heading"/>
-    <xsl:choose>
-        <xsl:when test="parent::*[&THEOREM-FILTER;]">
-            <fo:block font-style="italic">
+    <xsl:param name="trailing-tombstone"/>
+    <xsl:variable name="body">
+        <xsl:choose>
+            <xsl:when test="count(*) = 1">
+                <xsl:apply-templates select="*[1]">
+                    <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
+                    <xsl:with-param name="trailing-tombstone" select="$trailing-tombstone"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
                 <xsl:apply-templates select="*[1]">
                     <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
                 </xsl:apply-templates>
-                <xsl:apply-templates select="*[position() &gt; 1]"/>
+                <xsl:apply-templates select="*[(position() &gt; 1) and (position() &lt; last())]"/>
+                <xsl:apply-templates select="*[last()]">
+                    <xsl:with-param name="trailing-tombstone" select="$trailing-tombstone"/>
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="parent::*[&THEOREM-FILTER;]">
+            <fo:block font-style="italic">
+                <xsl:copy-of select="$body"/>
             </fo:block>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="*[1]">
-                <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
-            </xsl:apply-templates>
-            <xsl:apply-templates select="*[position() &gt; 1]"/>
+            <xsl:copy-of select="$body"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- An italic run-in heading, the contents, and a right-aligned  -->
-<!-- tombstone to finish.  When the proof closes with a paragraph, -->
-<!-- the tombstone rides on its final line (an elastic leader      -->
-<!-- pushes it to the right margin); otherwise it makes a line of  -->
-<!-- its own, kept on the page of whatever display ended the       -->
-<!-- proof, so it can never lead an orphaned page.                 -->
+<!-- A titled block whose family closes with an end-mark: the      -->
+<!-- PROOF-LIKE tombstone, or the DEFINITION-LIKE / EXAMPLE-LIKE    -->
+<!-- mark.  When the block ends in a paragraph the mark rides its   -->
+<!-- final line, an elastic leader pushing it to the right margin;  -->
+<!-- the closing paragraph may be wrapped in a "statement" (the     -->
+<!-- usual shape of a "definition"), which threads the mark on      -->
+<!-- through.  Otherwise (a closing display, list, "case", or       -->
+<!-- "solution") the mark takes a line of its own, kept on the page -->
+<!-- where the content ended so it never leads an orphaned page;    -->
+<!-- chasing the mark down into those would be heroics.  The        -->
+<!-- heading runs into a leading paragraph, directly or within a    -->
+<!-- "statement", as in "heading-then-content".  The mark glyph     -->
+<!-- (passed as a code point) comes from the symbol font.           -->
+<xsl:template name="block-with-end-mark">
+    <xsl:param name="heading"/>
+    <xsl:param name="mark"/>
+    <xsl:variable name="end-mark">
+        <fo:leader leader-pattern="space"/>
+        <fo:inline font-family="{$font-family-symbol}">
+            <xsl:value-of select="$mark"/>
+        </fo:inline>
+    </xsl:variable>
+    <xsl:variable name="content" select="*[not(self::title)]"/>
+    <xsl:variable name="last" select="$content[last()]"/>
+    <xsl:variable name="b-mark-rides" select="boolean($last[self::p] or ($last[self::statement] and $last/*[last()][self::p]))"/>
+    <!-- the heading runs in to a leading paragraph, plain or in a "statement" -->
+    <xsl:choose>
+        <xsl:when test="$content[1][self::p] or ($content[1][self::statement] and $content[1]/*[1][self::p])">
+            <xsl:apply-templates select="$content[1]">
+                <xsl:with-param name="run-in-heading" select="$heading"/>
+                <xsl:with-param name="trailing-tombstone">
+                    <xsl:if test="(count($content) = 1) and $b-mark-rides">
+                        <xsl:copy-of select="$end-mark"/>
+                    </xsl:if>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <fo:block keep-with-next.within-page="always">
+                <xsl:copy-of select="$heading"/>
+            </fo:block>
+            <xsl:apply-templates select="$content[1]"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="$content[(position() &gt; 1) and (position() &lt; last())]"/>
+    <xsl:if test="count($content) &gt; 1">
+        <xsl:apply-templates select="$content[last()]">
+            <xsl:with-param name="trailing-tombstone">
+                <xsl:if test="$b-mark-rides">
+                    <xsl:copy-of select="$end-mark"/>
+                </xsl:if>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="not($b-mark-rides)">
+        <fo:block text-align-last="justify" keep-with-previous.within-page="always">
+            <xsl:copy-of select="$end-mark"/>
+        </fo:block>
+    </xsl:if>
+</xsl:template>
+
+<!-- An italic run-in heading, the contents, and a filled square -->
+<!-- (QED, Halmos) to finish, matching the LaTeX conversion.     -->
 <xsl:template match="&PROOF-LIKE;">
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
@@ -1138,49 +1254,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </fo:inline>
             <xsl:text> </xsl:text>
         </xsl:variable>
-        <xsl:variable name="tombstone">
-            <fo:leader leader-pattern="space"/>
-            <!-- the main (serif) font lacks END OF PROOF, the symbol font has it -->
-            <fo:inline font-family="{$font-family-symbol}">
-                <xsl:text>&#x220e;</xsl:text>
-            </fo:inline>
-        </xsl:variable>
-        <xsl:variable name="content" select="*[not(self::title)]"/>
-        <xsl:variable name="b-tombstone-rides" select="boolean($content[last()][self::p])"/>
-        <!-- the heading runs in to a leading paragraph -->
-        <xsl:choose>
-            <xsl:when test="$content[1][self::p]">
-                <xsl:apply-templates select="$content[1]">
-                    <xsl:with-param name="run-in-heading" select="$heading"/>
-                    <xsl:with-param name="trailing-tombstone">
-                        <xsl:if test="count($content) = 1">
-                            <xsl:copy-of select="$tombstone"/>
-                        </xsl:if>
-                    </xsl:with-param>
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
-                <fo:block keep-with-next.within-page="always">
-                    <xsl:copy-of select="$heading"/>
-                </fo:block>
-                <xsl:apply-templates select="$content[1]"/>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="$content[(position() &gt; 1) and (position() &lt; last())]"/>
-        <xsl:if test="count($content) &gt; 1">
-            <xsl:apply-templates select="$content[last()]">
-                <xsl:with-param name="trailing-tombstone">
-                    <xsl:if test="$b-tombstone-rides">
-                        <xsl:copy-of select="$tombstone"/>
-                    </xsl:if>
-                </xsl:with-param>
-            </xsl:apply-templates>
-        </xsl:if>
-        <xsl:if test="not($b-tombstone-rides)">
-            <fo:block text-align-last="justify" keep-with-previous.within-page="always">
-                <xsl:copy-of select="$tombstone"/>
-            </fo:block>
-        </xsl:if>
+        <xsl:call-template name="block-with-end-mark">
+            <xsl:with-param name="heading" select="$heading"/>
+            <!-- BLACK SQUARE -->
+            <xsl:with-param name="mark" select="'&#x25a0;'"/>
+        </xsl:call-template>
     </fo:block>
 </xsl:template>
 
@@ -2788,8 +2866,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
-<!-- A "cd" (code display) interrupts a paragraph with a short -->
-<!-- hunk of verbatim text, either mixed content or "cline"s.  -->
+<!-- A "cd" (code display) interrupts a paragraph with a short    -->
+<!-- hunk of verbatim text, either mixed content or "cline"s.     -->
+<!-- With @showspaces="all" every space becomes a visible OPEN    -->
+<!-- BOX, as in the HTML conversion (the monospace font carries    -->
+<!-- the glyph); the "cline" flavor is handled in a variant below. -->
 <xsl:template match="cd">
     <xsl:call-template name="verbatim-block">
         <xsl:with-param name="content">
@@ -2797,12 +2878,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="cline">
                     <xsl:apply-templates select="cline"/>
                 </xsl:when>
+                <xsl:when test="@showspaces = 'all'">
+                    <xsl:value-of select="str:replace(., '&#x20;', '&#x2423;')"/>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="."/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:with-param>
     </xsl:call-template>
+</xsl:template>
+
+<!-- A "cline" of a "cd" with visible spaces, as in the HTML -->
+<!-- conversion: each space becomes the OPEN BOX glyph.      -->
+<xsl:template match="cline[parent::cd/@showspaces = 'all']">
+    <xsl:value-of select="str:replace(., '&#x20;', '&#x2423;')"/>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- A "program" renders its visible source code; line numbers, -->
@@ -3094,12 +3185,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:inline>
 </xsl:template>
 
-<!-- Symbol keys set in the symbol font, which covers the arrows. -->
-<!-- The official "enter" code point (U+2BA0) is in no DejaVu     -->
-<!-- face, so the classic return symbol (U+21B5) stands in.       -->
+<!-- Named keys.  Each key glyph stands alone, so the font-family   -->
+<!-- list resolves per glyph: the ASCII keys (#, &amp;, ~, ...) come -->
+<!-- from the monospace face, matching an unnamed boxed key, while   -->
+<!-- the arrow and symbol keys fall back to the symbol font.  The    -->
+<!-- official "enter" code point (U+2BA0) is in no embeddable face,  -->
+<!-- so the classic return symbol (U+21B5) stands in.                -->
 <xsl:template match="kbd[@name]">
     <xsl:variable name="kbdkey-name" select="@name"/>
-    <fo:inline font-family="{$font-family-symbol}" border="solid 0.5pt #888888" padding-left="2pt" padding-right="2pt">
+    <fo:inline font-family="{$font-family-monospace}, {$font-family-symbol}" border="solid 0.5pt #888888" padding-left="2pt" padding-right="2pt">
         <xsl:choose>
             <xsl:when test="@name = 'enter'">
                 <xsl:text>&#x21b5;</xsl:text>
@@ -3316,8 +3410,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="mdash-character">
     <xsl:text>&#x2014;</xsl:text>
 </xsl:template>
+<!-- the thin space is missing from the main (serif) face, so it -->
+<!-- borrows the symbol font, as the narrow no-break space does   -->
 <xsl:template name="thin-space-character">
-    <xsl:text>&#x2009;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2009;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <!-- the narrow no-break space is missing from the main (serif) -->
 <!-- face, so it borrows the symbol font, as the tombstone does -->
@@ -3338,13 +3436,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#x27e7;</xsl:text>
     </fo:inline>
 </xsl:template>
-<!-- the *mathematical* angle brackets (U+27E8, U+27E9); the CJK -->
-<!-- pair (U+3008, U+3009) is not in the embedded fonts at all   -->
+<!-- the *mathematical* angle brackets (U+27E8, U+27E9), missing  -->
+<!-- from the main (serif) face, so they borrow the symbol font;  -->
+<!-- the CJK pair (U+3008, U+3009) is in no embedded font at all   -->
 <xsl:template name="langle-character">
-    <xsl:text>&#x27e8;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x27e8;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="rangle-character">
-    <xsl:text>&#x27e9;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x27e9;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="ellipsis-character">
     <xsl:text>&#x2026;</xsl:text>
@@ -3352,8 +3455,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="midpoint-character">
     <xsl:text>&#xb7;</xsl:text>
 </xsl:template>
+<!-- the swung dash is missing from the main (serif) face, so it -->
+<!-- borrows the symbol font, as the tombstone does              -->
 <xsl:template name="swungdash-character">
-    <xsl:text>&#x2053;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2053;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="permille-character">
     <xsl:text>&#x2030;</xsl:text>
@@ -3388,12 +3495,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#x2117;</xsl:text>
     </fo:inline>
 </xsl:template>
-<!-- The copyleft symbol (U+1F12F) is in none of the embedded   -->
-<!-- fonts; a reversed-c in parentheses is its construction     -->
-<!-- anyway, so an open-o (U+0254) stands in until fonts become -->
-<!-- publisher-configurable.                                    -->
+<!-- The copyleft symbol (U+1F12F) is in no embeddable font, so it  -->
+<!-- is built, as in its name, from a reversed "c" (U+2184) set in  -->
+<!-- parentheses.  The main font lacks the reversed "c", and it sits -->
+<!-- between the parentheses with no surrounding space, so it is     -->
+<!-- named from the symbol font explicitly, as the primes are.       -->
 <xsl:template name="copyleft-character">
-    <xsl:text>(&#x254;)</xsl:text>
+    <xsl:text>(</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2184;</xsl:text>
+    </fo:inline>
+    <xsl:text>)</xsl:text>
 </xsl:template>
 <xsl:template name="registered-character">
     <xsl:text>&#xae;</xsl:text>
@@ -3409,11 +3521,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="degree-character">
     <xsl:text>&#xb0;</xsl:text>
 </xsl:template>
+<!-- the prime and double prime (minutes and seconds, feet and       -->
+<!-- inches) are missing from the main (serif) face; because they     -->
+<!-- sit *within* a measurement, with no surrounding space, FOP's     -->
+<!-- per-word font selection cannot reach the symbol font for them,   -->
+<!-- so each is named explicitly, as the tombstone is.                -->
 <xsl:template name="prime-character">
-    <xsl:text>&#x2032;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2032;</xsl:text>
+    </fo:inline>
 </xsl:template>
 <xsl:template name="dblprime-character">
-    <xsl:text>&#x2033;</xsl:text>
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2033;</xsl:text>
+    </fo:inline>
 </xsl:template>
 
 <!-- ######### -->

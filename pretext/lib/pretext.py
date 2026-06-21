@@ -4308,6 +4308,12 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     # Make image files available, relative to the FO file
     common.copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
 
+    # Bundled fonts (the symbol fallback face) are named by a relative
+    # path in  fop.xconf , so they must sit in the scratch directory
+    # where FOP runs, beside the FO file and the image directories.
+    fonts_src = os.path.join(common.get_ptx_path(), "fonts")
+    shutil.copytree(fonts_src, os.path.join(tmp_dir, "fonts"))
+
     # FOP renders SVG through Batik (SVG 1.1); downgrade the SVG 2
     # constructs in the staged images so the diagrams render
     _downgrade_svg2_for_batik(tmp_dir)
