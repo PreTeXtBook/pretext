@@ -290,6 +290,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </cd>
             and then it continues.</p>
 
+            <p>With <attr>showspaces</attr> set, a code display marks every space as a visible box, so that
+                <cd showspaces="all">
+                    <cline>def area(base, height):</cline>
+                    <cline>    return base * height / 2</cline>
+                </cd>
+            reveals the indentation of its body line, before the sentence finishes.</p>
+
             <listing xml:id="listing-greeting" label="listing-greeting">
                 <title>A Counting Program</title>
                 <program language="python">
