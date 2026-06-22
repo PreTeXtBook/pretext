@@ -3702,10 +3702,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:copy-of select="$content"/>
         </xsl:when>
         <xsl:otherwise>
-            <!-- the link text doubles as the description PDF/UA requires -->
+            <!-- The link text doubles as the description PDF/UA      -->
+            <!-- requires, taken from the string value of the content -->
+            <!-- so it keeps a real non-breaking space for a reader,  -->
+            <!-- before "fix-nbsp" rewrites those spaces for display. -->
             <fo:basic-link internal-destination="{$the-id}" fox:alt-text="{normalize-space(string($content))}">
                 <xsl:call-template name="link-attributes"/>
-                <xsl:copy-of select="$content"/>
+                <xsl:apply-templates select="exsl:node-set($content)" mode="fix-nbsp"/>
             </fo:basic-link>
             <!-- Trail the link with the target's page number, when the     -->
             <!-- publisher wants them, via a native XSL-FO page-number      -->
@@ -3716,6 +3719,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>, p.&#xa0;</xsl:text>
                 <fo:page-number-citation ref-id="{$the-id}"/>
             </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A non-breaking space that ends a word inside an              -->
+<!-- "fo:inline" or "fo:basic-link", with a glyph glued           -->
+<!-- directly after the inline (no intervening space), trips      -->
+<!-- an FOP layout bug: the following glyph is set about 1.8      -->
+<!-- points too far left and overprints the inline's last         -->
+<!-- character.  An "xref" hits this exactly: its text is         -->
+<!-- "Theorem<nbsp>7.3" in a colored link, with an authored       -->
+<!-- comma or period often glued on with no space.  Recasting     -->
+<!-- the U+00A0 as an "fo:character" that is not a word space     -->
+<!-- lets FOP advance normally, while the reference text still    -->
+<!-- will not break across lines.  The copy is otherwise an       -->
+<!-- identity transform; run it only on link text, where the      -->
+<!-- inline boundary and the glued punctuation coincide.          -->
+<xsl:template match="node()|@*" mode="fix-nbsp">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="fix-nbsp"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="text()" mode="fix-nbsp">
+    <xsl:call-template name="nbsp-to-fo-character">
+        <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Emit text, but with each U+00A0 replaced by a non-word-space -->
+<!-- "fo:character", recursing across every occurrence.           -->
+<xsl:template name="nbsp-to-fo-character">
+    <xsl:param name="text"/>
+    <xsl:choose>
+        <xsl:when test="contains($text, '&#xa0;')">
+            <xsl:value-of select="substring-before($text, '&#xa0;')"/>
+            <fo:character character="&#xa0;" treat-as-word-space="false"/>
+            <xsl:call-template name="nbsp-to-fo-character">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa0;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$text"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
