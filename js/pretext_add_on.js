@@ -302,7 +302,6 @@ window.addEventListener("load",function(event) {
         }
     }
     function initGeogebra() {
-        const geoGebraDiv = document.getElementById('ptx-geogebra-calculator');
         // Some paramaters are fixed here, others are set by publisher options in the HTML source
         // and stored in ggbParams. Merge those here.
         const fixedParams = {
@@ -341,7 +340,6 @@ window.addEventListener("load",function(event) {
             if (entry.target === calcDialogElement && applet && applet.getAppletObject()) {
                 const width = entry.contentRect.width;
                 const height = entry.contentRect.height;
-                const geoGebraDiv = document.getElementById('ptx-geogebra-calculator');
                 const topBarHeight = calcDialogElement.querySelector('.ptx-dialog-topbar').clientHeight || 0;
                 applet.getAppletObject().setSize(width, height - topBarHeight);
                 applet.getAppletObject().recalculateEnvironments();
