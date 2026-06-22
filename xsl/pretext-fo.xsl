@@ -2338,11 +2338,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- a footnote's text is set elsewhere, not in the cell, -->
                 <!-- so it does not count toward the column's width       -->
                 <xsl:otherwise>
-                    <xsl:variable name="longest">
+                    <!-- the character count of each candidate's displayed  -->
+                    <!-- text (see "width-text"), gathered so the widest can -->
+                    <!-- be taken; a template call cannot live in a sort key -->
+                    <xsl:variable name="lengths-rtf">
                         <xsl:for-each select="$column-cells/line | $column-cells[not(line)] | $column-cells//url/@visual">
-                            <xsl:sort select="string-length(normalize-space(.)) - string-length(normalize-space(.//fn))" data-type="number" order="descending"/>
+                            <xsl:variable name="displayed">
+                                <xsl:apply-templates select="." mode="width-text"/>
+                            </xsl:variable>
+                            <length>
+                                <xsl:value-of select="string-length(normalize-space($displayed))"/>
+                            </length>
+                        </xsl:for-each>
+                    </xsl:variable>
+                    <xsl:variable name="longest">
+                        <xsl:for-each select="exsl:node-set($lengths-rtf)/length">
+                            <xsl:sort select="number(.)" data-type="number" order="descending"/>
                             <xsl:if test="position() = 1">
-                                <xsl:value-of select="string-length(normalize-space(.)) - string-length(normalize-space(.//fn))"/>
+                                <xsl:value-of select="."/>
                             </xsl:if>
                         </xsl:for-each>
                     </xsl:variable>
@@ -2366,6 +2379,66 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="index" select="$index + 1"/>
         </xsl:call-template>
     </xsl:if>
+</xsl:template>
+
+<!-- The text a table column is sized from.  By default this      -->
+<!-- copy recurses, so wrapper elements, and the source text of   -->
+<!-- an "m" (a fair proxy for the rendered math), are measured,   -->
+<!-- while a footnote is dropped (its text is set outside the     -->
+<!-- cell).  A generator, though, makes text the source lacks,    -->
+<!-- so it is rendered to that text and the result measured: an   -->
+<!-- "xref" (its reference text), the TeX-family and              -->
+<!-- PreTeXt/WeBWorK logos, the date and time, the Latin          -->
+<!-- abbreviations, a "url" (whose text may be an attribute),     -->
+<!-- the tag-syntax elements, and the punctuation and symbol      -->
+<!-- characters.  A "fillin" contributes its blank's character    -->
+<!-- count.  Text and attribute nodes fall to the built-in        -->
+<!-- rules, which copy their string value through.                -->
+<xsl:template match="*" mode="width-text">
+    <xsl:apply-templates select="node()" mode="width-text"/>
+</xsl:template>
+
+<xsl:template match="fn" mode="width-text"/>
+
+<!-- A cross-reference's displayed text is generated, never in    -->
+<!-- the source, so render it via the shared "xref-text" (driven  -->
+<!-- by the resolved text style) rather than measure an empty     -->
+<!-- string; "self-referential-tabular-xref" is the witness.      -->
+<xsl:template match="xref" mode="width-text">
+    <xsl:variable name="text-style">
+        <xsl:apply-templates select="." mode="get-text-style"/>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="xref-text">
+        <xsl:with-param name="target" select="id(@ref)"/>
+        <xsl:with-param name="text-style" select="$text-style"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- The remaining generators have a normal template that already -->
+<!-- emits their displayed text, so render each in place; their   -->
+<!-- output is plain text (or text inside an inline), which the   -->
+<!-- measurement counts.  The list tracks the dispatched          -->
+<!-- character/text elements, less the wrappers (which recurse    -->
+<!-- to their content), plus the logos and "url".                 -->
+<xsl:template match="pretext|latex|tex|xetex|xelatex|webwork[not(* or @copy or @source)]|today|timeofday|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|url|dataurl|icon|kbd[@name]|tag|tage|attr|pi:localize|ndash|mdash|nbsp|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime" mode="width-text">
+    <xsl:apply-templates select="."/>
+</xsl:template>
+
+<!-- A fill-in blank renders as a rule or box of no characters,   -->
+<!-- so it would measure as empty; count its "@characters" width  -->
+<!-- (ten by default, matching the blank's own default length).   -->
+<xsl:template match="fillin" mode="width-text">
+    <xsl:variable name="characters">
+        <xsl:choose>
+            <xsl:when test="@characters">
+                <xsl:value-of select="@characters"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>10</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:value-of select="str:padding(number($characters), '0')"/>
 </xsl:template>
 
 <xsl:template name="equal-table-columns">
@@ -3702,10 +3775,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:copy-of select="$content"/>
         </xsl:when>
         <xsl:otherwise>
-            <!-- the link text doubles as the description PDF/UA requires -->
+            <!-- The link text doubles as the description PDF/UA      -->
+            <!-- requires, taken from the string value of the content -->
+            <!-- so it keeps a real non-breaking space for a reader,  -->
+            <!-- before "fix-nbsp" rewrites those spaces for display. -->
             <fo:basic-link internal-destination="{$the-id}" fox:alt-text="{normalize-space(string($content))}">
                 <xsl:call-template name="link-attributes"/>
-                <xsl:copy-of select="$content"/>
+                <xsl:apply-templates select="exsl:node-set($content)" mode="fix-nbsp"/>
             </fo:basic-link>
             <!-- Trail the link with the target's page number, when the     -->
             <!-- publisher wants them, via a native XSL-FO page-number      -->
@@ -3716,6 +3792,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>, p.&#xa0;</xsl:text>
                 <fo:page-number-citation ref-id="{$the-id}"/>
             </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A non-breaking space that ends a word inside an              -->
+<!-- "fo:inline" or "fo:basic-link", with a glyph glued           -->
+<!-- directly after the inline (no intervening space), trips      -->
+<!-- an FOP layout bug: the following glyph is set about 1.8      -->
+<!-- points too far left and overprints the inline's last         -->
+<!-- character.  An "xref" hits this exactly: its text is         -->
+<!-- "Theorem<nbsp>7.3" in a colored link, with an authored       -->
+<!-- comma or period often glued on with no space.  Recasting     -->
+<!-- the U+00A0 as an "fo:character" that is not a word space     -->
+<!-- lets FOP advance normally, while the reference text still    -->
+<!-- will not break across lines.  The copy is otherwise an       -->
+<!-- identity transform; run it only on link text, where the      -->
+<!-- inline boundary and the glued punctuation coincide.          -->
+<xsl:template match="node()|@*" mode="fix-nbsp">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="fix-nbsp"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="text()" mode="fix-nbsp">
+    <xsl:call-template name="nbsp-to-fo-character">
+        <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Emit text, but with each U+00A0 replaced by a non-word-space -->
+<!-- "fo:character", recursing across every occurrence.           -->
+<xsl:template name="nbsp-to-fo-character">
+    <xsl:param name="text"/>
+    <xsl:choose>
+        <xsl:when test="contains($text, '&#xa0;')">
+            <xsl:value-of select="substring-before($text, '&#xa0;')"/>
+            <fo:character character="&#xa0;" treat-as-word-space="false"/>
+            <xsl:call-template name="nbsp-to-fo-character">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa0;')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$text"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
