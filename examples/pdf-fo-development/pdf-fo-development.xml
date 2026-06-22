@@ -69,6 +69,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Keyboard keys, named like <kbd name="enter"/> and <kbd name="shift"/>, or verbatim like <kbd>q</kbd>, render visibly boxed.</p>
 
+            <p>Interface icons name a glyph from a standard set, such as settings <icon name="gear"/>, tools <icon name="wrench"/>, and save <icon name="file-save"/>.</p>
+
             <p>External references are active links: the <url href="https://pretextbook.org/"><pretext/> website</url>, the bare <init>URL</init> <url href="https://pretextbook.org/"/>, and an address for writing, <email>info@example.com</email>.  Cross-references, like one to <xref ref="theorem-pythagoras"/> ahead, are internal links.</p>
         </section>
 
