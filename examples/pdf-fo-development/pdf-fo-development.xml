@@ -337,6 +337,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </statement>
                 </definition>
 
+                <definition xml:id="definition-distance" label="definition-distance">
+                    <statement>
+                        <p>The <term>distance</term> between points <m>P = (x_1, y_1)</m> and <m>Q = (x_2, y_2)</m> in the plane is
+                            <md>
+                                <mrow>d(P, Q) = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}.</mrow>
+                            </md></p>
+                    </statement>
+                </definition>
+
                 <theorem xml:id="theorem-pythagoras" label="theorem-pythagoras">
                     <title>Pythagorean Theorem</title>
                     <creator>Pythagoras</creator>
