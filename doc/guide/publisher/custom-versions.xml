@@ -79,7 +79,7 @@
         <subsection>
             <title>Forming a Version</title>
 
-            <p>Now, a publisher can elect to include or exclude all of the content of each component.  This is accomplished with the <attr>include</attr> attribute of the <c>source/include</c> element inside a publication file.  The value of this attribute is a space-separated listing of some of the component names in use.  An example minimal publication file could look like the following example.  See <xref ref="publication-file-source-version"/> for the specifics.</p>
+            <p>Now, a publisher can elect to include or exclude all of the content of each component.  This is accomplished with the <attr>include</attr> attribute of the <c>source/version</c> element inside a publication file.  The value of this attribute is a space-separated listing of some of the component names in use.  An example minimal publication file could look like the following example.  See <xref ref="publication-file-source-version"/> for the specifics.</p>
 
             <pre><![CDATA[
                 <publication>
