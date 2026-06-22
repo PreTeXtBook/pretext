@@ -405,6 +405,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <title>A Little History</title>
                     <p>The lightweight <tag>paragraphs</tag> division has just a title, run in to this paragraph.  Cross-references work too: see <xref ref="theorem-pythagoras"/>, <xref ref="definition-hypotenuse"/>, and <xref ref="section-images"/>, all referenced from <xref ref="paragraphs-history" text="title"/>.  Even the starred equation <xref ref="equation-even"/> answers to its decoration.</p>
                 </paragraphs>
+
+                <assemblage xml:id="assemblage-central-identity" label="assemblage-central-identity">
+                    <title>The Central Identity</title>
+                    <p>Nearly everything in this section turns on a single relationship: in a right triangle, the square on the hypotenuse equals the sum of the squares on the legs, <m>a^2 + b^2 = c^2</m>.</p>
+                </assemblage>
             </introduction>
 
             <subsection xml:id="subsection-depth" label="subsection-depth">
