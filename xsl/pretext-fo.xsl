@@ -2337,10 +2337,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:call-template name="rule-attribute">
-            <xsl:with-param name="side" select="'top'"/>
-            <xsl:with-param name="thickness" select="@top"/>
-        </xsl:call-template>
+        <!-- The top edge is not a single table border: it rides the     -->
+        <!-- first row's cells (see the "cell" template) so the top rule  -->
+        <!-- can vary by column via "col/@top".  The other three frame    -->
+        <!-- edges stay whole-tabular borders on the table.               -->
         <xsl:call-template name="rule-attribute">
             <xsl:with-param name="side" select="'bottom'"/>
             <xsl:with-param name="thickness" select="@bottom"/>
@@ -2650,6 +2650,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of select="parent::row/@left"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+        <!-- The top edge of the table rides its first row, per column       -->
+        <!-- ("col/@top"), so the top rule can vary across columns, or even  -->
+        <!-- drop out where "@top" is "none"; a column with no "@top" of its -->
+        <!-- own inherits the whole-tabular "@top".  A spanning leading cell -->
+        <!-- takes the top of the column it starts in.                       -->
+        <xsl:if test="not(parent::row/preceding-sibling::row)">
+            <xsl:variable name="top-position" select="count(preceding-sibling::cell[not(@colspan)]) + sum(preceding-sibling::cell/@colspan) + 1"/>
+            <xsl:call-template name="rule-attribute">
+                <xsl:with-param name="side" select="'top'"/>
+                <xsl:with-param name="thickness">
+                    <xsl:choose>
+                        <xsl:when test="ancestor::tabular/col[position() = $top-position]/@top">
+                            <xsl:value-of select="ancestor::tabular/col[position() = $top-position]/@top"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="ancestor::tabular/@top"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:with-param>
