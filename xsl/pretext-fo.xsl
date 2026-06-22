@@ -939,7 +939,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="trailing-tombstone"/>
     <xsl:param name="alignment" select="$text-alignment"/>
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
-    <fo:block text-align="{$alignment}" space-after="0.5em">
+    <fo:block text-align="{$alignment}">
+        <!-- A new paragraph is set off by indenting its first line      -->
+        <!-- rather than by vertical space, so consecutive paragraphs    -->
+        <!-- share the body leading (no "space-after").  Indent a "p"     -->
+        <!-- exactly when another "p" precedes it among its siblings.     -->
+        <!-- The opening paragraph of a division or block (after a        -->
+        <!-- heading, or a figure's "caption") then stays flush, having   -->
+        <!-- no earlier paragraph to break from, while a paragraph that   -->
+        <!-- follows an interruption between paragraphs (a figure, a      -->
+        <!-- list) is the next paragraph in the prose and indents.  Using -->
+        <!-- "preceding-sibling::p" (not the immediate predecessor) keeps -->
+        <!-- an invisible "idx" or "notation" marker between paragraphs   -->
+        <!-- from masking the earlier one.  Text resuming after an        -->
+        <!-- in-paragraph display stays flush: FOP indents only a         -->
+        <!-- block's first line, not a line that follows a nested block.  -->
+        <!-- Bringhurst (The Elements of Typographic Style, 4th ed.)     -->
+        <!-- makes the case for both. Sec. 2.3.2: "In continuous text    -->
+        <!-- mark all paragraphs after the first with an indent of at    -->
+        <!-- least one en" (the 1.5em here, the LaTeX article default,   -->
+        <!-- exceeds that minimum). Sec. 2.3.1, on the flush opener:     -->
+        <!-- "The function of a paragraph indent is to mark a pause,     -->
+        <!-- setting the paragraph apart from what precedes it. If a     -->
+        <!-- paragraph is preceded by a title or subhead, the indent is  -->
+        <!-- superfluous and can therefore be omitted, as it is here."   -->
+        <xsl:if test="preceding-sibling::p">
+            <xsl:attribute name="text-indent">
+                <xsl:value-of select="$paragraph-indentation"/>
+                <xsl:text>em</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <!-- a tombstone arriving from an enclosing PROOF-LIKE rides -->
         <!-- the final line, whose elastic leader needs the line     -->
         <!-- justified to push the tombstone to the right margin     -->
