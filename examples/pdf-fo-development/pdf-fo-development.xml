@@ -357,6 +357,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </proof>
                 </theorem>
 
+                <example xml:id="example-hypotenuse" label="example-hypotenuse">
+                    <title>Computing a Hypotenuse</title>
+                    <statement>
+                        <p>A right triangle has legs <m>3</m> and <m>4</m>, and here each step toward its hypotenuse <m>c</m> is annotated with the fact it relies on.
+                            <md>
+                                <mrow>c^2 &amp;= a^2 + b^2 &amp;&amp;<xref ref="theorem-pythagoras"/></mrow>
+                                <mrow>&amp;= 3^2 + 4^2 &amp;&amp;\text{(the given legs)}</mrow>
+                                <mrow>&amp;= 25,</mrow>
+                            </md>
+                        so <m>c = 5</m>.</p>
+                    </statement>
+                </example>
+
                 <example xml:id="example-quadratic" label="example-quadratic">
                     <title>A Quadratic Equation</title>
                     <statement>
