@@ -352,12 +352,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <definition xml:id="definition-hypotenuse" label="definition-hypotenuse">
                     <title>Hypotenuse</title>
+                    <idx>hypotenuse</idx>
                     <statement>
                         <p>The <term>hypotenuse</term> of a right triangle is the side opposite the right angle.</p>
                     </statement>
                 </definition>
 
                 <definition xml:id="definition-distance" label="definition-distance">
+                    <idx>distance</idx>
                     <statement>
                         <p>The <term>distance</term> between points <m>P = (x_1, y_1)</m> and <m>Q = (x_2, y_2)</m> in the plane is
                             <md>
@@ -369,6 +371,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <theorem xml:id="theorem-pythagoras" label="theorem-pythagoras">
                     <title>Pythagorean Theorem</title>
                     <creator>Pythagoras</creator>
+                    <idx>Pythagorean Theorem</idx>
                     <statement>
                         <p>If a right triangle has legs <m>a</m> and <m>b</m>, and hypotenuse <m>c</m>, then <m>a^2 + b^2 = c^2</m>.</p>
                     </statement>
@@ -404,6 +407,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <theorem xml:id="theorem-even" label="theorem-even">
                 <title>Characterizing Even Squares</title>
+                <idx>even integer</idx>
                 <statement>
                     <p>An integer <m>n</m> is even if and only if <m>n^2</m> is even, a fact worth a reference number,
                         <md>
@@ -610,6 +614,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <solutions xml:id="solutions-backmatter" label="solutions-backmatter" divisional="answer solution" project="solution" inline="answer">
                 <title>Answers and Solutions</title>
             </solutions>
+            <index xml:id="the-index" label="the-index">
+                <title>Index</title>
+                <index-list/>
+            </index>
             <colophon xml:id="colophon" label="colophon">
                 <p>This article was authored in, and produced with, <pretext/>, rendered by Apache <init>FOP</init> by way of <init>XSL</init> Formatting Objects.</p>
             </colophon>
