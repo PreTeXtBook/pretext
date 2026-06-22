@@ -1422,7 +1422,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <fo:block space-before="0.75em" space-after="0.75em">
         <!-- a sub-task indents one step deeper than its parent -->
         <xsl:attribute name="start-indent">
-            <xsl:value-of select="count(ancestor-or-self::task) * 2"/>
+            <xsl:value-of select="count(ancestor-or-self::task) * $task-indentation"/>
             <xsl:text>em</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="link-id-attribute"/>
@@ -1543,38 +1543,44 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- final short row pads with empty cells, since the rows of a   -->
 <!-- tagged table must share a common width (ISO 14289-1).        -->
 <xsl:template match="exercisegroup">
+    <!-- the exercises shift right to show the scope of the group, by -->
+    <!-- the shared fraction of the text measure (LaTeX's \egindent); -->
+    <!-- the introduction and conclusion stay at the left margin      -->
+    <xsl:variable name="group-indent" select="format-number($exercisegroup-indentation * $text-width-points, '0.##')"/>
     <fo:block>
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="idx"/>
         <xsl:apply-templates select="introduction"/>
-        <xsl:choose>
-            <xsl:when test="@cols">
-                <xsl:variable name="cols" select="@cols"/>
-                <fo:table table-layout="fixed" width="100%">
-                    <xsl:call-template name="equal-table-columns">
-                        <xsl:with-param name="remaining" select="$cols"/>
-                    </xsl:call-template>
-                    <fo:table-body>
-                        <xsl:for-each select="exercise[(position() mod $cols) = 1]">
-                            <fo:table-row>
-                                <xsl:variable name="row-exercises" select=".|following-sibling::exercise[position() &lt; $cols]"/>
-                                <xsl:for-each select="$row-exercises">
-                                    <fo:table-cell padding-right="6pt">
-                                        <xsl:apply-templates select="."/>
-                                    </fo:table-cell>
-                                </xsl:for-each>
-                                <xsl:call-template name="empty-table-cells">
-                                    <xsl:with-param name="remaining" select="$cols - count($row-exercises)"/>
-                                </xsl:call-template>
-                            </fo:table-row>
-                        </xsl:for-each>
-                    </fo:table-body>
-                </fo:table>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="exercise"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <fo:block start-indent="{$group-indent}pt">
+            <xsl:choose>
+                <xsl:when test="@cols">
+                    <xsl:variable name="cols" select="@cols"/>
+                    <fo:table table-layout="fixed" width="100%">
+                        <xsl:call-template name="equal-table-columns">
+                            <xsl:with-param name="remaining" select="$cols"/>
+                        </xsl:call-template>
+                        <fo:table-body>
+                            <xsl:for-each select="exercise[(position() mod $cols) = 1]">
+                                <fo:table-row>
+                                    <xsl:variable name="row-exercises" select=".|following-sibling::exercise[position() &lt; $cols]"/>
+                                    <xsl:for-each select="$row-exercises">
+                                        <fo:table-cell padding-right="6pt">
+                                            <xsl:apply-templates select="."/>
+                                        </fo:table-cell>
+                                    </xsl:for-each>
+                                    <xsl:call-template name="empty-table-cells">
+                                        <xsl:with-param name="remaining" select="$cols - count($row-exercises)"/>
+                                    </xsl:call-template>
+                                </fo:table-row>
+                            </xsl:for-each>
+                        </fo:table-body>
+                    </fo:table>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="exercise"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </fo:block>
         <xsl:apply-templates select="conclusion"/>
     </fo:block>
 </xsl:template>
@@ -1671,7 +1677,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <fo:block space-before="0.75em" space-after="0.75em">
                 <!-- a sub-task indents one step deeper than its parent -->
                 <xsl:attribute name="start-indent">
-                    <xsl:value-of select="count(ancestor-or-self::task) * 2"/>
+                    <xsl:value-of select="count(ancestor-or-self::task) * $task-indentation"/>
                     <xsl:text>em</xsl:text>
                 </xsl:attribute>
                 <!-- a duplicate (in a solutions division) cannot -->
