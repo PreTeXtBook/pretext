@@ -209,6 +209,46 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </tabular>
             </table>
 
+            <p>A second table groups three columns under a spanning header, sets the names off with a single vertical rule, and sizes itself to its content rather than to fixed percentages.</p>
+
+            <table xml:id="table-triples" label="table-triples">
+                <title>Some Pythagorean Triples</title>
+                <tabular halign="center" bottom="major" left="medium" right="medium">
+                    <col halign="left" top="major" right="minor"/>
+                    <col halign="right" top="major"/>
+                    <col halign="right" top="major"/>
+                    <col halign="right" top="major"/>
+                    <row header="yes">
+                        <cell></cell>
+                        <cell colspan="3" halign="center" bottom="minor">Side Lengths</cell>
+                    </row>
+                    <row header="yes" bottom="medium">
+                        <cell>Name</cell>
+                        <cell><m>a</m></cell>
+                        <cell><m>b</m></cell>
+                        <cell><m>c</m></cell>
+                    </row>
+                    <row>
+                        <cell>3-4-5</cell>
+                        <cell>3</cell>
+                        <cell>4</cell>
+                        <cell>5</cell>
+                    </row>
+                    <row>
+                        <cell>5-12-13</cell>
+                        <cell>5</cell>
+                        <cell>12</cell>
+                        <cell>13</cell>
+                    </row>
+                    <row>
+                        <cell>8-15-17</cell>
+                        <cell>8</cell>
+                        <cell>15</cell>
+                        <cell>17</cell>
+                    </row>
+                </tabular>
+            </table>
+
             <p>A side-by-side arranges panels horizontally: an image, beside a list of the sides of the pictured triangle, with the bottoms of the two panels aligned.</p>
 
             <sidebyside widths="40% 35%" valign="bottom">
