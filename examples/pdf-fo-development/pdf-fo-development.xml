@@ -510,7 +510,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <blockquote>
                 <p>The grand thing is to be able to reason backwards.</p>
-                <attribution><q>A Study in Scarlet</q>, 1887</attribution>
+                <attribution>
+                    <line>Sherlock Holmes</line>
+                    <line><q>A Study in Scarlet</q>, 1887</line>
+                </attribution>
             </blockquote>
 
             <poem xml:id="poem-fog" label="poem-fog">
