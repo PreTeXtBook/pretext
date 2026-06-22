@@ -145,7 +145,7 @@ except ImportError:
 #############################
 
 
-def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
+def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format, math_cross_references):
     """Convert PreTeXt source to a structured file of representations of mathematics"""
     # formats:  'svg', 'mml', 'nemeth', 'speech', 'kindle'
     # Internal calls will specify out_file with complete path
@@ -182,6 +182,10 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
         punctuation = "none"
     params = {}
     params["math.punctuation"] = punctuation
+    # a single-file target (XSL-FO/PDF) can ask that cross-references
+    # inside mathematics become active internal links (an SVG "a")
+    if math_cross_references:
+        params["math.cross-references"] = "yes"
     if pub_file:
         params["publisher"] = pub_file
     common.xsltproc(extraction_xslt, xml_source, mjinput, None, params)
@@ -2380,7 +2384,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     # ripping out LaTeX as math representations
     msg = "converting raw LaTeX from {} into clean {} format placed into {}"
     log.debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, None, math_format, False)
 
     # use XSL to make a simplified BRF-like XML version, "preprint"
     msg = "converting source ({}) and clean representations ({}) into preprint XML file ({})"
@@ -2803,11 +2807,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
     # ripping out LaTeX as math representations
     msg = "converting raw LaTeX from {} into clean {} format placed into {}"
     log.debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, None, math_format, False)
     # optionally, build a file of speech versions of the math
     if math_format == "svg":
         log.debug(msg.format(xml_source, "speech", speech_representations))
-        mathjax_latex(xml_source, pub_file, speech_representations, None, "speech")
+        mathjax_latex(xml_source, pub_file, speech_representations, None, "speech", False)
 
     # Build necessary content and infrastructure EPUB files,
     # using SVG images of math.  Most output goes into the
@@ -4250,6 +4254,39 @@ def _downgrade_svg2_for_batik(directory):
             tree.write(svg_file)
 
 
+def _math_links_for_batik(math_file):
+    """Make a cross-reference inside mathematics a live link in the PDF.
+
+    When asked for cross-reference links, MathJax wraps the reference in
+    an SVG "a" element carrying a plain SVG 2 "href".  Apache Batik (the
+    SVG engine inside FOP) honors only the SVG 1.1 "xlink:href", so the
+    link is present but dead until the value is moved over -- exactly the
+    fix  _downgrade_svg2_for_batik  applies to a "use".  Operates on the
+    math representations file, where these "a" elements live.
+    """
+    import lxml.etree as ET
+
+    svg_namespace = "http://www.w3.org/2000/svg"
+    xlink_namespace = "http://www.w3.org/1999/xlink"
+    anchor_tag = "{{{}}}a".format(svg_namespace)
+    xlink_href = "{{{}}}href".format(xlink_namespace)
+
+    try:
+        tree = ET.parse(math_file)
+    except (ET.XMLSyntaxError, OSError):
+        return
+    root = tree.getroot()
+    changed = False
+    for anchor in root.iter(anchor_tag):
+        target = anchor.get("href")
+        if target is not None and anchor.get(xlink_href) is None:
+            anchor.set(xlink_href, target)
+            del anchor.attrib["href"]
+            changed = True
+    if changed:
+        tree.write(math_file)
+
+
 def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     """
     Generate a PDF from an XML source using XSL-FO as an intermediate
@@ -4285,13 +4322,21 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     # the FO stylesheet as the  $mathfile  string parameter, which
     # melds each image into the page (the model is  epub()  above)
     math_representations = os.path.join(tmp_dir, "math-representations-svg.xml")
-    mathjax_latex(xml, pub_file, math_representations, None, "svg")
+    # The final argument requests live cross-reference links inside the
+    # mathematics.  This (single-file) PDF is the only conversion that
+    # asks for them: a link is a bare "#id" fragment, which resolves
+    # only within one file, and FOP renders it from the SVG that MathJax
+    # emits.  Chunked conversions (HTML, EPUB) would need real filenames,
+    # and not every reader honors an SVG link, so they pass False.
+    mathjax_latex(xml, pub_file, math_representations, None, "svg", True)
+    # let Batik honor the cross-reference links MathJax placed in the math
+    _math_links_for_batik(math_representations)
     stringparams["mathfile"] = math_representations.replace(os.sep, "/")
 
     # Speech versions of the mathematics become the alternate text
     # of the SVG images, as PDF/UA requires; again the model is epub()
     speech_representations = os.path.join(tmp_dir, "math-representations-speech.xml")
-    mathjax_latex(xml, pub_file, speech_representations, None, "speech")
+    mathjax_latex(xml, pub_file, speech_representations, None, "speech", False)
     stringparams["speechfile"] = speech_representations.replace(os.sep, "/")
 
     # make the XSL-FO file in scratch directory
