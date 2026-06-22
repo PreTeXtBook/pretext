@@ -145,7 +145,7 @@ except ImportError:
 #############################
 
 
-def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
+def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format, math_cross_references):
     """Convert PreTeXt source to a structured file of representations of mathematics"""
     # formats:  'svg', 'mml', 'nemeth', 'speech', 'kindle'
     # Internal calls will specify out_file with complete path
@@ -182,6 +182,10 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
         punctuation = "none"
     params = {}
     params["math.punctuation"] = punctuation
+    # a single-file target (XSL-FO/PDF) can ask that cross-references
+    # inside mathematics become active internal links (an SVG "a")
+    if math_cross_references:
+        params["math.cross-references"] = "yes"
     if pub_file:
         params["publisher"] = pub_file
     common.xsltproc(extraction_xslt, xml_source, mjinput, None, params)
@@ -2380,7 +2384,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     # ripping out LaTeX as math representations
     msg = "converting raw LaTeX from {} into clean {} format placed into {}"
     log.debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, None, math_format, False)
 
     # use XSL to make a simplified BRF-like XML version, "preprint"
     msg = "converting source ({}) and clean representations ({}) into preprint XML file ({})"
@@ -2803,11 +2807,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
     # ripping out LaTeX as math representations
     msg = "converting raw LaTeX from {} into clean {} format placed into {}"
     log.debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, None, math_format, False)
     # optionally, build a file of speech versions of the math
     if math_format == "svg":
         log.debug(msg.format(xml_source, "speech", speech_representations))
-        mathjax_latex(xml_source, pub_file, speech_representations, None, "speech")
+        mathjax_latex(xml_source, pub_file, speech_representations, None, "speech", False)
 
     # Build necessary content and infrastructure EPUB files,
     # using SVG images of math.  Most output goes into the
@@ -4161,6 +4165,111 @@ def _pdf_fo_accessibility_repairs(pdfname):
         if doc.xref_get_key(xref, "S")[1] == "/Note" and doc.xref_get_key(xref, "ID")[0] == "null":
             doc.xref_set_key(xref, "ID", "(Note-{})".format(xref))
             additions += 1
+
+    # repair three: tag the link annotations FOP leaves untagged.  Apache
+    # Batik turns the SVG "a" that MathJax emits for a cross-reference
+    # inside display mathematics into a Link annotation, but -- unlike
+    # FOP's own "fo:basic-link" -- does not nest it in a Link structure
+    # element, which PDF/UA-1 (Clause 7.18.5) requires.  Wrap each such
+    # annotation (a Link with no /StructParent) in a new Link structure
+    # element under the document's structure element, with an /OBJR back
+    # to the annotation, and register its /StructParent in the number
+    # tree.  Nesting under the math's own figure would read better, but
+    # needs per-figure geometry that FOP and PyMuPDF do not expose; this
+    # keeps the PDF conformant.
+    struct_root = doc.xref_get_key(doc.pdf_catalog(), "StructTreeRoot")
+    if struct_root[0] == "xref":
+        root_xref = int(struct_root[1].split()[0])
+        root_kids = doc.xref_get_key(root_xref, "K")
+        if root_kids[0] == "xref":
+            document_element = int(root_kids[1].split()[0])
+        elif root_kids[0] == "array":
+            document_refs = re.findall(r"(\d+)\s+0\s+R", root_kids[1])
+            document_element = int(document_refs[0]) if document_refs else None
+        else:
+            document_element = None
+
+        # The /ParentTree is a number tree, given inline on the structure
+        # root or as an indirect object.  Read a node's /Nums and /Kids
+        # whichever way it is stored.
+        def tree_node(node_type, node_value):
+            if node_type == "xref":
+                node = int(node_value.split()[0])
+                nums = doc.xref_get_key(node, "Nums")
+                kids = doc.xref_get_key(node, "Kids")
+                return (nums[1] if nums[0] == "array" else None,
+                        kids[1] if kids[0] == "array" else None)
+            nums = re.search(r"/Nums\s*(\[.*\])", node_value)
+            kids = re.search(r"/Kids\s*(\[[^\]]*\])", node_value)
+            return (nums.group(1) if nums else None,
+                    kids.group(1) if kids else None)
+
+        # an indirect leaf to extend (follow /Kids to its last child), the
+        # highest key already in the tree (a page's /StructParents or an
+        # annotation's /StructParent), so new keys sit above it
+        def resolve_leaf(node_type, node_value):
+            nums, kids = tree_node(node_type, node_value)
+            if kids:
+                refs = re.findall(r"(\d+)\s+0\s+R", kids)
+                if refs:
+                    return resolve_leaf("xref", refs[-1] + " 0 R")
+            return int(node_value.split()[0]) if node_type == "xref" else None
+
+        def tree_max_key(node_type, node_value):
+            nums, kids = tree_node(node_type, node_value)
+            keys = [-1]
+            if nums:
+                keys += [int(k) for k in re.findall(r"(\d+)\s+(?:\d+\s+0\s+R|<<|\[)", nums)]
+            if kids:
+                keys += [tree_max_key("xref", r + " 0 R") for r in re.findall(r"(\d+)\s+0\s+R", kids)]
+            return max(keys)
+
+        parent_tree = doc.xref_get_key(root_xref, "ParentTree")
+        leaf = resolve_leaf(*parent_tree) if document_element is not None else None
+        if leaf is not None:
+            next_key = doc.xref_get_key(root_xref, "ParentTreeNextKey")
+            key = int(next_key[1]) if next_key[0] == "int" else tree_max_key(*parent_tree) + 1
+
+            new_links = []
+            for page in doc:
+                page_xref = page.xref
+                for link in page.links():
+                    annot = link["xref"]
+                    if doc.xref_get_key(annot, "Subtype")[1] != "/Link":
+                        continue
+                    if doc.xref_get_key(annot, "StructParent")[0] == "int":
+                        continue
+                    link_element = doc.get_new_xref()
+                    objr = "<</Type/OBJR/Pg {} 0 R/Obj {} 0 R>>".format(page_xref, annot)
+                    doc.update_object(link_element, "<</Type/StructElem/S/Link/P {} 0 R/Pg {} 0 R/K {}>>".format(document_element, page_xref, objr))
+                    doc.xref_set_key(annot, "StructParent", str(key))
+                    new_links.append((key, link_element))
+                    key += 1
+                    additions += 1
+
+            if new_links:
+                # the new Link elements become children of the document
+                new_refs = " ".join("{} 0 R".format(x) for _, x in new_links)
+                k_entry = doc.xref_get_key(document_element, "K")
+                if k_entry[0] == "array":
+                    document_kids = k_entry[1].rstrip()[:-1] + " " + new_refs + "]"
+                elif k_entry[0] == "xref":
+                    document_kids = "[{} {}]".format(k_entry[1], new_refs)
+                else:
+                    document_kids = "[{}]".format(new_refs)
+                doc.xref_set_key(document_element, "K", document_kids)
+                # map each annotation's /StructParent to its Link element,
+                # extending the leaf's /Nums (kept sorted, as the new keys
+                # are all above the existing ones) and its /Limits
+                nums = " ".join("{} {} 0 R".format(k, x) for k, x in new_links)
+                leaf_nums = doc.xref_get_key(leaf, "Nums")
+                existing = leaf_nums[1].strip()[1:-1].strip() if leaf_nums[0] == "array" else ""
+                doc.xref_set_key(leaf, "Nums", "[{}]".format((existing + " " + nums).strip()))
+                leaf_limits = doc.xref_get_key(leaf, "Limits")
+                low = re.findall(r"-?\d+", leaf_limits[1])[0] if (leaf_limits[0] == "array" and existing) else str(new_links[0][0])
+                doc.xref_set_key(leaf, "Limits", "[{} {}]".format(low, new_links[-1][0]))
+                doc.xref_set_key(root_xref, "ParentTreeNextKey", str(key))
+
     if additions > 0:
         doc.saveIncr()
     doc.close()
@@ -4250,6 +4359,39 @@ def _downgrade_svg2_for_batik(directory):
             tree.write(svg_file)
 
 
+def _math_links_for_batik(math_file):
+    """Make a cross-reference inside mathematics a live link in the PDF.
+
+    When asked for cross-reference links, MathJax wraps the reference in
+    an SVG "a" element carrying a plain SVG 2 "href".  Apache Batik (the
+    SVG engine inside FOP) honors only the SVG 1.1 "xlink:href", so the
+    link is present but dead until the value is moved over -- exactly the
+    fix  _downgrade_svg2_for_batik  applies to a "use".  Operates on the
+    math representations file, where these "a" elements live.
+    """
+    import lxml.etree as ET
+
+    svg_namespace = "http://www.w3.org/2000/svg"
+    xlink_namespace = "http://www.w3.org/1999/xlink"
+    anchor_tag = "{{{}}}a".format(svg_namespace)
+    xlink_href = "{{{}}}href".format(xlink_namespace)
+
+    try:
+        tree = ET.parse(math_file)
+    except (ET.XMLSyntaxError, OSError):
+        return
+    root = tree.getroot()
+    changed = False
+    for anchor in root.iter(anchor_tag):
+        target = anchor.get("href")
+        if target is not None and anchor.get(xlink_href) is None:
+            anchor.set(xlink_href, target)
+            del anchor.attrib["href"]
+            changed = True
+    if changed:
+        tree.write(math_file)
+
+
 def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     """
     Generate a PDF from an XML source using XSL-FO as an intermediate
@@ -4285,13 +4427,21 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
     # the FO stylesheet as the  $mathfile  string parameter, which
     # melds each image into the page (the model is  epub()  above)
     math_representations = os.path.join(tmp_dir, "math-representations-svg.xml")
-    mathjax_latex(xml, pub_file, math_representations, None, "svg")
+    # The final argument requests live cross-reference links inside the
+    # mathematics.  This (single-file) PDF is the only conversion that
+    # asks for them: a link is a bare "#id" fragment, which resolves
+    # only within one file, and FOP renders it from the SVG that MathJax
+    # emits.  Chunked conversions (HTML, EPUB) would need real filenames,
+    # and not every reader honors an SVG link, so they pass False.
+    mathjax_latex(xml, pub_file, math_representations, None, "svg", True)
+    # let Batik honor the cross-reference links MathJax placed in the math
+    _math_links_for_batik(math_representations)
     stringparams["mathfile"] = math_representations.replace(os.sep, "/")
 
     # Speech versions of the mathematics become the alternate text
     # of the SVG images, as PDF/UA requires; again the model is epub()
     speech_representations = os.path.join(tmp_dir, "math-representations-speech.xml")
-    mathjax_latex(xml, pub_file, speech_representations, None, "speech")
+    mathjax_latex(xml, pub_file, speech_representations, None, "speech", False)
     stringparams["speechfile"] = speech_representations.replace(os.sep, "/")
 
     # make the XSL-FO file in scratch directory

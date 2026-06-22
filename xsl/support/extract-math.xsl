@@ -81,6 +81,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="math.punctuation" select="'none'"/>
 <xsl:variable name="math.punctuation.include" select="$math.punctuation"/>
 
+<!-- A consumer that renders the math SVG into a single-file target  -->
+<!-- (such as the XSL-FO conversion to PDF) can make a               -->
+<!-- cross-reference inside math an active link by setting this to   -->
+<!-- 'yes': the "xref" then emits a \href{#id} that MathJax turns    -->
+<!-- into an SVG "a" element. The "#id" is the shared "unique-id" of -->
+<!-- the target, so it matches the anchor that conversion places on  -->
+<!-- the target. Off ('no') by default, since a chunked target       -->
+<!-- (HTML, EPUB) needs a filename, not a bare fragment, and not     -->
+<!-- every reader honors the SVG link.                               -->
+<xsl:param name="math.cross-references" select="'no'"/>
+
 <!-- We import the HTML stylesheet since we want HTML versions of -->
 <!-- the math bits, but we don't need all the chunking machinery  -->
 <!-- for extracting math, since we are building a single file,    -->
@@ -197,15 +208,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--       And the lxml parser complains when a global XSL variable is redefined      -->
 <!--       in an override/import.                                                     -->
 <!--                                                                                  -->
-<!-- We are going to punt right now and just drop in text, so (1) is  important,      -->
-<!-- but (2) and (3) are no longer issues. This override just plops in text, which    -->
-<!-- automatically comes wrapped in a LaTeX \text{}                                   -->
+<!-- We drop in text (1, the computed number, already wrapped in a LaTeX \text{}),    -->
+<!-- which is all a chunked target (3) can use, and is the default ('no') because not -->
+<!-- every reader honors an SVG link (2). But when "math.cross-references" is 'yes' a -->
+<!-- single-file target (such as the XSL-FO conversion to PDF) wants the live link of -->
+<!-- (2): wrap that same text in a \href to the target's "#id", which MathJax renders -->
+<!-- as an "a" element in the SVG.                                                    -->
 <xsl:template match="*" mode="xref-link-display-math">
     <xsl:param name="target"/>
     <xsl:param name="content"/>
-    <!-- <xsl:text>\text{</xsl:text> -->
-    <xsl:value-of select="$content"/>
-    <!-- <xsl:text>}</xsl:text> -->
+    <xsl:choose>
+        <xsl:when test="$math.cross-references = 'yes'">
+            <xsl:text>\href{#</xsl:text>
+            <xsl:apply-templates select="$target" mode="unique-id"/>
+            <xsl:text>}{</xsl:text>
+            <xsl:choose>
+                <!-- an electronic PDF colors the reference like every    -->
+                <!-- other link (the dark blue of "link-attributes" in    -->
+                <!-- pretext-fo.xsl), via MathJax's \color; print leaves   -->
+                <!-- it black, exactly as the other links do               -->
+                <xsl:when test="$b-latex-print">
+                    <xsl:value-of select="$content"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\color{#000080}{</xsl:text>
+                    <xsl:value-of select="$content"/>
+                    <xsl:text>}</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$content"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Knowls -->

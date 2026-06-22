@@ -332,6 +332,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </rdf:Description>
                 </rdf:RDF>
             </x:xmpmeta>
+            <xsl:call-template name="math-cross-reference-destinations"/>
         </fo:declarations>
         <fo:bookmark-tree>
             <xsl:apply-templates select="$document-root/*" mode="bookmark"/>
@@ -3853,6 +3854,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$text"/>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- The cross-references that sit inside display mathematics (an  -->
+<!-- "xref" is schema-allowed in an "md", through an "mrow" or a    -->
+<!-- single-line "md", but never in an inline "m"), keyed by the    -->
+<!-- "@ref" they carry, so a destination is named just once even    -->
+<!-- when several references share a target.                        -->
+<xsl:key name="math-cross-reference"
+         match="xref[ancestor::md]"
+         use="@ref"/>
+
+<!-- FOP resolves its own internal links directly and creates no  -->
+<!-- named destinations; but a cross-reference inside mathematics -->
+<!-- becomes an SVG "a" (see "math.cross-references" in           -->
+<!-- extract-math.xsl) that FOP compiles into a GoTo a *named*    -->
+<!-- destination.  So, in "fo:declarations", name a destination   -->
+<!-- for the target of each such reference, once per target;      -->
+<!-- "fox:destination" aims at the element carrying that id,      -->
+<!-- wherever it sits.                                            -->
+<xsl:template name="math-cross-reference-destinations">
+    <xsl:for-each select="$document-root//xref[ancestor::md and id(@ref)]">
+        <xsl:if test="count(. | key('math-cross-reference', @ref)[1]) = 1">
+            <xsl:variable name="dest-id">
+                <xsl:apply-templates select="id(@ref)" mode="unique-id"/>
+            </xsl:variable>
+            <fox:destination internal-destination="{$dest-id}"/>
+        </xsl:if>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- Hard-coded numbers, as in the HTML conversion: the number of -->
