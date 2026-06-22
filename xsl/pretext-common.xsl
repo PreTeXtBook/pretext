@@ -425,6 +425,29 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- "chunking" templates defined below.                    -->
 
 
+<!-- ############################# -->
+<!-- Dimensions and Colors, Shared -->
+<!-- ############################# -->
+
+<!-- Distances (and, in time, colors) that should agree         -->
+<!-- between the LaTeX/print and XSL-FO conversions live        -->
+<!-- here, defined once, so the two stay consistent.  A         -->
+<!-- value is a bare number; each conversion attaches its       -->
+<!-- own units as it uses it.                                   -->
+
+<!-- An "exercisegroup" indents its exercises, to show the      -->
+<!-- scope of the group, by this fraction of the prevailing     -->
+<!-- text width.  The LaTeX conversion applies it through       -->
+<!-- \egindent (that many \linewidth); the XSL-FO conversion    -->
+<!-- scales its text measure.                                   -->
+<xsl:variable name="exercisegroup-indentation" select="0.05"/>
+
+<!-- Each level of "task" nesting indents by this many "em"     -->
+<!-- of the body font.  (For comparison, the LaTeX task list    -->
+<!-- takes the "enumerate" default, roughly 2.5em.)             -->
+<xsl:variable name="task-indentation" select="2"/>
+
+
 <!-- ###### -->
 <!-- Levels -->
 <!-- ###### -->

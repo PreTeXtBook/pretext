@@ -1134,7 +1134,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and LaTeX conversions; an untitled assemblage has no heading.  -->
 <xsl:template match="assemblage">
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
-    <fo:block space-before="1em" space-after="1em">
+    <!-- A prominent enclosing box, matching the LaTeX conversion's   -->
+    <!-- tcolorbox: a thin black frame (0.5mm, the tcolorbox default)  -->
+    <!-- on the white page, with padding between frame and content.    -->
+    <!-- XSL-FO/FOP has no rounded corners, so the box is square; a    -->
+    <!-- finite keep prefers the box whole on a page but yields if it  -->
+    <!-- is too tall, rather than clip it.                             -->
+    <fo:block space-before="1em" space-after="1em" border="0.5mm solid black" padding="0.5em" keep-together.within-page="5">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:if test="title">
             <fo:block font-weight="bold" text-align="center" space-after="0.5em" keep-with-next.within-page="always">
@@ -1422,7 +1428,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <fo:block space-before="0.75em" space-after="0.75em">
         <!-- a sub-task indents one step deeper than its parent -->
         <xsl:attribute name="start-indent">
-            <xsl:value-of select="count(ancestor-or-self::task) * 2"/>
+            <xsl:value-of select="count(ancestor-or-self::task) * $task-indentation"/>
             <xsl:text>em</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="link-id-attribute"/>
@@ -1543,38 +1549,44 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- final short row pads with empty cells, since the rows of a   -->
 <!-- tagged table must share a common width (ISO 14289-1).        -->
 <xsl:template match="exercisegroup">
+    <!-- the exercises shift right to show the scope of the group, by -->
+    <!-- the shared fraction of the text measure (LaTeX's \egindent); -->
+    <!-- the introduction and conclusion stay at the left margin      -->
+    <xsl:variable name="group-indent" select="format-number($exercisegroup-indentation * $text-width-points, '0.##')"/>
     <fo:block>
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="idx"/>
         <xsl:apply-templates select="introduction"/>
-        <xsl:choose>
-            <xsl:when test="@cols">
-                <xsl:variable name="cols" select="@cols"/>
-                <fo:table table-layout="fixed" width="100%">
-                    <xsl:call-template name="equal-table-columns">
-                        <xsl:with-param name="remaining" select="$cols"/>
-                    </xsl:call-template>
-                    <fo:table-body>
-                        <xsl:for-each select="exercise[(position() mod $cols) = 1]">
-                            <fo:table-row>
-                                <xsl:variable name="row-exercises" select=".|following-sibling::exercise[position() &lt; $cols]"/>
-                                <xsl:for-each select="$row-exercises">
-                                    <fo:table-cell padding-right="6pt">
-                                        <xsl:apply-templates select="."/>
-                                    </fo:table-cell>
-                                </xsl:for-each>
-                                <xsl:call-template name="empty-table-cells">
-                                    <xsl:with-param name="remaining" select="$cols - count($row-exercises)"/>
-                                </xsl:call-template>
-                            </fo:table-row>
-                        </xsl:for-each>
-                    </fo:table-body>
-                </fo:table>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="exercise"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <fo:block start-indent="{$group-indent}pt">
+            <xsl:choose>
+                <xsl:when test="@cols">
+                    <xsl:variable name="cols" select="@cols"/>
+                    <fo:table table-layout="fixed" width="100%">
+                        <xsl:call-template name="equal-table-columns">
+                            <xsl:with-param name="remaining" select="$cols"/>
+                        </xsl:call-template>
+                        <fo:table-body>
+                            <xsl:for-each select="exercise[(position() mod $cols) = 1]">
+                                <fo:table-row>
+                                    <xsl:variable name="row-exercises" select=".|following-sibling::exercise[position() &lt; $cols]"/>
+                                    <xsl:for-each select="$row-exercises">
+                                        <fo:table-cell padding-right="6pt">
+                                            <xsl:apply-templates select="."/>
+                                        </fo:table-cell>
+                                    </xsl:for-each>
+                                    <xsl:call-template name="empty-table-cells">
+                                        <xsl:with-param name="remaining" select="$cols - count($row-exercises)"/>
+                                    </xsl:call-template>
+                                </fo:table-row>
+                            </xsl:for-each>
+                        </fo:table-body>
+                    </fo:table>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="exercise"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </fo:block>
         <xsl:apply-templates select="conclusion"/>
     </fo:block>
 </xsl:template>
@@ -1671,7 +1683,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <fo:block space-before="0.75em" space-after="0.75em">
                 <!-- a sub-task indents one step deeper than its parent -->
                 <xsl:attribute name="start-indent">
-                    <xsl:value-of select="count(ancestor-or-self::task) * 2"/>
+                    <xsl:value-of select="count(ancestor-or-self::task) * $task-indentation"/>
                     <xsl:text>em</xsl:text>
                 </xsl:attribute>
                 <!-- a duplicate (in a solutions division) cannot -->
@@ -2288,11 +2300,47 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- too tall for one page, rather than overflow and clip it as   -->
     <!-- "always" would.  Tune the strength if the keeping proves     -->
     <!-- too eager or too weak.                                       -->
-    <fo:table table-layout="fixed" width="{$table-percent}%" start-indent="{$side-indent}%" end-indent="{$side-indent}%" space-before="0.75em" space-after="0.75em" keep-together.within-page="5">
-        <xsl:call-template name="rule-attribute">
-            <xsl:with-param name="side" select="'top'"/>
-            <xsl:with-param name="thickness" select="@top"/>
-        </xsl:call-template>
+    <fo:table table-layout="fixed" space-before="0.75em" space-after="0.75em" keep-together.within-page="5">
+        <xsl:choose>
+            <!-- In a "sidebyside" panel a table takes its natural width  -->
+            <!-- (in points), so its rules stay coextensive with the      -->
+            <!-- content instead of stretching to fill the panel and      -->
+            <!-- trailing an over-long top rule.  Capped at the text      -->
+            <!-- measure so it never overflows the page; a panel narrower -->
+            <!-- than the natural width is uncommon and would only crowd   -->
+            <!-- a neighbor, not run off the page.                        -->
+            <xsl:when test="ancestor::sidebyside">
+                <xsl:attribute name="width">
+                    <xsl:choose>
+                        <xsl:when test="$natural-width &gt; $text-width-points">
+                            <xsl:value-of select="format-number($text-width-points, '0.##')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="format-number($natural-width, '0.##')"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:text>pt</xsl:text>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="width">
+                    <xsl:value-of select="$table-percent"/>
+                    <xsl:text>%</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="start-indent">
+                    <xsl:value-of select="$side-indent"/>
+                    <xsl:text>%</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="end-indent">
+                    <xsl:value-of select="$side-indent"/>
+                    <xsl:text>%</xsl:text>
+                </xsl:attribute>
+            </xsl:otherwise>
+        </xsl:choose>
+        <!-- The top edge is not a single table border: it rides the     -->
+        <!-- first row's cells (see the "cell" template) so the top rule  -->
+        <!-- can vary by column via "col/@top".  The other three frame    -->
+        <!-- edges stay whole-tabular borders on the table.               -->
         <xsl:call-template name="rule-attribute">
             <xsl:with-param name="side" select="'bottom'"/>
             <xsl:with-param name="thickness" select="@bottom"/>
@@ -2334,7 +2382,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="count"/>
     <xsl:param name="index" select="1"/>
     <xsl:if test="$index &lt;= $count">
-        <xsl:variable name="column-cells" select="row[(count(cell) = $count) and not(cell/@colspan)]/cell[$index]"/>
+        <!-- Size from the cells in column "index" of rows that hold the -->
+        <!-- full column-count (so cell position maps to column number),  -->
+        <!-- skipping rows with a colspan.  When no row is that full (a   -->
+        <!-- "tabular" with more "col" than cells in any row), fall back  -->
+        <!-- to the same column of every colspan-free row, so the present -->
+        <!-- columns still size from their content and only a genuinely   -->
+        <!-- empty column is left with nothing.                          -->
+        <xsl:variable name="full-row-cells" select="row[(count(cell) = $count) and not(cell/@colspan)]/cell[$index]"/>
+        <xsl:variable name="column-cells" select="$full-row-cells | row[not($full-row-cells) and not(cell/@colspan)]/cell[$index]"/>
         <w>
             <xsl:choose>
                 <!-- a paragraph column: a fraction of the text width -->
@@ -2377,12 +2433,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:for-each>
                     </xsl:variable>
                     <xsl:choose>
-                        <!-- no row supplies the full column-count of un-spanned -->
-                        <!-- cells, so this column has nothing to size from; use -->
-                        <!-- the paragraph-column default rather than emit a NaN -->
-                        <!-- width that FOP rejects                              -->
+                        <!-- a genuinely empty column (no cell of any row sits  -->
+                        <!-- here, e.g. a "col" beyond the cells a row supplies) -->
+                        <!-- takes only the padding, so a table-wide top or      -->
+                        <!-- bottom rule does not trail past the real content;    -->
+                        <!-- the value is the formula below at zero length.       -->
                         <xsl:when test="$longest = ''">
-                            <xsl:value-of select="round(0.2 * $text-width-points)"/>
+                            <xsl:value-of select="8"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of select="7 * $longest + 8"/>
@@ -2578,6 +2635,47 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:choose>
             </xsl:with-param>
         </xsl:call-template>
+        <!-- The left edge of a row lives on its leading cell, taken    -->
+        <!-- from the cell, else the row (mirroring the bottom edge's    -->
+        <!-- fallback); the schema places a per-row left rule on "row",  -->
+        <!-- and the whole-tabular left rule is on the "fo:table".  A    -->
+        <!-- spanning leading cell still owns the single left edge.      -->
+        <xsl:if test="not(preceding-sibling::cell)">
+            <xsl:call-template name="rule-attribute">
+                <xsl:with-param name="side" select="'left'"/>
+                <xsl:with-param name="thickness">
+                    <xsl:choose>
+                        <xsl:when test="@left">
+                            <xsl:value-of select="@left"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="parent::row/@left"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+        <!-- The top edge of the table rides its first row, per column       -->
+        <!-- ("col/@top"), so the top rule can vary across columns, or even  -->
+        <!-- drop out where "@top" is "none"; a column with no "@top" of its -->
+        <!-- own inherits the whole-tabular "@top".  A spanning leading cell -->
+        <!-- takes the top of the column it starts in.                       -->
+        <xsl:if test="not(parent::row/preceding-sibling::row)">
+            <xsl:variable name="top-position" select="count(preceding-sibling::cell[not(@colspan)]) + sum(preceding-sibling::cell/@colspan) + 1"/>
+            <xsl:call-template name="rule-attribute">
+                <xsl:with-param name="side" select="'top'"/>
+                <xsl:with-param name="thickness">
+                    <xsl:choose>
+                        <xsl:when test="ancestor::tabular/col[position() = $top-position]/@top">
+                            <xsl:value-of select="ancestor::tabular/col[position() = $top-position]/@top"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="ancestor::tabular/@top"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
         <xsl:variable name="the-block">
             <fo:block>
                 <xsl:attribute name="text-align">
