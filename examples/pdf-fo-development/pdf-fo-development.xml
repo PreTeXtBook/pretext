@@ -75,21 +75,51 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-lists" label="section-lists">
             <title>Lists</title>
 
-            <p>An ordered list, with a nested unordered list, interrupts this paragraph.
-                <ol>
-                    <li>A first list item, unstructured.</li>
-                    <li>
-                        <p>A second list item, structured, with a nested unordered list.</p>
-                        <ul>
-                            <li>A bulleted item.</li>
-                            <li>Another, with <em>some emphasis</em>.</li>
-                        </ul>
-                    </li>
-                    <li>A third item, to show the numbering continues.</li>
-                </ol>
-            and then the paragraph concludes.</p>
+            <p>A plain unordered list gathers a few short, unstructured items.
+                <ul>
+                    <li>a side</li>
+                    <li>an angle</li>
+                    <li>a vertex</li>
+                </ul>
+            </p>
 
-            <p>A list may have an author-specified marker, such as Roman numerals.
+            <p>An ordered list nests several levels deep, with an unordered list at the bottom, which exercises the changing labels and the growing indentation.
+                <ol>
+                    <li>
+                        <p>Measure the three sides.</p>
+                        <ol>
+                            <li>
+                                <p>Single out the longest side, the candidate hypotenuse, and square it.</p>
+                                <ul>
+                                    <li>record the square</li>
+                                    <li>set it aside</li>
+                                </ul>
+                            </li>
+                            <li><p>Square each of the two shorter sides, and add the results.</p></li>
+                        </ol>
+                    </li>
+                    <li><p>Compare the two totals to test for a right angle.</p></li>
+                </ol>
+            and then the surrounding paragraph resumes.</p>
+
+            <p>The items of a list may lead with a title.
+                <ul>
+                    <li>
+                        <title>Acute</title>
+                        <p>every angle is smaller than a right angle</p>
+                    </li>
+                    <li>
+                        <title>Right</title>
+                        <p>one angle is exactly a right angle</p>
+                    </li>
+                    <li>
+                        <title>Obtuse</title>
+                        <p>one angle is larger than a right angle</p>
+                    </li>
+                </ul>
+            </p>
+
+            <p>An author may set the list label, such as lower-case Roman numerals.
                 <ol marker="(i)">
                     <li>One item.</li>
                     <li>A second item.</li>
