@@ -447,6 +447,14 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- takes the "enumerate" default, roughly 2.5em.)             -->
 <xsl:variable name="task-indentation" select="2"/>
 
+<!-- A new paragraph is marked by indenting its first line by   -->
+<!-- this many "em", not by vertical space, the book-typography -->
+<!-- default (and what the LaTeX conversion does, through the   -->
+<!-- class "\parindent"). The "p" template of the XSL-FO        -->
+<!-- conversion applies it, and makes Bringhurst's case for the -->
+<!-- indent and for which paragraphs take it.                   -->
+<xsl:variable name="paragraph-indentation" select="1.5"/>
+
 
 <!-- ###### -->
 <!-- Levels -->
