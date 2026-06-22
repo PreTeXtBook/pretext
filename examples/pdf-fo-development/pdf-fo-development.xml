@@ -126,15 +126,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </ol>
             </p>
 
-            <p>A description list pairs titles with explanations.</p>
-            <dl>
+            <p>A description list pairs short terms with their explanations; a wide label column sets the terms right-aligned against the descriptions.</p>
+            <dl width="wide">
                 <li>
-                    <title>Carrot</title>
-                    <p>A root vegetable, usually orange.</p>
+                    <title>Leg</title>
+                    <p>One of the two sides that meet at the right angle.</p>
                 </li>
                 <li>
-                    <title>Kohlrabi</title>
-                    <p>A cultivar of wild cabbage, with a swollen stem.</p>
+                    <title>Hypotenuse</title>
+                    <p>The side opposite the right angle, and the longest of the three.</p>
                 </li>
             </dl>
         </section>
