@@ -14,7 +14,7 @@ $navbar-breakpoint: 856px !default;
   resize: both;
   overflow: hidden;
   flex-direction: column;
-  @include dialogs.ptx-dialog-modal;
+  @include dialogs.ptx-dialog;
 }
 
 .ptx-calculator-container[open] {
