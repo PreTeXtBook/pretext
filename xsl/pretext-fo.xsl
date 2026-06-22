@@ -1215,7 +1215,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="idx | notation"/>
     <xsl:variable name="content" select="*[not(self::title) and not(self::idx) and not(self::notation)]"/>
     <xsl:variable name="last" select="$content[last()]"/>
-    <xsl:variable name="b-mark-rides" select="boolean($last[self::p] or ($last[self::statement] and $last/*[last()][self::p]))"/>
+    <!-- The mark rides a closing paragraph only when that paragraph   -->
+    <!-- holds running text alone.  A paragraph that carries a display  -->
+    <!-- ("...written as <md/>") would otherwise have its line          -->
+    <!-- justified (to push the mark to the margin), spreading the text -->
+    <!-- around the display; such a block takes the mark on its own     -->
+    <!-- line instead.                                                  -->
+    <xsl:variable name="b-mark-rides" select="boolean(($last[self::p] and not($last/md)) or ($last[self::statement] and $last/*[last()][self::p] and not($last/*[last()]/md)))"/>
     <!-- the heading runs in to a leading paragraph, plain or in a "statement" -->
     <xsl:choose>
         <xsl:when test="$content[1][self::p] or ($content[1][self::statement] and $content[1]/*[1][self::p])">
