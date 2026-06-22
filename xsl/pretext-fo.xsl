@@ -1134,7 +1134,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and LaTeX conversions; an untitled assemblage has no heading.  -->
 <xsl:template match="assemblage">
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
-    <fo:block space-before="1em" space-after="1em">
+    <!-- A prominent enclosing box, matching the LaTeX conversion's   -->
+    <!-- tcolorbox: a thin black frame (0.5mm, the tcolorbox default)  -->
+    <!-- on the white page, with padding between frame and content.    -->
+    <!-- XSL-FO/FOP has no rounded corners, so the box is square; a    -->
+    <!-- finite keep prefers the box whole on a page but yields if it  -->
+    <!-- is too tall, rather than clip it.                             -->
+    <fo:block space-before="1em" space-after="1em" border="0.5mm solid black" padding="0.5em" keep-together.within-page="5">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:if test="title">
             <fo:block font-weight="bold" text-align="center" space-after="0.5em" keep-with-next.within-page="always">
