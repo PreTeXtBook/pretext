@@ -569,9 +569,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- paragraph and page setup -->
 <xsl:template name="page-setup">
     <!-- This should save-off the indentation used for the first line of  -->
-    <!-- a paragraph, in effect for the chosen document class.  Then the  -->
-    <!-- "parbox" used by "tcolorbox" can restore indentation rather than -->
-    <!-- run with none.  Part of                                          -->
+    <!-- a paragraph, which we prescribe just below to match the XSL-FO   -->
+    <!-- conversion. Then the "parbox" used by "tcolorbox" can restore    -->
+    <!-- indentation rather than run with none. Part of                   -->
     <!-- https://tex.stackexchange.com/questions/250165/                  -->
     <!-- normal-body-text-within-tcolorbox                                -->
     <!-- In a similar fashion we save/restore the parskip, only should    -->
@@ -579,6 +579,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Save default paragraph indentation and parskip for use later, when adjusting parboxes&#xa;</xsl:text>
     <xsl:text>\newlength{\normalparindent}&#xa;</xsl:text>
     <xsl:text>\newlength{\normalparskip}&#xa;</xsl:text>
+    <xsl:text>%% Prescribe the paragraph indent to the value shared with the&#xa;</xsl:text>
+    <xsl:text>%% XSL-FO conversion, so the two agree, rather than accepting the&#xa;</xsl:text>
+    <xsl:text>%% document class default; "\normalparindent" then captures it&#xa;</xsl:text>
+    <xsl:text>\AtBeginDocument{\setlength{\parindent}{</xsl:text>
+    <xsl:value-of select="$paragraph-indentation"/>
+    <xsl:text>em}}&#xa;</xsl:text>
     <xsl:text>\AtBeginDocument{\setlength{\normalparindent}{\parindent}}&#xa;</xsl:text>
     <xsl:text>\AtBeginDocument{\setlength{\normalparskip}{\parskip}}&#xa;</xsl:text>
     <xsl:text>\newcommand{\setparstyle}{\setlength{\parindent}{\normalparindent}\setlength{\parskip}{\normalparskip}}</xsl:text>
