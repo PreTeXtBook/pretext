@@ -1886,7 +1886,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//exercisegroup">
         <xsl:text>%% Indented groups of "exercise" within an "exercises" division&#xa;</xsl:text>
         <xsl:text>%% Lengths control the indentation (always) and gaps (multi-column)&#xa;</xsl:text>
-        <xsl:text>\newlength{\egindent}\setlength{\egindent}{0.05\linewidth}&#xa;</xsl:text>
+        <xsl:text>\newlength{\egindent}\setlength{\egindent}{</xsl:text>
+        <xsl:value-of select="$exercisegroup-indentation"/>
+        <xsl:text>\linewidth}&#xa;</xsl:text>
         <xsl:text>\newlength{\exggap}\setlength{\exggap}{0.05\linewidth}&#xa;</xsl:text>
         <xsl:if test="$document-root//exercisegroup[not(@cols)]">
             <xsl:text>%% Thin "xparse" environments will represent the entire exercise&#xa;</xsl:text>
