@@ -183,11 +183,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-tables" label="section-tables">
             <title>Tables and Figures</title>
 
-            <p>A small table of tree data follows, with a header row, rules, and varied column alignment.</p>
+            <p>A small table of tree data follows, ruled only horizontally, with a header row and varied column alignment.</p>
 
             <table xml:id="table-trees" label="table-trees">
                 <title>Some Trees and Their Habits</title>
-                <tabular halign="center" top="major" bottom="major" left="medium" right="medium">
+                <tabular halign="center" top="major" bottom="major">
                     <col halign="left" width="40%"/>
                     <col width="30%"/>
                     <col width="30%"/>
