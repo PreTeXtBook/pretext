@@ -297,6 +297,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </cd>
             reveals the indentation of its body line, before the sentence finishes.</p>
 
+            <p>Preformatted text, set off as its own block, holds its exact shape<mdash/>here a small sketch of a right triangle.</p>
+
+            <pre>
+                <cline>|\</cline>
+                <cline>| \</cline>
+                <cline>|  \</cline>
+                <cline>|___\</cline>
+            </pre>
+
+            <p>A listing, by contrast, is a captioned and numbered program.</p>
+
             <listing xml:id="listing-greeting" label="listing-greeting">
                 <title>A Counting Program</title>
                 <program language="python">
