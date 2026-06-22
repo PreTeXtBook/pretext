@@ -3204,7 +3204,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- true and there is no filtering.  Otherwise we compare an      -->
                 <!-- "mrow"'s following "intertext" to see if it is $break or not. -->
                 <xsl:variable name="md-block" select="$lead-node |
-                    $lead-node/following-sibling::mrow[not($break) or (following-sibling::intertext[1] = $break)]"/>
+                    $lead-node/following-sibling::mrow[not($break) or (count(following-sibling::intertext[1] | $break) = count(following-sibling::intertext[1]))]"/>
                 <!-- put the maximal run into a fresh "md"     -->
                 <!-- Location helps with reconstruction in     -->
                 <!-- the LaTeX conversion, where we un-explode -->
