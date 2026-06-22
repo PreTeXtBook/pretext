@@ -3051,6 +3051,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="verbatim-block">
     <xsl:param name="content"/>
     <xsl:param name="boxed" select="false()"/>
+    <!-- a "cd" interrupting a paragraph must not inherit its first-line indent -->
     <fo:block font-family="{$font-family-monospace}"
               font-size="90%"
               white-space-collapse="false"
@@ -3058,6 +3059,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               linefeed-treatment="preserve"
               wrap-option="no-wrap"
               text-align="start"
+              text-indent="0"
               space-before="0.5em"
               space-after="0.5em">
         <xsl:if test="$boxed">

@@ -69,42 +69,74 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Keyboard keys, named like <kbd name="enter"/> and <kbd name="shift"/>, or verbatim like <kbd>q</kbd>, render visibly boxed.</p>
 
+            <p>Interface icons name a glyph from a standard set, such as settings <icon name="gear"/>, tools <icon name="wrench"/>, and save <icon name="file-save"/>.</p>
+
             <p>External references are active links: the <url href="https://pretextbook.org/"><pretext/> website</url>, the bare <init>URL</init> <url href="https://pretextbook.org/"/>, and an address for writing, <email>info@example.com</email>.  Cross-references, like one to <xref ref="theorem-pythagoras"/> ahead, are internal links.</p>
         </section>
 
         <section xml:id="section-lists" label="section-lists">
             <title>Lists</title>
 
-            <p>An ordered list, with a nested unordered list, interrupts this paragraph.
-                <ol>
-                    <li>A first list item, unstructured.</li>
-                    <li>
-                        <p>A second list item, structured, with a nested unordered list.</p>
-                        <ul>
-                            <li>A bulleted item.</li>
-                            <li>Another, with <em>some emphasis</em>.</li>
-                        </ul>
-                    </li>
-                    <li>A third item, to show the numbering continues.</li>
-                </ol>
-            and then the paragraph concludes.</p>
+            <p>A plain unordered list gathers a few short, unstructured items.
+                <ul>
+                    <li>a side</li>
+                    <li>an angle</li>
+                    <li>a vertex</li>
+                </ul>
+            </p>
 
-            <p>A list may have an author-specified marker, such as Roman numerals.
+            <p>An ordered list nests several levels deep, with an unordered list at the bottom, which exercises the changing labels and the growing indentation.
+                <ol>
+                    <li>
+                        <p>Measure the three sides.</p>
+                        <ol>
+                            <li>
+                                <p>Single out the longest side, the candidate hypotenuse, and square it.</p>
+                                <ul>
+                                    <li>record the square</li>
+                                    <li>set it aside</li>
+                                </ul>
+                            </li>
+                            <li><p>Square each of the two shorter sides, and add the results.</p></li>
+                        </ol>
+                    </li>
+                    <li><p>Compare the two totals to test for a right angle.</p></li>
+                </ol>
+            and then the surrounding paragraph resumes.</p>
+
+            <p>The items of a list may lead with a title.
+                <ul>
+                    <li>
+                        <title>Acute</title>
+                        <p>every angle is smaller than a right angle</p>
+                    </li>
+                    <li>
+                        <title>Right</title>
+                        <p>one angle is exactly a right angle</p>
+                    </li>
+                    <li>
+                        <title>Obtuse</title>
+                        <p>one angle is larger than a right angle</p>
+                    </li>
+                </ul>
+            </p>
+
+            <p>An author may set the list label, such as lower-case Roman numerals.
                 <ol marker="(i)">
                     <li>One item.</li>
                     <li>A second item.</li>
                 </ol>
             </p>
 
-            <p>A description list pairs titles with explanations.</p>
-            <dl>
+            <p>A description list pairs short terms with their explanations; a wide label column sets the terms right-aligned against the descriptions.</p>
+            <dl width="wide">
                 <li>
-                    <title>Carrot</title>
-                    <p>A root vegetable, usually orange.</p>
+                    <title>Leg</title>
+                    <p>One of the two sides that meet at the right angle.</p>
                 </li>
                 <li>
-                    <title>Kohlrabi</title>
-                    <p>A cultivar of wild cabbage, with a swollen stem.</p>
+                    <title>Hypotenuse</title>
+                    <p>The side opposite the right angle, and the longest of the three.</p>
                 </li>
             </dl>
         </section>
@@ -153,11 +185,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-tables" label="section-tables">
             <title>Tables and Figures</title>
 
-            <p>A small table of tree data follows, with a header row, rules, and varied column alignment.</p>
+            <p>A small table of tree data follows, ruled only horizontally, with a header row and varied column alignment.</p>
 
             <table xml:id="table-trees" label="table-trees">
                 <title>Some Trees and Their Habits</title>
-                <tabular halign="center" top="major" bottom="major" left="medium" right="medium">
+                <tabular halign="center" top="major" bottom="major">
                     <col halign="left" width="40%"/>
                     <col width="30%"/>
                     <col width="30%"/>
@@ -175,6 +207,46 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <cell>Douglas fir</cell>
                         <cell>Pine</cell>
                         <cell halign="right">100</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>A second table groups three columns under a spanning header, sets the names off with a single vertical rule, and sizes itself to its content rather than to fixed percentages.</p>
+
+            <table xml:id="table-triples" label="table-triples">
+                <title>Some Pythagorean Triples</title>
+                <tabular halign="center" bottom="major" left="medium" right="medium">
+                    <col halign="left" top="major" right="minor"/>
+                    <col halign="right" top="major"/>
+                    <col halign="right" top="major"/>
+                    <col halign="right" top="major"/>
+                    <row header="yes">
+                        <cell></cell>
+                        <cell colspan="3" halign="center" bottom="minor">Side Lengths</cell>
+                    </row>
+                    <row header="yes" bottom="medium">
+                        <cell>Name</cell>
+                        <cell><m>a</m></cell>
+                        <cell><m>b</m></cell>
+                        <cell><m>c</m></cell>
+                    </row>
+                    <row>
+                        <cell>3-4-5</cell>
+                        <cell>3</cell>
+                        <cell>4</cell>
+                        <cell>5</cell>
+                    </row>
+                    <row>
+                        <cell>5-12-13</cell>
+                        <cell>5</cell>
+                        <cell>12</cell>
+                        <cell>13</cell>
+                    </row>
+                    <row>
+                        <cell>8-15-17</cell>
+                        <cell>8</cell>
+                        <cell>15</cell>
+                        <cell>17</cell>
                     </row>
                 </tabular>
             </table>
@@ -217,6 +289,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <cline>print(s)</cline>
                 </cd>
             and then it continues.</p>
+
+            <p>With <attr>showspaces</attr> set, a code display marks every space as a visible box, so that
+                <cd showspaces="all">
+                    <cline>def area(base, height):</cline>
+                    <cline>    return base * height / 2</cline>
+                </cd>
+            reveals the indentation of its body line, before the sentence finishes.</p>
+
+            <p>Preformatted text, set off as its own block, holds its exact shape<mdash/>here a small sketch of a right triangle.</p>
+
+            <pre>
+                <cline>|\</cline>
+                <cline>| \</cline>
+                <cline>|  \</cline>
+                <cline>|___\</cline>
+            </pre>
+
+            <p>A listing, by contrast, is a captioned and numbered program.</p>
 
             <listing xml:id="listing-greeting" label="listing-greeting">
                 <title>A Counting Program</title>
@@ -262,14 +352,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <definition xml:id="definition-hypotenuse" label="definition-hypotenuse">
                     <title>Hypotenuse</title>
+                    <idx>hypotenuse</idx>
                     <statement>
                         <p>The <term>hypotenuse</term> of a right triangle is the side opposite the right angle.</p>
+                    </statement>
+                </definition>
+
+                <definition xml:id="definition-distance" label="definition-distance">
+                    <idx>distance</idx>
+                    <statement>
+                        <p>The <term>distance</term> between points <m>P = (x_1, y_1)</m> and <m>Q = (x_2, y_2)</m> in the plane is
+                            <md>
+                                <mrow>d(P, Q) = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}.</mrow>
+                            </md></p>
                     </statement>
                 </definition>
 
                 <theorem xml:id="theorem-pythagoras" label="theorem-pythagoras">
                     <title>Pythagorean Theorem</title>
                     <creator>Pythagoras</creator>
+                    <idx>Pythagorean Theorem</idx>
                     <statement>
                         <p>If a right triangle has legs <m>a</m> and <m>b</m>, and hypotenuse <m>c</m>, then <m>a^2 + b^2 = c^2</m>.</p>
                     </statement>
@@ -277,6 +379,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <p>Dissect a square with side length <m>a + b</m> in two different ways, and account for the areas.</p>
                     </proof>
                 </theorem>
+
+                <example xml:id="example-hypotenuse" label="example-hypotenuse">
+                    <title>Computing a Hypotenuse</title>
+                    <statement>
+                        <p>A right triangle has legs <m>3</m> and <m>4</m>, and here each step toward its hypotenuse <m>c</m> is annotated with the fact it relies on.
+                            <md>
+                                <mrow>c^2 &amp;= a^2 + b^2 &amp;&amp;<xref ref="theorem-pythagoras"/></mrow>
+                                <mrow>&amp;= 3^2 + 4^2 &amp;&amp;\text{(the given legs)}</mrow>
+                                <mrow>&amp;= 25,</mrow>
+                            </md>
+                        so <m>c = 5</m>.</p>
+                    </statement>
+                </example>
 
                 <example xml:id="example-quadratic" label="example-quadratic">
                     <title>A Quadratic Equation</title>
@@ -292,6 +407,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <theorem xml:id="theorem-even" label="theorem-even">
                 <title>Characterizing Even Squares</title>
+                <idx>even integer</idx>
                 <statement>
                     <p>An integer <m>n</m> is even if and only if <m>n^2</m> is even, a fact worth a reference number,
                         <md>
@@ -313,6 +429,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <title>A Little History</title>
                     <p>The lightweight <tag>paragraphs</tag> division has just a title, run in to this paragraph.  Cross-references work too: see <xref ref="theorem-pythagoras"/>, <xref ref="definition-hypotenuse"/>, and <xref ref="section-images"/>, all referenced from <xref ref="paragraphs-history" text="title"/>.  Even the starred equation <xref ref="equation-even"/> answers to its decoration.</p>
                 </paragraphs>
+
+                <assemblage xml:id="assemblage-central-identity" label="assemblage-central-identity">
+                    <title>The Central Identity</title>
+                    <p>Nearly everything in this section turns on a single relationship: in a right triangle, the square on the hypotenuse equals the sum of the squares on the legs, <m>a^2 + b^2 = c^2</m>.</p>
+                </assemblage>
             </introduction>
 
             <subsection xml:id="subsection-depth" label="subsection-depth">
@@ -393,7 +514,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <blockquote>
                 <p>The grand thing is to be able to reason backwards.</p>
-                <attribution><q>A Study in Scarlet</q>, 1887</attribution>
+                <attribution>
+                    <line>Sherlock Holmes</line>
+                    <line><q>A Study in Scarlet</q>, 1887</line>
+                </attribution>
             </blockquote>
 
             <poem xml:id="poem-fog" label="poem-fog">
@@ -490,6 +614,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <solutions xml:id="solutions-backmatter" label="solutions-backmatter" divisional="answer solution" project="solution" inline="answer">
                 <title>Answers and Solutions</title>
             </solutions>
+            <index xml:id="the-index" label="the-index">
+                <title>Index</title>
+                <index-list/>
+            </index>
             <colophon xml:id="colophon" label="colophon">
                 <p>This article was authored in, and produced with, <pretext/>, rendered by Apache <init>FOP</init> by way of <init>XSL</init> Formatting Objects.</p>
             </colophon>
