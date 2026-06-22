@@ -1050,7 +1050,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- consumed by the heading, and so not content.                 -->
 <xsl:template name="heading-then-content">
     <xsl:param name="heading"/>
-    <xsl:variable name="content" select="*[not(self::title)]"/>
+    <!-- "idx" and "notation" are invisible markers, not content;     -->
+    <!-- render them for their side effects, but do not let them take  -->
+    <!-- the heading or block its run-in into a leading paragraph.     -->
+    <xsl:apply-templates select="idx | notation"/>
+    <xsl:variable name="content" select="*[not(self::title) and not(self::idx) and not(self::notation)]"/>
     <xsl:choose>
         <xsl:when test="$content[1][self::p] or $content[1][self::statement and *[1][self::p]]">
             <xsl:apply-templates select="$content[1]">
@@ -1203,7 +1207,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$mark"/>
         </fo:inline>
     </xsl:variable>
-    <xsl:variable name="content" select="*[not(self::title)]"/>
+    <!-- "idx" and "notation" are invisible markers (an index entry,  -->
+    <!-- the notation list), not content: render them for those side  -->
+    <!-- effects, but keep them from taking the heading or the mark,   -->
+    <!-- or blocking the heading's run-in (a "definition" often leads  -->
+    <!-- with them).                                                   -->
+    <xsl:apply-templates select="idx | notation"/>
+    <xsl:variable name="content" select="*[not(self::title) and not(self::idx) and not(self::notation)]"/>
     <xsl:variable name="last" select="$content[last()]"/>
     <xsl:variable name="b-mark-rides" select="boolean($last[self::p] or ($last[self::statement] and $last/*[last()][self::p]))"/>
     <!-- the heading runs in to a leading paragraph, plain or in a "statement" -->
