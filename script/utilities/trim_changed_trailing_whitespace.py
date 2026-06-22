@@ -23,8 +23,13 @@ def run_git(args):
         check=True,
         capture_output=True,
         text=True,
+        encoding="utf-8",
     )
     return result.stdout.strip()
+
+
+def repo_root_path():
+    return Path(run_git(["rev-parse", "--show-toplevel"]))
 
 
 def resolve_default_base():
@@ -75,12 +80,12 @@ def changed_lines(base_ref):
     return files
 
 
-def process_file(file_path, line_numbers, fix):
+def process_file(file_path, line_numbers, fix, repo_root):
     # Return the changed line numbers that have trailing whitespace, in order.
     # When fix is True, also rewrite the file with those lines trimmed,
     # preserving each line's original ending. Files that are missing, binary,
     # or not valid UTF-8 are skipped (treated as having no offending lines).
-    path = Path(file_path)
+    path = repo_root / file_path
     if not path.is_file():
         return []
 
@@ -138,6 +143,7 @@ def parse_args():
 
 def main():
     args = parse_args()
+    repo_root = repo_root_path()
     base_ref = args.base or resolve_default_base()
     files_to_lines = changed_lines(base_ref)
 
@@ -149,7 +155,7 @@ def main():
     changed_files = 0
 
     for file_path in sorted(files_to_lines):
-        hits = process_file(file_path, files_to_lines[file_path], fix=not args.check)
+        hits = process_file(file_path, files_to_lines[file_path], fix=not args.check, repo_root=repo_root)
         if not hits:
             continue
 
