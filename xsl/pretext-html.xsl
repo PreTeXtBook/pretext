@@ -12870,7 +12870,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="primary-navigation-toc">
-    <button>
+    <button id="ptx-toc-toggle" type="button" aria-controls="ptx-sidebar">
         <xsl:attribute name="class">
             <xsl:text>toc-toggle button</xsl:text>
             <xsl:if test="$toc-level = 0">
@@ -12895,14 +12895,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- ToC sidebar                                                -->
 <xsl:template match="*" mode="sidebars">
-    <div id="ptx-sidebar">
+    <div id="ptx-sidebar" role="complementary">
         <xsl:attribute name="class">
             <xsl:text>ptx-sidebar</xsl:text>
             <xsl:if test="$toc-level = 0">
                 <xsl:text> hidden</xsl:text>
             </xsl:if>
         </xsl:attribute>
-        <nav id="ptx-toc">
+        <nav id="ptx-toc" tabindex="-1">
+            <xsl:attribute name="aria-label">
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'toc'"/>
+                </xsl:apply-templates>
+            </xsl:attribute>
             <xsl:attribute name="class">
                 <xsl:text>ptx-toc</xsl:text>
                 <!-- A class indicates how much of the ToC we want   -->
@@ -12974,9 +12979,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:variable name="child-list" select="frontmatter|abstract|frontmatter/colophon|biography|dedication|acknowledgement|preface|contributors|part|chapter|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout|backmatter|appendix|index|backmatter/colophon"/>
         <xsl:if test="$child-list">
             <ul>
+                <!-- visible id for element - needed for accessibility wiring -->
+                <xsl:attribute name="id">
+                    <xsl:text>ptx-toc-group-</xsl:text>
+                    <xsl:apply-templates select="." mode="unique-id"/>
+                </xsl:attribute>
                 <!-- copy id of this ui for use in customization pass, will remove there -->
                 <xsl:attribute name="uid">
-                    <xsl:value-of select="@unique-id"/>
+                    <xsl:apply-templates select="." mode="unique-id"/>
                 </xsl:attribute>
                 <xsl:attribute name="class">
                     <xsl:text>structural toc-item-list</xsl:text>
