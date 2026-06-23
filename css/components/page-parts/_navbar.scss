@@ -94,6 +94,70 @@ $center-content: true !default;
     }
   }
 
+  .ptx-readability-options-popup {
+    padding: 10px;
+    margin-top: $nav-height;
+    min-width: 16rem;
+    max-width: 600px;
+    margin-bottom: 0.5em;
+    width: 90%;
+
+    @include dialogs.ptx-dialog-modal;
+  }
+
+  .ptx-readability-options-popup-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5em;
+    border-bottom: 1px solid var(--dialog-border-color);
+  }
+
+  .ptx-readability-options-group {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    row-gap: 0.5em;
+    column-gap: 35px;
+
+    label {
+      display: flex;
+      gap: 0.5em;
+      align-items: center;
+      padding-top: 0.4em;
+      flex-basis: 100%;  // default to full line
+      justify-content: flex-start;
+    }
+
+    input[type="range"] {
+      flex: 1;
+    }
+
+    & + .ptx-readability-options-group:not(fieldset) {
+      margin-top: 1.25em;
+    }
+  }
+
+  .ptx-readability-options-group:is(fieldset) {
+    margin-top: 1.5em;
+    padding: 0.5em 0.75em 0.75em;
+    border: 0;
+    border-top: 1px solid var(--dialog-border-color);
+    border-bottom: 1px solid var(--dialog-border-color);
+  }
+
+  .ptx-readability-options-group-theme {
+    label {
+      flex-basis: auto; // allow radio buttons to sit next to each other
+    }
+  }
+
+  .ptx-readability-slider-label {
+    justify-content: space-between;
+  }
+
   .treebuttons > * {
     display: flex;
     align-items: center;
@@ -109,7 +173,7 @@ $center-content: true !default;
     display: none;
   }
 
-  :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .ptx-calculator-toggle, .light-dark-button, .ptx-embed-button) .name {
+  :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .ptx-calculator-toggle, .ptx-embed-button, .ptx-readability-options-button) .name {
     @include accessibility.sr-only;
   }
 
@@ -186,12 +250,19 @@ $center-content: true !default;
       bottom: $nav-height;
     }
 
+    .ptx-readability-options-popup {
+      margin-top: unset;
+      margin-bottom: 0;
+      top: auto;
+      bottom: $nav-height;
+    }
+
     .dropdown-content {
       top: unset;
       bottom: $nav-height;
     }
 
-    :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button, .ptx-embed-button) .name {
+    :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button, .ptx-embed-button, .ptx-readability-options-button) .name {
       display: none;
     }
   }

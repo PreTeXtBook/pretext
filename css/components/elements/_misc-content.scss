@@ -129,7 +129,7 @@ article.theorem-like .emphasis {
 }
 
 .para {
-  line-height: 1.35;
+  line-height: var(--ptx-content-line-height, 1.35);
 }
 
 .hidden {
