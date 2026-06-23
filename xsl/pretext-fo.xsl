@@ -114,26 +114,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Modern lacks.  It is named after the body font on  fo:root ,   -->
 <!-- so FOP falls back to it for any glyph the body font is         -->
 <!-- missing, and named outright where a specific symbol is drawn.  -->
-<xsl:variable name="font-family-main">
-    <xsl:choose>
-        <xsl:when test="$pdf-font = 'dejavu'">
-            <xsl:text>DejaVu Serif</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>Latin Modern Roman</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<xsl:variable name="font-family-monospace">
-    <xsl:choose>
-        <xsl:when test="$pdf-font = 'dejavu'">
-            <xsl:text>DejaVu Sans Mono</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>Latin Modern Mono</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
+<xsl:variable name="font-family-main" select="'Latin Modern Roman'"/>
+<xsl:variable name="font-family-monospace" select="'Latin Modern Mono'"/>
 <!-- for symbols absent from the main font (e.g. the end-marks) -->
 <xsl:variable name="font-family-symbol" select="'PreTeXt Symbols'"/>
 <!-- the <icon> faces, declared in fop.xconf: FontAwesome 5 Solid   -->
