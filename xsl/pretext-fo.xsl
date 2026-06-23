@@ -3287,15 +3287,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The FIGURE-LIKE blocks (a captioned "figure"; and "table",   -->
 <!-- "listing", "list", each titled) wrap their contents and      -->
-<!-- finish with a centered caption line; all share one counter.  -->
-<!-- The "caption" element is consumed here, so it is killed in   -->
-<!-- the default mode, with the other metadata.                   -->
+<!-- finish with a caption: a body-aligned paragraph led by a     -->
+<!-- bold run-in heading (the type name and number), so a long    -->
+<!-- caption sets as ordinary prose, not centered ragged lines.   -->
+<!-- All share one counter.  The "caption" element is consumed    -->
+<!-- here, so it is killed in the default mode, with the rest     -->
+<!-- of the metadata.                                             -->
 <xsl:template match="&FIGURE-LIKE;">
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:apply-templates select="*"/>
-        <fo:block text-align="center" space-before="0.5em" keep-with-previous.within-page="always">
+        <fo:block text-align="{$text-alignment}" space-before="0.5em" keep-with-previous.within-page="always">
             <fo:inline font-weight="bold">
                 <xsl:apply-templates select="." mode="type-name"/>
                 <xsl:variable name="the-number">
