@@ -389,6 +389,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Close something interactive                              -->
     <localization string-id='close'>Close</localization>
     <localization string-id='open-new-tab'>Open in new tab</localization>
+    <!-- Readability menu items, HTML only, utilized by Javascript -->
     <localization string-id='readability-settings'>Readability settings</localization>
     <localization string-id='readability-line-height'>Line height</localization>
     <localization string-id='readability-content-font-size'>Content font size</localization>
