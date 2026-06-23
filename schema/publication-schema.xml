@@ -376,7 +376,7 @@
             <code>
             Pdf =
                 element pdf {
-                    attribute font { "latin-modern" | "dejavu" }?
+                    attribute font { "latin-modern" }?
                 }
             </code>
         </fragment>
