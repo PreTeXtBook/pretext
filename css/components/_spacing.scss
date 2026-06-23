@@ -25,13 +25,16 @@ $line-height: 1.35 !default;
 // Most spacing should be done with margin-top.
 
 @layer spacing {
+  // selectors for items that are expected to contain sequences of items
+  $containers: "section, article, .knowl__content, .introduction, .conclusion";
+
   // inter-item spacing high level containers
-  :is(section, article, .knowl__content) > *:not(:first-child) {
+  :is(#{$containers}) > *:not(:first-child) {
     margin-top: 1.5em;
   }
 
   // but tighten up spacing slightly for adjacent paragraphs in a section
-  :is(section, article, .knowl__content) > .para + .para {
+  :is(#{$containers}) > .para + .para {
     margin-top: 1em;
   }
 
