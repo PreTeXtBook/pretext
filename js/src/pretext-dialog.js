@@ -78,14 +78,14 @@ class PTXDialog {
         if (PTXDialog.hasNativeCommandInvokers()) {
             // If the browser supports command invokers, we can just use the native dialog element and its showModal and close methods.
             this.open = () => {
-              if (this.isModal) {
-                this.dialog.showModal();
-              } else {
+                if (this.isModal) {
+                    this.dialog.showModal();
+                } else {
+                    this.dialog.show();
+                }
                 if (this.controlElement) {
                     this.setExpanded(true);
                 }
-                this.dialog.show();
-              }
             };
             this.close = () => {
                 this.dialog.close();
