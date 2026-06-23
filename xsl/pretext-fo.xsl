@@ -129,6 +129,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="font-family-monospace" select="'Inconsolata'"/>
 <!-- for symbols absent from the main font (e.g. the end-marks) -->
 <xsl:variable name="font-family-symbol" select="'PreTeXt Symbols'"/>
+<!-- a last-resort broad serif (STIX Two Text) for the few          -->
+<!-- characters Latin Modern lacks in running text, notably the     -->
+<!-- micro sign U+00B5 (the SI "micro" prefix, as in micrometres).  -->
+<!-- It is listed *last* on  fo:root  below.  FOP falls back per    -->
+<!-- word, so a glyph sitting mid-word cannot be drawn from the     -->
+<!-- symbol font while the rest of the word keeps the body font;    -->
+<!-- a broad face can set the whole word.  This restores coverage   -->
+<!-- DejaVu used to give implicitly, before it was dropped.         -->
+<xsl:variable name="font-family-broad" select="'STIX Two Text'"/>
 <!-- the <icon> faces, declared in fop.xconf: FontAwesome 5 Solid   -->
 <!-- for the "classic" icons, Brands for the Creative Commons marks -->
 <xsl:variable name="font-family-icon" select="'Font Awesome 5 Free Solid'"/>
@@ -240,7 +249,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- face.  FOP selects per glyph, so any character missing from the  -->
     <!-- main font (a currency sign, a prime, a list-marker square) is    -->
     <!-- drawn from "PreTeXt Symbols" without any per-character markup.   -->
-    <fo:root font-family="{$font-family-main}, {$font-family-symbol}" font-size="{$font-size}" xml:lang="{$document-language}">
+    <fo:root font-family="{$font-family-main}, {$font-family-symbol}, {$font-family-broad}" font-size="{$font-size}" xml:lang="{$document-language}">
         <fo:layout-master-set>
             <fo:simple-page-master master-name="page-odd"
                                    page-width="{$page-width}"
