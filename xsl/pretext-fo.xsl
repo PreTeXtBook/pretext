@@ -3071,6 +3071,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="padding">
                 <xsl:text>3pt</xsl:text>
             </xsl:attribute>
+            <!-- the shared Sage-input tint, defined in pretext-common.xsl -->
+            <xsl:attribute name="background-color">
+                <xsl:text>#</xsl:text>
+                <xsl:value-of select="$sage-input-background"/>
+            </xsl:attribute>
+            <!-- FO draws a block's border and padding outward from   -->
+            <!-- the content edge; indenting the content by border +  -->
+            <!-- padding (3.5pt) keeps the box flush with the margins.-->
+            <xsl:attribute name="start-indent">
+                <xsl:text>3.5pt</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="end-indent">
+                <xsl:text>3.5pt</xsl:text>
+            </xsl:attribute>
         </xsl:if>
         <xsl:copy-of select="$content"/>
     </fo:block>
