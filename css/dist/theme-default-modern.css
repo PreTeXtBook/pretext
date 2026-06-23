@@ -35,6 +35,8 @@ body.pretext {
 .ptx-main .ptx-content {
   max-width: 696px;
   padding: 24px 48px 60px;
+  line-height: var(--ptx-content-line-height, normal);
+  font-size: var(--ptx-content-font-size, inherit);
 }
 .worksheet .ptx-main .ptx-content {
   max-width: 960px;
@@ -48,7 +50,7 @@ body.pretext,
 body.standalone {
   margin: 0;
   padding: 0;
-  font-size: 16px;
+  font-size: 1rem;
   background: var(--page-color, white);
 }
 .ptx-content .print-preview-header {
@@ -371,6 +373,10 @@ body.standalone-page .ptx-page {
   min-height: 15px;
   user-select: none;
 }
+.ptx-navbar .ptx-embed-popup .heading:is(h2) {
+  font-size: 1.5em;
+  margin: 0.5em 0;
+}
 .ptx-navbar .ptx-embed-popup::backdrop {
   background: var(--dialog-background);
   opacity: 0.6;
@@ -385,6 +391,113 @@ body.standalone-page .ptx-page {
   padding: 10px;
   height: 5em;
 }
+.ptx-navbar .ptx-readability-options-popup {
+  padding: 10px;
+  margin-top: 36px;
+  min-width: 16rem;
+  max-width: 600px;
+  margin-bottom: 0.5em;
+  width: 90%;
+  border: 1px solid var(--dialog-border-color);
+  border-radius: 0;
+  background: var(--dialog-background);
+  box-shadow: 0 0 5px var(--dialog-shadow-color);
+  color: var(--dialog-text-color);
+}
+.ptx-navbar .ptx-readability-options-popup .ptx-dialog-close-button {
+  font: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+  min-height: 34px;
+  color: var(--button-text-color);
+  background-color: var(--button-background);
+  border-width: 0;
+  border-color: var(--button-border-color);
+  border-style: solid;
+  border-radius: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  user-select: none;
+}
+.ptx-navbar .ptx-readability-options-popup .ptx-dialog-close-button:hover:not(.disabled) {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
+}
+.ptx-navbar .ptx-readability-options-popup .ptx-dialog-close-button:focus-visible {
+  outline: 2px solid var(--button-text-color);
+  outline-offset: -2px;
+}
+.ptx-navbar .ptx-readability-options-popup .ptx-dialog-close-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ptx-navbar .ptx-readability-options-popup .ptx-dialog-close-button.hidden {
+  display: none;
+}
+.ptx-navbar .ptx-readability-options-popup .ptx-dialog-close-button.open {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
+}
+.ptx-navbar .ptx-readability-options-popup .ptx-dialog-topbar {
+  min-height: 15px;
+  user-select: none;
+}
+.ptx-navbar .ptx-readability-options-popup .heading:is(h2) {
+  font-size: 1.5em;
+  margin: 0.5em 0;
+}
+.ptx-navbar .ptx-readability-options-popup::backdrop {
+  background: var(--dialog-background);
+  opacity: 0.6;
+}
+.ptx-navbar .ptx-readability-options-popup-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5em;
+  border-bottom: 1px solid var(--dialog-border-color);
+}
+.ptx-navbar .ptx-readability-options-group {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  row-gap: 0.5em;
+  column-gap: 35px;
+}
+.ptx-navbar .ptx-readability-options-group label {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  padding-top: 0.4em;
+  flex-basis: 100%;
+  justify-content: flex-start;
+}
+.ptx-navbar .ptx-readability-options-group input[type=range] {
+  flex: 1;
+}
+.ptx-navbar .ptx-readability-options-group + .ptx-readability-options-group:not(fieldset) {
+  margin-top: 1.25em;
+}
+.ptx-navbar .ptx-readability-options-group:is(fieldset) {
+  margin-top: 1.5em;
+  padding: 0.5em 0.75em 0.75em;
+  border: 0;
+  border-top: 1px solid var(--dialog-border-color);
+  border-bottom: 1px solid var(--dialog-border-color);
+}
+.ptx-navbar .ptx-readability-options-group-theme label {
+  flex-basis: auto;
+}
+.ptx-navbar .ptx-readability-slider-label {
+  justify-content: space-between;
+}
 .ptx-navbar .treebuttons > * {
   display: flex;
   align-items: center;
@@ -397,7 +510,7 @@ body.standalone-page .ptx-page {
 .ptx-navbar :is(.index-button) .icon {
   display: none;
 }
-.ptx-navbar :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .ptx-calculator-toggle, .light-dark-button, .ptx-embed-button) .name {
+.ptx-navbar :is(.runestone-profile, .activecode-toggle, .ptx-search-button, .ptx-calculator-toggle, .ptx-embed-button, .ptx-readability-options-button) .name {
   clip: rect(1px, 1px, 1px, 1px);
   clip-path: inset(50%);
   height: 1px;
@@ -490,11 +603,17 @@ body.standalone-page .ptx-page {
     top: auto;
     bottom: 36px;
   }
+  .ptx-navbar .ptx-readability-options-popup {
+    margin-top: unset;
+    margin-bottom: 0;
+    top: auto;
+    bottom: 36px;
+  }
   .ptx-navbar .dropdown-content {
     top: unset;
     bottom: 36px;
   }
-  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button, .ptx-embed-button) .name {
+  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button, .ptx-embed-button, .ptx-readability-options-button) .name {
     display: none;
   }
 }
@@ -2667,7 +2786,7 @@ article.theorem-like .emphasis {
   font-weight: 700;
 }
 .para {
-  line-height: 1.35;
+  line-height: var(--ptx-content-line-height, 1.35);
 }
 .hidden {
   display: none !important;
@@ -2815,6 +2934,10 @@ article.theorem-like .emphasis {
 .ptx-search-box .ptx-search-dialog .ptx-dialog-topbar {
   min-height: 15px;
   user-select: none;
+}
+.ptx-search-box .ptx-search-dialog .heading:is(h2) {
+  font-size: 1.5em;
+  margin: 0.5em 0;
 }
 .ptx-search-box .ptx-search-dialog::backdrop {
   background: var(--dialog-background);
@@ -3239,7 +3362,7 @@ label.incorrect .feedback {
 }
 .sagecell_evalButton {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 1rem;
   padding: 0 0.65em;
 }
 .sagecell_evalButton {
@@ -3347,6 +3470,10 @@ label.incorrect .feedback {
 .ptx-calculator-container .ptx-dialog-topbar {
   min-height: 15px;
   user-select: none;
+}
+.ptx-calculator-container .heading:is(h2) {
+  font-size: 1.5em;
+  margin: 0.5em 0;
 }
 .ptx-calculator-container::backdrop {
   background: var(--dialog-background);

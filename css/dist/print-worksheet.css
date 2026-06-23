@@ -1757,7 +1757,7 @@ article.theorem-like .emphasis {
   font-weight: 700;
 }
 .para {
-  line-height: 1.35;
+  line-height: var(--ptx-content-line-height, 1.35);
 }
 .hidden {
   display: none !important;
