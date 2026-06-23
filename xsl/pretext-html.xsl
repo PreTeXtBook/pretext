@@ -12978,7 +12978,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="calculator">
     <xsl:if test="contains($html-calculator,'geogebra')">
-        <dialog id="ptx-calculator-container" class="ptx-dialog ptx-calculator-container">
+        <xsl:variable name="calculator-localization">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'calculator'"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <dialog id="ptx-calculator-container" class="ptx-dialog ptx-calculator-container" aria-label="{$calculator-localization}">
             <div id="ptx-geogebra-calculator" class="ptx-geogebra-calculator"></div>
             <script id="ptx-geogebra-calculator-params">
                 <!-- params for Geogebra that can be set from PTX -->
