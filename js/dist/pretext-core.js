@@ -790,16 +790,24 @@
     toc.scrollTop = tocEntryTop - tocTop - 0.4 * self.innerHeight;
   }
   function toggletoc() {
-    thesidebar = document.getElementById("ptx-sidebar");
-    if (thesidebar.classList.contains("hidden") || thesidebar.classList.contains("visible")) {
-      thesidebar.classList.toggle("hidden");
-      thesidebar.classList.toggle("visible");
-    } else if (thesidebar.offsetParent === null) {
-      thesidebar.classList.toggle("visible");
+    let ptxSidebar = document.getElementById("ptx-sidebar");
+    let sideBarIsHidden = ptxSidebar.classList.contains("hidden") || !ptxSidebar.classList.contains("visible") && ptxSidebar.offsetParent === null;
+    if (sideBarIsHidden) {
+      ptxSidebar.classList.add("visible");
+      ptxSidebar.classList.remove("hidden");
     } else {
-      thesidebar.classList.toggle("hidden");
+      ptxSidebar.classList.remove("visible");
+      ptxSidebar.classList.add("hidden");
     }
-    scrollTocToActive();
+    sideBarIsHidden = !sideBarIsHidden;
+    let ptxTocButton = document.getElementById("ptx-toc-toggle");
+    ptxTocButton.setAttribute("aria-expanded", !sideBarIsHidden);
+    if (!sideBarIsHidden) {
+      scrollTocToActive();
+      document.querySelector("#ptx-toc").focus();
+    } else {
+      ptxTocButton.focus();
+    }
   }
   function samePageLink(a) {
     if (!(a instanceof HTMLAnchorElement)) return false;
@@ -813,11 +821,14 @@
     }
   }
   window.addEventListener("DOMContentLoaded", function(event2) {
-    thetocbutton = document.getElementsByClassName("toc-toggle")[0];
-    thetocbutton.addEventListener("click", (e2) => {
+    let tocButton = document.getElementById("ptx-toc-toggle");
+    tocButton.addEventListener("click", (e2) => {
       toggletoc();
       e2.stopPropagation();
     });
+    let ptxSidebar = document.getElementById("ptx-sidebar");
+    let sideBarIsHidden = ptxSidebar.classList.contains("hidden") || !ptxSidebar.classList.contains("visible") && ptxSidebar.offsetParent === null;
+    tocButton.setAttribute("aria-expanded", !sideBarIsHidden);
     if (getComputedStyle(document.documentElement).getPropertyValue("--auto-collapse-toc") == "yes") {
       const sidebar = document.getElementById("ptx-sidebar");
       window.addEventListener("click", function(event3) {
@@ -836,20 +847,31 @@
         if (e2.persisted) {
           sidebar.classList.remove("visible");
           sidebar.classList.add("hidden");
+          tocButton.setAttribute("aria-expanded", "false");
+        }
+      });
+      window.addEventListener("keydown", function(event3) {
+        if (event3.key === "Escape" && sidebar.classList.contains("visible")) {
+          toggletoc();
         }
       });
     }
   });
-  function toggleTOCItem(expander) {
+  function toggleTOCItem(expander, event2 = null) {
     let listItem = expander.closest(".toc-item");
     listItem.classList.toggle("expanded");
     let expanded = listItem.classList.contains("expanded");
-    let itemType = getTOCItemType(listItem);
+    let targetElement = document.getElementById(expander.controlledGroup);
     if (expanded) {
-      expander.title = "Close" + (itemType !== "" ? " " + itemType : "");
+      let groupName = listItem.querySelector(".toc-title-box").innerText;
+      expander.title = "Close " + groupName;
+      expander.setAttribute("aria-expanded", "true");
     } else {
-      expander.title = "Expand" + (itemType !== "" ? " " + itemType : "");
+      let groupName = listItem.querySelector(".toc-title-box").innerText;
+      expander.title = "Expand " + groupName;
+      expander.setAttribute("aria-expanded", "false");
     }
+    expander.setAttribute("aria-label", expander.title);
     for (const childUL of listItem.querySelectorAll(":scope > ul.toc-item-list")) {
       for (const childItem of childUL.querySelectorAll(":scope > li.toc-item")) {
         if (expanded) {
@@ -861,13 +883,15 @@
         }
       }
     }
-  }
-  function getTOCItemType(item) {
-    for (let className of item.classList) {
-      if (className !== "toc-item" && className.length > 3 && className.slice(0, 4) === "toc-")
-        return className.slice(4);
+    if (expanded && expander === document.activeElement && event2 && event2 instanceof KeyboardEvent) {
+      const firstChildItem = listItem.querySelector(":scope > ul.toc-item-list > li.toc-item");
+      if (firstChildItem) {
+        const firstChildLink = firstChildItem.querySelector("a");
+        if (firstChildLink) {
+          firstChildLink.focus();
+        }
+      }
     }
-    return "";
   }
   function getTOCItemDepth(item) {
     let depth = 0;
@@ -895,21 +919,27 @@
       let depth = getTOCItemDepth(tocItem);
       if (hasChildren && depth < maxDepth) {
         let expander = document.createElement("button");
+        expander.type = "button";
         expander.classList.add("toc-expander");
         expander.classList.add("toc-chevron-surround");
         expander.title = "toc-expander";
         expander.innerHTML = '<span class="icon material-symbols-outlined" aria-hidden="true"></span>';
+        const subList = tocItem.querySelector(".toc-item-list");
+        expander.controlledGroup = subList.id;
+        expander.setAttribute("aria-controls", subList.id);
+        expander.setAttribute("aria-expanded", "false");
         tocItem.querySelector(".toc-title-box").append(expander);
-        expander.addEventListener("click", () => {
-          toggleTOCItem(expander);
+        expander.addEventListener("click", (e2) => {
+          toggleTOCItem(expander, e2);
         });
         let isActive = tocItem.classList.contains("contains-active") || tocItem.classList.contains("active");
         let preExpanded = isActive || depth < preexpandedLevels;
-        let itemType = getTOCItemType(tocItem);
         if (preExpanded) {
           toggleTOCItem(expander);
         } else {
-          expander.title = "Expand" + (itemType !== "" ? " " + itemType : "");
+          let groupName = tocItem.querySelector(".toc-title-box").innerText;
+          expander.title = "Expand " + groupName;
+          expander.setAttribute("aria-label", expander.title);
         }
       }
     }
