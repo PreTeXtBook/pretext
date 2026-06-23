@@ -429,11 +429,12 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- Dimensions and Colors, Shared -->
 <!-- ############################# -->
 
-<!-- Distances (and, in time, colors) that should agree         -->
-<!-- between the LaTeX/print and XSL-FO conversions live        -->
-<!-- here, defined once, so the two stay consistent.  A         -->
-<!-- value is a bare number; each conversion attaches its       -->
-<!-- own units as it uses it.                                   -->
+<!-- Distances and colors that should agree between the LaTeX   -->
+<!-- and XSL-FO conversions live here, defined once, so the     -->
+<!-- two stay consistent.  A distance is a bare number, and     -->
+<!-- each conversion attaches its own units; a color is a       -->
+<!-- six-hex-digit RRGGBB string, which each conversion         -->
+<!-- wraps in its own syntax.                                   -->
 
 <!-- An "exercisegroup" indents its exercises, to show the      -->
 <!-- scope of the group, by this fraction of the prevailing     -->
@@ -454,6 +455,10 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- conversion applies it, and makes Bringhurst's case for the -->
 <!-- indent and for which paragraphs take it.                   -->
 <xsl:variable name="paragraph-indentation" select="1.5"/>
+
+<!-- The background tint of a Sage cell's input box: a very     -->
+<!-- pale blue, a heavily lightened version of Sage's own.      -->
+<xsl:variable name="sage-input-background" select="'F2F2FF'"/>
 
 
 <!-- ###### -->

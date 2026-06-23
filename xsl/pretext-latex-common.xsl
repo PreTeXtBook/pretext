@@ -1801,7 +1801,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- See: https://tex.stackexchange.com/questions/240246/           -->
             <!-- problem-with-tcblisting-at-page-break                          -->
             <!-- TODO: integrate into the LaTeX styling schemes -->
-            <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
+            <xsl:text>\definecolor{sageblue}{HTML}{</xsl:text><xsl:value-of select="$sage-input-background"/><xsl:text>}&#xa;</xsl:text>
             <xsl:text>\tcbset{ sagestyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,&#xa;</xsl:text>
             <xsl:text>boxsep=4pt, listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>breakable, &#xa;</xsl:text>
