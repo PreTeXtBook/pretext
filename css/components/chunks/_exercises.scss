@@ -8,6 +8,10 @@
   font-size: inherit;
 }
 
+.exercise-like > *:is(.solutions) {
+    margin-top: 0.5em;  // tighten up spacing between answer, hint, solution, etc...
+}
+
 .exercisegroup {
 
   .exercise-like {
@@ -38,7 +42,7 @@
   }
 
   .conclusion {
-    margin-left: 40px;  // match the padding of the exercisegroup-exercises
+    margin-top: 1em;
   
     .heading {
       // exercise heading/numbers regular size
