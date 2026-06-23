@@ -1133,7 +1133,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <title>A very structured exercise</title>
 
                         <introduction>
-                            <p>This is an over-arching introduction to the whole exercise.  We follow with some tasks.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                            <p>This is an over-arching introduction to the whole exercise.  We follow with some tasks.</p>
+                            <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </introduction>
 
                         <task>
@@ -17141,6 +17142,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <exercisegroup>
                     <introduction>
                         <p>This is an exercise group, and this is its introduction.</p>
+                        <p>And a second line for the introduction.</p>
                     </introduction>
                     <exercise>
                         <title>One</title>
@@ -17157,6 +17159,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p><m>1+1</m></p>
                         </statement>
                     </exercise>
+                    <conclusion>
+                        <p>Here we conclude the group.</p>
+                        <p>And a second line for the conclusion.</p>
+                    </conclusion>
                 </exercisegroup>
 
                 <exercise>
@@ -17379,6 +17385,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </md></p>
                         </statement>
                     </exercise>
+                    <conclusion>
+                        <p>Here we conclude the group of exercises.</p>
+                        <p>And a second line for the conclusion.</p>
+                    </conclusion>
                 </exercisegroup>
             </exercises>
 
