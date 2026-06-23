@@ -3,7 +3,7 @@
 // visual changes
 
 //-----------------------------------------------------------------
-// Dark/Light mode swiching
+// Dark/Light mode switching
 
 function getSavedTheme() {
     const savedTheme = localStorage.getItem("theme");
@@ -237,7 +237,7 @@ window.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
-    // apply again once DOM is loadedto make sure iframes are in sync
+    // apply again once DOM is loaded to make sure iframes are in sync
     setDarkMode(isDarkMode());
 
     const lineHeightInput = document.getElementById("ptx-readability-line-height");
