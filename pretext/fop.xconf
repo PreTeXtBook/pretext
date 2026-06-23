@@ -54,146 +54,166 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- non-embedded font), so a regression cannot slip by.  -->
             <pdf-ua-mode>PDF/UA-1</pdf-ua-mode>
             <fonts>
-                <!-- Explicit, *fully* embedded fonts (no subsetting):     -->
-                <!-- FOP's subset embedding writes an incomplete CIDSet    -->
-                <!-- stream, which fails PDF/UA-1 validation (ISO 14289-1, -->
-                <!-- clause 7.21.4.2, observed with veraPDF).  Explicit    -->
-                <!-- declarations also avoid a slow, noisy scan of every   -->
-                <!-- system font.  The paths are Debian's; font choices    -->
-                <!-- will become publisher-configurable eventually.        -->
-                <!-- Generic and legacy family names (e.g. inside an  -->
-                <!-- author's SVG image) alias to embedded faces, since -->
-                <!-- the base-14 fallbacks would violate PDF/UA.        -->
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf">
-                    <font-triplet name="DejaVu Serif" style="normal" weight="normal"/>
+                <!-- Explicit, *fully* embedded fonts (no subsetting): FOP's   -->
+                <!-- subset embedding writes an incomplete CIDSet stream,      -->
+                <!-- which fails PDF/UA-1 validation (ISO 14289-1, clause      -->
+                <!-- 7.21.4.2, observed with veraPDF).  Explicit declarations  -->
+                <!-- also avoid a slow scan of every system font.  Every       -->
+                <!-- face is bundled in  fonts/  (see  fonts/README.md ) and   -->
+                <!-- copied by the  pdf_fo()  routine into the build           -->
+                <!-- directory, so each  embed-url  is relative to there and   -->
+                <!-- no host font is ever consulted.                           -->
+                <!-- Generic and legacy family names (such as those inside an  -->
+                <!-- author's SVG image) alias to these faces, since base-14   -->
+                <!-- fallbacks would violate PDF/UA:  serif  to Latin Modern   -->
+                <!-- Roman,  sans-serif  to Latin Modern Sans,  monospace  to  -->
+                <!-- Inconsolata.                                              -->
+                <!-- Latin Modern Roman: the body face, matching the LaTeX     -->
+                <!-- route (lmodern).  This 10-point optical design also       -->
+                <!-- answers the  serif  generic; a 12-point design (below)    -->
+                <!-- is selected by the XSL for a body  font-size  of 12pt+.   -->
+                <font embedding-mode="full" embed-url="fonts/lmroman10-regular.otf">
+                    <font-triplet name="Latin Modern Roman" style="normal" weight="normal"/>
                     <font-triplet name="serif" style="normal" weight="normal"/>
                     <font-triplet name="Times" style="normal" weight="normal"/>
                     <font-triplet name="Times New Roman" style="normal" weight="normal"/>
                     <font-triplet name="any" style="normal" weight="normal"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf">
-                    <font-triplet name="DejaVu Serif" style="normal" weight="bold"/>
+                <font embedding-mode="full" embed-url="fonts/lmroman10-bold.otf">
+                    <font-triplet name="Latin Modern Roman" style="normal" weight="bold"/>
                     <font-triplet name="serif" style="normal" weight="bold"/>
                     <font-triplet name="Times" style="normal" weight="bold"/>
                     <font-triplet name="Times New Roman" style="normal" weight="bold"/>
                     <font-triplet name="any" style="normal" weight="bold"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf">
-                    <font-triplet name="DejaVu Serif" style="italic" weight="normal"/>
+                <font embedding-mode="full" embed-url="fonts/lmroman10-italic.otf">
+                    <font-triplet name="Latin Modern Roman" style="italic" weight="normal"/>
                     <font-triplet name="serif" style="italic" weight="normal"/>
                     <font-triplet name="Times" style="italic" weight="normal"/>
                     <font-triplet name="Times New Roman" style="italic" weight="normal"/>
                     <font-triplet name="any" style="italic" weight="normal"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf">
-                    <font-triplet name="DejaVu Serif" style="italic" weight="bold"/>
+                <font embedding-mode="full" embed-url="fonts/lmroman10-bolditalic.otf">
+                    <font-triplet name="Latin Modern Roman" style="italic" weight="bold"/>
                     <font-triplet name="serif" style="italic" weight="bold"/>
                     <font-triplet name="Times" style="italic" weight="bold"/>
                     <font-triplet name="Times New Roman" style="italic" weight="bold"/>
                     <font-triplet name="any" style="italic" weight="bold"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf">
-                    <font-triplet name="DejaVu Sans Mono" style="normal" weight="normal"/>
-                    <font-triplet name="monospace" style="normal" weight="normal"/>
-                    <font-triplet name="Courier" style="normal" weight="normal"/>
+                <!-- The 12-point optical design.  GUST ships no 12-point      -->
+                <!-- bold-italic, so that one cell borrows the 10-point face.  -->
+                <font embedding-mode="full" embed-url="fonts/lmroman12-regular.otf">
+                    <font-triplet name="Latin Modern Roman 12" style="normal" weight="normal"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf">
-                    <font-triplet name="DejaVu Sans Mono" style="normal" weight="bold"/>
+                <font embedding-mode="full" embed-url="fonts/lmroman12-bold.otf">
+                    <font-triplet name="Latin Modern Roman 12" style="normal" weight="bold"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf">
-                    <font-triplet name="DejaVu Sans Mono" style="italic" weight="normal"/>
+                <font embedding-mode="full" embed-url="fonts/lmroman12-italic.otf">
+                    <font-triplet name="Latin Modern Roman 12" style="italic" weight="normal"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf">
-                    <font-triplet name="DejaVu Sans Mono" style="italic" weight="bold"/>
+                <font embedding-mode="full" embed-url="fonts/lmroman10-bolditalic.otf">
+                    <font-triplet name="Latin Modern Roman 12" style="italic" weight="bold"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf">
-                    <font-triplet name="DejaVu Sans" style="normal" weight="normal"/>
+                <!-- Latin Modern Sans answers the  sans-serif  generic used   -->
+                <!-- by author SVGs (e.g. Mermaid and MyOpenMath labels) and   -->
+                <!-- the Helvetica/Arial/Verdana/Trebuchet legacy names.       -->
+                <font embedding-mode="full" embed-url="fonts/lmsans10-regular.otf">
+                    <font-triplet name="Latin Modern Sans" style="normal" weight="normal"/>
                     <font-triplet name="sans-serif" style="normal" weight="normal"/>
                     <font-triplet name="Helvetica" style="normal" weight="normal"/>
                     <font-triplet name="Arial" style="normal" weight="normal"/>
+                    <font-triplet name="Verdana" style="normal" weight="normal"/>
+                    <font-triplet name="trebuchet ms" style="normal" weight="normal"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf">
-                    <font-triplet name="DejaVu Sans" style="normal" weight="bold"/>
+                <font embedding-mode="full" embed-url="fonts/lmsans10-bold.otf">
+                    <font-triplet name="Latin Modern Sans" style="normal" weight="bold"/>
                     <font-triplet name="sans-serif" style="normal" weight="bold"/>
                     <font-triplet name="Helvetica" style="normal" weight="bold"/>
                     <font-triplet name="Arial" style="normal" weight="bold"/>
+                    <font-triplet name="Verdana" style="normal" weight="bold"/>
+                    <font-triplet name="trebuchet ms" style="normal" weight="bold"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf">
-                    <font-triplet name="DejaVu Sans" style="italic" weight="normal"/>
+                <font embedding-mode="full" embed-url="fonts/lmsans10-oblique.otf">
+                    <font-triplet name="Latin Modern Sans" style="italic" weight="normal"/>
                     <font-triplet name="sans-serif" style="italic" weight="normal"/>
                     <font-triplet name="Helvetica" style="italic" weight="normal"/>
                     <font-triplet name="Arial" style="italic" weight="normal"/>
+                    <font-triplet name="Verdana" style="italic" weight="normal"/>
+                    <font-triplet name="trebuchet ms" style="italic" weight="normal"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf">
-                    <font-triplet name="DejaVu Sans" style="italic" weight="bold"/>
+                <font embedding-mode="full" embed-url="fonts/lmsans10-boldoblique.otf">
+                    <font-triplet name="Latin Modern Sans" style="italic" weight="bold"/>
                     <font-triplet name="sans-serif" style="italic" weight="bold"/>
                     <font-triplet name="Helvetica" style="italic" weight="bold"/>
                     <font-triplet name="Arial" style="italic" weight="bold"/>
+                    <font-triplet name="Verdana" style="italic" weight="bold"/>
+                    <font-triplet name="trebuchet ms" style="italic" weight="bold"/>
                 </font>
-                <!-- Latin Modern: the default body and monospace faces, matching -->
-                <!-- the LaTeX route (lmodern).  Selected by the publication       -->
-                <!-- option  pdf/@font="latin-modern".  Declaring these alongside  -->
-                <!-- the DejaVu faces costs nothing in an output that uses only one -->
-                <!-- set, since FOP embeds only the faces a document actually uses. -->
-                <!-- Paths are Debian's texmf tree (the OTF/CFF Latin Modern); a    -->
-                <!-- later refinement will resolve them per host.  No generic       -->
-                <!-- aliases here: the XSL names these families explicitly, and the -->
-                <!-- DejaVu blocks above keep the generic/legacy fallbacks.         -->
-                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf">
-                    <font-triplet name="Latin Modern Roman" style="normal" weight="normal"/>
+                <!-- Inconsolata is the monospace face, matching the LaTeX     -->
+                <!-- route's default (the  inconsolata  package).  Its stock   -->
+                <!-- glyphs already give the slashed zero and upright quotes;  -->
+                <!-- it has a true bold but no italic, so the italic cells     -->
+                <!-- reuse the upright faces.  It also answers the             -->
+                <!-- monospace  and  Courier  generics.                        -->
+                <font embedding-mode="full" embed-url="fonts/Inconsolata-Regular.otf">
+                    <font-triplet name="Inconsolata" style="normal" weight="normal"/>
+                    <font-triplet name="Inconsolata" style="italic" weight="normal"/>
+                    <font-triplet name="monospace" style="normal" weight="normal"/>
+                    <font-triplet name="monospace" style="italic" weight="normal"/>
+                    <font-triplet name="Courier" style="normal" weight="normal"/>
+                    <font-triplet name="Courier" style="italic" weight="normal"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmroman10-bold.otf">
-                    <font-triplet name="Latin Modern Roman" style="normal" weight="bold"/>
+                <font embedding-mode="full" embed-url="fonts/Inconsolata-Bold.otf">
+                    <font-triplet name="Inconsolata" style="normal" weight="bold"/>
+                    <font-triplet name="Inconsolata" style="italic" weight="bold"/>
+                    <font-triplet name="monospace" style="normal" weight="bold"/>
+                    <font-triplet name="monospace" style="italic" weight="bold"/>
+                    <font-triplet name="Courier" style="normal" weight="bold"/>
+                    <font-triplet name="Courier" style="italic" weight="bold"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmroman10-italic.otf">
-                    <font-triplet name="Latin Modern Roman" style="italic" weight="normal"/>
-                </font>
-                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmroman10-bolditalic.otf">
-                    <font-triplet name="Latin Modern Roman" style="italic" weight="bold"/>
-                </font>
-                <!-- Latin Modern Mono ships regular and italic only at this design -->
-                <!-- weight (lmmono10); the bold cells borrow the Mono Light family -->
-                <!-- (lmmonolt10), the closest embeddable bold.  Bold monospace is  -->
-                <!-- rare, so the slight weight mismatch is an accepted stopgap.    -->
-                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmmono10-regular.otf">
-                    <font-triplet name="Latin Modern Mono" style="normal" weight="normal"/>
-                </font>
-                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmmonolt10-bold.otf">
-                    <font-triplet name="Latin Modern Mono" style="normal" weight="bold"/>
-                </font>
-                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmmono10-italic.otf">
-                    <font-triplet name="Latin Modern Mono" style="italic" weight="normal"/>
-                </font>
-                <font embedding-mode="full" embed-url="/usr/share/texmf/fonts/opentype/public/lm/lmmonolt10-boldoblique.otf">
-                    <font-triplet name="Latin Modern Mono" style="italic" weight="bold"/>
-                </font>
-                <!-- FontAwesome 5 (free) supplies the <icon> glyphs: Solid for  -->
-                <!-- the "classic" icons, Brands for the Creative Commons marks. -->
-                <!-- The XSL picks the face from  iconinfo/@font-awesome-family, -->
-                <!-- emitting the  @fa-codepoint  Private-Use glyph.  The same   -->
-                <!-- v5.15.4 faces the LaTeX route uses (texlive fontawesome5);  -->
-                <!-- per-host path resolution is deferred, like the faces above. -->
-                <font embedding-mode="full" embed-url="/usr/share/texlive/texmf-dist/fonts/opentype/public/fontawesome5/FontAwesome5Free-Solid-900.otf">
+                <!-- FontAwesome 5 (free) supplies the  <icon>  glyphs: Solid  -->
+                <!-- for the classic icons, Brands for the Creative Commons    -->
+                <!-- marks.  The XSL picks the face from                       -->
+                <!-- iconinfo/@font-awesome-family , emitting the              -->
+                <!-- @fa-codepoint  Private-Use glyph.  The same v5.15.4       -->
+                <!-- faces the LaTeX route uses.                               -->
+                <font embedding-mode="full" embed-url="fonts/FontAwesome5Free-Solid-900.otf">
                     <font-triplet name="Font Awesome 5 Free Solid" style="normal" weight="normal"/>
                 </font>
-                <font embedding-mode="full" embed-url="/usr/share/texlive/texmf-dist/fonts/opentype/public/fontawesome5/FontAwesome5Brands-Regular-400.otf">
+                <font embedding-mode="full" embed-url="fonts/FontAwesome5Brands-Regular-400.otf">
                     <font-triplet name="Font Awesome 5 Brands" style="normal" weight="normal"/>
                 </font>
-                <!-- PreTeXt Symbols: the symbol fallback face, bundled with -->
-                <!-- this distribution (see  fonts/README.md ) and copied by -->
-                <!-- the  pdf_fo()  routine into the build directory, so the  -->
-                <!-- path is relative to there.  FOP consults a font-family   -->
-                <!-- list per glyph, so naming this face after the body font  -->
-                <!-- on  fo:root  draws from it any character Latin Modern     -->
-                <!-- lacks: currency signs, primes, the geometric end-marks,  -->
-                <!-- dingbats.  These symbols have no bold or italic form, so  -->
-                <!-- the one regular face answers all four style/weight slots, -->
-                <!-- letting the fallback work inside bold or italic text too. -->
+                <!-- PreTeXt Symbols: the symbol fallback face (see            -->
+                <!-- fonts/README.md ).  FOP consults a font-family list per   -->
+                <!-- glyph, so naming this face after the body font on         -->
+                <!-- fo:root  draws from it any character Latin Modern lacks:  -->
+                <!-- currency signs, primes, geometric end-marks, dingbats.    -->
+                <!-- These symbols have no bold or italic form, so the one     -->
+                <!-- regular face answers all four style/weight slots, so the  -->
+                <!-- fallback works inside bold or italic text too.            -->
                 <font embedding-mode="full" embed-url="fonts/PreTeXtSymbols.otf">
                     <font-triplet name="PreTeXt Symbols" style="normal" weight="normal"/>
                     <font-triplet name="PreTeXt Symbols" style="normal" weight="bold"/>
                     <font-triplet name="PreTeXt Symbols" style="italic" weight="normal"/>
                     <font-triplet name="PreTeXt Symbols" style="italic" weight="bold"/>
+                </font>
+                <!-- Broad-coverage serif fallback.  Latin Modern Roman omits  -->
+                <!-- a few characters that appear in ordinary text — notably   -->
+                <!-- the micro sign (U+00B5, the SI 'micro' prefix, as in      -->
+                <!-- micrometres or microfarads).  PreTeXt Symbols cannot      -->
+                <!-- rescue these, because FOP's font fallback is per-WORD: a  -->
+                <!-- glyph sitting mid-word cannot be taken from the symbol    -->
+                <!-- face while the rest of the word stays in the body face.   -->
+                <!-- STIX Two Text, listed last on  fo:root , lets FOP set any -->
+                <!-- whole word the body font cannot (the unit renders wholly  -->
+                <!-- in STIX), restoring coverage DejaVu once provided by      -->
+                <!-- default.  One regular face fills all four style/weight    -->
+                <!-- slots, as for PreTeXt Symbols above.                      -->
+                <font embedding-mode="full" embed-url="fonts/STIXTwoText-Regular.otf">
+                    <font-triplet name="STIX Two Text" style="normal" weight="normal"/>
+                    <font-triplet name="STIX Two Text" style="normal" weight="bold"/>
+                    <font-triplet name="STIX Two Text" style="italic" weight="normal"/>
+                    <font-triplet name="STIX Two Text" style="italic" weight="bold"/>
                 </font>
             </fonts>
         </renderer>

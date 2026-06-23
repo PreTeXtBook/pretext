@@ -106,8 +106,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- each font family must name a real, available font: a generic -->
 <!-- family (serif, monospace) would fall back to a base-14 PDF   -->
 <!-- font, which is never embedded.  Each named family must have a -->
-<!-- matching declaration in  pretext/fop.xconf.  The body and     -->
-<!-- monospace faces follow the  pdf/@font  publication key; the    -->
+<!-- matching declaration in  pretext/fop.xconf.  The body is      -->
+<!-- Latin Modern Roman and the monospace face Inconsolata; the     -->
 <!-- symbol family is "PreTeXt Symbols", the bundled FreeSerif      -->
 <!-- subset (see  fonts/README.md ), which carries the currency     -->
 <!-- signs, primes, geometric end-marks, and dingbats that Latin    -->
@@ -115,7 +115,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so FOP falls back to it for any glyph the body font is         -->
 <!-- missing, and named outright where a specific symbol is drawn.  -->
 <xsl:variable name="font-family-main" select="'Latin Modern Roman'"/>
-<xsl:variable name="font-family-monospace" select="'Latin Modern Mono'"/>
+<xsl:variable name="font-family-monospace" select="'Inconsolata'"/>
 <!-- for symbols absent from the main font (e.g. the end-marks) -->
 <xsl:variable name="font-family-symbol" select="'PreTeXt Symbols'"/>
 <!-- the <icon> faces, declared in fop.xconf: FontAwesome 5 Solid   -->
