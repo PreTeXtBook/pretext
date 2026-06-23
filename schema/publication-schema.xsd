@@ -598,7 +598,6 @@
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="latin-modern"/>
-            <xs:enumeration value="dejavu"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>

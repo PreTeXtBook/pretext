@@ -671,10 +671,7 @@
     <element name="pdf">
       <optional>
         <attribute name="font">
-          <choice>
-            <value>latin-modern</value>
-            <value>dejavu</value>
-          </choice>
+          <value>latin-modern</value>
         </attribute>
       </optional>
     </element>

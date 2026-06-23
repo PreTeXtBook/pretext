@@ -106,36 +106,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- each font family must name a real, available font: a generic -->
 <!-- family (serif, monospace) would fall back to a base-14 PDF   -->
 <!-- font, which is never embedded.  Each named family must have a -->
-<!-- matching declaration in  pretext/fop.xconf.  The body and     -->
-<!-- monospace faces follow the  pdf/@font  publication key; the    -->
+<!-- matching declaration in  pretext/fop.xconf.  The body is      -->
+<!-- Latin Modern Roman and the monospace face Inconsolata; the     -->
 <!-- symbol family is "PreTeXt Symbols", the bundled FreeSerif      -->
 <!-- subset (see  fonts/README.md ), which carries the currency     -->
 <!-- signs, primes, geometric end-marks, and dingbats that Latin    -->
 <!-- Modern lacks.  It is named after the body font on  fo:root ,   -->
 <!-- so FOP falls back to it for any glyph the body font is         -->
 <!-- missing, and named outright where a specific symbol is drawn.  -->
+<!-- the 12-point optical design is used for a body font size of   -->
+<!-- 12pt or more; smaller sizes (and 11pt) use the 10-point face  -->
 <xsl:variable name="font-family-main">
     <xsl:choose>
-        <xsl:when test="$pdf-font = 'dejavu'">
-            <xsl:text>DejaVu Serif</xsl:text>
+        <xsl:when test="number(substring-before($font-size, 'pt')) &gt;= 12">
+            <xsl:text>Latin Modern Roman 12</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>Latin Modern Roman</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
-<xsl:variable name="font-family-monospace">
-    <xsl:choose>
-        <xsl:when test="$pdf-font = 'dejavu'">
-            <xsl:text>DejaVu Sans Mono</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>Latin Modern Mono</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
+<xsl:variable name="font-family-monospace" select="'Inconsolata'"/>
 <!-- for symbols absent from the main font (e.g. the end-marks) -->
 <xsl:variable name="font-family-symbol" select="'PreTeXt Symbols'"/>
+<!-- a last-resort broad serif (STIX Two Text) for the few          -->
+<!-- characters Latin Modern lacks in running text, notably the     -->
+<!-- micro sign U+00B5 (the SI "micro" prefix, as in micrometres).  -->
+<!-- It is listed *last* on  fo:root  below.  FOP falls back per    -->
+<!-- word, so a glyph sitting mid-word cannot be drawn from the     -->
+<!-- symbol font while the rest of the word keeps the body font;    -->
+<!-- a broad face can set the whole word.  This restores coverage   -->
+<!-- DejaVu used to give implicitly, before it was dropped.         -->
+<xsl:variable name="font-family-broad" select="'STIX Two Text'"/>
 <!-- the <icon> faces, declared in fop.xconf: FontAwesome 5 Solid   -->
 <!-- for the "classic" icons, Brands for the Creative Commons marks -->
 <xsl:variable name="font-family-icon" select="'Font Awesome 5 Free Solid'"/>
@@ -247,7 +249,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- face.  FOP selects per glyph, so any character missing from the  -->
     <!-- main font (a currency sign, a prime, a list-marker square) is    -->
     <!-- drawn from "PreTeXt Symbols" without any per-character markup.   -->
-    <fo:root font-family="{$font-family-main}, {$font-family-symbol}" font-size="{$font-size}" xml:lang="{$document-language}">
+    <fo:root font-family="{$font-family-main}, {$font-family-symbol}, {$font-family-broad}" font-size="{$font-size}" xml:lang="{$document-language}">
         <fo:layout-master-set>
             <fo:simple-page-master master-name="page-odd"
                                    page-width="{$page-width}"

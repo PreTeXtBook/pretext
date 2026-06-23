@@ -504,7 +504,7 @@
 
             <p>The text and monospace fonts of the <init>PDF</init> are chosen with the<cd>
                 <cline>/publication/pdf/@font</cline>
-            </cd>attribute, whose value is a key naming a tested font set.  The value <c>latin-modern</c> (the default) selects Latin Modern, matching the <latex/> conversion, while <c>dejavu</c> selects the DejaVu families.  In either case a small number of symbols absent from the chosen font are supplied from a fallback font.  Every font is fully embedded, as required for the accessible (<init>PDF/UA</init>) output this conversion produces.</p>
+            </cd>attribute.  Its only value at present is <c>latin-modern</c> (also the default), which matches the fonts of the <latex/> conversion.  A small number of symbols absent from these fonts are supplied from a fallback font.  Every font is fully embedded, as required for the accessible (<init>PDF/UA</init>) output this conversion produces.</p>
         </subsection>
     </section>
 

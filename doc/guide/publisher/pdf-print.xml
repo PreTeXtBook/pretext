@@ -303,6 +303,6 @@
 
         <p>The conversions described so far in this chapter reach a <init>PDF</init> by way of <latex/>, as an intermediate format (<xref ref="latex-file"/>).  An experimental alternative produces a <init>PDF</init> directly from an <init>XSL-FO</init> rendering of your source, formatted by Apache <init>FOP</init>, with no <latex/> stage at all.  This route is under active development and does not yet match the maturity or typographic polish of the <latex/> route, so it is not yet a substitute for it.</p>
 
-        <p>One motivation for this route is accessibility: it produces a tagged, <init>PDF/UA</init> <init>PDF</init>, and every font it uses is fully embedded.  Because there is no <latex/> in the pipeline, the available fonts are a small, curated set rather than the whole <tex/> ecosystem.  You may choose the font set with a publication option; by default it matches the Latin Modern fonts of the <latex/> route.  See <xref ref="pdf-fo-font-options"/> for the option and its values.</p>
+        <p>One motivation for this route is accessibility: it produces a tagged, <init>PDF/UA</init> <init>PDF</init>, and every font it uses is fully embedded.  Because there is no <latex/> in the pipeline, the available fonts are a small, curated set rather than the whole <tex/> ecosystem.  These fonts match the Latin Modern fonts of the <latex/> route.  See <xref ref="pdf-fo-font-options"/> for the publication option that selects them.</p>
     </section>
 </chapter>
