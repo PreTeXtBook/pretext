@@ -421,42 +421,32 @@
             </xsl:apply-templates>
         </xsl:when>
         <!-- If no explicit test is provided, use given answer. -->
+        <!-- NB: The @answer cases (mode='number' and mode='string') are now   -->
+        <!-- handled upstream in pretext-assembly.xsl (exercise pass), which   -->
+        <!-- injects a synthesized <test correct="yes"> element.               -->
+        <!-- The remaining cases are for fillins that use @ansobj that         -->
+        <!-- reference an object that was dynamically created (random).        -->
         <xsl:otherwise>
             <xsl:text>{</xsl:text>
             <xsl:choose>
-                <xsl:when test="$match-fillin/@answer">
-                    <xsl:choose>
-                        <xsl:when test="$match-fillin/@mode='number'">
-                            <xsl:text>"number": [</xsl:text>
-                            <xsl:value-of select="$match-fillin/@answer"/>
-                            <xsl:text>,</xsl:text>
-                            <xsl:value-of select="$match-fillin/@answer"/>
-                            <xsl:text>]</xsl:text>
-                        </xsl:when>
-                        <xsl:when test="$match-fillin/@mode='string'">
-                            <xsl:text>"regex": "</xsl:text>
-                            <xsl:value-of select="$match-fillin/@answer"/>
-                            <xsl:text>"</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:message>PTX:ERROR: fillin has an @answer with invalid or missing mode (valid: number or string) in "<xsl:value-of select="@visible-id"/>. If dynamic, you should use @ansobj.".</xsl:message>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
                 <xsl:when test="$match-fillin/@ansobj">
                     <xsl:choose>
+                        <!-- Number objects — assume match with very tight tolerance -->
                         <xsl:when test="$match-fillin/@mode='number'">
                             <xsl:text>function() {&#xa;</xsl:text>
                             <xsl:text>    return (Math.abs(</xsl:text>
                             <xsl:value-of select="$match-fillin/@ansobj"/>
                             <xsl:text>- ans) &lt; 1e-10);&#xa;}</xsl:text>
                         </xsl:when>
+                        <!-- String objects — assume require exact string match -->
+                        <!-- otherwise the author should specify the test -->
                         <xsl:when test="$match-fillin/@mode='string'">
                             <xsl:text>function() {&#xa;</xsl:text>
                             <xsl:text>    return (</xsl:text>
                             <xsl:value-of select="$match-fillin/@ansobj"/>
                             <xsl:text>== ans);&#xa;}</xsl:text>
                         </xsl:when>
+                        <!-- Dynamic math objects: compare expressions -->
                         <xsl:when test="$match-fillin/@mode='math'">
                             <xsl:text>function() {&#xa;</xsl:text>
                             <xsl:text>    return _mobjs.compareExpressions(</xsl:text>
@@ -717,8 +707,16 @@
         <xsl:otherwise>
             <xsl:variable name="answer">
                 <xsl:choose>
+                    <!-- If comparing with actual answer, implicitly a literal check -->
                     <xsl:when test="strcmp/@use-answer='yes'">
-                        <xsl:value-of select="$fillin/@answer"/>
+                        <xsl:call-template name="escape-regexp-literal">
+                            <xsl:with-param name="text" select="$fillin/@answer"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:when test="strcmp/@literal='yes'">
+                        <xsl:call-template name="escape-regexp-literal">
+                            <xsl:with-param name="text" select="strcmp"/>
+                        </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="strcmp"/>
