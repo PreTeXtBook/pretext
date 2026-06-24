@@ -26,9 +26,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <locale language="cs-CZ" direction="ltr"
         quote-primary="down-up-double" quote-secondary="down-up-single">
-    <!-- The english quotation style above is just a default, it needs adjustment -->
     <!-- THEOREM-LIKE blocks -->
-    <!-- Environments which have proofs, plus proofs themselves -->
+    <!-- The english quotation style above is just a default, it needs adjustment -->
     <localization string-id='theorem'>Teorém</localization>
     <localization string-id='corollary'>Důsledek</localization>
     <localization string-id='lemma'>Lemma</localization>
@@ -43,6 +42,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='justification'>Odůvodnění</localization>
     <localization string-id='reasoning'>Argumentace</localization>
     <localization string-id='explanation'>Vysvětlení</localization>
+    <localization string-id='case'>Případ</localization>
+    <!-- Components of the narrative -->
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->
     <localization string-id='axiom'>Axiom</localization>
@@ -53,17 +54,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='assumption'>Předpoklad</localization>
     <!-- Definitions -->
     <localization string-id='definition'>Definice</localization>
-    <!--Mathematics -->
-    <!-- "equation" is a string signaling one line of displayed mathematics         -->
-    <!-- "displaymath" is a string signaling several lines of displayed mathematics -->
+    <!-- Mathematics -->
     <localization string-id='equation'>Rovnice</localization>
     <localization string-id='displaymath'>Zobrazená matematika</localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'>Díl</localization>
     <localization string-id='book'>Kniha</localization>
     <localization string-id='article'>Článek</localization>
-    <localization string-id='slideshow'>Prezentace</localization>
     <localization string-id='letter'>Dopis</localization>
+    <localization string-id='slideshow'>Prezentace</localization>
     <localization string-id='memo'>Sdělení</localization>
     <localization string-id='presentation'>Prezentace</localization>
     <!-- Parts of a document -->
@@ -71,12 +70,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='part'>Část</localization>
     <localization string-id='chapter'>Kapitola</localization>
     <localization string-id='appendix'>Dodatek</localization>
-    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
     <localization string-id='appendices'>Dodatky</localization>
     <localization string-id='section'>Sekce</localization>
     <localization string-id='subsection'>Podsekce</localization>
     <localization string-id='subsubsection'>Podpodsekce</localization>
-    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
     <localization string-id='slide'>Slajd</localization>
     <localization string-id='introduction'>Úvod</localization>
     <localization string-id='conclusion'>Závěr</localization>
@@ -88,16 +85,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='glossary'>Vysvětlivky</localization>
     <localization string-id='references'>Odkazy</localization>
     <localization string-id='backmatter'>Závěrečná část</localization>
-    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'>Odstavce</localization>
     <localization string-id='subparagraph'>Pododstavec</localization>
     <!-- Adjustments to titles of divisions -->
     <localization string-id='group'>Skupina</localization>
-    <!-- used for a (logical) portion of a proof -->
-    <localization string-id='case'>Případ</localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
-    <!-- "note" is used within "biblio", likely to change -->
     <localization string-id='remark'>Poznámka</localization>
     <localization string-id='convention'>Konvence</localization>
     <localization string-id='note'>Poznámka</localization>
@@ -122,28 +115,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='exploration'>Průzkum</localization>
     <localization string-id='task'>Úkol</localization>
     <localization string-id='investigation'>Výzkum</localization>
-    <!--  -->
-    <!-- assemblages are collections of minimally structured material -->
     <localization string-id='assemblage'>Soustava</localization>
     <localization string-id='poem'>Báseň</localization>
-    <!-- Objectives is the block, objective is a list item within -->
     <localization string-id='objectives'>Cíle</localization>
     <localization string-id='objective'>Cíl</localization>
-    <!-- Outcomes is the block, outcome is a list item within (different) -->
     <localization string-id='outcomes'>Výsledky</localization>
     <localization string-id='outcome'>Výsledek</localization>
-    <!--  -->
-    <!-- "Open" means unsolved, a research question/problem -->
     <localization string-id='openquestion'>Nevyřešená otázka</localization>
     <localization string-id='openproblem'>Nevyřešený problém</localization>
     <localization string-id='openconjecture'>Nevyřešená domněnka</localization>
-    <!-- "discussion" on open problems -->
     <localization string-id='context'>Kontext</localization>
     <localization string-id='discussion'>Diskuse</localization>
     <localization string-id='opinion'>Názor</localization>
     <localization string-id='status'>Status</localization>
     <localization string-id='suggestion'>Návrh</localization>
-    <!--  -->
     <localization string-id='figure'>Obrázek</localization>
     <localization string-id='table'>Tabulka</localization>
     <localization string-id='listing'>Výpis</localization>
@@ -152,13 +137,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Lists and their items -->
     <localization string-id='list'>Seznam</localization>
     <localization string-id='li'>Bod</localization>
-    <!-- A term (word) defined in a glossary item -->
     <localization string-id='gi'>Termín</localization>
-    <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Odstavec</localization>
     <localization string-id='blockquote'>Citát</localization>
     <localization string-id='pre'>Blok kódu</localization>
-    <!-- Literate programming, a chunk of computer code -->
     <localization string-id='fragment'>Fragment</localization>
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
@@ -173,9 +155,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='answer'>Odpověď</localization>
     <localization string-id='solution'>Řešení</localization>
     <localization string-id='subexercises'>Dílčí cvičení</localization>
-    <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'>Skupina cvičení</localization>
-    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <localization string-id='biblio'>Bibliografický údaj</localization>
     <!-- Front matter components -->
     <localization string-id='toc'>Obsah</localization>
@@ -183,7 +163,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='preface'>Předmluva</localization>
     <localization string-id='acknowledgement'>Poděkování</localization>
     <localization string-id='biography'>Životopis autora</localization>
-    <!-- singular and plural titles for biography subdivision -->
     <localization string-id='about-author'>O autoru</localization>
     <localization string-id='about-authors'>O autorech</localization>
     <localization string-id='foreword'>Předmluva</localization>
@@ -192,6 +171,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Runestone Activities -->
     <localization string-id='video'>Video</localization>
     <localization string-id='program'>Program</localization>
+    <!-- Runestone Exercises -->
     <localization string-id='true'>Pravda</localization>
     <localization string-id='false'>Nepravda</localization>
     <localization string-id='or'>Nebo</localization>
@@ -202,12 +182,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='scratch-activecode'>Scratch ActiveCode</localization> -->
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
-    <!-- index-part is deprecated, but not abandoned          -->
-    <!-- NB: repurpose translations, maybe move appendix here -->
     <localization string-id='index'>Rejstřík</localization>
     <localization string-id='jump-to'>Skoč na:</localization>
     <!-- Parts of the Index -->
-    <localization string-id='index'>Rejstřík</localization>
     <localization string-id='see'>Viz</localization>
     <localization string-id='also'>Viz také</localization>
     <!-- Notation List headings/foot -->
@@ -217,17 +194,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='page'>Stránka</localization>
     <localization string-id='continued'>Pokračuje na další straně</localization>
     <!-- Navigation Interface elements -->
-    <!-- Assistive "skip to content" link -->
     <localization string-id='skip-to-content'>Přeskočit na hlavní obsah</localization>
     <localization string-id='previous'>Předchozí</localization>
     <localization string-id='up'>Nahoru</localization>
     <localization string-id='next'>Další</localization>
-    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
     <localization string-id='previous-short'>Zpět</localization>
     <localization string-id='up-short'>Výš</localization>
     <localization string-id='next-short'>Dál</localization>
     <!-- <localization string-id='top'>Top</localization> -->
-    <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'>Anotace</localization>
     <localization string-id='feedback'>Odezva</localization>
     <localization string-id='authored'>Napsáno v PreTeXt</localization>
@@ -252,30 +226,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'>permalink</localization>
     <localization string-id='incontext'>V Souvislosti</localization>
-    <!-- Static representation link to the dedicated HTML page ("standalone") -->
     <!-- <localization string-id='standalone'>Standalone</localization> -->
-    <!-- Static representation link to the embeddable iframe version ("embed") -->
     <!-- <localization string-id='embed'>Embed</localization> -->
     <!-- <localization string-id='embed-this-page'>Embed this page</localization> -->
     <!-- <localization string-id='copy'>Copy</localization> -->
     <!-- <localization string-id='profile'>Profile</localization> -->
     <!-- Following is in ENGLISH and should be translated.  Due to its -->
-    <!-- ubiquitous nature we have not left it undefined.  See the     -->
-    <!-- "en-US" file for a more complete explanation of its use.      -->
-    <!-- Please remove this entire comment when translated.  Thanks.   -->
+    <!-- ubiquitous nature we have not left it undefined.  See the -->
+    <!-- "en-US" file for a more complete explanation of its use. -->
+    <!-- Please remove this entire comment when translated.  Thanks. -->
     <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
     <!-- <localization string-id='calculator'>Calculator</localization> -->
-    <!-- Sage Cell evaluate button      -->
-    <!-- eg, "Evaluate (Maxima)"        -->
-    <!-- 2017-05-14: 'code' is obsolete -->
-    <!-- This needs to be defined to *something* (English)       -->
-    <!-- else whatever crud ends up on the button kills the cell -->
-    <!-- Translate at first opportunity, please                  -->
+    <!-- This needs to be defined to *something* (English) -->
+    <!-- Translate at first opportunity, please -->
     <localization string-id='evaluate'>Ohodnotit</localization>
-    <localization string-id='code'>Kód</localization>
-    <!-- How to run an interactive widget, sliders, checkboxes, etc -->
+    <!-- <localization string-id='code'>Code</localization> -->
     <localization string-id='instructions'>Instrukce</localization>
-    <!-- Interactive exercise feedback messages -->
     <localization string-id='correct'>Správně</localization>
     <localization string-id='incorrect'>Nesprávně</localization>
     <localization string-id='blank'>Prázdné</localization>
@@ -286,10 +252,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='activate'>Aktivovat</localization>
     <localization string-id='reset'>Reset</localization>
     <localization string-id='array'>pole</localization>
-    <localization string-id='papersize'>Velikost papíru</localization>
-    <!-- Additional printing options -->
+    <localization string-id="papersize">Velikost papíru</localization>
     <localization string-id="printing-options">Další možnosti tisku</localization>
-    <!-- "hide hint/answer/solutions" toggle title                         -->
     <localization string-id="hide-hints">Zakrýt nápovědu</localization>
     <localization string-id="hide-answers">Zakrýt odpovědi</localization>
     <localization string-id="hide-solutions">Zakrýt řešení</localization>
@@ -302,6 +266,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='print-preview'>Náhled tisku</localization>
     <localization string-id='close'>Zavřít</localization>
     <localization string-id='open-new-tab'>Otevřít v nové kartě</localization>
+    <!-- Readability menu items, HTML only, utilized by Javascript -->
     <!-- <localization string-id='readability-settings'>Readability settings</localization> -->
     <!-- <localization string-id='readability-line-height'>Line height</localization> -->
     <!-- <localization string-id='readability-content-font-size'>Content font size</localization> -->
