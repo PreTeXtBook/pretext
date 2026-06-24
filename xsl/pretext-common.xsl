@@ -9767,89 +9767,131 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 
-<!-- Fully marked-up bibtex-style bibliographic entry formatting -->
-<!-- Current treatment assumes elements are in the correct order -->
+<!-- Fully marked-up bibtex-style bibliographic entry formatting.    -->
+<!-- Current treatment assumes elements are in the correct order.    -->
+<!-- Each field is followed by its own separator, except the last,   -->
+<!-- which is finished with a period (see "bibtex-separator").       -->
 
-<!-- Comma after author or editor -->
+<!-- Trailing punctuation for a BibTeX field: the given separator   -->
+<!-- when another field follows, otherwise a period.  An annotation -->
+<!-- "note" is not an inline field, so it does not count here.       -->
+<xsl:template match="*" mode="bibtex-separator">
+    <xsl:param name="separator"/>
+    <xsl:choose>
+        <xsl:when test="following-sibling::*[not(self::note)]">
+            <xsl:value-of select="$separator"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>.</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Author, comma after -->
 <xsl:template match="biblio[@type='bibtex']/author">
     <xsl:apply-templates select="text()"/>
-    <xsl:text>, </xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="', '"/>
+    </xsl:apply-templates>
 </xsl:template>
+
+<!-- Editor, labelled, comma after -->
 <xsl:template match="biblio[@type='bibtex']/editor">
     <xsl:apply-templates select="text()"/>
-    <xsl:text>, </xsl:text>
+    <xsl:text> (ed.)</xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="', '"/>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- Title in italics, followed by comma -->
+<!-- Title in italics, comma after -->
 <xsl:template match="biblio[@type='bibtex']/title">
     <xsl:apply-templates select="." mode="italic"/>
-    <xsl:text>, </xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="', '"/>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- Space after journal -->
+<!-- Journal, space after -->
 <xsl:template match="biblio[@type='bibtex']/journal">
     <xsl:apply-templates select="text()|m"/>
-    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="' '"/>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- Volume in bold -->
+<!-- Volume in bold, space after -->
 <xsl:template match="biblio[@type='bibtex']/volume">
     <xsl:apply-templates select="." mode="bold"/>
-    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="' '"/>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- Series is plain (but space after) -->
+<!-- Series, comma after (so it separates from a following publisher) -->
 <xsl:template match="biblio[@type='bibtex']/series">
     <xsl:apply-templates select="text()"/>
-    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="', '"/>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- Publisher is plain (but semicolon after) -->
+<!-- Publisher, comma after -->
 <xsl:template match="biblio[@type='bibtex']/publisher">
     <xsl:apply-templates select="text()"/>
-    <xsl:text>; </xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="', '"/>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- Year in parentheses -->
+<!-- Year in parentheses, space after -->
 <xsl:template match="biblio[@type='bibtex']/year">
     <xsl:text>(</xsl:text>
     <xsl:apply-templates select="text()"/>
-    <xsl:text>) </xsl:text>
+    <xsl:text>)</xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="' '"/>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- Number: no. and comma after -->
-<!-- Note: original pure LaTeX implemenation did not have -->
-<!-- a trailing comma, the pure HTML implementation did   -->
+<!-- Number, as "no. N", space after -->
 <xsl:template match="biblio[@type='bibtex']/number">
     <xsl:text>no</xsl:text>
     <xsl:call-template name="biblio-period"/>
     <xsl:call-template name="thin-space-character"/>
     <xsl:apply-templates select="text()"/>
-    <xsl:text>, </xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="' '"/>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- A "pubnote", which could contain any publication information. -->
-<!-- Render all content (not just "text()") so inline markup, such -->
-<!-- as an "ndash" in a page or place range, is not dropped.       -->
+<!-- A "pubnote" holds free-form publication information.  Render all -->
+<!-- content (not just "text()") so inline markup such as an "ndash"  -->
+<!-- is not dropped; comma after.                                     -->
 <xsl:template match="biblio[@type='bibtex']/pubnote">
-    <xsl:text> [</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>]</xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="', '"/>
+    </xsl:apply-templates>
 </xsl:template>
 
-<!-- Pages should come last, so put a period.    -->
-<!-- Two forms: @start and @end,                 -->
-<!-- or total number as content (as for a book). -->
+<!-- Pages, two forms: a total count (a book), or a @start/@end       -->
+<!-- range.  Comma after, unless last, when "bibtex-separator" ends   -->
+<!-- the entry with a period.                                         -->
 <xsl:template match="biblio[@type='bibtex']/pages[not(@start)]">
     <xsl:apply-templates select="text()"/>
-    <xsl:text>.</xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="', '"/>
+    </xsl:apply-templates>
 </xsl:template>
 <xsl:template match="biblio[@type='bibtex']/pages[@start]">
     <xsl:text>pp</xsl:text>
     <xsl:call-template name="biblio-period"/>
     <xsl:call-template name="thin-space-character"/>
     <xsl:value-of select="@start"/><xsl:text>-</xsl:text><xsl:value-of select="@end"/>
-    <xsl:text>.</xsl:text>
+    <xsl:apply-templates select="." mode="bibtex-separator">
+        <xsl:with-param name="separator" select="', '"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Always: authors first, no leading separator -->
