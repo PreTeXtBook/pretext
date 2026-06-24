@@ -17751,6 +17751,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </name>
                     </author>
                     <title>Three Regularity Results in Harmonic Analysis</title>
+                    <genre>Ph.D. thesis</genre>
                     <issued>
                         <date year="1996"/>
                     </issued>
@@ -18143,7 +18144,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </name>
                     </author>
                     <title>Subspaces and Echelon Forms</title>
-                    <collection-title>The College Mathematics Journal</collection-title>
+                    <container-title>The College Mathematics Journal</container-title>
                     <volume>24</volume>
                     <number>1</number>
                     <issued>
@@ -18192,7 +18193,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </name>
                     </author>
                     <title>Mean values of <m>L</m>-functions and symmetry</title>
-                    <collection-title>Internat. Math. Res. Notices</collection-title>
+                    <container-title>Internat. Math. Res. Notices</container-title>
                     <volume>17</volume>
                     <issued>
                         <date year="2000"/>
