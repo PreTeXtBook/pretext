@@ -17835,11 +17835,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </author>
                     <title>Subspaces and Echelon Forms</title>
                     <collection-title>The College Mathematics Journal</collection-title>
+                    <volume>24</volume>
+                    <number>1</number>
                     <issued>
                         <date year="1993" month="1"/>
                     </issued>
-                    <volume>24</volume>
-                    <number>1</number>
                     <page>57-62</page>
                 </biblio>
 
@@ -17851,10 +17851,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <given>John</given>
                         </name>
                     </author>
+                    <title>Still Anonymous, But now Ibid</title>
                     <issued>
                         <date year="1970" month="6" day="1"/>
                     </issued>
-                    <title>Still Anonymous, But now Ibid</title>
                 </biblio>
 
                 <!-- from test suite in citeproc.py JSON example program -->
@@ -17865,10 +17865,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <given>John</given>
                         </name>
                     </author>
+                    <title>His Anonymous Life</title>
                     <issued>
                         <date year="1965" month="6" day="1"/>
                     </issued>
-                    <title>His Anonymous Life</title>
                 </biblio>
 
                 <biblio xml:id="conrey-farmer" type="article-journal">
@@ -17884,10 +17884,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </author>
                     <title>Mean values of <m>L</m>-functions and symmetry</title>
                     <collection-title>Internat. Math. Res. Notices</collection-title>
+                    <volume>17</volume>
                     <issued>
                         <date year="2000"/>
                     </issued>
-                    <volume>17</volume>
                     <page>883-908</page>
                 </biblio>
 
@@ -17901,11 +17901,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </name>
                     </author>
                     <title>Boundaries of Dissent: Protest and State Power in the Media Age</title>
-                    <publisher>Routledge</publisher>
-                    <publisher-place>New York</publisher-place>
                     <issued>
                         <date year="2006"/>
                     </issued>
+                    <publisher>Routledge</publisher>
+                    <publisher-place>New York</publisher-place>
                     <URL>http://www.test01.com</URL>
                 </biblio>
             </references>
