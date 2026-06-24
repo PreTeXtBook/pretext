@@ -170,14 +170,12 @@ function toggleTOCItem(expander, event = null) {
     let listItem = expander.closest(".toc-item");
     listItem.classList.toggle("expanded");
     let expanded = listItem.classList.contains("expanded");
-    let targetElement = document.getElementById(expander.controlledGroup);
 
+    let groupName = listItem.querySelector(".toc-title-box").innerText;
     if(expanded) {
-        let groupName = listItem.querySelector(".toc-title-box").innerText;
         expander.title = "Close " + groupName;
         expander.setAttribute("aria-expanded", "true");
     } else {
-        let groupName = listItem.querySelector(".toc-title-box").innerText;
         expander.title = "Expand " + groupName;
         expander.setAttribute("aria-expanded", "false");
     }
