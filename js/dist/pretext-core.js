@@ -381,10 +381,10 @@
           if (this.isModal) {
             this.dialog.showModal();
           } else {
-            if (this.controlElement) {
-              this.setExpanded(true);
-            }
             this.dialog.show();
+          }
+          if (this.controlElement) {
+            this.setExpanded(true);
           }
         };
         this.close = () => {
@@ -1178,7 +1178,6 @@
       }
     };
     function initGeogebra() {
-      const geoGebraDiv = document.getElementById("ptx-geogebra-calculator");
       const fixedParams = {
         showToolBar: true,
         showAlgebraInput: true,
@@ -1212,7 +1211,6 @@
         if (entry.target === calcDialogElement && applet && applet.getAppletObject()) {
           const width = entry.contentRect.width;
           const height = entry.contentRect.height;
-          const geoGebraDiv = document.getElementById("ptx-geogebra-calculator");
           const topBarHeight = calcDialogElement.querySelector(".ptx-dialog-topbar").clientHeight || 0;
           applet.getAppletObject().setSize(width, height - topBarHeight);
           applet.getAppletObject().recalculateEnvironments();
