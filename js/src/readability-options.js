@@ -292,7 +292,7 @@ window.addEventListener("DOMContentLoaded", function() {
             setAutopermalinksAccessible(this.checked);
         });
     }
-    setAutopermalinksAccessible(localStorage.getItem("accessiblePermalinks") === "true");
+    setAutopermalinksAccessible(getSavedAccessiblePermalinks());
 
     const resetButton = document.getElementById("ptx-readability-reset-button");
     if (resetButton) {
