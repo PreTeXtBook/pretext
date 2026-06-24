@@ -122,21 +122,19 @@ window.addEventListener("DOMContentLoaded",function(event) {
     // when the reader clicks anywhere outside it or selects a subsection.
     // (Selecting other sections or chapters navigates away from the page so
     // effectively closes the TOC.)
-    if (getComputedStyle(document.documentElement).getPropertyValue('--auto-collapse-toc') == "yes") {
-
-        const sidebar = document.getElementById("ptx-sidebar");
-
+    const autoCollapseToc = getComputedStyle(document.documentElement).getPropertyValue('--auto-collapse-toc') == "yes";
+    if (autoCollapseToc) {
         // Handle all clicks outside the sidebar
         window.addEventListener("click", function(event) {
-            if (sidebar.classList.contains("visible")) {
-                if (!event.composedPath().includes(sidebar)) {
+            if (ptxSidebar.classList.contains("visible")) {
+                if (!event.composedPath().includes(ptxSidebar)) {
                     toggletoc();
                 }
             }
         });
 
         // Handle clicks inside the sidebar but on link within a subsection.
-        sidebar.addEventListener("click", function (event) {
+        ptxSidebar.addEventListener("click", function (event) {
             if (samePageLink(event.target.closest('a'))) {
                 toggletoc();
             }
@@ -145,19 +143,28 @@ window.addEventListener("DOMContentLoaded",function(event) {
         // Handle persistent sidebar if the page is restored from cache on back/forward buttons.
         window.addEventListener('pageshow', (e) => {
             if (e.persisted) {
-                sidebar.classList.remove('visible');
-                sidebar.classList.add('hidden');
+                ptxSidebar.classList.remove('visible');
+                ptxSidebar.classList.add('hidden');
                 tocButton.setAttribute("aria-expanded", "false");
             }
         });
 
-        // Handle Escape key to close the sidebar
-        window.addEventListener("keydown", function(event) {
-            if (event.key === "Escape" && sidebar.classList.contains("visible")) {
-                toggletoc();
-            }
-        });
     }
+
+    // Handle Escape key to close the sidebar when it is presented as a mobile overlay
+    // or at any size if autoCollapseToc is enabled
+    window.addEventListener("keydown", function(event) {
+        if (
+            event.key === "Escape"
+            && ptxSidebar.classList.contains("visible")
+            && (
+                getComputedStyle(ptxSidebar).position === "fixed"
+                || autoCollapseToc
+            )
+        ) {
+            toggletoc();
+        }
+    });
 });
 
 
