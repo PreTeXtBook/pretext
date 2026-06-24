@@ -24,6 +24,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- en-US, English (United States) -->
 <!-- Robert A. Beezer, beezer@pugetsound.edu, 2014-08-11   -->
 
+<!-- RULES for keeping a translation in sync with this en-US file,    -->
+<!-- which is the template.  (Comments here are documentation; see    -->
+<!-- also  README.md.)                                                -->
+<!--                                                                  -->
+<!-- * Provide the same "localization" elements in the same order     -->
+<!--   as en-US.  Strip the comments from any two files and the       -->
+<!--   lists of string-ids should be identical and identically        -->
+<!--   ordered.                                                       -->
+<!-- * For a string you do not translate, leave the en-US line in     -->
+<!--   place, commented out, one element per comment line, indented   -->
+<!--   to match, so it is easy to find and fill in later.             -->
+<!-- * Keep the short heading comments that label groups of strings   -->
+<!--   (e.g. "AXIOM-LIKE blocks", "Various").  Do not copy the        -->
+<!--   longer explanatory comments; that documentation lives only     -->
+<!--   in en-US.                                                      -->
+<!-- * Do add comments of your own that record tricky translation     -->
+<!--   choices.  Those are kept.                                      -->
+
 <!-- Every localization should specify the direction of the language, -->
 <!-- there is no assumed default.  Left-to-right is "ltr" and         -->
 <!-- right-to-left is "rtl".  Provide these exactly as written since  -->
@@ -273,7 +291,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='index'>Index</localization>
     <localization string-id='jump-to'>Jump to:</localization>
     <!-- Parts of the Index -->
-    <localization string-id='index'>Index</localization>
     <localization string-id='see'>See</localization>
     <localization string-id='also'>See also</localization>
     <!-- Notation List headings/foot -->
