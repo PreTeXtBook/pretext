@@ -9828,10 +9828,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:text>, </xsl:text>
 </xsl:template>
 
-<!-- A "pubnote", which could contain any publication information -->
+<!-- A "pubnote", which could contain any publication information. -->
+<!-- Render all content (not just "text()") so inline markup, such -->
+<!-- as an "ndash" in a page or place range, is not dropped.       -->
 <xsl:template match="biblio[@type='bibtex']/pubnote">
     <xsl:text> [</xsl:text>
-    <xsl:apply-templates select="text()"/>
+    <xsl:apply-templates/>
     <xsl:text>]</xsl:text>
 </xsl:template>
 
