@@ -3288,12 +3288,117 @@
               <ref name="BibSeries"/>
               <ref name="BibPublisher"/>
               <ref name="BibPages"/>
+              <ref name="BibPubnote"/>
               <ref name="BibNote"/>
             </choice>
           </zeroOrMore>
         </group>
+        <group>
+          <!--
+            A CSL-style entry, modeled on the CSL-JSON data
+            format.  Structured fields, all optional, in a fixed
+            canonical order.  With no CSL style active the fields
+            are rendered in this (document) order; with a style,
+            citeproc-py supplies the order from the CSL-JSON.
+          -->
+          <attribute name="type">
+            <ref name="CSLType"/>
+          </attribute>
+          <optional>
+            <ref name="CSLAuthor"/>
+          </optional>
+          <optional>
+            <ref name="CSLEditor"/>
+          </optional>
+          <optional>
+            <ref name="CSLTranslator"/>
+          </optional>
+          <optional>
+            <ref name="BibTitle"/>
+          </optional>
+          <optional>
+            <ref name="BibContainerTitle"/>
+          </optional>
+          <optional>
+            <ref name="BibCollectionTitle"/>
+          </optional>
+          <optional>
+            <ref name="BibGenre"/>
+          </optional>
+          <optional>
+            <ref name="Edition"/>
+          </optional>
+          <optional>
+            <ref name="BibVolume"/>
+          </optional>
+          <optional>
+            <ref name="BibNumber"/>
+          </optional>
+          <optional>
+            <ref name="BibIssue"/>
+          </optional>
+          <optional>
+            <ref name="BibIssued"/>
+          </optional>
+          <optional>
+            <ref name="BibAccessed"/>
+          </optional>
+          <optional>
+            <ref name="BibPage"/>
+          </optional>
+          <optional>
+            <ref name="BibPageFirst"/>
+          </optional>
+          <optional>
+            <ref name="BibNumberOfPages"/>
+          </optional>
+          <optional>
+            <ref name="BibPublisher"/>
+          </optional>
+          <optional>
+            <ref name="BibPublisherPlace"/>
+          </optional>
+          <optional>
+            <ref name="BibDOI"/>
+          </optional>
+          <optional>
+            <ref name="BibISBN"/>
+          </optional>
+          <optional>
+            <ref name="BibISSN"/>
+          </optional>
+          <optional>
+            <ref name="BibURL"/>
+          </optional>
+        </group>
       </choice>
     </element>
+  </define>
+  <!-- CSL-JSON item types, a curated scholarly subset -->
+  <define name="CSLType">
+    <choice>
+      <value>article</value>
+      <value>article-journal</value>
+      <value>article-magazine</value>
+      <value>article-newspaper</value>
+      <value>book</value>
+      <value>chapter</value>
+      <value>collection</value>
+      <value>dataset</value>
+      <value>document</value>
+      <value>entry</value>
+      <value>entry-dictionary</value>
+      <value>entry-encyclopedia</value>
+      <value>manuscript</value>
+      <value>paper-conference</value>
+      <value>patent</value>
+      <value>report</value>
+      <value>review</value>
+      <value>software</value>
+      <value>speech</value>
+      <value>thesis</value>
+      <value>webpage</value>
+    </choice>
   </define>
   <define name="Ibid">
     <element name="ibid">
@@ -3355,6 +3460,12 @@
       <text/>
     </element>
   </define>
+  <!-- A BibTeX "pubnote" holds free-form publication information -->
+  <define name="BibPubnote">
+    <element name="pubnote">
+      <ref name="TextBib"/>
+    </element>
+  </define>
   <define name="BibPages">
     <element name="pages">
       <choice>
@@ -3365,6 +3476,176 @@
         </group>
         <text/>
       </choice>
+    </element>
+  </define>
+  <!--
+    CSL contributors carry structured "name" elements only.  The
+    element names "author"/"editor" are deliberately shared with the
+    plain-text BibTeX patterns above; the gating "@type" attribute
+    keeps the two content models apart (a RELAX NG co-occurrence
+    constraint).
+  -->
+  <define name="CSLAuthor">
+    <element name="author">
+      <oneOrMore>
+        <ref name="CSLName"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="CSLEditor">
+    <element name="editor">
+      <oneOrMore>
+        <ref name="CSLName"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="CSLTranslator">
+    <element name="translator">
+      <oneOrMore>
+        <ref name="CSLName"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <!-- A CSL "name": recognized parts in any order, or a literal string -->
+  <define name="CSLName">
+    <element name="name">
+      <zeroOrMore>
+        <choice>
+          <ref name="BibFamily"/>
+          <ref name="BibGiven"/>
+          <ref name="BibDroppingParticle"/>
+          <ref name="BibNonDroppingParticle"/>
+          <ref name="BibSuffix"/>
+          <ref name="BibStaticOrdering"/>
+          <ref name="BibLiteral"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="BibFamily">
+    <element name="family">
+      <text/>
+    </element>
+  </define>
+  <define name="BibGiven">
+    <element name="given">
+      <text/>
+    </element>
+  </define>
+  <define name="BibDroppingParticle">
+    <element name="dropping-particle">
+      <text/>
+    </element>
+  </define>
+  <define name="BibNonDroppingParticle">
+    <element name="non-dropping-particle">
+      <text/>
+    </element>
+  </define>
+  <define name="BibSuffix">
+    <element name="suffix">
+      <text/>
+    </element>
+  </define>
+  <define name="BibStaticOrdering">
+    <element name="static-ordering">
+      <text/>
+    </element>
+  </define>
+  <define name="BibLiteral">
+    <element name="literal">
+      <text/>
+    </element>
+  </define>
+  <!-- CSL standard (string) fields -->
+  <define name="BibContainerTitle">
+    <element name="container-title">
+      <ref name="TextBib"/>
+    </element>
+  </define>
+  <define name="BibCollectionTitle">
+    <element name="collection-title">
+      <ref name="TextBib"/>
+    </element>
+  </define>
+  <!-- A CSL "genre" gives a sub-type, e.g. "Ph.D. thesis" -->
+  <define name="BibGenre">
+    <element name="genre">
+      <text/>
+    </element>
+  </define>
+  <define name="BibIssue">
+    <element name="issue">
+      <text/>
+    </element>
+  </define>
+  <define name="BibPage">
+    <element name="page">
+      <text/>
+    </element>
+  </define>
+  <define name="BibPageFirst">
+    <element name="page-first">
+      <text/>
+    </element>
+  </define>
+  <define name="BibNumberOfPages">
+    <element name="number-of-pages">
+      <text/>
+    </element>
+  </define>
+  <define name="BibPublisherPlace">
+    <element name="publisher-place">
+      <ref name="TextBib"/>
+    </element>
+  </define>
+  <define name="BibDOI">
+    <element name="DOI">
+      <text/>
+    </element>
+  </define>
+  <define name="BibISBN">
+    <element name="ISBN">
+      <text/>
+    </element>
+  </define>
+  <define name="BibISSN">
+    <element name="ISSN">
+      <text/>
+    </element>
+  </define>
+  <define name="BibURL">
+    <element name="URL">
+      <text/>
+    </element>
+  </define>
+  <!-- CSL date variables; one "date" per point, two for a range -->
+  <define name="BibIssued">
+    <element name="issued">
+      <oneOrMore>
+        <ref name="BibDate"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="BibAccessed">
+    <element name="accessed">
+      <oneOrMore>
+        <ref name="BibDate"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="BibDate">
+    <element name="date">
+      <optional>
+        <attribute name="year"/>
+      </optional>
+      <optional>
+        <attribute name="month"/>
+      </optional>
+      <optional>
+        <attribute name="day"/>
+      </optional>
+      <empty/>
     </element>
   </define>
   <define name="GlossaryItem">

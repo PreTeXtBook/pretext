@@ -600,11 +600,179 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </worksheet>
 
         <references xml:id="references-development" label="references-development">
-            <biblio type="raw" xml:id="biblio-fcla" label="biblio-fcla">
-                <author>R. A. Beezer</author>, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
+            <title>References</title>
+
+            <biblio xml:id="csl-judson" type="book">
+                <author>
+                    <name>
+                        <given>Thomas W.</given>
+                        <family>Judson</family>
+                    </name>
+                </author>
+                <title>Abstract Algebra: Theory and Applications</title>
+                <issued>
+                    <date year="2022"/>
+                </issued>
+                <publisher>Orthogonal Publishing</publisher>
+                <publisher-place>Ann Arbor, MI</publisher-place>
             </biblio>
-            <biblio type="raw" xml:id="biblio-judson" label="biblio-judson">
-                <author>T. W. Judson</author>, <title>Abstract Algebra: Theory and Applications</title>, Orthogonal Publishing, 2024.
+
+            <biblio xml:id="csl-lay" type="article-journal">
+                <author>
+                    <name>
+                        <given>David C.</given>
+                        <family>Lay</family>
+                    </name>
+                </author>
+                <title>Subspaces and Echelon Forms</title>
+                <container-title>The College Mathematics Journal</container-title>
+                <volume>24</volume>
+                <number>1</number>
+                <issued>
+                    <date year="1993" month="1"/>
+                </issued>
+                <page>57-62</page>
+            </biblio>
+
+            <biblio xml:id="csl-conrey" type="article-journal">
+                <author>
+                    <name>
+                        <given>J. B.</given>
+                        <family>Conrey</family>
+                    </name>
+                    <name>
+                        <given>D. W.</given>
+                        <family>Farmer</family>
+                    </name>
+                </author>
+                <title>Mean values of <m>L</m>-functions and symmetry</title>
+                <container-title>International Mathematics Research Notices</container-title>
+                <volume>17</volume>
+                <issued>
+                    <date year="2000"/>
+                </issued>
+                <page>883-908</page>
+            </biblio>
+
+            <biblio xml:id="csl-dummit" type="book">
+                <author>
+                    <name>
+                        <given>David S.</given>
+                        <family>Dummit</family>
+                    </name>
+                    <name>
+                        <given>Richard M.</given>
+                        <family>Foote</family>
+                    </name>
+                </author>
+                <title>Abstract Algebra</title>
+                <edition>3rd</edition>
+                <issued>
+                    <date year="2004"/>
+                </issued>
+                <publisher>John Wiley &amp; Sons</publisher>
+                <publisher-place>Hoboken, NJ</publisher-place>
+            </biblio>
+
+            <biblio xml:id="csl-pretext" type="webpage">
+                <author>
+                    <name>
+                        <literal>The PreTeXt Project</literal>
+                    </name>
+                </author>
+                <title>The PreTeXt Guide</title>
+                <accessed>
+                    <date year="2026" month="6" day="1"/>
+                </accessed>
+                <URL>https://pretextbook.org/doc/guide/html/</URL>
+            </biblio>
+
+            <biblio xml:id="csl-chapter" type="chapter">
+                <author>
+                    <name>
+                        <given>Jane Q.</given>
+                        <family>Author</family>
+                    </name>
+                </author>
+                <editor>
+                    <name>
+                        <given>John</given>
+                        <family>Smith</family>
+                    </name>
+                </editor>
+                <title>Finite Fields and Their Applications</title>
+                <container-title>Topics in Modern Algebra</container-title>
+                <issued>
+                    <date year="2010"/>
+                </issued>
+                <page>45-98</page>
+                <publisher>Academic Press</publisher>
+                <publisher-place>San Diego, CA</publisher-place>
+            </biblio>
+
+            <biblio xml:id="csl-icm" type="paper-conference">
+                <author>
+                    <name>
+                        <given>A.</given>
+                        <family>Lovelace</family>
+                    </name>
+                    <name>
+                        <given>C.</given>
+                        <family>Babbage</family>
+                    </name>
+                    <name>
+                        <given>G.</given>
+                        <family>Boole</family>
+                    </name>
+                </author>
+                <title>A Fast Algorithm for Matrix Factorization</title>
+                <container-title>Proceedings of the International Congress of Mathematicians</container-title>
+                <issued>
+                    <date year="2018"/>
+                </issued>
+                <page>1123-1140</page>
+            </biblio>
+
+            <biblio xml:id="csl-tao" type="thesis">
+                <author>
+                    <name>
+                        <given>Terence</given>
+                        <family>Tao</family>
+                    </name>
+                </author>
+                <title>Three Regularity Results in Harmonic Analysis</title>
+                <genre>Ph.D. thesis</genre>
+                <issued>
+                    <date year="1996"/>
+                </issued>
+                <publisher>Princeton University</publisher>
+            </biblio>
+
+            <biblio xml:id="csl-sage" type="software">
+                <author>
+                    <name>
+                        <literal>The Sage Developers</literal>
+                    </name>
+                </author>
+                <title>SageMath, the Sage Mathematics Software System (Version 10.3)</title>
+                <issued>
+                    <date year="2024"/>
+                </issued>
+                <URL>https://www.sagemath.org</URL>
+            </biblio>
+
+            <biblio xml:id="csl-nist" type="report">
+                <author>
+                    <name>
+                        <literal>National Institute of Standards and Technology</literal>
+                    </name>
+                </author>
+                <title>Digital Signature Standard (DSS)</title>
+                <number>FIPS PUB 186-4</number>
+                <issued>
+                    <date year="2013"/>
+                </issued>
+                <publisher>U.S. Department of Commerce</publisher>
             </biblio>
         </references>
 
