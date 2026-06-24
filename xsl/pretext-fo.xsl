@@ -2854,6 +2854,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- Render the parts of a CSL "name"; the catch-all "*" harness -->
+<!-- below drops their text, but only until it is removed.       -->
+<xsl:template match="biblio/author/name/* | biblio/editor/name/* | biblio/translator/name/*">
+    <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="biblio" mode="bibentry-wrapper">
     <xsl:param name="content"/>
     <fo:list-block provisional-distance-between-starts="2.5em"

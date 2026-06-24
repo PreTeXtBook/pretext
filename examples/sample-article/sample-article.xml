@@ -17483,7 +17483,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection xml:id="bibliography-styles-intro" label="bibliography-styles-intro">
                 <title>The Three Styles</title>
 
-                <p>PreTeXt supports three styles of markup for the <tag>biblio</tag> entries of a <tag>references</tag> division.  To compare them, the same ten references appear three times in the divisions that follow, once in each style.  The references are deliberately varied: books and journal articles, a chapter and a conference paper, a thesis, a report, a software system, and a web page; with one, two, and three authors, as well as organizational authors.</p>
+                <p>PreTeXt supports three styles of markup for the <tag>biblio</tag> entries of a <tag>references</tag> division.  To compare them, the same twelve references appear three times in the divisions that follow, once in each style.  The references are deliberately varied: books and journal articles, a chapter and a conference paper, a thesis, a report, a software system, and a web page; with one, two, and three authors, as well as organizational authors.</p>
 
                 <p>A <term>raw</term> entry (<c>type="raw"</c>) is free-form mixed content: the author supplies the order, the punctuation, and almost all of the formatting, while PreTeXt styles only a few recognized elements, such as an italicized <tag>title</tag>, a bold <tag>volume</tag>, a parenthesized <tag>year</tag>, and a <tag>number</tag> prefixed by <q>no.</q></p>
 
@@ -17495,7 +17495,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <references xml:id="references-raw" label="references-raw">
                 <title>Raw Entries</title>
                 <introduction>
-                    <p>The ten references as <c>type="raw"</c> entries.</p>
+                    <p>The twelve references as <c>type="raw"</c> entries.</p>
                 </introduction>
 
                 <biblio xml:id="raw-judson" type="raw">Thomas W. Judson, <title>Abstract Algebra: Theory and Applications</title>, Orthogonal Publishing, Ann Arbor, MI, 2022.</biblio>
@@ -17517,12 +17517,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <biblio xml:id="raw-sage" type="raw">The Sage Developers, <title>SageMath, the Sage Mathematics Software System (Version 10.3)</title>, 2024, <c>https://www.sagemath.org</c>.</biblio>
 
                 <biblio xml:id="raw-nist" type="raw">National Institute of Standards and Technology, <title>Digital Signature Standard (DSS)</title>, FIPS PUB 186-4, U.S. Department of Commerce, 2013.</biblio>
+
+                <biblio xml:id="raw-strang" type="raw">Gilbert Strang, <title>Introduction to Linear Algebra</title>, 5th edition, Wellesley<ndash/>Cambridge Press, Wellesley, MA, 2016, 584 pages, ISBN 978-0-9802327-7-6.</biblio>
+
+                <biblio xml:id="raw-trefethen" type="raw">L. N. Trefethen, <q>A Brief Note on Spectral Methods</q>, <journal>SIAM Review</journal> <volume>50</volume> <number>1</number> <year>2008</year>, p. 67, doi:10.1137/060657716, ISSN 0036-1445.</biblio>
             </references>
 
             <references xml:id="references-bibtex" label="references-bibtex">
                 <title>BibTeX-Style Entries</title>
                 <introduction>
-                    <p>The ten references as <c>type="bibtex"</c> entries.</p>
+                    <p>The twelve references as <c>type="bibtex"</c> entries.</p>
                 </introduction>
 
                 <biblio xml:id="bibtex-judson" type="bibtex">
@@ -17604,12 +17608,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <year>2013</year>
                     <pubnote>FIPS PUB 186-4</pubnote>
                 </biblio>
+
+                <biblio xml:id="bibtex-strang" type="bibtex">
+                    <author>Gilbert Strang</author>
+                    <title>Introduction to Linear Algebra</title>
+                    <publisher>Wellesley-Cambridge Press, Wellesley, MA</publisher>
+                    <year>2016</year>
+                    <pages>584</pages>
+                    <pubnote>5th edition; ISBN 978-0-9802327-7-6</pubnote>
+                </biblio>
+
+                <biblio xml:id="bibtex-trefethen" type="bibtex">
+                    <author>L. N. Trefethen</author>
+                    <title>A Brief Note on Spectral Methods</title>
+                    <journal>SIAM Review</journal>
+                    <volume>50</volume>
+                    <number>1</number>
+                    <year>2008</year>
+                    <pages>67</pages>
+                    <pubnote>doi:10.1137/060657716; ISSN 0036-1445</pubnote>
+                </biblio>
             </references>
 
             <references xml:id="references-csl" label="references-csl">
                 <title>CSL-Style Entries</title>
                 <introduction>
-                    <p>The ten references as CSL-style entries.</p>
+                    <p>The twelve references as CSL-style entries.</p>
                 </introduction>
 
                 <biblio xml:id="csl-judson" type="book">
@@ -17783,6 +17807,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <date year="2013"/>
                     </issued>
                     <publisher>U.S. Department of Commerce</publisher>
+                </biblio>
+
+                <biblio xml:id="csl-strang" type="book">
+                    <author>
+                        <name>
+                            <given>Gilbert</given>
+                            <family>Strang</family>
+                        </name>
+                    </author>
+                    <title>Introduction to Linear Algebra</title>
+                    <edition>5th</edition>
+                    <issued>
+                        <date year="2016"/>
+                    </issued>
+                    <number-of-pages>584</number-of-pages>
+                    <publisher>Wellesley-Cambridge Press</publisher>
+                    <publisher-place>Wellesley, MA</publisher-place>
+                    <ISBN>978-0-9802327-7-6</ISBN>
+                </biblio>
+
+                <biblio xml:id="csl-trefethen" type="article-journal">
+                    <author>
+                        <name>
+                            <given>L. N.</given>
+                            <family>Trefethen</family>
+                        </name>
+                    </author>
+                    <title>A Brief Note on Spectral Methods</title>
+                    <container-title>SIAM Review</container-title>
+                    <volume>50</volume>
+                    <issue>1</issue>
+                    <issued>
+                        <date year="2008"/>
+                    </issued>
+                    <page-first>67</page-first>
+                    <DOI>10.1137/060657716</DOI>
+                    <ISSN>0036-1445</ISSN>
                 </biblio>
             </references>
         </section>

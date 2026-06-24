@@ -774,6 +774,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </issued>
                 <publisher>U.S. Department of Commerce</publisher>
             </biblio>
+
+            <biblio xml:id="csl-strang" type="book">
+                <author>
+                    <name>
+                        <given>Gilbert</given>
+                        <family>Strang</family>
+                    </name>
+                </author>
+                <title>Introduction to Linear Algebra</title>
+                <edition>5th</edition>
+                <issued>
+                    <date year="2016"/>
+                </issued>
+                <number-of-pages>584</number-of-pages>
+                <publisher>Wellesley-Cambridge Press</publisher>
+                <publisher-place>Wellesley, MA</publisher-place>
+                <ISBN>978-0-9802327-7-6</ISBN>
+            </biblio>
+
+            <biblio xml:id="csl-trefethen" type="article-journal">
+                <author>
+                    <name>
+                        <given>L. N.</given>
+                        <family>Trefethen</family>
+                    </name>
+                </author>
+                <title>A Brief Note on Spectral Methods</title>
+                <container-title>SIAM Review</container-title>
+                <volume>50</volume>
+                <issue>1</issue>
+                <issued>
+                    <date year="2008"/>
+                </issued>
+                <page-first>67</page-first>
+                <DOI>10.1137/060657716</DOI>
+                <ISSN>0036-1445</ISSN>
+            </biblio>
         </references>
 
         <backmatter xml:id="backmatter" label="backmatter">
