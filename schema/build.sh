@@ -79,17 +79,9 @@ trang -I rnc -O rng pretext-dev.rnc pretext-dev.rng
 # it in turn "include"s the upstream "pf_schema.rnc"/"pf_schema.rng"
 trang -I rnc -O rng pf-adapter.rnc pf-adapter.rng
 
-# System trang conversion to W3C XSD schema
-# "abstract groups" make schema browser too obtuse
-# NOTE: trang cannot follow the PreFigure "externalRef" when emitting XSD
-# ("sorry, externalRef is not yet supported"), so the XSD path does not yet
-# carry structural PreFigure validation.
-trang -o disable-abstract-elements -I rnc -O xsd pretext.rnc pretext.xsd
-
 # And the same steps for the publication-schema
 xsltproc ${XSL}/pretext-litprog.xsl publication-schema.xml
 trang -I rnc -O rng publication-schema.rnc publication-schema.rng
-trang -o disable-abstract-elements -I rnc -O xsd publication-schema.rnc publication-schema.xsd
 
 # exit cleanly
 exit 0
