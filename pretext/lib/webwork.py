@@ -66,16 +66,18 @@ def webwork_to_xml(
             ]
         )
         log.warning(msg.format(dest_dir))
-    ww_reps_dir = dest_dir
+    ww_reps_dir = os.path.join(dest_dir, "representations")
     ww_images_dir = os.path.join(dest_dir, "images")
 
     # per-exercise representation files live in this directory, named {assembly-id}.xml
 
     # where generated pg problem files will live (each .pg file will usually be deeper in a folder
     # tree based on document structure and chunking level)
-    ww_pg_dir = os.path.join(ww_reps_dir, "pg")
+    ww_pg_dir = os.path.join(dest_dir, "pg")
 
     # create these directories if they don't already exist
+    if not (os.path.isdir(dest_dir)):
+        os.mkdir(dest_dir)
     if not (os.path.isdir(ww_reps_dir)):
         os.mkdir(ww_reps_dir)
     if not (os.path.isdir(ww_images_dir)):
@@ -99,7 +101,7 @@ def webwork_to_xml(
     localization = extracted_pg_xml.get("localization")
     webwork2_server = extracted_pg_xml.find("server-params-pub").get("webwork2-server")
     numbered_title_filesafe = extracted_pg_xml.get("numbered-title-filesafe")
-    ww_project_dir = os.path.join(ww_reps_dir, "pg", numbered_title_filesafe)
+    ww_project_dir = os.path.join(dest_dir, "pg", numbered_title_filesafe)
     if not (os.path.isdir(ww_project_dir)):
         os.mkdir(ww_project_dir)
     ww_macros_dir = os.path.join(ww_project_dir, "macros")

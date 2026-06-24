@@ -1865,7 +1865,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:copy>
                         <xsl:apply-templates select="node()|@*" mode="representations"/>
                     </xsl:copy>
-                    <xsl:message>PTX:ERROR:   could not load WeBWorK representation file "<xsl:value-of select="$webwork-rep-uri"/>" for @assembly-id "<xsl:value-of select="@assembly-id"/>"; re-generate the WeBWorK representations.  A "webwork-representations.xml" in that directory indicates old-format files that need replacing.</xsl:message>
+                    <xsl:choose>
+                        <!-- Check if rep file is in parent folder, where rep files briefly landed for a time in 2026 -->
+                        <xsl:when test="document(str:replace(concat($generated-directory-source, 'webwork/', @assembly-id, '.xml'), '&#x20;', '%20'), $original)/webwork-reps">
+                            <xsl:message>PTX:ERROR:   could not load WeBWorK representation file "<xsl:value-of select="$webwork-rep-uri"/>" for @assembly-id "<xsl:value-of select="@assembly-id"/>". However, there is a file of the same name with the right structure in the parent folder. Either move the file, or re-generate the WeBWorK representations.</xsl:message>
+                        </xsl:when>
+                        <!-- Check if there is a webwork-representations.xml in the parent folder, which held representations prior to 2026 -->
+                        <xsl:when test="document(str:replace(concat($generated-directory-source, 'webwork/webwork-representations.xml'), '&#x20;', '%20'), $original)/webwork-reps">
+                            <xsl:message>PTX:ERROR:   could not load WeBWorK representation file "<xsl:value-of select="$webwork-rep-uri"/>" for @assembly-id "<xsl:value-of select="@assembly-id"/>". However, there is a "webwork-representations.xml" file in the parent folder. This is an old format. Re-generate the WeBWorK representations.</xsl:message>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:message>PTX:ERROR:   could not load WeBWorK representation file "<xsl:value-of select="$webwork-rep-uri"/>" for @assembly-id "<xsl:value-of select="@assembly-id"/>"; re-generate the WeBWorK representations.</xsl:message>
+                        </xsl:otherwise>
+                    </xsl:choose>
+
                 </xsl:when>
                 <xsl:otherwise>
                     <!-- The representation file may record a server failure   -->

@@ -1380,7 +1380,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Defaults to the very old "directory.images"?         -->
             <!-- So testing for the publication file entry is better. -->
             <xsl:when test="$publication/source/directories/@generated">
-                <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/'), '&#x20;', '%20')"/>
+                <xsl:value-of select="str:replace(concat($generated-directory-source, 'webwork/representations/'), '&#x20;', '%20')"/>
             </xsl:when>
             <xsl:when test="$publication/source/@webwork-problems">
                 <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
