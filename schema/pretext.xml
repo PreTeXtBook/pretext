@@ -2672,7 +2672,7 @@
     <section>
         <title>Bibliography</title>
 
-        <p>This is all stop-gap and will change radically.  But it seems to work for now.  So these rules should not be taken as definitive, at all.</p>
+        <p>This support is in-progress and may be expanded.  The CSL-style entry, in particular, covers a curated scholarly subset of the CSL-JSON model for now, and may grow beyond this initial curation.</p>
 
         <fragment xml:id="bibliography">
             <title>Bibliography</title>
@@ -2706,8 +2706,60 @@
                         BibPages |
                         BibPubnote |
                         BibNote)*
-                    ))
+                    ) |
+                    (
+                        # A CSL-style entry, modeled on the CSL-JSON data
+                        # format.  Structured fields, all optional, in a fixed
+                        # canonical order.  With no CSL style active the fields
+                        # are rendered in this (document) order; with a style,
+                        # citeproc-py supplies the order from the CSL-JSON.
+                        attribute type {CSLType},
+                        CSLAuthor?,
+                        CSLEditor?,
+                        CSLTranslator?,
+                        BibTitle?,
+                        BibContainerTitle?,
+                        BibCollectionTitle?,
+                        BibGenre?,
+                        Edition?,
+                        BibVolume?,
+                        BibNumber?,
+                        BibIssue?,
+                        BibIssued?,
+                        BibAccessed?,
+                        BibPage?,
+                        BibPageFirst?,
+                        BibNumberOfPages?,
+                        BibPublisher?,
+                        BibPublisherPlace?,
+                        BibDOI?,
+                        BibISBN?,
+                        BibISSN?,
+                        BibURL?))
                 }
+            # CSL-JSON item types, a curated scholarly subset
+            CSLType =
+                "article" |
+                "article-journal" |
+                "article-magazine" |
+                "article-newspaper" |
+                "book" |
+                "chapter" |
+                "collection" |
+                "dataset" |
+                "document" |
+                "entry" |
+                "entry-dictionary" |
+                "entry-encyclopedia" |
+                "manuscript" |
+                "paper-conference" |
+                "patent" |
+                "report" |
+                "review" |
+                "software" |
+                "speech" |
+                "thesis" |
+                "webpage"
             Ibid = element ibid {empty}
             BibYear = element year {text}
             BibJournal = element journal { TextBib }
@@ -2730,6 +2782,56 @@
                 (
                     text
                 )
+                }
+            # CSL contributors carry structured "name" elements only.  The
+            # element names "author"/"editor" are deliberately shared with the
+            # plain-text BibTeX patterns above; the gating "@type" attribute
+            # keeps the two content models apart (a RELAX NG co-occurrence
+            # constraint).
+            CSLAuthor = element author {CSLName+}
+            CSLEditor = element editor {CSLName+}
+            CSLTranslator = element translator {CSLName+}
+            # A CSL "name": recognized parts in any order, or a literal string
+            CSLName =
+                element name {
+                    (BibFamily |
+                    BibGiven |
+                    BibDroppingParticle |
+                    BibNonDroppingParticle |
+                    BibSuffix |
+                    BibStaticOrdering |
+                    BibLiteral)*
+                }
+            BibFamily = element family {text}
+            BibGiven = element given {text}
+            BibDroppingParticle = element dropping-particle {text}
+            BibNonDroppingParticle = element non-dropping-particle {text}
+            BibSuffix = element suffix {text}
+            BibStaticOrdering = element static-ordering {text}
+            BibLiteral = element literal {text}
+            # CSL standard (string) fields
+            BibContainerTitle = element container-title {TextBib}
+            BibCollectionTitle = element collection-title {TextBib}
+            # A CSL "genre" gives a sub-type, e.g. "Ph.D. thesis"
+            BibGenre = element genre {text}
+            BibIssue = element issue {text}
+            BibPage = element page {text}
+            BibPageFirst = element page-first {text}
+            BibNumberOfPages = element number-of-pages {text}
+            BibPublisherPlace = element publisher-place {TextBib}
+            BibDOI = element DOI {text}
+            BibISBN = element ISBN {text}
+            BibISSN = element ISSN {text}
+            BibURL = element URL {text}
+            # CSL date variables; one "date" per point, two for a range
+            BibIssued = element issued {BibDate+}
+            BibAccessed = element accessed {BibDate+}
+            BibDate =
+                element date {
+                    attribute year {text}?,
+                    attribute month {text}?,
+                    attribute day {text}?,
+                    empty
                 }
             </code>
         </fragment>
