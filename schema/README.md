@@ -9,8 +9,6 @@ A RELAX-NG schema is the formal specification of the PreTeXt vocabulary, with ad
    against this version only, all the others are derived copies.
 * `pretext.rnc`: direct product from `pretext.xml`, RELAX-NG compact syntax
 * `pretext.rng`: conversion from `pretext.xml` via `trang`, RELAX-NG XML syntax
-* `pretext.xsd`: conversion from `pretext.rng` via `trang`, to W3C XSD syntax,
-   with resultant minor inaccuracies
 
 ## Schematron Rules
 
