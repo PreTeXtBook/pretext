@@ -10076,6 +10076,46 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="plain-biblio-period"/>
 </xsl:template>
 
+<!-- Issue, parenthesized, directly following the volume -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/issue">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>)</xsl:text>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- First page, when no range is recorded -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/page-first">
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Total page count, as for a book -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/number-of-pages">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text> pages</xsl:text>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Identifiers: a DOI in monospace, an ISBN or ISSN labelled -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/DOI">
+    <xsl:text>, doi:</xsl:text>
+    <xsl:apply-templates select="." mode="monospace"/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/ISBN">
+    <xsl:text>, ISBN </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/ISSN">
+    <xsl:text>, ISSN </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
 <xsl:template match="*" mode="plain-biblio-period">
     <xsl:if test="not(following-sibling::*)">
         <xsl:text>.</xsl:text>
