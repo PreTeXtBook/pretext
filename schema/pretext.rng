@@ -3288,6 +3288,7 @@
               <ref name="BibSeries"/>
               <ref name="BibPublisher"/>
               <ref name="BibPages"/>
+              <ref name="BibPubnote"/>
               <ref name="BibNote"/>
             </choice>
           </zeroOrMore>
@@ -3353,6 +3354,12 @@
   <define name="BibPublisher">
     <element name="publisher">
       <text/>
+    </element>
+  </define>
+  <!-- A BibTeX "pubnote" holds free-form publication information -->
+  <define name="BibPubnote">
+    <element name="pubnote">
+      <ref name="TextBib"/>
     </element>
   </define>
   <define name="BibPages">

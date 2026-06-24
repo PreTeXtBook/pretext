@@ -1266,6 +1266,7 @@
                         BibSeries |
                         BibPublisher |
                         BibPages |
+                        BibPubnote |
                         BibNote)*
                     ))
                 }
@@ -1280,6 +1281,8 @@
             BibEditor = element editor {text}
             BibSeries = element series {text}
             BibPublisher = element publisher {text}
+            # A BibTeX "pubnote" holds free-form publication information
+            BibPubnote = element pubnote {TextBib}
             BibPages = element pages {
                 (
                     attribute start {text},
