@@ -1599,6 +1599,15 @@
       <optional>
         <attribute name="latexsep"/>
       </optional>
+      <optional>
+        <!-- "all" renders every space as a visible glyph; default "none" -->
+        <attribute name="showspaces">
+          <choice>
+            <value>all</value>
+            <value>none</value>
+          </choice>
+        </attribute>
+      </optional>
       <choice>
         <text/>
         <oneOrMore>

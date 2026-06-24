@@ -587,6 +587,8 @@
             CodeDisplay =
                 element cd {
                     attribute latexsep {text}?,
+                    # "all" renders every space as a visible glyph; default "none"
+                    attribute showspaces {"all" | "none"}?,
                     (text | CodeLine+)
                 }
             Preformatted =
