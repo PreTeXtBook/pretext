@@ -9859,10 +9859,45 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:message>PTX:WARNING:  a child of "biblio" (<xsl:value-of select="local-name()"/>) is not being processed.  Please report me so this can be fixed.</xsl:message>
 </xsl:template>
 
-<!-- Authors, no lead-in, no trailing space -->
+<!-- Authors: no lead-in, names via the shared "contributor-names" -->
 <xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/author">
+    <xsl:apply-templates select="." mode="contributor-names"/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Editors and translators: a leading separator, the names, then a -->
+<!-- parenthetical role label (pluralized by the count of "name").   -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/editor">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates select="." mode="contributor-names"/>
+    <xsl:choose>
+        <xsl:when test="count(name) &gt; 1">
+            <xsl:text> (eds.)</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text> (ed.)</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/translator">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates select="." mode="contributor-names"/>
+    <xsl:text> (trans.)</xsl:text>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Private mode: format the "name" list of a CSL contributor.      -->
+<!-- The first name is family-first, the rest given-first, with      -->
+<!-- "and"/";" separators; a "literal" name is printed verbatim.     -->
+<xsl:template match="*" mode="contributor-names">
     <xsl:for-each select="name">
         <xsl:choose>
+            <!-- An organizational or otherwise literal name -->
+            <xsl:when test="literal">
+                <xsl:apply-templates select="literal"/>
+            </xsl:when>
             <!-- First, name with family name first -->
             <xsl:when test="not(preceding-sibling::name)">
                 <xsl:apply-templates select="family"/>
@@ -9887,7 +9922,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             </xsl:otherwise>
         </xsl:choose>
     </xsl:for-each>
-    <xsl:apply-templates select="." mode="plain-biblio-period"/>
 </xsl:template>
 
 <!-- Title, in italics -->
@@ -9920,12 +9954,27 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="plain-biblio-period"/>
 </xsl:template>
 
-<!-- Collection title -->
-<!-- Once had "lq-character" and "rq-character", but -->
-<!-- removed for consistency with other formats      -->
-<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/collection-title">
+<!-- Container title (a journal, proceedings, or the book of a -->
+<!-- chapter); rendered plain, like a collection title         -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/container-title">
     <xsl:text>, </xsl:text>
     <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Genre, a sub-type such as "Ph.D. thesis" -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/genre">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Edition, with the word spelled out (so the abbreviation's -->
+<!-- period does not collide with a final period)             -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/edition">
+    <xsl:text>, </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text> edition</xsl:text>
     <xsl:apply-templates select="." mode="plain-biblio-period"/>
 </xsl:template>
 
@@ -9949,6 +9998,22 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:text>(</xsl:text>
     <xsl:value-of select="date/@year"/>
     <xsl:text>)</xsl:text>
+    <xsl:apply-templates select="." mode="plain-biblio-period"/>
+</xsl:template>
+
+<!-- Access date, for online material; month and day are padded to -->
+<!-- two digits, for an ISO 8601 (YYYY-MM-DD) appearance           -->
+<xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/accessed">
+    <xsl:text>, accessed </xsl:text>
+    <xsl:value-of select="date/@year"/>
+    <xsl:if test="date/@month">
+        <xsl:text>-</xsl:text>
+        <xsl:value-of select="format-number(date/@month, '00')"/>
+    </xsl:if>
+    <xsl:if test="date/@day">
+        <xsl:text>-</xsl:text>
+        <xsl:value-of select="format-number(date/@day, '00')"/>
+    </xsl:if>
     <xsl:apply-templates select="." mode="plain-biblio-period"/>
 </xsl:template>
 
