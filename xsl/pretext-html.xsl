@@ -12653,7 +12653,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </button>
         </div>
         <div class="ptx-embed-code-container">
-            <textarea class="ptx-embed-code-textbox" id="ptx-embed-code-textbox" readonly="true" aria-label="textbox">
+            <textarea class="ptx-embed-code-textbox" id="ptx-embed-code-textbox" readonly="true" aria-label="{$embed-localization}">
                 <iframe src="https://example.com/embed" width="100%" height="1000"></iframe>
             </textarea>
             <button autofocus="autofocus" class="ptx-embed-copy-button button" id="ptx-embed-copy-button" title="{$copy-localization}">
@@ -14201,9 +14201,14 @@ TODO:
 <xsl:template name="native-search-results">
     <xsl:if test="$has-native-search">
         <dialog id="ptx-search-dialog" class="ptx-dialog ptx-search-dialog">
+            <xsl:variable name="close-localization">
+                <xsl:apply-templates select="." mode="type-name">
+                    <xsl:with-param name="string-id" select="'close'"/>
+                </xsl:apply-templates>
+            </xsl:variable>
             <div class="ptx-search-dialog-controls">
                 <input aria-label="Search term" id="ptx-search-terms" class="ptx-search-terms" type="text" name="terms" placeholder="Search terms"/>
-                <button aria-label="Close search" id="ptx-search-close" class="ptx-search-close">
+                <button aria-label="{$close-localization}" id="ptx-search-close" class="ptx-search-close">
                     <xsl:call-template name="insert-symbol">
                         <xsl:with-param name="name" select="'close'"/>
                     </xsl:call-template>
