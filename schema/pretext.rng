@@ -2515,6 +2515,14 @@
       <attribute name="margins"/>
     </optional>
     <optional>
+      <attribute name="landscape">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
       <choice>
         <attribute name="width"/>
         <attribute name="widths"/>

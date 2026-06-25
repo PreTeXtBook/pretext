@@ -13821,7 +13821,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
                 <figure xml:id="rotated-fig-with-sbs" landscape="yes">
                     <caption>Wide figure containing a sidebyside containing a rotated image.  This will be rotated and appear on its own page in <term>print PDF</term> output.</caption>
-                    <sidebyside widths="25% 70%" margins="0%" valign="bottom" landscape="true">
+                    <sidebyside widths="25% 70%" margins="0%" valign="bottom" landscape="yes">
                         <figure>
                             <caption>Quack</caption>
                             <image rotate="10" source="images/Yellow_Duck.png"/>
