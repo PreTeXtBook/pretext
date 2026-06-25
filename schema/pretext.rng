@@ -2922,6 +2922,14 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="break">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
         <ref name="AlignmentHorizontal"/>
       </optional>
       <optional>

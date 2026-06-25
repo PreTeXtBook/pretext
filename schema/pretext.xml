@@ -1798,6 +1798,7 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute row-headers {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderTop?,
