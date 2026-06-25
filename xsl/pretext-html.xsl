@@ -11581,6 +11581,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- * page content (exclusive of banners, navigation etc) -->
 <xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
+    <xsl:param name="title" select="''"/>
     <xsl:param name="filename" select="''"/>
     <xsl:param name="b-has-printout" select="false()"/>
 
@@ -11604,12 +11605,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
             <title>
-                <!-- Leading with initials is useful for small tabs -->
-                <xsl:if test="$docinfo/initialism">
-                    <xsl:apply-templates select="$docinfo/initialism" />
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:apply-templates select="." mode="title-plain" />
+                <xsl:choose>
+                    <xsl:when test="$title != ''">
+                        <xsl:value-of select="$title"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- Leading with initials is useful for small tabs -->
+                        <xsl:if test="$docinfo/initialism">
+                            <xsl:apply-templates select="$docinfo/initialism" />
+                            <xsl:text> </xsl:text>
+                        </xsl:if>
+                        <xsl:apply-templates select="." mode="title-plain" />
+                    </xsl:otherwise>
+                </xsl:choose>
             </title>
             <!-- canonical link for better SEO -->
             <xsl:call-template name="canonical-link">
