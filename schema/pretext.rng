@@ -2030,6 +2030,14 @@
   </define>
   <define name="Proof">
     <element name="proof">
+      <optional>
+        <attribute name="ref"/>
+      </optional>
+      <optional>
+        <attribute name="text">
+          <ref name="XrefTextStyle"/>
+        </attribute>
+      </optional>
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>

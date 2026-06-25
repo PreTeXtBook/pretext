@@ -744,6 +744,8 @@
                    }
             Proof =
                 element proof {
+                    attribute ref {text}?,
+                    attribute text {XrefTextStyle}?,
                     MetaDataTitleOptional,
                     (BlockStatement | Case)+
                 }
