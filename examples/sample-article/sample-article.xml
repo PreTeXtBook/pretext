@@ -16657,83 +16657,87 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <page>
                 <paragraphs>
                 <title>Rules for specific types of functions</title>
-                <dl>
-                    <li>
-                        <title>Constant functions</title>
-                        <p>
-                            <m>(k)' = 0</m>
-                        </p>
-                    </li>
+                <p>
+                    <dl>
+                        <li>
+                            <title>Constant functions</title>
+                            <p>
+                                <m>(k)' = 0</m>
+                            </p>
+                        </li>
+
+                        <li>
+                        <title>Power functions</title>
+                        <p><m>(x^{n})' = nx^{n-1}</m></p>
+                        </li>
+
+                        <li>
+                            <title>Exponential functions</title>
+                            <p>
+                                <m>(a^{x})' = \ln(a) a^{x} \text{ (for } a>0\text{)}</m>
+                            </p>
+                            <p>
+                                    <m>(e^{x})' = e^{x}</m>
+                            </p>
+                        </li>
+
+                        <li>
+                            <title>Logarithmic functions</title>
+                            <p><m>(\ln(x))' = \frac{1}{x}</m></p>
+                        </li>
 
                     <li>
-                    <title>Power functions</title>
-                    <p><m>(x^{n})' = nx^{n-1}</m></p>
+                        <title>Trigonometric functions</title>
+                        <p><m>(\sin(x))' = \cos(x)</m>.</p>
+                        <p> <m>(\cos(x))' = -\sin(x)</m>.</p>
+                        <p><m>(\tan(x))' = \sec^{2}(x) = \frac{1}{\cos^{2}(x)}</m>.</p>
+                        <p><m>(\arcsin(x))' = \frac{1}{\sqrt{1-x^{2}}}</m>.</p>
+                        <p><m>(\arctan(x))' = \frac{1}{1+x^{2}}</m>.</p>
                     </li>
-
-                    <li>
-                        <title>Exponential functions</title>
-                        <p>
-                            <m>(a^{x})' = \ln(a) a^{x} \text{ (for } a>0\text{)}</m>
-                        </p>
-                        <p>
-                                <m>(e^{x})' = e^{x}</m>
-                        </p>
-                    </li>
-
-                    <li>
-                        <title>Logarithmic functions</title>
-                        <p><m>(\ln(x))' = \frac{1}{x}</m></p>
-                    </li>
-
-                <li>
-                    <title>Trigonometric functions</title>
-                    <p><m>(\sin(x))' = \cos(x)</m>.</p>
-                    <p> <m>(\cos(x))' = -\sin(x)</m>.</p>
-                    <p><m>(\tan(x))' = \sec^{2}(x) = \frac{1}{\cos^{2}(x)}</m>.</p>
-                    <p><m>(\arcsin(x))' = \frac{1}{\sqrt{1-x^{2}}}</m>.</p>
-                    <p><m>(\arctan(x))' = \frac{1}{1+x^{2}}</m>.</p>
-                </li>
-                </dl>
+                    </dl>
+                </p>
                 </paragraphs>
 
                 <paragraphs>
                 <title>Rules for combinations of functions</title>
-                <dl>
-                    <li>
-                        <title>Constant multiples</title>
-                        <p>
-                            <m>(k\cdot f(x))' = k\cdot f'(x)</m>
-                        </p>
-                    </li>
+                <p>
+                    <dl>
+                        <li>
+                            <title>Constant multiples</title>
+                            <p>
+                                <m>(k\cdot f(x))' = k\cdot f'(x)</m>
+                            </p>
+                        </li>
+
+                        <li>
+                            <title>Sum and difference</title>
+                            <p>
+                                <m>(f(x) \pm g(x))' = f'(x) \pm g'(x)</m>
+                            </p>
+                        </li>
+
+                        <li>
+                            <title>Products (the product rule)</title>
+                            <p>
+                                <m>(f(x)\cdot g(x))' = f'(x)g(x) + f(x)g'(x)</m>
+                            </p>
+                        </li>
+
+                        <li>
+                            <title>Quotients (the quotient rule)</title>
+                            <p>
+                                <m>\left(\frac{f(x)}{g(x)}\right)' = \frac{f'(x)g(x) - f(x)g'(x)}{(g(x))^{2}}</m>
+                            </p>
+                        </li>
 
                     <li>
-                        <title>Sum and difference</title>
+                        <title>Compositions (the chain rule)</title>
                         <p>
-                            <m>(f(x) \pm g(x))' = f'(x) \pm g'(x)</m>
+                            <m>(f(g(x)))' = f'(g(x))\cdot g'(x)</m>
                         </p>
                     </li>
-
-                    <li>
-                        <title>Products (the product rule)</title>
-                        <p>
-                            <m>(f(x)\cdot g(x))' = f'(x)g(x) + f(x)g'(x)</m>
-                        </p>
-                    </li>
-
-                    <li>
-                        <title>Quotients (the quotient rule)</title>
-                        <p>
-                            <m>\left(\frac{f(x)}{g(x)}\right)' = \frac{f'(x)g(x) - f(x)g'(x)}{(g(x))^{2}}</m>
-                        </p>
-                    </li>
-
-                <li>
-                    <title>Compositions (the chain rule)</title>
-                    <p>
-                        <m>(f(g(x)))' = f'(g(x))\cdot g'(x)</m>
-                    </p>
-                </li>
-            </dl>
+                </dl>
+                </p>
                 </paragraphs>
             </page>
         </handout>
