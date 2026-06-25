@@ -265,7 +265,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <keyword>00-02</keyword>
                     <keyword primary="no">00A99</keyword>
                 </keywords>
-                <support><p>This is an example of a statement describing funding support for the current document.</p></support>
+                <support>This is an example of a statement describing funding support for the current document.</support>
             </bibinfo>
 
             <titlepage>
@@ -2604,7 +2604,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </theorem>
                 <theorem>
                     <title>A title</title>
-                    <p>A theorem with a proof.</p>
+                    <statement>
+                        <p>A theorem with a proof.</p>
+                    </statement>
                     <proof>
                         <p>The proof of the theorem.</p>
                     </proof>
