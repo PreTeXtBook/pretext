@@ -8310,16 +8310,9 @@ Book (with parts), "section" at level 3
         <xsl:when test="@text='custom'">
             <xsl:text>custom</xsl:text>
         </xsl:when>
-        <!-- old (deprecated, 2017-07-25) autoname attribute -->
-        <xsl:when test="@autoname='no'">
-            <xsl:text>global</xsl:text>
-        </xsl:when>
-        <xsl:when test="@autoname='yes'">
-            <xsl:text>type-global</xsl:text>
-        </xsl:when>
-        <xsl:when test="@autoname='title'">
-            <xsl:text>title</xsl:text>
-        </xsl:when>
+        <!-- NB: the legacy "xref/@autoname" attribute is upgraded to  -->
+        <!-- the equivalent "@text" in the "repair" pass of assembly,  -->
+        <!-- so it never reaches here.                                 -->
         <!-- otherwise, global setting via attribute/switch  -->
         <!-- New scheme is set from docinfo attribute        -->
         <!-- No setting in docinfo yields empty string for   -->

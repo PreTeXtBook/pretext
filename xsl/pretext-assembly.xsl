@@ -2473,6 +2473,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </pretext>
 </xsl:template>
 
+<!-- 2017-07-25  "autoname" on "xref" deprecated in favor of "text".  -->
+<!-- Silently repair the legacy attribute to its modern functional    -->
+<!-- equivalent.  Every other attribute, and any content, is left to  -->
+<!-- the identity template, and so is preserved.  Added 2026-06-25.   -->
+<xsl:template match="xref/@autoname" mode="repair">
+    <xsl:attribute name="text">
+        <xsl:choose>
+            <xsl:when test=". = 'yes'">
+                <xsl:text>type-global</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'no'">
+                <xsl:text>global</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'title'">
+                <xsl:text>title</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:attribute>
+</xsl:template>
+
 <!-- 2021-07-02 wrap notation/usage in "m" if not present -->
 <xsl:template match="notation/usage[not(m)]" mode="repair">
     <!-- duplicate "usage" w/ attributes, insert "m" as repair -->
