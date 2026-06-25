@@ -10296,12 +10296,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>More interactive components, just for testing, no commentary.</p>
             </introduction>
 
-            <exercises>
+            <subsection>
                 <title>ActiveCode</title>
 
-                <introduction>
-                  <p>ActiveCode, Python program.</p>
-                </introduction>
+                <p>ActiveCode, Python program.</p>
 
                 <listing xml:id="program-activecode-python">
                     <title>An interactive Python program, using <pubtitle>Runestone</pubtitle></title>
@@ -10320,14 +10318,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </code>
                     </program>
                 </listing>
-            </exercises>
+            </subsection>
 
-            <exercises>
+            <subsection>
                 <title>CodeLens</title>
 
-                <introduction>
-                  <p>A steppable Python program.</p>
-                </introduction>
+                <p>A steppable Python program.</p>
 
                 <listing xml:id="program-codelens-python">
                     <title>A Python program, stepable with CodeLens</title>
@@ -10337,14 +10333,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </code>
                     </program>
                 </listing>
-            </exercises>
+            </subsection>
 
-            <exercises>
+            <subsection>
                 <title>Activity with An ActiveCode</title>
 
-                <introduction>
-                  <p>Something to do with ActiveCode program.</p>
-                </introduction>
+                <p>Something to do with ActiveCode program.</p>
 
                 <activity xml:id="coding-exercise-partial-two" label="coding-exercise-partial-two">
                     <title>Activity Coding Exercise</title>
@@ -10360,7 +10354,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </program>
                     <answer><p>We're still not really sure.</p></answer>
                 </activity>
-            </exercises>
+            </subsection>
 
             <subsection>
                 <title>YouTube</title>
