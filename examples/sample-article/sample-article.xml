@@ -5052,37 +5052,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <image source="images/cross-square.png" decorative="yes"/>
                     </sidebyside>
                     <sidebyside>
-                        <p>No description, empty shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, empty shortdescription</p>
                         <image source="images/cross-square.png">
                             <shortdescription/>
                         </image>
-                        <p>No description, empty shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
-                            <shortdescription/>
-                        </image>
-                    </sidebyside>
-                    <sidebyside>
-                        <p>No description, too long shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, too long shortdescription</p>
                         <image source="images/cross-square.png">
-                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
-                        </image>
-                        <p>No description, too long shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
                             <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
                         </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>No description, good shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, good shortdescription</p>
                         <image source="images/cross-square.png">
                             <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
                         </image>
-                        <p>No description, good shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
-                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
-                        </image>
-                    </sidebyside>
-                    <sidebyside>
-                        <p>Description, no shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>Description, no shortdescription</p>
                         <image source="images/cross-square.png">
                             <description>
                                 <p>
@@ -5090,17 +5074,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 </p>
                             </description>
                         </image>
-                        <p>Description, no shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
-                            <description>
-                                <p>
-                                    A white square outlined in blue covered by a black <q>X</q>.
-                                </p>
-                            </description>
-                        </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>Description, empty shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>Description, empty shortdescription</p>
                         <image source="images/cross-square.png">
                             <shortdescription/>
                             <description>
@@ -5109,28 +5085,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 </p>
                             </description>
                         </image>
-                        <p>Description, empty shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
-                            <shortdescription/>
-                            <description>
-                                <p>
-                                    A white square outlined in blue covered by a black <q>X</q>.
-                                </p>
-                            </description>
-                        </image>
-                    </sidebyside>
-                    <sidebyside>
-                        <p>Description, too long shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>Description, too long shortdescription</p>
                         <image source="images/cross-square.png">
-                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
-                            <description>
-                                <p>
-                                    A white square outlined in blue covered by a black <q>X</q>.
-                                </p>
-                            </description>
-                        </image>
-                        <p>Description, too long shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
                             <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
                             <description>
                                 <p>
@@ -5140,17 +5096,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>Description, good shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>Description, good shortdescription</p>
                         <image source="images/cross-square.png">
-                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
-                            <description>
-                                <p>
-                                    A white square outlined in blue covered by a black <q>X</q>.
-                                </p>
-                            </description>
-                        </image>
-                        <p>Description, good shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
                             <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
                             <description>
                                 <p>
