@@ -329,6 +329,7 @@
                 element backmatter {
                     MetaDataTitleOptional,
                     (ArticleAppendix|Solutions)*,
+                    Glossary?,
                     References?,
                     IndexDivision?,
                     ColophonBack?
@@ -976,11 +977,13 @@
                 }
             SideBySideGroup =
                 element sbsgroup {
+                    UniqueID?,
                     SidebySideAttributes,
                     SideBySide+
                 }
             SideBySideGroupNoCaption =
                 element sbsgroup {
+                    UniqueID?,
                     SidebySideAttributes,
                     SideBySideNoCaption+
                 }

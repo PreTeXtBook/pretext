@@ -1002,6 +1002,9 @@
         </choice>
       </zeroOrMore>
       <optional>
+        <ref name="Glossary"/>
+      </optional>
+      <optional>
         <ref name="References"/>
       </optional>
       <optional>
@@ -2588,6 +2591,9 @@
   </define>
   <define name="SideBySideGroup">
     <element name="sbsgroup">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
         <ref name="SideBySide"/>
@@ -2596,6 +2602,9 @@
   </define>
   <define name="SideBySideGroupNoCaption">
     <element name="sbsgroup">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
         <ref name="SideBySideNoCaption"/>
