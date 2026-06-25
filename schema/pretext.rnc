@@ -1093,6 +1093,9 @@
             AlignmentVertical =
                 attribute valign {"top" | "middle" | "bottom"}
 
+            # A table cell admits footnotes, authored as table notes; the
+            # rendering (below the table, keyed a, b, c) is a pending TODO.
+            TableCellText = mixed { (TextLongContent | Footnote)* }
             TableCell =
                 element cell {
                     AlignmentHorizontal?,
@@ -1100,7 +1103,7 @@
                     BorderRight?,
                     attribute colspan {text}?,
                     (
-                        TextLong |
+                        TableCellText |
                         LongLine+ |
                         Paragraph+
                     )
@@ -1697,7 +1700,7 @@
                 Group |
                 MathInline |
                 Music)* }
-            TextLong =  mixed { (
+            TextLongContent =
                 Character |
                 Generator |
                 Verbatim |
@@ -1706,7 +1709,8 @@
                 Music |
                 Reference |
                 Custom |
-                WWVariable)* }
+                WWVariable
+            TextLong =  mixed { (TextLongContent)* }
                 
             Footnote =
                 element fn {

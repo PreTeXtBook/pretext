@@ -2858,6 +2858,20 @@
       </choice>
     </attribute>
   </define>
+  <!--
+    A table cell admits footnotes, authored as table notes; the
+    rendering (below the table, keyed a, b, c) is a pending TODO.
+  -->
+  <define name="TableCellText">
+    <mixed>
+      <zeroOrMore>
+        <choice>
+          <ref name="TextLongContent"/>
+          <ref name="Footnote"/>
+        </choice>
+      </zeroOrMore>
+    </mixed>
+  </define>
   <define name="TableCell">
     <element name="cell">
       <optional>
@@ -2873,7 +2887,7 @@
         <attribute name="colspan"/>
       </optional>
       <choice>
-        <ref name="TextLong"/>
+        <ref name="TableCellText"/>
         <oneOrMore>
           <ref name="LongLine"/>
         </oneOrMore>
@@ -4388,20 +4402,23 @@
       </zeroOrMore>
     </mixed>
   </define>
+  <define name="TextLongContent">
+    <choice>
+      <ref name="Character"/>
+      <ref name="Generator"/>
+      <ref name="Verbatim"/>
+      <ref name="Group"/>
+      <ref name="MathInline"/>
+      <ref name="Music"/>
+      <ref name="Reference"/>
+      <ref name="Custom"/>
+      <ref name="WWVariable"/>
+    </choice>
+  </define>
   <define name="TextLong">
     <mixed>
       <zeroOrMore>
-        <choice>
-          <ref name="Character"/>
-          <ref name="Generator"/>
-          <ref name="Verbatim"/>
-          <ref name="Group"/>
-          <ref name="MathInline"/>
-          <ref name="Music"/>
-          <ref name="Reference"/>
-          <ref name="Custom"/>
-          <ref name="WWVariable"/>
-        </choice>
+        <ref name="TextLongContent"/>
       </zeroOrMore>
     </mixed>
   </define>
