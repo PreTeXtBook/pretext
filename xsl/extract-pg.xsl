@@ -1916,7 +1916,7 @@
 </xsl:template>
 
 <!-- Booktitle: slanted normally, we italic here-->
-<xsl:template match="booktitle">
+<xsl:template match="pubtitle">
     <xsl:text>_</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>_</xsl:text>

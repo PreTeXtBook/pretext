@@ -9461,7 +9461,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and other freestanding works are italicized; titles -->
 <!-- of articles, chapters, and other shorter works      -->
 <!-- are set in roman and enclosed in quotation marks.   -->
-<xsl:template match="pubtitle|booktitle">
+<xsl:template match="pubtitle">
     <span class="booktitle">
         <xsl:apply-templates/>
     </span>
