@@ -3107,14 +3107,10 @@ Book (with parts), "section" at level 3
             <xsl:when test="$docinfo/rename[@element=$str-id and @xml:lang=$lang]">
                 <xsl:apply-templates select="$docinfo/rename[@element=$str-id and @xml:lang=$lang]"/>
             </xsl:when>
-            <!-- Second, look in docinfo for document-specific rename with correct language, -->
-            <!-- but with @lang attribute which was deprecated on 2019-02-23                 -->
-            <xsl:when test="$docinfo/rename[@element=$str-id and @lang=$lang]">
-                <xsl:apply-templates select="$docinfo/rename[@element=$str-id and @lang=$lang]"/>
-            </xsl:when>
-            <!-- Third, look in docinfo for document-specific rename, but now explicitly language-agnostic -->
-            <xsl:when test="$docinfo/rename[@element=$str-id and not(@lang) and not(@xml:lang)]">
-                <xsl:apply-templates select="$docinfo/rename[@element=$str-id and not(@lang) and not(@xml:lang)]"/>
+            <!-- Second, look in docinfo for document-specific rename, but       -->
+            <!-- now explicitly language-agnostic; "@lang" became "@xml:lang".   -->
+            <xsl:when test="$docinfo/rename[@element=$str-id and not(@xml:lang)]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$str-id and not(@xml:lang)]"/>
             </xsl:when>
             <!-- Finally, default to a lookup from the localization file's nodes -->
             <!-- Use a "for-each" to effect a context switch for the look-up and -->

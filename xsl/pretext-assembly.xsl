@@ -2500,6 +2500,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </pubtitle>
 </xsl:template>
 
+<!-- 2019-02-20  "rename/@lang" replaced by "@xml:lang".  Added 2026-06-25. -->
+<xsl:template match="rename/@lang" mode="repair">
+    <xsl:attribute name="xml:lang">
+        <xsl:value-of select="."/>
+    </xsl:attribute>
+</xsl:template>
+
 <!-- 2021-07-02 wrap notation/usage in "m" if not present -->
 <xsl:template match="notation/usage[not(m)]" mode="repair">
     <!-- duplicate "usage" w/ attributes, insert "m" as repair -->
