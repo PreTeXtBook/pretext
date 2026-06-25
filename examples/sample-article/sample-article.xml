@@ -4179,8 +4179,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-shark-attack">
                     <caption>An illustration of the shark trying to catch you as you swim to shore.</caption>
-                    <image label="shark-attack">
-                        <latex-image>
+                    <image>
+                        <latex-image label="shark-attack">
                         \begin{tikzpicture}
                             \tikzset{ ragged border/.style={ decoration={random steps, segment length=1mm, amplitude=0.5mm}, decorate, } }
                             \fill[cyan!30] decorate[ragged border]{ (0,2) -- (8,2) } -- (8,0) -- (0,0) -- cycle;
@@ -4201,7 +4201,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-pgfplots-data-description">
                     <caption>Full description with tabular</caption>
-                    <image label="pgfplots-data-description" width="70%">
+                    <image width="70%">
                         <shortdescription>
                             a plot of some data points
                         </shortdescription>
@@ -4240,7 +4240,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 </row>
                             </tabular>
                         </description>
-                        <latex-image>
+                        <latex-image label="pgfplots-data-description">
                             \begin{tikzpicture}
                                 \begin{axis}[
                                         xmin=0,
