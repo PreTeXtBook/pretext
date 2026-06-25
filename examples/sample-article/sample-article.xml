@@ -16177,6 +16177,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <statement>
                             <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec b = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
                             <figure xml:id="prefigure-vectors">
+                                <caption>Two vectors <m>\vec a</m> and <m>\vec b</m>.</caption>
                                 <image width="100%">
                                     <prefigure xmlns="https://prefigure.org"
                                                label="prefigure-worksheet-vectors">
@@ -16207,7 +16208,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     </prefigure>
                                     <shortdescription>two vectors in a Cartesian plane</shortdescription>
                                 </image>
-                                <caption>Two vectors <m>\vec a</m> and <m>\vec b</m>.</caption>
                             </figure>
                         </statement>
                     </exercise>
