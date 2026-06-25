@@ -2473,6 +2473,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </pretext>
 </xsl:template>
 
+<!-- 2017-02-05  "hyphen" replaced by a bare hyphen.  Added 2026-06-25. -->
+<xsl:template match="hyphen" mode="repair">
+    <xsl:text>-</xsl:text>
+</xsl:template>
+
+<!-- 2017-07-18  "@tex_size" was renamed "@tex-size" (cosmetic), which in  -->
+<!-- turn became ignored (2017-11-09) in favor of a percentage "@width".   -->
+<!-- The legacy attribute now does nothing, so drop it.  Added 2026-06-25. -->
+<xsl:template match="@tex_size" mode="repair"/>
+
 <!-- 2017-07-25  "autoname" on "xref" deprecated in favor of "text".  -->
 <!-- Silently repair the legacy attribute to its modern functional    -->
 <!-- equivalent.  Every other attribute, and any content, is left to  -->
@@ -2492,6 +2502,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:attribute>
 </xsl:template>
+
+<!-- 2017-12-07  "@latexsep" on "c"/"cd" is ignored; drop it.  Added 2026-06-25. -->
+<xsl:template match="c/@latexsep|cd/@latexsep" mode="repair"/>
 
 <!-- 2018-02-05  "booktitle" replaced by "pubtitle".  Added 2026-06-25. -->
 <xsl:template match="booktitle" mode="repair">
