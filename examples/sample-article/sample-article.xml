@@ -10838,16 +10838,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </tabular>
             </table>
 
-            <figure>
-                <caption>Xref Inside MathJAX</caption>
-                <p>
-                    <md>
-                        <mrow>{\mathbb Z}_2 \times {\mathbb Z}_2</mrow>
-                        <mrow><xref ref="theorem-FTC" text="type-global"/></mrow>
-                        <mrow>{\mathbb Z}_2 \times {\mathbb Z}_2</mrow>
-                    </md>
-                </p>
-            </figure>
+            <p>
+                <md>
+                    <mrow>{\mathbb Z}_2 \times {\mathbb Z}_2</mrow>
+                    <mrow><xref ref="theorem-FTC" text="type-global"/></mrow>
+                    <mrow>{\mathbb Z}_2 \times {\mathbb Z}_2</mrow>
+                </md>
+            </p>
 
             <p>Now we have two xref's to that same target that has a runestone component. Only the first one clicked should try to render the runestone.<xref ref="program-activecode-python" text="global"/><xref ref="program-activecode-python" text="global"/></p>
         </section>
@@ -13810,6 +13807,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </exercise>
 
                     <exercisegroup cols="2">
+                        <introduction>
+                            <p>The following images are grouped two per row.</p>
+                        </introduction>
                         <exercise>
                             <statement>
                                 <image margins="0% 70%" source="images/nz-landscape.jpg"/>
