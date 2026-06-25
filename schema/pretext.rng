@@ -2201,6 +2201,19 @@
             </zeroOrMore>
           </group>
           <group>
+            <ref name="Statement"/>
+            <ref name="Program"/>
+            <zeroOrMore>
+              <ref name="Hint"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Answer"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Solution"/>
+            </zeroOrMore>
+          </group>
+          <group>
             <optional>
               <ref name="IntroductionStatement"/>
             </optional>
