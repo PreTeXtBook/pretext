@@ -432,6 +432,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -487,7 +488,7 @@
             
             BlockText =
                 Paragraph | BlockQuote | Preformatted |
-                Image | Video | Program | Console | Tabular
+                Image | Video | Audio | Program | Console | Tabular
             BlockStatementNoCaption =
                 BlockText | Aside |
                 SideBySideNoCaption | SideBySideGroupNoCaption
@@ -883,6 +884,7 @@
                     (
                         Image |
                         Video |
+                        Audio |
                         SideBySide |
                         SideBySideGroup |
                         MuseScore
@@ -915,6 +917,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -939,6 +942,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -955,6 +959,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -1159,6 +1164,17 @@
                     (AttributesSourceFile | AttributesNetwork | AttributesYouTube |
                      AttributesYouTubePlaylist | AttributesVimeo),
                     Track*
+                }
+            Audio =
+                element audio {
+                    UniqueID?,
+                    LabelID?,
+                    Component?,
+                    attribute width {text}?,
+                    attribute margins {text}?,
+                    attribute start {xsd:integer}?,
+                    attribute end {xsd:integer}?,
+                    (AttributesSourceFile | AttributesNetwork)
                 }
             Track =
                 element track {

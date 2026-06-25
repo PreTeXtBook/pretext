@@ -1224,6 +1224,7 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -1372,6 +1373,7 @@
       <ref name="Preformatted"/>
       <ref name="Image"/>
       <ref name="Video"/>
+      <ref name="Audio"/>
       <ref name="Program"/>
       <ref name="Console"/>
       <ref name="Tabular"/>
@@ -2433,6 +2435,7 @@
         <choice>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="SideBySide"/>
           <ref name="SideBySideGroup"/>
           <ref name="MuseScore"/>
@@ -2477,6 +2480,7 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -2526,6 +2530,7 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -2545,6 +2550,7 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -3048,6 +3054,39 @@
       <zeroOrMore>
         <ref name="Track"/>
       </zeroOrMore>
+    </element>
+  </define>
+  <define name="Audio">
+    <element name="audio">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
+      </optional>
+      <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="margins"/>
+      </optional>
+      <optional>
+        <attribute name="start">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="end">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <choice>
+        <ref name="AttributesSourceFile"/>
+        <ref name="AttributesNetwork"/>
+      </choice>
     </element>
   </define>
   <define name="Track">
