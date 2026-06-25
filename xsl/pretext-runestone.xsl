@@ -84,6 +84,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="rso" select="'~._'"/>
 <xsl:variable name="rsc" select="'_.~'"/>
 
+<!-- Determines the base url of a book served on Runestone  -->
+<!-- If there is an authored base url, use it as the author -->
+<!-- may be targetting a non-public server. Otherwise,      -->
+<!-- assume book is hosted on Runestone Academy             -->
+<xsl:template name="runestone-server-baseurl">
+    <xsl:choose>
+        <xsl:when test="$b-has-baseurl">
+            <xsl:value-of select="$baseurl"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>https://runestone.academy/ns/books/published/</xsl:text>
+            <xsl:value-of select="$document-id"/>
+            <xsl:text>/</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Runestone Services (Javascript)  -->
 <!-- OR, Hosting at Runestone Academy -->
 <xsl:template name="runestone-header">
