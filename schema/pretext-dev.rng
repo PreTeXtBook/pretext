@@ -40,6 +40,12 @@
         <attribute name="calcplot3d"/>
       </optional>
       <optional>
+        <attribute name="geogebra"/>
+      </optional>
+      <optional>
+        <attribute name="desmos"/>
+      </optional>
+      <optional>
         <!--
           currently only consumed by the CalcPlot3D flavor;
           widen this enum if another flavor adopts "@variant"
@@ -58,6 +64,15 @@
       <optional>
         <attribute name="resize-behavior"/>
       </optional>
+      <optional>
+        <attribute name="css"/>
+      </optional>
+      <optional>
+        <attribute name="design-width"/>
+      </optional>
+      <optional>
+        <attribute name="reset-icon"/>
+      </optional>
       <interleave>
         <optional>
           <ref name="ImageShortDescription"/>
@@ -72,11 +87,26 @@
             <ref name="SideBySideGroupNoCaption"/>
           </choice>
         </zeroOrMore>
+        <zeroOrMore>
+          <element name="script">
+            <optional>
+              <attribute name="type"/>
+            </optional>
+            <text/>
+          </element>
+        </zeroOrMore>
+        <optional>
+          <element name="source">
+            <text/>
+          </element>
+        </optional>
         <optional>
           <element name="instructions">
             <mixed>
               <ref name="MetaDataTitleOptional"/>
-              <ref name="BlockText"/>
+              <oneOrMore>
+                <ref name="BlockText"/>
+              </oneOrMore>
             </mixed>
           </element>
         </optional>
@@ -130,12 +160,16 @@
           <optional>
             <attribute name="aspect"/>
           </optional>
+          <optional>
+            <attribute name="perspective"/>
+          </optional>
           <zeroOrMore>
             <choice>
               <ref name="Paragraph"/>
               <ref name="Tabular"/>
               <ref name="SideBySideNoCaption"/>
               <ref name="SlateInput"/>
+              <ref name="AnyXhtml"/>
               <optional>
                 <element name="xhtml:button">
                   <attribute name="type"/>
@@ -198,6 +232,22 @@
       <optional>
         <attribute name="style"/>
       </optional>
+    </element>
+  </define>
+  <!-- A slate with surface="html" embeds an arbitrary XHTML fragment. -->
+  <define name="AnyXhtml">
+    <element>
+      <nsName ns="http://www.w3.org/1999/xhtml"/>
+      <zeroOrMore>
+        <attribute>
+          <anyName/>
+        </attribute>
+      </zeroOrMore>
+      <mixed>
+        <zeroOrMore>
+          <ref name="AnyXhtml"/>
+        </zeroOrMore>
+      </mixed>
     </element>
   </define>
   <!-- add Interactives where used -->

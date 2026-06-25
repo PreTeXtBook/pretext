@@ -2100,11 +2100,16 @@
                     attribute version { text }?,
                     attribute circuitjs { text }?,
                     attribute calcplot3d { text }?,
+                    attribute geogebra { text }?,
+                    attribute desmos { text }?,
                     # currently only consumed by the CalcPlot3D flavor;
                     # widen this enum if another flavor adopts "@variant"
                     attribute variant { "application" | "controls" | "minimal" }?,
                     attribute dark-mode-enabled { text }?,
                     attribute resize-behavior { text }?,
+                    attribute css { text }?,
+                    attribute design-width { text }?,
+                    attribute reset-icon { text }?,
                     (
                       ImageShortDescription? &amp;
                       ImageDescription? &amp;
@@ -2113,7 +2118,9 @@
                         SideBySideNoCaption |
                         SideBySideGroupNoCaption
                       )* &amp;
-                      element instructions { mixed { MetaDataTitleOptional, BlockText } }? &amp;
+                      element script { attribute type { text }?, text }* &amp;
+                      element source { text }? &amp;
+                      element instructions { mixed { MetaDataTitleOptional, BlockText+ } }? &amp;
                       element static { Image }?
                     )
 
@@ -2149,11 +2156,13 @@
                           attribute material { text }
                         )?,
                         attribute aspect { text }?,
+                        attribute perspective { text }?,
                         (
                           Paragraph |
                           Tabular |
                           SideBySideNoCaption |
                           SlateInput |
+                          AnyXhtml |
                           element xhtml:button {
                             attribute type { text },
                             attribute id { text },
@@ -2181,6 +2190,13 @@
                   attribute onkeypress {text}?,
                   attribute onclick {text}?,
                   attribute style {text}?
+                }
+
+              # A slate with surface="html" embeds an arbitrary XHTML fragment.
+              AnyXhtml =
+                element xhtml:* {
+                  (attribute * { text })*,
+                  mixed { AnyXhtml* }
                 }
 
             # add Interactives where used
