@@ -1151,7 +1151,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
     <!-- 2018-02-05: "booktitle" deprecated -->
-    <xsl:if test="$document-root//pubtitle|$document-root//booktitle">
+    <xsl:if test="$document-root//pubtitle">
         <xsl:text>%% Titles of longer works (e.g. books, versus articles)&#xa;</xsl:text>
         <xsl:text>\newcommand{\pubtitle}[1]{\textsl{#1}}&#xa;</xsl:text>
     </xsl:if>
@@ -8739,9 +8739,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of articles, chapters, and other shorter works      -->
 <!-- are set in roman and enclosed in quotation marks.   -->
 <!-- \pubtitle is a semantic macro defined only if       -->
-<!-- "pubtitle" or "booktitle" is employed.  Adjust if   -->
-<!-- deprecation is removed.                             -->
-<xsl:template match="pubtitle|booktitle">
+<!-- "pubtitle" is employed.                             -->
+<xsl:template match="pubtitle">
     <xsl:text>\pubtitle{</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>}</xsl:text>

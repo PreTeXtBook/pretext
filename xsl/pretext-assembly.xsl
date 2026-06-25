@@ -2493,6 +2493,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
 </xsl:template>
 
+<!-- 2018-02-05  "booktitle" replaced by "pubtitle".  Added 2026-06-25. -->
+<xsl:template match="booktitle" mode="repair">
+    <pubtitle>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </pubtitle>
+</xsl:template>
+
 <!-- 2021-07-02 wrap notation/usage in "m" if not present -->
 <xsl:template match="notation/usage[not(m)]" mode="repair">
     <!-- duplicate "usage" w/ attributes, insert "m" as repair -->
