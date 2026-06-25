@@ -11822,16 +11822,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################### -->
 
 <!-- Canonical Link -->
-<!-- TODO: condition for generic builds at $site-root, need base-url, etc -->
 <xsl:template name="canonical-link">
     <xsl:param name="filename"/>
-
-    <!-- book-wide site URL -->
-    <xsl:variable name="site-root">
-        <xsl:value-of select="concat('https://runestone.academy/ns/books/published/', $document-id, '/')"/>
-    </xsl:variable>
     <!-- just for Runestone builds -->
     <xsl:if test="$b-host-runestone">
+        <xsl:variable name="site-root">
+            <xsl:call-template name="runestone-server-baseurl"/>
+        </xsl:variable>
         <xsl:variable name="full-url" select="concat($site-root, $filename)"/>
         <link rel="canonical" href="{$full-url}"/>
     </xsl:if>
