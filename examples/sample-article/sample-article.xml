@@ -358,7 +358,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             aliases given by "xml:id"'s in the bibliography.
             Citations render as knowls on web pages.
             -->
-            <p>You will find almost nothing about all this in the article <xref ref="biblio-lay-article" text="global"/>, nor in the book <xref ref="biblio-judson-AATA" text="global"/>, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
+            <p>You will find almost nothing about all this in the article <xref ref="biblio-lay-article"/>, nor in the book <xref ref="biblio-judson-AATA"/>, since they belong in some other article, but we can cite them out-of-order for practice anyway.</p>
 
             <!--
             There are various tools for authors
@@ -5166,7 +5166,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Specialized Subdivisions</title>
 
-                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <xref ref="biblio-beezer-fcla" detail="Chapter R" text="global"/>, included an indication that a specific chapter may be relevant.</p>
+                <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <xref ref="biblio-beezer-fcla" detail="Chapter R"/>, included an indication that a specific chapter may be relevant.</p>
             </subsection>
 
             <exercises>
@@ -5466,7 +5466,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <biblio type="raw" xml:id="biblio-rosswell-fictional-two"><ibid/>, <title>Diffeomorphisms of Penciled Fiber Bundles, Part 2</title>, <journal>Mathematicians of America</journal> <year>2021</year>, <volume>3</volume> <number>4</number>, 102<ndash/>103.</biblio>
 
                 <conclusion>
-                    <p>This is a conclusion, which has not been used very much in this sample.  Did you see that the entry for <xref ref="biblio-beezer-fcla" text="global"/> has a short annotation?  So you can make annotated bibliographies easily.</p>
+                    <p>This is a conclusion, which has not been used very much in this sample.  Did you see that the entry for <xref ref="biblio-beezer-fcla"/> has a short annotation?  So you can make annotated bibliographies easily.</p>
                 </conclusion>
             </references>
 
@@ -18145,19 +18145,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <subsection>
                     <title>Multiple Specialized References</title>
 
-                    <p>You might want to have lists of references, in the back, but with multiple such lists.  Make an <tag>appendix</tag> to hold them, give it some structure (for an <tag>article</tag>, a leading <tag>subsection</tag>, such as the one you are reading right now), then follow with multiple <tag>references</tag> divisions.  A typical citation will then look like: <xref ref="biblio-strang-article-tres" text="global"/>.</p>
+                    <p>You might want to have lists of references, in the back, but with multiple such lists.  Make an <tag>appendix</tag> to hold them, give it some structure (for an <tag>article</tag>, a leading <tag>subsection</tag>, such as the one you are reading right now), then follow with multiple <tag>references</tag> divisions.  A typical citation will then look like: <xref ref="biblio-strang-article-tres"/>.</p>
 
                     <!-- Notes to add once CSL processing is enabled: Note: we need at least one citation for an item to show up.  Note: look at the source to see sorting/reordering. -->
                     <p>2025-05-23: currently testing citations to CSL-style references in the back matter.  These should go eventually somewhere besides right where the references are.<ul>
-                        <li>Judson: <xref ref="biblio-judson-aata" text="global"/></li>
-                        <li>Lay: <xref ref="biblio-lay-article" text="global"/></li>
-                        <li>Doe: <xref ref="citeproc-py-item-3" text="global"/></li>
-                        <li>Doe, later: <xref ref="citeproc-py-item-3-later" text="global"/></li>
-                        <li>Conrey/Farmer: <xref ref="conrey-farmer" text="global"/></li>
-                        <li>D'Arcus: <xref ref="citeproc-py-item-5" text="global"/></li>
-                        <li>Two, authored in-order: <xref ref="conrey-farmer citeproc-py-item-5" text="global"/></li>
-                        <li>Two, authored out-of-order: <xref ref="citeproc-py-item-5 conrey-farmer" text="global"/></li>
-                        <li>Three, authored reverse-order: <xref ref="biblio-lay-article biblio-judson-aata citeproc-py-item-3" text="global"/></li>
+                        <li>Judson: <xref ref="biblio-judson-aata"/></li>
+                        <li>Lay: <xref ref="biblio-lay-article"/></li>
+                        <li>Doe: <xref ref="citeproc-py-item-3"/></li>
+                        <li>Doe, later: <xref ref="citeproc-py-item-3-later"/></li>
+                        <li>Conrey/Farmer: <xref ref="conrey-farmer"/></li>
+                        <li>D'Arcus: <xref ref="citeproc-py-item-5"/></li>
+                        <li>Two, authored in-order: <xref ref="conrey-farmer citeproc-py-item-5"/></li>
+                        <li>Two, authored out-of-order: <xref ref="citeproc-py-item-5 conrey-farmer"/></li>
+                        <li>Three, authored reverse-order: <xref ref="biblio-lay-article biblio-judson-aata citeproc-py-item-3"/></li>
                     </ul></p>
                 </subsection>
 
