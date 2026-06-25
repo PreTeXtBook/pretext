@@ -2827,10 +2827,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pretext-common.xsl implements "biblio" entries (raw, BibTeX,  -->
 <!-- and CSL flavors) and the typography of their fields, via the  -->
 <!-- abstract font modes implemented in "Inline Markup".  Here:    -->
-<!-- the entry wrapper, a hanging "[N]" label, and the unshadowing -->
-<!-- of the imported templates.  (A field common does not style    -->
-<!-- falls through apply-imports to the built-in rules, i.e. its   -->
-<!-- text, which is right for raw mixed content.)                  -->
+<!-- the entry wrapper and a hanging "[N]" label.  A biblio's      -->
+<!-- "title", "author", etc. are killed elsewhere as metadata, so  -->
+<!-- this template overrides those kills to route the fields to    -->
+<!-- common's typography; a field common does not style falls      -->
+<!-- through to its text, which is right for raw mixed content.    -->
 <xsl:template match="biblio|biblio/*">
     <xsl:apply-imports/>
 </xsl:template>
@@ -3508,13 +3509,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- characters, Latin abbreviations, quotation constructions,    -->
 <!-- verbatim snippets ("c", "tag", "tage", "attr"), and logos,   -->
 <!-- in terms of abstract "*-character" templates which receive   -->
-<!-- concrete Unicode values below.  The coverage harness shadows -->
-<!-- those default-mode templates, so an  xsl:apply-imports       -->
-<!-- reinstates each element here: an element leaves the harness  -->
-<!-- report only by deliberately joining this list.               -->
-<xsl:template match="pretext|prefigure[not(node())]|webwork[not(* or @copy or @source)]|xetex|xelatex|ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz|nbsp|ndash|mdash|lsq|rsq|lq|rq|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime|q|sq|dblbrackets|angles|c|cline|tag|tage|attr|today|timeofday|pi:localize">
-    <xsl:apply-imports/>
-</xsl:template>
+<!-- concrete Unicode values below.  So these elements are        -->
+<!-- implemented entirely in common, and need no FO template      -->
+<!-- of their own here.                                           -->
 
 <!-- An <icon> is a FontAwesome 5 glyph, as in the LaTeX route: the -->
 <!-- face follows  iconinfo/@font-awesome-family  and the glyph is  -->
@@ -3931,9 +3928,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- template: an active internal link to the @id of the target.  -->
 <!-- A not-yet-implemented target has no @id in the output, and   -->
 <!-- the link is simply dead until its element joins up.          -->
-<xsl:template match="xref">
-    <xsl:apply-imports/>
-</xsl:template>
+<!-- "xref" is implemented in common. -->
+
 
 <xsl:template match="*" mode="xref-link">
     <xsl:param name="target"/>
@@ -4454,10 +4450,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- complete back-of-the-book index emerges in a single pass:     -->
 <!-- no  makeindex , no second run.                                -->
 
-<!-- the harness would otherwise shadow the machinery -->
-<xsl:template match="index-list">
-    <xsl:apply-imports/>
-</xsl:template>
+<!-- "index-list" is implemented in common. -->
+
 
 <!-- the body of the index passes through -->
 <xsl:template name="present-index">
@@ -4549,10 +4543,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- sample usage (as mathematics), the narrative description, and -->
 <!-- a cross-reference to the enclosing environment.               -->
 
-<!-- the harness would otherwise shadow the machinery -->
-<xsl:template match="notation-list">
-    <xsl:apply-imports/>
-</xsl:template>
+<!-- "notation-list" is implemented in common. -->
+
 
 <xsl:template name="present-notation-list">
     <xsl:param name="content"/>
@@ -4655,10 +4647,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- elements the author requested; here, each element is one    -->
 <!-- line, a live cross-reference followed by any title.         -->
 
-<!-- the harness would otherwise shadow the machinery -->
-<xsl:template match="list-of">
-    <xsl:apply-imports/>
-</xsl:template>
+<!-- "list-of" is implemented in common. -->
+
 
 <!-- no surrounding infrastructure necessary -->
 <xsl:template name="list-of-begin"/>
@@ -4712,16 +4702,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################ -->
 
 <!-- *Every* element needs an implementation, or it lands here and is  -->
-<!-- reported as unimplemented.  This template has the lowest priority -->
-<!-- but the highest import precedence, so it also shadows the         -->
-<!-- default-mode templates of the imported stylesheets: an element is -->
-<!-- only "done" once *this* stylesheet handles it.  We recurse        -->
+<!-- reported as unimplemented.  Elements that common.xsl handles are  -->
+<!-- named in the exclusion list below, so they are not matched here   -->
+<!-- but fall through to common, replacing the per-element             -->
+<!-- "apply-imports" shims.  Emptied, the template can go.  We recurse -->
 <!-- through element children, and drop interior text, so the output   -->
 <!-- is always legal XSL-FO.  Survey what remains to implement, as a   -->
 <!-- counted summary, with something like                              -->
 <!--     pretext/pretext -v ... 2>&1 | grep 'PTX:FO-TODO' \            -->
 <!--         | sort | uniq -c | sort -rn                               -->
-<xsl:template match="*">
+<xsl:template priority="-0.5" match="*[not(
+        self::pretext or self::prefigure[not(node())] or self::webwork[not(* or @copy or @source)] or
+        self::xetex or self::xelatex or
+        self::ad or self::am or self::bc or self::ca or self::eg or self::etal or self::etc or self::ie or self::nb or self::pm or self::ps or self::vs or self::viz or
+        self::nbsp or self::ndash or self::mdash or self::lsq or self::rsq or self::lq or self::rq or self::ldblbracket or self::rdblbracket or self::langle or self::rangle or self::ellipsis or self::midpoint or self::swungdash or self::permille or self::pilcrow or self::section-mark or self::minus or self::times or self::solidus or self::obelus or self::plusminus or self::copyright or self::phonomark or self::copyleft or self::registered or self::trademark or self::servicemark or self::degree or self::prime or self::dblprime or
+        self::q or self::sq or self::dblbrackets or self::angles or
+        self::c or self::cline or self::tag or self::tage or self::attr or self::today or self::timeofday or self::pi:localize or
+        self::xref or self::index-list or self::notation-list or self::list-of)]">
     <xsl:message>PTX:FO-TODO: <xsl:value-of select="local-name()"/> (child of "<xsl:value-of select="local-name(parent::*)"/>")</xsl:message>
     <xsl:apply-templates select="*"/>
 </xsl:template>
