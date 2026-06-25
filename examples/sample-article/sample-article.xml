@@ -10737,13 +10737,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-cross-referencing" label="section-cross-referencing">
             <title>Cross-Referencing</title>
 
-            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.</p>
+            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>type name</q> part of the cross-reference text, such as <q>Theorem</q> or <q>Section</q>.  You control this document-wide with the <attr>text</attr> attribute of the <tag>cross-references</tag> element in your <tag>docinfo</tag><idx><h>cross-reference</h><h>type name</h></idx>.  The value <c>type-global</c><mdash/>the default, and what this article uses<mdash/>supplies the type name automatically, so there is no need to write it into your source.</p>
 
-            <p>Moreover, the names themselves will change with the use of the one language dependent file.  And another bonus is that with an autoname, you automatically get a <em>non-breaking</em> space between the name and the reference.  The autoname switch makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
+            <p>Moreover, the names themselves will change with the use of the one language-dependent file.  And another bonus is that with an automatic type name, you get a <em>non-breaking</em> space between the name and the reference.  A type name makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
 
-            <p>Here is a reference that has no indication of its type in the source:  <xref ref="theorem-FTC" text="global"/>.  So by default you will just see a number that you can click on.  If you use the <c>text="type-global"</c> switch then you should see <q>Theorem</q> prepended.  Note that if you changed the theorem to a lemma, then that change would be reflected here automatically when autonaming is in effect.</p>
+            <p>Here is a reference that suppresses its type with <c>text="global"</c>:  <xref ref="theorem-FTC" text="global"/>.  So you will just see a number that you can click on.  Using <c>text="type-global"</c><mdash/>or simply accepting the document default<mdash/>you would instead see <q>Theorem</q> prepended.  Note that if you changed the theorem to a lemma, then that change would be reflected here automatically.</p>
 
-            <p>If you set the autonaming behavior globally, or accept the default behavior, there will still be instances where you want to override that choice.  Simple: just say <c>text="type-global"</c> or <c>text="global"</c> as part of the <c>xref</c>.  Each example below should look the same each time this article is processed, no matter how the global <c>autoname</c> is set.<ul>
+            <p>Whatever document-wide default you set with <tag>cross-references</tag>, there will still be instances where you want to override that choice.  Simple: just say <c>text="type-global"</c> or <c>text="global"</c> as part of the <tag>xref</tag>.  Each example below should look the same each time this article is processed, no matter the document-wide <tag>cross-references</tag> setting.<ul>
                 <li><p>No name ever: <xref ref="corollary-FTC-derivative" text="global"/></p></li>
                 <li><p>Always named: <xref ref="corollary-FTC-derivative" text="type-global"/></p></li>
             </ul></p>
@@ -10753,7 +10753,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>A grand result: <xref ref="corollary-FTC-derivative" text="custom">a nice corollary</xref></p></li>
             </ul></p>
 
-            <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override the first <c>Theorem</c> by providing the content <c>Theorems</c> on the first <c>xref</c> and <c>text="global"</c> on the second <c>xref</c>.  (With global autonaming off, you will also get what you want/expect.)   Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing" text="global">Sections</xref> and <xref ref="section-internationalization" text="global"/>.  (But notice that it is up to you to be certain the types of these targets do not change without you changing the content of the first <c>xref</c>.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
+            <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With type names shown (the default), you can override the first <c>Theorem</c> by providing the content <c>Theorems</c> on the first <c>xref</c> and <c>text="global"</c> on the second <c>xref</c>.  (With type names suppressed, you will also get what you want/expect.)   Here is the test, which should look correct no matter the document-wide setting:  <xref ref="section-cross-referencing" text="global">Sections</xref> and <xref ref="section-internationalization" text="global"/>.  (But notice that it is up to you to be certain the types of these targets do not change without you changing the content of the first <c>xref</c>.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
 
             <p>If you set the value of <attr>text</attr> to <c>title</c>, then the title you assigned to the theorem will be used as the link for a cross-reference.  Here is a the final example, which refers to a fundamental theorem by name <xref ref="theorem-FTC" text="title"/>.</p>
 
@@ -10762,7 +10762,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Here we form a list to test pointing at various structures.  Each of the following should open a knowl in the HTML version, otherwise it will be a traditional hyperlink (if possible).  Note that if a knowl opens, there will always be an <q>in-context</q> link which will take you to the actual location, should you have  wished instead to just go there.<ul>
                 <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" text="global"/>.</p></li>
                 <li><p>Citations: Judson's AATA with annotation at <xref ref="biblio-judson-AATA" text="global"/></p></li>
-                <li><p>Citations: Judson's AATA with autoname that should have zero effect <xref ref="biblio-judson-AATA" text="type-global"/></p></li>
+                <li><p>Citations: Judson's AATA with a type name, which has zero effect <xref ref="biblio-judson-AATA" text="type-global"/></p></li>
                 <li><p>Citations: In a <tag>references</tag> division inside an appendix <xref ref="biblio-strang-article-uno" text="global"/></p></li>
                 <li><p>Note: just the annotation of previous citation at <xref ref="note-judson-AATA" text="global"/></p></li>
                 <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" text="global"/>, or a question at <xref ref="sample-question" text="global"/>.</p></li>
@@ -10775,15 +10775,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>A Figure within a side-by-side panel, with its own number: <xref ref="another-regular-figure" text="global"/></p></li>
                 <li><p>A Table within a side-by-side panel, with a subnumber: <xref ref="table-sidebyside-subtable" text="global"/></p></li>
                 <li><p>A Figure, containing a side-by-side with two sub-captioned images: <xref ref="fig-sidebyside-global" text="global"/></p></li>
-                <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" text="global"/>.  Then with an autoname: <xref ref="equation-alternate-FTC" text="type-global"/>.</p></li>
-                <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" text="global"/>.  Then with an autoname: <xref ref="equation-use-FTC" text="type-global"/>.  And two, with a plural form: <xref ref="equation-alternate-FTC" text="global">Equations</xref> and <xref ref="equation-use-FTC" text="global"/>.</p></li>
+                <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" text="global"/>.  Then with a type name: <xref ref="equation-alternate-FTC" text="type-global"/>.</p></li>
+                <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" text="global"/>.  Then with a type name: <xref ref="equation-use-FTC" text="type-global"/>.  And two, with a plural form: <xref ref="equation-alternate-FTC" text="global">Equations</xref> and <xref ref="equation-use-FTC" text="global"/>.</p></li>
                 <li><p>You can cross-reference <xref ref="equation-use-FTC" text="custom">The Fundamental Theorem of Calculus</xref> via custom text of your choice.</p></li>
                 <li><p>Display mathematics: an equation with  <q>local</q> tag, which should not be used so very far away: <xref ref="equation-local-star" text="global"/>.</p></li>
                 <li><p>You can author a cross-reference to a displayed equation with no number, but it will not be very satisfying.  You should get a warning if you try.</p></li>
-                <li><p>Exercises (divisional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative" text="global">Exercises</xref>.</p></li>
+                <li><p>Exercises (divisional), a range, with plural form provided to override the type name: <xref first="exercises-null-problem" last="exercises-cosine-derivative" text="global">Exercises</xref>.</p></li>
                 <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay" text="global"/></p></li>
                 <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" text="type-global"/></p></li>
-                <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" text="type-global"/></p></li>
+                <li><p>Solution: A portion of an exercise, with its type name: <xref ref="solution-antiderivative" text="type-global"/></p></li>
                 <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" text="type-global"/> <xref ref="exercise-complicated-first-answer" text="type-global"/></p></li>
                 <li><p>A subsidary part of an exercise: <xref ref="exercise-one-two-one" text="global"/></p></li>
                 <li><p>
@@ -10803,8 +10803,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>A case within the proof of <xref ref="claim-with-cases" text="type-global"/>: <xref ref="inductive-step" text="title"/></p></li>
                 <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" text="title"/></p></li>
                 <li><p>A cross-reference to an aside, by title necessarily, and with some formatting in the title: <xref ref="an-aside" text="title"/></p></li>
-                <li><p>A cross-reference to an <c>objectives</c> block, with an autoname.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" text="type-global"/></p></li>
-                <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" text="type-global"/></p></li>
+                <li><p>A cross-reference to an <c>objectives</c> block, with a type name.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" text="type-global"/></p></li>
+                <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via a type name: <xref ref="objective-structure" text="type-global"/></p></li>
                 <li><p>A cross-reference to the top-level element (<eg/><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives" text="custom">ToC or Title</xref></p></li>
                 <li><p><q>Cross-references inside quotations previously lost track of their target, so this tests correcting that, not so much the cross-reference itself: <xref ref="theorem-FTC" text="type-global"/></q></p></li>
                 <li><p>An activity with full details following: <xref ref="activity-with-hint-answer-solution" text="global"/></p></li>
@@ -10825,26 +10825,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- <li><p>: <xref ref="" text=""/></p></li> -->
             </ul></p>
 
-            <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" text="type-global"/>.</p>
+            <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is a type-named link to a subsubsection:  <xref ref="subsubsection-different-integrals" text="type-global"/>.</p>
 
-            <p>Cross-references can be built into display mathematics, but they can only point to one item (<ie/> a comma-delimited list of targets is not supported).  Examples below should test the distinction in HTML output between a link that opens a knowl and a link that jumps to a larger chunk of content.  Notice that display mathematics is entirely <latex/> syntax, no matter which output format you create.  So if you do not use the <c>autoname</c> facility, you need to wrap non-math text in <c>\text{}</c> and perhaps use a tilde (<c>~</c>) as a non-breaking space (examine the source of this article).</p>
+            <p>Cross-references can be built into display mathematics, but they can only point to one item (<ie/> a comma-delimited list of targets is not supported).  Examples below should test the distinction in HTML output between a link that opens a knowl and a link that jumps to a larger chunk of content.  Notice that display mathematics is entirely <latex/> syntax, no matter which output format you create.  So if you do not use the automatic type name, you need to wrap non-math text in <c>\text{}</c> and perhaps use a tilde (<c>~</c>) as a non-breaking space (examine the source of this article).</p>
 
             <p><md>
                 <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="theorem-FTC" text="type-global"/></mrow>
                 <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;\text{Section}~<xref ref="section-fundamental-theorem" text="global"/></mrow>
             </md><idx><h>bug</h><h>in-context broken</h></idx></p>
 
-            <p>Variations on the above include multiple <c>xml:id</c> as the value of a single <c>ref</c> attribute on an <c>xref</c>, in the form of a comma-separated list.  In this case, only the numbers are links/knowls and the autonaming attribute is based on the type of the first <c>ref</c>.  Wrapping with brackets (citations) or parentheses (equations) is also controlled by the type of the first <c>ref</c>.  And the <c>detail</c> attribute for a bibliographic reference is silently ignored.  So you can do silly things like have a reference to a theorem within a list of equation numbers and there will be no error message.  Handle with care.  Spaces after commas in the list will migrate to the output as spaces, so if you don't have any, you won't get any.<ul>
+            <p>Variations on the above include multiple <c>xml:id</c> as the value of a single <c>ref</c> attribute on an <c>xref</c>, in the form of a comma-separated list.  In this case, only the numbers are links/knowls and the type name is based on the type of the first <c>ref</c>.  Wrapping with brackets (citations) or parentheses (equations) is also controlled by the type of the first <c>ref</c>.  And the <c>detail</c> attribute for a bibliographic reference is silently ignored.  So you can do silly things like have a reference to a theorem within a list of equation numbers and there will be no error message.  Handle with care.  Spaces after commas in the list will migrate to the output as spaces, so if you don't have any, you won't get any.<ul>
                 <!-- NB: a knowl for "theorem-number-02" will *only* be created if this list is decomposed -->
                 <!-- properly, so do not remove, and certainly do not cross-reference it elsewhere         -->
-                <li><p>Four theorems, with spaces, autonamed: <xref ref="theorem-FTC, theorem-number-01, theorem-number-02, theorem-number-03" text="type-global"/></p></li>
-                <li><p>Two equations, no spaces, autonamed: <xref ref="equation-alternate-FTC,equation-use-FTC" text="type-global"/></p></li>
-                <li><p>Two bibliographic items, no autoname: <xref ref="biblio-judson-AATA, biblio-lay-article" text="global"/></p></li>
+                <li><p>Four theorems, with spaces, with type names: <xref ref="theorem-FTC, theorem-number-01, theorem-number-02, theorem-number-03" text="type-global"/></p></li>
+                <li><p>Two equations, no spaces, with type names: <xref ref="equation-alternate-FTC,equation-use-FTC" text="type-global"/></p></li>
+                <li><p>Two bibliographic items, no type name: <xref ref="biblio-judson-AATA, biblio-lay-article" text="global"/></p></li>
                 <!-- <li><p>: <xref ref=""/></p></li> -->
             </ul></p>
 
-            <p>If you have a long list of items (such as homework exercises, not in an <c>exercisegroup</c>, or perhaps several chapters), you can get a cross-reference that prints as a range by using <c>xref</c> with two attributes <c>first</c> and <c>last</c>, which may contain a single <c>xml:id</c> each.  As with multiple references, <c>first</c> will control autonaming and other features.<ul>
-                <li><p>A range of exercises, autonamed (this range appears <q>out-of-order</q> since the two <c>exercise</c> are numbered under two different schemes): <xref first="exercise-essay" last="exercise-test-number" text="type-global"/></p></li>
+            <p>If you have a long list of items (such as homework exercises, not in an <c>exercisegroup</c>, or perhaps several chapters), you can get a cross-reference that prints as a range by using <c>xref</c> with two attributes <c>first</c> and <c>last</c>, which may contain a single <c>xml:id</c> each.  As with multiple references, <c>first</c> will control the type name and other features.<ul>
+                <li><p>A range of exercises, with type names (this range appears <q>out-of-order</q> since the two <c>exercise</c> are numbered under two different schemes): <xref first="exercise-essay" last="exercise-test-number" text="type-global"/></p></li>
                 <li><p>A range of equations: <xref first="equation-use-FTC" last="equation-conclude" text="global"/></p></li>
                 <li><p>A system of equations, given as range from first to last: <xref first="equation-system-begin" last="equation-system-end" text="global"/></p></li>
                 <li><p>A range of sections, hand-named to be plural: Sections<nbsp/><xref first="section-sage-cells" last="section-cross-referencing" text="global"/></p></li>
@@ -12127,7 +12127,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </sidebyside>
                 </figure>
 
-                <!-- the "Tables" content interior to the xref will override any autonaming -->
+                <!-- the "Tables" content interior to the xref will override the type name -->
                 <p>If you put two <c>table</c> elements side-by-side without an enclosing <tag>figure</tag>, then they will use regular numbering; see <xref first="table-regular-fig1" last="table-regular-fig3" text="global">Tables</xref>.</p>
 
                 <sidebyside>
