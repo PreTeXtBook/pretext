@@ -15,7 +15,7 @@
     display:none;
   }
 
-  .ptx-page, .ptx-main, .ptx-main .ptx-content {
+  .ptx-page, .ptx-main, .ptx-main > .ptx-content {
     all: unset !important;
     width: 100%;
     border: none;
