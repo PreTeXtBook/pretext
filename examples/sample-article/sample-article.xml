@@ -84,11 +84,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- (these are the "xref" elements).  Because this changes the words         -->
         <!-- that appear in your output, it is a decision with stays with the source. -->
         <!-- Experiment here with different choices and a few different "xref"        -->
-        <!-- elements before you decide on a final choice.  We set this to 'global',  -->
-        <!-- not because we think it is a good choice, but for historical reasons.    -->
-        <!-- The default is 'type-global', which produces text like "Theorem 5.2",    -->
-        <!-- where "Theorem" will be translated into the document language            -->
-        <cross-references text="global"/>
+        <!-- elements before you decide on a final choice.  We use 'type-global',     -->
+        <!-- which is also the default, and produces text like "Theorem 5.2", where   -->
+        <!-- "Theorem" will be translated into the document language.  Individual     -->
+        <!-- "xref" carry an explicit "text" attribute where a different scheme is    -->
+        <!-- wanted.                                                                  -->
+        <cross-references text="type-global"/>
         <!--
         Extra packages, package options, and package settings for latex-based images.
         Inserted in the preamble for LaTeX output.
@@ -518,7 +519,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </sage>
 
             <!-- keep R index entry, collides with sortby attribute elsewhere -->
-            <p>Sage, and by extension, the Sage Cell Server, can interpret several languages.  The next example has code in the <c>R</c> language,<idx><h>R</h></idx> a popular open source language for statistics.  As an author, you add the attribute <c>language="r"</c> to your <c>sage</c> element.  (The default language is Sage, so you do not need to indicate that repeatedly.)  Note that a language like <c>R</c> likes to use a <q>less than</q> character, &lt;, special character in XML.  You need to escape it by writing <c>&amp;lt;</c> as we have done in the source for this example.  (See the discussion in <xref ref="subsection-xml-escape" text="type-global"/>.)</p>
+            <p>Sage, and by extension, the Sage Cell Server, can interpret several languages.  The next example has code in the <c>R</c> language,<idx><h>R</h></idx> a popular open source language for statistics.  As an author, you add the attribute <c>language="r"</c> to your <c>sage</c> element.  (The default language is Sage, so you do not need to indicate that repeatedly.)  Note that a language like <c>R</c> likes to use a <q>less than</q> character, &lt;, special character in XML.  You need to escape it by writing <c>&amp;lt;</c> as we have done in the source for this example.  (See the discussion in <xref ref="subsection-xml-escape"/>.)</p>
 
             <p>As a reader you learn that the <q>Evaluate</q> button for a pre-loaded Sage cell will indicate the language in use.</p>
 
@@ -536,7 +537,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>The Sage Cell Server supports the following languages:  <c>sage</c>, <c>gap</c>, <c>gp</c>, <c>html</c>, <c>maxima</c>, <c>octave</c>, <c>python</c>, <c>r</c>, and <c>singular</c>.</p>
 
-            <p>Here is another <c>R</c> cell.  Unfortunately, it seems Sage's <c>doctest</c> facility cannot be used easily with code from other languages.  In the source for this example, we have employed the <init>XML</init> escape sequence, <c>&amp;lt;</c> several times (see <xref ref="subsection-xml-escape" text="type-global"/>).</p>
+            <p>Here is another <c>R</c> cell.  Unfortunately, it seems Sage's <c>doctest</c> facility cannot be used easily with code from other languages.  In the source for this example, we have employed the <init>XML</init> escape sequence, <c>&amp;lt;</c> several times (see <xref ref="subsection-xml-escape"/>).</p>
 
             <sage language="r">
                 <input>
@@ -693,7 +694,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <md number="yes" xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</md>.</p>
                     </statement>
                     <proof xml:id="proof-FTC-corollary">
-                        <p>We simply take the indicated derivative, applying Theorem<nbsp/><xref ref="theorem-FTC"/> at <xref ref="equation-use-FTC"/><md number="yes">
+                        <p>We simply take the indicated derivative, applying <xref ref="theorem-FTC"/> at <xref ref="equation-use-FTC" text="global"/><md number="yes">
                             <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
                             <mrow xml:id="equation-conclude">&amp;=f(x)-0 = f(x)</mrow>
@@ -717,7 +718,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </proof>
                 </corollary>
 
-                <p>The alternative version of the Fundamental Theorem (<acro>FTC</acro>) in <xref ref="equation-alternate-FTC"/> is a compact way to express the result.</p>
+                <p>The alternative version of the Fundamental Theorem (<acro>FTC</acro>) in <xref ref="equation-alternate-FTC" text="global"/> is a compact way to express the result.</p>
 
                 <p>For testing purposes, there is a simple bare Sage Cell here.</p>
                 <sage>
@@ -778,7 +779,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </input>
                 </sage>
 
-                <p>We cross-reference the example just prior, <xref ref="example-mysterious" text="type-global"/>, to test the simple Sage cells that will now be part of a cross-reference knowl (an external file).</p>
+                <p>We cross-reference the example just prior, <xref ref="example-mysterious"/>, to test the simple Sage cells that will now be part of a cross-reference knowl (an external file).</p>
 
                 <claim xml:id="claim-with-cases">
                     <title>An Equivalent Claim</title>
@@ -869,8 +870,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>We can also use <attr>direction</attr> set to <c>cycle</c> in a stand-alone proof of our TFAE claim. If we include a <attr>ref</attr> on the <tag>proof</tag> that points to the original claim, then the formatting of the markers on the statement list will be honored in our cases.</p>
 
-                <proof ref="claim-with-tfae-cases">
-                    <p>Once again we will prove that the four statements in <xref ref="claim-with-tfae-cases"/> are equivalent.</p>
+                <proof ref="claim-with-tfae-cases" text="global">
+                    <p>Once again we will prove that the four statements in <xref ref="claim-with-tfae-cases" text="global"/> are equivalent.</p>
 
                     <case direction="cycle">
                         <p>Another argument that the first statement implies the second.</p>
@@ -929,7 +930,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>This proof includes a <attr>ref</attr> to the preceding claim.</p>
 
-                <proof ref="another-claim-with-tfae-cases">
+                <proof ref="another-claim-with-tfae-cases" text="global">
 
                     <case direction="cycle">
                         <p>Does the first statement imply the second?</p>
@@ -971,7 +972,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             -->
 
             <subsection>
-                <title>A Pedagogical Note about <xref ref="subsection-second-FTC" text="type-global"/></title>
+                <title>A Pedagogical Note about <xref ref="subsection-second-FTC"/></title>
 
                 <subsubsection xml:id="subsubsection-different-integrals">
                     <title>Symbolic and Numerical Integrals</title>
@@ -1073,7 +1074,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <statement>
                             <p>This is an <tag>exploration</tag>.<idx><h>exploration</h></idx>  Other similar possibilities are <tag>project</tag><idx><h>project</h></idx>, <tag>activity</tag><idx><h>activity</h></idx>, <tag>task</tag><idx><h>task</h></idx>, and <tag>investigation</tag><idx><h>investigation</h></idx>.</p>
 
-                            <p>Note that projects, activities, explorations, tasks and investigations <em>share</em> the independent numbering scheme, so it is really only intended you use one of these.  If you want a variant of the name (<eg/> <q>Directed Activity</q>) you can use the <tag>rename</tag><idx><h>rename an environment</h></idx> facility (<xref ref="rename-facility" text="type-global"/>).</p>
+                            <p>Note that projects, activities, explorations, tasks and investigations <em>share</em> the independent numbering scheme, so it is really only intended you use one of these.  If you want a variant of the name (<eg/> <q>Directed Activity</q>) you can use the <tag>rename</tag><idx><h>rename an environment</h></idx> facility (<xref ref="rename-facility"/>).</p>
                         </statement>
 
                         <solution>
@@ -1448,7 +1449,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <exercises xml:id="exercises-subsection-solo" label="exercises-subsection-solo">
                     <exercise xml:id="exercise-test-number">
                         <statement>
-                            <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate.  Here is a self-referential link: Exercise<nbsp/><xref ref="exercise-test-number"/>.</p>
+                            <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate.  Here is a self-referential link: <xref ref="exercise-test-number"/>.</p>
 
                             <p>The subsubsection has no title in the source, so one is provided automatically, and will adjust according to the language of the document.</p>
                         </statement>
@@ -1503,7 +1504,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                       <p>
                         And a second one, with a cross-reference to the first,
                         as a check on numbering:
-                        <xref ref="first-reading" text="type-global"/>.
+                        <xref ref="first-reading"/>.
                         Reading questions are allowed to have answers,
                         but providing answers misses the point of a reading question,
                         and the answer knowl interacts poorly with the mechanism used to
@@ -1564,7 +1565,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </statement>
                 </principle>
 
-                <p>More precisely, <tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, and <tag>identity</tag>, all behave exactly the same, requiring a statement (as a sequence of paragraphs) followed by an optional proof, and may have an optional title.  The elements <tag>axiom</tag>, <tag>conjecture</tag>, <tag>principle</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, and <tag>assumption</tag> are functionally the same, barring a proof (since they would never have one!).  Definitions are an exception, as it is natural to place <tag>notation</tag> within<mdash/>see the source for Definition<nbsp/><xref ref="definition-indefinite-integral"/> for an example.</p>
+                <p>More precisely, <tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, and <tag>identity</tag>, all behave exactly the same, requiring a statement (as a sequence of paragraphs) followed by an optional proof, and may have an optional title.  The elements <tag>axiom</tag>, <tag>conjecture</tag>, <tag>principle</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, and <tag>assumption</tag> are functionally the same, barring a proof (since they would never have one!).  Definitions are an exception, as it is natural to place <tag>notation</tag> within<mdash/>see the source for <xref ref="definition-indefinite-integral"/> for an example.</p>
             </subsection>
 
             <subsection>
@@ -1628,9 +1629,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>An <tag>assemblage</tag> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs and friends (<c>p</c>, <c>blockquote</c>, <c>pre</c>) and side-by-sides that do not contain captioned items (<c>sidebyside</c>, <c>sbsgroup</c>).  The intent is that contents are not numbered, so cannot be cross-referenced individually, and so also do not become knowls.  You may place <tag>image</tag>, <tag>tabular</tag>, and <tag>program</tag> inside a <tag>sidebyside</tag>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the entire assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
 
                     <p>What have we seen so far in this (disorganized) sample?<ul>
-                        <li><p>Theorems, definitions and corollaries. (<xref ref="section-fundamental-theorem" text="type-global"/>)</p></li>
-                        <li><p>Sage cells, including with R. (<xref ref="section-sage-cells" text="type-global"/>)</p></li>
-                        <li><p>Lots of document structure, like introductions and conclusions (next). (<xref ref="interesting-corollary" text="type-global"/>)</p></li>
+                        <li><p>Theorems, definitions and corollaries. (<xref ref="section-fundamental-theorem"/>)</p></li>
+                        <li><p>Sage cells, including with R. (<xref ref="section-sage-cells"/>)</p></li>
+                        <li><p>Lots of document structure, like introductions and conclusions (next). (<xref ref="interesting-corollary"/>)</p></li>
                     </ul></p>
 
                     <p>A sample table, as a <c>tabular</c> inside a <c>sidebyside</c> with no caption, follows.</p>
@@ -1823,7 +1824,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </ul></p>
 
             <remark>
-                <p>You can<fn>Third test footnote</fn> gain a greater understanding of derivatives by studying the graphs of functions with their derivatives.  Can<fn>Fourth test footnote</fn> you discern the derivative<ndash/>antiderivative<fn>Fifth test footnote</fn> relationship in Figure<nbsp/><xref ref="figure-function-derivative"/>?</p>
+                <p>You can<fn>Third test footnote</fn> gain a greater understanding of derivatives by studying the graphs of functions with their derivatives.  Can<fn>Fourth test footnote</fn> you discern the derivative<ndash/>antiderivative<fn>Fifth test footnote</fn> relationship in <xref ref="figure-function-derivative"/>?</p>
             </remark>
 
             <!--
@@ -1938,7 +1939,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Now with no numbers and no alignment.  We include two cross-references in the <c>intertext</c> portion for testing.<md>
                 <mrow>{\mathcal L}(y')(s)  = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0).</mrow>
-                <intertext>First an external reference to <url href="http://example.com" visual="example.com"/> and internal cross-reference to <xref ref="corollary-FTC-derivative" text="type-global"/>. And so it follows that,</intertext>
+                <intertext>First an external reference to <url href="http://example.com" visual="example.com"/> and internal cross-reference to <xref ref="corollary-FTC-derivative"/>. And so it follows that,</intertext>
                 <mrow>{\mathcal L}(y')(s)^{++} = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s)^{5} = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0)</mrow>
             </md>.</p>
@@ -2292,7 +2293,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </md></p>
 
                 <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <tag>xref</tag> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
-                    <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global"/></mrow>
+                    <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative"/></mrow>
                     <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" text="title"/></mrow>
                     <mrow>&amp;=F+G&amp;&amp;<xref ref="theorem-number-01" text="custom">A nice result</xref></mrow>
                 </md>.</p>
@@ -2343,9 +2344,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow xml:id="equation-local-hash"      tag="dhash">c^2 \amp = a^2+b^2</mrow>
                     <mrow xml:id="equation-local-maltese"   tag="dmaltese">c^2 \amp = a^2+b^2</mrow>
                     <mrow>z^2 \amp = x^2+y^2</mrow>
-                </md>Here are the local cross-references: <xref ref="equation-local-star"/>, <xref ref="equation-local-dagger"/>, <xref ref="equation-local-daggerdbl"/>, <xref ref="equation-local-hash"/>, <xref ref="equation-local-maltese"/>.  We test another farther away in <xref ref="section-cross-referencing" text="type-global"/>, contrary to our advice above.</p>
+                </md>Here are the local cross-references: <xref ref="equation-local-star" text="global"/>, <xref ref="equation-local-dagger" text="global"/>, <xref ref="equation-local-daggerdbl" text="global"/>, <xref ref="equation-local-hash" text="global"/>, <xref ref="equation-local-maltese" text="global"/>.  We test another farther away in <xref ref="section-cross-referencing"/>, contrary to our advice above.</p>
 
-                <p>When there is nothing to align, the <attr>tag</attr> attribute may live directly on a single-line <tag>md</tag>: <md xml:id="equation-tag-on-md" tag="star">c^2 = a^2 + b^2</md>.  This is equivalent to placing the content in a single <tag>mrow</tag> child carrying the <attr>tag</attr>.  A cross-reference to this equation looks like <xref ref="equation-tag-on-md"/>.  Note that <attr>tag</attr> and <attr>number</attr> are mutually exclusive on a single-line <tag>md</tag>.</p>
+                <p>When there is nothing to align, the <attr>tag</attr> attribute may live directly on a single-line <tag>md</tag>: <md xml:id="equation-tag-on-md" tag="star">c^2 = a^2 + b^2</md>.  This is equivalent to placing the content in a single <tag>mrow</tag> child carrying the <attr>tag</attr>.  A cross-reference to this equation looks like <xref ref="equation-tag-on-md" text="global"/>.  Note that <attr>tag</attr> and <attr>number</attr> are mutually exclusive on a single-line <tag>md</tag>.</p>
             </subsection>
 
             <subsection xml:id="commutative-diagrams">
@@ -2444,7 +2445,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </row>
                 </tabular>
 
-                <p>The hash character also requires escaping within the <c>\tag{}</c> macro.  See <xref ref="equation-local-hash"/> for an example where the <c>tag="dhash"</c> attribute produces a double hash as an equation tag.</p>
+                <p>The hash character also requires escaping within the <c>\tag{}</c> macro.  See <xref ref="equation-local-hash" text="global"/> for an example where the <c>tag="dhash"</c> attribute produces a double hash as an equation tag.</p>
 
             </subsection>
 
@@ -2771,7 +2772,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <plaintitle>Entering Text in Paragraphs</plaintitle>
 
             <introduction>
-                <p><init>XML</init>, and therefore <pretext/>, is a markup language.  But by and large, what you type into your source will be what you see in your output.  So there is not much to say.  Except that <xref ref="subsection-xml-escape" text="type-global"/> eventually will be essential.  However we do test various tricky situations here (which have technical explanations we avoid).  See the Author's Guide for a superior treatment of the topics addressed here.</p>
+                <p><init>XML</init>, and therefore <pretext/>, is a markup language.  But by and large, what you type into your source will be what you see in your output.  So there is not much to say.  Except that <xref ref="subsection-xml-escape"/> eventually will be essential.  However we do test various tricky situations here (which have technical explanations we avoid).  See the Author's Guide for a superior treatment of the topics addressed here.</p>
             </introduction>
 
             <subsection xml:id="subsection-xml-escape">
@@ -2824,7 +2825,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </attribution>
                 </blockquote>
 
-                <p>Sometimes a quote may extend across several paragraphs.  Or a balanced pair of quotations marks crosses an XML boundary, so we need left, right, single and double versions.  (For example, see Section<nbsp/><xref ref="poetry"/> on poetry.)  Here are all four in a haphazard order: <rq/>, <lsq/>, <lq/>, <rsq/>.  These should be a last resort, and <em>not</em> a replacement for the <c>q</c> and <c>sq</c> tags.  The left/right versions are used for the following quote from Abraham Lincoln, which we have edited into two paragraphs.</p>
+                <p>Sometimes a quote may extend across several paragraphs.  Or a balanced pair of quotations marks crosses an XML boundary, so we need left, right, single and double versions.  (For example, see <xref ref="poetry"/> on poetry.)  Here are all four in a haphazard order: <rq/>, <lsq/>, <lq/>, <rsq/>.  These should be a last resort, and <em>not</em> a replacement for the <c>q</c> and <c>sq</c> tags.  The left/right versions are used for the following quote from Abraham Lincoln, which we have edited into two paragraphs.</p>
 
                 <p><lq/>I am not bound to win, but I am bound to be true. I am not bound to succeed, but I am bound to live by the light that I have.</p>
 
@@ -3148,7 +3149,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>Your text can include specialized text meant to look like a key on the keyboard of a calculator or other device.  So you can go <kbd>b</kbd> <kbd>Enter</kbd> <kbd>&lt;</kbd> or <kbd>F1</kbd>.  Or maybe a sequence as: <kbd>Tab</kbd> &gt; <kbd>Ctrl</kbd> &gt; <kbd>T</kbd>.  Use the <tag>kbd</tag> element, with the label of the key as content.</p>
 
-                <p>There is a growing supply of keys which are labeled with graphics rather than text, such as a left arrow <kbd name="left"/>, right arrow <kbd name="right"/>, up arrow <kbd name="up"/>, down arrow <kbd name="down"/>, and Enter <kbd name="enter"/>.  See <pubtitle>The <pretext/> Guide</pubtitle> for the definitive list.  In <xref ref="named-keyboard-keys"/> the literal column means the symbol/character is the content of a <tag>kbd</tag> element, while the named column means the symbol/character has been chosen via the value of the <attr>name</attr> attribute of an empty <tage>kbd</tage> element.</p>
+                <p>There is a growing supply of keys which are labeled with graphics rather than text, such as a left arrow <kbd name="left"/>, right arrow <kbd name="right"/>, up arrow <kbd name="up"/>, down arrow <kbd name="down"/>, and Enter <kbd name="enter"/>.  See <pubtitle>The <pretext/> Guide</pubtitle> for the definitive list.  In <xref ref="named-keyboard-keys" text="global"/> the literal column means the symbol/character is the content of a <tag>kbd</tag> element, while the named column means the symbol/character has been chosen via the value of the <attr>name</attr> attribute of an empty <tage>kbd</tage> element.</p>
 
                 <table xml:id="named-keyboard-keys">
                 <title>Named keys</title>
@@ -3367,7 +3368,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>The <tag>url</tag> element can be used to create an external reference.  The mandatory <attr>href</attr> attribute is the actual <init>URL</init> complete with the protocol (e.g. <c>https://</c>).  Content for the element is optional, and if provided will be the <q>clickable</q> text.  In this case, a <attr>visual</attr> attribute can be provided. In producing the print version of a PDF, this will become a parenthetical with a more friendly version of the <init>URL</init>.  When no content is provided, the <q>clickable</q> will be the <init>URL</init> with a preference for an optional <attr>visual</attr>.  This subsection has some (extreme) tests and we leave complete documentation and full details for the <pretext/> Guide.</p>
 
-                <p>A long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw" visual="www.pcc.edu/enroll/registration/dropping.html#withdraw"/>.  Notice in the source that you <em>do not</em> put any tags inside the <attr>href</attr> or <attr>visual</attr> attributes, but you may need to provide XML escape sequences (see <xref ref="subsection-xml-escape" text="type-global"/>). </p>
+                <p>A long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw" visual="www.pcc.edu/enroll/registration/dropping.html#withdraw"/>.  Notice in the source that you <em>do not</em> put any tags inside the <attr>href</attr> or <attr>visual</attr> attributes, but you may need to provide XML escape sequences (see <xref ref="subsection-xml-escape"/>). </p>
 
                 <p>A <tag>url</tag> element in the print version of a PDF will get a trailing parenthetical containing the (simplified) URL in the highly-recommended <attr>visual</attr> attribute.  If you do not provide the <attr>visual</attr> attribute in this case, then you will get the <attr>href</attr> value repeated, possibly with some editing.  If you insist, you can make the <attr>visual</attr> attribute identical to the <attr>href</attr> attribute.  Some tests:<ul>
                     <li><url href="http://example.com/" visual="example.com">With a useful <attr>visual</attr> attribute</url></li>
@@ -3423,7 +3424,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection xml:id="subsection-special-situations">
                 <title>Special Situations</title>
 
-                <p>Sage defines a nice syntax for generators of algebraic structures, but we must remember to use an escape sequence for the &lt; symbol (see <xref ref="subsection-xml-escape" text="type-global"/>).</p>
+                <p>Sage defines a nice syntax for generators of algebraic structures, but we must remember to use an escape sequence for the &lt; symbol (see <xref ref="subsection-xml-escape"/>).</p>
 
                 <sage>
                     <input>
@@ -3444,7 +3445,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <output>(u, Univariate Polynomial Ring in u over Integer Ring)</output>
                 </sage>
 
-                <p>Ampersands, less-than, and greater symbols are likely to be necessary in source code, such as Sage code (think generators of field extensions) or TikZ code (think arrowheads), and in matrices (think separating entries).  If you have a big matrix, or a huge chunk of TikZ code, you can protect it all at once from the XML processor by wrapping it in <c>&lt;![CDATA[</c><nbsp/><nbsp/><nbsp/><c>]]&gt;</c>.  It should be possible to write without ever using the <q>CDATA</q> mechanism, but it might get tedious in places to use the supplied macros or <init>XML</init> escape sequences.  This construction is often mis-understood as a solution better remedied by reading <xref ref="subsection-xml-escape" text="type-global"/> again.</p>
+                <p>Ampersands, less-than, and greater symbols are likely to be necessary in source code, such as Sage code (think generators of field extensions) or TikZ code (think arrowheads), and in matrices (think separating entries).  If you have a big matrix, or a huge chunk of TikZ code, you can protect it all at once from the XML processor by wrapping it in <c>&lt;![CDATA[</c><nbsp/><nbsp/><nbsp/><c>]]&gt;</c>.  It should be possible to write without ever using the <q>CDATA</q> mechanism, but it might get tedious in places to use the supplied macros or <init>XML</init> escape sequences.  This construction is often mis-understood as a solution better remedied by reading <xref ref="subsection-xml-escape"/> again.</p>
 
                 <p>We test the three pre-defined <latex/> macros for &amp;, &lt;, and &gt; with a pair of aligned equations:<md>
                     <mrow>a^2 + b^2\amp\lt c^2</mrow>
@@ -3517,7 +3518,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Images from External Sources</title>
 
-                <p>If you have raster images (photographs, etc.) then they are specified with complete filenames, as above in Figure<nbsp/><xref ref="figure-function-derivative"/> or just below.</p>
+                <p>If you have raster images (photographs, etc.) then they are specified with complete filenames, as above in <xref ref="figure-function-derivative"/> or just below.</p>
 
                 <figure>
                     <caption>New Zealand Landscape, <url href="https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg" visual="commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg"><c>commons.wikimedia.org</c></url>, CC-BY-SA-2.0</caption>
@@ -4404,7 +4405,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection xml:id="graphics-asymptote-webgl">
                 <title>Asymptote, 3D via WebGL</title>
 
-                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2020-05-18) support via the <c>pretext</c> script is evolving.  Plus, you will need newer versions of Asymptote and the <c>dvisvgm</c> utility to duplicate all of the results being displayed here in this testing document.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone" text="type-global"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/" visual="asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url>.</p>
+                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2020-05-18) support via the <c>pretext</c> script is evolving.  Plus, you will need newer versions of Asymptote and the <c>dvisvgm</c> utility to duplicate all of the results being displayed here in this testing document.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/" visual="asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url>.</p>
 
                 <figure xml:id="figure-asymptote-workcone">
                     <caption>Work Cone (Asymptote Interactive 3D Image)</caption>
@@ -4597,7 +4598,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
 
                 <p>Mermaid has two layout engines<mdash/>the default and <c>elk</c>. The ELK engine often does a better job with complex diagrams. You can specify it as a default by setting the publisher variable <tag
-                  >common/mermaid/@layout-engine</tag> to <c>"elk"</c>, or specify it in a single diagram by using standard Mermaid config frontmatter as shown in <xref ref="figure-mermaid-elk-layout"/> below.</p>
+                  >common/mermaid/@layout-engine</tag> to <c>"elk"</c>, or specify it in a single diagram by using standard Mermaid config frontmatter as shown in <xref ref="figure-mermaid-elk-layout" text="global"/> below.</p>
 
                 <figure xml:id="figure-mermaid-elk-layout">
                     <caption>Mermaid Class Diagram using ELK layout engine</caption>
@@ -4656,7 +4657,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </image>
                 </figure>
 
-                <p>Pay careful attention to the requirement that the last line of your code be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing, it evaluates to Python's <c>None</c> object and that is just what you will get.  The code for Figure<nbsp/><xref ref="figure-sage-double-plot"/> illustrates creating two graphics objects and combining them into an expression on the last line that evaluates to a graphics object.</p>
+                <p>Pay careful attention to the requirement that the last line of your code be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing, it evaluates to Python's <c>None</c> object and that is just what you will get.  The code for <xref ref="figure-sage-double-plot"/> illustrates creating two graphics objects and combining them into an expression on the last line that evaluates to a graphics object.</p>
 
                 <figure xml:id="figure-sage-double-plot">
                     <caption>Two Sage plots on one set of axes</caption>
@@ -4688,7 +4689,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </image>
                 </figure>
 
-                <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html" visual="www.sagemath.org/tour-graphics.html">Sage Tour</url>.  We package them into a <c>sidebyside</c> layout element, see <xref ref="section-side-by-side" text="type-global"/>.</p>
+                <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html" visual="www.sagemath.org/tour-graphics.html">Sage Tour</url>.  We package them into a <c>sidebyside</c> layout element, see <xref ref="section-side-by-side"/>.</p>
 
                 <sidebyside width="40%" margins="auto">
                     <!-- Tour example modified: figsize moved from show() into plot() -->
@@ -4783,7 +4784,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>A caption could be as substantial as a paragraph, here we test out one such example.</p>
 
                 <figure xml:id="figure-long-caption">
-                    <caption>A caption can be a whole paragraph with lots of technical details, and maybe a hyperlink to something external, such as <url href="https://pretextbook.org" visual="pretextbook.org"/> or <url href="https://pretextbook.org" visual="pretextbook.org"><pretext/></url>.  There could be some inline mathematics, such as <m>x^2 + y^2 = c^2</m>.  Would a knowl open here?  Recursively?  Let's see: <xref ref="figure-long-caption"/>.  Display mathematics, side-by-sides, theorems, and lots of other things should be banned.  Footnotes sound like a bad idea.  Strange characters should be fine: <section-mark/>.</caption>
+                    <caption>A caption can be a whole paragraph with lots of technical details, and maybe a hyperlink to something external, such as <url href="https://pretextbook.org" visual="pretextbook.org"/> or <url href="https://pretextbook.org" visual="pretextbook.org"><pretext/></url>.  There could be some inline mathematics, such as <m>x^2 + y^2 = c^2</m>.  Would a knowl open here?  Recursively?  Let's see: <xref ref="figure-long-caption" text="global"/>.  Display mathematics, side-by-sides, theorems, and lots of other things should be banned.  Footnotes sound like a bad idea.  Strange characters should be fine: <section-mark/>.</caption>
 
                     <image source="images/cross-square.png" width="20%"/>
                 </figure>
@@ -4794,7 +4795,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>We strongly suggest placing images within a <tag>figure</tag>, as we have done above, so that you can reference them, and use the (required) <tag>caption</tag> to explain what they are.  However there are places, such as a <tag>preface</tag>, where numbered items are not permitted.  So you might want a solo image there.  Or maybe graphics are an illustration of sorts, and a numbered figure feels like overkill.  Or it is part of an <tag>exercise</tag> or <tag>proof</tag> of a <tag>theorem</tag>. But notice that you cannot then use this image as the target of a cross-reference, so you may need to refer to some enclosing container.</p>
 
-                <p>The image can be scaled by specifying the <attr>width</attr> as a percentage, including the percent-sign (%).  The height is scaled to preserve the aspect ratio.  There is no facility to change the height, it is your responsibility to manage the aspect ratio independently.  The <attr>margins</attr> can be given as a pair of percentages, separated by a space.  The <attr>width</attr> defaults to 100%, while <attr>margins</attr> defaults to the value <c>auto</c>, which will center the image.  Missing values are computed sensibly, and there is robust error-checking.  The layout control here is a subset of what is available for the more elaborate <tag>sidebyside</tag> element, see <xref ref="section-side-by-side" text="type-global"/>.</p>
+                <p>The image can be scaled by specifying the <attr>width</attr> as a percentage, including the percent-sign (%).  The height is scaled to preserve the aspect ratio.  There is no facility to change the height, it is your responsibility to manage the aspect ratio independently.  The <attr>margins</attr> can be given as a pair of percentages, separated by a space.  The <attr>width</attr> defaults to 100%, while <attr>margins</attr> defaults to the value <c>auto</c>, which will center the image.  Missing values are computed sensibly, and there is robust error-checking.  The layout control here is a subset of what is available for the more elaborate <tag>sidebyside</tag> element, see <xref ref="section-side-by-side"/>.</p>
 
                 <p>Two simple examples. The first has width <c>10%</c> and so defaults to being centered, and the second has width <c>10%</c> and left margin of <c>25%</c>.</p>
 
@@ -5237,7 +5238,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <exercise>
                     <statement>
-                        <p>One of the few things you can place inside of mathematics is a <q>fill-in</q> blank.<idx><h>fill-in blank</h></idx>  We demonstrate a few scenarios here.  See details on syntax in <xref ref="subsection-paragraph-markup" text="type-global"/><ndash/>the use is identical within mathematics.<ul>
+                        <p>One of the few things you can place inside of mathematics is a <q>fill-in</q> blank.<idx><h>fill-in blank</h></idx>  We demonstrate a few scenarios here.  See details on syntax in <xref ref="subsection-paragraph-markup"/><ndash/>the use is identical within mathematics.<ul>
                             <li><p>Inside inline math (short, space for <m>x</m>): <m>\sin(<fillin fill="x"/>)</m></p></li>
 
                             <li><p>Inside inline math (default, space for <m>XXX</m>): <m>\sin(<fillin/>)</m></p></li>
@@ -5541,7 +5542,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li><p>Level 1, third.</p></li>
                 </ol></p>
 
-                <p>Items in ordered lists (only) may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two"/>.  Level 3, second: <xref ref="list-two-two-two"/>.  Level 4, third: <xref ref="list-two-two-two-three"/>.  Note that if a list item of an ordered list is contained within a list item of an unordered list, then its number will not be defined.</p>
+                <p>Items in ordered lists (only) may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two" text="global"/>.  Level 3, second: <xref ref="list-two-two-two" text="global"/>.  Level 4, third: <xref ref="list-two-two-two-three" text="global"/>.  Note that if a list item of an ordered list is contained within a list item of an unordered list, then its number will not be defined.</p>
 
                 <p>And now a four-level deep unordered list with the default labels supplied by <pretext/> (disc, circle, square, disc).  Again, the defalt order for Markdown/Jupyter (disc, square, circle, circle) is different than for <latex/> and HTML (disc, circle, square, disc)<ul>
                     <li>
@@ -5637,7 +5638,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <li><p>Level 2, second.</p></li>
                         </ul></p>
                     </li>
-                    <li><p>Level 1, third.  With a cross-reference to second list item, <xref ref="list-item-second"/>.</p></li>
+                    <li><p>Level 1, third.  With a cross-reference to second list item, <xref ref="list-item-second" text="global"/>.</p></li>
                     <li><p>Level 1, fourth.  Whose number should not change when the knowl just prior is opened.</p></li>
                 </ol></p>
 
@@ -5908,7 +5909,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Difficult List Items</title>
 
-                <p>In <xref ref="test-second" text="type-global"/> we were careful about lone bits of math inside list items.  The <tag>cd</tag> element is used with indentation, which is likely superfluous inside a list item that is already being indented.  Here we test lone <tag>cd</tag> elements inside of list items in various configurations.</p>
+                <p>In <xref ref="test-second"/> we were careful about lone bits of math inside list items.  The <tag>cd</tag> element is used with indentation, which is likely superfluous inside a list item that is already being indented.  Here we test lone <tag>cd</tag> elements inside of list items in various configurations.</p>
 
                 <p>Unordered list, one-deep.
                     <ul>
@@ -6231,7 +6232,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </list>
 
 
-                 <p>This next list is used for testing cross-references to it.  See <xref ref="section-cross-referencing" text="type-global"/>.</p>
+                 <p>This next list is used for testing cross-references to it.  See <xref ref="section-cross-referencing"/>.</p>
 
                 <list xml:id="list-to-reference">
                     <title>A named list of targets</title>
@@ -6261,7 +6262,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <p>
                                 <ul marker="disc">
                                     <li>The next three cross-references point to a list item, just above.  It is interesting because the list is named, hence numbered.  The global reference uses the full number, while the local reference uses the number from within the list.  The hybrid reference recognizes that the target is within the same named list, so the number can be shorter.  An identical hybrid cross-reference appears within the <tag>introduction</tag> to this list, an immediately following, but outside the <tag>list</tag>.</li>
-                                    <li>Cross-reference within named list (<c>global</c>): <xref ref="target-item" text="type-global"/></li>
+                                    <li>Cross-reference within named list (<c>global</c>): <xref ref="target-item"/></li>
                                     <li>Cross-reference within named list (<c>hybrid</c>): <xref ref="target-item" text="type-hybrid"/></li>
                                     <li>Cross-reference within named list (<c>local</c>): <xref ref="target-item" text="type-local"/></li>
                                     <li>
@@ -6387,7 +6388,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
                 <conclusion>
-                    <p>A small test of cross-references to subsidiary parts of exercises.  Exercise 1, third part: <xref ref="exercise-one-three"/>.  Exercise 1, second part, first refinement: <xref ref="exercise-one-two-one"/>.</p>
+                    <p>A small test of cross-references to subsidiary parts of exercises.  Exercise 1, third part: <xref ref="exercise-one-three" text="global"/>.  Exercise 1, second part, first refinement: <xref ref="exercise-one-two-one" text="global"/>.</p>
                 </conclusion>
 
             </exercises>
@@ -6841,7 +6842,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <cell>
                              <line>I am the Lorax.</line>
                              <line>I speak for the trees.</line>
-                             <line>Self-referential: <xref ref="table-multiline-cells" text="type-global"/></line>
+                             <line>Self-referential: <xref ref="table-multiline-cells"/></line>
                         </cell>
                         <cell>
                              <line>Look at me!</line>
@@ -6932,7 +6933,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </tabular>
             </table>
 
-            <p>And now a <tag>sidebyside</tag> with a <tag>table</tag> and a <tag>tabular</tag> to check that width is scaled appropriately. See <xref ref="section-side-by-side">Section</xref> to learn about <tag>sidebyside</tag>s.</p>
+            <p>And now a <tag>sidebyside</tag> with a <tag>table</tag> and a <tag>tabular</tag> to check that width is scaled appropriately. See <xref ref="section-side-by-side" text="global">Section</xref> to learn about <tag>sidebyside</tag>s.</p>
 
             <figure xml:id="table-consitution-text">
                 <caption>Some text from the US Constitution</caption>
@@ -6959,7 +6960,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </sidebyside>
             </figure>
 
-            <p>Tables are formed in <latex/> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex/>'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex/> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" type="text-global"/>, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  That section says more about making a comprehensive, yet legal, test <init>URL</init>.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.  So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars" text="type-global"/>.)</p>
+            <p>Tables are formed in <latex/> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex/>'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex/> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" type="text-global" text="global"/>, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  That section says more about making a comprehensive, yet legal, test <init>URL</init>.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.  So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars"/>.)</p>
 
             <table xml:id="table-latex-problems">
                 <title>Problematic Table Cells for <latex/></title>
@@ -8516,7 +8517,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </tabular>
             </table>
 
-            <p>This device is not ideal, as some features of tables are not behaving as expected.  More precisely, we switch from the standard <latex/> <c>tabular</c> environment to the <c>longtable</c> environment from the package of the same name when table-breaking is requested.  So there may be some undesirable interaction with other packages.  For one, full-width horizontal rules seem to become as wide as the page (rather than as wide as the tabular).  The following table is <xref ref="horizontal-rules-table" text="type-global"/> repeated but as a breakable <tag>tabular</tag>.  The <c>longtable</c> package documentation suggests it accomodates the <c>array</c> package, but it also seems to make a variety of redefinitions.  Furthermore, a panel of a side-by-side cannot be a breakable tabular, or a <latex/> compilation error occurs.</p>
+            <p>This device is not ideal, as some features of tables are not behaving as expected.  More precisely, we switch from the standard <latex/> <c>tabular</c> environment to the <c>longtable</c> environment from the package of the same name when table-breaking is requested.  So there may be some undesirable interaction with other packages.  For one, full-width horizontal rules seem to become as wide as the page (rather than as wide as the tabular).  The following table is <xref ref="horizontal-rules-table"/> repeated but as a breakable <tag>tabular</tag>.  The <c>longtable</c> package documentation suggests it accomodates the <c>array</c> package, but it also seems to make a variety of redefinitions.  Furthermore, a panel of a side-by-side cannot be a breakable tabular, or a <latex/> compilation error occurs.</p>
 
             <table xml:id="horizontal-rules-breakable-table">
                 <title>Horizontal Rules Example</title>
@@ -8617,9 +8618,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <introduction>
                 <!-- First paragraph duplicated in next section -->
-                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex/>/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See <xref ref="section-sage-cells" text="type-global"/> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex/>/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See <xref ref="section-sage-cells"/> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
 
-                <p>Interactives in this section are those for which you provide code you have authored.  Generally, the libraries involved to support this have open licenses, though the player for GeoGebra may be an exception.  Creating these assumes some familiarity with <init>HTML</init> and Javascript.  See <xref ref="section-interactive-server" text="type-global"/> for more interactives that are perhaps simpler to create or use.</p>
+                <p>Interactives in this section are those for which you provide code you have authored.  Generally, the libraries involved to support this have open licenses, though the player for GeoGebra may be an exception.  Creating these assumes some familiarity with <init>HTML</init> and Javascript.  See <xref ref="section-interactive-server"/> for more interactives that are perhaps simpler to create or use.</p>
 
                 <p>(2018-06-22) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
             </introduction>
@@ -8645,7 +8646,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
 
                 <exercise>
-                    <p>The interactive in <xref ref="figure-simple-eigenvector" text="type-global"/> shows a vector <m>\vec{x}</m> in red, and the matrix-vector product <m>A\vec{x}</m> in grey, for a particular <m>2\times 2</m> matrix <m>A</m>.  The four entries of the matrix <m>A</m> are coded into the interactive.  Can you deduce <m>A</m> simply by using the interactive?  Which theorem is the key?</p>
+                    <p>The interactive in <xref ref="figure-simple-eigenvector"/> shows a vector <m>\vec{x}</m> in red, and the matrix-vector product <m>A\vec{x}</m> in grey, for a particular <m>2\times 2</m> matrix <m>A</m>.  The four entries of the matrix <m>A</m> are coded into the interactive.  Can you deduce <m>A</m> simply by using the interactive?  Which theorem is the key?</p>
                 </exercise>
 
                 <figure xml:id="figure-eigenvectors">
@@ -8660,7 +8661,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </figure>
 
-                <p>The next example has ten <tag>slate</tag> elements communicating with each other, and arranged with the layout features of a <tag>sidebyside</tag> (see <xref ref="section-side-by-side" text="type-global"/>).</p>
+                <p>The next example has ten <tag>slate</tag> elements communicating with each other, and arranged with the layout features of a <tag>sidebyside</tag> (see <xref ref="section-side-by-side"/>).</p>
 
                 <figure xml:id="figure-animation">
                     <caption>Affine Transformations</caption>
@@ -8704,7 +8705,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <cline>xmlns="http://www.w3.org/1999/xhtml"</cline>
                     </cd>This will identify <em>all</em> of the elements within the <tag>slate</tag> as <init>HTML</init> elements and not as <pretext/> elements.  The danger is that elements with the same name in both languages, such as <tag>li</tag> and <tag>table</tag>, will be mis-identified.  This could be harmless, but could also create chaos, such as disrupting numbering of <pretext/> elements.</p>
 
-                    <p>See the source code of this document for examples:  <xref ref="figure-animation" text="type-global"/> <xref ref="figure-interactive-slopes" text="type-global"/>, <xref ref="figure-piecewise" text="type-global"/>.</p>
+                    <p>See the source code of this document for examples:  <xref ref="figure-animation"/> <xref ref="figure-interactive-slopes"/>, <xref ref="figure-piecewise"/>.</p>
 
                     <p>Note that the <init>HTML</init> that is output can vary slightly from your source in small, harmless ways, such as empty (self-closing) elements being output with both an opening and a closing tag.  Please report any significant discrepancies.  Soon this requirement will be enforced in the code.</p>
                 </warning>
@@ -8844,7 +8845,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection xml:id="svg-interactives">
                 <title>SVG</title>
 
-                <p>Entirely similar to using an HTML5 <c>canvas</c> element (<xref ref="interactive-html5-canvas"/>), it is possible to control an <init>SVG</init> element with Javascript.  This example is from Mark McClure.</p>
+                <p>Entirely similar to using an HTML5 <c>canvas</c> element (<xref ref="interactive-html5-canvas" text="global"/>), it is possible to control an <init>SVG</init> element with Javascript.  This example is from Mark McClure.</p>
 
                 <p>Look carefully at the source and rendering of this example as <init>HTML</init>.  The functions to choose from via radio buttons, and the change in <m>x</m>, denoted later as <m>h</m>, are being rendered as mathematics by the Javascript MathJax library.  However, this cannot be accomplished with simply <c>$...$</c> nor by simply <c>\(...\)</c>, but instead by using the <c>\(...\)</c> and then also wrapping that in a <tag>span</tag> element with a <attr>class</attr> attribute set to <c>process-math</c>. (The latter is how we instruct MathJax as to which parts of a page to process, or not).  So to have MathJax render a nice <m>x^2</m> in this context (math inside <init>HTML</init> inside a <tag>slate</tag> inside an <tag>interactive</tag>) would be accomplished with<cd>
                     <cline>&lt;span class="process-math"&gt;x^2&lt;/span&gt;</cline>
@@ -8912,7 +8913,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <exercise>
                     <title>Changing Secant Lines</title>
                     <statement>
-                        <p>When discussing the derivative as a limit, we think of the point of tangency as being fixed (the green point in <xref ref="figure-interactive-slopes"/>) and the <q>other</q> point defining the secant line as changing (the red point in <xref ref="figure-interactive-slopes"/>).  Switch it up!  Fix a large value of <m>h</m> (positive or negative) and then change the point of tangency (the green point).  Discuss what you observe.</p>
+                        <p>When discussing the derivative as a limit, we think of the point of tangency as being fixed (the green point in <xref ref="figure-interactive-slopes" text="global"/>) and the <q>other</q> point defining the secant line as changing (the red point in <xref ref="figure-interactive-slopes" text="global"/>).  Switch it up!  Fix a large value of <m>h</m> (positive or negative) and then change the point of tangency (the green point).  Discuss what you observe.</p>
                     </statement>
                 </exercise>
             </subsection>
@@ -8976,7 +8977,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </figure>
 
-                <p>Here are the two new examples.  They have been included in a <c>sidebyside</c> layout element with equal widths (see <xref ref="section-side-by-side" text="type-global"/>) so they can be placed horizontally across the page.  They are not wrapped as figures, so cannot be cross-referenced.  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">JSXGraph example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
+                <p>Here are the two new examples.  They have been included in a <c>sidebyside</c> layout element with equal widths (see <xref ref="section-side-by-side"/>) so they can be placed horizontally across the page.  They are not wrapped as figures, so cannot be cross-referenced.  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">JSXGraph example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
 
                 <sidebyside widths="40% 40%">
                     <interactive xml:id="interactive-fermats-spiral" platform="jsxgraph" source="code/jsxgraph/fermats-spiral.js">
@@ -9181,7 +9182,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Geogebra</title>
 
-                <p>To embed a GeoGebra applet as-is from GeoGebra's Classroom Resources site (by material ID), see <xref ref="subsection-geogebra-server" text="type-global"/>. To design your own applet (either from scratch, or modifying something that already exists in one of those three forms) you may use one of Geogebra's <q>Apps</q> to embed the material in your document. (But note, use of the App comes with licensing restrictions.) <pretext/> will handle most of the technical details for you.</p>
+                <p>To embed a GeoGebra applet as-is from GeoGebra's Classroom Resources site (by material ID), see <xref ref="subsection-geogebra-server"/>. To design your own applet (either from scratch, or modifying something that already exists in one of those three forms) you may use one of Geogebra's <q>Apps</q> to embed the material in your document. (But note, use of the App comes with licensing restrictions.) <pretext/> will handle most of the technical details for you.</p>
 
                 <p>Do one of the following:<ol>
                     <li>Identify a material ID from GeoGebra's Classroom Resources site. You might even make the material yourself on that site.</li>
@@ -9419,7 +9420,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <cline>var('x,y')</cline>
                     <cline>plot3d(x^2 - y^2, (x,-1,1), (y,-1,1), color="orange", mesh=true)</cline>
                 </cd>
-                News of other computational engines that produce similar graphics will also allow us to further expand this description.  Note that for the case of Sage 3D plots, support for the <tag>sageplot</tag> element makes this even easier.  For example, see <xref ref="figure-sage-implicit-surface"/>.</p>
+                News of other computational engines that produce similar graphics will also allow us to further expand this description.  Note that for the case of Sage 3D plots, support for the <tag>sageplot</tag> element makes this even easier.  For example, see <xref ref="figure-sage-implicit-surface" text="global"/>.</p>
 
                 <p>A button in the lower right allows for several options, one is <c>Save as HTML</c>, which will produce a complete self-contained web page we can recycle.  We save this file with our other externally-created images, in a directory that we choose to name <c>iframe</c><mdash/>you can use another name.  Then we make an <tag>interactive</tag> with an <attr>iframe</attr> attribute that has the filename, starting from <c>iframe/</c> (in other words, do not include the name of your managed directory of external images).</p>
 
@@ -9429,7 +9430,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
                     <!-- preview="preview/threejs-splines.png"  -->
 
-                <p>Note that the downloaded file has links to specific versions of the <c>three.js</c> library, which are beyond our control, and beyond your control.  So there is a future where these images may need updating.  You could put your source code into a (large) comment with your project's source for safe-keeping in the future.  See <xref ref="interactive-iframes-server" text="type-global"/> for the server version.</p>
+                <p>Note that the downloaded file has links to specific versions of the <c>three.js</c> library, which are beyond our control, and beyond your control.  So there is a future where these images may need updating.  You could put your source code into a (large) comment with your project's source for safe-keeping in the future.  See <xref ref="interactive-iframes-server"/> for the server version.</p>
             </subsection>
 
             <subsection xml:id="interactive-threejs">
@@ -9439,10 +9440,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>But it would seem to have become a bit more complicated to embed and our example was not rendering.  As of 2022-08-08, we have removed it.  Of course, you can find it in the git repository, perhaps searching on the date string just mentioned.  It woulld be interesting to see if our <tag>interactive</tag> framework could still support the changes.</p>
 
-                <p>The following two examples are meant to be instructive (<em>only</em>).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes-local" text="type-global"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
+                <p>The following two examples are meant to be instructive (<em>only</em>).  The end result is accomplished in a much more straightforward way be the method in <xref ref="interactive-iframes-local"/>.  We illustrate a way to get a <c>three.js</c> image out of an <init>HTML</init> page as a Javascript file and render it on a <pretext/> <tag>slate</tag>.  We follow the second method in a <url href="https://golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html" visual="golem.ph.utexas.edu/category/2017/12/sagemath_and_3d_models_in_webp.html">blog post from the <m>n</m>-Category Cafe</url>.<ol>
                     <li>Open a Jupyter Notebook that utilizes a Sage kernel.  This can be done easily at <url href="https://cocalc.com" visual="cocalc.com">CoCalc</url> (and for free initially).</li>
 
-                    <li>Sketch a surface using Sage code.  We recycle the suggestion from Juan Carlos Bustamante in <xref ref="interactive-iframes-local" text="type-global"/>:<cd>
+                    <li>Sketch a surface using Sage code.  We recycle the suggestion from Juan Carlos Bustamante in <xref ref="interactive-iframes-local"/>:<cd>
                         <cline>var('x,y')</cline>
                         <cline>plot3d(x^2 - y^2, (x,-1,1), (y,-1,1), color="orange", mesh=true)</cline>
                     </cd></li>
@@ -9597,9 +9598,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <introduction>
                 <!-- First paragraph duplicated in previous section -->
-                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex/>/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See <xref ref="section-sage-cells" text="type-global"/> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex/>/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See <xref ref="section-sage-cells"/> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
 
-                <p>Interactives in this section have code that lives on a server somewhere (in the <q>cloud</q>).  So maybe you uploaded an interactive demonstration, or maybe somebody else did.  In this sense, these are easier to create or use.  But pay attention, the code may come with restrictive licenses, even if you are the author originally.  See <xref ref="section-interactive-authored" text="type-global"/> for more interactives that can be free as in <q>freedom</q> or <foreign xml:lang="fr-FR">liberté</foreign>.  CalcPlot3D is the notable exception here.</p>
+                <p>Interactives in this section have code that lives on a server somewhere (in the <q>cloud</q>).  So maybe you uploaded an interactive demonstration, or maybe somebody else did.  In this sense, these are easier to create or use.  But pay attention, the code may come with restrictive licenses, even if you are the author originally.  See <xref ref="section-interactive-authored"/> for more interactives that can be free as in <q>freedom</q> or <foreign xml:lang="fr-FR">liberté</foreign>.  CalcPlot3D is the notable exception here.</p>
 
                 <p>(2018-06-22) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
             </introduction>
@@ -9657,9 +9658,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>To use it, start at the <url href="https://c3d.libretexts.org/CalcPlot3D/index.html" visual="c3d.libretexts.org/CalcPlot3D/index.html">online app version</url>.  Create a plot and adjust the image to a viewpoint and scale if you like.  Then, click the menu/hamburger icon in the upper-left and choose <c>File</c>.  From here you can save a <init>PNG</init> image for the static version, but you also want to select <c>Encode View in URL</c>.  Now your browser address bar is filled with a query string (<em>all</em> the stuff <em>after</em> the question-mark) that has all the information necessary to reproduce your plot (and view).  Copy everything after the first question-mark to the <c>interactive/code</c> element.  Be sure to replace any ampersands by <c>&amp;amp;</c> (see the Author's Guide for more about certain characters in <init>URL</init>s).  Examine the source for the examples below to see how they are authored.  The <pubtitle>Help Manual</pubtitle> for CalcPlot3D is also available off the menu/hamburger icon in the upper-left.</p>
 
-                <p>In <xref ref="figure-intersecting-planes" text="type-global"/> grab the image with your mouse and rotate it in various directions.  Then while the image has focus, press the <c>3</c> key (short for <q>3-D</q>), to get a 3D view, which will require some red-blue 3D glasses to fully appreciate.  Press the key again to return to a regular view.</p>
+                <p>In <xref ref="figure-intersecting-planes"/> grab the image with your mouse and rotate it in various directions.  Then while the image has focus, press the <c>3</c> key (short for <q>3-D</q>), to get a 3D view, which will require some red-blue 3D glasses to fully appreciate.  Press the key again to return to a regular view.</p>
 
-                <p>When using a version with controls (e.g. <xref ref="figure-wavefunction" text="type-global"/>), or the full application (e.g. <xref ref="figure-calcplot3d" text="type-global"/>), specify an aspect ratio that is wider than it is tall.  Start with <c>aspect="3:2"</c>, and perhaps fine-tune from there.</p>
+                <p>When using a version with controls (e.g. <xref ref="figure-wavefunction"/>), or the full application (e.g. <xref ref="figure-calcplot3d"/>), specify an aspect ratio that is wider than it is tall.  Start with <c>aspect="3:2"</c>, and perhaps fine-tune from there.</p>
 
                 <figure xml:id="figure-intersecting-planes">
                     <caption>Intersection of two planes (minimal embedding)</caption>
@@ -9680,7 +9681,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection xml:id="interactive-iframes-server">
                 <title>IFrames from Servers</title>
 
-                <p>The <c>iFrame</c> versions of interactives can point to a network location, presuming the endpoint is reasonably well-behaved.  If you are using this sytematically, let us know and perhpas it should become a more dedicated <pretext/> construction.  See <xref ref="interactive-iframes-local" text="type-global"/> for the local file version.</p>
+                <p>The <c>iFrame</c> versions of interactives can point to a network location, presuming the endpoint is reasonably well-behaved.  If you are using this sytematically, let us know and perhpas it should become a more dedicated <pretext/> construction.  See <xref ref="interactive-iframes-local"/> for the local file version.</p>
 
                 <p>This example is from <url href="https://phet.colorado.edu/" visual="phet.colorado.edu">PhET Interactive Simulations</url>.</p>
 
@@ -9715,7 +9716,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <interactive xml:id="interactive-layout-desmos" desmos="ttox1bvxku" design-width="300" aspect="300:450"/>
                 </figure>
 
-                <p>What happens if there is not enough space to display the requested frame? That depends on the <attr>resize-behavior</attr> applied to the interactive. The default is <c>fixed-height</c>. In this case, the interactive's height will not change if the window becomes too small to display the full width of the interactive. Instead a horizontal scroll bar will appear. This can be seen in many of the samples in <xref ref="section-interactive-authored" text="type-global"/> and this CircuitJS sample:</p>
+                <p>What happens if there is not enough space to display the requested frame? That depends on the <attr>resize-behavior</attr> applied to the interactive. The default is <c>fixed-height</c>. In this case, the interactive's height will not change if the window becomes too small to display the full width of the interactive. Instead a horizontal scroll bar will appear. This can be seen in many of the samples in <xref ref="section-interactive-authored"/> and this CircuitJS sample:</p>
 
                 <figure>
                     <caption>CircuitJS with <c>resize-behavior="fixed-height"</c></caption>
@@ -9780,7 +9781,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>The vector space of all polynomials with finite degree has a basis, <m>B = \{1,x,x^2,x^3,\dots\}</m>, which is infinte.</p>
                     </feedback>
                     <hint>
-                        <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-FTC"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
+                        <p><m>P_n</m>, the vector space of polynomials with degree at most <m>n</m>, has dimension <m>n+1</m> by <xref ref="theorem-FTC" text="global"/>.  [Cross-reference is just a demo, content is not relevant.]  What happens if we relax the defintion and remove the parameter <m>n</m>?</p>
                     </hint>
                 </exercise>
             </exercises>
@@ -10449,7 +10450,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Video</title>
 
             <introduction>
-                <p>First, a gratuitous reference to Exercise<nbsp/><xref ref="exercises-cosine-derivative"/> about the derivative of a cosine.</p>
+                <p>First, a gratuitous reference to <xref ref="exercises-cosine-derivative"/> about the derivative of a cosine.</p>
 
                 <p>You can specify a video by a filename if you host it as part of your document, or a <init>URL</init> giving a location on the Internet.  There are a few extra features for YouTube and Vimeo videos, which are near the bottom of this page, so look there first if that meets your needs.</p>
             </introduction>
@@ -10568,7 +10569,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <video xml:id="led-zeppelin-kashmir-solo" youtube="hAzdgU_kpGo" width="50%" preview="preview/jimmy-page.jpg"/>
 
-                <p>We can pack two videos side-by-side, with a lot of horizontal control, using two panels in the <c>sidebyside</c> element.  We have simply chosen here to not provide a caption (overall, or separately) as an illustration.  The sizes are purposely a bit odd.  See <xref ref="section-side-by-side" text="type-global"/> for much more on side-by-side panels.  These videos come from the <q>Topic</q> and <q>VEVO</q> areas of YouTube (respectively) and both have start/end times.</p>
+                <p>We can pack two videos side-by-side, with a lot of horizontal control, using two panels in the <c>sidebyside</c> element.  We have simply chosen here to not provide a caption (overall, or separately) as an illustration.  The sizes are purposely a bit odd.  See <xref ref="section-side-by-side"/> for much more on side-by-side panels.  These videos come from the <q>Topic</q> and <q>VEVO</q> areas of YouTube (respectively) and both have start/end times.</p>
 
                 <sidebyside margins="auto" widths="20% 40%" valign="middle">
                     <!-- Liza Minelli -->
@@ -10736,61 +10737,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-cross-referencing" label="section-cross-referencing">
             <title>Cross-Referencing</title>
 
-            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.</p>
+            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>type name</q> part of the cross-reference text, such as <q>Theorem</q> or <q>Section</q>.  You control this document-wide with the <attr>text</attr> attribute of the <tag>cross-references</tag> element in your <tag>docinfo</tag><idx><h>cross-reference</h><h>type name</h></idx>.  The value <c>type-global</c><mdash/>the default, and what this article uses<mdash/>supplies the type name automatically, so there is no need to write it into your source.</p>
 
-            <p>Moreover, the names themselves will change with the use of the one language dependent file.  And another bonus is that with an autoname, you automatically get a <em>non-breaking</em> space between the name and the reference.  The autoname switch makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
+            <p>Moreover, the names themselves will change with the use of the one language-dependent file.  And another bonus is that with an automatic type name, you get a <em>non-breaking</em> space between the name and the reference.  A type name makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
 
-            <p>Here is a reference that has no indication of its type in the source:  <xref ref="theorem-FTC"/>.  So by default you will just see a number that you can click on.  If you use the <c>text="type-global"</c> switch then you should see <q>Theorem</q> prepended.  Note that if you changed the theorem to a lemma, then that change would be reflected here automatically when autonaming is in effect.</p>
+            <p>Here is a reference that suppresses its type with <c>text="global"</c>:  <xref ref="theorem-FTC" text="global"/>.  So you will just see a number that you can click on.  Using <c>text="type-global"</c><mdash/>or simply accepting the document default<mdash/>you would instead see <q>Theorem</q> prepended.  Note that if you changed the theorem to a lemma, then that change would be reflected here automatically.</p>
 
-            <p>If you set the autonaming behavior globally, or accept the default behavior, there will still be instances where you want to override that choice.  Simple: just say <c>text="type-global"</c> or <c>text="global"</c> as part of the <c>xref</c>.  Each example below should look the same each time this article is processed, no matter how the global <c>autoname</c> is set.<ul>
+            <p>Whatever document-wide default you set with <tag>cross-references</tag>, there will still be instances where you want to override that choice.  Simple: just say <c>text="type-global"</c> or <c>text="global"</c> as part of the <tag>xref</tag>.  Each example below should look the same each time this article is processed, no matter the document-wide <tag>cross-references</tag> setting.<ul>
                 <li><p>No name ever: <xref ref="corollary-FTC-derivative" text="global"/></p></li>
                 <li><p>Always named: <xref ref="corollary-FTC-derivative" text="type-global"/></p></li>
             </ul></p>
 
             <p>You might also wish to provide a prefix to a cross-reference and have it incorporated into the text of what you would click on in an electronic version.  So if you make an <c>xref</c> with some content, then that content will prefix the cross-reference within the clickable/pokeable text and be attached with a non-breaking space.  This <c>xref</c> content totally overrides any prefix that might happen otherwise.  So the name of an item (<eg/> <q>corollary</q>) could be replaced, and if you make a cross-reference with custom text, that will be the clickable also.  An example:<ul>
-                <li><p>A grand result: <xref ref="corollary-FTC-derivative">Major Corollary</xref></p></li>
+                <li><p>A grand result: <xref ref="corollary-FTC-derivative" text="global">Major Corollary</xref></p></li>
                 <li><p>A grand result: <xref ref="corollary-FTC-derivative" text="custom">a nice corollary</xref></p></li>
             </ul></p>
 
-            <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override the first <c>Theorem</c> by providing the content <c>Theorems</c> on the first <c>xref</c> and <c>text="global"</c> on the second <c>xref</c>.  (With global autonaming off, you will also get what you want/expect.)   Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing">Sections</xref> and <xref ref="section-internationalization" text="global"/>.  (But notice that it is up to you to be certain the types of these targets do not change without you changing the content of the first <c>xref</c>.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
+            <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With type names shown (the default), you can override the first <c>Theorem</c> by providing the content <c>Theorems</c> on the first <c>xref</c> and <c>text="global"</c> on the second <c>xref</c>.  (With type names suppressed, you will also get what you want/expect.)   Here is the test, which should look correct no matter the document-wide setting:  <xref ref="section-cross-referencing" text="global">Sections</xref> and <xref ref="section-internationalization" text="global"/>.  (But notice that it is up to you to be certain the types of these targets do not change without you changing the content of the first <c>xref</c>.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
 
             <p>If you set the value of <attr>text</attr> to <c>title</c>, then the title you assigned to the theorem will be used as the link for a cross-reference.  Here is a the final example, which refers to a fundamental theorem by name <xref ref="theorem-FTC" text="title"/>.</p>
 
-            <p>Cross-references to exercises with hard-coded numbers should respect the supplied number.  Exercise<nbsp/><xref ref="exercise-with-hardcoded-number"/> should reference problem 42a.</p>
+            <p>Cross-references to exercises with hard-coded numbers should respect the supplied number.  <xref ref="exercise-with-hardcoded-number"/> should reference problem 42a.</p>
 
             <p>Here we form a list to test pointing at various structures.  Each of the following should open a knowl in the HTML version, otherwise it will be a traditional hyperlink (if possible).  Note that if a knowl opens, there will always be an <q>in-context</q> link which will take you to the actual location, should you have  wished instead to just go there.<ul>
-                <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat"/>.</p></li>
-                <li><p>Citations: Judson's AATA with annotation at <xref ref="biblio-judson-AATA"/></p></li>
-                <li><p>Citations: Judson's AATA with autoname that should have zero effect <xref ref="biblio-judson-AATA" text="type-global"/></p></li>
-                <li><p>Citations: In a <tag>references</tag> division inside an appendix <xref ref="biblio-strang-article-uno"/></p></li>
-                <li><p>Note: just the annotation of previous citation at <xref ref="note-judson-AATA"/></p></li>
-                <li><p>Examples: Mystery derivative at <xref ref="example-mysterious"/>, or a question at <xref ref="sample-question"/>.</p></li>
-                <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle"/>.</p></li>
-                <li><p>A numbered Note: <xref ref="note-remark"/></p></li>
+                <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" text="global"/>.</p></li>
+                <li><p>Citations: Judson's AATA with annotation at <xref ref="biblio-judson-AATA" text="global"/></p></li>
+                <li><p>Citations: Judson's AATA with a type name, which has zero effect <xref ref="biblio-judson-AATA" text="type-global"/></p></li>
+                <li><p>Citations: In a <tag>references</tag> division inside an appendix <xref ref="biblio-strang-article-uno" text="global"/></p></li>
+                <li><p>Note: just the annotation of previous citation at <xref ref="note-judson-AATA" text="global"/></p></li>
+                <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" text="global"/>, or a question at <xref ref="sample-question" text="global"/>.</p></li>
+                <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" text="global"/>.</p></li>
+                <li><p>A numbered Note: <xref ref="note-remark" text="global"/></p></li>
                 <li><p>A link to a <c>proposition</c> element, while this document has globally renamed <c>proposition</c>s as <q>Conundrum</q>s, so this link should use the new name: <xref ref="proposition-as-conundrum" text="type-global"/></p></li>
-                <li><p>Theorems: Fundamental Theorem of Calculus, with proof at <xref ref="theorem-FTC"/></p></li>
-                <li><p>Proof: of second version of FTC at <xref ref="proof-FTC-corollary"/></p></li>
-                <li><p>Figures: A plot with a derivative at <xref ref="figure-function-derivative"/>.</p></li>
-                <li><p>A Figure within a side-by-side panel, with its own number: <xref ref="another-regular-figure"/></p></li>
-                <li><p>A Table within a side-by-side panel, with a subnumber: <xref ref="table-sidebyside-subtable"/></p></li>
-                <li><p>A Figure, containing a side-by-side with two sub-captioned images: <xref ref="fig-sidebyside-global"/></p></li>
-                <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC"/>.  Then with an autoname: <xref ref="equation-alternate-FTC" text="type-global"/>.</p></li>
-                <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC"/>.  Then with an autoname: <xref ref="equation-use-FTC" text="type-global"/>.  And two, with a plural form: <xref ref="equation-alternate-FTC">Equations</xref> and <xref ref="equation-use-FTC" text="global"/>.</p></li>
+                <li><p>Theorems: Fundamental Theorem of Calculus, with proof at <xref ref="theorem-FTC" text="global"/></p></li>
+                <li><p>Proof: of second version of FTC at <xref ref="proof-FTC-corollary" text="global"/></p></li>
+                <li><p>Figures: A plot with a derivative at <xref ref="figure-function-derivative" text="global"/>.</p></li>
+                <li><p>A Figure within a side-by-side panel, with its own number: <xref ref="another-regular-figure" text="global"/></p></li>
+                <li><p>A Table within a side-by-side panel, with a subnumber: <xref ref="table-sidebyside-subtable" text="global"/></p></li>
+                <li><p>A Figure, containing a side-by-side with two sub-captioned images: <xref ref="fig-sidebyside-global" text="global"/></p></li>
+                <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" text="global"/>.  Then with a type name: <xref ref="equation-alternate-FTC" text="type-global"/>.</p></li>
+                <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" text="global"/>.  Then with a type name: <xref ref="equation-use-FTC" text="type-global"/>.  And two, with a plural form: <xref ref="equation-alternate-FTC" text="global">Equations</xref> and <xref ref="equation-use-FTC" text="global"/>.</p></li>
                 <li><p>You can cross-reference <xref ref="equation-use-FTC" text="custom">The Fundamental Theorem of Calculus</xref> via custom text of your choice.</p></li>
-                <li><p>Display mathematics: an equation with  <q>local</q> tag, which should not be used so very far away: <xref ref="equation-local-star"/>.</p></li>
+                <li><p>Display mathematics: an equation with  <q>local</q> tag, which should not be used so very far away: <xref ref="equation-local-star" text="global"/>.</p></li>
                 <li><p>You can author a cross-reference to a displayed equation with no number, but it will not be very satisfying.  You should get a warning if you try.</p></li>
-                <li><p>Exercises (divisional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
-                <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay"/></p></li>
+                <li><p>Exercises (divisional), a range, with plural form provided to override the type name: <xref first="exercises-null-problem" last="exercises-cosine-derivative" text="global">Exercises</xref>.</p></li>
+                <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay" text="global"/></p></li>
                 <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" text="type-global"/></p></li>
-                <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" text="type-global"/></p></li>
+                <li><p>Solution: A portion of an exercise, with its type name: <xref ref="solution-antiderivative" text="type-global"/></p></li>
                 <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" text="type-global"/> <xref ref="exercise-complicated-first-answer" text="type-global"/></p></li>
-                <li><p>A subsidary part of an exercise: <xref ref="exercise-one-two-one"/></p></li>
+                <li><p>A subsidary part of an exercise: <xref ref="exercise-one-two-one" text="global"/></p></li>
                 <li><p>
                        <idx><h>knowl</h><h>nested</h></idx>
                    Three cross-references to individual exercises, but due to their location, they should have different <q>type names</q> in the cross-reference: in an <tag>exercises</tag> division, <xref ref="duplicate-divisional"  text="type-global"/>; in the narrative, <xref ref="exercise-essay"  text="type-global"/>; and in a <tag>worksheet</tag>, <xref ref="exercise-vector-addition"  text="type-global"/>.</p></li>
                 <li><p>An item buried in nested ordered lists: <xref ref="list-two-two-two-three" text="type-global"/></p></li>
-                <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two"/>, <xref ref="list-two-two-two" text="type-global"/></p></li>
-                <li><p>A titled list: <xref ref="list-colors-rainbow"/></p></li>
+                <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" text="global"/>, <xref ref="list-two-two-two" text="type-global"/></p></li>
+                <li><p>A titled list: <xref ref="list-colors-rainbow" text="global"/></p></li>
                 <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" text="type-global"/></p></li>
                 <li><p>Second color in rainbow list, but now as a local reference: <xref ref="rainbow-orange" text="type-local"/></p></li>
                 <li><p>An item in ordered list, but contained in an unordered list, hence without a number, so a cross-reference by number would be ambiguous.  So we use a cross-reference which relies on custom text: <xref ref="target-no-number" text="custom">No Number List Item</xref></p></li>
@@ -10802,13 +10803,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>A case within the proof of <xref ref="claim-with-cases" text="type-global"/>: <xref ref="inductive-step" text="title"/></p></li>
                 <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" text="title"/></p></li>
                 <li><p>A cross-reference to an aside, by title necessarily, and with some formatting in the title: <xref ref="an-aside" text="title"/></p></li>
-                <li><p>A cross-reference to an <c>objectives</c> block, with an autoname.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" text="type-global"/></p></li>
-                <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" text="type-global"/></p></li>
+                <li><p>A cross-reference to an <c>objectives</c> block, with a type name.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" text="type-global"/></p></li>
+                <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via a type name: <xref ref="objective-structure" text="type-global"/></p></li>
                 <li><p>A cross-reference to the top-level element (<eg/><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives" text="custom">ToC or Title</xref></p></li>
                 <li><p><q>Cross-references inside quotations previously lost track of their target, so this tests correcting that, not so much the cross-reference itself: <xref ref="theorem-FTC" text="type-global"/></q></p></li>
-                <li><p>An activity with full details following: <xref ref="activity-with-hint-answer-solution"/></p></li>
-                <li><p>A <c>type-global</c> cross-reference to a second-level <c>task</c> within a project: <xref ref="project-task-level-two" text="type-global"/>, the encompassing <c>project</c>: <xref ref="project-structured"/>, and a <c>local</c> reference <xref ref="project-task-level-two" text="local"/>.</p></li>
-                <li><p>A subcaptioned named list: <xref ref="color-list-as-panel"/></p></li>
+                <li><p>An activity with full details following: <xref ref="activity-with-hint-answer-solution" text="global"/></p></li>
+                <li><p>A <c>type-global</c> cross-reference to a second-level <c>task</c> within a project: <xref ref="project-task-level-two" text="type-global"/>, the encompassing <c>project</c>: <xref ref="project-structured" text="global"/>, and a <c>local</c> reference <xref ref="project-task-level-two" text="local"/>.</p></li>
+                <li><p>A subcaptioned named list: <xref ref="color-list-as-panel" text="global"/></p></li>
                 <li><p>This opens a knowl for an <c>example</c>.  It has a solution, which is orginally presented as a hidden knowl.  But since this version is a duplicate, the knowl for the solution is a file version, not an embedded version, and hence free from duplicating any unique identifaction like an <init>HTML</init> id.  So we test its styling and function here: <xref ref="example-structured" text="type-global"/></p></li>
                 <li><p>A cross-reference to a poem, where we need to use a title for the link text, since a <c>poem</c> is not numbered: <xref ref="poem-light-brigade" text="title"/></p></li>
                 <li><p>A cross-reference to a <tag>references</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="references-section" text="type-global"/>.  And a cross-reference to a <tag>references</tag> division, which is the <q>main</q> bibliography in the back matter, and so is not numbered where born, nor in a cross-reference (which we must accomplish via it's title): <xref ref="references-backmatter" text="title"/>.</p></li>
@@ -10824,30 +10825,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- <li><p>: <xref ref="" text=""/></p></li> -->
             </ul></p>
 
-            <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" text="type-global"/>.</p>
+            <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is a type-named link to a subsubsection:  <xref ref="subsubsection-different-integrals" text="type-global"/>.</p>
 
-            <p>Cross-references can be built into display mathematics, but they can only point to one item (<ie/> a comma-delimited list of targets is not supported).  Examples below should test the distinction in HTML output between a link that opens a knowl and a link that jumps to a larger chunk of content.  Notice that display mathematics is entirely <latex/> syntax, no matter which output format you create.  So if you do not use the <c>autoname</c> facility, you need to wrap non-math text in <c>\text{}</c> and perhaps use a tilde (<c>~</c>) as a non-breaking space (examine the source of this article).</p>
+            <p>Cross-references can be built into display mathematics, but they can only point to one item (<ie/> a comma-delimited list of targets is not supported).  Examples below should test the distinction in HTML output between a link that opens a knowl and a link that jumps to a larger chunk of content.  Notice that display mathematics is entirely <latex/> syntax, no matter which output format you create.  So if you do not use the automatic type name, you need to wrap non-math text in <c>\text{}</c> and perhaps use a tilde (<c>~</c>) as a non-breaking space (examine the source of this article).</p>
 
             <p><md>
                 <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="theorem-FTC" text="type-global"/></mrow>
-                <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;\text{Section}~<xref ref="section-fundamental-theorem"/></mrow>
+                <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;\text{Section}~<xref ref="section-fundamental-theorem" text="global"/></mrow>
             </md><idx><h>bug</h><h>in-context broken</h></idx></p>
 
-            <p>Variations on the above include multiple <c>xml:id</c> as the value of a single <c>ref</c> attribute on an <c>xref</c>, in the form of a comma-separated list.  In this case, only the numbers are links/knowls and the autonaming attribute is based on the type of the first <c>ref</c>.  Wrapping with brackets (citations) or parentheses (equations) is also controlled by the type of the first <c>ref</c>.  And the <c>detail</c> attribute for a bibliographic reference is silently ignored.  So you can do silly things like have a reference to a theorem within a list of equation numbers and there will be no error message.  Handle with care.  Spaces after commas in the list will migrate to the output as spaces, so if you don't have any, you won't get any.<ul>
+            <p>Variations on the above include multiple <c>xml:id</c> as the value of a single <c>ref</c> attribute on an <c>xref</c>, in the form of a comma-separated list.  In this case, only the numbers are links/knowls and the type name is based on the type of the first <c>ref</c>.  Wrapping with brackets (citations) or parentheses (equations) is also controlled by the type of the first <c>ref</c>.  And the <c>detail</c> attribute for a bibliographic reference is silently ignored.  So you can do silly things like have a reference to a theorem within a list of equation numbers and there will be no error message.  Handle with care.  Spaces after commas in the list will migrate to the output as spaces, so if you don't have any, you won't get any.<ul>
                 <!-- NB: a knowl for "theorem-number-02" will *only* be created if this list is decomposed -->
                 <!-- properly, so do not remove, and certainly do not cross-reference it elsewhere         -->
-                <li><p>Four theorems, with spaces, autonamed: <xref ref="theorem-FTC, theorem-number-01, theorem-number-02, theorem-number-03" text="type-global"/></p></li>
-                <li><p>Two equations, no spaces, autonamed: <xref ref="equation-alternate-FTC,equation-use-FTC" text="type-global"/></p></li>
-                <li><p>Two bibliographic items, no autoname: <xref ref="biblio-judson-AATA, biblio-lay-article"/></p></li>
+                <li><p>Four theorems, with spaces, with type names: <xref ref="theorem-FTC, theorem-number-01, theorem-number-02, theorem-number-03" text="type-global"/></p></li>
+                <li><p>Two equations, no spaces, with type names: <xref ref="equation-alternate-FTC,equation-use-FTC" text="type-global"/></p></li>
+                <li><p>Two bibliographic items, no type name: <xref ref="biblio-judson-AATA, biblio-lay-article" text="global"/></p></li>
                 <!-- <li><p>: <xref ref=""/></p></li> -->
             </ul></p>
 
-            <p>If you have a long list of items (such as homework exercises, not in an <c>exercisegroup</c>, or perhaps several chapters), you can get a cross-reference that prints as a range by using <c>xref</c> with two attributes <c>first</c> and <c>last</c>, which may contain a single <c>xml:id</c> each.  As with multiple references, <c>first</c> will control autonaming and other features.<ul>
-                <li><p>A range of exercises, autonamed (this range appears <q>out-of-order</q> since the two <c>exercise</c> are numbered under two different schemes): <xref first="exercise-essay" last="exercise-test-number" text="type-global"/></p></li>
-                <li><p>A range of equations: <xref first="equation-use-FTC" last="equation-conclude"/></p></li>
-                <li><p>A system of equations, given as range from first to last: <xref first="equation-system-begin" last="equation-system-end"/></p></li>
-                <li><p>A range of sections, hand-named to be plural: Sections<nbsp/><xref first="section-sage-cells" last="section-cross-referencing"/></p></li>
-                <li><p>A range of bibliographic items: <xref first="biblio-judson-AATA" last="biblio-lay-article"/></p></li>
+            <p>If you have a long list of items (such as homework exercises, not in an <c>exercisegroup</c>, or perhaps several chapters), you can get a cross-reference that prints as a range by using <c>xref</c> with two attributes <c>first</c> and <c>last</c>, which may contain a single <c>xml:id</c> each.  As with multiple references, <c>first</c> will control the type name and other features.<ul>
+                <li><p>A range of exercises, with type names (this range appears <q>out-of-order</q> since the two <c>exercise</c> are numbered under two different schemes): <xref first="exercise-essay" last="exercise-test-number" text="type-global"/></p></li>
+                <li><p>A range of equations: <xref first="equation-use-FTC" last="equation-conclude" text="global"/></p></li>
+                <li><p>A system of equations, given as range from first to last: <xref first="equation-system-begin" last="equation-system-end" text="global"/></p></li>
+                <li><p>A range of sections, hand-named to be plural: Sections<nbsp/><xref first="section-sage-cells" last="section-cross-referencing" text="global"/></p></li>
+                <li><p>A range of bibliographic items: <xref first="biblio-judson-AATA" last="biblio-lay-article" text="global"/></p></li>
                 <!-- <li><p>: <xref ref=""/></p></li> -->
             </ul></p>
 
@@ -10897,7 +10898,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </p>
             </figure>
 
-            <p>Now we have two xref's to that same target that has a runestone component. Only the first one clicked should try to render the runestone.<xref ref="program-activecode-python"/><xref ref="program-activecode-python"/></p>
+            <p>Now we have two xref's to that same target that has a runestone component. Only the first one clicked should try to render the runestone.<xref ref="program-activecode-python" text="global"/><xref ref="program-activecode-python" text="global"/></p>
         </section>
 
         <section xml:id="section-internationalization" label="section-internationalization">
@@ -11194,7 +11195,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>The <c>pre</c> element surrounds text that should be preserved verbatim.  It is like a special kind of paragraph, and can be used almost everywhere that a paragraph can be used.   The realization of preformatted text should be robust enough that it can be cut from documents and pasted without any substitutions of <q>fancier</q> Unicode characters for generic ASCII characters.  Try the <q>minus</q> sign on the <m>48</m> above to see if it does not become a dash, or the single quotes on the Sage variables.</p>
 
-            <p>For Sage input code, the first non-whitespace character sets the left margin, since legitimate Python code has no subsequent lines outdented.  For pre-formatted code, the line with the <em>least</em> whitespace leading the line will determine the left margin.  If preserving indentation is important, do not mix spaces and tabs.  For syntax highlighting of text representing computer programs, or parts of them, see Section<nbsp/><xref ref="section-programs"/>.  Examine the source of the following example to help understand this paragraph.</p>
+            <p>For Sage input code, the first non-whitespace character sets the left margin, since legitimate Python code has no subsequent lines outdented.  For pre-formatted code, the line with the <em>least</em> whitespace leading the line will determine the left margin.  If preserving indentation is important, do not mix spaces and tabs.  For syntax highlighting of text representing computer programs, or parts of them, see <xref ref="section-programs"/>.  Examine the source of the following example to help understand this paragraph.</p>
 
             <pre>
             A normal line
@@ -11241,7 +11242,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-programs" label="section-programs">
             <title>Program Listings (with <c>code</c> in the title)</title>
 
-            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt or Brython (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at Section<nbsp/><xref ref="section-sage-cells"/>.</p>
+            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt or Brython (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at <xref ref="section-sage-cells"/>.</p>
 
             <p>In the meantime, program listings,<idx><h>listing</h></idx><idx><h>program listing</h></idx> especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.  Note in the source that the entire block of code is wrapped in a CDATA section due to the four left angle brackets.  We do not recommend this technique for isolated problem characters, but it is a life-saver for situations like the <init>XSLT</init> code just following.</p>
 
@@ -11314,7 +11315,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Note that the above examples all have slightly different widths (theser are very evident in print with the frames).  As 2-D atomic objects, to place them in the narrative requires the layout features of a <c>sidebyside</c> element.  Then <c>width</c> and/or <c>margin</c> attributes will influence the width of the panel.</p>
 
-            <p>A <c>program</c> may also be nested inside a <c>listing</c>, which behaves similar to a <c>figure</c>.  You can provide a <c>title</c>, and the listing will be numbered along with tables and figures.  This then makes it possible to cross-reference the listing, such as <xref ref="listing-c-hello" text="type-global" />.  It also removes the requirement of wrapping the <c>program</c> in a <c>sidebyside</c>.  For technical reasons, the three examples above will not split across a page break in PDF output, but the placement inside a <c>listing</c> will allow splits, as you should see in at least one example following.</p>
+            <p>A <c>program</c> may also be nested inside a <c>listing</c>, which behaves similar to a <c>figure</c>.  You can provide a <c>title</c>, and the listing will be numbered along with tables and figures.  This then makes it possible to cross-reference the listing, such as <xref ref="listing-c-hello" />.  It also removes the requirement of wrapping the <c>program</c> in a <c>sidebyside</c>.  For technical reasons, the three examples above will not split across a page break in PDF output, but the placement inside a <c>listing</c> will allow splits, as you should see in at least one example following.</p>
 
             <listing xml:id="listing-c-hello">
                 <title>C Version of <q>Hello, World!</q></title>
@@ -11745,9 +11746,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Figures with Numbers Side-By-Side</title>
 
-                <p>Figures, or other captioned items such as tables or listings, can be placed side-by-side using the <c>sidebyside</c> element.  The figures will be captioned and numbered as if they were part of the vertical flow of the document.  For example, see <xref ref="regular-figure" text="type-global"/> and <xref ref="another-regular-figure" text="type-global"/></p>
+                <p>Figures, or other captioned items such as tables or listings, can be placed side-by-side using the <c>sidebyside</c> element.  The figures will be captioned and numbered as if they were part of the vertical flow of the document.  For example, see <xref ref="regular-figure"/> and <xref ref="another-regular-figure"/></p>
 
-                <p>However, if the <tag>sidebyside</tag> is placed inside another <tag>figure</tag>, then the outer figure gets an overall caption and a <q>regular</q> number, while the captions of the interior items will be labelled as (a), (b), (c), etc; for example, see the subfigures in <xref ref="fig-sidebyside-global" text="type-global"/>. You can also cross-reference the subfigures individually, for example: <xref ref="fig-sidebyside-subfigure" text="type-global"/>.</p>
+                <p>However, if the <tag>sidebyside</tag> is placed inside another <tag>figure</tag>, then the outer figure gets an overall caption and a <q>regular</q> number, while the captions of the interior items will be labelled as (a), (b), (c), etc; for example, see the subfigures in <xref ref="fig-sidebyside-global"/>. You can also cross-reference the subfigures individually, for example: <xref ref="fig-sidebyside-subfigure"/>.</p>
 
                 <p>The <c>sidebyside</c> tag can have an attribute <c>widths</c> that specifies a percentage width of the page for each panel of the layout.  There are automatic margins by default, and any remaining width is divided evenly to space out the panels.  When the <c>margins</c> attribute is given as <c>auto</c>, or in the default case, the margins provided each equal half of the inter-panel space.</p>
 
@@ -11838,7 +11839,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>If you want an overall caption to a group of images, but no sub-captions on your images, that is also straightforward.  This example has no attributes specified.  The overall <tag>figure</tag> may be cross-referenced, as <xref ref="figure-double-image" text="type-global"/></p>
+                <p>If you want an overall caption to a group of images, but no sub-captions on your images, that is also straightforward.  This example has no attributes specified.  The overall <tag>figure</tag> may be cross-referenced, as <xref ref="figure-double-image"/></p>
 
                 <figure xml:id="figure-double-image">
                     <caption>Two equally-spaced (identical) images</caption>
@@ -11933,7 +11934,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Text Next to Text and Images</title>
 
-                <p>Text can be put next to other blocks of text using the <c>stack</c> element, which can contain multiple paragraphs using the <c>p</c> element (see <xref ref="stacking-side-by-side" text="type-global"/>).  If only one paragraph is required, simply use the <c>p</c> element on its own.</p>
+                <p>Text can be put next to other blocks of text using the <c>stack</c> element, which can contain multiple paragraphs using the <c>p</c> element (see <xref ref="stacking-side-by-side"/>).  If only one paragraph is required, simply use the <c>p</c> element on its own.</p>
 
                 <sidebyside widths="20% 20% 20% 20%" valigns="middle top middle top">
                     <stack>
@@ -11951,14 +11952,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Similarly, text can be put next to images.</p>
 
                 <sidebyside widths="50% 20%" valigns="middle top">
-                    <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text cross reference: <xref ref="text-next-to-figure" text="type-global"/> and math: <m>x^2</m></p>
+                    <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text cross reference: <xref ref="text-next-to-figure"/> and math: <m>x^2</m></p>
                     <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>You can place text next to numbered figures, as shown below in <xref ref="text-next-to-figure" text="type-global"/>.</p>
+                <p>You can place text next to numbered figures, as shown below in <xref ref="text-next-to-figure"/>.</p>
 
                 <sidebyside widths="50% 20%" valigns="middle top">
-                    <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text; cross reference: <xref ref="text-next-to-figure" text="type-global"/> and math: <m>x^2</m></p>
+                    <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text; cross reference: <xref ref="text-next-to-figure"/> and math: <m>x^2</m></p>
                     <figure xml:id="text-next-to-figure">
                         <caption>Text next to a figure</caption>
                         <image source="images/cross-square.png"/>
@@ -11969,7 +11970,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Image Formats, Side-by-Sides</title>
 
-                <p>Most of our demonstrations here use our square <q>blue cross</q> test image, which is provided as a <init>PNG</init> image.  You may specify images by any of the methods described in the section on graphics, <xref ref="graphics" text="type-global"/>.  The complete graph below is specified with no file extension, on the assumption that an <init>SVG</init> version exists for <init>HTML</init> output, and a <init>PDF</init> version exists for <latex/> output.  The second is a <init>JPEG</init> image that we use elsewhere for a YouTube video, but recycle here as an image provided in that format.  By default, they are aligned at their tops.</p>
+                <p>Most of our demonstrations here use our square <q>blue cross</q> test image, which is provided as a <init>PNG</init> image.  You may specify images by any of the methods described in the section on graphics, <xref ref="graphics"/>.  The complete graph below is specified with no file extension, on the assumption that an <init>SVG</init> version exists for <init>HTML</init> output, and a <init>PDF</init> version exists for <latex/> output.  The second is a <init>JPEG</init> image that we use elsewhere for a YouTube video, but recycle here as an image provided in that format.  By default, they are aligned at their tops.</p>
 
                 <sidebyside widths="30% 30%" margins="auto">
                     <image source="images/complete-graph"/>
@@ -12028,7 +12029,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Tables Side-By-Side</title>
 
-                <p>Tables<idx>table</idx> can also be put side-by-side, as demonstrated below in <xref ref="table-sidebyside-global" text="type-global"/>; naturally, subtables can be referenced as in <xref ref="table-sidebyside-subtable" text="type-global"/>.</p>
+                <p>Tables<idx>table</idx> can also be put side-by-side, as demonstrated below in <xref ref="table-sidebyside-global"/>; naturally, subtables can be referenced as in <xref ref="table-sidebyside-subtable"/>.</p>
 
                 <figure xml:id="table-sidebyside-global">
                     <caption>Side-by-Side, with tables as children</caption>
@@ -12126,8 +12127,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </sidebyside>
                 </figure>
 
-                <!-- the "Tables" content interior to the xref will override any autonaming -->
-                <p>If you put two <c>table</c> elements side-by-side without an enclosing <tag>figure</tag>, then they will use regular numbering; see <xref first="table-regular-fig1" last="table-regular-fig3">Tables</xref>.</p>
+                <!-- the "Tables" content interior to the xref will override the type name -->
+                <p>If you put two <c>table</c> elements side-by-side without an enclosing <tag>figure</tag>, then they will use regular numbering; see <xref first="table-regular-fig1" last="table-regular-fig3" text="global">Tables</xref>.</p>
 
                 <sidebyside>
                     <table xml:id="table-regular-fig1">
@@ -12200,7 +12201,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Tables Next to Figures</title>
 
-                <p>Tables and figures can go next to each other, as demonstrated in <xref ref="table-next-figure" text="type-global"/> and <xref ref="figure-next-table" text="type-global"/>, plus within an overall captioned figure, <xref ref="figure-table-captioned" text="type-global"/>.</p>
+                <p>Tables and figures can go next to each other, as demonstrated in <xref ref="table-next-figure"/> and <xref ref="figure-next-table"/>, plus within an overall captioned figure, <xref ref="figure-table-captioned"/>.</p>
 
                 <sidebyside>
                     <table xml:id="table-next-figure">
@@ -12267,7 +12268,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Tables Next to Text</title>
 
-                <p>Tables can go next to blocks of text using the <tag>stack</tag> element (see <xref ref="stacking-side-by-side" text="type-global"/>).</p>
+                <p>Tables can go next to blocks of text using the <tag>stack</tag> element (see <xref ref="stacking-side-by-side"/>).</p>
 
                 <sidebyside widths="50% 20% 20%" valigns="top top middle">
                     <table>
@@ -12391,7 +12392,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Lists in Side-by-Sides</title>
 
-                <p>A <q>regular</q> list normally belongs in a <c>p</c> but it can be placed unadorned into a panel of a side-by-side, as demonstrated below in <xref ref="subsection-sbs-other-panels" text="type-global"/>.  You can also put <q>named</q> lists into a panel, and then the title, introduction, conclusion, and caption will behave as expected, along with a number that might be used in a cross-reference (<xref ref="color-list-as-panel" text="global"/>), or perhaps we might cross-reference by title, <xref ref="color-list-as-panel" text="title"/>.</p>
+                <p>A <q>regular</q> list normally belongs in a <c>p</c> but it can be placed unadorned into a panel of a side-by-side, as demonstrated below in <xref ref="subsection-sbs-other-panels"/>.  You can also put <q>named</q> lists into a panel, and then the title, introduction, conclusion, and caption will behave as expected, along with a number that might be used in a cross-reference (<xref ref="color-list-as-panel" text="global"/>), or perhaps we might cross-reference by title, <xref ref="color-list-as-panel" text="title"/>.</p>
 
                 <figure>
                     <caption>Two named lists</caption>
@@ -12595,16 +12596,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <sidebyside>
                         <ol>
-                            <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat"/>.</p></li>
-                            <li><p>Examples: Mystery derivative at <xref ref="example-mysterious"/>.</p></li>
-                            <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle"/>.</p></li>
-                            <li><p>Figures: An early plot, Figure<nbsp/><xref ref="figure-function-derivative"/>.</p></li>
+                            <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" text="global"/>.</p></li>
+                            <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" text="global"/>.</p></li>
+                            <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" text="global"/>.</p></li>
+                            <li><p>Figures: An early plot, <xref ref="figure-function-derivative"/>.</p></li>
                         </ol>
                         <ul>
-                            <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat"/>.</p></li>
-                            <li><p>Examples: Mystery derivative at <xref ref="example-mysterious"/>.</p></li>
-                            <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle"/>.</p></li>
-                            <li><p>Figures: An early plot, Figure<nbsp/><xref ref="figure-function-derivative"/>.</p></li>
+                            <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" text="global"/>.</p></li>
+                            <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" text="global"/>.</p></li>
+                            <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" text="global"/>.</p></li>
+                            <li><p>Figures: An early plot, <xref ref="figure-function-derivative"/>.</p></li>
                         </ul>
                 </sidebyside>
 
@@ -12677,7 +12678,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Poems as Side-By-Side Panels</title>
 
 
-                <p>Poems<idx>poem</idx> may be panels of a side-by-side layout.  Here we place some commentary alongside.  See <xref ref="poetry" text="type-global"/> for general information about poetry.</p>
+                <p>Poems<idx>poem</idx> may be panels of a side-by-side layout.  Here we place some commentary alongside.  See <xref ref="poetry"/> for general information about poetry.</p>
 
                 <sidebyside widths="50% 50%">
                     <poem>
@@ -13269,7 +13270,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Testing Styling of Related Elements</title>
 
-                <p>This subsection has non-side-by-side structures, to aid with the effects of styling decisions across the range of possibilities.  First a <c>figure</c> with a <c>caption</c> holding a scaled image and a cross-reference for knowl testing: <xref ref="figure-traditional" text="type-global"/>.</p>
+                <p>This subsection has non-side-by-side structures, to aid with the effects of styling decisions across the range of possibilities.  First a <c>figure</c> with a <c>caption</c> holding a scaled image and a cross-reference for knowl testing: <xref ref="figure-traditional"/>.</p>
 
                 <figure xml:id="figure-traditional">
                     <caption>A traditional figure</caption>
@@ -13282,7 +13283,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <section label="section-side-by-side-gallery">
             <title>Side-by-Side Gallery</title>
 
-            <p>This subsection attempts to survey all the possible items that can be placed into a <c>sidebyside</c> element, in various combinations.  While intended to be exhaustive across contents, it does not test all possibilities, and is not meant to be instructive (see <xref ref="section-side-by-side" text="type-global"/> for that). The layout is identical for each <c>sidebyside</c>, 5% margins, panel widths of 40% and 45%, leaving 5% for the space between the panels.  The vertical alignment is left at the default, <c>top</c>.</p>
+            <p>This subsection attempts to survey all the possible items that can be placed into a <c>sidebyside</c> element, in various combinations.  While intended to be exhaustive across contents, it does not test all possibilities, and is not meant to be instructive (see <xref ref="section-side-by-side"/> for that). The layout is identical for each <c>sidebyside</c>, 5% margins, panel widths of 40% and 45%, leaving 5% for the space between the panels.  The vertical alignment is left at the default, <c>top</c>.</p>
 
             <p>We begin with <q>simpler</q> atomic items.  If necessary, comments follow each.</p>
 
@@ -13561,7 +13562,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <video xml:id="airborne-midnight-1" youtube="UYPoMjR6-Ao"/>
             </sidebyside>
 
-            <p>Videos can be placed quite compactly for HTML output, but we display a fair amount of information for a YouTube video in print, and therefore two videos side-by-side gets pretty crowded.  The examples above have the bare minimum amount of information attached (not in an overarching <c>figure</c>), and the bare amount which which is displayed in print.  We could relax our common spacing to make it a bit better.  Read about <q>side-by-side</q> groups (<c>sbsgroup</c>) and experiment with stacking several sub-captioned videos into an overall captioned figure (<xref ref="subsection-sbsgroup" text="type-global"/>).  For other examples see <xref ref="section-video" text="type-global"/> and <xref ref="atomic-video" text="type-global"/>.</p>
+            <p>Videos can be placed quite compactly for HTML output, but we display a fair amount of information for a YouTube video in print, and therefore two videos side-by-side gets pretty crowded.  The examples above have the bare minimum amount of information attached (not in an overarching <c>figure</c>), and the bare amount which which is displayed in print.  We could relax our common spacing to make it a bit better.  Read about <q>side-by-side</q> groups (<c>sbsgroup</c>) and experiment with stacking several sub-captioned videos into an overall captioned figure (<xref ref="subsection-sbsgroup"/>).  For other examples see <xref ref="section-video"/> and <xref ref="atomic-video"/>.</p>
         </section>
 
         <section xml:id="open-problems" label="section-open-problems">
@@ -13716,7 +13717,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Atomic Objects</title>
 
             <introduction>
-                <p>Some <pretext/> objects are relatively indivisable and are used as components of other structures.  We call them <term>atomic</term>, even if the term is not perfect.  A good example is <tag>image</tag> (next, <xref ref="atomic-image"/>).  This section is arranged according to these objects and tests the various ways they can be employed.</p>
+                <p>Some <pretext/> objects are relatively indivisable and are used as components of other structures.  We call them <term>atomic</term>, even if the term is not perfect.  A good example is <tag>image</tag> (next, <xref ref="atomic-image" text="global"/>).  This section is arranged according to these objects and tests the various ways they can be employed.</p>
 
                 <p>We frequently include some nonsense text inside short intervening paragraphs to test spacing and establish margins.</p>
             </introduction>
@@ -13780,7 +13781,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </figure>
                 </sidebyside>
 
-                <p>Identical code to previous example, but now wrapped in an overall <tag>figure</tag>, which has its own caption and number, leaving the interior figures to be sub-numbered.  Cross-references use the full number: <xref ref="nz-land" text="type-global"/>.</p>
+                <p>Identical code to previous example, but now wrapped in an overall <tag>figure</tag>, which has its own caption and number, leaving the interior figures to be sub-numbered.  Cross-references use the full number: <xref ref="nz-land"/>.</p>
 
                 <figure>
                     <caption>Amalgamation of Scapes</caption>
@@ -13899,7 +13900,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag> inside a <tag>figure</tag>, with size and layout configured, with a number and caption, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
                 </ol>Examples of each, and more.</p>
 
-                <p>Videos can be realized in many forms, and can come from a variety of sources.  See <xref ref="section-video" text="type-global"/> for tests of some of that variety.  Here we are testing placement within surroundings and testing the schema for location.  But we do have two videos in each test, one provided as a local file and one embedded from a service.</p>
+                <p>Videos can be realized in many forms, and can come from a variety of sources.  See <xref ref="section-video"/> for tests of some of that variety.  Here we are testing placement within surroundings and testing the schema for location.  But we do have two videos in each test, one provided as a local file and one embedded from a service.</p>
 
                 <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
 
@@ -13978,7 +13979,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </figure>
                 </sidebyside>
 
-                <p>Identical code to previous example, but now wrapped in an overall <tag>figure</tag>, which has its own caption and number, leaving the interior figures to be sub-numbered.  Cross-references use the full number: <xref ref="ups-video" text="type-global"/>.</p>
+                <p>Identical code to previous example, but now wrapped in an overall <tag>figure</tag>, which has its own caption and number, leaving the interior figures to be sub-numbered.  Cross-references use the full number: <xref ref="ups-video"/>.</p>
 
                 <figure>
                     <caption>Amalgamation of Videos</caption>
@@ -14008,7 +14009,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag> inside a <tag>listing</tag>, with size and layout configured, with a number and title, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
                 </ol>Examples of each, and more.</p>
 
-               <p>Programs can be realized in many forms, and can come from a variety of sources.  See <xref ref="section-video" text="type-global"/> for tests of some of that variety.  Here we are testing placement within surroundings and testing the schema for location.  But we do have two videos in each test, one provided as a local file and one embedded from a service.</p>
+               <p>Programs can be realized in many forms, and can come from a variety of sources.  See <xref ref="section-video"/> for tests of some of that variety.  Here we are testing placement within surroundings and testing the schema for location.  But we do have two videos in each test, one provided as a local file and one embedded from a service.</p>
 
                 <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
 
@@ -14310,7 +14311,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <li>inside a <tag>table</tag> inside a <tag>sidebyside</tag> inside a <tag>figure</tag>, with size and layout configured, with a number and title, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
                 </ol>Examples of each, and more.</p>
 
-                <p>A <tag>tabular</tag> realized by <latex/> for PDF/print will normally be as wide as necessary to hold the content, without word-wrapping the content of any cell that is not explicitly authored that way.  This is the most rigid of the content types we call <q>planar.</q>  So for <pretext/> output as <latex/>, when you explicitly constrain the width to be less than the <q>natural width</q> (including use as a panel of a <tag>sidebyside</tag>, or even setting margins) the table will be scaled <em>down</em> in width, which can result in an apparent font size very much smaller than that of the surrounding text.  Note that we do not ever scale a tabular up to be wider with a larger font size.  Note also that if there is no attempt to control the space for the table (no layout control, not in a <tag>sidebyside</tag>) then no scaling is attempted at all and the table may be wider than the text and protrude into the right margin.  For more, see the three examples at: <xref ref="natural-too-wide" text="type-global"/> , <xref ref="scale-down-auto" text="type-global"/>, <xref ref="scale-down-100" text="type-global"/>.  Generally, much of the commentary and testing here is about <latex/>/PDF/print.  While for <init>HTML</init> output the cells will usually automatically word-wrap to fit in the available space, without adjusting the font size.  Some might like this behavior and some might not.</p>
+                <p>A <tag>tabular</tag> realized by <latex/> for PDF/print will normally be as wide as necessary to hold the content, without word-wrapping the content of any cell that is not explicitly authored that way.  This is the most rigid of the content types we call <q>planar.</q>  So for <pretext/> output as <latex/>, when you explicitly constrain the width to be less than the <q>natural width</q> (including use as a panel of a <tag>sidebyside</tag>, or even setting margins) the table will be scaled <em>down</em> in width, which can result in an apparent font size very much smaller than that of the surrounding text.  Note that we do not ever scale a tabular up to be wider with a larger font size.  Note also that if there is no attempt to control the space for the table (no layout control, not in a <tag>sidebyside</tag>) then no scaling is attempted at all and the table may be wider than the text and protrude into the right margin.  For more, see the three examples at: <xref ref="natural-too-wide"/> , <xref ref="scale-down-auto"/>, <xref ref="scale-down-100"/>.  Generally, much of the commentary and testing here is about <latex/>/PDF/print.  While for <init>HTML</init> output the cells will usually automatically word-wrap to fit in the available space, without adjusting the font size.  Some might like this behavior and some might not.</p>
 
                 <p>Data in a table form can be placed in amongst a series of paragraphs.  With no layout control, it will occupy its <q>natural width</q> and be centered.</p>
 
@@ -14586,7 +14587,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </tabular>
                 </table>
 
-                <p>The next table is purposely much too wide.  In <xref ref="natural-too-wide" text="type-global"/> we make no attempt to control the width, and so it will extend into the margins.  In <xref ref="scale-down-auto" text="type-global"/> we have simple added the attribute <c>width="auto"</c>.  This attempt to use layout control will cause an automatic reduction in width and a smaller apparent font size.  Adjusting margins providing an explicit percentage width, or placing the tabular as a panel of <tag>sidebyside</tag> will have the same effect.  In <xref ref="scale-down-100" text="type-global"/> we have set the width explicity to 100% and so it should be identical to the automatic width case just prior.</p>
+                <p>The next table is purposely much too wide.  In <xref ref="natural-too-wide"/> we make no attempt to control the width, and so it will extend into the margins.  In <xref ref="scale-down-auto"/> we have simple added the attribute <c>width="auto"</c>.  This attempt to use layout control will cause an automatic reduction in width and a smaller apparent font size.  Adjusting margins providing an explicit percentage width, or placing the tabular as a panel of <tag>sidebyside</tag> will have the same effect.  In <xref ref="scale-down-100"/> we have set the width explicity to 100% and so it should be identical to the automatic width case just prior.</p>
 
                 <table xml:id="natural-too-wide">
                     <title>Tabular too wide, no layout control</title>
@@ -15145,7 +15146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection xml:id="subsection-local-theorems">
                 <title>Theorems in This Section</title>
 
-                <p>We have a lot of theorems in this section, so we illustrate including an automatic list of these here.  We use the <c>elements</c> attribute to limit the list to <c>theorem</c> elements, and we use the <c>scope</c> attribute to limit the list to this <c>section</c>.  You can use an introductory <c>p</c> like this one, or not.  The list gets no title or visual separation, so use the usual subdivision elements to make that happen.  The <c>elements</c> attribute can be a space-delimited list of many different elements.  This list should not include the Fundamental Theorem of Calculus, Theorem<nbsp/><xref ref="theorem-FTC"/>.  See a slightly different example in <xref ref="appendix-results" text="type-global"/>.</p>
+                <p>We have a lot of theorems in this section, so we illustrate including an automatic list of these here.  We use the <c>elements</c> attribute to limit the list to <c>theorem</c> elements, and we use the <c>scope</c> attribute to limit the list to this <c>section</c>.  You can use an introductory <c>p</c> like this one, or not.  The list gets no title or visual separation, so use the usual subdivision elements to make that happen.  The <c>elements</c> attribute can be a space-delimited list of many different elements.  This list should not include the Fundamental Theorem of Calculus, <xref ref="theorem-FTC"/>.  See a slightly different example in <xref ref="appendix-results"/>.</p>
 
                 <list-of elements="theorem" scope="section"/>
             </subsection>
@@ -15153,7 +15154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection xml:id="subsection-list-of-definitions" label="subsection-list-of-definitions">
                 <title>Definitions in This Article</title>
 
-                <p>Here is a similar list, but for <c>definition</c> elements across the whole article.  This list also serves as a regression test.  <xref ref="prefigure-diagrams"/> contains a <prefigure/> diagram whose source uses a <c>definition</c> element of its own, in the <prefigure/> XML namespace.  An earlier version of <tag>list-of</tag> matched descendants by local name only, ignoring namespaces, and so would catch <prefigure/> definitions and then fail to produce numbers for them.  The list below correctly contains only the <pretext/> definitions.</p>
+                <p>Here is a similar list, but for <c>definition</c> elements across the whole article.  This list also serves as a regression test.  <xref ref="prefigure-diagrams" text="global"/> contains a <prefigure/> diagram whose source uses a <c>definition</c> element of its own, in the <prefigure/> XML namespace.  An earlier version of <tag>list-of</tag> matched descendants by local name only, ignoring namespaces, and so would catch <prefigure/> definitions and then fail to produce numbers for them.  The list below correctly contains only the <pretext/> definitions.</p>
 
                 <list-of elements="definition" empty="no"/>
             </subsection>
@@ -15422,7 +15423,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               <introduction>
                 <p>This two-page worksheet was generously donated to the sample article by Dave Rosoff at a CuratedCourses workshop in August<nbsp/>2018.  It has the default (skinny) margins.</p>
 
-                <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral" text="type-global"/>.</p>
+                <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral"/>.</p>
                 <sidebyside width="30%">
                   <figure xml:id="figure-midpoints-of-quadrilateral">
                     <caption>The midpoints of the sides of a quadrilateral are the vertices of a parallelogram.</caption>
@@ -15478,7 +15479,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </image>
                   </figure>
                 </sidebyside>
-                <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
+                <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
               </introduction>
 
               <exercise xml:id="ex-cyclic" workspace="4in">
@@ -15487,7 +15488,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                   </statement>
               </exercise>
 
-              <p><xref ref="figure-triangle-cyclic-medians" text="type-global"/> from the previous page is reproduced for your convenience.</p>
+              <p><xref ref="figure-triangle-cyclic-medians"/> from the previous page is reproduced for your convenience.</p>
               <figure xml:id="figure-triangle-cyclic-medians-copy">
                 <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
                 <image xml:id="worksheet-triangle-cyclic-medians-copy" width="50%">
@@ -15516,7 +15517,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Show that <m>\vec{M}_{1} + \vec{M}_{2} + \vec{M}_{3} = 0</m>.</p>
                   </statement>
                   <hint>
-                    <p>Use <xref ref="ex-cyclic" text="type-global"/>.</p>
+                    <p>Use <xref ref="ex-cyclic"/>.</p>
                   </hint>
                 </exercise>
                 <exercise workspace="2in">
@@ -15549,7 +15550,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </objectives>
                 <introduction>
                   <p>This two-page worksheet was generously donated to the sample article by Dave Rosoff at a CuratedCourses workshop in August<nbsp/>2018.  It has the default (skinny) margins.</p>
-                  <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral" text="type-global"/>.</p>
+                  <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral"/>.</p>
                   <sidebyside width="30%">
                     <figure xml:id="figure-midpoints-of-quadrilateral-pages">
                       <caption>The midpoints of the sides of a quadrilateral are the vertices of a parallelogram.</caption>
@@ -15605,7 +15606,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                       </image>
                     </figure>
                   </sidebyside>
-                  <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
+                  <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
                 </introduction>
 
                 <exercise xml:id="ex-cyclic-pages" workspace="4in">
@@ -15616,7 +15617,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               </page>
 
               <page>
-              <p><xref ref="figure-triangle-cyclic-medians" text="type-global"/> from the previous page is reproduced for your convenience.</p>
+              <p><xref ref="figure-triangle-cyclic-medians"/> from the previous page is reproduced for your convenience.</p>
               <figure xml:id="figure-triangle-cyclic-medians-copy-pages">
                 <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
                 <image xml:id="worksheet-triangle-cyclic-medians-copy-pages" width="50%">
@@ -15644,7 +15645,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Show that <m>\vec{M}_{1} + \vec{M}_{2} + \vec{M}_{3} = 0</m>.</p>
                   </statement>
                   <hint>
-                    <p>Use <xref ref="ex-cyclic" text="type-global"/>.</p>
+                    <p>Use <xref ref="ex-cyclic"/>.</p>
                   </hint>
                 </exercise>
                 <exercise workspace="2in">
@@ -17020,11 +17021,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
        <section xml:id="exercises-single" label="section-exercises-single">
             <title>Exercises, One Subsection</title>
 
-            <p>This <tag>section</tag> of the sample article demonstrates an <q>unstructured division.</q>  There are no <tag>subsection</tag>, you are just reading the first two paragraphs, followed by some nonsense text.  Then there is a <em>single</em> <tag>exercises</tag> division.  Note that this division is not numbered (since it is unique within the <tag>section</tag>).  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered as a member of the <tag>section</tag>, <xref ref="exercise-challenging-one-unstructured" text="type-global"/>.</p>
+            <p>This <tag>section</tag> of the sample article demonstrates an <q>unstructured division.</q>  There are no <tag>subsection</tag>, you are just reading the first two paragraphs, followed by some nonsense text.  Then there is a <em>single</em> <tag>exercises</tag> division.  Note that this division is not numbered (since it is unique within the <tag>section</tag>).  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered as a member of the <tag>section</tag>, <xref ref="exercise-challenging-one-unstructured"/>.</p>
 
-            <p>If you use the unstructured form of a division, <em>and</em> have both inline and divisional exercises, there is a potential to form ambiguous cross-references.  To wit, check that <xref ref="duplicate-inline" text="global"/> and <xref ref="duplicate-divisional" text="global"/> are really different exercises (which you are <em>unable to do</em> if you are reading this in print!).  The solution is to include the type of exercise in the reference, which will assist everybody, but especially your print readers:  <xref ref="duplicate-inline" text="type-global"/> and <xref ref="duplicate-divisional" text="type-global"/>.</p>
+            <p>If you use the unstructured form of a division, <em>and</em> have both inline and divisional exercises, there is a potential to form ambiguous cross-references.  To wit, check that <xref ref="duplicate-inline" text="global"/> and <xref ref="duplicate-divisional" text="global"/> are really different exercises (which you are <em>unable to do</em> if you are reading this in print!).  The solution is to include the type of exercise in the reference, which will assist everybody, but especially your print readers:  <xref ref="duplicate-inline"/> and <xref ref="duplicate-divisional"/>.</p>
 
-            <p>Compare this section with the similar <xref ref="exercises-multiple" text="type-global"/>, next.  The following text is mostly nonsense, just for testing purposes.</p>
+            <p>Compare this section with the similar <xref ref="exercises-multiple"/>, next.  The following text is mostly nonsense, just for testing purposes.</p>
 
             <exercise>
                 <title>Inline One</title>
@@ -17255,9 +17256,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Exercises, Multiple Subsections</title>
 
             <introduction>
-                <p>This <tag>section</tag> of the sample article demonstrates a <q>structured division.</q>  You are reading the introduction to the division, then there is a faux <tag>subsection</tag>, followed by three <tag>exercises</tag> divisions.  Note that the three are numbered as if they are also fellow<tag>subsection</tag>.  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered use the number of the <tag>subsection</tag>, <xref ref="exercise-challenging-one-structured" text="type-global"/>.</p>
+                <p>This <tag>section</tag> of the sample article demonstrates a <q>structured division.</q>  You are reading the introduction to the division, then there is a faux <tag>subsection</tag>, followed by three <tag>exercises</tag> divisions.  Note that the three are numbered as if they are also fellow<tag>subsection</tag>.  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered use the number of the <tag>subsection</tag>, <xref ref="exercise-challenging-one-structured"/>.</p>
 
-                <p>Compare this section with the similar <xref ref="exercises-single" text="type-global"/>, previous.  The following text is mostly nonsense, just for testing purposes.</p>
+                <p>Compare this section with the similar <xref ref="exercises-single"/>, previous.  The following text is mostly nonsense, just for testing purposes.</p>
             </introduction>
 
             <subsection>
@@ -17853,7 +17854,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <introduction>
                 <p></p>
-                <p>This <tag>exercises</tag> of the sample article is a peer of all the preceding <tag>section</tag> and is the only such <tag>exercises</tag>.  As such, it is not numbered, and contains only <tag>exercise</tag>, but for this <tag>introduction</tag> you are reading.  The <tag>exercises</tag> contained within will be numbered in cross-references according to the enclosing division, in this case the entire article and so without any qualification, to wit, <xref ref="exercise-challenging-one-top" text="type-global"/>.</p>
+                <p>This <tag>exercises</tag> of the sample article is a peer of all the preceding <tag>section</tag> and is the only such <tag>exercises</tag>.  As such, it is not numbered, and contains only <tag>exercise</tag>, but for this <tag>introduction</tag> you are reading.  The <tag>exercises</tag> contained within will be numbered in cross-references according to the enclosing division, in this case the entire article and so without any qualification, to wit, <xref ref="exercise-challenging-one-top"/>.</p>
             </introduction>
 
             <exercise>
@@ -17959,7 +17960,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <exercise>
                 <statement>
-                    <p>Can you prove Corollary<nbsp/><xref ref="corollary-FTC-derivative"/> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level.<ol>
+                    <p>Can you prove <xref ref="corollary-FTC-derivative"/> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level.<ol>
                         <li><p>Why is this result a Corollary?</p></li>
                         <li><p>Could you interchange the Theorem and Corollary?</p></li>
                     </ol></p>
@@ -18064,7 +18065,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <appendix xml:id="appendix-results" label="appendix-results">
                 <title>List of Results</title>
 
-                <p>We had an automatic list of theorems for just one section, back in <xref ref="subsection-local-theorems" text="type-global"/>.  Here we expand to include <c>corollary</c> in our space-delimited list of <c>elements</c> and we request <c>divisions</c> (headings) at each <c>subsection</c> and <c>section</c>.  The default <c>scope</c> is the entire document, which is appropriate here in the backmatter.  There are many subsections with no results, so we set the <c>empty</c> attribute to <c>no</c> to suppress them, though this is the default behavior (<c>yes</c> being the other option to see divisions with no list items).  These lists are most valuable if you are in the practice of giving items titles.</p>
+                <p>We had an automatic list of theorems for just one section, back in <xref ref="subsection-local-theorems"/>.  Here we expand to include <c>corollary</c> in our space-delimited list of <c>elements</c> and we request <c>divisions</c> (headings) at each <c>subsection</c> and <c>section</c>.  The default <c>scope</c> is the entire document, which is appropriate here in the backmatter.  There are many subsections with no results, so we set the <c>empty</c> attribute to <c>no</c> to suppress them, though this is the default behavior (<c>yes</c> being the other option to see divisions with no list items).  These lists are most valuable if you are in the practice of giving items titles.</p>
 
                 <list-of elements="  theorem corollary" divisions="section    subsection " empty="no"/>
             </appendix>
@@ -18124,7 +18125,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <glossary xml:id="glossary-backmatter" label="glossary-backmatter">
                 <idx>glossary</idx>
                 <headnote>
-                    <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is placed in the back matter.  Placement as a specialized division is another option, see <xref ref="glossary-specialized" text="type-global"/>.</p>
+                    <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is placed in the back matter.  Placement as a specialized division is another option, see <xref ref="glossary-specialized"/>.</p>
                 </headnote>
 
                 <gi>

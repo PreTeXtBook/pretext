@@ -34,7 +34,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <li><p>Emerald</p></li>
         </ul>
     </custom>
-    <custom name="xref-to-result"><xref ref="corollary-FTC-derivative"/></custom>
+    <custom name="xref-to-result"><xref ref="corollary-FTC-derivative" text="global"/></custom>
     <!-- exposes a bug, same substitution in both files -->
     <custom name="a-URL"><url href="http://example.com" visual="example.com"/></custom>
 </pi:customizations>
