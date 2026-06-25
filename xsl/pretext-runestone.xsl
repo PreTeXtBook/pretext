@@ -251,7 +251,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="runestone-bust-menu">
     <!-- "Bust w/ Silhoutte" is U+1F464, used as menu icon -->
-    <xsl:if test="$b-host-runestone">
+    <xsl:if test="$b-host-runestone or true()">
         <xsl:variable name="profile-localization">
             <xsl:apply-templates select="." mode="type-name">
                 <xsl:with-param name="string-id" select="'profile'"/>
