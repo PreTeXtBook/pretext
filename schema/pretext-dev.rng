@@ -1088,8 +1088,11 @@
       </mixed>
     </element>
   </define>
-  <!-- Extended fillin with interactive attributes -->
-  <define name="FillIn" combine="choice">
+  <!--
+    Extended fillin with interactive attributes (extends the inline
+    text fill-in blank; the bare "FillIn" name was orphaned)
+  -->
+  <define name="FillInText" combine="choice">
     <element name="fillin">
       <optional>
         <attribute name="characters">

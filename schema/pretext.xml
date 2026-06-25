@@ -2630,8 +2630,9 @@
                     attribute * {text}*,
                     mixed {AnyElement*}
                 }
-            # Extended fillin with interactive attributes
-            FillIn |=
+            # Extended fillin with interactive attributes (extends the inline
+            # text fill-in blank; the bare "FillIn" name was orphaned)
+            FillInText |=
                 element fillin {
                     attribute characters {xsd:integer}?,
                     attribute cols {xsd:integer}?,
