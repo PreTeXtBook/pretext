@@ -944,8 +944,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <p>Glossary items: <xref ref="gi-1-chB"/>, <xref ref="gi-1-bm"/>.</p>
                 </section>
 
-                <section xml:id="xref-autoname">
-                    <title>Autoname and Style Variants</title>
+                <section xml:id="xref-text-styles">
+                    <title>Cross-Reference Text Styles</title>
                     <p>The same theorem in several <attr>text</attr> styles, to verify number rendering in each.</p>
                     <p>Default: <xref ref="t-1-chA"/>.  Local: <xref ref="t-1-chA" text="local"/>.  Global: <xref ref="t-1-chA" text="global"/>.  Type-local: <xref ref="t-1-chA" text="type-local"/>.  Type-global: <xref ref="t-1-chA" text="type-global"/>.</p>
                     <p>A titled target: <xref ref="tb-1-chA" text="title"/>.</p>
