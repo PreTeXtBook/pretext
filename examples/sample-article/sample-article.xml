@@ -8680,7 +8680,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </figure>
 
-                <p>This next interactive uses ECMAScript module based code. That will not function unless the <element>script</element>'s <attr>type</attr> is set to <c>module</c> in the HTML output. So let's set it here and pass it through. It also generates its own HTML elements, so we hopefully don't get a default empty div.</p>
+                <p>This next interactive uses ECMAScript module based code. That will not function unless the <tag>script</tag>'s <attr>type</attr> is set to <c>module</c> in the HTML output. So let's set it here and pass it through. It also generates its own HTML elements, so we hopefully don't get a default empty div.</p>
 
                 <figure>
                     <caption>A simple JS module test</caption>
@@ -8948,6 +8948,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>A test where the JSXGraph code indicates it needs MathJax to render.</p>
 
                 <figure xml:id="interactive-jsx-arc-graph">
+                    <caption>An interactive whose JSXGraph code uses MathJax to render mathematics.</caption>
                     <interactive platform="jsxgraph" source="code/jsxgraph/interactive-jsx-arc-graph.js" width="60%">
                         <slate xml:id="interactive-jsx-arc-graph_fig" surface="jsxboard"/>
                         <instructions>
