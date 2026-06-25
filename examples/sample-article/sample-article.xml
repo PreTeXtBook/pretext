@@ -10084,7 +10084,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <jscmp><![CDATA[
                                 ans_array.slice(0,1).includes(ans)
                                 ]]></jscmp>
-                                <feedback>You already gave that answer.</feedback>
+                                <feedback><p>You already gave that answer.</p></feedback>
                             </test>
                         </evaluate>
                         <evaluate>
@@ -10097,7 +10097,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <jscmp><![CDATA[
                                 ans_array.slice(0,2).includes(ans)
                                 ]]></jscmp>
-                                <feedback>You already gave that answer.</feedback>
+                                <feedback><p>You already gave that answer.</p></feedback>
                             </test>
                         </evaluate>
                      </evaluation>
