@@ -3657,7 +3657,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 </point>
                             </coordinates>
 
-                            <annotations>
+                            <annotations text="The graph of a function and its tangent line at the point a equals 1">
                                 <annotation ref="figure"
                                             text="The graph of a function and its tangent line at the point a equals 1">
                                     <annotation ref="graph-tangent"
@@ -3763,7 +3763,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                             arrows="1" stroke="black"/>
                                   </coordinates>
 
-                                  <annotations>
+                                  <annotations text="The set of Fibonacci tiles consists of two tiles denoted by L and S.">
                                       <annotation ref="figure"
                                                   text="The set of Fibonacci tiles consists of two tiles denoted by L and S.">
                                           <annotation ref="top"
@@ -3856,7 +3856,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                       </transform>
                                   </coordinates>
 
-                                  <annotations>
+                                  <annotations text="A Fibonacci tiling is a horizontal sequence of tiles obtained by deflating the tiles in another Fibonacci tiling.  We will explain why these tilings are aperiodic.">
                                       <annotation ref="figure"
                                                   text="A Fibonacci tiling is a horizontal sequence of tiles obtained by deflating the tiles in another Fibonacci tiling.  We will explain why these tilings are aperiodic.">
                                           <annotation ref="down-arrows"/>
@@ -16242,7 +16242,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                                 <vector at="vector-a" v="(3,9)" alignment="se"><m>\vec a</m></vector>
                                                 <vector at="vector-b" v="(4,2)" alignment="nw"><m>\vec b</m></vector>
                                             </coordinates>
-                                            <annotations>
+                                            <annotations text="Two vectors labeled a and b in the coordinate plane">
                                                 <annotation ref="figure"
                                                             text="Two vectors labeled a and b in the coordinate plane">
                                                     <annotation ref="grid"
