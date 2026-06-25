@@ -595,6 +595,7 @@
                     UniqueID?,
                     LabelID?,
                     Component?,
+                    attribute workspace {text}?,
                     TextParagraph
                 }
             ParagraphLined =
@@ -1452,6 +1453,7 @@
             <title>Definitions</title>
             <code>
             DefinitionLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 Notation*,
                 Statement
@@ -1479,10 +1481,12 @@
                 element proof {
                     attribute ref {text}?,
                     attribute text {XrefTextStyle}?,
+                    attribute workspace {text}?,
                     MetaDataTitleOptional,
                     (BlockStatement | Case)+
                 }
             TheoremLike =
+                attribute workspace {text}?,
                 MetaDataTitleCreatorOptional,
                 (BlockStatement+ | (Statement, Proof*))
             Theorem =
@@ -1550,6 +1554,7 @@
             <title>Projects, and similar</title>
             <code>
             ProjectLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 (
                     (BlockStatement+) |
@@ -2363,6 +2368,7 @@
                 }
             ExerciseGroup =
                 element exercisegroup {
+                    attribute workspace {text}?,
                     MetaDataTitleOptional,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                     IntroductionStatementNoCaption,
@@ -2911,6 +2917,7 @@
             <title>Examples, and similar</title>
             <code>
             ExampleLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 (
                     (BlockStatement)+ |

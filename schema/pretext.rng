@@ -2009,6 +2009,9 @@
     </choice>
   </define>
   <define name="DefinitionLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleOptional"/>
     <zeroOrMore>
       <ref name="Notation"/>
@@ -2041,6 +2044,9 @@
           <ref name="XrefTextStyle"/>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
@@ -2051,6 +2057,9 @@
     </element>
   </define>
   <define name="TheoremLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleCreatorOptional"/>
     <choice>
       <oneOrMore>
@@ -2119,6 +2128,9 @@
     </choice>
   </define>
   <define name="ExampleLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleOptional"/>
     <choice>
       <oneOrMore>
@@ -2163,6 +2175,9 @@
     </choice>
   </define>
   <define name="ProjectLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleOptional"/>
     <choice>
       <oneOrMore>
@@ -3270,6 +3285,9 @@
   </define>
   <define name="ExerciseGroup">
     <element name="exercisegroup">
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
       <ref name="MetaDataTitleOptional"/>
       <optional>
         <attribute name="cols">
@@ -4368,6 +4386,9 @@
       </optional>
       <optional>
         <ref name="Component"/>
+      </optional>
+      <optional>
+        <attribute name="workspace"/>
       </optional>
       <ref name="TextParagraph"/>
     </element>
