@@ -30,3 +30,9 @@ $wide-rs-elements: ".parsons_section, .ac_section, .codelens";
 .tabular-box {
   @include expandable.expandable;
 }
+
+body.ptx-runestone-template {
+  .ptx-runestone-container:has(#{$wide-rs-elements}) {
+    --max-width: 100%;
+  }
+}

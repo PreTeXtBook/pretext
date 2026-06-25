@@ -244,3 +244,9 @@ $sidebar-hide-breakpoint: $content-width + 2 * $content-side-padding-tight + $si
     max-width: 100%;
   }
 }
+
+body.ptx-runestone-template {
+    .ptx-main > .ptx-content {
+        padding: 24px;
+    }
+}
