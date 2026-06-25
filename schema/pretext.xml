@@ -482,6 +482,9 @@
             Worksheet =
                 element worksheet {
                     PrintoutAttributes,
+                    attribute courseid {text}?,
+                    attribute series {text}?,
+                    attribute seriescode {text}?,
                     MetaDataAltTitleOptional,
                     (Objectives? &amp; IntroductionDivision?),
                     (Page+ | PrintoutBlock+),

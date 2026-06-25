@@ -1335,6 +1335,15 @@
   <define name="Worksheet">
     <element name="worksheet">
       <ref name="PrintoutAttributes"/>
+      <optional>
+        <attribute name="courseid"/>
+      </optional>
+      <optional>
+        <attribute name="series"/>
+      </optional>
+      <optional>
+        <attribute name="seriescode"/>
+      </optional>
       <ref name="MetaDataAltTitleOptional"/>
       <interleave>
         <optional>
