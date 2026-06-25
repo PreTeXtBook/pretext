@@ -11584,6 +11584,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="title" select="''"/>
     <xsl:param name="filename" select="''"/>
     <xsl:param name="b-has-printout" select="false()"/>
+    <xsl:param name="b-include-bottom-nav" select="true()"/>
 
     <xsl:variable name="the-filename">
         <xsl:choose>
@@ -11708,23 +11709,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- output. (2023-01-11)                             -->
                         <xsl:copy-of select="$content" />
                     </div>
-                    <div id="ptx-content-footer" class="ptx-content-footer">
-                        <xsl:apply-templates select="." mode="previous-button"/>
-                        <xsl:variable name="top-localization">
-                            <xsl:apply-templates select="." mode="type-name">
-                                <xsl:with-param name="string-id" select="'top'"/>
-                            </xsl:apply-templates>
-                        </xsl:variable>
-                        <a class="top-button button" href="#" title="{$top-localization}">
-                            <xsl:call-template name="insert-symbol">
-                                <xsl:with-param name="name" select="'expand_less'"/>
-                            </xsl:call-template>
-                            <span class="name">
-                                <xsl:value-of select="$top-localization"/>
-                            </span>
-                        </a>
-                        <xsl:apply-templates select="." mode="next-button"/>
-                    </div>
+                    <xsl:if test="$b-include-bottom-nav">
+                        <div id="ptx-content-footer" class="ptx-content-footer">
+                            <xsl:apply-templates select="." mode="previous-button"/>
+                            <xsl:variable name="top-localization">
+                                <xsl:apply-templates select="." mode="type-name">
+                                    <xsl:with-param name="string-id" select="'top'"/>
+                                </xsl:apply-templates>
+                            </xsl:variable>
+                            <a class="top-button button" href="#" title="{$top-localization}">
+                                <xsl:call-template name="insert-symbol">
+                                    <xsl:with-param name="name" select="'expand_less'"/>
+                                </xsl:call-template>
+                                <span class="name">
+                                    <xsl:value-of select="$top-localization"/>
+                                </span>
+                            </a>
+                            <xsl:apply-templates select="." mode="next-button"/>
+                        </div>
+                    </xsl:if>
                 </main>
             </div>
             <!-- formerly "extra" -->
