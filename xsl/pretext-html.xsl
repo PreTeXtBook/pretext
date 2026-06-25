@@ -11605,6 +11605,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="pretext-advertisement-and-style"/>
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
+            <!-- optional head content that needs to come prior to other content -->
+            <xsl:apply-templates select="." mode="file-wrap-head-pre"/>
             <title>
                 <xsl:choose>
                     <xsl:when test="$title != ''">
@@ -11630,6 +11632,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="knowl" />
             <!-- webwork's iframeResizer needs to come before sagecell template -->
             <xsl:apply-templates select="." mode="sagecell" />
+            <!-- optional head content that might override other content-->
+            <xsl:apply-templates select="." mode="file-wrap-head-post"/>
         </head>
         <body>
             <xsl:if test="$b-has-stack">
@@ -11648,6 +11652,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="$root/book">pretext book</xsl:when>
                     <xsl:when test="$root/article">pretext article</xsl:when>
                 </xsl:choose>
+                <xsl:apply-templates select="." mode="file-wrap-body-attr-extra"/>
                 <!-- ignore MathJax signals everywhere, then enable selectively -->
                 <xsl:text> ignore-math</xsl:text>
             </xsl:attribute>
@@ -11742,10 +11747,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$b-portable-html and $has-native-search">
                 <xsl:call-template name="embedded-search-construction"/>
             </xsl:if>
+            <!-- optional body content that needs to be inserted after all content -->
+            <!-- e.g. script tags to run immediately                               -->
+            <xsl:apply-templates select="." mode="file-wrap-body-post"/>
         </body>
     </html>
     </exsl:document>
 </xsl:template>
+
+<!-- Templates that can be overriden to inject into various      -->
+<!-- points in the HTML page. See file-wrap above for locations. -->
+<xsl:template match="*" mode="file-wrap-head-pre"/>
+<xsl:template match="*" mode="file-wrap-head-post"/>
+<xsl:template match="*" mode="file-wrap-body-attr-extra"/>
+<xsl:template match="*" mode="file-wrap-body-post"/>
 
 <!-- A minimal individual page:                              -->
 <!-- Inputs:                                                 -->
