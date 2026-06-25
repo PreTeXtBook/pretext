@@ -694,7 +694,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <md number="yes" xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</md>.</p>
                     </statement>
                     <proof xml:id="proof-FTC-corollary">
-                        <p>We simply take the indicated derivative, applying Theorem<nbsp/><xref ref="theorem-FTC" text="global"/> at <xref ref="equation-use-FTC" text="global"/><md number="yes">
+                        <p>We simply take the indicated derivative, applying <xref ref="theorem-FTC"/> at <xref ref="equation-use-FTC" text="global"/><md number="yes">
                             <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
                             <mrow xml:id="equation-conclude">&amp;=f(x)-0 = f(x)</mrow>
@@ -1449,7 +1449,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <exercises xml:id="exercises-subsection-solo" label="exercises-subsection-solo">
                     <exercise xml:id="exercise-test-number">
                         <statement>
-                            <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate.  Here is a self-referential link: Exercise<nbsp/><xref ref="exercise-test-number" text="global"/>.</p>
+                            <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate.  Here is a self-referential link: <xref ref="exercise-test-number"/>.</p>
 
                             <p>The subsubsection has no title in the source, so one is provided automatically, and will adjust according to the language of the document.</p>
                         </statement>
@@ -1565,7 +1565,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </statement>
                 </principle>
 
-                <p>More precisely, <tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, and <tag>identity</tag>, all behave exactly the same, requiring a statement (as a sequence of paragraphs) followed by an optional proof, and may have an optional title.  The elements <tag>axiom</tag>, <tag>conjecture</tag>, <tag>principle</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, and <tag>assumption</tag> are functionally the same, barring a proof (since they would never have one!).  Definitions are an exception, as it is natural to place <tag>notation</tag> within<mdash/>see the source for Definition<nbsp/><xref ref="definition-indefinite-integral" text="global"/> for an example.</p>
+                <p>More precisely, <tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, and <tag>identity</tag>, all behave exactly the same, requiring a statement (as a sequence of paragraphs) followed by an optional proof, and may have an optional title.  The elements <tag>axiom</tag>, <tag>conjecture</tag>, <tag>principle</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, and <tag>assumption</tag> are functionally the same, barring a proof (since they would never have one!).  Definitions are an exception, as it is natural to place <tag>notation</tag> within<mdash/>see the source for <xref ref="definition-indefinite-integral"/> for an example.</p>
             </subsection>
 
             <subsection>
@@ -1824,7 +1824,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </ul></p>
 
             <remark>
-                <p>You can<fn>Third test footnote</fn> gain a greater understanding of derivatives by studying the graphs of functions with their derivatives.  Can<fn>Fourth test footnote</fn> you discern the derivative<ndash/>antiderivative<fn>Fifth test footnote</fn> relationship in Figure<nbsp/><xref ref="figure-function-derivative" text="global"/>?</p>
+                <p>You can<fn>Third test footnote</fn> gain a greater understanding of derivatives by studying the graphs of functions with their derivatives.  Can<fn>Fourth test footnote</fn> you discern the derivative<ndash/>antiderivative<fn>Fifth test footnote</fn> relationship in <xref ref="figure-function-derivative"/>?</p>
             </remark>
 
             <!--
@@ -2825,7 +2825,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </attribution>
                 </blockquote>
 
-                <p>Sometimes a quote may extend across several paragraphs.  Or a balanced pair of quotations marks crosses an XML boundary, so we need left, right, single and double versions.  (For example, see Section<nbsp/><xref ref="poetry" text="global"/> on poetry.)  Here are all four in a haphazard order: <rq/>, <lsq/>, <lq/>, <rsq/>.  These should be a last resort, and <em>not</em> a replacement for the <c>q</c> and <c>sq</c> tags.  The left/right versions are used for the following quote from Abraham Lincoln, which we have edited into two paragraphs.</p>
+                <p>Sometimes a quote may extend across several paragraphs.  Or a balanced pair of quotations marks crosses an XML boundary, so we need left, right, single and double versions.  (For example, see <xref ref="poetry"/> on poetry.)  Here are all four in a haphazard order: <rq/>, <lsq/>, <lq/>, <rsq/>.  These should be a last resort, and <em>not</em> a replacement for the <c>q</c> and <c>sq</c> tags.  The left/right versions are used for the following quote from Abraham Lincoln, which we have edited into two paragraphs.</p>
 
                 <p><lq/>I am not bound to win, but I am bound to be true. I am not bound to succeed, but I am bound to live by the light that I have.</p>
 
@@ -3518,7 +3518,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Images from External Sources</title>
 
-                <p>If you have raster images (photographs, etc.) then they are specified with complete filenames, as above in Figure<nbsp/><xref ref="figure-function-derivative" text="global"/> or just below.</p>
+                <p>If you have raster images (photographs, etc.) then they are specified with complete filenames, as above in <xref ref="figure-function-derivative"/> or just below.</p>
 
                 <figure>
                     <caption>New Zealand Landscape, <url href="https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg" visual="commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg"><c>commons.wikimedia.org</c></url>, CC-BY-SA-2.0</caption>
@@ -4657,7 +4657,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </image>
                 </figure>
 
-                <p>Pay careful attention to the requirement that the last line of your code be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing, it evaluates to Python's <c>None</c> object and that is just what you will get.  The code for Figure<nbsp/><xref ref="figure-sage-double-plot" text="global"/> illustrates creating two graphics objects and combining them into an expression on the last line that evaluates to a graphics object.</p>
+                <p>Pay careful attention to the requirement that the last line of your code be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing, it evaluates to Python's <c>None</c> object and that is just what you will get.  The code for <xref ref="figure-sage-double-plot"/> illustrates creating two graphics objects and combining them into an expression on the last line that evaluates to a graphics object.</p>
 
                 <figure xml:id="figure-sage-double-plot">
                     <caption>Two Sage plots on one set of axes</caption>
@@ -10450,7 +10450,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Video</title>
 
             <introduction>
-                <p>First, a gratuitous reference to Exercise<nbsp/><xref ref="exercises-cosine-derivative" text="global"/> about the derivative of a cosine.</p>
+                <p>First, a gratuitous reference to <xref ref="exercises-cosine-derivative"/> about the derivative of a cosine.</p>
 
                 <p>You can specify a video by a filename if you host it as part of your document, or a <init>URL</init> giving a location on the Internet.  There are a few extra features for YouTube and Vimeo videos, which are near the bottom of this page, so look there first if that meets your needs.</p>
             </introduction>
@@ -10757,7 +10757,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>If you set the value of <attr>text</attr> to <c>title</c>, then the title you assigned to the theorem will be used as the link for a cross-reference.  Here is a the final example, which refers to a fundamental theorem by name <xref ref="theorem-FTC" text="title"/>.</p>
 
-            <p>Cross-references to exercises with hard-coded numbers should respect the supplied number.  Exercise<nbsp/><xref ref="exercise-with-hardcoded-number" text="global"/> should reference problem 42a.</p>
+            <p>Cross-references to exercises with hard-coded numbers should respect the supplied number.  <xref ref="exercise-with-hardcoded-number"/> should reference problem 42a.</p>
 
             <p>Here we form a list to test pointing at various structures.  Each of the following should open a knowl in the HTML version, otherwise it will be a traditional hyperlink (if possible).  Note that if a knowl opens, there will always be an <q>in-context</q> link which will take you to the actual location, should you have  wished instead to just go there.<ul>
                 <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" text="global"/>.</p></li>
@@ -11195,7 +11195,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>The <c>pre</c> element surrounds text that should be preserved verbatim.  It is like a special kind of paragraph, and can be used almost everywhere that a paragraph can be used.   The realization of preformatted text should be robust enough that it can be cut from documents and pasted without any substitutions of <q>fancier</q> Unicode characters for generic ASCII characters.  Try the <q>minus</q> sign on the <m>48</m> above to see if it does not become a dash, or the single quotes on the Sage variables.</p>
 
-            <p>For Sage input code, the first non-whitespace character sets the left margin, since legitimate Python code has no subsequent lines outdented.  For pre-formatted code, the line with the <em>least</em> whitespace leading the line will determine the left margin.  If preserving indentation is important, do not mix spaces and tabs.  For syntax highlighting of text representing computer programs, or parts of them, see Section<nbsp/><xref ref="section-programs" text="global"/>.  Examine the source of the following example to help understand this paragraph.</p>
+            <p>For Sage input code, the first non-whitespace character sets the left margin, since legitimate Python code has no subsequent lines outdented.  For pre-formatted code, the line with the <em>least</em> whitespace leading the line will determine the left margin.  If preserving indentation is important, do not mix spaces and tabs.  For syntax highlighting of text representing computer programs, or parts of them, see <xref ref="section-programs"/>.  Examine the source of the following example to help understand this paragraph.</p>
 
             <pre>
             A normal line
@@ -11242,7 +11242,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-programs" label="section-programs">
             <title>Program Listings (with <c>code</c> in the title)</title>
 
-            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt or Brython (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at Section<nbsp/><xref ref="section-sage-cells" text="global"/>.</p>
+            <p>Sage cells can be used for Python examples, but Sage uses a mild amount of pre-parsing, so that might not be a wise decision, especially in instructional settings.  We might implement Skulpt or Brython (in-browser Python) or the Python language argument to the Sage Cell Server.  To see examples of authoring Sage cells, have a look at <xref ref="section-sage-cells"/>.</p>
 
             <p>In the meantime, program listings,<idx><h>listing</h></idx><idx><h>program listing</h></idx> especially with syntax highlighting, is useful all by itself.  The <q>R</q> language might not be a bad stand-in for pseudo-code, as it supports assignment with a left arrow and has fairly generic procedural syntax for control structures and data structures.  Or maybe Pascal would be a good choice?  Here is an example of R.  Note in the source that the entire block of code is wrapped in a CDATA section due to the four left angle brackets.  We do not recommend this technique for isolated problem characters, but it is a life-saver for situations like the <init>XSLT</init> code just following.</p>
 
@@ -12599,13 +12599,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" text="global"/>.</p></li>
                             <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" text="global"/>.</p></li>
                             <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" text="global"/>.</p></li>
-                            <li><p>Figures: An early plot, Figure<nbsp/><xref ref="figure-function-derivative" text="global"/>.</p></li>
+                            <li><p>Figures: An early plot, <xref ref="figure-function-derivative"/>.</p></li>
                         </ol>
                         <ul>
                             <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" text="global"/>.</p></li>
                             <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" text="global"/>.</p></li>
                             <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" text="global"/>.</p></li>
-                            <li><p>Figures: An early plot, Figure<nbsp/><xref ref="figure-function-derivative" text="global"/>.</p></li>
+                            <li><p>Figures: An early plot, <xref ref="figure-function-derivative"/>.</p></li>
                         </ul>
                 </sidebyside>
 
@@ -15146,7 +15146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection xml:id="subsection-local-theorems">
                 <title>Theorems in This Section</title>
 
-                <p>We have a lot of theorems in this section, so we illustrate including an automatic list of these here.  We use the <c>elements</c> attribute to limit the list to <c>theorem</c> elements, and we use the <c>scope</c> attribute to limit the list to this <c>section</c>.  You can use an introductory <c>p</c> like this one, or not.  The list gets no title or visual separation, so use the usual subdivision elements to make that happen.  The <c>elements</c> attribute can be a space-delimited list of many different elements.  This list should not include the Fundamental Theorem of Calculus, Theorem<nbsp/><xref ref="theorem-FTC" text="global"/>.  See a slightly different example in <xref ref="appendix-results" text="type-global"/>.</p>
+                <p>We have a lot of theorems in this section, so we illustrate including an automatic list of these here.  We use the <c>elements</c> attribute to limit the list to <c>theorem</c> elements, and we use the <c>scope</c> attribute to limit the list to this <c>section</c>.  You can use an introductory <c>p</c> like this one, or not.  The list gets no title or visual separation, so use the usual subdivision elements to make that happen.  The <c>elements</c> attribute can be a space-delimited list of many different elements.  This list should not include the Fundamental Theorem of Calculus, <xref ref="theorem-FTC"/>.  See a slightly different example in <xref ref="appendix-results" text="type-global"/>.</p>
 
                 <list-of elements="theorem" scope="section"/>
             </subsection>
@@ -17960,7 +17960,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <exercise>
                 <statement>
-                    <p>Can you prove Corollary<nbsp/><xref ref="corollary-FTC-derivative" text="global"/> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level.<ol>
+                    <p>Can you prove <xref ref="corollary-FTC-derivative"/> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level.<ol>
                         <li><p>Why is this result a Corollary?</p></li>
                         <li><p>Could you interchange the Theorem and Corollary?</p></li>
                     </ol></p>
