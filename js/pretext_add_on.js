@@ -1293,3 +1293,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 // END Support for code-copy button functionality
+
+
+window.addEventListener("DOMContentLoaded", () => {
+    const userDropdownButton = document.getElementById("ptx-user-dropdown-button");
+    const userDropdownContent = document.getElementById("ptx-user-dropdown-content");
+    if (userDropdownButton && userDropdownContent) {
+        new PTXDropdown(userDropdownContent, userDropdownButton);
+    }
+});

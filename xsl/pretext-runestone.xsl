@@ -257,58 +257,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="string-id" select="'profile'"/>
             </xsl:apply-templates>
         </xsl:variable>
-        <button class="runestone-profile dropdown button" title="{$profile-localization}">
+        <!-- note: as of 6/20/2026, anchor positioning is not widely supported -->
+        <!-- when it becomes supported, would make sense to use popover API    -->
+        <button type="button" id="ptx-user-dropdown-button" class="runestone-profile button ptx-dropdown-button" aria-haspopup="menu" aria-controls="ptx-user-dropdown-content" aria-expanded="false" title="{$profile-localization}">
             <xsl:call-template name="insert-symbol">
                 <xsl:with-param name="name" select="'person'"/>
             </xsl:call-template>
             <span class="name">
                 <xsl:value-of select="$profile-localization"/>
             </span>
-            <div id="ptx-user-dropdown_rs-content" class="dropdown-content">
-            </div>
-            <!-- clone template, modify href and inner text, and append to ptx-user-dropdown_rs-content -->
-            <template id="ptx-user-dropdown-content_item-template">
-              <a href="url here">title here</a>
-            </template>
-            <!-- clone and append to dropdown content area and add a separator within the menu -->
-            <template id="ptx-user-dropdown-content_separator-template">
-              <hr/>
-            </template>
-            <div class="dropdown-content" data-deprecated="true">
-                <xsl:text>&#xa;</xsl:text>
-                <xsl:text>{% if settings.academy_mode: %}&#xa;</xsl:text>
-                <a href="/ns/course/index">Course Home</a>
-                <a href="/runestone/assignments/chooseAssignment">Assignments</a>
-                <a href="/runestone/assignments/practice">Practice</a>
-                <hr/>
-                <!-- NB: next two entries were once templated with "appname" and           -->
-                <!-- the requisite spaces were percent-encoded by XSLT since it is         -->
-                <!-- known to be forming a  a/@href.                                       -->
-                <!-- Short-term fix: hard-code "runestone" as the appname, which should    -->
-                <!-- migrate to "assignment" when peer-instruction code moves.             -->
-                <!-- Long-term might suggest some XSL variables for the names of the apps. -->
-                <!-- if reader is not an instructor the next link will be removed by javascript -->
-                <a id="inst_peer_link" href="/runestone/peer/instructor.html">Peer Instruction (Instructor)</a>
-                <a href="/runestone/peer/student.html">Peer Instruction (Student)</a>
-                <hr/>
-                <a href="/runestone/default/courses">Change Course</a>
-                <hr/>
-                <a id="ip_dropdown_link" href="/admin/instructor/menu">Instructor Dashboard</a>
-                <hr/>
-                <xsl:text>&#xa;</xsl:text>
-                <xsl:text>{% endif %}&#xa;</xsl:text>
-                <a href="/runestone/dashboard/studentreport">Progress Page</a>
-                <hr/>
-                <xsl:text>&#xa;{% if is_logged_in %}&#xa;</xsl:text>
-                <a href="/runestone/default/user/profile">Edit Profile</a>
-                <a href="/runestone/default/user/change_password">Change Password</a>
-                <a href="/runestone/default/user/logout">Log Out</a>
-                <xsl:text>&#xa;{% else %}&#xa;</xsl:text>
-                <a href="/runestone/default/user/register">Register</a>
-                <a href="/runestone/default/user/login">Login</a>
-                <xsl:text>&#xa;{% endif %}&#xa;</xsl:text>
-            </div>
         </button>
+        <div id="ptx-user-dropdown-content" class="ptx-dropdown-content" aria-labelledby="ptx-user-dropdown-button" role="menu">
+            <ul id="ptx-user-dropdown_rs-content" role="group" aria-label="Runestone"></ul>
+        </div>
+        <!-- clone template, modify href and inner text, and append to ptx-user-dropdown_rs-content -->
+        <template id="ptx-user-dropdown-content_item-template">
+            <li role="presentation" class="ptx-dropdown-item">
+                <a href="url here" role="menuitem">title here</a>
+            </li>
+        </template>
+        <!-- clone and append to dropdown content area and add a separator within the menu -->
+        <template id="ptx-user-dropdown-content_separator-template">
+            <li role="presentation" class="ptx-dropdown-separator"></li>
+        </template>
     </xsl:if>
 </xsl:template>
 

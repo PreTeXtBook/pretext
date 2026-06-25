@@ -71,10 +71,6 @@ $center-content: true !default;
     justify-content: end;
   }
 
-  .pretext .navbar .dropdown {
-    height: 34px;
-  }
-
   .ptx-embed-popup {
     padding: 10px;
     margin-top: $nav-height;
@@ -181,11 +177,10 @@ $center-content: true !default;
     min-width: 70px;
   }
 
-}
-
-// Button in the navbar, but needs to be less specific so not nested in previous
-.runestone-profile {
-  @include buttons.ptx-dropdown-button;
+  // applies to all dropdowns in the navbar, currently just profile
+  .ptx-dropdown-content {
+    @include buttons.ptx-dropdown-menu;
+  }
 }
 
 @if $max-width > 0 {
@@ -257,7 +252,7 @@ $center-content: true !default;
       bottom: $nav-height;
     }
 
-    .dropdown-content {
+    .ptx-dropdown-content {
       top: unset;
       bottom: $nav-height;
     }

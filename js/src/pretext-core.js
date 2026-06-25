@@ -14,6 +14,7 @@
  ******************************************************************************/
 
 import './pretext-dialog.js';
+import './pretext-dropdown.js';
 import './readability-options.js';
 import '../pretext.js';
 import '../pretext_add_on.js';

@@ -503,6 +503,133 @@
   };
   window.PTXDialog = PTXDialog2;
 
+  // ../../js/src/pretext-dropdown.js
+  var PTXDropdown2 = class {
+    // dropdownElement: menu element to show and hide
+    // openButton: element that toggles the dropdown and receives focus on close
+    constructor(dropdownElement, openButton = null, options = {}) {
+      this.dropdown = dropdownElement;
+      this.controlElement = openButton;
+      this.closeOnSelect = options.closeOnSelect !== false;
+      if (!this.dropdown) {
+        console.warn("PTXDropdown: No dropdown element provided.");
+        return;
+      }
+      this.dropdown.hidden = true;
+      if (this.controlElement) {
+        this.controlElement.setAttribute("aria-expanded", "false");
+        this.controlElement.setAttribute("aria-controls", this.dropdown.id);
+        this.controlElement.addEventListener("click", (event2) => {
+          event2.preventDefault();
+          this.toggle();
+        });
+        this.controlElement.addEventListener("keydown", (event2) => {
+          if (event2.key === "ArrowDown" || event2.key === "Enter" || event2.key === " ") {
+            event2.preventDefault();
+            this.open({ focusMenu: true });
+          }
+        });
+        this.controlElement.addEventListener("keydown", (event2) => {
+          if (event2.key === "Escape" && this.isOpen()) {
+            event2.preventDefault();
+            this.close();
+          }
+        });
+      }
+      this.dropdown.addEventListener("keydown", (event2) => this.handleKeydown(event2));
+      this.dropdown.addEventListener("click", (event2) => {
+        if (this.closeOnSelect && event2.target.closest('[role="menuitem"], a, button')) {
+          this.close({ restoreFocus: false });
+        }
+      });
+      document.addEventListener("click", (event2) => {
+        if (!this.isOpen()) return;
+        if (this.dropdown.contains(event2.target) || this.controlElement?.contains(event2.target)) {
+          return;
+        }
+        this.close({ restoreFocus: false });
+      });
+    }
+    isOpen() {
+      return !this.dropdown.hidden;
+    }
+    setExpanded(expanded) {
+      this.dropdown.hidden = !expanded;
+      this.dropdown.classList.toggle("open", expanded);
+      if (this.controlElement) {
+        this.controlElement.setAttribute("aria-expanded", expanded ? "true" : "false");
+        this.controlElement.classList.toggle("open", expanded);
+      }
+    }
+    open(options = {}) {
+      this.dropdown.querySelectorAll("a").forEach((link) => {
+        link.setAttribute("tabindex", "-1");
+      });
+      this.setExpanded(true);
+      if (options.focusMenu) {
+        this.focusFirstItem();
+      }
+    }
+    close(options = {}) {
+      this.setExpanded(false);
+      if (options.restoreFocus !== false && this.controlElement) {
+        this.controlElement.focus();
+      }
+    }
+    toggle() {
+      if (this.isOpen()) {
+        this.close();
+      } else {
+        this.open();
+      }
+    }
+    menuItems() {
+      return Array.from(this.dropdown.querySelectorAll('[role="menuitem"], a, button')).filter((item) => !item.hasAttribute("disabled") && item.getAttribute("aria-disabled") !== "true");
+    }
+    focusFirstItem() {
+      this.menuItems()[0]?.focus();
+    }
+    focusLastItem() {
+      const items = this.menuItems();
+      items[items.length - 1]?.focus();
+    }
+    focusNextItem(currentItem, direction) {
+      const items = this.menuItems();
+      if (!items.length) return;
+      const currentIndex = items.indexOf(currentItem);
+      const nextIndex = currentIndex === -1 ? 0 : (currentIndex + direction + items.length) % items.length;
+      items[nextIndex].focus();
+    }
+    handleKeydown(event2) {
+      switch (event2.key) {
+        case "Escape":
+          event2.preventDefault();
+          this.close();
+          break;
+        case "ArrowDown":
+          event2.preventDefault();
+          this.focusNextItem(document.activeElement, 1);
+          break;
+        case "ArrowUp":
+          event2.preventDefault();
+          this.focusNextItem(document.activeElement, -1);
+          break;
+        case "Home":
+          event2.preventDefault();
+          this.focusFirstItem();
+          break;
+        case "End":
+          event2.preventDefault();
+          this.focusLastItem();
+          break;
+        case "Tab":
+          this.close({ restoreFocus: false });
+          break;
+      }
+    }
+  };
+  window.PTXDropdown = PTXDropdown2;
+
   // ../../js/src/readability-options.js
   function getSavedTheme() {
     const savedTheme = localStorage.getItem("theme");
@@ -1960,6 +2087,13 @@
         <span class="checkmark material-symbols-outlined">check</span>
     </button>
             `.trim());
+    }
+  });
+  window.addEventListener("DOMContentLoaded", () => {
+    const userDropdownButton = document.getElementById("ptx-user-dropdown-button");
+    const userDropdownContent = document.getElementById("ptx-user-dropdown-content");
+    if (userDropdownButton && userDropdownContent) {
+      new PTXDropdown(userDropdownContent, userDropdownButton);
     }
   });
 
