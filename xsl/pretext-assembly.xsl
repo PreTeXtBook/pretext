@@ -3462,6 +3462,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <!-- Restore all of the original attributes not processed separately -->
         <xsl:copy-of select="@*[not(contains(concat(' ', $interactive-drop-attr, ' '), concat(' ', local-name(), ' ')))]"/>
+        <!-- done with attributes, copy the content -->
+        <xsl:apply-templates select="node()" mode="enrichment"/>
         <slate>
             <xsl:attribute name="xml:id">
                 <xsl:value-of select="@assembly-id"/>
