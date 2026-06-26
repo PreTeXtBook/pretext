@@ -6637,7 +6637,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<xsl:template match="image|interactive[@platform]" mode="description">
+<xsl:template match="image|interactive[@platform|@desmos|@calcplot3d|@circuitjs|@iframe]" mode="description">
     <xsl:if test="description">
         <!-- @aria-live means screenreaders will make announcements -->
         <details class="image-description" aria-live="polite">
@@ -6657,7 +6657,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Utility template so "aria-describedby" values are consistent -->
-<xsl:template match="image|interactive[@platform]" mode="describedby-id">
+<xsl:template match="image|interactive[@platform|@desmos|@calcplot3d|@circuitjs|@iframe]" mode="describedby-id">
     <xsl:apply-templates select="." mode="visible-id"/>
     <xsl:text>-description</xsl:text>
 </xsl:template>
@@ -9980,10 +9980,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The simplest possible example of this type -->
 <xsl:template match="interactive[@desmos]" mode="iframe-interactive">
     <iframe src="https://www.desmos.com/calculator/{@desmos}">
-        <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
-        <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
+        <xsl:apply-templates select="." mode="iframe-common-attributes" />
+        <xsl:apply-templates select="." mode="iframe-accessibility-attributes"/>
     </iframe>
+    <!-- possibly give a long description -->
+    <xsl:apply-templates select="." mode="description"/>
 </xsl:template>
 
 <!-- CalcPlot3D -->
@@ -10011,10 +10012,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: box-sizing, etc does not seem to help with vertical scroll bars -->
     <xsl:variable name="full-url" select="concat($cp3d-endpoint, '?', @calcplot3d)" />
     <iframe src="{$full-url}">
-        <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
-        <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
+        <xsl:apply-templates select="." mode="iframe-common-attributes" />
+        <xsl:apply-templates select="." mode="iframe-accessibility-attributes"/>
     </iframe>
+    <!-- possibly give a long description -->
+    <xsl:apply-templates select="." mode="description"/>
 </xsl:template>
 
 <!-- CircuitJS: https://www.falstad.com -->
@@ -10045,10 +10047,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <iframe src="https://www.falstad.com/circuit/circuitjs.html?cct='{$url-string}'">
-        <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
-        <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
+        <xsl:apply-templates select="." mode="iframe-common-attributes" />
+        <xsl:apply-templates select="." mode="iframe-accessibility-attributes"/>
     </iframe>
+    <!-- possibly give a long description -->
+    <xsl:apply-templates select="." mode="description"/>
 </xsl:template>
 
 <!-- Arbitrary IFrame -->
@@ -10068,40 +10071,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="@iframe"/>
     </xsl:variable>
     <iframe src="{$location}">
-        <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
-        <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
+        <xsl:apply-templates select="." mode="iframe-common-attributes" />
+        <xsl:apply-templates select="." mode="iframe-accessibility-attributes"/>
     </iframe>
+    <!-- possibly give a long description -->
+    <xsl:apply-templates select="." mode="description"/>
 </xsl:template>
 
 <!-- For more complicated interactives, we just point to the page we generate -->
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <iframe>
-        <xsl:apply-templates select="." mode="html-id-attribute"/>
-        <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
+        <xsl:apply-templates select="." mode="iframe-common-attributes" />
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
         </xsl:attribute>
-        <!-- title attribute for accessibility -->
-        <xsl:choose>
-            <xsl:when test="not(string(shortdescription) = '')">
-                <xsl:attribute name="title">
-                    <xsl:apply-templates select="shortdescription" />
-                </xsl:attribute>
-            </xsl:when>
-            <xsl:when test="description">
-                <xsl:attribute name="title">
-                    <xsl:text>described in detail following the image</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="aria-describedby">
-                    <xsl:apply-templates select="." mode="describedby-id"/>
-                </xsl:attribute>
-            </xsl:when>
-        </xsl:choose>
-        <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
+        <xsl:apply-templates select="." mode="iframe-accessibility-attributes"/>
     </iframe>
     <!-- possibly give a long description -->
     <xsl:apply-templates select="." mode="description"/>
+</xsl:template>
+
+<!-- Set the title attribute for accessibility purposes -->
+<!-- If there is a description but not a shortdescription, provide text and aria-describedby -->
+<xsl:template match="*" mode="iframe-accessibility-attributes">
+    <!-- title attribute for accessibility -->
+    <xsl:choose>
+        <xsl:when test="not(string(shortdescription) = '')">
+            <xsl:attribute name="title">
+                <xsl:apply-templates select="shortdescription" />
+            </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="description">
+            <xsl:attribute name="title">
+                <xsl:text>described in detail following the image</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="aria-describedby">
+                <xsl:apply-templates select="." mode="describedby-id"/>
+            </xsl:attribute>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Attributes that are common to the iframe interactives -->
+<xsl:template match="*" mode="iframe-common-attributes">
+    <xsl:apply-templates select="." mode="html-id-attribute"/>
+    <xsl:apply-templates select="." mode="iframe-dark-mode-attribute" />
+    <xsl:apply-templates select="." mode="interactive-sizing-style-attribute" />
 </xsl:template>
 
 <!-- ######################### -->
