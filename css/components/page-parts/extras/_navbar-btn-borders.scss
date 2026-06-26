@@ -3,16 +3,18 @@ $border-width: 1px !default;
 
 @mixin navbar-btn-borders {
   .ptx-navbar-contents {
+    gap: $border-width;
+    background: var(--page-border-color);
+
     & > .button,
     & > :not(dialog) > .button {
-      border-left-width: $border-width;
-      border-right-width: $border-width;
-      border-color: var(--page-border-color);
+      border-left-width: 0;
+      border-right-width: 0;
     }
-  
-    & > *:not(:first-child) {
-      //hide double borders
-      margin-left: -1 * $border-width;
+
+    :is(.treebuttons, .nav-runestone-controls, .nav-other-controls) {
+      gap: $border-width;
+      background: var(--page-border-color);
     }
   }
 }
