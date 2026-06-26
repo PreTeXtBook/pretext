@@ -209,8 +209,13 @@ def webwork_to_xml(
             disableCookies='1',
             outputformat='raw'
         )
-        # Always use html2xml for this; we don't know the server version yet
-        version_determination_json = requests.get(url=webwork2_html2xml, params=params_for_version_determination).json()
+        # Try render_rpc first.  If that fails, then fall back to html2xml.
+        render_rpc_response = requests.get(url=webwork2_render_rpc, params=params_for_version_determination)
+        if render_rpc_response.status_code == 200:
+            version_determination_json = render_rpc_response.json()
+        else:
+            version_determination_json = requests.get(
+                url=webwork2_html2xml, params=params_for_version_determination).json()
         if "ww_version" in version_determination_json:
             webwork2_version = version_determination_json["ww_version"]
             webwork2_version_match = re.search(
