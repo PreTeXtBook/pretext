@@ -862,7 +862,7 @@
         setAutopermalinksAccessible(this.checked);
       });
     }
-    setAutopermalinksAccessible(localStorage.getItem("accessiblePermalinks") === "true");
+    setAutopermalinksAccessible(getSavedAccessiblePermalinks());
     const resetButton = document.getElementById("ptx-readability-reset-button");
     if (resetButton) {
       resetButton.addEventListener("click", function() {
@@ -956,45 +956,43 @@
     let ptxSidebar = document.getElementById("ptx-sidebar");
     let sideBarIsHidden = ptxSidebar.classList.contains("hidden") || !ptxSidebar.classList.contains("visible") && ptxSidebar.offsetParent === null;
     tocButton.setAttribute("aria-expanded", !sideBarIsHidden);
-    if (getComputedStyle(document.documentElement).getPropertyValue("--auto-collapse-toc") == "yes") {
-      const sidebar = document.getElementById("ptx-sidebar");
+    const autoCollapseToc = getComputedStyle(document.documentElement).getPropertyValue("--auto-collapse-toc") == "yes";
+    if (autoCollapseToc) {
       window.addEventListener("click", function(event3) {
-        if (sidebar.classList.contains("visible")) {
-          if (!event3.composedPath().includes(sidebar)) {
+        if (ptxSidebar.classList.contains("visible")) {
+          if (!event3.composedPath().includes(ptxSidebar)) {
             toggletoc();
           }
         }
       });
-      sidebar.addEventListener("click", function(event3) {
+      ptxSidebar.addEventListener("click", function(event3) {
         if (samePageLink(event3.target.closest("a"))) {
           toggletoc();
         }
       });
       window.addEventListener("pageshow", (e2) => {
         if (e2.persisted) {
-          sidebar.classList.remove("visible");
-          sidebar.classList.add("hidden");
+          ptxSidebar.classList.remove("visible");
+          ptxSidebar.classList.add("hidden");
           tocButton.setAttribute("aria-expanded", "false");
         }
       });
-      window.addEventListener("keydown", function(event3) {
-        if (event3.key === "Escape" && sidebar.classList.contains("visible")) {
-          toggletoc();
-        }
-      });
     }
+    window.addEventListener("keydown", function(event3) {
+      if (event3.key === "Escape" && ptxSidebar.classList.contains("visible") && (getComputedStyle(ptxSidebar).position === "fixed" || autoCollapseToc)) {
+        toggletoc();
+      }
+    });
   });
   function toggleTOCItem(expander, event2 = null) {
     let listItem = expander.closest(".toc-item");
     listItem.classList.toggle("expanded");
     let expanded = listItem.classList.contains("expanded");
-    let targetElement = document.getElementById(expander.controlledGroup);
+    let groupName = listItem.querySelector(".toc-title-box").innerText;
     if (expanded) {
-      let groupName = listItem.querySelector(".toc-title-box").innerText;
       expander.title = "Close " + groupName;
       expander.setAttribute("aria-expanded", "true");
     } else {
-      let groupName = listItem.querySelector(".toc-title-box").innerText;
       expander.title = "Expand " + groupName;
       expander.setAttribute("aria-expanded", "false");
     }
