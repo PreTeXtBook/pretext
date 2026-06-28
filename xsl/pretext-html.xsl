@@ -7261,7 +7261,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- assistive "Skip to main content" link    -->
                 <!-- this *must* be first for maximum utility -->
                 <xsl:call-template name="skip-to-content-link" />
-                <xsl:call-template name="latex-macros" />
+                <xsl:apply-templates select="." mode="latex-macros" />
                  <header id="ptx-masthead" class="ptx-masthead">
                     <div class="ptx-banner">
                         <xsl:call-template name="brand-logo" />
@@ -10277,7 +10277,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Some interactives use slates that are PreTeXt  -->
                 <!-- elements, hence could have math, hence need to -->
                 <!-- know globally available macros from the author -->
-                <xsl:call-template name="latex-macros"/>
+                <xsl:apply-templates select="." mode="latex-macros"/>
                 <xsl:if test="slate|sidebyside|sbsgroup">
                     <div>
                         <!-- aspect ratio will force the proper height for wrapper div                           -->
@@ -11694,7 +11694,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </div>  <!-- banner -->
             </header>  <!-- masthead -->
             <xsl:apply-templates select="." mode="primary-navigation"/>
-            <xsl:call-template name="latex-macros"/>
+            <xsl:apply-templates select="." mode="latex-macros"/>
             <div class="ptx-page">
                 <xsl:apply-templates select="." mode="sidebars" />
                 <!-- HTML5 main will be a "main" landmark automatically -->
@@ -14569,7 +14569,7 @@ TODO:
 <!-- NB: "math support" macros (fillin-math, sfrac) must  -->
 <!-- be defined here AND in the "extraction-wrapper"      -->
 <!-- template in  support/extract-math.xsl                -->
-<xsl:template name="latex-macros">
+<xsl:template match="*" mode="latex-macros">
     <div id="latex-macros" class="hidden-content process-math" style="display:none">
         <xsl:call-template name="inline-math-wrapper">
             <xsl:with-param name="math">

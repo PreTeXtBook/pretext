@@ -224,7 +224,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="load-css" />
         <!-- load LaTeX macros for MathJax               -->
         <!-- Empty visually, so also provides separation -->
-        <xsl:call-template name="latex-macros" />
+        <xsl:apply-templates select="." mode="latex-macros" />
         <!-- the real content of the page -->
         <xsl:copy-of select="$content" />
     </xsl:variable>
@@ -367,7 +367,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- conversion to LateX.  Bad practice?  Maybe better to  -->
 <!-- go back to -common and rework the entire latex-macro  -->
 <!-- generation scheme?                                    -->
-<xsl:template name="latex-macros">
+<xsl:template match="*" mode="latex-macros">
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
