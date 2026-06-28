@@ -3669,6 +3669,14 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     common.xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
     time_logger.log("xsltproc complete")
 
+    if common.get_publisher_variable(pub_vars, 'host-platform') == "runestone":
+        log.info("building Runestone page template for {} in {}".format(xml, tmp_dir))
+        runestone_page_template_xslt = os.path.join(
+            common.get_ptx_xsl_path(), "extract-runestone-page-template.xsl"
+        )
+        common.xsltproc(runestone_page_template_xslt, xml, None, tmp_dir, stringparams)
+        time_logger.log("runestone page template extraction complete")
+
     if not(include_static_files):
         # remove latex-image generated directories for portable builds
         shutil.rmtree(os.path.join(tmp_dir, "generated", "latex-image"), ignore_errors=True)
