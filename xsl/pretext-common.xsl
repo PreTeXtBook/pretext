@@ -10330,19 +10330,10 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- identifier equal to one of these would collide and break the UI. -->
     <!-- Audited against the HTML output, 2026-06-04.                     -->
     <xsl:variable name="reserved-html-ids">
-        <xsl:text>ptx-masthead ptx-content ptx-content-footer ptx-page-footer </xsl:text>
-        <xsl:text>ptx-navbar ptx-sidebar ptx-toc-toggle ptx-toc mainmatter logo-link latex-macros </xsl:text>
-        <xsl:text>ptx-search-button ptx-search-results ptx-search-dialog ptx-search-terms ptx-search-status ptx-search-empty ptx-search-close </xsl:text>
-        <xsl:text>ptx-readability-options-button ptx-readability-options-popup ptx-readability-options-close-button ptx-readability-reset-button </xsl:text>
-        <xsl:text>ptx-readability-theme-system ptx-readability-theme-light ptx-readability-theme-dark </xsl:text>
-        <xsl:text>ptx-readability-line-height ptx-readability-line-height-value ptx-readability-font-size ptx-readability-font-size-value ptx-readability-accessible-permalinks </xsl:text>
         <xsl:text>papersize-select highlight-workspace-checkbox </xsl:text>
         <xsl:text>hide-hint-checkbox hide-answer-checkbox hide-solution-checkbox </xsl:text>
         <xsl:text>print-first-page-header-checkbox print-running-header-checkbox </xsl:text>
         <xsl:text>print-first-page-footer-checkbox print-running-footer-checkbox </xsl:text>
-        <xsl:text>ptx-calculator-toggle ptx-calculator-container ptx-geogebra-calculator </xsl:text>
-        <xsl:text>ptx-user-dropdown_rs-content ptx-user-dropdown-content_item-template ptx-user-dropdown-content_separator-template </xsl:text>
-        <xsl:text>ptx-embed-button ptx-embed-popup ptx-embed-close-button ptx-embed-code-textbox ptx-embed-copy-button </xsl:text>
         <!-- Runestone Services ids, banned always: these components can appear -->
         <!-- even on a non-hosted build.  (When actually hosted on Runestone the -->
         <!-- HTML ids are mangled, so the collision risk there is small.)        -->
@@ -10380,6 +10371,17 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <xsl:text> "</xsl:text>
                 <xsl:value-of select="." />
                 <xsl:text>" is invalid since it will conflict with a unique HTML id in use by the user interface.  Please use a different string.  Quitting...</xsl:text>
+            </xsl:message>
+        </xsl:if>
+        <!-- reserve all ptx-* ids for internal use -->
+        <xsl:if test="starts-with(., 'ptx-')">
+            <xsl:message terminate="yes">
+                <xsl:text>PTX:FATAL:   </xsl:text>
+                <xsl:text>The @</xsl:text>
+                <xsl:value-of select="name()" />
+                <xsl:text> "</xsl:text>
+                <xsl:value-of select="." />
+                <xsl:text>" is invalid because PreTeXt reserves all ptx-* ids for internal use.  Quitting...</xsl:text>
             </xsl:message>
         </xsl:if>
         <!-- index.html is built automatically, so preclude a clash -->
