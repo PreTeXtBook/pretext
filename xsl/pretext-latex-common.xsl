@@ -10014,16 +10014,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="row-bottom">
-        <xsl:choose>
-            <xsl:when test="@bottom">
-                <xsl:value-of select="@bottom" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$table-bottom" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
     <!-- Walking the row's cells, write contents and bottom borders -->
     <xsl:apply-templates select="cell[1]">
         <xsl:with-param name="left-col" select="parent::tabular/col[1]" /> <!-- possibly empty -->
@@ -10036,7 +10026,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="table-halign" select="$table-halign" />
         <xsl:with-param name="table-valign" select="$table-valign" />
         <xsl:with-param name="row-left" select="$row-left" />
-        <xsl:with-param name="row-bottom" select="$row-bottom" />
     </xsl:apply-templates>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
@@ -10066,7 +10055,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="table-halign" />
     <xsl:param name="table-valign" />
     <xsl:param name="row-left" />
-    <xsl:param name="row-bottom" />
     <!-- A cell may span several columns, or default to just 1              -->
     <!-- When colspan is not trivial, we identify the left and right ends   -->
     <!-- of the span, both as col elements and as column numbers            -->
@@ -10098,17 +10086,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- determine a custom right border on a cell -->
-    <!-- else default to the column value          -->
+    <!-- the effective right border of the cell (cell > col > tabular); -->
+    <!-- "column-right" above is kept for the multicolumn deviation test -->
     <xsl:variable name="cell-right">
-        <xsl:choose>
-            <xsl:when test="@right">
-                <xsl:value-of select="@right" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$column-right" />
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="effective-right"/>
     </xsl:variable>
     <!-- Use cell attributes, or col attributes for horizontal alignment -->
     <!-- recreate the column specification for horizontal alignment      -->
@@ -10123,34 +10104,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- determine a custom horizontal alignment on a cell        -->
-    <!-- check for row override, else default to the column value -->
+    <!-- the effective horizontal alignment (cell > row > col > tabular); -->
+    <!-- "column-halign" above is kept for the multicolumn deviation test -->
     <xsl:variable name="cell-halign">
-        <xsl:choose>
-            <xsl:when test="@halign">
-                <xsl:value-of select="@halign" />
-            </xsl:when>
-            <!-- look to the row -->
-            <xsl:when test="parent::row/@halign">
-                <xsl:value-of select="parent::row/@halign" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$column-halign" />
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="effective-halign"/>
     </xsl:variable>
-    <!-- Use row attributes for vertical alignment                -->
-    <!-- recreate the row specification for vertical alignment    -->
-    <!-- either a per-row value, or the global, table-wide value  -->
+    <!-- the effective vertical alignment of the cell (row > tabular) -->
     <xsl:variable name="row-valign">
-        <xsl:choose>
-            <xsl:when test="parent::row/@valign">
-                <xsl:value-of select="parent::row/@valign" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$table-valign" />
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="effective-valign"/>
     </xsl:variable>
     <!-- Look ahead to next cell, anticipating recursion     -->
     <!-- but also probing for end of row (empty $next-cell), -->
@@ -10229,34 +10190,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$next-cell">
         <xsl:text>&amp;</xsl:text>
     </xsl:if>
-    <!-- The desired bottom border style for this cell     -->
+    <!-- the effective bottom border of this cell (cell > row > tabular) -->
     <xsl:variable name="current-bottom">
-        <xsl:choose>
-            <!-- cell specification -->
-            <xsl:when test="@bottom">
-                <xsl:value-of select="@bottom" />
-            </xsl:when>
-            <!-- inherited specification for row -->
-            <xsl:otherwise>
-                <xsl:value-of select="$row-bottom" />
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="effective-bottom"/>
     </xsl:variable>
-    <!-- The desired bottom border style for the next cell     -->
+    <!-- the effective bottom border of the next cell, or a sentinel  -->
+    <!-- at end of row, used below to detect a change in the rule run -->
     <xsl:variable name="next-bottom">
         <xsl:choose>
-            <!-- end of row, no next cell, so      -->
-            <!-- bottom style signals change/flush -->
             <xsl:when test="not($next-cell)">
                 <xsl:text>undefined-bottom</xsl:text>
             </xsl:when>
-            <!-- next cell's specification -->
-            <xsl:when test="$next-cell/@bottom">
-                <xsl:value-of select="$next-cell/@bottom" />
-            </xsl:when>
-            <!-- inherited specification for row -->
             <xsl:otherwise>
-                <xsl:value-of select="$row-bottom" />
+                <xsl:apply-templates select="$next-cell" mode="effective-bottom"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -10314,7 +10260,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="table-halign" select="$table-halign" />
         <xsl:with-param name="table-valign" select="$table-valign" />
         <xsl:with-param name="row-left" select="$table-left" />
-        <xsl:with-param name="row-bottom" select="$row-bottom" />
     </xsl:apply-templates>
 
     <!-- finish the row, dump cline info, etc -->
