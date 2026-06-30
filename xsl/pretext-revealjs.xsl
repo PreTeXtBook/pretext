@@ -159,7 +159,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <div class="reveal ptx-content">
                 <!-- For mathematics/MathJax, must be located -->
                 <!-- within div.reveal to be effective        -->
-                <xsl:call-template name="latex-macros"/>
+                <xsl:apply-templates select="." mode="latex-macros"/>
                 <div class="slides">
                      <xsl:apply-templates select="frontmatter"/>
                     <xsl:apply-templates select="section|slide"/>

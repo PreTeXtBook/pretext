@@ -116,3 +116,10 @@ $small-nested-margin-offset: 0px !default;
     margin-right: auto;
   }
 }
+
+.ptx-runestone-template {
+  :is(#{sizing.$grouping-elements}):has(#{sizing.$rs-wide-elements}) {
+    margin-left: unset;
+  }
+
+}

@@ -348,7 +348,7 @@
 <xsl:template name="html-css-mathjax-setup">
     <xsl:apply-templates select="." mode="smc-html-cell">
         <xsl:with-param name="content">
-            <xsl:call-template name="latex-macros" />
+            <xsl:apply-templates select="." mode="latex-macros" />
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>

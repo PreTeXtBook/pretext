@@ -7261,7 +7261,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- assistive "Skip to main content" link    -->
                 <!-- this *must* be first for maximum utility -->
                 <xsl:call-template name="skip-to-content-link" />
-                <xsl:call-template name="latex-macros" />
+                <xsl:apply-templates select="." mode="latex-macros" />
                  <header id="ptx-masthead" class="ptx-masthead">
                     <div class="ptx-banner">
                         <xsl:call-template name="brand-logo" />
@@ -10277,7 +10277,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Some interactives use slates that are PreTeXt  -->
                 <!-- elements, hence could have math, hence need to -->
                 <!-- know globally available macros from the author -->
-                <xsl:call-template name="latex-macros"/>
+                <xsl:apply-templates select="." mode="latex-macros"/>
                 <xsl:if test="slate|sidebyside|sbsgroup">
                     <div>
                         <!-- aspect ratio will force the proper height for wrapper div                           -->
@@ -11581,8 +11581,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- * page content (exclusive of banners, navigation etc) -->
 <xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
+    <xsl:param name="title" select="''"/>
     <xsl:param name="filename" select="''"/>
     <xsl:param name="b-has-printout" select="false()"/>
+    <xsl:param name="b-include-bottom-nav" select="true()"/>
 
     <xsl:variable name="the-filename">
         <xsl:choose>
@@ -11603,13 +11605,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="pretext-advertisement-and-style"/>
         <!-- Open Graph Protocol only in "meta" elements, within "head" -->
         <head xmlns:og="http://ogp.me/ns#" xmlns:book="https://ogp.me/ns/book#">
+            <!-- optional head content that needs to come prior to other content -->
+            <xsl:apply-templates select="." mode="file-wrap-head-pre"/>
             <title>
-                <!-- Leading with initials is useful for small tabs -->
-                <xsl:if test="$docinfo/initialism">
-                    <xsl:apply-templates select="$docinfo/initialism" />
-                    <xsl:text> </xsl:text>
-                </xsl:if>
-                <xsl:apply-templates select="." mode="title-plain" />
+                <xsl:choose>
+                    <xsl:when test="$title != ''">
+                        <xsl:value-of select="$title"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- Leading with initials is useful for small tabs -->
+                        <xsl:if test="$docinfo/initialism">
+                            <xsl:apply-templates select="$docinfo/initialism" />
+                            <xsl:text> </xsl:text>
+                        </xsl:if>
+                        <xsl:apply-templates select="." mode="title-plain" />
+                    </xsl:otherwise>
+                </xsl:choose>
             </title>
             <!-- canonical link for better SEO -->
             <xsl:call-template name="canonical-link">
@@ -11621,6 +11632,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="knowl" />
             <!-- webwork's iframeResizer needs to come before sagecell template -->
             <xsl:apply-templates select="." mode="sagecell" />
+            <!-- optional head content that might override other content-->
+            <xsl:apply-templates select="." mode="file-wrap-head-post"/>
         </head>
         <body>
             <xsl:if test="$b-has-stack">
@@ -11639,6 +11652,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="$root/book">pretext book</xsl:when>
                     <xsl:when test="$root/article">pretext article</xsl:when>
                 </xsl:choose>
+                <xsl:apply-templates select="." mode="file-wrap-body-attr-extra"/>
                 <!-- ignore MathJax signals everywhere, then enable selectively -->
                 <xsl:text> ignore-math</xsl:text>
             </xsl:attribute>
@@ -11680,7 +11694,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </div>  <!-- banner -->
             </header>  <!-- masthead -->
             <xsl:apply-templates select="." mode="primary-navigation"/>
-            <xsl:call-template name="latex-macros"/>
+            <xsl:apply-templates select="." mode="latex-macros"/>
             <div class="ptx-page">
                 <xsl:apply-templates select="." mode="sidebars" />
                 <!-- HTML5 main will be a "main" landmark automatically -->
@@ -11700,23 +11714,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- output. (2023-01-11)                             -->
                         <xsl:copy-of select="$content" />
                     </div>
-                    <div id="ptx-content-footer" class="ptx-content-footer">
-                        <xsl:apply-templates select="." mode="previous-button"/>
-                        <xsl:variable name="top-localization">
-                            <xsl:apply-templates select="." mode="type-name">
-                                <xsl:with-param name="string-id" select="'top'"/>
-                            </xsl:apply-templates>
-                        </xsl:variable>
-                        <a class="top-button button" href="#" title="{$top-localization}">
-                            <xsl:call-template name="insert-symbol">
-                                <xsl:with-param name="name" select="'expand_less'"/>
-                            </xsl:call-template>
-                            <span class="name">
-                                <xsl:value-of select="$top-localization"/>
-                            </span>
-                        </a>
-                        <xsl:apply-templates select="." mode="next-button"/>
-                    </div>
+                    <xsl:if test="$b-include-bottom-nav">
+                        <div id="ptx-content-footer" class="ptx-content-footer">
+                            <xsl:apply-templates select="." mode="previous-button"/>
+                            <xsl:variable name="top-localization">
+                                <xsl:apply-templates select="." mode="type-name">
+                                    <xsl:with-param name="string-id" select="'top'"/>
+                                </xsl:apply-templates>
+                            </xsl:variable>
+                            <a class="top-button button" href="#" title="{$top-localization}">
+                                <xsl:call-template name="insert-symbol">
+                                    <xsl:with-param name="name" select="'expand_less'"/>
+                                </xsl:call-template>
+                                <span class="name">
+                                    <xsl:value-of select="$top-localization"/>
+                                </span>
+                            </a>
+                            <xsl:apply-templates select="." mode="next-button"/>
+                        </div>
+                    </xsl:if>
                 </main>
             </div>
             <!-- formerly "extra" -->
@@ -11731,10 +11747,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$b-portable-html and $has-native-search">
                 <xsl:call-template name="embedded-search-construction"/>
             </xsl:if>
+            <!-- optional body content that needs to be inserted after all content -->
+            <!-- e.g. script tags to run immediately                               -->
+            <xsl:apply-templates select="." mode="file-wrap-body-post"/>
         </body>
     </html>
     </exsl:document>
 </xsl:template>
+
+<!-- Templates that can be overriden to inject into various      -->
+<!-- points in the HTML page. See file-wrap above for locations. -->
+<xsl:template match="*" mode="file-wrap-head-pre"/>
+<xsl:template match="*" mode="file-wrap-head-post"/>
+<xsl:template match="*" mode="file-wrap-body-attr-extra"/>
+<xsl:template match="*" mode="file-wrap-body-post"/>
 
 <!-- A minimal individual page:                              -->
 <!-- Inputs:                                                 -->
@@ -11822,16 +11848,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################### -->
 
 <!-- Canonical Link -->
-<!-- TODO: condition for generic builds at $site-root, need base-url, etc -->
 <xsl:template name="canonical-link">
     <xsl:param name="filename"/>
-
-    <!-- book-wide site URL -->
-    <xsl:variable name="site-root">
-        <xsl:value-of select="concat('https://runestone.academy/ns/books/published/', $document-id, '/')"/>
-    </xsl:variable>
     <!-- just for Runestone builds -->
     <xsl:if test="$b-host-runestone">
+        <xsl:variable name="site-root">
+            <xsl:call-template name="runestone-server-baseurl"/>
+        </xsl:variable>
         <xsl:variable name="full-url" select="concat($site-root, $filename)"/>
         <link rel="canonical" href="{$full-url}"/>
     </xsl:if>
@@ -14546,7 +14569,7 @@ TODO:
 <!-- NB: "math support" macros (fillin-math, sfrac) must  -->
 <!-- be defined here AND in the "extraction-wrapper"      -->
 <!-- template in  support/extract-math.xsl                -->
-<xsl:template name="latex-macros">
+<xsl:template match="*" mode="latex-macros">
     <div id="latex-macros" class="hidden-content process-math" style="display:none">
         <xsl:call-template name="inline-math-wrapper">
             <xsl:with-param name="math">

@@ -132,6 +132,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$baseurl"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2026-06-25 platform host for html -->
+    <xsl:text>host-platform</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$host-platform"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- -->
 
     <!--

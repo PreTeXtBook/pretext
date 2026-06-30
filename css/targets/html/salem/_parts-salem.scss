@@ -104,7 +104,7 @@ $sidebar-breakpoint: $content-width + $sidebar-width + $content-side-padding * 2
 
 @container ptx-main (width < #{$navbar-breakpoint}) {
   .ptx-page > .ptx-main { 
-    .ptx-content {
+    & > .ptx-content {
       padding-left: 20px;
       padding-right: 20px;
       max-width: calc($content-width + 40px);

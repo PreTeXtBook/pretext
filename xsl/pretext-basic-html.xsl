@@ -76,7 +76,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="mathjax" />
             </head>
             <body>
-                <xsl:call-template name="latex-macros" />
+                <xsl:apply-templates select="." mode="latex-macros" />
                 <xsl:copy-of select="$content" />
             </body>
         </html>

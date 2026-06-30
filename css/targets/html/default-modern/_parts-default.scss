@@ -41,7 +41,7 @@ $content-with-padding-width: $content-width + 2 * $content-side-padding;
 // Decrease the side margins once out of room
 @container ptx-main (width < #{$content-with-padding-width}) {
   .ptx-page > .ptx-main { 
-    .ptx-content {
+    & > .ptx-content {
       padding-left: #{$content-side-padding-tight};
       padding-right: #{$content-side-padding-tight};
       max-width: calc($content-width + 2 * #{$content-side-padding-tight});
