@@ -233,6 +233,7 @@
                         Knowls? &
                         NavigationHTML? &
                         Platform? &
+                        Resources? &
                         Search? &
                         Tableofcontents? &
                         Video? &
@@ -342,6 +343,10 @@
                 element platform {
                     attribute host { "web" | "runestone" },
                     attribute portable { "yes" | "no" }
+                }
+            Resources =
+                element resources {
+                    attribute host { "local" | "cdn" }
                 }
             Search =
                 element search {
