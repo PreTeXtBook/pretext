@@ -1409,7 +1409,7 @@ article.theorem-like .emphasis {
   }
   .ptx-page,
   .ptx-main,
-  .ptx-main .ptx-content {
+  .ptx-main > .ptx-content {
     all: unset !important;
     width: 100%;
     border: none;
@@ -1655,6 +1655,9 @@ article.theorem-like .emphasis {
 :root.dark-mode {
   --ptx-search-resultsbackground: #0008;
   --ptx-search-resultshighlight: rgba(255, 255, 0, 15%);
+}
+body.ptx-runestone-template .ptx-main > .ptx-content {
+  max-width: unset;
 }
 .ptx-content .ptx-runestone-container .runestone {
   margin: unset;
@@ -2058,10 +2061,6 @@ label.incorrect .feedback {
   font-size: 1.5em;
   margin: 0.5em 0;
 }
-.ptx-calculator-container::backdrop {
-  background: var(--dialog-background);
-  opacity: 0.6;
-}
 .ptx-calculator-container[open] {
   display: flex;
 }
@@ -2232,7 +2231,7 @@ body.pretext {
   container-name: ptx-main;
   container-type: inline-size;
 }
-.ptx-main .ptx-content {
+.ptx-main > .ptx-content {
   max-width: 840px;
   padding: 24px 120px 60px;
   line-height: var(--ptx-content-line-height, normal);
@@ -2240,7 +2239,7 @@ body.pretext {
   margin-left: auto;
   margin-right: auto;
 }
-.worksheet .ptx-main .ptx-content {
+.worksheet .ptx-main > .ptx-content {
   max-width: 960px;
 }
 .ptx-page {
@@ -2513,9 +2512,6 @@ body.standalone-page .ptx-page {
   flex: 1 1 70px;
   justify-content: end;
 }
-.ptx-navbar .pretext .navbar .dropdown {
-  height: 34px;
-}
 .ptx-navbar .ptx-embed-popup {
   padding: 10px;
   margin-top: 36px;
@@ -2718,10 +2714,7 @@ body.standalone-page .ptx-page {
 .ptx-navbar .index-button {
   min-width: 70px;
 }
-.runestone-profile {
-  position: relative;
-}
-.runestone-profile .dropdown-content {
+.ptx-navbar .ptx-dropdown-content {
   display: none;
   position: absolute;
   background-color: var(--dropdown-background);
@@ -2729,39 +2722,55 @@ body.standalone-page .ptx-page {
   z-index: 100;
   border: 1px solid var(--dropdown-border-color);
   right: 0;
-  top: 35px;
+  top: 100%;
   text-align: start;
   padding: 0;
 }
-.runestone-profile .dropdown-content a {
+.ptx-navbar .ptx-dropdown-content a {
   display: block;
   text-decoration: none;
   color: var(--dropdown-text-color);
   padding: 2px 8px;
 }
-.runestone-profile .dropdown-content a:is(:hover, :focus-visible) {
+.ptx-navbar .ptx-dropdown-content a:is(:hover, :focus-visible) {
   background-color: var(--dropdown-hover-background);
   color: var(--dropdown-hover-text-color);
 }
-.runestone-profile .dropdown-content hr {
+.ptx-navbar .ptx-dropdown-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.ptx-navbar .ptx-dropdown-content hr {
   color: var(--dropdown-border-color);
   margin: 4px 0;
 }
-.runestone-profile:is(:hover, :focus-visible, :focus-within) {
+.ptx-navbar .ptx-dropdown-content .ptx-dropdown-separator {
+  border-bottom: 1px solid var(--dropdown-border-color);
+  margin: 4px 0;
+}
+.ptx-navbar .ptx-dropdown-content.open {
+  display: block;
+}
+.ptx-navbar .ptx-dropdown-content:is(:hover, :focus-visible, :focus-within) {
   overflow: visible;
 }
-.runestone-profile:is(:hover, :focus-visible, :focus-within) .dropdown-content {
+.ptx-navbar .ptx-dropdown-content:is(:hover, :focus-visible, :focus-within) .dropdown-content {
   display: block;
 }
 @media screen and (max-width: 800px) {
+  .ptx-navbar-contents {
+    gap: 1px;
+    background: var(--page-border-color);
+  }
   .ptx-navbar-contents > .button,
   .ptx-navbar-contents > :not(dialog) > .button {
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-color: var(--page-border-color);
+    border-left-width: 0;
+    border-right-width: 0;
   }
-  .ptx-navbar-contents > *:not(:first-child) {
-    margin-left: -1px;
+  .ptx-navbar-contents :is(.treebuttons, .nav-runestone-controls, .nav-other-controls) {
+    gap: 1px;
+    background: var(--page-border-color);
   }
   .ptx-navbar {
     position: fixed;
@@ -2804,9 +2813,12 @@ body.standalone-page .ptx-page {
     top: auto;
     bottom: 36px;
   }
-  .ptx-navbar .dropdown-content {
+  .ptx-navbar .ptx-dropdown-content {
     top: unset;
     bottom: 36px;
+  }
+  .ptx-navbar .ptx-embed-button {
+    display: none;
   }
   .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button, .ptx-embed-button, .ptx-readability-options-button) .name {
     display: none;
@@ -3194,6 +3206,9 @@ body.standalone-page .ptx-page {
   margin-left: auto;
   margin-right: auto;
 }
+.ptx-runestone-template :is(.timedAssessment, .theorem-like, .definition-like, .example-like, .exercise-like, .project-like, .remark-like, .openproblem-like, .openproblems-like, .computation-like, .knowl__content):has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
+  margin-left: unset;
+}
 @media (width < 850px) {
   .ptx-runestone-container:has(.ac_section, .codelens, .parsons_section, .hparsons_section, .datafile) {
     width: 100cqw;
@@ -3329,6 +3344,9 @@ body.standalone-page .ptx-page {
   margin-left: auto;
   box-shadow: none;
   max-width: 100%;
+}
+body.ptx-runestone-template .ptx-main > .ptx-content {
+  padding: 24px;
 }
 .ptx-toc.focused .toc-item > .toc-title-box > .toc-expander > .icon {
   font-size: 30px;
