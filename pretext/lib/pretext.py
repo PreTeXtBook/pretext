@@ -3636,7 +3636,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     tmp_dir = common.get_temporary_directory()
 
     pub_vars = common.get_publisher_variable_report(xml, pub_file, stringparams)
-    include_static_files = common.get_publisher_variable(pub_vars, 'portable-html') != "yes"
+    include_static_files = common.get_publisher_variable(pub_vars, 'b-cdn-resources') != "true"
     time_logger.log("pubvars loaded")
 
     if include_static_files:
