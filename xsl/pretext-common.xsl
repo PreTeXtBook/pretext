@@ -10330,6 +10330,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- identifier equal to one of these would collide and break the UI. -->
     <!-- Audited against the HTML output, 2026-06-04.                     -->
     <xsl:variable name="reserved-html-ids">
+        <xsl:text>mainmatter logo-link latex-macros </xsl:text>
         <xsl:text>papersize-select highlight-workspace-checkbox </xsl:text>
         <xsl:text>hide-hint-checkbox hide-answer-checkbox hide-solution-checkbox </xsl:text>
         <xsl:text>print-first-page-header-checkbox print-running-header-checkbox </xsl:text>
