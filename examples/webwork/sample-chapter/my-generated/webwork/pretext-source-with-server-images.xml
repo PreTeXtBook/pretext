@@ -1,26 +1,26 @@
 <?xml version='1.0' encoding='utf-8'?>
-<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-ptx-source-with-server-images" assembly-id="ptx-source-with-server-images">
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-pretext-source-with-server-images" assembly-id="pretext-source-with-server-images">
   <static seed="82">
     <task>
       <statement><!-- PTX:WARNING: PGML wanted to center align here. -->
-<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-1.png" width="25%"/>
-<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-2.png" width="25%"/>
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/pretext-source-with-server-images-image-1.png" width="25%"/>
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/pretext-source-with-server-images-image-2.png" width="25%"/>
 </statement>
       <solution><!-- PTX:WARNING: PGML wanted to center align here. -->
-<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-3.png" width="25%"/>
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/pretext-source-with-server-images-image-3.png" width="25%"/>
 </solution>
     </task>
     <task>
       <statement><!-- PTX:WARNING: PGML wanted to center align here. -->
-<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-4.png" width="25%"/>
-<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-5.png" width="25%"/>
-<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-6.png" width="25%"/>
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/pretext-source-with-server-images-image-4.png" width="25%"/>
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/pretext-source-with-server-images-image-5.png" width="25%"/>
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/pretext-source-with-server-images-image-6.png" width="25%"/>
 </statement>
       <hint><!-- PTX:WARNING: PGML wanted to center align here. -->
-<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-7.png" width="25%"/>
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/pretext-source-with-server-images-image-7.png" width="25%"/>
 </hint>
       <solution><!-- PTX:WARNING: PGML wanted to center align here. -->
-<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/ptx-source-with-server-images-image-8.png" width="25%"/>
+<image xmlns:pi="http://pretextbook.org/2020/pretext/internal" pi:generated="webwork/images/pretext-source-with-server-images-image-8.png" width="25%"/>
 </solution>
     </task>
   </static>
