@@ -107,6 +107,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$portable-html"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2026-06-30 local/cdn resources -->
+    <xsl:text>b-cdn-resources</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$b-cdn-resources"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- 2025-05-10 CSL style indicator -->
     <xsl:text>b-using-csl-styles</xsl:text>
     <xsl:text> </xsl:text>
