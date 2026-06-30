@@ -1880,8 +1880,8 @@ ENDDOCUMENT();
             <section>
                 <title>Stress Tests</title>
 
-                <exercise label="ptx-source-with-server-images">
-                    <title>PTX problem source with server-generated images</title>
+                <exercise label="pretext-source-with-server-images">
+                    <title><pretext/> problem source with server-generated images</title>
                     <webwork>
                         <pg-code>
                             for my $i(0..7){$gr[$i] = init_graph(-1,-1,4,4,axes=>[0,0],grid=>[5,5],size=>[150,150]);};
