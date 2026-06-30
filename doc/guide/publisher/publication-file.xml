@@ -806,9 +806,26 @@
                 <cline>/publication/html/platform/@portable</cline>
             </cd>
             attribute to the value <c>"yes"</c>. 
-            This will result in the HTML using hosted CSS and Javascript files, rather than including them adjacent to the rest of your output.
-            This is especially useful in conjunction with setting the <xref ref="common-chunking-options">chunking variable</xref> to 0 to get a single html file.</p>
+            This will result in the HTML using hosted CSS and Javascript files, rather than including them adjacent to the rest of your output  (identical to selecting <q>cdn</q> as the <c>resources/@host</c> value, see <xref ref="online-resource-host-options"/>).
+            Further, the <xref ref="common-chunking-options">chunking variable</xref> will be set to 0 to get a single html file, and svgs produced from generated assets will be embedded directly in the page.</p>
         </subsection>
+
+        <subsection xml:id="online-resource-host-options">
+            <title>HTML Resources</title>
+            <idx><h>resource hosting</h><h>HTML</h></idx>
+            <idx><h>host</h><h>HTML resources</h></idx>
+
+            <p>The
+            <cd>
+                <cline>/publication/html/resources</cline>
+            </cd>
+            element can have an attribute <attr>host</attr> with values:
+            <ul>
+                <li><c>local</c>: the default, all css and js files are included in the output directory.</li>
+                <li><c>cdn</c>: all css and js files are hosted remotely on a content delivery network.</li>
+            </ul></p>
+
+            <p>Note that since the css is delivered remotely, only the basic themes are available (you cannot customize the colors as described in <xref ref="online-style-options"/>).</p>
 
         <subsection xml:id="online-style-options">
             <title>HTML Style (Theme)</title>
