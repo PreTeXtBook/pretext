@@ -2778,8 +2778,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- 2023-09-07: move "description" to "shortdescription" -->
-
-<xsl:template match="image/description[not(*[not(self::var)])]" mode="repair">
+<!-- 2026-06-26: support this move for "description" inside "interactive" -->
+<xsl:template match="image/description[not(*[not(self::var)])]|interactive/description[not(*[not(self::var)])]" mode="repair">
     <xsl:element name="shortdescription" namespace="">
         <xsl:apply-templates select="node()|@*" mode="repair"/>
     </xsl:element>
@@ -3462,6 +3462,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <!-- Restore all of the original attributes not processed separately -->
         <xsl:copy-of select="@*[not(contains(concat(' ', $interactive-drop-attr, ' '), concat(' ', local-name(), ' ')))]"/>
+        <!-- done with attributes, copy the content -->
+        <xsl:apply-templates select="node()" mode="enrichment"/>
         <slate>
             <xsl:attribute name="xml:id">
                 <xsl:value-of select="@assembly-id"/>
