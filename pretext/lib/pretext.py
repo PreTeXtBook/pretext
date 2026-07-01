@@ -1600,7 +1600,7 @@ def zip_with_last_dir_as_root(source_dir, output_zip):
             # Recursively find all files in the source directory
             for file in itertools.chain(hidden_glob,norm_glob):
                 if file.is_file():
-                    log.error(f"{file} being added to zip")
+                    log.debug(f"{file} being added to zip")
                     # arcname determines the internal ZIP structure
                     internal_path = file.relative_to(source_path)
                     zipf.write(file, arcname=internal_path)
@@ -1628,7 +1628,7 @@ def gdscript_pck(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     _, external_dir = common.get_managed_directories(xml_source, pub_file)
     
     
-    log.error(
+    log.info(
         "zipping GDScript interactives from {} for placement in {}".format(
             external_dir, dest_dir
         )
@@ -1643,7 +1643,7 @@ def gdscript_pck(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # Build list of id's into a scratch directory/file
     tmp_dir = common.get_temporary_directory()
     id_filename = os.path.join(tmp_dir, "gdscript-ids.txt")
-    log.error("GDScript id list temporarily in {}".format(id_filename))
+    log.debug("GDScript id list temporarily in {}".format(id_filename))
     # this builds the gdscript names
     common.xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
@@ -1657,11 +1657,11 @@ def gdscript_pck(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         src = os.path.join(external_dir,pair_a[1])
         # this is the path to the destination file
         path = os.path.join(dest_dir, pair_a[0] + ".zip")
-        log.error("compressing {} as {}...".format(src, path))
+        log.info("compressing {} as {}...".format(src, path))
         zip_with_last_dir_as_root(src, path)
 
         
-    log.error("GDScript pck zipping complete")
+    log.info("GDScript pck zipping complete")
 
 
 
