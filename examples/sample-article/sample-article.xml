@@ -9715,6 +9715,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Interactive components, <em>just</em> for testing, no commentary.</p>
             </introduction>
 
+            <subsection>
+                <title>Faux Subsection</title>
+
+                <p>We use <tag>exercises</tag> divisions below, and need a <tag>subsection</tag> to feed the schema.</p>
+            </subsection>
+
             <exercises>
                 <title>True/False</title>
 
@@ -9995,20 +10001,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <response/>
                 </exercise>
             </reading-questions>
-
-            <subsection>
-                <title>Faux Subsection</title>
-
-                <p>We used <tag>exercises</tag> divisions above, and need a <tag>subsection</tag> to feed the schema.</p>
-            </subsection>
         </section>
 
         <section xml:id="section-dynamic-exercises">
             <title>Dynamic Exercises</title>
 
-            <introduction>
-                <p>This section demonstrates the use of dynamic randomized exercises built upon the framework of Runestone components. These demonstration problems incorporate a library supporting mathematical expressions both for varying the content of the statement of the exercises as well as the checking of submitted answers.</p>
-            </introduction>
+            <p>This section demonstrates the use of dynamic randomized exercises built upon the framework of Runestone components. These demonstration problems incorporate a library supporting mathematical expressions both for varying the content of the statement of the exercises as well as the checking of submitted answers.</p>
 
             <exercises>
                 <title>Dynamic Fill-In</title>
