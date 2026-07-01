@@ -140,8 +140,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>An interactive GDScript program, using <pubtitle>Runestone</pubtitle></title>
             <statement><p>Run the following code. 
         You'll need to define a function called `add_numbers` that takes 2 `int` parameters and returns an `int` for the test to pass.</p></statement>
-            <program xml:id="gdscript-hello-world" interactive='activecode' language="gdscript" label="gd-hello-world"
-                     pck="gdpractice/test_exercise.pck"
+            <program xml:id="gdscript-hello-world" interactive='activecode' 
+                     language="gdscript" label="gd-hello-world"
+                     pck="gdpractice/test_exercise"
                      scene="res://practices/test_example/practice.tscn">
                 <code>
                     extends Node
@@ -211,7 +212,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </program>
             </p></statement>
             <program xml:id="gdscript-first-script" interactive='activecode' language="gdscript" label="gd-first-script"
-                     pck="gdpractice/first_script.pck"
+                     pck="gdpractice/first_script"
                      scene="res://practices/first_script/practice.tscn">
                 <code>
                     extends Sprite2D
@@ -235,6 +236,83 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         
 
                         checks.append_array([c1])
+
+                </tests>
+            </program>
+        </activity>
+
+
+        <p>Here's a GDScript program with split graphics. testing making a change</p>
+        
+        <activity xml:id="program-activecode-gdscript-split-graphics">
+            <title>An interactive GDScript program, with split graphics</title>
+            <statement><p>This is an example of split screen code.
+            </p></statement>
+            <program xml:id="gdscript-split-screen" interactive='activecode' language="gdscript" label="gd-split-screen"
+                     pck="gdpractice/L2.P9.visual_2d"
+                     scene="res://practices/L2.P9.visual_2d_input_motion/practice.tscn">
+                <code>
+                    extends Node2D
+
+                    const SPEED := 200.0
+
+
+                    func _physics_process(delta: float) -&gt; void:
+                        if Input.is_action_pressed("move_right"):
+                            position.x += 0
+
+
+                </code>
+                <tests>
+                    extends PracticeTest
+
+                    func _init() -&gt; void:
+                        side_by_side = true
+                        if not InputMap.has_action("move_right"):
+                            InputMap.add_action("move_right")
+                            var event := InputEventKey.new()
+                            event.keycode = KEY_D
+                            InputMap.action_add_event("move_right", event)
+
+
+                    func _build_requirements() -&gt; void:
+                        super()
+                        _add_actions_requirement(["move_right"])
+
+
+                    func _setup_state() -&gt; void:
+                        _practice.position = Vector2.ZERO
+                        _solution.position = Vector2.ZERO
+
+
+                    func _setup_populate_test_space() -&gt; void:
+                        Input.action_press("move_right")
+                        await _connect_timed(0.5, get_tree().physics_frame, _populate_test_space)
+                        Input.action_release("move_right")
+
+
+                    func _populate_test_space() -&gt; void:
+                        _test_space.append({
+                            practice_position = _practice.position,
+                            solution_position = _solution.position,
+                        })
+
+
+                    func _build_checks() -&gt; void:
+                        _add_simple_check(
+                            "holding move_right should move the practice node to match the solution",
+                            func() -&gt; String:
+                                var last: Dictionary = _test_space.back()
+                                return (
+                                    ""
+                                    if last.practice_position.is_equal_approx(last.solution_position)
+                                    else (
+                                        "position doesn't match the solution. Make sure position.x is "
+                                        + "updated based on SPEED in _physics_process() when move_right is pressed."
+                                    )
+                                )
+                        )
+
 
                 </tests>
             </program>
