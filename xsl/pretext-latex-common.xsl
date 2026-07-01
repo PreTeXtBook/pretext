@@ -9705,16 +9705,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="table-bottom">
-        <xsl:choose>
-            <xsl:when test="@bottom">
-                <xsl:value-of select="@bottom" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>none</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
     <xsl:variable name="table-right">
         <xsl:choose>
             <xsl:when test="@right">
@@ -9732,16 +9722,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>left</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="table-valign">
-        <xsl:choose>
-            <xsl:when test="@valign">
-                <xsl:value-of select="@valign" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>middle</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -9824,6 +9804,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!--   follow with right border (optional)                 -->
         <!-- TODO: error check each row for correct number of columns -->
         <xsl:otherwise>
+            <!-- TODO: this inline column count duplicates the reusable -->
+            <!-- "tabular" mode "column-count" in pretext-fo.xsl; the   -->
+            <!-- pair could be lifted to a shared getter in -common.    -->
             <xsl:variable name="ncols" select="count(row[1]/cell) + sum(row[1]/cell[@colspan]/@colspan) - count(row[1]/cell[@colspan])" />
             <xsl:call-template name="duplicate-string">
                 <xsl:with-param name="count" select="$ncols" />
@@ -9845,12 +9828,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- A col element might indicate top border customizations   -->
         <!-- so we walk the cols to build a cline-style specification -->
         <!-- $clines accumulates the specification when complicated   -->
-        <!-- For convenience, recursion passes along the $table-top   -->
         <xsl:when test="col/@top">
             <xsl:apply-templates select="col[1]" mode="column-cols">
-                <xsl:with-param name="col-number" select="1" />
                 <xsl:with-param name="clines" select="''" />
-                <xsl:with-param name="table-top" select="$table-top"/>
                 <xsl:with-param name="start-run" select="1" />
             </xsl:apply-templates>
         </xsl:when>
@@ -9864,24 +9844,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <!-- now ready to build rows -->
     <xsl:text>&#xa;</xsl:text>
-    <!-- table-wide values are needed to reconstruct/determine overrides -->
-    <!-- We *actively* enforce header rows being (a) initial, and        -->
-    <!-- (b) contiguous.  So following two-part match will do no harm    -->
-    <!-- to correct source, but will definitely harm incorrect source.   -->
-    <xsl:apply-templates select="row[@header]">
-        <xsl:with-param name="table-left" select="$table-left" />
-        <xsl:with-param name="table-bottom" select="$table-bottom" />
-        <xsl:with-param name="table-right" select="$table-right" />
-        <xsl:with-param name="table-halign" select="$table-halign" />
-        <xsl:with-param name="table-valign" select="$table-valign" />
-    </xsl:apply-templates>
-    <xsl:apply-templates select="row[not(@header)]">
-        <xsl:with-param name="table-left" select="$table-left" />
-        <xsl:with-param name="table-bottom" select="$table-bottom" />
-        <xsl:with-param name="table-right" select="$table-right" />
-        <xsl:with-param name="table-halign" select="$table-halign" />
-        <xsl:with-param name="table-valign" select="$table-valign" />
-    </xsl:apply-templates>
+    <!-- Each row and cell resolves its own effective properties, so no  -->
+    <!-- table-wide values need be threaded here.  We *actively* enforce -->
+    <!-- header rows being (a) initial, and (b) contiguous.  So the      -->
+    <!-- following two-part selection will do no harm to correct source, -->
+    <!-- but will definitely harm incorrect source.                      -->
+    <xsl:apply-templates select="row[@header]"/>
+    <xsl:apply-templates select="row[not(@header)]"/>
     <!-- mandatory finish, exclusive of any final row specifications -->
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$tabular-environment"/>
@@ -9895,49 +9864,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- We recursively traverse the "col" elements of the "column" group         -->
-<!-- The cline specification is accumulated in the clines variable            -->
-<!-- A similar strategy is used to traverse the "cell" elements of each "row" -->
-<!-- but becomes much more involved, see the "row-cells" template             -->
+<!-- We recursively traverse the "col" elements of the "column" group,   -->
+<!-- accumulating a cline specification for the top border in the $clines -->
+<!-- parameter.  A similar, but more involved, strategy traverses the     -->
+<!-- "cell" elements of each "row"; see the "cell" template.             -->
 <xsl:template match="col" mode="column-cols">
-    <xsl:param name="col-number" />
     <xsl:param name="clines" />
-    <xsl:param name="table-top" />
     <xsl:param name="start-run" />
 
-    <!-- Look ahead one column, anticipating recursion           -->
-    <!-- but also probing for end of column group (no more cols) -->
-    <!-- An empty node-set will signal final "col" element       -->
+    <!-- This column's number, and a look ahead one column, anticipating  -->
+    <!-- recursion, but also probing for the end of the column group (no  -->
+    <!-- more cols).  An empty node-set signals the final "col" element.  -->
+    <xsl:variable name="col-number" select="count(preceding-sibling::col) + 1"/>
     <xsl:variable name="next-col"  select="following-sibling::col[1]"/>
     <xsl:variable name="b-final-col" select="not($next-col)"/>
-    <!-- The desired top border styles for columns, both -->
-    <!-- current and next, so as to recognize a change   -->
+    <!-- The desired top border styles for columns, both current and next, -->
+    <!-- so as to recognize a change: the col's own specification, else    -->
+    <!-- the tabular default, else "none".  On the final column the next   -->
+    <!-- value is empty, a sentinel that matches no specification.         -->
     <xsl:variable name="current-top">
         <xsl:choose>
-            <!-- cell specification -->
             <xsl:when test="@top">
                 <xsl:value-of select="@top" />
             </xsl:when>
-            <!-- inherited specification for top -->
+            <xsl:when test="parent::tabular/@top">
+                <xsl:value-of select="parent::tabular/@top" />
+            </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$table-top" />
+                <xsl:text>none</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="next-top">
-        <xsl:choose>
-            <!-- empty is sentinel for currently on the final -->
-             <!-- "col", and will not match any specification -->
-            <xsl:when test="$b-final-col"/>
-            <!-- cell specification -->
-            <xsl:when test="$next-col/@top">
-                <xsl:value-of select="$next-col/@top" />
-            </xsl:when>
-            <!-- inherited specification for top -->
-            <xsl:otherwise>
-                <xsl:value-of select="$table-top" />
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:if test="not($b-final-col)">
+            <xsl:choose>
+                <xsl:when test="$next-col/@top">
+                    <xsl:value-of select="$next-col/@top" />
+                </xsl:when>
+                <xsl:when test="parent::tabular/@top">
+                    <xsl:value-of select="parent::tabular/@top" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>none</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
     </xsl:variable>
     <!-- Formulate any necessary update to    -->
     <!-- cline information for the top border -->
@@ -9989,78 +9960,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Recursive call of this template on next "col",    -->
     <!-- which if empty will be a no-op and recursion ends -->
     <xsl:apply-templates select="$next-col" mode="column-cols">
-        <xsl:with-param name="col-number" select="$col-number + 1" />
         <xsl:with-param name="clines" select="$updated-cline" />
-        <xsl:with-param name="table-top" select="$table-top" />
         <xsl:with-param name="start-run" select="$new-start-run" />
     </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="row">
-    <xsl:param name="table-left" />
-    <xsl:param name="table-bottom" />
-    <xsl:param name="table-right" />
-    <xsl:param name="table-halign" />
-    <xsl:param name="table-valign" />
-    <!-- inherit global table-wide values    -->
-    <!-- or replace with row-specific values -->
-    <xsl:variable name="row-left">
-        <xsl:choose>
-            <xsl:when test="@left">
-                <xsl:value-of select="@left" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$table-left" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- Walking the row's cells, write contents and bottom borders -->
+    <!-- Walking the row's cells, write contents and bottom borders. -->
+    <!-- Each cell resolves its own effective properties, so only    -->
+    <!-- the cline accumulator and its run start need be seeded.     -->
     <xsl:apply-templates select="cell[1]">
-        <xsl:with-param name="left-col" select="parent::tabular/col[1]" /> <!-- possibly empty -->
-        <xsl:with-param name="left-column-number" select="1" />
         <xsl:with-param name="clines" select="''" />
         <xsl:with-param name="start-run" select="1" />
-        <xsl:with-param name="table-left" select="$table-left"/>
-        <xsl:with-param name="table-bottom" select="$table-bottom"/>
-        <xsl:with-param name="table-right" select="$table-right" />
-        <xsl:with-param name="table-halign" select="$table-halign" />
-        <xsl:with-param name="table-valign" select="$table-valign" />
-        <xsl:with-param name="row-left" select="$row-left" />
     </xsl:apply-templates>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Recursively traverse the "cell" of a "row" while simultaneously       -->
-<!-- traversing the "col" elements of the column group, if present.        -->
-<!-- Inspect the (previously) built column specifications to see if        -->
-<!-- a \multicolumn is necessary for an override on a table entry          -->
-<!-- Accumulate cline information to write at the end of the line/row.     -->
-<!-- Study the "column-cols" template for a less-involved template         -->
-<!-- that uses an identical strategy, if you want to see something simpler -->
-<!-- NB: column numbers are always accurate.  There may be either (1) no   -->
-<!-- tabular/col or (2) one tabular/col for each column of the table.  So  -->
-<!-- the $left-col parameter might  be empty through the entire recursion. -->
-<!-- NB: the $table-* and $row-* parameters could be recomputed inside     -->
-<!-- this template by looking outward and implmenting the same effective   -->
-<!-- override and defaults strategy.  They are left in place as a          -->
-<!-- historical artifact, and they might be just a smidge more efficient.  -->
+<!-- Recursively traverse the "cell" elements of a "row", accumulating   -->
+<!-- cline information for the bottom border in the $clines parameter, to -->
+<!-- be written once the whole row is built.  Only $clines and its run    -->
+<!-- start need be threaded; every other property a cell needs is an      -->
+<!-- effective value it resolves for itself, through a shared resolver in -->
+<!-- pretext-common.xsl, or, for the two column-only values the           -->
+<!-- \multicolumn deviation test compares against, locally just below.    -->
+<!-- Compare the "column-cols" template, which uses the identical cline   -->
+<!-- strategy over the "col" elements, but with much less to compute.     -->
 <xsl:template match="cell">
-    <xsl:param name="left-col" />
-    <xsl:param name="left-column-number" />
     <xsl:param name="clines" />
     <xsl:param name="start-run" />
-    <xsl:param name="table-left" />
-    <xsl:param name="table-bottom" />
-    <xsl:param name="table-right" />
-    <xsl:param name="table-halign" />
-    <xsl:param name="table-valign" />
-    <xsl:param name="row-left" />
-    <!-- A cell may span several columns, or default to just 1              -->
-    <!-- When colspan is not trivial, we identify the left and right ends   -->
-    <!-- of the span, both as col elements and as column numbers            -->
-    <!-- When colspan is trivial, the left and right versions are identical -->
-    <!-- Left is used for left border and for horizontal alignment          -->
-    <!-- Right is used for right border                                     -->
+    <!-- A cell may span several columns, or default to just one.  The    -->
+    <!-- leftmost column governs the left border and horizontal alignment; -->
+    <!-- the rightmost governs the right border.  A "col" may be absent    -->
+    <!-- (an empty $left-col / $right-col), in which case the effective    -->
+    <!-- values fall back to table-wide values.                           -->
     <xsl:variable name="column-span">
         <xsl:choose>
             <xsl:when test="@colspan">
@@ -10072,46 +10004,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <xsl:variable name="b-multiple-columns" select="$column-span > 1"/>
-    <xsl:variable name="right-column-number" select="$left-column-number + $column-span - 1"/>
-    <xsl:variable name="right-col" select="(parent::row/parent::tabular/col)[$right-column-number]"/>
-    <!-- recreate the column specification for a right border       -->
-    <!-- either a per-column value, or the global, table-wide value -->
-    <xsl:variable name="column-right">
-        <xsl:choose>
-            <xsl:when test="$right-col/@right">
-                <xsl:value-of select="$right-col/@right" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$table-right" />
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:variable name="b-first-cell" select="not(preceding-sibling::cell)"/>
+    <xsl:variable name="left-column-number">
+        <xsl:apply-templates select="." mode="column-left-number"/>
     </xsl:variable>
-    <!-- the effective right border of the cell (cell > col > tabular); -->
-    <!-- "column-right" above is kept for the multicolumn deviation test -->
-    <xsl:variable name="cell-right">
-        <xsl:apply-templates select="." mode="effective-right"/>
+    <xsl:variable name="right-column-number">
+        <xsl:apply-templates select="." mode="column-right-number"/>
     </xsl:variable>
-    <!-- Use cell attributes, or col attributes for horizontal alignment -->
-    <!-- recreate the column specification for horizontal alignment      -->
-    <!-- either a per-column value, or the global, table-wide value      -->
+    <xsl:variable name="left-col" select="parent::row/parent::tabular/col[number($left-column-number)]"/>
+    <xsl:variable name="right-col" select="parent::row/parent::tabular/col[number($right-column-number)]"/>
+    <!-- The column specification alone provides these two values (col,   -->
+    <!-- else tabular, else the hard default).  A cell whose effective    -->
+    <!-- horizontal alignment or right border differs from its column's   -->
+    <!-- needs a \multicolumn to realize the override.                    -->
     <xsl:variable name="column-halign">
         <xsl:choose>
             <xsl:when test="$left-col/@halign">
                 <xsl:value-of select="$left-col/@halign" />
             </xsl:when>
+            <xsl:when test="parent::row/parent::tabular/@halign">
+                <xsl:value-of select="parent::row/parent::tabular/@halign" />
+            </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$table-halign" />
+                <xsl:text>left</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- the effective horizontal alignment (cell > row > col > tabular); -->
-    <!-- "column-halign" above is kept for the multicolumn deviation test -->
+    <xsl:variable name="column-right">
+        <xsl:choose>
+            <xsl:when test="$right-col/@right">
+                <xsl:value-of select="$right-col/@right" />
+            </xsl:when>
+            <xsl:when test="parent::row/parent::tabular/@right">
+                <xsl:value-of select="parent::row/parent::tabular/@right" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- the cell's actual effective values (see pretext-common.xsl) -->
     <xsl:variable name="cell-halign">
         <xsl:apply-templates select="." mode="effective-halign"/>
     </xsl:variable>
-    <!-- the effective vertical alignment of the cell (row > tabular) -->
+    <xsl:variable name="cell-right">
+        <xsl:apply-templates select="." mode="effective-right"/>
+    </xsl:variable>
     <xsl:variable name="row-valign">
         <xsl:apply-templates select="." mode="effective-valign"/>
+    </xsl:variable>
+    <!-- The left border lives only at the very start of the column      -->
+    <!-- specification, so it is a property of the first cell of a row,   -->
+    <!-- needing a \multicolumn when the row overrides the table's left.  -->
+    <!-- "effective-left" already yields "none" for a non-leading cell.   -->
+    <xsl:variable name="cell-left">
+        <xsl:apply-templates select="." mode="effective-left"/>
+    </xsl:variable>
+    <xsl:variable name="table-left">
+        <xsl:choose>
+            <xsl:when test="parent::row/parent::tabular/@left">
+                <xsl:value-of select="parent::row/parent::tabular/@left" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <!-- Look ahead to next cell, anticipating recursion     -->
     <!-- but also probing for end of row (empty $next-cell), -->
@@ -10125,17 +10082,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--         conflict with the column specification                  -->
     <!--    -if we have a colspan                                        -->
     <!--    -if there are paragraphs in the cell                         -->
-    <!-- $table-left and $row-left *can* differ on first use,            -->
-    <!-- but row-left is subsequently set to $table-left.                -->
+    <!-- A left-border override is only possible on the first cell, where -->
+    <!-- the row's effective left may differ from the table-wide left.    -->
     <xsl:choose>
-        <xsl:when test="not($table-left = $row-left) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or $b-multiple-columns or p">
+        <xsl:when test="($b-first-cell and not($table-left = $cell-left)) or not($column-halign = $cell-halign) or not($column-right = $cell-right) or $b-multiple-columns or p">
             <xsl:text>\multicolumn{</xsl:text>
             <xsl:value-of select="$column-span" />
             <xsl:text>}{</xsl:text>
             <!-- only place latex allows/needs a left border -->
-            <xsl:if test="$left-column-number = 1">
+            <xsl:if test="$b-first-cell">
                 <xsl:call-template name="vrule-specification">
-                    <xsl:with-param name="width" select="$row-left" />
+                    <xsl:with-param name="width" select="$cell-left" />
                 </xsl:call-template>
             </xsl:if>
             <xsl:choose>
@@ -10247,19 +10204,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <!-- Always attempt a recursive call.  If cells are exhausted, -->
-    <!-- $next-cell is empty/false and nothing happens here        -->
-    <!-- Leap forward to column element just beyond end of colspan -->
+    <!-- $next-cell is empty/false and nothing happens here.       -->
     <xsl:apply-templates select="$next-cell">
-        <xsl:with-param name="left-col" select="$right-col/following-sibling::col[1]" />
-        <xsl:with-param name="left-column-number" select="$right-column-number + 1" />
         <xsl:with-param name="clines" select="$updated-cline" />
         <xsl:with-param name="start-run" select="$new-start-run" />
-        <xsl:with-param name="table-left" select="$table-left" />
-        <xsl:with-param name="table-bottom" select="$table-bottom" />
-        <xsl:with-param name="table-right" select="$table-right" />
-        <xsl:with-param name="table-halign" select="$table-halign" />
-        <xsl:with-param name="table-valign" select="$table-valign" />
-        <xsl:with-param name="row-left" select="$table-left" />
     </xsl:apply-templates>
 
     <!-- finish the row, dump cline info, etc -->

@@ -7987,225 +7987,205 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:attribute>
         </xsl:if>
         <!-- Walk the cells of the row -->
-        <xsl:call-template name="row-cells">
+        <xsl:apply-templates select="cell" mode="row-cell">
             <xsl:with-param name="b-original" select="$b-original" />
-            <xsl:with-param name="ambient-relative-width">
-                <xsl:value-of select="$ambient-relative-width" />
-            </xsl:with-param>
-            <xsl:with-param name="the-cell" select="cell[1]" />
-            <xsl:with-param name="left-col" select="ancestor::tabular/col[1]" />  <!-- possibly empty -->
-        </xsl:call-template>
+            <xsl:with-param name="ambient-relative-width" select="$ambient-relative-width" />
+        </xsl:apply-templates>
     </xsl:element>
 </xsl:template>
 
-<xsl:template name="row-cells">
+<!-- One cell of a table row.  The cell is the context node, so it resolves -->
+<!-- its own effective alignments and rule weights (see pretext-common.xsl) -->
+<!-- and finds its governing "col" by column number, with no cell cursor or -->
+<!-- column pointer threaded in.  Only the two genuinely ambient values     -->
+<!-- pass through: the original-vs-knowl-copy flag and the containing width. -->
+<xsl:template match="cell" mode="row-cell">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="ambient-relative-width" />
-    <xsl:param name="the-cell" />
-    <xsl:param name="left-col" />
-    <!-- A cell may span several columns, or default to just 1              -->
-    <!-- When colspan is not trivial, we identify the col elements          -->
-    <!-- for the left and right ends of the span                            -->
-    <!-- When colspan is trivial, the left and right versions are identical -->
-    <!-- Left is used for left border and for horizontal alignment          -->
-    <!-- Right is used for right border                                     -->
+    <!-- A cell may span several columns, or default to just 1.  Its left  -->
+    <!-- end sits in column "column-left-number" (resolved in -common,     -->
+    <!-- honoring the colspans of preceding cells), which identifies the   -->
+    <!-- governing "col" for left border, alignment, and paragraph width.  -->
+    <!-- That "col" may be absent (an empty $left-col).                    -->
     <xsl:variable name="column-span">
         <xsl:choose>
-            <xsl:when test="$the-cell/@colspan">
-                <xsl:value-of select="$the-cell/@colspan" />
+            <xsl:when test="@colspan">
+                <xsl:value-of select="@colspan" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>1</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- For a "normal" 1-column cell this variable effectively makes a copy -->
-    <!-- position()  added in 026d6d6d9f69f4de17a012aa32c4e8dee77519fb,      -->
-    <!-- unclear if it can be removed/replaced                               -->
-    <xsl:variable name="right-col" select="($left-col/self::*|$left-col/following-sibling::col)[position()=$column-span]" />
-    <!-- Look ahead one column, anticipating recursion   -->
-    <!-- but also probing for end of row (no more cells) -->
-    <xsl:variable name="next-cell" select="$the-cell/following-sibling::cell[1]" />
-    <xsl:variable name="next-col"  select="$right-col/following-sibling::col[1]" /> <!-- possibly empty -->
+    <xsl:variable name="left-column-number">
+        <xsl:apply-templates select="." mode="column-left-number"/>
+    </xsl:variable>
+    <xsl:variable name="left-col" select="ancestor::tabular/col[number($left-column-number)]"/>
 
     <!-- Check if row-headers are requested -->
-    <xsl:variable name="b-row-headers" select="boolean($the-cell/parent::row/parent::tabular[@row-headers = 'yes'])"/>
+    <xsl:variable name="b-row-headers" select="boolean(parent::row/parent::tabular[@row-headers = 'yes'])"/>
     <!-- And if we are at the first cell -->
-    <xsl:variable name="b-row-header" select="$b-row-headers and not($the-cell/preceding-sibling::cell)"/>
+    <xsl:variable name="b-row-header" select="$b-row-headers and not(preceding-sibling::cell)"/>
 
-    <xsl:if test="$the-cell">
-        <!-- build an HTML data cell, with CSS decorations              -->
-        <!-- we set properties in various variables,                    -->
-        <!-- then write them in a class attribute                       -->
-        <!-- we look outward and upward for characteristics of the cell -->
-        <!--                                                            -->
-        <!-- effective alignments and rule weights, resolved in -common; -->
-        <!-- each is a token translated to a CSS class fragment below     -->
-        <xsl:variable name="alignment">
-            <xsl:apply-templates select="$the-cell" mode="effective-halign"/>
-        </xsl:variable>
-        <xsl:variable name="valignment">
-            <xsl:apply-templates select="$the-cell" mode="effective-valign"/>
-        </xsl:variable>
-        <xsl:variable name="bottom">
-            <xsl:apply-templates select="$the-cell" mode="effective-bottom"/>
-        </xsl:variable>
-        <xsl:variable name="right">
-            <xsl:apply-templates select="$the-cell" mode="effective-right"/>
-        </xsl:variable>
-        <xsl:variable name="left">
-            <xsl:apply-templates select="$the-cell" mode="effective-left"/>
-        </xsl:variable>
-        <xsl:variable name="top">
-            <xsl:apply-templates select="$the-cell" mode="effective-top"/>
-        </xsl:variable>
+    <!-- build an HTML data cell, with CSS decorations              -->
+    <!-- we set properties in various variables,                    -->
+    <!-- then write them in a class attribute                       -->
+    <!-- we look outward and upward for characteristics of the cell -->
+    <!--                                                            -->
+    <!-- effective alignments and rule weights, resolved in -common; -->
+    <!-- each is a token translated to a CSS class fragment below     -->
+    <xsl:variable name="alignment">
+        <xsl:apply-templates select="." mode="effective-halign"/>
+    </xsl:variable>
+    <xsl:variable name="valignment">
+        <xsl:apply-templates select="." mode="effective-valign"/>
+    </xsl:variable>
+    <xsl:variable name="bottom">
+        <xsl:apply-templates select="." mode="effective-bottom"/>
+    </xsl:variable>
+    <xsl:variable name="right">
+        <xsl:apply-templates select="." mode="effective-right"/>
+    </xsl:variable>
+    <xsl:variable name="left">
+        <xsl:apply-templates select="." mode="effective-left"/>
+    </xsl:variable>
+    <xsl:variable name="top">
+        <xsl:apply-templates select="." mode="effective-top"/>
+    </xsl:variable>
 
-        <!-- a cell of a header row needs to be "th" -->
-        <!-- else the HTML mark up is "td"           -->
-        <!-- NB: Named templates means context is a  -->
-        <!-- row, which is really wrong.  Tests      -->
-        <!-- should be on  parent::row/@header       -->
-        <xsl:variable name="header-row-elt">
+    <!-- a cell of a header row needs to be "th" -->
+    <!-- else the HTML mark up is "td"           -->
+    <xsl:variable name="header-row-elt">
+        <xsl:choose>
+            <xsl:when test="parent::row/@header = 'yes'">
+                <xsl:text>th</xsl:text>
+            </xsl:when>
+            <xsl:when test="parent::row/@header = 'vertical'">
+                <xsl:text>th</xsl:text>
+            </xsl:when>
+            <xsl:when test="$b-row-header">
+                <xsl:text>th</xsl:text>
+            </xsl:when>
+            <!-- "no" is other choice, or no attribute at all -->
+            <!-- controlled by schema, so no error-check here -->
+            <xsl:otherwise>
+                <xsl:text>td</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- the HTML element for the cell -->
+    <!-- newline inserted to encourage formatted output -->
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:element name="{$header-row-elt}">
+        <!-- Scope attribute helps with accessibility: what          -->
+        <!-- is the table element/cell describing?                   -->
+        <!-- if this is a row of column headers, declare scope="col" -->
+        <!-- if this is a column of row headers, declare scope="row" -->
+        <xsl:if test="$header-row-elt = 'th'">
+            <xsl:attribute name="scope">
+                <!-- If in upper-left corner, let column headings dominate -->
+                <xsl:choose>
+                    <xsl:when test="(parent::row/@header = 'yes') or (parent::row/@header = 'vertical')">
+                        <xsl:text>col</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$b-row-header">
+                        <xsl:text>row</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:attribute>
+        </xsl:if>
+        <!-- and the class attribute -->
+        <xsl:attribute name="class">
+            <!-- always write alignment, so *precede* all subsequent with a space -->
             <xsl:choose>
-                <xsl:when test="@header = 'yes'">
-                    <xsl:text>th</xsl:text>
+                <xsl:when test="p and $alignment='justify'">
+                    <xsl:text>j</xsl:text>
                 </xsl:when>
-                <xsl:when test="@header = 'vertical'">
-                    <xsl:text>th</xsl:text>
-                </xsl:when>
-                <xsl:when test="$b-row-header">
-                    <xsl:text>th</xsl:text>
-                </xsl:when>
-                <!-- "no" is other choice, or no attribute at all -->
-                <!-- controlled by schema, so no error-check here -->
                 <xsl:otherwise>
-                    <xsl:text>td</xsl:text>
+                    <xsl:call-template name="halign-specification">
+                        <xsl:with-param name="align" select="$alignment" />
+                    </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:variable>
-
-        <!-- the HTML element for the cell -->
-        <!-- newline inserted to encourage formatted output -->
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:element name="{$header-row-elt}">
-            <!-- Scope attribute helps with accessibility: what          -->
-            <!-- is the table element/cell describing?                   -->
-            <!-- if this is a row of column headers, declare scope="col" -->
-            <!-- if this is a column of row headers, declare scope="row" -->
-            <xsl:if test="$header-row-elt = 'th'">
-                <xsl:attribute name="scope">
-                    <!-- If in upper-left corner, let column headings dominate -->
-                    <xsl:choose>
-                        <xsl:when test="(@header = 'yes') or (@header = 'vertical')">
-                            <xsl:text>col</xsl:text>
-                        </xsl:when>
-                        <xsl:when test="$b-row-header">
-                            <xsl:text>row</xsl:text>
-                        </xsl:when>
-                    </xsl:choose>
-                </xsl:attribute>
+            <!-- vertical alignment -->
+            <xsl:text> </xsl:text>
+            <xsl:call-template name="valign-specification">
+                <xsl:with-param name="align" select="$valignment" />
+            </xsl:call-template>
+            <!-- bottom border -->
+            <xsl:text> b</xsl:text>
+            <xsl:call-template name="thickness-specification">
+                <xsl:with-param name="width" select="$bottom" />
+            </xsl:call-template>
+            <!-- right border -->
+            <xsl:text> r</xsl:text>
+            <xsl:call-template name="thickness-specification">
+                <xsl:with-param name="width" select="$right" />
+            </xsl:call-template>
+            <!-- left border -->
+            <xsl:text> l</xsl:text>
+            <xsl:call-template name="thickness-specification">
+                <xsl:with-param name="width" select="$left" />
+            </xsl:call-template>
+            <!-- top border -->
+            <xsl:text> t</xsl:text>
+            <xsl:call-template name="thickness-specification">
+                <xsl:with-param name="width" select="$top" />
+            </xsl:call-template>
+            <!-- no wrapping unless paragraph cell -->
+            <xsl:if test="not(p)">
+                <xsl:text> lines</xsl:text>
             </xsl:if>
-            <!-- and the class attribute -->
-            <xsl:attribute name="class">
-                <!-- always write alignment, so *precede* all subsequent with a space -->
+        </xsl:attribute>
+        <xsl:if test="not($column-span = 1)">
+            <xsl:attribute name="colspan">
+                <xsl:value-of select="$column-span" />
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="p">
+            <xsl:attribute name="style">
+                <xsl:text>max-width:</xsl:text>
                 <xsl:choose>
-                    <xsl:when test="$the-cell/p and $alignment='justify'">
-                        <xsl:text>j</xsl:text>
+                    <xsl:when test="$left-col/@width">
+                        <xsl:variable name="width">
+                            <xsl:call-template name="normalize-percentage">
+                                <xsl:with-param name="percentage" select="$left-col/@width" />
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <xsl:value-of select="$design-width * substring-before($width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
+                        <xsl:text>px;</xsl:text>
                     </xsl:when>
+                    <!-- If there is no $left-col/@width, silently use 20% as default -->
+                    <!-- We get some ill-formed WW exercises here, so a less-precise  -->
+                    <!-- warning is given on the author's source.                     -->
                     <xsl:otherwise>
-                        <xsl:call-template name="halign-specification">
-                            <xsl:with-param name="align" select="$alignment" />
-                        </xsl:call-template>
+                        <xsl:value-of select="$design-width * 0.2 * substring-before($ambient-relative-width, '%') div 100" />
                     </xsl:otherwise>
                 </xsl:choose>
-                <!-- vertical alignment -->
-                <xsl:text> </xsl:text>
-                <xsl:call-template name="valign-specification">
-                    <xsl:with-param name="align" select="$valignment" />
-                </xsl:call-template>
-                <!-- bottom border -->
-                <xsl:text> b</xsl:text>
-                <xsl:call-template name="thickness-specification">
-                    <xsl:with-param name="width" select="$bottom" />
-                </xsl:call-template>
-                <!-- right border -->
-                <xsl:text> r</xsl:text>
-                <xsl:call-template name="thickness-specification">
-                    <xsl:with-param name="width" select="$right" />
-                </xsl:call-template>
-                <!-- left border -->
-                <xsl:text> l</xsl:text>
-                <xsl:call-template name="thickness-specification">
-                    <xsl:with-param name="width" select="$left" />
-                </xsl:call-template>
-                <!-- top border -->
-                <xsl:text> t</xsl:text>
-                <xsl:call-template name="thickness-specification">
-                    <xsl:with-param name="width" select="$top" />
-                </xsl:call-template>
-                <!-- no wrapping unless paragraph cell -->
-                <xsl:if test="not($the-cell/p)">
-                    <xsl:text> lines</xsl:text>
-                </xsl:if>
             </xsl:attribute>
-            <xsl:if test="not($column-span = 1)">
-                <xsl:attribute name="colspan">
-                    <xsl:value-of select="$column-span" />
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$the-cell/p">
-                <xsl:attribute name="style">
-                    <xsl:text>max-width:</xsl:text>
-                    <xsl:choose>
-                        <xsl:when test="$left-col/@width">
-                            <xsl:variable name="width">
-                                <xsl:call-template name="normalize-percentage">
-                                    <xsl:with-param name="percentage" select="$left-col/@width" />
-                                </xsl:call-template>
-                            </xsl:variable>
-                            <xsl:value-of select="$design-width * substring-before($width, '%') div 100 * substring-before($ambient-relative-width, '%') div 100" />
-                            <xsl:text>px;</xsl:text>
-                        </xsl:when>
-                        <!-- If there is no $left-col/@width, silently use 20% as default -->
-                        <!-- We get some ill-formed WW exercises here, so a less-precise  -->
-                        <!-- warning is given on the author's source.                     -->
-                        <xsl:otherwise>
-                            <xsl:value-of select="$design-width * 0.2 * substring-before($ambient-relative-width, '%') div 100" />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
-            </xsl:if>
-            <!-- process the actual contents           -->
-            <!-- condition on indicators of structure  -->
-            <!-- All "line", all "p", or mixed content -->
-            <!-- TODO: is it important to pass $b-original -->
-            <!-- flag into template for "line" elements?   -->
-            <xsl:choose>
-                <xsl:when test="$the-cell/line">
-                    <xsl:apply-templates select="$the-cell/line"/>
-                </xsl:when>
-                <xsl:when test="$the-cell/p">
-                    <xsl:apply-templates select="$the-cell/p">
-                        <xsl:with-param name="b-original" select="$b-original"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="$the-cell">
-                        <xsl:with-param name="b-original" select="$b-original"/>
-                    </xsl:apply-templates>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:element>
-        <!-- recurse forward, perhaps to an empty cell -->
-        <xsl:call-template name="row-cells">
-            <xsl:with-param name="b-original" select="$b-original" />
-            <xsl:with-param name="ambient-relative-width" select="$ambient-relative-width" />
-            <xsl:with-param name="the-cell" select="$next-cell" />
-            <xsl:with-param name="left-col" select="$next-col" />
-        </xsl:call-template>
-    </xsl:if>
-    <!-- Arrive here only when we have no cell so      -->
-    <!-- we bail out of recursion with no action taken -->
+        </xsl:if>
+        <!-- process the actual contents           -->
+        <!-- condition on indicators of structure  -->
+        <!-- All "line", all "p", or mixed content -->
+        <!-- TODO: is it important to pass $b-original -->
+        <!-- flag into template for "line" elements?   -->
+        <xsl:choose>
+            <xsl:when test="line">
+                <xsl:apply-templates select="line"/>
+            </xsl:when>
+            <xsl:when test="p">
+                <xsl:apply-templates select="p">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select=".">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:element>
 </xsl:template>
 
 <!-- ############################ -->
