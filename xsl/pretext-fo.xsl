@@ -4281,7 +4281,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:inline>
 </xsl:template>
 
-<xsl:template match="me|men|md|mdn" mode="math-placeholder">
+<!-- Assembly rewrites every display to "md", so that is the only    -->
+<!-- form seen here.  Each "mrow" is one line of the display: emit    -->
+<!-- it as its own block with whitespace normalized (the raw string   -->
+<!-- value carried the source indentation), and glue the clause-      -->
+<!-- ending punctuation absorbed by the display to the final row      -->
+<!-- rather than leaving it stranded after that indentation.          -->
+<xsl:template match="md" mode="math-placeholder">
     <fo:block font-family="{$font-family-monospace}"
               border="solid 0.5pt #888888"
               padding="2pt"
@@ -4290,15 +4296,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               text-align="center">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <xsl:for-each select="mrow">
-            <fo:inline>
+            <fo:block>
                 <xsl:apply-templates select="." mode="link-id-attribute"/>
-            </fo:inline>
+                <xsl:value-of select="normalize-space(.)"/>
+                <xsl:if test="position() = last()">
+                    <xsl:apply-templates select="parent::md" mode="get-clause-punctuation-mark"/>
+                </xsl:if>
+            </fo:block>
         </xsl:for-each>
-        <xsl:value-of select="."/>
-        <!-- reclaim any clause-ending punctuation absorbed by display math -->
-        <xsl:if test="self::md">
-            <xsl:apply-templates select="." mode="get-clause-punctuation-mark"/>
-        </xsl:if>
     </fo:block>
 </xsl:template>
 
