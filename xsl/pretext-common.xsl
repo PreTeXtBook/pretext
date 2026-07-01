@@ -7336,6 +7336,169 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- Effective rule weight and alignment for a "cell" edge.            -->
+<!--                                                                   -->
+<!-- The rule weight ("none"/"minor"/"medium"/"major") and the        -->
+<!-- alignment for a given cell edge are determined by a precedence    -->
+<!-- ladder over the four levels at which the attribute may appear     -->
+<!-- ("cell", "row", "col", "tabular"), with a default.  That          -->
+<!-- resolution is format-independent, so it is performed once here.   -->
+<!-- Each conversion consumes the resulting token and translates it    -->
+<!-- into its own markup (a CSS class, a LaTeX rule macro or column    -->
+<!-- letter, an FO "border" property).                                 -->
+<!--                                                                   -->
+<!--   halign:  cell > row > col > tabular > "left"                    -->
+<!--   valign:  row > tabular > "middle"                               -->
+<!--   bottom:  cell > row > tabular > "none"                          -->
+<!--   right:   cell > col > tabular > "none"                          -->
+<!--   left:    (leading cell only) row > tabular > "none"             -->
+<!--   top:     (first row only)    col > tabular > "none"             -->
+<!--                                                                   -->
+<!-- A "cell" finds its "col" by counting columns occupied by the      -->
+<!-- preceding cells of its row (each contributes its "@colspan", or   -->
+<!-- 1).  The left edge of the cell is in column "column-left-number"; -->
+<!-- a spanning cell's right edge is in "column-right-number".         -->
+<xsl:template match="cell" mode="column-left-number">
+    <xsl:value-of select="1 + sum(preceding-sibling::cell/@colspan) + count(preceding-sibling::cell[not(@colspan)])"/>
+</xsl:template>
+
+<xsl:template match="cell" mode="column-right-number">
+    <xsl:variable name="left">
+        <xsl:apply-templates select="." mode="column-left-number"/>
+    </xsl:variable>
+    <xsl:variable name="span">
+        <xsl:choose>
+            <xsl:when test="@colspan">
+                <xsl:value-of select="@colspan"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>1</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:value-of select="$left + $span - 1"/>
+</xsl:template>
+
+<!-- horizontal alignment: cell > row > col > tabular > "left" -->
+<xsl:template match="cell" mode="effective-halign">
+    <xsl:variable name="left-number">
+        <xsl:apply-templates select="." mode="column-left-number"/>
+    </xsl:variable>
+    <xsl:variable name="left-col" select="ancestor::tabular/col[number($left-number)]"/>
+    <xsl:choose>
+        <xsl:when test="@halign">
+            <xsl:value-of select="@halign"/>
+        </xsl:when>
+        <xsl:when test="ancestor::row/@halign">
+            <xsl:value-of select="ancestor::row/@halign"/>
+        </xsl:when>
+        <xsl:when test="$left-col/@halign">
+            <xsl:value-of select="$left-col/@halign"/>
+        </xsl:when>
+        <xsl:when test="ancestor::tabular/@halign">
+            <xsl:value-of select="ancestor::tabular/@halign"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>left</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- vertical alignment: row > tabular > "middle" -->
+<xsl:template match="cell" mode="effective-valign">
+    <xsl:choose>
+        <xsl:when test="ancestor::row/@valign">
+            <xsl:value-of select="ancestor::row/@valign"/>
+        </xsl:when>
+        <xsl:when test="ancestor::tabular/@valign">
+            <xsl:value-of select="ancestor::tabular/@valign"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>middle</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- bottom rule: cell > row > tabular > "none" -->
+<xsl:template match="cell" mode="effective-bottom">
+    <xsl:choose>
+        <xsl:when test="@bottom">
+            <xsl:value-of select="@bottom"/>
+        </xsl:when>
+        <xsl:when test="ancestor::row/@bottom">
+            <xsl:value-of select="ancestor::row/@bottom"/>
+        </xsl:when>
+        <xsl:when test="ancestor::tabular/@bottom">
+            <xsl:value-of select="ancestor::tabular/@bottom"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>none</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- right rule: cell > col > tabular > "none" -->
+<xsl:template match="cell" mode="effective-right">
+    <xsl:variable name="right-number">
+        <xsl:apply-templates select="." mode="column-right-number"/>
+    </xsl:variable>
+    <xsl:variable name="right-col" select="ancestor::tabular/col[number($right-number)]"/>
+    <xsl:choose>
+        <xsl:when test="@right">
+            <xsl:value-of select="@right"/>
+        </xsl:when>
+        <xsl:when test="$right-col/@right">
+            <xsl:value-of select="$right-col/@right"/>
+        </xsl:when>
+        <xsl:when test="ancestor::tabular/@right">
+            <xsl:value-of select="ancestor::tabular/@right"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>none</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- left rule: only the leading cell of a row has one; row > tabular > "none" -->
+<xsl:template match="cell" mode="effective-left">
+    <xsl:choose>
+        <xsl:when test="preceding-sibling::cell">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="ancestor::row/@left">
+            <xsl:value-of select="ancestor::row/@left"/>
+        </xsl:when>
+        <xsl:when test="ancestor::tabular/@left">
+            <xsl:value-of select="ancestor::tabular/@left"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>none</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- top rule: only cells of the first row have one; col > tabular > "none" -->
+<xsl:template match="cell" mode="effective-top">
+    <xsl:variable name="left-number">
+        <xsl:apply-templates select="." mode="column-left-number"/>
+    </xsl:variable>
+    <xsl:variable name="left-col" select="ancestor::tabular/col[number($left-number)]"/>
+    <xsl:choose>
+        <xsl:when test="ancestor::row/preceding-sibling::row">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="$left-col/@top">
+            <xsl:value-of select="$left-col/@top"/>
+        </xsl:when>
+        <xsl:when test="ancestor::tabular/@top">
+            <xsl:value-of select="ancestor::tabular/@top"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>none</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ################### -->
 <!-- Structured by Lines -->
 <!-- ################### -->

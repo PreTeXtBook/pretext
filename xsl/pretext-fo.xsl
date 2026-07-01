@@ -2370,22 +2370,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
             </xsl:otherwise>
         </xsl:choose>
-        <!-- The top edge is not a single table border: it rides the     -->
-        <!-- first row's cells (see the "cell" template) so the top rule  -->
-        <!-- can vary by column via "col/@top".  The other three frame    -->
-        <!-- edges stay whole-tabular borders on the table.               -->
-        <xsl:call-template name="rule-attribute">
-            <xsl:with-param name="side" select="'bottom'"/>
-            <xsl:with-param name="thickness" select="@bottom"/>
-        </xsl:call-template>
-        <xsl:call-template name="rule-attribute">
-            <xsl:with-param name="side" select="'left'"/>
-            <xsl:with-param name="thickness" select="@left"/>
-        </xsl:call-template>
-        <xsl:call-template name="rule-attribute">
-            <xsl:with-param name="side" select="'right'"/>
-            <xsl:with-param name="thickness" select="@right"/>
-        </xsl:call-template>
+        <!-- Every rule, interior or perimeter, is drawn per cell in the -->
+        <!-- "cell" template from the effective edge weights resolved in -->
+        <!-- -common (cell, then row/col, then whole-tabular), so no      -->
+        <!-- table-wide border is placed here.                           -->
         <xsl:for-each select="$widths">
             <fo:table-column column-width="proportional-column-width({.})"/>
         </xsl:for-each>
@@ -2614,13 +2602,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="@colspan"/>
             </xsl:attribute>
         </xsl:if>
-        <!-- vertical alignment: row, else tabular, else the top -->
+        <!-- vertical alignment, effective value resolved in -common -->
+        <xsl:variable name="valign">
+            <xsl:apply-templates select="." mode="effective-valign"/>
+        </xsl:variable>
         <xsl:attribute name="display-align">
             <xsl:choose>
-                <xsl:when test="parent::row/@valign = 'middle' or (not(parent::row/@valign) and ancestor::tabular/@valign = 'middle')">
+                <xsl:when test="$valign = 'middle'">
                     <xsl:text>center</xsl:text>
                 </xsl:when>
-                <xsl:when test="parent::row/@valign = 'bottom' or (not(parent::row/@valign) and ancestor::tabular/@valign = 'bottom')">
+                <xsl:when test="$valign = 'bottom'">
                     <xsl:text>after</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -2628,91 +2619,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
+        <!-- Effective rule weight per edge, resolved in -common; a       -->
+        <!-- "none" yields no border.  Each cell now draws its own four    -->
+        <!-- rules, so interior rules and the whole-tabular fall-through   -->
+        <!-- appear (matching HTML and LaTeX) rather than only an outer    -->
+        <!-- frame.  "effective-left"/"effective-top" return "none" away   -->
+        <!-- from the leading cell / first row, so no guard is needed.     -->
         <xsl:call-template name="rule-attribute">
             <xsl:with-param name="side" select="'bottom'"/>
             <xsl:with-param name="thickness">
-                <xsl:choose>
-                    <xsl:when test="@bottom">
-                        <xsl:value-of select="@bottom"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="parent::row/@bottom"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:apply-templates select="." mode="effective-bottom"/>
             </xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="rule-attribute">
             <xsl:with-param name="side" select="'right'"/>
             <xsl:with-param name="thickness">
-                <xsl:choose>
-                    <xsl:when test="@right">
-                        <xsl:value-of select="@right"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <!-- a right border comes from the last column the   -->
-                        <!-- cell occupies, so a spanning cell reaches past  -->
-                        <!-- its starting column to the end of its span      -->
-                        <xsl:variable name="start-position" select="count(preceding-sibling::cell[not(@colspan)]) + sum(preceding-sibling::cell/@colspan) + 1"/>
-                        <xsl:variable name="span">
-                            <xsl:choose>
-                                <xsl:when test="@colspan">
-                                    <xsl:value-of select="@colspan"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:text>1</xsl:text>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:variable>
-                        <xsl:value-of select="ancestor::tabular/col[position() = $start-position + $span - 1]/@right"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:apply-templates select="." mode="effective-right"/>
             </xsl:with-param>
         </xsl:call-template>
-        <!-- The left edge of a row lives on its leading cell, taken    -->
-        <!-- from the cell, else the row (mirroring the bottom edge's    -->
-        <!-- fallback); the schema places a per-row left rule on "row",  -->
-        <!-- and the whole-tabular left rule is on the "fo:table".  A    -->
-        <!-- spanning leading cell still owns the single left edge.      -->
-        <xsl:if test="not(preceding-sibling::cell)">
-            <xsl:call-template name="rule-attribute">
-                <xsl:with-param name="side" select="'left'"/>
-                <xsl:with-param name="thickness">
-                    <xsl:choose>
-                        <xsl:when test="@left">
-                            <xsl:value-of select="@left"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="parent::row/@left"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-        <!-- The top edge of the table rides its first row, per column       -->
-        <!-- ("col/@top"), so the top rule can vary across columns, or even  -->
-        <!-- drop out where "@top" is "none"; a column with no "@top" of its -->
-        <!-- own inherits the whole-tabular "@top".  A spanning leading cell -->
-        <!-- takes the top of the column it starts in.                       -->
-        <xsl:if test="not(parent::row/preceding-sibling::row)">
-            <xsl:variable name="top-position" select="count(preceding-sibling::cell[not(@colspan)]) + sum(preceding-sibling::cell/@colspan) + 1"/>
-            <xsl:call-template name="rule-attribute">
-                <xsl:with-param name="side" select="'top'"/>
-                <xsl:with-param name="thickness">
-                    <xsl:choose>
-                        <xsl:when test="ancestor::tabular/col[position() = $top-position]/@top">
-                            <xsl:value-of select="ancestor::tabular/col[position() = $top-position]/@top"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="ancestor::tabular/@top"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
+        <xsl:call-template name="rule-attribute">
+            <xsl:with-param name="side" select="'left'"/>
+            <xsl:with-param name="thickness">
+                <xsl:apply-templates select="." mode="effective-left"/>
+            </xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="rule-attribute">
+            <xsl:with-param name="side" select="'top'"/>
+            <xsl:with-param name="thickness">
+                <xsl:apply-templates select="." mode="effective-top"/>
+            </xsl:with-param>
+        </xsl:call-template>
         <xsl:variable name="the-block">
             <fo:block>
                 <xsl:attribute name="text-align">
-                    <xsl:apply-templates select="." mode="cell-halign"/>
+                    <xsl:apply-templates select="." mode="effective-halign"/>
                 </xsl:attribute>
                 <!-- headers are bold: a header row (horizontal or  -->
                 <!-- vertical), or the leading cell of each row     -->
@@ -2758,30 +2698,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </fo:table-cell>
-</xsl:template>
-
-<!-- Horizontal alignment: the cell, else its row, else its -->
-<!-- column, else the tabular, else flush left.  ("justify" -->
-<!-- passes through with the same meaning in XSL-FO.)       -->
-<xsl:template match="row/cell" mode="cell-halign">
-    <xsl:variable name="the-position" select="count(preceding-sibling::cell[not(@colspan)]) + sum(preceding-sibling::cell/@colspan) + 1"/>
-    <xsl:choose>
-        <xsl:when test="@halign">
-            <xsl:value-of select="@halign"/>
-        </xsl:when>
-        <xsl:when test="parent::row/@halign">
-            <xsl:value-of select="parent::row/@halign"/>
-        </xsl:when>
-        <xsl:when test="ancestor::tabular/col[position() = $the-position]/@halign">
-            <xsl:value-of select="ancestor::tabular/col[position() = $the-position]/@halign"/>
-        </xsl:when>
-        <xsl:when test="ancestor::tabular/@halign">
-            <xsl:value-of select="ancestor::tabular/@halign"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>left</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <!-- The schema's rule thicknesses, emitted as a border on the -->

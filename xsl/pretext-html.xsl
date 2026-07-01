@@ -8039,143 +8039,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- then write them in a class attribute                       -->
         <!-- we look outward and upward for characteristics of the cell -->
         <!--                                                            -->
-        <!-- horizontal alignment -->
+        <!-- effective alignments and rule weights, resolved in -common; -->
+        <!-- each is a token translated to a CSS class fragment below     -->
         <xsl:variable name="alignment">
-            <xsl:choose>
-                <!-- cell attribute first -->
-                <xsl:when test="$the-cell/@halign">
-                    <xsl:value-of select="$the-cell/@halign" />
-                </xsl:when>
-                <!-- parent row attribute next -->
-                <xsl:when test="$the-cell/ancestor::row/@halign">
-                    <xsl:value-of select="$the-cell/ancestor::row/@halign" />
-                </xsl:when>
-                <!-- col attribute next -->
-                <xsl:when test="$left-col/@halign">
-                    <xsl:value-of select="$left-col/@halign" />
-                </xsl:when>
-                <!-- table attribute last -->
-                <xsl:when test="$the-cell/ancestor::tabular/@halign">
-                    <xsl:value-of select="$the-cell/ancestor::tabular/@halign" />
-                </xsl:when>
-                <!-- HTML default is left, we write it for consistency -->
-                <xsl:otherwise>
-                    <xsl:text>left</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="$the-cell" mode="effective-halign"/>
         </xsl:variable>
-        <!-- vertical alignment -->
         <xsl:variable name="valignment">
-            <xsl:choose>
-                <!-- parent row attribute first -->
-                <xsl:when test="$the-cell/ancestor::row/@valign">
-                    <xsl:value-of select="$the-cell/ancestor::row/@valign" />
-                </xsl:when>
-                <!-- table attribute last -->
-                <xsl:when test="$the-cell/ancestor::tabular/@valign">
-                    <xsl:value-of select="$the-cell/ancestor::tabular/@valign" />
-                </xsl:when>
-                <!-- HTML default is "baseline", not supported by PTX           -->
-                <!-- Instead we default to "middle" to be consistent with LaTeX -->
-                <xsl:otherwise>
-                    <xsl:text>middle</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="$the-cell" mode="effective-valign"/>
         </xsl:variable>
-        <!-- bottom borders -->
         <xsl:variable name="bottom">
-            <xsl:choose>
-                <!-- cell attribute first -->
-                <xsl:when test="$the-cell/@bottom">
-                    <xsl:value-of select="$the-cell/@bottom" />
-                </xsl:when>
-                <!-- parent row attribute next -->
-                <xsl:when test="$the-cell/ancestor::row/@bottom">
-                    <xsl:value-of select="$the-cell/ancestor::row/@bottom" />
-                </xsl:when>
-                <!-- not available on columns, table attribute last -->
-                <xsl:when test="$the-cell/ancestor::tabular/@bottom">
-                    <xsl:value-of select="$the-cell/ancestor::tabular/@bottom" />
-                </xsl:when>
-                <!-- default is none -->
-                <xsl:otherwise>
-                    <xsl:text>none</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="$the-cell" mode="effective-bottom"/>
         </xsl:variable>
-        <!-- right borders -->
         <xsl:variable name="right">
-            <xsl:choose>
-                <!-- cell attribute first -->
-                <xsl:when test="$the-cell/@right">
-                    <xsl:value-of select="$the-cell/@right" />
-                </xsl:when>
-                <!-- not available on rows, col attribute next -->
-                <xsl:when test="$right-col/@right">
-                    <xsl:value-of select="$right-col/@right" />
-                </xsl:when>
-                <!-- table attribute last -->
-                <xsl:when test="$the-cell/ancestor::tabular/@right">
-                    <xsl:value-of select="$the-cell/ancestor::tabular/@right" />
-                </xsl:when>
-                <!-- default is none -->
-                <xsl:otherwise>
-                    <xsl:text>none</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="$the-cell" mode="effective-right"/>
         </xsl:variable>
-        <!-- left borders -->
         <xsl:variable name="left">
-            <xsl:choose>
-                <!-- the first cell of the row, so may have left border -->
-                <xsl:when test="not($the-cell/preceding-sibling::cell)">
-                    <xsl:choose>
-                        <!-- row attribute first -->
-                        <xsl:when test="$the-cell/ancestor::row/@left">
-                            <xsl:value-of select="$the-cell/ancestor::row/@left" />
-                        </xsl:when>
-                        <!-- table attribute last -->
-                        <xsl:when test="$the-cell/ancestor::tabular/@left">
-                            <xsl:value-of select="$the-cell/ancestor::tabular/@left" />
-                        </xsl:when>
-                        <!-- default is none -->
-                        <xsl:otherwise>
-                            <xsl:text>none</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
-                <!-- not the first cell of the row, so no left border -->
-                <xsl:otherwise>
-                    <xsl:text>none</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="$the-cell" mode="effective-left"/>
         </xsl:variable>
-        <!-- top borders -->
         <xsl:variable name="top">
-            <xsl:choose>
-                <!-- the first row of the table, so may have top border -->
-                <!-- http://ajaxandxml.blogspot.com/2006/11/xsl-detect-first-of-type-element-in.html -->
-                <xsl:when test="not($the-cell/ancestor::row/preceding-sibling::row)">
-                    <xsl:choose>
-                        <!-- col attribute first -->
-                        <xsl:when test="$left-col/@top">
-                            <xsl:value-of select="$left-col/@top" />
-                        </xsl:when>
-                        <!-- table attribute last -->
-                        <xsl:when test="$the-cell/ancestor::tabular/@top">
-                            <xsl:value-of select="$the-cell/ancestor::tabular/@top" />
-                        </xsl:when>
-                        <!-- default is none -->
-                        <xsl:otherwise>
-                            <xsl:text>none</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
-                <!-- not the first cell of the row, so no left border -->
-                <xsl:otherwise>
-                    <xsl:text>none</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="$the-cell" mode="effective-top"/>
         </xsl:variable>
 
         <!-- a cell of a header row needs to be "th" -->
