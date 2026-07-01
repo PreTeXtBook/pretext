@@ -4048,7 +4048,7 @@
             <subsubsection xml:id="interactive-program-activecode-tests">
                 <title>Tests for Interactive Programs</title>
 
-                <p>There are currently two ways to make automated tests for ActiveCode programs. The first way is to simply provide code in the <tag>tests</tag> element of the <tag>program</tag> as described in <xref ref="interactive-program-activecode"/>. It will be assumed this code is unit tests and it will be run automatically with the user's submission.</p>
+                <p>There are currently two main ways to make automated tests for ActiveCode programs. The first way is to simply provide code in the <tag>tests</tag> element of the <tag>program</tag> as described in <xref ref="interactive-program-activecode"/>. It will be assumed this code is unit tests and it will be run automatically with the user's submission.</p>
 
                 <p>Below is an example of unit tested Python. For more examples, see <url href="https://runestone.academy/ns/books/published/PTXSB/coding-exercises.html">the Coding Exercises section of the Sample Book</url></p>
 
@@ -4096,6 +4096,8 @@
                 <p>Structured IO tests are added as <tag>iotest</tag>s to the <tag>tests</tag> element. Each <tag>iotest</tag> element must have a single <tag>input</tag> and <tag>output</tag> element. The <tag>input</tag> element contains the input that will be fed to the program, and the <tag>match</tag> element contains the expected output of the program. Indentation for both will be normalized in the same way that programs are (so multiple-line sample output can be indented in your source document).</p>
 
                 <p>When evaluated, the program output and test <tag>output</tag> will have leading and trailing spaces removed. Other than that spacing, the two must match exactly to be considered a "passed" test.</p>
+
+                <p>GDScript has it's own way to test based on the GDPractice addon library. You can look at the <url href="https://github.com/WCU-CS-CooperLab/godot-docs-pretext/tree/master/lessons">lessons</url> folder of <url href="https://github.com/WCU-CS-CooperLab/godot-docs-pretext/">Godot Docs Pretext</url> to see an example.</p>
             </subsubsection>
         </subsection>
 
@@ -4132,6 +4134,12 @@
                         <cell><c>python3</c></cell>
                         <cell></cell>
                         <cell>AC + IO</cell>
+                    </row>
+                    <row>
+                        <cell>GDScript</cell>
+                        <cell><c>gdscript</c></cell>
+                        <cell>AC</cell>
+                        <cell>AC</cell>
                     </row>
                     <row>
                         <cell>Java</cell>

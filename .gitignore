@@ -19,6 +19,8 @@ examples/webwork/Makefile.paths
 **/build
 **/node_modules/
 
+.DS_Store
+
 # cssbuilder output
 css/dist/*.map
 

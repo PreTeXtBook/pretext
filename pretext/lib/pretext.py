@@ -1572,6 +1572,105 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
 ##############################
 #
+#  GDScript interactive zipping
+#
+##############################
+
+
+def zip_with_last_dir_as_root(source_dir, output_zip):
+
+    try:
+        import zipfile  # for zipping
+    except ImportError:
+        raise ImportError(__module_warning.format("zipfile"))
+    try:
+        import pathlib  # for paths
+    except ImportError:
+        raise ImportError(__module_warning.format("pathlib"))
+
+    try:
+        import itertools
+    except ImportError:
+        raise ImportError(__module_warning.format("itertools"))
+
+
+    source_path = pathlib.Path(source_dir).resolve()
+    # Get the parent directory so the last folder is included as the root
+    #archive_root = source_path.parent 
+    try:
+        with zipfile.ZipFile(output_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            norm_glob = source_path.rglob("*")
+            hidden_glob = source_path.rglob(".*")
+            # Recursively find all files in the source directory
+            for file in itertools.chain(hidden_glob,norm_glob):
+                if file.is_file():
+                    log.debug(f"{file} being added to zip")
+                    # arcname determines the internal ZIP structure
+                    internal_path = file.relative_to(source_path)
+                    zipf.write(file, arcname=internal_path)
+    except PermissionError:
+        msg = "PTX:ERROR: You do not have permission to write to this location."
+        raise OSError(msg)
+        
+    except FileNotFoundError:
+        msg = "PTX:ERROR:  The source file or directory was not found."
+        raise OSError(msg)
+    except zipfile.BadZipFile:
+        msg = "PTX:ERROR: The ZIP file is corrupted or invalid."
+        raise OSError(msg)
+    except Exception as e:
+        msg = f"An unexpected error occurred: {e}"
+        raise OSError(msg)
+
+
+
+def gdscript_pck(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    _, external_dir = common.get_managed_directories(xml_source, pub_file)
+    
+    
+    log.info(
+        "zipping GDScript interactives from {} for placement in {}".format(
+            external_dir, dest_dir
+        )
+    )
+    ptx_xsl_dir = common.get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-gdscript.xsl")
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+    # Build list of id's into a scratch directory/file
+    tmp_dir = common.get_temporary_directory()
+    id_filename = os.path.join(tmp_dir, "gdscript-ids.txt")
+    log.debug("GDScript id list temporarily in {}".format(id_filename))
+    # this builds the gdscript names
+    common.xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
+    # "run" an assignment for the list of triples of strings
+    with open(id_filename, "r") as id_file:
+        # read lines, but only lines that are comma delimited
+        pairs = [p.strip() for p in id_file.readlines() if "," in p]
+
+    for pair in pairs:
+        # first item is destination name, second item is source
+        pair_a = pair.split(",")
+        src = os.path.join(external_dir,pair_a[1])
+        # this is the path to the destination file
+        path = os.path.join(dest_dir, pair_a[0] + ".zip")
+        log.info("compressing {} as {}...".format(src, path))
+        zip_with_last_dir_as_root(src, path)
+
+        
+    log.info("GDScript pck zipping complete")
+
+
+
+##############################
+#
 #  You Tube thumbnail scraping
 #
 ##############################
@@ -1603,6 +1702,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     tmp_dir = common.get_temporary_directory()
     id_filename = os.path.join(tmp_dir, "youtube-ids.txt")
     log.debug("YouTube id list temporarily in {}".format(id_filename))
+    # this builds the gdscript names
     common.xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
     with open(id_filename, "r") as id_file:
@@ -1612,6 +1712,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     for thumb in thumbs:
         thumb_pair = thumb.split(",")
         url = "http://i.ytimg.com/vi/{}/default.jpg".format(thumb_pair[0])
+        # this is the path to the destination file
         path = os.path.join(dest_dir, thumb_pair[1] + ".jpg")
         log.info("downloading {} as {}...".format(url, path))
         # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
@@ -1620,6 +1721,7 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         if r.status_code == 200:
             with open(path, "wb") as f:
                 r.raw.decode_content = True
+                # this copies the content, zip in our case to the path
                 shutil.copyfileobj(r.raw, f)
         else:
             msg = "PTX:ERROR: download returned a bad status code ({}), perhaps try {} manually?"
@@ -1990,6 +2092,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 
     # explore source for various PreTeXt elements needing assistance
     # no element => empty list => boolean is False
+    has_gdscript = bool(src_tree.xpath("/pretext/*[not(docinfo)]//program[@pck]"))
     has_latex_image = bool(src_tree.xpath("/pretext/*[not(docinfo)]//latex-image"))
     has_asymptote = bool(src_tree.xpath("/pretext/*[not(docinfo)]//asymptote"))
     has_sageplot = bool(src_tree.xpath("/pretext/*[not(docinfo)]//sageplot"))
@@ -2061,6 +2164,15 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
         # conversions look for this PNG as a fallback absent SVG or PDF
         sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, "pdf", None)
         sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, "svg", None)
+
+    # gdscript pck
+    #
+    if has_gdscript:
+        dest_dir = os.path.join(generated_dir, "gdscript", "")
+        if not (os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        # no format, they are what they are (*.jpg)
+        gdscript_pck(xml, pub_file, stringparams, xmlid_root, dest_dir)
 
     # YouTube previews
     #
