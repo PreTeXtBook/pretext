@@ -18056,23 +18056,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </paragraphs>
             </appendix>
 
-            <glossary xml:id="glossary-backmatter" label="glossary-backmatter">
-                <idx>glossary</idx>
-                <headnote>
-                    <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is placed in the back matter.  Placement as a specialized division is another option, see <xref ref="glossary-specialized"/>.</p>
-                </headnote>
-
-                <gi>
-                    <title>bar</title>
-                    <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined-two" text="title"/>.</p>
-                </gi>
-
-                <gi xml:id="foobar-defined-two">
-                    <title>foobar</title>
-                    <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
-                </gi>
-            </glossary>
-
             <appendix xml:id="references" label="appendix-multiple-references">
                 <title>Multiple References</title>
 
@@ -18110,7 +18093,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                     <biblio type="raw" xml:id="biblio-strang-article-tres">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash/>855.</biblio>
                 </references>
-             </appendix>
+            </appendix>
+
+            <glossary xml:id="glossary-backmatter" label="glossary-backmatter">
+                <idx>glossary</idx>
+                <headnote>
+                    <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is placed in the back matter.  Placement as a specialized division is another option, see <xref ref="glossary-specialized"/>.</p>
+                </headnote>
+
+                <gi>
+                    <title>bar</title>
+                    <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined-two" text="title"/>.</p>
+                </gi>
+
+                <gi xml:id="foobar-defined-two">
+                    <title>foobar</title>
+                    <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
+                </gi>
+            </glossary>
 
             <!-- Bibliography/References can appear anywhere,  -->
             <!-- but these are in the backmatter, hence global -->
