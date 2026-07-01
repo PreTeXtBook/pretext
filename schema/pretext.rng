@@ -3347,9 +3347,6 @@
   </define>
   <define name="ExerciseGroup">
     <element name="exercisegroup">
-      <optional>
-        <attribute name="workspace"/>
-      </optional>
       <ref name="MetaDataTitleOptional"/>
       <optional>
         <attribute name="cols">
