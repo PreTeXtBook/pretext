@@ -16306,8 +16306,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </activity>
             </worksheet>
 
-            <!-- NB: this is duplicated in the sample article -->
-            <worksheet label="worksheet-exercisegroup" margin="1cm">
+            <worksheet label="worksheet-workspace" margin="1cm">
                 <introduction>
                     <p>This is a mock worksheet for testing the use of <attr>workspace</attr> on an <tag>exercise</tag> in a worksheet.</p>
                 </introduction>
