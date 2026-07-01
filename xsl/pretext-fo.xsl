@@ -2546,23 +2546,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- The width of a "tabular", in columns: as authored, else the -->
-<!-- widest row, with any @colspan unrolled.                     -->
-<xsl:template match="tabular" mode="column-count">
-    <xsl:choose>
-        <xsl:when test="col">
-            <xsl:value-of select="count(col)"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:for-each select="row">
-                <xsl:sort select="count(cell[not(@colspan)]) + sum(cell/@colspan)" data-type="number" order="descending"/>
-                <xsl:if test="position() = 1">
-                    <xsl:value-of select="count(cell[not(@colspan)]) + sum(cell/@colspan)"/>
-                </xsl:if>
-            </xsl:for-each>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
+<!-- "tabular" mode "column-count" is shared, in pretext-common.xsl -->
 
 <xsl:template match="tabular/row">
     <fo:table-row>
