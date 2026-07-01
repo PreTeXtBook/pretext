@@ -415,6 +415,7 @@
                         Knowls? &amp;
                         NavigationHTML? &amp;
                         Platform? &amp;
+                        Resources? &amp;
                         Search? &amp;
                         Tableofcontents? &amp;
                         Video? &amp;
@@ -524,6 +525,10 @@
                 element platform {
                     attribute host { "web" | "runestone" },
                     attribute portable { "yes" | "no" }
+                }
+            Resources =
+                element resources {
+                    attribute host { "local" | "cdn" }
                 }
             Search =
                 element search {

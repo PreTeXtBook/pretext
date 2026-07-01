@@ -740,6 +740,9 @@
           <ref name="Platform"/>
         </optional>
         <optional>
+          <ref name="Resources"/>
+        </optional>
+        <optional>
           <ref name="Search"/>
         </optional>
         <optional>
@@ -1081,6 +1084,16 @@
         <choice>
           <value>yes</value>
           <value>no</value>
+        </choice>
+      </attribute>
+    </element>
+  </define>
+  <define name="Resources">
+    <element name="resources">
+      <attribute name="host">
+        <choice>
+          <value>local</value>
+          <value>cdn</value>
         </choice>
       </attribute>
     </element>
