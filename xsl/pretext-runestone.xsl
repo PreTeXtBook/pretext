@@ -2564,11 +2564,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="data-pck">
                 <xsl:choose>
                     <xsl:when test="$b-managed-directories">
-                        <xsl:value-of select="$external-directory"/>
-                        <xsl:value-of select="@pck"/>
+                        <xsl:value-of select="$generated-directory"/>
+                        <!-- add subdirectory -->
+                        <xsl:text>gdscript/</xsl:text>
+                        <!-- add template-->
+                        <xsl:apply-templates select="." mode="visible-id" />
+                        <xsl:text>.zip</xsl:text>
+                        <!-- <xsl:value-of select="@pck"/> -->
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="@pck"/>
+                        <!-- add subdirectory -->
+                        <xsl:text>gdscript/</xsl:text>
+                        <!-- add template-->
+                        <xsl:apply-templates select="." mode="visible-id" />
+                        <xsl:text>.zip</xsl:text>
+                        <!-- <xsl:value-of select="@pck"/> -->
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
