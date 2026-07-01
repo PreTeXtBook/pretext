@@ -16308,167 +16308,133 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <!-- NB: this is duplicated in the sample article -->
             <worksheet label="worksheet-exercisegroup" margin="1cm">
-              <introduction>
-                <p>
-                  This is a mock worksheet for testing the use of <attr>workspace</attr> for <tag>exercise</tag> within an <tag>exercisegroup</tag>.
-                </p>
-              </introduction>
+                <introduction>
+                    <p>This is a mock worksheet for testing the use of <attr>workspace</attr> on an <tag>exercise</tag> in a worksheet.</p>
+                </introduction>
 
-                <exercisegroup cols="2" workspace="1in">
-                    <introduction>
-                        <p>
-                            Do things to the following.
-                        </p>
-                    </introduction>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Apple
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Banana
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Cherry
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Durian
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise workspace="2in">
-                        <statement>
-                            <p>
-                                Elderberry (with workspace override)
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Fig
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Guava
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Habanero
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                I can't think of an <q>I</q> fruit.
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Jackfruit
-                            </p>
-                        </statement>
-                    </exercise>
-                </exercisegroup>
+                <p>Do things to the following.</p>
 
-                <exercisegroup workspace="0.25in">
-                    <introduction>
-                        <p>
-                            Now with one column, do things to the following.
-                        </p>
-                    </introduction>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Apple
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Banana
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Cherry
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Durian
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise workspace="2in">
-                        <statement>
-                            <p>
-                                Elderberry (with workspace override)
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Fig
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Guava
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Habanero
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                I can't think of an <q>I</q> fruit.
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Jackfruit
-                            </p>
-                        </statement>
-                    </exercise>
-                </exercisegroup>
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Apple</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Banana</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Cherry</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Durian</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="2in">
+                    <statement>
+                        <p>Elderberry (with workspace override)</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Fig</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Guava</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Habanero</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>I can't think of an <q>I</q> fruit.</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Jackfruit</p>
+                    </statement>
+                </exercise>
+
+                <p>Now, do things to the following, again.</p>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Apple</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Banana</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Cherry</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Durian</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="2in">
+                    <statement>
+                        <p>Elderberry (with workspace override)</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Fig</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Guava</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Habanero</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>I can't think of an <q>I</q> fruit.</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Jackfruit</p>
+                    </statement>
+                </exercise>
             </worksheet>
 
             <worksheet>
