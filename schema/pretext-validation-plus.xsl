@@ -203,6 +203,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- A "tabular" is ragged when its rows do not all occupy the same    -->
+<!-- number of columns (each cell counting as its @colspan, else one).  -->
+<!-- We detect this against a reference count: the number of "col"      -->
+<!-- elements when a column group is present, otherwise the first row.  -->
+<!-- The reference only makes the test computable; neither it nor any   -->
+<!-- row is declared "correct".  The schema cannot count columns, and   -->
+<!-- a mismatch leaves the output of the "tabular" unpredictable.       -->
+<xsl:template match="tabular">
+    <xsl:variable name="reference-count">
+        <xsl:choose>
+            <xsl:when test="col">
+                <xsl:value-of select="count(col)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="count(row[1]/cell[not(@colspan)]) + sum(row[1]/cell/@colspan)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="row[(count(cell[not(@colspan)]) + sum(cell/@colspan)) != number($reference-count)]">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>The rows of this &lt;tabular&gt; do not all span the same number of columns&#xa;</xsl:text>
+                <xsl:text>(counting each cell as its @colspan, or as one column otherwise).&#xa;</xsl:text>
+                <xsl:text>Compare the rows against the number of &lt;col&gt; elements, if present,&#xa;</xsl:text>
+                <xsl:text>or else against the first row.  Results may be unpredictable.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="title[m]">
     <xsl:if test="parent::chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary|backmatter and not(following-sibling::shorttitle)">
         <xsl:apply-templates select="." mode="messaging">

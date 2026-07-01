@@ -7379,6 +7379,27 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="$left + $span - 1"/>
 </xsl:template>
 
+<!-- The number of columns in a "tabular": the count of "col" elements  -->
+<!-- when a column group is present, otherwise the widest row (each      -->
+<!-- cell counting as its "@colspan", or one).  A well-formed table has  -->
+<!-- every row that wide; a ragged one (flagged by validation) is given  -->
+<!-- enough columns for its widest row.                                  -->
+<xsl:template match="tabular" mode="column-count">
+    <xsl:choose>
+        <xsl:when test="col">
+            <xsl:value-of select="count(col)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:for-each select="row">
+                <xsl:sort select="count(cell[not(@colspan)]) + sum(cell/@colspan)" data-type="number" order="descending"/>
+                <xsl:if test="position() = 1">
+                    <xsl:value-of select="count(cell[not(@colspan)]) + sum(cell/@colspan)"/>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- horizontal alignment: cell > row > col > tabular > "left" -->
 <xsl:template match="cell" mode="effective-halign">
     <xsl:variable name="left-number">

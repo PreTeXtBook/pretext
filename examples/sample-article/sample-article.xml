@@ -3287,6 +3287,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <cell><kbd>?</kbd></cell>
                         <cell><kbd>Shift</kbd></cell>
                         <cell></cell>
+                        <cell></cell>
                     </row>
                     </tabular>
                 </table>
@@ -3355,6 +3356,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <cell><kbd>.</kbd></cell>
                         <cell><kbd>/</kbd></cell>
                         <cell><kbd>Shift</kbd></cell>
+                        <cell></cell>
                         <cell></cell>
                     </row>
                     </tabular>
@@ -12039,7 +12041,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
-                                <col/>
                                 <!--  -->
                                 <row bottom="medium">
                                     <cell>1111</cell>
@@ -12060,7 +12061,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
-                                <col/>
                                 <!--  -->
                                 <row bottom="medium">
                                     <cell>1111</cell>
@@ -12087,7 +12087,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
-                                <col/>
                                 <!--  -->
                                 <row bottom="medium">
                                     <cell>1111</cell>
@@ -12108,7 +12107,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
-                                <col/>
                                 <!--  -->
                                 <row bottom="medium">
                                     <cell>1111</cell>
@@ -12136,7 +12134,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
                             <col right="major"/>
-                            <col/>
                             <!--  -->
                             <row bottom="medium">
                                 <cell>1111</cell>
@@ -12157,7 +12154,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
                             <col right="major"/>
-                            <col/>
                             <!--  -->
                             <row bottom="medium">
                                 <cell>1111</cell>
@@ -12178,7 +12174,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
                             <col right="major"/>
-                            <col/>
                             <!--  -->
                             <row bottom="medium">
                                 <cell>1111</cell>
@@ -12209,7 +12204,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
                             <col right="major"/>
-                            <col/>
                             <!--  -->
                             <row bottom="medium">
                                 <cell>1111</cell>
@@ -12240,7 +12234,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
-                                <col/>
                                 <!--  -->
                                 <row bottom="medium">
                                     <cell>1111</cell>
@@ -12276,7 +12269,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
                             <col right="major"/>
-                            <col/>
                             <!--  -->
                             <row bottom="medium">
                                 <cell>1111</cell>
@@ -12313,7 +12305,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <tabular top="minor" left="minor" halign="center">
                         <col right="medium"/>
                         <col right="major"/>
-                        <col/>
                         <!--  -->
                         <row bottom="medium">
                             <cell>1111</cell>
@@ -12335,7 +12326,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <tabular valign="top" top="minor" left="minor" halign="center">
                         <col right="medium"/>
                         <col right="major"/>
-                        <col/>
                         <!--  -->
                         <row bottom="medium">
                             <cell>1111</cell>
@@ -12353,7 +12343,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <tabular valign="middle" top="minor" left="minor" halign="center">
                         <col right="medium"/>
                         <col right="major"/>
-                        <col/>
                         <!--  -->
                         <row bottom="medium">
                             <cell>1111</cell>
@@ -12371,7 +12360,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <tabular top="minor" left="minor" halign="center">
                         <col right="medium"/>
                         <col right="major"/>
-                        <col/>
                         <!--  -->
                         <row bottom="medium">
                             <cell>1111</cell>
@@ -12523,7 +12511,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
                             <col right="major"/>
-                            <col/>
                             <!--  -->
                             <row bottom="medium">
                                 <cell>1111</cell>

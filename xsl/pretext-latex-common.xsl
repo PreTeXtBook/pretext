@@ -9804,10 +9804,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!--   follow with right border (optional)                 -->
         <!-- TODO: error check each row for correct number of columns -->
         <xsl:otherwise>
-            <!-- TODO: this inline column count duplicates the reusable -->
-            <!-- "tabular" mode "column-count" in pretext-fo.xsl; the   -->
-            <!-- pair could be lifted to a shared getter in -common.    -->
-            <xsl:variable name="ncols" select="count(row[1]/cell) + sum(row[1]/cell[@colspan]/@colspan) - count(row[1]/cell[@colspan])" />
+            <xsl:variable name="ncols">
+                <xsl:apply-templates select="." mode="column-count"/>
+            </xsl:variable>
             <xsl:call-template name="duplicate-string">
                 <xsl:with-param name="count" select="$ncols" />
                 <xsl:with-param name="text">
