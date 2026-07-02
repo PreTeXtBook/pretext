@@ -95,6 +95,10 @@
     </xsl:choose>
 </xsl:variable>
 
+<!-- Force level 2 as the top level heading for chunks      -->
+<!-- by overrideing this template than calling the original -->
+<xsl:variable name="chunk-heading-level" select="2"/>
+
 <!-- We disable the ToC level to avoid any conflicts with chunk level -->
 <xsl:variable name="toc-level" select="number(0)" />
 
@@ -790,7 +794,7 @@
             </head>
             <body class="ptx-content epub" epub:type="frontmatter">
                 <nav epub:type="toc" id="toc">
-                    <h1>Table of Contents</h1>
+                    <h2>Table of Contents</h2>
                     <ol>
                         <!-- top-level divisions, for a book -->
                         <xsl:for-each select="$document-root/chapter[$b-is-book]|$document-root/section[$b-is-article]">
