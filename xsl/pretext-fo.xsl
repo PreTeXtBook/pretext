@@ -1826,15 +1826,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
               space-after="0.75em"
               keep-with-next.within-page="always">
         <!-- Each division of the stack on its own line, as in the LaTeX -->
-        <!-- conversion: the number and title joined by a middle dot,     -->
-        <!-- with no type-name.  An unnumbered (specialized) division     -->
-        <!-- leads with the dot.                                          -->
+        <!-- conversion: the number and title joined by a middle dot,    -->
+        <!-- with no type-name.  A division whose number is withheld     -->
+        <!-- (see "duplicate-heading-show-number") leads with the dot.   -->
         <xsl:for-each select="$heading-stack">
             <fo:block>
+                <xsl:variable name="show-number">
+                    <xsl:apply-templates select="." mode="duplicate-heading-show-number"/>
+                </xsl:variable>
                 <xsl:variable name="the-number">
                     <xsl:apply-templates select="." mode="number"/>
                 </xsl:variable>
-                <xsl:if test="not($the-number = '')">
+                <xsl:if test="($show-number = 'true') and not($the-number = '')">
                     <xsl:value-of select="$the-number"/>
                     <xsl:text> </xsl:text>
                 </xsl:if>
