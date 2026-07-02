@@ -3289,6 +3289,9 @@
                 TextSimple
             }
             Edition = element edition {text}
+            # "event" is consumed only by the slideshow conversions
+            # (Beamer, reveal.js).  This schema does not yet describe a
+            # "slideshow" document, so the pattern is dormant until then.
             Event = element event {
                 TextLong
             }
