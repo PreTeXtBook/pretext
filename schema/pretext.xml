@@ -424,32 +424,8 @@
 
             PrintoutBlock =
                 BlockStatement | Remark | Computation | Theorem | Proof | Definition |
-                Axiom | Example | PrintoutExercise | Project |
+                Axiom | Example | Exercise | Project |
                 Poem | Assemblage | ListGenerator | Fragment | Paragraphs
-
-            # Exercises and tasks can have workspace:
-            PrintoutExercise =
-                element exercise {
-                    MetaDataTitleOptional,
-                    attribute number {text}?,
-                    attribute workspace {text}?,
-                    (
-                    ExerciseBody |
-                    (StatementExercise, Hint*, Answer*, Solution*) |
-                    (IntroductionText?, WebWork, ConclusionText?) |
-                    (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
-                    )
-                }
-            PrintoutTask =
-                element task {
-                    MetaDataTitleOptional,
-                    attribute workspace {text}?,
-                    (
-                        BlockStatement+ |
-                        (Statement, Hint*, Answer*, Solution*) |
-                        (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
-                    )
-                }
 
             # Page can contain a printout block or be empty
             Page =
