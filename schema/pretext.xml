@@ -3530,6 +3530,10 @@
                 element latex-image-preamble {text}
             Configuration |=
                 element asymptote-preamble {text}
+            Configuration |=
+                element pf:prefigure-preamble {
+                    external "pf-preamble-adapter.rnc"
+                }
             </code>
         </fragment>
 
@@ -3700,7 +3704,7 @@
 
     <section>
         <title>PreFigure Schema
-                Adapter</title>
+                Adapters</title>
 
         <p>The <init>PreFigure</init> project publishes its own <init>RELAX-NG</init> compact schema (<c>pf_schema.rnc</c>), which we copy into this directory nearly verbatim (carrying only a handful of minimal upstream bug fixes needed for the grammar to load).  That schema defines every <init>PreFigure</init> element in no namespace, with a start pattern of the <c>diagram</c> element.  <pretext/>, however, expects <init>PreFigure</init> content in the <c>https://prefigure.org</c> namespace, signalled by the <attr>xmlns</attr> on a <c>prefigure</c> element.</p>
 
@@ -3712,6 +3716,21 @@
                 default namespace = "https://prefigure.org"
                 grammar {
                     include "pf_schema.rnc"
+                }
+            </code>
+        </fragment>
+
+        <p>A <c>prefigure-preamble</c> in the <c>docinfo</c> carries <init>PreFigure</init> content (graphical and group elements) without an enclosing <c>diagram</c>.  Since the upstream start pattern is the <c>diagram</c> element, that content is not reachable through the <c>externalRef</c> above, which exposes only a grammar's start pattern.  A second adapter includes the same upstream grammar but overrides its <c>start</c> to expose exactly the drawing-content patterns, again reusing the upstream definitions verbatim.  Definition elements are deliberately omitted as diagram-specific, rather than preamble, material.</p>
+
+        <fragment filename="pf-preamble-adapter.rnc">
+            <title>PreFigure Preamble Adapter</title>
+            <code>
+                default namespace = "https://prefigure.org"
+                grammar {
+                    include "pf_schema.rnc" {
+                        start =
+                            ( GraphicalElements* &amp; GroupElements* )
+                    }
                 }
             </code>
         </fragment>

@@ -2014,6 +2014,10 @@
                 element latex-image-preamble {text}
             Configuration |=
                 element asymptote-preamble {text}
+            Configuration |=
+                element pf:prefigure-preamble {
+                    external "pf-preamble-adapter.rnc"
+                }
             
             Configuration |=
                 element macros {text}
