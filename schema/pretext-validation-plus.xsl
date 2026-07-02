@@ -203,6 +203,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- A "figure", "table", "listing", or (named) "list" is numbered and  -->
+<!-- carries a caption or title.  Some locations are meant for strictly -->
+<!-- unnumbered content, and the schema's "NoNumber" patterns exclude   -->
+<!-- these items as immediate children, or as whole panels of a         -->
+<!-- "sidebyside".  But one can still sneak in nested, such as a        -->
+<!-- "figure" within a list item of a "p".  We catch every depth here.  -->
+<!-- The locations: "assemblage", "interactive", "slate", "colophon",   -->
+<!-- "headnote", "gi", "biography", "acknowledgement", "preface", and   -->
+<!-- the "introduction"/"conclusion" of an "exercisegroup".             -->
+<xsl:template match="figure|table|listing|list">
+    <xsl:variable name="unnumbered-context" select="(ancestor::*[self::assemblage or self::interactive or self::slate or self::colophon or self::headnote or self::gi or self::biography or self::acknowledgement or self::preface or ((self::introduction or self::conclusion) and parent::exercisegroup)])[last()]"/>
+    <xsl:if test="$unnumbered-context">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A &lt;</xsl:text>
+                <xsl:value-of select="local-name(.)"/>
+                <xsl:text>&gt; is numbered, but it is located within a container (&lt;</xsl:text>
+                <xsl:value-of select="local-name($unnumbered-context)"/>
+                <xsl:text>&gt;) whose content&#xa;</xsl:text>
+                <xsl:text>is otherwise unnumbered.  The number may be unreliable and the presentation&#xa;</xsl:text>
+                <xsl:text>may suffer.  Consider an unnumbered substitute for the contents (such as&#xa;</xsl:text>
+                <xsl:text>&lt;image&gt;, &lt;tabular&gt;, &lt;program&gt;, &lt;console&gt;) or relocate the item.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
 <!-- A "tabular" is ragged when its rows do not all occupy the same    -->
 <!-- number of columns (each cell counting as its @colspan, else one).  -->
 <!-- We detect this against a reference count: the number of "col"      -->
