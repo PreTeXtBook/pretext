@@ -1,6 +1,6 @@
 # PreTeXt RELAX-NG Schema
 
-A RELAX-NG schema is the formal specification of the PreTeXt vocabulary, with additional Schematron rules.  Read the Author's Guide for complete documentation.
+A RELAX-NG schema is the formal specification of the PreTeXt vocabulary.  Read the Author's Guide for complete documentation.
 
 ## RELAX-NG Grammar
 
@@ -9,15 +9,6 @@ A RELAX-NG schema is the formal specification of the PreTeXt vocabulary, with ad
    against this version only, all the others are derived copies.
 * `pretext.rnc`: direct product from `pretext.xml`, RELAX-NG compact syntax
 * `pretext.rng`: conversion from `pretext.xml` via `trang`, RELAX-NG XML syntax
-
-## Schematron Rules
-
-* `pretext.sch`: original version of Schematron rules
-* `iso_schematron_cli.xsl`: extension using Schematron API.
-  For developer use and requires a copy of the Schematron distribution.
-* `pretext-schematron.xsl`: stylesheet for author use.  Invoke with
-  an xslt processor (e.g. `xsltproc`) on your PreTeXt source to get 
-  messages from the Schematron rules.
 
 ## Build Script
 
