@@ -1759,7 +1759,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="personname">
             <xsl:apply-templates select="personname"/>
         </xsl:when>
-        <!-- Schematron assertion requires the target -->
+        <!-- PreTeXt's validation requires the target -->
         <!-- of the xref to be a contributor element  -->
         <xsl:when test="xref">
             <xsl:apply-templates select="xref"/>
@@ -8121,7 +8121,7 @@ Book (with parts), "section" at level 3
             </xsl:variable>
             <!-- enforce @first, @last point to same kind of element, -->
             <!-- since we implicitly recycle the type-name of @first  -->
-            <!-- Schematron: possible by inserting id() into XPath test? -->
+            <!-- validation stylesheet: possible by inserting id() into XPath test? -->
             <xsl:if test="not(local-name($target-one) = local-name($target-two))">
                 <xsl:message>PTX:ERROR:   &lt;xref @first="<xsl:value-of select="@first" />" @last="<xsl:value-of select="@last" />" /&gt; references two elements with different tags (<xsl:value-of select="local-name($target-one)" /> vs. <xsl:value-of select="local-name($target-two)" />), so are incompatible as endpoints of a range.  Rewrite using two &lt;xref&gt; elements</xsl:message>
             </xsl:if>
@@ -10788,7 +10788,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- for delayed evaluation, only if the warning -->
     <!-- survives a date filter.                     -->
     <!-- Comments without implementations have moved -->
-    <!-- to Schematron rules after residing here for -->
+    <!-- to validation rules after residing here for -->
     <!-- at least 16 months (one year plus grace)    -->
     <!--  -->
     <!-- 2014-05-04  @filebase has been replaced in function by @xml:id -->
