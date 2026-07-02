@@ -306,7 +306,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Warn if there is a description and @decorative="yes". -->
 <!-- Warn if a description length is over 125 characters.  -->
 <xsl:template match="image">
-    <xsl:if test="not(@decorative = 'yes') and description = ''">
+    <xsl:if test="not(@decorative = 'yes') and (not(description) or description = '')">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
             <xsl:with-param name="message">
@@ -317,7 +317,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:apply-templates>
     </xsl:if>
-    <xsl:if test="@decorative = 'yes' and not(description = '')">
+    <xsl:if test="@decorative = 'yes' and description and not(description = '')">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
             <xsl:with-param name="message">
