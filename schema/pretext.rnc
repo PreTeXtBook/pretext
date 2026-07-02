@@ -296,7 +296,7 @@
             Biography =
                 element biography {
                     MetaDataTitleOptional,
-                    (BlockStatementNoCaption | ParagraphsNoNumber)+
+                    (BlockStatementNoNumber | ParagraphsNoNumber)+
                 }
             Dedication =
                 element dedication {
@@ -306,21 +306,21 @@
             Acknowledgement =
                 element acknowledgement {
                     MetaDataTitleOptional,
-                    (BlockStatementNoCaption | ParagraphsNoNumber)+
+                    (BlockStatementNoNumber | ParagraphsNoNumber)+
                 }
             Preface =
                 element preface {
                     MetaDataTitleOptional,
                     (
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber)+,
+                            (BlockStatementNoNumber | ParagraphsNoNumber)+,
                             Attribution*
                         )
                         |
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber )*,
+                            (BlockStatementNoNumber | ParagraphsNoNumber )*,
                             Contributors,
-                            (BlockStatementNoCaption | ParagraphsNoNumber)*
+                            (BlockStatementNoNumber | ParagraphsNoNumber)*
                         )
                     )
                 }
@@ -346,7 +346,7 @@
             ColophonBack =
                 element colophon {
                     MetaDataTarget,
-                    (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                    (BlockText | SideBySideNoNumber | SideBySideGroupNoNumber)+
                 }
             
             Paragraphs =
@@ -359,7 +359,7 @@
                 element paragraphs {
                     MetaDataTitle,
                     Index*,
-                    BlockStatementNoCaption+
+                    BlockStatementNoNumber+
                 }
             
             ReadingQuestions =
@@ -516,9 +516,9 @@
             BlockText =
                 Paragraph | BlockQuote | Preformatted |
                 Image | Video | Audio | Program | Console | Tabular
-            BlockStatementNoCaption =
+            BlockStatementNoNumber =
                 BlockText | Aside |
-                SideBySideNoCaption | SideBySideGroupNoCaption
+                SideBySideNoNumber | SideBySideGroupNoNumber
             BlockStatement =
                 BlockText |
                 Figure | Aside |
@@ -561,10 +561,10 @@
                 element introduction {BlockText+}
             ConclusionText =
                 element conclusion {BlockText+}
-            IntroductionStatementNoCaption =
-                element introduction {BlockStatementNoCaption+}
-            ConclusionStatementNoCaption =
-                element conclusion {BlockStatementNoCaption+}
+            IntroductionStatementNoNumber =
+                element introduction {BlockStatementNoNumber+}
+            ConclusionStatementNoNumber =
+                element conclusion {BlockStatementNoNumber+}
             IntroductionStatement =
                 element introduction {BlockStatement+}
             ConclusionStatement =
@@ -580,7 +580,7 @@
                     BlockDivision+
                 }
             HeadNote =
-                element headnote {BlockStatementNoCaption+}
+                element headnote {BlockStatementNoNumber+}
             
             Objectives =
                 element objectives {
@@ -905,7 +905,7 @@
             Assemblage =
                 element assemblage {
                     MetaDataTitleOptional,
-                    (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                    (BlockText | SideBySideNoNumber | SideBySideGroupNoNumber)+
                 }
             
             Caption =
@@ -987,7 +987,7 @@
                         Stack
                     )+
                 }
-            SideBySideNoCaption =
+            SideBySideNoNumber =
                 element sidebyside {
                     SidebySideAttributes,
                     (
@@ -1010,11 +1010,11 @@
                     SidebySideAttributes,
                     SideBySide+
                 }
-            SideBySideGroupNoCaption =
+            SideBySideGroupNoNumber =
                 element sbsgroup {
                     UniqueID?,
                     SidebySideAttributes,
-                    SideBySideNoCaption+
+                    SideBySideNoNumber+
                 }
             
             Image = ImageRaster | ImageCode
@@ -1270,9 +1270,9 @@
                 element exercisegroup {
                     MetaDataTitleOptional,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    IntroductionStatementNoCaption,
+                    IntroductionStatementNoNumber,
                     Exercise+,
-                    ConclusionStatementNoCaption?
+                    ConclusionStatementNoNumber?
                 }
             
             AlignmentPoem = attribute halign {"left" | "center" | "right"}
@@ -1459,7 +1459,7 @@
             GlossaryItem =
                 element gi {
                     MetaDataTitle,
-                    BlockStatementNoCaption+
+                    BlockStatementNoNumber+
                 }
             
             Contributor =

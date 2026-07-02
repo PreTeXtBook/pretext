@@ -931,7 +931,7 @@
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
-          <ref name="BlockStatementNoCaption"/>
+          <ref name="BlockStatementNoNumber"/>
           <ref name="ParagraphsNoNumber"/>
         </choice>
       </oneOrMore>
@@ -953,7 +953,7 @@
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
-          <ref name="BlockStatementNoCaption"/>
+          <ref name="BlockStatementNoNumber"/>
           <ref name="ParagraphsNoNumber"/>
         </choice>
       </oneOrMore>
@@ -966,7 +966,7 @@
         <group>
           <oneOrMore>
             <choice>
-              <ref name="BlockStatementNoCaption"/>
+              <ref name="BlockStatementNoNumber"/>
               <ref name="ParagraphsNoNumber"/>
             </choice>
           </oneOrMore>
@@ -977,14 +977,14 @@
         <group>
           <zeroOrMore>
             <choice>
-              <ref name="BlockStatementNoCaption"/>
+              <ref name="BlockStatementNoNumber"/>
               <ref name="ParagraphsNoNumber"/>
             </choice>
           </zeroOrMore>
           <ref name="Contributors"/>
           <zeroOrMore>
             <choice>
-              <ref name="BlockStatementNoCaption"/>
+              <ref name="BlockStatementNoNumber"/>
               <ref name="ParagraphsNoNumber"/>
             </choice>
           </zeroOrMore>
@@ -1044,8 +1044,8 @@
       <oneOrMore>
         <choice>
           <ref name="BlockText"/>
-          <ref name="SideBySideNoCaption"/>
-          <ref name="SideBySideGroupNoCaption"/>
+          <ref name="SideBySideNoNumber"/>
+          <ref name="SideBySideGroupNoNumber"/>
         </choice>
       </oneOrMore>
     </element>
@@ -1068,7 +1068,7 @@
         <ref name="Index"/>
       </zeroOrMore>
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -1440,12 +1440,12 @@
       <ref name="Tabular"/>
     </choice>
   </define>
-  <define name="BlockStatementNoCaption">
+  <define name="BlockStatementNoNumber">
     <choice>
       <ref name="BlockText"/>
       <ref name="Aside"/>
-      <ref name="SideBySideNoCaption"/>
-      <ref name="SideBySideGroupNoCaption"/>
+      <ref name="SideBySideNoNumber"/>
+      <ref name="SideBySideGroupNoNumber"/>
     </choice>
   </define>
   <define name="BlockStatement">
@@ -1549,17 +1549,17 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="IntroductionStatementNoCaption">
+  <define name="IntroductionStatementNoNumber">
     <element name="introduction">
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
-  <define name="ConclusionStatementNoCaption">
+  <define name="ConclusionStatementNoNumber">
     <element name="conclusion">
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -1598,7 +1598,7 @@
   <define name="HeadNote">
     <element name="headnote">
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -2503,8 +2503,8 @@
       <oneOrMore>
         <choice>
           <ref name="BlockText"/>
-          <ref name="SideBySideNoCaption"/>
-          <ref name="SideBySideGroupNoCaption"/>
+          <ref name="SideBySideNoNumber"/>
+          <ref name="SideBySideGroupNoNumber"/>
         </choice>
       </oneOrMore>
     </element>
@@ -2646,7 +2646,7 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="SideBySideNoCaption">
+  <define name="SideBySideNoNumber">
     <element name="sidebyside">
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
@@ -2677,14 +2677,14 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="SideBySideGroupNoCaption">
+  <define name="SideBySideGroupNoNumber">
     <element name="sbsgroup">
       <optional>
         <ref name="UniqueID"/>
       </optional>
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
-        <ref name="SideBySideNoCaption"/>
+        <ref name="SideBySideNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -3359,12 +3359,12 @@
           </choice>
         </attribute>
       </optional>
-      <ref name="IntroductionStatementNoCaption"/>
+      <ref name="IntroductionStatementNoNumber"/>
       <oneOrMore>
         <ref name="Exercise"/>
       </oneOrMore>
       <optional>
-        <ref name="ConclusionStatementNoCaption"/>
+        <ref name="ConclusionStatementNoNumber"/>
       </optional>
     </element>
   </define>
@@ -3833,7 +3833,7 @@
     <element name="gi">
       <ref name="MetaDataTitle"/>
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>

@@ -33,8 +33,8 @@
                       ImageDescription? &
                       (
                         Slate |
-                        SideBySideNoCaption |
-                        SideBySideGroupNoCaption
+                        SideBySideNoNumber |
+                        SideBySideGroupNoNumber
                       )* &
                       element script { attribute type { text }?, text }* &
                       element source { text }? &
@@ -78,7 +78,7 @@
                         (
                           Paragraph |
                           Tabular |
-                          SideBySideNoCaption |
+                          SideBySideNoNumber |
                           SlateInput |
                           AnyXhtml |
                           element xhtml:button {
@@ -127,7 +127,7 @@
                 (Interactive | Slate)+
             }
 
-            SideBySideNoCaption |= element sidebyside {
+            SideBySideNoNumber |= element sidebyside {
                 SidebySideAttributes,
                 (Interactive | Slate)+
             }
