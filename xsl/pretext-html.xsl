@@ -187,6 +187,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so lightweight stylesheets can access the same logic. -->
 <xsl:variable name="chunk-level" select="$html-chunk-level"/>
 
+<!-- A document with chunking set to 0, or with no chapters or sections -->
+<!-- will be a single page. -->
+<xsl:variable name="b-is-single-page" select="$chunk-level = 0 or ($b-is-article and count($document-root/section) = 0) or ($b-is-book and count($document-root//chapter) = 0)"/>
+
 <!-- HTML files as output -->
 <xsl:variable name="file-extension" select="'.html'" />
 
