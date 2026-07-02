@@ -4513,7 +4513,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="exercise|&PROJECT-LIKE;|task|&EXAMPLE-LIKE;|webwork-reps/static|webwork-reps/static/task|webwork-reps/static/stage" mode="exercise-components">
+<!-- The decision procedure for which components appear, and in which  -->
+<!-- order, is the generic "exercise-components" driver pair in        -->
+<!-- pretext-common.xsl; the "present-*" hooks below supply the HTML   -->
+<!-- realization.  Runestone interactive exercises are entirely        -->
+<!-- HTML-specific, so they are matched here, ahead of the drivers.    -->
+
+<!-- Select -->
+<!-- Largely a Runestone/database operation referencing -->
+<!-- existing questions supplied by the manifest,       -->
+<!-- so we go straight to an HTML version               -->
+<xsl:template match="*[@exercise-interactive = 'select']" mode="exercise-components">
+    <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+</xsl:template>
+
+<!-- True/False        -->
+<!-- Multiple Choice   -->
+<!-- Parson problems   -->
+<!-- Matching problems -->
+<!-- Clickable Area    -->
+<!-- Fill-In (Basic)   -->
+<!-- Coding Exercise   -->
+<!-- Dual Form Exercise-->
+<!-- Short Answer      -->
+<!-- The "runestone-to-interactive" templates will combine a   -->
+<!-- "regular" PreTeXt statement together with some additional -->
+<!-- interactive material to make a hybrid "statement"         -->
+<xsl:template match="*[(@exercise-interactive = 'truefalse') or
+                       (@exercise-interactive = 'multiplechoice') or
+                       (@exercise-interactive = 'parson') or
+                       (@exercise-interactive = 'parson-horizontal') or
+                       (@exercise-interactive = 'cardsort') or
+                       (@exercise-interactive = 'matching') or
+                       (@exercise-interactive = 'clickablearea') or
+                       (@exercise-interactive = 'fillin-basic') or
+                       (@exercise-interactive = 'coding') or
+                       (@exercise-interactive = 'dual') or
+                       (@exercise-interactive = 'shortanswer')]" mode="exercise-components">
     <xsl:param name="b-original"/>
     <xsl:param name="block-type"/>
     <xsl:param name="heading-level"/>
@@ -4522,97 +4558,132 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
-    <xsl:choose>
-        <!-- Select -->
-        <!-- Largely a Runestone/database operation referencing -->
-        <!-- existing questions supplied by the manifest,       -->
-        <!-- so we go straight to an HTML version               -->
-        <xsl:when test="@exercise-interactive = 'select'">
-            <xsl:apply-templates select="." mode="runestone-to-interactive"/>
-        </xsl:when>
-        <!-- True/False        -->
-        <!-- Multiple Choice   -->
-        <!-- Parson problems   -->
-        <!-- Matching problems -->
-        <!-- Clickable Area    -->
-        <!-- Fill-In (Basic)   -->
-        <!-- Coding Exercise   -->
-        <!-- Dual Form Exercise-->
-        <!-- Short Answer      -->
-        <!-- The "runestone-to-interactive" templates will combine a   -->
-        <!-- "regular" PreTeXt statement together with some additional -->
-        <!-- interactive material to make a hybrid "statement"         -->
-        <xsl:when test="(@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'dual') or
-                               (@exercise-interactive = 'shortanswer')"
-                               >
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="." mode="runestone-to-interactive"/>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="heading-level" select="$heading-level"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- Dynamic fillin is broken out separately because the test for -->
-        <!-- correctness as well as feedback is dynamically chosen.       -->
-        <xsl:when test="@exercise-interactive = 'fillin'">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="." mode="runestone-to-interactive"/>
-            </xsl:if>
-            <!-- Include hints. Solution/answer get special handling       -->
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="heading-level" select="$heading-level"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- Finally nothing too exceptional, do the usual drill. Consider -->
-        <!-- structured versus unstructured, non-interactive.              -->
-        <xsl:when test="statement">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="statement">
-                    <xsl:with-param name="b-original" select="$b-original" />
-                    <xsl:with-param name="block-type" select="$block-type"/>
-                    <xsl:with-param name="heading-level" select="$heading-level"/>
-                </xsl:apply-templates>
-            </xsl:if>
-            <xsl:apply-templates select="." mode="solutions-div">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="block-type" select="$block-type"/>
-                <xsl:with-param name="heading-level" select="$heading-level"/>
-                <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
-                <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <!-- TODO: contained "if" should just be a new "when"? (look around for similar)" -->
-        <xsl:otherwise>
-            <!-- no explicit "statement", so all content is the statement -->
-            <!-- the "dry-run" templates should prevent an empty shell  -->
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="*">
-                    <xsl:with-param name="b-original" select="$b-original" />
-                    <xsl:with-param name="block-type" select="$block-type"/>
-                    <xsl:with-param name="heading-level" select="$heading-level"/>
-                </xsl:apply-templates>
-                <!-- no separator, since no trailing components -->
-            </xsl:if>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="solutions-div">
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
+        <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Dynamic fillin is broken out separately because the test for -->
+<!-- correctness as well as feedback is dynamically chosen.       -->
+<xsl:template match="*[@exercise-interactive = 'fillin']" mode="exercise-components">
+    <xsl:param name="b-original"/>
+    <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="." mode="runestone-to-interactive"/>
+    </xsl:if>
+    <!-- Include hints. Solution/answer get special handling       -->
+    <xsl:apply-templates select="." mode="solutions-div">
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Now the hooks for the generic drivers -->
+
+<xsl:template match="*" mode="present-exercise-statement">
+    <xsl:param name="b-original"/>
+    <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
+
+    <xsl:apply-templates select="statement">
+        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- no explicit "statement", so all content is the statement -->
+<!-- the "dry-run" templates should prevent an empty shell    -->
+<xsl:template match="*" mode="present-exercise-statement-bare">
+    <xsl:param name="b-original"/>
+    <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
+
+    <xsl:apply-templates select="*">
+        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
+    <!-- no separator, since no trailing components -->
+</xsl:template>
+
+<xsl:template match="*" mode="present-exercise-solutions">
+    <xsl:param name="b-original"/>
+    <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
+    <xsl:param name="b-has-hint"/>
+    <xsl:param name="b-has-answer"/>
+    <xsl:param name="b-has-solution"/>
+
+    <xsl:apply-templates select="." mode="solutions-div">
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="b-has-hint"  select="$b-has-hint"/>
+        <xsl:with-param name="b-has-answer"  select="$b-has-answer"/>
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- An "introduction", a "task" that survived its dry-run, and a  -->
+<!-- "conclusion" are simply processed as if encountered normally, -->
+<!-- reproducing the wholesale processing that preceded the        -->
+<!-- generic drivers.                                              -->
+
+<xsl:template match="*" mode="present-tasks-introduction">
+    <xsl:param name="b-has-statement"/>
+    <xsl:param name="b-original"/>
+    <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
+
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="introduction">
+            <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="block-type" select="$block-type"/>
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="task" mode="present-task-item">
+    <xsl:param name="b-original"/>
+    <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
+
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="block-type" select="$block-type"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="*" mode="present-tasks-conclusion">
+    <xsl:param name="b-has-statement"/>
+    <xsl:param name="b-original"/>
+    <xsl:param name="block-type"/>
+    <xsl:param name="heading-level"/>
+
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="conclusion">
+            <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="block-type" select="$block-type"/>
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
+    </xsl:if>
 </xsl:template>
 
 <!-- "exercise", EXAMPLE-LIKE, PROJECT-LIKE, "task", and more have a  -->
