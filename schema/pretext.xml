@@ -409,7 +409,7 @@
 
         <p>A printout division (currently only a <tag>worksheet</tag>) is a specialized division, allowing for some additional control of spacing and page delineation, to allow for workspace.</p>
 
-        <p>The attributes on a printout include margin information to control layout.  Inside a printout we can have either a number of <tag>page</tag> elements that holding the content or just the content itself.</p>
+        <p>The attributes on a printout include margin information to control layout.  Inside a printout we can have either a number of <tag>page</tag> elements that hold the content or just the content itself.</p>
 
         <p>The contents of a printout can include the same blocks as a division, namely BlockDivision, plus the <tag>paragraphs</tag> division.</p>
         <fragment xml:id="printout">
@@ -455,9 +455,9 @@
 
         <p>A handout is a specialized division very similar to a worksheet, allowing for some additional control of spacing, to allow for workspace.</p>
 
-        <p>The attributes on a handout include margin information to control layout, just like worksheets.  Also like worksheets, a handout we can contain either a number of <tag>page</tag> elements that holding the content or just the content itself.</p>
+        <p>The attributes on a handout include margin information to control layout, just like worksheets.  Also like worksheets, a handout can contain either a number of <tag>page</tag> elements that hold the content or just the content itself.</p>
 
-        <p>The contents of a handout can include the same blocks as a division, namely BlockDivision.  Any such division can get a <attr>workspace</attr> attribute.  This is currently not implemented in the schema (stable or experimental), but the plan is to allow <attr>workspace</attr> to be placed on any element that will be respected inside a handout, treating this as a hint that will be ignored when not inside a printout.</p>
+        <p>The contents of a handout can include the same blocks as a division, namely BlockDivision.  Many of these blocks (theorems, definitions, examples, projects, exercises, tasks, proofs) can get a <attr>workspace</attr> attribute.  It is treated as a hint: respected inside a printout, and ignored elsewhere (which the validation-plus stylesheet will point out).</p>
 
         <p>Note: when handouts moves to the stable schema, we will need to go to every division and for the option of an unstructured division, include Worksheet and Handout as separate elements so an unstructured division can have one of each.</p>
 
