@@ -6073,6 +6073,192 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="($is-specialized-division = 'false') or ($is-child-of-structured = 'true')"/>
 </xsl:template>
 
+<!-- ####################### -->
+<!-- Components of Exercises -->
+<!-- ####################### -->
+
+<!-- An exercise (or PROJECT-LIKE, or EXAMPLE-LIKE, or "task") shows     -->
+<!-- some of its components: "statement", "hint", "answer", "solution".  -->
+<!-- Which ones is a *decision*, made from the $b-has-* parameters       -->
+<!-- (a desire, from publisher switches or a "solutions" division) and   -->
+<!-- from what the exercise actually possesses.  The decision procedure  -->
+<!-- lives here, once; the markup is supplied by each conversion through -->
+<!-- the "present-*" hooks below.                                        -->
+<!--                                                                     -->
+<!-- N.B. the HTML conversion does not yet participate: its version of   -->
+<!-- "exercise-components" interleaves Runestone interactive exercises   -->
+<!-- with this generic procedure, and its templates shadow these by      -->
+<!-- import precedence.  Converging it onto these drivers is planned.    -->
+
+<!-- The leaf form: a statement, then chosen appendages.  The $b-has-*   -->
+<!-- parameters express a desire to see a component; an exercise missing -->
+<!-- a component cannot show it, hence the $b-showing-* refinements.     -->
+<!-- With no "statement" shown, a "title" may still be presented inline, -->
+<!-- so a separator is necessary in that case as well.                   -->
+<xsl:template match="exercise|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task[not(task)]" mode="exercise-components">
+    <xsl:param name="b-original"/>
+    <xsl:param name="purpose"/>
+    <xsl:param name="b-component-heading"/>
+    <xsl:param name="run-in-heading"/>
+    <xsl:param name="b-has-statement"/>
+    <xsl:param name="b-has-hint"/>
+    <xsl:param name="b-has-answer"/>
+    <xsl:param name="b-has-solution"/>
+
+    <xsl:variable name="b-showing-statement" select="$b-has-statement or title"/>
+    <xsl:variable name="b-showing-hints" select="$b-has-hint and hint"/>
+    <xsl:variable name="b-showing-answers" select="$b-has-answer and answer"/>
+    <xsl:variable name="b-showing-solutions" select="$b-has-solution and solution"/>
+
+    <!-- structured (with components) versus unstructured (a bare statement) -->
+    <xsl:choose>
+        <xsl:when test="statement">
+            <xsl:choose>
+                <xsl:when test="$b-has-statement">
+                    <xsl:apply-templates select="." mode="present-exercise-statement">
+                        <xsl:with-param name="b-original" select="$b-original"/>
+                        <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="present-exercise-statement-omitted">
+                        <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
+            <!-- inline presentation used up, and more coming: a separator -->
+            <xsl:if test="$b-showing-statement and ($b-showing-hints or $b-showing-answers or $b-showing-solutions)">
+                <xsl:apply-templates select="." mode="exercise-component-separator"/>
+            </xsl:if>
+            <xsl:if test="$b-showing-hints or $b-showing-answers or $b-showing-solutions">
+                <xsl:apply-templates select="." mode="present-exercise-solutions">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                    <xsl:with-param name="purpose" select="$purpose"/>
+                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                    <xsl:with-param name="b-has-answer" select="$b-has-answer"/>
+                    <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+                    <xsl:with-param name="b-showing-hints" select="$b-showing-hints"/>
+                    <xsl:with-param name="b-showing-answers" select="$b-showing-answers"/>
+                    <xsl:with-param name="b-showing-solutions" select="$b-showing-solutions"/>
+                </xsl:apply-templates>
+            </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- no explicit "statement", so all content is the statement -->
+            <xsl:if test="$b-has-statement">
+                <xsl:apply-templates select="." mode="present-exercise-statement-bare">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                    <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
+                </xsl:apply-templates>
+                <!-- no separator, since no trailing components -->
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- The structured form: an optional "introduction", a sequence of      -->
+<!-- "task" (some possibly withheld, so each is checked by a "dry-run"), -->
+<!-- and an optional "conclusion".  The introduction and conclusion ride -->
+<!-- with the statement's visibility.                                    -->
+<xsl:template match="exercise[task]|project[task]|activity[task]|exploration[task]|investigation[task]|example[task]|question[task]|problem[task]|task[task]" mode="exercise-components">
+    <xsl:param name="b-original"/>
+    <xsl:param name="purpose"/>
+    <xsl:param name="b-component-heading"/>
+    <xsl:param name="run-in-heading"/>
+    <xsl:param name="b-has-statement"/>
+    <xsl:param name="b-has-hint"/>
+    <xsl:param name="b-has-answer"/>
+    <xsl:param name="b-has-solution"/>
+
+    <xsl:apply-templates select="." mode="present-tasks-introduction">
+        <xsl:with-param name="b-has-statement" select="$b-has-statement"/>
+        <xsl:with-param name="run-in-heading" select="$run-in-heading"/>
+    </xsl:apply-templates>
+
+    <!-- Now we see if the list of contained tasks is empty or not -->
+    <xsl:variable name="task-list-dry-run">
+        <xsl:apply-templates select="task" mode="dry-run">
+            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+            <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+            <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+            <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+        </xsl:apply-templates>
+    </xsl:variable>
+
+    <xsl:if test="not($task-list-dry-run = '')">
+        <xsl:apply-templates select="." mode="begin-task-list"/>
+        <xsl:for-each select="task">
+            <!-- just for this particular task -->
+            <xsl:variable name="dry-run">
+                <xsl:apply-templates select="." mode="dry-run">
+                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                    <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                    <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+                </xsl:apply-templates>
+            </xsl:variable>
+            <!-- The entire task list is non-empty, so some particular task -->
+            <!-- must be non-empty, ensuring a conversion never creates an  -->
+            <!-- empty list structure.                                      -->
+            <xsl:if test="not($dry-run = '')">
+                <xsl:apply-templates select="." mode="present-task-item">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                    <xsl:with-param name="purpose" select="$purpose"/>
+                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                    <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                    <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+                </xsl:apply-templates>
+            </xsl:if>
+        </xsl:for-each>
+        <xsl:apply-templates select="." mode="end-task-list"/>
+    </xsl:if>
+
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="conclusion"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- The hooks.  A conversion participating in the drivers above         -->
+<!-- must implement the four essential presentation hooks; the stubs     -->
+<!-- here fail loudly.  The remaining hooks are optional decorations     -->
+<!-- with quiet no-op defaults.                                          -->
+
+<xsl:template match="*" mode="present-exercise-statement">
+    <xsl:message>PTX:BUG:     a conversion to a new output format requires implementation of the template with match="*" and mode="present-exercise-statement"</xsl:message>
+</xsl:template>
+
+<xsl:template match="*" mode="present-exercise-statement-bare">
+    <xsl:message>PTX:BUG:     a conversion to a new output format requires implementation of the template with match="*" and mode="present-exercise-statement-bare"</xsl:message>
+</xsl:template>
+
+<xsl:template match="*" mode="present-exercise-solutions">
+    <xsl:message>PTX:BUG:     a conversion to a new output format requires implementation of the template with match="*" and mode="present-exercise-solutions"</xsl:message>
+</xsl:template>
+
+<xsl:template match="*" mode="present-task-item">
+    <xsl:message>PTX:BUG:     a conversion to a new output format requires implementation of the template with match="*" and mode="present-task-item"</xsl:message>
+</xsl:template>
+
+<!-- A heading with no statement to carry it may still need presenting -->
+<xsl:template match="*" mode="present-exercise-statement-omitted"/>
+
+<!-- Punctuation between components, when more are coming -->
+<xsl:template match="*" mode="exercise-component-separator"/>
+
+<!-- Infrastructure around a sequence of "task" -->
+<xsl:template match="*" mode="begin-task-list"/>
+<xsl:template match="*" mode="end-task-list"/>
+
+<!-- The introduction (or a stand-in) preceding a sequence of "task" -->
+<xsl:template match="*" mode="present-tasks-introduction">
+    <xsl:param name="b-has-statement"/>
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="introduction"/>
+    </xsl:if>
+</xsl:template>
+
 <!-- ################ -->
 <!-- Printout Margins -->
 <!-- ################ -->
