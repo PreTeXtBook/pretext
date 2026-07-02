@@ -5203,8 +5203,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The "division-in-solutions" modal template from -common   -->
 <!-- calls the "duplicate-heading" modal template.             -->
-<!-- Stacked headings are all \Large, regardless of which      -->
-<!-- level of depth they reflect. This is consistent with      -->
+<!-- Stacked headings all share one size, fixed by the level   -->
+<!-- of the originating "solutions" division, regardless of    -->
+<!-- the depth each entry reflects.  This is consistent with   -->
 <!-- treating stacked headings as a single "squashed" heading. -->
 
 <xsl:template match="*" mode="duplicate-heading">
@@ -5226,28 +5227,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="*" mode="duplicate-heading-content">
     <xsl:param name="heading-stack"/>
-    <xsl:variable name="is-specialized-division">
-        <xsl:choose>
-            <xsl:when test="self::task">
-                <xsl:value-of select="false()"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="is-specialized-division"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="is-child-of-structured">
-        <xsl:choose>
-            <xsl:when test="parent::*[&TRADITIONAL-DIVISION-FILTER;]">
-                <xsl:apply-templates select="parent::*[&TRADITIONAL-DIVISION-FILTER;]" mode="is-structured-division"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="false()"/>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:variable name="show-number">
+        <xsl:apply-templates select="." mode="duplicate-heading-show-number"/>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$is-specialized-division = 'true' and $is-child-of-structured = 'false'">
+        <xsl:when test="$show-number = 'false'">
             <xsl:text>\textperiodcentered\space{}</xsl:text>
         </xsl:when>
         <xsl:otherwise>

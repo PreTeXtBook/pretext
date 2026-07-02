@@ -1354,31 +1354,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="duplicate-heading-content">
-    <xsl:variable name="is-specialized-division">
-        <xsl:choose>
-            <xsl:when test="self::task">
-                <xsl:value-of select="false()"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="is-specialized-division"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="is-child-of-structured">
-        <xsl:choose>
-            <xsl:when test="parent::*[&TRADITIONAL-DIVISION-FILTER;]">
-                <xsl:apply-templates select="parent::*[&TRADITIONAL-DIVISION-FILTER;]" mode="is-structured-division"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="false()"/>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:variable name="show-number">
+        <xsl:apply-templates select="." mode="duplicate-heading-show-number"/>
     </xsl:variable>
     <xsl:variable name="title">
         <xsl:apply-templates select="." mode="title-full" />
     </xsl:variable>
     <!-- Since headings stack, we use a "p" to aid screen readers in pausing between headings -->
-    <xsl:if test="$is-specialized-division = 'false' or $is-child-of-structured = 'true'">
+    <xsl:if test="$show-number = 'true'">
         <span class="codenumber">
             <xsl:apply-templates select="." mode="number" />
         </span>

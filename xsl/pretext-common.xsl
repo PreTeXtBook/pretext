@@ -6041,6 +6041,38 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- A division echoed in a "solutions" division (or in a "list-of")     -->
+<!-- shows its number, except when it is a specialized division serving  -->
+<!-- as the unstructured remainder of its parent: there it shares the    -->
+<!-- parent's number, and echoing that number would misattribute it.     -->
+<!-- This is THE decision, shared by every conversion's implementation   -->
+<!-- of the "duplicate-heading" template: 'true' means show the number.  -->
+<!-- A "task" can arrive here via a "list-of"; it is not a division at   -->
+<!-- all, and always keeps its number.                                   -->
+<xsl:template match="*" mode="duplicate-heading-show-number">
+    <xsl:variable name="is-specialized-division">
+        <xsl:choose>
+            <xsl:when test="self::task">
+                <xsl:value-of select="false()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="is-specialized-division"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="is-child-of-structured">
+        <xsl:choose>
+            <xsl:when test="parent::*[&TRADITIONAL-DIVISION-FILTER;]">
+                <xsl:apply-templates select="parent::*[&TRADITIONAL-DIVISION-FILTER;]" mode="is-structured-division"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:value-of select="($is-specialized-division = 'false') or ($is-child-of-structured = 'true')"/>
+</xsl:template>
+
 <!-- ################ -->
 <!-- Printout Margins -->
 <!-- ################ -->
