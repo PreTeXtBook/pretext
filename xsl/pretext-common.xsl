@@ -5389,61 +5389,72 @@ Book (with parts), "section" at level 3
 
 <xsl:template match="exercises" mode="dry-run">
     <xsl:param name="admit"/>
-    <xsl:param name="b-divisional-statement" />
-    <xsl:param name="b-divisional-hint" />
-    <xsl:param name="b-divisional-answer" />
-    <xsl:param name="b-divisional-solution" />
+    <xsl:param name="component-spec"/>
 
+    <xsl:variable name="divisional-components">
+        <xsl:call-template name="solutions-components">
+            <xsl:with-param name="component-spec" select="$component-spec"/>
+            <xsl:with-param name="category" select="'divisional'"/>
+        </xsl:call-template>
+    </xsl:variable>
     <xsl:apply-templates select=".//exercise" mode="dry-run">
         <xsl:with-param name="admit"           select="$admit"/>
-        <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
-        <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
-        <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
-        <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+        <xsl:with-param name="b-has-statement" select="contains($divisional-components, 'statement')" />
+        <xsl:with-param name="b-has-hint"      select="contains($divisional-components, 'hint')" />
+        <xsl:with-param name="b-has-answer"    select="contains($divisional-components, 'answer')" />
+        <xsl:with-param name="b-has-solution"  select="contains($divisional-components, 'solution')" />
     </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="worksheet" mode="dry-run">
     <xsl:param name="admit"/>
-    <xsl:param name="b-worksheet-statement" />
-    <xsl:param name="b-worksheet-hint" />
-    <xsl:param name="b-worksheet-answer" />
-    <xsl:param name="b-worksheet-solution" />
-    <xsl:param name="b-project-statement" />
-    <xsl:param name="b-project-hint" />
-    <xsl:param name="b-project-answer" />
-    <xsl:param name="b-project-solution" />
+    <xsl:param name="component-spec"/>
 
+    <xsl:variable name="worksheet-components">
+        <xsl:call-template name="solutions-components">
+            <xsl:with-param name="component-spec" select="$component-spec"/>
+            <xsl:with-param name="category" select="'worksheet'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="project-components">
+        <xsl:call-template name="solutions-components">
+            <xsl:with-param name="component-spec" select="$component-spec"/>
+            <xsl:with-param name="category" select="'project'"/>
+        </xsl:call-template>
+    </xsl:variable>
     <xsl:apply-templates select=".//exercise" mode="dry-run">
         <xsl:with-param name="admit"           select="$admit"/>
-        <xsl:with-param name="b-has-statement" select="$b-worksheet-statement" />
-        <xsl:with-param name="b-has-hint"      select="$b-worksheet-hint" />
-        <xsl:with-param name="b-has-answer"    select="$b-worksheet-answer" />
-        <xsl:with-param name="b-has-solution"  select="$b-worksheet-solution" />
+        <xsl:with-param name="b-has-statement" select="contains($worksheet-components, 'statement')" />
+        <xsl:with-param name="b-has-hint"      select="contains($worksheet-components, 'hint')" />
+        <xsl:with-param name="b-has-answer"    select="contains($worksheet-components, 'answer')" />
+        <xsl:with-param name="b-has-solution"  select="contains($worksheet-components, 'solution')" />
     </xsl:apply-templates>
     <xsl:apply-templates select=".//activity|.//exploration|.//investigation|.//project" mode="dry-run">
         <xsl:with-param name="admit"           select="$admit"/>
-        <xsl:with-param name="b-has-statement" select="$b-project-statement" />
-        <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
-        <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
-        <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
+        <xsl:with-param name="b-has-statement" select="contains($project-components, 'statement')" />
+        <xsl:with-param name="b-has-hint"      select="contains($project-components, 'hint')" />
+        <xsl:with-param name="b-has-answer"    select="contains($project-components, 'answer')" />
+        <xsl:with-param name="b-has-solution"  select="contains($project-components, 'solution')" />
     </xsl:apply-templates>
 
 </xsl:template>
 
 <xsl:template match="reading-questions" mode="dry-run">
     <xsl:param name="admit"/>
-    <xsl:param name="b-reading-statement" />
-    <xsl:param name="b-reading-hint" />
-    <xsl:param name="b-reading-answer" />
-    <xsl:param name="b-reading-solution" />
+    <xsl:param name="component-spec"/>
 
+    <xsl:variable name="reading-components">
+        <xsl:call-template name="solutions-components">
+            <xsl:with-param name="component-spec" select="$component-spec"/>
+            <xsl:with-param name="category" select="'reading'"/>
+        </xsl:call-template>
+    </xsl:variable>
     <xsl:apply-templates select="exercise" mode="dry-run">
         <xsl:with-param name="admit"           select="$admit"/>
-        <xsl:with-param name="b-has-statement" select="$b-reading-statement" />
-        <xsl:with-param name="b-has-hint"      select="$b-reading-hint" />
-        <xsl:with-param name="b-has-answer"    select="$b-reading-answer" />
-        <xsl:with-param name="b-has-solution"  select="$b-reading-solution" />
+        <xsl:with-param name="b-has-statement" select="contains($reading-components, 'statement')" />
+        <xsl:with-param name="b-has-hint"      select="contains($reading-components, 'hint')" />
+        <xsl:with-param name="b-has-answer"    select="contains($reading-components, 'answer')" />
+        <xsl:with-param name="b-has-solution"  select="contains($reading-components, 'solution')" />
     </xsl:apply-templates>
 </xsl:template>
 
@@ -5456,62 +5467,73 @@ Book (with parts), "section" at level 3
 <!-- and what switches are passed along.                              -->
 <xsl:template match="part|chapter|section|subsection|subsubsection" mode="dry-run">
     <xsl:param name="admit"/>
-    <xsl:param name="b-inline-statement" />
-    <xsl:param name="b-inline-answer" />
-    <xsl:param name="b-inline-hint" />
-    <xsl:param name="b-inline-solution" />
-    <xsl:param name="b-divisional-statement" />
-    <xsl:param name="b-divisional-answer" />
-    <xsl:param name="b-divisional-hint" />
-    <xsl:param name="b-divisional-solution" />
-    <xsl:param name="b-worksheet-statement" />
-    <xsl:param name="b-worksheet-answer" />
-    <xsl:param name="b-worksheet-hint" />
-    <xsl:param name="b-worksheet-solution" />
-    <xsl:param name="b-reading-statement" />
-    <xsl:param name="b-reading-answer" />
-    <xsl:param name="b-reading-hint" />
-    <xsl:param name="b-reading-solution" />
-    <xsl:param name="b-project-statement" />
-    <xsl:param name="b-project-answer" />
-    <xsl:param name="b-project-hint" />
-    <xsl:param name="b-project-solution" />
+    <xsl:param name="component-spec"/>
 
+    <xsl:variable name="inline-components">
+        <xsl:call-template name="solutions-components">
+            <xsl:with-param name="component-spec" select="$component-spec"/>
+            <xsl:with-param name="category" select="'inline'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="divisional-components">
+        <xsl:call-template name="solutions-components">
+            <xsl:with-param name="component-spec" select="$component-spec"/>
+            <xsl:with-param name="category" select="'divisional'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="worksheet-components">
+        <xsl:call-template name="solutions-components">
+            <xsl:with-param name="component-spec" select="$component-spec"/>
+            <xsl:with-param name="category" select="'worksheet'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="reading-components">
+        <xsl:call-template name="solutions-components">
+            <xsl:with-param name="component-spec" select="$component-spec"/>
+            <xsl:with-param name="category" select="'reading'"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="project-components">
+        <xsl:call-template name="solutions-components">
+            <xsl:with-param name="component-spec" select="$component-spec"/>
+            <xsl:with-param name="category" select="'project'"/>
+        </xsl:call-template>
+    </xsl:variable>
     <xsl:apply-templates select=".//exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="dry-run">
         <xsl:with-param name="admit"           select="$admit"/>
-        <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
-        <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
-        <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
-        <xsl:with-param name="b-has-solution"  select="$b-inline-solution" />
+        <xsl:with-param name="b-has-statement" select="contains($inline-components, 'statement')" />
+        <xsl:with-param name="b-has-hint"      select="contains($inline-components, 'hint')" />
+        <xsl:with-param name="b-has-answer"    select="contains($inline-components, 'answer')" />
+        <xsl:with-param name="b-has-solution"  select="contains($inline-components, 'solution')" />
     </xsl:apply-templates>
     <xsl:apply-templates select=".//exercises//exercise" mode="dry-run">
         <xsl:with-param name="admit"           select="$admit"/>
-        <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
-        <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
-        <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
-        <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+        <xsl:with-param name="b-has-statement" select="contains($divisional-components, 'statement')" />
+        <xsl:with-param name="b-has-hint"      select="contains($divisional-components, 'hint')" />
+        <xsl:with-param name="b-has-answer"    select="contains($divisional-components, 'answer')" />
+        <xsl:with-param name="b-has-solution"  select="contains($divisional-components, 'solution')" />
     </xsl:apply-templates>
     <xsl:apply-templates select=".//worksheet//exercise" mode="dry-run">
         <xsl:with-param name="admit"           select="$admit"/>
-        <xsl:with-param name="b-has-statement" select="$b-worksheet-statement" />
-        <xsl:with-param name="b-has-answer"    select="$b-worksheet-answer" />
-        <xsl:with-param name="b-has-hint"      select="$b-worksheet-hint" />
-        <xsl:with-param name="b-has-solution"  select="$b-worksheet-solution" />
+        <xsl:with-param name="b-has-statement" select="contains($worksheet-components, 'statement')" />
+        <xsl:with-param name="b-has-hint"      select="contains($worksheet-components, 'hint')" />
+        <xsl:with-param name="b-has-answer"    select="contains($worksheet-components, 'answer')" />
+        <xsl:with-param name="b-has-solution"  select="contains($worksheet-components, 'solution')" />
     </xsl:apply-templates>
     <xsl:apply-templates select=".//reading-questions//exercise" mode="dry-run">
         <xsl:with-param name="admit"           select="$admit"/>
-        <xsl:with-param name="b-has-statement" select="$b-reading-statement" />
-        <xsl:with-param name="b-has-answer"    select="$b-reading-answer" />
-        <xsl:with-param name="b-has-hint"      select="$b-reading-hint" />
-        <xsl:with-param name="b-has-solution"  select="$b-reading-solution" />
+        <xsl:with-param name="b-has-statement" select="contains($reading-components, 'statement')" />
+        <xsl:with-param name="b-has-hint"      select="contains($reading-components, 'hint')" />
+        <xsl:with-param name="b-has-answer"    select="contains($reading-components, 'answer')" />
+        <xsl:with-param name="b-has-solution"  select="contains($reading-components, 'solution')" />
     </xsl:apply-templates>
     <!-- &PROJECT-LIKE; "project|activity|exploration|investigation"> -->
     <xsl:apply-templates select=".//project|.//activity|.//exploration|.//investigation" mode="dry-run">
         <xsl:with-param name="admit"           select="$admit"/>
-        <xsl:with-param name="b-has-statement" select="$b-project-statement" />
-        <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
-        <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
-        <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
+        <xsl:with-param name="b-has-statement" select="contains($project-components, 'statement')" />
+        <xsl:with-param name="b-has-hint"      select="contains($project-components, 'hint')" />
+        <xsl:with-param name="b-has-answer"    select="contains($project-components, 'answer')" />
+        <xsl:with-param name="b-has-solution"  select="contains($project-components, 'solution')" />
     </xsl:apply-templates>
 </xsl:template>
 
@@ -5665,92 +5687,81 @@ Book (with parts), "section" at level 3
         </xsl:choose>
     </xsl:variable>
 
+    <!-- The five attributes describing which solution components    -->
+    <!-- are requested, packed into one string parameter.  See the   -->
+    <!-- "solutions-component-spec" template for the packing format. -->
+    <xsl:variable name="component-spec">
+        <xsl:call-template name="solutions-component-spec">
+            <xsl:with-param name="inline"     select="@inline"/>
+            <xsl:with-param name="divisional" select="@divisional"/>
+            <xsl:with-param name="worksheet"  select="@worksheet"/>
+            <xsl:with-param name="reading"    select="@reading"/>
+            <xsl:with-param name="project"    select="@project"/>
+        </xsl:call-template>
+    </xsl:variable>
+
     <xsl:apply-templates select="introduction">
         <xsl:with-param name="b-original" select="true()" />
     </xsl:apply-templates>
-    <!-- We call the solutions-generator one of two ways, either by     -->
-    <!-- looking up a level, to the parent (jumping over "backmatter")  -->
-    <!-- or by respecting a @scope attribute that specifies the parent. -->
-    <!-- The "call" is identical, only the @select is different.        -->
-    <!-- (Maybe there is a better way to use just one call?)            -->
 
-    <xsl:choose>
-        <xsl:when test="@scope">
-            <!-- First check that the scope is reasonable, i.e. it -->
-            <!-- exists and is one of the elements defined for the -->
-            <!-- "solutions-generator" template                    -->
-            <xsl:variable name="scope" select="id(@scope)"/>
-            <xsl:if test="not($scope)">
-                <xsl:message>PTX:WARNING: unresolved @scope ("<xsl:value-of select="@scope"/>") for a &lt;solutions&gt; division</xsl:message>
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:if>
-            <xsl:if test="not($scope/self::book|$scope/self::article|$scope/self::chapter|$scope/self::section|$scope/self::subsection|$scope/self::subsubsection|$scope/self::exercises|$scope/self::worksheet|$scope/self::reading-questions)">
-                <xsl:message>PTX:ERROR: the @scope ("<xsl:value-of select="@scope"/>") of a &lt;solutions&gt; division is not a supported division.  If you think your attempt is reasonable, please make a feature request.  Results now will be unpredictable</xsl:message>
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:if>
+    <xsl:if test="@scope">
+        <!-- Check that the scope is reasonable, i.e. it exists and is -->
+        <!-- one of the elements defined for the "solutions-generator" -->
+        <!-- template                                                  -->
+        <xsl:variable name="scope" select="id(@scope)"/>
+        <xsl:if test="not($scope)">
+            <xsl:message>PTX:WARNING: unresolved @scope ("<xsl:value-of select="@scope"/>") for a &lt;solutions&gt; division</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:if>
+        <xsl:if test="not($scope/self::book|$scope/self::article|$scope/self::chapter|$scope/self::section|$scope/self::subsection|$scope/self::subsubsection|$scope/self::exercises|$scope/self::worksheet|$scope/self::reading-questions)">
+            <xsl:message>PTX:ERROR: the @scope ("<xsl:value-of select="@scope"/>") of a &lt;solutions&gt; division is not a supported division.  If you think your attempt is reasonable, please make a feature request.  Results now will be unpredictable</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:if>
+    </xsl:if>
 
-            <xsl:apply-templates select="$scope" mode="solutions-generator">
-                <xsl:with-param name="purpose" select="$purpose" />
-                <xsl:with-param name="admit"   select="$admit"/>
-                <xsl:with-param name="heading-level" select="$heading-level"/>
-                <xsl:with-param name="scope" select="$scope"/>
-                <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
-                <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
-                <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
-                <xsl:with-param name="b-inline-solution"      select="contains(@inline,     'solution')"  />
-                <xsl:with-param name="b-divisional-statement" select="contains(@divisional, 'statement')" />
-                <xsl:with-param name="b-divisional-hint"      select="contains(@divisional, 'hint')"      />
-                <xsl:with-param name="b-divisional-answer"    select="contains(@divisional, 'answer')"    />
-                <xsl:with-param name="b-divisional-solution"  select="contains(@divisional, 'solution')"  />
-                <xsl:with-param name="b-worksheet-statement"  select="contains(@worksheet,  'statement')" />
-                <xsl:with-param name="b-worksheet-hint"       select="contains(@worksheet,  'hint')"      />
-                <xsl:with-param name="b-worksheet-answer"     select="contains(@worksheet,  'answer')"    />
-                <xsl:with-param name="b-worksheet-solution"   select="contains(@worksheet,  'solution')"  />
-                <xsl:with-param name="b-reading-statement"    select="contains(@reading,    'statement')" />
-                <xsl:with-param name="b-reading-hint"         select="contains(@reading,    'hint')"      />
-                <xsl:with-param name="b-reading-answer"       select="contains(@reading,    'answer')"    />
-                <xsl:with-param name="b-reading-solution"     select="contains(@reading,    'solution')"  />
-                <xsl:with-param name="b-project-statement"    select="contains(@project,    'statement')" />
-                <xsl:with-param name="b-project-hint"         select="contains(@project,    'hint')"      />
-                <xsl:with-param name="b-project-answer"       select="contains(@project,    'answer')"    />
-                <xsl:with-param name="b-project-solution"     select="contains(@project,    'solution')"  />
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- the default scope, first ancestor -->
-            <xsl:apply-templates select="ancestor::*[not(self::backmatter)][1]" mode="solutions-generator">
-                <xsl:with-param name="purpose" select="$purpose" />
-                <xsl:with-param name="admit"   select="$admit"/>
-                <xsl:with-param name="heading-level" select="$heading-level"/>
-                <xsl:with-param name="scope" select="ancestor::*[not(self::backmatter)][1]"/>
-                <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
-                <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
-                <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
-                <xsl:with-param name="b-inline-solution"      select="contains(@inline,     'solution')"  />
-                <xsl:with-param name="b-divisional-statement" select="contains(@divisional, 'statement')" />
-                <xsl:with-param name="b-divisional-hint"      select="contains(@divisional, 'hint')"      />
-                <xsl:with-param name="b-divisional-answer"    select="contains(@divisional, 'answer')"    />
-                <xsl:with-param name="b-divisional-solution"  select="contains(@divisional, 'solution')"  />
-                <xsl:with-param name="b-worksheet-statement"  select="contains(@worksheet,  'statement')" />
-                <xsl:with-param name="b-worksheet-hint"       select="contains(@worksheet,  'hint')"      />
-                <xsl:with-param name="b-worksheet-answer"     select="contains(@worksheet,  'answer')"    />
-                <xsl:with-param name="b-worksheet-solution"   select="contains(@worksheet,  'solution')"  />
-                <xsl:with-param name="b-reading-statement"    select="contains(@reading,    'statement')" />
-                <xsl:with-param name="b-reading-hint"         select="contains(@reading,    'hint')"      />
-                <xsl:with-param name="b-reading-answer"       select="contains(@reading,    'answer')"    />
-                <xsl:with-param name="b-reading-solution"     select="contains(@reading,    'solution')"  />
-                <xsl:with-param name="b-project-statement"    select="contains(@project,    'statement')" />
-                <xsl:with-param name="b-project-hint"         select="contains(@project,    'hint')"      />
-                <xsl:with-param name="b-project-answer"       select="contains(@project,    'answer')"    />
-                <xsl:with-param name="b-project-solution"     select="contains(@project,    'solution')"  />
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-
+    <!-- We call the solutions-generator on a single target: either the -->
+    <!-- division specified by @scope, or the parent (jumping over      -->
+    <!-- "backmatter").  The union computing $target has at most one    -->
+    <!-- node, since id() is empty without a @scope attribute, and the  -->
+    <!-- ancestor member is only admitted when @scope is absent.        -->
+    <xsl:variable name="target" select="id(@scope) | ancestor::*[not(self::backmatter)][1][not(current()/@scope)]"/>
+    <xsl:apply-templates select="$target" mode="solutions-generator">
+        <xsl:with-param name="purpose" select="$purpose" />
+        <xsl:with-param name="admit"   select="$admit"/>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="scope" select="$target"/>
+        <xsl:with-param name="component-spec" select="$component-spec"/>
+    </xsl:apply-templates>
 
     <xsl:apply-templates select="conclusion">
         <xsl:with-param name="b-original" select="true()" />
     </xsl:apply-templates>
+</xsl:template>
+
+<!-- The components of solutions ("statement", "hint", "answer",        -->
+<!-- "solution") are requested per category of exercise, matching the   -->
+<!-- five attributes of a "solutions" division: "inline", "divisional", -->
+<!-- "worksheet", "reading", "project".  We pack the five component     -->
+<!-- lists into a single string parameter, rather than threading twenty -->
+<!-- boolean parameters through every template of the generator.  The   -->
+<!-- format, with every piece employed, is                              -->
+<!--                                                                    -->
+<!--   |inline:statement hint|divisional:solution|worksheet:|reading:|project:statement| -->
+<!--                                                                    -->
+<xsl:template name="solutions-component-spec">
+    <xsl:param name="inline"/>
+    <xsl:param name="divisional"/>
+    <xsl:param name="worksheet"/>
+    <xsl:param name="reading"/>
+    <xsl:param name="project"/>
+    <xsl:value-of select="concat('|inline:', $inline, '|divisional:', $divisional, '|worksheet:', $worksheet, '|reading:', $reading, '|project:', $project, '|')"/>
+</xsl:template>
+
+<!-- Extract one category's component list from a packed specification -->
+<xsl:template name="solutions-components">
+    <xsl:param name="component-spec"/>
+    <xsl:param name="category"/>
+    <xsl:value-of select="substring-before(substring-after($component-spec, concat('|', $category, ':')), '|')"/>
 </xsl:template>
 
 <!-- Determine whether an exercise should be admitted, given its serial -->
@@ -5806,26 +5817,7 @@ Book (with parts), "section" at level 3
     <xsl:param name="heading-level"/>
     <xsl:param name="heading-stack" select="."/>
     <xsl:param name="scope"/>
-    <xsl:param name="b-inline-statement"     />
-    <xsl:param name="b-inline-hint"          />
-    <xsl:param name="b-inline-answer"        />
-    <xsl:param name="b-inline-solution"      />
-    <xsl:param name="b-divisional-statement" />
-    <xsl:param name="b-divisional-hint"      />
-    <xsl:param name="b-divisional-answer"    />
-    <xsl:param name="b-divisional-solution"  />
-    <xsl:param name="b-worksheet-statement"  />
-    <xsl:param name="b-worksheet-hint"       />
-    <xsl:param name="b-worksheet-answer"     />
-    <xsl:param name="b-worksheet-solution"   />
-    <xsl:param name="b-reading-statement"    />
-    <xsl:param name="b-reading-hint"         />
-    <xsl:param name="b-reading-answer"       />
-    <xsl:param name="b-reading-solution"     />
-    <xsl:param name="b-project-statement"    />
-    <xsl:param name="b-project-hint"         />
-    <xsl:param name="b-project-answer"       />
-    <xsl:param name="b-project-solution"     />
+    <xsl:param name="component-spec"/>
 
     <!-- See if division has *any* content, at any depth, in light of switches. -->
     <!-- Traditional divisions expect many switches, while specialized          -->
@@ -5833,26 +5825,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="dry-run">
         <xsl:apply-templates select="." mode="dry-run">
             <xsl:with-param name="admit"                  select="$admit"/>
-            <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
-            <xsl:with-param name="b-inline-answer"        select="$b-inline-answer" />
-            <xsl:with-param name="b-inline-hint"          select="$b-inline-hint" />
-            <xsl:with-param name="b-inline-solution"      select="$b-inline-solution" />
-            <xsl:with-param name="b-divisional-statement" select="$b-divisional-statement" />
-            <xsl:with-param name="b-divisional-answer"    select="$b-divisional-answer" />
-            <xsl:with-param name="b-divisional-hint"      select="$b-divisional-hint" />
-            <xsl:with-param name="b-divisional-solution"  select="$b-divisional-solution" />
-            <xsl:with-param name="b-worksheet-statement"  select="$b-worksheet-statement" />
-            <xsl:with-param name="b-worksheet-answer"     select="$b-worksheet-answer" />
-            <xsl:with-param name="b-worksheet-hint"       select="$b-worksheet-hint" />
-            <xsl:with-param name="b-worksheet-solution"   select="$b-worksheet-solution" />
-            <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
-            <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
-            <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
-            <xsl:with-param name="b-reading-solution"     select="$b-reading-solution" />
-            <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
-            <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
-            <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
-            <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
+            <xsl:with-param name="component-spec" select="$component-spec"/>
         </xsl:apply-templates>
     </xsl:variable>
 
@@ -5863,26 +5836,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="preceding-sibling-dry-run">
         <xsl:apply-templates select="preceding-sibling::*" mode="dry-run">
             <xsl:with-param name="admit"                  select="$admit"/>
-            <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
-            <xsl:with-param name="b-inline-answer"        select="$b-inline-answer" />
-            <xsl:with-param name="b-inline-hint"          select="$b-inline-hint" />
-            <xsl:with-param name="b-inline-solution"      select="$b-inline-solution" />
-            <xsl:with-param name="b-divisional-statement" select="$b-divisional-statement" />
-            <xsl:with-param name="b-divisional-answer"    select="$b-divisional-answer" />
-            <xsl:with-param name="b-divisional-hint"      select="$b-divisional-hint" />
-            <xsl:with-param name="b-divisional-solution"  select="$b-divisional-solution" />
-            <xsl:with-param name="b-worksheet-statement"  select="$b-worksheet-statement" />
-            <xsl:with-param name="b-worksheet-answer"     select="$b-worksheet-answer" />
-            <xsl:with-param name="b-worksheet-hint"       select="$b-worksheet-hint" />
-            <xsl:with-param name="b-worksheet-solution"   select="$b-worksheet-solution" />
-            <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
-            <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
-            <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
-            <xsl:with-param name="b-reading-solution"     select="$b-reading-solution" />
-            <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
-            <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
-            <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
-            <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
+            <xsl:with-param name="component-spec" select="$component-spec"/>
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:variable name="b-preceding-empty" select="$preceding-sibling-dry-run = ''"/>
@@ -5921,16 +5875,16 @@ Book (with parts), "section" at level 3
         <!-- some requested type never appears.                        -->
 
         <xsl:variable name="variety">
-            <xsl:if test="$b-inline-statement or $b-divisional-statement or $b-worksheet-statement or $b-reading-statement or $b-project-statement">
+            <xsl:if test="contains($component-spec, 'statement')">
                 <xsl:text>T</xsl:text>
             </xsl:if>
-            <xsl:if test="$b-inline-hint or $b-divisional-hint or $b-worksheet-hint or $b-reading-hint or $b-project-hint">
+            <xsl:if test="contains($component-spec, 'hint')">
                 <xsl:text>H</xsl:text>
             </xsl:if>
-            <xsl:if test="$b-inline-answer or $b-divisional-answer or $b-worksheet-answer or $b-reading-answer or $b-project-answer">
+            <xsl:if test="contains($component-spec, 'answer')">
                 <xsl:text>A</xsl:text>
             </xsl:if>
-            <xsl:if test="$b-inline-solution or $b-divisional-solution or $b-worksheet-solution or $b-reading-solution or $b-project-solution">
+            <xsl:if test="contains($component-spec, 'solution')">
                 <xsl:text>S</xsl:text>
             </xsl:if>
         </xsl:variable>
@@ -5966,80 +5920,51 @@ Book (with parts), "section" at level 3
                 <!-- "hidden" inside the "paragraphs" pseudo-division -->
                 <!-- Everything below is 1 deeper than the division's heading -->
                 <xsl:for-each select="exercise|subexercises|exercisegroup|&PROJECT-LIKE;|paragraphs/*[self::exercise or &PROJECT-FILTER;]|self::worksheet//*[self::exercise or &PROJECT-FILTER;]">
-                     <xsl:choose>
-                        <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
-                            <xsl:apply-templates select="." mode="solutions">
-                                <xsl:with-param name="purpose" select="$purpose" />
-                                <xsl:with-param name="admit"   select="$admit"/>
-                                <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
-                                <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
-                                <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
-                                <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
-                                <xsl:with-param name="b-has-solution"  select="$b-inline-solution" />
-                            </xsl:apply-templates>
-                        </xsl:when>
-                        <xsl:when test="self::subexercises|self::exercisegroup">
-                            <xsl:apply-templates select="." mode="solutions">
-                                <xsl:with-param name="purpose" select="$purpose"/>
-                                <xsl:with-param name="admit"   select="$admit"/>
-                                <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
-                                <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
-                                <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
-                                <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
-                                <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
-                            </xsl:apply-templates>
-                        </xsl:when>
-                        <xsl:when test="self::exercise and ancestor::exercises">
-                            <xsl:apply-templates select="." mode="solutions">
-                                <xsl:with-param name="purpose" select="$purpose"/>
-                                <xsl:with-param name="admit"   select="$admit"/>
-                                <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
-                                <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
-                                <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
-                                <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
-                                <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
-                            </xsl:apply-templates>
-                        </xsl:when>
-                        <xsl:when test="self::exercise and ancestor::worksheet">
-                            <xsl:apply-templates select="." mode="solutions">
-                                <xsl:with-param name="purpose" select="$purpose"/>
-                                <xsl:with-param name="admit"   select="$admit"/>
-                                <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
-                                <xsl:with-param name="b-has-statement" select="$b-worksheet-statement" />
-                                <xsl:with-param name="b-has-answer"    select="$b-worksheet-answer" />
-                                <xsl:with-param name="b-has-hint"      select="$b-worksheet-hint" />
-                                <xsl:with-param name="b-has-solution"  select="$b-worksheet-solution" />
-                            </xsl:apply-templates>
-                        </xsl:when>
-                        <xsl:when test="self::exercise and ancestor::reading-questions">
-                            <xsl:apply-templates select="." mode="solutions">
-                                <xsl:with-param name="purpose" select="$purpose"/>
-                                <xsl:with-param name="admit"   select="$admit"/>
-                                <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
-                                <xsl:with-param name="b-has-statement" select="$b-reading-statement" />
-                                <xsl:with-param name="b-has-answer"    select="$b-reading-answer" />
-                                <xsl:with-param name="b-has-hint"      select="$b-reading-hint" />
-                                <xsl:with-param name="b-has-solution"  select="$b-reading-solution" />
-                            </xsl:apply-templates>
-                        </xsl:when>
-                        <xsl:when test="&PROJECT-FILTER;">
-                            <xsl:apply-templates select="." mode="solutions">
-                                <xsl:with-param name="purpose" select="$purpose"/>
-                                <xsl:with-param name="admit"   select="$admit"/>
-                                <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-                                <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
-                                <xsl:with-param name="b-has-statement" select="$b-project-statement" />
-                                <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
-                                <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
-                                <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
-                            </xsl:apply-templates>
-                        </xsl:when>
-                    </xsl:choose>
+                    <!-- Classify each item into one of the five categories of  -->
+                    <!-- exercise, which selects the relevant component list.   -->
+                    <!-- The order of the tests mirrors the dispatch this       -->
+                    <!-- replaces.  An element matching no test is unexpected,  -->
+                    <!-- yields no category, and so produces no output.         -->
+                    <xsl:variable name="category">
+                        <xsl:choose>
+                            <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
+                                <xsl:text>inline</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="self::subexercises or self::exercisegroup">
+                                <xsl:text>divisional</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="self::exercise and ancestor::exercises">
+                                <xsl:text>divisional</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="self::exercise and ancestor::worksheet">
+                                <xsl:text>worksheet</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="self::exercise and ancestor::reading-questions">
+                                <xsl:text>reading</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="&PROJECT-FILTER;">
+                                <xsl:text>project</xsl:text>
+                            </xsl:when>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:variable name="components">
+                        <xsl:call-template name="solutions-components">
+                            <xsl:with-param name="component-spec" select="$component-spec"/>
+                            <xsl:with-param name="category" select="$category"/>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:if test="not($category = '')">
+                        <xsl:apply-templates select="." mode="solutions">
+                            <xsl:with-param name="purpose" select="$purpose" />
+                            <xsl:with-param name="admit"   select="$admit"/>
+                            <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                            <xsl:with-param name="heading-level"       select="$next-heading-level + 1"/>
+                            <xsl:with-param name="b-has-statement" select="contains($components, 'statement')" />
+                            <xsl:with-param name="b-has-hint"      select="contains($components, 'hint')" />
+                            <xsl:with-param name="b-has-answer"    select="contains($components, 'answer')" />
+                            <xsl:with-param name="b-has-solution"  select="contains($components, 'solution')" />
+                        </xsl:apply-templates>
+                    </xsl:if>
                 </xsl:for-each>
             </xsl:with-param>
         </xsl:apply-templates>
@@ -6058,26 +5983,7 @@ Book (with parts), "section" at level 3
         <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-stack" select="$next-heading-stack"/>
         <xsl:with-param name="scope" select="$scope" />
-        <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
-        <xsl:with-param name="b-inline-answer"        select="$b-inline-answer" />
-        <xsl:with-param name="b-inline-hint"          select="$b-inline-hint" />
-        <xsl:with-param name="b-inline-solution"      select="$b-inline-solution" />
-        <xsl:with-param name="b-divisional-statement" select="$b-divisional-statement" />
-        <xsl:with-param name="b-divisional-answer"    select="$b-divisional-answer" />
-        <xsl:with-param name="b-divisional-hint"      select="$b-divisional-hint" />
-        <xsl:with-param name="b-divisional-solution"  select="$b-divisional-solution" />
-        <xsl:with-param name="b-worksheet-statement"  select="$b-worksheet-statement" />
-        <xsl:with-param name="b-worksheet-answer"     select="$b-worksheet-answer" />
-        <xsl:with-param name="b-worksheet-hint"       select="$b-worksheet-hint" />
-        <xsl:with-param name="b-worksheet-solution"   select="$b-worksheet-solution" />
-        <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
-        <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
-        <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
-        <xsl:with-param name="b-reading-solution"     select="$b-reading-solution" />
-        <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
-        <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
-        <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
-        <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
+        <xsl:with-param name="component-spec" select="$component-spec"/>
     </xsl:apply-templates>
 </xsl:template>
 
