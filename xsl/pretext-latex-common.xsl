@@ -6023,59 +6023,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="idx|notation|introduction|exercisegroup|exercise|conclusion"/>
 </xsl:template>
 
-<xsl:template match="subexercises" mode="solutions">
-    <xsl:param name="purpose"/>
-    <xsl:param name="admit"/>
-    <xsl:param name="b-component-heading"/>
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint" />
-    <xsl:param name="b-has-answer" />
-    <xsl:param name="b-has-solution" />
+<!-- The generic driver in pretext-common.xsl decides if anything -->
+<!-- appears at all, and renders the items; the wrapping here      -->
+<xsl:template match="subexercises" mode="present-solutions-container">
+    <xsl:param name="b-has-statement"/>
+    <xsl:param name="content"/>
 
-    <!-- When we subset exercises for solutions, an entire      -->
-    <!-- "subexercises" can become empty.  So we do a dry-run  -->
-    <!-- and if there is no content at all we bail out.         -->
-     <xsl:variable name="dry-run">
-        <xsl:apply-templates select="." mode="dry-run">
-            <xsl:with-param name="admit" select="$admit"/>
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-        </xsl:apply-templates>
-    </xsl:variable>
-
-    <xsl:if test="not($dry-run = '')">
-        <xsl:if test="title">
-            <xsl:text>\paragraph</xsl:text>
-            <!-- keep optional title if LaTeX source is re-purposed -->
-            <xsl:text>[{</xsl:text>
-            <xsl:apply-templates select="." mode="title-short" />
-            <xsl:text>}]</xsl:text>
-            <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="." mode="title-full" />
-            <xsl:text>}</xsl:text>
-            <!-- no label, as this is a duplicate              -->
-            <!-- no title, no heading, so only line-break here -->
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="$b-has-statement">
-            <xsl:apply-templates select="introduction" />
-        </xsl:if>
-        <xsl:apply-templates select="exercise|exercisegroup" mode="solutions">
-            <xsl:with-param name="purpose" select="$purpose" />
-            <xsl:with-param name="admit" select="$admit"/>
-            <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-        </xsl:apply-templates>
-        <xsl:if test="$b-has-statement">
-            <xsl:apply-templates select="conclusion" />
-        </xsl:if>
-        <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
+    <xsl:if test="title">
+        <xsl:text>\paragraph</xsl:text>
+        <!-- keep optional title if LaTeX source is re-purposed -->
+        <xsl:text>[{</xsl:text>
+        <xsl:apply-templates select="." mode="title-short" />
+        <xsl:text>}]</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>}</xsl:text>
+        <!-- no label, as this is a duplicate              -->
+        <!-- no title, no heading, so only line-break here -->
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="introduction" />
+    </xsl:if>
+    <xsl:copy-of select="$content"/>
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="conclusion" />
+    </xsl:if>
+    <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ############### -->
@@ -6146,100 +6120,74 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Nothing produced if there is no content         -->
 <!-- Otherwise, no label, since duplicate            -->
 <!-- Introduction and conclusion iff with statements -->
-<xsl:template match="exercisegroup" mode="solutions">
-    <xsl:param name="purpose"/>
-    <xsl:param name="admit"/>
-    <xsl:param name="b-component-heading"/>
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint" />
-    <xsl:param name="b-has-answer" />
-    <xsl:param name="b-has-solution" />
+<!-- Echoed in a "solutions" division; the generic driver in     -->
+<!-- pretext-common.xsl decides if anything appears at all, and  -->
+<!-- renders the items; the wrapping here                        -->
+<xsl:template match="exercisegroup" mode="present-solutions-container">
+    <xsl:param name="b-has-statement"/>
+    <xsl:param name="content"/>
 
-    <!-- When we subset exercises for solutions, an entire      -->
-    <!-- "exercisegroup" can become empty.  So we do a dry-run  -->
-    <!-- and if there is no content at all we bail out.         -->
-     <xsl:variable name="dry-run">
-        <xsl:apply-templates select="." mode="dry-run">
-            <xsl:with-param name="admit" select="$admit"/>
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-        </xsl:apply-templates>
+    <!-- Determine the number of columns         -->
+    <!-- Restrict to 1-6 via the schema          -->
+    <!-- Override for solutions takes precedence -->
+    <xsl:variable name="ncols">
+        <xsl:choose>
+            <xsl:when test="@solutions-cols">
+                <xsl:value-of select="@solutions-cols"/>
+            </xsl:when>
+            <xsl:when test="@cols">
+                <xsl:value-of select="@cols"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>1</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
-
-    <xsl:if test="not($dry-run = '')">
-        <!-- Determine the number of columns         -->
-        <!-- Restrict to 1-6 via the schema          -->
-        <!-- Override for solutions takes precedence -->
-        <xsl:variable name="ncols">
-            <xsl:choose>
-                <xsl:when test="@solutions-cols">
-                    <xsl:value-of select="@solutions-cols"/>
-                </xsl:when>
-                <xsl:when test="@cols">
-                    <xsl:value-of select="@cols"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>1</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:if test="title">
-            <xsl:text>\subparagraph</xsl:text>
-            <!-- keep optional title if LaTeX source is re-purposed -->
-            <xsl:text>[{</xsl:text>
-            <xsl:apply-templates select="." mode="title-short" />
-            <xsl:text>}]</xsl:text>
-            <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="." mode="title-full" />
-            <xsl:text>}</xsl:text>
-            <!-- no label, as this is a duplicate              -->
-            <!-- no title, no heading, so only line-break here -->
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="$b-has-statement">
-            <xsl:apply-templates select="introduction" />
-        </xsl:if>
-        <!-- the container for the exercisegroup does not need to change -->
-        <!-- when in a solutions list.  The indentation might look odd   -->
-        <!-- without an introduction (when there are no statements), or  -->
-        <!-- it might remind the reader of the grouping                  -->
-        <xsl:choose>
-            <xsl:when test="$ncols = 1">
-                <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>\begin{exercisegroupcol}</xsl:text>
-                <xsl:text>{</xsl:text>
-                <xsl:value-of select="$ncols"/>
-                <xsl:text>}&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="exercise" mode="solutions">
-            <xsl:with-param name="purpose" select="$purpose" />
-            <xsl:with-param name="admit" select="$admit"/>
-            <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-        </xsl:apply-templates>
-        <xsl:choose>
-            <xsl:when test="$ncols = 1">
-                <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>\end{exercisegroupcol}&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:if test="$b-has-statement">
-            <xsl:apply-templates select="conclusion" />
-        </xsl:if>
-        <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
+    <xsl:if test="title">
+        <xsl:text>\subparagraph</xsl:text>
+        <!-- keep optional title if LaTeX source is re-purposed -->
+        <xsl:text>[{</xsl:text>
+        <xsl:apply-templates select="." mode="title-short" />
+        <xsl:text>}]</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>}</xsl:text>
+        <!-- no label, as this is a duplicate              -->
+        <!-- no title, no heading, so only line-break here -->
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="introduction" />
+    </xsl:if>
+    <!-- the container for the exercisegroup does not need to change -->
+    <!-- when in a solutions list.  The indentation might look odd   -->
+    <!-- without an introduction (when there are no statements), or  -->
+    <!-- it might remind the reader of the grouping                  -->
+    <xsl:choose>
+        <xsl:when test="$ncols = 1">
+            <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\begin{exercisegroupcol}</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:value-of select="$ncols"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:copy-of select="$content"/>
+    <xsl:choose>
+        <xsl:when test="$ncols = 1">
+            <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\end{exercisegroupcol}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="$b-has-statement">
+        <xsl:apply-templates select="conclusion" />
+    </xsl:if>
+    <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
 </xsl:template>
-
 
 <!-- ###################### -->
 <!-- Exercises and Projects -->

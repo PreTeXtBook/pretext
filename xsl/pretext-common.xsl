@@ -6073,6 +6073,76 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="($is-specialized-division = 'false') or ($is-child-of-structured = 'true')"/>
 </xsl:template>
 
+<!-- ##################################### -->
+<!-- Containers of Exercises, in Solutions -->
+<!-- ##################################### -->
+
+<!-- A "subexercises" or an "exercisegroup" echoed in a "solutions"     -->
+<!-- division repeats its infrastructure only when some descendant      -->
+<!-- exercise contributes something: the dry-run decides.  Introduction -->
+<!-- and conclusion ride with the statement's visibility, an item can   -->
+<!-- be withheld entirely, and a "subexercises" has a heading, so its   -->
+<!-- items sit one outline level deeper.  Those decisions are made      -->
+<!-- here; the surrounding structure is the per-conversion              -->
+<!-- "present-solutions-container" hook, which receives the rendered    -->
+<!-- items as its content parameter.                                    -->
+<xsl:template match="subexercises|exercisegroup" mode="solutions">
+    <xsl:param name="purpose"/>
+    <xsl:param name="admit"/>
+    <xsl:param name="b-component-heading"/>
+    <xsl:param name="heading-level"/>
+    <xsl:param name="b-has-statement"/>
+    <xsl:param name="b-has-hint"/>
+    <xsl:param name="b-has-answer"/>
+    <xsl:param name="b-has-solution"/>
+
+    <!-- When we subset exercises for solutions, an entire container -->
+    <!-- can become empty.  So we do a dry-run and if there is no    -->
+    <!-- content at all we bail out.                                 -->
+    <xsl:variable name="dry-run">
+        <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="admit" select="$admit"/>
+            <xsl:with-param name="b-has-statement" select="$b-has-statement"/>
+            <xsl:with-param name="b-has-hint" select="$b-has-hint"/>
+            <xsl:with-param name="b-has-answer" select="$b-has-answer"/>
+            <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+
+    <xsl:if test="not($dry-run = '')">
+        <xsl:variable name="child-heading-level">
+            <xsl:choose>
+                <xsl:when test="self::subexercises">
+                    <xsl:value-of select="$heading-level + 1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$heading-level"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:apply-templates select="." mode="present-solutions-container">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+            <xsl:with-param name="b-has-statement" select="$b-has-statement"/>
+            <xsl:with-param name="content">
+                <xsl:apply-templates select="exercise|exercisegroup" mode="solutions">
+                    <xsl:with-param name="purpose" select="$purpose"/>
+                    <xsl:with-param name="admit" select="$admit"/>
+                    <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
+                    <xsl:with-param name="heading-level" select="$child-heading-level"/>
+                    <xsl:with-param name="b-has-statement" select="$b-has-statement"/>
+                    <xsl:with-param name="b-has-hint" select="$b-has-hint"/>
+                    <xsl:with-param name="b-has-answer" select="$b-has-answer"/>
+                    <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+                </xsl:apply-templates>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="*" mode="present-solutions-container">
+    <xsl:message>PTX:BUG:     a conversion to a new output format requires implementation of the template with match="*" and mode="present-solutions-container"</xsl:message>
+</xsl:template>
+
 <!-- ####################### -->
 <!-- Components of Exercises -->
 <!-- ####################### -->

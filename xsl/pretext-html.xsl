@@ -3559,51 +3559,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- For solutions divisions, we mimic and reuse some of the above -->
-<xsl:template match="subexercises" mode="solutions">
-    <xsl:param name="admit"/>
+<!-- The generic driver in pretext-common.xsl decides if anything -->
+<!-- appears at all, and renders the items; the wrapping here      -->
+<xsl:template match="subexercises" mode="present-solutions-container">
     <xsl:param name="heading-level"/>
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint" />
-    <xsl:param name="b-has-answer" />
-    <xsl:param name="b-has-solution" />
+    <xsl:param name="b-has-statement"/>
+    <xsl:param name="content"/>
 
-    <!-- we check for content, subject to selection of switches          -->
-    <!-- if there is no content, then we will not output anything at all -->
-     <xsl:variable name="dry-run">
-        <xsl:apply-templates select="." mode="dry-run">
-            <xsl:with-param name="admit" select="$admit"/>
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+    <article class="subexercises">
+        <xsl:apply-templates select="." mode="heading-title">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
-    </xsl:variable>
-
-    <xsl:if test="not($dry-run = '')">
-        <article class="subexercises">
-            <xsl:apply-templates select="." mode="heading-title">
-                <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:if test="$b-has-statement">
+            <xsl:apply-templates select="introduction">
+                <xsl:with-param name="b-original" select="false()" />
             </xsl:apply-templates>
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="introduction">
-                    <xsl:with-param name="b-original" select="false()" />
-                </xsl:apply-templates>
-            </xsl:if>
-            <xsl:apply-templates select="exercise|exercisegroup" mode="solutions">
-                <xsl:with-param name="admit"           select="$admit"/>
-                <xsl:with-param name="heading-level"   select="$heading-level + 1"/>
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+        </xsl:if>
+        <xsl:copy-of select="$content"/>
+        <xsl:if test="$b-has-statement">
+            <xsl:apply-templates select="conclusion">
+                <xsl:with-param name="b-original" select="false()" />
             </xsl:apply-templates>
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="conclusion">
-                    <xsl:with-param name="b-original" select="false()" />
-                </xsl:apply-templates>
-            </xsl:if>
-        </article>
-    </xsl:if>
+        </xsl:if>
+    </article>
 </xsl:template>
 
 <!-- Exercise Group -->
@@ -3676,62 +3654,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- For solutions divisions, we mimic and reuse some of the above -->
-<xsl:template match="exercisegroup" mode="solutions">
-    <xsl:param name="admit"/>
-    <xsl:param name="heading-level"/>
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint" />
-    <xsl:param name="b-has-answer" />
-    <xsl:param name="b-has-solution" />
+<!-- For solutions divisions, we mimic and reuse some of the above; -->
+<!-- the generic driver in pretext-common.xsl renders the items     -->
+<xsl:template match="exercisegroup" mode="present-solutions-container">
+    <xsl:param name="b-has-statement"/>
+    <xsl:param name="content"/>
 
-    <!-- we check for content, subject to selection of switches          -->
-    <!-- if there is no content, then we will not output anything at all -->
-     <xsl:variable name="dry-run">
-        <xsl:apply-templates select="." mode="dry-run">
-            <xsl:with-param name="admit" select="$admit"/>
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-        </xsl:apply-templates>
-    </xsl:variable>
-
-    <xsl:if test="not($dry-run = '')">
-        <div class="exercisegroup">
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="introduction">
-                    <xsl:with-param name="b-original" select="false()" />
-                </xsl:apply-templates>
-            </xsl:if>
-            <div>
-                <xsl:attribute name="class">
-                    <xsl:text>exercisegroup-exercises</xsl:text>
-                    <xsl:variable name="cols-class-name">
-                        <!-- HTML-specific, but in pretext-common.xsl -->
-                        <xsl:apply-templates select="." mode="number-cols-CSS-class"/>
-                    </xsl:variable>
-                    <xsl:if test="not($cols-class-name = '')">
-                        <xsl:text> </xsl:text>
-                        <xsl:value-of select="$cols-class-name"/>
-                    </xsl:if>
-                </xsl:attribute>
-                <xsl:apply-templates select="exercise" mode="solutions">
-                    <xsl:with-param name="admit"           select="$admit"/>
-                    <xsl:with-param name="heading-level"   select="$heading-level"/>
-                    <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                    <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                    <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                    <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-                </xsl:apply-templates>
-            </div>
-            <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="conclusion">
-                    <xsl:with-param name="b-original" select="false()" />
-                </xsl:apply-templates>
-            </xsl:if>
+    <div class="exercisegroup">
+        <xsl:if test="$b-has-statement">
+            <xsl:apply-templates select="introduction">
+                <xsl:with-param name="b-original" select="false()" />
+            </xsl:apply-templates>
+        </xsl:if>
+        <div>
+            <xsl:attribute name="class">
+                <xsl:text>exercisegroup-exercises</xsl:text>
+                <xsl:variable name="cols-class-name">
+                    <!-- HTML-specific, but in pretext-common.xsl -->
+                    <xsl:apply-templates select="." mode="number-cols-CSS-class"/>
+                </xsl:variable>
+                <xsl:if test="not($cols-class-name = '')">
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="$cols-class-name"/>
+                </xsl:if>
+            </xsl:attribute>
+            <xsl:copy-of select="$content"/>
         </div>
-    </xsl:if>
+        <xsl:if test="$b-has-statement">
+            <xsl:apply-templates select="conclusion">
+                <xsl:with-param name="b-original" select="false()" />
+            </xsl:apply-templates>
+        </xsl:if>
+    </div>
 </xsl:template>
 
 <!-- Exercise -->
