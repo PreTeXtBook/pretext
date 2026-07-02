@@ -4093,33 +4093,6 @@
       <ref name="Index"/>
     </zeroOrMore>
   </define>
-  <define name="MetaDataSubtitle">
-    <optional>
-      <ref name="UniqueID"/>
-    </optional>
-    <optional>
-      <ref name="LabelID"/>
-    </optional>
-    <optional>
-      <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLLang"/>
-    </optional>
-    <ref name="Title"/>
-    <optional>
-      <ref name="Subtitle"/>
-    </optional>
-    <optional>
-      <ref name="ShortTitle"/>
-    </optional>
-    <optional>
-      <ref name="PlainTitle"/>
-    </optional>
-    <zeroOrMore>
-      <ref name="Index"/>
-    </zeroOrMore>
-  </define>
   <define name="MetaDataLinedSubtitle">
     <optional>
       <ref name="UniqueID"/>

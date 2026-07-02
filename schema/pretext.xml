@@ -3052,9 +3052,8 @@
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
             <li><c>MetaDataTitle</c> has a required <tag>title</tag>.</li>
             <li><c>MetaDataAltTitle</c> has a required <tag>title</tag>, and allows optional <tag>shorttitle</tag> and <tag>plaintitle</tag>.</li>
-            <li><c>MetaDataSubtitle</c> implicitly has a required <tag>title</tag>, and allows optional <tag>subtitle</tag>, <tag>shorttitle</tag> and <tag>plaintitle</tag>.</li>
             <li>A <tag>plaintitle</tag> means no markup whatsoever in the content, this is what <q>plain</q> means.</li>
-            <li><c>MetaDataLinedTitle</c> and <c>MetaDataLinedSubtitle</c> are variants of the <c>AltTitle</c> or <c>Subtitle</c> versions for use on larger divisions with <tag>line</tag> elements used to suggest line breaks in titles.</li>
+            <li><c>MetaDataLinedTitle</c> and <c>MetaDataLinedSubtitle</c> are variants of the <c>AltTitle</c> version for use on larger divisions with <tag>line</tag> elements used to suggest line breaks in titles; the latter also allows an optional <tag>subtitle</tag>.</li>
             <li><c>MetaDataCaption</c> implicitly has an optional title.</li>
             <li>Titles may contain external references (<c>url</c>) or internal cross-references (<c>xref</c>), but implementers need not make them active (<ie/>, they maybe text only), since titles are prone to migrating to other locations.</li>
         </ul></p>
@@ -3110,16 +3109,6 @@
                 Component?,
                 XMLLang?,
                 (Title | LinedTitle),
-                ShortTitle?,
-                PlainTitle?,
-                Index*
-            MetaDataSubtitle =
-                UniqueID?,
-                LabelID?,
-                Component?,
-                XMLLang?,
-                Title,
-                Subtitle?,
                 ShortTitle?,
                 PlainTitle?,
                 Index*

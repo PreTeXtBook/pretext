@@ -1571,16 +1571,6 @@
                 ShortTitle?,
                 PlainTitle?,
                 Index*
-            MetaDataSubtitle =
-                UniqueID?,
-                LabelID?,
-                Component?,
-                XMLLang?,
-                Title,
-                Subtitle?,
-                ShortTitle?,
-                PlainTitle?,
-                Index*
             MetaDataLinedSubtitle =
                 UniqueID?,
                 LabelID?,
