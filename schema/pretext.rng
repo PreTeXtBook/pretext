@@ -1198,20 +1198,7 @@
   </define>
   <define name="PrintoutBlock">
     <choice>
-      <ref name="BlockStatement"/>
-      <ref name="Remark"/>
-      <ref name="Computation"/>
-      <ref name="Theorem"/>
-      <ref name="Proof"/>
-      <ref name="Definition"/>
-      <ref name="Axiom"/>
-      <ref name="Example"/>
-      <ref name="Exercise"/>
-      <ref name="Project"/>
-      <ref name="Poem"/>
-      <ref name="Assemblage"/>
-      <ref name="ListGenerator"/>
-      <ref name="Fragment"/>
+      <ref name="BlockDivision"/>
       <ref name="Paragraphs"/>
     </choice>
   </define>

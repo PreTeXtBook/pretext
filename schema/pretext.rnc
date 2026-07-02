@@ -418,9 +418,7 @@
                 attribute left { text }?
 
             PrintoutBlock =
-                BlockStatement | Remark | Computation | Theorem | Proof | Definition |
-                Axiom | Example | Exercise | Project |
-                Poem | Assemblage | ListGenerator | Fragment | Paragraphs
+                BlockDivision | Paragraphs
 
             # Page can contain a printout block or be empty
             Page =

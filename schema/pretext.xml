@@ -411,7 +411,7 @@
 
         <p>The attributes on a printout include margin information to control layout.  Inside a printout we can have either a number of <tag>page</tag> elements that holding the content or just the content itself.</p>
 
-        <p>The contents of a printout can include the same blocks as a division, namely BlockDivision.</p>
+        <p>The contents of a printout can include the same blocks as a division, namely BlockDivision, plus the <tag>paragraphs</tag> division.</p>
         <fragment xml:id="printout">
             <title>Printout</title>
             <code>
@@ -423,9 +423,7 @@
                 attribute left { text }?
 
             PrintoutBlock =
-                BlockStatement | Remark | Computation | Theorem | Proof | Definition |
-                Axiom | Example | Exercise | Project |
-                Poem | Assemblage | ListGenerator | Fragment | Paragraphs
+                BlockDivision | Paragraphs
 
             # Page can contain a printout block or be empty
             Page =
