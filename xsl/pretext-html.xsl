@@ -200,6 +200,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Used to identify if target is reveal.js instead of vanilla html -->
 <xsl:variable name="b-reveal-build" select="false()" />
 
+<!-- Standard HTML builds start chunks from level 1. Other builds like epub -->
+<!-- may need a different value.                                            -->
+<xsl:variable name="chunk-heading-level" select="1"/>
+
 <!-- ############### -->
 <!-- Source Analysis -->
 <!-- ############### -->
