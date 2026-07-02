@@ -815,12 +815,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The front and back matter have their own style -->
 <xsl:template match="frontmatter|backmatter" mode="section-heading" />
 
-<!-- A book or article is the top level, so the   -->
-<!-- masthead might suffice, else an author can   -->
-<!-- provide a frontmatter/titlepage to provide   -->
-<!-- more specific information.  In either event, -->
-<!-- a typical section heading is out of place.   -->
-<xsl:template match="book|article" mode="section-heading" />
+<!-- A book or article is the top level, using the title would be -->
+<!-- duplicative of the banner. Instead, the page-specific header -->
+<!-- announces that this is the table of contents unless build is -->
+<!-- a single page.                                               -->
+<!-- We generally will hide this for sited users.                 -->
+<xsl:template match="book|article" mode="section-heading">
+    <xsl:if test="$b-is-single-page = false()">
+        <h1 class="heading ptx-toc-headling">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'toc'"/>
+            </xsl:apply-templates>
+        </h1>
+    </xsl:if>
+</xsl:template>
 
 <!-- An abstract needs structure, and an ID for a -->
 <!-- link out of the ToC sidebar for an article   -->
