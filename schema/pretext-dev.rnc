@@ -18,11 +18,16 @@
                     attribute version { text }?,
                     attribute circuitjs { text }?,
                     attribute calcplot3d { text }?,
+                    attribute geogebra { text }?,
+                    attribute desmos { text }?,
                     # currently only consumed by the CalcPlot3D flavor;
                     # widen this enum if another flavor adopts "@variant"
                     attribute variant { "application" | "controls" | "minimal" }?,
                     attribute dark-mode-enabled { text }?,
                     attribute resize-behavior { text }?,
+                    attribute css { text }?,
+                    attribute design-width { text }?,
+                    attribute reset-icon { text }?,
                     (
                       ImageShortDescription? &
                       ImageDescription? &
@@ -31,7 +36,9 @@
                         SideBySideNoCaption |
                         SideBySideGroupNoCaption
                       )* &
-                      element instructions { mixed { MetaDataTitleOptional, BlockText } }? &
+                      element script { attribute type { text }?, text }* &
+                      element source { text }? &
+                      element instructions { mixed { MetaDataTitleOptional, BlockText+ } }? &
                       element static { Image }?
                     )
 
@@ -43,6 +50,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -66,11 +74,13 @@
                           attribute material { text }
                         )?,
                         attribute aspect { text }?,
+                        attribute perspective { text }?,
                         (
                           Paragraph |
                           Tabular |
                           SideBySideNoCaption |
                           SlateInput |
+                          AnyXhtml |
                           element xhtml:button {
                             attribute type { text },
                             attribute id { text },
@@ -98,6 +108,13 @@
                   attribute onkeypress {text}?,
                   attribute onclick {text}?,
                   attribute style {text}?
+                }
+
+              # A slate with surface="html" embeds an arbitrary XHTML fragment.
+              AnyXhtml =
+                element xhtml:* {
+                  (attribute * { text })*,
+                  mixed { AnyXhtml* }
                 }
 
             # add Interactives where used
@@ -434,8 +451,9 @@
                     attribute * {text}*,
                     mixed {AnyElement*}
                 }
-            # Extended fillin with interactive attributes
-            FillIn |=
+            # Extended fillin with interactive attributes (extends the inline
+            # text fill-in blank; the bare "FillIn" name was orphaned)
+            FillInText |=
                 element fillin {
                     attribute characters {xsd:integer}?,
                     attribute cols {xsd:integer}?,

@@ -1002,6 +1002,9 @@
         </choice>
       </zeroOrMore>
       <optional>
+        <ref name="Glossary"/>
+      </optional>
+      <optional>
         <ref name="References"/>
       </optional>
       <optional>
@@ -1193,7 +1196,15 @@
       <attribute name="left"/>
     </optional>
   </define>
-  <define name="PrintoutBlock">
+  <!--
+    PrintoutBlockCommon is the block content shared by a "worksheet"
+    and a "handout".  A worksheet additionally admits an "exercise"
+    inside a "sidebyside" (WorksheetSideBySide) and uses
+    WorksheetParagraphs; a handout does neither.  The shared remainder
+    is factored out here.  (An ordinary "sidebyside" without an
+    "exercise" is already available to both, through BlockStatement.)
+  -->
+  <define name="PrintoutBlockCommon">
     <choice>
       <ref name="BlockStatement"/>
       <ref name="Remark"/>
@@ -1209,12 +1220,16 @@
       <ref name="Assemblage"/>
       <ref name="ListGenerator"/>
       <ref name="Fragment"/>
-      <ref name="PrintoutSideBySide"/>
+    </choice>
+  </define>
+  <define name="PrintoutBlock">
+    <choice>
+      <ref name="PrintoutBlockCommon"/>
       <ref name="Paragraphs"/>
     </choice>
   </define>
-  <!-- Allow exercise in sidebyside -->
-  <define name="PrintoutSideBySide">
+  <!-- A worksheet "sidebyside" may hold an "exercise" (with workspace). -->
+  <define name="WorksheetSideBySide">
     <element name="sidebyside">
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
@@ -1224,6 +1239,7 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -1330,10 +1346,56 @@
       </choice>
     </element>
   </define>
+  <!--
+    A "worksheet" (but not a "handout") may hold a "sidebyside" that
+    contains an "exercise" (with workspace).  An ordinary "sidebyside"
+    cannot hold an "exercise", so a worksheet's "paragraphs" gets that
+    exception here, admitting a WorksheetSideBySide.
+  -->
+  <define name="WorksheetParagraphs">
+    <element name="paragraphs">
+      <ref name="MetaDataTitle"/>
+      <zeroOrMore>
+        <ref name="Index"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <choice>
+          <ref name="BlockDivision"/>
+          <ref name="WorksheetSideBySide"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="WorksheetBlock">
+    <choice>
+      <ref name="PrintoutBlockCommon"/>
+      <ref name="WorksheetSideBySide"/>
+      <ref name="WorksheetParagraphs"/>
+    </choice>
+  </define>
+  <define name="WorksheetPage">
+    <element name="page">
+      <choice>
+        <oneOrMore>
+          <ref name="WorksheetBlock"/>
+        </oneOrMore>
+        <empty/>
+      </choice>
+    </element>
+  </define>
   <!-- Main worksheet definition -->
   <define name="Worksheet">
     <element name="worksheet">
       <ref name="PrintoutAttributes"/>
+      <optional>
+        <attribute name="courseid"/>
+      </optional>
+      <optional>
+        <attribute name="series"/>
+      </optional>
+      <optional>
+        <attribute name="seriescode"/>
+      </optional>
       <ref name="MetaDataAltTitleOptional"/>
       <interleave>
         <optional>
@@ -1345,10 +1407,10 @@
       </interleave>
       <choice>
         <oneOrMore>
-          <ref name="Page"/>
+          <ref name="WorksheetPage"/>
         </oneOrMore>
         <oneOrMore>
-          <ref name="PrintoutBlock"/>
+          <ref name="WorksheetBlock"/>
         </oneOrMore>
       </choice>
       <interleave>
@@ -1372,6 +1434,7 @@
       <ref name="Preformatted"/>
       <ref name="Image"/>
       <ref name="Video"/>
+      <ref name="Audio"/>
       <ref name="Program"/>
       <ref name="Console"/>
       <ref name="Tabular"/>
@@ -1995,6 +2058,9 @@
     </choice>
   </define>
   <define name="DefinitionLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleOptional"/>
     <zeroOrMore>
       <ref name="Notation"/>
@@ -2019,6 +2085,17 @@
   </define>
   <define name="Proof">
     <element name="proof">
+      <optional>
+        <attribute name="ref"/>
+      </optional>
+      <optional>
+        <attribute name="text">
+          <ref name="XrefTextStyle"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
@@ -2029,6 +2106,9 @@
     </element>
   </define>
   <define name="TheoremLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleCreatorOptional"/>
     <choice>
       <oneOrMore>
@@ -2097,6 +2177,9 @@
     </choice>
   </define>
   <define name="ExampleLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleOptional"/>
     <choice>
       <oneOrMore>
@@ -2141,6 +2224,9 @@
     </choice>
   </define>
   <define name="ProjectLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleOptional"/>
     <choice>
       <oneOrMore>
@@ -2153,6 +2239,19 @@
         <choice>
           <group>
             <ref name="Statement"/>
+            <zeroOrMore>
+              <ref name="Hint"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Answer"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Solution"/>
+            </zeroOrMore>
+          </group>
+          <group>
+            <ref name="Statement"/>
+            <ref name="Program"/>
             <zeroOrMore>
               <ref name="Hint"/>
             </zeroOrMore>
@@ -2433,6 +2532,7 @@
         <choice>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="SideBySide"/>
           <ref name="SideBySideGroup"/>
           <ref name="MuseScore"/>
@@ -2477,6 +2577,7 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -2492,6 +2593,14 @@
     </optional>
     <optional>
       <attribute name="margins"/>
+    </optional>
+    <optional>
+      <attribute name="landscape">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
     </optional>
     <optional>
       <choice>
@@ -2526,6 +2635,7 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -2545,6 +2655,7 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -2557,6 +2668,9 @@
   </define>
   <define name="SideBySideGroup">
     <element name="sbsgroup">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
         <ref name="SideBySide"/>
@@ -2565,6 +2679,9 @@
   </define>
   <define name="SideBySideGroupNoCaption">
     <element name="sbsgroup">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
         <ref name="SideBySideNoCaption"/>
@@ -2827,6 +2944,20 @@
       </choice>
     </attribute>
   </define>
+  <!--
+    A table cell admits footnotes, authored as table notes; the
+    rendering (below the table, keyed a, b, c) is a pending TODO.
+  -->
+  <define name="TableCellText">
+    <mixed>
+      <zeroOrMore>
+        <choice>
+          <ref name="TextLongContent"/>
+          <ref name="Footnote"/>
+        </choice>
+      </zeroOrMore>
+    </mixed>
+  </define>
   <define name="TableCell">
     <element name="cell">
       <optional>
@@ -2842,7 +2973,7 @@
         <attribute name="colspan"/>
       </optional>
       <choice>
-        <ref name="TextLong"/>
+        <ref name="TableCellText"/>
         <oneOrMore>
           <ref name="LongLine"/>
         </oneOrMore>
@@ -2909,6 +3040,14 @@
       </optional>
       <optional>
         <attribute name="row-headers">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="break">
           <choice>
             <value>yes</value>
             <value>no</value>
@@ -3048,6 +3187,39 @@
       <zeroOrMore>
         <ref name="Track"/>
       </zeroOrMore>
+    </element>
+  </define>
+  <define name="Audio">
+    <element name="audio">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
+      </optional>
+      <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="margins"/>
+      </optional>
+      <optional>
+        <attribute name="start">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="end">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <choice>
+        <ref name="AttributesSourceFile"/>
+        <ref name="AttributesNetwork"/>
+      </choice>
     </element>
   </define>
   <define name="Track">
@@ -4274,6 +4446,9 @@
       <optional>
         <ref name="Component"/>
       </optional>
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
       <ref name="TextParagraph"/>
     </element>
   </define>
@@ -4316,20 +4491,23 @@
       </zeroOrMore>
     </mixed>
   </define>
+  <define name="TextLongContent">
+    <choice>
+      <ref name="Character"/>
+      <ref name="Generator"/>
+      <ref name="Verbatim"/>
+      <ref name="Group"/>
+      <ref name="MathInline"/>
+      <ref name="Music"/>
+      <ref name="Reference"/>
+      <ref name="Custom"/>
+      <ref name="WWVariable"/>
+    </choice>
+  </define>
   <define name="TextLong">
     <mixed>
       <zeroOrMore>
-        <choice>
-          <ref name="Character"/>
-          <ref name="Generator"/>
-          <ref name="Verbatim"/>
-          <ref name="Group"/>
-          <ref name="MathInline"/>
-          <ref name="Music"/>
-          <ref name="Reference"/>
-          <ref name="Custom"/>
-          <ref name="WWVariable"/>
-        </choice>
+        <ref name="TextLongContent"/>
       </zeroOrMore>
     </mixed>
   </define>

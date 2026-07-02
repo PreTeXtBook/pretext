@@ -422,14 +422,21 @@
                 attribute right { text }?,
                 attribute left { text }?
 
-            PrintoutBlock =
+            # PrintoutBlockCommon is the block content shared by a "worksheet"
+            # and a "handout".  A worksheet additionally admits an "exercise"
+            # inside a "sidebyside" (WorksheetSideBySide) and uses
+            # WorksheetParagraphs; a handout does neither.  The shared remainder
+            # is factored out here.  (An ordinary "sidebyside" without an
+            # "exercise" is already available to both, through BlockStatement.)
+            PrintoutBlockCommon =
                 BlockStatement | Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | PrintoutExercise | Project |
-                Poem | Assemblage | ListGenerator | Fragment |
-                PrintoutSideBySide | Paragraphs
+                Poem | Assemblage | ListGenerator | Fragment
+            PrintoutBlock =
+                PrintoutBlockCommon | Paragraphs
 
-            # Allow exercise in sidebyside
-            PrintoutSideBySide =
+            # A worksheet "sidebyside" may hold an "exercise" (with workspace).
+            WorksheetSideBySide =
                 element sidebyside {
                     SidebySideAttributes,
                     (
@@ -438,6 +445,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -477,13 +485,32 @@
                 element page {
                     PrintoutBlock+ | empty
                 }
+            # A "worksheet" (but not a "handout") may hold a "sidebyside" that
+            # contains an "exercise" (with workspace).  An ordinary "sidebyside"
+            # cannot hold an "exercise", so a worksheet's "paragraphs" gets that
+            # exception here, admitting a WorksheetSideBySide.
+            WorksheetParagraphs =
+                element paragraphs {
+                    MetaDataTitle,
+                    Index*,
+                    (BlockDivision | WorksheetSideBySide)+
+                }
+            WorksheetBlock =
+                PrintoutBlockCommon | WorksheetSideBySide | WorksheetParagraphs
+            WorksheetPage =
+                element page {
+                    WorksheetBlock+ | empty
+                }
             # Main worksheet definition
             Worksheet =
                 element worksheet {
                     PrintoutAttributes,
+                    attribute courseid {text}?,
+                    attribute series {text}?,
+                    attribute seriescode {text}?,
                     MetaDataAltTitleOptional,
                     (Objectives? &amp; IntroductionDivision?),
-                    (Page+ | PrintoutBlock+),
+                    (WorksheetPage+ | WorksheetBlock+),
                     (Outcomes? &amp; ConclusionDivision?)
                 }
 
@@ -547,7 +574,7 @@
                 Group |
                 MathInline |
                 Music)* }
-            TextLong =  mixed { (
+            TextLongContent =
                 Character |
                 Generator |
                 Verbatim |
@@ -556,7 +583,8 @@
                 Music |
                 Reference |
                 Custom |
-                WWVariable)* }
+                WWVariable
+            TextLong =  mixed { (TextLongContent)* }
                 </code>
         </fragment>
 
@@ -590,6 +618,7 @@
                     UniqueID?,
                     LabelID?,
                     Component?,
+                    attribute workspace {text}?,
                     TextParagraph
                 }
             ParagraphLined =
@@ -1025,7 +1054,7 @@
             <code>
             BlockText =
                 Paragraph | BlockQuote | Preformatted |
-                Image | Video | Program | Console | Tabular
+                Image | Video | Audio | Program | Console | Tabular
             BlockStatementNoCaption =
                 BlockText | Aside |
                 SideBySideNoCaption | SideBySideGroupNoCaption
@@ -1447,6 +1476,7 @@
             <title>Definitions</title>
             <code>
             DefinitionLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 Notation*,
                 Statement
@@ -1472,10 +1502,14 @@
                    }
             Proof =
                 element proof {
+                    attribute ref {text}?,
+                    attribute text {XrefTextStyle}?,
+                    attribute workspace {text}?,
                     MetaDataTitleOptional,
                     (BlockStatement | Case)+
                 }
             TheoremLike =
+                attribute workspace {text}?,
                 MetaDataTitleCreatorOptional,
                 (BlockStatement+ | (Statement, Proof*))
             Theorem =
@@ -1543,6 +1577,7 @@
             <title>Projects, and similar</title>
             <code>
             ProjectLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 (
                     (BlockStatement+) |
@@ -1550,6 +1585,7 @@
                        Prelude?,
                        (
                           (Statement, Hint*, Answer*, Solution*) |
+                          (Statement, Program, Hint*, Answer*, Solution*) |
                           (IntroductionStatement?, Task+, ConclusionStatement?) |
                           (IntroductionText?, WebWork, ConclusionText?)
                        ),
@@ -1698,8 +1734,8 @@
     <section>
         <title>Figures, Tables, Listings and Named Lists</title>
 
-        <p>These are containers that all carry titles (mandatory and optional), captions for two, and numbers.  They need to be filled with other (atomic) items, which we generally call <term>planar</term> due to their two-dimensional and rigid characteristics.  These have also called <term>captioned items</term> in the code, even if not all allow a caption.  The option for a lanscape orientation is only relevant for print, and not within a <c>sidebyside</c>.</p>
-        <!-- 2021-12-29: should add audio and interacive to figure, once ready -->
+        <p>These are containers that all carry titles (mandatory and optional), captions for two, and numbers.  They need to be filled with other (atomic) items, which we generally call <term>planar</term> due to their two-dimensional and rigid characteristics.  These have also called <term>captioned items</term> in the code, even if not all allow a caption.  The option for a lanscape orientation is only relevant for print.</p>
+        <!-- 2021-12-29: should add interactive to figure, once ready -->
 
         <fragment xml:id="table-figure">
             <title>Captioned and titled displays</title>
@@ -1715,6 +1751,7 @@
                     (
                         Image |
                         Video |
+                        Audio |
                         SideBySide |
                         SideBySideGroup |
                         MuseScore
@@ -1762,6 +1799,9 @@
             AlignmentVertical =
                 attribute valign {"top" | "middle" | "bottom"}
 
+            # A table cell admits footnotes, authored as table notes; the
+            # rendering (below the table, keyed a, b, c) is a pending TODO.
+            TableCellText = mixed { (TextLongContent | Footnote)* }
             TableCell =
                 element cell {
                     AlignmentHorizontal?,
@@ -1769,7 +1809,7 @@
                     BorderRight?,
                     attribute colspan {text}?,
                     (
-                        TextLong |
+                        TableCellText |
                         LongLine+ |
                         Paragraph+
                     )
@@ -1796,6 +1836,7 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute row-headers {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderTop?,
@@ -1851,6 +1892,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -1861,6 +1903,7 @@
             SidebySideAttributes =
                 Component?,
                 attribute margins {text}?,
+                attribute landscape {"yes" | "no"}?,
                 (attribute width {text} | attribute widths {text})?,
                 (
                     AlignmentVertical |
@@ -1875,6 +1918,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -1891,6 +1935,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -1901,11 +1946,13 @@
                 }
             SideBySideGroup =
                 element sbsgroup {
+                    UniqueID?,
                     SidebySideAttributes,
                     SideBySide+
                 }
             SideBySideGroupNoCaption =
                 element sbsgroup {
+                    UniqueID?,
                     SidebySideAttributes,
                     SideBySideNoCaption+
                 }
@@ -2084,11 +2131,16 @@
                     attribute version { text }?,
                     attribute circuitjs { text }?,
                     attribute calcplot3d { text }?,
+                    attribute geogebra { text }?,
+                    attribute desmos { text }?,
                     # currently only consumed by the CalcPlot3D flavor;
                     # widen this enum if another flavor adopts "@variant"
                     attribute variant { "application" | "controls" | "minimal" }?,
                     attribute dark-mode-enabled { text }?,
                     attribute resize-behavior { text }?,
+                    attribute css { text }?,
+                    attribute design-width { text }?,
+                    attribute reset-icon { text }?,
                     (
                       ImageShortDescription? &amp;
                       ImageDescription? &amp;
@@ -2097,7 +2149,9 @@
                         SideBySideNoCaption |
                         SideBySideGroupNoCaption
                       )* &amp;
-                      element instructions { mixed { MetaDataTitleOptional, BlockText } }? &amp;
+                      element script { attribute type { text }?, text }* &amp;
+                      element source { text }? &amp;
+                      element instructions { mixed { MetaDataTitleOptional, BlockText+ } }? &amp;
                       element static { Image }?
                     )
 
@@ -2109,6 +2163,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -2132,11 +2187,13 @@
                           attribute material { text }
                         )?,
                         attribute aspect { text }?,
+                        attribute perspective { text }?,
                         (
                           Paragraph |
                           Tabular |
                           SideBySideNoCaption |
                           SlateInput |
+                          AnyXhtml |
                           element xhtml:button {
                             attribute type { text },
                             attribute id { text },
@@ -2164,6 +2221,13 @@
                   attribute onkeypress {text}?,
                   attribute onclick {text}?,
                   attribute style {text}?
+                }
+
+              # A slate with surface="html" embeds an arbitrary XHTML fragment.
+              AnyXhtml =
+                element xhtml:* {
+                  (attribute * { text })*,
+                  mixed { AnyXhtml* }
                 }
 
             # add Interactives where used
@@ -2197,7 +2261,7 @@
     <section>
         <title>Audio and Video</title>
 
-        <p>Well, just video right now.  The <c>xml:id</c> is not used as a target, but rather as a name for a static preview image that is auto-generated by the <c>pretext</c> script thumbnail file, hence optional.  <c>preview</c> maybe be one of two reserved switches, or the filename of a static preview image.</p>
+        <p>Video and audio are both supported.  For video, the <c>xml:id</c> is not used as a target, but rather as a name for a static preview image that is auto-generated by the <c>pretext</c> script thumbnail file, hence optional.  <c>preview</c> maybe be one of two reserved switches, or the filename of a static preview image.  Audio is simpler: it has no preview image, aspect ratio, or playback mode, and points to either a local <attr>source</attr> file or a network <attr>href</attr>.</p>
 
         <p>Note: the <c>Video</c> pattern allows an <attr>xml:id</attr> attribute since it is used to construct a filename for preview images (<q>poster</q>), especially when scraped.</p>
 
@@ -2220,6 +2284,17 @@
                     (AttributesSourceFile | AttributesNetwork | AttributesYouTube |
                      AttributesYouTubePlaylist | AttributesVimeo),
                     Track*
+                }
+            Audio =
+                element audio {
+                    UniqueID?,
+                    LabelID?,
+                    Component?,
+                    attribute width {text}?,
+                    attribute margins {text}?,
+                    attribute start {xsd:integer}?,
+                    attribute end {xsd:integer}?,
+                    (AttributesSourceFile | AttributesNetwork)
                 }
             Track =
                 element track {
@@ -2577,8 +2652,9 @@
                     attribute * {text}*,
                     mixed {AnyElement*}
                 }
-            # Extended fillin with interactive attributes
-            FillIn |=
+            # Extended fillin with interactive attributes (extends the inline
+            # text fill-in blank; the bare "FillIn" name was orphaned)
+            FillInText |=
                 element fillin {
                     attribute characters {xsd:integer}?,
                     attribute cols {xsd:integer}?,
@@ -2865,6 +2941,7 @@
             <title>Examples, and similar</title>
             <code>
             ExampleLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 (
                     (BlockStatement)+ |
@@ -3454,6 +3531,7 @@
                 element backmatter {
                     MetaDataTitleOptional,
                     (ArticleAppendix|Solutions)*,
+                    Glossary?,
                     References?,
                     IndexDivision?,
                     ColophonBack?

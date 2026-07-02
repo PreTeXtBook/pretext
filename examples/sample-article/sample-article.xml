@@ -265,7 +265,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <keyword>00-02</keyword>
                     <keyword primary="no">00A99</keyword>
                 </keywords>
-                <support><p>This is an example of a statement describing funding support for the current document.</p></support>
+                <support>This is an example of a statement describing funding support for the current document.</support>
             </bibinfo>
 
             <titlepage>
@@ -1343,11 +1343,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </postlude>
                     </project>
 
+                    <p>The following <tag>example</tag>, from Elise Desgreniers, is structured with <tag>task</tag>.</p>
+
                     <example xml:id="example-structured-with-task">
                         <title>Notation mathématique 2</title>
-                        <prelude>
-                            <p>The following <tag>example</tag>, from Elise Desgreniers, is structured with <tag>task</tag>.</p>
-                        </prelude>
                         <introduction>
                             <p>Écrivez chacun des exemples suivants avec les conditions pertinentes.</p>
                         </introduction>
@@ -2604,7 +2603,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </theorem>
                 <theorem>
                     <title>A title</title>
-                    <p>A theorem with a proof.</p>
+                    <statement>
+                        <p>A theorem with a proof.</p>
+                    </statement>
                     <proof>
                         <p>The proof of the theorem.</p>
                     </proof>
@@ -3656,7 +3657,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 </point>
                             </coordinates>
 
-                            <annotations>
+                            <annotations text="The graph of a function and its tangent line at the point a equals 1">
                                 <annotation ref="figure"
                                             text="The graph of a function and its tangent line at the point a equals 1">
                                     <annotation ref="graph-tangent"
@@ -3762,7 +3763,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                             arrows="1" stroke="black"/>
                                   </coordinates>
 
-                                  <annotations>
+                                  <annotations text="The set of Fibonacci tiles consists of two tiles denoted by L and S.">
                                       <annotation ref="figure"
                                                   text="The set of Fibonacci tiles consists of two tiles denoted by L and S.">
                                           <annotation ref="top"
@@ -3855,7 +3856,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                       </transform>
                                   </coordinates>
 
-                                  <annotations>
+                                  <annotations text="A Fibonacci tiling is a horizontal sequence of tiles obtained by deflating the tiles in another Fibonacci tiling.  We will explain why these tilings are aperiodic.">
                                       <annotation ref="figure"
                                                   text="A Fibonacci tiling is a horizontal sequence of tiles obtained by deflating the tiles in another Fibonacci tiling.  We will explain why these tilings are aperiodic.">
                                           <annotation ref="down-arrows"/>
@@ -4178,8 +4179,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-shark-attack">
                     <caption>An illustration of the shark trying to catch you as you swim to shore.</caption>
-                    <image label="shark-attack">
-                        <latex-image>
+                    <image>
+                        <latex-image label="shark-attack">
                         \begin{tikzpicture}
                             \tikzset{ ragged border/.style={ decoration={random steps, segment length=1mm, amplitude=0.5mm}, decorate, } }
                             \fill[cyan!30] decorate[ragged border]{ (0,2) -- (8,2) } -- (8,0) -- (0,0) -- cycle;
@@ -4200,7 +4201,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <figure xml:id="figure-pgfplots-data-description">
                     <caption>Full description with tabular</caption>
-                    <image label="pgfplots-data-description" width="70%">
+                    <image width="70%">
                         <shortdescription>
                             a plot of some data points
                         </shortdescription>
@@ -4239,7 +4240,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 </row>
                             </tabular>
                         </description>
-                        <latex-image>
+                        <latex-image label="pgfplots-data-description">
                             \begin{tikzpicture}
                                 \begin{axis}[
                                         xmin=0,
@@ -5051,37 +5052,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <image source="images/cross-square.png" decorative="yes"/>
                     </sidebyside>
                     <sidebyside>
-                        <p>No description, empty shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, empty shortdescription</p>
                         <image source="images/cross-square.png">
                             <shortdescription/>
                         </image>
-                        <p>No description, empty shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
-                            <shortdescription/>
-                        </image>
-                    </sidebyside>
-                    <sidebyside>
-                        <p>No description, too long shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, too long shortdescription</p>
                         <image source="images/cross-square.png">
-                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
-                        </image>
-                        <p>No description, too long shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
                             <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
                         </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>No description, good shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>No description, good shortdescription</p>
                         <image source="images/cross-square.png">
                             <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
                         </image>
-                        <p>No description, good shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
-                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
-                        </image>
-                    </sidebyside>
-                    <sidebyside>
-                        <p>Description, no shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>Description, no shortdescription</p>
                         <image source="images/cross-square.png">
                             <description>
                                 <p>
@@ -5089,17 +5074,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 </p>
                             </description>
                         </image>
-                        <p>Description, no shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
-                            <description>
-                                <p>
-                                    A white square outlined in blue covered by a black <q>X</q>.
-                                </p>
-                            </description>
-                        </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>Description, empty shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>Description, empty shortdescription</p>
                         <image source="images/cross-square.png">
                             <shortdescription/>
                             <description>
@@ -5108,28 +5085,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 </p>
                             </description>
                         </image>
-                        <p>Description, empty shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
-                            <shortdescription/>
-                            <description>
-                                <p>
-                                    A white square outlined in blue covered by a black <q>X</q>.
-                                </p>
-                            </description>
-                        </image>
-                    </sidebyside>
-                    <sidebyside>
-                        <p>Description, too long shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>Description, too long shortdescription</p>
                         <image source="images/cross-square.png">
-                            <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
-                            <description>
-                                <p>
-                                    A white square outlined in blue covered by a black <q>X</q>.
-                                </p>
-                            </description>
-                        </image>
-                        <p>Description, too long shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
                             <shortdescription>This shortdescription is too long because when alt text is longer than 125 characters, some screen readers will cut off reading the alt text after the 125th character.</shortdescription>
                             <description>
                                 <p>
@@ -5139,17 +5096,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </image>
                     </sidebyside>
                     <sidebyside>
-                        <p>Description, good shortdescription, no <attr>decorative</attr> set to <c>yes</c></p>
+                        <p>Description, good shortdescription</p>
                         <image source="images/cross-square.png">
-                            <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
-                            <description>
-                                <p>
-                                    A white square outlined in blue covered by a black <q>X</q>.
-                                </p>
-                            </description>
-                        </image>
-                        <p>Description, good shortdescription, <attr>decorative</attr> set to <c>yes</c></p>
-                        <image source="images/cross-square.png" decorative="yes">
                             <shortdescription>a white square outlined in blue covered by a black X</shortdescription>
                             <description>
                                 <p>
@@ -6962,7 +6910,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </sidebyside>
             </figure>
 
-            <p>Tables are formed in <latex/> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex/>'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex/> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" type="text-global" text="global"/>, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  That section says more about making a comprehensive, yet legal, test <init>URL</init>.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.  So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars"/>.)</p>
+            <p>Tables are formed in <latex/> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex/>'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex/> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" text="global"/>, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  That section says more about making a comprehensive, yet legal, test <init>URL</init>.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.  So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars"/>.)</p>
 
             <table xml:id="table-latex-problems">
                 <title>Problematic Table Cells for <latex/></title>
@@ -8732,7 +8680,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </figure>
 
-                <p>This next interactive uses ECMAScript module based code. That will not function unless the <element>script</element>'s <attr>type</attr> is set to <c>module</c> in the HTML output. So let's set it here and pass it through. It also generates its own HTML elements, so we hopefully don't get a default empty div.</p>
+                <p>This next interactive uses ECMAScript module based code. That will not function unless the <tag>script</tag>'s <attr>type</attr> is set to <c>module</c> in the HTML output. So let's set it here and pass it through. It also generates its own HTML elements, so we hopefully don't get a default empty div.</p>
 
                 <figure>
                     <caption>A simple JS module test</caption>
@@ -9000,6 +8948,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>A test where the JSXGraph code indicates it needs MathJax to render.</p>
 
                 <figure xml:id="interactive-jsx-arc-graph">
+                    <caption>An interactive whose JSXGraph code uses MathJax to render mathematics.</caption>
                     <interactive platform="jsxgraph" source="code/jsxgraph/interactive-jsx-arc-graph.js" width="60%">
                         <slate xml:id="interactive-jsx-arc-graph_fig" surface="jsxboard"/>
                         <instructions>
@@ -9766,6 +9715,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Interactive components, <em>just</em> for testing, no commentary.</p>
             </introduction>
 
+            <subsection>
+                <title>Faux Subsection</title>
+
+                <p>We use <tag>exercises</tag> divisions below, and need a <tag>subsection</tag> to feed the schema.</p>
+            </subsection>
+
             <exercises>
                 <title>True/False</title>
 
@@ -10046,20 +10001,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <response/>
                 </exercise>
             </reading-questions>
-
-            <subsection>
-                <title>Faux Subsection</title>
-
-                <p>We used <tag>exercises</tag> divisions above, and need a <tag>subsection</tag> to feed the schema.</p>
-            </subsection>
         </section>
 
         <section xml:id="section-dynamic-exercises">
             <title>Dynamic Exercises</title>
 
-            <introduction>
-                <p>This section demonstrates the use of dynamic randomized exercises built upon the framework of Runestone components. These demonstration problems incorporate a library supporting mathematical expressions both for varying the content of the statement of the exercises as well as the checking of submitted answers.</p>
-            </introduction>
+            <p>This section demonstrates the use of dynamic randomized exercises built upon the framework of Runestone components. These demonstration problems incorporate a library supporting mathematical expressions both for varying the content of the statement of the exercises as well as the checking of submitted answers.</p>
 
             <exercises>
                 <title>Dynamic Fill-In</title>
@@ -10135,7 +10082,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <jscmp><![CDATA[
                                 ans_array.slice(0,1).includes(ans)
                                 ]]></jscmp>
-                                <feedback>You already gave that answer.</feedback>
+                                <feedback><p>You already gave that answer.</p></feedback>
                             </test>
                         </evaluate>
                         <evaluate>
@@ -10148,7 +10095,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <jscmp><![CDATA[
                                 ans_array.slice(0,2).includes(ans)
                                 ]]></jscmp>
-                                <feedback>You already gave that answer.</feedback>
+                                <feedback><p>You already gave that answer.</p></feedback>
                             </test>
                         </evaluate>
                      </evaluation>
@@ -10347,12 +10294,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>More interactive components, just for testing, no commentary.</p>
             </introduction>
 
-            <exercises>
+            <subsection>
                 <title>ActiveCode</title>
 
-                <introduction>
-                  <p>ActiveCode, Python program.</p>
-                </introduction>
+                <p>ActiveCode, Python program.</p>
 
                 <listing xml:id="program-activecode-python">
                     <title>An interactive Python program, using <pubtitle>Runestone</pubtitle></title>
@@ -10371,14 +10316,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </code>
                     </program>
                 </listing>
-            </exercises>
+            </subsection>
 
-            <exercises>
+            <subsection>
                 <title>CodeLens</title>
 
-                <introduction>
-                  <p>A steppable Python program.</p>
-                </introduction>
+                <p>A steppable Python program.</p>
 
                 <listing xml:id="program-codelens-python">
                     <title>A Python program, stepable with CodeLens</title>
@@ -10388,14 +10331,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </code>
                     </program>
                 </listing>
-            </exercises>
+            </subsection>
 
-            <exercises>
+            <subsection>
                 <title>Activity with An ActiveCode</title>
 
-                <introduction>
-                  <p>Something to do with ActiveCode program.</p>
-                </introduction>
+                <p>Something to do with ActiveCode program.</p>
 
                 <activity xml:id="coding-exercise-partial-two" label="coding-exercise-partial-two">
                     <title>Activity Coding Exercise</title>
@@ -10411,7 +10352,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </program>
                     <answer><p>We're still not really sure.</p></answer>
                 </activity>
-            </exercises>
+            </subsection>
 
             <subsection>
                 <title>YouTube</title>
@@ -10889,16 +10830,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </tabular>
             </table>
 
-            <figure>
-                <caption>Xref Inside MathJAX</caption>
-                <p>
-                    <md>
-                        <mrow>{\mathbb Z}_2 \times {\mathbb Z}_2</mrow>
-                        <mrow><xref ref="theorem-FTC" text="type-global"/></mrow>
-                        <mrow>{\mathbb Z}_2 \times {\mathbb Z}_2</mrow>
-                    </md>
-                </p>
-            </figure>
+            <p>
+                <md>
+                    <mrow>{\mathbb Z}_2 \times {\mathbb Z}_2</mrow>
+                    <mrow><xref ref="theorem-FTC" text="type-global"/></mrow>
+                    <mrow>{\mathbb Z}_2 \times {\mathbb Z}_2</mrow>
+                </md>
+            </p>
 
             <p>Now we have two xref's to that same target that has a runestone component. Only the first one clicked should try to render the runestone.<xref ref="program-activecode-python" text="global"/><xref ref="program-activecode-python" text="global"/></p>
         </section>
@@ -11381,7 +11319,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>Although a program should have a <tag>code</tag> element surrounding its code, we attempt to provide one when it is missing. This next sample tests that and intentionally has no leading or trailing newline inside the program.</p>
 
-            <program languge="python">print("Hello world")</program>
+            <program language="python">print("Hello world")</program>
 
             <p>Sometimes it is nice to author an inline fragment of a program and have the styling of its text match that of a <tag>program</tag>. To do this we can use the <tag>pf</tag> tag (<q>program fragment</q>).  It is similar to a <tag>c</tag> element, but will be syntax highlighted according to either a <attr>language</attr> or the default language for <tag>programs</tag>. Here is an example in C: <pf language="c">printf("The cost is $%f.2", money);</pf>. And another that is in Python and tests problematic characters: <pf language="python">print("&amp; % $ # _ { } ~ ^ \")</pf>.</p>
 
@@ -13821,7 +13759,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </figure>
                 <figure xml:id="rotated-fig-with-sbs" landscape="yes">
                     <caption>Wide figure containing a sidebyside containing a rotated image.  This will be rotated and appear on its own page in <term>print PDF</term> output.</caption>
-                    <sidebyside widths="25% 70%" margins="0%" valign="bottom" landscape="true">
+                    <sidebyside widths="25% 70%" margins="0%" valign="bottom" landscape="yes">
                         <figure>
                             <caption>Quack</caption>
                             <image rotate="10" source="images/Yellow_Duck.png"/>
@@ -13861,6 +13799,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </exercise>
 
                     <exercisegroup cols="2">
+                        <introduction>
+                            <p>The following images are grouped two per row.</p>
+                        </introduction>
                         <exercise>
                             <statement>
                                 <image margins="0% 70%" source="images/nz-landscape.jpg"/>
@@ -15528,74 +15469,74 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <worksheet label="worksheet-geometric-prelude-pages">
               <title>A Geometric Prelude (with authored pages)</title>
               <!-- <author>Dave Rosoff</author> -->
-              <page>
-                <objectives xml:id="objectives-pages">
-                  <ul>
-                    <li>Practice visualizing vector addition</li>
-                    <li>Use vectors without explicit coordinates</li>
-                  </ul>
-                </objectives>
-                <introduction>
-                  <p>This two-page worksheet was generously donated to the sample article by Dave Rosoff at a CuratedCourses workshop in August<nbsp/>2018.  It has the default (skinny) margins.</p>
-                  <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral"/>.</p>
-                  <sidebyside width="30%">
-                    <figure xml:id="figure-midpoints-of-quadrilateral-pages">
-                      <caption>The midpoints of the sides of a quadrilateral are the vertices of a parallelogram.</caption>
-                      <image xml:id="worksheet-midpoints-of-quadrilateral-pages">
-                        <latex-image>
-                          \begin{tikzpicture}[xscale=0.8, yscale=0.8]
-                           \draw[style={black, ultra thick}] (0,0) -- (5,0) -- (4,4) -- (2,5) -- (0,0);
-                           \draw[style={black, dashed, very thick}] (2.5, 0) -- (4.5, 2) -- (3, 4.5) -- (1, 2.5) -- (2.5, 0);
-                          \end{tikzpicture}
-                        </latex-image>
-                      </image>
-                    </figure>
-                    <figure xml:id="figure-triangle-cyclic-vectors-pages">
-                      <caption>The sides of a triangle presented as vectors.</caption>
-                      <image xml:id="worksheet-triangle-cyclic-vectors-pages">
-                        <latex-image>
-                          \begin{tikzpicture}[xscale=1.5, yscale=1.5]
-                            \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
-                            \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
-                            \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
-                            % \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
-                            %   {} -- (1.5,0) node[below right=0mm and 3mm] {$\vec{A}$};
-                            %\draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
-                            %  {} -- (2,1) node[above left=5mm and 1mm] {$\vec{B}$};
-                            %\draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
-                            %  {} -- (0.5,1) node[below left=1mm and 3mm] {$\vec{C}$};
-                            %\node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
-                            %\node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
-                            % \node {$P$} (1.3333,0.6667);
-                          \end{tikzpicture}
-                        </latex-image>
-                      </image>
-                    </figure>
-                    <figure xml:id="figure-triangle-cyclic-medians-pages">
-                      <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
-                      <image xml:id="worksheet-triangle-cyclic-medians-pages" width="50%">
-                        <latex-image>
-                          \begin{tikzpicture}[xscale=1.5, yscale=1.5]
-                            \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
-                            \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
-                            \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
-                            \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
-                              {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
-                            \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
-                             {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
-                            \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
-                             {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
-                            \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
-                            \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
-                            % \node {$P$} (1.3333,0.6667);
-                          \end{tikzpicture}
-                        </latex-image>
-                      </image>
-                    </figure>
-                  </sidebyside>
-                  <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
-                </introduction>
+              <objectives xml:id="objectives-pages">
+                <ul>
+                  <li>Practice visualizing vector addition</li>
+                  <li>Use vectors without explicit coordinates</li>
+                </ul>
+              </objectives>
+              <introduction>
+                <p>This two-page worksheet was generously donated to the sample article by Dave Rosoff at a CuratedCourses workshop in August<nbsp/>2018.  It has the default (skinny) margins.</p>
+                <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral"/>.</p>
+                <sidebyside width="30%">
+                  <figure xml:id="figure-midpoints-of-quadrilateral-pages">
+                    <caption>The midpoints of the sides of a quadrilateral are the vertices of a parallelogram.</caption>
+                    <image xml:id="worksheet-midpoints-of-quadrilateral-pages">
+                      <latex-image>
+                        \begin{tikzpicture}[xscale=0.8, yscale=0.8]
+                         \draw[style={black, ultra thick}] (0,0) -- (5,0) -- (4,4) -- (2,5) -- (0,0);
+                         \draw[style={black, dashed, very thick}] (2.5, 0) -- (4.5, 2) -- (3, 4.5) -- (1, 2.5) -- (2.5, 0);
+                        \end{tikzpicture}
+                      </latex-image>
+                    </image>
+                  </figure>
+                  <figure xml:id="figure-triangle-cyclic-vectors-pages">
+                    <caption>The sides of a triangle presented as vectors.</caption>
+                    <image xml:id="worksheet-triangle-cyclic-vectors-pages">
+                      <latex-image>
+                        \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                          \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                          \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                          \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                          % \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                          %   {} -- (1.5,0) node[below right=0mm and 3mm] {$\vec{A}$};
+                          %\draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                          %  {} -- (2,1) node[above left=5mm and 1mm] {$\vec{B}$};
+                          %\draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                          %  {} -- (0.5,1) node[below left=1mm and 3mm] {$\vec{C}$};
+                          %\node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                          %\node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                          % \node {$P$} (1.3333,0.6667);
+                        \end{tikzpicture}
+                      </latex-image>
+                    </image>
+                  </figure>
+                  <figure xml:id="figure-triangle-cyclic-medians-pages">
+                    <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
+                    <image xml:id="worksheet-triangle-cyclic-medians-pages" width="50%">
+                      <latex-image>
+                        \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                          \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                          \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                          \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                          \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                            {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
+                          \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                           {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
+                          \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                           {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
+                          \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                          \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                          % \node {$P$} (1.3333,0.6667);
+                        \end{tikzpicture}
+                      </latex-image>
+                    </image>
+                  </figure>
+                </sidebyside>
+                <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
+              </introduction>
 
+              <page>
                 <exercise xml:id="ex-cyclic-pages" workspace="4in">
                   <statement>
                     <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
@@ -16228,6 +16169,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <statement>
                             <p>The vectors <m>\vec a = (3,9)</m> and <m>\vec b = (4,2)</m> are pictured below.  Derive the formula for projection on a line and use it to find the projection of <m>\vec a</m> on the line spanned by <m>\vec u</m>. Also compute the length of the residual vector.</p>
                             <figure xml:id="prefigure-vectors">
+                                <caption>Two vectors <m>\vec a</m> and <m>\vec b</m>.</caption>
                                 <image width="100%">
                                     <prefigure xmlns="https://prefigure.org"
                                                label="prefigure-worksheet-vectors">
@@ -16241,7 +16183,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                                 <vector at="vector-a" v="(3,9)" alignment="se"><m>\vec a</m></vector>
                                                 <vector at="vector-b" v="(4,2)" alignment="nw"><m>\vec b</m></vector>
                                             </coordinates>
-                                            <annotations>
+                                            <annotations text="Two vectors labeled a and b in the coordinate plane">
                                                 <annotation ref="figure"
                                                             text="Two vectors labeled a and b in the coordinate plane">
                                                     <annotation ref="grid"
@@ -16258,7 +16200,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     </prefigure>
                                     <shortdescription>two vectors in a Cartesian plane</shortdescription>
                                 </image>
-                                <caption>Two vectors <m>\vec a</m> and <m>\vec b</m>.</caption>
                             </figure>
                         </statement>
                     </exercise>
@@ -16365,169 +16306,134 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </activity>
             </worksheet>
 
-            <!-- NB: this is duplicated in the sample article -->
-            <worksheet label="worksheet-exercisegroup" margin="1cm">
-              <introduction>
-                <p>
-                  This is a mock worksheet for testing the use of <attr>workspace</attr> for <tag>exercise</tag> within an <tag>exercisegroup</tag>.
-                </p>
-              </introduction>
+            <worksheet label="worksheet-workspace" margin="1cm">
+                <introduction>
+                    <p>This is a mock worksheet for testing the use of <attr>workspace</attr> on an <tag>exercise</tag> in a worksheet.</p>
+                </introduction>
 
-                <exercisegroup cols="2" workspace="1in">
-                    <introduction>
-                        <p>
-                            Do things to the following.
-                        </p>
-                    </introduction>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Apple
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Banana
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Cherry
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Durian
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise workspace="2in">
-                        <statement>
-                            <p>
-                                Elderberry (with workspace override)
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Fig
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Guava
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Habanero
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                I can't think of an <q>I</q> fruit.
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Jackfruit
-                            </p>
-                        </statement>
-                    </exercise>
-                </exercisegroup>
+                <p>Do things to the following.</p>
 
-                <exercisegroup workspace="0.25in">
-                    <introduction>
-                        <p>
-                            Now with one column, do things to the following.
-                        </p>
-                    </introduction>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Apple
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Banana
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Cherry
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Durian
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise workspace="2in">
-                        <statement>
-                            <p>
-                                Elderberry (with workspace override)
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Fig
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Guava
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Habanero
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                I can't think of an <q>I</q> fruit.
-                            </p>
-                        </statement>
-                    </exercise>
-                    <exercise>
-                        <statement>
-                            <p>
-                                Jackfruit
-                            </p>
-                        </statement>
-                    </exercise>
-                </exercisegroup>
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Apple</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Banana</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Cherry</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Durian</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="2in">
+                    <statement>
+                        <p>Elderberry (with workspace override)</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Fig</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Guava</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Habanero</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>I can't think of an <q>I</q> fruit.</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="1in">
+                    <statement>
+                        <p>Jackfruit</p>
+                    </statement>
+                </exercise>
+
+                <p>Now, do things to the following, again.</p>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Apple</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Banana</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Cherry</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Durian</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="2in">
+                    <statement>
+                        <p>Elderberry (with workspace override)</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Fig</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Guava</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Habanero</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>I can't think of an <q>I</q> fruit.</p>
+                    </statement>
+                </exercise>
+
+                <exercise workspace="0.25in">
+                    <statement>
+                        <p>Jackfruit</p>
+                    </statement>
+                </exercise>
             </worksheet>
 
             <worksheet>
@@ -16714,83 +16620,87 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <page>
                 <paragraphs>
                 <title>Rules for specific types of functions</title>
-                <dl>
-                    <li>
-                        <title>Constant functions</title>
-                        <p>
-                            <m>(k)' = 0</m>
-                        </p>
-                    </li>
+                <p>
+                    <dl>
+                        <li>
+                            <title>Constant functions</title>
+                            <p>
+                                <m>(k)' = 0</m>
+                            </p>
+                        </li>
+
+                        <li>
+                        <title>Power functions</title>
+                        <p><m>(x^{n})' = nx^{n-1}</m></p>
+                        </li>
+
+                        <li>
+                            <title>Exponential functions</title>
+                            <p>
+                                <m>(a^{x})' = \ln(a) a^{x} \text{ (for } a>0\text{)}</m>
+                            </p>
+                            <p>
+                                    <m>(e^{x})' = e^{x}</m>
+                            </p>
+                        </li>
+
+                        <li>
+                            <title>Logarithmic functions</title>
+                            <p><m>(\ln(x))' = \frac{1}{x}</m></p>
+                        </li>
 
                     <li>
-                    <title>Power functions</title>
-                    <p><m>(x^{n})' = nx^{n-1}</m></p>
+                        <title>Trigonometric functions</title>
+                        <p><m>(\sin(x))' = \cos(x)</m>.</p>
+                        <p> <m>(\cos(x))' = -\sin(x)</m>.</p>
+                        <p><m>(\tan(x))' = \sec^{2}(x) = \frac{1}{\cos^{2}(x)}</m>.</p>
+                        <p><m>(\arcsin(x))' = \frac{1}{\sqrt{1-x^{2}}}</m>.</p>
+                        <p><m>(\arctan(x))' = \frac{1}{1+x^{2}}</m>.</p>
                     </li>
-
-                    <li>
-                        <title>Exponential functions</title>
-                        <p>
-                            <m>(a^{x})' = \ln(a) a^{x} \text{ (for } a>0\text{)}</m>
-                        </p>
-                        <p>
-                                <m>(e^{x})' = e^{x}</m>
-                        </p>
-                    </li>
-
-                    <li>
-                        <title>Logarithmic functions</title>
-                        <p><m>(\ln(x))' = \frac{1}{x}</m></p>
-                    </li>
-
-                <li>
-                    <title>Trigonometric functions</title>
-                    <p><m>(\sin(x))' = \cos(x)</m>.</p>
-                    <p> <m>(\cos(x))' = -\sin(x)</m>.</p>
-                    <p><m>(\tan(x))' = \sec^{2}(x) = \frac{1}{\cos^{2}(x)}</m>.</p>
-                    <p><m>(\arcsin(x))' = \frac{1}{\sqrt{1-x^{2}}}</m>.</p>
-                    <p><m>(\arctan(x))' = \frac{1}{1+x^{2}}</m>.</p>
-                </li>
-                </dl>
+                    </dl>
+                </p>
                 </paragraphs>
 
                 <paragraphs>
                 <title>Rules for combinations of functions</title>
-                <dl>
-                    <li>
-                        <title>Constant multiples</title>
-                        <p>
-                            <m>(k\cdot f(x))' = k\cdot f'(x)</m>
-                        </p>
-                    </li>
+                <p>
+                    <dl>
+                        <li>
+                            <title>Constant multiples</title>
+                            <p>
+                                <m>(k\cdot f(x))' = k\cdot f'(x)</m>
+                            </p>
+                        </li>
+
+                        <li>
+                            <title>Sum and difference</title>
+                            <p>
+                                <m>(f(x) \pm g(x))' = f'(x) \pm g'(x)</m>
+                            </p>
+                        </li>
+
+                        <li>
+                            <title>Products (the product rule)</title>
+                            <p>
+                                <m>(f(x)\cdot g(x))' = f'(x)g(x) + f(x)g'(x)</m>
+                            </p>
+                        </li>
+
+                        <li>
+                            <title>Quotients (the quotient rule)</title>
+                            <p>
+                                <m>\left(\frac{f(x)}{g(x)}\right)' = \frac{f'(x)g(x) - f(x)g'(x)}{(g(x))^{2}}</m>
+                            </p>
+                        </li>
 
                     <li>
-                        <title>Sum and difference</title>
+                        <title>Compositions (the chain rule)</title>
                         <p>
-                            <m>(f(x) \pm g(x))' = f'(x) \pm g'(x)</m>
+                            <m>(f(g(x)))' = f'(g(x))\cdot g'(x)</m>
                         </p>
                     </li>
-
-                    <li>
-                        <title>Products (the product rule)</title>
-                        <p>
-                            <m>(f(x)\cdot g(x))' = f'(x)g(x) + f(x)g'(x)</m>
-                        </p>
-                    </li>
-
-                    <li>
-                        <title>Quotients (the quotient rule)</title>
-                        <p>
-                            <m>\left(\frac{f(x)}{g(x)}\right)' = \frac{f'(x)g(x) - f(x)g'(x)}{(g(x))^{2}}</m>
-                        </p>
-                    </li>
-
-                <li>
-                    <title>Compositions (the chain rule)</title>
-                    <p>
-                        <m>(f(g(x)))' = f'(g(x))\cdot g'(x)</m>
-                    </p>
-                </li>
-            </dl>
+                </dl>
+                </p>
                 </paragraphs>
             </page>
         </handout>
@@ -18109,23 +18019,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </paragraphs>
             </appendix>
 
-            <glossary xml:id="glossary-backmatter" label="glossary-backmatter">
-                <idx>glossary</idx>
-                <headnote>
-                    <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is placed in the back matter.  Placement as a specialized division is another option, see <xref ref="glossary-specialized"/>.</p>
-                </headnote>
-
-                <gi>
-                    <title>bar</title>
-                    <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined-two" text="title"/>.</p>
-                </gi>
-
-                <gi xml:id="foobar-defined-two">
-                    <title>foobar</title>
-                    <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
-                </gi>
-            </glossary>
-
             <appendix xml:id="references" label="appendix-multiple-references">
                 <title>Multiple References</title>
 
@@ -18163,7 +18056,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                     <biblio type="raw" xml:id="biblio-strang-article-tres">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash/>855.</biblio>
                 </references>
-             </appendix>
+            </appendix>
+
+            <glossary xml:id="glossary-backmatter" label="glossary-backmatter">
+                <idx>glossary</idx>
+                <headnote>
+                    <p>A glossary may have a <tag>headnote</tag>, perhaps with some explanation.  This glossary is placed in the back matter.  Placement as a specialized division is another option, see <xref ref="glossary-specialized"/>.</p>
+                </headnote>
+
+                <gi>
+                    <title>bar</title>
+                    <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined-two" text="title"/>.</p>
+                </gi>
+
+                <gi xml:id="foobar-defined-two">
+                    <title>foobar</title>
+                    <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
+                </gi>
+            </glossary>
 
             <!-- Bibliography/References can appear anywhere,  -->
             <!-- but these are in the backmatter, hence global -->

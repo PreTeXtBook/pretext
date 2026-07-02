@@ -329,6 +329,7 @@
                 element backmatter {
                     MetaDataTitleOptional,
                     (ArticleAppendix|Solutions)*,
+                    Glossary?,
                     References?,
                     IndexDivision?,
                     ColophonBack?
@@ -416,14 +417,21 @@
                 attribute right { text }?,
                 attribute left { text }?
 
-            PrintoutBlock =
+            # PrintoutBlockCommon is the block content shared by a "worksheet"
+            # and a "handout".  A worksheet additionally admits an "exercise"
+            # inside a "sidebyside" (WorksheetSideBySide) and uses
+            # WorksheetParagraphs; a handout does neither.  The shared remainder
+            # is factored out here.  (An ordinary "sidebyside" without an
+            # "exercise" is already available to both, through BlockStatement.)
+            PrintoutBlockCommon =
                 BlockStatement | Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | PrintoutExercise | Project |
-                Poem | Assemblage | ListGenerator | Fragment |
-                PrintoutSideBySide | Paragraphs
+                Poem | Assemblage | ListGenerator | Fragment
+            PrintoutBlock =
+                PrintoutBlockCommon | Paragraphs
 
-            # Allow exercise in sidebyside
-            PrintoutSideBySide =
+            # A worksheet "sidebyside" may hold an "exercise" (with workspace).
+            WorksheetSideBySide =
                 element sidebyside {
                     SidebySideAttributes,
                     (
@@ -432,6 +440,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -471,13 +480,32 @@
                 element page {
                     PrintoutBlock+ | empty
                 }
+            # A "worksheet" (but not a "handout") may hold a "sidebyside" that
+            # contains an "exercise" (with workspace).  An ordinary "sidebyside"
+            # cannot hold an "exercise", so a worksheet's "paragraphs" gets that
+            # exception here, admitting a WorksheetSideBySide.
+            WorksheetParagraphs =
+                element paragraphs {
+                    MetaDataTitle,
+                    Index*,
+                    (BlockDivision | WorksheetSideBySide)+
+                }
+            WorksheetBlock =
+                PrintoutBlockCommon | WorksheetSideBySide | WorksheetParagraphs
+            WorksheetPage =
+                element page {
+                    WorksheetBlock+ | empty
+                }
             # Main worksheet definition
             Worksheet =
                 element worksheet {
                     PrintoutAttributes,
+                    attribute courseid {text}?,
+                    attribute series {text}?,
+                    attribute seriescode {text}?,
                     MetaDataAltTitleOptional,
                     (Objectives? & IntroductionDivision?),
-                    (Page+ | PrintoutBlock+),
+                    (WorksheetPage+ | WorksheetBlock+),
                     (Outcomes? & ConclusionDivision?)
                 }
 
@@ -487,7 +515,7 @@
             
             BlockText =
                 Paragraph | BlockQuote | Preformatted |
-                Image | Video | Program | Console | Tabular
+                Image | Video | Audio | Program | Console | Tabular
             BlockStatementNoCaption =
                 BlockText | Aside |
                 SideBySideNoCaption | SideBySideGroupNoCaption
@@ -726,6 +754,7 @@
                 }
             
             DefinitionLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 Notation*,
                 Statement
@@ -740,10 +769,14 @@
                    }
             Proof =
                 element proof {
+                    attribute ref {text}?,
+                    attribute text {XrefTextStyle}?,
+                    attribute workspace {text}?,
                     MetaDataTitleOptional,
                     (BlockStatement | Case)+
                 }
             TheoremLike =
+                attribute workspace {text}?,
                 MetaDataTitleCreatorOptional,
                 (BlockStatement+ | (Statement, Proof*))
             Theorem =
@@ -768,6 +801,7 @@
                 element assumption {AxiomLike}
             
             ExampleLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 (
                     (BlockStatement)+ |
@@ -780,6 +814,7 @@
                 element problem {ExampleLike}
             
             ProjectLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 (
                     (BlockStatement+) |
@@ -787,6 +822,7 @@
                        Prelude?,
                        (
                           (Statement, Hint*, Answer*, Solution*) |
+                          (Statement, Program, Hint*, Answer*, Solution*) |
                           (IntroductionStatement?, Task+, ConclusionStatement?) |
                           (IntroductionText?, WebWork, ConclusionText?)
                        ),
@@ -883,6 +919,7 @@
                     (
                         Image |
                         Video |
+                        Audio |
                         SideBySide |
                         SideBySideGroup |
                         MuseScore
@@ -915,6 +952,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -925,6 +963,7 @@
             SidebySideAttributes =
                 Component?,
                 attribute margins {text}?,
+                attribute landscape {"yes" | "no"}?,
                 (attribute width {text} | attribute widths {text})?,
                 (
                     AlignmentVertical |
@@ -939,6 +978,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -955,6 +995,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -965,11 +1006,13 @@
                 }
             SideBySideGroup =
                 element sbsgroup {
+                    UniqueID?,
                     SidebySideAttributes,
                     SideBySide+
                 }
             SideBySideGroupNoCaption =
                 element sbsgroup {
+                    UniqueID?,
                     SidebySideAttributes,
                     SideBySideNoCaption+
                 }
@@ -1082,6 +1125,9 @@
             AlignmentVertical =
                 attribute valign {"top" | "middle" | "bottom"}
 
+            # A table cell admits footnotes, authored as table notes; the
+            # rendering (below the table, keyed a, b, c) is a pending TODO.
+            TableCellText = mixed { (TextLongContent | Footnote)* }
             TableCell =
                 element cell {
                     AlignmentHorizontal?,
@@ -1089,7 +1135,7 @@
                     BorderRight?,
                     attribute colspan {text}?,
                     (
-                        TextLong |
+                        TableCellText |
                         LongLine+ |
                         Paragraph+
                     )
@@ -1116,6 +1162,7 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute row-headers {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderTop?,
@@ -1159,6 +1206,17 @@
                     (AttributesSourceFile | AttributesNetwork | AttributesYouTube |
                      AttributesYouTubePlaylist | AttributesVimeo),
                     Track*
+                }
+            Audio =
+                element audio {
+                    UniqueID?,
+                    LabelID?,
+                    Component?,
+                    attribute width {text}?,
+                    attribute margins {text}?,
+                    attribute start {xsd:integer}?,
+                    attribute end {xsd:integer}?,
+                    (AttributesSourceFile | AttributesNetwork)
                 }
             Track =
                 element track {
@@ -1655,6 +1713,7 @@
                     UniqueID?,
                     LabelID?,
                     Component?,
+                    attribute workspace {text}?,
                     TextParagraph
                 }
             ParagraphLined =
@@ -1674,7 +1733,7 @@
                 Group |
                 MathInline |
                 Music)* }
-            TextLong =  mixed { (
+            TextLongContent =
                 Character |
                 Generator |
                 Verbatim |
@@ -1683,7 +1742,8 @@
                 Music |
                 Reference |
                 Custom |
-                WWVariable)* }
+                WWVariable
+            TextLong =  mixed { (TextLongContent)* }
                 
             Footnote =
                 element fn {
