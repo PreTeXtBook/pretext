@@ -3658,17 +3658,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </coordinates>
 
                             <annotations text="The graph of a function and its tangent line at the point a equals 1">
-                                <annotation ref="figure"
-                                            text="The graph of a function and its tangent line at the point a equals 1">
-                                    <annotation ref="graph-tangent"
-                                                text="The graph and its tangent line">
-                                        <annotation ref="graph"
-                                                    text="The graph of the function f" sonify="yes"/>
-                                        <annotation ref="point"
-                                                    text="The point a comma f of a"/>
-                                        <annotation ref="tangent"
-                                                    text="The tangent line to the graph of f at the point"/>
-                                    </annotation>
+                                <annotation ref="graph-tangent"
+                                            text="The graph and its tangent line">
+                                    <annotation ref="graph"
+                                                text="The graph of the function f" sonify="yes"/>
+                                    <annotation ref="point"
+                                                text="The point a comma f of a"/>
+                                    <annotation ref="tangent"
+                                                text="The tangent line to the graph of f at the point"/>
                                 </annotation>
                             </annotations>
 
@@ -3764,36 +3761,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                   </coordinates>
 
                                   <annotations text="The set of Fibonacci tiles consists of two tiles denoted by L and S.">
-                                      <annotation ref="figure"
-                                                  text="The set of Fibonacci tiles consists of two tiles denoted by L and S.">
-                                          <annotation ref="top"
-                                                      text="The ratio of the lengths of the tiles is the golden ratio so one tile L is long and the other S is short">
-                                              <annotation ref="top-L"
-                                                          text="The long tile L"/>
-                                              <annotation ref="top-S"
-                                                          text="The short tile S"/>
+                                      <annotation ref="top"
+                                                  text="The ratio of the lengths of the tiles is the golden ratio so one tile L is long and the other S is short">
+                                          <annotation ref="top-L"
+                                                      text="The long tile L"/>
+                                          <annotation ref="top-S"
+                                                      text="The short tile S"/>
+                                      </annotation>
+                                      <annotation ref="arrows"
+                                                  text="A process called deflation replaces each tile by a new set of tiles">
+                                          <annotation ref="left-deflate"
+                                                      text="A long tile is replaced by a long and a short tile">
+                                              <annotation ref="left-arrow"/>
+                                              <annotation ref="top-L"/>
+                                              <annotation ref="bottom-L"
+                                                          text="The length of the new tiles is scaled by the reciprocal of the golden ratio">
+                                                  <annotation ref="bottom-LL"
+                                                              text="The new long tile is on the left"/>
+                                                  <annotation ref="bottom-LS"
+                                                              text="The new short tile is on the right"/>
+                                              </annotation>
                                           </annotation>
-                                          <annotation ref="arrows"
-                                                      text="A process called deflation replaces each tile by a new set of tiles">
-                                              <annotation ref="left-deflate"
-                                                          text="A long tile is replaced by a long and a short tile">
-                                                  <annotation ref="left-arrow"/>
-                                                  <annotation ref="top-L"/>
-                                                  <annotation ref="bottom-L"
-                                                              text="The length of the new tiles is scaled by the reciprocal of the golden ratio">
-                                                      <annotation ref="bottom-LL"
-                                                                  text="The new long tile is on the left"/>
-                                                      <annotation ref="bottom-LS"
-                                                                  text="The new short tile is on the right"/>
-                                                  </annotation>
-                                              </annotation>
-                                              <annotation ref="right-deflate"
-                                                          text="A short tile is replaced by a single long tile">
-                                                  <annotation ref="right-arrow"/>
-                                                  <annotation ref="top-S"/>
-                                                  <annotation ref="bottom-S"
-                                                              text="The length of the new tile is again scaled by the reciprocal of the golden ratio"/>
-                                              </annotation>
+                                          <annotation ref="right-deflate"
+                                                      text="A short tile is replaced by a single long tile">
+                                              <annotation ref="right-arrow"/>
+                                              <annotation ref="top-S"/>
+                                              <annotation ref="bottom-S"
+                                                          text="The length of the new tile is again scaled by the reciprocal of the golden ratio"/>
                                           </annotation>
                                       </annotation>
                                   </annotations>
@@ -3857,52 +3851,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                   </coordinates>
 
                                   <annotations text="A Fibonacci tiling is a horizontal sequence of tiles obtained by deflating the tiles in another Fibonacci tiling.  We will explain why these tilings are aperiodic.">
-                                      <annotation ref="figure"
-                                                  text="A Fibonacci tiling is a horizontal sequence of tiles obtained by deflating the tiles in another Fibonacci tiling.  We will explain why these tilings are aperiodic.">
-                                          <annotation ref="down-arrows"/>
-                                          <annotation ref="top-down-arrow"/>
-
+                                      <annotation ref="down-arrows"/>
+                                      <annotation ref="top-down-arrow"/>
+                                      <annotation ref="tiling-row_0"
+                                                  text="We begin with this Fibonacci tiling"/>
+                                      <annotation ref="tiling-row_1"
+                                                  text="Our first Fibonacci tiling is obtained by deflating this second tiling">
+                                          <annotation ref="down-arrow-row_0"/>
+                                      </annotation>
+                                      <annotation ref="tiling-row_2"
+                                                  text="The second tiling is obtained by deflating this third tiling, so we see that there is an infinite hierarchy of tilings.">
+                                          <annotation ref="down-arrow-row_1"/>
+                                      </annotation>
+                                      <annotation ref="bottom-tilings"
+                                                  text="Beginning with one tiling, the tiling above is uniquely determined.">
                                           <annotation ref="tiling-row_0"
-                                                      text="We begin with this Fibonacci tiling"/>
-
+                                                      text="Consider this Fibonacci tiling."/>
                                           <annotation ref="tiling-row_1"
-                                                      text="Our first Fibonacci tiling is obtained by deflating this second tiling">
-                                              <annotation ref="down-arrow-row_0"/>
-                                          </annotation>
-
+                                                      text="By inverting the deflation rules, we can uniquely determine the tiling above."/>
+                                      </annotation>
+                                      <annotation ref="periodic-0"
+                                                  text="Suppose that a Fibonacci tiling is periodic under a horizontal translation.">
+                                          <annotation ref="tiling-row_0"
+                                                      text="For example, suppose this Fibonacci tiling is periodic."/>
+                                          <annotation ref="right-arrow-row_0"
+                                                      text="And that this horizontal translation leaves the tiling unchanged."/>
+                                      </annotation>
+                                      <annotation ref="periodic-1"
+                                                  text="Because the inflated tiling above is unique, it must also be periodic under the same translation.">
+                                          <annotation ref="tiling-row_1"
+                                                      text="This Fibonacci tiling is also periodic."/>
+                                          <annotation ref="right-arrow-row_1"
+                                                      text="The same horizontal translation leaves the tiling unchanged."/>
+                                      </annotation>
+                                      <annotation ref="periodic-2"
+                                                  text="Consequently, every tiling in the hierarchy is periodic by this translation.  This is not possible, which means the original tiling cannot be periodic.">
                                           <annotation ref="tiling-row_2"
-                                                      text="The second tiling is obtained by deflating this third tiling, so we see that there is an infinite hierarchy of tilings.">
-                                              <annotation ref="down-arrow-row_1"/>
-                                          </annotation>
-
-                                          <annotation ref="bottom-tilings"
-                                                      text="Beginning with one tiling, the tiling above is uniquely determined.">
-                                              <annotation ref="tiling-row_0"
-                                                          text="Consider this Fibonacci tiling."/>
-                                              <annotation ref="tiling-row_1"
-                                                          text="By inverting the deflation rules, we can uniquely determine the tiling above."/>
-                                          </annotation>
-                                          <annotation ref="periodic-0"
-                                                      text="Suppose that a Fibonacci tiling is periodic under a horizontal translation.">
-                                              <annotation ref="tiling-row_0"
-                                                          text="For example, suppose this Fibonacci tiling is periodic."/>
-                                              <annotation ref="right-arrow-row_0"
-                                                          text="And that this horizontal translation leaves the tiling unchanged."/>
-                                          </annotation>
-                                          <annotation ref="periodic-1"
-                                                      text="Because the inflated tiling above is unique, it must also be periodic under the same translation.">
-                                              <annotation ref="tiling-row_1"
-                                                          text="This Fibonacci tiling is also periodic."/>
-                                              <annotation ref="right-arrow-row_1"
-                                                          text="The same horizontal translation leaves the tiling unchanged."/>
-                                          </annotation>
-                                          <annotation ref="periodic-2"
-                                                      text="Consequently, every tiling in the hierarchy is periodic by this translation.  This is not possible, which means the original tiling cannot be periodic.">
-                                              <annotation ref="tiling-row_2"
-                                                          text="The size of the tiles grows exponentially as we move up in the hierarchy."/>
-                                              <annotation ref="right-arrow-row_2"
-                                                          text="Eventually the tiles are longer than the translation."/>
-                                          </annotation>
+                                                      text="The size of the tiles grows exponentially as we move up in the hierarchy."/>
+                                          <annotation ref="right-arrow-row_2"
+                                                      text="Eventually the tiles are longer than the translation."/>
                                       </annotation>
                                   </annotations>
                               </diagram>
@@ -16219,17 +16206,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                                 <vector at="vector-b" v="(4,2)" alignment="nw"><m>\vec b</m></vector>
                                             </coordinates>
                                             <annotations text="Two vectors labeled a and b in the coordinate plane">
-                                                <annotation ref="figure"
-                                                            text="Two vectors labeled a and b in the coordinate plane">
-                                                    <annotation ref="grid"
-                                                                text="A one by one grid"/>
-                                                    <annotation ref="axes"
-                                                                text="A set of labeled axes"/>
-                                                    <annotation ref="vector-a"
-                                                                text="The vector a"/>
-                                                    <annotation ref="vector-b"
-                                                                text="The vector b"/>
-                                                </annotation>
+                                                <annotation ref="grid"
+                                                            text="A one by one grid"/>
+                                                <annotation ref="axes"
+                                                            text="A set of labeled axes"/>
+                                                <annotation ref="vector-a"
+                                                            text="The vector a"/>
+                                                <annotation ref="vector-b"
+                                                            text="The vector b"/>
                                             </annotations>
                                         </diagram>
                                     </prefigure>
