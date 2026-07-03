@@ -33,16 +33,17 @@
       <text/>
     </element>
   </define>
-  <!--
-    Annotations are constructed with a single #annotations element,
-    which contains a single #annotation
-  -->
   <define name="Annotations">
     <element name="annotations">
-      <zeroOrMore>
+      <choice>
+        <group>
+          <attribute name="text"/>
+          <zeroOrMore>
+            <ref name="Annotation"/>
+          </zeroOrMore>
+        </group>
         <ref name="Annotation"/>
-      </zeroOrMore>
-      <attribute name="text"/>
+      </choice>
     </element>
   </define>
   <define name="AnnotationAttributes">
@@ -92,27 +93,18 @@
         </choice>
       </attribute>
     </optional>
-    <optional>
-      <ref name="AnnotatedElementAttributes"/>
-    </optional>
+    <ref name="AnnotatedElementAttributes"/>
   </define>
   <!-- next come some definition elements that can be added anywhere -->
   <define name="DefinitionElements">
-    <optional>
+    <choice>
       <ref name="Definition"/>
-    </optional>
-    <optional>
       <ref name="Derivative"/>
-    </optional>
-    <optional>
       <ref name="DE-Solution"/>
-    </optional>
-    <optional>
       <ref name="Define-Shapes"/>
-    </optional>
-    <optional>
       <ref name="Read"/>
-    </optional>
+      <ref name="Templates"/>
+    </choice>
   </define>
   <define name="Definition">
     <element name="definition">
@@ -177,6 +169,13 @@
         <attribute name="string-columns"/>
       </optional>
       <attribute name="type"/>
+    </element>
+  </define>
+  <define name="Templates">
+    <element name="templates">
+      <oneOrMore>
+        <ref name="GraphicalElements"/>
+      </oneOrMore>
     </element>
   </define>
   <!-- the next elements group other elements together -->
@@ -301,7 +300,9 @@
         <zeroOrMore>
           <ref name="GroupElements"/>
         </zeroOrMore>
-        <ref name="TransformElements"/>
+        <zeroOrMore>
+          <ref name="TransformElements"/>
+        </zeroOrMore>
       </interleave>
     </element>
   </define>
@@ -496,32 +497,17 @@
       <empty/>
     </element>
   </define>
-  <define name="LabelElements">
-    <interleave>
-      <zeroOrMore>
-        <ref name="Math"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Bold"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Italic"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Plain"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Newline"/>
-      </zeroOrMore>
-    </interleave>
-  </define>
   <define name="LabelText">
-    <choice>
-      <text/>
-      <zeroOrMore>
-        <ref name="LabelElements"/>
-      </zeroOrMore>
-    </choice>
+    <oneOrMore>
+      <choice>
+        <text/>
+        <ref name="Math"/>
+        <ref name="Bold"/>
+        <ref name="Italic"/>
+        <ref name="Plain"/>
+        <ref name="Newline"/>
+      </choice>
+    </oneOrMore>
   </define>
   <define name="Label">
     <element name="label">
@@ -530,9 +516,7 @@
       </optional>
       <attribute name="anchor"/>
       <ref name="LabelAttributes"/>
-      <oneOrMore>
-        <ref name="LabelText"/>
-      </oneOrMore>
+      <ref name="LabelText"/>
     </element>
   </define>
   <define name="XLabel">
@@ -541,9 +525,7 @@
         <attribute name="at"/>
       </optional>
       <ref name="LabelAttributes"/>
-      <oneOrMore>
-        <ref name="LabelText"/>
-      </oneOrMore>
+      <ref name="LabelText"/>
     </element>
   </define>
   <define name="YLabel">
@@ -552,9 +534,7 @@
         <attribute name="at"/>
       </optional>
       <ref name="LabelAttributes"/>
-      <oneOrMore>
-        <ref name="LabelText"/>
-      </oneOrMore>
+      <ref name="LabelText"/>
     </element>
   </define>
   <!-- elements that can go inside a path -->
@@ -703,44 +683,20 @@
     </interleave>
   </define>
   <define name="ShapeElements">
-    <interleave>
-      <zeroOrMore>
-        <ref name="Arc"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Area-Between-Curves"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Area-Under-Curve"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Circle"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Ellipse"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Graph"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Parametric-Curve"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Path"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Polygon"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Rectangle"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Shape"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Spline"/>
-      </zeroOrMore>
-    </interleave>
+    <choice>
+      <ref name="Arc"/>
+      <ref name="Area-Between-Curves"/>
+      <ref name="Area-Under-Curve"/>
+      <ref name="Circle"/>
+      <ref name="Ellipse"/>
+      <ref name="Graph"/>
+      <ref name="Parametric-Curve"/>
+      <ref name="Path"/>
+      <ref name="Polygon"/>
+      <ref name="Rectangle"/>
+      <ref name="Shape"/>
+      <ref name="Spline"/>
+    </choice>
   </define>
   <!-- graphical elements can be stroked and possibly filled -->
   <define name="StrokeAttributes">
@@ -827,122 +783,80 @@
     <optional>
       <attribute name="fill-rule"/>
     </optional>
+    <optional>
+      <attribute name="fill-pattern">
+        <choice>
+          <value>horizontal</value>
+          <value>vertical</value>
+          <value>diagonal</value>
+          <value>backdiagonal</value>
+          <value>dot</value>
+          <value>diamond</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <ref name="TactileFillAttributes"/>
+    </optional>
   </define>
   <define name="TactileFillAttributes">
-    <ref name="TactileStrokeAttributes"/>
     <optional>
       <attribute name="tactile-fill"/>
     </optional>
     <optional>
       <attribute name="tactile-fill-rule"/>
     </optional>
+    <optional>
+      <attribute name="tactile-fill-pattern">
+        <choice>
+          <value>horizontal</value>
+          <value>vertical</value>
+          <value>diagonal</value>
+          <value>backdiagonal</value>
+          <value>dot</value>
+          <value>diamond</value>
+        </choice>
+      </attribute>
+    </optional>
   </define>
   <!-- start defining the graphical elements -->
   <define name="GraphicalElements">
-    <interleave>
-      <zeroOrMore>
-        <ref name="Angle-Marker"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Arc"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Area-Between-Curves"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Area-Under-Curve"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Axes"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Circle"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Contour"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Ellipse"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Graph"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Grid"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Grid-Axes"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Histogram"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Image"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Implicit-Curve"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Label"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Legend"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Line"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Network"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Parametric-Curve"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Path"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Plot-DE-Solution"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Point"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Polygon"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Rectangle"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Riemann-Sum"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Scatter"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Shape"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Slope-Field"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Spline"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Tick-Mark"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Tangent-line"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Triangle"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Vector"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Vector-Field"/>
-      </zeroOrMore>
-    </interleave>
+    <choice>
+      <ref name="Angle-Marker"/>
+      <ref name="Arc"/>
+      <ref name="Area-Between-Curves"/>
+      <ref name="Area-Under-Curve"/>
+      <ref name="Axes"/>
+      <ref name="Circle"/>
+      <ref name="Contour"/>
+      <ref name="Ellipse"/>
+      <ref name="Graph"/>
+      <ref name="Grid"/>
+      <ref name="Grid-Axes"/>
+      <ref name="Histogram"/>
+      <ref name="Image"/>
+      <ref name="Implicit-Curve"/>
+      <ref name="Label"/>
+      <ref name="Legend"/>
+      <ref name="Line"/>
+      <ref name="Network"/>
+      <ref name="Parametric-Curve"/>
+      <ref name="Path"/>
+      <ref name="Plot-DE-Solution"/>
+      <ref name="Point"/>
+      <ref name="Polygon"/>
+      <ref name="Rectangle"/>
+      <ref name="Riemann-Sum"/>
+      <ref name="Scatter"/>
+      <ref name="Shape"/>
+      <ref name="Slope-Field"/>
+      <ref name="Spline"/>
+      <ref name="Tick-Mark"/>
+      <ref name="Tangent-line"/>
+      <ref name="Triangle"/>
+      <ref name="Vector"/>
+      <ref name="Vector-Field"/>
+    </choice>
   </define>
   <define name="Angle-Marker">
     <element name="angle-marker">
@@ -1421,6 +1335,7 @@
       <optional>
         <ref name="LabelText"/>
       </optional>
+      <ref name="CommonAttributes"/>
     </element>
   </define>
   <define name="Contour">
@@ -1476,7 +1391,7 @@
       <optional>
         <attribute name="N"/>
       </optional>
-      <ref name="StrokeAttributes"/>
+      <ref name="FillAttributes"/>
       <ref name="CommonAttributes"/>
     </element>
   </define>
@@ -1496,12 +1411,12 @@
         <attribute name="coordinates">
           <choice>
             <value>polar</value>
-            <value>coordinates</value>
+            <value>cartesian</value>
           </choice>
         </attribute>
       </optional>
       <optional>
-        <attribute name="domain-degress">
+        <attribute name="domain-degrees">
           <choice>
             <value>yes</value>
             <value>no</value>
@@ -1558,6 +1473,7 @@
       <optional>
         <attribute name="scale"/>
       </optional>
+      <ref name="CommonAttributes"/>
     </element>
   </define>
   <define name="Histogram">
@@ -1628,9 +1544,7 @@
       <oneOrMore>
         <element name="item">
           <attribute name="ref"/>
-          <oneOrMore>
-            <ref name="LabelText"/>
-          </oneOrMore>
+          <ref name="LabelText"/>
         </element>
       </oneOrMore>
     </element>
@@ -2311,11 +2225,7 @@
         <attribute name="arrow-width"/>
       </optional>
       <optional>
-        <attribute name="arrow-angles">
-          <optional>
-            <text/>
-          </optional>
-        </attribute>
+        <attribute name="arrow-angles"/>
       </optional>
       <ref name="StrokeAttributes"/>
       <ref name="CommonAttributes"/>

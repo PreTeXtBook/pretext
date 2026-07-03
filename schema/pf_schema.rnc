@@ -15,11 +15,9 @@ Diagram = element diagram {
 
 Caption = element caption {text}
 
-# Annotations are constructed with a single #annotations element,
-# which contains a single #annotation
 Annotations = element annotations {
-    Annotation*,
-    attribute text {text}
+    (attribute text {text}, Annotation*) |
+    Annotation
 }
 
 AnnotationAttributes = 
@@ -41,15 +39,16 @@ Annotation = element annotation {
 # Most elements can be annotated
 CommonAttributes =
     attribute annotate {"yes"|"no"}?,
-    AnnotatedElementAttributes?
+    AnnotatedElementAttributes
 
 # next come some definition elements that can be added anywhere
 DefinitionElements = 
-    Definition?,
-    Derivative?,
-    DE-Solution?,
-    Define-Shapes?,
-    Read?
+    Definition |
+    Derivative |
+    DE-Solution |
+    Define-Shapes |
+    Read |
+    Templates
 
 Definition = element definition {
     text,
@@ -84,6 +83,10 @@ Read = element read {
     attribute quotechar {text}?,
     attribute string-columns {text}?,
     attribute type {text}
+}
+
+Templates = element templates {
+    GraphicalElements+
 }
 
 # the next elements group other elements together
@@ -143,7 +146,7 @@ Clip = element clip {
         DefinitionElements* &
         GraphicalElements* &
         GroupElements* &
-        TransformElements
+        TransformElements*
     )
 }
 
@@ -196,38 +199,31 @@ TactileLabelAttributes =
     attribute tactile-clear-background {"yes"|"no"}?,
     attribute tactile-background-margin {text}?
 
-
 Math = element m {attribute color {text}? & text}
 Bold = element b {attribute color {text}? & text & Italic*}
 Italic = element it {attribute color {text}? & text & Bold*}
-Plain = element plain {attribute color{text}? & text}
+Plain = element plain {attribute color {text}? & text}
 Newline = element newline {empty}
-LabelElements = (
-    Math* &
-    Bold* &
-    Italic* &
-    Plain* &
-    Newline*
-)
-LabelText = (text | LabelElements*)
+
+LabelText = (text | Math | Bold | Italic | Plain | Newline)+
 
 Label = element label {
     attribute at {text}?,
     attribute anchor {text},
     LabelAttributes,
-    LabelText+
+    LabelText
 }
 
 XLabel = element xlabel {
     attribute at {text}?,
     LabelAttributes,
-    LabelText+
+    LabelText
 }
 
 YLabel = element ylabel {
     attribute at {text}?,
     LabelAttributes,
-    LabelText+
+    LabelText
 }
 
 # elements that can go inside a path
@@ -289,18 +285,18 @@ PathElements = (
 )
 
 ShapeElements = (
-    Arc* &
-    Area-Between-Curves* &
-    Area-Under-Curve* &
-    Circle* &
-    Ellipse* &
-    Graph* &
-    Parametric-Curve* &
-    Path* &
-    Polygon* &
-    Rectangle* &
-    Shape* &
-    Spline*
+    Arc |
+    Area-Between-Curves |
+    Area-Under-Curve |
+    Circle |
+    Ellipse |
+    Graph |
+    Parametric-Curve |
+    Path |
+    Polygon |
+    Rectangle |
+    Shape |
+    Spline
 )
 
 # graphical elements can be stroked and possibly filled
@@ -317,7 +313,7 @@ StrokeAttributes =
     attribute outline {"yes"|"no"}?,
     TactileStrokeAttributes?
 
-TactileStrokeAttributes =
+TactileStrokeAttributes = 
     attribute tactile-stroke {text}?,
     attribute tactile-thickness {text}?,
     attribute tactile-miterlimit {text}?,
@@ -330,50 +326,52 @@ FillAttributes =
     StrokeAttributes,
     attribute fill {text}?,
     attribute fill-opacity {text}?,
-    attribute fill-rule {text}?
+    attribute fill-rule {text}?,
+    attribute fill-pattern {"horizontal" | "vertical" | "diagonal" | "backdiagonal" | "dot" | "diamond"}?,
+    TactileFillAttributes?
 
 TactileFillAttributes =
-    TactileStrokeAttributes,
     attribute tactile-fill {text}?,
-    attribute tactile-fill-rule {text}?
+    attribute tactile-fill-rule {text}?,
+    attribute tactile-fill-pattern {"horizontal" | "vertical" | "diagonal" | "backdiagonal" | "dot" | "diamond"}?
 
 # start defining the graphical elements
 GraphicalElements = 
     (
-        Angle-Marker* &
-        Arc* &
-        Area-Between-Curves* &
-        Area-Under-Curve* &
-        Axes* &
-        Circle* &
-        Contour* &
-        Ellipse* &
-        Graph* &
-        Grid* &
-        Grid-Axes* &
-        Histogram* &
-        Image*&
-        Implicit-Curve* &
-        Label* &
-        Legend* &
-        Line* &
-        Network* &
-        Parametric-Curve* &
-        Path* &
-        Plot-DE-Solution* &
-        Point* &
-        Polygon* &
-        Rectangle* &
-        Riemann-Sum* &
-        Scatter* &
-        Shape* &
-        Slope-Field* &
-        Spline* &
-        Tick-Mark* &
-        Tangent-line* &
-        Triangle* &
-        Vector* & 
-        Vector-Field*
+        Angle-Marker |
+        Arc |
+        Area-Between-Curves |
+        Area-Under-Curve |
+        Axes |
+        Circle |
+        Contour |
+        Ellipse |
+        Graph |
+        Grid |
+        Grid-Axes |
+        Histogram |
+        Image |
+        Implicit-Curve |
+        Label |
+        Legend |
+        Line |
+        Network |
+        Parametric-Curve |
+        Path |
+        Plot-DE-Solution |
+        Point |
+        Polygon |
+        Rectangle |
+        Riemann-Sum |
+        Scatter |
+        Shape |
+        Slope-Field |
+        Spline |
+        Tick-Mark |
+        Tangent-line |
+        Triangle |
+        Vector |
+        Vector-Field
     )
 
 Angle-Marker = element angle-marker {
@@ -506,7 +504,8 @@ Tick-Mark = element tick-mark {
     attribute size {text}?,
     StrokeAttributes,
     LabelAttributes,
-    LabelText?
+    LabelText?,
+    CommonAttributes
 }
 
 Contour = element contour {
@@ -535,7 +534,7 @@ Ellipse = element ellipse {
     attribute rotate {text}?,
     attribute degrees {text}?,
     attribute N {text}?,
-    StrokeAttributes,
+    FillAttributes,
     CommonAttributes
 }
 
@@ -544,8 +543,8 @@ Graph = element graph {
     attribute function {text},
     attribute N {text}?,
     attribute domain {text}?,
-    attribute coordinates {"polar"|"coordinates"}?,
-    attribute domain-degress {"yes"|"no"}?,
+    attribute coordinates {"polar"|"cartesian"}?,
+    attribute domain-degrees {"yes"|"no"}?,
     attribute closed {"yes"|"no"}?,
     attribute fill {text}?,
     StrokeAttributes,
@@ -554,14 +553,15 @@ Graph = element graph {
 
 Image = element image {
     attribute at {text}?,
-    attribute source{text},
+    attribute source {text},
     attribute lower-left {text}?,
     attribute center {text}?,
     attribute dimensions {text}?,
     attribute opacity {text}?,
     attribute filetype {"svg"|"png"|"gif"|"jpeg"|"jpg"}?,
     attribute rotate {text}?,
-    attribute scale {text}?
+    attribute scale {text}?,
+    CommonAttributes
 }
 
 Histogram = element histogram {
@@ -596,7 +596,7 @@ Legend = element legend {
     attribute opacity {text}?,
     element item {
         attribute ref {text},
-        LabelText+
+        LabelText
     }+}
 
 Line = element line {
@@ -623,7 +623,7 @@ Network = element network {
     attribute directed {"yes"|"no"}?,
     attribute arrows {"end"|"middle"}?,
     attribute bipartite-set {text}?,
-    attribute alignment {'vertical' | 'horizontal'}?,
+    attribute alignment {"vertical" | "horizontal"}?,
     attribute loop-scale {text}?,
     attribute layout {text}?,
     attribute seed {text}?,
@@ -855,7 +855,7 @@ Vector-Field = element vector-field {
     attribute domain {text}?,
     attribute N {text}?,
     attribute arrow-width {text}?,
-    attribute arrow-angles {text?}?,
+    attribute arrow-angles {text}?,
     StrokeAttributes,
     CommonAttributes
 }
