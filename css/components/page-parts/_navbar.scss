@@ -199,8 +199,15 @@ $center-content: true !default;
   }
 }
 
+
+// flip navbar to bottom and reduce size/number of buttons
 @media screen and (max-width: $navbar-breakpoint) {
   @include navbar-btn-borders.navbar-btn-borders();
+
+  // reserve space for fixed navbar
+  body.pretext {
+    padding-bottom: $nav-height;
+  }
 
   .ptx-navbar {
     position: fixed;

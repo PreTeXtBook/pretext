@@ -1,6 +1,5 @@
 $max-width: 0 !default;  // 0 == no max width
 $navbar-breakpoint: 856px !default;
-$nav-height: 36px !default;
 
 @use 'components/helpers/buttons-default' as buttons;
 
@@ -42,7 +41,6 @@ $nav-height: 36px !default;
     // prevent icons from spreading too much
     gap: 20px;
     justify-content: center;
-    margin-bottom: $nav-height - 2;
 
     & > a > .logo:first-child {
       height: 2em;
