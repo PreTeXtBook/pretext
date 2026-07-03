@@ -778,6 +778,11 @@
       <text/>
     </element>
   </define>
+  <!--
+    "event" is consumed only by the slideshow conversions
+    (Beamer, reveal.js).  This schema does not yet describe a
+    "slideshow" document, so the pattern is dormant until then.
+  -->
   <define name="Event">
     <element name="event">
       <ref name="TextLong"/>
@@ -931,7 +936,7 @@
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
-          <ref name="BlockStatementNoCaption"/>
+          <ref name="BlockStatementNoNumber"/>
           <ref name="ParagraphsNoNumber"/>
         </choice>
       </oneOrMore>
@@ -953,7 +958,7 @@
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
-          <ref name="BlockStatementNoCaption"/>
+          <ref name="BlockStatementNoNumber"/>
           <ref name="ParagraphsNoNumber"/>
         </choice>
       </oneOrMore>
@@ -966,7 +971,7 @@
         <group>
           <oneOrMore>
             <choice>
-              <ref name="BlockStatementNoCaption"/>
+              <ref name="BlockStatementNoNumber"/>
               <ref name="ParagraphsNoNumber"/>
             </choice>
           </oneOrMore>
@@ -977,14 +982,14 @@
         <group>
           <zeroOrMore>
             <choice>
-              <ref name="BlockStatementNoCaption"/>
+              <ref name="BlockStatementNoNumber"/>
               <ref name="ParagraphsNoNumber"/>
             </choice>
           </zeroOrMore>
           <ref name="Contributors"/>
           <zeroOrMore>
             <choice>
-              <ref name="BlockStatementNoCaption"/>
+              <ref name="BlockStatementNoNumber"/>
               <ref name="ParagraphsNoNumber"/>
             </choice>
           </zeroOrMore>
@@ -1044,8 +1049,8 @@
       <oneOrMore>
         <choice>
           <ref name="BlockText"/>
-          <ref name="SideBySideNoCaption"/>
-          <ref name="SideBySideGroupNoCaption"/>
+          <ref name="SideBySideNoNumber"/>
+          <ref name="SideBySideGroupNoNumber"/>
         </choice>
       </oneOrMore>
     </element>
@@ -1068,7 +1073,7 @@
         <ref name="Index"/>
       </zeroOrMore>
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -1196,144 +1201,11 @@
       <attribute name="left"/>
     </optional>
   </define>
-  <!--
-    PrintoutBlockCommon is the block content shared by a "worksheet"
-    and a "handout".  A worksheet additionally admits an "exercise"
-    inside a "sidebyside" (WorksheetSideBySide) and uses
-    WorksheetParagraphs; a handout does neither.  The shared remainder
-    is factored out here.  (An ordinary "sidebyside" without an
-    "exercise" is already available to both, through BlockStatement.)
-  -->
-  <define name="PrintoutBlockCommon">
-    <choice>
-      <ref name="BlockStatement"/>
-      <ref name="Remark"/>
-      <ref name="Computation"/>
-      <ref name="Theorem"/>
-      <ref name="Proof"/>
-      <ref name="Definition"/>
-      <ref name="Axiom"/>
-      <ref name="Example"/>
-      <ref name="PrintoutExercise"/>
-      <ref name="Project"/>
-      <ref name="Poem"/>
-      <ref name="Assemblage"/>
-      <ref name="ListGenerator"/>
-      <ref name="Fragment"/>
-    </choice>
-  </define>
   <define name="PrintoutBlock">
     <choice>
-      <ref name="PrintoutBlockCommon"/>
+      <ref name="BlockDivision"/>
       <ref name="Paragraphs"/>
     </choice>
-  </define>
-  <!-- A worksheet "sidebyside" may hold an "exercise" (with workspace). -->
-  <define name="WorksheetSideBySide">
-    <element name="sidebyside">
-      <ref name="SidebySideAttributes"/>
-      <oneOrMore>
-        <choice>
-          <ref name="Figure"/>
-          <ref name="Poem"/>
-          <ref name="Tabular"/>
-          <ref name="Image"/>
-          <ref name="Video"/>
-          <ref name="Audio"/>
-          <ref name="Program"/>
-          <ref name="Console"/>
-          <ref name="Paragraph"/>
-          <ref name="Preformatted"/>
-          <ref name="List"/>
-          <ref name="Stack"/>
-          <ref name="PrintoutExercise"/>
-          <ref name="PrintoutTask"/>
-        </choice>
-      </oneOrMore>
-    </element>
-  </define>
-  <!-- Exercises and tasks can have workspace: -->
-  <define name="PrintoutExercise">
-    <element name="exercise">
-      <ref name="MetaDataTitleOptional"/>
-      <optional>
-        <attribute name="number"/>
-      </optional>
-      <optional>
-        <attribute name="workspace"/>
-      </optional>
-      <choice>
-        <ref name="ExerciseBody"/>
-        <group>
-          <ref name="StatementExercise"/>
-          <zeroOrMore>
-            <ref name="Hint"/>
-          </zeroOrMore>
-          <zeroOrMore>
-            <ref name="Answer"/>
-          </zeroOrMore>
-          <zeroOrMore>
-            <ref name="Solution"/>
-          </zeroOrMore>
-        </group>
-        <group>
-          <optional>
-            <ref name="IntroductionText"/>
-          </optional>
-          <ref name="WebWork"/>
-          <optional>
-            <ref name="ConclusionText"/>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <ref name="IntroductionStatement"/>
-          </optional>
-          <oneOrMore>
-            <ref name="PrintoutTask"/>
-          </oneOrMore>
-          <optional>
-            <ref name="ConclusionStatement"/>
-          </optional>
-        </group>
-      </choice>
-    </element>
-  </define>
-  <define name="PrintoutTask">
-    <element name="task">
-      <ref name="MetaDataTitleOptional"/>
-      <optional>
-        <attribute name="workspace"/>
-      </optional>
-      <choice>
-        <oneOrMore>
-          <ref name="BlockStatement"/>
-        </oneOrMore>
-        <group>
-          <ref name="Statement"/>
-          <zeroOrMore>
-            <ref name="Hint"/>
-          </zeroOrMore>
-          <zeroOrMore>
-            <ref name="Answer"/>
-          </zeroOrMore>
-          <zeroOrMore>
-            <ref name="Solution"/>
-          </zeroOrMore>
-        </group>
-        <group>
-          <optional>
-            <ref name="IntroductionStatement"/>
-          </optional>
-          <oneOrMore>
-            <ref name="PrintoutTask"/>
-          </oneOrMore>
-          <optional>
-            <ref name="ConclusionStatement"/>
-          </optional>
-        </group>
-      </choice>
-    </element>
   </define>
   <!-- Page can contain a printout block or be empty -->
   <define name="Page">
@@ -1341,43 +1213,6 @@
       <choice>
         <oneOrMore>
           <ref name="PrintoutBlock"/>
-        </oneOrMore>
-        <empty/>
-      </choice>
-    </element>
-  </define>
-  <!--
-    A "worksheet" (but not a "handout") may hold a "sidebyside" that
-    contains an "exercise" (with workspace).  An ordinary "sidebyside"
-    cannot hold an "exercise", so a worksheet's "paragraphs" gets that
-    exception here, admitting a WorksheetSideBySide.
-  -->
-  <define name="WorksheetParagraphs">
-    <element name="paragraphs">
-      <ref name="MetaDataTitle"/>
-      <zeroOrMore>
-        <ref name="Index"/>
-      </zeroOrMore>
-      <oneOrMore>
-        <choice>
-          <ref name="BlockDivision"/>
-          <ref name="WorksheetSideBySide"/>
-        </choice>
-      </oneOrMore>
-    </element>
-  </define>
-  <define name="WorksheetBlock">
-    <choice>
-      <ref name="PrintoutBlockCommon"/>
-      <ref name="WorksheetSideBySide"/>
-      <ref name="WorksheetParagraphs"/>
-    </choice>
-  </define>
-  <define name="WorksheetPage">
-    <element name="page">
-      <choice>
-        <oneOrMore>
-          <ref name="WorksheetBlock"/>
         </oneOrMore>
         <empty/>
       </choice>
@@ -1407,10 +1242,10 @@
       </interleave>
       <choice>
         <oneOrMore>
-          <ref name="WorksheetPage"/>
+          <ref name="Page"/>
         </oneOrMore>
         <oneOrMore>
-          <ref name="WorksheetBlock"/>
+          <ref name="PrintoutBlock"/>
         </oneOrMore>
       </choice>
       <interleave>
@@ -1440,12 +1275,12 @@
       <ref name="Tabular"/>
     </choice>
   </define>
-  <define name="BlockStatementNoCaption">
+  <define name="BlockStatementNoNumber">
     <choice>
       <ref name="BlockText"/>
       <ref name="Aside"/>
-      <ref name="SideBySideNoCaption"/>
-      <ref name="SideBySideGroupNoCaption"/>
+      <ref name="SideBySideNoNumber"/>
+      <ref name="SideBySideGroupNoNumber"/>
     </choice>
   </define>
   <define name="BlockStatement">
@@ -1485,13 +1320,6 @@
   </define>
   <define name="Prelude">
     <element name="prelude">
-      <oneOrMore>
-        <ref name="BlockText"/>
-      </oneOrMore>
-    </element>
-  </define>
-  <define name="Interlude">
-    <element name="interlude">
       <oneOrMore>
         <ref name="BlockText"/>
       </oneOrMore>
@@ -1549,17 +1377,17 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="IntroductionStatementNoCaption">
+  <define name="IntroductionStatementNoNumber">
     <element name="introduction">
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
-  <define name="ConclusionStatementNoCaption">
+  <define name="ConclusionStatementNoNumber">
     <element name="conclusion">
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -1598,7 +1426,7 @@
   <define name="HeadNote">
     <element name="headnote">
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -2503,8 +2331,8 @@
       <oneOrMore>
         <choice>
           <ref name="BlockText"/>
-          <ref name="SideBySideNoCaption"/>
-          <ref name="SideBySideGroupNoCaption"/>
+          <ref name="SideBySideNoNumber"/>
+          <ref name="SideBySideGroupNoNumber"/>
         </choice>
       </oneOrMore>
     </element>
@@ -2642,11 +2470,12 @@
           <ref name="Preformatted"/>
           <ref name="List"/>
           <ref name="Stack"/>
+          <ref name="Exercise"/>
         </choice>
       </oneOrMore>
     </element>
   </define>
-  <define name="SideBySideNoCaption">
+  <define name="SideBySideNoNumber">
     <element name="sidebyside">
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
@@ -2677,14 +2506,14 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="SideBySideGroupNoCaption">
+  <define name="SideBySideGroupNoNumber">
     <element name="sbsgroup">
       <optional>
         <ref name="UniqueID"/>
       </optional>
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
-        <ref name="SideBySideNoCaption"/>
+        <ref name="SideBySideNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -3359,12 +3188,12 @@
           </choice>
         </attribute>
       </optional>
-      <ref name="IntroductionStatementNoCaption"/>
+      <ref name="IntroductionStatementNoNumber"/>
       <oneOrMore>
         <ref name="Exercise"/>
       </oneOrMore>
       <optional>
-        <ref name="ConclusionStatementNoCaption"/>
+        <ref name="ConclusionStatementNoNumber"/>
       </optional>
     </element>
   </define>
@@ -3833,7 +3662,7 @@
     <element name="gi">
       <ref name="MetaDataTitle"/>
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -4252,33 +4081,6 @@
       <ref name="Title"/>
       <ref name="LinedTitle"/>
     </choice>
-    <optional>
-      <ref name="ShortTitle"/>
-    </optional>
-    <optional>
-      <ref name="PlainTitle"/>
-    </optional>
-    <zeroOrMore>
-      <ref name="Index"/>
-    </zeroOrMore>
-  </define>
-  <define name="MetaDataSubtitle">
-    <optional>
-      <ref name="UniqueID"/>
-    </optional>
-    <optional>
-      <ref name="LabelID"/>
-    </optional>
-    <optional>
-      <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLLang"/>
-    </optional>
-    <ref name="Title"/>
-    <optional>
-      <ref name="Subtitle"/>
-    </optional>
     <optional>
       <ref name="ShortTitle"/>
     </optional>

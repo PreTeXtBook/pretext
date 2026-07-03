@@ -83,8 +83,8 @@
         <zeroOrMore>
           <choice>
             <ref name="Slate"/>
-            <ref name="SideBySideNoCaption"/>
-            <ref name="SideBySideGroupNoCaption"/>
+            <ref name="SideBySideNoNumber"/>
+            <ref name="SideBySideGroupNoNumber"/>
           </choice>
         </zeroOrMore>
         <zeroOrMore>
@@ -167,7 +167,7 @@
             <choice>
               <ref name="Paragraph"/>
               <ref name="Tabular"/>
-              <ref name="SideBySideNoCaption"/>
+              <ref name="SideBySideNoNumber"/>
               <ref name="SlateInput"/>
               <ref name="AnyXhtml"/>
               <optional>
@@ -271,7 +271,7 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="SideBySideNoCaption" combine="choice">
+  <define name="SideBySideNoNumber" combine="choice">
     <element name="sidebyside">
       <ref name="SidebySideAttributes"/>
       <oneOrMore>

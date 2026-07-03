@@ -236,6 +236,9 @@
                 TextSimple
             }
             Edition = element edition {text}
+            # "event" is consumed only by the slideshow conversions
+            # (Beamer, reveal.js).  This schema does not yet describe a
+            # "slideshow" document, so the pattern is dormant until then.
             Event = element event {
                 TextLong
             }
@@ -296,7 +299,7 @@
             Biography =
                 element biography {
                     MetaDataTitleOptional,
-                    (BlockStatementNoCaption | ParagraphsNoNumber)+
+                    (BlockStatementNoNumber | ParagraphsNoNumber)+
                 }
             Dedication =
                 element dedication {
@@ -306,21 +309,21 @@
             Acknowledgement =
                 element acknowledgement {
                     MetaDataTitleOptional,
-                    (BlockStatementNoCaption | ParagraphsNoNumber)+
+                    (BlockStatementNoNumber | ParagraphsNoNumber)+
                 }
             Preface =
                 element preface {
                     MetaDataTitleOptional,
                     (
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber)+,
+                            (BlockStatementNoNumber | ParagraphsNoNumber)+,
                             Attribution*
                         )
                         |
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber )*,
+                            (BlockStatementNoNumber | ParagraphsNoNumber )*,
                             Contributors,
-                            (BlockStatementNoCaption | ParagraphsNoNumber)*
+                            (BlockStatementNoNumber | ParagraphsNoNumber)*
                         )
                     )
                 }
@@ -346,7 +349,7 @@
             ColophonBack =
                 element colophon {
                     MetaDataTarget,
-                    (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                    (BlockText | SideBySideNoNumber | SideBySideGroupNoNumber)+
                 }
             
             Paragraphs =
@@ -359,7 +362,7 @@
                 element paragraphs {
                     MetaDataTitle,
                     Index*,
-                    BlockStatementNoCaption+
+                    BlockStatementNoNumber+
                 }
             
             ReadingQuestions =
@@ -417,84 +420,13 @@
                 attribute right { text }?,
                 attribute left { text }?
 
-            # PrintoutBlockCommon is the block content shared by a "worksheet"
-            # and a "handout".  A worksheet additionally admits an "exercise"
-            # inside a "sidebyside" (WorksheetSideBySide) and uses
-            # WorksheetParagraphs; a handout does neither.  The shared remainder
-            # is factored out here.  (An ordinary "sidebyside" without an
-            # "exercise" is already available to both, through BlockStatement.)
-            PrintoutBlockCommon =
-                BlockStatement | Remark | Computation | Theorem | Proof | Definition |
-                Axiom | Example | PrintoutExercise | Project |
-                Poem | Assemblage | ListGenerator | Fragment
             PrintoutBlock =
-                PrintoutBlockCommon | Paragraphs
-
-            # A worksheet "sidebyside" may hold an "exercise" (with workspace).
-            WorksheetSideBySide =
-                element sidebyside {
-                    SidebySideAttributes,
-                    (
-                        Figure |
-                        Poem |
-                        Tabular |
-                        Image |
-                        Video |
-                        Audio |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack |
-                        PrintoutExercise |
-                        PrintoutTask
-                    )+
-                }
-            # Exercises and tasks can have workspace:
-            PrintoutExercise =
-                element exercise {
-                    MetaDataTitleOptional,
-                    attribute number {text}?,
-                    attribute workspace {text}?,
-                    (
-                    ExerciseBody |
-                    (StatementExercise, Hint*, Answer*, Solution*) |
-                    (IntroductionText?, WebWork, ConclusionText?) |
-                    (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
-                    )
-                }
-            PrintoutTask =
-                element task {
-                    MetaDataTitleOptional,
-                    attribute workspace {text}?,
-                    (
-                        BlockStatement+ |
-                        (Statement, Hint*, Answer*, Solution*) |
-                        (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
-                    )
-                }
+                BlockDivision | Paragraphs
 
             # Page can contain a printout block or be empty
             Page =
                 element page {
                     PrintoutBlock+ | empty
-                }
-            # A "worksheet" (but not a "handout") may hold a "sidebyside" that
-            # contains an "exercise" (with workspace).  An ordinary "sidebyside"
-            # cannot hold an "exercise", so a worksheet's "paragraphs" gets that
-            # exception here, admitting a WorksheetSideBySide.
-            WorksheetParagraphs =
-                element paragraphs {
-                    MetaDataTitle,
-                    Index*,
-                    (BlockDivision | WorksheetSideBySide)+
-                }
-            WorksheetBlock =
-                PrintoutBlockCommon | WorksheetSideBySide | WorksheetParagraphs
-            WorksheetPage =
-                element page {
-                    WorksheetBlock+ | empty
                 }
             # Main worksheet definition
             Worksheet =
@@ -505,7 +437,7 @@
                     attribute seriescode {text}?,
                     MetaDataAltTitleOptional,
                     (Objectives? & IntroductionDivision?),
-                    (WorksheetPage+ | WorksheetBlock+),
+                    (Page+ | PrintoutBlock+),
                     (Outcomes? & ConclusionDivision?)
                 }
 
@@ -516,9 +448,9 @@
             BlockText =
                 Paragraph | BlockQuote | Preformatted |
                 Image | Video | Audio | Program | Console | Tabular
-            BlockStatementNoCaption =
+            BlockStatementNoNumber =
                 BlockText | Aside |
-                SideBySideNoCaption | SideBySideGroupNoCaption
+                SideBySideNoNumber | SideBySideGroupNoNumber
             BlockStatement =
                 BlockText |
                 Figure | Aside |
@@ -533,8 +465,6 @@
             
             Prelude =
                 element prelude {BlockText+}
-            Interlude =
-                element interlude {BlockText+}
             Postlude =
                 element postlude {BlockText+}
             Statement =
@@ -561,10 +491,10 @@
                 element introduction {BlockText+}
             ConclusionText =
                 element conclusion {BlockText+}
-            IntroductionStatementNoCaption =
-                element introduction {BlockStatementNoCaption+}
-            ConclusionStatementNoCaption =
-                element conclusion {BlockStatementNoCaption+}
+            IntroductionStatementNoNumber =
+                element introduction {BlockStatementNoNumber+}
+            ConclusionStatementNoNumber =
+                element conclusion {BlockStatementNoNumber+}
             IntroductionStatement =
                 element introduction {BlockStatement+}
             ConclusionStatement =
@@ -580,7 +510,7 @@
                     BlockDivision+
                 }
             HeadNote =
-                element headnote {BlockStatementNoCaption+}
+                element headnote {BlockStatementNoNumber+}
             
             Objectives =
                 element objectives {
@@ -905,7 +835,7 @@
             Assemblage =
                 element assemblage {
                     MetaDataTitleOptional,
-                    (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                    (BlockText | SideBySideNoNumber | SideBySideGroupNoNumber)+
                 }
             
             Caption =
@@ -984,10 +914,11 @@
                         Paragraph |
                         Preformatted |
                         List |
-                        Stack
+                        Stack |
+                        Exercise
                     )+
                 }
-            SideBySideNoCaption =
+            SideBySideNoNumber =
                 element sidebyside {
                     SidebySideAttributes,
                     (
@@ -1010,11 +941,11 @@
                     SidebySideAttributes,
                     SideBySide+
                 }
-            SideBySideGroupNoCaption =
+            SideBySideGroupNoNumber =
                 element sbsgroup {
                     UniqueID?,
                     SidebySideAttributes,
-                    SideBySideNoCaption+
+                    SideBySideNoNumber+
                 }
             
             Image = ImageRaster | ImageCode
@@ -1270,9 +1201,9 @@
                 element exercisegroup {
                     MetaDataTitleOptional,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    IntroductionStatementNoCaption,
+                    IntroductionStatementNoNumber,
                     Exercise+,
-                    ConclusionStatementNoCaption?
+                    ConclusionStatementNoNumber?
                 }
             
             AlignmentPoem = attribute halign {"left" | "center" | "right"}
@@ -1459,7 +1390,7 @@
             GlossaryItem =
                 element gi {
                     MetaDataTitle,
-                    BlockStatementNoCaption+
+                    BlockStatementNoNumber+
                 }
             
             Contributor =
@@ -1638,16 +1569,6 @@
                 Component?,
                 XMLLang?,
                 (Title | LinedTitle),
-                ShortTitle?,
-                PlainTitle?,
-                Index*
-            MetaDataSubtitle =
-                UniqueID?,
-                LabelID?,
-                Component?,
-                XMLLang?,
-                Title,
-                Subtitle?,
                 ShortTitle?,
                 PlainTitle?,
                 Index*
