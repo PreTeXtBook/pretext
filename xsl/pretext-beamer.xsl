@@ -53,6 +53,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- until slideshow options mature in the publisher file.             -->
 <xsl:param name="beamer.theme" select="'Boadilla'"/>
 
+<!-- Blocks on slides never carry a LaTeX \label, so cross-reference -->
+<!-- numbers are hard-coded rather than realized through \ref        -->
+<xsl:variable name="b-latex-hardcode-numbers" select="true()"/>
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -386,20 +390,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- On a slide there is no numbering, so a caption or title is just  -->
 <!-- a small centered legend after the content.                       -->
 <xsl:template match="&FIGURE-LIKE;" priority="1">
+    <xsl:text>\begin{center}&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
     <xsl:choose>
         <xsl:when test="caption">
-            <xsl:text>\begin{center}\small{}</xsl:text>
+            <xsl:text>\par\smallskip{}{\small{}</xsl:text>
             <xsl:apply-templates select="caption/node()"/>
-            <xsl:text>\end{center}&#xa;</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:when test="title">
-            <xsl:text>\begin{center}\small{}</xsl:text>
+            <xsl:text>\par\smallskip{}{\small{}</xsl:text>
             <xsl:apply-templates select="." mode="title-full"/>
-            <xsl:text>\end{center}&#xa;</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise/>
     </xsl:choose>
+    <xsl:text>\end{center}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ################ -->
@@ -413,6 +419,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="target"/>
     <xsl:param name="content"/>
     <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<!-- Every number in a cross-reference is hard-coded: no block on a  -->
+<!-- slide carries a LaTeX \label, so \ref has nothing to resolve.   -->
+<xsl:template match="*" mode="xref-number">
+    <xsl:param name="xref" select="/.." />
+    <xsl:apply-templates select="." mode="xref-number-hardcoded">
+        <xsl:with-param name="xref" select="$xref"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- ######## -->
@@ -621,6 +636,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title">
         <xsl:text>%% Style of a title on a list item, for ordered and unordered lists&#xa;</xsl:text>
         <xsl:text>\newcommand{\lititle}[1]{{\slshape#1}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//xref">
+        <xsl:text>%% Font for cross-reference numbers, a no-op on slides&#xa;</xsl:text>
+        <xsl:text>\newcommand{\xreffont}{}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.late != ''">
