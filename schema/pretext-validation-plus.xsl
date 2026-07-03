@@ -182,6 +182,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- An "exercise" as a panel of a "sidebyside" supports compact -->
+<!-- layout of a "worksheet" or a "handout", where workspace is  -->
+<!-- relevant.  The schema allows the arrangement anywhere a     -->
+<!-- "sidebyside" can appear, so we restrict it here.            -->
+<xsl:template match="sidebyside/exercise">
+    <xsl:if test="not(ancestor::worksheet) and not(ancestor::handout)">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message">
+                <xsl:text>An &lt;exercise&gt; as a panel of a &lt;sidebyside&gt; is only supported&#xa;</xsl:text>
+                <xsl:text>within a &lt;worksheet&gt; or a &lt;handout&gt;.  Here, results&#xa;</xsl:text>
+                <xsl:text>may be unpredictable.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
 <!-- ########## -->
 <!-- Advisories -->
 <!-- ########## -->
