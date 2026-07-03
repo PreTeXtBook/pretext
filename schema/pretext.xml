@@ -422,40 +422,11 @@
                 attribute right { text }?,
                 attribute left { text }?
 
-            # PrintoutBlockCommon is the block content shared by a "worksheet"
-            # and a "handout".  A worksheet additionally admits an "exercise"
-            # inside a "sidebyside" (WorksheetSideBySide) and uses
-            # WorksheetParagraphs; a handout does neither.  The shared remainder
-            # is factored out here.  (An ordinary "sidebyside" without an
-            # "exercise" is already available to both, through BlockStatement.)
-            PrintoutBlockCommon =
+            PrintoutBlock =
                 BlockStatement | Remark | Computation | Theorem | Proof | Definition |
                 Axiom | Example | PrintoutExercise | Project |
-                Poem | Assemblage | ListGenerator | Fragment
-            PrintoutBlock =
-                PrintoutBlockCommon | Paragraphs
+                Poem | Assemblage | ListGenerator | Fragment | Paragraphs
 
-            # A worksheet "sidebyside" may hold an "exercise" (with workspace).
-            WorksheetSideBySide =
-                element sidebyside {
-                    SidebySideAttributes,
-                    (
-                        Figure |
-                        Poem |
-                        Tabular |
-                        Image |
-                        Video |
-                        Audio |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack |
-                        PrintoutExercise |
-                        PrintoutTask
-                    )+
-                }
             # Exercises and tasks can have workspace:
             PrintoutExercise =
                 element exercise {
@@ -485,22 +456,6 @@
                 element page {
                     PrintoutBlock+ | empty
                 }
-            # A "worksheet" (but not a "handout") may hold a "sidebyside" that
-            # contains an "exercise" (with workspace).  An ordinary "sidebyside"
-            # cannot hold an "exercise", so a worksheet's "paragraphs" gets that
-            # exception here, admitting a WorksheetSideBySide.
-            WorksheetParagraphs =
-                element paragraphs {
-                    MetaDataTitle,
-                    Index*,
-                    (BlockDivision | WorksheetSideBySide)+
-                }
-            WorksheetBlock =
-                PrintoutBlockCommon | WorksheetSideBySide | WorksheetParagraphs
-            WorksheetPage =
-                element page {
-                    WorksheetBlock+ | empty
-                }
             # Main worksheet definition
             Worksheet =
                 element worksheet {
@@ -510,7 +465,7 @@
                     attribute seriescode {text}?,
                     MetaDataAltTitleOptional,
                     (Objectives? &amp; IntroductionDivision?),
-                    (WorksheetPage+ | WorksheetBlock+),
+                    (Page+ | PrintoutBlock+),
                     (Outcomes? &amp; ConclusionDivision?)
                 }
 
@@ -1881,6 +1836,8 @@
 
         <p>A <tag>stack</tag> allows non-captioned, non-titled elements to accumulate vertically in a single panel.  It is a basic container.</p>
 
+        <p>An <tag>exercise</tag> may be a panel, in support of compact layout of a <tag>worksheet</tag> or a <tag>handout</tag>, where workspace is relevant.  The schema does not restrict the arrangement to those locations, but the validation-plus stylesheet warns about others.</p>
+
         <p>A group of side-by-sides is designed to stack vertically with common controls on widths, etc.  Its implementation is entirely experimental right now, even if we are relatively confident of the markup.</p>
 
         <fragment xml:id="sidebyside">
@@ -1924,7 +1881,8 @@
                         Paragraph |
                         Preformatted |
                         List |
-                        Stack
+                        Stack |
+                        Exercise
                     )+
                 }
             SideBySideNoNumber =
