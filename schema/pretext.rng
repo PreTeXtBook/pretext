@@ -5199,6 +5199,11 @@
     </element>
   </define>
   <define name="Configuration" combine="choice">
+    <element name="pf:prefigure-preamble">
+      <externalRef href="pf-preamble-adapter.rng"/>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
     <element name="macros">
       <text/>
     </element>
