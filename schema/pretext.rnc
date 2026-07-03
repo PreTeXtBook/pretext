@@ -465,8 +465,6 @@
             
             Prelude =
                 element prelude {BlockText+}
-            Interlude =
-                element interlude {BlockText+}
             Postlude =
                 element postlude {BlockText+}
             Statement =

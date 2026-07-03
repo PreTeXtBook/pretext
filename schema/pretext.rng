@@ -1325,13 +1325,6 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="Interlude">
-    <element name="interlude">
-      <oneOrMore>
-        <ref name="BlockText"/>
-      </oneOrMore>
-    </element>
-  </define>
   <define name="Postlude">
     <element name="postlude">
       <oneOrMore>
