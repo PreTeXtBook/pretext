@@ -1,6 +1,13 @@
+@use 'components/helpers/buttons-default' as buttons;
+
 // styles for the runestone template page
 body.ptx-runestone-template {
     .ptx-main > .ptx-content {
         max-width: unset;
+    }
+
+    /* expose a basic button class for use in the Runestone template */
+    .ptx-button {
+        @include buttons.ptx-button;
     }
 }
