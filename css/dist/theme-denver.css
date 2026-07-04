@@ -582,6 +582,9 @@ body.standalone-page .ptx-page {
     gap: 1px;
     background: var(--page-border-color);
   }
+  body.pretext {
+    padding-bottom: 36px;
+  }
   .ptx-navbar {
     position: fixed;
     top: auto;
@@ -939,7 +942,6 @@ body.standalone-page .ptx-page {
   .ptx-page-footer {
     gap: 20px;
     justify-content: center;
-    margin-bottom: 34px;
   }
   .ptx-page-footer > a > .logo:first-child {
     height: 2em;
@@ -3421,8 +3423,49 @@ article.theorem-like .emphasis {
   --ptx-search-resultsbackground: #0008;
   --ptx-search-resultshighlight: rgba(255, 255, 0, 15%);
 }
+body.ptx-runestone-template {
+}
 body.ptx-runestone-template .ptx-main > .ptx-content {
   max-width: unset;
+}
+body.ptx-runestone-template .ptx-button {
+  font: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+  min-height: 34px;
+  color: var(--button-text-color);
+  background-color: var(--button-background);
+  border-width: 1px;
+  border-color: var(--button-border-color);
+  border-style: solid;
+  border-radius: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  user-select: none;
+}
+body.ptx-runestone-template .ptx-button:hover:not(.disabled) {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
+}
+body.ptx-runestone-template .ptx-button:focus-visible {
+  outline: 2px solid var(--button-text-color);
+  outline-offset: -2px;
+}
+body.ptx-runestone-template .ptx-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+body.ptx-runestone-template .ptx-button.hidden {
+  display: none;
+}
+body.ptx-runestone-template .ptx-button.open {
+  color: var(--button-hover-text-color);
+  background-color: var(--button-hover-background);
 }
 .ptx-content .ptx-runestone-container .runestone {
   margin: unset;
