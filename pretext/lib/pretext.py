@@ -4519,7 +4519,341 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
 #
 ########################
 
-def validate(xml_source, out_file, dest_dir):
+def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
+    """Validate source against the RELAX-NG schema, locally or via a server"""
+
+    if method == "server":
+        _validate_server(xml_source, out_file, dest_dir)
+    else:
+        # "local" validates against the production schema, and
+        # "local-dev" against the development schema, each with a
+        # report meant for an author.  The "agent" method is the
+        # production schema with terse output meant for a program
+        # (and so is not elective from the "pretext/pretext" script).
+        if method == "local-dev":
+            schema_file = "pretext-dev.rng"
+        else:
+            schema_file = "pretext.rng"
+        terse = method == "agent"
+        _validate_local(
+            xml_source, pub_file, stringparams, out_file, dest_dir, schema_file, terse
+        )
+
+
+# the "pi" namespace attribute recording an element's originating file
+PI_SOURCE_URI = "{http://pretextbook.org/2020/pretext/internal}source-uri"
+
+
+def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, schema_file, terse):
+    """Validate the assembled source with an installed "jing" program"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    # "jing" is a Java program, so a configuration can be simply the
+    # name of an executable ("jing", say, from a system package), or a
+    # command with options ("java -jar /usr/share/java/jing.jar", say)
+    jing_exec_cmd = common.get_executable_cmd("jing")
+
+    # the consolidated report, and the assembled source deposited
+    # alongside it (wherever the report lands)
+    reportname = common.get_output_filename(
+        xml_source, out_file, dest_dir, "-validation.txt"
+    )
+    assembled_source = os.path.join(
+        os.path.dirname(os.path.abspath(reportname)),
+        os.path.splitext(os.path.basename(xml_source))[0] + "-assembled.xml",
+    )
+
+    tmp_dir = common.get_temporary_directory()
+
+    # Modular source files are knitted together here, rather than
+    # during assembly, so each included file can be recorded on its
+    # root element (as a @pi:source-uri attribute) and problems can
+    # then be attributed to the file where they lie
+    source_dir = os.path.dirname(os.path.abspath(xml_source))
+    main_file = os.path.basename(xml_source)
+
+    def _stamping_loader(href, parse, encoding=None):
+        if parse == "xml":
+            elt = ET.parse(href).getroot()
+            elt.set(PI_SOURCE_URI, href)
+            return elt
+        with open(href, "r", encoding=(encoding or "utf-8")) as f:
+            return f.read()
+
+    merged_source = os.path.join(tmp_dir, "merged.xml")
+    source_tree = ET.parse(xml_source)
+    try:
+        from lxml import ElementInclude
+
+        ElementInclude.include(
+            source_tree.getroot(), loader=_stamping_loader, max_depth=20
+        )
+    except Exception as e:
+        log.warning(
+            "file attribution of validation problems unavailable ({})".format(e)
+        )
+        source_tree = ET.parse(xml_source)
+        source_tree.xinclude()
+    # The temporary merged file must resolve relative references (a
+    # customizations file, say) as the original source would, which is
+    # exactly the job of an @xml:base (assembly drops it from output)
+    source_tree.getroot().set(
+        "{http://www.w3.org/XML/1998/namespace}base", os.path.abspath(xml_source)
+    )
+    source_tree.write(merged_source, encoding="utf-8", xml_declaration=True)
+
+    # Validation is performed on the "version" tree: the merged source
+    # reduced by any "version" support elected in a publication file.
+    # The paths of any messages refer to this assembled source, so it
+    # is deposited next to the report, for cross-referencing, rather
+    # than evaporating with a temporary directory.
+    stringparams["assembly.file-attribution"] = "yes"
+    attributed_source = os.path.join(tmp_dir, "assembled-attributed.xml")
+    assembly(merged_source, pub_file, stringparams, attributed_source, None, "version")
+
+    # Tree "A" retains the file attributions, which are stripped to
+    # make the deposited assembled source (what "jing" examines, since
+    # the schema knows nothing of the attribute).  Tree "B" is that
+    # deposited file re-parsed, so line numbers agree with what "jing"
+    # reports; elements of the two trees correspond in document order.
+    tree_a = ET.parse(attributed_source)
+    file_of_a = {}
+    current_files = {tree_a.getroot(): main_file}
+    for elt in tree_a.iter():
+        if not isinstance(elt.tag, str):
+            continue
+        uri = elt.attrib.pop(PI_SOURCE_URI, None)
+        if uri is not None:
+            filename = os.path.relpath(uri, start=source_dir)
+        else:
+            parent = elt.getparent()
+            filename = file_of_a.get(parent, main_file)
+        file_of_a[elt] = filename
+    tree_a.write(assembled_source, encoding="utf-8", xml_declaration=True)
+    tree_b = ET.parse(assembled_source)
+    a_elements = [e for e in tree_a.iter() if isinstance(e.tag, str)]
+    b_elements = [e for e in tree_b.iter() if isinstance(e.tag, str)]
+    file_of = {b: file_of_a[a] for a, b in zip(a_elements, b_elements)}
+    # the last element to *begin* on each line, in document order
+    opening = {}
+    for elt in b_elements:
+        opening[elt.sourceline] = elt
+    with open(assembled_source) as f:
+        source_lines = f.readlines()
+
+    # fresh schema from the PreTeXt distribution, in XML syntax
+    schema_filename = os.path.join(common.get_ptx_path(), "schema", schema_file)
+
+    full_cmd = jing_exec_cmd + [schema_filename, assembled_source]
+    log.debug("jing command: {}".format(" ".join(full_cmd)))
+    result = subprocess.run(full_cmd, capture_output=True, text=True)
+    # jing exits 0 when the document is valid, 1 when messages result
+    if result.returncode == 0:
+        log.info("the source validates with no schema errors")
+    elif result.returncode > 1:
+        log.warning('the "jing" program failed (code {})'.format(result.returncode))
+    jing_messages = result.stdout.splitlines()
+
+    # The "validation-plus" stylesheet performs checks the RELAX-NG
+    # schema cannot express, and provides advice besides.  Applied to
+    # the same assembled source, so locations are consistent with the
+    # schema messages.  Single-line output, one message per line.
+    plus_xsl = os.path.join(
+        common.get_ptx_path(), "schema", "pretext-validation-plus.xsl"
+    )
+    plus_scratch = os.path.join(tmp_dir, "validation-plus.txt")
+    params = {"single.line.output": "yes"}
+    common.xsltproc(plus_xsl, assembled_source, plus_scratch, None, params)
+    with open(plus_scratch, "r") as f:
+        plus_messages = [line.strip() for line in f if line.startswith("PTX:")]
+
+    # helpers for locating a message's element in tree "B"
+
+    def _numbered_path(elt):
+        parts = []
+        while elt is not None and isinstance(elt.tag, str):
+            name = ET.QName(elt).localname
+            position = 1 + sum(
+                1
+                for sib in elt.itersiblings(preceding=True)
+                if isinstance(sib.tag, str) and ET.QName(sib).localname == name
+            )
+            parts.append("{}[{}]".format(name, position))
+            elt = elt.getparent()
+        return "/" + "/".join(reversed(parts))
+
+    def _element_at_path(path):
+        # follow a numbered path (as validation-plus produces)
+        elt = tree_b.getroot()
+        segments = path.strip("/").split("/")
+        segment_pattern = re.compile(r"(.*)\[(\d+)\]")
+        first = segment_pattern.match(segments[0])
+        if not first or ET.QName(elt).localname != first.group(1):
+            return None
+        for segment in segments[1:]:
+            match = segment_pattern.match(segment)
+            if not match:
+                return None
+            name, position = match.group(1), int(match.group(2))
+            count = 0
+            found = None
+            for child in elt:
+                if isinstance(child.tag, str) and ET.QName(child).localname == name:
+                    count += 1
+                    if count == position:
+                        found = child
+                        break
+            if found is None:
+                return None
+            elt = found
+        return elt
+
+    def _excerpt(line_number):
+        if 0 < line_number <= len(source_lines):
+            text = source_lines[line_number - 1].strip()
+            if len(text) > 100:
+                text = text[:100] + "..."
+            return text
+        return None
+
+    # assemble the consolidated report
+    report = []
+    banner = "=" * 70
+
+    if not terse:
+        report.extend(_validation_report_preamble(schema_filename, assembled_source))
+        report.extend([banner, "Messages: RELAX-NG schema validation, from \"jing\"", banner, ""])
+    # "jing" messages lead with filename:line:column.  The line number
+    # refers to the assembled source (which is deposited alongside the
+    # report), so it is reported as such, supplemented by the
+    # originating file, a path into the assembled source, and an
+    # excerpt of the offending text.  An element's extent is not
+    # available, so for a message about a line where no element begins,
+    # the location is the closest element beginning on an earlier line:
+    # very often the container, and always a good place to start looking.
+    location = re.compile(r"^.*?:(\d+):(\d+): (.*)$")
+    for message in jing_messages:
+        match = location.match(message)
+        if not match:
+            report.append(message)
+            continue
+        line_number = int(match.group(1))
+        body = match.group(3)
+        near = max((n for n in opening if n <= line_number), default=None)
+        elt = opening[near] if near is not None else None
+        filename = file_of.get(elt, main_file)
+        path = _numbered_path(elt) if elt is not None else ""
+        if terse:
+            report.append("{}\t{}\t{}\t{}".format(filename, path, line_number, body))
+        else:
+            report.append(body)
+            report.append("    file: {}".format(filename))
+            report.append("    path: {}".format(path))
+            report.append("    line: {}".format(line_number))
+            excerpt = _excerpt(line_number)
+            if excerpt:
+                report.append("    text: {}".format(excerpt))
+            report.append("")
+    if not terse and not jing_messages:
+        report.extend(["(no messages)", ""])
+
+    if not terse:
+        report.extend([banner, "Messages: PreTeXt \"validation-plus\" stylesheet", banner, ""])
+    plus_form = re.compile(r"^(PTX:[A-Z]+): (/\S+) (.*)$")
+    for message in plus_messages:
+        match = plus_form.match(message)
+        if not match:
+            report.append(message)
+            continue
+        severity, path, body = match.group(1), match.group(2), match.group(3)
+        elt = _element_at_path(path)
+        filename = file_of.get(elt, main_file)
+        line_number = elt.sourceline if elt is not None else ""
+        if terse:
+            report.append(
+                "{}\t{}\t{}\t{}: {}".format(filename, path, line_number, severity, body)
+            )
+        else:
+            report.append("{}: {}".format(severity, body))
+            report.append("    file: {}".format(filename))
+            report.append("    path: {}".format(path))
+            report.append("    line: {}".format(line_number))
+            if elt is not None:
+                excerpt = _excerpt(elt.sourceline)
+                if excerpt:
+                    report.append("    text: {}".format(excerpt))
+            report.append("")
+    if not terse and not plus_messages:
+        report.extend(["(no messages)", ""])
+
+    with open(reportname, "w") as f:
+        f.write("\n".join(report))
+
+    if jing_messages:
+        log.info("schema validation raised {} messages".format(len(jing_messages)))
+    if plus_messages:
+        log.info("validation-plus stylesheet raised {} messages".format(len(plus_messages)))
+    else:
+        log.info("validation-plus stylesheet raised no messages")
+    log.info("consolidated validation report in {}".format(reportname))
+    log.info("locations refer to the assembled source in {}".format(assembled_source))
+
+
+def _validation_report_preamble(schema_filename, assembled_source):
+    """The fixed introductory text of a validation report"""
+
+    return [
+        "Validation Report",
+        "=================",
+        "",
+        "Two tools have examined an assembled version of your source:",
+        "",
+        "  (1) \"jing\" checked conformance with the RELAX-NG schema at",
+        "      {}".format(schema_filename),
+        "      (a schema can only describe parent-child relationships,",
+        "      plus the attributes of each element)",
+        "  (2) the PreTeXt \"validation-plus\" stylesheet made checks that",
+        "      no RELAX-NG schema could ever express, and offers advice",
+        "      besides",
+        "",
+        "Locations refer to the ASSEMBLED version of your source: your",
+        "modular source files have been knitted together, and any version",
+        "support has been applied (as elected by a \"version\" element",
+        "within the \"source\" element of the publication file you",
+        "supplied).  In particular, an element excluded from the version",
+        "being built cannot raise a message here.  The assembled source",
+        "has been deposited at",
+        "    {}".format(assembled_source),
+        "",
+        "Each message locates its problem four ways:",
+        "",
+        "    file:  the source file where the problem lies",
+        "    path:  the location within the assembled source",
+        "    line:  the line number within the assembled source",
+        "    text:  an excerpt of the offending content",
+        "",
+        "Only \"file\" points into your own source files.  In particular,",
+        "\"line\" is a line number of the deposited assembled source named",
+        "above, never of one of your files.",
+        "",
+        "To read a \"path\", count elements of each name.  For example,",
+        "",
+        "    /pretext[1]/book[1]/chapter[7]/section[2]/p[13]/em[2]",
+        "",
+        "is the second \"em\" within the thirteenth \"p\" (paragraph) of the",
+        "second \"section\" of the seventh \"chapter\" of the book.  Counts",
+        "are of elements with the same name: that paragraph is the",
+        "thirteenth \"p\" of its section, though other elements may precede",
+        "it or intervene.",
+        "",
+        "",
+    ]
+
+
+def _validate_server(xml_source, out_file, dest_dir):
+    """Validate original source files with a round-trip to a server"""
 
     try:
         import requests  # post()
