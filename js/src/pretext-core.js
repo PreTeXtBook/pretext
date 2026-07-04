@@ -18,4 +18,5 @@ import './pretext-dropdown.js';
 import './readability-options.js';
 import '../pretext.js';
 import '../pretext_add_on.js';
+import './pretext-embed.js';
 import '../knowl.js';

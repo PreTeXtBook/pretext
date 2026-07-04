@@ -319,6 +319,7 @@ applyLineHeight(getSavedLineHeight());
 applyFontSize(getSavedFontSize());
 
 
-// isDarkMode is called from XSL-generated inline <script> blocks (e.g. mermaid).
-// expose it globally
+// isDarkMode and setDarkMode are called from XSL-generated inline <script> blocks
+// and from other modules (e.g. mermaid, embed code). Expose them globally.
 window.isDarkMode = isDarkMode;
+window.setDarkMode = setDarkMode;
