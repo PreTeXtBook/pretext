@@ -4300,6 +4300,10 @@ def _downgrade_svg2_for_batik(directory):
 
       * a "use" element carrying a plain "href" rather than "xlink:href".
     """
+    # TODO (2026-07-03) This function may modify SVG 1.1 files coming
+    # from PreFigure that are known to be good for Batik to ingest.
+    # With access to source, we can determine filenames to avoid.
+
     import glob
     import copy
     import lxml.etree as ET
