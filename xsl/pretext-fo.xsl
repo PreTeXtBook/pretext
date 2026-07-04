@@ -2270,7 +2270,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:if>
     <xsl:apply-templates select="latex-image|sageplot|asymptote|pf:prefigure|mermaid" mode="image-source-basename"/>
-    <xsl:text>.svg</xsl:text>
+    <xsl:choose>
+        <xsl:when test="pf:prefigure">
+            <xsl:text>-11.svg</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>.svg</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ###### -->
