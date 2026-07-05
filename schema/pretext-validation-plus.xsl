@@ -31,7 +31,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace">
 
 <!-- Report on console, or redirect/option to a file -->
-<xsl:output method="text"/>
+<xsl:output method="text" encoding="UTF-8"/>
 
 <!-- Single line output allows for sorting on "fields" with the     -->
 <!-- sort utility. So design messages to *lead* with something      -->

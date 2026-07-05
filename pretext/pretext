@@ -181,9 +181,26 @@ def string_parameters_as_dict(pairs):
     return params
 
 
-def sanitize_method(method, component, format):
+def sanitize_method(method, component, format, validate):
     """Returns a string appropriate for the component and format, else None"""
-    if component == "asy":
+    if validate:
+        # unset by command-line, use default
+        if not (method):
+            return "local"
+        # set, but illegal
+        elif not (method in ["local", "local-dev", "server"]):
+            msg = "\n".join(
+                [
+                    'the method given for validation ("{}") is not "local", "local-dev", or "server",',
+                    '              so using the default method instead ("local")',
+                ]
+            )
+            log.warning(msg.format(method))
+            return "local"
+        # set correctly
+        else:
+            return method
+    elif component == "asy":
         # unset by command-line, use default
         if not (method):
             return "server"
@@ -516,9 +533,21 @@ def get_cli_arguments():
         action="store_true",
         dest="tgz",
     )
-    # Needs help-file, once public
-    # Will default to False
-    parser.add_argument("-V", "--validate", action="store_true", dest="validate")
+    validate_info = [
+        ("local", 'employs an installed "jing" program (default)'),
+        ("local-dev", 'as "local", but checks against the development schema'),
+        ("server", "a round-trip to a validation server"),
+    ]
+    validate_help = "validate source, methods are:\n" + "\n".join(
+        ["  {} - {}".format(info[0], info[1]) for info in validate_info]
+    )
+    parser.add_argument(
+        "-V",
+        "--validate",
+        help=validate_help,
+        action="store_true",
+        dest="validate",
+    )
     parser.add_argument(
         "xml_file", help="PreTeXt source file with content", action="store"
     )
@@ -615,7 +644,7 @@ def main():
     # method may not be required, but when it may apply we use a
     # routine to error-check and sanitize possible values and defaults
     # varies by component and format
-    method = sanitize_method(args.method, args.component, args.format)
+    method = sanitize_method(args.method, args.component, args.format, args.validate)
     # convert list of string parameters into a dictionary
     # routines in module expect a dictionary, so convert here and now
     stringparams = string_parameters_as_dict(args.stringparams)
@@ -639,7 +668,7 @@ def main():
     # The big switch
     # Validation trumps everything, since it is an easy switch
     if args.validate:
-        ptx.validate(xml_source, out_file, dest_dir)
+        ptx.validate(xml_source, publication_file, stringparams, out_file, dest_dir, method)
     elif args.component == "prefigure":
         if args.format in ["source", "svg", "pdf", "png", "tactile", "all"]:
             ptx.prefigure_conversion(xml_source, publication_file, stringparams, args.xmlid, dest_dir, args.format, None)
