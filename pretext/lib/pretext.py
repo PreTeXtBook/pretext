@@ -96,6 +96,11 @@ import time
 # cleanup multiline strings used as source code
 import textwrap
 
+# for zipping gdscript pck
+import zipfile  # for zipping
+import pathlib  # for paths
+import itertools
+
 # * For non-standard packages (such as those installed via PIP) try to keep
 #   dependencies to a minimum by *not* importing at the module-level
 #   (with justified exceptions)
@@ -1574,25 +1579,7 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
 
 def zip_with_last_dir_as_root(source_dir, output_zip):
-
-    try:
-        import zipfile  # for zipping
-    except ImportError:
-        raise ImportError(__module_warning.format("zipfile"))
-    try:
-        import pathlib  # for paths
-    except ImportError:
-        raise ImportError(__module_warning.format("pathlib"))
-
-    try:
-        import itertools
-    except ImportError:
-        raise ImportError(__module_warning.format("itertools"))
-
-
     source_path = pathlib.Path(source_dir).resolve()
-    # Get the parent directory so the last folder is included as the root
-    #archive_root = source_path.parent 
     try:
         with zipfile.ZipFile(output_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
             norm_glob = source_path.rglob("*")
@@ -1600,14 +1587,13 @@ def zip_with_last_dir_as_root(source_dir, output_zip):
             # Recursively find all files in the source directory
             for file in itertools.chain(hidden_glob,norm_glob):
                 if file.is_file():
-                    log.debug(f"{file} being added to zip")
+                    log.debug("{} being added to zip".format(file))
                     # arcname determines the internal ZIP structure
                     internal_path = file.relative_to(source_path)
                     zipf.write(file, arcname=internal_path)
     except PermissionError:
         msg = "PTX:ERROR: You do not have permission to write to this location."
-        raise OSError(msg)
-        
+        raise OSError(msg) 
     except FileNotFoundError:
         msg = "PTX:ERROR:  The source file or directory was not found."
         raise OSError(msg)
@@ -1615,19 +1601,13 @@ def zip_with_last_dir_as_root(source_dir, output_zip):
         msg = "PTX:ERROR: The ZIP file is corrupted or invalid."
         raise OSError(msg)
     except Exception as e:
-        msg = f"An unexpected error occurred: {e}"
+        msg = "An unexpected error occurred: {}".format(e)
         raise OSError(msg)
 
-
-
 def gdscript_pck(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
-
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
-
     _, external_dir = common.get_managed_directories(xml_source, pub_file)
-    
-    
     log.info(
         "zipping GDScript interactives from {} for placement in {}".format(
             external_dir, dest_dir
@@ -1650,7 +1630,6 @@ def gdscript_pck(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     with open(id_filename, "r") as id_file:
         # read lines, but only lines that are comma delimited
         pairs = [p.strip() for p in id_file.readlines() if "," in p]
-
     for pair in pairs:
         # first item is destination name, second item is source
         pair_a = pair.split(",")
@@ -1659,8 +1638,6 @@ def gdscript_pck(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         path = os.path.join(dest_dir, pair_a[0] + ".zip")
         log.info("compressing {} as {}...".format(src, path))
         zip_with_last_dir_as_root(src, path)
-
-        
     log.info("GDScript pck zipping complete")
 
 
