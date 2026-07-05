@@ -2553,34 +2553,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- GDScript (Godot WASM) needs to find the shell engine files -->
     <xsl:if test="$active-language = 'gdscript'">
-        
         <xsl:attribute name="data-wasm">
            <xsl:value-of select="$godot.shell" />
            <xsl:value-of select="$godot.version" />
-            
         </xsl:attribute>
-        <!-- Optional: per-exercise .pck file in the external directory -->
+        <!-- Optional: per-exercise pck directory in the external directory -->
         <xsl:if test="@pck">
             <xsl:attribute name="data-pck">
                 <xsl:choose>
+                    <!-- insert generated-directory when managed -->
                     <xsl:when test="$b-managed-directories">
                         <xsl:value-of select="$generated-directory"/>
-                        <!-- add subdirectory -->
-                        <xsl:text>gdscript/</xsl:text>
-                        <!-- add template-->
-                        <xsl:apply-templates select="." mode="visible-id" />
-                        <xsl:text>.zip</xsl:text>
-                        <!-- <xsl:value-of select="@pck"/> -->
                     </xsl:when>
-                    <xsl:otherwise>
-                        <!-- add subdirectory -->
-                        <xsl:text>gdscript/</xsl:text>
-                        <!-- add template-->
-                        <xsl:apply-templates select="." mode="visible-id" />
-                        <xsl:text>.zip</xsl:text>
-                        <!-- <xsl:value-of select="@pck"/> -->
-                    </xsl:otherwise>
                 </xsl:choose>
+                <!-- add subdirectory -->
+                <xsl:text>gdscript/</xsl:text>
+                <!-- add template-->
+                <xsl:apply-templates select="." mode="visible-id" />
+                <xsl:text>.zip</xsl:text>
             </xsl:attribute>
         </xsl:if>
         <!-- Scene path inside the .pck virtual filesystem -->
