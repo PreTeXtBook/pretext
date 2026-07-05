@@ -26,3 +26,23 @@ the merge-base with your branch's upstream (or `origin/HEAD`) as the base.
 To merely *detect* trailing whitespace on changed lines, git has this
 built in: `git diff --check`.  This script complements that by also
 *fixing* the lines it finds.
+
+### `find_xml_pattern.py`
+
+Searches PreTeXt source trees for XML elements that match an XPath-like
+pattern and reports the file, line number, and source line where each
+match starts.
+
+```
+script/utilities/find_xml_pattern.py theorem//em [--root <dir>]
+```
+
+With no `--root`, the script searches the repository `examples/`
+directory recursively, looking at both `.xml` and `.ptx` files.
+
+- `pattern` &mdash; an XPath fragment. Relative fragments are matched
+  anywhere in each file, so `theorem//em` finds `<em>` elements inside
+  `<theorem>` elements.
+- `--root <dir>` &mdash; search a different directory tree instead of the
+  default `examples/` tree.
+- `--verbose` &mdash; show skipped-file warnings and pattern errors.
