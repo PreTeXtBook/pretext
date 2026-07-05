@@ -1,22 +1,22 @@
 <?xml version='1.0'?>
 
 <!--********************************************************************
-Copyright 2026 David G. Cooper
+Copyright 2026 Robert A. Beezer
 
-This file is part of PreTexT.
+This file is part of PreTeXt.
 
-PreTexT is free software: you can redistribute it and/or modify
+PreTeXt is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 or version 3 of the
 License (at your option).
 
-PreTexT is distributed in the hope that it will be useful,
+PreTeXt is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with PreTexT.  If not, see <http://www.gnu.org/licenses/>.
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
 <!-- This stylesheet locates gdscript/@pck elements and -->
@@ -40,7 +40,6 @@ along with PreTexT.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Then walk the XML source tree  -->
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
-
 <xsl:output method="text" encoding="UTF-8"/>
 
 <!-- Avoid Catch-22: default assembly/pre-processor providews output     -->
@@ -57,7 +56,4 @@ along with PreTexT.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="@pck" />
     <xsl:text>&#xa;</xsl:text> <!-- newline -->
 </xsl:template>
-
-
-
 </xsl:stylesheet>
