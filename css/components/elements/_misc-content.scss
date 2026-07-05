@@ -121,10 +121,19 @@ iframe {
   }
 }
 
-.definition-like .emphasis {
-  font-weight: 700;
+.theorem-like
+{
+  .para {
+    font-style: italic;
+
+    .emphasis {
+      font-weight: 700;
+    }
+  }
 }
-article.theorem-like .emphasis {
+
+
+.definition-like .emphasis {
   font-weight: 700;
 }
 
