@@ -87,6 +87,7 @@
 .tabular-box {
   margin-top: 0.5em;  //minimum space above to separate from figcaption
   overflow-x: auto;
+  overflow-y: hidden;  //handle mathjax fractional height overflow - SA Figure 13.2
 }
 
 .tabular-box.natural-width table {
