@@ -20,10 +20,12 @@
 # Python Version History
 # vermin is a great linter/checker to check versions required
 #     https://github.com/netromdk/vermin.git
+# 2026-07-06: this module expects Python 3.10 or newer
+#     FileInput(..., encoding="utf-8") added, required Python 3.10
+#     stack.py: str.removeprefix(), str.removeuffix() requires Python 3.9
 # 2023-10-13: this module expects Python 3.8 or newer
 #     shutil.copytree now has dirs_exist_ok argument
 # 2021-05-21: this module expects Python 3.6 or newer
-#
 #     subprocess.run() requires Python 3.5
 #     shutil.which() member requires 3.3
 #     otherwise Python 3.0 might be sufficient
@@ -4962,7 +4964,7 @@ def check_python_version():
     # but only handling 2to3 switch when introduced
     msg = "".join(
         [
-            "PreTeXt script/module expects Python 3.8, not Python 2 or older\n",
+            "PreTeXt script/module expects Python 3.10, not Python 2 or older\n",
             "You have Python {}\n",
             "** Try prefixing your command-line with 'python3 ' **",
         ]
