@@ -194,6 +194,13 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format, math_cr
     # Trying to correct baseline for inline math in Kindle, so we
     # insert a \mathstrut into all the inline math before feeding to MathJax
     if math_format == "kindle":
+        # fileinput's in-place mode rewrites each file line by line: print() writes
+        # back onto the file, and end="" suppresses the extra newline it would add
+        # (the line already carries its own).  Two Windows pitfalls handled here:
+        #   - the "with" context manager closes the handle before the file is
+        #     reopened/replaced, which otherwise raises a PermissionError (PR #1779)
+        #   - encoding="utf-8" reads/writes UTF-8 rather than the locale default,
+        #     which would mis-decode UTF-8 math/HTML on a cp1252 locale (PR #3003)
         with fileinput.FileInput(mjinput, inplace=True, encoding="utf-8") as file:
             for line in file:
                 print(line.replace(r"\(", r"\(\mathstrut "), end="")
@@ -236,14 +243,15 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format, math_cr
     orig = "&nbsp;"
     repl = " "
     xhtml_elt = re.compile(orig)
-    # the inplace facility of the fileinput module gets
-    # confused about temporary backup files if the working
-    # directory is not where the file lives
-    # Also, print() here actual writes on the file, as
-    # another facility of the fileinput module, but we need
-    # to kill the "extra" newline that print() creates
     with common.working_directory(tmp_dir):
         html_file = mjoutput
+        # fileinput's in-place mode rewrites each file line by line: print() writes
+        # back onto the file, and end="" suppresses the extra newline it would add
+        # (the line already carries its own).  Two Windows pitfalls handled here:
+        #   - the "with" context manager closes the handle before the file is
+        #     reopened/replaced, which otherwise raises a PermissionError (PR #1779)
+        #   - encoding="utf-8" reads/writes UTF-8 rather than the locale default,
+        #     which would mis-decode UTF-8 math/HTML on a cp1252 locale (PR #3003)
         with fileinput.FileInput(html_file, inplace=True, encoding="utf-8") as file:
             for line in file:
                 print(xhtml_elt.sub(repl, line), end="")
@@ -2851,16 +2859,17 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
     #   <html xmlns="http://www.w3.org/1999/xhtml">
     orig = "<html"
     repl = __xml_header + '<html xmlns="http://www.w3.org/1999/xhtml"'
-    # the inoplace facility of the fileinput module gets
-    # confused about temporary backup files if the working
-    # directory is not where the file lives
-    # Also, print() here actual writes on the file, as
-    # another facility of the fileinput module, but we need
-    # to kill the "extra" newline that print() creates
     with common.working_directory(xhtml_dir):
         html_elt = re.compile(orig)
         for root, dirs, files in os.walk(xhtml_dir):
             for fn in files:
+                # fileinput's in-place mode rewrites each file line by line: print() writes
+                # back onto the file, and end="" suppresses the extra newline it would add
+                # (the line already carries its own).  Two Windows pitfalls handled here:
+                #   - the "with" context manager closes the handle before the file is
+                #     reopened/replaced, which otherwise raises a PermissionError (PR #1779)
+                #   - encoding="utf-8" reads/writes UTF-8 rather than the locale default,
+                #     which would mis-decode UTF-8 math/HTML on a cp1252 locale (PR #3003)
                 with fileinput.FileInput(fn, inplace=True, encoding="utf-8") as file:
                     for line in file:
                         print(html_elt.sub(repl, line), end="")
