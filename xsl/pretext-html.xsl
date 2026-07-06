@@ -812,14 +812,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- The front and back matter have their own style -->
-<xsl:template match="frontmatter|backmatter" mode="section-heading" />
+<!-- The frontmatter has its own style -->
+<xsl:template match="frontmatter" mode="section-heading" />
+
+<!-- Fixed header for the backmatter contents.      -->
+<!-- We generally will hide this for sighted users. -->
+<xsl:template match="backmatter" mode="section-heading">
+    <xsl:if test="not($b-is-single-page)">
+        <xsl:variable name="html-heading">
+            <xsl:apply-templates select="." mode="html-heading">
+                <xsl:with-param name="heading-level" select="$chunk-heading-level"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <xsl:element name="{$html-heading}">
+            <xsl:attribute name="class">heading ptx-backmatter-heading</xsl:attribute>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'backmatter'"/>
+            </xsl:apply-templates>
+        </xsl:element>
+    </xsl:if>
+</xsl:template>
 
 <!-- A book or article is the top level, using the title would be -->
 <!-- duplicative of the banner. Instead, the page-specific header -->
 <!-- announces that this is the table of contents unless build is -->
 <!-- a single page.                                               -->
-<!-- We generally will hide this for sighted users.                 -->
+<!-- We generally will hide this for sighted users.               -->
 <xsl:template match="book|article" mode="section-heading">
     <xsl:if test="not($b-is-single-page)">
         <xsl:variable name="html-heading">
