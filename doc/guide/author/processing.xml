@@ -27,7 +27,7 @@
                 </li>
                 <li>
                     <p>
-                        The <pretext/> script (sometimes referred to as <c>pretext/pretext</c>): a Python script that has a large variety of utilities to process your source and its components.  Requires Python 3.6 or later.  This script is very useful for development and for users who prefer a <q>Swiss Army Knife</q> approach to their tools.  In rare cases this may be needed to test new features that have not yet been exposed in the <pretext/>-CLI.  See <xref ref="pretext-script"/>.
+                        The <pretext/> script (sometimes referred to as <c>pretext/pretext</c>): a Python script that has a large variety of utilities to process your source and its components.  Requires Python 3.10 or later.  This script is very useful for development and for users who prefer a <q>Swiss Army Knife</q> approach to their tools.  In rare cases this may be needed to test new features that have not yet been exposed in the <pretext/>-CLI.  See <xref ref="pretext-script"/>.
                     </p>
                 </li>
                 <li>
