@@ -4958,7 +4958,7 @@ def python_version():
 
 
 def check_python_version():
-    """Raise error with Python 2 (or less)"""
+    """Raise an error for Python 2 (or less); warn for Python 3 before 3.10"""
 
     # This test could be more precise,
     # but only handling 2to3 switch when introduced
@@ -4971,6 +4971,15 @@ def check_python_version():
     )
     if sys.version_info[0] <= 2:
         raise (OSError(msg.format(python_version())))
+    # Warn, but do not error, for Python 3 older than the minimum below
+    #   2026-07-06: Python 3.10 or newer
+    if sys.version_info[:2] < (3, 10):
+        log.warning(
+            "PreTeXt expects Python 3.10 or newer\n"
+            "You have Python {}, and some operations may fail".format(
+                python_version()
+            )
+        )
 
 
 
