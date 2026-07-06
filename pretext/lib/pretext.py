@@ -22,7 +22,7 @@
 #     https://github.com/netromdk/vermin.git
 # 2026-07-06: this module expects Python 3.10 or newer
 #     FileInput(..., encoding="utf-8") added, required Python 3.10
-#     stack.py: str.removeprefix(), str.removeuffix() requires Python 3.9
+#     stack.py: str.removeprefix(), str.removesuffix() requires Python 3.9
 # 2023-10-13: this module expects Python 3.8 or newer
 #     shutil.copytree now has dirs_exist_ok argument
 # 2021-05-21: this module expects Python 3.6 or newer
