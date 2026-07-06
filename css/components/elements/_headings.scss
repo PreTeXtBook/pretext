@@ -66,8 +66,9 @@ article > .heading {
   margin-top: 0.5em;
 }
 
-// hide the heading for the table of contents visually
-.ptx-toc-heading {
+// hide the heading for the table of contents and backmatter visually
+.ptx-toc-heading,
+.ptx-backmatter-heading {
   @include accessibility.sr-only;
 }
 
