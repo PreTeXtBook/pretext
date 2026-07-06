@@ -479,6 +479,7 @@ a[href^="mailto:"] {
 .tabular-box {
   margin-top: 0.5em;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 .tabular-box.natural-width table {
   margin-left: auto;
