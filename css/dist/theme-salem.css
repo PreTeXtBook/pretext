@@ -2930,10 +2930,13 @@ iframe {
 .emphasis .emphasis {
   font-weight: bold;
 }
-.definition-like .emphasis {
+.theorem-like .para {
+  font-style: italic;
+}
+.theorem-like .para .emphasis {
   font-weight: 700;
 }
-article.theorem-like .emphasis {
+.definition-like .emphasis {
   font-weight: 700;
 }
 .para {
