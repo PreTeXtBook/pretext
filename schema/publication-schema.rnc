@@ -233,6 +233,7 @@
                         Knowls? &
                         NavigationHTML? &
                         Platform? &
+                        Resources? &
                         Search? &
                         Tableofcontents? &
                         Video? &
