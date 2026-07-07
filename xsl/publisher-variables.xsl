@@ -2934,6 +2934,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-portable-html" select="$portable-html = 'yes'"/>
 
+<!-- The css and js can be served locally (default) or by CDN -->
+<xsl:variable name="resources-host">
+    <xsl:apply-templates select="$publisher-attribute-options/html/resources/pi:pub-attribute[@name='host']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<!-- Always use cdn when "b-portable-html" is true or "resources-host" is "cdn" -->
+<xsl:variable name="b-cdn-resources" select="$b-portable-html or $resources-host = 'cdn'"/>
+
 <!-- HTML chunk-level defaults, available to any stylesheet that    -->
 <!-- needs to compute HTML filenames via the "containing-filename"  -->
 <!-- template (pretext-common.xsl) without importing the full       -->
@@ -3596,6 +3603,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <css>
             <pi:pub-attribute name="palette" freeform="yes"/>
         </css>
+        <resources>
+            <pi:pub-attribute name="host" default="local" options="cdn"/>
+        </resources>
         <knowl>
             <pi:pub-attribute name="theorem" default="no" options="yes" legacy-stringparam="html.knowl.theorem"/>
             <pi:pub-attribute name="proof" default="yes" options="no" legacy-stringparam="html.knowl.proof"/>

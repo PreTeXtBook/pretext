@@ -121,18 +121,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We use version "latest" unless the CLI provides a version -->
 <xsl:param name="cli.version" select="'latest'"/>
 <xsl:variable name="cdn-prefix">
-    <xsl:if test="$b-portable-html">
+    <xsl:if test="$b-cdn-resources">
         <xsl:text>https://cdn.jsdelivr.net/gh/PreTeXtBook/html-static@</xsl:text>
         <xsl:value-of select="$cli.version"/>
         <xsl:text>/dist/</xsl:text>
     </xsl:if>
 </xsl:variable>
 
-<!-- The css file name is usually "theme.css", but if portable html is selected, -->
-<!-- then we use a minified version and need to give the full theme name.        -->
+<!-- The css file name is usually "theme.css", but if cdn resources are selected, -->
+<!-- then we use a minified version and need to give the full theme name.         -->
 <xsl:variable name="html-css-theme-file">
     <xsl:choose>
-        <xsl:when test="$b-portable-html">
+        <xsl:when test="$b-cdn-resources">
             <xsl:text>theme-</xsl:text>
             <xsl:value-of select="$html-theme-name"/>
             <xsl:text>.min.css</xsl:text>
