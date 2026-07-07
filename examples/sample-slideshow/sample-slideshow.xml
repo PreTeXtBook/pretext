@@ -276,6 +276,88 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </section>
 
         <section>
+            <title>More Elements</title>
+
+            <slide>
+                <title>Displayed Mathematics</title>
+
+                <p>A single displayed equation, unnumbered on a slide.<md>
+                    <mrow>\definiteintegral{0}{\pi}{\sin(x)}{x} = 2</mrow>
+                </md></p>
+
+                <p>And a multi-line display, with alignment on the equals signs.<md>
+                    <mrow>(a+b)^2 \amp= (a+b)(a+b)</mrow>
+                    <mrow>\amp= a^2 + ab + ba + b^2</mrow>
+                    <mrow>\amp= a^2 + 2ab + b^2</mrow>
+                </md></p>
+            </slide>
+
+            <slide>
+                <title>A Table</title>
+
+                <p>A <tag>tabular</tag> inside a <tag>table</tag>, whose title serves as a caption.</p>
+
+                <table>
+                    <title>Conversions of a slideshow</title>
+                    <tabular halign="center" top="major" bottom="major">
+                        <col halign="left"/>
+                        <col/>
+                        <col/>
+                        <row bottom="minor">
+                            <cell>Format</cell>
+                            <cell>Engine</cell>
+                            <cell>Output</cell>
+                        </row>
+                        <row>
+                            <cell>reveal.js</cell>
+                            <cell>browser</cell>
+                            <cell><init>HTML</init></cell>
+                        </row>
+                        <row>
+                            <cell>Beamer</cell>
+                            <cell><latex/></cell>
+                            <cell><init>PDF</init></cell>
+                        </row>
+                    </tabular>
+                </table>
+            </slide>
+
+            <slide>
+                <title>Console Sessions</title>
+
+                <p>A <tag>console</tag> reproduces an interactive command-line session, input distinguished from output.</p>
+
+                <console>
+                    <input prompt="$ ">date</input>
+                    <output>Thu Jul  2 10:00:00 PDT 2026</output>
+                    <input prompt="$ ">echo "PreTeXt"</input>
+                    <output>PreTeXt</output>
+                </console>
+            </slide>
+
+            <slide>
+                <title>Quotations</title>
+
+                <blockquote>
+                    <p>The problem with quotes on the Internet is that it is hard to verify their authenticity.</p>
+                    <attribution>Abraham Lincoln</attribution>
+                </blockquote>
+
+                <p>A <tag>blockquote</tag> can carry an <tag>attribution</tag>, as above.</p>
+            </slide>
+
+            <slide>
+                <title>Cross-References and URLs</title>
+
+                <p>A cross-reference to a block on another slide renders as static text, since a <init>PDF</init> slideshow has no knowls: see <xref ref="definition-indefinite-integral"/>.</p>
+
+                <p>One with text from the target's title: <xref ref="theorem-FTC" text="title"/>.</p>
+
+                <p>An external reference is live in capable outputs: <url href="https://pretextbook.org" visual="pretextbook.org"/>.</p>
+            </slide>
+        </section>
+
+        <section>
             <title>Other features</title>
 
             <slide>
