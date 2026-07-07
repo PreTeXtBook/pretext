@@ -434,12 +434,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Preamble -->
 <!-- ######## -->
 
-<!-- N.B. Portions of this preamble duplicate fragments of the LaTeX   -->
-<!-- conversion's preamble, since the inherited content templates      -->
-<!-- presume supporting macros and environments ("image", "sidebyside" -->
-<!-- and "sbspanel", "program", "console", "sageinput"/"sageoutput",   -->
-<!-- tabular rules, semantic macros).  Re-architecting the LaTeX       -->
-<!-- preamble into shareable pieces would remove the duplication.      -->
+<!-- N.B. Portions of this preamble duplicate fragments of the LaTeX -->
+<!-- conversion's preamble, since the inherited content templates    -->
+<!-- presume supporting macros and environments ("sidebyside" and    -->
+<!-- "sbspanel", "program", "console", "sageinput"/"sageoutput",     -->
+<!-- semantic macros).  The "image" and tabular support comes from   -->
+<!-- the shared preamble pieces; the remaining fragments await       -->
+<!-- pieces that do not presume the regular conversion's styling     -->
+<!-- hooks (such as \blocktitlefont and \ptxsetparstyle).               -->
 <xsl:template name="beamer-preamble">
     <xsl:text>\documentclass[11pt, compress]{beamer}&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.early != ''">
@@ -472,13 +474,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% tcolorbox styles used by images and side-by-side panels&#xa;</xsl:text>
     <xsl:text>\tcbset{ bwminimalstyle/.style={size=minimal, boxrule=-0.3pt, frame empty,&#xa;</xsl:text>
     <xsl:text>colback=white, colbacktitle=white, coltitle=black, opacityfill=0.0} }&#xa;</xsl:text>
-    <xsl:if test="$document-root//image">
-        <xsl:text>%% "tcolorbox" environment for a single image, as in the LaTeX conversion&#xa;</xsl:text>
-        <xsl:text>\tcbset{ imagestyle/.style={bwminimalstyle} }&#xa;</xsl:text>
-        <xsl:text>\NewTColorBox{tcbimage}{mmm}{imagestyle,left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
-        <xsl:text>\NewDocumentEnvironment{image}{mmmm}{\notblank{#4}{\leavevmode\nopagebreak\vspace{#4}}{}\begin{tcbimage}{#1}{#2}{#3}}{\end{tcbimage}%&#xa;}</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <!-- The shared "tcolorbox" environment for a single image -->
+    <xsl:call-template name="image-tcolorbox"/>
     <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]">
         <xsl:text>%% Multiple column lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
@@ -545,37 +542,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% "tcolorbox" environment for a panel of sidebyside&#xa;</xsl:text>
         <xsl:text>\NewTColorBox{sbspanel}{mO{top}}{sbspanelstyle,width=#1\linewidth,valign=#2}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//tabular">
-        <xsl:text>%% For improved tables&#xa;</xsl:text>
-        <xsl:text>\usepackage{array}&#xa;</xsl:text>
-        <xsl:text>\setlength{\extrarowheight}{0.2ex}&#xa;</xsl:text>
-        <xsl:text>%% Variable thickness horizontal rules, full and partial&#xa;</xsl:text>
-        <xsl:text>\newcommand{\ptxhrulethin}  {\noalign{\hrule height 0.04em}}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\ptxhrulemedium}{\noalign{\hrule height 0.07em}}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\ptxhrulethick} {\noalign{\hrule height 0.11em}}&#xa;</xsl:text>
-        <xsl:text>\let\ptxoldsetlength\setlength&#xa;</xsl:text>
-        <xsl:text>\newlength{\ptxOldarrayrulewidth}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\ptxcrulethin}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.04em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}%&#xa;</xsl:text>
-        <xsl:text>\newcommand{\ptxcrulemedium}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.07em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\ptxcrulethick}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.11em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}&#xa;</xsl:text>
-        <xsl:text>%% Single letter column specifiers defined via array package&#xa;</xsl:text>
-        <xsl:text>\newcolumntype{A}{!{\vrule width 0.04em}}&#xa;</xsl:text>
-        <xsl:text>\newcolumntype{B}{!{\vrule width 0.07em}}&#xa;</xsl:text>
-        <xsl:text>\newcolumntype{C}{!{\vrule width 0.11em}}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//cell/line">
-        <xsl:text>\newcommand{\ptxtablecelllines}[3]%&#xa;</xsl:text>
-        <xsl:text>{\begin{tabular}[#2]{@{}#1@{}}#3\end{tabular}}&#xa;</xsl:text>
-    </xsl:if>
+    <!-- The shared table support: rules, column types, and the       -->
+    <!-- "tabularbox" that the inherited "tabular" templates rely on  -->
+    <xsl:call-template name="tables"/>
     <xsl:text>\newcommand{\lt}{&lt;}&#xa;</xsl:text>
     <xsl:text>\newcommand{\gt}{&gt;}&#xa;</xsl:text>
     <xsl:text>\newcommand{\amp}{&amp;}&#xa;</xsl:text>
