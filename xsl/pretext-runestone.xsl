@@ -782,7 +782,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="@exercise-interactive = 'webwork'">
                         <xsl:apply-templates select="." mode="webwork-core">
                             <xsl:with-param name="b-original" select="true()"/>
-                            <xsl:with-param name="heading-level" select="2"/>
+                            <xsl:with-param name="heading-level" select="3"/>
                         </xsl:apply-templates>
                     </xsl:when>
                     <xsl:otherwise>
@@ -799,7 +799,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:apply-templates select="." mode="exercise-components">
                             <xsl:with-param name="b-original" select="true()"/>
                             <xsl:with-param name="block-type" select="'visible'"/>
-                            <xsl:with-param name="heading-level" select="2"/>
+                            <xsl:with-param name="heading-level" select="3"/>
                             <xsl:with-param name="b-has-statement" select="true()"/>
                             <xsl:with-param name="b-has-hint" select="$ex-components-report/@has-hint = 'true'"/>
                             <xsl:with-param name="b-has-answer" select="$ex-components-report/@has-answer = 'true'"/>
