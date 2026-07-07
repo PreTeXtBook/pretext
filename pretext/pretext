@@ -783,7 +783,7 @@ def main():
     elif args.component == "math":
         if args.format in ["svg", "mml", "nemeth", "speech"]:
             ptx.mathjax_latex(
-                xml_source, publication_file, out_file, dest_dir, args.format
+                xml_source, publication_file, out_file, dest_dir, args.format, False
             )
         else:
             raise NotImplementedError(
