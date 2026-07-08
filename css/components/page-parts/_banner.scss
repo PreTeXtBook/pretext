@@ -41,9 +41,10 @@ $centered-content: false !default;
     flex: 1;
 
     .heading {
-      font-weight: 700;
-      font-size: 100%;
       line-height: 1.25em;
+      // next 2 are important in cases where banner is a hX
+      font-size: 100%;
+      font-weight: 700;
     }
 
     .title:has(+ .subtitle)::after {

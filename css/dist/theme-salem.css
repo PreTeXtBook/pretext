@@ -162,9 +162,9 @@ body.standalone-page .ptx-page {
   flex: 1;
 }
 .ptx-masthead .title-container .heading {
-  font-weight: 700;
-  font-size: 100%;
   line-height: 1.25em;
+  font-size: 100%;
+  font-weight: 700;
 }
 .ptx-masthead .title-container .title:has(+ .subtitle)::after {
   content: ":";
@@ -1892,6 +1892,17 @@ article > .heading + * {
 }
 :is(section, article) > .heading + :is(section, article) > .heading {
   margin-top: 0.5em;
+}
+.ptx-toc-heading,
+.ptx-backmatter-heading {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
 }
 @media screen and (max-width: 480px) {
   section > .heading {
@@ -3833,10 +3844,10 @@ section > .heading {
   padding-bottom: 3px;
   border-bottom: 2px solid var(--primary-color-white-30);
 }
-section > h2.heading {
+section > h1.heading {
   border-bottom-width: 4px;
 }
-section > h3.heading {
+section > h2.heading {
   border-bottom-width: 3px;
 }
 :root.dark-mode section > .heading {

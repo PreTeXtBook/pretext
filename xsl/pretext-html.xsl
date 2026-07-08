@@ -187,6 +187,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so lightweight stylesheets can access the same logic. -->
 <xsl:variable name="chunk-level" select="$html-chunk-level"/>
 
+<!-- A document with chunking set to 0, or with no chapters or sections -->
+<!-- will be a single page. -->
+<xsl:variable name="b-is-single-page" select="$chunk-level = 0 or ($b-is-article and count($document-root/section) = 0) or ($b-is-book and count($document-root//chapter) = 0)"/>
+
 <!-- HTML files as output -->
 <xsl:variable name="file-extension" select="'.html'" />
 
@@ -199,6 +203,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Used to identify if target is reveal.js instead of vanilla html -->
 <xsl:variable name="b-reveal-build" select="false()" />
+
+<!-- Standard HTML builds start chunks from level 1. Other builds like epub -->
+<!-- may need a different value.                                            -->
+<xsl:variable name="chunk-heading-level" select="1"/>
 
 <!-- ############### -->
 <!-- Source Analysis -->
@@ -488,14 +496,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- parameter holding the contents of the body of the page -->
 
 <!-- A complete page for a structural division -->
-<!-- Unlike the base implemenation in -common we pass a        -->
-<!-- "heading-level", which begins at 2 to account for an "h1" -->
-<!-- being used in the masthead of the page infrastructure.    -->
 <xsl:template match="&STRUCTURAL;" mode="chunk">
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">
             <xsl:apply-templates select=".">
-                 <xsl:with-param name="heading-level" select="2"/>
+                 <xsl:with-param name="heading-level" select="$chunk-heading-level"/>
             </xsl:apply-templates>
         </xsl:with-param>
         <!-- Set b-has-printout to true if the structural node is or contains a worksheet or handout -->
@@ -506,9 +511,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A summary page for a structural division -->
 <!-- Processing of a structural node realized as an           -->
 <!-- intermediate/summary node.                               -->
-<!-- We pass in a "heading-level", which begins at 2 to       -->
-<!-- account for an "h1" being used in the masthead of the    -->
-<!-- page infrastructure.                                     -->
 <xsl:template match="&STRUCTURAL;" mode="intermediate">
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">
@@ -518,7 +520,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <section class="{local-name(.)}">
                 <xsl:apply-templates select="." mode="html-id-attribute"/>
                 <xsl:apply-templates select="." mode="section-heading">
-                    <xsl:with-param name="heading-level" select="2"/>
+                    <xsl:with-param name="heading-level" select="$chunk-heading-level"/>
                 </xsl:apply-templates>
                 <xsl:apply-templates select="." mode="author-byline"/>
                 <!-- Special case when building page for frontmatter without a titlepage -->
@@ -526,7 +528,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:call-template name="frontmatter-title" />
                 </xsl:if>
                 <xsl:apply-templates select="objectives|introduction|titlepage|abstract">
-                    <xsl:with-param name="heading-level" select="3"/>
+                    <xsl:with-param name="heading-level" select="$chunk-heading-level + 1"/>
                 </xsl:apply-templates>
                 <!-- Links to subsidiary divisions, as a group of button/hyperlinks -->
                 <nav class="summary-links">
@@ -535,7 +537,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </ul>
                 </nav>
                 <xsl:apply-templates select="conclusion|outcomes">
-                    <xsl:with-param name="heading-level" select="3"/>
+                    <xsl:with-param name="heading-level" select="$chunk-heading-level + 1"/>
                 </xsl:apply-templates>
                 <!-- Insert permalink -->
                 <xsl:apply-templates select="." mode="permalink"/>
@@ -632,7 +634,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="author-byline"/>
         <!-- If there is watermark text, we print it here in an assistive p -->
         <!-- so that it is the first thing read by a screen-reader user.    -->
-        <xsl:if test="$b-watermark and $heading-level = 2">
+        <xsl:if test="$b-watermark and $heading-level = $chunk-heading-level">
             <p class="watermark">
                 <xsl:text>Watermark text: </xsl:text>
                 <xsl:value-of select="$watermark-text"/>
@@ -646,16 +648,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- and the method is defined there.                       -->
         <xsl:apply-templates select="." mode="view-source-widget"/>
 
-        <!-- This is usually recurrence, so increment heading-level,  -->
-        <!-- but "book" and "article" have an h1  masthead, so if     -->
-        <!-- this is the context, we just pass along the level of     -->
-        <!-- "2" which is supplied by the chunking templates          -->
-        <!-- N.B. the modal "solutions" templates increment           -->
-        <!--      $heading-level as "exercise" are produced, so       -->
-        <!--      we by-pass the increment here.                      -->
+        <!-- The "solutions" modal templates increment $heading-level  -->
+        <!-- themselves, so bypassing the increment here avoids a skip -->
+        <!-- for both a solutions page and an inline "solutions".      -->
         <xsl:variable name="next-level">
             <xsl:choose>
-                <xsl:when test="self::book or self::article or self::solutions">
+                <xsl:when test="self::solutions">
                     <xsl:value-of select="$heading-level"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -821,15 +819,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- The front and back matter have their own style -->
-<xsl:template match="frontmatter|backmatter" mode="section-heading" />
+<!-- The frontmatter has its own style -->
+<xsl:template match="frontmatter" mode="section-heading" />
 
-<!-- A book or article is the top level, so the   -->
-<!-- masthead might suffice, else an author can   -->
-<!-- provide a frontmatter/titlepage to provide   -->
-<!-- more specific information.  In either event, -->
-<!-- a typical section heading is out of place.   -->
-<xsl:template match="book|article" mode="section-heading" />
+<!-- Fixed header for the backmatter contents.      -->
+<!-- We generally will hide this for sighted users. -->
+<xsl:template match="backmatter" mode="section-heading">
+    <xsl:if test="not($b-is-single-page)">
+        <xsl:variable name="html-heading">
+            <xsl:apply-templates select="." mode="html-heading">
+                <xsl:with-param name="heading-level" select="$chunk-heading-level"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <xsl:element name="{$html-heading}">
+            <xsl:attribute name="class">heading ptx-backmatter-heading</xsl:attribute>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'backmatter'"/>
+            </xsl:apply-templates>
+        </xsl:element>
+    </xsl:if>
+</xsl:template>
+
+<!-- A book or article is the top level, using the title would be -->
+<!-- duplicative of the banner. Instead, the page-specific header -->
+<!-- announces that this is the table of contents unless build is -->
+<!-- a single page.                                               -->
+<!-- We generally will hide this for sighted users.               -->
+<xsl:template match="book|article" mode="section-heading">
+    <xsl:if test="not($b-is-single-page)">
+        <xsl:variable name="html-heading">
+            <xsl:apply-templates select="." mode="html-heading">
+                <xsl:with-param name="heading-level" select="$chunk-heading-level"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <xsl:element name="{$html-heading}">
+            <xsl:attribute name="class">heading ptx-toc-heading</xsl:attribute>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'toc'"/>
+            </xsl:apply-templates>
+        </xsl:element>
+    </xsl:if>
+</xsl:template>
 
 <!-- An abstract needs structure, and an ID for a -->
 <!-- link out of the ToC sidebar for an article   -->
@@ -967,7 +997,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is all within a .frontmatter class for CSS       -->
 <xsl:template match="titlepage">
     <!-- Use a context-free template to generate -->
-    <!-- an "h2" title/subtitle heading          -->
+    <!-- an "h1" title/subtitle heading          -->
     <xsl:call-template name="frontmatter-title"/>
     <!-- text generator for title page items from "bibinfo" -->
     <xsl:apply-templates select="$document-root/frontmatter/titlepage/titlepage-items" />
@@ -988,7 +1018,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- generated by a "frontmatter" element (including, e.g., an intermediate page). -->
 <xsl:template name="frontmatter-title">
     <xsl:variable name="b-has-subtitle" select="$document-root/subtitle"/>
-    <h2 class="heading">
+    <!-- heading level should match default chunk heading level -->
+    <xsl:variable name="html-heading">
+        <xsl:apply-templates select="." mode="html-heading">
+            <xsl:with-param name="heading-level" select="$chunk-heading-level"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:element name="{$html-heading}">
+        <xsl:attribute name="class">heading</xsl:attribute>
         <span class="title">
             <xsl:apply-templates select="$document-root" mode="title-full" />
         </span>
@@ -997,7 +1034,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="$document-root" mode="subtitle" />
             </span>
         </xsl:if>
-    </h2>
+    </xsl:element>
 </xsl:template>
 
 <!-- A "credit" required "title" followed by an author (or several)    -->
@@ -1883,8 +1920,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- progression corresponding to "section" and "article" nodes       -->
 <!-- of the HTML tree.                                                -->
 <!--                                                                  -->
-<!-- We set the "heading-level" to "2" when chunking is initiated,    -->
-<!-- since we expect the masthead/banner to contain an "h1".          -->
+<!-- We set the "heading-level" to "1" when chunking is initiated.    -->
 <!-- Whenever a template processes its children, we increment the     -->
 <!-- variable as we pass it down, so a template receives the correct  -->
 <!-- level (and before it ever gets here, since we have consciously   -->
@@ -1921,9 +1957,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Emit the "hN" tag name for a heading element.  Every caller is -->
 <!-- expected to thread a $heading-level parameter through from the -->
-<!-- chunk-template starting point (currently 2, accounting for the -->
-<!-- masthead h1) via "body", "wrapped-content", and the various    -->
-<!-- heading-* helper templates.                                    -->
+<!-- chunk-template starting point.                                 -->
 <xsl:template match="*" mode="hN">
     <xsl:param name="heading-level" />
     <xsl:variable name="actual-heading-level">
@@ -1938,8 +1972,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- and the various heading-* templates.  If you see  -->
                 <!-- this message, locate the apply-templates chain    -->
                 <!-- that omitted the parameter and add it.            -->
-                <xsl:message>PTX:BUG:     "hN" template reached without a $heading-level parameter on element &lt;<xsl:value-of select="local-name(.)"/>&gt; at <xsl:for-each select="ancestor::*"><xsl:value-of select="local-name(.)"/><xsl:text>/</xsl:text></xsl:for-each><xsl:value-of select="local-name(.)"/>; defaulting to h2</xsl:message>
-                <xsl:text>2</xsl:text>
+                <xsl:message>PTX:BUG:     "hN" template reached without a $heading-level parameter on element &lt;<xsl:value-of select="local-name(.)"/>&gt; at <xsl:for-each select="ancestor::*"><xsl:value-of select="local-name(.)"/><xsl:text>/</xsl:text></xsl:for-each><xsl:value-of select="local-name(.)"/>; defaulting to h1</xsl:message>
+                <xsl:text>1</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -7248,11 +7282,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- this *must* be first for maximum utility -->
                 <xsl:call-template name="skip-to-content-link" />
                 <xsl:apply-templates select="." mode="latex-macros" />
-                 <header id="ptx-masthead" class="ptx-masthead">
+                <header id="ptx-masthead" class="ptx-masthead" role="banner">
                     <div class="ptx-banner">
                         <xsl:call-template name="brand-logo" />
                         <div class="title-container">
-                            <h1 class="heading">
+                            <div class="heading ptx-banner-heading">
                                 <xsl:variable name="root-filename">
                                     <xsl:apply-templates select="$document-root" mode="containing-filename" />
                                 </xsl:variable>
@@ -7270,7 +7304,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         </span>
                                     </xsl:if>
                                 </a>
-                            </h1>
+                            </div>
                             <!-- Serial list of authors/editors -->
                             <xsl:if test="$b-html-banner-byline">
                                 <p class="byline">
@@ -9836,14 +9870,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
     <!-- (2) Identical content, but now isolated on a reader-friendly page -->
     <!-- (we skip this for portable html)                                  -->
-    <!-- The standalone page has its own masthead h1, so headings inside   -->
-    <!-- start fresh at h2.                                                -->
     <xsl:if test="not($b-portable-html)">
         <xsl:apply-templates select="." mode="standalone-page" >
             <xsl:with-param name="content">
                 <xsl:apply-templates select="." mode="interactive-core">
                     <xsl:with-param name="is-standalone" select="true()"/>
-                    <xsl:with-param name="heading-level" select="2"/>
+                    <xsl:with-param name="heading-level" select="1"/>
                 </xsl:apply-templates>
             </xsl:with-param>
         </xsl:apply-templates>
@@ -11523,11 +11555,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- this *must* be first for maximum utility -->
             <xsl:call-template name="skip-to-content-link" />
             <!-- HTML5 body/header will be a "banner" landmark automatically -->
-            <header id="ptx-masthead" class="ptx-masthead">
+            <header id="ptx-masthead" class="ptx-masthead" role="banner">
                 <div class="ptx-banner">
                     <xsl:call-template name="brand-logo" />
                     <div class="title-container">
-                        <h1 class="heading">
+                        <xsl:variable name="banner-heading-element-type">
+                            <xsl:apply-templates select="." mode="banner-heading-element-type"/>
+                        </xsl:variable>
+                        <xsl:element name="{$banner-heading-element-type}">
+                            <xsl:attribute name="class">heading ptx-banner-heading</xsl:attribute>
                             <xsl:variable name="root-filename">
                                 <xsl:apply-templates select="$document-root" mode="containing-filename" />
                             </xsl:variable>
@@ -11545,7 +11581,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     </span>
                                 </xsl:if>
                             </a>
-                        </h1>
+                        </xsl:element>
                         <!-- Serial list of authors/editors -->
                         <xsl:if test="$b-html-banner-byline">
                             <p class="byline">
@@ -11554,7 +11590,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </p>
                         </xsl:if>
                     </div>  <!-- title-container -->
-                </div>  <!-- banner -->
+                </div> <!-- banner -->
             </header>  <!-- masthead -->
             <xsl:apply-templates select="." mode="primary-navigation"/>
             <xsl:apply-templates select="." mode="latex-macros"/>
@@ -11616,6 +11652,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </body>
     </html>
     </exsl:document>
+</xsl:template>
+
+<!-- Most pages get a plain div for the banner title element as content will have an h1 -->
+<xsl:template match="*" mode="banner-heading-element-type">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<!-- Root page for a single page document needs h1 as the banner title element -->
+<!-- as there will not be on in page contents.                                 -->
+<xsl:template match="book|article" mode="banner-heading-element-type">
+    <xsl:choose>
+        <xsl:when test="$b-is-single-page">
+            <xsl:text>h1</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>div</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Templates that can be overriden to inject into various      -->

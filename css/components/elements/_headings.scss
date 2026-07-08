@@ -2,6 +2,8 @@
 // more specialized headings (exercises) should be defined in the specific component
 // complex stylizing (like boxes) should be done by "chunks"
 
+@use 'components/helpers/accessibility' as accessibility;
+
 // reset size/margin for headings
 .heading:is(h1, h2, h3, h4, h5, h6) {
   margin: 0;
@@ -62,6 +64,12 @@ article > .heading {
 // heading followed by no content and then a subsection that starts with heading
 :is(section, article) > .heading + :is(section, article) > .heading {
   margin-top: 0.5em;
+}
+
+// hide the heading for the table of contents and backmatter visually
+.ptx-toc-heading,
+.ptx-backmatter-heading {
+  @include accessibility.sr-only;
 }
 
 // smaller headings on phone screens
