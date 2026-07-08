@@ -589,7 +589,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="tex-macro"/>
     </xsl:for-each>
     <xsl:if test="$document-root//alert">
-        <xsl:text>\newcommand{\alert}[1]{\textbf{\textit{#1}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxalert}[1]{\textbf{\textit{#1}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//term">
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>

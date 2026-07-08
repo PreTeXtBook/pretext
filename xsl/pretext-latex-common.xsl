@@ -1144,7 +1144,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
     <xsl:if test="$document-root//alert">
         <xsl:text>%% Used for warnings, typically bold and italic&#xa;</xsl:text>
-        <xsl:text>\newcommand{\alert}[1]{\textbf{\textit{#1}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxalert}[1]{\textbf{\textit{#1}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//term">
         <xsl:text>%% Used for inline definitions of terms&#xa;</xsl:text>
@@ -7845,9 +7845,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Alert -->
-<!-- \alert{} defined in preamble as semantic macro -->
+<!-- \ptxalert{} defined in preamble as semantic macro -->
 <xsl:template match="alert">
-    <xsl:text>\alert{</xsl:text>
+    <xsl:text>\ptxalert{</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 </xsl:template>
