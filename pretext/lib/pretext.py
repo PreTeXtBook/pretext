@@ -3902,7 +3902,24 @@ def latex_package(xml, pub_file, stringparams, dest_dir):
 # Instead, this is a conveience for developers who want to compare
 # different versions of this file during development and testing.
 def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, format_xsl):
-    """Convert XML source to LaTeX in destination directory"""
+    """
+    Convert XML source to LaTeX in destination directory.
+
+    Args:
+        xml (str): Path to the XML source file.
+        pub_file (str or None): Path to the publisher configuration file, or None if not used.
+        stringparams (dict): Dictionary of string parameters to control the transformation.
+        extra_xsl (str or None): Path to an additional XSL stylesheet, or None if not used.
+        out_file (str or None): Path to the output PDF file. If None, the PDF is copied to      dest_dir.
+        dest_dir (str): Directory where the output PDF should be placed if out_file is not specified.
+        format_xsl (str or None): Path to a format-specific XSL stylesheet (e.g., for Beamer), or None if not used.
+
+    Returns:
+        None
+
+    Side Effects:
+        - Generates a LaTeX file in the specified destination directory.
+    """
 
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
@@ -4005,6 +4022,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
         dest_dir (str): Directory where the output PDF should be placed if out_file is not specified.
         method (str): The LaTeX engine or processing method to use (e.g., 'pdflatex', 'xelatex').
         outputs (str or None): Specify which files should be copied to dest_dir.  Possible values are pdf-only (default), all (.tex, assets, pdf, and *.log, *.aux, etc), all-clean (same as all but no *.log, *.aux, etc), or prebuild (same as all-clean but no pdf).
+        format_xsl (str or None): Path to a format-specific XSL stylesheet (e.g., for Beamer), or None if not used.
 
     Returns:
         None
