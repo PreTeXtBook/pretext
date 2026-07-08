@@ -648,11 +648,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- and the method is defined there.                       -->
         <xsl:apply-templates select="." mode="view-source-widget"/>
 
-        <!-- When generating a solutions page, we need to avoid skipping -->
-        <!-- two levels of heading, so avoid incrementing here.          -->
+        <!-- The "solutions" modal templates increment $heading-level  -->
+        <!-- themselves, so bypassing the increment here avoids a skip -->
+        <!-- for both a solutions page and an inline "solutions".      -->
         <xsl:variable name="next-level">
             <xsl:choose>
-                <xsl:when test="self::solutions and $heading-level = $chunk-heading-level">
+                <xsl:when test="self::solutions">
                     <xsl:value-of select="$heading-level"/>
                 </xsl:when>
                 <xsl:otherwise>
