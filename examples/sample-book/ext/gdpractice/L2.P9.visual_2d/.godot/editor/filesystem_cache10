@@ -1,0 +1,12 @@
+63f7b34db8d8cdea90c76aacccf841ec
+::res://::1783476771
+export_presets.cfg::TextFile::-1::1783476390::0::1::::<><><>0<>0<><>::
+icon.svg::CompressedTexture2D::8779389603817527077::1783284251::1783476771::1::::<><><>0<>0<>e95bb9b337b40df83f792bc991a3ca22<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
+::res://practices/::1783284251
+::res://practices/L2.P9.visual_2d_input_motion/::1783476036
+practice.tscn::PackedScene::-1::1783476036::0::1::::<><><>0<>0<><>::res://practices/L2.P9.visual_2d_input_motion/practice.gd
+::res://practice_solutions/::1783284251
+::res://practice_solutions/L2.P9.visual_2d_input_motion/::1783476770
+export_preset.cfg::TextFile::-1::1783476390::0::1::::<><><>0<>0<><>::
+practice.gd::GDScript::1125497559819000853::1783476101::0::1::::<>Node2D<><>0<>0<><>::
+practice.tscn::PackedScene::-1::1783476085::0::1::::<><><>0<>0<><>::res://practice_solutions/L2.P9.visual_2d_input_motion/practice.gd

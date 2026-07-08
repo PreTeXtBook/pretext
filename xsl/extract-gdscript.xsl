@@ -54,6 +54,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>,</xsl:text>
     <xsl:value-of select="@pck" />
+    <xsl:text>,</xsl:text>
+    <xsl:value-of select="@scene" />
     <xsl:text>&#xa;</xsl:text> <!-- newline -->
 </xsl:template>
 </xsl:stylesheet>

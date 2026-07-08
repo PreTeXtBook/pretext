@@ -96,11 +96,6 @@ import time
 # cleanup multiline strings used as source code
 import textwrap
 
-# for zipping gdscript pck
-import zipfile  # for zipping
-import pathlib  # for paths
-import itertools
-
 # * For non-standard packages (such as those installed via PIP) try to keep
 #   dependencies to a minimum by *not* importing at the module-level
 #   (with justified exceptions)
@@ -134,6 +129,7 @@ from . import common
 __module_warning = common.__module_warning
 from . import webwork
 from . import stack
+from . import godot_helper
 
 # Not much can be done without the "lxml" module which mimics
 # the "xsltproc" executable (they share the same libraries)
@@ -1573,43 +1569,128 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
 ##############################
 #
-#  GDScript interactive zipping
+#  GDScript interactive packing
 #
 ##############################
 
-
-def zip_with_last_dir_as_root(source_dir, output_zip):
+def gd_pack(source_dir, dest_zip_file, pack_name):
     source_path = pathlib.Path(source_dir).resolve()
     try:
-        with zipfile.ZipFile(output_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            norm_glob = source_path.rglob("*")
-            hidden_glob = source_path.rglob(".*")
-            # Recursively find all files in the source directory
-            for file in itertools.chain(hidden_glob,norm_glob):
-                if file.is_file():
-                    log.debug("{} being added to zip".format(file))
-                    # arcname determines the internal ZIP structure
-                    internal_path = file.relative_to(source_path)
-                    zipf.write(file, arcname=internal_path)
-    except PermissionError:
-        msg = "PTX:ERROR: You do not have permission to write to this location."
-        raise OSError(msg) 
-    except FileNotFoundError:
-        msg = "PTX:ERROR:  The source file or directory was not found."
-        raise OSError(msg)
-    except zipfile.BadZipFile:
-        msg = "PTX:ERROR: The ZIP file is corrupted or invalid."
-        raise OSError(msg)
+       godot_cmd = common.get_executable_cmd("godot")
     except Exception as e:
-        msg = "An unexpected error occurred: {}".format(e)
+       log.error("{}".format(e))
+       godot_cmd = "godot"
+
+    godot_cmd = godot_helper.resolve_godot(godot_cmd)
+    godot_helper.ensure_export_templates()
+
+    PROJECT_FILENAME = "project.godot"
+    EXPORTS_FILENAME  = "export_presets.cfg"
+    EXPORT_FILENAME  = "export_preset.cfg"
+
+    source_config_path = os.path.join(source_path,"practice_solutions",pack_name,EXPORT_FILENAME)
+
+    # Define the destination path for the config file in the project folder
+    target_config_path = os.path.join(source_path, EXPORTS_FILENAME)
+    # Define the destination path for the project file in the project folder
+    target_project_path = os.path.join(source_path, PROJECT_FILENAME)
+
+    tmp_dir = common.get_temporary_directory()
+
+    # Check if a config already exists there (so we don't accidentally overwrite/delete a permanent one)
+    config_already_existed = os.path.exists(target_config_path)
+    if config_already_existed:
+        shutil.copy2(target_config_path, tmp_dir)
+
+    # Check if a project file already exists there (so we don't accidentally overwrite/delete a permanent one)
+    project_already_existed = os.path.exists(target_project_path)
+    if project_already_existed:
+        shutil.copy2(target_project_path, tmp_dir)
+
+    godot_template_path = os.path.join(get_ptx_path(), "pretext","lib","godot")
+    template_project_path = os.path.join(godot_template_path,PROJECT_FILENAME)
+    try:
+        shutil.copy2(source_config_path,target_config_path)
+        shutil.copy2(template_project_path,source_path)
+
+        # dry run
+        command = [
+            godot_cmd,
+            "--headless",
+            "--path", source_path,
+            "--editor",
+            "--quit"
+        ]
+
+        # Execute the command
+        result = subprocess.run(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+
+        # Check for success or failure of dry run
+        if result.returncode == 0:
+            log.info("Trial successful! File saved to: {}".format(dest_zip_file))
+            log.info(result.stdout)
+            log.error(result.stderr)
+        else:
+            log.error("Trial failed. Godot Output:")
+            log.error(result.stdout)
+            log.error(result.stderr)
+            raise OSError(result.stderr)
+
+        command = [
+            godot_cmd,
+            "--headless",
+            "--path", source_path,
+            "--export-pack", pack_name,
+            dest_zip_file
+        ]
+
+        # Execute the command
+        result = subprocess.run(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+
+        # Check for success or failure
+        if result.returncode == 0:
+            log.info("Export successful! File saved to: {}".format(dest_zip_file))
+            log.info(result.stdout)
+            log.error(result.stderr)
+        else:
+            log.error("Export failed. Godot Output:")
+            log.error(result.stdout)
+            log.error(result.stderr)
+            raise OSError(result.stderr)
+
+    except Exception as e:
+        msg = "An error occurred: {}".format(e)
         raise OSError(msg)
+    finally:
+        tmp_config_file = os.path.join(tmp_dir,EXPORTS_FILENAME)
+        tmp_project_file = os.path.join(tmp_dir,PROJECT_FILENAME)
+        if os.path.exists(target_config_path):
+            if not config_already_existed or os.path.exists(tmp_config_file):
+                os.remove(target_config_path)
+        if os.path.exists(target_project_path):
+            if not config_already_existed or os.path.exists(tmp_project_file):
+                os.remove(target_project_path)
+        if config_already_existed:
+            shutil.copy2(tmp_config_file,source_path)
+        if project_already_existed:
+            shutil.copy2(tmp_project_file,source_path)
 
 def gdscript_pck(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
     _, external_dir = common.get_managed_directories(xml_source, pub_file)
     log.info(
-        "zipping GDScript interactives from {} for placement in {}".format(
+        "exporting GDScript interactives from {} for placement in {}".format(
             external_dir, dest_dir
         )
     )
@@ -1629,17 +1710,25 @@ def gdscript_pck(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # "run" an assignment for the list of triples of strings
     with open(id_filename, "r") as id_file:
         # read lines, but only lines that are comma delimited
-        pairs = [p.strip() for p in id_file.readlines() if "," in p]
-    for pair in pairs:
-        # first item is destination name, second item is source
-        pair_a = pair.split(",")
-        src = os.path.join(external_dir,pair_a[1])
-        # this is the path to the destination file
-        path = os.path.join(dest_dir, pair_a[0] + ".zip")
-        log.info("compressing {} as {}...".format(src, path))
-        zip_with_last_dir_as_root(src, path)
-    log.info("GDScript pck zipping complete")
+        triples = [p.strip() for p in id_file.readlines() if "," in p]
+    for triple in triples:
+        try:
+            # first item is destination name, second item is source,
+            # third item is scene to derive export name
+            triple_a = triple.split(",")
+            src = os.path.join(external_dir,triple_a[1])
+            # this is the path to the destination file
+            path = os.path.join(dest_dir, triple_a[0] + ".zip")
+            # split third item on path separator
+            parts = triple_a[2].split("/")
+            # the second to last part should be the problem name
+            name = parts[-2]
+            log.info("exporting {} as {} using {} ...".format(src, path, name))
+            gd_pack(src, path,name)
+        except Exception as e:
+            log.error("Something went wrong with gdscript conversion for {}:\n {}".format(triple,e))
 
+    log.info("GDScript pck exporting complete")
 
 
 ##############################

@@ -1,0 +1,12 @@
+63f7b34db8d8cdea90c76aacccf841ec
+::res://::1783476763
+export_presets.cfg::TextFile::-1::1783472492::0::1::::<><><>0<>0<><>::
+icon.svg::CompressedTexture2D::2629273653269436918::1782862907::1783475653::1::::<><><>0<>0<>5d4184c8874732bcc175d45d71ac9cd6<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
+::res://practices/::1782862907
+::res://practices/first_script/::1783475595
+practice.tscn::PackedScene::3467919965683146792::1783475206::0::1::::<><><>0<>0<><>::uid://bdpv0unclpdb7::::res://icon.svg
+::res://practice_solutions/::1782862907
+::res://practice_solutions/first_script/::1783475653
+export_preset.cfg::TextFile::-1::1783472492::0::1::::<><><>0<>0<><>::
+practice.gd::GDScript::1261765701085080105::1783475392::0::1::::<>Sprite2D<><>0<>0<><>::
+practice.tscn::PackedScene::3033923435618266990::1783475405::0::1::::<><><>0<>0<><>::uid://bdpv0unclpdb7::::res://icon.svg<>uid://emhnchkq5m3g::::res://practice_solutions/first_script/practice.gd
