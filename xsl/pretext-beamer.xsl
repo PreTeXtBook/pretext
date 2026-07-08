@@ -434,14 +434,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Preamble -->
 <!-- ######## -->
 
-<!-- N.B. Portions of this preamble duplicate fragments of the LaTeX -->
-<!-- conversion's preamble, since the inherited content templates    -->
-<!-- presume supporting macros and environments ("sidebyside" and    -->
-<!-- "sbspanel", "program", "console", "sageinput"/"sageoutput",     -->
-<!-- semantic macros).  The "image" and tabular support comes from   -->
-<!-- the shared preamble pieces; the remaining fragments await       -->
-<!-- pieces that do not presume the regular conversion's styling     -->
-<!-- hooks (such as \blocktitlefont and \ptxsetparstyle).               -->
+<!-- N.B. This preamble is assembled largely from the shared preamble  -->
+<!-- pieces of pretext-latex-common.xsl (tcolorbox setup, images,      -->
+<!-- tables, side-by-side, code, font hooks), so the environments the  -->
+<!-- inherited content templates emit are all defined.  Two fragments  -->
+<!-- remain local duplicates: the semantic macros (a subset, with      -->
+<!-- Beamer-specific treatment of \alert and no styling hooks) and     -->
+<!-- the engine/font setup (fontenc/fontspec, where the regular        -->
+<!-- "font-support" prescribes document fonts a theme should control). -->
 <xsl:template name="beamer-preamble">
     <xsl:text>\documentclass[11pt, compress]{beamer}&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.early != ''">
@@ -489,19 +489,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- The shared support for programs, consoles, Sage code, and -->
     <!-- verbatim-ish material ("pre", "cd", literate programming) -->
     <xsl:call-template name="code-support"/>
-    <xsl:if test="$document-root//sidebyside">
-        <xsl:text>%% tcolorbox styles for sidebyside layout&#xa;</xsl:text>
-        <xsl:text>\tcbset{ sbsstyle/.style={raster before skip=2.0ex, raster equal height=rows, raster force size=false} }&#xa;</xsl:text>
-        <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle} }&#xa;</xsl:text>
-        <xsl:text>%% "xparse" environment for entire sidebyside&#xa;</xsl:text>
-        <xsl:text>\NewDocumentEnvironment{sidebyside}{mmmm}&#xa;</xsl:text>
-        <xsl:text>  {\begin{tcbraster}&#xa;</xsl:text>
-        <xsl:text>    [sbsstyle,raster columns=#1,&#xa;</xsl:text>
-        <xsl:text>    raster left skip=#2\linewidth,raster right skip=#3\linewidth,raster column skip=#4\linewidth]}&#xa;</xsl:text>
-        <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
-        <xsl:text>%% "tcolorbox" environment for a panel of sidebyside&#xa;</xsl:text>
-        <xsl:text>\NewTColorBox{sbspanel}{mO{top}}{sbspanelstyle,width=#1\linewidth,valign=#2}&#xa;</xsl:text>
-    </xsl:if>
+    <!-- The shared side-by-side environments; their styles employ -->
+    <!-- the \blocktitlefont and \ptxsetparstyle hooks defined above   -->
+    <xsl:call-template name="sidebyside-environment"/>
     <!-- The shared table support: rules, column types, and the       -->
     <!-- "tabularbox" that the inherited "tabular" templates rely on  -->
     <xsl:call-template name="tables"/>
