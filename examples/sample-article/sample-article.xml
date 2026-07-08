@@ -676,7 +676,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </conclusion>
             </objectives>
 
-            <introduction>
+            <introduction xml:id="introduction-structures">
                 <p>This is a cross-reference to one of the objectives above, forced to use the <c>phrase-global</c> form of the text.  It should describe the objective as belonging to the <em>section</em> (rather than the <em>objectives</em>), since objectives are one-per-subdivision and are numbered based upon the containing division: <xref ref="objective-structure" text="phrase-global"/>.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="objective-structure" text="type-global"/>.</p>
 
                 <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
@@ -1753,7 +1753,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             </subsection>
 
-            <conclusion>
+            <conclusion xml:id="conclusion-structures">
                 <p>A conclusion here, which we fill with some numbering tests.</p>
 
                 <p>This is a cross-reference to one of the outcomes, forced to use the <c>type-global</c> form of the text.  It should describe the outcome as belonging to the <em>section</em> (rather than the <em>outcomes</em>), since outcomes are one-per-subdivision and are numbered based upon the containing division: <xref ref="outcome-structure" text="phrase-global"/>.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="outcome-structure" text="type-global"/>.</p>
@@ -10787,6 +10787,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>A hyperlink to a <tag>subexercises</tag> via its required title (no number is assigned): <xref ref="hard-subexercises" text="title"/></p></li>
                 <li><p>You can request the text to be a type, then a number, then a title: <xref ref="theorem-FTC" text="type-global-title"/></p></li>
                 <li><p>Asking for the text to be a type, then a number, then a title, when there is no title, is not a problem: <xref ref="corollary-FTC-derivative" text="type-local-title"/></p></li>
+                <li><p>A cross-reference to the <tag>introduction</tag> of a (structured) section, and to the <tag>conclusion</tag> of the same section.  There is at most one of each per division, so each takes the number of its parent division, displayed only here in a cross-reference (never where born), and each should be a traditional hyperlink, never a knowl: <xref ref="introduction-structures"/> and <xref ref="conclusion-structures"/>.  In an <init>HTML</init> version chunked so the section becomes a summary page, these lead to the companions' own pages.</p></li>
                 <!-- Accumulate examples here -->
                 <!-- <li><p>: <xref ref="" text=""/></p></li> -->
             </ul></p>
