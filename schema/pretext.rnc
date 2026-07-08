@@ -236,6 +236,9 @@
                 TextSimple
             }
             Edition = element edition {text}
+            # "event" is consumed only by the slideshow conversions
+            # (Beamer, reveal.js).  This schema does not yet describe a
+            # "slideshow" document, so the pattern is dormant until then.
             Event = element event {
                 TextLong
             }
@@ -296,7 +299,7 @@
             Biography =
                 element biography {
                     MetaDataTitleOptional,
-                    (BlockStatementNoCaption | ParagraphsNoNumber)+
+                    (BlockStatementNoNumber | ParagraphsNoNumber)+
                 }
             Dedication =
                 element dedication {
@@ -306,21 +309,21 @@
             Acknowledgement =
                 element acknowledgement {
                     MetaDataTitleOptional,
-                    (BlockStatementNoCaption | ParagraphsNoNumber)+
+                    (BlockStatementNoNumber | ParagraphsNoNumber)+
                 }
             Preface =
                 element preface {
                     MetaDataTitleOptional,
                     (
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber)+,
+                            (BlockStatementNoNumber | ParagraphsNoNumber)+,
                             Attribution*
                         )
                         |
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber )*,
+                            (BlockStatementNoNumber | ParagraphsNoNumber )*,
                             Contributors,
-                            (BlockStatementNoCaption | ParagraphsNoNumber)*
+                            (BlockStatementNoNumber | ParagraphsNoNumber)*
                         )
                     )
                 }
@@ -329,6 +332,7 @@
                 element backmatter {
                     MetaDataTitleOptional,
                     (ArticleAppendix|Solutions)*,
+                    Glossary?,
                     References?,
                     IndexDivision?,
                     ColophonBack?
@@ -345,7 +349,7 @@
             ColophonBack =
                 element colophon {
                     MetaDataTarget,
-                    (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                    (BlockText | SideBySideNoNumber | SideBySideGroupNoNumber)+
                 }
             
             Paragraphs =
@@ -358,7 +362,7 @@
                 element paragraphs {
                     MetaDataTitle,
                     Index*,
-                    BlockStatementNoCaption+
+                    BlockStatementNoNumber+
                 }
             
             ReadingQuestions =
@@ -417,54 +421,7 @@
                 attribute left { text }?
 
             PrintoutBlock =
-                BlockStatement | Remark | Computation | Theorem | Proof | Definition |
-                Axiom | Example | PrintoutExercise | Project |
-                Poem | Assemblage | ListGenerator | Fragment |
-                PrintoutSideBySide | Paragraphs
-
-            # Allow exercise in sidebyside
-            PrintoutSideBySide =
-                element sidebyside {
-                    SidebySideAttributes,
-                    (
-                        Figure |
-                        Poem |
-                        Tabular |
-                        Image |
-                        Video |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack |
-                        PrintoutExercise |
-                        PrintoutTask
-                    )+
-                }
-            # Exercises and tasks can have workspace:
-            PrintoutExercise =
-                element exercise {
-                    MetaDataTitleOptional,
-                    attribute number {text}?,
-                    attribute workspace {text}?,
-                    (
-                    ExerciseBody |
-                    (StatementExercise, Hint*, Answer*, Solution*) |
-                    (IntroductionText?, WebWork, ConclusionText?) |
-                    (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
-                    )
-                }
-            PrintoutTask =
-                element task {
-                    MetaDataTitleOptional,
-                    attribute workspace {text}?,
-                    (
-                        BlockStatement+ |
-                        (Statement, Hint*, Answer*, Solution*) |
-                        (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
-                    )
-                }
+                BlockDivision | Paragraphs
 
             # Page can contain a printout block or be empty
             Page =
@@ -475,6 +432,9 @@
             Worksheet =
                 element worksheet {
                     PrintoutAttributes,
+                    attribute courseid {text}?,
+                    attribute series {text}?,
+                    attribute seriescode {text}?,
                     MetaDataAltTitleOptional,
                     (Objectives? & IntroductionDivision?),
                     (Page+ | PrintoutBlock+),
@@ -487,10 +447,10 @@
             
             BlockText =
                 Paragraph | BlockQuote | Preformatted |
-                Image | Video | Program | Console | Tabular
-            BlockStatementNoCaption =
+                Image | Video | Audio | Program | Console | Tabular
+            BlockStatementNoNumber =
                 BlockText | Aside |
-                SideBySideNoCaption | SideBySideGroupNoCaption
+                SideBySideNoNumber | SideBySideGroupNoNumber
             BlockStatement =
                 BlockText |
                 Figure | Aside |
@@ -500,13 +460,11 @@
             BlockDivision =
                 BlockStatement |
                 Remark | Computation | Theorem | Proof | Definition |
-                Axiom | Example | Exercise | Project |
+                Axiom | Example | Exercise | Project | OpenProblem |
                 Poem | Assemblage | ListGenerator | Fragment
             
             Prelude =
                 element prelude {BlockText+}
-            Interlude =
-                element interlude {BlockText+}
             Postlude =
                 element postlude {BlockText+}
             Statement =
@@ -533,10 +491,10 @@
                 element introduction {BlockText+}
             ConclusionText =
                 element conclusion {BlockText+}
-            IntroductionStatementNoCaption =
-                element introduction {BlockStatementNoCaption+}
-            ConclusionStatementNoCaption =
-                element conclusion {BlockStatementNoCaption+}
+            IntroductionStatementNoNumber =
+                element introduction {BlockStatementNoNumber+}
+            ConclusionStatementNoNumber =
+                element conclusion {BlockStatementNoNumber+}
             IntroductionStatement =
                 element introduction {BlockStatement+}
             ConclusionStatement =
@@ -552,7 +510,7 @@
                     BlockDivision+
                 }
             HeadNote =
-                element headnote {BlockStatementNoCaption+}
+                element headnote {BlockStatementNoNumber+}
             
             Objectives =
                 element objectives {
@@ -587,6 +545,8 @@
             CodeDisplay =
                 element cd {
                     attribute latexsep {text}?,
+                    # "all" renders every space as a visible glyph; default "none"
+                    attribute showspaces {"all" | "none"}?,
                     (text | CodeLine+)
                 }
             Preformatted =
@@ -661,6 +621,7 @@
                     attribute autorun {"yes"|"no"}?,
                     attribute chatcodes {"yes"|"no"}?,
                     attribute codelens {"yes"|"no"}?,
+                    attribute codetailor {"yes"|"no"}?,
                     attribute starting-step {"yes"|"no"}?,
                     attribute compiler-args {text}?,
                     attribute extra-compiler-args {text}?,
@@ -723,6 +684,7 @@
                 }
             
             DefinitionLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 Notation*,
                 Statement
@@ -737,10 +699,14 @@
                    }
             Proof =
                 element proof {
+                    attribute ref {text}?,
+                    attribute text {XrefTextStyle}?,
+                    attribute workspace {text}?,
                     MetaDataTitleOptional,
                     (BlockStatement | Case)+
                 }
             TheoremLike =
+                attribute workspace {text}?,
                 MetaDataTitleCreatorOptional,
                 (BlockStatement+ | (Statement, Proof*))
             Theorem =
@@ -765,6 +731,7 @@
                 element assumption {AxiomLike}
             
             ExampleLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 (
                     (BlockStatement)+ |
@@ -777,6 +744,7 @@
                 element problem {ExampleLike}
             
             ProjectLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 (
                     (BlockStatement+) |
@@ -784,6 +752,7 @@
                        Prelude?,
                        (
                           (Statement, Hint*, Answer*, Solution*) |
+                          (Statement, Program, Hint*, Answer*, Solution*) |
                           (IntroductionStatement?, Task+, ConclusionStatement?) |
                           (IntroductionText?, WebWork, ConclusionText?)
                        ),
@@ -805,6 +774,36 @@
                         (IntroductionStatement?, Task+, ConclusionStatement?)
                     )
                 }
+            
+            OpenProblemLike =
+                MetaDataTitleOptional,
+                Prelude?,
+                (
+                    (Statement, Discussion*) |
+                    (IntroductionStatement?, OpenProblemTask+, ConclusionStatement?)
+                ),
+                Postlude?
+            OpenProblem =
+                element openproblem {OpenProblemLike} |
+                element openquestion {OpenProblemLike} |
+                element openconjecture {OpenProblemLike}
+            OpenProblemTask =
+                element task {
+                    MetaDataTitleOptional,
+                    (
+                        (Statement, Discussion*) |
+                        (IntroductionStatement?, OpenProblemTask+, ConclusionStatement?)
+                    )
+                }
+            Discussion =
+                element context {DiscussionLike} |
+                element discussion {DiscussionLike} |
+                element opinion {DiscussionLike} |
+                element status {DiscussionLike} |
+                element suggestion {DiscussionLike}
+            DiscussionLike =
+                MetaDataTitleOptional,
+                BlockStatement+
             
             RemarkLike =
                 MetaDataTitleOptional,
@@ -836,7 +835,7 @@
             Assemblage =
                 element assemblage {
                     MetaDataTitleOptional,
-                    (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                    (BlockText | SideBySideNoNumber | SideBySideGroupNoNumber)+
                 }
             
             Caption =
@@ -850,6 +849,7 @@
                     (
                         Image |
                         Video |
+                        Audio |
                         SideBySide |
                         SideBySideGroup |
                         MuseScore
@@ -882,6 +882,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -892,6 +893,7 @@
             SidebySideAttributes =
                 Component?,
                 attribute margins {text}?,
+                attribute landscape {"yes" | "no"}?,
                 (attribute width {text} | attribute widths {text})?,
                 (
                     AlignmentVertical |
@@ -906,15 +908,17 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
                         Preformatted |
                         List |
-                        Stack
+                        Stack |
+                        Exercise
                     )+
                 }
-            SideBySideNoCaption =
+            SideBySideNoNumber =
                 element sidebyside {
                     SidebySideAttributes,
                     (
@@ -922,6 +926,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -932,13 +937,15 @@
                 }
             SideBySideGroup =
                 element sbsgroup {
+                    UniqueID?,
                     SidebySideAttributes,
                     SideBySide+
                 }
-            SideBySideGroupNoCaption =
+            SideBySideGroupNoNumber =
                 element sbsgroup {
+                    UniqueID?,
                     SidebySideAttributes,
-                    SideBySideNoCaption+
+                    SideBySideNoNumber+
                 }
             
             Image = ImageRaster | ImageCode
@@ -973,7 +980,6 @@
                     Component?,
                     text
                 }
-            AnyPFContent = text | element * { attribute * { text }*, AnyPFContent* }
             ImageCode =
                 element image {
                     UniqueID?,
@@ -1009,7 +1015,7 @@
                             } |
                             element pf:prefigure {
                                 attribute label {text}?,
-                                AnyPFContent*
+                                external "pf-adapter.rnc"
                             }
                           )
                         )
@@ -1050,6 +1056,9 @@
             AlignmentVertical =
                 attribute valign {"top" | "middle" | "bottom"}
 
+            # A table cell admits footnotes, authored as table notes; the
+            # rendering (below the table, keyed a, b, c) is a pending TODO.
+            TableCellText = mixed { (TextLongContent | Footnote)* }
             TableCell =
                 element cell {
                     AlignmentHorizontal?,
@@ -1057,7 +1066,7 @@
                     BorderRight?,
                     attribute colspan {text}?,
                     (
-                        TextLong |
+                        TableCellText |
                         LongLine+ |
                         Paragraph+
                     )
@@ -1084,6 +1093,7 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute row-headers {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderTop?,
@@ -1127,6 +1137,17 @@
                     (AttributesSourceFile | AttributesNetwork | AttributesYouTube |
                      AttributesYouTubePlaylist | AttributesVimeo),
                     Track*
+                }
+            Audio =
+                element audio {
+                    UniqueID?,
+                    LabelID?,
+                    Component?,
+                    attribute width {text}?,
+                    attribute margins {text}?,
+                    attribute start {xsd:integer}?,
+                    attribute end {xsd:integer}?,
+                    (AttributesSourceFile | AttributesNetwork)
                 }
             Track =
                 element track {
@@ -1180,9 +1201,9 @@
                 element exercisegroup {
                     MetaDataTitleOptional,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    IntroductionStatementNoCaption,
+                    IntroductionStatementNoNumber,
                     Exercise+,
-                    ConclusionStatementNoCaption?
+                    ConclusionStatementNoNumber?
                 }
             
             AlignmentPoem = attribute halign {"left" | "center" | "right"}
@@ -1236,9 +1257,62 @@
                         BibSeries |
                         BibPublisher |
                         BibPages |
+                        BibPubnote |
                         BibNote)*
-                    ))
+                    ) |
+                    (
+                        # A CSL-style entry, modeled on the CSL-JSON data
+                        # format.  Structured fields, all optional, in a fixed
+                        # canonical order.  With no CSL style active the fields
+                        # are rendered in this (document) order; with a style,
+                        # citeproc-py supplies the order from the CSL-JSON.
+                        attribute type {CSLType},
+                        CSLAuthor?,
+                        CSLEditor?,
+                        CSLTranslator?,
+                        BibTitle?,
+                        BibContainerTitle?,
+                        BibCollectionTitle?,
+                        BibGenre?,
+                        Edition?,
+                        BibVolume?,
+                        BibNumber?,
+                        BibIssue?,
+                        BibIssued?,
+                        BibAccessed?,
+                        BibPage?,
+                        BibPageFirst?,
+                        BibNumberOfPages?,
+                        BibPublisher?,
+                        BibPublisherPlace?,
+                        BibDOI?,
+                        BibISBN?,
+                        BibISSN?,
+                        BibURL?))
                 }
+            # CSL-JSON item types, a curated scholarly subset
+            CSLType =
+                "article" |
+                "article-journal" |
+                "article-magazine" |
+                "article-newspaper" |
+                "book" |
+                "chapter" |
+                "collection" |
+                "dataset" |
+                "document" |
+                "entry" |
+                "entry-dictionary" |
+                "entry-encyclopedia" |
+                "manuscript" |
+                "paper-conference" |
+                "patent" |
+                "report" |
+                "review" |
+                "software" |
+                "speech" |
+                "thesis" |
+                "webpage"
             Ibid = element ibid {empty}
             BibYear = element year {text}
             BibJournal = element journal { TextBib }
@@ -1250,6 +1324,8 @@
             BibEditor = element editor {text}
             BibSeries = element series {text}
             BibPublisher = element publisher {text}
+            # A BibTeX "pubnote" holds free-form publication information
+            BibPubnote = element pubnote {TextBib}
             BibPages = element pages {
                 (
                     attribute start {text},
@@ -1260,11 +1336,61 @@
                     text
                 )
                 }
+            # CSL contributors carry structured "name" elements only.  The
+            # element names "author"/"editor" are deliberately shared with the
+            # plain-text BibTeX patterns above; the gating "@type" attribute
+            # keeps the two content models apart (a RELAX NG co-occurrence
+            # constraint).
+            CSLAuthor = element author {CSLName+}
+            CSLEditor = element editor {CSLName+}
+            CSLTranslator = element translator {CSLName+}
+            # A CSL "name": recognized parts in any order, or a literal string
+            CSLName =
+                element name {
+                    (BibFamily |
+                    BibGiven |
+                    BibDroppingParticle |
+                    BibNonDroppingParticle |
+                    BibSuffix |
+                    BibStaticOrdering |
+                    BibLiteral)*
+                }
+            BibFamily = element family {text}
+            BibGiven = element given {text}
+            BibDroppingParticle = element dropping-particle {text}
+            BibNonDroppingParticle = element non-dropping-particle {text}
+            BibSuffix = element suffix {text}
+            BibStaticOrdering = element static-ordering {text}
+            BibLiteral = element literal {text}
+            # CSL standard (string) fields
+            BibContainerTitle = element container-title {TextBib}
+            BibCollectionTitle = element collection-title {TextBib}
+            # A CSL "genre" gives a sub-type, e.g. "Ph.D. thesis"
+            BibGenre = element genre {text}
+            BibIssue = element issue {text}
+            BibPage = element page {text}
+            BibPageFirst = element page-first {text}
+            BibNumberOfPages = element number-of-pages {text}
+            BibPublisherPlace = element publisher-place {TextBib}
+            BibDOI = element DOI {text}
+            BibISBN = element ISBN {text}
+            BibISSN = element ISSN {text}
+            BibURL = element URL {text}
+            # CSL date variables; one "date" per point, two for a range
+            BibIssued = element issued {BibDate+}
+            BibAccessed = element accessed {BibDate+}
+            BibDate =
+                element date {
+                    attribute year {text}?,
+                    attribute month {text}?,
+                    attribute day {text}?,
+                    empty
+                }
             
             GlossaryItem =
                 element gi {
                     MetaDataTitle,
-                    BlockStatementNoCaption+
+                    BlockStatementNoNumber+
                 }
             
             Contributor =
@@ -1343,7 +1469,7 @@
                     element macro-file {text}+
                 }
             WWVariable =
-                ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.
+                ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  PreTeXt's additional validation will check on these two situations.
                 element var {
                     (attribute name {text},
                     attribute evaluator {text}?,
@@ -1415,7 +1541,6 @@
                 element plaintitle {text}
             Creator =
                 element creator {TextShort}
-            XMLBase = attribute xml:base {text}
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
@@ -1426,7 +1551,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title,
                 Index*
@@ -1434,7 +1558,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title,
                 ShortTitle?,
@@ -1444,20 +1567,8 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
-                ShortTitle?,
-                PlainTitle?,
-                Index*
-            MetaDataSubtitle =
-                UniqueID?,
-                LabelID?,
-                Component?,
-                XMLBase?,
-                XMLLang?,
-                Title,
-                Subtitle?,
                 ShortTitle?,
                 PlainTitle?,
                 Index*
@@ -1465,7 +1576,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
                 (Subtitle | LinedSubtitle)?,
@@ -1476,7 +1586,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Index*
@@ -1484,7 +1593,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title, ShortTitle?, PlainTitle?)?,
                 Index*
@@ -1492,7 +1600,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Creator?,
@@ -1501,7 +1608,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Caption,
@@ -1528,6 +1634,7 @@
                     UniqueID?,
                     LabelID?,
                     Component?,
+                    attribute workspace {text}?,
                     TextParagraph
                 }
             ParagraphLined =
@@ -1547,7 +1654,7 @@
                 Group |
                 MathInline |
                 Music)* }
-            TextLong =  mixed { (
+            TextLongContent =
                 Character |
                 Generator |
                 Verbatim |
@@ -1556,7 +1663,8 @@
                 Music |
                 Reference |
                 Custom |
-                WWVariable)* }
+                WWVariable
+            TextLong =  mixed { (TextLongContent)* }
                 
             Footnote =
                 element fn {
@@ -1887,7 +1995,6 @@
             
             DocInfo =
                 element docinfo {
-                    XMLBase?,
                     XMLLang?,
                     Configuration+
                 }
@@ -1907,6 +2014,10 @@
                 element latex-image-preamble {text}
             Configuration |=
                 element asymptote-preamble {text}
+            Configuration |=
+                element pf:prefigure-preamble {
+                    external "pf-preamble-adapter.rnc"
+                }
             
             Configuration |=
                 element macros {text}

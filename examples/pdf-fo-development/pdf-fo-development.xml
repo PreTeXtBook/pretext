@@ -1,0 +1,834 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright 2026 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- A small article for developing the (experimental) conversion to -->
+<!-- XSL-FO, and on to a PDF via Apache FOP.  Content here grows in  -->
+<!-- concert with the capabilities of  xsl/pretext-fo.xsl, with the  -->
+<!-- sample article as the eventual goal.                            -->
+
+<pretext>
+
+    <article xml:id="pdf-fo-development" label="pdf-fo-development">
+        <title>XSL-FO Conversion Development</title>
+
+        <frontmatter xml:id="frontmatter" label="frontmatter">
+            <bibinfo>
+                <author>
+                    <personname>Robert Beezer</personname>
+                    <affiliation>
+                        <institution>University of Puget Sound</institution>
+                    </affiliation>
+                    <email>beezer@pugetsound.edu</email>
+                </author>
+                <date><today/></date>
+            </bibinfo>
+            <titlepage>
+                <titlepage-items/>
+            </titlepage>
+            <abstract>
+                <p>A small article exercising the conversion of <pretext/> to <init>XSL</init> Formatting Objects, rendered as an accessible <init>PDF</init> by Apache <init>FOP</init>.  It grows in concert with the capabilities of the conversion.</p>
+            </abstract>
+        </frontmatter>
+
+        <section xml:id="section-prose" label="section-prose">
+            <title>Prose</title>
+
+            <p>This is the first paragraph of a minimal article, used to exercise the conversion of <pretext/> source to <init>XSL</init> Formatting Objects, and then to a <init>PDF</init> by Apache <init>FOP</init>.  A paragraph is the fundamental unit of prose, so it is the first element implemented, and this one is long enough to demonstrate line-breaking and justification.</p>
+
+            <p>A second paragraph demonstrates inter-paragraph spacing.  It contains some inline markup, such as <em>emphasized text</em> and a <term>defined term</term>, rendered with italic and bold fonts.  A footnote<fn>The footnote drops to the bottom of the page, below a separator rule.</fn> hangs off this sentence.</p>
+
+            <paragraphs xml:id="paragraphs-history" label="paragraphs-history">
+                <title>A Little History</title>
+                <p>The lightweight <tag>paragraphs</tag> division has just a title, run in to this paragraph.  Cross-references work too: see <xref ref="theorem-pythagoras"/>, <xref ref="definition-hypotenuse"/>, and <xref ref="section-images"/>, all referenced from <xref ref="paragraphs-history" text="title"/>.  Even the starred equation <xref ref="equation-even"/> answers to its decoration.</p>
+            </paragraphs>
+        </section>
+
+        <section xml:id="section-inline" label="section-inline">
+            <title>Inline Markup</title>
+
+            <p>Semantic markup, mostly by font: <em>emphasis</em>, a <term>defined term</term>, an <alert>alert</alert>, a <foreign xml:lang="la">lingua aliena</foreign>, the book <pubtitle>A First Course in Linear Algebra</pubtitle>, the paper <articletitle>On Computable Numbers</articletitle>, and the species <taxon>Quercus garryana</taxon>.</p>
+
+            <p>Edits as <insert>inserted</insert>, <delete>deleted</delete>, and <stale>stale</stale> text.  Verbatim text such as <c>print("Hello, world")</c>, and markup-language fragments like <tag>section</tag>, <tage>mdash</tage>, and <attr>xml:id</attr>.</p>
+
+            <p>Quotations, <q>double</q> and <sq>single</sq>.  Dashes for ranges, 2023<ndash/>2024, and for asides<mdash/>like this one.  An ellipsis<ellipsis/> and a few characters: 98.6<degree/>, 3<times/>5, <copyright/>, <trademark/>, and several logos: <pretext/>, <latex/>, <tex/>, <xetex/>, <xelatex/>, and <webwork/>.</p>
+
+            <p>Abbreviations render plainly: an acronym like <acro>SCUBA</acro>, an initialism like <init>XML</init>, and Latin abbreviations, <eg/>, this very sentence.</p>
+
+            <p>Keyboard keys, named like <kbd name="enter"/> and <kbd name="shift"/>, or verbatim like <kbd>q</kbd>, render visibly boxed.</p>
+
+            <p>Interface icons name a glyph from a standard set, such as settings <icon name="gear"/>, tools <icon name="wrench"/>, and save <icon name="file-save"/>.</p>
+
+            <p>External references are active links: the <url href="https://pretextbook.org/"><pretext/> website</url>, the bare <init>URL</init> <url href="https://pretextbook.org/"/>, and an address for writing, <email>info@example.com</email>.  Cross-references, like one to <xref ref="theorem-pythagoras"/> ahead, are internal links.</p>
+        </section>
+
+        <section xml:id="section-lists" label="section-lists">
+            <title>Lists</title>
+
+            <p>A plain unordered list gathers a few short, unstructured items.
+                <ul>
+                    <li>a side</li>
+                    <li>an angle</li>
+                    <li>a vertex</li>
+                </ul>
+            </p>
+
+            <p>An ordered list nests several levels deep, with an unordered list at the bottom, which exercises the changing labels and the growing indentation.
+                <ol>
+                    <li>
+                        <p>Measure the three sides.
+                            <ol>
+                                <li>
+                                    <p>Single out the longest side, the candidate hypotenuse, and square it.
+                                        <ul>
+                                            <li>record the square</li>
+                                            <li>set it aside</li>
+                                        </ul>
+                                    </p>
+                                </li>
+                                <li><p>Square each of the two shorter sides, and add the results.</p></li>
+                            </ol>
+                        </p>
+                    </li>
+                    <li><p>Compare the two totals to test for a right angle.</p></li>
+                </ol>
+            and then the surrounding paragraph resumes.</p>
+
+            <p>The items of a list may lead with a title.
+                <ul>
+                    <li>
+                        <title>Acute</title>
+                        <p>every angle is smaller than a right angle</p>
+                    </li>
+                    <li>
+                        <title>Right</title>
+                        <p>one angle is exactly a right angle</p>
+                    </li>
+                    <li>
+                        <title>Obtuse</title>
+                        <p>one angle is larger than a right angle</p>
+                    </li>
+                </ul>
+            </p>
+
+            <p>An author may set the list label, such as lower-case Roman numerals.
+                <ol marker="(i)">
+                    <li>One item.</li>
+                    <li>A second item.</li>
+                </ol>
+            </p>
+
+            <p>A description list pairs short terms with their explanations; a wide label column sets the terms right-aligned against the descriptions.
+                <dl width="wide">
+                    <li>
+                        <title>Leg</title>
+                        <p>One of the two sides that meet at the right angle.</p>
+                    </li>
+                    <li>
+                        <title>Hypotenuse</title>
+                        <p>The side opposite the right angle, and the longest of the three.</p>
+                    </li>
+                </dl>
+            </p>
+        </section>
+
+        <section xml:id="section-images" label="section-images">
+            <title>Images</title>
+
+            <p>An externally produced image, a right triangle, follows at half of the available width.</p>
+
+            <image source="right-triangle" width="50%">
+                <description>
+                    <p>The legs are labeled <m>a</m> and <m>b</m>, and the hypotenuse, opposite the right angle, is <m>c</m>.</p>
+                </description>
+                <shortdescription>a right triangle</shortdescription>
+            </image>
+
+            <p>A born-in-source image, authored in <prefigure/> syntax, follows.  It is generated to <init>SVG</init>, which Apache <init>FOP</init> embeds directly; the diagram carries an intrinsic width and height, so it occupies only the vertical space it needs.</p>
+
+            <image width="60%">
+                <shortdescription>the decaying oscillation that solves a damped harmonic oscillator, with its derivative</shortdescription>
+                <prefigure label="prefigure-diffeq"
+                           xmlns="https://prefigure.org">
+                    <diagram dimensions="(300,300)" margins="5">
+                        <definition>f(t,y) = (y[1], -pi*y[0]-0.3*y[1])</definition>
+                        <coordinates bbox="[-1,-3,6,3]">
+                            <grid-axes xlabel="t"/>
+                            <de-solve function="f" t0="0" t1="bbox[2]"
+                                      y0="(0,2)" name="oscillator"
+                                      N="200"/>
+                            <plot-de-solution at="x" solution="oscillator"
+                                              axes="(t,y0)"/>
+                            <plot-de-solution at="xprime" solution="oscillator"
+                                              axes="(t,y1)" stroke="red"
+                                              tactile-dash="9 9"/>
+                            <legend at="legend" anchor="(bbox[2], bbox[3])"
+                                    alignment="sw" scale="0.9" opacity="0.5">
+                                <item ref="x"><m>x(t)</m></item>
+                                <item ref="xprime"><m>x'(t)</m></item>
+                            </legend>
+                        </coordinates>
+                    </diagram>
+                </prefigure>
+            </image>
+        </section>
+
+        <section xml:id="section-tables" label="section-tables">
+            <title>Tables and Figures</title>
+
+            <p>A small table of tree data follows, ruled only horizontally, with a header row and varied column alignment.</p>
+
+            <table xml:id="table-trees" label="table-trees">
+                <title>Some Trees and Their Habits</title>
+                <tabular halign="center" top="major" bottom="major">
+                    <col halign="left" width="40%"/>
+                    <col width="30%"/>
+                    <col width="30%"/>
+                    <row header="yes" bottom="medium">
+                        <cell>Species</cell>
+                        <cell>Family</cell>
+                        <cell halign="right">Height (m)</cell>
+                    </row>
+                    <row>
+                        <cell>Garry oak</cell>
+                        <cell>Beech</cell>
+                        <cell halign="right">20</cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell>Douglas fir</cell>
+                        <cell>Pine</cell>
+                        <cell halign="right">100</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>A second table groups three columns under a spanning header, sets the names off with a single vertical rule, and sizes itself to its content rather than to fixed percentages.</p>
+
+            <table xml:id="table-triples" label="table-triples">
+                <title>Some Pythagorean Triples</title>
+                <tabular halign="center" bottom="major" left="medium" right="medium">
+                    <col halign="left" top="major" right="minor"/>
+                    <col halign="right" top="major"/>
+                    <col halign="right" top="major"/>
+                    <col halign="right" top="major"/>
+                    <row header="yes">
+                        <cell></cell>
+                        <cell colspan="3" halign="center" bottom="minor">Side Lengths</cell>
+                    </row>
+                    <row header="yes" bottom="medium">
+                        <cell>Name</cell>
+                        <cell><m>a</m></cell>
+                        <cell><m>b</m></cell>
+                        <cell><m>c</m></cell>
+                    </row>
+                    <row>
+                        <cell>3-4-5</cell>
+                        <cell>3</cell>
+                        <cell>4</cell>
+                        <cell>5</cell>
+                    </row>
+                    <row>
+                        <cell>5-12-13</cell>
+                        <cell>5</cell>
+                        <cell>12</cell>
+                        <cell>13</cell>
+                    </row>
+                    <row>
+                        <cell>8-15-17</cell>
+                        <cell>8</cell>
+                        <cell>15</cell>
+                        <cell>17</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>A side-by-side arranges panels horizontally: an image, beside a list of the sides of the pictured triangle, with the bottoms of the two panels aligned.</p>
+
+            <sidebyside widths="40% 35%" valign="bottom">
+                <image source="right-triangle">
+                    <description>
+                        <p>The legs are labeled <m>a</m> and <m>b</m>, and the hypotenuse, opposite the right angle, is <m>c</m>.</p>
+                    </description>
+                    <shortdescription>a right triangle</shortdescription>
+                </image>
+                <ul>
+                    <li>a leg of length <m>3</m></li>
+                    <li>a leg of length <m>4</m></li>
+                    <li>hypotenuse of length <m>5</m></li>
+                </ul>
+            </sidebyside>
+
+            <p>Some prose separates the bare side-by-side above from the captioned figure below, so the two layout devices read as distinct.</p>
+
+            <figure xml:id="figure-triangle" label="figure-triangle">
+                <caption>A right triangle, now wrapped in a captioned figure.</caption>
+                <image source="right-triangle" width="35%">
+                    <description>
+                        <p>The legs are labeled <m>a</m> and <m>b</m>, and the hypotenuse, opposite the right angle, is <m>c</m>.</p>
+                    </description>
+                    <shortdescription>a right triangle</shortdescription>
+                </image>
+            </figure>
+        </section>
+
+        <section xml:id="section-verbatim" label="section-verbatim">
+            <title>Verbatim</title>
+
+            <p>Code display interrupts a paragraph,
+                <cd>
+                    <cline>s = "Hello, World!"</cline>
+                    <cline>print(s)</cline>
+                </cd>
+            and then it continues.</p>
+
+            <p>With <attr>showspaces</attr> set, a code display marks every space as a visible box, so that
+                <cd showspaces="all">
+                    <cline>def area(base, height):</cline>
+                    <cline>    return base * height / 2</cline>
+                </cd>
+            reveals the indentation of its body line, before the sentence finishes.</p>
+
+            <p>Preformatted text, set off as its own block, holds its exact shape<mdash/>here a small sketch of a right triangle.</p>
+
+            <pre>
+                <cline>|\</cline>
+                <cline>| \</cline>
+                <cline>|  \</cline>
+                <cline>|___\</cline>
+            </pre>
+
+            <p>A listing, by contrast, is a captioned and numbered program.</p>
+
+            <listing xml:id="listing-greeting" label="listing-greeting">
+                <title>A Counting Program</title>
+                <program language="python">
+                    <code>
+                    total = 0
+                    for i in range(1, 11):
+                        total = total + i
+                    print(total)
+                    </code>
+                </program>
+            </listing>
+
+            <p>A console session, with prompt, bold input, and plain output.</p>
+
+            <console prompt="$ ">
+                <input>date --utc</input>
+                <output>Thu Jun 11 23:30:00 UTC 2026</output>
+            </console>
+
+            <p>A Sage cell, input boxed, output following.</p>
+
+            <sage>
+                <input>factorial(8)</input>
+                <output>40320</output>
+            </sage>
+        </section>
+
+        <section xml:id="section-mathematics" label="section-mathematics">
+            <title>Mathematics</title>
+
+            <introduction>
+                <p>Inline mathematics, such as <m>a^2 + b^2 = c^2</m>, renders from an <init>SVG</init> image produced by MathJax, sized and placed on the baseline.  Display mathematics interrupts a paragraph,
+                    <md>
+                        <mrow>\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</mrow>
+                    </md>
+                and the paragraph then continues with a bit more text.</p>
+
+                <remark xml:id="remark-placeholders" label="remark-placeholders">
+                    <title>Blocks Have Headings</title>
+                    <p>This remark is a basic titled block, with a heading assembled from its type, its number, and its title.</p>
+                </remark>
+
+                <definition xml:id="definition-hypotenuse" label="definition-hypotenuse">
+                    <title>Hypotenuse</title>
+                    <idx>hypotenuse</idx>
+                    <statement>
+                        <p>The <term>hypotenuse</term> of a right triangle is the side opposite the right angle.</p>
+                    </statement>
+                </definition>
+
+                <definition xml:id="definition-distance" label="definition-distance">
+                    <idx>distance</idx>
+                    <statement>
+                        <p>The <term>distance</term> between points <m>P = (x_1, y_1)</m> and <m>Q = (x_2, y_2)</m> in the plane is
+                            <md>
+                                <mrow>d(P, Q) = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}.</mrow>
+                            </md></p>
+                    </statement>
+                </definition>
+
+                <theorem xml:id="theorem-pythagoras" label="theorem-pythagoras">
+                    <title>Pythagorean Theorem</title>
+                    <creator>Pythagoras</creator>
+                    <idx>Pythagorean Theorem</idx>
+                    <statement>
+                        <p>If a right triangle has legs <m>a</m> and <m>b</m>, and hypotenuse <m>c</m>, then <m>a^2 + b^2 = c^2</m>.</p>
+                    </statement>
+                    <proof>
+                        <p>Dissect a square with side length <m>a + b</m> in two different ways, and account for the areas.</p>
+                    </proof>
+                </theorem>
+
+                <example xml:id="example-hypotenuse" label="example-hypotenuse">
+                    <title>Computing a Hypotenuse</title>
+                    <statement>
+                        <p>A right triangle has legs <m>3</m> and <m>4</m>, and here each step toward its hypotenuse <m>c</m> is annotated with the fact it relies on.
+                            <md>
+                                <mrow>c^2 &amp;= a^2 + b^2 &amp;&amp;<xref ref="theorem-pythagoras"/></mrow>
+                                <mrow>&amp;= 3^2 + 4^2 &amp;&amp;\text{(the given legs)}</mrow>
+                                <mrow>&amp;= 25,</mrow>
+                            </md>
+                        so <m>c = 5</m>.</p>
+                    </statement>
+                </example>
+
+                <example xml:id="example-quadratic" label="example-quadratic">
+                    <title>A Quadratic Equation</title>
+                    <statement>
+                        <p>Solve the equation<md>
+                            <mrow number="yes">x^2 - 5x + 6 = 0.</mrow>
+                        </md></p>
+                    </statement>
+                    <solution>
+                        <p>The left side factors as <m>(x-2)(x-3)</m>, so the solutions are <m>x = 2</m> and <m>x = 3</m>.</p>
+                    </solution>
+                </example>
+
+                <theorem xml:id="theorem-even" label="theorem-even">
+                <title>Characterizing Even Squares</title>
+                <idx>even integer</idx>
+                <statement>
+                    <p>An integer <m>n</m> is even if and only if <m>n^2</m> is even, a fact worth a reference number,
+                        <md>
+                            <mrow xml:id="equation-even" label="equation-even" tag="star">2 \mid n \iff 4 \mid n^2</mrow>
+                        </md>
+                    which earns a decorative tag instead.</p>
+                </statement>
+                <proof>
+                    <case direction="forward">
+                        <p>If <m>n = 2k</m>, then <m>n^2 = 4k^2</m>, so <m>n^2</m> is even.</p>
+                    </case>
+                    <case direction="backward">
+                        <p>If <m>n</m> is odd, say <m>n = 2k+1</m>, then <m>n^2 = 4k^2 + 4k + 1</m> is odd; the contrapositive completes the case.</p>
+                    </case>
+                </proof>
+            </theorem>
+
+                <assemblage xml:id="assemblage-central-identity" label="assemblage-central-identity">
+                    <title>The Central Identity</title>
+                    <p>Nearly everything in this section turns on a single relationship: in a right triangle, the square on the hypotenuse equals the sum of the squares on the legs, <m>a^2 + b^2 = c^2</m>.</p>
+                </assemblage>
+            </introduction>
+
+            <subsection xml:id="subsection-depth" label="subsection-depth">
+                <title>Depth</title>
+
+                <introduction>
+                    <p>A subsection exercises a deeper heading, and a two-level number.</p>
+                </introduction>
+
+                <subsubsection xml:id="subsubsection-depth" label="subsubsection-depth">
+                    <title>More Depth</title>
+
+                    <p>A subsubsection is the deepest traditional division, with a three-level number.</p>
+                </subsubsection>
+
+                <subsubsection xml:id="subsubsection-deeper" label="subsubsection-deeper">
+                    <title>Deeper Still</title>
+
+                    <p>A second subsubsection confirms that the numbering increments within the subsection.</p>
+                </subsubsection>
+
+                <conclusion>
+                    <p>A subsection may also close with a conclusion, set after its subsubsections.</p>
+                </conclusion>
+            </subsection>
+        </section>
+
+        <section xml:id="section-projects" label="section-projects">
+            <title>Projects and Checkpoints</title>
+
+            <p>An inline exercise is a <q>checkpoint</q>, numbered with the blocks.</p>
+
+            <exercise xml:id="checkpoint-triangle" label="checkpoint-triangle">
+                <title>A Quick Check</title>
+                <statement>
+                    <p>A right triangle has legs <m>5</m> and <m>12</m>.  How long is the hypotenuse?</p>
+                </statement>
+                <answer>
+                    <p><m>13</m>.</p>
+                </answer>
+            </exercise>
+
+            <project xml:id="project-tasks" label="project-tasks">
+                <title>A Project in Pieces</title>
+                <introduction>
+                    <p>Projects often divide into tasks.</p>
+                </introduction>
+                <task xml:id="task-one" label="task-one">
+                    <statement>
+                        <p>Compute the area of the <m>3</m>-<m>4</m>-<m>5</m> right triangle.</p>
+                    </statement>
+                    <solution>
+                        <p>One half of <m>3 \cdot 4</m>, so <m>6</m>.</p>
+                    </solution>
+                </task>
+                <task xml:id="task-two" label="task-two">
+                    <introduction>
+                        <p>Now find its perimeter, in two steps.</p>
+                    </introduction>
+                    <task xml:id="task-two-legs" label="task-two-legs">
+                        <statement>
+                            <p>Add the two legs.</p>
+                        </statement>
+                    </task>
+                    <task xml:id="task-two-hypotenuse" label="task-two-hypotenuse">
+                        <statement>
+                            <p>Add in the hypotenuse.</p>
+                        </statement>
+                    </task>
+                </task>
+            </project>
+        </section>
+
+        <section xml:id="section-quotations" label="section-quotations">
+            <title>Quotations, Verse, Quantities</title>
+
+            <p>Fill in the blank: the answer is <fillin characters="8"/> here.  And a quantity with units: the speed limit is <quantity><mag>100</mag><unit prefix="kilo" base="meter"/><per base="hour"/></quantity>.</p>
+
+            <blockquote>
+                <p>The grand thing is to be able to reason backwards.</p>
+                <attribution>
+                    <line>Sherlock Holmes</line>
+                    <line><q>A Study in Scarlet</q>, 1887</line>
+                </attribution>
+            </blockquote>
+
+            <poem xml:id="poem-fog" label="poem-fog">
+                <title>Fog</title>
+                <author>Carl Sandburg</author>
+                <stanza>
+                    <line>The fog comes</line>
+                    <line>on little cat feet.</line>
+                </stanza>
+                <stanza>
+                    <line>It sits looking</line>
+                    <line>over harbor and city</line>
+                    <line>on silent haunches</line>
+                    <line>and then moves on.</line>
+                </stanza>
+            </poem>
+        </section>
+
+        <exercises xml:id="exercises-development" label="exercises-development">
+            <title>A Few Exercises</title>
+
+            <exercise xml:id="exercise-one" label="exercise-one">
+                <statement>
+                    <p>Multiply <m>13 \cdot 31</m>.</p>
+                </statement>
+                <hint>
+                    <p>A calculator might help.</p>
+                </hint>
+            </exercise>
+
+            <exercisegroup xml:id="exercisegroup-squares" label="exercisegroup-squares">
+                <introduction>
+                    <p>Square each of the following.</p>
+                </introduction>
+                <exercise xml:id="exercise-two" label="exercise-two">
+                    <statement>
+                        <p><m>7</m>.</p>
+                    </statement>
+                </exercise>
+                <exercise xml:id="exercise-three" label="exercise-three">
+                    <statement>
+                        <p><m>2x - 3</m>.</p>
+                    </statement>
+                </exercise>
+            </exercisegroup>
+        </exercises>
+
+        <worksheet xml:id="worksheet-development" label="worksheet-development">
+            <title>A Worksheet with Workspace</title>
+
+            <introduction>
+                <p>A worksheet is a printout, so an exercise may request <attr>workspace</attr><mdash/>blank space below, where a reader works.  The space is elastic: it can stretch to fill out the printout's page, or surrender a bit when the page is crowded.</p>
+            </introduction>
+
+            <page>
+                <exercise xml:id="worksheet-exercise-sum" label="worksheet-exercise-sum" workspace="1.5in">
+                    <statement>
+                        <p>Add the first ten positive integers.</p>
+                    </statement>
+                </exercise>
+
+                <exercise xml:id="worksheet-exercise-product" label="worksheet-exercise-product" workspace="2in">
+                    <statement>
+                        <p>Now multiply them.  This deserves the larger workspace.</p>
+                    </statement>
+                </exercise>
+            </page>
+
+            <page>
+                <exercise xml:id="worksheet-exercise-conjecture" label="worksheet-exercise-conjecture" workspace="3in">
+                    <statement>
+                        <p>This exercise begins an authored second page.  Formulate a conjecture relating the two preceding answers, with plenty of room to think.</p>
+                    </statement>
+                </exercise>
+            </page>
+
+            <conclusion>
+                <p>The conclusion of the worksheet follows the final workspace.</p>
+            </conclusion>
+        </worksheet>
+
+        <references xml:id="references-development" label="references-development">
+            <title>References</title>
+
+            <biblio xml:id="csl-judson" type="book">
+                <author>
+                    <name>
+                        <given>Thomas W.</given>
+                        <family>Judson</family>
+                    </name>
+                </author>
+                <title>Abstract Algebra: Theory and Applications</title>
+                <issued>
+                    <date year="2022"/>
+                </issued>
+                <publisher>Orthogonal Publishing</publisher>
+                <publisher-place>Ann Arbor, MI</publisher-place>
+            </biblio>
+
+            <biblio xml:id="csl-lay" type="article-journal">
+                <author>
+                    <name>
+                        <given>David C.</given>
+                        <family>Lay</family>
+                    </name>
+                </author>
+                <title>Subspaces and Echelon Forms</title>
+                <container-title>The College Mathematics Journal</container-title>
+                <volume>24</volume>
+                <number>1</number>
+                <issued>
+                    <date year="1993" month="1"/>
+                </issued>
+                <page>57-62</page>
+            </biblio>
+
+            <biblio xml:id="csl-conrey" type="article-journal">
+                <author>
+                    <name>
+                        <given>J. B.</given>
+                        <family>Conrey</family>
+                    </name>
+                    <name>
+                        <given>D. W.</given>
+                        <family>Farmer</family>
+                    </name>
+                </author>
+                <title>Mean values of <m>L</m>-functions and symmetry</title>
+                <container-title>International Mathematics Research Notices</container-title>
+                <volume>17</volume>
+                <issued>
+                    <date year="2000"/>
+                </issued>
+                <page>883-908</page>
+            </biblio>
+
+            <biblio xml:id="csl-dummit" type="book">
+                <author>
+                    <name>
+                        <given>David S.</given>
+                        <family>Dummit</family>
+                    </name>
+                    <name>
+                        <given>Richard M.</given>
+                        <family>Foote</family>
+                    </name>
+                </author>
+                <title>Abstract Algebra</title>
+                <edition>3rd</edition>
+                <issued>
+                    <date year="2004"/>
+                </issued>
+                <publisher>John Wiley &amp; Sons</publisher>
+                <publisher-place>Hoboken, NJ</publisher-place>
+            </biblio>
+
+            <biblio xml:id="csl-pretext" type="webpage">
+                <author>
+                    <name>
+                        <literal>The PreTeXt Project</literal>
+                    </name>
+                </author>
+                <title>The PreTeXt Guide</title>
+                <accessed>
+                    <date year="2026" month="6" day="1"/>
+                </accessed>
+                <URL>https://pretextbook.org/doc/guide/html/</URL>
+            </biblio>
+
+            <biblio xml:id="csl-chapter" type="chapter">
+                <author>
+                    <name>
+                        <given>Jane Q.</given>
+                        <family>Author</family>
+                    </name>
+                </author>
+                <editor>
+                    <name>
+                        <given>John</given>
+                        <family>Smith</family>
+                    </name>
+                </editor>
+                <title>Finite Fields and Their Applications</title>
+                <container-title>Topics in Modern Algebra</container-title>
+                <issued>
+                    <date year="2010"/>
+                </issued>
+                <page>45-98</page>
+                <publisher>Academic Press</publisher>
+                <publisher-place>San Diego, CA</publisher-place>
+            </biblio>
+
+            <biblio xml:id="csl-icm" type="paper-conference">
+                <author>
+                    <name>
+                        <given>A.</given>
+                        <family>Lovelace</family>
+                    </name>
+                    <name>
+                        <given>C.</given>
+                        <family>Babbage</family>
+                    </name>
+                    <name>
+                        <given>G.</given>
+                        <family>Boole</family>
+                    </name>
+                </author>
+                <title>A Fast Algorithm for Matrix Factorization</title>
+                <container-title>Proceedings of the International Congress of Mathematicians</container-title>
+                <issued>
+                    <date year="2018"/>
+                </issued>
+                <page>1123-1140</page>
+            </biblio>
+
+            <biblio xml:id="csl-tao" type="thesis">
+                <author>
+                    <name>
+                        <given>Terence</given>
+                        <family>Tao</family>
+                    </name>
+                </author>
+                <title>Three Regularity Results in Harmonic Analysis</title>
+                <genre>Ph.D. thesis</genre>
+                <issued>
+                    <date year="1996"/>
+                </issued>
+                <publisher>Princeton University</publisher>
+            </biblio>
+
+            <biblio xml:id="csl-sage" type="software">
+                <author>
+                    <name>
+                        <literal>The Sage Developers</literal>
+                    </name>
+                </author>
+                <title>SageMath, the Sage Mathematics Software System (Version 10.3)</title>
+                <issued>
+                    <date year="2024"/>
+                </issued>
+                <URL>https://www.sagemath.org</URL>
+            </biblio>
+
+            <biblio xml:id="csl-nist" type="report">
+                <author>
+                    <name>
+                        <literal>National Institute of Standards and Technology</literal>
+                    </name>
+                </author>
+                <title>Digital Signature Standard (DSS)</title>
+                <number>FIPS PUB 186-4</number>
+                <issued>
+                    <date year="2013"/>
+                </issued>
+                <publisher>U.S. Department of Commerce</publisher>
+            </biblio>
+
+            <biblio xml:id="csl-strang" type="book">
+                <author>
+                    <name>
+                        <given>Gilbert</given>
+                        <family>Strang</family>
+                    </name>
+                </author>
+                <title>Introduction to Linear Algebra</title>
+                <edition>5th</edition>
+                <issued>
+                    <date year="2016"/>
+                </issued>
+                <number-of-pages>584</number-of-pages>
+                <publisher>Wellesley-Cambridge Press</publisher>
+                <publisher-place>Wellesley, MA</publisher-place>
+                <ISBN>978-0-9802327-7-6</ISBN>
+            </biblio>
+
+            <biblio xml:id="csl-trefethen" type="article-journal">
+                <author>
+                    <name>
+                        <given>L. N.</given>
+                        <family>Trefethen</family>
+                    </name>
+                </author>
+                <title>A Brief Note on Spectral Methods</title>
+                <container-title>SIAM Review</container-title>
+                <volume>50</volume>
+                <issue>1</issue>
+                <issued>
+                    <date year="2008"/>
+                </issued>
+                <page-first>67</page-first>
+                <DOI>10.1137/060657716</DOI>
+                <ISSN>0036-1445</ISSN>
+            </biblio>
+        </references>
+
+        <backmatter xml:id="backmatter" label="backmatter">
+            <title>Back Matter</title>
+
+            <solutions xml:id="solutions-backmatter" label="solutions-backmatter" divisional="answer solution" project="solution" inline="answer">
+                <title>Answers and Solutions</title>
+            </solutions>
+            <index xml:id="the-index" label="the-index">
+                <title>Index</title>
+                <index-list/>
+            </index>
+            <colophon xml:id="colophon" label="colophon">
+                <p>This article was authored in, and produced with, <pretext/>, rendered by Apache <init>FOP</init> by way of <init>XSL</init> Formatting Objects.</p>
+            </colophon>
+        </backmatter>
+    </article>
+</pretext>

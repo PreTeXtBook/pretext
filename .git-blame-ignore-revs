@@ -9,3 +9,6 @@
 
 # Mar 2025: empty elements in sample article
 36decdaa299138281dd461d021483a83fb7d1964
+
+# Jun 2026: normalize line endings to LF in two localization files
+fcc497053294ba42ee77e88fc21890a8f1eb2eff

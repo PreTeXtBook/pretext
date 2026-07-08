@@ -86,7 +86,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <numbering>
         <divisions level="3"/>
         <blocks    level="1"/>
-        <projects  level="1"/>
+        <projects  level="1" distinct="yes"/>
         <equations level="1"/>
         <footnotes level="1"/>
     </numbering>

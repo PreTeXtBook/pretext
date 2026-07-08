@@ -157,7 +157,7 @@ $page-border-breakpoint: $main-width + $sidebar-width + 2 * $sidebar-right-margi
     margin-right: auto;
 
     // shrink content padding
-    .ptx-content {
+    & .ptx-content {
       padding-left: $content-side-padding-tight;
       padding-right: $content-side-padding-tight;
       max-width: calc($content-width + 2 * $content-side-padding-tight);
@@ -243,4 +243,10 @@ $sidebar-hide-breakpoint: $content-width + 2 * $content-side-padding-tight + $si
     box-shadow: none;
     max-width: 100%;
   }
+}
+
+body.ptx-runestone-template {
+    .ptx-main > .ptx-content {
+        padding: 24px;
+    }
 }

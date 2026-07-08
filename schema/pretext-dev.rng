@@ -40,6 +40,12 @@
         <attribute name="calcplot3d"/>
       </optional>
       <optional>
+        <attribute name="geogebra"/>
+      </optional>
+      <optional>
+        <attribute name="desmos"/>
+      </optional>
+      <optional>
         <!--
           currently only consumed by the CalcPlot3D flavor;
           widen this enum if another flavor adopts "@variant"
@@ -58,6 +64,15 @@
       <optional>
         <attribute name="resize-behavior"/>
       </optional>
+      <optional>
+        <attribute name="css"/>
+      </optional>
+      <optional>
+        <attribute name="design-width"/>
+      </optional>
+      <optional>
+        <attribute name="reset-icon"/>
+      </optional>
       <interleave>
         <optional>
           <ref name="ImageShortDescription"/>
@@ -68,15 +83,30 @@
         <zeroOrMore>
           <choice>
             <ref name="Slate"/>
-            <ref name="SideBySideNoCaption"/>
-            <ref name="SideBySideGroupNoCaption"/>
+            <ref name="SideBySideNoNumber"/>
+            <ref name="SideBySideGroupNoNumber"/>
           </choice>
         </zeroOrMore>
+        <zeroOrMore>
+          <element name="script">
+            <optional>
+              <attribute name="type"/>
+            </optional>
+            <text/>
+          </element>
+        </zeroOrMore>
+        <optional>
+          <element name="source">
+            <text/>
+          </element>
+        </optional>
         <optional>
           <element name="instructions">
             <mixed>
               <ref name="MetaDataTitleOptional"/>
-              <ref name="BlockText"/>
+              <oneOrMore>
+                <ref name="BlockText"/>
+              </oneOrMore>
             </mixed>
           </element>
         </optional>
@@ -95,6 +125,7 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -129,12 +160,16 @@
           <optional>
             <attribute name="aspect"/>
           </optional>
+          <optional>
+            <attribute name="perspective"/>
+          </optional>
           <zeroOrMore>
             <choice>
               <ref name="Paragraph"/>
               <ref name="Tabular"/>
-              <ref name="SideBySideNoCaption"/>
+              <ref name="SideBySideNoNumber"/>
               <ref name="SlateInput"/>
+              <ref name="AnyXhtml"/>
               <optional>
                 <element name="xhtml:button">
                   <attribute name="type"/>
@@ -199,6 +234,22 @@
       </optional>
     </element>
   </define>
+  <!-- A slate with surface="html" embeds an arbitrary XHTML fragment. -->
+  <define name="AnyXhtml">
+    <element>
+      <nsName ns="http://www.w3.org/1999/xhtml"/>
+      <zeroOrMore>
+        <attribute>
+          <anyName/>
+        </attribute>
+      </zeroOrMore>
+      <mixed>
+        <zeroOrMore>
+          <ref name="AnyXhtml"/>
+        </zeroOrMore>
+      </mixed>
+    </element>
+  </define>
   <!-- add Interactives where used -->
   <define name="BlockStatement" combine="choice">
     <ref name="Interactive"/>
@@ -220,7 +271,7 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="SideBySideNoCaption" combine="choice">
+  <define name="SideBySideNoNumber" combine="choice">
     <element name="sidebyside">
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
@@ -282,7 +333,9 @@
   </define>
   <define name="Configuration" combine="choice">
     <element name="blurb">
-      <attribute name="shelf"/>
+      <optional>
+        <attribute name="shelf"/>
+      </optional>
       <text/>
     </element>
   </define>
@@ -1035,8 +1088,11 @@
       </mixed>
     </element>
   </define>
-  <!-- Extended fillin with interactive attributes -->
-  <define name="FillIn" combine="choice">
+  <!--
+    Extended fillin with interactive attributes (extends the inline
+    text fill-in blank; the bare "FillIn" name was orphaned)
+  -->
+  <define name="FillInText" combine="choice">
     <element name="fillin">
       <optional>
         <attribute name="characters">

@@ -24,6 +24,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     %entities;
 ]>
 
+<!-- A "slideshow" realized as a LaTeX/Beamer presentation.            -->
+<!--                                                                   -->
+<!-- Modeled on the reveal.js conversion: import the full parent       -->
+<!-- conversion (LaTeX), which supplies inline markup, mathematics,    -->
+<!-- images, tables, programs, side-by-side, and so on.  Override      -->
+<!-- the entry point and the structure ("slideshow", "section",        -->
+<!-- "slide", "subslide"), pauses, and the block elements, which       -->
+<!-- become native Beamer environments.                                -->
+<!--                                                                   -->
+<!-- Lists are implemented here, and NOT inherited: the LaTeX          -->
+<!-- conversion's lists rely on the "enumitem" package, which          -->
+<!-- interferes with Beamer's own list machinery (especially           -->
+<!-- overlays); Beamer's native lists are used instead.                -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -31,244 +44,486 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:date="http://exslt.org/dates-and-times"
     extension-element-prefixes="exsl date"
 >
+
 <xsl:import href="./pretext-latex.xsl" />
 
 <xsl:output method="text" indent="no" encoding="UTF-8"/>
 
+<!-- The Beamer theme, an author/publisher choice.  A string parameter -->
+<!-- until slideshow options mature in the publisher file.             -->
+<xsl:param name="beamer.theme" select="'Boadilla'"/>
+
+<!-- Blocks on slides never carry a LaTeX \label, so cross-reference -->
+<!-- numbers are hard-coded rather than realized through \ref        -->
+<xsl:variable name="b-latex-hardcode-numbers" select="true()"/>
+
+<!-- ############## -->
+<!-- Entry Template -->
+<!-- ############## -->
+
+<!-- Mirror the LaTeX conversion's entry template: warnings are     -->
+<!-- computed on the original source, and we process the enhanced   -->
+<!-- source produced by the assembly stylesheet (so generated       -->
+<!-- images, WeBWorK representations, and their friends all exist). -->
 <xsl:template match="/">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">Conversion to Beamer presentations/slideshows is experimental and needs improvements&#xa;Requests for additional specific constructions welcome&#xa;Additional PreTeXt elements are subject to change</xsl:with-param>
-      </xsl:call-template>
-  <xsl:apply-templates select="pretext"/>
+        <xsl:with-param name="warning">Conversion to Beamer presentations/slideshows is experimental&#xa;Requests for additional specific constructions welcome&#xa;Additional PreTeXt elements are subject to change</xsl:with-param>
+    </xsl:call-template>
+    <xsl:apply-templates select="$original" mode="generic-warnings"/>
+    <xsl:apply-templates select="$original" mode="element-deprecation-warnings"/>
+    <xsl:apply-templates select="$original" mode="parameter-deprecation-warnings"/>
+    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
-<xsl:template match="/pretext">
-  <xsl:apply-templates select="slideshow" />
+<xsl:template match="/mathbook|/pretext">
+    <xsl:apply-templates select="slideshow"/>
 </xsl:template>
+
+<!-- ################ -->
+<!-- Document Shell   -->
+<!-- ################ -->
 
 <xsl:template match="slideshow">
-  <xsl:call-template name="preamble" />
-  <xsl:call-template name="body" />
+    <xsl:call-template name="converter-blurb-latex" />
+    <xsl:call-template name="beamer-preamble"/>
+    <xsl:text>\begin{document}&#xa;&#xa;</xsl:text>
+    <xsl:apply-templates select="frontmatter"/>
+    <!-- an overview of the sections, when there are sections -->
+    <xsl:if test="section">
+        <xsl:text>\begin{frame}&#xa;</xsl:text>
+        <xsl:text>\frametitle{</xsl:text>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'toc'"/>
+        </xsl:apply-templates>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\tableofcontents&#xa;</xsl:text>
+        <xsl:text>\end{frame}&#xa;&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="section|slide"/>
+    <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template name="preamble">
-  <xsl:text>\documentclass[11pt, compress]{beamer}&#xa;</xsl:text>
-  <xsl:if test="$latex.preamble.early != ''">
-    <xsl:text>%% Custom Preamble Entries, early (use latex.preamble.early)&#xa;</xsl:text>
-    <xsl:value-of select="$latex.preamble.early" />
-    <xsl:text>&#xa;</xsl:text>
-  </xsl:if>
-  <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
+<!-- ########### -->
+<!-- Frontmatter -->
+<!-- ########### -->
 
-  <xsl:text>\usetheme{Boadilla}&#xa;</xsl:text>
-  <xsl:text>\usefonttheme[onlymath]{serif}&#xa;</xsl:text>
-  <xsl:text>%get rid of navigation:&#xa;\setbeamertemplate{navigation symbols}{}&#xa;</xsl:text>
-  <xsl:text>&#xa;&#xa; %%%% Start PreTeXt generated preamble: %%%%% &#xa;&#xa;</xsl:text>
-  <xsl:text>%% Some aspects of the preamble are conditional,&#xa;</xsl:text>
-  <xsl:text>%% the LaTeX engine is one such determinant&#xa;</xsl:text>
-  <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
-  <xsl:text>\newcommand{\tabularfont}{}&#xa;</xsl:text>
-  <xsl:text>\usepackage[xparse, raster]{tcolorbox}&#xa;</xsl:text>
-  <xsl:text>\tcbset{colback=white, colframe=white}&#xa;</xsl:text>
-  <xsl:text>\NewTColorBox{image}{mmm}{boxrule=0.25pt, colframe=gray, left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
-  <xsl:text>\RenewTColorBox{definition}{m}{colback=teal!30!white, colbacktitle=teal!30!white, coltitle=black, colframe=gray, boxrule=0.5pt, sharp corners=downhill, titlerule = 0.25pt, title={#1}}&#xa;</xsl:text>
-  <xsl:text>\RenewTColorBox{theorem}{m}{colback=pink!30!white, colbacktitle=pink!30!white, coltitle=black, colframe=gray, boxrule=0.5pt, sharp corners=downhill, titlerule = 0.25pt, title={#1}}&#xa;</xsl:text>
-  <xsl:text>\RenewTColorBox{proof}{}{boxrule=0.25pt, colframe=gray, colback=white, before upper={Proof:}, after upper={\qed}}&#xa;</xsl:text>
-       <xsl:if test="$b-has-program or $b-has-console or $b-has-sage">
+<!-- Title, subtitle, authors, event, date become Beamer's title -->
+<!-- page material, on a plain frame.  An optional "abstract"    -->
+<!-- follows on a frame of its own.                              -->
+<xsl:template match="slideshow/frontmatter">
+    <xsl:text>\title{</xsl:text>
+    <xsl:apply-templates select="parent::slideshow" mode="title-full"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="parent::slideshow/subtitle">
+        <xsl:text>\subtitle{</xsl:text>
+        <xsl:apply-templates select="parent::slideshow" mode="subtitle"/>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- short form (names only) for theme footlines -->
+    <xsl:text>\author[</xsl:text>
+    <xsl:for-each select="$bibinfo/author">
+        <xsl:apply-templates select="personname"/>
+        <xsl:if test="following-sibling::author">
+            <xsl:text>, </xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:text>]{</xsl:text>
+    <xsl:for-each select="$bibinfo/author">
+        <xsl:apply-templates select="personname"/>
+        <!-- assembly wraps a bare "institution" in an "affiliation" -->
+        <xsl:if test="affiliation/institution|institution">
+            <xsl:text>\\ {\small </xsl:text>
+            <xsl:apply-templates select="(affiliation/institution|institution)[1]/node()"/>
+            <xsl:text>}</xsl:text>
+        </xsl:if>
+        <xsl:if test="following-sibling::author">
+            <xsl:text> \and </xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\date{</xsl:text>
+    <xsl:if test="$bibinfo/event">
+        <xsl:apply-templates select="$bibinfo/event"/>
+        <xsl:if test="$bibinfo/date">
+            <xsl:text>\\ </xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <xsl:if test="$bibinfo/date">
+        <xsl:apply-templates select="$bibinfo/date"/>
+    </xsl:if>
+    <xsl:text>}&#xa;&#xa;</xsl:text>
+    <xsl:text>\begin{frame}[plain]&#xa;</xsl:text>
+    <xsl:text>\titlepage&#xa;</xsl:text>
+    <xsl:text>\end{frame}&#xa;&#xa;</xsl:text>
+    <xsl:apply-templates select="abstract"/>
+</xsl:template>
+
+<xsl:template match="slideshow/frontmatter/abstract">
+    <xsl:text>\begin{frame}&#xa;</xsl:text>
+    <xsl:text>\frametitle{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{frame}&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ######################## -->
+<!-- Sections, Slides, Pauses -->
+<!-- ######################## -->
+
+<!-- A "section" is a Beamer section (navigation, table of contents) -->
+<!-- with a section-title frame, as in the reveal.js conversion.     -->
+<xsl:template match="slideshow/section">
+    <xsl:text>&#xa;\section{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\begin{frame}&#xa;</xsl:text>
+    <xsl:text>\sectionpage&#xa;</xsl:text>
+    <xsl:text>\end{frame}&#xa;&#xa;</xsl:text>
+    <xsl:apply-templates select="slide"/>
+</xsl:template>
+
+<!-- A "slide" is a frame.  A frame whose content includes anything  -->
+<!-- realized through the "listings" package (or other verbatim-like -->
+<!-- material) must be marked "fragile".                             -->
+<xsl:template match="slide">
+    <xsl:text>\begin{frame}</xsl:text>
+    <xsl:if test="descendant::program or descendant::console or descendant::sage or descendant::cd or descendant::pre">
+        <xsl:text>[fragile]</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>\frametitle{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{frame}&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<!-- A "subslide" is material that appears, as one group, after an   -->
+<!-- advance of the slideshow.  Beamer's \pause would also suppress   -->
+<!-- everything *after* the group, but material following a subslide  -->
+<!-- is visible from the outset (as with reveal.js "fragments"), so   -->
+<!-- we uncover the group on the next pause step and leave the        -->
+<!-- surroundings alone.                                              -->
+<xsl:template match="subslide">
+    <xsl:text>\uncover&lt;+(1)-&gt;{%&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>}%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- A paragraph may pause before it appears; identical device -->
+<xsl:template match="slide//p[@pause = 'yes']">
+    <xsl:text>\uncover&lt;+(1)-&gt;{%&#xa;</xsl:text>
+    <xsl:apply-imports/>
+    <xsl:text>}%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ##### -->
+<!-- Lists -->
+<!-- ##### -->
+
+<!-- Beamer's native lists, since the inherited lists rely on the  -->
+<!-- "enumitem" package, which fights Beamer.  A list with pauses  -->
+<!-- gets the incremental default overlay specification, item by   -->
+<!-- item, matching the reveal.js conversion's fragments.          -->
+
+<!-- An "ol" marker passes through as a Beamer "mini-template",  -->
+<!-- where the characters A, a, I, i, 1 are the counter formats, -->
+<!-- consonant with PreTeXt marker conventions                   -->
+<xsl:template match="slide//ol">
+    <xsl:call-template name="begin-list-columns"/>
+    <xsl:text>\begin{enumerate}</xsl:text>
+    <xsl:if test="@pause = 'yes'">
+        <xsl:text>[&lt;+-&gt;]</xsl:text>
+    </xsl:if>
+    <xsl:if test="@marker">
+        <xsl:text>[</xsl:text>
+        <xsl:value-of select="@marker"/>
+        <xsl:text>]</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="li"/>
+    <xsl:text>\end{enumerate}&#xa;</xsl:text>
+    <xsl:call-template name="end-list-columns"/>
+</xsl:template>
+
+<xsl:template match="slide//ul">
+    <xsl:call-template name="begin-list-columns"/>
+    <xsl:text>\begin{itemize}</xsl:text>
+    <xsl:if test="@pause = 'yes'">
+        <xsl:text>[&lt;+-&gt;]</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="li"/>
+    <xsl:text>\end{itemize}&#xa;</xsl:text>
+    <xsl:call-template name="end-list-columns"/>
+</xsl:template>
+
+<xsl:template match="slide//dl">
+    <xsl:text>\begin{description}</xsl:text>
+    <xsl:if test="@pause = 'yes'">
+        <xsl:text>[&lt;+-&gt;]</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="li"/>
+    <xsl:text>\end{description}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Multiple columns via the "multicol" package (in the preamble) -->
+<xsl:template name="begin-list-columns">
+    <xsl:if test="@cols and (@cols != 1)">
+        <xsl:text>\begin{multicols}{</xsl:text>
+        <xsl:value-of select="@cols"/>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="end-list-columns">
+    <xsl:if test="@cols and (@cols != 1)">
+        <xsl:text>\end{multicols}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="slide//ol/li|slide//ul/li">
+    <xsl:text>\item{}</xsl:text>
+    <xsl:if test="title">
+        <xsl:text> \ptxlititle{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:text>}\par</xsl:text>
+    </xsl:if>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- The title becomes Beamer's description label -->
+<xsl:template match="slide//dl/li">
+    <xsl:text>\item[</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>] </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ###### -->
+<!-- Blocks -->
+<!-- ###### -->
+
+<!-- Blocks become native Beamer environments, which the theme      -->
+<!-- styles.  Beamer predefines "definition", "theorem",            -->
+<!-- "corollary", "lemma", "fact", "example", "proof" and the       -->
+<!-- generic titled "block".  Blocks are not numbered on slides.    -->
+
+<xsl:template match="&DEFINITION-LIKE;" priority="1">
+    <xsl:call-template name="beamer-environment">
+        <xsl:with-param name="environment" select="'definition'"/>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="theorem|corollary|lemma|fact" priority="1">
+    <xsl:call-template name="beamer-environment">
+        <xsl:with-param name="environment" select="local-name(.)"/>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="&EXAMPLE-LIKE;" priority="1">
+    <xsl:call-template name="beamer-environment">
+        <xsl:with-param name="environment" select="'example'"/>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Everything else theorem-ish, plus remarks and asides, is a -->
+<!-- generic Beamer "block" headed by its type-name and title   -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&GOAL-LIKE;|assemblage">
+    <xsl:text>\begin{block}{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:if test="title">
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+    </xsl:if>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(&PROOF-FILTER;)]"/>
+    <xsl:text>\end{block}&#xa;</xsl:text>
+    <xsl:apply-templates select="&PROOF-LIKE;"/>
+</xsl:template>
+
+<!-- The common core: the environment, an optional title in the   -->
+<!-- optional argument, the guts, and any proof following outside -->
+<xsl:template name="beamer-environment">
+    <xsl:param name="environment"/>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="$environment"/>
+    <xsl:text>}</xsl:text>
+    <xsl:if test="title">
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:text>]</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(&PROOF-FILTER;)]"/>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="$environment"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="&PROOF-LIKE;"/>
+</xsl:template>
+
+<xsl:template match="&PROOF-LIKE;">
+    <xsl:text>\begin{proof}&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{proof}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- "statement" is a pure container in this context -->
+<xsl:template match="statement">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- Metadata of blocks, handled elsewhere or meaningless on a slide -->
+<xsl:template match="notation"/>
+
+<!-- ####### -->
+<!-- Figures -->
+<!-- ####### -->
+
+<!-- The LaTeX conversion realizes captioned items through generated  -->
+<!-- environments of its styling scheme, which Beamer does not carry. -->
+<!-- On a slide there is no numbering, so a caption or title is just  -->
+<!-- a small centered legend after the content.                       -->
+<xsl:template match="&FIGURE-LIKE;" priority="1">
+    <xsl:text>\begin{center}&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:choose>
+        <xsl:when test="caption">
+            <xsl:text>\par\smallskip{}{\small{}</xsl:text>
+            <xsl:apply-templates select="caption/node()"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="title">
+            <xsl:text>\par\smallskip{}{\small{}</xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise/>
+    </xsl:choose>
+    <xsl:text>\end{center}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ################ -->
+<!-- Cross-References -->
+<!-- ################ -->
+
+<!-- The content of a cross-reference is computed by the -common     -->
+<!-- machinery; on a slide we do not make it a hyperlink, since the  -->
+<!-- likely target is a nearby slide with no useful anchor in a PDF. -->
+<xsl:template match="*" mode="xref-link">
+    <xsl:param name="target"/>
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<!-- Every number in a cross-reference is hard-coded: no block on a  -->
+<!-- slide carries a LaTeX \label, so \ref has nothing to resolve.   -->
+<xsl:template match="*" mode="xref-number">
+    <xsl:param name="xref" select="/.." />
+    <xsl:apply-templates select="." mode="xref-number-hardcoded">
+        <xsl:with-param name="xref" select="$xref"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- ######## -->
+<!-- Preamble -->
+<!-- ######## -->
+
+<!-- N.B. Portions of this preamble duplicate fragments of the LaTeX   -->
+<!-- conversion's preamble, since the inherited content templates      -->
+<!-- presume supporting macros and environments ("image", "sidebyside" -->
+<!-- and "sbspanel", "program", "console", "sageinput"/"sageoutput",   -->
+<!-- tabular rules, semantic macros).  Re-architecting the LaTeX       -->
+<!-- preamble into shareable pieces would remove the duplication.      -->
+<xsl:template name="beamer-preamble">
+    <xsl:text>\documentclass[11pt, compress]{beamer}&#xa;</xsl:text>
+    <xsl:if test="$latex.preamble.early != ''">
+        <xsl:text>%% Custom Preamble Entries, early (use latex.preamble.early)&#xa;</xsl:text>
+        <xsl:value-of select="$latex.preamble.early" />
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>\usetheme{</xsl:text>
+    <xsl:value-of select="$beamer.theme"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\usefonttheme[onlymath]{serif}&#xa;</xsl:text>
+    <xsl:text>%% quash navigation symbols&#xa;</xsl:text>
+    <xsl:text>\setbeamertemplate{navigation symbols}{}&#xa;</xsl:text>
+    <xsl:text>%% every "section" gets a section-title frame via \sectionpage&#xa;</xsl:text>
+    <xsl:text>&#xa;%%%% Start PreTeXt generated preamble %%%%&#xa;&#xa;</xsl:text>
+    <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
+    <xsl:text>%% fonts: the inherited templates emit T1-encoded glyph names&#xa;</xsl:text>
+    <xsl:text>%% (such as \textquotedbl), so match the LaTeX conversion's setup&#xa;</xsl:text>
+    <xsl:text>\ifPDFTeX&#xa;</xsl:text>
+    <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
+    <xsl:text>\else&#xa;</xsl:text>
+    <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
+    <xsl:text>\fi&#xa;</xsl:text>
+    <xsl:text>%% Some aspects of the preamble are conditional,&#xa;</xsl:text>
+    <xsl:text>%% the LaTeX engine is one such determinant&#xa;</xsl:text>
+    <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\tabularfont}{}&#xa;</xsl:text>
+    <xsl:text>\usepackage[xparse, raster]{tcolorbox}&#xa;</xsl:text>
+    <xsl:text>\tcbset{colback=white, colframe=white}&#xa;</xsl:text>
+    <xsl:text>%% tcolorbox styles used by images and side-by-side panels&#xa;</xsl:text>
+    <xsl:text>\tcbset{ bwminimalstyle/.style={size=minimal, boxrule=-0.3pt, frame empty,&#xa;</xsl:text>
+    <xsl:text>colback=white, colbacktitle=white, coltitle=black, opacityfill=0.0} }&#xa;</xsl:text>
+    <xsl:if test="$document-root//image">
+        <xsl:text>%% "tcolorbox" environment for a single image, as in the LaTeX conversion&#xa;</xsl:text>
+        <xsl:text>\tcbset{ imagestyle/.style={bwminimalstyle} }&#xa;</xsl:text>
+        <xsl:text>\NewTColorBox{tcbimage}{mmm}{imagestyle,left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
+        <xsl:text>\NewDocumentEnvironment{image}{mmmm}{\notblank{#4}{\leavevmode\nopagebreak\vspace{#4}}{}\begin{tcbimage}{#1}{#2}{#3}}{\end{tcbimage}%&#xa;}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]">
+        <xsl:text>%% Multiple column lists&#xa;</xsl:text>
+        <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$b-has-program or $b-has-console or $b-has-sage">
         <xsl:text>%% Program listing support: for listings, programs, consoles, and Sage code&#xa;</xsl:text>
-        <!-- NB: the "listingsutf8" package is not a panacea, as it only       -->
-        <!-- cooperates with UTF-8 characters when code snippets are read      -->
-        <!-- in from external files.  We do condition on the LaTeX engines     -->
-        <!-- since (a) it is easy and (b) the tcolorbox documentation warns    -->
-        <!-- about not being careful.  NB: LuaTeX is not tested nor supported. -->
         <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}%&#xa;</xsl:text>
         <xsl:text>  {\tcbuselibrary{listings}}%&#xa;</xsl:text>
         <xsl:text>  {\tcbuselibrary{listingsutf8}}%&#xa;</xsl:text>
-        <xsl:text>%% We define the listings font style to be the default "ttfamily"&#xa;</xsl:text>
-        <xsl:text>%% To fix hyphens/dashes rendered in PDF as fancy minus signs by listing&#xa;</xsl:text>
-        <xsl:text>%% http://tex.stackexchange.com/questions/33185/listings-package-changes-hyphens-to-minus-signs&#xa;</xsl:text>
-        <xsl:text>\makeatletter&#xa;</xsl:text>
-        <xsl:text>\lst@CCPutMacro\lst@ProcessOther {"2D}{\lst@ttfamily{-{}}{-{}}}&#xa;</xsl:text>
-        <xsl:text>\@empty\z@\@empty&#xa;</xsl:text>
-        <xsl:text>\makeatother&#xa;</xsl:text>
-        <xsl:text>%% We define a null language, free of any formatting or style&#xa;</xsl:text>
-        <xsl:text>%% for use when a language is not supported, or pseudo-code, or consoles&#xa;</xsl:text>
-        <xsl:text>%% Not necessary for Sage code, so in limited cases included unnecessarily&#xa;</xsl:text>
+        <xsl:text>%% A null language, free of any formatting or style&#xa;</xsl:text>
         <xsl:text>\lstdefinelanguage{none}{identifierstyle=,commentstyle=,stringstyle=,keywordstyle=}&#xa;</xsl:text>
-        <xsl:text>\ifthenelse{\boolean{xetex}}{}{%&#xa;</xsl:text>
-        <xsl:text>%% begin: pdflatex-specific listings configuration&#xa;</xsl:text>
-        <xsl:text>%% translate U+0080 - U+00F0 to their textmode LaTeX equivalents&#xa;</xsl:text>
-        <xsl:text>%% Data originally from https://www.w3.org/Math/characters/unicode.xml, 2016-07-23&#xa;</xsl:text>
-        <xsl:text>%% Lines marked in XSL with "$" were converted from mathmode to textmode&#xa;</xsl:text>
-        <!-- encoding, etc: http://tex.stackexchange.com/questions/24528/ -->
-        <!-- Format: {Unicode}{TeX}{rendered-length} Unicode name (in numerical order) -->
-        <xsl:text>\lstset{extendedchars=true}&#xa;</xsl:text>
-        <xsl:text>\lstset{literate=</xsl:text>
-        <xsl:text>{&#x00A0;}{{~}}{1}</xsl:text>    <!--NO-BREAK SPACE-->
-        <xsl:text>{&#x00A1;}{{\textexclamdown }}{1}</xsl:text>    <!--INVERTED EXCLAMATION MARK-->
-        <xsl:text>{&#x00A2;}{{\textcent }}{1}</xsl:text>    <!--CENT SIGN-->
-        <xsl:text>{&#x00A3;}{{\textsterling }}{1}</xsl:text>    <!--POUND SIGN-->
-        <xsl:text>{&#x00A4;}{{\textcurrency }}{1}</xsl:text>    <!--CURRENCY SIGN-->
-        <xsl:text>{&#x00A5;}{{\textyen }}{1}</xsl:text>    <!--YEN SIGN-->
-        <xsl:text>{&#x00A6;}{{\textbrokenbar }}{1}</xsl:text>    <!--BROKEN BAR-->
-        <xsl:text>{&#x00A7;}{{\textsection }}{1}</xsl:text>    <!--SECTION SIGN-->
-        <xsl:text>{&#x00A8;}{{\textasciidieresis }}{1}</xsl:text>    <!--DIAERESIS-->
-        <xsl:text>{&#x00A9;}{{\textcopyright }}{1}</xsl:text>    <!--COPYRIGHT SIGN-->
-        <xsl:text>{&#x00AA;}{{\textordfeminine }}{1}</xsl:text>    <!--FEMININE ORDINAL INDICATOR-->
-        <xsl:text>{&#x00AB;}{{\guillemotleft }}{1}</xsl:text>    <!--LEFT-POINTING DOUBLE ANGLE QUOTATION MARK-->
-        <xsl:text>{&#x00AC;}{{\textlnot }}{1}</xsl:text>    <!--NOT SIGN-->  <!-- $ -->
-        <xsl:text>{&#x00AD;}{{\-}}{1}</xsl:text>    <!--SOFT HYPHEN-->
-        <xsl:text>{&#x00AE;}{{\textregistered }}{1}</xsl:text>    <!--REGISTERED SIGN-->
-        <xsl:text>{&#x00AF;}{{\textasciimacron }}{1}</xsl:text>    <!--MACRON-->
-        <xsl:text>{&#x00B0;}{{\textdegree }}{1}</xsl:text>    <!--DEGREE SIGN-->
-        <xsl:text>{&#x00B1;}{{\textpm }}{1}</xsl:text>    <!--PLUS-MINUS SIGN-->  <!-- $ -->
-        <xsl:text>{&#x00B2;}{{\texttwosuperior }}{1}</xsl:text>    <!--SUPERSCRIPT TWO-->  <!-- $ -->
-        <xsl:text>{&#x00B3;}{{\textthreesuperior }}{1}</xsl:text>    <!--SUPERSCRIPT THREE-->   <!-- $ -->
-        <xsl:text>{&#x00B4;}{{\textasciiacute }}{1}</xsl:text>    <!--ACUTE ACCENT-->
-        <xsl:text>{&#x00B5;}{{\textmu }}{1}</xsl:text>    <!--MICRO SIGN-->  <!-- $ -->
-        <xsl:text>{&#x00B6;}{{\textparagraph }}{1}</xsl:text>    <!--PILCROW SIGN-->
-        <xsl:text>{&#x00B7;}{{\textperiodcentered }}{1}</xsl:text>    <!--MIDDLE DOT-->  <!-- $ -->
-        <xsl:text>{&#x00B8;}{{\c{}}}{1}</xsl:text>    <!--CEDILLA-->
-        <xsl:text>{&#x00B9;}{{\textonesuperior }}{1}</xsl:text>    <!--SUPERSCRIPT ONE-->  <!-- $ -->
-        <xsl:text>{&#x00BA;}{{\textordmasculine }}{1}</xsl:text>    <!--MASCULINE ORDINAL INDICATOR-->
-        <xsl:text>{&#x00BB;}{{\guillemotright }}{1}</xsl:text>    <!--RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK-->
-        <xsl:text>{&#x00BC;}{{\textonequarter }}{1}</xsl:text>    <!--VULGAR FRACTION ONE QUARTER-->
-        <xsl:text>{&#x00BD;}{{\textonehalf }}{1}</xsl:text>    <!--VULGAR FRACTION ONE HALF-->
-        <xsl:text>{&#x00BE;}{{\textthreequarters }}{1}</xsl:text>    <!--VULGAR FRACTION THREE QUARTERS-->
-        <xsl:text>{&#x00BF;}{{\textquestiondown }}{1}</xsl:text>    <!--INVERTED QUESTION MARK-->
-        <xsl:text>{&#x00C0;}{{\`{A}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER A WITH GRAVE-->
-        <xsl:text>{&#x00C1;}{{\'{A}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER A WITH ACUTE-->
-        <xsl:text>{&#x00C2;}{{\^{A}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER A WITH CIRCUMFLEX-->
-        <xsl:text>{&#x00C3;}{{\~{A}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER A WITH TILDE-->
-        <xsl:text>{&#x00C4;}{{\"{A}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER A WITH DIAERESIS-->
-        <xsl:text>{&#x00C5;}{{\AA }}{1}</xsl:text>    <!--LATIN CAPITAL LETTER A WITH RING ABOVE-->
-        <xsl:text>{&#x00C6;}{{\AE }}{1}</xsl:text>    <!--LATIN CAPITAL LETTER AE-->
-        <xsl:text>{&#x00C7;}{{\c{C}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER C WITH CEDILLA-->
-        <xsl:text>{&#x00C8;}{{\`{E}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER E WITH GRAVE-->
-        <xsl:text>{&#x00C9;}{{\'{E}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER E WITH ACUTE-->
-        <xsl:text>{&#x00CA;}{{\^{E}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER E WITH CIRCUMFLEX-->
-        <xsl:text>{&#x00CB;}{{\"{E}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER E WITH DIAERESIS-->
-        <xsl:text>{&#x00CC;}{{\`{I}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER I WITH GRAVE-->
-        <xsl:text>{&#x00CD;}{{\'{I}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER I WITH ACUTE-->
-        <xsl:text>{&#x00CE;}{{\^{I}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER I WITH CIRCUMFLEX-->
-        <xsl:text>{&#x00CF;}{{\"{I}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER I WITH DIAERESIS-->
-        <xsl:text>{&#x00D0;}{{\DH }}{1}</xsl:text>    <!--LATIN CAPITAL LETTER ETH-->
-        <xsl:text>{&#x00D1;}{{\~{N}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER N WITH TILDE-->
-        <xsl:text>{&#x00D2;}{{\`{O}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER O WITH GRAVE-->
-        <xsl:text>{&#x00D3;}{{\'{O}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER O WITH ACUTE-->
-        <xsl:text>{&#x00D4;}{{\^{O}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER O WITH CIRCUMFLEX-->
-        <xsl:text>{&#x00D5;}{{\~{O}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER O WITH TILDE-->
-        <xsl:text>{&#x00D6;}{{\"{O}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER O WITH DIAERESIS-->
-        <xsl:text>{&#x00D7;}{{\texttimes }}{1}</xsl:text>    <!--MULTIPLICATION SIGN-->
-        <xsl:text>{&#x00D8;}{{\O }}{1}</xsl:text>    <!--LATIN CAPITAL LETTER O WITH STROKE-->
-        <xsl:text>{&#x00D9;}{{\`{U}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER U WITH GRAVE-->
-        <xsl:text>{&#x00DA;}{{\'{U}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER U WITH ACUTE-->
-        <xsl:text>{&#x00DB;}{{\^{U}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER U WITH CIRCUMFLEX-->
-        <xsl:text>{&#x00DC;}{{\"{U}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER U WITH DIAERESIS-->
-        <xsl:text>{&#x00DD;}{{\'{Y}}}{1}</xsl:text>    <!--LATIN CAPITAL LETTER Y WITH ACUTE-->
-        <xsl:text>{&#x00DE;}{{\TH }}{1}</xsl:text>    <!--LATIN CAPITAL LETTER THORN-->
-        <xsl:text>{&#x00DF;}{{\ss }}{1}</xsl:text>    <!--LATIN SMALL LETTER SHARP S-->
-        <xsl:text>{&#x00E0;}{{\`{a}}}{1}</xsl:text>    <!--LATIN SMALL LETTER A WITH GRAVE-->
-        <xsl:text>{&#x00E1;}{{\'{a}}}{1}</xsl:text>    <!--LATIN SMALL LETTER A WITH ACUTE-->
-        <xsl:text>{&#x00E2;}{{\^{a}}}{1}</xsl:text>    <!--LATIN SMALL LETTER A WITH CIRCUMFLEX-->
-        <xsl:text>{&#x00E3;}{{\~{a}}}{1}</xsl:text>    <!--LATIN SMALL LETTER A WITH TILDE-->
-        <xsl:text>{&#x00E4;}{{\"{a}}}{1}</xsl:text>    <!--LATIN SMALL LETTER A WITH DIAERESIS-->
-        <xsl:text>{&#x00E5;}{{\aa }}{1}</xsl:text>    <!--LATIN SMALL LETTER A WITH RING ABOVE-->
-        <xsl:text>{&#x00E6;}{{\ae }}{1}</xsl:text>    <!--LATIN SMALL LETTER AE-->
-        <xsl:text>{&#x00E7;}{{\c{c}}}{1}</xsl:text>    <!--LATIN SMALL LETTER C WITH CEDILLA-->
-        <xsl:text>{&#x00E8;}{{\`{e}}}{1}</xsl:text>    <!--LATIN SMALL LETTER E WITH GRAVE-->
-        <xsl:text>{&#x00E9;}{{\'{e}}}{1}</xsl:text>    <!--LATIN SMALL LETTER E WITH ACUTE-->
-        <xsl:text>{&#x00EA;}{{\^{e}}}{1}</xsl:text>    <!--LATIN SMALL LETTER E WITH CIRCUMFLEX-->
-        <xsl:text>{&#x00EB;}{{\"{e}}}{1}</xsl:text>    <!--LATIN SMALL LETTER E WITH DIAERESIS-->
-        <xsl:text>{&#x00EC;}{{\`{\i}}}{1}</xsl:text>    <!--LATIN SMALL LETTER I WITH GRAVE-->
-        <xsl:text>{&#x00ED;}{{\'{\i}}}{1}</xsl:text>    <!--LATIN SMALL LETTER I WITH ACUTE-->
-        <xsl:text>{&#x00EE;}{{\^{\i}}}{1}</xsl:text>    <!--LATIN SMALL LETTER I WITH CIRCUMFLEX-->
-        <xsl:text>{&#x00EF;}{{\"{\i}}}{1}</xsl:text>    <!--LATIN SMALL LETTER I WITH DIAERESIS-->
-        <xsl:text>{&#x00F0;}{{\dh }}{1}</xsl:text>    <!--LATIN SMALL LETTER ETH-->
-        <xsl:text>{&#x00F1;}{{\~{n}}}{1}</xsl:text>    <!--LATIN SMALL LETTER N WITH TILDE-->
-        <xsl:text>{&#x00F2;}{{\`{o}}}{1}</xsl:text>    <!--LATIN SMALL LETTER O WITH GRAVE-->
-        <xsl:text>{&#x00F3;}{{\'{o}}}{1}</xsl:text>    <!--LATIN SMALL LETTER O WITH ACUTE-->
-        <xsl:text>{&#x00F4;}{{\^{o}}}{1}</xsl:text>    <!--LATIN SMALL LETTER O WITH CIRCUMFLEX-->
-        <xsl:text>{&#x00F5;}{{\~{o}}}{1}</xsl:text>    <!--LATIN SMALL LETTER O WITH TILDE-->
-        <xsl:text>{&#x00F6;}{{\"{o}}}{1}</xsl:text>    <!--LATIN SMALL LETTER O WITH DIAERESIS-->
-        <xsl:text>{&#x00F7;}{{\textdiv }}{1}</xsl:text>    <!--DIVISION SIGN-->  <!-- $ -->
-        <xsl:text>{&#x00F8;}{{\o }}{1}</xsl:text>    <!--LATIN SMALL LETTER O WITH STROKE-->
-        <xsl:text>{&#x00F9;}{{\`{u}}}{1}</xsl:text>    <!--LATIN SMALL LETTER U WITH GRAVE-->
-        <xsl:text>{&#x00FA;}{{\'{u}}}{1}</xsl:text>    <!--LATIN SMALL LETTER U WITH ACUTE-->
-        <xsl:text>{&#x00FB;}{{\^{u}}}{1}</xsl:text>    <!--LATIN SMALL LETTER U WITH CIRCUMFLEX-->
-        <xsl:text>{&#x00FC;}{{\"{u}}}{1}</xsl:text>    <!--LATIN SMALL LETTER U WITH DIAERESIS-->
-        <xsl:text>{&#x00FD;}{{\'{y}}}{1}</xsl:text>    <!--LATIN SMALL LETTER Y WITH ACUTE-->
-        <xsl:text>{&#x00FE;}{{\th }}{1}</xsl:text>    <!--LATIN SMALL LETTER THORN-->
-        <xsl:text>{&#x00FF;}{{\"{y}}}{1}</xsl:text>    <!--LATIN SMALL LETTER Y WITH DIAERESIS-->
-        <xsl:text>}&#xa;</xsl:text> <!-- end of literate set -->
-        <xsl:text>%% end: pdflatex-specific listings configuration&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>%% End of generic listing adjustments&#xa;</xsl:text>
         <xsl:if test="$b-has-program">
-            <xsl:text>%% Program listings via new tcblisting environment&#xa;</xsl:text>
-            <xsl:text>%% First a universal color scheme for parts of any language&#xa;</xsl:text>
-            <xsl:if test="$latex.print='no'" >
-                <xsl:text>%% Colors match a subset of Google prettify "Default" style&#xa;</xsl:text>
-                <xsl:text>%% Set latex.print='yes' to get all black&#xa;</xsl:text>
-                <xsl:text>%% http://code.google.com/p/google-code-prettify/source/browse/trunk/src/prettify.css&#xa;</xsl:text>
-                <xsl:text>\definecolor{identifiers}{rgb}{0.375,0,0.375}&#xa;</xsl:text>
-                <xsl:text>\definecolor{comments}{rgb}{0.5,0,0}&#xa;</xsl:text>
-                <xsl:text>\definecolor{strings}{rgb}{0,0.5,0}&#xa;</xsl:text>
-                <xsl:text>\definecolor{keywords}{rgb}{0,0,0.5}&#xa;</xsl:text>
-            </xsl:if>
-            <xsl:if test="$latex.print='yes'" >
-                <xsl:text>%% All-black colors&#xa;</xsl:text>
-                <xsl:text>%% Set latex.print='no' to get actual colors&#xa;</xsl:text>
-                <xsl:text>\definecolor{identifiers}{rgb}{0,0,0}&#xa;</xsl:text>
-                <xsl:text>\definecolor{comments}{rgb}{0,0,0}&#xa;</xsl:text>
-                <xsl:text>\definecolor{strings}{rgb}{0,0,0}&#xa;</xsl:text>
-                <xsl:text>\definecolor{keywords}{rgb}{0,0,0}&#xa;</xsl:text>
-            </xsl:if>
-            <xsl:text>%% Options passed to the listings package via tcolorbox&#xa;</xsl:text>
+            <xsl:text>%% Colors match a subset of Google prettify "Default" style&#xa;</xsl:text>
+            <xsl:text>\definecolor{identifiers}{rgb}{0.375,0,0.375}&#xa;</xsl:text>
+            <xsl:text>\definecolor{comments}{rgb}{0.5,0,0}&#xa;</xsl:text>
+            <xsl:text>\definecolor{strings}{rgb}{0,0.5,0}&#xa;</xsl:text>
+            <xsl:text>\definecolor{keywords}{rgb}{0,0,0.5}&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{programcodestyle}{identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}, breaklines=true, breakatwhitespace=true, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
-            <!-- We want a "program" to be able to break across pages    -->
-            <!-- Trying "enforce breakable" for a long listing inside of -->
-            <!-- a "listing" just led to a "mess of shattered boxes" so  -->
-            <!-- simply advise that a "listing" is not breakable.        -->
-            <!-- NB: rules "at break" need to come after "boxrule"       -->
+            <xsl:text>\lstdefinestyle{programcodenumberedstyle}{style=programcodestyle, numbers=left}&#xa;</xsl:text>
             <xsl:text>\tcbset{ programboxstyle/.style={left=3ex, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt, &#xa;</xsl:text>
             <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>colback=white, sharp corners, boxrule=-0.3pt, leftrule=0.5pt,&#xa;</xsl:text>
             <xsl:text>parbox=false,&#xa;</xsl:text>
             <xsl:text>} }&#xa;</xsl:text>
-            <!--  -->
-            <xsl:text>\newtcblisting{program}[1]{programboxstyle, listing options={language=#1, style=programcodestyle}}&#xa;</xsl:text>
+            <xsl:text>\tcbset{ programboxnumberedstyle/.style={programboxstyle, left=6ex} }&#xa;</xsl:text>
+            <xsl:text>%% Arguments: language, left margin, width, right margin (latter ignored)&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{program}[4]{programboxstyle, left skip=#2\linewidth, width=#3\linewidth, listing options={language=#1, style=programcodestyle}}&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{programnumbered}[4]{programboxnumberedstyle, left skip=#2\linewidth, width=#3\linewidth, listing options={language=#1, style=programcodenumberedstyle}}&#xa;</xsl:text>
+            <xsl:text>\newcommand{\ptxprogramfragment}[2]{\lstinline[language=#1, style=programcodestyle, basicstyle=\ttfamily]#2}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="$document-root//console">
+        <xsl:if test="$b-has-console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
-            <xsl:text>%% listings allows for escape sequences to enable LateX,&#xa;</xsl:text>
-            <xsl:text>%% so we bold the input commands via the following macro&#xa;</xsl:text>
-            <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
-            <!-- https://tex.stackexchange.com/questions/299401/bold-just-one-line-inside-of-lstlisting/299406 -->
-            <!-- Syntax highlighting is not so great for "language=bash" -->
-            <!-- Line-breaking off to match old behavior, prebreak option fails inside LaTeX for input -->
+            <xsl:text>\newcommand{\ptxconsoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{consolecodestyle}{language=none, escapeinside={(*}{*)}, identifierstyle=, commentstyle=, stringstyle=, keywordstyle=, breaklines=false, breakatwhitespace=false, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
-            <!--  -->
             <xsl:text>\tcbset{ consoleboxstyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt,&#xa;</xsl:text>
             <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>colback=white, boxrule=-0.3pt,&#xa;</xsl:text>
             <xsl:text>parbox=false,&#xa;</xsl:text>
             <xsl:text>} }&#xa;</xsl:text>
-            <!--  -->
-            <xsl:text>\newtcblisting{console}{consoleboxstyle, listing options={style=consolecodestyle}}&#xa;</xsl:text>
-       </xsl:if>
+            <xsl:text>%% Arguments: left margin, width, right margin (latter ignored)&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{console}[3]{consoleboxstyle, left skip=#1\linewidth, width=#2\linewidth, listing options={style=consolecodestyle}}&#xa;</xsl:text>
+        </xsl:if>
         <xsl:if test="$b-has-sage">
             <xsl:text>%% The listings package as tcolorbox for Sage code&#xa;</xsl:text>
-            <xsl:text>%% We do as much styling as possible with tcolorbox, not listings&#xa;</xsl:text>
-            <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would also work)&#xa;</xsl:text>
-            <xsl:text>%% Note that we defuse listings' default "aboveskip" and "belowskip"&#xa;</xsl:text>
-            <!-- NB: tcblisting "forgets" its colors as it breaks across pages, -->
-            <!-- and "frame empty" on the output is not sufficient.  So we set  -->
-            <!-- the frame color to white.                                      -->
-            <!-- See: https://tex.stackexchange.com/questions/240246/           -->
-            <!-- problem-with-tcblisting-at-page-break                          -->
-            <!-- TODO: integrate into the LaTeX styling schemes -->
-            <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
+            <xsl:text>\definecolor{sageblue}{HTML}{</xsl:text><xsl:value-of select="$sage-input-background"/><xsl:text>}&#xa;</xsl:text>
             <xsl:text>\tcbset{ sagestyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,&#xa;</xsl:text>
             <xsl:text>boxsep=4pt, listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>parbox=false, &#xa;</xsl:text>
@@ -277,428 +532,133 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, colframe=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-  <xsl:if test="$document-root//sidebyside">
-    <!-- "minimal" is no border or spacing at all -->
-    <!-- set on $sbsdebug to "tight" with some background    -->
-    <!-- From the tcolorbox manual, "center" vs. "flush center":      -->
-    <!-- "The differences between the flush and non-flush version     -->
-    <!-- are explained in detail in the TikZ manual. The short story  -->
-    <!-- is that the non-flush versions will often look more balanced -->
-    <!-- but with more hyphenations."                                 -->
-    <xsl:choose>
-      <xsl:when test="$sbsdebug">
-        <xsl:text>%% tcolorbox styles for *DEBUGGING* sidebyside layout&#xa;</xsl:text>
-        <xsl:text>%% "tight" -> 0.4pt border, pink background&#xa;</xsl:text>
-        <xsl:text>\tcbset{ sbsstyle/.style={raster equal height=rows,raster force size=false} }&#xa;</xsl:text>
-        <xsl:text>\tcbset{ sbspanelstyle/.style={size=tight,colback=pink} }&#xa;</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
+    <xsl:if test="$document-root//sidebyside">
         <xsl:text>%% tcolorbox styles for sidebyside layout&#xa;</xsl:text>
-        <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
-        <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
-        <xsl:text>\tcbset{ bwminimalstyle/.style={size=minimal, boxrule=-0.3pt, frame empty,&#xa;</xsl:text>
-        <xsl:text>colback=white, colbacktitle=white, coltitle=black, opacityfill=0.0} }&#xa;</xsl:text>
         <xsl:text>\tcbset{ sbsstyle/.style={raster before skip=2.0ex, raster equal height=rows, raster force size=false} }&#xa;</xsl:text>
         <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle} }&#xa;</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
-    <xsl:text>%% Necessary to use \NewTColorBox for boxes of the panels&#xa;</xsl:text>
-    <xsl:text>%% "newfloat" environment to squash page-breaks within a single sidebyside&#xa;</xsl:text>
-    <!-- Main side-by-side environment, given by xparse            -->
-    <!-- raster equal height: boxes of same *row* have same height -->
-    <!-- raster force size: false lets us control width            -->
-    <!-- We do not try here to keep captions attached (when not    -->
-    <!-- in a "figure"), unfortunately, this is an un-semantic     -->
-    <!-- command inbetween the list of panels and the captions     -->
-    <xsl:text>%% "xparse" environment for entire sidebyside&#xa;</xsl:text>
-    <xsl:text>\NewDocumentEnvironment{sidebyside}{mmmm}&#xa;</xsl:text>
-    <xsl:text>  {\begin{tcbraster}&#xa;</xsl:text>
-    <xsl:text>    [sbsstyle,raster columns=#1,&#xa;</xsl:text>
-    <xsl:text>    raster left skip=#2\linewidth,raster right skip=#3\linewidth,raster column skip=#4\linewidth]}&#xa;</xsl:text>
-    <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
-    <xsl:text>%% "tcolorbox" environment for a panel of sidebyside&#xa;</xsl:text>
-    <xsl:text>\NewTColorBox{sbspanel}{mO{top}}{sbspanelstyle,width=#1\linewidth,valign=#2}&#xa;</xsl:text>
-  </xsl:if>
-
-  <xsl:if test="$document-root//tabular">
-    <xsl:text>%% For improved tables&#xa;</xsl:text>
-    <xsl:text>\usepackage{array}&#xa;</xsl:text>
-    <xsl:text>%% Some extra height on each row is desirable, especially with horizontal rules&#xa;</xsl:text>
-    <xsl:text>%% Increment determined experimentally&#xa;</xsl:text>
-    <xsl:text>\setlength{\extrarowheight}{0.2ex}&#xa;</xsl:text>
-    <xsl:text>%% Define variable thickness horizontal rules, full and partial&#xa;</xsl:text>
-    <xsl:text>%% Thicknesses are 0.03, 0.05, 0.08 in the  booktabs  package&#xa;</xsl:text>
-    <!-- http://tex.stackexchange.com/questions/119153/table-with-different-rule-widths -->
-    <xsl:text>\newcommand{\hrulethin}  {\noalign{\hrule height 0.04em}}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\hrulemedium}{\noalign{\hrule height 0.07em}}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\hrulethick} {\noalign{\hrule height 0.11em}}&#xa;</xsl:text>
-    <!-- http://tex.stackexchange.com/questions/24549/horizontal-rule-with-adjustable-height-behaving-like-clinen-m -->
-    <!-- Could preserve/restore \arrayrulewidth on entry/exit to tabular -->
-    <!-- But we'll get cleaner source with this built into macros        -->
-    <!-- Could condition \setlength debacle on the use of extpfeil       -->
-    <!-- arrows (see discussion below)                                   -->
-    <xsl:text>%% We preserve a copy of the \setlength package before other&#xa;</xsl:text>
-    <xsl:text>%% packages (extpfeil) get a chance to load packages that redefine it&#xa;</xsl:text>
-    <xsl:text>\let\oldsetlength\setlength&#xa;</xsl:text>
-    <xsl:text>\newlength{\Oldarrayrulewidth}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\crulethin}[1]%&#xa;</xsl:text>
-    <xsl:text>{\noalign{\global\oldsetlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-    <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{0.04em}}\cline{#1}%&#xa;</xsl:text>
-    <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{\Oldarrayrulewidth}}}%&#xa;</xsl:text>
-    <xsl:text>\newcommand{\crulemedium}[1]%&#xa;</xsl:text>
-    <xsl:text>{\noalign{\global\oldsetlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-    <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{0.07em}}\cline{#1}%&#xa;</xsl:text>
-    <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{\Oldarrayrulewidth}}}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\crulethick}[1]%&#xa;</xsl:text>
-    <xsl:text>{\noalign{\global\oldsetlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-    <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{0.11em}}\cline{#1}%&#xa;</xsl:text>
-    <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{\Oldarrayrulewidth}}}&#xa;</xsl:text>
-    <!-- http://tex.stackexchange.com/questions/119153/table-with-different-rule-widths -->
-    <xsl:text>%% Single letter column specifiers defined via array package&#xa;</xsl:text>
-    <xsl:text>\newcolumntype{A}{!{\vrule width 0.04em}}&#xa;</xsl:text>
-    <xsl:text>\newcolumntype{B}{!{\vrule width 0.07em}}&#xa;</xsl:text>
-    <xsl:text>\newcolumntype{C}{!{\vrule width 0.11em}}&#xa;</xsl:text>
-  </xsl:if>
-  <xsl:if test="$document-root//cell/line">
-    <xsl:text>\newcommand{\tablecelllines}[3]%&#xa;</xsl:text>
-    <xsl:text>{\begin{tabular}[#2]{@{}#1@{}}#3\end{tabular}}&#xa;</xsl:text>
-  </xsl:if>
-
-  <xsl:text>\newcommand{\lt}{&lt;}&#xa;</xsl:text>
-  <xsl:text>\newcommand{\gt}{&gt;}&#xa;</xsl:text>
-  <xsl:text>\newcommand{\amp}{&amp;}&#xa;&#xa;</xsl:text>
-  <!-- ############### -->
-  <!-- Semantic Macros -->
-  <!-- ############### -->
-  <xsl:text>%% Begin: Semantic Macros&#xa;</xsl:text>
-  <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
-  <xsl:text>%%&#xa;</xsl:text>
-  <xsl:text>%% \mono macro for content of "c", "cd", "tag", etc elements&#xa;</xsl:text>
-  <xsl:text>%% Also used automatically in other constructions&#xa;</xsl:text>
-  <xsl:text>%% Simply an alias for \texttt&#xa;</xsl:text>
-  <xsl:text>%% Always defined, even if there is no need, or if a specific tt font is not loaded&#xa;</xsl:text>
-  <xsl:text>\newcommand{\mono}[1]{\texttt{#1}}&#xa;</xsl:text>
-  <xsl:text>%%&#xa;</xsl:text>
-  <xsl:text>%% Following semantic macros are only defined here if their&#xa;</xsl:text>
-  <xsl:text>%% use is required only in this specific document&#xa;</xsl:text>
-  <xsl:text>%%&#xa;</xsl:text>
-  <xsl:variable name="one-line-reps" select="
+        <xsl:text>%% "xparse" environment for entire sidebyside&#xa;</xsl:text>
+        <xsl:text>\NewDocumentEnvironment{sidebyside}{mmmm}&#xa;</xsl:text>
+        <xsl:text>  {\begin{tcbraster}&#xa;</xsl:text>
+        <xsl:text>    [sbsstyle,raster columns=#1,&#xa;</xsl:text>
+        <xsl:text>    raster left skip=#2\linewidth,raster right skip=#3\linewidth,raster column skip=#4\linewidth]}&#xa;</xsl:text>
+        <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
+        <xsl:text>%% "tcolorbox" environment for a panel of sidebyside&#xa;</xsl:text>
+        <xsl:text>\NewTColorBox{sbspanel}{mO{top}}{sbspanelstyle,width=#1\linewidth,valign=#2}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//tabular">
+        <xsl:text>%% For improved tables&#xa;</xsl:text>
+        <xsl:text>\usepackage{array}&#xa;</xsl:text>
+        <xsl:text>\setlength{\extrarowheight}{0.2ex}&#xa;</xsl:text>
+        <xsl:text>%% Variable thickness horizontal rules, full and partial&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxhrulethin}  {\noalign{\hrule height 0.04em}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxhrulemedium}{\noalign{\hrule height 0.07em}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxhrulethick} {\noalign{\hrule height 0.11em}}&#xa;</xsl:text>
+        <xsl:text>\let\ptxoldsetlength\setlength&#xa;</xsl:text>
+        <xsl:text>\newlength{\ptxOldarrayrulewidth}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxcrulethin}[1]%&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.04em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}%&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxcrulemedium}[1]%&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.07em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxcrulethick}[1]%&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.11em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}&#xa;</xsl:text>
+        <xsl:text>%% Single letter column specifiers defined via array package&#xa;</xsl:text>
+        <xsl:text>\newcolumntype{A}{!{\vrule width 0.04em}}&#xa;</xsl:text>
+        <xsl:text>\newcolumntype{B}{!{\vrule width 0.07em}}&#xa;</xsl:text>
+        <xsl:text>\newcolumntype{C}{!{\vrule width 0.11em}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//cell/line">
+        <xsl:text>\newcommand{\ptxtablecelllines}[3]%&#xa;</xsl:text>
+        <xsl:text>{\begin{tabular}[#2]{@{}#1@{}}#3\end{tabular}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>\newcommand{\lt}{&lt;}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\gt}{&gt;}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\amp}{&amp;}&#xa;</xsl:text>
+    <xsl:text>%% Begin: Semantic Macros&#xa;</xsl:text>
+    <xsl:text>\newcommand{\ptxmono}[1]{\texttt{#1}}&#xa;</xsl:text>
+    <xsl:variable name="one-line-reps" select="
         ($document-root//abbr)[1]|
         ($document-root//acro)[1]|
         ($document-root//init)[1]"/>
-  <!-- (after fillin before swung-dash) -->
-  <!-- Eventually move explanation of section to condition  -->
-  <xsl:for-each select="$one-line-reps">
-    <xsl:apply-templates select="." mode="tex-macro"/>
-  </xsl:for-each>
-  <xsl:if test="$document-root//alert">
-    <xsl:text>%% Used for warnings, typically bold and italic&#xa;</xsl:text>
-    <xsl:text>\newcommand{\alert}[1]{\textbf{\textit{#1}}}&#xa;</xsl:text>
-  </xsl:if>
-  <xsl:if test="$document-root//term">
-    <xsl:text>%% Used for inline definitions of terms&#xa;</xsl:text>
-    <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
-  </xsl:if>
-  <!-- 2018-02-05: "booktitle" deprecated -->
-  <xsl:if test="$document-root//pubtitle|$document-root//booktitle">
-    <xsl:text>%% Titles of longer works (e.g. books, versus articles)&#xa;</xsl:text>
-    <xsl:text>\newcommand{\pubtitle}[1]{\textsl{#1}}&#xa;</xsl:text>
-  </xsl:if>
-  <!-- http://tex.stackexchange.com/questions/23711/strikethrough-text -->
-  <!-- http://tex.stackexchange.com/questions/287599/thickness-for-sout-strikethrough-command-from-ulem-package -->
-  <xsl:if test="$document-root//insert|$document-root//delete|$document-root//stale">
-    <xsl:text>%% Edits (insert, delete), stale (irrelevant, obsolete)&#xa;</xsl:text>
-    <xsl:text>%% Package: underlines and strikethroughs, no change to \emph{}&#xa;</xsl:text>
-    <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
-    <xsl:text>%% Rules in this package reset proportional to fontsize&#xa;</xsl:text>
-    <xsl:text>%% NB: *never* reset to package default (0.4pt?) after use&#xa;</xsl:text>
-    <xsl:text>%% Macros will use colors if latex.print='no'  (the default)&#xa;</xsl:text>
-    <xsl:if test="$document-root//insert">
-      <xsl:text>%% Used for an edit that is an addition&#xa;</xsl:text>
-      <xsl:text>\newcommand{\insertthick}{.1ex}&#xa;</xsl:text>
-      <xsl:choose>
-        <xsl:when test="$latex.print='yes'">
-          <xsl:text>\newcommand{\inserted}[1]{\renewcommand{\ULthickness}{\insertthick}\uline{#1}}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>\newcommand{\inserted}[1]{\renewcommand{\ULthickness}{\insertthick}\textcolor{green}{\uline{#1}}}&#xa;</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
-    <xsl:if test="$document-root//delete">
-      <xsl:text>%% Used for an edit that is a deletion&#xa;</xsl:text>
-      <xsl:text>\newcommand{\deletethick}{.25ex}&#xa;</xsl:text>
-      <xsl:choose>
-        <xsl:when test="$latex.print='yes'">
-          <xsl:text>\newcommand{\deleted}[1]{\renewcommand{\ULthickness}{\deletethick}\sout{#1}}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>\newcommand{\deleted}[1]{\renewcommand{\ULthickness}{\deletethick}\textcolor{red}{\sout{#1}}}&#xa;</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
-    <xsl:if test="$document-root//stale">
-      <xsl:text>%% Used for inline irrelevant or obsolete text&#xa;</xsl:text>
-      <xsl:text>\newcommand{\stalethick}{.1ex}&#xa;</xsl:text>
-      <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
-    </xsl:if>
-  </xsl:if>
-  <xsl:if test="$document-root//fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
-    <xsl:call-template name="fillin-text"/>
-  </xsl:if>
-  <xsl:if test="$document-root//m/fillin|$document-root//me/fillin|$document-root//men/fillin|$document-root//mrow/fillin">
-      <xsl:call-template name="fillin-math"/>
-  </xsl:if>
-  <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
-  <xsl:if test="$document-root//swungdash">
-    <xsl:text>%% A character like a tilde, but different&#xa;</xsl:text>
-    <xsl:text>\newcommand{\swungdash}{\raisebox{-2.25ex}{\scalebox{2}{\~{}}}}&#xa;</xsl:text>
-  </xsl:if>
-  <xsl:if test="$document-root//quantity">
-    <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
-    <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
-    <xsl:text>\sisetup{inter-unit-product=\cdot}&#xa;</xsl:text>
-    <xsl:text>\ifxetex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
-    <xsl:text>\ifluatex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
-    <xsl:text>%% Common non-SI units&#xa;</xsl:text>
-    <xsl:for-each select="document('pretext-units.xsl')//base[@siunitx]">
-      <xsl:text>\DeclareSIUnit\</xsl:text>
-      <xsl:value-of select="@full" />
-      <xsl:text>{</xsl:text>
-      <xsl:choose>
-        <xsl:when test="@siunitx='none'">
-          <xsl:value-of select="@short" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="@siunitx" />
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:text>}&#xa;</xsl:text>
+    <xsl:for-each select="$one-line-reps">
+        <xsl:apply-templates select="." mode="tex-macro"/>
     </xsl:for-each>
-  </xsl:if>
-  <xsl:if test="$document-root//case[@direction]">
-    <!-- Perhaps customize these via something like tex-macro-style      -->
-    <!-- And/or move these closer to the environment where they are used -->
-    <xsl:text>%% Arrows for iff proofs, with trailing space&#xa;</xsl:text>
-    <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
-  </xsl:if>
-  <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title">
-    <!-- Styling: expose this macro to easier overriding for style work -->
-    <xsl:text>%% Style of a title on a list item, for ordered and unordered lists&#xa;</xsl:text>
-    <xsl:text>\newcommand{\lititle}[1]{{\slshape#1}}&#xa;</xsl:text>
-  </xsl:if>
-  <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
-  <xsl:if test="$latex.preamble.late != ''">
-    <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
-    <xsl:value-of select="$latex.preamble.late" />
-    <xsl:text>&#xa;</xsl:text>
-  </xsl:if>
-
-  <xsl:apply-templates select="/pretext/docinfo/macros"/>
-  <xsl:if test="$latex-image-preamble">
-    <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
-    <xsl:value-of select="$latex-image-preamble"/>
-  </xsl:if>
-  <xsl:text>&#xa;&#xa;%%%% End of PreTeXt generated preamble %%%%% &#xa;&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="pretext/docinfo/macros">
-    <xsl:value-of select="."/>
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template name="body">
-  <xsl:text>\title{</xsl:text>
-    <xsl:apply-templates select="/pretext/slideshow" mode="title-full" />
-  <xsl:text>}&#xa;</xsl:text>
-  <xsl:if test="/pretext/slideshow/subtitle">
-  <xsl:text>\subtitle{</xsl:text>
-    <xsl:apply-templates select="." mode="subtitle" />
-  <xsl:text>}&#xa;</xsl:text>
-  </xsl:if>
-  <xsl:text>\author{</xsl:text>
-    <xsl:apply-templates select="author|$bibinfo/author" mode="article-info"/>
-  <xsl:text>}&#xa;</xsl:text>
-  <xsl:text>\date[</xsl:text>
-  <xsl:if test="$bibinfo/date">
-    <xsl:apply-templates select="$bibinfo/date"/>
-  </xsl:if>
-  <xsl:if test="date">
-    <xsl:apply-templates select="date"/>
-  </xsl:if>
-  <xsl:text>]{</xsl:text>
-  <xsl:if test="$bibinfo/event">
-    <xsl:apply-templates select="$bibinfo/event"/>
-  </xsl:if>
-  <xsl:if test="event">
-    <xsl:apply-templates select="event"/>
-  </xsl:if>
-  <xsl:text>}&#xa;&#xa;</xsl:text>
-  <xsl:text>\begin{document}&#xa;</xsl:text>
-  <xsl:call-template name="titlepage"/>
-  <xsl:call-template name="beamertoc"/>
-
-  <xsl:apply-templates select="section|slide"/>
-  <xsl:text>\end{document}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template name="titlepage">
-  <xsl:text>\begin{frame}&#xa;</xsl:text>
-  <xsl:text>\maketitle &#xa;</xsl:text>
-  <xsl:text>\end{frame}&#xa; &#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template name="beamertoc">
-  <xsl:text>\begin{frame}&#xa;</xsl:text>
-  <xsl:text>\frametitle{Overview}&#xa;</xsl:text>
-  <xsl:text>\tableofcontents &#xa;</xsl:text>
-  <xsl:text>\end{frame}&#xa; &#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="section">
-  <xsl:text>&#xa;\section{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
-  <xsl:text>}&#xa;</xsl:text>
-  <xsl:apply-templates select="slide"/>
-  <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="slide">
-  <xsl:text>\begin{frame}&#xa;</xsl:text>
-    <xsl:text>\frametitle{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates/>
-  <xsl:text>\end{frame}&#xa; &#xa;</xsl:text>
-</xsl:template>
-
-
-<xsl:template match="p">
-    <xsl:if test="@pause = 'yes'">
-        <xsl:text>&#xa;\pause \vfill &#xa;&#xa;</xsl:text>
+    <xsl:if test="$document-root//alert">
+        <!-- Beamer has its own theme-aware, overlay-capable \alert, -->
+        <!-- so the PreTeXt semantic macro is realized through it    -->
+        <xsl:text>\newcommand{\ptxalert}[1]{\alert{#1}}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates/>
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="ul">
-  <xsl:if test="@pause = 'yes'">
-    <xsl:text>&#xa;\pause &#xa;&#xa;</xsl:text>
-  </xsl:if>
-  <xsl:text>\begin{itemize}</xsl:text>
-  <xsl:if test="@pause = 'yes'">
-    <xsl:text>[&lt;+-&gt;]</xsl:text>
-  </xsl:if>
-  <xsl:apply-templates/>
-  <xsl:text>\end{itemize}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="ol">
-  <xsl:if test="@pause = 'yes'">
-    <xsl:text>&#xa;\pause &#xa;&#xa;</xsl:text>
-  </xsl:if>
-  <xsl:text>\begin{enumerate}</xsl:text>
-  <xsl:if test="@pause = 'yes'">
-    <xsl:text>[&lt;+-&gt;]</xsl:text>
-  </xsl:if>
-  <xsl:apply-templates/>
-  <xsl:text>\end{enumerate}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="li">
-  <xsl:text>&#xa;\item{} </xsl:text>
-  <xsl:apply-templates/>
-  <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<!-- 
-<xsl:template match="sidebyside">
-  <xsl:text>\begin{tcbraster}[arc=0pt, raster columns=</xsl:text>
-  <xsl:value-of select="count(*)"/>
-  <xsl:text>, raster equal height=rows, raster force size=false, raster column skip=0ex] &#xa;</xsl:text>
-
-  <xsl:variable name="columnCount">
-    <xsl:value-of select="count(*)"/>
-  </xsl:variable>
-  <xsl:variable name="widthFraction">
-    <xsl:value-of select="1 div $columnCount" />
-  </xsl:variable>
-
-  <xsl:for-each select="*">
-    <xsl:if test="parent::*/@pause = 'yes'">
-      <xsl:text>&#xa;\pause &#xa;&#xa;</xsl:text>
+    <xsl:if test="$document-root//term">
+        <xsl:text>\newcommand{\ptxterminology}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>\begin{tcolorbox}[valign=top, width=</xsl:text>
-      <xsl:value-of select="$widthFraction" />
-    <xsl:text>\textwidth]&#xa;</xsl:text>
-      <xsl:apply-templates select="."/>
-    <xsl:text>\end{tcolorbox}&#xa; </xsl:text>
-  </xsl:for-each>
-  <xsl:text>\end{tcbraster} &#xa;</xsl:text>
-</xsl:template> -->
-
-<xsl:template match="&PROOF-LIKE;">
-  <xsl:text>\begin{proof}</xsl:text>
-  <xsl:apply-templates/>
-  <xsl:text>\end{proof}</xsl:text>
-</xsl:template>
-
-<xsl:template match="xref">
-  [REF=TODO]
-<!--  Look up this in some xsl files -->
-<!-- <xsl:template match="*" mode="xref-link">
-    <xsl:param name="target" />
-    <xsl:param name="content" />
-
-    <xsl:copy-of select="$content"/>
-</xsl:template> -->
-</xsl:template>
-
-
-
-<xsl:template match="example">
-  <xsl:text>\begin{example}[</xsl:text>
-  <xsl:apply-templates select="." mode="title-full" />
-<xsl:text>]</xsl:text>
-    <xsl:apply-templates/>
-<xsl:text>\end{example}&#xa;</xsl:text>
-</xsl:template>
-
-
-<xsl:template match="definition" mode="type-name">
-  <xsl:text>Definition</xsl:text>
-</xsl:template>
-<xsl:template match="definition">
-  <xsl:text>\begin{definition}{</xsl:text>
-  <xsl:apply-templates select="." mode="type-name" />
-  <xsl:choose>
-</xsl:choose>
-<xsl:text>: </xsl:text>
-  <xsl:apply-templates select="." mode="title-full" />
-<xsl:text>}</xsl:text>
-    <xsl:apply-templates/>
-<xsl:text>\end{definition}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="theorem" mode="type-name">
-  <xsl:text>Theorem</xsl:text>
-</xsl:template>
-<xsl:template match="corollary" mode="type-name">
-  <xsl:text>Corollary</xsl:text>
-</xsl:template>
-<xsl:template match="theorem|corollary">
-  <xsl:text>\begin{theorem}{</xsl:text>
-  <xsl:apply-templates select="." mode="type-name" />
-  <xsl:choose>
-</xsl:choose>
-<xsl:text>: </xsl:text>
-  <xsl:apply-templates select="." mode="title-full" />
-<xsl:text>}</xsl:text>
-    <xsl:apply-templates select="statement"/>
-<xsl:text>\end{theorem}&#xa;</xsl:text>
-<xsl:apply-templates select="&PROOF-LIKE;"/>
+    <xsl:if test="$document-root//pubtitle">
+        <xsl:text>\newcommand{\ptxpubtitle}[1]{\textsl{#1}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
+        <xsl:call-template name="fillin-text"/>
+    </xsl:if>
+    <xsl:if test="$document-root//m/fillin|$document-root//me/fillin|$document-root//men/fillin|$document-root//mrow/fillin">
+        <xsl:call-template name="fillin-math"/>
+    </xsl:if>
+    <xsl:if test="$document-root//swungdash">
+        <xsl:text>\newcommand{\ptxswungdash}{\raisebox{-2.25ex}{\scalebox{2}{\~{}}}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//quantity">
+        <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
+        <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
+        <xsl:text>\sisetup{inter-unit-product=\cdot}&#xa;</xsl:text>
+        <xsl:text>\ifxetex\sisetup{math-micro=\text{µ},text-micro=µ}\fi&#xa;</xsl:text>
+        <xsl:text>\ifluatex\sisetup{math-micro=\text{µ},text-micro=µ}\fi&#xa;</xsl:text>
+        <xsl:text>%% Common non-SI units&#xa;</xsl:text>
+        <xsl:for-each select="document('pretext-units.xsl')//base[@siunitx]">
+            <xsl:text>\DeclareSIUnit\</xsl:text>
+            <xsl:value-of select="@full" />
+            <xsl:text>{</xsl:text>
+            <xsl:choose>
+                <xsl:when test="@siunitx='none'">
+                    <xsl:value-of select="@short" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="@siunitx" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:for-each>
+    </xsl:if>
+    <xsl:if test="$document-root//case[@direction]">
+        <xsl:text>%% Arrows for iff proofs, with trailing space&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxforwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxbackwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title">
+        <xsl:text>%% Style of a title on a list item, for ordered and unordered lists&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxlititle}[1]{{\slshape#1}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//xref">
+        <xsl:text>%% Font for cross-reference numbers, a no-op on slides&#xa;</xsl:text>
+        <xsl:text>\newcommand{\xreffont}{}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
+    <xsl:if test="$latex.preamble.late != ''">
+        <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
+        <xsl:value-of select="$latex.preamble.late" />
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$docinfo/macros">
+        <xsl:text>%% Custom macros (docinfo/macros)&#xa;</xsl:text>
+        <xsl:value-of select="$docinfo/macros"/>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$latex-image-preamble">
+        <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
+        <xsl:value-of select="$latex-image-preamble"/>
+    </xsl:if>
+    <xsl:text>&#xa;%%%% End of PreTeXt generated preamble %%%%&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

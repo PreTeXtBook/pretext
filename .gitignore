@@ -1,11 +1,11 @@
 user/*
-doc/guide/webwork-representations.ptx
 script/mjsre/node_modules/
 script/mjsre/package-lock.json
 script/dynsub/node_modules/
 script/dynsub/package-lock.json
 pretext/__pycache__/**
 pretext/lib/__pycache__/**
+**/__pycache__/
 .error_schema.log
 # WW examples
 examples/webwork/Makefile.paths
@@ -23,3 +23,6 @@ examples/webwork/Makefile.paths
 
 # cssbuilder output
 css/dist/*.map
+
+# jsbuilder output
+js/dist/**/*.map

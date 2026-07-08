@@ -11,35 +11,17 @@
  *******************************************************************************
  */
 
-/*
-console.log("thisbrowser.userAgent", window.navigator.userAgent);
-*/
-
-/* scrollbar width from https://stackoverflow.com/questions/13382516/getting-scroll-bar-width-using-javascript */
-function getScrollbarWidth() {
-    var outer = document.createElement("div");
-    outer.style.visibility = "hidden";
-    outer.style.width = "100px";
-    outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
-
-    document.body.appendChild(outer);
-
-    var widthNoScroll = outer.offsetWidth;
-    // force scrollbars
-    outer.style.overflow = "scroll";
-
-    // add innerdiv
-    var inner = document.createElement("div");
-    inner.style.width = "100%";
-    outer.appendChild(inner);
-
-    var widthWithScroll = inner.offsetWidth;
-
-    // remove divs
-    outer.parentNode.removeChild(outer);
-
-    return widthNoScroll - widthWithScroll;
-}
+// stub for i18next to future-proof the code. We don't actually use it for
+// anything right now, but it will be needed if we want to localize the
+// accessibility search status messages.
+window.i18next = window.i18next || {
+    t(key, params = {}) {
+        for (const param in params) {
+            key = key.replace(`{{${param}}}`, params[param]);
+        }
+        return key;
+    }
+};
 
 /*
   copy permalink address to clipboard
@@ -304,61 +286,67 @@ function process_workspace() {
     console.log("processing workspace");
     MathJax.typesetPromise();
 }
-/* for the GeoGebra calculator */
 
-function pretext_geogebra_calculator_onload() {
-    $("#calculator-toggle").focus();
-    var inputfield = $("input.gwt-SuggestBox.TextField")[0];
-    console.log("inputfield", inputfield);
-    inputfield.focus();
-}
 window.addEventListener("load",function(event) {
+    const calcDialogElement = document.getElementById('ptx-calculator-container');
+    const calcButtonElement = document.getElementById('ptx-calculator-toggle');
+    if (!calcDialogElement || !calcButtonElement) {
+        return;
+    }
+    const calcDialog = new PTXDialog(calcDialogElement, calcButtonElement, {"kind": "non-modal"});
 
-   /* scrolling on GG plot should scale, not move browser body */
-//     var scrollWidth = 15;  //currently correct for FF, Ch, and Saf, but would be better to calculate
-     var scrollWidth = getScrollbarWidth();
-     if ( (navigator.userAgent.match(/Mozilla/i) != null) ) {
-        // scrollWidth += 0.5
-     }
-     console.log("scrollWidth", scrollWidth);
-     calcoffsetR = 5;
-     calcoffsetB = 5;
-     $('body').on('mouseover','#geogebra-calculator canvas', function(){
-         $('body').css('overflow', 'hidden');
-         $('html').css('margin-right', '15px');
-         $('#calculator-container').css('right', (calcoffsetR+scrollWidth).toString() + 'px');
-         $('#calculator-container').css('bottom', (calcoffsetB+scrollWidth).toString() + 'px');
-     });
+    const focusCalcInput = function() {
+        const inputField = document.querySelector("#ptx-geogebra-calculator input.gwt-SuggestBox.TextField");
+        if (inputField) {
+            inputField.focus();
+        }
+    }
+    function initGeogebra() {
+        // Some paramaters are fixed here, others are set by publisher options in the HTML source
+        // and stored in ggbParams. Merge those here.
+        const fixedParams = {
+            showToolBar: true,
+            showAlgebraInput: true,
+            perspective: "G/A",
+            algebraInputPosition: "bottom",
+            appletOnLoad: focusCalcInput,
+            scaleContainerClass: "ptx-calculator-container",
+            allowUpscale: false,
+            autoHeight: false,
+        }
+        const generatedParams = (typeof ggbParams === "object" && ggbParams) ? ggbParams : {};
+        const params = {...generatedParams, ...fixedParams};
+        let applet = new GGBApplet(params, true);
+        applet.inject('ptx-geogebra-calculator');
+        return applet;
+    }
 
-     $('body').on('mouseout','#geogebra-calculator canvas', function(){
-         $('body').css('overflow', 'scroll')
-         $('html').css('margin-right', '0');
-         $('#calculator-container').css('right', calcoffsetR.toString() + 'px');
-         $('#calculator-container').css('bottom', calcoffsetB.toString() + 'px');
-     });
+    let applet;
+    calcButtonElement.addEventListener('click', function() {
+        if (calcDialog.dialog.open) {
+            let initialized = calcDialogElement.dataset.initialized || false;
+            if (!initialized) {
+                applet = initGeogebra();
+                calcDialogElement.dataset.initialized = true;
+            } else {
+                focusCalcInput();
+            }
+        }
+    });
 
-     $('body').on('click', '#calculator-toggle', function() {
-         if ($('#calculator-container').css('display') == 'none') {
-             $('#calculator-container').css('display', 'block');
-             $('#calculator-toggle').addClass('open');
-             $('#calculator-toggle').attr('title', 'Hide calculator');
-             $('#calculator-toggle').attr('aria-expanded', 'true');
-             create_calc_script = document.getElementById("create_ggb_calc");
-             if (!create_calc_script) {
-                 var ggbscript = document.createElement("script");
-                 ggbscript.id = "create_ggb_calc";
-                 ggbscript.innerHTML = "ggbApp.inject('geogebra-calculator')";
-                 document.body.appendChild(ggbscript);
-             } else {
-                 pretext_geogebra_calculator_onload();
-             }
-         } else {
-             $('#calculator-container').css('display', 'none');
-             $('#calculator-toggle').removeClass('open');
-             $('#calculator-toggle').attr('title', 'Show calculator');
-             $('#calculator-toggle').attr('aria-expanded', 'false');
-         }
-     });
+    //add resize observer for dialog
+    const resizeObserver = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            if (entry.target === calcDialogElement && applet && applet.getAppletObject()) {
+                const width = entry.contentRect.width;
+                const height = entry.contentRect.height;
+                const topBarHeight = calcDialogElement.querySelector('.ptx-dialog-topbar').clientHeight || 0;
+                applet.getAppletObject().setSize(width, height - topBarHeight);
+                applet.getAppletObject().recalculateEnvironments();
+            }
+        }
+    });
+    resizeObserver.observe(calcDialogElement);
 });
 
 
@@ -1195,138 +1183,6 @@ window.addEventListener("DOMContentLoaded", async function(event) {
     }
 });
 
-
-
-//-----------------------------------------------------------------
-// Dark/Light mode swiching
-
-function isDarkMode() {
-    if (document.documentElement.dataset.darkmode === 'disabled')
-        return false;
-
-    const currentTheme = localStorage.getItem("theme");
-    if (currentTheme === "dark")
-        return true;
-    else if (currentTheme === "light")
-        return false;
-
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
-function setDarkMode(isDark) {
-    if(document.documentElement.dataset.darkmode === 'disabled')
-        return;
-
-    const parentHtml = document.documentElement;
-    const iframes = document.querySelectorAll("iframe[data-dark-mode-enabled]");
-
-    // Update the parent document
-    if (isDark) {
-        parentHtml.classList.add("dark-mode");
-    } else {
-        parentHtml.classList.remove("dark-mode");
-    }
-
-    // Sync each iframe's <html> class with the parent
-    for (const iframe of iframes) {
-        try {
-            const iframeHtml = iframe.contentWindow.document.documentElement;
-            if (isDark) {
-              iframeHtml.classList.add("dark-mode")
-            } else {
-              iframeHtml.classList.remove("dark-mode")
-            }
-        } catch (err) {
-            console.warn("Dark mode sync to iframe failed:", err);
-        }
-    }
-
-    const modeButton = document.getElementById("light-dark-button");
-    if (modeButton) {
-        modeButton.querySelector('.icon').innerText = isDark ? "light_mode" : "dark_mode";
-        modeButton.querySelector('.name').innerText = isDark ? "Light Mode" : "Dark Mode";
-    }
-}
-
-// Run this as soon as possible to avoid flicker
-setDarkMode(isDarkMode());
-
-// Rest of dark mode setup logic waits until after load
-window.addEventListener("DOMContentLoaded", function(event) {
-    // Rerun setDarkMode now that it can update buttons
-    const isDark = isDarkMode();
-    setDarkMode(isDark);
-
-    const modeButton = document.getElementById("light-dark-button");
-    modeButton.addEventListener("click", function() {
-        const wasDark = isDarkMode();
-        setDarkMode(!wasDark);
-        localStorage.setItem("theme", wasDark ? "light" : "dark");
-    });
-});
-
-// Share button and embed in LMS code
-window.addEventListener("DOMContentLoaded", function(event) {
-    const shareButton = document.getElementById("embed-button");
-    if (shareButton) {
-        const sharePopup = document.getElementById("embed-popup");
-        const embedCode = "<iframe src='" + window.location.href + "?embed' width='100%' height='1000px' frameborder='0'></iframe>";
-        const embedTextbox = document.getElementById("embed-code-textbox");
-        if (embedTextbox) {
-            embedTextbox.value = embedCode;
-        }
-        shareButton.addEventListener("click", function() {
-            sharePopup.classList.toggle("hidden");
-        });
-        const copyButton = document.getElementById("copy-embed-button");
-        if (copyButton) {
-            copyButton.addEventListener("click", function() {
-                const embedTextbox = document.getElementById("embed-code-textbox");
-                if (embedTextbox) {
-                    navigator.clipboard.writeText(embedCode).then(() => {
-                        console.log("Embed code copied to clipboard!");
-                    }).catch(err => {
-                        console.error("Failed to copy embed code: ", err);
-                    });
-                    //copyButton.innerHTML = "✓✓";
-                    // show confirmation for 2 seconds:
-                    copyButton.querySelector('.icon').innerText = "library_add_check";
-                    setTimeout(function() {
-                        copyButton.querySelector('.icon').innerText = "content_copy";
-                        sharePopup.classList.add("hidden");
-                    }, 450);
-                }
-            });
-        }
-    }
-});
-
-// Hide everything except the content when the URL has "embed" in it
-window.addEventListener("DOMContentLoaded", function(event) {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has("embed")) {
-        // Set dark mode based on value of param
-        if (urlParams.get("embed") === "dark") {
-            setDarkMode(true);
-        } else {
-            setDarkMode(false);
-        }
-        const elemsToHide = [
-            "ptx-navbar",
-            "ptx-masthead",
-            "ptx-page-footer",
-            "ptx-sidebar",
-            "ptx-content-footer"
-        ];
-        for (let id of elemsToHide) {
-            const elem = document.getElementById(id);
-            if (elem) {
-                elem.classList.add("hidden");
-            }
-        }
-    }
-});
-
 // START Support for code-copy button functionality
 document.addEventListener("click", (ev) => {
     const codeBox = ev.target.closest(".clipboardable");
@@ -1355,3 +1211,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 // END Support for code-copy button functionality
+
+
+window.addEventListener("DOMContentLoaded", () => {
+    const userDropdownButton = document.getElementById("ptx-user-dropdown-button");
+    const userDropdownContent = document.getElementById("ptx-user-dropdown-content");
+    if (userDropdownButton && userDropdownContent) {
+        new PTXDropdown(userDropdownContent, userDropdownButton);
+    }
+});

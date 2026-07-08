@@ -62,14 +62,14 @@
   white-space: pre;
   color: var(--body-text-color);
   background: var(--code-inline-background);
-  border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
   border-radius: 0.2em;
   display: inline-block;
   overflow-x: auto;
   max-width: 100%;
   vertical-align: middle;
-  line-height: normal;
-  padding: 0.0625em 0.15em;
+  padding: 0 0.15em;
+  translate: 0 -1px;
+  line-height: calc(var(--content-line-height) - 0.15);
 }
 .prompt.unselectable {
   user-select: none;
@@ -133,6 +133,9 @@
 .exercise-like > .heading {
   font-size: inherit;
 }
+.exercise-like > *:is(.solutions) {
+  margin-top: 0.5em;
+}
 .exercisegroup .exercise-like {
   margin-top: 1em;
 }
@@ -153,7 +156,7 @@
   padding-left: 40px;
 }
 .exercisegroup .conclusion {
-  margin-left: 40px;
+  margin-top: 1em;
 }
 .exercisegroup .conclusion .heading {
   font-size: inherit;
@@ -471,11 +474,14 @@ article > .heading:first-child + :is(.para, .para.logical, .introduction) > .par
 * {
   box-sizing: border-box;
 }
+.ptx-content {
+  --content-line-height: 1.35;
+}
 @layer spacing {
-  :is(section, article, .knowl__content) > *:not(:first-child) {
+  :is(section, article, .knowl__content, .introduction, .conclusion) > *:not(:first-child) {
     margin-top: 1.5em;
   }
-  :is(section, article, .knowl__content) > .para + .para {
+  :is(section, article, .knowl__content, .introduction, .conclusion) > .para + .para {
     margin-top: 1em;
   }
   .ptx-content :is(ul, td, li, dd, .blockquote, .sbspanel, .para.logical) > *:not(:first-child) {
@@ -938,6 +944,7 @@ a[href^="mailto:"] {
 .tabular-box {
   margin-top: 0.5em;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 .tabular-box.natural-width table {
   margin-left: auto;
@@ -1418,7 +1425,7 @@ pre[class*=language-] {
 code[class*=language-],
 pre[class*=language-] {
   color: black;
-  background: #fdfdfd;
+  background: var(--code-background);
   text-shadow: none;
   font-family: var(--font-monospace);
   text-align: left;
@@ -1432,8 +1439,10 @@ pre[class*=language-] {
 }
 code[class*=language-].code-inline,
 pre[class*=language-].code-inline {
-  line-height: normal;
-  padding: 0.0625em 0.15em;
+  padding: 0 0.15em;
+  translate: 0 -1px;
+  line-height: calc(var(--content-line-height) - 0.15);
+  border: 1px solid color-mix(in oklab, var(--code-inline-background) 50%, #888);
 }
 code[class*=language-]::selection,
 code[class*=language-] ::selection,
@@ -1632,6 +1641,9 @@ pre[class*=language-] .line-highlight {
   overflow-x: auto;
   overflow-y: hidden;
 }
+mjx-container {
+  line-height: 0;
+}
 .displaymath mjx-container[jax=CHTML][display=true] {
   margin: 0 0 0 0;
   padding-top: 0.3em;
@@ -1742,14 +1754,17 @@ iframe {
 .emphasis .emphasis {
   font-weight: bold;
 }
+.theorem-like .para {
+  font-style: italic;
+}
+.theorem-like .para .emphasis {
+  font-weight: 700;
+}
 .definition-like .emphasis {
   font-weight: 700;
 }
-article.theorem-like .emphasis {
-  font-weight: 700;
-}
 .para {
-  line-height: 1.35;
+  line-height: var(--ptx-content-line-height, 1.35);
 }
 .hidden {
   display: none !important;
@@ -1775,15 +1790,17 @@ article.theorem-like .emphasis {
 .latex-logo .A {
   font-size: 75%;
   text-transform: uppercase;
-  vertical-align: 0.5ex;
   margin-left: -0.48em;
   margin-right: -0.2em;
+  display: inline-block;
+  translate: 0 -0.5ex;
 }
 .latex-logo .E {
-  vertical-align: -0.5ex;
   text-transform: uppercase;
   margin-left: -0.18em;
   margin-right: -0.12em;
+  display: inline-block;
+  translate: 0 0.4ex;
 }
 :root {
   --font-body:
@@ -1879,7 +1896,7 @@ article.theorem-like .emphasis {
   --dropdown-hover-background: var(--tocitem-active-background);
   --dropdown-hover-text-color: var(--tocitem-active-text-color);
   --code-background: #fdfdfd;
-  --code-inline-background: #ededed;
+  --code-inline-background: #f4f4f4;
   --assemblage-like-body-background: var(--block-body-background);
   --assemblage-like-border-color: var(--block-border-color);
   --definition-like-body-background: var(--block-body-background);

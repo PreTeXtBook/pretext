@@ -26,12 +26,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <locale language="pt-PT" direction="ltr"
         quote-primary="english-double" quote-secondary="english-single">
-    <!-- The english quotation style above is just a default, it needs adjustment -->
     <!-- THEOREM-LIKE blocks -->
-    <!-- Environments which have proofs, plus proofs themselves -->
-    <localization string-id="theorem">Teorema</localization>
-    <localization string-id="corollary">Corolário</localization>
-    <localization string-id="lemma">Lema</localization>
+    <!-- The english quotation style above is just a default, it needs adjustment -->
+    <localization string-id='theorem'>Teorema</localization>
+    <localization string-id='corollary'>Corolário</localization>
+    <localization string-id='lemma'>Lema</localization>
     <localization string-id='algorithm'>Algoritmo</localization>
     <localization string-id='proposition'>Proposição</localization>
     <localization string-id='claim'>Afirmação</localization>
@@ -43,8 +42,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='justification'>Justification</localization> -->
     <!-- <localization string-id='reasoning'>Reasoning</localization> -->
     <!-- <localization string-id='explanation'>Explanation</localization> -->
-    <!-- used for a (logical) portion of a proof -->
     <!-- <localization string-id='case'>Case</localization> -->
+    <!-- Components of the narrative -->
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->
     <localization string-id='axiom'>Axioma</localization>
@@ -55,9 +54,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='assumption'>Assumption</localization> -->
     <!-- Definitions -->
     <localization string-id='definition'>Definição</localization>
-    <!--Mathematics -->
-    <!-- "equation" is a string signaling one line of displayed mathematics         -->
-    <!-- "displaymath" is a string signaling several lines of displayed mathematics -->
+    <!-- Mathematics -->
     <localization string-id='equation'>Equação</localization>
     <!-- the translations for 'display mathematics' need revision! -->
     <localization string-id='displaymath'>Equação</localization>
@@ -65,8 +62,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='volume'>Volume</localization>
     <localization string-id='book'>Livro</localization>
     <localization string-id='article'>Artigo</localization>
-    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
     <localization string-id='letter'>Carta</localization>
+    <!-- <localization string-id='slideshow'>Slideshow</localization> -->
     <localization string-id='memo'>Memorando</localization>
     <localization string-id='presentation'>Apresentação</localization>
     <!-- Parts of a document -->
@@ -75,12 +72,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='part'>Parte</localization>
     <localization string-id='chapter'>Capítulo</localization>
     <localization string-id='appendix'>Apêndice</localization>
-    <!-- Next is the plural of Appendix, used to identify a group of appendix -->
     <!-- <localization string-id='appendices'>Appendices</localization> -->
     <localization string-id='section'>Secção</localization>
     <localization string-id='subsection'>Subsecção</localization>
     <localization string-id='subsubsection'>Subsubsecção</localization>
-    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
     <!-- <localization string-id='slide'>Slide</localization> -->
     <localization string-id='introduction'>Introdução</localization>
     <localization string-id='conclusion'>Conclusão</localization>
@@ -92,14 +87,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='glossary'>Glossary</localization> -->
     <localization string-id='references'>Referências</localization>
     <localization string-id='backmatter'>Pós Texto</localization>
-    <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'>Parágrafos</localization>
+    <localization string-id='subparagraph'>Subparágrafo</localization>
     <!-- Adjustments to titles of divisions -->
     <!-- <localization string-id='group'>Group</localization> -->
-    <localization string-id='subparagraph'>Subparágrafo</localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
-    <!-- "note" is used within "biblio", likely to change -->
     <localization string-id='remark'>Observação</localization>
     <!-- <localization string-id='convention'>Convention</localization> -->
     <localization string-id='note'>Nota</localization>
@@ -124,28 +117,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='exploration'>Exploration</localization> -->
     <!-- <localization string-id='task'>Task</localization> -->
     <!-- <localization string-id='investigation'>Investigation</localization> -->
-    <!--  -->
-    <!-- assemblages are collections of minimally structured material -->
     <!-- <localization string-id='assemblage'>Assemblage</localization> -->
     <!-- <localization string-id='poem'>Poem</localization> -->
-    <!-- Objectives is the block, objective is a list item within -->
     <!-- <localization string-id='objectives'>Objectives</localization> -->
     <!-- <localization string-id='objective'>Objective</localization> -->
-    <!-- Outcomes is the block, outcome is a list item within (different) -->
     <!-- <localization string-id='outcomes'>Outcomes</localization> -->
     <!-- <localization string-id='outcome'>Outcome</localization> -->
-    <!--  -->
-    <!-- "Open" means unsolved, a research question/problem -->
     <!-- <localization string-id='openquestion'>Open Question</localization> -->
     <!-- <localization string-id='openproblem'>Open Problem</localization> -->
     <!-- <localization string-id='openconjecture'>Open Conjecture</localization> -->
-    <!-- "discussion" on open problems -->
     <!-- <localization string-id='context'>Context</localization> -->
     <!-- <localization string-id='discussion'>Discussion</localization> -->
     <!-- <localization string-id='opinion'>Opinion</localization> -->
     <!-- <localization string-id='status'>Status</localization> -->
     <!-- <localization string-id='suggestion'>Suggestion</localization> -->
-    <!--  -->
     <localization string-id='figure'>Figura</localization>
     <localization string-id='table'>Tabela</localization>
     <!-- Translation needed for Portugal Portugese -->
@@ -157,13 +142,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translations needed for Portugal Portugese -->
     <!-- <localization string-id='list'>List</localization> -->
     <!-- <localization string-id='li'>Item</localization> -->
-    <!-- A term (word) defined in a glossary item -->
     <!-- <localization string-id='gi'>Term</localization> -->
-    <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'>Parágrafo</localization>
     <!-- <localization string-id='blockquote'>Quotation</localization> -->
     <!-- <localization string-id='pre'>Code Block</localization> -->
-    <!-- Literate programming, a chunk of computer code -->
     <!-- <localization string-id='fragment'>Fragment</localization> -->
     <!-- Parts of an exercise and its solution -->
     <!-- See the en-US file for a detailed explanation of the words for exercises -->
@@ -178,10 +160,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='answer'>Resposta</localization>
     <localization string-id='solution'>Solução</localization>
     <!-- Translation needed for Portugal Portugese -->
-    <!-- A group of divisional exercises (with introduction and conclusion) -->
     <!-- <localization string-id='subexercises'>Subexercises</localization> -->
     <!-- <localization string-id='exercisegroup'>Exercise Group</localization> -->
-    <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <!-- the term 'Bibliographic Item' could be just 'Referência'... -->
     <localization string-id='biblio'>Referência Bibliográfica</localization>
     <!-- Front matter components -->
@@ -191,7 +171,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='preface'>Prefácio</localization>
     <localization string-id='acknowledgement'>Agradecimentos</localization>
     <localization string-id='biography'>Biografia do Autor</localization>
-    <!-- singular and plural titles for biography subdivision -->
     <!-- <localization string-id='about-author'>About the Author</localization> -->
     <!-- <localization string-id='about-authors'>About the Authors</localization> -->
     <!-- Other possible names for 'foreword': Prefácio -->
@@ -201,6 +180,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Runestone Activities -->
     <!-- <localization string-id='video'>Video</localization> -->
     <!-- <localization string-id='program'>Program</localization> -->
+    <!-- Runestone Exercises -->
     <!-- <localization string-id='true'>True</localization> -->
     <!-- <localization string-id='false'>False</localization> -->
     <!-- <localization string-id='or'>Or</localization> -->
@@ -208,14 +188,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='uncategorized'>Uncategorized</localization> -->
     <!-- <localization string-id='query'>Query</localization> -->
     <localization string-id='program-activecode'>ActiveCode</localization>
+    <!-- <localization string-id='scratch-activecode'>Scratch ActiveCode</localization> -->
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
-    <!-- index-part is deprecated, but not abandoned          -->
-    <!-- NB: repurpose translations, maybe move appendix here -->
     <localization string-id='index'>Índice Remissivo</localization>
     <!-- <localization string-id='jump-to'>Jump to:</localization> -->
     <!-- Parts of the Index -->
-    <localization string-id='index'>Índice Remissivo</localization>
     <localization string-id='see'>Veja</localization>
     <localization string-id='also'>Veja também</localization>
     <!-- Notation List headings/foot -->
@@ -226,21 +204,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='page'>Página</localization>
     <localization string-id='continued'>Continua na página seguinte</localization>
     <!-- Navigation Interface elements -->
-    <!-- Assistive "skip to content" link -->
     <!-- <localization string-id='skip-to-content'>Skip to main content</localization> -->
     <localization string-id='previous'>Anterior</localization>
     <localization string-id='up'>Acima</localization>
     <localization string-id='next'>Seguinte</localization>
-    <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
     <!-- TODO: SHORTEN THESE -->
     <localization string-id='previous-short'>Anterior</localization>
     <localization string-id='up-short'>Acima</localization>
     <localization string-id='next-short'>Seguinte</localization>
-    <!-- NB: Use toc from above for both headings and navigation sidebar-->
+    <!-- <localization string-id='top'>Top</localization> -->
     <localization string-id='annotations'>Anotações</localization>
     <localization string-id='feedback'>Comentário</localization>
     <localization string-id='authored'>Produzido com PreTeXt</localization>
     <!-- Search Results display/dialog -->
+    <!-- <localization string-id='search-book'>Search Book</localization> -->
     <!-- <localization string-id='search-results-heading'>Search Results</localization> -->
     <!-- <localization string-id='no-search-results'>No results</localization> -->
     <!-- Parts of memos and letters -->
@@ -248,7 +225,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>De</localization>
     <localization string-id='subject'>Assunto</localization>
     <localization string-id='date'>Data</localization>
-    <localization string-id='copy'>Cópia</localization>
+    <localization string-id='cc'>Cópia</localization>
     <localization string-id='enclosure'>Anexo</localization>
     <!-- Various -->
     <localization string-id='todo'>Para fazer</localization>
@@ -261,26 +238,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for Portugal Portugese -->
     <!-- <localization string-id='permalink'>permalink</localization> -->
     <!-- <localization string-id='incontext'>In Context</localization> -->
-    <!-- Static representation link to the dedicated HTML page ("standalone") -->
     <!-- <localization string-id='standalone'>Standalone</localization> -->
-    <!-- Static representation link to the embeddable iframe version ("embed") -->
     <!-- <localization string-id='embed'>Embed</localization> -->
+    <!-- <localization string-id='embed-this-page'>Embed this page</localization> -->
+    <!-- <localization string-id='copy'>Copy</localization> -->
+    <!-- <localization string-id='profile'>Profile</localization> -->
     <!-- Following is in ENGLISH and should be translated.  Due to its -->
-    <!-- ubiquitous nature we have not left it undefined.  See the     -->
-    <!-- "en-US" file for a more complete explanation of its use.      -->
-    <!-- Please remove this entire comment when translated.  Thanks.   -->
+    <!-- ubiquitous nature we have not left it undefined.  See the -->
+    <!-- "en-US" file for a more complete explanation of its use. -->
+    <!-- Please remove this entire comment when translated.  Thanks. -->
     <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
-    <!-- Sage Cell evaluate button      -->
-    <!-- eg, "Evaluate (Maxima)"        -->
-    <!-- 2017-05-14: 'code' is obsolete -->
-    <!-- This needs to be defined to *something* (English)       -->
-    <!-- else whatever crud ends up on the button kills the cell -->
-    <!-- Translate at first opportunity, please                  -->
+    <!-- <localization string-id='calculator'>Calculator</localization> -->
+    <!-- This needs to be defined to *something* (English) -->
+    <!-- Translate at first opportunity, please -->
     <localization string-id='evaluate'>Evaluate</localization>
     <!-- <localization string-id='code'>Code</localization> -->
-    <!-- How to run an interactive widget, sliders, checkboxes, etc -->
     <!-- <localization string-id='instructions'>Instructions</localization> -->
-    <!-- Interactive exercise feedback messages -->
     <!-- <localization string-id='correct'>Correct</localization> -->
     <!-- <localization string-id='incorrect'>Incorrect</localization> -->
     <!-- <localization string-id='blank'>Blank</localization> -->
@@ -291,11 +264,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='activate'>Activate</localization> -->
     <!-- <localization string-id='reset'>Reset</localization> -->
     <!-- <localization string-id='array'>array</localization> -->
-    <!-- "paper size" toggle title                                -->
-    <localization string-id='papersize'>Formato do papel</localization>
-    <!-- Additional printing options -->
+    <localization string-id="papersize">Formato do papel</localization>
     <localization string-id="printing-options">Opções de impressão</localization>
-    <!-- "hide hint/answer/solutions" toggle title                         -->
     <localization string-id="hide-hints">Esconder dicas</localization>
     <localization string-id="hide-answers">Esconder respostas</localization>
     <localization string-id="hide-solutions">Esconder soluções</localization>
@@ -308,4 +278,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='print-preview'>Pré-visualização da impressão</localization>
     <localization string-id='close'>Fechar</localization>
     <localization string-id='open-new-tab'>Abrir em nova aba</localization>
+    <!-- Readability menu items, HTML only, utilized by Javascript -->
+    <!-- <localization string-id='readability-settings'>Readability settings</localization> -->
+    <!-- <localization string-id='readability-line-height'>Line height</localization> -->
+    <!-- <localization string-id='readability-content-font-size'>Content font size</localization> -->
+    <!-- <localization string-id='readability-theme'>Theme</localization> -->
+    <!-- <localization string-id='readability-theme-system'>System</localization> -->
+    <!-- <localization string-id='readability-theme-light'>Light</localization> -->
+    <!-- <localization string-id='readability-theme-dark'>Dark</localization> -->
+    <!-- <localization string-id='readability-assistive-technologies'>Assistive technologies</localization> -->
+    <!-- <localization string-id='readability-expose-permalinks'>Expose permalinks</localization> -->
+    <!-- <localization string-id='reset-all'>Reset All</localization> -->
 </locale>

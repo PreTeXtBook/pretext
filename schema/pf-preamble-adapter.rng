@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar ns="https://prefigure.org" xmlns="http://relaxng.org/ns/structure/1.0">
+  <include href="pf_schema.rng">
+    <start>
+      <interleave>
+        <zeroOrMore>
+          <ref name="GraphicalElements"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="GroupElements"/>
+        </zeroOrMore>
+      </interleave>
+    </start>
+  </include>
+</grammar>

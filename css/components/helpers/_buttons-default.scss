@@ -1,7 +1,9 @@
 $border-radius: 0 !default;
+$border-width: 1px !default;
 
 @mixin ptx-button(
-  $border-radius: $border-radius
+  $border-radius: $border-radius,
+  $border-width: $border-width
 ) {
   font: inherit;
   display: flex;
@@ -12,7 +14,7 @@ $border-radius: 0 !default;
   min-height: 34px;
   color: var(--button-text-color);
   background-color: var(--button-background);
-  border-width: 1px;
+  border-width: $border-width;
   border-color: var(--button-border-color);
   border-style: solid;
   border-radius: $border-radius;
@@ -49,37 +51,48 @@ $border-radius: 0 !default;
   }
 }
 
-@mixin ptx-dropdown-button {
-  position: relative;
+@mixin ptx-dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: var(--dropdown-background);
+  min-width: 160px;
+  z-index: 100;
+  border: 1px solid var(--dropdown-border-color);
+  right: 0;
+  top: 100%;
+  text-align: start;
+  padding: 0;
 
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: var(--dropdown-background);
-    min-width: 160px;
-    z-index: 100;
-    border: 1px solid var(--dropdown-border-color);
-    right: 0;
-    top: 35px;
-    text-align: start;
+  a {
+    display: block;
+    text-decoration: none;
+    color: var(--dropdown-text-color);
+    padding: 2px 8px;
+
+    &:is(:hover, :focus-visible) {
+      background-color: var(--dropdown-hover-background);
+      color: var(--dropdown-hover-text-color);
+    }
+  }
+
+  ul {
+    list-style: none;
     padding: 0;
+    margin: 0;
+  }
 
-    a {
-      display: block;
-      text-decoration: none;
-      color: var(--dropdown-text-color);
-      padding: 2px 8px;
+  hr {
+    color: var(--dropdown-border-color);
+    margin: 4px 0;
+  }
 
-      &:is(:hover, :focus-visible) {
-        background-color: var(--dropdown-hover-background);
-        color: var(--dropdown-hover-text-color);
-      }
-    }
+  .ptx-dropdown-separator {
+    border-bottom: 1px solid var(--dropdown-border-color);
+    margin: 4px 0;
+  }
 
-    hr {
-      color: var(--dropdown-border-color);
-      margin: 4px 0;
-    }
+  &.open {
+    display: block;
   }
 
   &:is(:hover, :focus-visible, :focus-within) {

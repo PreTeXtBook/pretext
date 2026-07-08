@@ -778,6 +778,11 @@
       <text/>
     </element>
   </define>
+  <!--
+    "event" is consumed only by the slideshow conversions
+    (Beamer, reveal.js).  This schema does not yet describe a
+    "slideshow" document, so the pattern is dormant until then.
+  -->
   <define name="Event">
     <element name="event">
       <ref name="TextLong"/>
@@ -931,7 +936,7 @@
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
-          <ref name="BlockStatementNoCaption"/>
+          <ref name="BlockStatementNoNumber"/>
           <ref name="ParagraphsNoNumber"/>
         </choice>
       </oneOrMore>
@@ -953,7 +958,7 @@
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
-          <ref name="BlockStatementNoCaption"/>
+          <ref name="BlockStatementNoNumber"/>
           <ref name="ParagraphsNoNumber"/>
         </choice>
       </oneOrMore>
@@ -966,7 +971,7 @@
         <group>
           <oneOrMore>
             <choice>
-              <ref name="BlockStatementNoCaption"/>
+              <ref name="BlockStatementNoNumber"/>
               <ref name="ParagraphsNoNumber"/>
             </choice>
           </oneOrMore>
@@ -977,14 +982,14 @@
         <group>
           <zeroOrMore>
             <choice>
-              <ref name="BlockStatementNoCaption"/>
+              <ref name="BlockStatementNoNumber"/>
               <ref name="ParagraphsNoNumber"/>
             </choice>
           </zeroOrMore>
           <ref name="Contributors"/>
           <zeroOrMore>
             <choice>
-              <ref name="BlockStatementNoCaption"/>
+              <ref name="BlockStatementNoNumber"/>
               <ref name="ParagraphsNoNumber"/>
             </choice>
           </zeroOrMore>
@@ -1001,6 +1006,9 @@
           <ref name="Solutions"/>
         </choice>
       </zeroOrMore>
+      <optional>
+        <ref name="Glossary"/>
+      </optional>
       <optional>
         <ref name="References"/>
       </optional>
@@ -1041,8 +1049,8 @@
       <oneOrMore>
         <choice>
           <ref name="BlockText"/>
-          <ref name="SideBySideNoCaption"/>
-          <ref name="SideBySideGroupNoCaption"/>
+          <ref name="SideBySideNoNumber"/>
+          <ref name="SideBySideGroupNoNumber"/>
         </choice>
       </oneOrMore>
     </element>
@@ -1065,7 +1073,7 @@
         <ref name="Index"/>
       </zeroOrMore>
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -1195,129 +1203,9 @@
   </define>
   <define name="PrintoutBlock">
     <choice>
-      <ref name="BlockStatement"/>
-      <ref name="Remark"/>
-      <ref name="Computation"/>
-      <ref name="Theorem"/>
-      <ref name="Proof"/>
-      <ref name="Definition"/>
-      <ref name="Axiom"/>
-      <ref name="Example"/>
-      <ref name="PrintoutExercise"/>
-      <ref name="Project"/>
-      <ref name="Poem"/>
-      <ref name="Assemblage"/>
-      <ref name="ListGenerator"/>
-      <ref name="Fragment"/>
-      <ref name="PrintoutSideBySide"/>
+      <ref name="BlockDivision"/>
       <ref name="Paragraphs"/>
     </choice>
-  </define>
-  <!-- Allow exercise in sidebyside -->
-  <define name="PrintoutSideBySide">
-    <element name="sidebyside">
-      <ref name="SidebySideAttributes"/>
-      <oneOrMore>
-        <choice>
-          <ref name="Figure"/>
-          <ref name="Poem"/>
-          <ref name="Tabular"/>
-          <ref name="Image"/>
-          <ref name="Video"/>
-          <ref name="Program"/>
-          <ref name="Console"/>
-          <ref name="Paragraph"/>
-          <ref name="Preformatted"/>
-          <ref name="List"/>
-          <ref name="Stack"/>
-          <ref name="PrintoutExercise"/>
-          <ref name="PrintoutTask"/>
-        </choice>
-      </oneOrMore>
-    </element>
-  </define>
-  <!-- Exercises and tasks can have workspace: -->
-  <define name="PrintoutExercise">
-    <element name="exercise">
-      <ref name="MetaDataTitleOptional"/>
-      <optional>
-        <attribute name="number"/>
-      </optional>
-      <optional>
-        <attribute name="workspace"/>
-      </optional>
-      <choice>
-        <ref name="ExerciseBody"/>
-        <group>
-          <ref name="StatementExercise"/>
-          <zeroOrMore>
-            <ref name="Hint"/>
-          </zeroOrMore>
-          <zeroOrMore>
-            <ref name="Answer"/>
-          </zeroOrMore>
-          <zeroOrMore>
-            <ref name="Solution"/>
-          </zeroOrMore>
-        </group>
-        <group>
-          <optional>
-            <ref name="IntroductionText"/>
-          </optional>
-          <ref name="WebWork"/>
-          <optional>
-            <ref name="ConclusionText"/>
-          </optional>
-        </group>
-        <group>
-          <optional>
-            <ref name="IntroductionStatement"/>
-          </optional>
-          <oneOrMore>
-            <ref name="PrintoutTask"/>
-          </oneOrMore>
-          <optional>
-            <ref name="ConclusionStatement"/>
-          </optional>
-        </group>
-      </choice>
-    </element>
-  </define>
-  <define name="PrintoutTask">
-    <element name="task">
-      <ref name="MetaDataTitleOptional"/>
-      <optional>
-        <attribute name="workspace"/>
-      </optional>
-      <choice>
-        <oneOrMore>
-          <ref name="BlockStatement"/>
-        </oneOrMore>
-        <group>
-          <ref name="Statement"/>
-          <zeroOrMore>
-            <ref name="Hint"/>
-          </zeroOrMore>
-          <zeroOrMore>
-            <ref name="Answer"/>
-          </zeroOrMore>
-          <zeroOrMore>
-            <ref name="Solution"/>
-          </zeroOrMore>
-        </group>
-        <group>
-          <optional>
-            <ref name="IntroductionStatement"/>
-          </optional>
-          <oneOrMore>
-            <ref name="PrintoutTask"/>
-          </oneOrMore>
-          <optional>
-            <ref name="ConclusionStatement"/>
-          </optional>
-        </group>
-      </choice>
-    </element>
   </define>
   <!-- Page can contain a printout block or be empty -->
   <define name="Page">
@@ -1334,6 +1222,15 @@
   <define name="Worksheet">
     <element name="worksheet">
       <ref name="PrintoutAttributes"/>
+      <optional>
+        <attribute name="courseid"/>
+      </optional>
+      <optional>
+        <attribute name="series"/>
+      </optional>
+      <optional>
+        <attribute name="seriescode"/>
+      </optional>
       <ref name="MetaDataAltTitleOptional"/>
       <interleave>
         <optional>
@@ -1372,17 +1269,18 @@
       <ref name="Preformatted"/>
       <ref name="Image"/>
       <ref name="Video"/>
+      <ref name="Audio"/>
       <ref name="Program"/>
       <ref name="Console"/>
       <ref name="Tabular"/>
     </choice>
   </define>
-  <define name="BlockStatementNoCaption">
+  <define name="BlockStatementNoNumber">
     <choice>
       <ref name="BlockText"/>
       <ref name="Aside"/>
-      <ref name="SideBySideNoCaption"/>
-      <ref name="SideBySideGroupNoCaption"/>
+      <ref name="SideBySideNoNumber"/>
+      <ref name="SideBySideGroupNoNumber"/>
     </choice>
   </define>
   <define name="BlockStatement">
@@ -1413,6 +1311,7 @@
       <ref name="Example"/>
       <ref name="Exercise"/>
       <ref name="Project"/>
+      <ref name="OpenProblem"/>
       <ref name="Poem"/>
       <ref name="Assemblage"/>
       <ref name="ListGenerator"/>
@@ -1421,13 +1320,6 @@
   </define>
   <define name="Prelude">
     <element name="prelude">
-      <oneOrMore>
-        <ref name="BlockText"/>
-      </oneOrMore>
-    </element>
-  </define>
-  <define name="Interlude">
-    <element name="interlude">
       <oneOrMore>
         <ref name="BlockText"/>
       </oneOrMore>
@@ -1485,17 +1377,17 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="IntroductionStatementNoCaption">
+  <define name="IntroductionStatementNoNumber">
     <element name="introduction">
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
-  <define name="ConclusionStatementNoCaption">
+  <define name="ConclusionStatementNoNumber">
     <element name="conclusion">
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -1534,7 +1426,7 @@
   <define name="HeadNote">
     <element name="headnote">
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -1597,6 +1489,15 @@
     <element name="cd">
       <optional>
         <attribute name="latexsep"/>
+      </optional>
+      <optional>
+        <!-- "all" renders every space as a visible glyph; default "none" -->
+        <attribute name="showspaces">
+          <choice>
+            <value>all</value>
+            <value>none</value>
+          </choice>
+        </attribute>
       </optional>
       <choice>
         <text/>
@@ -1774,6 +1675,14 @@
       </optional>
       <optional>
         <attribute name="codelens">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="codetailor">
           <choice>
             <value>yes</value>
             <value>no</value>
@@ -1977,6 +1886,9 @@
     </choice>
   </define>
   <define name="DefinitionLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleOptional"/>
     <zeroOrMore>
       <ref name="Notation"/>
@@ -2001,6 +1913,17 @@
   </define>
   <define name="Proof">
     <element name="proof">
+      <optional>
+        <attribute name="ref"/>
+      </optional>
+      <optional>
+        <attribute name="text">
+          <ref name="XrefTextStyle"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
       <ref name="MetaDataTitleOptional"/>
       <oneOrMore>
         <choice>
@@ -2011,6 +1934,9 @@
     </element>
   </define>
   <define name="TheoremLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleCreatorOptional"/>
     <choice>
       <oneOrMore>
@@ -2079,6 +2005,9 @@
     </choice>
   </define>
   <define name="ExampleLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleOptional"/>
     <choice>
       <oneOrMore>
@@ -2123,6 +2052,9 @@
     </choice>
   </define>
   <define name="ProjectLike">
+    <optional>
+      <attribute name="workspace"/>
+    </optional>
     <ref name="MetaDataTitleOptional"/>
     <choice>
       <oneOrMore>
@@ -2135,6 +2067,19 @@
         <choice>
           <group>
             <ref name="Statement"/>
+            <zeroOrMore>
+              <ref name="Hint"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Answer"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Solution"/>
+            </zeroOrMore>
+          </group>
+          <group>
+            <ref name="Statement"/>
+            <ref name="Program"/>
             <zeroOrMore>
               <ref name="Hint"/>
             </zeroOrMore>
@@ -2224,6 +2169,96 @@
       </choice>
     </element>
   </define>
+  <define name="OpenProblemLike">
+    <ref name="MetaDataTitleOptional"/>
+    <optional>
+      <ref name="Prelude"/>
+    </optional>
+    <choice>
+      <group>
+        <ref name="Statement"/>
+        <zeroOrMore>
+          <ref name="Discussion"/>
+        </zeroOrMore>
+      </group>
+      <group>
+        <optional>
+          <ref name="IntroductionStatement"/>
+        </optional>
+        <oneOrMore>
+          <ref name="OpenProblemTask"/>
+        </oneOrMore>
+        <optional>
+          <ref name="ConclusionStatement"/>
+        </optional>
+      </group>
+    </choice>
+    <optional>
+      <ref name="Postlude"/>
+    </optional>
+  </define>
+  <define name="OpenProblem">
+    <choice>
+      <element name="openproblem">
+        <ref name="OpenProblemLike"/>
+      </element>
+      <element name="openquestion">
+        <ref name="OpenProblemLike"/>
+      </element>
+      <element name="openconjecture">
+        <ref name="OpenProblemLike"/>
+      </element>
+    </choice>
+  </define>
+  <define name="OpenProblemTask">
+    <element name="task">
+      <ref name="MetaDataTitleOptional"/>
+      <choice>
+        <group>
+          <ref name="Statement"/>
+          <zeroOrMore>
+            <ref name="Discussion"/>
+          </zeroOrMore>
+        </group>
+        <group>
+          <optional>
+            <ref name="IntroductionStatement"/>
+          </optional>
+          <oneOrMore>
+            <ref name="OpenProblemTask"/>
+          </oneOrMore>
+          <optional>
+            <ref name="ConclusionStatement"/>
+          </optional>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="Discussion">
+    <choice>
+      <element name="context">
+        <ref name="DiscussionLike"/>
+      </element>
+      <element name="discussion">
+        <ref name="DiscussionLike"/>
+      </element>
+      <element name="opinion">
+        <ref name="DiscussionLike"/>
+      </element>
+      <element name="status">
+        <ref name="DiscussionLike"/>
+      </element>
+      <element name="suggestion">
+        <ref name="DiscussionLike"/>
+      </element>
+    </choice>
+  </define>
+  <define name="DiscussionLike">
+    <ref name="MetaDataTitleOptional"/>
+    <oneOrMore>
+      <ref name="BlockStatement"/>
+    </oneOrMore>
+  </define>
   <define name="RemarkLike">
     <ref name="MetaDataTitleOptional"/>
     <oneOrMore>
@@ -2296,8 +2331,8 @@
       <oneOrMore>
         <choice>
           <ref name="BlockText"/>
-          <ref name="SideBySideNoCaption"/>
-          <ref name="SideBySideGroupNoCaption"/>
+          <ref name="SideBySideNoNumber"/>
+          <ref name="SideBySideGroupNoNumber"/>
         </choice>
       </oneOrMore>
     </element>
@@ -2325,6 +2360,7 @@
         <choice>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="SideBySide"/>
           <ref name="SideBySideGroup"/>
           <ref name="MuseScore"/>
@@ -2369,6 +2405,7 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -2384,6 +2421,14 @@
     </optional>
     <optional>
       <attribute name="margins"/>
+    </optional>
+    <optional>
+      <attribute name="landscape">
+        <choice>
+          <value>yes</value>
+          <value>no</value>
+        </choice>
+      </attribute>
     </optional>
     <optional>
       <choice>
@@ -2418,17 +2463,19 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
           <ref name="Preformatted"/>
           <ref name="List"/>
           <ref name="Stack"/>
+          <ref name="Exercise"/>
         </choice>
       </oneOrMore>
     </element>
   </define>
-  <define name="SideBySideNoCaption">
+  <define name="SideBySideNoNumber">
     <element name="sidebyside">
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
@@ -2437,6 +2484,7 @@
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
+          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -2449,17 +2497,23 @@
   </define>
   <define name="SideBySideGroup">
     <element name="sbsgroup">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
         <ref name="SideBySide"/>
       </oneOrMore>
     </element>
   </define>
-  <define name="SideBySideGroupNoCaption">
+  <define name="SideBySideGroupNoNumber">
     <element name="sbsgroup">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
-        <ref name="SideBySideNoCaption"/>
+        <ref name="SideBySideNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -2548,22 +2602,6 @@
       <text/>
     </element>
   </define>
-  <define name="AnyPFContent">
-    <choice>
-      <text/>
-      <element>
-        <anyName/>
-        <zeroOrMore>
-          <attribute>
-            <anyName/>
-          </attribute>
-        </zeroOrMore>
-        <zeroOrMore>
-          <ref name="AnyPFContent"/>
-        </zeroOrMore>
-      </element>
-    </choice>
-  </define>
   <define name="ImageCode">
     <element name="image">
       <optional>
@@ -2642,9 +2680,7 @@
                 <optional>
                   <attribute name="label"/>
                 </optional>
-                <zeroOrMore>
-                  <ref name="AnyPFContent"/>
-                </zeroOrMore>
+                <externalRef href="pf-adapter.rng"/>
               </element>
             </choice>
           </interleave>
@@ -2737,6 +2773,20 @@
       </choice>
     </attribute>
   </define>
+  <!--
+    A table cell admits footnotes, authored as table notes; the
+    rendering (below the table, keyed a, b, c) is a pending TODO.
+  -->
+  <define name="TableCellText">
+    <mixed>
+      <zeroOrMore>
+        <choice>
+          <ref name="TextLongContent"/>
+          <ref name="Footnote"/>
+        </choice>
+      </zeroOrMore>
+    </mixed>
+  </define>
   <define name="TableCell">
     <element name="cell">
       <optional>
@@ -2752,7 +2802,7 @@
         <attribute name="colspan"/>
       </optional>
       <choice>
-        <ref name="TextLong"/>
+        <ref name="TableCellText"/>
         <oneOrMore>
           <ref name="LongLine"/>
         </oneOrMore>
@@ -2819,6 +2869,14 @@
       </optional>
       <optional>
         <attribute name="row-headers">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="break">
           <choice>
             <value>yes</value>
             <value>no</value>
@@ -2960,6 +3018,39 @@
       </zeroOrMore>
     </element>
   </define>
+  <define name="Audio">
+    <element name="audio">
+      <optional>
+        <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="LabelID"/>
+      </optional>
+      <optional>
+        <ref name="Component"/>
+      </optional>
+      <optional>
+        <attribute name="width"/>
+      </optional>
+      <optional>
+        <attribute name="margins"/>
+      </optional>
+      <optional>
+        <attribute name="start">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="end">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <choice>
+        <ref name="AttributesSourceFile"/>
+        <ref name="AttributesNetwork"/>
+      </choice>
+    </element>
+  </define>
   <define name="Track">
     <element name="track">
       <attribute name="kind"/>
@@ -3097,12 +3188,12 @@
           </choice>
         </attribute>
       </optional>
-      <ref name="IntroductionStatementNoCaption"/>
+      <ref name="IntroductionStatementNoNumber"/>
       <oneOrMore>
         <ref name="Exercise"/>
       </oneOrMore>
       <optional>
-        <ref name="ConclusionStatementNoCaption"/>
+        <ref name="ConclusionStatementNoNumber"/>
       </optional>
     </element>
   </define>
@@ -3207,12 +3298,117 @@
               <ref name="BibSeries"/>
               <ref name="BibPublisher"/>
               <ref name="BibPages"/>
+              <ref name="BibPubnote"/>
               <ref name="BibNote"/>
             </choice>
           </zeroOrMore>
         </group>
+        <group>
+          <!--
+            A CSL-style entry, modeled on the CSL-JSON data
+            format.  Structured fields, all optional, in a fixed
+            canonical order.  With no CSL style active the fields
+            are rendered in this (document) order; with a style,
+            citeproc-py supplies the order from the CSL-JSON.
+          -->
+          <attribute name="type">
+            <ref name="CSLType"/>
+          </attribute>
+          <optional>
+            <ref name="CSLAuthor"/>
+          </optional>
+          <optional>
+            <ref name="CSLEditor"/>
+          </optional>
+          <optional>
+            <ref name="CSLTranslator"/>
+          </optional>
+          <optional>
+            <ref name="BibTitle"/>
+          </optional>
+          <optional>
+            <ref name="BibContainerTitle"/>
+          </optional>
+          <optional>
+            <ref name="BibCollectionTitle"/>
+          </optional>
+          <optional>
+            <ref name="BibGenre"/>
+          </optional>
+          <optional>
+            <ref name="Edition"/>
+          </optional>
+          <optional>
+            <ref name="BibVolume"/>
+          </optional>
+          <optional>
+            <ref name="BibNumber"/>
+          </optional>
+          <optional>
+            <ref name="BibIssue"/>
+          </optional>
+          <optional>
+            <ref name="BibIssued"/>
+          </optional>
+          <optional>
+            <ref name="BibAccessed"/>
+          </optional>
+          <optional>
+            <ref name="BibPage"/>
+          </optional>
+          <optional>
+            <ref name="BibPageFirst"/>
+          </optional>
+          <optional>
+            <ref name="BibNumberOfPages"/>
+          </optional>
+          <optional>
+            <ref name="BibPublisher"/>
+          </optional>
+          <optional>
+            <ref name="BibPublisherPlace"/>
+          </optional>
+          <optional>
+            <ref name="BibDOI"/>
+          </optional>
+          <optional>
+            <ref name="BibISBN"/>
+          </optional>
+          <optional>
+            <ref name="BibISSN"/>
+          </optional>
+          <optional>
+            <ref name="BibURL"/>
+          </optional>
+        </group>
       </choice>
     </element>
+  </define>
+  <!-- CSL-JSON item types, a curated scholarly subset -->
+  <define name="CSLType">
+    <choice>
+      <value>article</value>
+      <value>article-journal</value>
+      <value>article-magazine</value>
+      <value>article-newspaper</value>
+      <value>book</value>
+      <value>chapter</value>
+      <value>collection</value>
+      <value>dataset</value>
+      <value>document</value>
+      <value>entry</value>
+      <value>entry-dictionary</value>
+      <value>entry-encyclopedia</value>
+      <value>manuscript</value>
+      <value>paper-conference</value>
+      <value>patent</value>
+      <value>report</value>
+      <value>review</value>
+      <value>software</value>
+      <value>speech</value>
+      <value>thesis</value>
+      <value>webpage</value>
+    </choice>
   </define>
   <define name="Ibid">
     <element name="ibid">
@@ -3274,6 +3470,12 @@
       <text/>
     </element>
   </define>
+  <!-- A BibTeX "pubnote" holds free-form publication information -->
+  <define name="BibPubnote">
+    <element name="pubnote">
+      <ref name="TextBib"/>
+    </element>
+  </define>
   <define name="BibPages">
     <element name="pages">
       <choice>
@@ -3286,11 +3488,181 @@
       </choice>
     </element>
   </define>
+  <!--
+    CSL contributors carry structured "name" elements only.  The
+    element names "author"/"editor" are deliberately shared with the
+    plain-text BibTeX patterns above; the gating "@type" attribute
+    keeps the two content models apart (a RELAX NG co-occurrence
+    constraint).
+  -->
+  <define name="CSLAuthor">
+    <element name="author">
+      <oneOrMore>
+        <ref name="CSLName"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="CSLEditor">
+    <element name="editor">
+      <oneOrMore>
+        <ref name="CSLName"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="CSLTranslator">
+    <element name="translator">
+      <oneOrMore>
+        <ref name="CSLName"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <!-- A CSL "name": recognized parts in any order, or a literal string -->
+  <define name="CSLName">
+    <element name="name">
+      <zeroOrMore>
+        <choice>
+          <ref name="BibFamily"/>
+          <ref name="BibGiven"/>
+          <ref name="BibDroppingParticle"/>
+          <ref name="BibNonDroppingParticle"/>
+          <ref name="BibSuffix"/>
+          <ref name="BibStaticOrdering"/>
+          <ref name="BibLiteral"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="BibFamily">
+    <element name="family">
+      <text/>
+    </element>
+  </define>
+  <define name="BibGiven">
+    <element name="given">
+      <text/>
+    </element>
+  </define>
+  <define name="BibDroppingParticle">
+    <element name="dropping-particle">
+      <text/>
+    </element>
+  </define>
+  <define name="BibNonDroppingParticle">
+    <element name="non-dropping-particle">
+      <text/>
+    </element>
+  </define>
+  <define name="BibSuffix">
+    <element name="suffix">
+      <text/>
+    </element>
+  </define>
+  <define name="BibStaticOrdering">
+    <element name="static-ordering">
+      <text/>
+    </element>
+  </define>
+  <define name="BibLiteral">
+    <element name="literal">
+      <text/>
+    </element>
+  </define>
+  <!-- CSL standard (string) fields -->
+  <define name="BibContainerTitle">
+    <element name="container-title">
+      <ref name="TextBib"/>
+    </element>
+  </define>
+  <define name="BibCollectionTitle">
+    <element name="collection-title">
+      <ref name="TextBib"/>
+    </element>
+  </define>
+  <!-- A CSL "genre" gives a sub-type, e.g. "Ph.D. thesis" -->
+  <define name="BibGenre">
+    <element name="genre">
+      <text/>
+    </element>
+  </define>
+  <define name="BibIssue">
+    <element name="issue">
+      <text/>
+    </element>
+  </define>
+  <define name="BibPage">
+    <element name="page">
+      <text/>
+    </element>
+  </define>
+  <define name="BibPageFirst">
+    <element name="page-first">
+      <text/>
+    </element>
+  </define>
+  <define name="BibNumberOfPages">
+    <element name="number-of-pages">
+      <text/>
+    </element>
+  </define>
+  <define name="BibPublisherPlace">
+    <element name="publisher-place">
+      <ref name="TextBib"/>
+    </element>
+  </define>
+  <define name="BibDOI">
+    <element name="DOI">
+      <text/>
+    </element>
+  </define>
+  <define name="BibISBN">
+    <element name="ISBN">
+      <text/>
+    </element>
+  </define>
+  <define name="BibISSN">
+    <element name="ISSN">
+      <text/>
+    </element>
+  </define>
+  <define name="BibURL">
+    <element name="URL">
+      <text/>
+    </element>
+  </define>
+  <!-- CSL date variables; one "date" per point, two for a range -->
+  <define name="BibIssued">
+    <element name="issued">
+      <oneOrMore>
+        <ref name="BibDate"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="BibAccessed">
+    <element name="accessed">
+      <oneOrMore>
+        <ref name="BibDate"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="BibDate">
+    <element name="date">
+      <optional>
+        <attribute name="year"/>
+      </optional>
+      <optional>
+        <attribute name="month"/>
+      </optional>
+      <optional>
+        <attribute name="day"/>
+      </optional>
+      <empty/>
+    </element>
+  </define>
   <define name="GlossaryItem">
     <element name="gi">
       <ref name="MetaDataTitle"/>
       <oneOrMore>
-        <ref name="BlockStatementNoCaption"/>
+        <ref name="BlockStatementNoNumber"/>
       </oneOrMore>
     </element>
   </define>
@@ -3479,7 +3851,7 @@
   </define>
   <define name="WWVariable">
     <element name="var">
-      <a:documentation>The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.</a:documentation>
+      <a:documentation>The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  PreTeXt's additional validation will check on these two situations.</a:documentation>
       <choice>
         <group>
           <attribute name="name"/>
@@ -3633,9 +4005,6 @@
       <ref name="TextShort"/>
     </element>
   </define>
-  <define name="XMLBase">
-    <attribute name="xml:base"/>
-  </define>
   <define name="XMLLang">
     <attribute name="xml:lang"/>
   </define>
@@ -3664,9 +4033,6 @@
       <ref name="Component"/>
     </optional>
     <optional>
-      <ref name="XMLBase"/>
-    </optional>
-    <optional>
       <ref name="XMLLang"/>
     </optional>
     <ref name="Title"/>
@@ -3683,9 +4049,6 @@
     </optional>
     <optional>
       <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLBase"/>
     </optional>
     <optional>
       <ref name="XMLLang"/>
@@ -3712,45 +4075,12 @@
       <ref name="Component"/>
     </optional>
     <optional>
-      <ref name="XMLBase"/>
-    </optional>
-    <optional>
       <ref name="XMLLang"/>
     </optional>
     <choice>
       <ref name="Title"/>
       <ref name="LinedTitle"/>
     </choice>
-    <optional>
-      <ref name="ShortTitle"/>
-    </optional>
-    <optional>
-      <ref name="PlainTitle"/>
-    </optional>
-    <zeroOrMore>
-      <ref name="Index"/>
-    </zeroOrMore>
-  </define>
-  <define name="MetaDataSubtitle">
-    <optional>
-      <ref name="UniqueID"/>
-    </optional>
-    <optional>
-      <ref name="LabelID"/>
-    </optional>
-    <optional>
-      <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLBase"/>
-    </optional>
-    <optional>
-      <ref name="XMLLang"/>
-    </optional>
-    <ref name="Title"/>
-    <optional>
-      <ref name="Subtitle"/>
-    </optional>
     <optional>
       <ref name="ShortTitle"/>
     </optional>
@@ -3770,9 +4100,6 @@
     </optional>
     <optional>
       <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLBase"/>
     </optional>
     <optional>
       <ref name="XMLLang"/>
@@ -3808,9 +4135,6 @@
       <ref name="Component"/>
     </optional>
     <optional>
-      <ref name="XMLBase"/>
-    </optional>
-    <optional>
       <ref name="XMLLang"/>
     </optional>
     <optional>
@@ -3829,9 +4153,6 @@
     </optional>
     <optional>
       <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLBase"/>
     </optional>
     <optional>
       <ref name="XMLLang"/>
@@ -3860,9 +4181,6 @@
       <ref name="Component"/>
     </optional>
     <optional>
-      <ref name="XMLBase"/>
-    </optional>
-    <optional>
       <ref name="XMLLang"/>
     </optional>
     <optional>
@@ -3884,9 +4202,6 @@
     </optional>
     <optional>
       <ref name="Component"/>
-    </optional>
-    <optional>
-      <ref name="XMLBase"/>
     </optional>
     <optional>
       <ref name="XMLLang"/>
@@ -3933,6 +4248,9 @@
       <optional>
         <ref name="Component"/>
       </optional>
+      <optional>
+        <attribute name="workspace"/>
+      </optional>
       <ref name="TextParagraph"/>
     </element>
   </define>
@@ -3975,20 +4293,23 @@
       </zeroOrMore>
     </mixed>
   </define>
+  <define name="TextLongContent">
+    <choice>
+      <ref name="Character"/>
+      <ref name="Generator"/>
+      <ref name="Verbatim"/>
+      <ref name="Group"/>
+      <ref name="MathInline"/>
+      <ref name="Music"/>
+      <ref name="Reference"/>
+      <ref name="Custom"/>
+      <ref name="WWVariable"/>
+    </choice>
+  </define>
   <define name="TextLong">
     <mixed>
       <zeroOrMore>
-        <choice>
-          <ref name="Character"/>
-          <ref name="Generator"/>
-          <ref name="Verbatim"/>
-          <ref name="Group"/>
-          <ref name="MathInline"/>
-          <ref name="Music"/>
-          <ref name="Reference"/>
-          <ref name="Custom"/>
-          <ref name="WWVariable"/>
-        </choice>
+        <ref name="TextLongContent"/>
       </zeroOrMore>
     </mixed>
   </define>
@@ -4844,9 +5165,6 @@
   <define name="DocInfo">
     <element name="docinfo">
       <optional>
-        <ref name="XMLBase"/>
-      </optional>
-      <optional>
         <ref name="XMLLang"/>
       </optional>
       <oneOrMore>
@@ -4878,6 +5196,11 @@
   <define name="Configuration" combine="choice">
     <element name="asymptote-preamble">
       <text/>
+    </element>
+  </define>
+  <define name="Configuration" combine="choice">
+    <element name="pf:prefigure-preamble">
+      <externalRef href="pf-preamble-adapter.rng"/>
     </element>
   </define>
   <define name="Configuration" combine="choice">

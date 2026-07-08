@@ -371,10 +371,10 @@ body.pretext {
   background-color: var(--linkbackgroundhighlight);
   color: var(--bodyfontcolorhighlight);
 }
-.pretext[data-atmosphere*="dark"] .ptx-navbar .calculator-toggle {
+.pretext[data-atmosphere*="dark"] .ptx-navbar .ptx-calculator-toggle {
   background-color: var(--buttonbackground);
 }
-.pretext[data-atmosphere*="dark"] .ptx-navbar .calculator-toggle:hover {
+.pretext[data-atmosphere*="dark"] .ptx-navbar .ptx-calculator-toggle:hover {
   background-color: var(--linkbackgroundhighlight);
   color: var(--bodyfontcolorhighlight);
 }

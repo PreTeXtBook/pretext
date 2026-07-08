@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A 3-4-5 right triangle, an externally provided image for   -->
+<!-- the XSL-FO development article.  The viewBox hugs the ink:  -->
+<!-- the path box (10,10)-(210,160) grown by the 1.5 half        -->
+<!-- stroke-width, so the image carries no padding of its own.   -->
+<svg xmlns="http://www.w3.org/2000/svg" width="203" height="153" viewBox="8.5 8.5 203 153">
+    <polygon points="10,160 210,160 210,10" fill="#cfe2f3" stroke="#1c4587" stroke-width="3" stroke-linejoin="round"/>
+    <polyline points="190,160 190,140 210,140" fill="none" stroke="#1c4587" stroke-width="2"/>
+</svg>

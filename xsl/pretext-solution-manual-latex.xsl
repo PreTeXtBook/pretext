@@ -121,32 +121,95 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="chapter[1]" />
 </xsl:template>
 
+<!-- The publisher switches for solution components, packed into the -->
+<!-- single string parameter the "solutions-generator" expects       -->
+<xsl:variable name="component-spec">
+    <xsl:variable name="inline-components">
+        <xsl:if test="$b-has-inline-statement">
+            <xsl:text>statement </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-inline-hint">
+            <xsl:text>hint </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-inline-answer">
+            <xsl:text>answer </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-inline-solution">
+            <xsl:text>solution </xsl:text>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="divisional-components">
+        <xsl:if test="$b-has-divisional-statement">
+            <xsl:text>statement </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-divisional-hint">
+            <xsl:text>hint </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-divisional-answer">
+            <xsl:text>answer </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-divisional-solution">
+            <xsl:text>solution </xsl:text>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="worksheet-components">
+        <xsl:if test="$b-has-worksheet-statement">
+            <xsl:text>statement </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-worksheet-hint">
+            <xsl:text>hint </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-worksheet-answer">
+            <xsl:text>answer </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-worksheet-solution">
+            <xsl:text>solution </xsl:text>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="reading-components">
+        <xsl:if test="$b-has-reading-statement">
+            <xsl:text>statement </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-reading-hint">
+            <xsl:text>hint </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-reading-answer">
+            <xsl:text>answer </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-reading-solution">
+            <xsl:text>solution </xsl:text>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="project-components">
+        <xsl:if test="$b-has-project-statement">
+            <xsl:text>statement </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-project-hint">
+            <xsl:text>hint </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-project-answer">
+            <xsl:text>answer </xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-project-solution">
+            <xsl:text>solution </xsl:text>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:call-template name="solutions-component-spec">
+        <xsl:with-param name="inline"     select="$inline-components"/>
+        <xsl:with-param name="divisional" select="$divisional-components"/>
+        <xsl:with-param name="worksheet"  select="$worksheet-components"/>
+        <xsl:with-param name="reading"    select="$reading-components"/>
+        <xsl:with-param name="project"    select="$project-components"/>
+    </xsl:call-template>
+</xsl:variable>
+
 <!-- provoke the "solutions-generator" at the first sign of main matter content -->
 <xsl:template match="chapter[1]|article/section[1]">
     <xsl:apply-templates select="$document-root" mode="solutions-generator">
         <xsl:with-param name="purpose" select="'solutionmanual'" />
         <xsl:with-param name="admit" select="'all'" />
         <xsl:with-param name="scope" select="$document-root"/>
-        <xsl:with-param name="b-inline-statement"     select="$b-has-inline-statement" />
-        <xsl:with-param name="b-inline-hint"          select="$b-has-inline-hint"  />
-        <xsl:with-param name="b-inline-answer"        select="$b-has-inline-answer"  />
-        <xsl:with-param name="b-inline-solution"      select="$b-has-inline-solution"  />
-        <xsl:with-param name="b-divisional-statement" select="$b-has-divisional-statement" />
-        <xsl:with-param name="b-divisional-hint"      select="$b-has-divisional-hint"  />
-        <xsl:with-param name="b-divisional-answer"    select="$b-has-divisional-answer"  />
-        <xsl:with-param name="b-divisional-solution"  select="$b-has-divisional-solution"  />
-        <xsl:with-param name="b-worksheet-statement"  select="$b-has-worksheet-statement" />
-        <xsl:with-param name="b-worksheet-hint"       select="$b-has-worksheet-hint"  />
-        <xsl:with-param name="b-worksheet-answer"     select="$b-has-worksheet-answer"  />
-        <xsl:with-param name="b-worksheet-solution"   select="$b-has-worksheet-solution"  />
-        <xsl:with-param name="b-reading-statement"    select="$b-has-reading-statement" />
-        <xsl:with-param name="b-reading-hint"         select="$b-has-reading-hint"  />
-        <xsl:with-param name="b-reading-answer"       select="$b-has-reading-answer"  />
-        <xsl:with-param name="b-reading-solution"     select="$b-has-reading-solution"  />
-        <xsl:with-param name="b-project-statement"    select="$b-has-project-statement" />
-        <xsl:with-param name="b-project-hint"         select="$b-has-project-hint"  />
-        <xsl:with-param name="b-project-answer"       select="$b-has-project-answer"  />
-        <xsl:with-param name="b-project-solution"     select="$b-has-project-solution"  />
+        <xsl:with-param name="component-spec" select="$component-spec"/>
     </xsl:apply-templates>
 </xsl:template>
 

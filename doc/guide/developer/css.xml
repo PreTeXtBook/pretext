@@ -93,17 +93,13 @@
             If you want to add finer control over the colors used by a new feature, add a new color variable to <c>colors/_color-vars.scss</c>, and use it in your CSS. To do so, you would write something like:
         </p>
 
-        <program langauge="scss">
+        <program language="scss">
             "dropdown-background": var(--button-background),
         </program>
 
         <p>
-            This ensures that the new variable has a default value (the button background color). Any palatte that targets multiple colors or dark mode will already have a value for <c>--button-background</c>, so your new variable will automatically work with those. Then, to customize the new variable for a particular palette like <c>_palette-dual.scss</c>, you would add an entry to the palette file, such as:
+            This ensures that the new variable has a default value (the button background color). Any palatte that targets multiple colors or dark mode will already have a value for <c>--button-background</c>, so your new variable will automatically work with those. Then, to customize the new variable for a particular palette like <c>_palette-dual.scss</c>, you would add an entry to the palette file, such as:<cd>"dropdown-background": var(--secondary-color),</cd>
         </p>
-
-        <code>
-            "dropdown-background": var(--secondary-color),
-        </code>
 
         <p>
             In a theme that uses the dual palette (like <c>default-modern</c>), the dropdown background will now be the secondary color, which is a different color than the button background. In a theme that uses a palette that does not customize <c>--dropdown-background</c>, the dropdown background will be the same as the button background.
@@ -130,9 +126,9 @@
             When writing new CSS, you can use these variables to ensure that your new feature uses the same fonts as the rest of the theme.
         </p>
 
-        <p>Icons for various buttons and controls are provided for by the <url ref="https://fonts.google.com/icons">Google Material Symbols</url> font. To use an icon from this font, add the classes <c>icon material-symbols-outlined</c> to an element (typically a <tag>span</tag> or <tag>i</tag>) and set its content to the name of the icon you want. For example, to get a magnifying glass icon, you would write:</p>
+        <p>Icons for various buttons and controls are provided for by the <url href="https://fonts.google.com/icons">Google Material Symbols</url> font. To use an icon from this font, add the classes <c>icon material-symbols-outlined</c> to an element (typically a <tag>span</tag> or <tag>i</tag>) and set its content to the name of the icon you want. For example, to get a magnifying glass icon, you would write:</p>
 
-        <program langage="html">
+        <program language="html">
             &lt;span class="icon material-symbols-outlined" aria-hidden="true">search&lt;/span>
         </program>
 
@@ -142,9 +138,7 @@
     <section xml:id="css-sizing" label="css-sizing">
         <title>Sizing and Positioning Elements</title>
 
-        <p>Elements that are placed or sized relative to the page or other top level structures of the page will likely need to leverage <init>SCSS</init> variables to work well across different themes. Many files have variables defined that look like this one from <c>css/components/page-parts/_body.scss</c>:</p>
-
-        <code>$content-width: 600px !default;</code>
+        <p>Elements that are placed or sized relative to the page or other top level structures of the page will likely need to leverage <init>SCSS</init> variables to work well across different themes. Many files have variables defined that look like this one from <c>css/components/page-parts/_body.scss</c>:<cd>$content-width: 600px !default;</cd></p>
 
         <p>That variable can be overridden by a file that <c>@use</c>s it, but otherwise will have a default value of 600px. That variable can be used in style rules:</p>
 

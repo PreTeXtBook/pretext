@@ -20,10 +20,12 @@
 # Python Version History
 # vermin is a great linter/checker to check versions required
 #     https://github.com/netromdk/vermin.git
+# 2026-07-06: this module expects Python 3.10 or newer
+#     FileInput(..., encoding="utf-8") added, required Python 3.10
+#     stack.py: str.removeprefix(), str.removesuffix() requires Python 3.9
 # 2023-10-13: this module expects Python 3.8 or newer
 #     shutil.copytree now has dirs_exist_ok argument
 # 2021-05-21: this module expects Python 3.6 or newer
-#
 #     subprocess.run() requires Python 3.5
 #     shutil.which() member requires 3.3
 #     otherwise Python 3.0 might be sufficient
@@ -146,7 +148,7 @@ except ImportError:
 #############################
 
 
-def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
+def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format, math_cross_references):
     """Convert PreTeXt source to a structured file of representations of mathematics"""
     # formats:  'svg', 'mml', 'nemeth', 'speech', 'kindle'
     # Internal calls will specify out_file with complete path
@@ -183,13 +185,24 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
         punctuation = "none"
     params = {}
     params["math.punctuation"] = punctuation
+    # a single-file target (XSL-FO/PDF) can ask that cross-references
+    # inside mathematics become active internal links (an SVG "a")
+    if math_cross_references:
+        params["math.cross-references"] = "yes"
     if pub_file:
         params["publisher"] = pub_file
     common.xsltproc(extraction_xslt, xml_source, mjinput, None, params)
     # Trying to correct baseline for inline math in Kindle, so we
     # insert a \mathstrut into all the inline math before feeding to MathJax
     if math_format == "kindle":
-        with fileinput.FileInput(mjinput, inplace=True) as file:
+        # fileinput's in-place mode rewrites each file line by line: print() writes
+        # back onto the file, and end="" suppresses the extra newline it would add
+        # (the line already carries its own).  Two Windows pitfalls handled here:
+        #   - the "with" context manager closes the handle before the file is
+        #     reopened/replaced, which otherwise raises a PermissionError (PR #1779)
+        #   - encoding="utf-8" reads/writes UTF-8 rather than the locale default,
+        #     which would mis-decode UTF-8 math/HTML on a cp1252 locale (PR #3003)
+        with fileinput.FileInput(mjinput, inplace=True, encoding="utf-8") as file:
             for line in file:
                 print(line.replace(r"\(", r"\(\mathstrut "), end="")
 
@@ -231,15 +244,16 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     orig = "&nbsp;"
     repl = " "
     xhtml_elt = re.compile(orig)
-    # the inplace facility of the fileinput module gets
-    # confused about temporary backup files if the working
-    # directory is not where the file lives
-    # Also, print() here actual writes on the file, as
-    # another facility of the fileinput module, but we need
-    # to kill the "extra" newline that print() creates
     with common.working_directory(tmp_dir):
         html_file = mjoutput
-        with fileinput.FileInput(html_file, inplace=True) as file:
+        # fileinput's in-place mode rewrites each file line by line: print() writes
+        # back onto the file, and end="" suppresses the extra newline it would add
+        # (the line already carries its own).  Two Windows pitfalls handled here:
+        #   - the "with" context manager closes the handle before the file is
+        #     reopened/replaced, which otherwise raises a PermissionError (PR #1779)
+        #   - encoding="utf-8" reads/writes UTF-8 rather than the locale default,
+        #     which would mis-decode UTF-8 math/HTML on a cp1252 locale (PR #3003)
+        with fileinput.FileInput(html_file, inplace=True, encoding="utf-8") as file:
             for line in file:
                 print(xhtml_elt.sub(repl, line), end="")
 
@@ -2558,7 +2572,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     # ripping out LaTeX as math representations
     msg = "converting raw LaTeX from {} into clean {} format placed into {}"
     log.debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, None, math_format, False)
 
     # use XSL to make a simplified BRF-like XML version, "preprint"
     msg = "converting source ({}) and clean representations ({}) into preprint XML file ({})"
@@ -2981,11 +2995,11 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
     # ripping out LaTeX as math representations
     msg = "converting raw LaTeX from {} into clean {} format placed into {}"
     log.debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, None, math_format, False)
     # optionally, build a file of speech versions of the math
     if math_format == "svg":
         log.debug(msg.format(xml_source, "speech", speech_representations))
-        mathjax_latex(xml_source, pub_file, speech_representations, None, "speech")
+        mathjax_latex(xml_source, pub_file, speech_representations, None, "speech", False)
 
     # Build necessary content and infrastructure EPUB files,
     # using SVG images of math.  Most output goes into the
@@ -3023,17 +3037,18 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
     #   <html xmlns="http://www.w3.org/1999/xhtml">
     orig = "<html"
     repl = __xml_header + '<html xmlns="http://www.w3.org/1999/xhtml"'
-    # the inoplace facility of the fileinput module gets
-    # confused about temporary backup files if the working
-    # directory is not where the file lives
-    # Also, print() here actual writes on the file, as
-    # another facility of the fileinput module, but we need
-    # to kill the "extra" newline that print() creates
     with common.working_directory(xhtml_dir):
         html_elt = re.compile(orig)
         for root, dirs, files in os.walk(xhtml_dir):
             for fn in files:
-                with fileinput.FileInput(fn, inplace=True) as file:
+                # fileinput's in-place mode rewrites each file line by line: print() writes
+                # back onto the file, and end="" suppresses the extra newline it would add
+                # (the line already carries its own).  Two Windows pitfalls handled here:
+                #   - the "with" context manager closes the handle before the file is
+                #     reopened/replaced, which otherwise raises a PermissionError (PR #1779)
+                #   - encoding="utf-8" reads/writes UTF-8 rather than the locale default,
+                #     which would mis-decode UTF-8 math/HTML on a cp1252 locale (PR #3003)
+                with fileinput.FileInput(fn, inplace=True, encoding="utf-8") as file:
                     for line in file:
                         print(html_elt.sub(repl, line), end="")
 
@@ -3799,7 +3814,7 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     tmp_dir = common.get_temporary_directory()
 
     pub_vars = common.get_publisher_variable_report(xml, pub_file, stringparams)
-    include_static_files = common.get_publisher_variable(pub_vars, 'portable-html') != "yes"
+    include_static_files = common.get_publisher_variable(pub_vars, 'b-cdn-resources') != "true"
     time_logger.log("pubvars loaded")
 
     if include_static_files:
@@ -3842,6 +3857,14 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     common.xsltproc(extraction_xslt, xml, None, tmp_dir, stringparams)
     time_logger.log("xsltproc complete")
+
+    if common.get_publisher_variable(pub_vars, 'host-platform') == "runestone":
+        log.info("building Runestone page template for {} in {}".format(xml, tmp_dir))
+        runestone_page_template_xslt = os.path.join(
+            common.get_ptx_xsl_path(), "extract-runestone-page-template.xsl"
+        )
+        common.xsltproc(runestone_page_template_xslt, xml, None, tmp_dir, stringparams)
+        time_logger.log("runestone page template extraction complete")
 
     if not(include_static_files):
         # remove latex-image generated directories for portable builds
@@ -4056,7 +4079,7 @@ def latex_package(xml, pub_file, stringparams, dest_dir):
 # This is not a build target, there is no such thing as a "latex build."
 # Instead, this is a conveience for developers who want to compare
 # different versions of this file during development and testing.
-def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
+def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, format_xsl):
     """Convert XML source to LaTeX in destination directory"""
 
     # to ensure provided stringparams aren't mutated unintentionally
@@ -4069,11 +4092,15 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     # Get potential extra XSL for LaTeX style from publication file
     latex_style = get_latex_style(xml, pub_file, stringparams)
 
-    # Optional extra XSL could be None, or sanitized full filename
+    # Optional extra XSL could be None, or sanitized full filename.
+    # "format_xsl" is a conversion-specific base stylesheet (e.g. Beamer),
+    # used when the caller has not overridden it with "extra_xsl".
     if extra_xsl:
         extraction_xslt = extra_xsl
         if latex_style:
             log.warning("Ignoring the publisher file's latex-style in favor of the extra XSL specified.")
+    elif format_xsl:
+        extraction_xslt = format_xsl
     elif latex_style:
         log.debug("Using LaTeX style: {}".format(latex_style))
         extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "latex", f"pretext-latex-{latex_style}.xsl")
@@ -4085,6 +4112,32 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir):
     # Write output into working directory, no scratch space needed
     log.info("converting {} to LaTeX as {}".format(xml, derivedname))
     common.xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
+
+
+# Like latex() above, this is mostly a convenience for developers:
+# the XSL-FO file is an intermediate format on the way to a PDF,
+# though it does stand alone as the input to any XSL-FO formatter.
+def fo(xml, pub_file, stringparams, out_file, dest_dir):
+    """Convert XML source to XSL-FO in destination directory"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    # support publisher file, not subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+
+    extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "pretext-fo.xsl")
+    # form output filename based on source filename,
+    # unless an  out_file  has been specified
+    derivedname = common.get_output_filename(xml, out_file, dest_dir, ".fo")
+    # The stylesheet may write companion files (e.g. a publisher's
+    # watermark image) via exsl:document, which resolve against the
+    # current working directory; aim them beside the FO file, where
+    # relative references resolve when Apache FOP renders it
+    companion_dir = os.path.dirname(os.path.abspath(derivedname))
+    log.info("converting {} to XSL-FO as {}".format(xml, derivedname))
+    common.xsltproc(extraction_xslt, xml, derivedname, companion_dir, stringparams)
 
 
 ###################
@@ -4117,7 +4170,7 @@ def _latex_compile(latex_cmd, log_file, source_name, max_passes=10, capture_outp
     return result
 
 
-def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outputs):
+def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outputs, format_xsl):
     """
     Generate a PDF from an XML source using LaTeX as an intermediate format.
 
@@ -4157,7 +4210,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
     # make the LaTeX source file in scratch directory
     # (1) pass None as out_file to derive from XML source filename
     # (2) pass tmp_dir (scratch) as destination directory
-    latex(xml, pub_file, stringparams, extra_xsl, None, tmp_dir)
+    latex(xml, pub_file, stringparams, extra_xsl, None, tmp_dir, format_xsl)
 
     # Create localized filenames for pdflatex conversion step
     # sourcename  needs to match behavior of latex() with above arguments
@@ -4216,6 +4269,445 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
                 shutil.copy2(pdfname, dest_dir)
 
 
+def beamer(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outputs):
+    """Convert XML source "slideshow" to a LaTeX/Beamer PDF"""
+
+    # Beamer is a LaTeX-based slideshow presentation, so we reuse the entire
+    # PDF pipeline (LaTeX generation, managed-directory copy, compilation) and
+    # only substitute the Beamer stylesheet for the default LaTeX one.  A
+    # caller-supplied "extra_xsl" still takes precedence, as it does for "pdf".
+    beamer_xsl = os.path.join(common.get_ptx_xsl_path(), "pretext-beamer.xsl")
+    pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outputs, beamer_xsl)
+
+
+def _pdf_fo_accessibility_repairs(pdfname):
+    """
+    Post-process a FOP-rendered PDF to repair two PDF/UA conformance
+    gaps that Apache FOP (observed with version 2.8) cannot fill from
+    the XSL-FO side.  PyMuPDF performs the (small, incremental)
+    repairs; it is already a dependency of this script, used for
+    image format conversions.
+
+    Repair one, link descriptions:
+
+    PDF/UA-1 (ISO 14289-1, Clause 7.18.5) requires each link
+    annotation to provide an alternate description in the /Contents
+    key of its annotation dictionary (per ISO 32000-1, 14.9.3); this
+    is what assistive technology announces for the link, and what a
+    validator such as veraPDF inspects.  The XSL-FO conversion
+    decorates every "fo:basic-link" with a description, via the
+    "fox:alt-text" extension attribute, but FOP records it only as
+    the /Alt entry of the link's *structure element*, in the
+    structure tree -- it has no mechanism at all for writing the
+    /Contents key of the Link *annotation*.  So walk the structure
+    tree's /ParentTree to recover each annotation's intended
+    description from its structure element (falling back to the
+    link's URI, or generic text) and write it into /Contents.
+
+    Repair two, footnote identifiers:
+
+    PDF/UA-1 (Clause 7.9) requires each /Note structure element
+    (FOP's tag for the body of a footnote) to carry a unique /ID
+    entry, which FOP never writes.  Manufacture one from the
+    object number.
+
+    N.B. Remove this routine (and its one call, in pdf_fo()) the day
+    FOP handles both itself.  The test: render with a newer FOP,
+    skip this pass, and check the report of
+        verapdf --flavour ua1 <the-pdf>
+    for Clauses 7.18.5 and 7.9.
+    """
+    try:
+        import fitz  # pyMuPDF
+    except ImportError:
+        log.warning("the 'pyMuPDF' module is not installed, so PDF link annotations lack the alternate descriptions PDF/UA requires")
+        return
+
+    import re
+
+    doc = fitz.open(pdfname)
+    # Map a /StructParent index to the /Alt of its structure element by
+    # walking the /ParentTree number tree, whose nodes are inline
+    # dictionaries or indirect objects, with /Kids subtrees or /Nums
+    # leaf arrays.  Entries mapping an index to an *array* (the marked
+    # content of a page) do not concern us, and do not match the pair
+    # pattern.  Any miss just engages the fallback below.
+    alternate_text = {}
+
+    def harvest(node_type, node_value):
+        if node_type == "xref":
+            node = int(node_value.split()[0])
+            kids = doc.xref_get_key(node, "Kids")
+            nums = doc.xref_get_key(node, "Nums")
+        elif node_type == "dict":
+            kids_match = re.search(r"/Kids\s*(\[[^\]]*\])", node_value)
+            kids = ("array", kids_match.group(1)) if kids_match else ("null", "null")
+            nums_match = re.search(r"/Nums\s*(\[[^\]]*\])", node_value)
+            nums = ("array", nums_match.group(1)) if nums_match else ("null", "null")
+        else:
+            return
+        if kids[0] == "array":
+            for reference in re.findall(r"(\d+)\s+0\s+R", kids[1]):
+                harvest("xref", reference + " 0 R")
+        if nums[0] == "array":
+            for index, element in re.findall(r"(\d+)\s+(\d+)\s+0\s+R", nums[1]):
+                alt = doc.xref_get_key(int(element), "Alt")
+                if alt[0] == "string":
+                    alternate_text[int(index)] = alt[1]
+
+    struct_root = doc.xref_get_key(doc.pdf_catalog(), "StructTreeRoot")
+    if struct_root[0] == "xref":
+        harvest(*doc.xref_get_key(int(struct_root[1].split()[0]), "ParentTree"))
+    additions = 0
+    for page in doc:
+        for link in page.links():
+            xref = link["xref"]
+            if doc.xref_get_key(xref, "Contents")[0] != "null":
+                continue
+            description = None
+            struct_parent = doc.xref_get_key(xref, "StructParent")
+            if struct_parent[0] == "int":
+                description = alternate_text.get(int(struct_parent[1]))
+            if description is None:
+                description = link.get("uri") or "internal cross-reference"
+            doc.xref_set_key(xref, "Contents", fitz.get_pdf_str(description))
+            additions += 1
+    # repair two: a unique /ID for each /Note structure element
+    for xref in range(1, doc.xref_length()):
+        if doc.xref_get_key(xref, "S")[1] == "/Note" and doc.xref_get_key(xref, "ID")[0] == "null":
+            doc.xref_set_key(xref, "ID", "(Note-{})".format(xref))
+            additions += 1
+
+    # repair three: tag the link annotations FOP leaves untagged.  Apache
+    # Batik turns the SVG "a" that MathJax emits for a cross-reference
+    # inside display mathematics into a Link annotation, but -- unlike
+    # FOP's own "fo:basic-link" -- does not nest it in a Link structure
+    # element, which PDF/UA-1 (Clause 7.18.5) requires.  Wrap each such
+    # annotation (a Link with no /StructParent) in a new Link structure
+    # element under the document's structure element, with an /OBJR back
+    # to the annotation, and register its /StructParent in the number
+    # tree.  Nesting under the math's own figure would read better, but
+    # needs per-figure geometry that FOP and PyMuPDF do not expose; this
+    # keeps the PDF conformant.
+    struct_root = doc.xref_get_key(doc.pdf_catalog(), "StructTreeRoot")
+    if struct_root[0] == "xref":
+        root_xref = int(struct_root[1].split()[0])
+        root_kids = doc.xref_get_key(root_xref, "K")
+        if root_kids[0] == "xref":
+            document_element = int(root_kids[1].split()[0])
+        elif root_kids[0] == "array":
+            document_refs = re.findall(r"(\d+)\s+0\s+R", root_kids[1])
+            document_element = int(document_refs[0]) if document_refs else None
+        else:
+            document_element = None
+
+        # The /ParentTree is a number tree, given inline on the structure
+        # root or as an indirect object.  Read a node's /Nums and /Kids
+        # whichever way it is stored.
+        def tree_node(node_type, node_value):
+            if node_type == "xref":
+                node = int(node_value.split()[0])
+                nums = doc.xref_get_key(node, "Nums")
+                kids = doc.xref_get_key(node, "Kids")
+                return (nums[1] if nums[0] == "array" else None,
+                        kids[1] if kids[0] == "array" else None)
+            nums = re.search(r"/Nums\s*(\[.*\])", node_value)
+            kids = re.search(r"/Kids\s*(\[[^\]]*\])", node_value)
+            return (nums.group(1) if nums else None,
+                    kids.group(1) if kids else None)
+
+        # an indirect leaf to extend (follow /Kids to its last child), the
+        # highest key already in the tree (a page's /StructParents or an
+        # annotation's /StructParent), so new keys sit above it
+        def resolve_leaf(node_type, node_value):
+            nums, kids = tree_node(node_type, node_value)
+            if kids:
+                refs = re.findall(r"(\d+)\s+0\s+R", kids)
+                if refs:
+                    return resolve_leaf("xref", refs[-1] + " 0 R")
+            return int(node_value.split()[0]) if node_type == "xref" else None
+
+        def tree_max_key(node_type, node_value):
+            nums, kids = tree_node(node_type, node_value)
+            keys = [-1]
+            if nums:
+                keys += [int(k) for k in re.findall(r"(\d+)\s+(?:\d+\s+0\s+R|<<|\[)", nums)]
+            if kids:
+                keys += [tree_max_key("xref", r + " 0 R") for r in re.findall(r"(\d+)\s+0\s+R", kids)]
+            return max(keys)
+
+        parent_tree = doc.xref_get_key(root_xref, "ParentTree")
+        leaf = resolve_leaf(*parent_tree) if document_element is not None else None
+        if leaf is not None:
+            next_key = doc.xref_get_key(root_xref, "ParentTreeNextKey")
+            key = int(next_key[1]) if next_key[0] == "int" else tree_max_key(*parent_tree) + 1
+
+            new_links = []
+            for page in doc:
+                page_xref = page.xref
+                for link in page.links():
+                    annot = link["xref"]
+                    if doc.xref_get_key(annot, "Subtype")[1] != "/Link":
+                        continue
+                    if doc.xref_get_key(annot, "StructParent")[0] == "int":
+                        continue
+                    link_element = doc.get_new_xref()
+                    objr = "<</Type/OBJR/Pg {} 0 R/Obj {} 0 R>>".format(page_xref, annot)
+                    doc.update_object(link_element, "<</Type/StructElem/S/Link/P {} 0 R/Pg {} 0 R/K {}>>".format(document_element, page_xref, objr))
+                    doc.xref_set_key(annot, "StructParent", str(key))
+                    new_links.append((key, link_element))
+                    key += 1
+                    additions += 1
+
+            if new_links:
+                # the new Link elements become children of the document
+                new_refs = " ".join("{} 0 R".format(x) for _, x in new_links)
+                k_entry = doc.xref_get_key(document_element, "K")
+                if k_entry[0] == "array":
+                    document_kids = k_entry[1].rstrip()[:-1] + " " + new_refs + "]"
+                elif k_entry[0] == "xref":
+                    document_kids = "[{} {}]".format(k_entry[1], new_refs)
+                else:
+                    document_kids = "[{}]".format(new_refs)
+                doc.xref_set_key(document_element, "K", document_kids)
+                # map each annotation's /StructParent to its Link element,
+                # extending the leaf's /Nums (kept sorted, as the new keys
+                # are all above the existing ones) and its /Limits
+                nums = " ".join("{} {} 0 R".format(k, x) for k, x in new_links)
+                leaf_nums = doc.xref_get_key(leaf, "Nums")
+                existing = leaf_nums[1].strip()[1:-1].strip() if leaf_nums[0] == "array" else ""
+                doc.xref_set_key(leaf, "Nums", "[{}]".format((existing + " " + nums).strip()))
+                leaf_limits = doc.xref_get_key(leaf, "Limits")
+                low = re.findall(r"-?\d+", leaf_limits[1])[0] if (leaf_limits[0] == "array" and existing) else str(new_links[0][0])
+                doc.xref_set_key(leaf, "Limits", "[{} {}]".format(low, new_links[-1][0]))
+                doc.xref_set_key(root_xref, "ParentTreeNextKey", str(key))
+
+    if additions > 0:
+        doc.saveIncr()
+    doc.close()
+    log.debug("made {} accessibility repairs in {}".format(additions, pdfname))
+
+
+def _downgrade_svg2_for_batik(directory):
+    """Rewrite the SVG 2 constructs that Apache Batik cannot render.
+
+    Apache FOP rasterizes SVG with Batik, an SVG 1.1 implementation, so
+    SVG 2 syntax inside an image aborts the whole graphic.  Two such
+    constructs occur in PreFigure output; this rewrites the SVG copies
+    staged for FOP, leaving the managed source assets untouched.
+
+      * "orient" of "auto-start-reverse" on a "marker".  Its value
+        differs from "auto" only at a "marker-start" placement, so the
+        marker becomes plain "auto"; a marker actually placed at a start
+        also gets a companion rotated 180 degrees, with that start
+        reference repointed to the companion.
+
+      * a "use" element carrying a plain "href" rather than "xlink:href".
+    """
+    # TODO (2026-07-03) This function may modify SVG 1.1 files coming
+    # from PreFigure that are known to be good for Batik to ingest.
+    # With access to source, we can determine filenames to avoid.
+
+    import glob
+    import copy
+    import lxml.etree as ET
+
+    svg_namespace = "http://www.w3.org/2000/svg"
+    xlink_namespace = "http://www.w3.org/1999/xlink"
+    ET.register_namespace("xlink", xlink_namespace)
+    use_tag = "{{{}}}use".format(svg_namespace)
+    marker_tag = "{{{}}}marker".format(svg_namespace)
+    group_tag = "{{{}}}g".format(svg_namespace)
+    xlink_href = "{{{}}}href".format(xlink_namespace)
+
+    for svg_file in glob.glob(os.path.join(directory, "**", "*.svg"), recursive=True):
+        try:
+            tree = ET.parse(svg_file)
+        except ET.XMLSyntaxError:
+            continue
+        root = tree.getroot()
+        changed = False
+
+        # SVG 2 plain "href" on a "use" becomes SVG 1.1 "xlink:href"
+        for use in root.iter(use_tag):
+            target = use.get("href")
+            if target is not None and use.get(xlink_href) is None:
+                use.set(xlink_href, target)
+                del use.attrib["href"]
+                changed = True
+
+        # a marker placed at a "marker-start" needs a 180-degree twin,
+        # since SVG 1.1 "auto" cannot express the reversal "auto-start-reverse"
+        start_references = set(
+            element.get("marker-start")
+            for element in root.iter()
+            if element.get("marker-start")
+        )
+        reversed_twin = {}
+        for marker in list(root.iter(marker_tag)):
+            if marker.get("orient") != "auto-start-reverse":
+                continue
+            marker.set("orient", "auto")
+            changed = True
+            marker_id = marker.get("id")
+            reference = "url(#{})".format(marker_id) if marker_id else None
+            if reference and reference in start_references:
+                twin = copy.deepcopy(marker)
+                twin.set("id", "{}-start".format(marker_id))
+                rotation = ET.Element(group_tag)
+                rotation.set(
+                    "transform",
+                    "rotate(180 {} {})".format(twin.get("refX", "0"), twin.get("refY", "0")),
+                )
+                for child in list(twin):
+                    twin.remove(child)
+                    rotation.append(child)
+                twin.append(rotation)
+                marker.getparent().append(twin)
+                reversed_twin[reference] = "url(#{}-start)".format(marker_id)
+
+        for element in root.iter():
+            replacement = reversed_twin.get(element.get("marker-start"))
+            if replacement is not None:
+                element.set("marker-start", replacement)
+
+        if changed:
+            tree.write(svg_file)
+
+
+def _math_links_for_batik(math_file):
+    """Make a cross-reference inside mathematics a live link in the PDF.
+
+    When asked for cross-reference links, MathJax wraps the reference in
+    an SVG "a" element carrying a plain SVG 2 "href".  Apache Batik (the
+    SVG engine inside FOP) honors only the SVG 1.1 "xlink:href", so the
+    link is present but dead until the value is moved over -- exactly the
+    fix  _downgrade_svg2_for_batik  applies to a "use".  Operates on the
+    math representations file, where these "a" elements live.
+    """
+    import lxml.etree as ET
+
+    svg_namespace = "http://www.w3.org/2000/svg"
+    xlink_namespace = "http://www.w3.org/1999/xlink"
+    anchor_tag = "{{{}}}a".format(svg_namespace)
+    xlink_href = "{{{}}}href".format(xlink_namespace)
+
+    try:
+        tree = ET.parse(math_file)
+    except (ET.XMLSyntaxError, OSError):
+        return
+    root = tree.getroot()
+    changed = False
+    for anchor in root.iter(anchor_tag):
+        target = anchor.get("href")
+        if target is not None and anchor.get(xlink_href) is None:
+            anchor.set(xlink_href, target)
+            del anchor.attrib["href"]
+            changed = True
+    if changed:
+        tree.write(math_file)
+
+
+def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
+    """
+    Generate a PDF from an XML source using XSL-FO as an intermediate
+    format, rendered by Apache FOP.  This is a LaTeX-free route to a
+    PDF, experimental and very incomplete.
+
+    Args:
+        xml (str): Path to the XML source file.
+        pub_file (str or None): Path to the publisher configuration file, or None if not used.
+        stringparams (dict): Dictionary of string parameters to control the transformation.
+        out_file (str or None): Path to the output PDF file. If None, the PDF is copied to dest_dir.
+        dest_dir (str): Directory where the output PDF should be placed if out_file is not specified.
+
+    Returns:
+        None
+
+    Side Effects:
+        - Copies the generated PDF to the specified output location.
+    """
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    generated_abs, external_abs = common.get_managed_directories(xml, pub_file)
+    # Consult source for additional files
+    data_dir = common.get_source_directories(xml)
+
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    # name for scratch directory
+    tmp_dir = common.get_temporary_directory()
+
+    # Mathematics as SVG images, produced by MathJax, and passed to
+    # the FO stylesheet as the  $mathfile  string parameter, which
+    # melds each image into the page (the model is  epub()  above)
+    math_representations = os.path.join(tmp_dir, "math-representations-svg.xml")
+    # The final argument requests live cross-reference links inside the
+    # mathematics.  This (single-file) PDF is the only conversion that
+    # asks for them: a link is a bare "#id" fragment, which resolves
+    # only within one file, and FOP renders it from the SVG that MathJax
+    # emits.  Chunked conversions (HTML, EPUB) would need real filenames,
+    # and not every reader honors an SVG link, so they pass False.
+    mathjax_latex(xml, pub_file, math_representations, None, "svg", True)
+    # let Batik honor the cross-reference links MathJax placed in the math
+    _math_links_for_batik(math_representations)
+    stringparams["mathfile"] = math_representations.replace(os.sep, "/")
+
+    # Speech versions of the mathematics become the alternate text
+    # of the SVG images, as PDF/UA requires; again the model is epub()
+    speech_representations = os.path.join(tmp_dir, "math-representations-speech.xml")
+    mathjax_latex(xml, pub_file, speech_representations, None, "speech", False)
+    stringparams["speechfile"] = speech_representations.replace(os.sep, "/")
+
+    # make the XSL-FO file in scratch directory
+    # (1) pass None as out_file to derive from XML source filename
+    # (2) pass tmp_dir (scratch) as destination directory
+    fo(xml, pub_file, stringparams, None, tmp_dir)
+
+    # Create localized filenames for the FOP rendering step
+    # foname  needs to match behavior of fo() with above arguments
+    basename = os.path.splitext(os.path.split(xml)[1])[0]
+    foname = os.path.join(tmp_dir, basename + ".fo")
+    pdfname = os.path.join(tmp_dir, basename + ".pdf")
+
+    # Make image files available, relative to the FO file
+    common.copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs, data_abs=data_dir)
+
+    # Bundled fonts (the symbol fallback face) are named by a relative
+    # path in  fop.xconf , so they must sit in the scratch directory
+    # where FOP runs, beside the FO file and the image directories.
+    fonts_src = os.path.join(common.get_ptx_path(), "fonts")
+    shutil.copytree(fonts_src, os.path.join(tmp_dir, "fonts"))
+
+    # FOP renders SVG through Batik (SVG 1.1); downgrade the SVG 2
+    # constructs in the staged images so the diagrams render
+    _downgrade_svg2_for_batik(tmp_dir)
+
+    # render the FO file as a PDF with Apache FOP, configured
+    # by the  fop.xconf  file maintained in this distribution
+    fop_exec_cmd = common.get_executable_cmd("fop")
+    fop_xconf = os.path.join(common.get_ptx_path(), "pretext", "fop.xconf")
+    fop_cmd = fop_exec_cmd + ["-c", fop_xconf, "-fo", foname, "-pdf", pdfname]
+    log.info("rendering {} as {} with Apache FOP".format(foname, pdfname))
+    log.debug("FOP command: {}".format(" ".join(fop_cmd)))
+    # run FOP in the scratch directory, where the managed directories
+    # were just copied, so relative image paths in the FO file resolve
+    result = subprocess.run(fop_cmd, cwd=tmp_dir)
+    if result.returncode != 0:
+        raise OSError("Apache FOP rendering of {} failed".format(foname))
+
+    # post-process: repair PDF/UA conformance gaps FOP leaves behind
+    _pdf_fo_accessibility_repairs(pdfname)
+
+    # Copy just the PDF output
+    # out_file: not(None) only if provided in CLI
+    # dest_dir: always defined, if only current directory of CLI invocation
+    if out_file:
+        shutil.copy2(pdfname, out_file)
+    else:
+        shutil.copy2(pdfname, dest_dir)
+
 
 #################
 # XSLT Processing
@@ -4231,7 +4723,341 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
 #
 ########################
 
-def validate(xml_source, out_file, dest_dir):
+def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
+    """Validate source against the RELAX-NG schema, locally or via a server"""
+
+    if method == "server":
+        _validate_server(xml_source, out_file, dest_dir)
+    else:
+        # "local" validates against the production schema, and
+        # "local-dev" against the development schema, each with a
+        # report meant for an author.  The "agent" method is the
+        # production schema with terse output meant for a program
+        # (and so is not elective from the "pretext/pretext" script).
+        if method == "local-dev":
+            schema_file = "pretext-dev.rng"
+        else:
+            schema_file = "pretext.rng"
+        terse = method == "agent"
+        _validate_local(
+            xml_source, pub_file, stringparams, out_file, dest_dir, schema_file, terse
+        )
+
+
+# the "pi" namespace attribute recording an element's originating file
+PI_SOURCE_URI = "{http://pretextbook.org/2020/pretext/internal}source-uri"
+
+
+def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, schema_file, terse):
+    """Validate the assembled source with an installed "jing" program"""
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    # "jing" is a Java program, so a configuration can be simply the
+    # name of an executable ("jing", say, from a system package), or a
+    # command with options ("java -jar /usr/share/java/jing.jar", say)
+    jing_exec_cmd = common.get_executable_cmd("jing")
+
+    # the consolidated report, and the assembled source deposited
+    # alongside it (wherever the report lands)
+    reportname = common.get_output_filename(
+        xml_source, out_file, dest_dir, "-validation.txt"
+    )
+    assembled_source = os.path.join(
+        os.path.dirname(os.path.abspath(reportname)),
+        os.path.splitext(os.path.basename(xml_source))[0] + "-assembled.xml",
+    )
+
+    tmp_dir = common.get_temporary_directory()
+
+    # Modular source files are knitted together here, rather than
+    # during assembly, so each included file can be recorded on its
+    # root element (as a @pi:source-uri attribute) and problems can
+    # then be attributed to the file where they lie
+    source_dir = os.path.dirname(os.path.abspath(xml_source))
+    main_file = os.path.basename(xml_source)
+
+    def _stamping_loader(href, parse, encoding=None):
+        if parse == "xml":
+            elt = ET.parse(href).getroot()
+            elt.set(PI_SOURCE_URI, href)
+            return elt
+        with open(href, "r", encoding=(encoding or "utf-8")) as f:
+            return f.read()
+
+    merged_source = os.path.join(tmp_dir, "merged.xml")
+    source_tree = ET.parse(xml_source)
+    try:
+        from lxml import ElementInclude
+
+        ElementInclude.include(
+            source_tree.getroot(), loader=_stamping_loader, max_depth=20
+        )
+    except Exception as e:
+        log.warning(
+            "file attribution of validation problems unavailable ({})".format(e)
+        )
+        source_tree = ET.parse(xml_source)
+        source_tree.xinclude()
+    # The temporary merged file must resolve relative references (a
+    # customizations file, say) as the original source would, which is
+    # exactly the job of an @xml:base (assembly drops it from output)
+    source_tree.getroot().set(
+        "{http://www.w3.org/XML/1998/namespace}base", os.path.abspath(xml_source)
+    )
+    source_tree.write(merged_source, encoding="utf-8", xml_declaration=True)
+
+    # Validation is performed on the "version" tree: the merged source
+    # reduced by any "version" support elected in a publication file.
+    # The paths of any messages refer to this assembled source, so it
+    # is deposited next to the report, for cross-referencing, rather
+    # than evaporating with a temporary directory.
+    stringparams["assembly.file-attribution"] = "yes"
+    attributed_source = os.path.join(tmp_dir, "assembled-attributed.xml")
+    assembly(merged_source, pub_file, stringparams, attributed_source, None, "version")
+
+    # Tree "A" retains the file attributions, which are stripped to
+    # make the deposited assembled source (what "jing" examines, since
+    # the schema knows nothing of the attribute).  Tree "B" is that
+    # deposited file re-parsed, so line numbers agree with what "jing"
+    # reports; elements of the two trees correspond in document order.
+    tree_a = ET.parse(attributed_source)
+    file_of_a = {}
+    current_files = {tree_a.getroot(): main_file}
+    for elt in tree_a.iter():
+        if not isinstance(elt.tag, str):
+            continue
+        uri = elt.attrib.pop(PI_SOURCE_URI, None)
+        if uri is not None:
+            filename = os.path.relpath(uri, start=source_dir)
+        else:
+            parent = elt.getparent()
+            filename = file_of_a.get(parent, main_file)
+        file_of_a[elt] = filename
+    tree_a.write(assembled_source, encoding="utf-8", xml_declaration=True)
+    tree_b = ET.parse(assembled_source)
+    a_elements = [e for e in tree_a.iter() if isinstance(e.tag, str)]
+    b_elements = [e for e in tree_b.iter() if isinstance(e.tag, str)]
+    file_of = {b: file_of_a[a] for a, b in zip(a_elements, b_elements)}
+    # the last element to *begin* on each line, in document order
+    opening = {}
+    for elt in b_elements:
+        opening[elt.sourceline] = elt
+    with open(assembled_source) as f:
+        source_lines = f.readlines()
+
+    # fresh schema from the PreTeXt distribution, in XML syntax
+    schema_filename = os.path.join(common.get_ptx_path(), "schema", schema_file)
+
+    full_cmd = jing_exec_cmd + [schema_filename, assembled_source]
+    log.debug("jing command: {}".format(" ".join(full_cmd)))
+    result = subprocess.run(full_cmd, capture_output=True, text=True)
+    # jing exits 0 when the document is valid, 1 when messages result
+    if result.returncode == 0:
+        log.info("the source validates with no schema errors")
+    elif result.returncode > 1:
+        log.warning('the "jing" program failed (code {})'.format(result.returncode))
+    jing_messages = result.stdout.splitlines()
+
+    # The "validation-plus" stylesheet performs checks the RELAX-NG
+    # schema cannot express, and provides advice besides.  Applied to
+    # the same assembled source, so locations are consistent with the
+    # schema messages.  Single-line output, one message per line.
+    plus_xsl = os.path.join(
+        common.get_ptx_path(), "schema", "pretext-validation-plus.xsl"
+    )
+    plus_scratch = os.path.join(tmp_dir, "validation-plus.txt")
+    params = {"single.line.output": "yes"}
+    common.xsltproc(plus_xsl, assembled_source, plus_scratch, None, params)
+    with open(plus_scratch, "r") as f:
+        plus_messages = [line.strip() for line in f if line.startswith("PTX:")]
+
+    # helpers for locating a message's element in tree "B"
+
+    def _numbered_path(elt):
+        parts = []
+        while elt is not None and isinstance(elt.tag, str):
+            name = ET.QName(elt).localname
+            position = 1 + sum(
+                1
+                for sib in elt.itersiblings(preceding=True)
+                if isinstance(sib.tag, str) and ET.QName(sib).localname == name
+            )
+            parts.append("{}[{}]".format(name, position))
+            elt = elt.getparent()
+        return "/" + "/".join(reversed(parts))
+
+    def _element_at_path(path):
+        # follow a numbered path (as validation-plus produces)
+        elt = tree_b.getroot()
+        segments = path.strip("/").split("/")
+        segment_pattern = re.compile(r"(.*)\[(\d+)\]")
+        first = segment_pattern.match(segments[0])
+        if not first or ET.QName(elt).localname != first.group(1):
+            return None
+        for segment in segments[1:]:
+            match = segment_pattern.match(segment)
+            if not match:
+                return None
+            name, position = match.group(1), int(match.group(2))
+            count = 0
+            found = None
+            for child in elt:
+                if isinstance(child.tag, str) and ET.QName(child).localname == name:
+                    count += 1
+                    if count == position:
+                        found = child
+                        break
+            if found is None:
+                return None
+            elt = found
+        return elt
+
+    def _excerpt(line_number):
+        if 0 < line_number <= len(source_lines):
+            text = source_lines[line_number - 1].strip()
+            if len(text) > 100:
+                text = text[:100] + "..."
+            return text
+        return None
+
+    # assemble the consolidated report
+    report = []
+    banner = "=" * 70
+
+    if not terse:
+        report.extend(_validation_report_preamble(schema_filename, assembled_source))
+        report.extend([banner, "Messages: RELAX-NG schema validation, from \"jing\"", banner, ""])
+    # "jing" messages lead with filename:line:column.  The line number
+    # refers to the assembled source (which is deposited alongside the
+    # report), so it is reported as such, supplemented by the
+    # originating file, a path into the assembled source, and an
+    # excerpt of the offending text.  An element's extent is not
+    # available, so for a message about a line where no element begins,
+    # the location is the closest element beginning on an earlier line:
+    # very often the container, and always a good place to start looking.
+    location = re.compile(r"^.*?:(\d+):(\d+): (.*)$")
+    for message in jing_messages:
+        match = location.match(message)
+        if not match:
+            report.append(message)
+            continue
+        line_number = int(match.group(1))
+        body = match.group(3)
+        near = max((n for n in opening if n <= line_number), default=None)
+        elt = opening[near] if near is not None else None
+        filename = file_of.get(elt, main_file)
+        path = _numbered_path(elt) if elt is not None else ""
+        if terse:
+            report.append("{}\t{}\t{}\t{}".format(filename, path, line_number, body))
+        else:
+            report.append(body)
+            report.append("    file: {}".format(filename))
+            report.append("    path: {}".format(path))
+            report.append("    line: {}".format(line_number))
+            excerpt = _excerpt(line_number)
+            if excerpt:
+                report.append("    text: {}".format(excerpt))
+            report.append("")
+    if not terse and not jing_messages:
+        report.extend(["(no messages)", ""])
+
+    if not terse:
+        report.extend([banner, "Messages: PreTeXt \"validation-plus\" stylesheet", banner, ""])
+    plus_form = re.compile(r"^(PTX:[A-Z]+): (/\S+) (.*)$")
+    for message in plus_messages:
+        match = plus_form.match(message)
+        if not match:
+            report.append(message)
+            continue
+        severity, path, body = match.group(1), match.group(2), match.group(3)
+        elt = _element_at_path(path)
+        filename = file_of.get(elt, main_file)
+        line_number = elt.sourceline if elt is not None else ""
+        if terse:
+            report.append(
+                "{}\t{}\t{}\t{}: {}".format(filename, path, line_number, severity, body)
+            )
+        else:
+            report.append("{}: {}".format(severity, body))
+            report.append("    file: {}".format(filename))
+            report.append("    path: {}".format(path))
+            report.append("    line: {}".format(line_number))
+            if elt is not None:
+                excerpt = _excerpt(elt.sourceline)
+                if excerpt:
+                    report.append("    text: {}".format(excerpt))
+            report.append("")
+    if not terse and not plus_messages:
+        report.extend(["(no messages)", ""])
+
+    with open(reportname, "w") as f:
+        f.write("\n".join(report))
+
+    if jing_messages:
+        log.info("schema validation raised {} messages".format(len(jing_messages)))
+    if plus_messages:
+        log.info("validation-plus stylesheet raised {} messages".format(len(plus_messages)))
+    else:
+        log.info("validation-plus stylesheet raised no messages")
+    log.info("consolidated validation report in {}".format(reportname))
+    log.info("locations refer to the assembled source in {}".format(assembled_source))
+
+
+def _validation_report_preamble(schema_filename, assembled_source):
+    """The fixed introductory text of a validation report"""
+
+    return [
+        "Validation Report",
+        "=================",
+        "",
+        "Two tools have examined an assembled version of your source:",
+        "",
+        "  (1) \"jing\" checked conformance with the RELAX-NG schema at",
+        "      {}".format(schema_filename),
+        "      (a schema can only describe parent-child relationships,",
+        "      plus the attributes of each element)",
+        "  (2) the PreTeXt \"validation-plus\" stylesheet made checks that",
+        "      no RELAX-NG schema could ever express, and offers advice",
+        "      besides",
+        "",
+        "Locations refer to the ASSEMBLED version of your source: your",
+        "modular source files have been knitted together, and any version",
+        "support has been applied (as elected by a \"version\" element",
+        "within the \"source\" element of the publication file you",
+        "supplied).  In particular, an element excluded from the version",
+        "being built cannot raise a message here.  The assembled source",
+        "has been deposited at",
+        "    {}".format(assembled_source),
+        "",
+        "Each message locates its problem four ways:",
+        "",
+        "    file:  the source file where the problem lies",
+        "    path:  the location within the assembled source",
+        "    line:  the line number within the assembled source",
+        "    text:  an excerpt of the offending content",
+        "",
+        "Only \"file\" points into your own source files.  In particular,",
+        "\"line\" is a line number of the deposited assembled source named",
+        "above, never of one of your files.",
+        "",
+        "To read a \"path\", count elements of each name.  For example,",
+        "",
+        "    /pretext[1]/book[1]/chapter[7]/section[2]/p[13]/em[2]",
+        "",
+        "is the second \"em\" within the thirteenth \"p\" (paragraph) of the",
+        "second \"section\" of the seventh \"chapter\" of the book.  Counts",
+        "are of elements with the same name: that paragraph is the",
+        "thirteenth \"p\" of its section, though other elements may precede",
+        "it or intervene.",
+        "",
+        "",
+    ]
+
+
+def _validate_server(xml_source, out_file, dest_dir):
+    """Validate original source files with a round-trip to a server"""
 
     try:
         import requests  # post()
@@ -4334,19 +5160,28 @@ def python_version():
 
 
 def check_python_version():
-    """Raise error with Python 2 (or less)"""
+    """Raise an error for Python 2 (or less); warn for Python 3 before 3.10"""
 
     # This test could be more precise,
     # but only handling 2to3 switch when introduced
     msg = "".join(
         [
-            "PreTeXt script/module expects Python 3.8, not Python 2 or older\n",
+            "PreTeXt script/module expects Python 3.10, not Python 2 or older\n",
             "You have Python {}\n",
             "** Try prefixing your command-line with 'python3 ' **",
         ]
     )
     if sys.version_info[0] <= 2:
         raise (OSError(msg.format(python_version())))
+    # Warn, but do not error, for Python 3 older than the minimum below
+    #   2026-07-06: Python 3.10 or newer
+    if sys.version_info[:2] < (3, 10):
+        log.warning(
+            "PreTeXt expects Python 3.10 or newer\n"
+            "You have Python {}, and some operations may fail".format(
+                python_version()
+            )
+        )
 
 
 

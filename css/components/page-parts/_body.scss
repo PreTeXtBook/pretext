@@ -51,16 +51,18 @@ body {
 
 // Base width/padding
 // ptx-main ensures iframe pages don't get these
-.ptx-main .ptx-content {
+.ptx-main > .ptx-content {
   max-width: $content-with-padding-width;   // bad for worksheets
   padding: 24px $content-side-padding 60px;
+  line-height: var(--ptx-content-line-height, normal);
+  font-size: var(--ptx-content-font-size, inherit);
 
   @if $centered-content {
     margin-left: auto;
     margin-right: auto;
   }
 }
-.worksheet .ptx-main .ptx-content {
+.worksheet .ptx-main > .ptx-content {
     max-width: 960px;
 }
 
@@ -76,7 +78,7 @@ body.pretext,
 body.standalone {
   margin: 0;
   padding: 0;
-  font-size: 16px;
+  font-size: 1rem;
   background: var(--page-color, white);
 }
 

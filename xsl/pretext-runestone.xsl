@@ -91,6 +91,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="rso" select="'~._'"/>
 <xsl:variable name="rsc" select="'_.~'"/>
 
+<!-- Determines the base url of a book served on Runestone  -->
+<!-- If there is an authored base url, use it as the author -->
+<!-- may be targetting a non-public server. Otherwise,      -->
+<!-- assume book is hosted on Runestone Academy             -->
+<xsl:template name="runestone-server-baseurl">
+    <xsl:choose>
+        <xsl:when test="$b-has-baseurl">
+            <xsl:value-of select="$baseurl"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>https://runestone.academy/ns/books/published/</xsl:text>
+            <xsl:value-of select="$document-id"/>
+            <xsl:text>/</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Runestone Services (Javascript)  -->
 <!-- OR, Hosting at Runestone Academy -->
 <xsl:template name="runestone-header">
@@ -113,17 +130,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>eBookConfig.course = '</xsl:text><xsl:value-of select="$rso"/><xsl:text> course_name </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.termStartDate = '</xsl:text><xsl:value-of select="$rso"/><xsl:text> term_start_date </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
                 <xsl:text>eBookConfig.basecourse = '</xsl:text><xsl:value-of select="$rso"/><xsl:text> base_course </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.isLoggedIn = </xsl:text><xsl:value-of select="$rso"/><xsl:text> is_logged_in </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.isLoggedIn = </xsl:text><xsl:value-of select="$rso"/><xsl:text> is_logged_in|default('false') </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.email = '</xsl:text><xsl:value-of select="$rso"/><xsl:text> user_email </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.isInstructor = </xsl:text><xsl:value-of select="$rso"/><xsl:text> is_instructor </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.isInstructor = </xsl:text><xsl:value-of select="$rso"/><xsl:text> is_instructor|default('false') </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.logLevel = 10;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.ajaxURL = eBookConfig.app + "/ajax/";&#xa;</xsl:text>
                 <!-- no .loglevel -->
                 <xsl:text>eBookConfig.username = '</xsl:text><xsl:value-of select="$rso"/><xsl:text> user_id </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-                <xsl:text>eBookConfig.readings = </xsl:text><xsl:value-of select="$rso"/><xsl:text> readings|safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text> activity_info|safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text> downloads_enabled </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-                <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text> allow_pairs </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.readings = </xsl:text><xsl:value-of select="$rso"/><xsl:text> readings|default([])|safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text> activity_info|default({})|safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text> downloads_enabled|default('false') </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text> allow_pairs|default('false') </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <xsl:text>eBookConfig.course_attrs = </xsl:text><xsl:value-of select="$rso"/><xsl:text> course_attrs|default({})|tojson|safe </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
                 <!-- Scratch ActiveCode windows are a publisher option -->
                 <xsl:text>eBookConfig.enableScratchAC = </xsl:text>
@@ -253,50 +270,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- User Menu (aka Bust Menu)                    -->
 <!-- Conditional on a build for Runestone hosting -->
+<!-- "template" elements are not visible, ever,   -->
+<!-- but rather serve as a model for Javascript   -->
 
 <xsl:template name="runestone-bust-menu">
     <!-- "Bust w/ Silhoutte" is U+1F464, used as menu icon -->
     <xsl:if test="$b-host-runestone">
-        <button class="runestone-profile dropdown button" title="Profile">
+        <xsl:variable name="profile-localization">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'profile'"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <!-- note: as of 6/20/2026, anchor positioning is not widely supported -->
+        <!-- when it becomes supported, would make sense to use popover API    -->
+        <button type="button" id="ptx-user-dropdown-button" class="runestone-profile button ptx-dropdown-button" aria-haspopup="menu" aria-controls="ptx-user-dropdown-content" aria-expanded="false" title="{$profile-localization}">
             <xsl:call-template name="insert-symbol">
                 <xsl:with-param name="name" select="'person'"/>
             </xsl:call-template>
-            <span class="name"><xsl:text>Profile</xsl:text></span>
-            <div class="dropdown-content">
-                <xsl:text>&#xa;</xsl:text>
-                <xsl:text>{% if settings.academy_mode: %}&#xa;</xsl:text>
-                <a href="/ns/course/index">Course Home</a>
-                <a href="/runestone/assignments/chooseAssignment">Assignments</a>
-                <a href="/runestone/assignments/practice">Practice</a>
-                <hr/>
-                <!-- NB: next two entries were once templated with "appname" and           -->
-                <!-- the requisite spaces were percent-encoded by XSLT since it is         -->
-                <!-- known to be forming a  a/@href.                                       -->
-                <!-- Short-term fix: hard-code "runestone" as the appname, which should    -->
-                <!-- migrate to "assignment" when peer-instruction code moves.             -->
-                <!-- Long-term might suggest some XSL variables for the names of the apps. -->
-                <!-- if reader is not an instructor the next link will be removed by javascript -->
-                <a id="inst_peer_link" href="/runestone/peer/instructor.html">Peer Instruction (Instructor)</a>
-                <a href="/runestone/peer/student.html">Peer Instruction (Student)</a>
-                <hr/>
-                <a href="/runestone/default/courses">Change Course</a>
-                <hr/>
-                <a id="ip_dropdown_link" href="/admin/instructor/menu">Instructor Dashboard</a>
-                <hr/>
-                <xsl:text>&#xa;</xsl:text>
-                <xsl:text>{% endif %}&#xa;</xsl:text>
-                <a href="/runestone/dashboard/studentreport">Progress Page</a>
-                <hr/>
-                <xsl:text>&#xa;{% if is_logged_in %}&#xa;</xsl:text>
-                <a href="/runestone/default/user/profile">Edit Profile</a>
-                <a href="/runestone/default/user/change_password">Change Password</a>
-                <a href="/runestone/default/user/logout">Log Out</a>
-                <xsl:text>&#xa;{% else %}&#xa;</xsl:text>
-                <a href="/runestone/default/user/register">Register</a>
-                <a href="/runestone/default/user/login">Login</a>
-                <xsl:text>&#xa;{% endif %}&#xa;</xsl:text>
-            </div>
+            <span class="name">
+                <xsl:value-of select="$profile-localization"/>
+            </span>
         </button>
+        <div id="ptx-user-dropdown-content" class="ptx-dropdown-content" aria-labelledby="ptx-user-dropdown-button" role="menu">
+            <ul id="ptx-user-dropdown_rs-content" role="group" aria-label="Runestone"></ul>
+        </div>
+        <!-- clone template, modify href and inner text, and append to ptx-user-dropdown_rs-content -->
+        <template id="ptx-user-dropdown-content_item-template">
+            <li role="presentation" class="ptx-dropdown-item">
+                <a href="url here" role="menuitem">title here</a>
+            </li>
+        </template>
+        <!-- clone and append to dropdown content area and add a separator within the menu -->
+        <template id="ptx-user-dropdown-content_separator-template">
+            <li role="presentation" class="ptx-dropdown-separator"></li>
+        </template>
     </xsl:if>
 </xsl:template>
 
@@ -306,11 +313,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Unicode Character 'PENCIL' (U+270F)                               -->
 <xsl:template name="runestone-scratch-activecode">
     <xsl:if test="$b-has-scratch-activecode">
-        <button onclick="runestoneComponents.popupScratchAC()" class="activecode-toggle button" title="Open Scratch ActiveCode">
+        <xsl:variable name="scratch-localization">
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'scratch-activecode'"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <button onclick="runestoneComponents.popupScratchAC()" class="activecode-toggle button" title="{$scratch-localization}">
             <xsl:call-template name="insert-symbol">
                 <xsl:with-param name="name" select="'edit'"/>
             </xsl:call-template>
-            <span class="name">Scratch ActiveCode</span>
+            <span class="name">
+                <xsl:value-of select="$scratch-localization"/>
+            </span>
         </button>
     </xsl:if>
 </xsl:template>
@@ -775,6 +789,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="@exercise-interactive = 'webwork'">
                         <xsl:apply-templates select="." mode="webwork-core">
                             <xsl:with-param name="b-original" select="true()"/>
+                            <xsl:with-param name="heading-level" select="3"/>
                         </xsl:apply-templates>
                     </xsl:when>
                     <xsl:otherwise>
@@ -791,6 +806,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:apply-templates select="." mode="exercise-components">
                             <xsl:with-param name="b-original" select="true()"/>
                             <xsl:with-param name="block-type" select="'visible'"/>
+                            <xsl:with-param name="heading-level" select="3"/>
                             <xsl:with-param name="b-has-statement" select="true()"/>
                             <xsl:with-param name="b-has-hint" select="$ex-components-report/@has-hint = 'true'"/>
                             <xsl:with-param name="b-has-answer" select="$ex-components-report/@has-answer = 'true'"/>
@@ -2282,6 +2298,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:with-param name="active-language" select="$active-language"/>
                                 <xsl:with-param name="hosting" select="$hosting"/>
                             </xsl:call-template>
+                            <!-- CodeTailor: when an author requests it, emit the data       -->
+                            <!-- attributes that have Runestone offer the reader an          -->
+                            <!-- automatically-personalized Parsons puzzle as scaffolding     -->
+                            <!-- (a "Get Help" button) when they are stuck on the exercise.   -->
+                            <xsl:if test="@codetailor = 'yes'">
+                                <xsl:attribute name="data-parsonspersonalize">movable</xsl:attribute>
+                                <xsl:attribute name="data-parsonsexample">LLM-example</xsl:attribute>
+                            </xsl:if>
                             <!-- This is a bit awful, but we need to figure out how much margin     -->
                             <!-- to add to runestone dividers. It must match indentation used for   -->
                             <!-- the overall program.                                               -->

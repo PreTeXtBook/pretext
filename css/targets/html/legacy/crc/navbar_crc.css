@@ -7,11 +7,11 @@
 }
 
 .ptx-navbar .previous-button, .ptx-navbar .up-button, .ptx-navbar .next-button,
-.ptx-navbar .index-button, .ptx-navbar .calculator-toggle, .ptx-navbar .toc-toggle {
+.ptx-navbar .index-button, .ptx-navbar .ptx-calculator-toggle, .ptx-navbar .toc-toggle {
   width: unset;
 }
 
-.ptx-navbar .calculator-toggle {
+.ptx-navbar .ptx-calculator-toggle {
   margin-left: unset;
   margin-right: unset;
 }
@@ -28,7 +28,7 @@
 
 
 /* Generic and large screen layout */
-.ptx-navbar .toc-toggle, .ptx-navbar .index-button, .ptx-navbar .searchbox
+.ptx-navbar .toc-toggle, .ptx-navbar .index-button, .ptx-navbar .ptx-search-box
 {
 }
 
@@ -66,7 +66,7 @@ nav.ptx-navbar {
 
     grid-template-columns: auto auto auto 1fr 1fr auto; 
     grid-template-areas:
-    "MH-toc-area MH-extras-area1 ptx-searchbox MH-extras-area2 MH-page-navigation-area MH-preferences-area";
+    "MH-toc-area MH-extras-area1 ptx-search-box MH-extras-area2 MH-page-navigation-area MH-preferences-area";
     background-color: #fff;
 /*
     padding: 20px 0px 0px 0px;
@@ -136,7 +136,7 @@ nav.ptx-navbar::after {
     grid-area: MH-extras-area1;
     justify-self: right;
 }
-.calculator-toggle {
+.ptx-calculator-toggle {
     grid-area: MH-extras-area2;
     justify-self: left;
 }
@@ -183,13 +183,13 @@ nav.ptx-navbar::after {
     box-sizing: border-box;
 }
 
-.ptx-navbar .searchbutton {
+.ptx-navbar .ptx-search-button {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.searchresultsplaceholder {
+.ptx-search-dialog {
     left: calc(50vw - 300px);
 }
 
@@ -236,15 +236,15 @@ nav.ptx-navbar::after {
         justify-content: center;
     }
     
-    .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
+    .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button) .name {
         display: none;
     }
 
-    .pretext .ptx-navbar :is(.calculator-toggle, .index-button) .icon {
+    .pretext .ptx-navbar :is(.ptx-calculator-toggle, .index-button) .icon {
         display: inline-block;
     }
 
-    .searchresultsplaceholder {
+    .ptx-search-dialog {
         left: 10vw;
     }
 }
@@ -289,10 +289,10 @@ nav.ptx-navbar::after {
     display: none;
 }
 
-.ptx-navbar .calculator-toggle .name {
+.ptx-navbar .ptx-calculator-toggle .name {
     /*  Nada */
 }
-.ptx-navbar .calculator-toggle .icon {
+.ptx-navbar .ptx-calculator-toggle .icon {
     display: none;
 }
 
@@ -315,7 +315,7 @@ nav.ptx-navbar::after {
 .ptx-navbar .name {
     display: inline-block;
 }
-.ptx-navbar .searchbutton .name {
+.ptx-navbar .ptx-search-button .name {
     display: none;
     position: relative;
     bottom: 0;
@@ -357,7 +357,7 @@ nav.ptx-navbar::after {
         margin: 0;
     }
 
-    .ptx-navbar .calculator-toggle .icon {
+    .ptx-navbar .ptx-calculator-toggle .icon {
         padding-top: 5px;
     }
 }

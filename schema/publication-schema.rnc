@@ -9,6 +9,7 @@
                     Source? &
                     Numbering? &
                     Latex? &
+                    Pdf? &
                     Html? &
                     Revealjs? &
                     Epub? &
@@ -117,6 +118,9 @@
                     Divisions? &
                     Blocks? &
                     Projects? &
+                    Figures? &
+                    InlineExercises? &
+                    OpenProblems? &
                     Equations? &
                     Footnotes?
                 }
@@ -125,7 +129,7 @@
                 element divisions {
                     attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
                     attribute chapter-start { xsd:integer }?,
-                    attribute parts-structure { "decorative" | "structural" }?
+                    attribute part-structure { "decorative" | "structural" }?
                 }
 
             Blocks =
@@ -135,7 +139,26 @@
 
             Projects =
                 element projects {
-                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
+                }
+
+            Figures =
+                element figures {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
+                }
+
+            InlineExercises =
+                element exercises {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
+                }
+
+            OpenProblems =
+                element openproblems {
+                    attribute level { "0" | "1" | "2" | "3" | "4" | "5" | "6" }?,
+                    attribute distinct { "yes" | "no" }?
                 }
 
             Equations =
@@ -186,6 +209,11 @@
                     attribute links { "yes" | "no" }?
                 }
             
+            Pdf =
+                element pdf {
+                    attribute font { "latin-modern" }?
+                }
+            
             Html =
                 element html {
                     attribute design-width { xsd:integer }?,
@@ -205,6 +233,7 @@
                         Knowls? &
                         NavigationHTML? &
                         Platform? &
+                        Resources? &
                         Search? &
                         Tableofcontents? &
                         Video? &

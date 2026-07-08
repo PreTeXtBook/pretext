@@ -12,4 +12,9 @@ execute the `pretext/pretext` script.  DO NOT USE.
 
 Files for converting PreTeXt to Braille, see README there.
 
+`utilities`
+-----------
+
+Helper scripts for developers working on the PreTeXt source, see README there.
+
 

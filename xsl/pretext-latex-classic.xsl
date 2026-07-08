@@ -183,7 +183,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newlength{\ptxnormalparskip}&#xa;</xsl:text>
     <xsl:text>\AtBeginDocument{\setlength{\ptxnormalparindent}{\parindent}}&#xa;</xsl:text>
     <xsl:text>\AtBeginDocument{\setlength{\ptxnormalparskip}{\parskip}}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\setparstyle}{\setlength{\parindent}{\ptxnormalparindent}\setlength{\parskip}{\ptxnormalparskip}}</xsl:text>
+    <xsl:text>\newcommand{\ptxsetparstyle}{\setlength{\parindent}{\ptxnormalparindent}\setlength{\parskip}{\ptxnormalparskip}}</xsl:text>
 
     <!-- could condition on "subfigure-reps" -->
     <xsl:if test="$b-has-sidebyside">
@@ -369,7 +369,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <xsl:template match="bibinfo/support" mode="article-frontmatter">
-    <xsl:text>\support{</xsl:text>
+    <xsl:text>\ptxsupport{</xsl:text>
     <xsl:apply-templates select="$bibinfo/support" mode="article-info"/>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
@@ -531,7 +531,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}[1][]{title={#1}, </xsl:text>
-    <xsl:text>breakable, before upper app={\setparstyle}, </xsl:text>
+    <xsl:text>breakable, before upper app={\ptxsetparstyle}, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
@@ -810,6 +810,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:text>]{figure-distinct}{}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="$b-number-openproblem-distinct">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% This document is set to number OPENPROBLEM-LIKE on a separate numbering scheme&#xa;</xsl:text>
+        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
+        <xsl:text>%% Controlled by  numbering.openproblems.level  processing parameter&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox[auto counter</xsl:text>
+        <!-- control the levels of the numbering -->
+        <!-- global (no periods) is the default  -->
+        <xsl:if test="not($numbering-openproblems = 0)">
+            <xsl:text>, number within=</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-openproblems" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:text>]{openproblem-distinct}{}&#xa;</xsl:text>
+    </xsl:if>
     <!-- TODO: condition of figure/*/figure-like, or $subfigure-reps -->
     <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
     <xsl:text>%% facilities for 2D displays which are subnumbered as part of a "sidebyside"&#xa;</xsl:text>
@@ -923,12 +939,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- If there is a <support> tag in an article, create a unnumbered footnote environment for it -->
     <!-- NB: this is also part of the footnote-numbering named template (as of 2025-02-24), but we don't call that for -classic -->
     <xsl:if test="$b-is-article and $bibinfo/support">
-        <xsl:text>%% add a \support command as unnumbered footnote&#xa;</xsl:text>
-        <xsl:text>\let\svdthefootnote\thefootnote%&#xa;</xsl:text>
-        <xsl:text>\newcommand\support[1]{%&#xa;</xsl:text>
+        <xsl:text>%% add a \ptxsupport command as unnumbered footnote&#xa;</xsl:text>
+        <xsl:text>\let\ptxsvdthefootnote\thefootnote%&#xa;</xsl:text>
+        <xsl:text>\newcommand\ptxsupport[1]{%&#xa;</xsl:text>
         <xsl:text>  \let\thefootnote\relax%&#xa;</xsl:text>
         <xsl:text>  \footnotetext{#1}%&#xa;</xsl:text>
-        <xsl:text>  \let\thefootnote\svdthefootnote%&#xa;</xsl:text>
+        <xsl:text>  \let\thefootnote\ptxsvdthefootnote%&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>

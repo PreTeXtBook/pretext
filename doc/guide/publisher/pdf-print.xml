@@ -141,14 +141,31 @@
             </cd>
             At time of writing, the allowable elements which may be preceded by a page break using
             this feature are divisions, numbered blocks, and the following unnumbered elements:
-            <tag>answer</tag>, <tag>aside</tag>, <tag>audio</tag>, <tag>biographical</tag>,
-            <tag>assemblage</tag>, <tag>blokquote</tag>, <tag>console</tag> (when not a child of a
-            <tag>sidebyside</tag>), <tag>hint</tag>, <tag>historical</tag>, <tag>image</tag> (when
-            not a child of a <tag>sidebyside</tag>), <tag>interactive</tag>, <tag>list-of</tag>,
-            <tag>p</tag>, <tag>paragraphs</tag>, <tag>poem</tag>, <tag>pre</tag>, <tag>program</tag>
-            (when not a child of a <tag>sidebyside</tag>), <tag>sage</tag>, <tag>sbsgroup</tag>,
-            <tag>sidebyside</tag> (when not a child of a <tag>sidebyside</tag>), <tag>solution</tag>,
-            <tag>tabular</tag> (when not a child of a <tag>sidebyside</tag>), and <tag>video</tag>.
+            <tag>answer</tag>,
+            <tag>aside</tag>,
+            <tag>audio</tag>,
+            <tag>biographical</tag>,
+            <tag>assemblage</tag>,
+            <tag>blockquote</tag>,
+            <tag>console</tag> (when not a child of a <tag>sidebyside</tag>),
+            <tag>exercisegroup</tag>,
+            <tag>hint</tag>,
+            <tag>historical</tag>,
+            <tag>image</tag> (when not a child of a <tag>sidebyside</tag>),
+            <tag>interactive</tag>,
+            <tag>list-of</tag>,
+            <tag>p</tag>,
+            <tag>paragraphs</tag>,
+            <tag>poem</tag>,
+            <tag>pre</tag>,
+            <tag>program</tag> (when not a child of a <tag>sidebyside</tag>),
+            <tag>sage</tag>,
+            <tag>sbsgroup</tag>,
+            <tag>sidebyside</tag> (when not a child of a <tag>sidebyside</tag>),
+            <tag>solution</tag>,
+            <tag>subexercises</tag>,
+            <tag>tabular</tag> (when not a child of a <tag>sidebyside</tag>), and
+            <tag>video</tag>.
         </p>
         <p>
             Note that over time, the precise size of many things in your PDF output may change. This
@@ -276,5 +293,16 @@
         <p>We are careful about which <latex/> packages we use, trying to stick with well-established packages with active maintainers.  But it can be useful to have a record of <em>exactly</em> which packagees are in play, and better still, which versions of those packages are being used.  So you can use a publication entry to request loading the <url href="https://ctan.org/pkg/snapshot"><c>snapshot</c></url> package, which will then automatically generate such a record into a <c>&lt;job&gt;.dep</c> file.  See <xref ref="latex-snapshot-record-options"/> for details on electing this feature.</p>
 
         <p>If you suspect some packages are not playing well with each other, this record might be helpful for debugging this (rare) situation.  It can also be useful if you wish to have a perfect archive of how some publication was produced.  See the package documentation for more on the format and use.</p>
+    </section>
+
+    <section xml:id="pdf-xsl-fo">
+        <title>Direct <init>PDF</init> via <init>XSL-FO</init></title>
+        <idx><h>PDF</h><h>XSL-FO</h></idx>
+        <idx><h>XSL-FO</h></idx>
+        <idx>FOP</idx>
+
+        <p>The conversions described so far in this chapter reach a <init>PDF</init> by way of <latex/>, as an intermediate format (<xref ref="latex-file"/>).  An experimental alternative produces a <init>PDF</init> directly from an <init>XSL-FO</init> rendering of your source, formatted by Apache <init>FOP</init>, with no <latex/> stage at all.  This route is under active development and does not yet match the maturity or typographic polish of the <latex/> route, so it is not yet a substitute for it.</p>
+
+        <p>One motivation for this route is accessibility: it produces a tagged, <init>PDF/UA</init> <init>PDF</init>, and every font it uses is fully embedded.  Because there is no <latex/> in the pipeline, the available fonts are a small, curated set rather than the whole <tex/> ecosystem.  These fonts match the Latin Modern fonts of the <latex/> route.  See <xref ref="pdf-fo-font-options"/> for the publication option that selects them.</p>
     </section>
 </chapter>

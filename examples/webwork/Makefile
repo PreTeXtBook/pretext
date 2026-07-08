@@ -120,9 +120,9 @@ sample-chapter-macros:
 
 
 #########################################################################
-#  Extract webwork problems into a single XML file.
+#  Extract webwork problems into representation files.
 #  Location is within generated folder (named in the publisher file),
-#  within "webwork" subfolder
+#  within "webwork/representations" subfolder
 
 sample-chapter-representations:
 	$(PTX)/pretext/pretext -v -c webwork -p $(SMPCPUB) $(SMPC)
@@ -193,7 +193,7 @@ mini-html:
 # Make an archive of webwork problem sets for each "section" (as specified
 # by chunk level) with set definition files, set header files, and problem
 # files in a file tree. Separate problem sets for inline and divisional
-# problems. This does not require having the representations file.
+# problems. This does not require having representations files.
 # Adding a "-z" switch will create a "tgz" compressed archive
 
 sample-chapter-problem-sets:

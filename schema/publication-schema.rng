@@ -19,6 +19,9 @@
           <ref name="Latex"/>
         </optional>
         <optional>
+          <ref name="Pdf"/>
+        </optional>
+        <optional>
           <ref name="Html"/>
         </optional>
         <optional>
@@ -296,6 +299,15 @@
           <ref name="Projects"/>
         </optional>
         <optional>
+          <ref name="Figures"/>
+        </optional>
+        <optional>
+          <ref name="InlineExercises"/>
+        </optional>
+        <optional>
+          <ref name="OpenProblems"/>
+        </optional>
+        <optional>
           <ref name="Equations"/>
         </optional>
         <optional>
@@ -325,7 +337,7 @@
         </attribute>
       </optional>
       <optional>
-        <attribute name="parts-structure">
+        <attribute name="part-structure">
           <choice>
             <value>decorative</value>
             <value>structural</value>
@@ -351,17 +363,102 @@
   </define>
   <define name="Projects">
     <element name="projects">
-      <attribute name="level">
-        <choice>
-          <value>0</value>
-          <value>1</value>
-          <value>2</value>
-          <value>3</value>
-          <value>4</value>
-          <value>5</value>
-          <value>6</value>
-        </choice>
-      </attribute>
+      <optional>
+        <attribute name="level">
+          <choice>
+            <value>0</value>
+            <value>1</value>
+            <value>2</value>
+            <value>3</value>
+            <value>4</value>
+            <value>5</value>
+            <value>6</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="distinct">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Figures">
+    <element name="figures">
+      <optional>
+        <attribute name="level">
+          <choice>
+            <value>0</value>
+            <value>1</value>
+            <value>2</value>
+            <value>3</value>
+            <value>4</value>
+            <value>5</value>
+            <value>6</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="distinct">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="InlineExercises">
+    <element name="exercises">
+      <optional>
+        <attribute name="level">
+          <choice>
+            <value>0</value>
+            <value>1</value>
+            <value>2</value>
+            <value>3</value>
+            <value>4</value>
+            <value>5</value>
+            <value>6</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="distinct">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="OpenProblems">
+    <element name="openproblems">
+      <optional>
+        <attribute name="level">
+          <choice>
+            <value>0</value>
+            <value>1</value>
+            <value>2</value>
+            <value>3</value>
+            <value>4</value>
+            <value>5</value>
+            <value>6</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="distinct">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
   <define name="Equations">
@@ -570,6 +667,15 @@
       </optional>
     </element>
   </define>
+  <define name="Pdf">
+    <element name="pdf">
+      <optional>
+        <attribute name="font">
+          <value>latin-modern</value>
+        </attribute>
+      </optional>
+    </element>
+  </define>
   <define name="Html">
     <element name="html">
       <optional>
@@ -632,6 +738,9 @@
         </optional>
         <optional>
           <ref name="Platform"/>
+        </optional>
+        <optional>
+          <ref name="Resources"/>
         </optional>
         <optional>
           <ref name="Search"/>

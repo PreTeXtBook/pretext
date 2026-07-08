@@ -159,7 +159,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <div class="reveal ptx-content">
                 <!-- For mathematics/MathJax, must be located -->
                 <!-- within div.reveal to be effective        -->
-                <xsl:call-template name="latex-macros"/>
+                <xsl:apply-templates select="." mode="latex-macros"/>
                 <div class="slides">
                      <xsl:apply-templates select="frontmatter"/>
                     <xsl:apply-templates select="section|slide"/>
@@ -478,8 +478,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="xref">
-  [REF=TODO]
+<!-- The content of a cross-reference is computed by the -common  -->
+<!-- machinery; on a slide we do not make it a live link, since   -->
+<!-- the likely target is a nearby slide and knowls do not exist. -->
+<xsl:template match="*" mode="xref-link">
+    <xsl:param name="target"/>
+    <xsl:param name="content"/>
+    <xsl:param name="origin"/>
+    <xsl:copy-of select="$content"/>
 </xsl:template>
 
 <!-- We don't want any permalinks -->

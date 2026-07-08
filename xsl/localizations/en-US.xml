@@ -24,6 +24,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- en-US, English (United States) -->
 <!-- Robert A. Beezer, beezer@pugetsound.edu, 2014-08-11   -->
 
+<!-- RULES for keeping a translation in sync with this en-US file,    -->
+<!-- which is the template.  (Comments here are documentation; see    -->
+<!-- also  README.md.)                                                -->
+<!--                                                                  -->
+<!-- * Provide the same "localization" elements in the same order     -->
+<!--   as en-US.  Strip the comments from any two files and the       -->
+<!--   lists of string-ids should be identical and identically        -->
+<!--   ordered.                                                       -->
+<!-- * For a string you do not translate, leave the en-US line in     -->
+<!--   place, commented out, one element per comment line, indented   -->
+<!--   to match, so it is easy to find and fill in later.             -->
+<!-- * Keep the short heading comments that label groups of strings   -->
+<!--   (e.g. "AXIOM-LIKE blocks", "Various").  Do not copy the        -->
+<!--   longer explanatory comments; that documentation lives only     -->
+<!--   in en-US.                                                      -->
+<!-- * Do add comments of your own that record tricky translation     -->
+<!--   choices.  Those are kept.                                      -->
+
 <!-- Every localization should specify the direction of the language, -->
 <!-- there is no assumed default.  Left-to-right is "ltr" and         -->
 <!-- right-to-left is "rtl".  Provide these exactly as written since  -->
@@ -265,6 +283,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "ActiveCode" and "CodeLens" are Runestone-constructs -->
     <!-- and so really *should not* be translated.            -->
     <localization string-id='program-activecode'>ActiveCode</localization>
+    <localization string-id='scratch-activecode'>Scratch ActiveCode</localization>
     <localization string-id='program-codelens'>CodeLens</localization>
     <!-- Back matter components -->
     <!-- index-part is deprecated, but not abandoned          -->
@@ -272,7 +291,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='index'>Index</localization>
     <localization string-id='jump-to'>Jump to:</localization>
     <!-- Parts of the Index -->
-    <localization string-id='index'>Index</localization>
     <localization string-id='see'>See</localization>
     <localization string-id='also'>See also</localization>
     <!-- Notation List headings/foot -->
@@ -291,6 +309,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='previous-short'>Prev</localization>
     <localization string-id='up-short'>Up</localization>
     <localization string-id='next-short'>Next</localization>
+    <localization string-id='top'>Top</localization>
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'>Annotations</localization>
     <localization string-id='feedback'>Feedback</localization>
@@ -304,6 +323,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- When a reader uses a term that produces no results (perhaps they  -->
     <!-- misspell the search term) then they get a message to that effect. -->
     <!-- Capitalize "Search Results" - used as a heading, no punctuation   -->
+    <localization string-id='search-book'>Search Book</localization>
     <localization string-id='search-results-heading'>Search Results</localization>
     <!-- Short phrase, no punctuation -->
     <localization string-id='no-search-results'>No results</localization>
@@ -312,7 +332,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='from'>From</localization>
     <localization string-id='subject'>Subject</localization>
     <localization string-id='date'>Date</localization>
-    <localization string-id='copy'>cc</localization>
+    <localization string-id='cc'>cc</localization>
     <localization string-id='enclosure'>encl</localization>
     <!-- Various -->
     <localization string-id='todo'>To Do</localization>
@@ -329,6 +349,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the dedicated page, "embed" is for the embeddable iframe -->
     <localization string-id='standalone'>Standalone</localization>
     <localization string-id='embed'>Embed</localization>
+    <localization string-id='embed-this-page'>Embed this page</localization>
+    <localization string-id='copy'>Copy</localization>
+    <localization string-id='profile'>Profile</localization>
     <!-- A permalink icon in HTML output will have a tooltip (on hover) -->
     <!-- that says something like                                       -->
     <!--                                                                -->
@@ -338,6 +361,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- The indicated portion will be localized.  "heading" might be   -->
     <!-- replaced by "description" if that is easier to translate.      -->
     <localization string-id='permalink-tooltip'>Copy heading and permalink for</localization>
+    <localization string-id='calculator'>Calculator</localization>
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->
@@ -389,4 +413,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Close something interactive                              -->
     <localization string-id='close'>Close</localization>
     <localization string-id='open-new-tab'>Open in new tab</localization>
+    <!-- Readability menu items, HTML only, utilized by Javascript -->
+    <localization string-id='readability-settings'>Readability settings</localization>
+    <localization string-id='readability-line-height'>Line height</localization>
+    <localization string-id='readability-content-font-size'>Content font size</localization>
+    <localization string-id='readability-theme'>Theme</localization>
+    <localization string-id='readability-theme-system'>System</localization>
+    <localization string-id='readability-theme-light'>Light</localization>
+    <localization string-id='readability-theme-dark'>Dark</localization>
+    <localization string-id='readability-assistive-technologies'>Assistive technologies</localization>
+    <localization string-id='readability-expose-permalinks'>Expose permalinks</localization>
+    <localization string-id='reset-all'>Reset All</localization>
 </locale>

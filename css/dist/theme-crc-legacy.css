@@ -3332,7 +3332,7 @@ body.standalone.worksheet .ptx-content section.worksheet > .heading + .para {
 .ptx-content .poem .tab {
   margin-left: 2em;
 }
-.calculator-container {
+.ptx-calculator-container {
   position: fixed;
   z-index: 100;
   bottom: 5px;
@@ -3341,7 +3341,7 @@ body.standalone.worksheet .ptx-content section.worksheet > .heading + .para {
   height: 460px;
 }
 @media screen and (max-width: 800px) {
-  .calculator-container {
+  .ptx-calculator-container {
     bottom: 50px !important;
   }
 }
@@ -3664,30 +3664,30 @@ article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
   border-color: #600;
   border-color: var(--sectiontoctext);
 }
-.searchresultsplaceholder article {
+.ptx-search-dialog article {
   width: 60%;
   margin-left: auto;
   margin-right: auto;
   font-family: sans-serif;
 }
-.searchbox {
+.ptx-search-box {
 }
-.ptxsearch {
+.ptx-search-terms {
   height: 35px;
   flex: 1 1;
 }
-.searchbutton .name {
+.ptx-search-button .name {
   display: none;
 }
-.searchwidget {
+.ptx-search-widget {
   text-align: right;
 }
-.searchwidget input {
+.ptx-search-widget input {
 }
 .helpbox {
   display: none;
 }
-.detailed_result {
+.ptx-search-detailed-result {
   margin-bottom: 10px;
 }
 .all_results a:link {
@@ -3697,49 +3697,49 @@ article.exercise-like > .heading + div.ptx-runestone-container > div.runestone {
 .all_results a:hover {
   background-color: lightgray;
 }
-.searchresults a:hover {
+.ptx-search-results a:hover {
   background-color: #eee;
 }
-.searchresults a {
+.ptx-search-results a {
   text-decoration: none;
   color: #222;
 }
-.searchresults a:hover {
+.ptx-search-results a:hover {
   text-decoration: underline;
   color: #33f;
 }
-.searchresults ul li {
+.ptx-search-results ul li {
   list-style-type: none;
 }
-ol.searchresults {
+ol.ptx-search-results {
   padding-left: 10px;
   margin-top: 0;
   overflow-y: auto;
   flex: 1 1;
 }
-ol.searchresults > li {
+ol.ptx-search-results > li {
   list-style-type: none;
 }
-.search-result-score {
+.ptx-search-result-score {
   display: none;
 }
-.high_result {
+.ptx-search-result-high {
   font-weight: 700;
 }
-.medium_result {
+.ptx-search-result-medium {
   font-weight: 500;
 }
-.low_result {
+.ptx-search-result-low {
   font-weight: 200;
 }
-.no_result {
+.ptx-search-result-none {
   font-weight: 200;
   color: #444;
 }
-.detailed_result .no_result {
+.ptx-search-detailed-result .ptx-search-result-none {
   font-size: 90%;
 }
-.searchresultsplaceholder {
+.ptx-search-dialog {
   position: fixed;
   top: 5vh;
   bottom: 5vh;
@@ -3752,39 +3752,39 @@ ol.searchresults > li {
   display: flex;
   flex-direction: column;
 }
-.search-results-heading {
+.ptx-search-results-heading {
   border-bottom: 1px solid rgba(0, 0, 125, 0.5);
 }
-.search-results-controls {
+.ptx-search-dialog-controls {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
   gap: 10px;
   margin-bottom: 1em;
 }
-.closesearchresults {
+.ptx-search-close {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border: 1px solid black;
 }
-.closesearchresults:hover {
+.ptx-search-close:hover {
   color: #c00;
   background-color: #fee;
   border-color: #f00;
 }
-.closesearchresults + h2 {
+.ptx-search-close + h2 {
   margin-top: -1em;
 }
-.searchempty {
+.ptx-search-empty {
   display: none;
   padding-left: 10px;
   padding-top: 5px;
 }
-.search-result-bullet {
+.ptx-search-result-bullet {
   margin-top: 0.3em;
 }
-.search-result-clip {
+.ptx-search-result-clip {
   font-size: 80%;
   font-style: italic;
   color: #444;
@@ -3793,11 +3793,11 @@ ol.searchresults > li {
 .search-results-unshown-count {
   margin-top: 0.6em;
 }
-.search-result-clip-highlight {
+.ptx-search-result-clip-highlight {
   background: rgba(255, 255, 0, 0.5);
 }
 @media screen and (max-width: 800px) {
-  .searchresultsplaceholder {
+  .ptx-search-dialog {
     width: 80vw;
     left: 10vw;
     bottom: 10vh;
@@ -3882,7 +3882,7 @@ body.pretext {
     z-index: 100;
   }
 }
-.ptx-masthead .searchbox {
+.ptx-masthead .ptx-search-box {
   bottom: 2px;
   margin-right: -19px;
 }
@@ -4320,8 +4320,8 @@ body.pretext {
   padding: 0px 0px 0px 0px;
   justify-self: stretch;
 }
-.searchbox {
-  grid-area: ptx-searchbox;
+.ptx-search-box {
+  grid-area: ptx-search-box;
 }
 .ptx-navbar .treebuttons .next-button,
 .ptx-navbar .treebuttons .up-button,
@@ -4332,11 +4332,11 @@ body.pretext {
 .ptx-navbar .up-button,
 .ptx-navbar .next-button,
 .ptx-navbar .index-button,
-.ptx-navbar .calculator-toggle,
+.ptx-navbar .ptx-calculator-toggle,
 .ptx-navbar .toc-toggle {
   width: unset;
 }
-.ptx-navbar .calculator-toggle {
+.ptx-navbar .ptx-calculator-toggle {
   margin-left: unset;
   margin-right: unset;
 }
@@ -4376,7 +4376,7 @@ nav.ptx-navbar {
   display: grid;
   grid-column-gap: 0em;
   grid-template-columns: auto auto auto 1fr 1fr auto;
-  grid-template-areas: "MH-toc-area MH-extras-area1 ptx-searchbox MH-extras-area2 MH-page-navigation-area MH-preferences-area";
+  grid-template-areas: "MH-toc-area MH-extras-area1 ptx-search-box MH-extras-area2 MH-page-navigation-area MH-preferences-area";
   background-color: #fff;
   align-items: start;
   border: 2px solid #ddd;
@@ -4432,7 +4432,7 @@ nav.ptx-navbar::after {
   grid-area: MH-extras-area1;
   justify-self: right;
 }
-.calculator-toggle {
+.ptx-calculator-toggle {
   grid-area: MH-extras-area2;
   justify-self: left;
 }
@@ -4470,12 +4470,12 @@ nav.ptx-navbar::after {
   cursor: pointer;
   box-sizing: border-box;
 }
-.ptx-navbar .searchbutton {
+.ptx-navbar .ptx-search-button {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.searchresultsplaceholder {
+.ptx-search-dialog {
   left: calc(50vw - 300px);
 }
 @media only screen and (max-width: 800px) {
@@ -4499,13 +4499,13 @@ nav.ptx-navbar::after {
   .ptx-navbar .treebuttons {
     justify-content: center;
   }
-  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
+  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button) .name {
     display: none;
   }
-  .pretext .ptx-navbar :is(.calculator-toggle, .index-button) .icon {
+  .pretext .ptx-navbar :is(.ptx-calculator-toggle, .index-button) .icon {
     display: inline-block;
   }
-  .searchresultsplaceholder {
+  .ptx-search-dialog {
     left: 10vw;
   }
 }
@@ -4542,9 +4542,9 @@ nav.ptx-navbar::after {
 .ptx-navbar .index-button .icon {
   display: none;
 }
-.ptx-navbar .calculator-toggle .name {
+.ptx-navbar .ptx-calculator-toggle .name {
 }
-.ptx-navbar .calculator-toggle .icon {
+.ptx-navbar .ptx-calculator-toggle .icon {
   display: none;
 }
 .ptx-navbar .runestone-profile .name {
@@ -4562,7 +4562,7 @@ nav.ptx-navbar::after {
 .ptx-navbar .name {
   display: inline-block;
 }
-.ptx-navbar .searchbutton .name {
+.ptx-navbar .ptx-search-button .name {
   display: none;
   position: relative;
   bottom: 0;
@@ -4600,7 +4600,7 @@ nav.ptx-navbar::after {
   .ptx-navbar .toc-toggle {
     margin: 0;
   }
-  .ptx-navbar .calculator-toggle .icon {
+  .ptx-navbar .ptx-calculator-toggle .icon {
     padding-top: 5px;
   }
 }
@@ -5157,7 +5157,7 @@ summary.knowl__link {
     position: absolute;
   }
 }
-.searchbox .searchresultsplaceholder {
+.ptx-search-box .ptx-search-dialog {
   background: #eaf0f6;
 }
 :root[data-legacy-colorscheme=blue_green] {
@@ -5311,10 +5311,10 @@ summary.knowl__link {
     background-color: #fafafa;
     color: #000;
   }
-  .ptx-navbar .calculator-toggle {
+  .ptx-navbar .ptx-calculator-toggle {
     background-color: #336;
   }
-  .ptx-navbar .calculator-toggle:hover {
+  .ptx-navbar .ptx-calculator-toggle:hover {
     background-color: #fce;
   }
   .pretext .ptx-masthead {
@@ -6075,10 +6075,10 @@ body.pretext {
   background-color: var(--linkbackgroundhighlight);
   color: var(--bodyfontcolorhighlight);
 }
-.pretext[data-atmosphere*=dark] .ptx-navbar .calculator-toggle {
+.pretext[data-atmosphere*=dark] .ptx-navbar .ptx-calculator-toggle {
   background-color: var(--buttonbackground);
 }
-.pretext[data-atmosphere*=dark] .ptx-navbar .calculator-toggle:hover {
+.pretext[data-atmosphere*=dark] .ptx-navbar .ptx-calculator-toggle:hover {
   background-color: var(--linkbackgroundhighlight);
   color: var(--bodyfontcolorhighlight);
 }

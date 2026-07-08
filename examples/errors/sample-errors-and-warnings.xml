@@ -306,7 +306,7 @@ systems.
         <section>
             <title>Bona Fide <webwork/> Problems</title>
 
-            <p>These are two legitimate <webwork/> problems copied from the WW sample chapter on 2018-07-12.  We are using them, and variants below, to test Schematron rules enforcing locations where <webwork/>-specific exceptions are alllowed.  The third problem is a clone of the second, but with a <tag>setup</tag> element that is deprecated as of 2020-03-13.</p>
+            <p>These are two legitimate <webwork/> problems copied from the WW sample chapter on 2018-07-12.  We are using them, and variants below, to test validation rules enforcing locations where <webwork/>-specific exceptions are allowed.  The third problem is a clone of the second, but with a <tag>setup</tag> element that is deprecated as of 2020-03-13.</p>
 
             <exercise>
                 <title>Solving Quadratic Equations</title>

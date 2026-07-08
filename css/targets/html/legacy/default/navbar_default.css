@@ -114,10 +114,10 @@ nav.ptx-navbar {
   margin: 0 -7px;  /* chevrons have lots of horizontal padding */
 }
 
-.ptx-navbar :is(.index-button, .calculator-toggle)  .icon {
+.ptx-navbar :is(.index-button, .ptx-calculator-toggle)  .icon {
   display: none;
 }
-.ptx-navbar :is(.runestone-profile, .activecode-toggle, .searchbutton) .name {
+.ptx-navbar :is(.runestone-profile, .activecode-toggle, .ptx-search-button) .name {
   display: none;
 }
 
@@ -125,7 +125,7 @@ nav.ptx-navbar {
   width: 70px;
 }
 
-.ptx-navbar .calculator-toggle {
+.ptx-navbar .ptx-calculator-toggle {
   width: 60px;
   min-height: 32px;
   text-align: center;
@@ -137,7 +137,7 @@ nav.ptx-navbar {
   background-color: #eef;
 }
 
-.ptx-navbar .calculator-toggle.open {
+.ptx-navbar .ptx-calculator-toggle.open {
   background: #fee;
   border: 2px solid #f66;
 }
@@ -174,11 +174,11 @@ nav.ptx-navbar {
     border-left: 0;
   }
 
-  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .calculator-toggle, .index-button) .name {
+  .ptx-navbar :is(.toc-toggle, .previous-button, .up-button, .next-button, .ptx-calculator-toggle, .index-button) .name {
     display: none;
   }
 
-  .pretext .ptx-navbar :is(.calculator-toggle, .index-button) .icon {
+  .pretext .ptx-navbar :is(.ptx-calculator-toggle, .index-button) .icon {
     display: inline-block;
   }
 
@@ -186,7 +186,7 @@ nav.ptx-navbar {
     border-left: 0
   }
 
-  .ptx-navbar .calculator-toggle {
+  .ptx-navbar .ptx-calculator-toggle {
     width: auto;
     height: 35px;
     border-radius: 0;

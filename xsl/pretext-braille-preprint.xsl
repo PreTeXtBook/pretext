@@ -2092,89 +2092,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- EXPERIMENTAL -->
 <!-- ############ -->
 
-<!-- Uncaught elements for debugging reporting                     -->
-<!-- These elements have full implementations in -common, or       -->
-<!-- partial/abstract implementations which we extend hee.         -->
-<!-- So we just hit them with "apply-imports" so they do not       -->
-<!-- all into the (temporary, development) template below          -->
-<!-- reporting missed elements.   "Commenting out this template    -->
-<!-- should have zero effect, except to generate more debugging    -->
-<!-- messages, since this reporting template will take precedence. -->
+<!-- These elements are fully handled by common (or by a braille      -->
+<!-- character mode defined above), so the coverage catch-all at      -->
+<!-- the end of this section excludes them in its "not(...)"          -->
+<!-- list and they fall through, rather than report "Overlooked".     -->
+<!-- This replaced a block of one-line "apply-imports" shims.         -->
 
-<!-- "apply-imports" items necessary during development -->
-
-<!-- nbsp, ndash, mdash characters defined above -->
-<xsl:template match="nbsp|ndash|mdash">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- empty elements, characters, defined above -->
-<xsl:template match="copyright|registered|trademark|degree|prime|dblprime|lsq|rsq|lq|rq|langle|rangle|ellipsis|midpoint|pilcrow|section-mark|minus|times|obelus|plusminus">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- These elements/characters lack translations in liblouis.      -->
-<!-- We get/use their versions in -common, which will throw an     -->
-<!-- "unimplemented character" warning, which is accurate now,     -->
-<!-- *and* accurate later when the "overlooked" warning goes away. -->
-<!-- As characters get implemented, move to above template         -->
-<!-- (in proper order) as a way to keep track of the situation.    -->
-<xsl:template match="phonomark|copyleft|servicemark|ldblbracket|rdblbracket|swungdash|permille|solidus">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- Groupings, based on characters defined above -->
-<!-- dblbrackets raises warnings since left/right -->
-<!-- characters are not implemented               -->
-<xsl:template match="q|sq|dblbrackets|angles">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- xref-number, xref-link defined above -->
-<xsl:template match="xref">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- pure text in -common -->
-<xsl:template match="today|timeofday">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- Latin Abbreviations -->
-<!-- Fully defined as text in -common, including an "abbreviation-period" -->
-<xsl:template match="ad|am|bc|ca|eg|etal|etc|ie|nb|pm|ps|vs|viz">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- titles get killed in -common so we don't need to see them here -->
-<xsl:template match="title|subtitle|shorttitle|plaintitle|creator">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- captions get killed in -common so we don't need to see them here -->
-<xsl:template match="caption">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- We expect the simple template in -common to be active -->
-<xsl:template match="cline">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- We expect the simple template in -common to be active -->
-<xsl:template match="c">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- Action is in -common, this will catch all occurences? -->
-<xsl:template match="sage">
-    <xsl:apply-imports/>
-</xsl:template>
-
-<!-- Localizations happen in -common, so need the "rename" template there -->
-<xsl:template match="rename">
-    <xsl:apply-imports/>
-</xsl:template>
+<!-- nbsp, ndash, mdash: characters defined above -->
+<!-- copyright, registered, trademark, degree, prime, dblprime, lsq, rsq, lq, rq, langle, rangle, ellipsis, midpoint, pilcrow, section-mark, minus, times, obelus, plusminus: empty character elements defined above -->
+<!-- phonomark, copyleft, servicemark, ldblbracket, rdblbracket, swungdash, permille, solidus: lack liblouis translations, so common's versions emit an accurate unimplemented-character warning (move a character up as it is implemented) -->
+<!-- q, sq, dblbrackets, angles: groupings of the characters above -->
+<!-- xref: xref-number and xref-link defined above -->
+<!-- today, timeofday: pure text in common -->
+<!-- ad, am, bc, ca, eg, etal, etc, ie, nb, pm, ps, vs, viz: Latin abbreviations, defined as text in common -->
+<!-- title, subtitle, shorttitle, plaintitle, creator: killed in common as metadata -->
+<!-- caption: killed in common as metadata -->
+<!-- cline: a simple template in common is active -->
+<!-- c: a simple template in common is active -->
+<!-- sage: handled in common -->
+<!-- rename: localizations happen in common -->
 
 
 <!-- Larger structures, needing implementation, *along with* interior -->
@@ -2251,10 +2187,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- *Every* element needs an implementation, or it ends up here being -->
-<!-- reported as overlooked.  This is temporary during development.    -->
-<xsl:template match="*">
+<!-- reported as overlooked.  Elements handled by common are named in  -->
+<!-- the exclusion list, so they fall through; this is temporary       -->
+<!-- during development and, once the list empties, can be removed.    -->
+<xsl:template priority="-0.5" match="*[not(
+        self::nbsp or self::ndash or self::mdash or
+        self::copyright or self::registered or self::trademark or self::degree or self::prime or self::dblprime or self::lsq or self::rsq or self::lq or self::rq or self::langle or self::rangle or self::ellipsis or self::midpoint or self::pilcrow or self::section-mark or self::minus or self::times or self::obelus or self::plusminus or
+        self::phonomark or self::copyleft or self::servicemark or self::ldblbracket or self::rdblbracket or self::swungdash or self::permille or self::solidus or
+        self::q or self::sq or self::dblbrackets or self::angles or
+        self::xref or
+        self::today or self::timeofday or
+        self::ad or self::am or self::bc or self::ca or self::eg or self::etal or self::etc or self::ie or self::nb or self::pm or self::ps or self::vs or self::viz or
+        self::title or self::subtitle or self::shorttitle or self::plaintitle or self::creator or
+        self::caption or
+        self::cline or
+        self::c or
+        self::sage or
+        self::rename)]">
     <xsl:apply-templates select="." mode="overlooked"/>
-    <!-- <xsl:message>Overlooked: <xsl:value-of select="local-name()"/></xsl:message> -->
     <!-- recurse into child elements to find more "missing" elements -->
     <xsl:apply-templates select="*"/>
 </xsl:template>

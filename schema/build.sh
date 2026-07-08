@@ -68,20 +68,20 @@ declare XSL=${PTX}/xsl
 # ******************
 
 # PreTeXt extraction of RELAX-NG compact schema
+# Also emits the PreFigure adapter, "pf-adapter.rnc"
 xsltproc ${XSL}/pretext-litprog.xsl pretext.xml
 
 # System trang conversion to RELAX-NG XML schema
 trang -I rnc -O rng pretext.rnc pretext.rng
 trang -I rnc -O rng pretext-dev.rnc pretext-dev.rng
 
-# System trang conversion to W3C XSD schema
-# "abstract groups" make schema browser too obtuse
-trang -o disable-abstract-elements -I rnc -O xsd pretext.rnc pretext.xsd
+# PreFigure adapter, which "externalRef" reaches from "pretext.rnc";
+# it in turn "include"s the upstream "pf_schema.rnc"/"pf_schema.rng"
+trang -I rnc -O rng pf-adapter.rnc pf-adapter.rng
 
 # And the same steps for the publication-schema
 xsltproc ${XSL}/pretext-litprog.xsl publication-schema.xml
 trang -I rnc -O rng publication-schema.rnc publication-schema.rng
-trang -o disable-abstract-elements -I rnc -O xsd publication-schema.rnc publication-schema.xsd
 
 # exit cleanly
 exit 0

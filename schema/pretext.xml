@@ -314,7 +314,7 @@
                 element paragraphs {
                     MetaDataTitle,
                     Index*,
-                    BlockStatementNoCaption+
+                    BlockStatementNoNumber+
                 }
             </code>
         </fragment>
@@ -409,9 +409,9 @@
 
         <p>A printout division (currently only a <tag>worksheet</tag>) is a specialized division, allowing for some additional control of spacing and page delineation, to allow for workspace.</p>
 
-        <p>The attributes on a printout include margin information to control layout.  Inside a printout we can have either a number of <tag>page</tag> elements that holding the content or just the content itself.</p>
+        <p>The attributes on a printout include margin information to control layout.  Inside a printout we can have either a number of <tag>page</tag> elements that hold the content or just the content itself.</p>
 
-        <p>The contents of a printout can include the same blocks as a division, namely BlockDivision.</p>
+        <p>The contents of a printout can include the same blocks as a division, namely BlockDivision, plus the <tag>paragraphs</tag> division.</p>
         <fragment xml:id="printout">
             <title>Printout</title>
             <code>
@@ -423,54 +423,7 @@
                 attribute left { text }?
 
             PrintoutBlock =
-                BlockStatement | Remark | Computation | Theorem | Proof | Definition |
-                Axiom | Example | PrintoutExercise | Project |
-                Poem | Assemblage | ListGenerator | Fragment |
-                PrintoutSideBySide | Paragraphs
-
-            # Allow exercise in sidebyside
-            PrintoutSideBySide =
-                element sidebyside {
-                    SidebySideAttributes,
-                    (
-                        Figure |
-                        Poem |
-                        Tabular |
-                        Image |
-                        Video |
-                        Program |
-                        Console |
-                        Paragraph |
-                        Preformatted |
-                        List |
-                        Stack |
-                        PrintoutExercise |
-                        PrintoutTask
-                    )+
-                }
-            # Exercises and tasks can have workspace:
-            PrintoutExercise =
-                element exercise {
-                    MetaDataTitleOptional,
-                    attribute number {text}?,
-                    attribute workspace {text}?,
-                    (
-                    ExerciseBody |
-                    (StatementExercise, Hint*, Answer*, Solution*) |
-                    (IntroductionText?, WebWork, ConclusionText?) |
-                    (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
-                    )
-                }
-            PrintoutTask =
-                element task {
-                    MetaDataTitleOptional,
-                    attribute workspace {text}?,
-                    (
-                        BlockStatement+ |
-                        (Statement, Hint*, Answer*, Solution*) |
-                        (IntroductionStatement?, PrintoutTask+, ConclusionStatement?)
-                    )
-                }
+                BlockDivision | Paragraphs
 
             # Page can contain a printout block or be empty
             Page =
@@ -481,6 +434,9 @@
             Worksheet =
                 element worksheet {
                     PrintoutAttributes,
+                    attribute courseid {text}?,
+                    attribute series {text}?,
+                    attribute seriescode {text}?,
                     MetaDataAltTitleOptional,
                     (Objectives? &amp; IntroductionDivision?),
                     (Page+ | PrintoutBlock+),
@@ -499,9 +455,9 @@
 
         <p>A handout is a specialized division very similar to a worksheet, allowing for some additional control of spacing, to allow for workspace.</p>
 
-        <p>The attributes on a handout include margin information to control layout, just like worksheets.  Also like worksheets, a handout we can contain either a number of <tag>page</tag> elements that holding the content or just the content itself.</p>
+        <p>The attributes on a handout include margin information to control layout, just like worksheets.  Also like worksheets, a handout can contain either a number of <tag>page</tag> elements that hold the content or just the content itself.</p>
 
-        <p>The contents of a handout can include the same blocks as a division, namely BlockDivision.  Any such division can get a <attr>workspace</attr> attribute.  This is currently not implemented in the schema (stable or experimental), but the plan is to allow <attr>workspace</attr> to be placed on any element that will be respected inside a handout, treating this as a hint that will be ignored when not inside a printout.</p>
+        <p>The contents of a handout can include the same blocks as a division, namely BlockDivision.  Many of these blocks (theorems, definitions, examples, projects, exercises, tasks, proofs) can get a <attr>workspace</attr> attribute.  It is treated as a hint: respected inside a printout, and ignored elsewhere (which the validation-plus stylesheet will point out).</p>
 
         <p>Note: when handouts moves to the stable schema, we will need to go to every division and for the option of an unstructured division, include Worksheet and Handout as separate elements so an unstructured division can have one of each.</p>
 
@@ -547,7 +503,7 @@
                 Group |
                 MathInline |
                 Music)* }
-            TextLong =  mixed { (
+            TextLongContent =
                 Character |
                 Generator |
                 Verbatim |
@@ -556,7 +512,8 @@
                 Music |
                 Reference |
                 Custom |
-                WWVariable)* }
+                WWVariable
+            TextLong =  mixed { (TextLongContent)* }
                 </code>
         </fragment>
 
@@ -590,6 +547,7 @@
                     UniqueID?,
                     LabelID?,
                     Component?,
+                    attribute workspace {text}?,
                     TextParagraph
                 }
             ParagraphLined =
@@ -807,7 +765,7 @@
             </code>
         </fragment>
 
-        <p>A large class of similarly indivisible items are units on physical quantities.  The <tag>quantity</tag> element is allowed to be empty, and the code should silently produce no output.  Expressing non-emptiness here might get a bit messy, so a Schematron warning could be a good alternative.</p>
+        <p>A large class of similarly indivisible items are units on physical quantities.  The <tag>quantity</tag> element is allowed to be empty, and the code should silently produce no output.  Expressing non-emptiness here might get a bit messy, so an additional validation warning could be a good alternative.</p>
 
         <fragment xml:id="siunit">
             <title>SI units</title>
@@ -1025,10 +983,10 @@
             <code>
             BlockText =
                 Paragraph | BlockQuote | Preformatted |
-                Image | Video | Program | Console | Tabular
-            BlockStatementNoCaption =
+                Image | Video | Audio | Program | Console | Tabular
+            BlockStatementNoNumber =
                 BlockText | Aside |
-                SideBySideNoCaption | SideBySideGroupNoCaption
+                SideBySideNoNumber | SideBySideGroupNoNumber
             BlockStatement =
                 BlockText |
                 Figure | Aside |
@@ -1038,12 +996,12 @@
             BlockDivision =
                 BlockStatement |
                 Remark | Computation | Theorem | Proof | Definition |
-                Axiom | Example | Exercise | Project |
+                Axiom | Example | Exercise | Project | OpenProblem |
                 Poem | Assemblage | ListGenerator | Fragment
             </code>
         </fragment>
 
-        <p>Blocks are often structured, in a light way.  Hints, answers, and solutions adorn exercises, examples, and projects.  A simple introduction or conclusion is sometimes useful.  A <c>prelude</c> or <c>postlude</c> are authored inside a block and so are associated with it.  But they are presented before and after the block visually.  An <c>interlude</c> will be used between the statement of a theorem and its proof.</p>
+        <p>Blocks are often structured, in a light way.  Hints, answers, and solutions adorn exercises, examples, and projects.  A simple introduction or conclusion is sometimes useful.  A <c>prelude</c> or <c>postlude</c> are authored inside a block and so are associated with it.  But they are presented before and after the block visually.</p>
 
         <p>When a block is structured to allow some of the ancillary parts, a <c>statement</c> element is used to structure the main part.  Hints, answers, and solutions can be the target of cross-references, but do not get author-supplied titles.</p>
 
@@ -1052,8 +1010,6 @@
             <code>
             Prelude =
                 element prelude {BlockText+}
-            Interlude =
-                element interlude {BlockText+}
             Postlude =
                 element postlude {BlockText+}
             Statement =
@@ -1082,7 +1038,7 @@
     <section>
         <title>Introductions, Conclusions, and Headnotes</title>
 
-        <p>The <c>introduction</c> and <c>conclusion</c> containers can be used in a variety of other structured elements.  They come in three levels, according to what they can contain, and are meant to be consonant with their surroundings.  As children of a division, they may carry a <c>title</c>, which in turn allows them to be cross-referenced by that text.</p>
+        <p>The <c>introduction</c> and <c>conclusion</c> containers can be used in a variety of other structured elements.  They come in four levels, according to what they can contain, and are meant to be consonant with their surroundings.  As children of a division, they may carry a <c>title</c>, which in turn allows them to be cross-referenced by that text.</p>
 
         <p>A <tag>headnote</tag> is like an <tag>introduction</tag>, but does not have a symmetric concluding element, and is typically meant for specialized divisions, such as a <tag>glossary</tag>.</p>
 
@@ -1093,10 +1049,10 @@
                 element introduction {BlockText+}
             ConclusionText =
                 element conclusion {BlockText+}
-            IntroductionStatementNoCaption =
-                element introduction {BlockStatementNoCaption+}
-            ConclusionStatementNoCaption =
-                element conclusion {BlockStatementNoCaption+}
+            IntroductionStatementNoNumber =
+                element introduction {BlockStatementNoNumber+}
+            ConclusionStatementNoNumber =
+                element conclusion {BlockStatementNoNumber+}
             IntroductionStatement =
                 element introduction {BlockStatement+}
             ConclusionStatement =
@@ -1112,7 +1068,7 @@
                     BlockDivision+
                 }
             HeadNote =
-                element headnote {BlockStatementNoCaption+}
+                element headnote {BlockStatementNoNumber+}
             </code>
         </fragment>
     </section>
@@ -1284,6 +1240,8 @@
             CodeDisplay =
                 element cd {
                     attribute latexsep {text}?,
+                    # "all" renders every space as a visible glyph; default "none"
+                    attribute showspaces {"all" | "none"}?,
                     (text | CodeLine+)
                 }
             Preformatted =
@@ -1358,6 +1316,7 @@
                     attribute autorun {"yes"|"no"}?,
                     attribute chatcodes {"yes"|"no"}?,
                     attribute codelens {"yes"|"no"}?,
+                    attribute codetailor {"yes"|"no"}?,
                     attribute starting-step {"yes"|"no"}?,
                     attribute compiler-args {text}?,
                     attribute extra-compiler-args {text}?,
@@ -1444,6 +1403,7 @@
             <title>Definitions</title>
             <code>
             DefinitionLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 Notation*,
                 Statement
@@ -1469,10 +1429,14 @@
                    }
             Proof =
                 element proof {
+                    attribute ref {text}?,
+                    attribute text {XrefTextStyle}?,
+                    attribute workspace {text}?,
                     MetaDataTitleOptional,
                     (BlockStatement | Case)+
                 }
             TheoremLike =
+                attribute workspace {text}?,
                 MetaDataTitleCreatorOptional,
                 (BlockStatement+ | (Statement, Proof*))
             Theorem =
@@ -1540,6 +1504,7 @@
             <title>Projects, and similar</title>
             <code>
             ProjectLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 (
                     (BlockStatement+) |
@@ -1547,6 +1512,7 @@
                        Prelude?,
                        (
                           (Statement, Hint*, Answer*, Solution*) |
+                          (Statement, Program, Hint*, Answer*, Solution*) |
                           (IntroductionStatement?, Task+, ConclusionStatement?) |
                           (IntroductionText?, WebWork, ConclusionText?)
                        ),
@@ -1568,6 +1534,47 @@
                         (IntroductionStatement?, Task+, ConclusionStatement?)
                     )
                 }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
+        <title>Open Problems</title>
+
+        <p>Open problems collect unsolved questions, perhaps the subject of current research.  They are numbered like a <c>project</c><mdash/>sharing the overall blocks counter, or running on their own counter when a publisher requests a <attr>distinct</attr> number.  Possibly structured with <c>task</c>.  The appendages are discussion-like (<tag>discussion</tag>, <tag>context</tag>, and similar), rather than the hints, answers, and solutions of an exercise or a project.</p>
+
+        <fragment xml:id="open-problem-like">
+            <title>Open problems, and similar</title>
+            <code>
+            OpenProblemLike =
+                MetaDataTitleOptional,
+                Prelude?,
+                (
+                    (Statement, Discussion*) |
+                    (IntroductionStatement?, OpenProblemTask+, ConclusionStatement?)
+                ),
+                Postlude?
+            OpenProblem =
+                element openproblem {OpenProblemLike} |
+                element openquestion {OpenProblemLike} |
+                element openconjecture {OpenProblemLike}
+            OpenProblemTask =
+                element task {
+                    MetaDataTitleOptional,
+                    (
+                        (Statement, Discussion*) |
+                        (IntroductionStatement?, OpenProblemTask+, ConclusionStatement?)
+                    )
+                }
+            Discussion =
+                element context {DiscussionLike} |
+                element discussion {DiscussionLike} |
+                element opinion {DiscussionLike} |
+                element status {DiscussionLike} |
+                element suggestion {DiscussionLike}
+            DiscussionLike =
+                MetaDataTitleOptional,
+                BlockStatement+
             </code>
         </fragment>
     </section>
@@ -1645,7 +1652,7 @@
             Assemblage =
                 element assemblage {
                     MetaDataTitleOptional,
-                    (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                    (BlockText | SideBySideNoNumber | SideBySideGroupNoNumber)+
                 }
             </code>
         </fragment>
@@ -1654,8 +1661,8 @@
     <section>
         <title>Figures, Tables, Listings and Named Lists</title>
 
-        <p>These are containers that all carry titles (mandatory and optional), captions for two, and numbers.  They need to be filled with other (atomic) items, which we generally call <term>planar</term> due to their two-dimensional and rigid characteristics.  These have also called <term>captioned items</term> in the code, even if not all allow a caption.  The option for a lanscape orientation is only relevant for print, and not within a <c>sidebyside</c>.</p>
-        <!-- 2021-12-29: should add audio and interacive to figure, once ready -->
+        <p>These are containers that all carry titles (mandatory and optional), captions for two, and numbers.  They need to be filled with other (atomic) items, which we generally call <term>planar</term> due to their two-dimensional and rigid characteristics.  These have also called <term>captioned items</term> in the code, even if not all allow a caption.  The option for a lanscape orientation is only relevant for print.</p>
+        <!-- 2021-12-29: should add interactive to figure, once ready -->
 
         <fragment xml:id="table-figure">
             <title>Captioned and titled displays</title>
@@ -1671,6 +1678,7 @@
                     (
                         Image |
                         Video |
+                        Audio |
                         SideBySide |
                         SideBySideGroup |
                         MuseScore
@@ -1718,6 +1726,9 @@
             AlignmentVertical =
                 attribute valign {"top" | "middle" | "bottom"}
 
+            # A table cell admits footnotes, authored as table notes; the
+            # rendering (below the table, keyed a, b, c) is a pending TODO.
+            TableCellText = mixed { (TextLongContent | Footnote)* }
             TableCell =
                 element cell {
                     AlignmentHorizontal?,
@@ -1725,7 +1736,7 @@
                     BorderRight?,
                     attribute colspan {text}?,
                     (
-                        TextLong |
+                        TableCellText |
                         LongLine+ |
                         Paragraph+
                     )
@@ -1752,6 +1763,7 @@
                     attribute width {text}?,
                     attribute margins {text}?,
                     attribute row-headers {"yes" | "no"}?,
+                    attribute break {"yes" | "no"}?,
                     AlignmentHorizontal?,
                     AlignmentVertical?,
                     BorderTop?,
@@ -1796,6 +1808,8 @@
 
         <p>A <tag>stack</tag> allows non-captioned, non-titled elements to accumulate vertically in a single panel.  It is a basic container.</p>
 
+        <p>An <tag>exercise</tag> may be a panel, in support of compact layout of a <tag>worksheet</tag> or a <tag>handout</tag>, where workspace is relevant.  The schema does not restrict the arrangement to those locations, but the validation-plus stylesheet warns about others.</p>
+
         <p>A group of side-by-sides is designed to stack vertically with common controls on widths, etc.  Its implementation is entirely experimental right now, even if we are relatively confident of the markup.</p>
 
         <fragment xml:id="sidebyside">
@@ -1807,6 +1821,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -1817,6 +1832,7 @@
             SidebySideAttributes =
                 Component?,
                 attribute margins {text}?,
+                attribute landscape {"yes" | "no"}?,
                 (attribute width {text} | attribute widths {text})?,
                 (
                     AlignmentVertical |
@@ -1831,15 +1847,17 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
                         Preformatted |
                         List |
-                        Stack
+                        Stack |
+                        Exercise
                     )+
                 }
-            SideBySideNoCaption =
+            SideBySideNoNumber =
                 element sidebyside {
                     SidebySideAttributes,
                     (
@@ -1847,6 +1865,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -1857,13 +1876,15 @@
                 }
             SideBySideGroup =
                 element sbsgroup {
+                    UniqueID?,
                     SidebySideAttributes,
                     SideBySide+
                 }
-            SideBySideGroupNoCaption =
+            SideBySideGroupNoNumber =
                 element sbsgroup {
+                    UniqueID?,
                     SidebySideAttributes,
-                    SideBySideNoCaption+
+                    SideBySideNoNumber+
                 }
             </code>
         </fragment>
@@ -1875,6 +1896,8 @@
         <p>Raster, and described by languages, plus 100% duplicates.  The <webwork/> variant is quite different.</p>
 
         <p>Note: the <c>ImageCode</c> pattern allows an <attr>xml:id</attr> attribute since it is used to construct a filename.</p>
+
+        <p>A <c>pf:prefigure</c> image holds a <pretext/>-namespaced <c>label</c> attribute followed by a single <init>PreFigure</init> diagram.  Rather than validate the diagram with a permissive wildcard, we defer to <init>PreFigure</init>'s own schema by way of an <c>externalRef</c> to the adapter described below.  This isolates the two grammars, so the many pattern names they share (such as <c>Label</c>, <c>Image</c>, and <c>Caption</c>) do not collide.</p>
 
         <fragment xml:id="image">
             <title>Images</title>
@@ -1911,7 +1934,6 @@
                     Component?,
                     text
                 }
-            AnyPFContent = text | element * { attribute * { text }*, AnyPFContent* }
             ImageCode =
                 element image {
                     UniqueID?,
@@ -1947,7 +1969,7 @@
                             } |
                             element pf:prefigure {
                                 attribute label {text}?,
-                                AnyPFContent*
+                                external "pf-adapter.rnc"
                             }
                           )
                         )
@@ -2039,20 +2061,27 @@
                     attribute version { text }?,
                     attribute circuitjs { text }?,
                     attribute calcplot3d { text }?,
+                    attribute geogebra { text }?,
+                    attribute desmos { text }?,
                     # currently only consumed by the CalcPlot3D flavor;
                     # widen this enum if another flavor adopts "@variant"
                     attribute variant { "application" | "controls" | "minimal" }?,
                     attribute dark-mode-enabled { text }?,
                     attribute resize-behavior { text }?,
+                    attribute css { text }?,
+                    attribute design-width { text }?,
+                    attribute reset-icon { text }?,
                     (
                       ImageShortDescription? &amp;
                       ImageDescription? &amp;
                       (
                         Slate |
-                        SideBySideNoCaption |
-                        SideBySideGroupNoCaption
+                        SideBySideNoNumber |
+                        SideBySideGroupNoNumber
                       )* &amp;
-                      element instructions { mixed { MetaDataTitleOptional, BlockText } }? &amp;
+                      element script { attribute type { text }?, text }* &amp;
+                      element source { text }? &amp;
+                      element instructions { mixed { MetaDataTitleOptional, BlockText+ } }? &amp;
                       element static { Image }?
                     )
 
@@ -2064,6 +2093,7 @@
                         Tabular |
                         Image |
                         Video |
+                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -2087,11 +2117,13 @@
                           attribute material { text }
                         )?,
                         attribute aspect { text }?,
+                        attribute perspective { text }?,
                         (
                           Paragraph |
                           Tabular |
-                          SideBySideNoCaption |
+                          SideBySideNoNumber |
                           SlateInput |
+                          AnyXhtml |
                           element xhtml:button {
                             attribute type { text },
                             attribute id { text },
@@ -2121,6 +2153,13 @@
                   attribute style {text}?
                 }
 
+              # A slate with surface="html" embeds an arbitrary XHTML fragment.
+              AnyXhtml =
+                element xhtml:* {
+                  (attribute * { text })*,
+                  mixed { AnyXhtml* }
+                }
+
             # add Interactives where used
             BlockStatement |= Interactive
 
@@ -2131,7 +2170,7 @@
                 (Interactive | Slate)+
             }
 
-            SideBySideNoCaption |= element sidebyside {
+            SideBySideNoNumber |= element sidebyside {
                 SidebySideAttributes,
                 (Interactive | Slate)+
             }
@@ -2152,7 +2191,7 @@
     <section>
         <title>Audio and Video</title>
 
-        <p>Well, just video right now.  The <c>xml:id</c> is not used as a target, but rather as a name for a static preview image that is auto-generated by the <c>pretext</c> script thumbnail file, hence optional.  <c>preview</c> maybe be one of two reserved switches, or the filename of a static preview image.</p>
+        <p>Video and audio are both supported.  For video, the <c>xml:id</c> is not used as a target, but rather as a name for a static preview image that is auto-generated by the <c>pretext</c> script thumbnail file, hence optional.  <c>preview</c> maybe be one of two reserved switches, or the filename of a static preview image.  Audio is simpler: it has no preview image, aspect ratio, or playback mode, and points to either a local <attr>source</attr> file or a network <attr>href</attr>.</p>
 
         <p>Note: the <c>Video</c> pattern allows an <attr>xml:id</attr> attribute since it is used to construct a filename for preview images (<q>poster</q>), especially when scraped.</p>
 
@@ -2175,6 +2214,17 @@
                     (AttributesSourceFile | AttributesNetwork | AttributesYouTube |
                      AttributesYouTubePlaylist | AttributesVimeo),
                     Track*
+                }
+            Audio =
+                element audio {
+                    UniqueID?,
+                    LabelID?,
+                    Component?,
+                    attribute width {text}?,
+                    attribute margins {text}?,
+                    attribute start {xsd:integer}?,
+                    attribute end {xsd:integer}?,
+                    (AttributesSourceFile | AttributesNetwork)
                 }
             Track =
                 element track {
@@ -2274,9 +2324,9 @@
                 element exercisegroup {
                     MetaDataTitleOptional,
                     attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                    IntroductionStatementNoCaption,
+                    IntroductionStatementNoNumber,
                     Exercise+,
-                    ConclusionStatementNoCaption?
+                    ConclusionStatementNoNumber?
                 }
             </code>
         </fragment>
@@ -2532,8 +2582,9 @@
                     attribute * {text}*,
                     mixed {AnyElement*}
                 }
-            # Extended fillin with interactive attributes
-            FillIn |=
+            # Extended fillin with interactive attributes (extends the inline
+            # text fill-in blank; the bare "FillIn" name was orphaned)
+            FillInText |=
                 element fillin {
                     attribute characters {xsd:integer}?,
                     attribute cols {xsd:integer}?,
@@ -2629,7 +2680,7 @@
     <section>
         <title>Bibliography</title>
 
-        <p>This is all stop-gap and will change radically.  But it seems to work for now.  So these rules should not be taken as definitive, at all.</p>
+        <p>This support is in-progress and may be expanded.  The CSL-style entry, in particular, covers a curated scholarly subset of the CSL-JSON model for now, and may grow beyond this initial curation.</p>
 
         <fragment xml:id="bibliography">
             <title>Bibliography</title>
@@ -2661,9 +2712,62 @@
                         BibSeries |
                         BibPublisher |
                         BibPages |
+                        BibPubnote |
                         BibNote)*
-                    ))
+                    ) |
+                    (
+                        # A CSL-style entry, modeled on the CSL-JSON data
+                        # format.  Structured fields, all optional, in a fixed
+                        # canonical order.  With no CSL style active the fields
+                        # are rendered in this (document) order; with a style,
+                        # citeproc-py supplies the order from the CSL-JSON.
+                        attribute type {CSLType},
+                        CSLAuthor?,
+                        CSLEditor?,
+                        CSLTranslator?,
+                        BibTitle?,
+                        BibContainerTitle?,
+                        BibCollectionTitle?,
+                        BibGenre?,
+                        Edition?,
+                        BibVolume?,
+                        BibNumber?,
+                        BibIssue?,
+                        BibIssued?,
+                        BibAccessed?,
+                        BibPage?,
+                        BibPageFirst?,
+                        BibNumberOfPages?,
+                        BibPublisher?,
+                        BibPublisherPlace?,
+                        BibDOI?,
+                        BibISBN?,
+                        BibISSN?,
+                        BibURL?))
                 }
+            # CSL-JSON item types, a curated scholarly subset
+            CSLType =
+                "article" |
+                "article-journal" |
+                "article-magazine" |
+                "article-newspaper" |
+                "book" |
+                "chapter" |
+                "collection" |
+                "dataset" |
+                "document" |
+                "entry" |
+                "entry-dictionary" |
+                "entry-encyclopedia" |
+                "manuscript" |
+                "paper-conference" |
+                "patent" |
+                "report" |
+                "review" |
+                "software" |
+                "speech" |
+                "thesis" |
+                "webpage"
             Ibid = element ibid {empty}
             BibYear = element year {text}
             BibJournal = element journal { TextBib }
@@ -2675,6 +2779,8 @@
             BibEditor = element editor {text}
             BibSeries = element series {text}
             BibPublisher = element publisher {text}
+            # A BibTeX "pubnote" holds free-form publication information
+            BibPubnote = element pubnote {TextBib}
             BibPages = element pages {
                 (
                     attribute start {text},
@@ -2684,6 +2790,56 @@
                 (
                     text
                 )
+                }
+            # CSL contributors carry structured "name" elements only.  The
+            # element names "author"/"editor" are deliberately shared with the
+            # plain-text BibTeX patterns above; the gating "@type" attribute
+            # keeps the two content models apart (a RELAX NG co-occurrence
+            # constraint).
+            CSLAuthor = element author {CSLName+}
+            CSLEditor = element editor {CSLName+}
+            CSLTranslator = element translator {CSLName+}
+            # A CSL "name": recognized parts in any order, or a literal string
+            CSLName =
+                element name {
+                    (BibFamily |
+                    BibGiven |
+                    BibDroppingParticle |
+                    BibNonDroppingParticle |
+                    BibSuffix |
+                    BibStaticOrdering |
+                    BibLiteral)*
+                }
+            BibFamily = element family {text}
+            BibGiven = element given {text}
+            BibDroppingParticle = element dropping-particle {text}
+            BibNonDroppingParticle = element non-dropping-particle {text}
+            BibSuffix = element suffix {text}
+            BibStaticOrdering = element static-ordering {text}
+            BibLiteral = element literal {text}
+            # CSL standard (string) fields
+            BibContainerTitle = element container-title {TextBib}
+            BibCollectionTitle = element collection-title {TextBib}
+            # A CSL "genre" gives a sub-type, e.g. "Ph.D. thesis"
+            BibGenre = element genre {text}
+            BibIssue = element issue {text}
+            BibPage = element page {text}
+            BibPageFirst = element page-first {text}
+            BibNumberOfPages = element number-of-pages {text}
+            BibPublisherPlace = element publisher-place {TextBib}
+            BibDOI = element DOI {text}
+            BibISBN = element ISBN {text}
+            BibISSN = element ISSN {text}
+            BibURL = element URL {text}
+            # CSL date variables; one "date" per point, two for a range
+            BibIssued = element issued {BibDate+}
+            BibAccessed = element accessed {BibDate+}
+            BibDate =
+                element date {
+                    attribute year {text}?,
+                    attribute month {text}?,
+                    attribute day {text}?,
+                    empty
                 }
             </code>
         </fragment>
@@ -2700,7 +2856,7 @@
             GlossaryItem =
                 element gi {
                     MetaDataTitle,
-                    BlockStatementNoCaption+
+                    BlockStatementNoNumber+
                 }
             </code>
         </fragment>
@@ -2715,6 +2871,7 @@
             <title>Examples, and similar</title>
             <code>
             ExampleLike =
+                attribute workspace {text}?,
                 MetaDataTitleOptional,
                 (
                     (BlockStatement)+ |
@@ -2798,7 +2955,7 @@
                     element macro-file {text}+
                 }
             WWVariable =
-                ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.
+                ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurrences of "var" must be within a "webwork" element.  PreTeXt's additional validation will check on these two situations.
                 element var {
                     (attribute name {text},
                     attribute evaluator {text}?,
@@ -2888,15 +3045,13 @@
         <p>Notes: <ul>
             <li>Language tags go on the root element to affect variants of names of objects, like theorems.</li>
             <li>The <c>xinlude</c> mechanism may pass language tags down through the root element of included files to make them universally available.</li>
-            <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
             <li>The <c>component</c> attribute allows versions to be controlled by a publisher file.</li>
             <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <tag>plaintitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
             <li><c>MetaDataTitle</c> has a required <tag>title</tag>.</li>
             <li><c>MetaDataAltTitle</c> has a required <tag>title</tag>, and allows optional <tag>shorttitle</tag> and <tag>plaintitle</tag>.</li>
-            <li><c>MetaDataSubtitle</c> implicitly has a required <tag>title</tag>, and allows optional <tag>subtitle</tag>, <tag>shorttitle</tag> and <tag>plaintitle</tag>.</li>
             <li>A <tag>plaintitle</tag> means no markup whatsoever in the content, this is what <q>plain</q> means.</li>
-            <li><c>MetaDataLinedTitle</c> and <c>MetaDataLinedSubtitle</c> are variants of the <c>AltTitle</c> or <c>Subtitle</c> versions for use on larger divisions with <tag>line</tag> elements used to suggest line breaks in titles.</li>
+            <li><c>MetaDataLinedTitle</c> and <c>MetaDataLinedSubtitle</c> are variants of the <c>AltTitle</c> version for use on larger divisions with <tag>line</tag> elements used to suggest line breaks in titles; the latter also allows an optional <tag>subtitle</tag>.</li>
             <li><c>MetaDataCaption</c> implicitly has an optional title.</li>
             <li>Titles may contain external references (<c>url</c>) or internal cross-references (<c>xref</c>), but implementers need not make them active (<ie/>, they maybe text only), since titles are prone to migrating to other locations.</li>
         </ul></p>
@@ -2924,7 +3079,6 @@
                 element plaintitle {text}
             Creator =
                 element creator {TextShort}
-            XMLBase = attribute xml:base {text}
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
@@ -2935,7 +3089,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title,
                 Index*
@@ -2943,7 +3096,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title,
                 ShortTitle?,
@@ -2953,20 +3105,8 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
-                ShortTitle?,
-                PlainTitle?,
-                Index*
-            MetaDataSubtitle =
-                UniqueID?,
-                LabelID?,
-                Component?,
-                XMLBase?,
-                XMLLang?,
-                Title,
-                Subtitle?,
                 ShortTitle?,
                 PlainTitle?,
                 Index*
@@ -2974,7 +3114,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title | LinedTitle),
                 (Subtitle | LinedSubtitle)?,
@@ -2985,7 +3124,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Index*
@@ -2993,7 +3131,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 (Title, ShortTitle?, PlainTitle?)?,
                 Index*
@@ -3001,7 +3138,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Creator?,
@@ -3010,7 +3146,6 @@
                 UniqueID?,
                 LabelID?,
                 Component?,
-                XMLBase?,
                 XMLLang?,
                 Title?,
                 Caption,
@@ -3152,6 +3287,9 @@
                 TextSimple
             }
             Edition = element edition {text}
+            # "event" is consumed only by the slideshow conversions
+            # (Beamer, reveal.js).  This schema does not yet describe a
+            # "slideshow" document, so the pattern is dormant until then.
             Event = element event {
                 TextLong
             }
@@ -3212,7 +3350,7 @@
             Biography =
                 element biography {
                     MetaDataTitleOptional,
-                    (BlockStatementNoCaption | ParagraphsNoNumber)+
+                    (BlockStatementNoNumber | ParagraphsNoNumber)+
                 }
             Dedication =
                 element dedication {
@@ -3222,21 +3360,21 @@
             Acknowledgement =
                 element acknowledgement {
                     MetaDataTitleOptional,
-                    (BlockStatementNoCaption | ParagraphsNoNumber)+
+                    (BlockStatementNoNumber | ParagraphsNoNumber)+
                 }
             Preface =
                 element preface {
                     MetaDataTitleOptional,
                     (
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber)+,
+                            (BlockStatementNoNumber | ParagraphsNoNumber)+,
                             Attribution*
                         )
                         |
                         (
-                            (BlockStatementNoCaption | ParagraphsNoNumber )*,
+                            (BlockStatementNoNumber | ParagraphsNoNumber )*,
                             Contributors,
-                            (BlockStatementNoCaption | ParagraphsNoNumber)*
+                            (BlockStatementNoNumber | ParagraphsNoNumber)*
                         )
                     )
                 }
@@ -3315,6 +3453,7 @@
                 element backmatter {
                     MetaDataTitleOptional,
                     (ArticleAppendix|Solutions)*,
+                    Glossary?,
                     References?,
                     IndexDivision?,
                     ColophonBack?
@@ -3331,7 +3470,7 @@
             ColophonBack =
                 element colophon {
                     MetaDataTarget,
-                    (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
+                    (BlockText | SideBySideNoNumber | SideBySideGroupNoNumber)+
                 }
             </code>
         </fragment>
@@ -3347,7 +3486,6 @@
             <code>
             DocInfo =
                 element docinfo {
-                    XMLBase?,
                     XMLLang?,
                     Configuration+
                 }
@@ -3392,6 +3530,10 @@
                 element latex-image-preamble {text}
             Configuration |=
                 element asymptote-preamble {text}
+            Configuration |=
+                element pf:prefigure-preamble {
+                    external "pf-preamble-adapter.rnc"
+                }
             </code>
         </fragment>
 
@@ -3535,7 +3677,7 @@
             <code>
             Configuration |=
                 element blurb {
-                    attribute shelf {text},
+                    attribute shelf {text}?,
                     text
                 }
             </code>
@@ -3557,6 +3699,40 @@
             <title>Experimental Document Info</title>
             <fragref ref="blurb"/>
             <fragref ref="document-id"/>
+        </fragment>
+    </section>
+
+    <section>
+        <title>PreFigure Schema
+                Adapters</title>
+
+        <p>The <init>PreFigure</init> project publishes its own <init>RELAX-NG</init> compact schema (<c>pf_schema.rnc</c>), which we copy into this directory nearly verbatim (carrying only a handful of minimal upstream bug fixes needed for the grammar to load).  That schema defines every <init>PreFigure</init> element in no namespace, with a start pattern of the <c>diagram</c> element.  <pretext/>, however, expects <init>PreFigure</init> content in the <c>https://prefigure.org</c> namespace, signalled by the <attr>xmlns</attr> on a <c>prefigure</c> element.</p>
+
+        <p>This adapter reconciles the two.  Declaring a default namespace and then including the upstream schema remaps every one of its elements into the <init>PreFigure</init> namespace, all without restructuring the upstream file.  The included grammar's start pattern (the <c>diagram</c> element) becomes this adapter's start pattern, which is exactly what the <c>externalRef</c> in <c>ImageCode</c> reaches.  Keeping our edits to the upstream schema minimal means a future <init>PreFigure</init> release can be re-synced by copying a single file.</p>
+
+        <fragment filename="pf-adapter.rnc">
+            <title>PreFigure Schema Adapter</title>
+            <code>
+                default namespace = "https://prefigure.org"
+                grammar {
+                    include "pf_schema.rnc"
+                }
+            </code>
+        </fragment>
+
+        <p>A <c>prefigure-preamble</c> in the <c>docinfo</c> carries <init>PreFigure</init> content (graphical and group elements) without an enclosing <c>diagram</c>.  Since the upstream start pattern is the <c>diagram</c> element, that content is not reachable through the <c>externalRef</c> above, which exposes only a grammar's start pattern.  A second adapter includes the same upstream grammar but overrides its <c>start</c> to expose exactly the drawing-content patterns, again reusing the upstream definitions verbatim.  Definition elements are deliberately omitted as diagram-specific, rather than preamble, material.</p>
+
+        <fragment filename="pf-preamble-adapter.rnc">
+            <title>PreFigure Preamble Adapter</title>
+            <code>
+                default namespace = "https://prefigure.org"
+                grammar {
+                    include "pf_schema.rnc" {
+                        start =
+                            ( GraphicalElements* &amp; GroupElements* )
+                    }
+                }
+            </code>
         </fragment>
     </section>
 
@@ -3595,6 +3771,7 @@
             <fragref ref="axiom-like" />
             <fragref ref="example-like" />
             <fragref ref="project-like" />
+            <fragref ref="open-problem-like" />
             <fragref ref="remark-like" />
             <fragref ref="computation-like" />
             <fragref ref="aside" />

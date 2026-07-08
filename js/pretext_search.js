@@ -5,35 +5,34 @@
 //   or
 // var ptx_lunr_search_style = "reference";
 
-// since there is only one search box now, this can be simplified
-function doSearch(searchlocation="A") {
-    // Get the search terms from the input text box
-    var terms;
-    if(searchlocation == "A") {
-        terms = document.getElementById("ptxsearch").value;
-    } else {
-        terms = document.getElementById("ptxsearchB").value;
+// stub for i18next to future-proof the code. We don't actually use it for
+// anything right now, but it will be needed if we want to localize the
+// accessibility search status messages.
+window.i18next = window.i18next || {
+    t(key, params = {}) {
+        for (const param in params) {
+            key = key.replace(`{{${param}}}`, params[param]);
+        }
+        return key;
     }
-    
-    localStorage.setItem('last-search-terms', JSON.stringify({terms: terms, time: Date.now()}));
-    
-    // Where do we want to put the results?
-    let resultArea = document.getElementById("searchresults")
-    resultArea.innerHTML = "";  // clear out any previous results
-    // assume AND for multiple words
-    var searchterms = terms;
-    if(searchlocation == "B") {
-        document.getElementById("ptxsearch").value = searchterms
-        console.log("ptxsearch value", document.getElementById("ptxsearch").value);
-    } else {
-        searchterms = terms;
-    }
+};
 
-    searchterms = searchterms.toLowerCase().trim();
+
+function doSearch() {
+    // Get the search terms from the input text box
+    const terms = document.getElementById("ptx-search-terms").value;
+    localStorage.setItem('last-search-terms', JSON.stringify({terms: terms, time: Date.now()}));
+
+    // Where do we want to put the results?
+    let resultArea = document.getElementById("ptx-search-results")
+    resultArea.innerHTML = "";  // clear out any previous results
+
+    // assume AND for multiple words
+    const searchTerms = terms.toLowerCase().trim();
     let pageResult = [];
-    if(searchterms != "") {
+    if(searchTerms != "") {
         pageResult = ptx_lunr_idx.query((q) => {
-            for(let term of searchterms.split(' ')) {
+            for(let term of searchTerms.split(' ')) {
                 q.term(term, { fields: ["title"], boost: 20 }); //exact title match with 20x weight
                 q.term(term, { wildcard: lunr.Query.wildcard.TRAILING, fields: ["title"], boost: 10 }); //inexact title 10x weight
                 q.term(term, { fields: ["body"], boost: 5 }); //exact body 5x weight
@@ -102,7 +101,7 @@ function augmentResults(result, docs) {
                     const startClipInd = positionData[0];
                     const endClipInd = positionData[0] + positionData[1];
                     res.title = res.title.substring(0, endClipInd) + '</span>' + res.title.substring(endClipInd);
-                    res.title = res.title.substring(0, startClipInd) + '<span class="search-result-clip-highlight">' + res.title.substring(startClipInd);
+                    res.title = res.title.substring(0, startClipInd) + '<span class="ptx-search-result-clip-highlight">' + res.title.substring(startClipInd);
                     titleMarked = true;
                 }
             } else if (res.matchData.metadata[hit].body) {
@@ -115,7 +114,7 @@ function augmentResults(result, docs) {
                 const startClipInd = positionData[0];
                 const endClipInd = positionData[0] + positionData[1];
                 let resultSnippet = (startInd > 0 ? '...' : '' ) + bodyContent.substring(startInd, startClipInd);
-                resultSnippet += '<span class="search-result-clip-highlight">' + bodyContent.substring(startClipInd, endClipInd) + '</span>';
+                resultSnippet += '<span class="ptx-search-result-clip-highlight">' + bodyContent.substring(startClipInd, endClipInd) + '</span>';
                 resultSnippet += bodyContent.substring(endClipInd, endInd) + (endInd < bodyContent.length ? '...' : '' ) + '<br/>';
                 res.body += resultSnippet;
             }
@@ -180,36 +179,23 @@ function compareScoreDesc(a, b) {
 }
 
 function addResultToPage(searchterms, result, docs, numUnshown, resultArea) {
-    /* backward compatibility for old html */
-    if (document.getElementById("searchempty")) {
-        document.getElementById("searchempty").style.display = "none";
-    }
     let len = result.length;
-    console.log("first result", result[0]);
+
+    const searchStatus = document.getElementById("ptx-search-status");
+
     if (len == 0) {
-        if (document.getElementById("searchempty")) {
-            document.getElementById("searchempty").style.display = "block";
-        } else {
-            let noresults = document.createElement("div");
-            noresults.classList.add("noresults");
-            search_no_results_string = "No results were found"
-            noresults.innerHTML = search_no_results_string + ".";
-   //     console.log("the new variable", search_results_heading_string);
-            resultArea.appendChild(noresults);
-        }
-        document.getElementById("searchresultsplaceholder").style.display = null;
-        return
+        document.getElementById("ptx-search-empty").style.display = "block";
+        document.getElementById("ptx-search-dialog").style.display = null;
+        searchStatus.innerHTML = window.i18next.t('No results found for "{{terms}}".', { terms: searchterms });
+        return;
     }
-// console.log("result",result);
+    document.getElementById("ptx-search-empty").style.display = "none";
+    searchStatus.innerHTML = window.i18next.t('{{count}} results found.', { count: len });
+
     let allScores = result.map(function (r) { return r.score });
-// console.log(typeof allScores[0], "allScores",allScores);
     allScores.sort((a,b) => (a - b));
     allScores.reverse();
-// console.log("allScores, sorted",allScores);
 
-//    let high = result[Math.floor(len*0.25)].score;
-//    let med = result[Math.floor(len*0.5)].score;
-//    let low = result[Math.floor(len*0.75)].score;
     // sort the results by their position in the book, not their score
     let high = allScores[Math.floor(len*0.20)];
     let med = allScores[Math.floor(len*0.40)];
@@ -226,19 +212,19 @@ function addResultToPage(searchterms, result, docs, numUnshown, resultArea) {
         // add a class so we can colorize the results based on their rank in terms
         // of search score.
         if (res.score >= high) {
-            link.classList.add("high_result")
+            link.classList.add("ptx-search-result-high")
         } else if (res.score >= med) {
-            link.classList.add("medium_result")
+            link.classList.add("ptx-search-result-medium")
         } else if (res.score >= low) {
-            link.classList.add("low_result")
+            link.classList.add("ptx-search-result-low")
         } else { 
-            link.classList.add("no_result")
+            link.classList.add("ptx-search-result-none")
         }
         currIndent = res.level;
         if (currIndent > indent) {
             indent = currIndent;
             let ilist = document.createElement("ul")
-            ilist.classList.add("detailed_result");
+            ilist.classList.add("ptx-search-detailed-result");
             resultArea.appendChild(ilist);
             resultArea = ilist;
         } else if (currIndent < indent) {
@@ -248,14 +234,14 @@ function addResultToPage(searchterms, result, docs, numUnshown, resultArea) {
         link.href = `${res.url}`;
         link.innerHTML = `${res.type} ${res.number} ${res.title}`;
         let clip = document.createElement("div");
-        clip.classList.add("search-result-clip");
+        clip.classList.add("ptx-search-result-clip");
         clip.innerHTML = `${res.body}`;
         let bullet = document.createElement("li");
-        bullet.classList.add('search-result-bullet');
+        bullet.classList.add('ptx-search-result-bullet');
         bullet.appendChild(link);
         bullet.appendChild(clip);
         let p = document.createElement("text");
-        p.classList.add('search-result-score');
+        p.classList.add('ptx-search-result-score');
         p.innerHTML = `  (${res.score.toFixed(2)})`;
         bullet.appendChild(p);
         resultArea.appendChild(bullet);
@@ -263,53 +249,36 @@ function addResultToPage(searchterms, result, docs, numUnshown, resultArea) {
 
     // Auto-close search results when a result is clicked in case result is on
     // the same page search started from
-    const resultsDiv = document.getElementById('searchresultsplaceholder');
-    const backDiv = document.querySelector('.searchresultsbackground');
+    const resultsDialog = document.getElementById('ptx-search-dialog');
     resultArea.querySelectorAll("a").forEach((link) => {
         link.addEventListener('click', (e) => {
-            backDiv.style.display = 'none';
-            resultsDiv.style.display = 'none';
+            resultsDialog.close()
         });
     });
-    //Could print message about how many results are not shown. No way to localize it though...
-    // if(numUnshown > 0) {
-    //     let bullet = document.createElement("li");
-    //     bullet.classList.add('search-results-bullet');
-    //     bullet.classList.add('search-results-unshown-count');
-    //     let p = document.createElement("text");
-    //     p.innerHTML = `${parseInt(numUnshown)} unshown results...`;
-    //     bullet.appendChild(p);
-    //     resultArea.appendChild(bullet);
-    // }
-    document.getElementById("searchresultsplaceholder").style.display = null;
+    document.getElementById("ptx-search-dialog").style.display = null;
     MathJax.typesetPromise();
 }
 
 window.addEventListener("load", function (event) {
-    const resultsDiv = document.getElementById('searchresultsplaceholder');
+    const searchDialogElement = document.getElementById('ptx-search-dialog');
+    const searchButtonElement = document.getElementById('ptx-search-button');
+    const closeBtn = document.getElementById("ptx-search-close");
+    const searchDialog = new PTXDialog(searchDialogElement, searchButtonElement, {
+        closeButton: closeBtn,
+    });
 
-    //insert a div to be backgroud behind searchresultsplaceholder
-    const backDiv = document.createElement("div");
-    backDiv.classList.add("searchresultsbackground");
-    backDiv.style.display = 'none';
-    resultsDiv.parentNode.appendChild(backDiv);
-
-    document.getElementById("searchbutton").addEventListener('click', (e) => {
-        resultsDiv.style.display = null;
-        backDiv.style.display = null;
-        let searchInput = document.getElementById("ptxsearch");
-        searchInput.value = JSON.parse(localStorage.getItem("last-search-terms")).terms;
+    searchButtonElement.addEventListener('click', (e) => {
+        // Attempt to restore last search
+        const lastSearch = localStorage.getItem("last-search-terms");
+        let searchInput = document.getElementById("ptx-search-terms");
+        searchInput.value = lastSearch ? (JSON.parse(lastSearch)?.terms || "") : "";
         searchInput.select();
-        doSearch();
+        if(searchInput.value) {
+            doSearch();
+        }
     });
 
-    document.getElementById("ptxsearch").addEventListener('input', (e) => {
+    document.getElementById("ptx-search-terms").addEventListener('input', (e) => {
         doSearch();
-    });
-
-    document.getElementById("closesearchresults").addEventListener('click', (e) => {
-        resultsDiv.style.display = 'none';
-        backDiv.style.display = 'none';
-        document.getElementById('searchbutton').focus();
     });
 });

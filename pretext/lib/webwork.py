@@ -209,8 +209,13 @@ def webwork_to_xml(
             disableCookies='1',
             outputformat='raw'
         )
-        # Always use html2xml for this; we don't know the server version yet
-        version_determination_json = requests.get(url=webwork2_html2xml, params=params_for_version_determination).json()
+        # Try render_rpc first.  If that fails, then fall back to html2xml.
+        render_rpc_response = requests.get(url=webwork2_render_rpc, params=params_for_version_determination)
+        if render_rpc_response.status_code == 200:
+            version_determination_json = render_rpc_response.json()
+        else:
+            version_determination_json = requests.get(
+                url=webwork2_html2xml, params=params_for_version_determination).json()
         if "ww_version" in version_determination_json:
             webwork2_version = version_determination_json["ww_version"]
             webwork2_version_match = re.search(
@@ -624,7 +629,7 @@ def webwork_to_xml(
             ww_image_path, ww_image_filename = os.path.split(ww_image_full_path)
             # split the filename into (name, extension). extension can be empty or like '.png'.
             ww_image_name, image_extension = os.path.splitext(ww_image_filename)
-            # rename, eg, webwork-representations/webwork-5-image-3.png
+            # rename the image file to, e.g., webworkParentExerciseLabel-image-3.png
             ptx_image_name = problem + "-image-" + str(count)
             ptx_image_filename = ptx_image_name + image_extension
             if image_extension == ".tgz":
@@ -926,8 +931,13 @@ def webwork_sets(xml_source, pub_file, stringparams, dest_dir, tgz, need_macros)
     tmp_dir = common.get_temporary_directory()
     common.xsltproc(extraction_xslt, xml_source, None, output_dir=tmp_dir, stringparams=stringparams)
     # We don't explicitly know the name of the folder that has all of the sets
-    # But it is the only thing in the tmp_dir
-    folder_name = os.listdir(tmp_dir)[0]
+    # But it is the only thing in the tmp_dir.  A document with no WeBWorK
+    # problems produces no folder, so there are no sets to collect.
+    set_folders = os.listdir(tmp_dir)
+    if not set_folders:
+        log.info("no WeBWorK problem sets to construct")
+        return
+    folder_name = set_folders[0]
     folder = os.path.join(tmp_dir, folder_name)
     macros_folder = os.path.join(folder, 'macros')
     os.mkdir(macros_folder)

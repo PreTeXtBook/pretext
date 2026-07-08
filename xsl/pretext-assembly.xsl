@@ -56,19 +56,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   valid PreTeXt (when perhaps the authored source was not).   -->
 <!-- * The modal "assembly" templates are applied to the source    -->
 <!--   root element, creating a new version of the source, which   -->
-<!--   has been "enhanced".  Various things happen in this pass,   -->
-<!--   such as assembling auxiliary files of content (WeBWorK      -->
-<!--   representations, private solutions, bibliographic items).   -->
-<!--   This creates the $assembly source tree by *adding* new      -->
-<!--   source elements.                                            -->
+<!--   has been "enhanced".  This pass assembles computed          -->
+<!--   content (most visibly the bibliography), creating the       -->
+<!--   $assembly source tree by *adding* new source elements.      -->
 <!-- * The "repair" templates will automatically repair deprecated -->
 <!--   constructions so that actual conversions can remove         -->
 <!--   orphaned code.  Despite the name, we also implement         -->
-<!--   conveniences that are universal accross all conversions, so -->
+<!--   conveniences that are universal across all conversions, so  -->
 <!--   that conversions can assume a more canonical version of the -->
 <!--   source, or remove the need for additional templates to      -->
-<!--   realize certain constructions (e.g. url/@visual).  This     -->
-<!--   creates the $repair source tree by *changing* source.       -->
+<!--   realize certain constructions.  This creates the            -->
+<!--   $repair source tree by *changing* source.                   -->
 <!-- * $root will point to the root of the final enhanced          -->
 <!--   source file/tree/XML.                                       -->
 <!-- * Derived variables, $docinfo and $document-root, will        -->
@@ -114,8 +112,90 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- content, which may generally just produce a lot of text.      -->
 <!-- Which is no good, say as an attribute value.                  -->
 
-<!-- Isolate computation of numbers -->
-<xsl:import href="./pretext-numbers.xsl"/>
+<!-- This stylesheet runs as a chain of full-tree passes.  Each    -->
+<!-- pass is a modal traversal that copies the previous tree and   -->
+<!-- alters only the elements it cares about, yielding a new       -->
+<!-- tree.  The new tree is built as a result tree fragment and    -->
+<!-- immediately turned into a real node-set with                  -->
+<!-- exsl:node-set(), so the next pass can walk it.  The chain is  -->
+<!-- wired in "The Assembly Pipeline" section as a sequence of     -->
+<!-- variables ($version, $assembly, ...); that sequence, not the  -->
+<!-- order of templates in this file, is the authoritative pass    -->
+<!-- order.                                                        -->
+<!--                                                               -->
+<!-- Most passes are the identity for almost every node.  The      -->
+<!-- low-priority identity templates that make each pass a         -->
+<!-- faithful copy by default are collected in "Source Assembly    -->
+<!-- Infrastructure"; the section for a pass then overrides them   -->
+<!-- (one section per pass, below, in execution order) for just    -->
+<!-- the handful of elements that pass transforms.                 -->
+<!--                                                               -->
+<!-- The passes, in the order they run (the identifier in          -->
+<!-- parentheses is the node-set each one produces):               -->
+<!--                                                               -->
+<!--    1. private-solutions   ($private-solutions)                -->
+<!--         Splice in an external file of instructor solutions.   -->
+<!--         Identity, and skipped, when no such file is named.    -->
+<!--    2. version             ($version)                          -->
+<!--         Resolve "version" and "custom" elements, *removing*   -->
+<!--         excluded content.  Result should be valid PreTeXt.    -->
+<!--    3. id-attribute        ($original-labeled)  @original-id   -->
+<!--         First of three identification stamps (see below).     -->
+<!--    4. assembly            ($assembly)                         -->
+<!--         *Add* computed content: the assembled bibliography,   -->
+<!--         copied WeBWorK problems, matching/card-sort pieces.   -->
+<!--    5. exercise            ($exercise)                         -->
+<!--         Tag each exercise with its kind (inline, divisional,  -->
+<!--         worksheet, ...) for later decisions.                  -->
+<!--    6. id-attribute        ($assembly-label)    @assembly-id   -->
+<!--         Second stamp: the early id passes coordinate on.      -->
+<!--    7. dynamic-substitution ($dynamic)                         -->
+<!--         Splice computed answers into fill-in-the-blank and    -->
+<!--         kindred dynamic exercises.  Skipped when none exist.  -->
+<!--    8. representations     ($representations)                  -->
+<!--         Render interactive exercises as static or dynamic     -->
+<!--         equivalents, per $exercise-style.                     -->
+<!--    9. repair              ($repair)                           -->
+<!--         *Change* source: fix deprecated constructions and     -->
+<!--         apply conveniences, for a canonical tree.             -->
+<!--   10. enrichment          ($enrichment)                       -->
+<!--         *Add* generated material, e.g. a GeoGebra preview     -->
+<!--         or visual text for a bare url.                        -->
+<!--   11. labels              ($labels)                           -->
+<!--         Promote an authored @xml:id to @label and record      -->
+<!--         localization support.  See "Labels".                  -->
+<!--   12. id-attribute        ($identification)    @unique-id     -->
+<!--         Third stamp: the final id conversions consume.        -->
+<!--   13. augment             ($augment)                          -->
+<!--         Annotate divisions with @level (and ordered lists     -->
+<!--         with @ordered-list-level), as numbering needs.        -->
+<!--   14. serial-stamp        ($serial-stamp)                     -->
+<!--         Stamp @serial on every numbered item.  See            -->
+<!--         "Numbering".                                          -->
+<!--                                                               -->
+<!-- After the chain, $root, $docinfo, $document-root and          -->
+<!-- $bibinfo are derived from the final tree for the conversion   -->
+<!-- stylesheets that import this one.                             -->
+<!--                                                               -->
+<!-- Three identifiers, one mechanism.  The id-attribute pass      -->
+<!-- runs three times (passes 3, 6, 12), each stamping one         -->
+<!-- attribute by a deterministic depth-first walk: @original-id   -->
+<!-- (authored structure), @assembly-id (early, so passes can      -->
+<!-- coordinate before filenames exist) and @unique-id (the final  -->
+<!-- identifier).  The three agree element-for-element only        -->
+<!-- because no intervening pass reorders siblings; that           -->
+<!-- invariant is stated in full at "Structural Contract for       -->
+<!-- Identification Passes" and checked, when assembly.debug is    -->
+<!-- set, by the id-coherence-check.                               -->
+<!--                                                               -->
+<!-- Two-pass extraction and substitution.  A few constructs       -->
+<!-- (fill-in-the-blank answers, WeBWorK, MOM, ...) need an        -->
+<!-- external round trip: this stylesheet first emits a tree that  -->
+<!-- drives the trip, then on a later run reads the results back.  -->
+<!-- The $b-extracting-* switches that select that mode are        -->
+<!-- described at "Controlling Two-Pass Extraction and             -->
+<!-- Substitution".                                                -->
+
 <!-- Isolate conversion of Runestone/interactive to PreTeXt/static -->
 <xsl:import href="./pretext-runestone-static.xsl"/>
 
@@ -143,7 +223,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   * We default here to "static".  HTML production will override     -->
 <!--     to "dynamic" and then any importing stylesheet will need to     -->
 <!--     override back to "static".                                      -->
-<!--   * 'pg-problems' are WeBWork problems for an archive               -->
+<!--   * 'pg-problems' are WeBWorK problems for an archive               -->
 <!--   * If testing, the pretext-enhanced-source.xsl  stylesheet will    -->
 <!--     need a stringparam override to view and test dynamic versions.  -->
 <xsl:variable name="exercise-style" select="'static'"/>
@@ -157,7 +237,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- publisher features.  When we stop this early, "exercise-style" is     -->
 <!-- irrelevant.                                                           -->
 
-<!-- default is empty, so we ccan detect non-use -->
+<!-- default is empty, so we can detect non-use -->
 <xsl:param name="assembly.version-only" select="''"/>
 <xsl:param name="assembly.assembly-id-only" select="''"/>
 
@@ -167,7 +247,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="assembly.debug" select="''"/>
 <xsl:variable name="b-assembly-debug" select="$assembly.debug = 'yes'"/>
 
-<!-- onvert to a boolean, with error-checking -->
+<!-- Set to 'yes' to convert the @xml:base attributes stamped by the -->
+<!-- xinclude mechanism into @pi:source-uri attributes, so that a    -->
+<!-- diagnostic (validation, say) can name the file where a problem  -->
+<!-- lies.  Not documented as an author or publisher feature.        -->
+<xsl:param name="assembly.file-attribution" select="''"/>
+<xsl:variable name="b-file-attribution" select="$assembly.file-attribution = 'yes'"/>
+
+<!-- convert to a boolean, with error-checking -->
 <xsl:variable name="version-only">
     <xsl:choose>
         <xsl:when test="$assembly.version-only = ''">
@@ -221,7 +308,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Other objects are extracted, then processed (sent to a server   -->
 <!-- typically), and a "static" PreTeXt version, in valid PreTeXt    -->
 <!-- syntax, is returned and captured in files by the Python         -->
-<!-- extraction step.  Then in a general aplication of this          -->
+<!-- extraction step.  Then in a general application of this         -->
 <!-- stylesheet to produce static output formats, those files are    -->
 <!-- read and the static versions are substituted into the eventual  -->
 <!-- source, for processing by stylesheets producing less-capable    -->
@@ -229,10 +316,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                 -->
 <!-- Such objects are:                                               -->
 <!--                                                                 -->
-<!--   WeBWorK (WW/PG), MyOpenMath (MOM),                            -->
-<!--   Dynamic Fill-in-the-Blank (FITB)                              -->
+<!--   WeBWorK (WW/PG), MyOpenMath (MOM), STACK,                     -->
+<!--   Dynamic Fill-in-the-Blank (FITB), bibliography                -->
+<!--   entries, and QR codes                                         -->
 <!--                                                                 -->
-<!-- But there is a "cicken-and-egg condition" if two such objects   -->
+<!-- But there is a "chicken-and-egg condition" if two such objects  -->
 <!-- are present in a fresh, un-processed, source document.  The     -->
 <!-- extraction of the first object will also try to "sub in" the    -->
 <!-- static versions of the second object from its                   -->
@@ -256,7 +344,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-extracting-qrcode" select="false()"/>
 
 <xsl:variable name="b-extracting" select="$b-extracting-pg or $b-extracting-mom or $b-extracting-fitb or $b-extracting-biblio or $b-extracting-stack or $b-extracting-qrcode"/>
-
 
 <!-- ############################## -->
 <!-- Source Assembly Infrastructure -->
@@ -291,9 +378,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- Later, this template only *adds* an attribute to an element -->
+<!-- it is copying over to the result tree.  Here we copy text   -->
+<!-- nodes and the other attributes and the parameters are not   -->
+<!-- needed.  This is a general-purpose template, see comments   -->
+<!-- at further definition for elements.                         -->
+<xsl:template match="node()|@*" mode="id-attribute">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="id-attribute"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="assembly">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="assembly"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="node()|@*" mode="exercise">
+    <xsl:param name="division" select="''"/>
+
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="exercise">
+            <xsl:with-param name="division" select="$division"/>
+        </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
 
@@ -321,27 +429,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-
 <xsl:template match="node()|@*" mode="labels">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="labels"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Later, this template only *adds* an attribute to an element -->
-<!-- it is copying over to the result tree.  Here we copy text   -->
-<!-- nodes and the other attributes and the parameters are not   -->
-<!-- needed.  This is a general-purpose template, see comments   -->
-<!-- at further definition for elements.                         -->
-<xsl:template match="node()|@*" mode="id-attribute">
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="id-attribute"/>
-    </xsl:copy>
-</xsl:template>
-
-<xsl:template match="node()|@*" mode="language">
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="language"/>
     </xsl:copy>
 </xsl:template>
 
@@ -359,151 +449,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
-<!-- ##################### -->
-<!-- Serial Stamp Pass     -->
-<!-- ##################### -->
-
-<!-- Stamps @serial during assembly, in one depth-first walk.  Each   -->
-<!-- numbered family (equations and footnotes) is threaded as a       -->
-<!-- node-set: its items in the current counting scope, and each item -->
-<!-- is stamped with its position in that node-set.  How a scope is   -->
-<!-- chosen, and how the node-set is recomputed at each step, is      -->
-<!-- documented with the division templates below.                    -->
-
 <!-- Catch-all identity: thread the inherited node-sets through. -->
 <xsl:template match="node()|@*" mode="serial-stamp">
     <!-- no defaults: every caller passes the scopes explicitly -->
     <xsl:param name="eq-nodes"/>
     <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:param name="openproblem-nodes"/>
     <xsl:copy>
         <xsl:apply-templates select="@*|node()" mode="serial-stamp">
             <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
             <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+            <xsl:with-param name="openproblem-nodes" select="$openproblem-nodes"/>
         </xsl:apply-templates>
     </xsl:copy>
 </xsl:template>
 
-<!-- The "next" node-set                                                    -->
-
-<!-- A numbered family is counted within a "scope": a division whose own    -->
-<!-- items form one flat, serially numbered pool.  A division opens a       -->
-<!-- scope for a family when it is terminal (has no traditional             -->
-<!-- subdivision) or has reached the family's numbering level.  A           -->
-<!-- structural division above that level recurses instead, and the         -->
-<!-- content it holds directly (its introduction and conclusion) pools      -->
-<!-- at the division's own level.                                           -->
-
-<!-- Each template threads one node-set per family (the family's items      -->
-<!-- in the current scope) and hands its children the "next" one, built     -->
-<!-- from the inherited node-set:                                           -->
-
-<!--     $b-open = not($nodes) and ($b-terminal or @level >= LEVEL)         -->
-<!--     $next   = $nodes | self::*[$b-open]//ITEMS                         -->
-
-<!-- This is three cases.  Already in a scope ($nodes non-empty): $b-open   -->
-<!-- is false, so $next is $nodes and the scope threads down unchanged.     -->
-<!-- Opening a scope here: $next is this division's pool of items.  Still   -->
-<!-- above the level: $next is empty, the walk recurses, and a deeper       -->
-<!-- division opens the scope.                                              -->
-
-<!-- The self::*[$b-open] guard makes the descendant scan for the pool      -->
-<!-- happen only at the division that opens the scope; while a scope        -->
-<!-- merely threads down, $nodes is non-empty and nothing is scanned.       -->
-
-<!-- The introduction/conclusion template (below) has the same shape,       -->
-<!-- except its pool is the division's own introduction and conclusion      -->
-<!-- (siblings, not a descendant scan), taken only where the parent         -->
-<!-- recursed.                                                              -->
-
-<!-- ITEMS (the family's items) and LEVEL (its numbering switch) are the    -->
-<!-- only per-family inputs; $b-terminal and the case structure are shared. -->
-<!-- Two families ride this structure, tagged "-eq" and "-fn": equations    -->
-<!-- ($numbering-equations; numbered mrows) and footnotes                   -->
-<!-- ($numbering-footnotes; every fn).                                      -->
-<xsl:template match="book|article|part|chapter|appendix|frontmatter|backmatter|preface|section|subsection|subsubsection|exercises|worksheet|handout|reading-questions|references|glossary|solutions" mode="serial-stamp">
-    <xsl:param name="eq-nodes"/>
-    <xsl:param name="fn-nodes"/>
-    <xsl:variable name="b-terminal" select="not(part|chapter|appendix|section|subsection|subsubsection|preface)"/>
-    <xsl:variable name="b-open-eq" select="not($eq-nodes) and ($b-terminal or (@level &gt;= $numbering-equations))"/>
-    <xsl:variable name="b-open-fn" select="not($fn-nodes) and ($b-terminal or (@level &gt;= $numbering-footnotes))"/>
-    <xsl:variable name="next-eq" select="$eq-nodes | self::*[$b-open-eq]//mrow[@pi:numbered = 'yes']"/>
-    <xsl:variable name="next-fn" select="$fn-nodes | self::*[$b-open-fn]//fn"/>
-    <xsl:copy>
-        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
-            <xsl:with-param name="eq-nodes" select="$next-eq"/>
-            <xsl:with-param name="fn-nodes" select="$next-fn"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Introduction and conclusion of a traditional division.  The match    -->
-<!-- is prefixed with the division names because PreTeXt also uses        -->
-<!-- introduction and conclusion inside exercises, exercisegroups,        -->
-<!-- objectives, and the like.  This is the pooling case above: where the -->
-<!-- parent recursed, the division's own introduction and conclusion pool -->
-<!-- into one scope, subdivisions excluded for free (siblings, not        -->
-<!-- descendants).                                                        -->
-<xsl:template match="article/introduction | chapter/introduction | section/introduction | subsection/introduction | appendix/introduction | article/conclusion | chapter/conclusion | section/conclusion | subsection/conclusion | appendix/conclusion" mode="serial-stamp">
-    <xsl:param name="eq-nodes"/>
-    <xsl:param name="fn-nodes"/>
-    <xsl:variable name="next-eq" select="$eq-nodes | (../introduction | ../conclusion)[not($eq-nodes)]//mrow[@pi:numbered = 'yes']"/>
-    <xsl:variable name="next-fn" select="$fn-nodes | (../introduction | ../conclusion)[not($fn-nodes)]//fn"/>
-    <xsl:copy>
-        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
-            <xsl:with-param name="eq-nodes" select="$next-eq"/>
-            <xsl:with-param name="fn-nodes" select="$next-fn"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Numbered mrow.  Stamp @serial with the position within the -->
-<!-- inherited node-set.                                        -->
-<xsl:template match="mrow[@pi:numbered = 'yes']" mode="serial-stamp">
-    <xsl:param name="eq-nodes"/>
-    <xsl:param name="fn-nodes"/>
-    <xsl:copy>
-        <xsl:attribute name="serial">
-            <xsl:apply-templates select="." mode="position-in-node-set">
-                <xsl:with-param name="nodes" select="$eq-nodes"/>
-            </xsl:apply-templates>
-        </xsl:attribute>
-        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
-            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
-            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Every fn is numbered.  Stamp @serial with the position -->
-<!-- within the inherited footnote node-set.                -->
-<xsl:template match="fn" mode="serial-stamp">
-    <xsl:param name="eq-nodes"/>
-    <xsl:param name="fn-nodes"/>
-    <xsl:copy>
-        <xsl:attribute name="serial">
-            <xsl:apply-templates select="." mode="position-in-node-set">
-                <xsl:with-param name="nodes" select="$fn-nodes"/>
-            </xsl:apply-templates>
-        </xsl:attribute>
-        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
-            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
-            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
-
-<!-- The position-in-node-set utility lives in pretext-numbers.xsl. -->
-<!-- It is called from the mrow and fn stamping templates above.    -->
-
-<xsl:template match="node()|@*" mode="exercise">
-    <xsl:param name="division" select="''"/>
-
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="exercise">
-            <xsl:with-param name="division" select="$division"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
+<!-- ##################### -->
+<!-- The Assembly Pipeline -->
+<!-- ##################### -->
 
 <!-- These templates initiate and create several iterations of -->
 <!-- the source tree via modal templates.  Think of each as a  -->
@@ -512,69 +483,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- convert it into real XML nodes. These "real" trees have a -->
 <!-- root element, as a result of the node-set() manufacture.  -->
 
-<!-- ################################################### -->
-<!-- Structural Contract for Identification Passes       -->
-<!-- ################################################### -->
-
-<!-- The "id-attribute" template (mode="id-attribute")       -->
-<!-- produces identification strings by a depth-first        -->
-<!-- traversal, encoding each element's position among its   -->
-<!-- siblings.  An element's ID depends only on its          -->
-<!-- ancestors and their sibling positions, so the template  -->
-<!-- is fast, unique, and local.                             -->
-<!--                                                         -->
-<!-- This template is applied three times, producing three   -->
-<!-- attributes on every element:                            -->
-<!--                                                         -->
-<!--   @original-id                                          -->
-<!--       after "version", before any additions             -->
-<!--   @assembly-id                                          -->
-<!--       after "exercise", before "representations"        -->
-<!--   @unique-id                                            -->
-<!--       after "labels", the final structural form         -->
-<!--                                                         -->
-<!-- The architecture relies on one critical invariant:      -->
-<!--                                                         -->
-<!--   BETWEEN ANY TWO ID-STAMPING PASSES, NO INTERVENING    -->
-<!--   PASS MAY CHANGE THE NUMBER OR ORDER OF SIBLING        -->
-<!--   ELEMENTS AT ANY LEVEL OF THE TREE, EXCEPT WITHIN A    -->
-<!--   SUBTREE THAT IS BEING WHOLLY REPLACED (SAME PARENT,   -->
-<!--   SAME SIBLING POSITION).                               -->
-<!--                                                         -->
-<!-- This invariant holds because:                           -->
-<!--                                                         -->
-<!--   (a) Replacements (e.g. an interactive replaced by a   -->
-<!--       static sidebyside) occupy the same sibling        -->
-<!--       position as the original element.                 -->
-<!--                                                         -->
-<!--   (b) Replacements are never nested: a replaced         -->
-<!--       subtree does not itself contain another element   -->
-<!--       that will be replaced at a different sibling      -->
-<!--       position.                                         -->
-<!--                                                         -->
-<!--   (c) Each ID-stamping pass is placed at a moment when  -->
-<!--       the tree is structurally quiet - no pending       -->
-<!--       changes will shift sibling positions before the   -->
-<!--       next one.                                         -->
-<!--                                                         -->
-<!-- Consequence: the id-attribute template produces the     -->
-<!-- same ID for every non-replaced element across passes,   -->
-<!-- and a replaced element's ID (consumed during isolation) -->
-<!-- remains valid through to the substitution phase.        -->
-<!--                                                         -->
-<!-- Any future pass that inserts or removes sibling         -->
-<!-- elements (rather than replacing in-place) MUST be       -->
-<!-- placed so that it does not fall between two ID-stamping -->
-<!-- passes, or else the identification will silently drift. -->
+<!-- The per-pass overview at the top of this file names what      -->
+<!-- each variable below contributes; this sequence of             -->
+<!-- variables is the authoritative pass order.                    -->
 
 <!-- Grab private solutions first.  The "exercise" (and more) -->
 <!-- that they belong to might be part of a version (have a   -->
 <!-- @component attribute) and we don't want to miss that.    -->
 <!-- It can happen next.                                      -->
+<!-- Without a file of private solutions this pass is the identity, -->
+<!-- so we do not build (or hold) a copy of the entire source: the   -->
+<!-- result tree fragment stays empty, and the filtered union below  -->
+<!-- hands the authored source itself to the next pass.              -->
 <xsl:variable name="private-solutions-rtf">
-    <xsl:apply-templates select="/" mode="private-solutions"/>
+    <xsl:if test="$b-private-solutions">
+        <xsl:apply-templates select="/" mode="private-solutions"/>
+    </xsl:if>
 </xsl:variable>
-<xsl:variable name="private-solutions" select="exsl:node-set($private-solutions-rtf)"/>
+<xsl:variable name="private-solutions" select="exsl:node-set($private-solutions-rtf)[$b-private-solutions] | (/)[not($b-private-solutions)]"/>
 
 <xsl:variable name="version-rtf">
     <xsl:apply-templates select="$private-solutions" mode="version"/>
@@ -633,12 +559,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly" select="exsl:node-set($assembly-rtf)"/>
 
-<!-- Make static substitutions for dynamic exercises.  -->
-<xsl:variable name="dynamic-rtf">
-    <xsl:apply-templates select="$assembly" mode="dynamic-substitution"/>
-</xsl:variable>
-<xsl:variable name="dynamic" select="exsl:node-set($dynamic-rtf)"/>
-
 <!-- Exercises are "tagged" as to their nature (division, inline, -->
 <!-- worksheet, reading, project-like) and interactive exercises  -->
 <!-- get more precise categorization.  The latter is used to      -->
@@ -646,7 +566,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="exercise-rtf">
     <!-- initialize with default, 'inline' -->
-    <xsl:apply-templates select="$dynamic" mode="exercise">
+    <xsl:apply-templates select="$assembly" mode="exercise">
         <xsl:with-param name="division" select="'inline'"/>
     </xsl:apply-templates>
 </xsl:variable>
@@ -660,12 +580,30 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="assembly-label" select="exsl:node-set($assembly-label-rtf)"/>
 
+<!-- Make static substitutions for dynamic exercises.  This runs AFTER  -->
+<!-- the @assembly-id stamp because the substitution round trip keys on  -->
+<!-- @assembly-id: extract-dynamic.xsl writes it as the exercise_id, and -->
+<!-- the lookup below reads it.  @assembly-id is the early identifier    -->
+<!-- both ends can compute consistently (the authored @label would only  -->
+<!-- match for labeled exercises, missing unlabeled ones and tasks).     -->
+<!-- The pass only acts on the elements enumerated in this presence      -->
+<!-- test (see the "dynamic-substitution" templates); without any of     -->
+<!-- them it is the identity, so we skip the full-tree copy.  NB: a      -->
+<!-- new template in the mode must be reflected in this test.            -->
+<xsl:variable name="b-has-dynamic-markup" select="boolean($assembly-label//setup | $assembly-label//numcmp | $assembly-label//strcmp | $assembly-label//jscmp | $assembly-label//mathcmp | $assembly-label//logic | $assembly-label//fillin[@ansobj] | $assembly-label//eval[@obj])"/>
+<xsl:variable name="dynamic-rtf">
+    <xsl:if test="$b-has-dynamic-markup">
+        <xsl:apply-templates select="$assembly-label" mode="dynamic-substitution"/>
+    </xsl:if>
+</xsl:variable>
+<xsl:variable name="dynamic" select="exsl:node-set($dynamic-rtf)[$b-has-dynamic-markup] | $assembly-label[not($b-has-dynamic-markup)]"/>
+
 <xsl:variable name="representations-rtf">
     <xsl:choose>
         <!-- short-circuit to stop after adding @assembly-id -->
         <xsl:when test="$b-assembly-id-only"/>
         <xsl:otherwise>
-            <xsl:apply-templates select="$assembly-label" mode="representations"/>
+            <xsl:apply-templates select="$dynamic" mode="representations"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -715,14 +653,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="identification" select="exsl:node-set($identification-rtf)"/>
 
-<xsl:variable name="language-rtf">
-    <xsl:apply-templates select="$identification" mode="id-coherence-check"/>
-    <xsl:apply-templates select="$identification" mode="language"/>
-</xsl:variable>
-<xsl:variable name="language" select="exsl:node-set($language-rtf)"/>
-
 <xsl:variable name="augment-rtf">
-    <xsl:apply-templates select="$language" mode="augment"/>
+    <xsl:apply-templates select="$identification" mode="id-coherence-check"/>
+    <xsl:apply-templates select="$identification" mode="augment"/>
 </xsl:variable>
 <xsl:variable name="augment" select="exsl:node-set($augment-rtf)"/>
 
@@ -731,6 +664,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$augment" mode="serial-stamp">
         <xsl:with-param name="eq-nodes" select="/.."/>
         <xsl:with-param name="fn-nodes" select="/.."/>
+        <xsl:with-param name="blocks-nodes" select="/.."/>
+        <xsl:with-param name="figure-nodes" select="/.."/>
+        <xsl:with-param name="project-nodes" select="/.."/>
+        <xsl:with-param name="exercise-nodes" select="/.."/>
+        <xsl:with-param name="openproblem-nodes" select="/.."/>
     </xsl:apply-templates>
 </xsl:variable>
 <xsl:variable name="serial-stamp" select="exsl:node-set($serial-stamp-rtf)"/>
@@ -755,7 +693,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="docinfo" select="$root/docinfo"/>
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]"/>
 <xsl:variable name="bibinfo" select="$document-root/frontmatter/bibinfo"/>
-
 
 <!-- ################# -->
 <!-- Private Solutions -->
@@ -883,6 +820,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="pi:*" mode="version"/>
 <xsl:template match="@pi:*" mode="version"/>
 
+<!-- Exception: when file attribution has been requested (below), a -->
+<!-- @pi:source-uri stamped on the source (by the pretext/pretext   -->
+<!-- script's include mechanism, say) rides through the version     -->
+<!-- pass, so a diagnostic can name the file where a problem lies.  -->
+<xsl:template match="@pi:source-uri" mode="version">
+    <xsl:if test="$b-file-attribution">
+        <xsl:copy/>
+    </xsl:if>
+</xsl:template>
+
+<!-- The xinclude mechanism stamps an @xml:base attribute onto the  -->
+<!-- root element of every included file.  We drop it during the    -->
+<!-- version pass, so the assembled source carries none, and the    -->
+<!-- schema need not permit it.  But when file attribution has been -->
+<!-- requested (validation, say, so a problem can be located in the -->
+<!-- file where it lies) we mint a @pi:source-uri instead,          -->
+<!-- consistent with the other "pi:" provenance attributes.         -->
+<xsl:template match="@xml:base" mode="version">
+    <xsl:if test="$b-file-attribution">
+        <xsl:attribute name="pi:source-uri">
+            <xsl:value-of select="."/>
+        </xsl:attribute>
+    </xsl:if>
+</xsl:template>
+
 <!-- The "custom" element, with a @name in an auxiliary file,     -->
 <!-- and a @ref in a source file, allows for custom substitutions -->
 
@@ -923,6 +885,164 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- will be caught quite easily, it seems.                        -->
         <xsl:apply-templates select="$the-lookup/node()" mode="version"/>
     </xsl:for-each>
+</xsl:template>
+
+<!-- ############## -->
+<!-- Identification -->
+<!-- ############## -->
+
+<!-- This section is the id-attribute pass.  One mechanism (the    -->
+<!-- "id-attribute" templates below) is applied three times by     -->
+<!-- the chain (passes 3, 6 and 12), stamping @original-id,        -->
+<!-- @assembly-id and @unique-id in turn.  The "labels" pass       -->
+<!-- runs between the second and third of these (see "Labels"),    -->
+<!-- and the @label values it creates are what the @unique-id      -->
+<!-- stamp reads here.  The contract that follows is what lets     -->
+<!-- the three stampings agree element-for-element.                -->
+
+<!-- ################################################### -->
+<!-- Structural Contract for Identification Passes       -->
+<!-- ################################################### -->
+
+<!-- The "id-attribute" template (mode="id-attribute")       -->
+<!-- produces identification strings by a depth-first        -->
+<!-- traversal, encoding each element's position among its   -->
+<!-- siblings.  An element's ID depends only on its          -->
+<!-- ancestors and their sibling positions, so the template  -->
+<!-- is fast, unique, and local.                             -->
+<!--                                                         -->
+<!-- This template is applied three times, producing three   -->
+<!-- attributes on every element:                            -->
+<!--                                                         -->
+<!--   @original-id                                          -->
+<!--       after "version", before any additions             -->
+<!--   @assembly-id                                          -->
+<!--       after "exercise", before "representations"        -->
+<!--   @unique-id                                            -->
+<!--       after "labels", the final structural form         -->
+<!--                                                         -->
+<!-- The architecture relies on one critical invariant:      -->
+<!--                                                         -->
+<!--   BETWEEN ANY TWO ID-STAMPING PASSES, NO INTERVENING    -->
+<!--   PASS MAY CHANGE THE NUMBER OR ORDER OF SIBLING        -->
+<!--   ELEMENTS AT ANY LEVEL OF THE TREE, EXCEPT WITHIN A    -->
+<!--   SUBTREE THAT IS BEING WHOLLY REPLACED (SAME PARENT,   -->
+<!--   SAME SIBLING POSITION).                               -->
+<!--                                                         -->
+<!-- This invariant holds because:                           -->
+<!--                                                         -->
+<!--   (a) Replacements (e.g. an interactive replaced by a   -->
+<!--       static sidebyside) occupy the same sibling        -->
+<!--       position as the original element.                 -->
+<!--                                                         -->
+<!--   (b) Replacements are never nested: a replaced         -->
+<!--       subtree does not itself contain another element   -->
+<!--       that will be replaced at a different sibling      -->
+<!--       position.                                         -->
+<!--                                                         -->
+<!--   (c) Each ID-stamping pass is placed at a moment when  -->
+<!--       the tree is structurally quiet - no pending       -->
+<!--       changes will shift sibling positions before the   -->
+<!--       next one.                                         -->
+<!--                                                         -->
+<!-- Consequence: the id-attribute template produces the     -->
+<!-- same ID for every non-replaced element across passes,   -->
+<!-- and a replaced element's ID (consumed during isolation) -->
+<!-- remains valid through to the substitution phase.        -->
+<!--                                                         -->
+<!-- Any future pass that inserts or removes sibling         -->
+<!-- elements (rather than replacing in-place) MUST be       -->
+<!-- placed so that it does not fall between two ID-stamping -->
+<!-- passes, or else the identification will silently drift. -->
+
+<!-- This general-purpose template constructs unique strings as part   -->
+<!-- of a natural depth-first exploration of the tree.  Strings are    -->
+<!-- reset when provided by authors on elements (ideally via @label).  -->
+<!-- Otherwise the tree structure is reflected by location at each     -->
+<!-- level of the subtree rooted at the last authored string.  A bit   -->
+<!-- unsightly, and only partially effective to unwind numbers back    -->
+<!-- to an element.  But super-fast to construct and reliably unique   -->
+<!-- (though an author could provide two strings that make a conflict, -->
+<!-- we believe).                                                      -->
+<xsl:template match="*" mode="id-attribute">
+    <xsl:param name="parent-id"  select="'root'"/>
+    <xsl:param name="attr-name"  select="''"/>
+
+    <xsl:copy>
+        <!-- duplicate all attributes -->
+        <xsl:apply-templates select="@*" mode="id-attribute"/>
+        <!-- * Strategy is much like @original-id but maybe needs as much care            -->
+        <!-- * Element counts are used to reflect document tree structure                 -->
+        <!-- * Non-numeric separator needed to preserve uniqueness (e.g.1-12 != 11-2).    -->
+        <!-- * Separators are therefore hyphens                                           -->
+        <!-- * Colons as separators would create confusion with namespaces                -->
+        <!-- * Salt added to authored values could decrease risk of collision             -->
+        <xsl:variable name="new-id">
+            <xsl:choose>
+                <!-- A @label might be authored.  Or not authored, and   -->
+                <!-- then an authored @xml:id was promoted into a @label -->
+                <xsl:when test="@label">
+                    <xsl:value-of select="@label"/>
+                </xsl:when>
+                <!-- This mimics the upgrade of an authored xml:id to a label -->
+                <!-- NB: this might not ever happen in some passes, when an   -->
+                <!-- @xml:id value has been upgraded to a @label value in a   -->
+                <!-- prior pass, because if there was an @xml:id, then it     -->
+                <!-- was upgraded to being a @label and if this "choose" gets -->
+                <!-- here, then the next test is false.                       -->
+                <xsl:when test="@xml:id">
+                    <xsl:value-of select="@xml:id"/>
+                </xsl:when>
+                <!-- Author has not supplied any sort of identification, no -->
+                <!-- @label and no @xml:id.  So we automatically devise one -->
+                <xsl:otherwise>
+                    <xsl:value-of select="$parent-id"/>
+                    <xsl:text>-</xsl:text>
+                    <!-- Start counting from 1, easier to debug -->
+                    <xsl:number value="count(preceding-sibling::*) + 1"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:attribute name="{$attr-name}">
+            <xsl:value-of select="$new-id"/>
+        </xsl:attribute>
+        <!-- recurse -->
+        <xsl:apply-templates select="node()" mode="id-attribute">
+            <xsl:with-param name="parent-id" select="$new-id"/>
+            <xsl:with-param name="attr-name" select="$attr-name"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- There is no real purpose to put identification onto an     -->
+<!-- (X)HTML element floating around as part of an interactive. -->
+<xsl:template match="pf:*|xhtml:*" mode="id-attribute">
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="id-attribute"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Diagnostic: verify @assembly-id equals @unique-id for  -->
+<!-- every element that carries both.  A mismatch indicates -->
+<!-- a structural change between the two ID-stamping passes -->
+<!-- that violates the identification contract documented   -->
+<!-- near the top of this stylesheet.  Gated by the         -->
+<!-- assembly.debug parameter; does nothing when off.       -->
+
+<xsl:template match="node()|@*" mode="id-coherence-check">
+    <xsl:if test="$b-assembly-debug">
+        <xsl:for-each select=".//*[@assembly-id and @unique-id and not(@assembly-id = @unique-id)]">
+            <xsl:message>
+                <xsl:text>PTX:DEBUG:  @assembly-id / @unique-id mismatch on &lt;</xsl:text>
+                <xsl:value-of select="local-name()"/>
+                <xsl:text>&gt;: assembly-id="</xsl:text>
+                <xsl:value-of select="@assembly-id"/>
+                <xsl:text>" unique-id="</xsl:text>
+                <xsl:value-of select="@unique-id"/>
+                <xsl:text>"</xsl:text>
+            </xsl:message>
+        </xsl:for-each>
+    </xsl:if>
 </xsl:template>
 
 <!-- ######################## -->
@@ -1289,1722 +1409,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- ##################################################### -->
-<!-- Dynamic Substitutions                                 -->
-<!-- Cut out dynamic setup and evaluation for static mode. -->
-<!-- ##################################################### -->
-<xsl:template match="setup[de-object|setupScript]" mode="dynamic-substitution">
-    <xsl:if test="$exercise-style = 'dynamic'">
-        <xsl:copy>
-            <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
-        </xsl:copy>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template match="numcmp|strcmp|jscmp|mathcmp|logic[parent::test]" mode="dynamic-substitution">
-    <xsl:if test="$exercise-style = 'dynamic'">
-        <xsl:copy>
-            <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
-        </xsl:copy>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template match="fillin[@ansobj]" mode="dynamic-substitution">
-    <xsl:choose>
-        <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
-            <xsl:variable name="parent-id">
-                <xsl:apply-templates select="ancestor::statement/../@label" />
-            </xsl:variable>
-            <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
-            <xsl:variable name="object" select="@ansobj"/>
-            <xsl:variable name="substitution">
-                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
-            </xsl:variable>
-            <xsl:copy>
-                <xsl:attribute name="answer">
-                    <xsl:value-of select="$substitution"/>
-                </xsl:attribute>
-                <xsl:apply-templates select="@*|node()" mode="dynamic-substitution"/>
-            </xsl:copy>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
-            </xsl:copy>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="eval[@obj]" mode="dynamic-substitution">
-    <xsl:choose>
-        <!-- static, for multiple conversions, but primarily LaTeX -->
-        <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
-            <xsl:variable name="parent-id">
-               <xsl:apply-templates select="(ancestor::statement|ancestor::solution|ancestor::evaluation)/../@label" />
-            </xsl:variable>
-            <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
-            <xsl:variable name="object" select="@obj"/>
-            <xsl:variable name="substitution">
-                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
-            </xsl:variable>
-            <xsl:value-of select="$substitution"/>
-        </xsl:when>
-        <!-- dynamic (aka HTML), needs static previews, server base64, etc, -->
-        <!-- so just copy as-is with "webwork-reps" to signal and organize  -->
-        <!-- to/for HTML conversion                                         -->
-        <xsl:otherwise>
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
-            </xsl:copy>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- An #eval child of test is implicit mathcmp. -->
-<xsl:template match="test/eval[@obj]" mode="dynamic-substitution">
-    <xsl:choose>
-        <xsl:when test="$exercise-style = 'static'">
-            <evaluation/>
-        </xsl:when>
-        <xsl:when test="$exercise-style = 'dynamic'">
-            <xsl:copy>
-                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
-            </xsl:copy>
-        </xsl:when>
-    </xsl:choose>
-</xsl:template>
-
-
-<!-- ########## -->
-<!-- Enrichment -->
-<!-- ########## -->
-
-<!-- Certain markup can be translated into more primitive versions using      -->
-<!-- existing markup, so we do a translation of certain forms into more       -->
-<!-- potentially verbose forms that an author might tire of doing repeatedly. -->
-<!-- See below for examples.  This is better than making a result-tree        -->
-<!-- fragment and applying templates, since all context is lost that way.     -->
-
-<!-- Visual URLs -->
-<!-- A great way to present a URL is with some clickable text.  But that    -->
-<!-- is useless in print.  And maybe a reader really would like to see the  -->
-<!-- actual URL.  So "@visual" is a version of the URL that is pleasing to  -->
-<!-- look at, maybe just a TLD, no protocol (e.g "https://"), no "www."     -->
-<!-- if unnecessary, etc.  This "visual URL"  may be provided by an author  -->
-<!-- through a @visual attribute.  When this attribute is not provided, we  -->
-<!-- manufacture a reasonable version from the real, actual URL that must   -->
-<!-- necessarily be given.  To prevent consideration of a visual version,   -->
-<!-- an author can set @visual="" and no manufactured version will be made. -->
-<xsl:template match="url[node() and not(@visual)]|dataurl[node() and not(@visual)]" mode="enrichment">
-    <!-- We create a new "default-ish" visual URL for a  -->
-    <!-- content-full "url" when none has been authored -->
-    <!--  -->
-    <!-- We get a candidate visual URI             -->
-    <!--   @href: external link/reference/location -->
-    <!--   dataurl[@source]:  internal link        -->
-    <xsl:variable name="uri">
-        <xsl:choose>
-            <!-- "url" and "dataurl" both support external @href -->
-            <xsl:when test="@href">
-                <xsl:value-of select="@href"/>
-            </xsl:when>
-            <!-- a "dataurl" might be local, @source is         -->
-            <!-- indication, so prefix with a base URL,         -->
-            <!-- add "external" directory, via template useful  -->
-            <!-- also for visual URL formulation in -assembly   -->
-            <!-- N.B. we are using the base URL, since this is  -->
-            <!-- the most likely need by employing conversions. -->
-            <!-- It would eem duplicative in a conversion to    -->
-            <!-- HTML, so could perhaps be killed in that case. -->
-            <!-- But it is what we want for LaTeX, and perhaps  -->
-            <!-- for EPUB, etc.                                 -->
-            <xsl:when test="self::dataurl and @source">
-                <xsl:apply-templates select="." mode="static-url"/>
-            </xsl:when>
-            <!-- empty will be non-functional -->
-            <xsl:otherwise/>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- And clean-up automatically in the prevalent cases -->
-    <xsl:variable name="truncated-href">
-        <xsl:choose>
-            <xsl:when test="substring(@href, 1, 8) = 'https://'">
-                <xsl:value-of select="substring($uri, 9)"/>
-            </xsl:when>
-            <xsl:when test="substring(@href, 1, 7) = 'http://'">
-                <xsl:value-of select="substring($uri, 8)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$uri"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!--  -->
-    <xsl:copy>
-        <!-- copy all the attributes, which might include a @visual,      -->
-        <!-- and that @visual could be empty (a signal it is not desired) -->
-        <xsl:apply-templates select="@*" mode="enrichment"/>
-        <!-- Provide the "missing" @visual (see match above),  -->
-        <!-- so now *every* content-full "url" has an @visual, -->
-        <!-- either authored or provided automatically here.   -->
-        <!-- Conversions decide what to do with it.            -->
-        <xsl:attribute name="visual">
-            <xsl:value-of select="$truncated-href"/>
-        </xsl:attribute>
-        <!-- done with attributes, copy the content -->
-        <xsl:apply-templates select="node()" mode="enrichment"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- ######################################## -->
-<!-- Enrichment of Geogebra interactives      -->
-<!-- ######################################## -->
-
-<!-- Expand reference to Geogebra by material-id to use -->
-<!-- an implicit applet approach with a slate to better -->
-<!-- facilitate all of the applet control parameters.   -->
-<xsl:template match="interactive[@geogebra]" mode="enrichment">
-    <xsl:param name="default-aspect" select="'1:1'" />
-    <xsl:variable name="ggbMaterialWidth">
-        <xsl:choose>
-            <xsl:when test="@material-width">
-                <xsl:value-of select="@material-width"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>800</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="aspect-ratio">
-        <xsl:apply-templates select="." mode="get-aspect-ratio">
-            <xsl:with-param name="default-aspect" select="$default-aspect" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:variable name="ggbMaterialHeight">
-        <xsl:choose>
-            <xsl:when test="@material-height">
-                <xsl:value-of select="@material-height"/>
-            </xsl:when>
-            <xsl:when test="$aspect-ratio=''"/>
-            <xsl:otherwise>
-                <xsl:value-of select="round($ggbMaterialWidth div $aspect-ratio)" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="slate-copy-attr" select="'toolbar algebra-input reset-icon shift-drag-zoom zoom-buttons'"/>
-    <xsl:variable name="interactive-drop-attr" select="concat($slate-copy-attr, ' ', 'geogebra material-width material-height')"/>
-    <interactive>
-        <xsl:attribute name="platform">
-            <xsl:text>geogebra</xsl:text>
-        </xsl:attribute>
-        <xsl:if test="not(@aspect)">
-            <xsl:attribute name="aspect">
-                <xsl:value-of select="$aspect-ratio"/>
-            </xsl:attribute>
-        </xsl:if>
-        <!-- Restore all of the original attributes not processed separately -->
-        <xsl:copy-of select="@*[not(contains(concat(' ', $interactive-drop-attr, ' '), concat(' ', local-name(), ' ')))]"/>
-        <slate>
-            <xsl:attribute name="xml:id">
-                <xsl:value-of select="@assembly-id"/>
-                <xsl:text>-ggb-slate</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="surface">
-                <xsl:text>geogebra</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="material">
-                <xsl:value-of select="@geogebra"/>
-            </xsl:attribute>
-            <xsl:attribute name="material-width">
-                <xsl:value-of select="$ggbMaterialWidth"/>
-            </xsl:attribute>
-            <xsl:if test="$ggbMaterialHeight != ''">
-                <xsl:attribute name="material-height">
-                    <xsl:value-of select="$ggbMaterialHeight"/>
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:copy-of select="@*[contains(concat(' ', $slate-copy-attr, ' '), concat(' ', local-name(), ' '))]"/>
-        </slate>
-    </interactive>
-</xsl:template>
-
-
-<!-- ############# -->
-<!-- Source Repair -->
-<!-- ############# -->
-
-<!-- We unilaterally make various changes to an author's source -->
-<!-- so a conversion (every conversion?) can assume more        -->
-<!-- accurately that the source has certain characteristics.    -->
-
-<!-- 2019-04-02  "mathbook" replaced by "pretext" -->
-<xsl:template match="/mathbook" mode="repair">
-    <pretext>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </pretext>
-</xsl:template>
-
-<!-- 2021-07-02 wrap notation/usage in "m" if not present -->
-<xsl:template match="notation/usage[not(m)]" mode="repair">
-    <!-- duplicate "usage" w/ attributes, insert "m" as repair -->
-    <usage>
-        <xsl:apply-templates select="@*" mode="repair"/>
-        <m>
-            <xsl:apply-templates select="node()|@*" mode="repair"/>
-        </m>
-    </usage>
-</xsl:template>
-
-<!-- 2021-10-04 "glossary" was finalized, so old-style preserved -->
-
-<!-- glossary introductions become headnotes -->
-<xsl:template match="glossary/introduction" mode="repair">
-    <headnote>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </headnote>
-</xsl:template>
-
-<!-- "terms" only ever had "defined-term" as children    -->
-<!-- and is now obsolete, so dropped as excess structure -->
-<xsl:template match="glossary/terms" mode="repair">
-    <xsl:apply-templates select="defined-term" mode="repair"/>
-</xsl:template>
-
-<!-- "defined-term" was structured, so we just select elements -->
-<xsl:template match="glossary/terms/defined-term" mode="repair">
-    <gi>
-        <xsl:apply-templates select="*|@*" mode="repair"/>
-    </gi>
-</xsl:template>
-
-<!-- no more "conclusion", so drop it here; deprecation will warn -->
-<xsl:template match="glossary/conclusion" mode="repair"/>
-
-<!-- 2022-04-22 replace Python Tutor with Runestone CodeLens -->
-<xsl:template match="program/@interactive" mode="repair">
-    <xsl:choose>
-        <xsl:when test=". = 'pythontutor'">
-            <xsl:attribute name="interactive">
-                <xsl:text>codelens</xsl:text>
-            </xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:copy/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- 2022-04-25 @label deprecated, slated for renewal in starring  -->
-<!-- role. Lists with markers (not description lists) -->
-<xsl:template match="ol/@label|ul/@label" mode="repair">
-    <xsl:attribute name="marker">
-        <xsl:value-of select="."/>
-    </xsl:attribute>
-</xsl:template>
-
-<!-- 2022-04-24 An exception, label on video tracks mimicing HTML -->
-<xsl:template match="video/track/@label" mode="repair">
-    <xsl:attribute name="listing">
-        <xsl:value-of select="."/>
-    </xsl:attribute>
-</xsl:template>
-
-<!-- 2022-06-09 WeBWorK "stage" deprecated in favor of "task"       -->
-<!-- We could use  match="webwork/stage"  but then this would only  -->
-<!-- happen to the author's source while being prepared for the     -->
-<!-- "extract-pg.xsl" worksheet.  But we also want to catch "stage" -->
-<!-- coming back from an old WeBWorK server, which may be various   -->
-<!-- places after we algorithmically manipulate the "webwork-reps"  -->
-<!-- structure.  Instead, we just wait until now.  If necessary,    -->
-<!-- perhaps "exercise/stage" for the post-server pass.             -->
-<xsl:template match="stage" mode="repair">
-    <task>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </task>
-</xsl:template>
-
-<!-- 2022-07-10 webwork//latex-image[syntax='PGtikz'] deprecated    -->
-<!-- to just a normal latex-image. The text content for the code    -->
-<!-- must be wrapped in a tikzpicture environment.                  -->
-<xsl:template match="latex-image[@syntax='PGtikz']" mode="repair">
-    <xsl:copy>
-        <!-- we drop the @syntax attribute -->
-        <xsl:apply-templates select="node()|@*[not(local-name(.) = 'syntax')]" mode="repair"/>
-    </xsl:copy>
-</xsl:template>
-<xsl:template match="latex-image[@syntax='PGtikz']/text()" mode="repair">
-    <xsl:text>\begin{tikzpicture}&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text">
-            <xsl:copy>
-                <xsl:apply-templates select="."/>
-            </xsl:copy>
-        </xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>&#xa;\end{tikzpicture}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Deprecated 2018-12-30 in favor of "ca"   -->
-<!-- Copy attributes...because you never know -->
-<xsl:template match="circa" mode="repair">
-    <ca>
-        <xsl:apply-templates select="@*" mode="repair"/>
-    </ca>
-</xsl:template>
-
-<!-- Due to naivete, we had empty templates for "keyboard characters"    -->
-<!-- we did not have the skills to handle.  A good example was <dollar/> -->
-<!-- simply because it is a (very) special character in LaTeX.  These    -->
-<!-- were deprecated on 2019-02-06.  Beginning in 2022-12-26, we are     -->
-<!-- providing fixes here, and removing all the (dead) code meant for    -->
-<!-- backward compatibility.                                             -->
-
-<!-- XML characters -->
-
-<xsl:template match="less" mode="repair">
-    <xsl:text>&lt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="greater" mode="repair">
-    <xsl:text>&gt;</xsl:text>
-</xsl:template>
-
-<!-- Ten LaTeX characters -->
-<!-- # $ % ^ & _ { } ~ \  -->
-
-<xsl:template match="hash" mode="repair">
-    <xsl:text>#</xsl:text>
-</xsl:template>
-
-<xsl:template match="ampersand" mode="repair">
-    <xsl:text>&amp;</xsl:text>
-</xsl:template>
-
-<xsl:template match="dollar" mode="repair">
-    <xsl:text>$</xsl:text>
-</xsl:template>
-
-<xsl:template match="percent" mode="repair">
-    <xsl:text>%</xsl:text>
-</xsl:template>
-
-<xsl:template match="circumflex" mode="repair">
-    <xsl:text>^</xsl:text>
-</xsl:template>
-
-<xsl:template match="underscore" mode="repair">
-    <xsl:text>_</xsl:text>
-</xsl:template>
-
-<xsl:template match="lbrace" mode="repair">
-    <xsl:text>{</xsl:text>
-</xsl:template>
-
-<xsl:template match="rbrace" mode="repair">
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<xsl:template match="tilde" mode="repair">
-    <xsl:text>~</xsl:text>
-</xsl:template>
-
-<xsl:template match="backslash" mode="repair">
-    <xsl:text>\</xsl:text>
-</xsl:template>
-
-<!-- Lesser keyboard characters -->
-<!-- [, ], *, /, `,             -->
-
-<xsl:template match="lbracket" mode="repair">
-    <xsl:text>[</xsl:text>
-</xsl:template>
-
-<xsl:template match="rbracket" mode="repair">
-    <xsl:text>]</xsl:text>
-</xsl:template>
-
-<xsl:template match="asterisk" mode="repair">
-    <xsl:text>*</xsl:text>
-</xsl:template>
-
-<xsl:template match="slash" mode="repair">
-    <xsl:text>/</xsl:text>
-</xsl:template>
-
-<xsl:template match="backtick" mode="repair">
-    <xsl:text>`</xsl:text>
-</xsl:template>
-
-<!-- Grouping constructions  -->
-<!-- "braces" and "brackets" -->
-
-<xsl:template match="braces" mode="repair">
-    <xsl:text>{</xsl:text>
-    <!-- attributes will be lost -->
-    <xsl:apply-templates select="node()" mode="repair"/>
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<xsl:template match="brackets" mode="repair">
-    <xsl:text>[</xsl:text>
-    <!-- attributes will be lost -->
-    <xsl:apply-templates select="node()" mode="repair"/>
-    <xsl:text>]</xsl:text>
-</xsl:template>
-
-<!-- 2023-01-27: deprecate "datafile" to make way for a better    -->
-<!-- Runestone-powered version.  Cosmetic replacement: "dataurl". -->
-<!-- 2023-01-30: refine deprecation repair just after a minor CLI -->
-<!-- release. A "datafile" element may be OK as a "new" use,      -->
-<!-- with the presence of @label indicating use/application with  -->
-<!-- Runestone Javascript.  So only automatically upgrade "old"   -->
-<!-- uses lacking @label.                                         -->
-<xsl:template match="datafile[not(@label)]" mode="repair">
-    <dataurl>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </dataurl>
-</xsl:template>
-
-<xsl:template match="colophon/website[address]" mode="repair">
-    <website>
-        <xsl:apply-templates select="@*" mode="repair"/>
-        <url>
-            <xsl:attribute name="href">
-                <xsl:value-of select="address"/>
-            </xsl:attribute>
-            <xsl:apply-templates select="name/node()" mode="repair"/>
-        </url>
-    </website>
-</xsl:template>
-
-<!-- 2023-08-28: deprecate the "console" "prompt" element -->
-
-<!-- Removing this entire line typically orphans a text node    -->
-<!-- just prior with a newline and indentation, but this should -->
-<!-- not harm subsequent processing since we do not assume      -->
-<!-- source is carefully authored as one element per line.      -->
-<xsl:template match="console/prompt" mode="repair"/>
-
-<!-- If there was a "prompt" element just preceding an "input"      -->
-<!-- element, then we reach up and grab it and make it an attribute -->
-<!-- of the "input" - but not if somebody happened to already start -->
-<!-- using a @prompt attribute.                                     -->
-<!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
-<xsl:template match="console/input" mode="repair">
-    <xsl:copy>
-        <xsl:if test="not(@prompt) and preceding-sibling::*[1][self::prompt]">
-            <xsl:attribute name="prompt">
-                <xsl:value-of select="preceding-sibling::*[1][self::prompt]"/>
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- 2023-09-07: move "description" to "shortdescription" -->
-
-<xsl:template match="image/description[not(*[not(self::var)])]" mode="repair">
-    <xsl:element name="shortdescription" namespace="">
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </xsl:element>
-</xsl:template>
-
-<!-- 2023-10-17: docinfo/latex-preamble is history -->
-
-<xsl:template match="docinfo/latex-preamble" mode="repair">
-    <!-- any attributes (no such thing?) are simply  -->
-    <!-- orphaned and we just process child elements -->
-    <xsl:apply-templates select="node()" mode="repair"/>
-</xsl:template>
-
-<!-- 2023-10-17: and "extra" LaTeX packages are re-worked -->
-
-<xsl:template match="docinfo/latex-preamble/package" mode="repair">
-    <xsl:element name="math-package">
-        <xsl:attribute name="latex-name">
-            <xsl:value-of select="."/>
-        </xsl:attribute>
-        <xsl:attribute name="mathjax-name">
-            <xsl:value-of select="."/>
-        </xsl:attribute>
-    </xsl:element>
-</xsl:template>
-
-<!-- 2024-10-29: program is reworked -->
-
-<!-- Add code element around text in program when missing -->
-<xsl:template match="program[not(input|code)]" mode="repair">
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="repair"/>
-        <code>
-            <xsl:value-of select="text()"/>
-        </code>
-    </xsl:copy>
-</xsl:template>
-
-<xsl:template match="program[not(code)]/input" mode="repair">
-    <xsl:element name="code">
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </xsl:element>
-</xsl:template>
-
-<!-- Index deprecations -->
-<!-- The way an index was constructed changed in 2017-07-14.  At 2024-08-08  -->
-<!-- we are using the "repair" phase to move the old style to the new.  The  -->
-<!-- old style looked like a "index-part" division with a mandatory          -->
-<!-- "index-list" child.  Elements sprinkled into the text were an           -->
-<!-- unstructured "index" or an "index" with up to three headings: "main",   -->
-<!-- followed by possibly two "sub".  Now the division is "index" (as it     -->
-<!-- should be!) and the entries are "idx".  A structured "idx" can have     -->
-<!-- one to three "h" elements as the headings.                              -->
-
-<!-- Change the division element -->
-<xsl:template match="index-part" mode="repair">
-    <index>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </index>
-</xsl:template>
-
-<!-- Change tne entry element, but avoid a new division name -->
-<xsl:template match="index[not(index-list)]" mode="repair">
-    <idx>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </idx>
-</xsl:template>
-
-<!-- Change first old style heading -->
-<xsl:template match="index[not(index-list)]/main" mode="repair">
-    <h>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </h>
-</xsl:template>
-
-<!-- Change second and third old style headings -->
-<xsl:template match="index[not(index-list)]/sub" mode="repair">
-    <h>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </h>
-</xsl:template>
-
-<!-- Frontmatter repairs -->
-<!-- 2024-10-10: we will no longer require an author to decide  -->
-<!-- which frontmatter elements belong on a titlepage or in the -->
-<!-- front colophon.  All the elements from both titlepage and  -->
-<!-- colophon should now go in bibinfo. We run repair whenever  -->
-<!-- the author has an existing titlepage or colophon without   -->
-<!-- the new titlepage-items or colophon-items children.        -->
-<xsl:template match="frontmatter[titlepage[not(titlepage-items)] or colophon[not(colophon-items)]]" mode="repair">
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="repair"/>
-        <bibinfo>
-            <!-- Include deprecated children of titlepage and colophon -->
-            <xsl:apply-templates select="titlepage/author" mode="repair"/>
-            <xsl:apply-templates select="titlepage/editor" mode="repair"/>
-            <xsl:apply-templates select="titlepage/credit" mode="repair"/>
-            <xsl:apply-templates select="titlepage/date" mode="repair"/>
-            <!-- for slides, we allowed an "event" -->
-            <xsl:apply-templates select="titlepage/event" mode="repair"/>
-            <xsl:apply-templates select="colophon/credit" mode="repair"/>
-            <xsl:apply-templates select="colophon/edition" mode="repair"/>
-            <xsl:apply-templates select="colophon/website" mode="repair"/>
-            <xsl:apply-templates select="colophon/copyright" mode="repair"/>
-        </bibinfo>
-        <!-- We (pretty much) duplicate everything, except two templates -->
-        <!-- below hollow-out old-style "titlepage" and "colophon" to    -->
-        <!-- match the new style with generators.                        -->
-        <xsl:apply-templates select="node()" mode="repair"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- We repair a "titlepage" that is not in the new style using a text   -->
-<!-- generator.  The "titlepage" is structural and the empty text        -->
-<!-- generator will be implemented in conversions to do the right thing. -->
-<xsl:template match="titlepage[not(titlepage-items)]" mode="repair">
-    <xsl:copy>
-        <xsl:apply-templates select="titlepage/@*" mode="repair"/>
-        <titlepage-items/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- We repair a front "colophon" that is not in the new style using a   -->
-<!-- text generator.  The "colophon" is structural and the empty text    -->
-<!-- generator will be implemented in conversions to do the right thing. -->
-<!-- NB: "frontmatter" is necessary so we don't clobber a BACK colophon! -->
-<xsl:template match="frontmatter/colophon[not(colophon-items)]" mode="repair">
-    <xsl:copy>
-        <xsl:choose>
-            <!-- Keep authored xml:id or label -->
-            <xsl:when test="colophon/@xml:id|colophon/@label">
-                <xsl:apply-templates select="colophon/@xml:id|colophon/@label" mode="repair"/>
-            </xsl:when>
-            <!-- Otherwise, use the label "front-colophon" -->
-            <xsl:otherwise>
-                <xsl:attribute name="label">
-                    <xsl:text>front-colophon</xsl:text>
-                </xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- Include the colophon-items generator -->
-        <colophon-items/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- We allow an author/editor/contributor to have their affiliation information not -->
-<!-- wrapped in affiliation tags, but in that case we put them in affiliation tags.  -->
-<xsl:template match="frontmatter//author[not(affiliation)]|frontmatter//editor[not(affiliation)]|frontmatter//contributor[not(affiliation)]" mode="repair">
-    <xsl:copy>
-        <!-- Include "personname" first -->
-        <xsl:apply-templates select="personname|@*" mode="repair"/>
-        <!-- If there are bare deparmtment/institution/address, wrap them in affailiation -->
-        <xsl:if test="department or institution or location">
-            <affiliation>
-                <xsl:apply-templates select="department|institution|location" mode="repair"/>
-            </affiliation>
-        </xsl:if>
-        <!-- Include all additional elements as they are -->
-        <xsl:apply-templates select="*[not(self::personname or self::department or self::institution or self::location)]" mode="repair"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- 2025-03-08:  "commentary" is deprecated.  Authors should remove it, -->
-<!-- but we have suggested that it could be used with version support.   -->
-<!-- So, if extant here in the repair phase, then it must have had a     -->
-<!-- @component value that a publication file suggested retaining.       -->
-<!-- So, just like the previous (now gone) "component" pass, we just     -->
-<!-- unwrap the element.                                                 -->
-<xsl:template match="commentary" mode="repair">
-    <!-- do not duplicate "commentary", do not replicate   -->
-    <!-- @component, do replicate element and text children -->
-    <xsl:apply-templates select="node()" mode="repair"/>
-</xsl:template>
-
-<!-- Change listing captions to titles if there is not already a title -->
-<xsl:template match="listing/caption" mode="repair">
-    <xsl:if test="not(parent::listing/title)">
-        <title>
-            <xsl:apply-templates select="node()|@*" mode="repair"/>
-        </title>
-    </xsl:if>
-</xsl:template>
-
-<!-- 2025-08-15: Ensure that interactives all have a @interactive-platform -->
-<!-- that identifies their basic type                                      -->
-<xsl:template match="interactive" mode="repair">
-    <xsl:copy>
-        <xsl:attribute name="interactive-platform">
-            <xsl:choose>
-                <xsl:when test="@platform">
-                    <xsl:value-of select="@platform"/>
-                </xsl:when>
-                <xsl:when test="@desmos">desmos</xsl:when>
-                <xsl:when test="@geogebra">geogebra</xsl:when>
-                <xsl:when test="@calcplot3d">calcplot3d</xsl:when>
-                <xsl:when test="@circuitjs">circuitjs</xsl:when>
-                <xsl:when test="@iframe">iframe</xsl:when>
-                <xsl:otherwise>unknown</xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-        <xsl:apply-templates select="@*" mode="repair"/>
-        <xsl:apply-templates select="node()|@*" mode="repair"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- 2025-11-04: a @runestone attribute was used to point into a file      -->
-<!-- of raw HTML versions of Runestone exercises.  This was a              -->
-<!-- transitional device to allow conversions of Runestone books into      -->
-<!-- PreTeXt books as work progressed on better integration of Runestone.  -->
-<!-- We make a dead simple replacment exercise, so numbering is preserved, -->
-<!-- etc, and authors can adapt at their leisure.  We remove the offending -->
-<!-- @runestone attribute via a very specialized template.                 -->
-
-<!-- applies to exercise, PROJECT-LIKE, task -->
-<xsl:template match="exercise[@runestone]|project[@runestone]|activity[@runestone]|exploration[@runestone]|investigation[@runestone]|task[@runestone]" mode="repair">
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="repair"/>
-        <p>There was once a (temporary) Runestone exercise here, which would only render in <init>HTML</init> output, and never in static output forms.  That (temporary) device is no longer supported as of 2025-11-04, since the exercise should now be authored in supported <pretext/> syntax.  You might alert the author to this situation.</p>
-    </xsl:copy>
-</xsl:template>
-
-<!-- remove the @runestone, just in case -->
-<xsl:template match="@runestone" mode="repair"/>
-
-
-<!-- Deprecate "me", "men", "mdn" in favor of "md" (w/ "mrow" or bare) -->
-
-<!-- Strategy: only two forms may be authored:                       -->
-<!--                                                                 -->
-<!--   Regular "md" with (multiple) "mrow" children                  -->
-<!--     - @xml:id goes on the "mrow"                                -->
-<!--     - @number may go on individual "mrow"                       -->
-<!--     - @number may go on overall "md" (to mimic "mdn")           -->
-<!--                                                                 -->
-<!--   Bare "md" with content (like old "me" and "men")              -->
-<!--     - @xml:id goes on the "md"                                  -->
-<!--     - md/@number allows for me/men dichotomy                    -->
-<!--     - md/@number is not assumed                                 -->
-<!--                                                                 -->
-<!-- Conversion here makes every existing display math construction  -->
-<!-- look like the "regular" version described above.                -->
-
-<!-- Not always a "repair" function, but we take the opportunity to  -->
-<!-- record if an "mrow" is numbered or not, via a  @pi:numbered     -->
-<!-- attribute, which is in our private namespace. For deprecations, -->
-<!-- we just do it.  For authored forms, we interpret an authored    -->
-<!-- @number attribute on authored "mrow" (status quo), on a regular -->
-<!-- or bare "md" (new), and a global specification in "docinfo"     -->
-<!-- (new).  These new features compensate for the deprecation       -->
-<!-- of the "n"-series elements.                                     -->
-<!-- The @tag attribute is a "local tag" formed with symbols,        -->
-<!-- and precludes a number.                                         -->
-
-<!-- Replace "me" and "me" by an "md" with one "mrow"    -->
-<!--   - @xml:id will live on the "md" (new)             -->
-<!--   - forcible  @npi:umbered  attribute for each,     -->
-<!--       to preserve old behavior                      -->
-<!--   - @pi:authored-one-line as empty sentinel, to     -->
-<!--       distinguish from an *authored* single "mrow"  -->
-<xsl:template match="me|men" mode="repair">
-    <xsl:element name="md">
-        <xsl:apply-templates select="@*" mode="repair"/>
-        <!-- note origin as single-line display math -->
-        <xsl:attribute name="pi:authored-one-line"/>
-        <!-- manufacture an "mrow" to hold content -->
-        <xsl:element name="mrow">
-            <xsl:attribute name="pi:numbered">
-                <xsl:choose>
-                    <xsl:when test="self::me">
-                        <xsl:text>no</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="self::men">
-                        <xsl:text>yes</xsl:text>
-                    </xsl:when>
-                </xsl:choose>
-            </xsl:attribute>
-            <xsl:apply-templates select="node()" mode="repair"/>
-        </xsl:element>
-    </xsl:element>
-</xsl:template>
-
-<!-- "md" with "mrow" needs no adjustment (status quo),   -->
-<!-- the default "repair" templates are correct.  But     -->
-<!-- see "mrow" template below for @pi:numbered behavior. -->
-
-<!-- Replace "mdn" with "mrow" , by an "md" with @number     -->
-<!--   - see "mrow" template below for @pi:numbered behavior -->
-<!--   - @xml:id  was only ever allowed on individual "mrow" -->
-<xsl:template match="mdn[mrow]" mode="repair">
-    <xsl:element name="md">
-        <xsl:apply-templates select="@*" mode="repair"/>
-        <!-- copy the mrows -->
-        <xsl:apply-templates select="node()" mode="repair"/>
-    </xsl:element>
-</xsl:template>
-
-<!-- A bare "mdn" was just a transitional device during all    -->
-<!-- the deprecation of the majority of math display elements  -->
-<!-- and the introduction of more robust numbering options.    -->
-<!-- It *never* enjoyed full support and was only in the wild  -->
-<!-- for a couple of weeks.  We warn about this removal (as a  -->
-<!-- deprecation) and suggest the "md" replacement.            -->
-<xsl:template match="mdn[not(mrow)]" mode="repair"/>
-
-<!-- Replace bare "md" by "md" with one "mrow"          -->
-<!--   - @xml:id will live on the "md" (new)            -->
-<!--   - md/@number  respected first                    -->
-<!--   - md/@tag  transferred to the manufactured       -->
-<!--       "mrow", where downstream processing expects  -->
-<!--       it; @tag and @number are mutually exclusive  -->
-<!--   - @pi:authored-one-line as empty sentinel, to    -->
-<!--       distinguish from an *authored* single "mrow" -->
-<xsl:template match="md[not(mrow)]" mode="repair">
-    <xsl:copy>
-        <xsl:apply-templates select="@*[not(local-name(.) = 'tag')]" mode="repair"/>
-        <!-- note origin as single-line display math -->
-        <xsl:attribute name="pi:authored-one-line"/>
-        <!-- manufacture an "mrow" to hold content -->
-        <xsl:element name="mrow">
-            <!-- a @tag on the bare "md" is transferred to the "mrow" -->
-            <xsl:copy-of select="@tag"/>
-            <xsl:attribute name="pi:numbered">
-                <xsl:choose>
-                    <!-- a local @tag precludes a number -->
-                    <xsl:when test="@tag">
-                        <xsl:text>no</xsl:text>
-                    </xsl:when>
-                    <!-- possibly authored with @number -->
-                    <xsl:when test="@number = 'yes'">
-                        <xsl:text>yes</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="@number = 'no'">
-                        <xsl:text>no</xsl:text>
-                    </xsl:when>
-                    <!-- Now the global default set in "docinfo".  It would be -->
-                    <!-- nice to store this choice in a global variable, but   -->
-                    <!-- the mechanics of that result in erroneous recursion.  -->
-                    <!-- So we simply repeatedly consult the "docinfo" built   -->
-                    <!-- in the previous tree.                                 -->
-                    <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'yes'">
-                        <xsl:text>yes</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'no'">
-                        <xsl:text>no</xsl:text>
-                    </xsl:when>
-                    <!-- the default default is to not number equations -->
-                    <xsl:otherwise>
-                        <xsl:text>no</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-            <xsl:apply-templates select="node()" mode="repair"/>
-        </xsl:element>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Authored "mrow", inside "md" or "mdn", get a @pi: numbered -->
-<!-- attribute, according to hierarchy of specifications.       -->
-<!-- ("md" and "mdn" parents in "match" could be overkill.)     -->
-<xsl:template match="md/mrow|mdn/mrow" mode="repair">
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="repair"/>
-        <xsl:attribute name="pi:numbered">
-            <xsl:choose>
-                <xsl:when test="@tag">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <xsl:when test="@number = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="@number = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- now look to a (possible) "mdn" element as the      -->
-                <!-- container, the @number attribute is not supported, -->
-                <!-- the "n" implies a number by default                -->
-                <xsl:when test="parent::mdn">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <!-- now look to the (certain) "md" element as the container -->
-                <xsl:when test="parent::md[@number = 'yes']">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="parent::md[@number = 'no']">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- Now the global default set in "docinfo".  It would be -->
-                <!-- nice to store this choice in a global variable, but   -->
-                <!-- the mechanics of that result in erroneous recursion.  -->
-                <!-- So we simply repeatedly consult the "docinfo" built   -->
-                <!-- in the previous tree.                                 -->
-                <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'no'">
-                    <xsl:text>no</xsl:text>
-                </xsl:when>
-                <!-- the default default is to not number equations -->
-                <xsl:otherwise>
-                    <xsl:text>no</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-        <xsl:apply-templates select="node()" mode="repair"/>
-    </xsl:copy>
-</xsl:template>
-
-
-<!-- Display math with "intertext"                           -->
-<!-- We explode display math with "inertext" into a series   -->
-<!-- of "md" interspered with "pi:intertext" elements.       -->
-<!-- Note that $nodes only selects "mrow" and "intertext".   -->
-<!-- Note:                                                   -->
-<!-- *  This really is a "repair" for "mdn" with intertext   -->
-<!--    there is a transformation to many "md".              -->
-<!-- *  When the "mrow" get hit by the "repair" template,    -->
-<!--    the numbering is recorded, based on the usual        -->
-<!--     hierarchy,including the "md" or "mdn" container.    -->
-<!-- *  The text of the "intertext" also gets hit by         -->
-<!--   "repair"s of any sentence-level changes will be made. -->
-
-<xsl:template match="md[intertext]|mdn[intertext]" mode="repair">
-
-    <!-- We are going to explode an "md" with "intertext" into  -->
-    <!-- multiple "md".  But for LaTeX, only, we are going to   -->
-    <!-- basically put them all back together again.  But as we -->
-    <!-- come up to each exploded "md" in the LaTeX conversion  -->
-    <!-- it will not be so easy to see if the *original* "md"   -->
-    <!-- had numbers or local tags.  So we determine this       -->
-    <!-- prior to the explosion and record it onto each "md".   -->
-    <!--                                                        -->
-    <!-- The logic of deprecations here means it is perhaps     -->
-    <!-- best to construct all the "mrow" in a disposable       -->
-    <!-- node-set and analyze it for numbers and tags, recorded -->
-    <!-- as a single boolean we can replicate.                  -->
-
-    <xsl:variable name="trial-mrow-rtf">
-        <xsl:apply-templates select="mrow" mode="repair"/>
-    </xsl:variable>
-    <xsl:variable name="trial-mrow" select="exsl:node-set($trial-mrow-rtf)"/>
-    <xsl:variable name="b-needs-tags" select="boolean($trial-mrow/mrow[@pi:numbered = 'yes' or @tag])"/>
-
-    <xsl:apply-templates select="." mode="intertext-exploder">
-        <xsl:with-param name="nodes" select="mrow|intertext"/>
-        <xsl:with-param name="location" select="'first'"/>
-        <xsl:with-param name="b-needs-tags" select="$b-needs-tags"/>
-    </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="md[intertext]|mdn[intertext]" mode="intertext-exploder">
-    <xsl:param name="nodes"/>
-    <xsl:param name="location"/>
-    <xsl:param name="b-needs-tags"/>
-
-    <!-- No nodes, no action, so recursion ends, -->
-    <!-- AND there is no $lead-node to switch on. -->
-    <xsl:if test="$nodes">
-        <!-- will switch on if $lead node is "mrow" or "interext" -->
-        <xsl:variable name="lead-node" select="$nodes[1]"/>
-        <xsl:choose>
-            <xsl:when test="$lead-node[self::mrow]">
-                <!-- The first intertext after $lead-node (if any) -->
-                <!-- marks the end of a non-empty run of "mrow"    -->
-                <!-- (we know $lead-node is an "mrow")             -->
-                <xsl:variable name="break" select="$lead-node/following-sibling::intertext[1]"/>
-                <!-- A maximal run of contiguous "mrow" starting at $lead-node.    -->
-                <!-- All "mrow" including $lead-node, and those coming afterwards. -->
-                <!-- $break is empty for the last run, so "not($break)" will be    -->
-                <!-- true and there is no filtering.  Otherwise we compare an      -->
-                <!-- "mrow"'s following "intertext" to see if it is $break or not. -->
-                <xsl:variable name="md-block" select="$lead-node |
-                    $lead-node/following-sibling::mrow[not($break) or (following-sibling::intertext[1] = $break)]"/>
-                <!-- put the maximal run into a fresh "md"     -->
-                <!-- Location helps with reconstruction in     -->
-                <!-- the LaTeX conversion, where we un-explode -->
-                <md pi:location="{$location}">
-                    <xsl:attribute name="pi:latex-intertext-needs-tags">
-                        <xsl:choose>
-                            <xsl:when test="$b-needs-tags">
-                                <xsl:text>yes</xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:text>no</xsl:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:attribute>
-                    <xsl:apply-templates select="$md-block" mode="repair"/>
-                </md>
-                <!-- "first" is never repeated, and  -->
-                <!-- "last" only happens in one case -->
-                <xsl:variable name="next-location">
-                    <xsl:choose>
-                        <xsl:when test="not($break/following-sibling::intertext)">
-                            <xsl:text>last</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>intermediate</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <!-- We strip down the set of $nodes, starting at the     -->
-                <!-- last "mrow" of the $md-block, so the remainder will  -->
-                <!-- normally start with an "intertext", or the remainder -->
-                <!-- might be empty (which will halt the recursion).      -->
-                <xsl:apply-templates select="." mode="intertext-exploder">
-                    <xsl:with-param name="nodes" select="$md-block[last()]/following-sibling::*"/>
-                    <xsl:with-param name="location" select="$next-location"/>
-                    <xsl:with-param name="b-needs-tags" select="$b-needs-tags"/>
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:when test="$lead-node[self::intertext]">
-                <!-- We place the text of the intertext into a custom      -->
-                <!-- internal element for handling by the common templates -->
-                <pi:intertext>
-                    <xsl:apply-templates select="$lead-node/node()" mode="repair"/>
-                </pi:intertext>
-                <!-- Strip down $nodes by simply removing the leading "intertext" -->
-                <xsl:apply-templates select="." mode="intertext-exploder">
-                    <xsl:with-param name="nodes" select="$lead-node/following-sibling::*"/>
-                    <xsl:with-param name="location" select="$location"/>
-                    <xsl:with-param name="b-needs-tags" select="$b-needs-tags"/>
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- orioginal  $nodes  ensures we never get here -->
-            <xsl:otherwise/>
-        </xsl:choose>
-    </xsl:if>
-</xsl:template>
-
-
-<!-- ############################## -->
-<!-- Killed, in Chronological Order -->
-<!-- ############################## -->
-
-<!-- 2017-07-16  killed, from 2015-03-13 deprecation -->
-<xsl:template match="paragraph" mode="repair"/>
-
-<!-- 2019-02-20  deprecated and killed simultaneously -->
-<xsl:template match="todo" mode="repair"/>
-
-<!-- A "pagebreak" should have had limited -->
-<!-- uptake, so no real care taken,        -->
-<!-- Deprecated 2021-03-17                 -->
-<xsl:template match="pagebreak" mode="repair"/>
-
-<!-- @permid experiments retired 2024-07-24, -->
-<!-- so eliminated in this phase             -->
-<xsl:template match="@permid" mode="repair"/>
-
-<!-- 2024-08-05: remove metadata elements from a sidebyside, -->
-<!-- which have not been schema-compliant since circa 2017   -->
-<xsl:template match="sidebyside/*[&METADATA-FILTER;]" mode="repair"/>
-
-<!-- ########### -->
-<!-- Assembly ID -->
-<!-- ########### -->
-
-<!-- Some maniulations of source require stable identification *before*     -->
-<!-- we assign @unique-id values for general use in the very late           -->
-<!-- "identification" phase.  This is a role for the "@assembly-id" which   -->
-<!-- is formed after the author's source has been versioned, customized,    -->
-<!-- repaired, but before replacements. It should suffice for "big" objects -->
-<!-- which are unlikely to change much (other than going away in a version) -->
-<!-- and may only be "repaired" in a one-to-one cosmetic rename.  We use    -->
-<!-- this sparingly, thus we are careful about the match, along with        -->
-<!-- documenting rationale for each object.                                 -->
-<!--                                                                        -->
-<!-- Another way to think about this is as an "early" id, versus the        -->
-<!-- more general "late" id.                                                -->
-<!--                                                                        -->
-<!-- audio|video|interactive                                                -->
-<!--     Static versions of these interactive elements have previews        -->
-<!--     (YouTube thumbnails, automatically generated screenshots),         -->
-<!--     generated QR codes, and various links meant for use in static      -->
-<!--     contexts.  So we form names of these related objects based on      -->
-<!--     an "earlier" id.                                                   -->
-<!--                                                                        -->
-<!-- datafile                                                               -->
-<!--     For static versions of this Runestone component, when the file is  -->
-<!--     a text file provided in the external directory, we need to         -->
-<!--     interrogate the file manufactured in the generated directory in    -->
-<!--     order to make a sample of its content.  This happens before we     -->
-<!--     construct unique-id.                                               -->
-
-<!-- NB: we believe the @assembly-id will equal the @unique-id    -->
-<!-- ("visible-id" template) for objects at the level of blocks,  -->
-<!-- and certainly for any object replaced by a different static  -->
-<!-- representation.  But for generated objects, e.g. QR codes,   -->
-<!-- it would be best if the generation process used the          -->
-<!-- "assembly-id" template for guranteed consistency.  This *is* -->
-<!-- being done for "datafile" but is technical debt otherwise.   -->
-
-<!-- [Ed. this once prefaced the "visible-id-early" template, a weak  -->
-<!-- forerunner of the "assembly-id" template.  But the commentary    -->
-<!-- is still good, so we have preserved it here.]                    -->
-<!-- This template produces identification that happens early in the  -->
-<!-- passes this stylesheet executes.  The idea is that some elements -->
-<!-- get replaced wholesale (such as an "interactive" being replaced  -->
-<!-- by a "sidebyside" in the creation of a static precursor.  But we -->
-<!-- want these ids, especially if automatic, to be consistent when   -->
-<!-- used in derived versions (such as manufacturing, or displaying,  -->
-<!-- a QR code file for a static "interactive").                      -->
-<!-- NB: this template needs to be defined in this stylesheet, since  -->
-<!-- we want the stylesheet to be independent, and the template is    -->
-<!-- also applied here.                                               -->
-
-<xsl:template match="audio|video|interactive|image" mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-
-<xsl:template match="exercise[@exercise-interactive='fillin' and setup]
-                   | project[@exercise-interactive='fillin' and setup]
-                   | activity[@exercise-interactive='fillin' and setup]
-                   | exploration[@exercise-interactive='fillin' and setup]
-                   | investigation[@exercise-interactive='fillin' and setup]"
-                   mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-<xsl:template match="exercise[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | project[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | activity[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | exploration[.//task and .//task/@exercise-interactive='fillin' and .//setup]
-                   | investigation[.//task and .//task/@exercise-interactive='fillin' and .//setup]"
-                   mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-
-<xsl:template match="datafile" mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-
-<xsl:template match="exercise/stack" mode="assembly-id">
-    <xsl:value-of select="@assembly-id"/>
-</xsl:template>
-
-<xsl:template match="*" mode="assembly-id">
-    <xsl:message>
-        <xsl:text>PTX:BUG:  the "assembly-id" template was applied to an element it did not expect--</xsl:text>
-        <xsl:value-of select="name()"/>
-        <xsl:text>.</xsl:text>
-        <xsl:value-of select="@exercise-interactive"/>
-        <xsl:text>.</xsl:text>
-        <xsl:value-of select="@assembly-id"/>
-    </xsl:message>
-    <xsl:text>unexpected-assembly-id-template-use-here</xsl:text>
-</xsl:template>
-
-
-<!-- ############## -->
-<!-- Identification -->
-<!-- ############## -->
-
-<!-- The "visible-id" template switched to prefer @label,         -->
-<!-- rather than @xml:id (at 1779e6dbc84c6ecc).  So to preserve   -->
-<!-- authored (crafted) identifier strings, we copy the old over  -->
-<!-- into the new.  This preserves identifiers in output          -->
-<!-- (filenames, fragment identifiers).  Subsequent passes        -->
-<!-- should not introduce or remove elements.                     -->
-
-<!-- 2023-03-30: This is old commentary about the use of the -->
-<!-- "unique-id" identifier in the LaTeX conversion, which   -->
-<!-- has now become more universal.  Once identifiers settle -->
-<!-- down, we can clean up the parts of this worth keeping.  -->
-<!--  -->
-<!-- This produces unique strings that are internal to the  -->
-<!-- LaTeX (intermediate) file.  Since neither author nor   -->
-<!-- reader will ever see these, they can be as fast and as -->
-<!-- wild as necessary.  But for mature works, likely with  -->
-<!-- @permid on many relevant objects, or many @xml:id      -->
-<!-- provided for URLs in HTML, these can be predictable    -->
-<!-- across runs (and therefore help with tweaking the LaTeX-->
-<!-- output under revision control) These are employed with -->
-<!-- \label{}, \ref{}, \cite{}, \pageref{}, \eqref{}, etc.  -->
-<!-- We can change this at will, with no adverse effects    -->
-<!-- NB: colons are banned from PTX @xml:id, and will not   -->
-<!-- appear in @permid, though we could use dashes instead  -->
-<!-- without getting duplicates.  The prefixes guarantee    -->
-<!-- that the three uniqueness schemes do not overlap.      -->
-
-<!-- First, we upgrade an authored @xml:id to a @label,       -->
-<!-- WHEN there is no authored @label present.  This is a     -->
-<!-- sort of backward-compatibility maneuver.  An @xml:id     -->
-<!-- now serves only as a sort of internal name for a target  -->
-<!-- node (like a cross-reference, "xref"), while it formerly -->
-<!-- served as a string to generate various bits of output,   -->
-<!-- such as filenames in HTML output.                        -->
-
-<xsl:template match="*" mode="labels">
-    <xsl:copy>
-        <!-- duplicate all attributes -->
-        <xsl:apply-templates select="@*" mode="labels"/>
-        <!-- Case: an authored @xml:id, not an authored @label -->
-        <xsl:if test="@xml:id and not(@label)">
-            <xsl:attribute name="label">
-                <xsl:value-of select="@xml:id"/>
-            </xsl:attribute>
-        </xsl:if>
-        <!-- Case: a @label provided in source by author                 -->
-        <!-- It is helpful to distinguish between an authored @label and -->
-        <!-- one that this template creates by copying over a @xml:id.   -->
-        <!-- So we drop an (empty) attribute as a boolean indicator.     -->
-        <!-- This form will simplify checks later at "run-time".         -->
-        <xsl:if test="@label">
-            <xsl:attribute name="authored-label"/>
-        </xsl:if>
-        <!-- recurse -->
-        <xsl:apply-templates select="node()" mode="labels"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- This general-purpose template constructs unique strings as part   -->
-<!-- of a natural depth-first exploration of the tree.  Strings are    -->
-<!-- reset when provided by authors on elements (ideally via @label).  -->
-<!-- Otherwise the tree structure is reflected by location at each     -->
-<!-- level of the subtree rooted at the last authored string.  A bit   -->
-<!-- unsightly, and only partialy effective to unwind the numers back  -->
-<!-- to an element.  But super-fast to construct and reliably unique   -->
-<!-- (though an author could provide two strings that make a conflict, -->
-<!-- we believe).                                                      -->
-<xsl:template match="*" mode="id-attribute">
-    <xsl:param name="parent-id"  select="'root'"/>
-    <xsl:param name="attr-name"  select="''"/>
-
-    <xsl:copy>
-        <!-- duplicate all attributes -->
-        <xsl:apply-templates select="@*" mode="id-attribute"/>
-        <!-- * Strategy is much like @original-id but maybe needs as much care            -->
-        <!-- * Element counts are used to reflect document tree structure                 -->
-        <!-- * Non-numeric separator needed to preserve uniqueness (e.g.1-12 != 11-2).    -->
-        <!-- * Separators are therefore hyphens                                           -->
-        <!-- * Colons as separators would create confusion with namespaces                -->
-        <!-- * Salt added to authored values could decrease risk of collision             -->
-        <xsl:variable name="new-id">
-            <xsl:choose>
-                <!-- A @label might be authored.  Or not authored, and   -->
-                <!-- then an authored @xml:id was promoted into a @label -->
-                <xsl:when test="@label">
-                    <xsl:value-of select="@label"/>
-                </xsl:when>
-                <!-- This mimics the upgrade of an authored xml:id to a label -->
-                <!-- NB: this might not ever happen in some passes, when an   -->
-                <!-- @xml:id value has been upgraed to a @label value in a    -->
-                <!-- prior pass, because if there was an @xml:id, then it     -->
-                <!-- was upgraded to being a @label and if this "choose" gets -->
-                <!-- here, then the next test is false.                       -->
-                <xsl:when test="@xml:id">
-                    <xsl:value-of select="@xml:id"/>
-                </xsl:when>
-                <!-- Author has not supplied any sort of identification, no -->
-                <!-- @label and no @xml:id.  So we automatically devise one -->
-                <xsl:otherwise>
-                    <xsl:value-of select="$parent-id"/>
-                    <xsl:text>-</xsl:text>
-                    <!-- Start counting from 1, easier to debug -->
-                    <xsl:number value="count(preceding-sibling::*) + 1"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:attribute name="{$attr-name}">
-            <xsl:value-of select="$new-id"/>
-        </xsl:attribute>
-        <!-- recurse -->
-        <xsl:apply-templates select="node()" mode="id-attribute">
-            <xsl:with-param name="parent-id" select="$new-id"/>
-            <xsl:with-param name="attr-name" select="$attr-name"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
-
-<!-- There is no real purpose to put identification onto an     -->
-<!-- (X)HTML element floating around as part of an interactive. -->
-<xsl:template match="pf:*|xhtml:*" mode="id-attribute">
-    <xsl:copy>
-        <xsl:apply-templates select="@*|node()" mode="id-attribute"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- We look for duplicate identifiers both right after    -->
-<!-- assembly and right after automatic generation.  The   -->
-<!-- application of these templates is mixed-in to the     -->
-<!-- creation of the trees.                                -->
-<!-- NB: these were built as regular templates and the     -->
-<!-- root of the relevant tree was passed in, this created -->
-<!-- some error with the construction of the final tree:   -->
-<!-- "Recursive definition of root"                        -->
-<xsl:template name="duplication-check-xmlid">
-    <!-- pass in all elements with @xml:id attributes -->
-    <xsl:param name="nodes"/>
-    <!-- 'authored' or 'generated', just influences messages -->
-    <xsl:param name="purpose"/>
-
-    <xsl:call-template name="duplication-check-attribute">
-        <xsl:with-param name="nodes" select="$nodes"/>
-        <xsl:with-param name="purpose" select="$purpose"/>
-        <xsl:with-param name="target-attr" select="'xml:id'"/>
-    </xsl:call-template>
-</xsl:template>
-
-<xsl:template name="duplication-check-label">
-    <!-- pass in all elements with @label attributes -->
-    <xsl:param name="nodes"/>
-    <!-- 'authored' or 'generated', just influences messages -->
-    <xsl:param name="purpose"/>
-
-    <xsl:call-template name="duplication-check-attribute">
-        <xsl:with-param name="nodes" select="$nodes"/>
-        <xsl:with-param name="purpose" select="$purpose"/>
-        <xsl:with-param name="target-attr" select="'label'"/>
-    </xsl:call-template>
-</xsl:template>
-
-<xsl:template name="duplication-check-attribute">
-    <xsl:param name="nodes"/>
-    <!-- 'authored' or 'generated', just influences messages -->
-    <xsl:param name="purpose"/>
-    <xsl:param name="target-attr"/>
-
-    <!-- construct a list of just the sorted labels -->
-    <xsl:variable name="attr-values-sorted-rtf">
-        <xsl:for-each select="$nodes/@*[name() = $target-attr]">
-            <xsl:sort select="."/>
-            <label>
-                <xsl:value-of select="."/>
-            </label>
-        </xsl:for-each>
-    </xsl:variable>
-    <xsl:variable name="attr-values-sorted" select="exsl:node-set($attr-values-sorted-rtf)"/>
-
-    <!-- traverse sorted list to find duplicates -->
-    <xsl:for-each select="$attr-values-sorted/*">
-        <!-- save off the string on current node -->
-        <xsl:variable name="attr-value" select="."/>
-        <!-- get previous two labels - will be '' if out of bounds -->
-        <xsl:variable name="prev-value" select="string(preceding-sibling::*[1])"/>
-        <xsl:variable name="prev-prev-value" select="string(preceding-sibling::*[2])"/>
-        <!-- identify only first instance of a duplicate for each label -->
-        <xsl:if test="($attr-value= $prev-value) and ($attr-value != $prev-prev-value)">
-            <xsl:choose>
-                <xsl:when test="$purpose = 'authored'">
-                    <xsl:message>PTX:ERROR: the @<xsl:value-of select="$target-attr"/> value "<xsl:value-of select="$attr-value"/>" should be unique, but is authored multiple times.</xsl:message>
-                </xsl:when>
-            </xsl:choose>
-            <xsl:message>           Results will be unpredictable, and likely incorrect.  Information on the locations follows:</xsl:message>
-            <!-- use the original nodes to report location of instances -->
-            <!-- select where they have an attr with the correct name and it has correct value -->
-            <xsl:for-each select="$nodes[@*[name() = $target-attr] = $attr-value]">
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:for-each>
-        </xsl:if>
-    </xsl:for-each>
-</xsl:template>
-
-<!-- Diagnostic: verify @assembly-id equals @unique-id for  -->
-<!-- every element that carries both.  A mismatch indicates -->
-<!-- a structural change between the two ID-stamping passes -->
-<!-- that violates the identification contract documented   -->
-<!-- near the top of this stylesheet.  Gated by the         -->
-<!-- assembly.debug parameter; does nothing when off.       -->
-
-<xsl:template match="node()|@*" mode="id-coherence-check">
-    <xsl:if test="$b-assembly-debug">
-        <xsl:for-each select=".//*[@assembly-id and @unique-id and not(@assembly-id = @unique-id)]">
-            <xsl:message>
-                <xsl:text>PTX:DEBUG:  @assembly-id / @unique-id mismatch on &lt;</xsl:text>
-                <xsl:value-of select="local-name()"/>
-                <xsl:text>&gt;: assembly-id="</xsl:text>
-                <xsl:value-of select="@assembly-id"/>
-                <xsl:text>" unique-id="</xsl:text>
-                <xsl:value-of select="@unique-id"/>
-                <xsl:text>"</xsl:text>
-            </xsl:message>
-        </xsl:for-each>
-    </xsl:if>
-</xsl:template>
-
-
-<!-- ######### -->
-<!-- Languages -->
-<!-- ######### -->
-
-<!-- The variable $locales is a node-set of all the locales which have    -->
-<!-- supported localization files.  A comparison of an @xml:lang (string) -->
-<!-- with $locales (node-set) will be true if the attribute value is a    -->
-<!-- string value of one of the nodes in the node-set.  So it is easy to  -->
-<!-- create a boolean value for localization support .                    -->
-<xsl:variable name="locales" select="document('localizations/localizations.xml')/localizations/locale" />
-
-<!-- We want the root node to always have full and accurate language         -->
-<!-- information since it will be the fail-safe node on a query up the tree. -->
-<!-- Earlier "repair" pass eliminates "mathbook".                            -->
-<xsl:template match="/pretext" mode="language">
-    <!-- see above description of $locales, false if missing -->
-    <xsl:variable name="b-is-supported" select="@xml:lang = $locales"/>
-    <!-- duplicate with better language information -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="language"/>
-        <xsl:choose>
-            <xsl:when test="$b-is-supported">
-                <!-- if supported, it was just duplicated, save off a -->
-                <!-- new attribute indicating use for localizations   -->
-                <xsl:attribute name="locale-lang">
-                    <xsl:value-of select="@xml:lang"/>
-                </xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- if missing we add the default          -->
-                <!-- if unsupported, overwrite with default -->
-                <xsl:attribute name="xml:lang">
-                    <xsl:text>en-US</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="locale-lang">
-                    <xsl:text>en-US</xsl:text>
-                </xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="node()" mode="language"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- An  @xml:id  is checked to see if it is supported for localizations.  -->
-<!-- If so, we augment the elment with an internal attribute.  If not,     -->
-<!-- we just leave a copy alone, it might be relevant for future features. -->
-<xsl:template match="*[@xml:lang]" mode="language">
-    <!-- see above description of $locales -->
-    <xsl:variable name="b-is-supported" select="@xml:lang = $locales"/>
-    <!-- duplicate with additional language information -->
-    <xsl:copy>
-        <xsl:apply-templates select="@*" mode="language"/>
-        <xsl:if test="$b-is-supported">
-            <xsl:attribute name="locale-lang">
-                <xsl:value-of select="@xml:lang"/>
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="node()" mode="language"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Note: the $language tree is accessed (repeatedly) in the  -->
-<!-- $augment pass in order to determine the global default for  -->
-<!-- numbering equations.  So the order of these two must be  -->
-<!-- preserved.  See notes below for more explanation. -->
-
-
-<!-- ######### -->
-<!-- Numbering -->
-<!-- ######### -->
-
-<!-- We use the "augment" pass to compute, and add, partially naïve        -->
-<!-- information about numbers of objects, to be interpreted later by      -->
-<!-- templates in the "-common" stylesheet.  By "naïve" we mean that       -->
-<!-- these routines may depend on publisher variables (e.g. specification  -->
-<!-- of roots of subtrees for serial numbers of blocks) but do not depend  -->
-<!-- on subtlties of numbering (such as the structured/unstructured        -->
-<!-- division dichotomy), which are addressed in the "-common" stylesheet. -->
-<!-- In this way, this information could be interpreted in new ways by     -->
-<!-- additional conversions.                                               -->
-<!--                                                                       -->
-<!-- The manufactured @struct attribute is the (naïve) hierarchical number -->
-<!-- of the *container* of an element, known as the "structure number"     -->
-<!-- of an element.  The @serial attribute is the computed serial number   -->
-<!-- of the element, known as the "serial number".  Typically combining    -->
-<!-- these two attributes forms teh number of an element.  As many         -->
-<!-- practical subtleties about these numbers is delayed until their       -->
-<!-- interpretation by templates in the "-common" stylesheet.              -->
-
-<!-- For every type of division, everywhere, the "division-serial-number"   -->
-<!-- modal template will return a count of preceding peers at that level.   -->
-<!-- The @struct attribute is the structure number of the *parent*          -->
-<!-- (container), which seems odd here, but fits the general scheme better. -->
-<!-- The @level attribute is helpful, and trvislly to compute here.         -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout" mode="augment">
-    <xsl:param name="parent-struct"/>
-    <xsl:param name="level"/>
-    <xsl:param name="ordered-list-level" />
-
-    <xsl:variable name="the-serial">
-        <xsl:apply-templates select="." mode="division-serial-number"/>
-    </xsl:variable>
-    <xsl:variable name="new-struct">
-        <xsl:choose>
-            <!-- Parts as Roman numerals make for a lot of clutter.      -->
-            <!-- We tend to only use them when necessary to diambiguate  -->
-            <!-- a cross-reference in the case where these numbers are   -->
-            <!-- structural.  So rightly or wrongly, and owing to        -->
-            <!-- historical work, we squelch them as the lead item of a  -->
-            <!-- structural number.  So here the Roman numeral will be   -->
-            <!-- preserved as a serial number, but the construction of   -->
-            <!-- the structural numbers will be delayed one level.       -->
-            <!-- (It seems harder to strip these in -common.)            -->
-            <xsl:when test="self::part"/>
-            <!-- Decorative specialized divisions are transparent:    -->
-            <!-- they do not extend the structure number chain, so    -->
-            <!-- blocks inside them use the parent division's chain.  -->
-            <!-- Specialized divisions are leaves of the division     -->
-            <!-- tree, so this does not affect any descendant         -->
-            <!-- division's @struct.                                  -->
-            <xsl:when test="&SPECIALIZED-DIVISION-FILTER;">
-                <xsl:variable name="is-numbered">
-                    <xsl:apply-templates select="." mode="is-specialized-own-number"/>
-                </xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="$is-numbered = 'true'">
-                        <xsl:value-of select="$parent-struct"/>
-                        <xsl:if test="not($parent-struct='')">
-                            <xsl:text>.</xsl:text>
-                        </xsl:if>
-                        <xsl:value-of select="$the-serial"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$parent-struct"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$parent-struct"/>
-                <xsl:if test="not($parent-struct='')">
-                    <xsl:text>.</xsl:text>
-                </xsl:if>
-                <xsl:value-of select="$the-serial"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="next-level" select="$level + 1"/>
-    <xsl:variable name="next-ordered-list-level">
-        <xsl:choose>
-            <xsl:when test="self::exercises or self::worksheet or self::handout or self::reading-questions or self::references">
-                <xsl:number value="1" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:number value="0" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:copy>
-        <xsl:attribute name="struct">
-            <xsl:value-of select="$parent-struct"/>
-        </xsl:attribute>
-        <xsl:attribute name="serial">
-            <xsl:value-of select="$the-serial"/>
-        </xsl:attribute>
-        <xsl:attribute name="level">
-            <xsl:value-of select="$next-level"/>
-        </xsl:attribute>
-        <!-- Full structure chain including this division's       -->
-        <!-- contribution.  Decorative specialized divisions are  -->
-        <!-- transparent (pass through parent's chain).  Used by  -->
-        <!-- block elements to compute their structure numbers.   -->
-        <xsl:attribute name="block-struct">
-            <xsl:value-of select="$new-struct"/>
-        </xsl:attribute>
-        <xsl:apply-templates select="node()|@*" mode="augment">
-            <xsl:with-param name="parent-struct" select="$new-struct"/>
-            <xsl:with-param name="level" select="$next-level"/>
-            <xsl:with-param name="ordered-list-level" select="$next-ordered-list-level"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
-
-<!-- The top-level division (book, article, ...) is the root of the   -->
-<!-- division tree, at level 0, which the catch-all does not record.  -->
-<!-- A level-0 numbering scheme counts continuously from the root.    -->
-<xsl:template match="book|article|slideshow|letter|memo" mode="augment">
-    <xsl:copy>
-        <xsl:attribute name="level">
-            <xsl:text>0</xsl:text>
-        </xsl:attribute>
-        <xsl:apply-templates select="node()|@*" mode="augment">
-            <xsl:with-param name="parent-struct" select="''"/>
-            <xsl:with-param name="level" select="0"/>
-            <xsl:with-param name="ordered-list-level" select="0"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
-
-<!-- See the definitions of levels in -common.  For a book with parts   -->
-<!-- ($parts != 'absent') we consider parts as peers of frontmatter and -->
-<!-- backmatter.  So we need to increment the level in this case, only. -->
-<!-- NB: this might consolidate with above, but seems better solo.      -->
-<!-- NB: with some study and work, this situation might be improved?    -->
-<xsl:template match="frontmatter|backmatter" mode="augment">
-    <xsl:param name="parent-struct"/>
-    <xsl:param name="level"/>
-
-    <xsl:variable name="next-level">
-        <xsl:choose>
-            <xsl:when test="($parts = 'decorative') or ($parts = 'structural')">
-                <xsl:value-of select="$level + 1"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$level"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- we only add a level (not necessary?) -->
-    <!-- and just pass along structure number -->
-    <xsl:copy>
-        <xsl:attribute name="level">
-            <xsl:value-of select="$next-level"/>
-        </xsl:attribute>
-        <xsl:apply-templates select="node()|@*" mode="augment">
-            <xsl:with-param name="parent-struct" select="$parent-struct"/>
-            <xsl:with-param name="level" select="$next-level"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Labels of ordered lists have formatting codes, which  -->
-<!-- we detect here and pass on to other more specialized  -->
-<!-- templates for implementation specifics                -->
-<!-- In order: Arabic (0-based), Arabic (1-based)          -->
-<!-- lower-case Latin, upper-case Latin,                   -->
-<!-- lower-case Roman numeral, upper-case Roman numeral    -->
-<!-- Absent a label attribute, defaults go 4 levels deep   -->
-<!-- (max for Latex) as: Arabic, lower-case Latin,         -->
-<!-- lower-case Roman numeral, upper-case Latin            -->
-<xsl:template match="ol" mode="format-code">
-    <xsl:param name="level"/>
-    <xsl:choose>
-        <xsl:when test="@marker">
-            <xsl:choose>
-                <xsl:when test="contains(@marker,'0')">0</xsl:when>
-                <xsl:when test="contains(@marker,'1')">1</xsl:when>
-                <xsl:when test="contains(@marker,'a')">a</xsl:when>
-                <xsl:when test="contains(@marker,'A')">A</xsl:when>
-                <xsl:when test="contains(@marker,'i')">i</xsl:when>
-                <xsl:when test="contains(@marker,'I')">I</xsl:when>
-                <!-- DEPRECATED 2015-12-12 -->
-                <xsl:when test="@marker=''" />
-                <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: ordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:choose>
-                <xsl:when test="$level='0'">1</xsl:when>
-                <xsl:when test="$level='1'">a</xsl:when>
-                <xsl:when test="$level='2'">i</xsl:when>
-                <xsl:when test="$level='3'">A</xsl:when>
-                <xsl:otherwise>
-                    <xsl:message>PTX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />) or is inside an "exercise" and is more than 3 levels deep  (at level <xsl:value-of select="$level - 1" />)</xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="ol" mode="augment">
-    <xsl:param name="ordered-list-level"/>
-    <xsl:variable name="next-level" select="$ordered-list-level + 1" />
-    <xsl:variable name="format-code">
-        <xsl:apply-templates select="." mode="format-code">
-            <xsl:with-param name="level" select="$ordered-list-level"/>
-        </xsl:apply-templates>
-    </xsl:variable>
-    <!-- deconstruct the left and right adornments of the label   -->
-    <!-- or provide default adornments, consistent with LaTeX     -->
-    <!-- then store them                                          -->
-    <xsl:variable name="marker-prefix">
-        <xsl:choose>
-            <xsl:when test="@marker">
-                <xsl:value-of select="substring-before(@marker, $format-code)" />
-            </xsl:when>
-            <xsl:when test="$format-code = 'a' and $ordered-list-level = '1'">
-                <xsl:text>(</xsl:text>
-            </xsl:when>
-            <xsl:otherwise />
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="marker-suffix">
-        <xsl:choose>
-            <xsl:when test="@marker">
-                <xsl:value-of select="substring-after(@marker, $format-code)" />
-            </xsl:when>
-            <xsl:when test="$format-code = 'a' and $ordered-list-level = '1'">
-                <xsl:text>)</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>.</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:copy>
-        <xsl:attribute name="ordered-list-level">
-            <xsl:value-of select="$ordered-list-level"/>
-        </xsl:attribute>
-        <xsl:attribute name="format-code">
-            <xsl:value-of select="$format-code"/>
-        </xsl:attribute>
-        <xsl:attribute name="marker-prefix">
-            <xsl:value-of select="$marker-prefix"/>
-        </xsl:attribute>
-        <xsl:attribute name="marker-suffix">
-            <xsl:value-of select="$marker-suffix"/>
-        </xsl:attribute>
-        <xsl:apply-templates select="node()|@*" mode="augment">
-            <xsl:with-param name="ordered-list-level" select="$next-level"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-</xsl:template>
-
 <!-- ######### -->
 <!-- Exercises -->
 <!-- ######### -->
@@ -3079,7 +1483,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy>
         <!-- Record one of five categories for customization, which    -->
         <!-- are not relevant for "example" (always inline), or "task" -->
-        <!-- (always just a component of something larger).  WeBWork   -->
+        <!-- (always just a component of something larger).  WeBWorK   -->
         <!-- problems are interactive or static, inline or not, based  -->
         <!-- on publisher options.                                     -->
         <xsl:if test="not(self::task)">
@@ -3171,7 +1575,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="select">
                 <xsl:text>select</xsl:text>
             </xsl:when>
-            <!-- noted WeBWork earlier, so this is Runestone fillin -->
+            <!-- noted WeBWorK earlier, so this is Runestone fillin -->
             <xsl:when test="statement//var">
                 <xsl:text>fillin-basic</xsl:text>
             </xsl:when>
@@ -3209,6 +1613,100 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
 </xsl:template>
 
+<!-- ##################################################### -->
+<!-- Dynamic Substitutions                                 -->
+<!-- Cut out dynamic setup and evaluation for static mode. -->
+<!-- NB: a new match in this mode must be reflected in the -->
+<!-- $b-has-dynamic-markup presence test gating the pass.  -->
+<!-- ##################################################### -->
+<xsl:template match="setup[de-object|setupScript]" mode="dynamic-substitution">
+    <xsl:if test="$exercise-style = 'dynamic'">
+        <xsl:copy>
+            <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+        </xsl:copy>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="numcmp|strcmp|jscmp|mathcmp|logic[parent::test]" mode="dynamic-substitution">
+    <xsl:if test="$exercise-style = 'dynamic'">
+        <xsl:copy>
+            <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+        </xsl:copy>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="fillin[@ansobj]" mode="dynamic-substitution">
+    <xsl:choose>
+        <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
+            <!-- The substitutions file is keyed by @assembly-id, which     -->
+            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass   -->
+            <!-- runs after the @assembly-id stamp, so the owner carries it. -->
+            <xsl:variable name="owner" select="ancestor::statement/.."/>
+            <xsl:variable name="parent-id">
+                <xsl:apply-templates select="$owner" mode="assembly-id"/>
+            </xsl:variable>
+            <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
+            <xsl:variable name="object" select="@ansobj"/>
+            <xsl:variable name="substitution">
+                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
+            </xsl:variable>
+            <xsl:copy>
+                <xsl:attribute name="answer">
+                    <xsl:value-of select="$substitution"/>
+                </xsl:attribute>
+                <xsl:apply-templates select="@*|node()" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="eval[@obj]" mode="dynamic-substitution">
+    <xsl:choose>
+        <!-- static, for multiple conversions, but primarily LaTeX -->
+        <xsl:when test="($exercise-style = 'static') and not($b-extracting)">
+            <!-- The substitutions file is keyed by @assembly-id, which     -->
+            <!-- extract-dynamic.xsl writes as the exercise_id.  This pass   -->
+            <!-- runs after the @assembly-id stamp, so the owner carries it. -->
+            <xsl:variable name="owner" select="(ancestor::statement|ancestor::solution|ancestor::evaluation)/.."/>
+            <xsl:variable name="parent-id">
+               <xsl:apply-templates select="$owner" mode="assembly-id"/>
+            </xsl:variable>
+            <xsl:variable name="eval-subs" select="document($dynamic-substitutions-file,$original)"/>
+            <xsl:variable name="object" select="@obj"/>
+            <xsl:variable name="substitution">
+                <xsl:value-of select="$eval-subs//dynamic-substitution[@id=$parent-id]/eval-subst[@obj=$object]"/>
+            </xsl:variable>
+            <xsl:value-of select="$substitution"/>
+        </xsl:when>
+        <!-- dynamic (aka HTML), needs static previews, server base64, etc, -->
+        <!-- so just copy as-is with "webwork-reps" to signal and organize  -->
+        <!-- to/for HTML conversion                                         -->
+        <xsl:otherwise>
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- An #eval child of test is implicit mathcmp. -->
+<xsl:template match="test/eval[@obj]" mode="dynamic-substitution">
+    <xsl:choose>
+        <xsl:when test="$exercise-style = 'static'">
+            <evaluation/>
+        </xsl:when>
+        <xsl:when test="$exercise-style = 'dynamic'">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="dynamic-substitution"/>
+            </xsl:copy>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
 
 <!-- ############### -->
 <!-- Representations -->
@@ -3238,81 +1736,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Clickable Area    -->
 <!-- ActiveCode        -->
 
-<!-- TODO: definitely need better filters -->
-<!-- complement (not()), single attribute -->
-<!-- Also in Runestone manifest creation  -->
+<!-- The pattern grammar does not permit variable references, so the      -->
+<!-- list of Runestone interactivity types is a literal, fenced string    -->
+<!-- repeated for each element that can carry one.  Match exactly         -->
+<!-- whenever  @exercise-interactive  is one of the fenced values.        -->
+<!-- NB: also consulted in Runestone manifest creation.                   -->
 
-<xsl:template match="exercise[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                      |
-                      project[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                     activity[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                  exploration[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                investigation[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]
-                     |
-                         task[ (@exercise-interactive = 'truefalse') or
-                               (@exercise-interactive = 'multiplechoice') or
-                               (@exercise-interactive = 'parson') or
-                               (@exercise-interactive = 'parson-horizontal') or
-                               (@exercise-interactive = 'cardsort') or
-                               (@exercise-interactive = 'matching') or
-                               (@exercise-interactive = 'clickablearea') or
-                               (@exercise-interactive = 'fillin-basic') or
-                               (@exercise-interactive = 'fillin') or
-                               (@exercise-interactive = 'coding') or
-                               (@exercise-interactive = 'shortanswer')]" mode="representations">
+<xsl:template match="exercise[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | project[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | activity[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | exploration[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | investigation[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]
+                   | task[contains('|truefalse|multiplechoice|parson|parson-horizontal|cardsort|matching|clickablearea|fillin-basic|fillin|coding|shortanswer|', concat('|', @exercise-interactive, '|'))]" mode="representations">
     <!-- always preserve "exercise/project" container here, with attributes -->
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="representations"/>
@@ -4047,6 +2482,2096 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- ############# -->
+<!-- Source Repair -->
+<!-- ############# -->
+
+<!-- We unilaterally make various changes to an author's source -->
+<!-- so a conversion (every conversion?) can assume more        -->
+<!-- accurately that the source has certain characteristics.    -->
+
+<!-- 2019-04-02  "mathbook" replaced by "pretext" -->
+<xsl:template match="/mathbook" mode="repair">
+    <pretext>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </pretext>
+</xsl:template>
+
+<!-- 2017-02-05  "hyphen" replaced by a bare hyphen.  Added 2026-06-25. -->
+<xsl:template match="hyphen" mode="repair">
+    <xsl:text>-</xsl:text>
+</xsl:template>
+
+<!-- 2017-07-18  "@tex_size" was renamed "@tex-size" (cosmetic), which in  -->
+<!-- turn became ignored (2017-11-09) in favor of a percentage "@width".   -->
+<!-- The legacy attribute now does nothing, so drop it.  Added 2026-06-25. -->
+<xsl:template match="@tex_size" mode="repair"/>
+
+<!-- 2017-07-25  "autoname" on "xref" deprecated in favor of "text".  -->
+<!-- Silently repair the legacy attribute to its modern functional    -->
+<!-- equivalent.  Every other attribute, and any content, is left to  -->
+<!-- the identity template, and so is preserved.  Added 2026-06-25.   -->
+<xsl:template match="xref/@autoname" mode="repair">
+    <xsl:attribute name="text">
+        <xsl:choose>
+            <xsl:when test=". = 'yes'">
+                <xsl:text>type-global</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'no'">
+                <xsl:text>global</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'title'">
+                <xsl:text>title</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:attribute>
+</xsl:template>
+
+<!-- 2017-12-07  "@latexsep" on "c"/"cd" is ignored; drop it.  Added 2026-06-25. -->
+<xsl:template match="c/@latexsep|cd/@latexsep" mode="repair"/>
+
+<!-- 2018-02-05  "booktitle" replaced by "pubtitle".  Added 2026-06-25. -->
+<xsl:template match="booktitle" mode="repair">
+    <pubtitle>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </pubtitle>
+</xsl:template>
+
+<!-- 2019-02-20  "rename/@lang" replaced by "@xml:lang".  Added 2026-06-25. -->
+<xsl:template match="rename/@lang" mode="repair">
+    <xsl:attribute name="xml:lang">
+        <xsl:value-of select="."/>
+    </xsl:attribute>
+</xsl:template>
+
+<!-- 2021-07-02 wrap notation/usage in "m" if not present -->
+<xsl:template match="notation/usage[not(m)]" mode="repair">
+    <!-- duplicate "usage" w/ attributes, insert "m" as repair -->
+    <usage>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <m>
+            <xsl:apply-templates select="node()|@*" mode="repair"/>
+        </m>
+    </usage>
+</xsl:template>
+
+<!-- 2021-10-04 "glossary" was finalized, so old-style preserved -->
+
+<!-- glossary introductions become headnotes -->
+<xsl:template match="glossary/introduction" mode="repair">
+    <headnote>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </headnote>
+</xsl:template>
+
+<!-- "terms" only ever had "defined-term" as children    -->
+<!-- and is now obsolete, so dropped as excess structure -->
+<xsl:template match="glossary/terms" mode="repair">
+    <xsl:apply-templates select="defined-term" mode="repair"/>
+</xsl:template>
+
+<!-- "defined-term" was structured, so we just select elements -->
+<xsl:template match="glossary/terms/defined-term" mode="repair">
+    <gi>
+        <xsl:apply-templates select="*|@*" mode="repair"/>
+    </gi>
+</xsl:template>
+
+<!-- no more "conclusion", so drop it here; deprecation will warn -->
+<xsl:template match="glossary/conclusion" mode="repair"/>
+
+<!-- 2022-04-22 replace Python Tutor with Runestone CodeLens -->
+<xsl:template match="program/@interactive" mode="repair">
+    <xsl:choose>
+        <xsl:when test=". = 'pythontutor'">
+            <xsl:attribute name="interactive">
+                <xsl:text>codelens</xsl:text>
+            </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- 2022-04-25 @label deprecated, slated for renewal in starring  -->
+<!-- role. Lists with markers (not description lists) -->
+<xsl:template match="ol/@label|ul/@label" mode="repair">
+    <xsl:attribute name="marker">
+        <xsl:value-of select="."/>
+    </xsl:attribute>
+</xsl:template>
+
+<!-- 2022-04-24 An exception, label on video tracks mimicing HTML -->
+<xsl:template match="video/track/@label" mode="repair">
+    <xsl:attribute name="listing">
+        <xsl:value-of select="."/>
+    </xsl:attribute>
+</xsl:template>
+
+<!-- 2022-06-09 WeBWorK "stage" deprecated in favor of "task"       -->
+<!-- We could use  match="webwork/stage"  but then this would only  -->
+<!-- happen to the author's source while being prepared for the     -->
+<!-- "extract-pg.xsl" worksheet.  But we also want to catch "stage" -->
+<!-- coming back from an old WeBWorK server, which may be various   -->
+<!-- places after we algorithmically manipulate the "webwork-reps"  -->
+<!-- structure.  Instead, we just wait until now.  If necessary,    -->
+<!-- perhaps "exercise/stage" for the post-server pass.             -->
+<xsl:template match="stage" mode="repair">
+    <task>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </task>
+</xsl:template>
+
+<!-- 2022-07-10 webwork//latex-image[syntax='PGtikz'] deprecated    -->
+<!-- to just a normal latex-image. The text content for the code    -->
+<!-- must be wrapped in a tikzpicture environment.                  -->
+<xsl:template match="latex-image[@syntax='PGtikz']" mode="repair">
+    <xsl:copy>
+        <!-- we drop the @syntax attribute -->
+        <xsl:apply-templates select="node()|@*[not(local-name(.) = 'syntax')]" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+<xsl:template match="latex-image[@syntax='PGtikz']/text()" mode="repair">
+    <xsl:text>\begin{tikzpicture}&#xa;</xsl:text>
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text">
+            <xsl:copy>
+                <xsl:apply-templates select="."/>
+            </xsl:copy>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>&#xa;\end{tikzpicture}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Deprecated 2018-12-30 in favor of "ca"   -->
+<!-- Copy attributes...because you never know -->
+<xsl:template match="circa" mode="repair">
+    <ca>
+        <xsl:apply-templates select="@*" mode="repair"/>
+    </ca>
+</xsl:template>
+
+<!-- Due to naivete, we had empty templates for "keyboard characters"    -->
+<!-- we did not have the skills to handle.  A good example was <dollar/> -->
+<!-- simply because it is a (very) special character in LaTeX.  These    -->
+<!-- were deprecated on 2019-02-06.  Beginning in 2022-12-26, we are     -->
+<!-- providing fixes here, and removing all the (dead) code meant for    -->
+<!-- backward compatibility.                                             -->
+
+<!-- XML characters -->
+
+<xsl:template match="less" mode="repair">
+    <xsl:text>&lt;</xsl:text>
+</xsl:template>
+
+<xsl:template match="greater" mode="repair">
+    <xsl:text>&gt;</xsl:text>
+</xsl:template>
+
+<!-- Ten LaTeX characters -->
+<!-- # $ % ^ & _ { } ~ \  -->
+
+<xsl:template match="hash" mode="repair">
+    <xsl:text>#</xsl:text>
+</xsl:template>
+
+<xsl:template match="ampersand" mode="repair">
+    <xsl:text>&amp;</xsl:text>
+</xsl:template>
+
+<xsl:template match="dollar" mode="repair">
+    <xsl:text>$</xsl:text>
+</xsl:template>
+
+<xsl:template match="percent" mode="repair">
+    <xsl:text>%</xsl:text>
+</xsl:template>
+
+<xsl:template match="circumflex" mode="repair">
+    <xsl:text>^</xsl:text>
+</xsl:template>
+
+<xsl:template match="underscore" mode="repair">
+    <xsl:text>_</xsl:text>
+</xsl:template>
+
+<xsl:template match="lbrace" mode="repair">
+    <xsl:text>{</xsl:text>
+</xsl:template>
+
+<xsl:template match="rbrace" mode="repair">
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="tilde" mode="repair">
+    <xsl:text>~</xsl:text>
+</xsl:template>
+
+<xsl:template match="backslash" mode="repair">
+    <xsl:text>\</xsl:text>
+</xsl:template>
+
+<!-- Lesser keyboard characters -->
+<!-- [, ], *, /, `,             -->
+
+<xsl:template match="lbracket" mode="repair">
+    <xsl:text>[</xsl:text>
+</xsl:template>
+
+<xsl:template match="rbracket" mode="repair">
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<xsl:template match="asterisk" mode="repair">
+    <xsl:text>*</xsl:text>
+</xsl:template>
+
+<xsl:template match="slash" mode="repair">
+    <xsl:text>/</xsl:text>
+</xsl:template>
+
+<xsl:template match="backtick" mode="repair">
+    <xsl:text>`</xsl:text>
+</xsl:template>
+
+<!-- Grouping constructions  -->
+<!-- "braces" and "brackets" -->
+
+<xsl:template match="braces" mode="repair">
+    <xsl:text>{</xsl:text>
+    <!-- attributes will be lost -->
+    <xsl:apply-templates select="node()" mode="repair"/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="brackets" mode="repair">
+    <xsl:text>[</xsl:text>
+    <!-- attributes will be lost -->
+    <xsl:apply-templates select="node()" mode="repair"/>
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- 2023-01-27: deprecate "datafile" to make way for a better    -->
+<!-- Runestone-powered version.  Cosmetic replacement: "dataurl". -->
+<!-- 2023-01-30: refine deprecation repair just after a minor CLI -->
+<!-- release. A "datafile" element may be OK as a "new" use,      -->
+<!-- with the presence of @label indicating use/application with  -->
+<!-- Runestone Javascript.  So only automatically upgrade "old"   -->
+<!-- uses lacking @label.                                         -->
+<xsl:template match="datafile[not(@label)]" mode="repair">
+    <dataurl>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </dataurl>
+</xsl:template>
+
+<xsl:template match="colophon/website[address]" mode="repair">
+    <website>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <url>
+            <xsl:attribute name="href">
+                <xsl:value-of select="address"/>
+            </xsl:attribute>
+            <xsl:apply-templates select="name/node()" mode="repair"/>
+        </url>
+    </website>
+</xsl:template>
+
+<!-- 2023-08-28: deprecate the "console" "prompt" element -->
+
+<!-- Removing this entire line typically orphans a text node    -->
+<!-- just prior with a newline and indentation, but this should -->
+<!-- not harm subsequent processing since we do not assume      -->
+<!-- source is carefully authored as one element per line.      -->
+<xsl:template match="console/prompt" mode="repair"/>
+
+<!-- If there was a "prompt" element just preceding an "input"      -->
+<!-- element, then we reach up and grab it and make it an attribute -->
+<!-- of the "input" - but not if somebody happened to already start -->
+<!-- using a @prompt attribute.                                     -->
+<!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
+<xsl:template match="console/input" mode="repair">
+    <xsl:copy>
+        <xsl:if test="not(@prompt) and preceding-sibling::*[1][self::prompt]">
+            <xsl:attribute name="prompt">
+                <xsl:value-of select="preceding-sibling::*[1][self::prompt]"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- 2023-09-07: move "description" to "shortdescription" -->
+<!-- 2026-06-26: support this move for "description" inside "interactive" -->
+<xsl:template match="image/description[not(*[not(self::var)])]|interactive/description[not(*[not(self::var)])]" mode="repair">
+    <xsl:element name="shortdescription" namespace="">
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </xsl:element>
+</xsl:template>
+
+<!-- 2023-10-17: docinfo/latex-preamble is history -->
+
+<xsl:template match="docinfo/latex-preamble" mode="repair">
+    <!-- any attributes (no such thing?) are simply  -->
+    <!-- orphaned and we just process child elements -->
+    <xsl:apply-templates select="node()" mode="repair"/>
+</xsl:template>
+
+<!-- 2023-10-17: and "extra" LaTeX packages are re-worked -->
+
+<xsl:template match="docinfo/latex-preamble/package" mode="repair">
+    <xsl:element name="math-package">
+        <xsl:attribute name="latex-name">
+            <xsl:value-of select="."/>
+        </xsl:attribute>
+        <xsl:attribute name="mathjax-name">
+            <xsl:value-of select="."/>
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
+<!-- 2024-10-29: program is reworked -->
+
+<!-- Add code element around text in program when missing -->
+<xsl:template match="program[not(input|code)]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <code>
+            <xsl:value-of select="text()"/>
+        </code>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="program[not(code)]/input" mode="repair">
+    <xsl:element name="code">
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </xsl:element>
+</xsl:template>
+
+<!-- Index deprecations -->
+<!-- The way an index was constructed changed in 2017-07-14.  At 2024-08-08  -->
+<!-- we are using the "repair" phase to move the old style to the new.  The  -->
+<!-- old style looked like a "index-part" division with a mandatory          -->
+<!-- "index-list" child.  Elements sprinkled into the text were an           -->
+<!-- unstructured "index" or an "index" with up to three headings: "main",   -->
+<!-- followed by possibly two "sub".  Now the division is "index" (as it     -->
+<!-- should be!) and the entries are "idx".  A structured "idx" can have     -->
+<!-- one to three "h" elements as the headings.                              -->
+
+<!-- Change the division element -->
+<xsl:template match="index-part" mode="repair">
+    <index>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </index>
+</xsl:template>
+
+<!-- Change tne entry element, but avoid a new division name -->
+<xsl:template match="index[not(index-list)]" mode="repair">
+    <idx>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </idx>
+</xsl:template>
+
+<!-- Change first old style heading -->
+<xsl:template match="index[not(index-list)]/main" mode="repair">
+    <h>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </h>
+</xsl:template>
+
+<!-- Change second and third old style headings -->
+<xsl:template match="index[not(index-list)]/sub" mode="repair">
+    <h>
+        <xsl:apply-templates select="node()|@*" mode="repair"/>
+    </h>
+</xsl:template>
+
+<!-- Frontmatter repairs -->
+<!-- 2024-10-10: we will no longer require an author to decide  -->
+<!-- which frontmatter elements belong on a titlepage or in the -->
+<!-- front colophon.  All the elements from both titlepage and  -->
+<!-- colophon should now go in bibinfo. We run repair whenever  -->
+<!-- the author has an existing titlepage or colophon without   -->
+<!-- the new titlepage-items or colophon-items children.        -->
+<xsl:template match="frontmatter[titlepage[not(titlepage-items)] or colophon[not(colophon-items)]]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <bibinfo>
+            <!-- Include deprecated children of titlepage and colophon -->
+            <xsl:apply-templates select="titlepage/author" mode="repair"/>
+            <xsl:apply-templates select="titlepage/editor" mode="repair"/>
+            <xsl:apply-templates select="titlepage/credit" mode="repair"/>
+            <xsl:apply-templates select="titlepage/date" mode="repair"/>
+            <!-- for slides, we allowed an "event" -->
+            <xsl:apply-templates select="titlepage/event" mode="repair"/>
+            <xsl:apply-templates select="colophon/credit" mode="repair"/>
+            <xsl:apply-templates select="colophon/edition" mode="repair"/>
+            <xsl:apply-templates select="colophon/website" mode="repair"/>
+            <xsl:apply-templates select="colophon/copyright" mode="repair"/>
+        </bibinfo>
+        <!-- We (pretty much) duplicate everything, except two templates -->
+        <!-- below hollow-out old-style "titlepage" and "colophon" to    -->
+        <!-- match the new style with generators.                        -->
+        <xsl:apply-templates select="node()" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- We repair a "titlepage" that is not in the new style using a text   -->
+<!-- generator.  The "titlepage" is structural and the empty text        -->
+<!-- generator will be implemented in conversions to do the right thing. -->
+<xsl:template match="titlepage[not(titlepage-items)]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <titlepage-items/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- We repair a front "colophon" that is not in the new style using a   -->
+<!-- text generator.  The "colophon" is structural and the empty text    -->
+<!-- generator will be implemented in conversions to do the right thing. -->
+<!-- NB: "frontmatter" is necessary so we don't clobber a BACK colophon! -->
+<xsl:template match="frontmatter/colophon[not(colophon-items)]" mode="repair">
+    <xsl:copy>
+        <xsl:choose>
+            <!-- Keep authored xml:id or label -->
+            <xsl:when test="@xml:id|@label">
+                <xsl:apply-templates select="@xml:id|@label" mode="repair"/>
+            </xsl:when>
+            <!-- Otherwise, use the label "front-colophon" -->
+            <xsl:otherwise>
+                <xsl:attribute name="label">
+                    <xsl:text>front-colophon</xsl:text>
+                </xsl:attribute>
+            </xsl:otherwise>
+        </xsl:choose>
+        <!-- Include the colophon-items generator -->
+        <colophon-items/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- We allow an author/editor/contributor to have their affiliation information not -->
+<!-- wrapped in affiliation tags, but in that case we put them in affiliation tags.  -->
+<xsl:template match="frontmatter//author[not(affiliation)]|frontmatter//editor[not(affiliation)]|frontmatter//contributor[not(affiliation)]" mode="repair">
+    <xsl:copy>
+        <!-- Include "personname" first -->
+        <xsl:apply-templates select="personname|@*" mode="repair"/>
+        <!-- If there are bare deparmtment/institution/address, wrap them in affailiation -->
+        <xsl:if test="department or institution or location">
+            <affiliation>
+                <xsl:apply-templates select="department|institution|location" mode="repair"/>
+            </affiliation>
+        </xsl:if>
+        <!-- Include all additional elements as they are -->
+        <xsl:apply-templates select="*[not(self::personname or self::department or self::institution or self::location)]" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- 2025-03-08:  "commentary" is deprecated.  Authors should remove it, -->
+<!-- but we have suggested that it could be used with version support.   -->
+<!-- So, if extant here in the repair phase, then it must have had a     -->
+<!-- @component value that a publication file suggested retaining.       -->
+<!-- So, just like the previous (now gone) "component" pass, we just     -->
+<!-- unwrap the element.                                                 -->
+<xsl:template match="commentary" mode="repair">
+    <!-- do not duplicate "commentary", do not replicate   -->
+    <!-- @component, do replicate element and text children -->
+    <xsl:apply-templates select="node()" mode="repair"/>
+</xsl:template>
+
+<!-- Change listing captions to titles if there is not already a title -->
+<xsl:template match="listing/caption" mode="repair">
+    <xsl:if test="not(parent::listing/title)">
+        <title>
+            <xsl:apply-templates select="node()|@*" mode="repair"/>
+        </title>
+    </xsl:if>
+</xsl:template>
+
+<!-- 2025-08-15: Ensure that interactives all have a @interactive-platform -->
+<!-- that identifies their basic type                                      -->
+<xsl:template match="interactive" mode="repair">
+    <xsl:copy>
+        <xsl:attribute name="interactive-platform">
+            <xsl:choose>
+                <xsl:when test="@platform">
+                    <xsl:value-of select="@platform"/>
+                </xsl:when>
+                <xsl:when test="@desmos">desmos</xsl:when>
+                <xsl:when test="@geogebra">geogebra</xsl:when>
+                <xsl:when test="@calcplot3d">calcplot3d</xsl:when>
+                <xsl:when test="@circuitjs">circuitjs</xsl:when>
+                <xsl:when test="@iframe">iframe</xsl:when>
+                <xsl:otherwise>unknown</xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:apply-templates select="node()" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- 2025-11-04: a @runestone attribute was used to point into a file      -->
+<!-- of raw HTML versions of Runestone exercises.  This was a              -->
+<!-- transitional device to allow conversions of Runestone books into      -->
+<!-- PreTeXt books as work progressed on better integration of Runestone.  -->
+<!-- We make a dead simple replacment exercise, so numbering is preserved, -->
+<!-- etc, and authors can adapt at their leisure.  We remove the offending -->
+<!-- @runestone attribute via a very specialized template.                 -->
+
+<!-- applies to exercise, PROJECT-LIKE, task -->
+<xsl:template match="exercise[@runestone]|project[@runestone]|activity[@runestone]|exploration[@runestone]|investigation[@runestone]|task[@runestone]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <p>There was once a (temporary) Runestone exercise here, which would only render in <init>HTML</init> output, and never in static output forms.  That (temporary) device is no longer supported as of 2025-11-04, since the exercise should now be authored in supported <pretext/> syntax.  You might alert the author to this situation.</p>
+    </xsl:copy>
+</xsl:template>
+
+<!-- remove the @runestone, just in case -->
+<xsl:template match="@runestone" mode="repair"/>
+
+
+<!-- Deprecate "me", "men", "mdn" in favor of "md" (w/ "mrow" or bare) -->
+
+<!-- Strategy: only two forms may be authored:                       -->
+<!--                                                                 -->
+<!--   Regular "md" with (multiple) "mrow" children                  -->
+<!--     - @xml:id goes on the "mrow"                                -->
+<!--     - @number may go on individual "mrow"                       -->
+<!--     - @number may go on overall "md" (to mimic "mdn")           -->
+<!--                                                                 -->
+<!--   Bare "md" with content (like old "me" and "men")              -->
+<!--     - @xml:id goes on the "md"                                  -->
+<!--     - md/@number allows for me/men dichotomy                    -->
+<!--     - md/@number is not assumed                                 -->
+<!--                                                                 -->
+<!-- Conversion here makes every existing display math construction  -->
+<!-- look like the "regular" version described above.                -->
+
+<!-- Not always a "repair" function, but we take the opportunity to  -->
+<!-- record if an "mrow" is numbered or not, via a  @pi:numbered     -->
+<!-- attribute, which is in our private namespace. For deprecations, -->
+<!-- we just do it.  For authored forms, we interpret an authored    -->
+<!-- @number attribute on authored "mrow" (status quo), on a regular -->
+<!-- or bare "md" (new), and a global specification in "docinfo"     -->
+<!-- (new).  These new features compensate for the deprecation       -->
+<!-- of the "n"-series elements.                                     -->
+<!-- The @tag attribute is a "local tag" formed with symbols,        -->
+<!-- and precludes a number.                                         -->
+
+<!-- Replace "me" and "me" by an "md" with one "mrow"    -->
+<!--   - @xml:id will live on the "md" (new)             -->
+<!--   - forcible  @npi:umbered  attribute for each,     -->
+<!--       to preserve old behavior                      -->
+<!--   - @pi:authored-one-line as empty sentinel, to     -->
+<!--       distinguish from an *authored* single "mrow"  -->
+<xsl:template match="me|men" mode="repair">
+    <xsl:element name="md">
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <!-- note origin as single-line display math -->
+        <xsl:attribute name="pi:authored-one-line"/>
+        <!-- manufacture an "mrow" to hold content -->
+        <xsl:element name="mrow">
+            <xsl:attribute name="pi:numbered">
+                <xsl:choose>
+                    <xsl:when test="self::me">
+                        <xsl:text>no</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="self::men">
+                        <xsl:text>yes</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:apply-templates select="node()" mode="repair"/>
+        </xsl:element>
+    </xsl:element>
+</xsl:template>
+
+<!-- "md" with "mrow" needs no adjustment (status quo),   -->
+<!-- the default "repair" templates are correct.  But     -->
+<!-- see "mrow" template below for @pi:numbered behavior. -->
+
+<!-- Replace "mdn" with "mrow" , by an "md" with @number     -->
+<!--   - see "mrow" template below for @pi:numbered behavior -->
+<!--   - @xml:id  was only ever allowed on individual "mrow" -->
+<xsl:template match="mdn[mrow]" mode="repair">
+    <xsl:element name="md">
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <!-- copy the mrows -->
+        <xsl:apply-templates select="node()" mode="repair"/>
+    </xsl:element>
+</xsl:template>
+
+<!-- A bare "mdn" was just a transitional device during all    -->
+<!-- the deprecation of the majority of math display elements  -->
+<!-- and the introduction of more robust numbering options.    -->
+<!-- It *never* enjoyed full support and was only in the wild  -->
+<!-- for a couple of weeks.  We warn about this removal (as a  -->
+<!-- deprecation) and suggest the "md" replacement.            -->
+<xsl:template match="mdn[not(mrow)]" mode="repair"/>
+
+<!-- Replace bare "md" by "md" with one "mrow"          -->
+<!--   - @xml:id will live on the "md" (new)            -->
+<!--   - md/@number  respected first                    -->
+<!--   - md/@tag  transferred to the manufactured       -->
+<!--       "mrow", where downstream processing expects  -->
+<!--       it; @tag and @number are mutually exclusive  -->
+<!--   - @pi:authored-one-line as empty sentinel, to    -->
+<!--       distinguish from an *authored* single "mrow" -->
+<xsl:template match="md[not(mrow)]" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*[not(local-name(.) = 'tag')]" mode="repair"/>
+        <!-- note origin as single-line display math -->
+        <xsl:attribute name="pi:authored-one-line"/>
+        <!-- manufacture an "mrow" to hold content -->
+        <xsl:element name="mrow">
+            <!-- a @tag on the bare "md" is transferred to the "mrow" -->
+            <xsl:copy-of select="@tag"/>
+            <xsl:attribute name="pi:numbered">
+                <xsl:choose>
+                    <!-- a local @tag precludes a number -->
+                    <xsl:when test="@tag">
+                        <xsl:text>no</xsl:text>
+                    </xsl:when>
+                    <!-- possibly authored with @number -->
+                    <xsl:when test="@number = 'yes'">
+                        <xsl:text>yes</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="@number = 'no'">
+                        <xsl:text>no</xsl:text>
+                    </xsl:when>
+                    <!-- Now the global default set in "docinfo".  It would be -->
+                    <!-- nice to store this choice in a global variable, but   -->
+                    <!-- the mechanics of that result in erroneous recursion.  -->
+                    <!-- So we simply repeatedly consult the "docinfo" built   -->
+                    <!-- in the previous tree.                                 -->
+                    <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'yes'">
+                        <xsl:text>yes</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'no'">
+                        <xsl:text>no</xsl:text>
+                    </xsl:when>
+                    <!-- the default default is to not number equations -->
+                    <xsl:otherwise>
+                        <xsl:text>no</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:apply-templates select="node()" mode="repair"/>
+        </xsl:element>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Authored "mrow", inside "md" or "mdn", get a @pi: numbered -->
+<!-- attribute, according to hierarchy of specifications.       -->
+<!-- ("md" and "mdn" parents in "match" could be overkill.)     -->
+<xsl:template match="md/mrow|mdn/mrow" mode="repair">
+    <xsl:copy>
+        <xsl:apply-templates select="@*" mode="repair"/>
+        <xsl:attribute name="pi:numbered">
+            <xsl:choose>
+                <xsl:when test="@tag">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="@number = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="@number = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- now look to a (possible) "mdn" element as the      -->
+                <!-- container, the @number attribute is not supported, -->
+                <!-- the "n" implies a number by default                -->
+                <xsl:when test="parent::mdn">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <!-- now look to the (certain) "md" element as the container -->
+                <xsl:when test="parent::md[@number = 'yes']">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="parent::md[@number = 'no']">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- Now the global default set in "docinfo".  It would be -->
+                <!-- nice to store this choice in a global variable, but   -->
+                <!-- the mechanics of that result in erroneous recursion.  -->
+                <!-- So we simply repeatedly consult the "docinfo" built   -->
+                <!-- in the previous tree.                                 -->
+                <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="$representations/pretext/docinfo/numbering/@equations = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <!-- the default default is to not number equations -->
+                <xsl:otherwise>
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()" mode="repair"/>
+    </xsl:copy>
+</xsl:template>
+
+
+<!-- Display math with "intertext"                           -->
+<!-- We explode display math with "inertext" into a series   -->
+<!-- of "md" interspered with "pi:intertext" elements.       -->
+<!-- Note that $nodes only selects "mrow" and "intertext".   -->
+<!-- Note:                                                   -->
+<!-- *  This really is a "repair" for "mdn" with intertext   -->
+<!--    there is a transformation to many "md".              -->
+<!-- *  When the "mrow" get hit by the "repair" template,    -->
+<!--    the numbering is recorded, based on the usual        -->
+<!--     hierarchy,including the "md" or "mdn" container.    -->
+<!-- *  The text of the "intertext" also gets hit by         -->
+<!--   "repair"s of any sentence-level changes will be made. -->
+
+<xsl:template match="md[intertext]|mdn[intertext]" mode="repair">
+
+    <!-- We are going to explode an "md" with "intertext" into  -->
+    <!-- multiple "md".  But for LaTeX, only, we are going to   -->
+    <!-- basically put them all back together again.  But as we -->
+    <!-- come up to each exploded "md" in the LaTeX conversion  -->
+    <!-- it will not be so easy to see if the *original* "md"   -->
+    <!-- had numbers or local tags.  So we determine this       -->
+    <!-- prior to the explosion and record it onto each "md".   -->
+    <!--                                                        -->
+    <!-- The logic of deprecations here means it is perhaps     -->
+    <!-- best to construct all the "mrow" in a disposable       -->
+    <!-- node-set and analyze it for numbers and tags, recorded -->
+    <!-- as a single boolean we can replicate.                  -->
+
+    <xsl:variable name="trial-mrow-rtf">
+        <xsl:apply-templates select="mrow" mode="repair"/>
+    </xsl:variable>
+    <xsl:variable name="trial-mrow" select="exsl:node-set($trial-mrow-rtf)"/>
+    <xsl:variable name="b-needs-tags" select="boolean($trial-mrow/mrow[@pi:numbered = 'yes' or @tag])"/>
+
+    <xsl:apply-templates select="." mode="intertext-exploder">
+        <xsl:with-param name="nodes" select="mrow|intertext"/>
+        <xsl:with-param name="location" select="'first'"/>
+        <xsl:with-param name="b-needs-tags" select="$b-needs-tags"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="md[intertext]|mdn[intertext]" mode="intertext-exploder">
+    <xsl:param name="nodes"/>
+    <xsl:param name="location"/>
+    <xsl:param name="b-needs-tags"/>
+
+    <!-- No nodes, no action, so recursion ends, -->
+    <!-- AND there is no $lead-node to switch on. -->
+    <xsl:if test="$nodes">
+        <!-- will switch on if $lead node is "mrow" or "interext" -->
+        <xsl:variable name="lead-node" select="$nodes[1]"/>
+        <xsl:choose>
+            <xsl:when test="$lead-node[self::mrow]">
+                <!-- The first intertext after $lead-node (if any) -->
+                <!-- marks the end of a non-empty run of "mrow"    -->
+                <!-- (we know $lead-node is an "mrow")             -->
+                <xsl:variable name="break" select="$lead-node/following-sibling::intertext[1]"/>
+                <!-- A maximal run of contiguous "mrow" starting at $lead-node.    -->
+                <!-- All "mrow" including $lead-node, and those coming afterwards. -->
+                <!-- $break is empty for the last run, so "not($break)" will be    -->
+                <!-- true and there is no filtering.  Otherwise we compare an      -->
+                <!-- "mrow"'s following "intertext" to see if it is $break or not. -->
+                <xsl:variable name="md-block" select="$lead-node |
+                    $lead-node/following-sibling::mrow[not($break) or (count(following-sibling::intertext[1] | $break) = count(following-sibling::intertext[1]))]"/>
+                <!-- put the maximal run into a fresh "md"     -->
+                <!-- Location helps with reconstruction in     -->
+                <!-- the LaTeX conversion, where we un-explode -->
+                <md pi:location="{$location}">
+                    <xsl:attribute name="pi:latex-intertext-needs-tags">
+                        <xsl:choose>
+                            <xsl:when test="$b-needs-tags">
+                                <xsl:text>yes</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>no</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:apply-templates select="$md-block" mode="repair"/>
+                </md>
+                <!-- "first" is never repeated, and  -->
+                <!-- "last" only happens in one case -->
+                <xsl:variable name="next-location">
+                    <xsl:choose>
+                        <xsl:when test="not($break/following-sibling::intertext)">
+                            <xsl:text>last</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>intermediate</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <!-- We strip down the set of $nodes, starting at the     -->
+                <!-- last "mrow" of the $md-block, so the remainder will  -->
+                <!-- normally start with an "intertext", or the remainder -->
+                <!-- might be empty (which will halt the recursion).      -->
+                <xsl:apply-templates select="." mode="intertext-exploder">
+                    <xsl:with-param name="nodes" select="$md-block[last()]/following-sibling::*"/>
+                    <xsl:with-param name="location" select="$next-location"/>
+                    <xsl:with-param name="b-needs-tags" select="$b-needs-tags"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:when test="$lead-node[self::intertext]">
+                <!-- We place the text of the intertext into a custom      -->
+                <!-- internal element for handling by the common templates -->
+                <pi:intertext>
+                    <xsl:apply-templates select="$lead-node/node()" mode="repair"/>
+                </pi:intertext>
+                <!-- Strip down $nodes by simply removing the leading "intertext" -->
+                <xsl:apply-templates select="." mode="intertext-exploder">
+                    <xsl:with-param name="nodes" select="$lead-node/following-sibling::*"/>
+                    <xsl:with-param name="location" select="$location"/>
+                    <xsl:with-param name="b-needs-tags" select="$b-needs-tags"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <!-- orioginal  $nodes  ensures we never get here -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:if>
+</xsl:template>
+
+
+<!-- ############################## -->
+<!-- Killed, in Chronological Order -->
+<!-- ############################## -->
+
+<!-- 2017-07-16  killed, from 2015-03-13 deprecation -->
+<xsl:template match="paragraph" mode="repair"/>
+
+<!-- 2019-02-20  deprecated and killed simultaneously -->
+<xsl:template match="todo" mode="repair"/>
+
+<!-- A "pagebreak" should have had limited -->
+<!-- uptake, so no real care taken,        -->
+<!-- Deprecated 2021-03-17                 -->
+<xsl:template match="pagebreak" mode="repair"/>
+
+<!-- @permid experiments retired 2024-07-24, -->
+<!-- so eliminated in this phase             -->
+<xsl:template match="@permid" mode="repair"/>
+
+<!-- 2024-08-05: remove metadata elements from a sidebyside, -->
+<!-- which have not been schema-compliant since circa 2017   -->
+<xsl:template match="sidebyside/*[&METADATA-FILTER;]" mode="repair"/>
+
+<!-- ########## -->
+<!-- Enrichment -->
+<!-- ########## -->
+
+<!-- Certain markup can be translated into more primitive versions using      -->
+<!-- existing markup, so we do a translation of certain forms into more       -->
+<!-- potentially verbose forms that an author might tire of doing repeatedly. -->
+<!-- See below for examples.  This is better than making a result-tree        -->
+<!-- fragment and applying templates, since all context is lost that way.     -->
+
+<!-- Visual URLs -->
+<!-- A great way to present a URL is with some clickable text.  But that    -->
+<!-- is useless in print.  And maybe a reader really would like to see the  -->
+<!-- actual URL.  So "@visual" is a version of the URL that is pleasing to  -->
+<!-- look at, maybe just a TLD, no protocol (e.g "https://"), no "www."     -->
+<!-- if unnecessary, etc.  This "visual URL"  may be provided by an author  -->
+<!-- through a @visual attribute.  When this attribute is not provided, we  -->
+<!-- manufacture a reasonable version from the real, actual URL that must   -->
+<!-- necessarily be given.  To prevent consideration of a visual version,   -->
+<!-- an author can set @visual="" and no manufactured version will be made. -->
+<xsl:template match="url[node() and not(@visual)]|dataurl[node() and not(@visual)]" mode="enrichment">
+    <!-- We create a new "default-ish" visual URL for a  -->
+    <!-- content-full "url" when none has been authored -->
+    <!--  -->
+    <!-- We get a candidate visual URI             -->
+    <!--   @href: external link/reference/location -->
+    <!--   dataurl[@source]:  internal link        -->
+    <xsl:variable name="uri">
+        <xsl:choose>
+            <!-- "url" and "dataurl" both support external @href -->
+            <xsl:when test="@href">
+                <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- a "dataurl" might be local, @source is         -->
+            <!-- indication, so prefix with a base URL,         -->
+            <!-- add "external" directory, via template useful  -->
+            <!-- also for visual URL formulation in -assembly   -->
+            <!-- N.B. we are using the base URL, since this is  -->
+            <!-- the most likely need by employing conversions. -->
+            <!-- It would eem duplicative in a conversion to    -->
+            <!-- HTML, so could perhaps be killed in that case. -->
+            <!-- But it is what we want for LaTeX, and perhaps  -->
+            <!-- for EPUB, etc.                                 -->
+            <xsl:when test="self::dataurl and @source">
+                <xsl:apply-templates select="." mode="static-url"/>
+            </xsl:when>
+            <!-- empty will be non-functional -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- And clean-up automatically in the prevalent cases -->
+    <xsl:variable name="truncated-href">
+        <xsl:choose>
+            <xsl:when test="substring(@href, 1, 8) = 'https://'">
+                <xsl:value-of select="substring($uri, 9)"/>
+            </xsl:when>
+            <xsl:when test="substring(@href, 1, 7) = 'http://'">
+                <xsl:value-of select="substring($uri, 8)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$uri"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!--  -->
+    <xsl:copy>
+        <!-- copy all the attributes, which might include a @visual,      -->
+        <!-- and that @visual could be empty (a signal it is not desired) -->
+        <xsl:apply-templates select="@*" mode="enrichment"/>
+        <!-- Provide the "missing" @visual (see match above),  -->
+        <!-- so now *every* content-full "url" has an @visual, -->
+        <!-- either authored or provided automatically here.   -->
+        <!-- Conversions decide what to do with it.            -->
+        <xsl:attribute name="visual">
+            <xsl:value-of select="$truncated-href"/>
+        </xsl:attribute>
+        <!-- done with attributes, copy the content -->
+        <xsl:apply-templates select="node()" mode="enrichment"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- ######################################## -->
+<!-- Enrichment of Geogebra interactives      -->
+<!-- ######################################## -->
+
+<!-- Expand reference to Geogebra by material-id to use -->
+<!-- an implicit applet approach with a slate to better -->
+<!-- facilitate all of the applet control parameters.   -->
+<xsl:template match="interactive[@geogebra]" mode="enrichment">
+    <xsl:param name="default-aspect" select="'1:1'" />
+    <xsl:variable name="ggbMaterialWidth">
+        <xsl:choose>
+            <xsl:when test="@material-width">
+                <xsl:value-of select="@material-width"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>800</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="aspect-ratio">
+        <xsl:apply-templates select="." mode="get-aspect-ratio">
+            <xsl:with-param name="default-aspect" select="$default-aspect" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="ggbMaterialHeight">
+        <xsl:choose>
+            <xsl:when test="@material-height">
+                <xsl:value-of select="@material-height"/>
+            </xsl:when>
+            <xsl:when test="$aspect-ratio=''"/>
+            <xsl:otherwise>
+                <xsl:value-of select="round($ggbMaterialWidth div $aspect-ratio)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="slate-copy-attr" select="'toolbar algebra-input reset-icon shift-drag-zoom zoom-buttons'"/>
+    <xsl:variable name="interactive-drop-attr" select="concat($slate-copy-attr, ' ', 'geogebra material-width material-height')"/>
+    <interactive>
+        <xsl:attribute name="platform">
+            <xsl:text>geogebra</xsl:text>
+        </xsl:attribute>
+        <xsl:if test="not(@aspect)">
+            <xsl:attribute name="aspect">
+                <xsl:value-of select="$aspect-ratio"/>
+            </xsl:attribute>
+        </xsl:if>
+        <!-- Restore all of the original attributes not processed separately -->
+        <xsl:copy-of select="@*[not(contains(concat(' ', $interactive-drop-attr, ' '), concat(' ', local-name(), ' ')))]"/>
+        <!-- done with attributes, copy the content -->
+        <xsl:apply-templates select="node()" mode="enrichment"/>
+        <slate>
+            <xsl:attribute name="xml:id">
+                <xsl:value-of select="@assembly-id"/>
+                <xsl:text>-ggb-slate</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="surface">
+                <xsl:text>geogebra</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="material">
+                <xsl:value-of select="@geogebra"/>
+            </xsl:attribute>
+            <xsl:attribute name="material-width">
+                <xsl:value-of select="$ggbMaterialWidth"/>
+            </xsl:attribute>
+            <xsl:if test="$ggbMaterialHeight != ''">
+                <xsl:attribute name="material-height">
+                    <xsl:value-of select="$ggbMaterialHeight"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:copy-of select="@*[contains(concat(' ', $slate-copy-attr, ' '), concat(' ', local-name(), ' '))]"/>
+        </slate>
+    </interactive>
+</xsl:template>
+
+<!-- ###### -->
+<!-- Labels -->
+<!-- ###### -->
+
+<!-- The "labels" pass (pass 11).  It promotes an authored         -->
+<!-- @xml:id to @label and records localization support.  It is    -->
+<!-- deliberately separate from the id-attribute mechanism in      -->
+<!-- "Identification": it runs after @assembly-id is stamped and   -->
+<!-- before @unique-id, and the @label values created here are     -->
+<!-- read by that final @unique-id stamp.                          -->
+
+<!-- The "visible-id" template switched to prefer @label,         -->
+<!-- rather than @xml:id (at 1779e6dbc84c6ecc).  So to preserve   -->
+<!-- authored (crafted) identifier strings, we copy the old over  -->
+<!-- into the new.  This preserves identifiers in output          -->
+<!-- (filenames, fragment identifiers).  Subsequent passes        -->
+<!-- should not introduce or remove elements.                     -->
+
+<!-- 2023-03-30: This is old commentary about the use of the -->
+<!-- "unique-id" identifier in the LaTeX conversion, which   -->
+<!-- has now become more universal.  Once identifiers settle -->
+<!-- down, we can clean up the parts of this worth keeping.  -->
+<!--  -->
+<!-- This produces unique strings that are internal to the  -->
+<!-- LaTeX (intermediate) file.  Since neither author nor   -->
+<!-- reader will ever see these, they can be as fast and as -->
+<!-- wild as necessary.  But for mature works, likely with  -->
+<!-- @permid on many relevant objects, or many @xml:id      -->
+<!-- provided for URLs in HTML, these can be predictable    -->
+<!-- across runs (and therefore help with tweaking the LaTeX-->
+<!-- output under revision control) These are employed with -->
+<!-- \label{}, \ref{}, \cite{}, \pageref{}, \eqref{}, etc.  -->
+<!-- We can change this at will, with no adverse effects    -->
+<!-- NB: colons are banned from PTX @xml:id, and will not   -->
+<!-- appear in @permid, though we could use dashes instead  -->
+<!-- without getting duplicates.  The prefixes guarantee    -->
+<!-- that the three uniqueness schemes do not overlap.      -->
+
+<!-- First, we upgrade an authored @xml:id to a @label,       -->
+<!-- WHEN there is no authored @label present.  This is a     -->
+<!-- sort of backward-compatibility maneuver.  An @xml:id     -->
+<!-- now serves only as a sort of internal name for a target  -->
+<!-- node (like a cross-reference, "xref"), while it formerly -->
+<!-- served as a string to generate various bits of output,   -->
+<!-- such as filenames in HTML output.                        -->
+
+<!-- This same walk also records language support (see the    -->
+<!-- "Languages" section for the $locales variable), since    -->
+<!-- both jobs are simple attribute additions and do not      -->
+<!-- deserve separate passes through the entire source.       -->
+
+<xsl:template match="*" mode="labels">
+    <xsl:copy>
+        <!-- duplicate all attributes -->
+        <xsl:apply-templates select="@*" mode="labels"/>
+        <!-- Case: an authored @xml:id, not an authored @label -->
+        <xsl:if test="@xml:id and not(@label)">
+            <xsl:attribute name="label">
+                <xsl:value-of select="@xml:id"/>
+            </xsl:attribute>
+        </xsl:if>
+        <!-- Case: a @label provided in source by author                 -->
+        <!-- It is helpful to distinguish between an authored @label and -->
+        <!-- one that this template creates by copying over a @xml:id.   -->
+        <!-- So we drop an (empty) attribute as a boolean indicator.     -->
+        <!-- This form will simplify checks later at "run-time".         -->
+        <xsl:if test="@label">
+            <xsl:attribute name="authored-label"/>
+        </xsl:if>
+        <!-- A supported @xml:lang is recorded in an internal attribute -->
+        <!-- for use by localizations.  The root element is the         -->
+        <!-- fail-safe node on a language query up the tree, so there   -->
+        <!-- an absent, or unsupported, @xml:lang becomes the default,  -->
+        <!-- en-US.  An unsupported @xml:lang below the root is left    -->
+        <!-- alone, as it might be relevant for future features.        -->
+        <xsl:choose>
+            <xsl:when test="@xml:lang = $locales">
+                <xsl:attribute name="locale-lang">
+                    <xsl:value-of select="@xml:lang"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:when test="not(parent::*)">
+                <xsl:attribute name="xml:lang">
+                    <xsl:text>en-US</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="locale-lang">
+                    <xsl:text>en-US</xsl:text>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+        <!-- recurse -->
+        <xsl:apply-templates select="node()" mode="labels"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- We look for duplicate identifiers both right after    -->
+<!-- assembly and right after automatic generation.  The   -->
+<!-- application of these templates is mixed-in to the     -->
+<!-- creation of the trees.                                -->
+<!-- NB: these were built as regular templates and the     -->
+<!-- root of the relevant tree was passed in, this created -->
+<!-- some error with the construction of the final tree:   -->
+<!-- "Recursive definition of root"                        -->
+<xsl:template name="duplication-check-xmlid">
+    <!-- pass in all elements with @xml:id attributes -->
+    <xsl:param name="nodes"/>
+    <!-- 'authored' or 'generated', just influences messages -->
+    <xsl:param name="purpose"/>
+
+    <xsl:call-template name="duplication-check-attribute">
+        <xsl:with-param name="nodes" select="$nodes"/>
+        <xsl:with-param name="purpose" select="$purpose"/>
+        <xsl:with-param name="target-attr" select="'xml:id'"/>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="duplication-check-label">
+    <!-- pass in all elements with @label attributes -->
+    <xsl:param name="nodes"/>
+    <!-- 'authored' or 'generated', just influences messages -->
+    <xsl:param name="purpose"/>
+
+    <xsl:call-template name="duplication-check-attribute">
+        <xsl:with-param name="nodes" select="$nodes"/>
+        <xsl:with-param name="purpose" select="$purpose"/>
+        <xsl:with-param name="target-attr" select="'label'"/>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="duplication-check-attribute">
+    <xsl:param name="nodes"/>
+    <!-- 'authored' or 'generated', just influences messages -->
+    <xsl:param name="purpose"/>
+    <xsl:param name="target-attr"/>
+
+    <!-- construct a list of just the sorted labels -->
+    <xsl:variable name="attr-values-sorted-rtf">
+        <xsl:for-each select="$nodes/@*[name() = $target-attr]">
+            <xsl:sort select="."/>
+            <label>
+                <xsl:value-of select="."/>
+            </label>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="attr-values-sorted" select="exsl:node-set($attr-values-sorted-rtf)"/>
+
+    <!-- traverse sorted list to find duplicates -->
+    <xsl:for-each select="$attr-values-sorted/*">
+        <!-- save off the string on current node -->
+        <xsl:variable name="attr-value" select="."/>
+        <!-- get previous two labels - will be '' if out of bounds -->
+        <xsl:variable name="prev-value" select="string(preceding-sibling::*[1])"/>
+        <xsl:variable name="prev-prev-value" select="string(preceding-sibling::*[2])"/>
+        <!-- identify only first instance of a duplicate for each label -->
+        <xsl:if test="($attr-value= $prev-value) and ($attr-value != $prev-prev-value)">
+            <xsl:choose>
+                <xsl:when test="$purpose = 'authored'">
+                    <xsl:message>PTX:ERROR: the @<xsl:value-of select="$target-attr"/> value "<xsl:value-of select="$attr-value"/>" should be unique, but is authored multiple times.</xsl:message>
+                </xsl:when>
+            </xsl:choose>
+            <xsl:message>           Results will be unpredictable, and likely incorrect.  Information on the locations follows:</xsl:message>
+            <!-- use the original nodes to report location of instances -->
+            <!-- select where they have an attr with the correct name and it has correct value -->
+            <xsl:for-each select="$nodes[@*[name() = $target-attr] = $attr-value]">
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:for-each>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- ######### -->
+<!-- Languages -->
+<!-- ######### -->
+
+<!-- The variable $locales is a node-set of all the locales which have    -->
+<!-- supported localization files.  A comparison of an @xml:lang (string) -->
+<!-- with $locales (node-set) will be true if the attribute value is a    -->
+<!-- string value of one of the nodes in the node-set.  So it is easy to  -->
+<!-- create a boolean value for localization support.                     -->
+<!-- The recording of language support in @locale-lang attributes is part -->
+<!-- of the "labels" pass, since both jobs are simple attribute additions -->
+<!-- and do not deserve separate passes through the entire source.        -->
+<xsl:variable name="locales" select="document('localizations/localizations.xml')/localizations/locale" />
+
+<!-- ######### -->
+<!-- Numbering -->
+<!-- ######### -->
+
+<!-- We use the "augment" pass to compute, and add, partially naïve        -->
+<!-- information about numbers of objects, to be interpreted later by      -->
+<!-- templates in the "-common" stylesheet.  By "naïve" we mean that       -->
+<!-- these routines may depend on publisher variables (e.g. specification  -->
+<!-- of roots of subtrees for serial numbers of blocks) but do not depend  -->
+<!-- on subtlties of numbering (such as the structured/unstructured        -->
+<!-- division dichotomy), which are addressed in the "-common" stylesheet. -->
+<!-- In this way, this information could be interpreted in new ways by     -->
+<!-- additional conversions.                                               -->
+<!--                                                                       -->
+<!-- The manufactured @struct attribute is the (naïve) hierarchical number -->
+<!-- of the *container* of an element, known as the "structure number"     -->
+<!-- of an element.  The @serial attribute is the computed serial number   -->
+<!-- of the element, known as the "serial number".  Typically combining    -->
+<!-- these two attributes forms teh number of an element.  As many         -->
+<!-- practical subtleties about these numbers is delayed until their       -->
+<!-- interpretation by templates in the "-common" stylesheet.              -->
+
+<!-- For every type of division, everywhere, the "division-serial-number"   -->
+<!-- modal template will return a count of preceding peers at that level.   -->
+<!-- The @struct attribute is the structure number of the *parent*          -->
+<!-- (container), which seems odd here, but fits the general scheme better. -->
+<!-- The @level attribute is helpful, and trvislly to compute here.         -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references|glossary|worksheet|handout" mode="augment">
+    <xsl:param name="parent-struct"/>
+    <xsl:param name="level"/>
+    <xsl:param name="ordered-list-level" />
+
+    <xsl:variable name="the-serial">
+        <xsl:apply-templates select="." mode="division-serial-number"/>
+    </xsl:variable>
+    <xsl:variable name="new-struct">
+        <xsl:choose>
+            <!-- Parts as Roman numerals make for a lot of clutter.      -->
+            <!-- We tend to only use them when necessary to diambiguate  -->
+            <!-- a cross-reference in the case where these numbers are   -->
+            <!-- structural.  So rightly or wrongly, and owing to        -->
+            <!-- historical work, we squelch them as the lead item of a  -->
+            <!-- structural number.  So here the Roman numeral will be   -->
+            <!-- preserved as a serial number, but the construction of   -->
+            <!-- the structural numbers will be delayed one level.       -->
+            <!-- (It seems harder to strip these in -common.)            -->
+            <xsl:when test="self::part"/>
+            <!-- Decorative specialized divisions are transparent:    -->
+            <!-- they do not extend the structure number chain, so    -->
+            <!-- blocks inside them use the parent division's chain.  -->
+            <!-- Specialized divisions are leaves of the division     -->
+            <!-- tree, so this does not affect any descendant         -->
+            <!-- division's @struct.                                  -->
+            <xsl:when test="&SPECIALIZED-DIVISION-FILTER;">
+                <xsl:variable name="is-numbered">
+                    <xsl:apply-templates select="." mode="is-specialized-own-number"/>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$is-numbered = 'true'">
+                        <xsl:value-of select="$parent-struct"/>
+                        <xsl:if test="not($parent-struct='')">
+                            <xsl:text>.</xsl:text>
+                        </xsl:if>
+                        <xsl:value-of select="$the-serial"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$parent-struct"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$parent-struct"/>
+                <xsl:if test="not($parent-struct='')">
+                    <xsl:text>.</xsl:text>
+                </xsl:if>
+                <xsl:value-of select="$the-serial"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="next-level" select="$level + 1"/>
+    <xsl:variable name="next-ordered-list-level">
+        <xsl:choose>
+            <xsl:when test="self::exercises or self::worksheet or self::handout or self::reading-questions or self::references">
+                <xsl:number value="1" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:number value="0" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:copy>
+        <xsl:attribute name="struct">
+            <xsl:value-of select="$parent-struct"/>
+        </xsl:attribute>
+        <xsl:attribute name="serial">
+            <xsl:value-of select="$the-serial"/>
+        </xsl:attribute>
+        <xsl:attribute name="level">
+            <xsl:value-of select="$next-level"/>
+        </xsl:attribute>
+        <!-- Full structure chain including this division's       -->
+        <!-- contribution.  Decorative specialized divisions are  -->
+        <!-- transparent (pass through parent's chain).  Used by  -->
+        <!-- block elements to compute their structure numbers.   -->
+        <xsl:attribute name="block-struct">
+            <xsl:value-of select="$new-struct"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()|@*" mode="augment">
+            <xsl:with-param name="parent-struct" select="$new-struct"/>
+            <xsl:with-param name="level" select="$next-level"/>
+            <xsl:with-param name="ordered-list-level" select="$next-ordered-list-level"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- The top-level division (book, article, ...) is the root of the   -->
+<!-- division tree, at level 0, which the catch-all does not record.  -->
+<!-- A level-0 numbering scheme counts continuously from the root.    -->
+<xsl:template match="book|article|slideshow|letter|memo" mode="augment">
+    <xsl:copy>
+        <xsl:attribute name="level">
+            <xsl:text>0</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()|@*" mode="augment">
+            <xsl:with-param name="parent-struct" select="''"/>
+            <xsl:with-param name="level" select="0"/>
+            <xsl:with-param name="ordered-list-level" select="0"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- See the definitions of levels in -common.  For a book with parts   -->
+<!-- ($parts != 'absent') we consider parts as peers of frontmatter and -->
+<!-- backmatter.  So we need to increment the level in this case, only. -->
+<!-- NB: this might consolidate with above, but seems better solo.      -->
+<!-- NB: with some study and work, this situation might be improved?    -->
+<xsl:template match="frontmatter|backmatter" mode="augment">
+    <xsl:param name="parent-struct"/>
+    <xsl:param name="level"/>
+
+    <xsl:variable name="next-level">
+        <xsl:choose>
+            <xsl:when test="($parts = 'decorative') or ($parts = 'structural')">
+                <xsl:value-of select="$level + 1"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$level"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- we only add a level (not necessary?) -->
+    <!-- and just pass along structure number -->
+    <xsl:copy>
+        <xsl:attribute name="level">
+            <xsl:value-of select="$next-level"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()|@*" mode="augment">
+            <xsl:with-param name="parent-struct" select="$parent-struct"/>
+            <xsl:with-param name="level" select="$next-level"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Labels of ordered lists have formatting codes, which  -->
+<!-- we detect here and pass on to other more specialized  -->
+<!-- templates for implementation specifics                -->
+<!-- In order: Arabic (0-based), Arabic (1-based)          -->
+<!-- lower-case Latin, upper-case Latin,                   -->
+<!-- lower-case Roman numeral, upper-case Roman numeral    -->
+<!-- Absent a label attribute, defaults go 4 levels deep   -->
+<!-- (max for Latex) as: Arabic, lower-case Latin,         -->
+<!-- lower-case Roman numeral, upper-case Latin            -->
+<xsl:template match="ol" mode="format-code">
+    <xsl:param name="level"/>
+    <xsl:choose>
+        <xsl:when test="@marker">
+            <xsl:choose>
+                <xsl:when test="contains(@marker,'0')">0</xsl:when>
+                <xsl:when test="contains(@marker,'1')">1</xsl:when>
+                <xsl:when test="contains(@marker,'a')">a</xsl:when>
+                <xsl:when test="contains(@marker,'A')">A</xsl:when>
+                <xsl:when test="contains(@marker,'i')">i</xsl:when>
+                <xsl:when test="contains(@marker,'I')">I</xsl:when>
+                <!-- DEPRECATED 2015-12-12 -->
+                <xsl:when test="@marker=''" />
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR: ordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:choose>
+                <xsl:when test="$level='0'">1</xsl:when>
+                <xsl:when test="$level='1'">a</xsl:when>
+                <xsl:when test="$level='2'">i</xsl:when>
+                <xsl:when test="$level='3'">A</xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR: ordered list is more than 4 levels deep (at level <xsl:value-of select="$level" />) or is inside an "exercise" and is more than 3 levels deep  (at level <xsl:value-of select="$level - 1" />)</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ol" mode="augment">
+    <xsl:param name="ordered-list-level"/>
+    <xsl:variable name="next-level" select="$ordered-list-level + 1" />
+    <xsl:variable name="format-code">
+        <xsl:apply-templates select="." mode="format-code">
+            <xsl:with-param name="level" select="$ordered-list-level"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <!-- deconstruct the left and right adornments of the label   -->
+    <!-- or provide default adornments, consistent with LaTeX     -->
+    <!-- then store them                                          -->
+    <xsl:variable name="marker-prefix">
+        <xsl:choose>
+            <xsl:when test="@marker">
+                <xsl:value-of select="substring-before(@marker, $format-code)" />
+            </xsl:when>
+            <xsl:when test="$format-code = 'a' and $ordered-list-level = '1'">
+                <xsl:text>(</xsl:text>
+            </xsl:when>
+            <xsl:otherwise />
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="marker-suffix">
+        <xsl:choose>
+            <xsl:when test="@marker">
+                <xsl:value-of select="substring-after(@marker, $format-code)" />
+            </xsl:when>
+            <xsl:when test="$format-code = 'a' and $ordered-list-level = '1'">
+                <xsl:text>)</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>.</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:copy>
+        <xsl:attribute name="ordered-list-level">
+            <xsl:value-of select="$ordered-list-level"/>
+        </xsl:attribute>
+        <xsl:attribute name="format-code">
+            <xsl:value-of select="$format-code"/>
+        </xsl:attribute>
+        <xsl:attribute name="marker-prefix">
+            <xsl:value-of select="$marker-prefix"/>
+        </xsl:attribute>
+        <xsl:attribute name="marker-suffix">
+            <xsl:value-of select="$marker-suffix"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="node()|@*" mode="augment">
+            <xsl:with-param name="ordered-list-level" select="$next-level"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- ##################### -->
+<!-- Serial Stamp Pass     -->
+<!-- ##################### -->
+
+<!-- Stamps @serial during assembly, in one depth-first walk.  Each   -->
+<!-- numbered family (equations and footnotes) is threaded as a       -->
+<!-- node-set: its items in the current counting scope, and each item -->
+<!-- is stamped with its position in that node-set.  How a scope is   -->
+<!-- chosen, and how the node-set is recomputed at each step, is      -->
+<!-- documented with the division templates below.                    -->
+
+<!-- The "next" node-set                                                    -->
+
+<!-- A numbered family is counted within a "scope": a division whose own    -->
+<!-- items form one flat, serially numbered pool.  A division opens a       -->
+<!-- scope for a family when it is terminal (has no traditional             -->
+<!-- subdivision) or has reached the family's numbering level.  A           -->
+<!-- structural division above that level recurses instead, and the         -->
+<!-- content it holds directly (its introduction and conclusion) pools      -->
+<!-- at the division's own level.                                           -->
+
+<!-- Each template threads one node-set per family (the family's items      -->
+<!-- in the current scope) and hands its children the "next" one, built     -->
+<!-- from the inherited node-set:                                           -->
+
+<!--     $b-open = not($nodes) and ($b-terminal or @level >= LEVEL)         -->
+<!--     $next   = $nodes | self::*[$b-open]//ITEMS                         -->
+
+<!-- This is three cases.  Already in a scope ($nodes non-empty): $b-open   -->
+<!-- is false, so $next is $nodes and the scope threads down unchanged.     -->
+<!-- Opening a scope here: $next is this division's pool of items.  Still   -->
+<!-- above the level: $next is empty, the walk recurses, and a deeper       -->
+<!-- division opens the scope.                                              -->
+
+<!-- The self::*[$b-open] guard makes the descendant scan for the pool      -->
+<!-- happen only at the division that opens the scope; while a scope        -->
+<!-- merely threads down, $nodes is non-empty and nothing is scanned.       -->
+
+<!-- The introduction/conclusion template (below) has the same shape,       -->
+<!-- except its pool is the division's own introduction and conclusion      -->
+<!-- (siblings, not a descendant scan), taken only where the parent         -->
+<!-- recursed.                                                              -->
+
+<!-- ITEMS (the family's items) and LEVEL (its numbering switch) are the    -->
+<!-- only per-family inputs; $b-terminal and the case structure are shared. -->
+<!-- Seven families ride this structure: equations ("-eq") and footnotes    -->
+<!-- ("-fn") are single counters; the block families share the "blocks"     -->
+<!-- counter unless figure-likes, projects, inline exercises, or open       -->
+<!-- problems are set "distinct", each then opening its own counter.        -->
+<xsl:template match="book|article|part|chapter|appendix|frontmatter|backmatter|preface|section|subsection|subsubsection|exercises|worksheet|handout|reading-questions|references|glossary|solutions" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:param name="openproblem-nodes"/>
+    <xsl:variable name="b-terminal" select="not(part|chapter|appendix|section|subsection|subsubsection|preface)"/>
+    <xsl:variable name="b-open-eq"          select="not($eq-nodes)          and ($b-terminal or (@level &gt;= $numbering-equations))"/>
+    <xsl:variable name="b-open-fn"          select="not($fn-nodes)          and ($b-terminal or (@level &gt;= $numbering-footnotes))"/>
+    <xsl:variable name="b-open-blocks"      select="not($blocks-nodes)      and ($b-terminal or (@level &gt;= $numbering-blocks))"/>
+    <xsl:variable name="b-open-figure"      select="$b-number-figure-distinct      and not($figure-nodes)      and ($b-terminal or (@level &gt;= $numbering-figures))"/>
+    <xsl:variable name="b-open-project"     select="$b-number-project-distinct     and not($project-nodes)     and ($b-terminal or (@level &gt;= $numbering-projects))"/>
+    <xsl:variable name="b-open-exercise"    select="$b-number-exercise-distinct    and not($exercise-nodes)    and ($b-terminal or (@level &gt;= $numbering-exercises))"/>
+    <xsl:variable name="b-open-openproblem" select="$b-number-openproblem-distinct and not($openproblem-nodes) and ($b-terminal or (@level &gt;= $numbering-openproblems))"/>
+    <xsl:variable name="next-eq" select="$eq-nodes | self::*[$b-open-eq]//mrow[@pi:numbered = 'yes']"/>
+    <xsl:variable name="next-fn" select="$fn-nodes | self::*[$b-open-fn]//fn"/>
+    <!-- The shared "blocks" pool also gathers figure-likes, projects,  -->
+    <!-- inline exercises, and open problems that are not run distinct. -->
+    <xsl:variable name="next-blocks" select="$blocks-nodes
+        | self::*[$b-open-blocks]//*[&FUNDAMENTAL-BLOCK-FILTER;]
+        | self::*[$b-open-blocks and not($b-number-figure-distinct)]//*[&TOP-FIGURE-FILTER;]
+        | self::*[$b-open-blocks and not($b-number-project-distinct)]//*[&PROJECT-FILTER;]
+        | self::*[$b-open-blocks and not($b-number-exercise-distinct)]//exercise[&INLINE-EXERCISE-FILTER;]
+        | self::*[$b-open-blocks and not($b-number-openproblem-distinct)]//*[&OPENPROBLEM-FILTER;]"/>
+    <xsl:variable name="next-figure"      select="$figure-nodes      | self::*[$b-open-figure]//*[&TOP-FIGURE-FILTER;]"/>
+    <xsl:variable name="next-project"     select="$project-nodes     | self::*[$b-open-project]//*[&PROJECT-FILTER;]"/>
+    <xsl:variable name="next-exercise"    select="$exercise-nodes    | self::*[$b-open-exercise]//exercise[&INLINE-EXERCISE-FILTER;]"/>
+    <xsl:variable name="next-openproblem" select="$openproblem-nodes | self::*[$b-open-openproblem]//*[&OPENPROBLEM-FILTER;]"/>
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$next-eq"/>
+            <xsl:with-param name="fn-nodes" select="$next-fn"/>
+            <xsl:with-param name="blocks-nodes" select="$next-blocks"/>
+            <xsl:with-param name="figure-nodes" select="$next-figure"/>
+            <xsl:with-param name="project-nodes" select="$next-project"/>
+            <xsl:with-param name="exercise-nodes" select="$next-exercise"/>
+            <xsl:with-param name="openproblem-nodes" select="$next-openproblem"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Introduction and conclusion of a traditional division.  The match    -->
+<!-- is prefixed with the division names because PreTeXt also uses        -->
+<!-- introduction and conclusion inside exercises, exercisegroups,        -->
+<!-- objectives, and the like.  This is the pooling case above: where the -->
+<!-- parent recursed, the division's own introduction and conclusion pool -->
+<!-- into one scope, subdivisions excluded for free (siblings, not        -->
+<!-- descendants).                                                        -->
+<xsl:template match="article/introduction | chapter/introduction | section/introduction | subsection/introduction | appendix/introduction | article/conclusion | chapter/conclusion | section/conclusion | subsection/conclusion | appendix/conclusion" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:param name="openproblem-nodes"/>
+    <xsl:variable name="next-eq" select="$eq-nodes | (../introduction | ../conclusion)[not($eq-nodes)]//mrow[@pi:numbered = 'yes']"/>
+    <xsl:variable name="next-fn" select="$fn-nodes | (../introduction | ../conclusion)[not($fn-nodes)]//fn"/>
+    <xsl:variable name="next-blocks" select="$blocks-nodes
+        | (../introduction | ../conclusion)[not($blocks-nodes)]//*[&FUNDAMENTAL-BLOCK-FILTER;]
+        | (../introduction | ../conclusion)[not($blocks-nodes) and not($b-number-figure-distinct)]//*[&TOP-FIGURE-FILTER;]
+        | (../introduction | ../conclusion)[not($blocks-nodes) and not($b-number-project-distinct)]//*[&PROJECT-FILTER;]
+        | (../introduction | ../conclusion)[not($blocks-nodes) and not($b-number-exercise-distinct)]//exercise[&INLINE-EXERCISE-FILTER;]
+        | (../introduction | ../conclusion)[not($blocks-nodes) and not($b-number-openproblem-distinct)]//*[&OPENPROBLEM-FILTER;]"/>
+    <xsl:variable name="next-figure"      select="$figure-nodes      | (../introduction | ../conclusion)[not($figure-nodes)      and $b-number-figure-distinct]//*[&TOP-FIGURE-FILTER;]"/>
+    <xsl:variable name="next-project"     select="$project-nodes     | (../introduction | ../conclusion)[not($project-nodes)     and $b-number-project-distinct]//*[&PROJECT-FILTER;]"/>
+    <xsl:variable name="next-exercise"    select="$exercise-nodes    | (../introduction | ../conclusion)[not($exercise-nodes)    and $b-number-exercise-distinct]//exercise[&INLINE-EXERCISE-FILTER;]"/>
+    <xsl:variable name="next-openproblem" select="$openproblem-nodes | (../introduction | ../conclusion)[not($openproblem-nodes) and $b-number-openproblem-distinct]//*[&OPENPROBLEM-FILTER;]"/>
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$next-eq"/>
+            <xsl:with-param name="fn-nodes" select="$next-fn"/>
+            <xsl:with-param name="blocks-nodes" select="$next-blocks"/>
+            <xsl:with-param name="figure-nodes" select="$next-figure"/>
+            <xsl:with-param name="project-nodes" select="$next-project"/>
+            <xsl:with-param name="exercise-nodes" select="$next-exercise"/>
+            <xsl:with-param name="openproblem-nodes" select="$next-openproblem"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Numbered mrow.  Stamp @serial with the position within the -->
+<!-- inherited node-set.                                        -->
+<xsl:template match="mrow[@pi:numbered = 'yes']" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:param name="openproblem-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$eq-nodes"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+            <xsl:with-param name="openproblem-nodes" select="$openproblem-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Every fn is numbered.  Stamp @serial with the position -->
+<!-- within the inherited footnote node-set.                -->
+<xsl:template match="fn" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:param name="openproblem-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$fn-nodes"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+            <xsl:with-param name="openproblem-nodes" select="$openproblem-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Block stamps: serial from the group's distinct counter, else the shared "blocks". -->
+<!-- A subnumbered side-by-side panel is not a "top" figure, so it falls to the         -->
+<!-- catch-all (no @serial) and earns a letter downstream instead.                      -->
+
+<!-- Fundamental blocks always share the "blocks" counter. -->
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:param name="openproblem-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$blocks-nodes"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+            <xsl:with-param name="openproblem-nodes" select="$openproblem-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Projects: distinct counter when split out, else the "blocks" counter. -->
+<xsl:template match="&PROJECT-LIKE;" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:param name="openproblem-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$project-nodes[$b-number-project-distinct] | $blocks-nodes[not($b-number-project-distinct)]"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+            <xsl:with-param name="openproblem-nodes" select="$openproblem-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Top-level figure-likes: distinct counter when split out, else "blocks". -->
+<xsl:template match="*[&TOP-FIGURE-FILTER;]" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:param name="openproblem-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$figure-nodes[$b-number-figure-distinct] | $blocks-nodes[not($b-number-figure-distinct)]"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+            <xsl:with-param name="openproblem-nodes" select="$openproblem-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Inline exercises: distinct counter when split out, else "blocks". -->
+<xsl:template match="exercise[&INLINE-EXERCISE-FILTER;]" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:param name="openproblem-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$exercise-nodes[$b-number-exercise-distinct] | $blocks-nodes[not($b-number-exercise-distinct)]"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+            <xsl:with-param name="openproblem-nodes" select="$openproblem-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- Open problems: distinct counter when split out, else "blocks". -->
+<xsl:template match="&OPENPROBLEM-LIKE;" mode="serial-stamp">
+    <xsl:param name="eq-nodes"/>
+    <xsl:param name="fn-nodes"/>
+    <xsl:param name="blocks-nodes"/>
+    <xsl:param name="figure-nodes"/>
+    <xsl:param name="project-nodes"/>
+    <xsl:param name="exercise-nodes"/>
+    <xsl:param name="openproblem-nodes"/>
+    <xsl:copy>
+        <xsl:attribute name="serial">
+            <xsl:apply-templates select="." mode="position-in-node-set">
+                <xsl:with-param name="nodes" select="$openproblem-nodes[$b-number-openproblem-distinct] | $blocks-nodes[not($b-number-openproblem-distinct)]"/>
+            </xsl:apply-templates>
+        </xsl:attribute>
+        <xsl:apply-templates select="@*|node()" mode="serial-stamp">
+            <xsl:with-param name="eq-nodes" select="$eq-nodes"/>
+            <xsl:with-param name="fn-nodes" select="$fn-nodes"/>
+            <xsl:with-param name="blocks-nodes" select="$blocks-nodes"/>
+            <xsl:with-param name="figure-nodes" select="$figure-nodes"/>
+            <xsl:with-param name="project-nodes" select="$project-nodes"/>
+            <xsl:with-param name="exercise-nodes" select="$exercise-nodes"/>
+            <xsl:with-param name="openproblem-nodes" select="$openproblem-nodes"/>
+        </xsl:apply-templates>
+    </xsl:copy>
+</xsl:template>
+
+<!-- ############## -->
+<!-- Serial Numbers -->
+<!-- ############## -->
+
+<!-- These templates count the occurences of an element within a       -->
+<!-- subtree.  Sometimes that subtree is rooted just above the element -->
+<!-- (e.g. divisions) or sometimes it is many levels higher, such as   -->
+<!-- when an "example" might be in a "subsubsection" but they are      -->
+<!-- grouped ("count within" in LaTeX-speak) and counted across all    -->
+<!-- "example" within a chapter (ignoring the divisions by section,    -->
+<!-- subsection, and subsubsection).                                   -->
+<!--                                                                   -->
+<!-- All of the hard work of counting is done in these templates.      -->
+<!-- Elsewhere, serial numbers are combined with hierarchical          -->
+<!-- numbering of divisions to form "full" numbers.                    -->
+
+<!-- Traditional Divisions -->
+<!-- Mostly obvious, counting peers, including specialized         -->
+<!-- divisions.  Roman numerals for parts, letters for appendices. -->
+<xsl:template match="part" mode="division-serial-number">
+    <xsl:number format="I" />
+</xsl:template>
+<xsl:template match="chapter" mode="division-serial-number">
+    <!-- chapters, in parts or not -->
+    <xsl:choose>
+        <xsl:when test="($parts = 'absent') or ($parts = 'decorative')">
+            <xsl:variable name="true-count">
+                <xsl:number from="book" level="any" count="chapter" format="1" />
+            </xsl:variable>
+            <!-- $chapter-start defaults to 1 -->
+            <xsl:value-of select="$true-count + $chapter-start - 1" />
+        </xsl:when>
+        <!-- author-specified chapter start number does  -->
+        <!-- not really make sense for structural parts? -->
+        <xsl:when test="$parts = 'structural'">
+            <xsl:number from="part" count="chapter" format="1" />
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+<!-- A "solutions" is a specialized division, but is numbered -->
+<!-- as an appendix when present in the backmatter, so        -->
+<!-- included in the count here.                              -->
+<xsl:template match="appendix" mode="division-serial-number">
+    <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
+</xsl:template>
+<!-- NB: following do not assume an ordering on the subdivisions,     -->
+<!-- since this has not been solidified in the schema. At that point, -->
+<!-- we might enforce some assumptions here, and elsewhere, by only   -->
+<!-- including predecessors in the @count attribute.                  -->
+<xsl:template match="section" mode="division-serial-number">
+    <xsl:number count="section|exercises|reading-questions|solutions|references|glossary|worksheet|handout" format="1" />
+</xsl:template>
+<xsl:template match="subsection" mode="division-serial-number">
+    <xsl:number count="subsection|exercises|reading-questions|solutions|references|glossary|worksheet|handout" format="1" />
+</xsl:template>
+<xsl:template match="subsubsection" mode="division-serial-number">
+    <xsl:number count="subsubsection|exercises|reading-questions|solutions|references|glossary|worksheet|handout" format="1" />
+</xsl:template>
+
+<!-- Specialized Divisions -->
+<!-- "exercises", "solutions", references, "worksheet",-->
+<!-- "handout", "reading-questions", "glossary"        -->
+<!-- This is the case of a "structured" division,      -->
+<!-- where we use the resulting number for the         -->
+<!-- division. (In the unstructured case, the number   -->
+<!-- will be inherited from the parent, so this number -->
+<!-- is incorrect, meaningless, and ignored.)  So we   -->
+<!-- simply count preceding peers.  Note that every    -->
+<!-- possible traditional division that could be a     -->
+<!-- peer is listed here in the "match", but only one  -->
+<!-- type will actually be present in the structured   -->
+<!-- division.                                         -->
+<xsl:template match="exercises|reading-questions|solutions|references|glossary|worksheet|handout" mode="division-serial-number">
+    <xsl:number count="chapter|section|subsection|subsubsection|exercises|reading-questions|solutions|references|glossary|worksheet|handout" format="1" />
+</xsl:template>
+<!-- Following "backmatter" matches will be more specific than above -->
+<!-- A "solutions" is a specialized division, but is numbered        -->
+<!-- as an appendix when present in the backmatter, see above        -->
+<xsl:template match="backmatter/solutions" mode="division-serial-number">
+    <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
+</xsl:template>
+
+<!-- ######################### -->
+<!-- Structured vs. Decorative -->
+<!-- ######################### -->
+
+<!-- These templates determine the structure of divisions, needed    -->
+<!-- during assembly to compute block structure numbers.  They are   -->
+<!-- also used at render time from pretext-common.xsl and elsewhere, -->
+<!-- available via cross-import resolution (every conversion         -->
+<!-- stylesheet imports both pretext-assembly.xsl and                -->
+<!-- pretext-common.xsl).                                            -->
+
+<!-- There are two models for most of the divisions (part -->
+<!-- through subsubsection, plus appendix).  One has      -->
+<!-- subdivisions, and possibly specialized subdivisions. -->
+<!-- The other has no subdivisions, and then at most one  -->
+<!-- of each type of specialized subdivision, which       -->
+<!-- inherit numbers from their parent division. This is  -->
+<!-- the test, which is very similar to "is-leaf" in      -->
+<!-- pretext-common.xsl.                                  -->
+<!--                                                      -->
+<!-- A "part" must have chapters, so will always return   -->
+<!-- 'true' and for a 'subsubsection' there are no more   -->
+<!-- subdivisions to employ and so will return empty.     -->
+<!--                                                      -->
+<!-- An exception is a division of *only* worksheets.     -->
+<!-- Although there could be titles and the like.         -->
+<!-- So we compare all-children to  metadata + worksheet. -->
+<!-- TODO: should there be a similar exception for handouts? -->
+<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
+    <xsl:variable name="has-traditional" select="boolean(&TRADITIONAL-DIVISION;)"/>
+    <xsl:variable name="all-children" select="*"/>
+    <xsl:variable name="all-worksheet" select="title|shorttitle|plaintitle|idx|introduction|worksheet|handout|conclusion"/>
+    <xsl:variable name="only-worksheets" select="count($all-children) = count($all-worksheet)"/>
+
+    <xsl:value-of select="$has-traditional or $only-worksheets"/>
+</xsl:template>
+
+<xsl:template match="*" mode="is-structured-division">
+    <xsl:message>PTX:BUG: asking if a non-traditional division (<xsl:value-of select="local-name(.)"/>) is structured or not</xsl:message>
+</xsl:template>
+
+<!-- Specialized divisions sometimes inherit a number from their  -->
+<!-- parent (as part of an unstructured division) and sometimes   -->
+<!-- they do not even have a number (singleton "references" as    -->
+<!-- child of "backmatter").  This template returns "true" if a   -->
+<!-- specialized division "owns" its "own" number.                -->
+<xsl:template match="exercises|worksheet|handout|references|glossary|reading-questions|solutions" mode="is-specialized-own-number">
+    <xsl:choose>
+        <!-- *Some* specialized divisions can appear as a child of the    -->
+        <!-- "backmatter" too.  But only those below.  The rest are       -->
+        <!-- banned as top-level items in the backmatter, but might       -->
+        <!-- occur in an "appendix" or below, with or without structure.  -->
+        <!--   "solutions" will look like an appendix, thus numbered.     -->
+        <!--   "references" or "glossary" are singletons, never numbered. -->
+        <xsl:when test="parent::*[self::backmatter]">
+            <xsl:choose>
+                <xsl:when test="self::solutions">
+                    <xsl:text>true</xsl:text>
+                </xsl:when>
+                <xsl:when test="self::references or self::glossary">
+                    <xsl:text>false</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR:   encountered a specialized division ("<xsl:value-of select="local-name(.)"/>") as a child of "backmatter" that was unexpected.  Results will be unpredictable</xsl:message>
+                    <!-- no idea if we should say true or false here -->
+                    <xsl:text>true</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- parent must now be a "traditional" division -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="is-specialized-own-number">
+    <xsl:message>PTX:BUG: asking if a non-specialized division (<xsl:value-of select="local-name(.)"/>) is numbered or not</xsl:message>
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<!-- ######################## -->
+<!-- Position In a Node-Set   -->
+<!-- ######################## -->
+
+<!-- Returns the document-order position (1-indexed) of the matched -->
+<!-- node within the given node-set.  Uses the union-count identity -->
+<!-- test: count(.|$here) = 1 iff the two are the same node.        -->
+<!-- Empty result if the node is not in the set.                    -->
+<!--                                                                -->
+<!-- Used by the serial-stamp passes to find a node's position -->
+<!-- within a precomputed node-set of its countable peers      -->
+<!-- (equations, footnotes, and the block families).           -->
+<xsl:template match="*" mode="position-in-node-set">
+    <xsl:param name="nodes"/>
+    <!-- Save off the context node before the "for-each" switches it. -->
+    <xsl:variable name="here" select="."/>
+    <xsl:for-each select="$nodes">
+        <xsl:if test="count(.|$here) = 1">
+            <xsl:value-of select="position()"/>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- ########### -->
+<!-- Assembly ID -->
+<!-- ########### -->
+
+<!-- Some maniulations of source require stable identification *before*     -->
+<!-- we assign @unique-id values for general use in the very late           -->
+<!-- "identification" phase.  This is a role for the "@assembly-id" which   -->
+<!-- is formed after the author's source has been versioned, customized,    -->
+<!-- repaired, but before replacements. It should suffice for "big" objects -->
+<!-- which are unlikely to change much (other than going away in a version) -->
+<!-- and may only be "repaired" in a one-to-one cosmetic rename.  We use    -->
+<!-- this sparingly, thus we are careful about the match, along with        -->
+<!-- documenting rationale for each object.                                 -->
+<!--                                                                        -->
+<!-- Another way to think about this is as an "early" id, versus the        -->
+<!-- more general "late" id.                                                -->
+<!--                                                                        -->
+<!-- audio|video|interactive                                                -->
+<!--     Static versions of these interactive elements have previews        -->
+<!--     (YouTube thumbnails, automatically generated screenshots),         -->
+<!--     generated QR codes, and various links meant for use in static      -->
+<!--     contexts.  So we form names of these related objects based on      -->
+<!--     an "earlier" id.                                                   -->
+<!--                                                                        -->
+<!-- datafile                                                               -->
+<!--     For static versions of this Runestone component, when the file is  -->
+<!--     a text file provided in the external directory, we need to         -->
+<!--     interrogate the file manufactured in the generated directory in    -->
+<!--     order to make a sample of its content.  This happens before we     -->
+<!--     construct unique-id.                                               -->
+
+<!-- NB: we believe the @assembly-id will equal the @unique-id    -->
+<!-- ("visible-id" template) for objects at the level of blocks,  -->
+<!-- and certainly for any object replaced by a different static  -->
+<!-- representation.  But for generated objects, e.g. QR codes,   -->
+<!-- it would be best if the generation process used the          -->
+<!-- "assembly-id" template for guranteed consistency.  This *is* -->
+<!-- being done for "datafile" but is technical debt otherwise.   -->
+
+<!-- [Ed. this once prefaced the "visible-id-early" template, a weak  -->
+<!-- forerunner of the "assembly-id" template.  But the commentary    -->
+<!-- is still good, so we have preserved it here.]                    -->
+<!-- This template produces identification that happens early in the  -->
+<!-- passes this stylesheet executes.  The idea is that some elements -->
+<!-- get replaced wholesale (such as an "interactive" being replaced  -->
+<!-- by a "sidebyside" in the creation of a static precursor.  But we -->
+<!-- want these ids, especially if automatic, to be consistent when   -->
+<!-- used in derived versions (such as manufacturing, or displaying,  -->
+<!-- a QR code file for a static "interactive").                      -->
+<!-- NB: this template needs to be defined in this stylesheet, since  -->
+<!-- we want the stylesheet to be independent, and the template is    -->
+<!-- also applied here.                                               -->
+
+<xsl:template match="audio|video|interactive|image" mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+
+<xsl:template match="exercise[@exercise-interactive='fillin' and setup]
+                   | project[@exercise-interactive='fillin' and setup]
+                   | activity[@exercise-interactive='fillin' and setup]
+                   | exploration[@exercise-interactive='fillin' and setup]
+                   | investigation[@exercise-interactive='fillin' and setup]"
+                   mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+<xsl:template match="exercise[.//task and .//task/@exercise-interactive='fillin' and .//setup]
+                   | project[.//task and .//task/@exercise-interactive='fillin' and .//setup]
+                   | activity[.//task and .//task/@exercise-interactive='fillin' and .//setup]
+                   | exploration[.//task and .//task/@exercise-interactive='fillin' and .//setup]
+                   | investigation[.//task and .//task/@exercise-interactive='fillin' and .//setup]"
+                   mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+<!-- A fill-in "task" is the "owner" that the dynamic-substitution lookup -->
+<!-- keys on, so it too must report its "@assembly-id" (matching the      -->
+<!-- "exercise//task" extraction in extract-dynamic.xsl).                 -->
+<xsl:template match="exercise//task[@exercise-interactive='fillin' and setup]
+                   | project//task[@exercise-interactive='fillin' and setup]
+                   | activity//task[@exercise-interactive='fillin' and setup]
+                   | exploration//task[@exercise-interactive='fillin' and setup]
+                   | investigation//task[@exercise-interactive='fillin' and setup]"
+                   mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+
+<xsl:template match="datafile" mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+
+<xsl:template match="exercise/stack" mode="assembly-id">
+    <xsl:value-of select="@assembly-id"/>
+</xsl:template>
+
+<xsl:template match="*" mode="assembly-id">
+    <xsl:message>
+        <xsl:text>PTX:BUG:  the "assembly-id" template was applied to an element it did not expect--</xsl:text>
+        <xsl:value-of select="name()"/>
+        <xsl:text>.</xsl:text>
+        <xsl:value-of select="@exercise-interactive"/>
+        <xsl:text>.</xsl:text>
+        <xsl:value-of select="@assembly-id"/>
+    </xsl:message>
+    <xsl:text>unexpected-assembly-id-template-use-here</xsl:text>
+</xsl:template>
 
 <!-- ###################################### -->
 <!-- Static versions of Interactive Content -->
@@ -4086,10 +4611,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
-<xsl:template match="*" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="visible-id" />
-    <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
-</xsl:template>
 
 <xsl:template match="exercise[@exercise-interactive='fillin' and setup]
                    | project[@exercise-interactive='fillin' and setup]
@@ -4101,11 +4622,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercise[//task/@exercise-interactive='fillin' and //task/setup]
-                   | project[//task/@exercise-interactive='fillin' and //task/setup]
-                   | activity[//task/@exercise-interactive='fillin' and //task/setup]
-                   | exploration[//task/@exercise-interactive='fillin' and //task/setup]
-                   | investigation[//task/@exercise-interactive='fillin' and //task/setup]"
+<xsl:template match="exercise[.//task/@exercise-interactive='fillin' and .//task/setup]
+                   | project[.//task/@exercise-interactive='fillin' and .//task/setup]
+                   | activity[.//task/@exercise-interactive='fillin' and .//task/setup]
+                   | exploration[.//task/@exercise-interactive='fillin' and .//task/setup]
+                   | investigation[.//task/@exercise-interactive='fillin' and .//task/setup]"
                    mode="standalone-filename">
     <xsl:apply-templates select="." mode="assembly-id" />
     <xsl:text>.html</xsl:text>
