@@ -4369,8 +4369,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- When born use this heading -->
 <xsl:template match="&SOLUTION-LIKE;" mode="heading-birth">
     <xsl:param name="heading-level"/>
+    <!-- consult the single "heading-birth-is-h" predicate, so the -->
+    <!-- "body" heading-level increment cannot disagree with this  -->
+    <xsl:variable name="heads-with-h">
+        <xsl:apply-templates select="." mode="heading-birth-is-h"/>
+    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="($knowl-example-solution = 'no') and ancestor::*[&EXAMPLE-FILTER;]">
+        <xsl:when test="$heads-with-h = 'yes'">
             <xsl:apply-templates select="." mode="heading-non-singleton-number">
                 <xsl:with-param name="heading-level" select="$heading-level"/>
             </xsl:apply-templates>
@@ -5278,6 +5283,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are in the order presented above: simple first, -->
 <!-- and top-down when components are also knowled.  -->
 
+<!-- Does a block's "heading-birth" emit an actual "h" at its     -->
+<!-- level?  Consulted by the "body" increment and the "solution" -->
+<!-- heading-birth so their notion of an "h" heading stays one.   -->
+<xsl:template match="*" mode="heading-birth-is-h">
+    <xsl:text>yes</xsl:text>
+</xsl:template>
+
+<xsl:template match="&FIGURE-LIKE;" mode="heading-birth-is-h">
+    <xsl:text>no</xsl:text>
+</xsl:template>
+
+<xsl:template match="&SOLUTION-LIKE;" mode="heading-birth-is-h">
+    <xsl:choose>
+        <!-- an example's solution, shown un-knowled, is a numbered "h" -->
+        <xsl:when test="($knowl-example-solution = 'no') and ancestor::*[&EXAMPLE-FILTER;]">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|&GOAL-LIKE;|&OPENPROBLEM-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&PROOF-LIKE;|case|fn|contributor|biblio|biblio/note|interactive/instructions|fragment" mode="body">
     <xsl:param name="b-original" select="true()"/>
@@ -5330,11 +5358,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="view-source-widget"/>
         <!-- Then actual content, respecting b-original flag  -->
         <!-- Pass $block-type for Sage cells to know environs -->
-        <!-- Increment heading-level for descendant blocks    -->
+        <!-- Descendant blocks step down a heading level, unless -->
+        <!-- this block heads with something other than an "h";  -->
+        <!-- the "heading-birth-is-h" predicate decides.         -->
+        <xsl:variable name="heads-with-h">
+            <xsl:apply-templates select="." mode="heading-birth-is-h"/>
+        </xsl:variable>
         <xsl:apply-templates select="." mode="wrapped-content">
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="block-type" select="$block-type" />
-            <xsl:with-param name="heading-level" select="$heading-level + 1"/>
+            <xsl:with-param name="heading-level">
+                <xsl:choose>
+                    <xsl:when test="$heads-with-h = 'no'">
+                        <xsl:value-of select="$heading-level"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$heading-level + 1"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
         </xsl:apply-templates>
         <!-- Apply workspace div (but not in project, exercises or tasks, -->
         <!-- since they get them applied in their exercise-content        -->
