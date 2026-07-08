@@ -527,28 +527,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//swungdash">
         <xsl:text>\newcommand{\ptxswungdash}{\raisebox{-2.25ex}{\scalebox{2}{\~{}}}}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//quantity">
-        <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
-        <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
-        <xsl:text>\sisetup{inter-unit-product=\cdot}&#xa;</xsl:text>
-        <xsl:text>\ifxetex\sisetup{math-micro=\text{µ},text-micro=µ}\fi&#xa;</xsl:text>
-        <xsl:text>\ifluatex\sisetup{math-micro=\text{µ},text-micro=µ}\fi&#xa;</xsl:text>
-        <xsl:text>%% Common non-SI units&#xa;</xsl:text>
-        <xsl:for-each select="document('pretext-units.xsl')//base[@siunitx]">
-            <xsl:text>\DeclareSIUnit\</xsl:text>
-            <xsl:value-of select="@full" />
-            <xsl:text>{</xsl:text>
-            <xsl:choose>
-                <xsl:when test="@siunitx='none'">
-                    <xsl:value-of select="@short" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="@siunitx" />
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:for-each>
-    </xsl:if>
+    <!-- The shared siunitx support for "quantity" -->
+    <xsl:call-template name="quantity-support"/>
     <xsl:if test="$document-root//case[@direction]">
         <xsl:text>%% Arrows for iff proofs, with trailing space&#xa;</xsl:text>
         <xsl:text>\newcommand{\ptxforwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>

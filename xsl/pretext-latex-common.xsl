@@ -767,6 +767,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Support for the "quantity" element: the siunitx package,   -->
+<!-- its version-dependent configuration, and the non-SI units  -->
+<!-- PreTeXt provides.  A named template, shared by the regular -->
+<!-- and Beamer preambles.                                      -->
+<xsl:template name="quantity-support">
+    <xsl:if test="$document-root//quantity">
+        <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
+        <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
+        <!-- v2 -> v3 is a major upgrade, we need to accomodate both    -->
+        <!-- Eventually we may want to just fail on version 2 and warn. -->
+        <!-- Kernel test is actually "equal or later" according to      -->
+        <!-- https://tex.stackexchange.com/questions/47743/             -->
+        <!--   require-a-certain-or-later-version-of-a-package          -->
+        <!-- IfPackageAtLeastTF: maybe only available since 2020-10-01? -->
+        <xsl:text>%% v3 dated 2021-05-17, fix major behavior change&#xa;</xsl:text>
+        <xsl:text>\makeatletter%&#xa;</xsl:text>
+        <xsl:text>\@ifpackagelater{siunitx}{2021/05/17}&#xa;</xsl:text>
+        <xsl:text>{%&#xa;</xsl:text>
+        <xsl:text>\typeout{PTX: discovered siunitx v3, >= 2021-05-17}%&#xa;</xsl:text>
+        <xsl:text>\sisetup{parse-numbers = false}%&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>{%&#xa;</xsl:text>
+        <xsl:text>\typeout{PTX: discovered siunitx v2, &lt; 2021-05-17}%&#xa;</xsl:text>
+        <xsl:text>}%&#xa;</xsl:text>
+        <xsl:text>\makeatother%&#xa;</xsl:text>
+        <xsl:text>\sisetup{inter-unit-product=\cdot}&#xa;</xsl:text>
+        <xsl:text>\ifxetex\sisetup{math-micro=\text{µ},text-micro=µ}\fi&#xa;</xsl:text>
+        <xsl:text>\ifluatex\sisetup{math-micro=\text{µ},text-micro=µ}\fi&#xa;</xsl:text>
+        <xsl:text>%% Common non-SI units&#xa;</xsl:text>
+        <xsl:for-each select="document('pretext-units.xsl')//base[@siunitx]">
+            <xsl:text>\DeclareSIUnit\</xsl:text>
+            <xsl:value-of select="@full" />
+            <xsl:text>{</xsl:text>
+            <xsl:choose>
+                <xsl:when test="@siunitx='none'">
+                    <xsl:value-of select="@short" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="@siunitx" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:for-each>
+    </xsl:if>
+</xsl:template>
+
 <!-- Semantic Macros -->
 <xsl:template name="semantic-macros">
     <xsl:text>%% Begin: Semantic Macros&#xa;</xsl:text>
@@ -865,45 +911,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% A character like a tilde, but different&#xa;</xsl:text>
         <xsl:text>\newcommand{\ptxswungdash}{\raisebox{-2.25ex}{\scalebox{2}{\~{}}}}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//quantity">
-        <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
-        <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
-        <!-- v2 -> v3 is a major upgrade, we need to accomodate both    -->
-        <!-- Eventually we may want to just fail on version 2 and warn. -->
-        <!-- Kernel test is actually "equal or later" according to      -->
-        <!-- https://tex.stackexchange.com/questions/47743/             -->
-        <!--   require-a-certain-or-later-version-of-a-package          -->
-        <!-- IfPackageAtLeastTF: maybe only available since 2020-10-01? -->
-        <xsl:text>%% v3 dated 2021-05-17, fix major behavior change&#xa;</xsl:text>
-        <xsl:text>\makeatletter%&#xa;</xsl:text>
-        <xsl:text>\@ifpackagelater{siunitx}{2021/05/17}&#xa;</xsl:text>
-        <xsl:text>{%&#xa;</xsl:text>
-        <xsl:text>\typeout{PTX: discovered siunitx v3, >= 2021-05-17}%&#xa;</xsl:text>
-        <xsl:text>\sisetup{parse-numbers = false}%&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>{%&#xa;</xsl:text>
-        <xsl:text>\typeout{PTX: discovered siunitx v2, &lt; 2021-05-17}%&#xa;</xsl:text>
-        <xsl:text>}%&#xa;</xsl:text>
-        <xsl:text>\makeatother%&#xa;</xsl:text>
-        <xsl:text>\sisetup{inter-unit-product=\cdot}&#xa;</xsl:text>
-        <xsl:text>\ifxetex\sisetup{math-micro=\text{µ},text-micro=µ}\fi&#xa;</xsl:text>
-        <xsl:text>\ifluatex\sisetup{math-micro=\text{µ},text-micro=µ}\fi&#xa;</xsl:text>
-        <xsl:text>%% Common non-SI units&#xa;</xsl:text>
-        <xsl:for-each select="document('pretext-units.xsl')//base[@siunitx]">
-            <xsl:text>\DeclareSIUnit\</xsl:text>
-            <xsl:value-of select="@full" />
-            <xsl:text>{</xsl:text>
-            <xsl:choose>
-                <xsl:when test="@siunitx='none'">
-                    <xsl:value-of select="@short" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="@siunitx" />
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:for-each>
-    </xsl:if>
+    <xsl:call-template name="quantity-support"/>
     <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title|$document-root//task/title">
         <!-- Styling: expose this macro to easier overriding for style work -->
         <!-- NB: needs a rename (and duplication) before exposing publicly  -->
