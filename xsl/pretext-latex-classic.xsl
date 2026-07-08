@@ -686,12 +686,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Introductions and conclusions are just their contents at their position. -->
 <xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|reading-questions/introduction|references/introduction">
     <xsl:text>% Introduction&#xa;</xsl:text>
+    <!-- an authored @xml:id suggests a cross-reference target -->
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label"/>
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="*"/>
     <xsl:text>% end of introduction&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|reading-questions/conclusion|references/conclusion">
     <xsl:text>% Conclusion&#xa;</xsl:text>
+    <!-- an authored @xml:id suggests a cross-reference target -->
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label"/>
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="*"/>
     <xsl:text>% end of conclusion&#xa;</xsl:text>
 </xsl:template>

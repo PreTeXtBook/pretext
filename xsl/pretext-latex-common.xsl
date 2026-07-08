@@ -4325,6 +4325,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
+    <!-- an authored @xml:id suggests a cross-reference target -->
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label"/>
+    </xsl:if>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <xsl:text>\end{introduction}%&#xa;</xsl:text>
@@ -4345,6 +4349,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
+    <!-- an authored @xml:id suggests a cross-reference target -->
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label"/>
+    </xsl:if>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <xsl:text>\end{conclusion}%&#xa;</xsl:text>
@@ -8986,7 +8994,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Any target of a PreTeXt cross-reference, which is not naturally -->
 <!-- numbered by a LaTeX \label{} command, needs to go here.         -->
-<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|&SOLUTION-LIKE;|subexercises|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|&SOLUTION-LIKE;|subexercises|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article|introduction|conclusion" mode="xref-as-ref">
     <xsl:value-of select="false()" />
 </xsl:template>
 
@@ -9137,6 +9145,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- introduction, so the LaTeX \ref{} mechanism assigns the correct        -->
 <!-- number - that of the enclosing subdivision                             -->
 <xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|&PROOF-LIKE;|case|ol/li|dl/li|&SOLUTION-LIKE;|&DISCUSSION-LIKE;|exercisegroup|fn" mode="xref-number">
+    <xsl:param name="xref" select="/.." />
+
+    <xsl:apply-templates select="." mode="xref-number-hardcoded">
+        <xsl:with-param name="xref" select="$xref"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- A division companion ("introduction"/"conclusion" of a     -->
+<!-- structured division) has its parent's number, which the   -->
+<!-- LaTeX label/ref system cannot produce, so it is hardcoded  -->
+<xsl:template match="introduction[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]|conclusion[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]" mode="xref-number">
     <xsl:param name="xref" select="/.." />
 
     <xsl:apply-templates select="." mode="xref-number-hardcoded">
