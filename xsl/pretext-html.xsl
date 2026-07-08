@@ -495,6 +495,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The "file-wrap" routine should accept a $content       -->
 <!-- parameter holding the contents of the body of the page -->
 
+<!-- The HTML conversion (and hence its derivatives) opts in -->
+<!-- to "division companion" chunks: introduction, conclusion, -->
+<!-- objectives, outcomes of a division realized as a summary -->
+<!-- page become pages themselves (see pretext-common.xsl)    -->
+<xsl:variable name="b-division-companion-chunks" select="true()"/>
+
 <!-- A complete page for a structural division -->
 <xsl:template match="&STRUCTURAL;" mode="chunk">
     <xsl:apply-templates select="." mode="file-wrap">
@@ -527,7 +533,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:if test="self::frontmatter[not(titlepage)]">
                     <xsl:call-template name="frontmatter-title" />
                 </xsl:if>
-                <xsl:apply-templates select="objectives|introduction|titlepage|abstract">
+                <xsl:apply-templates select="titlepage|abstract">
                     <xsl:with-param name="heading-level" select="$chunk-heading-level + 1"/>
                 </xsl:apply-templates>
                 <!-- Links to subsidiary divisions, as a group of button/hyperlinks -->
@@ -536,9 +542,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:apply-templates select="*" mode="summary-nav" />
                     </ul>
                 </nav>
-                <xsl:apply-templates select="conclusion|outcomes">
-                    <xsl:with-param name="heading-level" select="$chunk-heading-level + 1"/>
-                </xsl:apply-templates>
                 <!-- Insert permalink -->
                 <xsl:apply-templates select="." mode="permalink"/>
             </section>
@@ -573,8 +576,86 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </li>
 </xsl:template>
 
-<!-- introduction (etc.) and conclusion get dropped -->
+<!-- Division companions become links, like the structural children; -->
+<!-- document order places an "introduction" before the subdivision -->
+<!-- links and a "conclusion" after, with no extra machinery        -->
+<xsl:template match="&DIVISION-COMPANION;" mode="summary-nav">
+    <!-- a link only when realized as a page (a conversion that -->
+    <!-- has not opted in renders no link, and no bare content) -->
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk"/>
+    </xsl:variable>
+    <xsl:if test="$chunk = 'true'">
+        <xsl:variable name="url">
+            <xsl:apply-templates select="." mode="url" />
+        </xsl:variable>
+        <li>
+            <a href="{$url}" class="internal">
+                <span class="title">
+                    <xsl:apply-templates select="." mode="division-companion-text"/>
+                </span>
+            </a>
+        </li>
+    </xsl:if>
+</xsl:template>
+
+<!-- everything else on a summary page gets dropped -->
 <xsl:template match="*" mode="summary-nav" />
+
+<!-- Text for links (and ToC entries) to a division companion page.  -->
+<!-- "introduction"/"conclusion": the localized type-name only (an  -->
+<!-- authored title is silently ignored, pending deprecation).      -->
+<!-- "objectives"/"outcomes": the localized type-name, plus the     -->
+<!-- title when authored, mirroring the inline block headings.      -->
+<xsl:template match="introduction|conclusion" mode="division-companion-text">
+    <xsl:apply-templates select="." mode="type-name"/>
+</xsl:template>
+
+<xsl:template match="objectives|outcomes" mode="division-companion-text">
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:if test="title">
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates select="." mode="title-short"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- A division companion realized as its own page -->
+<xsl:template match="&DIVISION-COMPANION;" mode="chunk">
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="division-companion-page"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Page content: a manufactured heading (the link text), then the -->
+<!-- children, much as the inline realization would present them    -->
+<xsl:template match="introduction|conclusion" mode="division-companion-page">
+    <xsl:text>&#xa;</xsl:text>
+    <section>
+        <xsl:attribute name="class">
+            <xsl:value-of select="local-name(.)" />
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="html-id-attribute"/>
+        <xsl:apply-templates select="." mode="heading-generic">
+            <xsl:with-param name="heading-level" select="$chunk-heading-level"/>
+            <xsl:with-param name="heading-title">
+                <xsl:apply-templates select="." mode="division-companion-text"/>
+            </xsl:with-param>
+        </xsl:apply-templates>
+        <xsl:apply-templates select="*">
+            <xsl:with-param name="heading-level" select="$chunk-heading-level + 1"/>
+        </xsl:apply-templates>
+    </section>
+</xsl:template>
+
+<!-- Page content: the ordinary block realization, whose heading -->
+<!-- already displays the type-name and any authored title       -->
+<xsl:template match="objectives|outcomes" mode="division-companion-page">
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="heading-level" select="$chunk-heading-level"/>
+    </xsl:apply-templates>
+</xsl:template>
 
 <!-- Default template for content of a structural  -->
 <!-- division, which could be an entire page's     -->
@@ -12002,15 +12083,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- TODO: perhaps isolate logic to return nodes and put into "common" -->
 
+<!-- Is a node a unit of the linear page order?  The structural  -->
+<!-- nodes are; so is a division companion realized as a page     -->
+<xsl:template match="*" mode="is-linear-unit">
+    <xsl:apply-templates select="." mode="is-structural"/>
+</xsl:template>
+
+<xsl:template match="&DIVISION-COMPANION;" mode="is-linear-unit">
+    <xsl:apply-templates select="." mode="is-chunk"/>
+</xsl:template>
+
 <!-- Check if the XML tree has a preceding/following/parent node -->
-<!-- Then check if it is a document node (structural)            -->
+<!-- Then check if it is a page of the reading order             -->
 <!-- If so, compute the URL for the node                         -->
 <!-- NB: tree urls maybe enabled as a processing option          -->
 <xsl:template match="*" mode="previous-tree-url">
     <xsl:if test="preceding-sibling::*">
         <xsl:variable name="preceding" select="preceding-sibling::*[1]" />
         <xsl:variable name="structural">
-            <xsl:apply-templates select="$preceding" mode="is-structural" />
+            <xsl:apply-templates select="$preceding" mode="is-linear-unit" />
         </xsl:variable>
         <xsl:if test="$structural='true'">
             <xsl:apply-templates select="$preceding" mode="url" />
@@ -12023,7 +12114,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="following-sibling::*">
         <xsl:variable name="following" select="following-sibling::*[1]" />
         <xsl:variable name="structural">
-            <xsl:apply-templates select="$following" mode="is-structural" />
+            <xsl:apply-templates select="$following" mode="is-linear-unit" />
         </xsl:variable>
         <xsl:if test="$structural='true'">
             <xsl:apply-templates select="$following" mode="url" />
@@ -12061,11 +12152,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$intermediate='true'">
             <!-- Descend once, will always have a child that is structural -->
-            <xsl:variable name="first-structural-child" select="*[&STRUCTURAL-FILTER;][1]" />
+            <xsl:variable name="first-structural-child" select="*[&STRUCTURAL-FILTER; or ($b-division-companion-chunks and (&DIVISION-COMPANION-FILTER;))][1]" />
             <xsl:apply-templates select="$first-structural-child" mode="url" />
             <!-- remainder is a basic check, could be removed -->
             <xsl:variable name="structural">
-                <xsl:apply-templates select="$first-structural-child" mode="is-structural" />
+                <xsl:apply-templates select="$first-structural-child" mode="is-linear-unit" />
             </xsl:variable>
             <xsl:if test="$structural='false'">
                 <xsl:message>PTX:ERROR: descending into first node of an intermediate page (<xsl:value-of select="local-name($first-structural-child)" />) that is non-structural; maybe your source has incorrect structure</xsl:message>
@@ -12086,7 +12177,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="following-sibling::*">
             <xsl:variable name="following" select="following-sibling::*[1]" />
             <xsl:variable name="structural">
-                <xsl:apply-templates select="$following" mode="is-structural" />
+                <xsl:apply-templates select="$following" mode="is-linear-unit" />
             </xsl:variable>
             <xsl:if test="$structural='true'">
                 <!-- A normal sibling following -->
@@ -12120,7 +12211,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="preceding-sibling::*">
             <xsl:variable name="preceding" select="preceding-sibling::*[1]" />
             <xsl:variable name="structural">
-                <xsl:apply-templates select="$preceding" mode="is-structural" />
+                <xsl:apply-templates select="$preceding" mode="is-linear-unit" />
             </xsl:variable>
             <xsl:if test="$structural='true'">
                 <!-- A normal sibling precedin, result is just a sentinel-->
@@ -12160,11 +12251,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="url" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:variable name="last-structural-child" select="*[&STRUCTURAL-FILTER;][last()]" />
+            <xsl:variable name="last-structural-child" select="*[&STRUCTURAL-FILTER; or ($b-division-companion-chunks and (&DIVISION-COMPANION-FILTER;))][last()]" />
             <xsl:apply-templates select="$last-structural-child" mode="previous-descent-url" />
             <!-- remainder is a basic check, could be removed -->
             <xsl:variable name="structural">
-                <xsl:apply-templates select="$last-structural-child" mode="is-structural" />
+                <xsl:apply-templates select="$last-structural-child" mode="is-linear-unit" />
             </xsl:variable>
             <xsl:if test="$structural='false'">
                 <xsl:message>PTX:ERROR: descending into last node of an intermediate page (<xsl:value-of select="local-name($last-structural-child)" />) that is non-structural</xsl:message>
@@ -13020,6 +13111,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </ul>
         </xsl:if>
     </li>
+</xsl:template>
+
+<!-- A division companion earns a ToC entry when it is a page -->
+<xsl:template match="&DIVISION-COMPANION;" mode="toc-item">
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk"/>
+    </xsl:variable>
+    <xsl:if test="$chunk = 'true'">
+        <xsl:variable name="the-url">
+            <xsl:apply-templates select="." mode="url"/>
+        </xsl:variable>
+        <li>
+            <xsl:attribute name="class">
+                <xsl:text>toc-item toc-</xsl:text>
+                <xsl:value-of select="local-name()"/>
+            </xsl:attribute>
+            <!-- copy id of this li for use in customization pass -->
+            <xsl:attribute name="uid">
+                <xsl:value-of select="@unique-id"/>
+            </xsl:attribute>
+            <div class="toc-title-box">
+                <a href="{$the-url}" class="internal">
+                    <span class="title">
+                        <xsl:apply-templates select="." mode="division-companion-text"/>
+                    </span>
+                </a>
+            </div>
+        </li>
+    </xsl:if>
 </xsl:template>
 
 <!-- Recurse through un-interesting elements -->
