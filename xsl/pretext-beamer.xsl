@@ -475,11 +475,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Shared tcolorbox styles restore paragraph shape via \ptxsetparstyle;&#xa;</xsl:text>
     <xsl:text>%% under Beamer the theme's paragraph shape should rule, so a no-op&#xa;</xsl:text>
     <xsl:text>\newcommand{\ptxsetparstyle}{}&#xa;</xsl:text>
-    <xsl:text>\usepackage[xparse, raster]{tcolorbox}&#xa;</xsl:text>
+    <!-- The shared tcolorbox setup: package, libraries, stock styles -->
+    <xsl:call-template name="tcolorbox-init"/>
+    <xsl:text>%% Boxes default to white backgrounds and frames, so tcolorbox&#xa;</xsl:text>
+    <xsl:text>%% content does not pick up colors from the Beamer theme&#xa;</xsl:text>
     <xsl:text>\tcbset{colback=white, colframe=white}&#xa;</xsl:text>
-    <xsl:text>%% tcolorbox styles used by images and side-by-side panels&#xa;</xsl:text>
-    <xsl:text>\tcbset{ bwminimalstyle/.style={size=minimal, boxrule=-0.3pt, frame empty,&#xa;</xsl:text>
-    <xsl:text>colback=white, colbacktitle=white, coltitle=black, opacityfill=0.0} }&#xa;</xsl:text>
     <!-- The shared "tcolorbox" environment for a single image -->
     <xsl:call-template name="image-tcolorbox"/>
     <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]">
