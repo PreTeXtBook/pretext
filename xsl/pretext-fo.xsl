@@ -1589,7 +1589,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- tagged table must share a common width (ISO 14289-1).        -->
 <xsl:template match="exercisegroup">
     <!-- the exercises shift right to show the scope of the group, by -->
-    <!-- the shared fraction of the text measure (LaTeX's \egindent); -->
+    <!-- the shared fraction of the text measure (LaTeX's \ptxegindent); -->
     <!-- the introduction and conclusion stay at the left margin      -->
     <xsl:variable name="group-indent" select="format-number($exercisegroup-indentation * $text-width-points, '0.##')"/>
     <fo:block>

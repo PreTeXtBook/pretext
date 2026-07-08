@@ -287,7 +287,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="slide//ol/li|slide//ul/li">
     <xsl:text>\item{}</xsl:text>
     <xsl:if test="title">
-        <xsl:text> \lititle{</xsl:text>
+        <xsl:text> \ptxlititle{</xsl:text>
         <xsl:apply-templates select="." mode="title-full"/>
         <xsl:text>}\par</xsl:text>
     </xsl:if>
@@ -507,11 +507,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Arguments: language, left margin, width, right margin (latter ignored)&#xa;</xsl:text>
             <xsl:text>\newtcblisting{program}[4]{programboxstyle, left skip=#2\linewidth, width=#3\linewidth, listing options={language=#1, style=programcodestyle}}&#xa;</xsl:text>
             <xsl:text>\newtcblisting{programnumbered}[4]{programboxnumberedstyle, left skip=#2\linewidth, width=#3\linewidth, listing options={language=#1, style=programcodenumberedstyle}}&#xa;</xsl:text>
-            <xsl:text>\newcommand{\programfragment}[2]{\lstinline[language=#1, style=programcodestyle, basicstyle=\ttfamily]#2}&#xa;</xsl:text>
+            <xsl:text>\newcommand{\ptxprogramfragment}[2]{\lstinline[language=#1, style=programcodestyle, basicstyle=\ttfamily]#2}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$b-has-console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
-            <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
+            <xsl:text>\newcommand{\ptxconsoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{consolecodestyle}{language=none, escapeinside={(*}{*)}, identifierstyle=, commentstyle=, stringstyle=, keywordstyle=, breaklines=false, breakatwhitespace=false, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
             <xsl:text>\tcbset{ consoleboxstyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt,&#xa;</xsl:text>
             <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
@@ -550,37 +550,37 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{array}&#xa;</xsl:text>
         <xsl:text>\setlength{\extrarowheight}{0.2ex}&#xa;</xsl:text>
         <xsl:text>%% Variable thickness horizontal rules, full and partial&#xa;</xsl:text>
-        <xsl:text>\newcommand{\hrulethin}  {\noalign{\hrule height 0.04em}}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\hrulemedium}{\noalign{\hrule height 0.07em}}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\hrulethick} {\noalign{\hrule height 0.11em}}&#xa;</xsl:text>
-        <xsl:text>\let\oldsetlength\setlength&#xa;</xsl:text>
-        <xsl:text>\newlength{\Oldarrayrulewidth}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\crulethin}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\oldsetlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{0.04em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{\Oldarrayrulewidth}}}%&#xa;</xsl:text>
-        <xsl:text>\newcommand{\crulemedium}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\oldsetlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{0.07em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{\Oldarrayrulewidth}}}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\crulethick}[1]%&#xa;</xsl:text>
-        <xsl:text>{\noalign{\global\oldsetlength{\Oldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{0.11em}}\cline{#1}%&#xa;</xsl:text>
-        <xsl:text>\noalign{\global\oldsetlength{\arrayrulewidth}{\Oldarrayrulewidth}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxhrulethin}  {\noalign{\hrule height 0.04em}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxhrulemedium}{\noalign{\hrule height 0.07em}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxhrulethick} {\noalign{\hrule height 0.11em}}&#xa;</xsl:text>
+        <xsl:text>\let\ptxoldsetlength\setlength&#xa;</xsl:text>
+        <xsl:text>\newlength{\ptxOldarrayrulewidth}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxcrulethin}[1]%&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.04em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}%&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxcrulemedium}[1]%&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.07em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxcrulethick}[1]%&#xa;</xsl:text>
+        <xsl:text>{\noalign{\global\ptxoldsetlength{\ptxOldarrayrulewidth}{\arrayrulewidth}}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{0.11em}}\cline{#1}%&#xa;</xsl:text>
+        <xsl:text>\noalign{\global\ptxoldsetlength{\arrayrulewidth}{\ptxOldarrayrulewidth}}}&#xa;</xsl:text>
         <xsl:text>%% Single letter column specifiers defined via array package&#xa;</xsl:text>
         <xsl:text>\newcolumntype{A}{!{\vrule width 0.04em}}&#xa;</xsl:text>
         <xsl:text>\newcolumntype{B}{!{\vrule width 0.07em}}&#xa;</xsl:text>
         <xsl:text>\newcolumntype{C}{!{\vrule width 0.11em}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//cell/line">
-        <xsl:text>\newcommand{\tablecelllines}[3]%&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxtablecelllines}[3]%&#xa;</xsl:text>
         <xsl:text>{\begin{tabular}[#2]{@{}#1@{}}#3\end{tabular}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\newcommand{\lt}{&lt;}&#xa;</xsl:text>
     <xsl:text>\newcommand{\gt}{&gt;}&#xa;</xsl:text>
     <xsl:text>\newcommand{\amp}{&amp;}&#xa;</xsl:text>
     <xsl:text>%% Begin: Semantic Macros&#xa;</xsl:text>
-    <xsl:text>\newcommand{\mono}[1]{\texttt{#1}}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\ptxmono}[1]{\texttt{#1}}&#xa;</xsl:text>
     <xsl:variable name="one-line-reps" select="
         ($document-root//abbr)[1]|
         ($document-root//acro)[1]|
@@ -589,13 +589,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="tex-macro"/>
     </xsl:for-each>
     <xsl:if test="$document-root//alert">
-        <xsl:text>\newcommand{\alert}[1]{\textbf{\textit{#1}}}&#xa;</xsl:text>
+        <!-- Beamer has its own theme-aware, overlay-capable \alert, -->
+        <!-- so the PreTeXt semantic macro is realized through it    -->
+        <xsl:text>\newcommand{\ptxalert}[1]{\alert{#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//term">
-        <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxterminology}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//pubtitle">
-        <xsl:text>\newcommand{\pubtitle}[1]{\textsl{#1}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxpubtitle}[1]{\textsl{#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//fillin[not(parent::m or parent::me or parent::men or parent::mrow)]">
         <xsl:call-template name="fillin-text"/>
@@ -604,7 +606,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="fillin-math"/>
     </xsl:if>
     <xsl:if test="$document-root//swungdash">
-        <xsl:text>\newcommand{\swungdash}{\raisebox{-2.25ex}{\scalebox{2}{\~{}}}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxswungdash}{\raisebox{-2.25ex}{\scalebox{2}{\~{}}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//quantity">
         <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
@@ -630,12 +632,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$document-root//case[@direction]">
         <xsl:text>%% Arrows for iff proofs, with trailing space&#xa;</xsl:text>
-        <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxforwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxbackwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title">
         <xsl:text>%% Style of a title on a list item, for ordered and unordered lists&#xa;</xsl:text>
-        <xsl:text>\newcommand{\lititle}[1]{{\slshape#1}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\ptxlititle}[1]{{\slshape#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//xref">
         <xsl:text>%% Font for cross-reference numbers, a no-op on slides&#xa;</xsl:text>
