@@ -3379,17 +3379,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- End: LaTeX Styling -->
 <!-- ################## -->
 
-<!-- Tack in a graphic with initials                   -->
-<!-- Height is just enough to not disrupt line spacing -->
-<!-- Place inline, no carriage returns                 -->
-<xsl:template match="initial">
-  <xsl:text>\hspace*{-0.75ex}{}</xsl:text>
-  <xsl:text>\raisebox{0.2\baselineskip}{\includegraphics[height=0.55\baselineskip]{</xsl:text>
-  <xsl:apply-templates select="@source" />
-  <xsl:text></xsl:text>
-  <xsl:text>}}\hspace*{-0.75ex}{}</xsl:text>
-</xsl:template>
-
 <!-- Authors, editors, info for article info to \maketitle -->
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
 <xsl:template match="author" mode="article-info">

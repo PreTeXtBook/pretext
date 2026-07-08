@@ -1379,6 +1379,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
 
+<!-- A graphic with a scan of the author's initials: used within -->
+<!-- the "from" of a "memo" (or within a "line" of "from") to    -->
+<!-- initial the memo near the sender's name, as a mark of       -->
+<!-- authorization.  The "@source" attribute names the graphics  -->
+<!-- file.  The height is scaled to just avoid disrupting line   -->
+<!-- spacing, and placement is inline (so, no carriage returns   -->
+<!-- in the output).  Small amounts of negative space (0.75ex)   -->
+<!-- precede and follow the graphic, so extra horizontal space   -->
+<!-- may need to be inserted directly in the source (\, or \ ).  -->
+<!-- NB: "initial" is not presently in the schema.               -->
+<xsl:template match="initial">
+  <xsl:text>\hspace*{-0.75ex}{}</xsl:text>
+  <xsl:text>\raisebox{0.2\baselineskip}{\includegraphics[height=0.55\baselineskip]{</xsl:text>
+  <xsl:apply-templates select="@source" />
+  <xsl:text></xsl:text>
+  <xsl:text>}}\hspace*{-0.75ex}{}</xsl:text>
+</xsl:template>
+
 <!-- #################### -->
 <!-- Back Matter, Letters -->
 <!-- #################### -->
