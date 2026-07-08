@@ -439,7 +439,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- An "exercisegroup" indents its exercises, to show the      -->
 <!-- scope of the group, by this fraction of the prevailing     -->
 <!-- text width.  The LaTeX conversion applies it through       -->
-<!-- \egindent (that many \linewidth); the XSL-FO conversion    -->
+<!-- \ptxegindent (that many \linewidth); the XSL-FO conversion    -->
 <!-- scales its text measure.                                   -->
 <xsl:variable name="exercisegroup-indentation" select="0.05"/>
 
