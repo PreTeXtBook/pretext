@@ -648,11 +648,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- and the method is defined there.                       -->
         <xsl:apply-templates select="." mode="view-source-widget"/>
 
-        <!-- N.B. the modal "solutions" templates increment           -->
-        <!--      $heading-level as "exercise" are produced, so       -->
-        <!--      we by-pass the increment here.                      -->
+        <!-- When generating a solutions page, we need to avoid skipping -->
+        <!-- two levels of heading, so avoid incrementing here.          -->
         <xsl:variable name="next-level">
-            <xsl:value-of select="$heading-level + 1"/>
+            <xsl:choose>
+                <xsl:when test="self::solutions and $heading-level = $chunk-heading-level">
+                    <xsl:value-of select="$heading-level"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$heading-level + 1"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
 
         <!-- Most divisions are a simple list of elements to be       -->
