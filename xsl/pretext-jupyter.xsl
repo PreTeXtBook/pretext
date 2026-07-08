@@ -152,6 +152,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:message>pretext-heading unmatched <xsl:value-of select="local-name(.)" /></xsl:message>
 </xsl:template>
 
+<!-- A division companion as its own notebook: a heading cell from -->
+<!-- the localized type-name (titles ignored, pending deprecation) -->
+<!-- and then the children as cells                                -->
+<xsl:template match="introduction|conclusion" mode="division-companion-page">
+    <xsl:variable name="html-rtf">
+        <h1>
+            <xsl:apply-templates select="." mode="division-companion-text"/>
+        </h1>
+    </xsl:variable>
+    <xsl:variable name="html-node-set" select="exsl:node-set($html-rtf)" />
+    <xsl:call-template name="pretext-cell">
+        <xsl:with-param name="content">
+            <xsl:call-template name="begin-string" />
+                <xsl:apply-templates select="$html-node-set" mode="xml-to-string" />
+            <xsl:call-template name="end-string" />
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- The ordinary block realization is the whole notebook -->
+<xsl:template match="objectives|outcomes" mode="division-companion-page">
+    <xsl:apply-templates select="."/>
+</xsl:template>
+
 <!-- Three modal templates accomodate all document structure nodes -->
 <!-- and all possibilities for chunking.  Read the description     -->
 <!-- in  xsl/pretext-common.xsl  and  -html  to understand these.  -->
@@ -165,7 +190,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <!-- should perhaps initialize/pass $heading-level = 2 here -->
             <!-- perhaps irrelevant since headings are done in markown? -->
-            <xsl:apply-templates select="objectives|introduction" />
             <xsl:variable name="html-rtf">
                 <nav class="summary-links">
                     <xsl:apply-templates select="*" mode="summary-nav" />
