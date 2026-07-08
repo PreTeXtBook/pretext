@@ -465,6 +465,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- The style-writer font hooks.  Shared preamble pieces presume  -->
+<!-- these are defined: "tcolorbox-init" (runintitlestyle employs  -->
+<!-- \blocktitlefont), "sidebyside-environment" (sbspanelstyle),   -->
+<!-- the "tabular" templates (\tabularfont), cross-references and  -->
+<!-- the index (\xreffont).  A separate named template, so another -->
+<!-- LaTeX-based conversion (e.g. Beamer) can establish the same   -->
+<!-- contract without adopting "font-support" wholesale.           -->
+<xsl:template name="automatic-font-control">
+    <xsl:text>%% Automatic Font Control&#xa;</xsl:text>
+    <xsl:text>%% Portions of a document, are, or may, be affected by defined commands&#xa;</xsl:text>
+    <xsl:text>%% These are perhaps more flexible when using  xelatex  rather than  pdflatex&#xa;</xsl:text>
+    <xsl:text>%% The following definitions are meant to be re-defined in a style, using \renewcommand&#xa;</xsl:text>
+    <xsl:text>%% They are scoped when employed (in a TeX group), and so should not be defined with an argument&#xa;</xsl:text>
+    <xsl:text>\newcommand{\divisionfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\blocktitlefont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\contentsfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\pagefont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\tabularfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\xreffont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\titlepagefont}{\relax}&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+</xsl:template>
+
 <!-- Font support (conditional on engine) -->
 <xsl:template name="font-support">
     <xsl:text>%% Fonts.  Conditional on LaTex engine employed.&#xa;</xsl:text>
@@ -488,19 +511,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% xelatex,lualatex: add OTF StylisticSet 3 for upright quotes&#xa;</xsl:text>
         <xsl:text>%%&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Automatic Font Control&#xa;</xsl:text>
-    <xsl:text>%% Portions of a document, are, or may, be affected by defined commands&#xa;</xsl:text>
-    <xsl:text>%% These are perhaps more flexible when using  xelatex  rather than  pdflatex&#xa;</xsl:text>
-    <xsl:text>%% The following definitions are meant to be re-defined in a style, using \renewcommand&#xa;</xsl:text>
-    <xsl:text>%% They are scoped when employed (in a TeX group), and so should not be defined with an argument&#xa;</xsl:text>
-    <xsl:text>\newcommand{\divisionfont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\blocktitlefont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\contentsfont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\pagefont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\tabularfont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\xreffont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\titlepagefont}{\relax}&#xa;</xsl:text>
-    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:call-template name="automatic-font-control"/>
     <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
     <xsl:text>%% begin: font setup and configuration for use with xelatex&#xa;</xsl:text>
     <!--  -->
