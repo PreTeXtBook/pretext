@@ -4405,6 +4405,65 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{case}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ####################################### -->
+<!-- Unimplemented Constructs, Warning Stubs -->
+<!-- ####################################### -->
+
+<!-- The LaTeX realization of "subexercises" and "exercisegroup"       -->
+<!-- structure within an "exercises" division, and of the content      -->
+<!-- generated for a "solutions" division, lives in pretext-latex.xsl. -->
+<!-- A conversion importing this stylesheet directly does not          -->
+<!-- implement these constructs, yet shared machinery (the structural  -->
+<!-- dispatch above, the solutions generator of pretext-common.xsl)    -->
+<!-- may still apply templates to them.  Each template below catches   -->
+<!-- one such application, alerts the author, and contributes nothing  -->
+<!-- to the output; otherwise the XSLT built-in rules would dump raw   -->
+<!-- text into the LaTeX.  The real templates in pretext-latex.xsl     -->
+<!-- override each of these stubs by import precedence.  (The classic  -->
+<!-- conversion, and texstyle importing it, intercept the containing   -->
+<!-- divisions with banner warnings, so these stubs serve future       -->
+<!-- conversions without such guards.)                                 -->
+
+<!-- Generic processing of an "exercises" division reaches these -->
+<xsl:template match="subexercises|exercisegroup">
+    <xsl:message>
+        <xsl:text>PTX:WARNING: this conversion does not implement "</xsl:text>
+        <xsl:value-of select="local-name(.)"/>
+        <xsl:text>" structure within an "exercises" division, so its content will be missing from your LaTeX output</xsl:text>
+    </xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
+</xsl:template>
+
+<!-- The solutions generator duplicates headings of intervening divisions -->
+<xsl:template match="*" mode="duplicate-heading">
+    <xsl:message>
+        <xsl:text>PTX:WARNING: this conversion does not implement a "solutions" division, so a heading duplicated from the "</xsl:text>
+        <xsl:value-of select="local-name(.)"/>
+        <xsl:text>" will be missing from your LaTeX output</xsl:text>
+    </xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
+</xsl:template>
+
+<!-- The solutions generator wraps duplicated container structure -->
+<xsl:template match="subexercises|exercisegroup" mode="present-solutions-container">
+    <xsl:message>
+        <xsl:text>PTX:WARNING: this conversion does not implement a "solutions" division, so content duplicated within the "</xsl:text>
+        <xsl:value-of select="local-name(.)"/>
+        <xsl:text>" will be missing from your LaTeX output</xsl:text>
+    </xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
+</xsl:template>
+
+<!-- The solutions generator duplicates components of exercises and projects -->
+<xsl:template match="exercise|&PROJECT-LIKE;" mode="solutions">
+    <xsl:message>
+        <xsl:text>PTX:WARNING: this conversion does not implement a "solutions" division, so components duplicated from an exercise or project ("</xsl:text>
+        <xsl:value-of select="local-name(.)"/>
+        <xsl:text>") will be missing from your LaTeX output</xsl:text>
+    </xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
+</xsl:template>
+
 <!-- ###################### -->
 <!-- Exercises and Projects -->
 <!-- ###################### -->
