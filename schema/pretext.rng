@@ -93,7 +93,7 @@
               <ref name="Objectives"/>
             </optional>
             <optional>
-              <ref name="IntroductionDivision"/>
+              <ref name="IntroductionCompanion"/>
             </optional>
           </interleave>
           <choice>
@@ -116,7 +116,7 @@
               <ref name="Outcomes"/>
             </optional>
             <optional>
-              <ref name="ConclusionDivision"/>
+              <ref name="ConclusionCompanion"/>
             </optional>
           </interleave>
           <optional>
@@ -214,7 +214,7 @@
               <ref name="Objectives"/>
             </optional>
             <optional>
-              <ref name="IntroductionDivision"/>
+              <ref name="IntroductionCompanion"/>
             </optional>
           </interleave>
           <choice>
@@ -237,7 +237,7 @@
               <ref name="Outcomes"/>
             </optional>
             <optional>
-              <ref name="ConclusionDivision"/>
+              <ref name="ConclusionCompanion"/>
             </optional>
           </interleave>
         </group>
@@ -291,7 +291,7 @@
               <ref name="Objectives"/>
             </optional>
             <optional>
-              <ref name="IntroductionDivision"/>
+              <ref name="IntroductionCompanion"/>
             </optional>
           </interleave>
           <choice>
@@ -314,7 +314,7 @@
               <ref name="Outcomes"/>
             </optional>
             <optional>
-              <ref name="ConclusionDivision"/>
+              <ref name="ConclusionCompanion"/>
             </optional>
           </interleave>
         </group>
@@ -368,7 +368,7 @@
               <ref name="Objectives"/>
             </optional>
             <optional>
-              <ref name="IntroductionDivision"/>
+              <ref name="IntroductionCompanion"/>
             </optional>
           </interleave>
           <choice>
@@ -391,7 +391,7 @@
               <ref name="Outcomes"/>
             </optional>
             <optional>
-              <ref name="ConclusionDivision"/>
+              <ref name="ConclusionCompanion"/>
             </optional>
           </interleave>
         </group>
@@ -486,7 +486,7 @@
               <ref name="Objectives"/>
             </optional>
             <optional>
-              <ref name="IntroductionDivision"/>
+              <ref name="IntroductionCompanion"/>
             </optional>
           </interleave>
           <choice>
@@ -509,7 +509,7 @@
               <ref name="Outcomes"/>
             </optional>
             <optional>
-              <ref name="ConclusionDivision"/>
+              <ref name="ConclusionCompanion"/>
             </optional>
           </interleave>
         </group>
@@ -564,7 +564,7 @@
               <ref name="Objectives"/>
             </optional>
             <optional>
-              <ref name="IntroductionDivision"/>
+              <ref name="IntroductionCompanion"/>
             </optional>
           </interleave>
           <choice>
@@ -587,7 +587,7 @@
               <ref name="Outcomes"/>
             </optional>
             <optional>
-              <ref name="ConclusionDivision"/>
+              <ref name="ConclusionCompanion"/>
             </optional>
           </interleave>
         </group>
@@ -1402,6 +1402,22 @@
     <element name="conclusion">
       <oneOrMore>
         <ref name="BlockStatement"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="IntroductionCompanion">
+    <element name="introduction">
+      <ref name="MetaDataNoTitle"/>
+      <oneOrMore>
+        <ref name="BlockDivision"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="ConclusionCompanion">
+    <element name="conclusion">
+      <ref name="MetaDataNoTitle"/>
+      <oneOrMore>
+        <ref name="BlockDivision"/>
       </oneOrMore>
     </element>
   </define>
@@ -4119,6 +4135,23 @@
     </optional>
     <optional>
       <ref name="PlainTitle"/>
+    </optional>
+    <zeroOrMore>
+      <ref name="Index"/>
+    </zeroOrMore>
+  </define>
+  <define name="MetaDataNoTitle">
+    <optional>
+      <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="LabelID"/>
+    </optional>
+    <optional>
+      <ref name="Component"/>
+    </optional>
+    <optional>
+      <ref name="XMLLang"/>
     </optional>
     <zeroOrMore>
       <ref name="Index"/>
