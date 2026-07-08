@@ -428,16 +428,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
-    <!-- If there is a <support> tag in an article, create a unnumbered footnote environment for it -->
-    <xsl:if test="$b-is-article and $bibinfo/support">
-        <xsl:text>%% add a \ptxsupport command as unnumbered footnote&#xa;</xsl:text>
-        <xsl:text>\let\ptxsvdthefootnote\thefootnote%&#xa;</xsl:text>
-        <xsl:text>\newcommand\ptxsupport[1]{%&#xa;</xsl:text>
-        <xsl:text>  \let\thefootnote\relax%&#xa;</xsl:text>
-        <xsl:text>  \footnotetext{#1}%&#xa;</xsl:text>
-        <xsl:text>  \let\thefootnote\ptxsvdthefootnote%&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:call-template name="support-footnote"/>
 </xsl:template>
 
 <!-- Text Alignment, Right and Bottom -->

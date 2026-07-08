@@ -813,6 +813,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- The funding/support acknowledgment ("bibinfo/support") is an   -->
+<!-- unnumbered footnote on an article's title page: temporarily    -->
+<!-- hijack \thefootnote to suppress the mark, then restore it.     -->
+<!-- Shared: the regular conversion employs this via its            -->
+<!-- "footnote-numbering", classic via its "frontmatter-helpers"    -->
+<xsl:template name="support-footnote">
+    <xsl:if test="$b-is-article and $bibinfo/support">
+        <xsl:text>%% add a \ptxsupport command as unnumbered footnote&#xa;</xsl:text>
+        <xsl:text>\let\ptxsvdthefootnote\thefootnote%&#xa;</xsl:text>
+        <xsl:text>\newcommand\ptxsupport[1]{%&#xa;</xsl:text>
+        <xsl:text>  \let\thefootnote\relax%&#xa;</xsl:text>
+        <xsl:text>  \footnotetext{#1}%&#xa;</xsl:text>
+        <xsl:text>  \let\thefootnote\ptxsvdthefootnote%&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- Semantic Macros -->
 <xsl:template name="semantic-macros">
     <xsl:text>%% Begin: Semantic Macros&#xa;</xsl:text>
