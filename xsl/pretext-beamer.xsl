@@ -486,55 +486,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Multiple column lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$b-has-program or $b-has-console or $b-has-sage">
-        <xsl:text>%% Program listing support: for listings, programs, consoles, and Sage code&#xa;</xsl:text>
-        <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}%&#xa;</xsl:text>
-        <xsl:text>  {\tcbuselibrary{listings}}%&#xa;</xsl:text>
-        <xsl:text>  {\tcbuselibrary{listingsutf8}}%&#xa;</xsl:text>
-        <xsl:text>%% A null language, free of any formatting or style&#xa;</xsl:text>
-        <xsl:text>\lstdefinelanguage{none}{identifierstyle=,commentstyle=,stringstyle=,keywordstyle=}&#xa;</xsl:text>
-        <xsl:if test="$b-has-program">
-            <xsl:text>%% Colors match a subset of Google prettify "Default" style&#xa;</xsl:text>
-            <xsl:text>\definecolor{identifiers}{rgb}{0.375,0,0.375}&#xa;</xsl:text>
-            <xsl:text>\definecolor{comments}{rgb}{0.5,0,0}&#xa;</xsl:text>
-            <xsl:text>\definecolor{strings}{rgb}{0,0.5,0}&#xa;</xsl:text>
-            <xsl:text>\definecolor{keywords}{rgb}{0,0,0.5}&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{programcodestyle}{identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}, breaklines=true, breakatwhitespace=true, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{programcodenumberedstyle}{style=programcodestyle, numbers=left}&#xa;</xsl:text>
-            <xsl:text>\tcbset{ programboxstyle/.style={left=3ex, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt, &#xa;</xsl:text>
-            <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
-            <xsl:text>colback=white, sharp corners, boxrule=-0.3pt, leftrule=0.5pt,&#xa;</xsl:text>
-            <xsl:text>parbox=false,&#xa;</xsl:text>
-            <xsl:text>} }&#xa;</xsl:text>
-            <xsl:text>\tcbset{ programboxnumberedstyle/.style={programboxstyle, left=6ex} }&#xa;</xsl:text>
-            <xsl:text>%% Arguments: language, left margin, width, right margin (latter ignored)&#xa;</xsl:text>
-            <xsl:text>\newtcblisting{program}[4]{programboxstyle, left skip=#2\linewidth, width=#3\linewidth, listing options={language=#1, style=programcodestyle}}&#xa;</xsl:text>
-            <xsl:text>\newtcblisting{programnumbered}[4]{programboxnumberedstyle, left skip=#2\linewidth, width=#3\linewidth, listing options={language=#1, style=programcodenumberedstyle}}&#xa;</xsl:text>
-            <xsl:text>\newcommand{\ptxprogramfragment}[2]{\lstinline[language=#1, style=programcodestyle, basicstyle=\ttfamily]#2}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="$b-has-console">
-            <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
-            <xsl:text>\newcommand{\ptxconsoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{consolecodestyle}{language=none, escapeinside={(*}{*)}, identifierstyle=, commentstyle=, stringstyle=, keywordstyle=, breaklines=false, breakatwhitespace=false, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
-            <xsl:text>\tcbset{ consoleboxstyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt,&#xa;</xsl:text>
-            <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
-            <xsl:text>colback=white, boxrule=-0.3pt,&#xa;</xsl:text>
-            <xsl:text>parbox=false,&#xa;</xsl:text>
-            <xsl:text>} }&#xa;</xsl:text>
-            <xsl:text>%% Arguments: left margin, width, right margin (latter ignored)&#xa;</xsl:text>
-            <xsl:text>\newtcblisting{console}[3]{consoleboxstyle, left skip=#1\linewidth, width=#2\linewidth, listing options={style=consolecodestyle}}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="$b-has-sage">
-            <xsl:text>%% The listings package as tcolorbox for Sage code&#xa;</xsl:text>
-            <xsl:text>\definecolor{sageblue}{HTML}{</xsl:text><xsl:value-of select="$sage-input-background"/><xsl:text>}&#xa;</xsl:text>
-            <xsl:text>\tcbset{ sagestyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,&#xa;</xsl:text>
-            <xsl:text>boxsep=4pt, listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
-            <xsl:text>parbox=false, &#xa;</xsl:text>
-            <xsl:text>listing options={language=Python,breaklines=true,breakatwhitespace=true, extendedchars=true, aboveskip=0pt, belowskip=0pt}} }&#xa;</xsl:text>
-            <xsl:text>\newtcblisting{sageinput}{sagestyle, colback=sageblue, sharp corners, boxrule=0.5pt, }&#xa;</xsl:text>
-            <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, colframe=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
-        </xsl:if>
-    </xsl:if>
+    <!-- The shared support for programs, consoles, Sage code, and -->
+    <!-- verbatim-ish material ("pre", "cd", literate programming) -->
+    <xsl:call-template name="code-support"/>
     <xsl:if test="$document-root//sidebyside">
         <xsl:text>%% tcolorbox styles for sidebyside layout&#xa;</xsl:text>
         <xsl:text>\tcbset{ sbsstyle/.style={raster before skip=2.0ex, raster equal height=rows, raster force size=false} }&#xa;</xsl:text>
