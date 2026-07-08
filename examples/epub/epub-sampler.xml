@@ -162,7 +162,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
             </exercises>
             <conclusion>
-                <title>Wrapping up</title>
                 <p>This is the conclusion.</p>
             </conclusion>
         </chapter>
