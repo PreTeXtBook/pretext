@@ -676,7 +676,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </conclusion>
             </objectives>
 
-            <introduction>
+            <introduction xml:id="introduction-structures">
                 <p>This is a cross-reference to one of the objectives above, forced to use the <c>phrase-global</c> form of the text.  It should describe the objective as belonging to the <em>section</em> (rather than the <em>objectives</em>), since objectives are one-per-subdivision and are numbered based upon the containing division: <xref ref="objective-structure" text="phrase-global"/>.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="objective-structure" text="type-global"/>.</p>
 
                 <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
@@ -1657,11 +1657,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Introductions and Conclusions</title>
 
                 <introduction>
-                    <title>An Introductory Introduction</title>
 
                     <p>Any subdivision may have a sequence of paragraphs within an <tag>introduction</tag> that precedes subsequent further subdivisions.  You are reading one now.  They are always leaves of the document structure, so are rendered on some pages that reference the following subdivisions.</p>
 
-                    <p>An introduction or conclusion is an extremely restrictive container with simple presentation.  A title is optional (and probably not advisable).  Content is meant to be short and unstructured, in particular, nothing that can be numbered is allowed.  If this feels <em>too</em> restrictive, then place your content in an initial numbered subdivision and perhaps title it <q>Introduction</q>.  Or make your entire subdivion unstructured and place whatever you want into it.</p>
+                    <p>An introduction or conclusion is an extremely restrictive container with simple presentation, and it may not have a title.  Content is meant to be short and unstructured, in particular, nothing that can be numbered is allowed.  If this feels <em>too</em> restrictive, then place your content in an initial numbered subdivision and perhaps title it <q>Introduction</q>.  Or make your entire subdivion unstructured and place whatever you want into it.</p>
 
                     <p>This ends this introduction to introductions.</p>
                 </introduction>
@@ -1753,7 +1752,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             </subsection>
 
-            <conclusion>
+            <conclusion xml:id="conclusion-structures">
                 <p>A conclusion here, which we fill with some numbering tests.</p>
 
                 <p>This is a cross-reference to one of the outcomes, forced to use the <c>type-global</c> form of the text.  It should describe the outcome as belonging to the <em>section</em> (rather than the <em>outcomes</em>), since outcomes are one-per-subdivision and are numbered based upon the containing division: <xref ref="outcome-structure" text="phrase-global"/>.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="outcome-structure" text="type-global"/>.</p>
@@ -2761,7 +2760,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </outcomes>
 
             <conclusion>
-                <title>Wrap-up</title>
                 <p>A minimal <tag>conclusion</tag>.</p>
             </conclusion>
         </section>
@@ -10787,6 +10785,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>A hyperlink to a <tag>subexercises</tag> via its required title (no number is assigned): <xref ref="hard-subexercises" text="title"/></p></li>
                 <li><p>You can request the text to be a type, then a number, then a title: <xref ref="theorem-FTC" text="type-global-title"/></p></li>
                 <li><p>Asking for the text to be a type, then a number, then a title, when there is no title, is not a problem: <xref ref="corollary-FTC-derivative" text="type-local-title"/></p></li>
+                <li><p>A cross-reference to the <tag>introduction</tag> of a (structured) section, and to the <tag>conclusion</tag> of the same section.  There is at most one of each per division, so each takes the number of its parent division, displayed only here in a cross-reference (never where born), and each should be a traditional hyperlink, never a knowl: <xref ref="introduction-structures"/> and <xref ref="conclusion-structures"/>.  In an <init>HTML</init> version chunked so the section becomes a summary page, these lead to the companions' own pages.</p></li>
                 <!-- Accumulate examples here -->
                 <!-- <li><p>: <xref ref="" text=""/></p></li> -->
             </ul></p>
@@ -11691,7 +11690,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Side-By-Side Panels</title>
 
             <introduction>
-                <title>Introduction</title>
 
                 <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page real estate by grouping several small items together (<eg/> images).  So the <tag>sidebyside</tag> tag is strictly a layout device, though it does convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>, <c>pre</c>, <c>poem</c>, and more.  The individual components of a <tag>sidebyside</tag> are generically called <term>panels</term><idx>panels</idx>.</p>
 
@@ -15355,7 +15353,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Worksheets</title>
 
             <introduction>
-                <title>About Worksheets</title>
 
                 <p>This is a section full of worksheets.  Each is a division of its own, via the <tag>worksheet</tag> element.  This is an optional <tag>introduction</tag> to the current <tag>section</tag>.  In practice you might want to rip out all the worksheets of an entire book and bundle them up as an <q>activity book.</q></p>
 
@@ -16623,7 +16620,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>Handouts</title>
 
             <introduction>
-                <title>About Handouts</title>
                 <p>
                     Like worksheets, a <term>handout</term> is a division that is inteded to be printed for use in a classroom.
                     In HTML output, you get the same print preview and page layout as you do with worksheets; in PDF, these will start on a new page with possibly different margins than the rest of the document.

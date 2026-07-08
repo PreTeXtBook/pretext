@@ -2267,6 +2267,13 @@ Book (with parts), "section" at level 3
 <!--   Realization: usual presentation, within the enclosing chunk  -->
 
 
+<!-- A conversion opts in to "division companion" chunks: the four   -->
+<!-- elements of &DIVISION-COMPANION; earn their own page (chunk)    -->
+<!-- exactly when their parent division is realized as a summary    -->
+<!-- (intermediate) page.  The HTML conversion opts in; conversions -->
+<!-- with their own chunking (WeBWorK sets, Sage doctest) do not.   -->
+<xsl:variable name="b-division-companion-chunks" select="false()"/>
+
 <!-- An intermediate node is at lesser level -->
 <!-- than chunk-level and is not a leaf      -->
  <xsl:template match="*" mode="is-intermediate">
@@ -2317,6 +2324,22 @@ Book (with parts), "section" at level 3
     </xsl:choose>
 </xsl:template>
 
+<!-- A division companion is a chunk exactly when its parent -->
+<!-- is a summary (intermediate) page, and the conversion    -->
+<!-- has opted in.  It is never an intermediate node itself  -->
+<!-- (the generic template answers correctly), and it is     -->
+<!-- inline content of its parent's page in every other case -->
+<xsl:template match="&DIVISION-COMPANION;" mode="is-chunk">
+    <xsl:choose>
+        <xsl:when test="$b-division-companion-chunks">
+            <xsl:apply-templates select="parent::*" mode="is-intermediate"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="false()"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- #################################### -->
 <!-- Abstract Chunking of Structural Nodes-->
 <!-- #################################### -->
@@ -2363,10 +2386,22 @@ Book (with parts), "section" at level 3
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="intermediate" />
-            <xsl:apply-templates select="&STRUCTURAL;" mode="chunking" />
+            <xsl:apply-templates select="&STRUCTURAL;|&DIVISION-COMPANION;" mode="chunking" />
         </xsl:otherwise>
     </xsl:choose>
  </xsl:template>
+
+<!-- A division companion produces a page (chunk) or nothing: -->
+<!-- it is only visited via the recursion above, so a parent  -->
+<!-- summary page is guaranteed, but the opt-in may be off    -->
+<xsl:template match="&DIVISION-COMPANION;" mode="chunking">
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk" />
+    </xsl:variable>
+    <xsl:if test="$chunk = 'true'">
+        <xsl:apply-templates select="." mode="chunk" />
+    </xsl:if>
+</xsl:template>
 
 <!-- docinfo, and anything else, is immune and dead-ends -->
 <xsl:template match="*" mode="chunking" />
@@ -2384,7 +2419,7 @@ Book (with parts), "section" at level 3
 <!-- parameter holding the contents of the body of the page -->
 
 <!-- A complete file/page for a structural division         -->
-<xsl:template match="&STRUCTURAL;" mode="chunk">
+<xsl:template match="&STRUCTURAL;|&DIVISION-COMPANION;" mode="chunk">
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="content">
             <xsl:apply-templates select="." />
@@ -11833,6 +11868,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="&quot;$document-root//@include-source&quot;" />
         <xsl:with-param name="date-string" select="'2026-05-22'" />
         <xsl:with-param name="message" select="'the &quot;@include-source&quot; attribute has been deprecated and it will be ignored.  No replacement is planned.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-07-08  "title" deprecated on "introduction"/"conclusion" of a traditional division -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//introduction[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]/title | $document-root//conclusion[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]/title&quot;" />
+        <xsl:with-param name="date-string" select="'2026-07-08'" />
+        <xsl:with-param name="message" select="'a &quot;title&quot; on an &quot;introduction&quot; or &quot;conclusion&quot; of a traditional division has been deprecated, and it will be ignored.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

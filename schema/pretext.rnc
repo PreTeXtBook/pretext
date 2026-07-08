@@ -25,11 +25,11 @@
                         )
                     |
                         (
-                            (Objectives? & IntroductionDivision?),
+                            (Objectives? & IntroductionCompanion?),
                             (Section | Printout),
                             (Section | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
-                            (Outcomes? & ConclusionDivision?),
+                            (Outcomes? & ConclusionCompanion?),
                             ArticleBackMatter?
                         )
                     )
@@ -65,11 +65,11 @@
                         )
                     |
                         (
-                            (Objectives? & IntroductionDivision?),
+                            (Objectives? & IntroductionCompanion?),
                             (Section | Printout),
                             (Section | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
-                            (Outcomes? & ConclusionDivision?)
+                            (Outcomes? & ConclusionCompanion?)
                         )
                     )
                 }
@@ -87,11 +87,11 @@
                         )
                     |
                         (
-                            (Objectives? & IntroductionDivision?),
+                            (Objectives? & IntroductionCompanion?),
                             (Subsection | Printout),
                             (Subsection | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
-                            (Outcomes? & ConclusionDivision?)
+                            (Outcomes? & ConclusionCompanion?)
                         )
                     )
                 }
@@ -109,11 +109,11 @@
                         )
                     |
                         (
-                            (Objectives? & IntroductionDivision?),
+                            (Objectives? & IntroductionCompanion?),
                             (Subsubsection | Printout),
                             (Subsubsection | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
-                            (Outcomes? & ConclusionDivision?)
+                            (Outcomes? & ConclusionCompanion?)
                         )
                     )
                 }
@@ -141,11 +141,11 @@
                         )
                     |
                         (
-                            (Objectives? & IntroductionDivision?),
+                            (Objectives? & IntroductionCompanion?),
                             (Subsection | Printout),
                             (Subsection | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
-                            (Outcomes? & ConclusionDivision?)
+                            (Outcomes? & ConclusionCompanion?)
                         )
                     )
                 }
@@ -163,11 +163,11 @@
                         )
                     |
                         (
-                            (Objectives? & IntroductionDivision?),
+                            (Objectives? & IntroductionCompanion?),
                             (Section | Printout),
                             (Section | Printout | ReadingQuestions | Exercises |
                              Solutions | References | Glossary)*,
-                            (Outcomes? & ConclusionDivision?)
+                            (Outcomes? & ConclusionCompanion?)
                         )
                     )
                 }
@@ -499,6 +499,16 @@
                 element introduction {BlockStatement+}
             ConclusionStatement =
                 element conclusion {BlockStatement+}
+            IntroductionCompanion =
+                element introduction {
+                    MetaDataNoTitle,
+                    BlockDivision+
+                }
+            ConclusionCompanion =
+                element conclusion {
+                    MetaDataNoTitle,
+                    BlockDivision+
+                }
             IntroductionDivision =
                 element introduction {
                     MetaDataTitleOptional,
@@ -1581,6 +1591,12 @@
                 (Subtitle | LinedSubtitle)?,
                 ShortTitle?,
                 PlainTitle?,
+                Index*
+            MetaDataNoTitle =
+                UniqueID?,
+                LabelID?,
+                Component?,
+                XMLLang?,
                 Index*
             MetaDataTitleOptional =
                 UniqueID?,

@@ -450,7 +450,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lists live in paragraphs, exercises, objectives, so       -->
 <!-- should be referenced as part of some enclosing element.   -->
 <!-- "mathbook" helps some tree-climbing routines halt -->
-<xsl:template match="mathbook|pretext|introduction|conclusion|frontmatter|backmatter|sidebyside|sbsgroup|ol|ul|dl|statement" mode="serial-number" />
+<xsl:template match="mathbook|pretext|frontmatter|backmatter|sidebyside|sbsgroup|ol|ul|dl|statement" mode="serial-number" />
+
+<!-- An "introduction" or "conclusion" of a structured division (a   -->
+<!-- "division companion") occurs at most once per division, and so   -->
+<!-- takes its number from the parent, exactly as GOAL-LIKE does.    -->
+<!-- The number is never displayed where born; it only serves to     -->
+<!-- identify the target of a cross-reference.  Every other flavor   -->
+<!-- (in blocks, tasks, exercise groups, ...) has no number at all.  -->
+<xsl:template match="introduction|conclusion" mode="serial-number"/>
+
+<xsl:template match="introduction[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]|conclusion[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]" mode="serial-number">
+    <xsl:apply-templates select="parent::*" mode="serial-number"/>
+</xsl:template>
+
+<xsl:template match="introduction[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]|conclusion[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]" mode="structure-number">
+    <xsl:apply-templates select="parent::*" mode="structure-number"/>
+</xsl:template>
 
 <!-- Poems go by their titles, not numbers -->
 <xsl:template match="poem" mode="serial-number" />

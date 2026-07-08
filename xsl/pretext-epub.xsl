@@ -239,7 +239,7 @@
 <!-- EPUB conversion with "chapter" having "section" it gets an -->
 <!-- HTML page of its own as part of the "summary" hack.  Ditto -->
 <!-- for "outcomes" which might appear in a different order.    -->
-<xsl:template match="&STRUCTURAL;|chapter/conclusion|chapter/outcomes[preceding-sibling::section]" mode="file-wrap">
+<xsl:template match="&STRUCTURAL;|&DIVISION-COMPANION;" mode="file-wrap">
     <xsl:param name="content" />
     <xsl:variable name="file">
         <xsl:value-of select="$content-dir" />
@@ -307,23 +307,10 @@
             <section class="{local-name(.)}">
                 <xsl:apply-templates select="." mode="html-id-attribute"/>
                 <xsl:apply-templates select="." mode="section-heading" />
-                <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
+                <xsl:apply-templates select="author|titlepage|abstract" />
                 <!-- deleted "nav" and summary links here -->
+                <!-- division companions become their own files, in the spine -->
             </section>
-            <xsl:if test="conclusion">
-                <xsl:apply-templates select="conclusion" mode="file-wrap">
-                    <xsl:with-param name="content">
-                        <xsl:apply-templates select="conclusion"/>
-                    </xsl:with-param>
-                </xsl:apply-templates>
-            </xsl:if>
-            <xsl:if test="outcomes">
-                <xsl:apply-templates select="outcomes" mode="file-wrap">
-                    <xsl:with-param name="content">
-                        <xsl:apply-templates select="outcomes"/>
-                    </xsl:with-param>
-                </xsl:apply-templates>
-            </xsl:if>
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -540,7 +527,26 @@
 <!-- Specialized divisions are terminal in back    -->
 <!-- matter, and only a separate file when within  -->
 <!-- a "chapter", at level 2                       -->
-<xsl:template match="frontmatter|colophon|biography|dedication|acknowledgement|preface|chapter|chapter/conclusion|chapter/outcomes[preceding-sibling::section]|appendix|index|section|exercises|chapter/reading-questions|chapter/solutions|appendix/solutions|backmatter/solutions|chapter/references|appendix/references|backmatter/references" mode="manifest">
+<xsl:template match="frontmatter|colophon|biography|dedication|acknowledgement|preface|chapter|appendix|index|section|exercises|chapter/reading-questions|chapter/solutions|appendix/solutions|backmatter/solutions|chapter/references|appendix/references|backmatter/references" mode="manifest">
+    <xsl:call-template name="manifest-item"/>
+    <!-- recurse, eg from chapter down into a section -->
+    <xsl:apply-templates select="*" mode="manifest" />
+</xsl:template>
+
+<!-- A division companion is a file exactly when it is a chunk -->
+<!-- (its parent is a summary page); it has no children that   -->
+<!-- could ever join the manifest, so there is no recursion    -->
+<xsl:template match="&DIVISION-COMPANION;" mode="manifest">
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk"/>
+    </xsl:variable>
+    <xsl:if test="$chunk = 'true'">
+        <xsl:call-template name="manifest-item"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- One manifest "item" element for the context node's file -->
+<xsl:template name="manifest-item">
     <!-- Annotate manifest entries -->
     <xsl:comment>
         <xsl:apply-templates select="." mode="long-name" />
@@ -605,7 +611,6 @@
         </xsl:attribute>
     </xsl:element>
     <!-- recurse, eg from chapter down into a section -->
-    <xsl:apply-templates select="*" mode="manifest" />
 </xsl:template>
 
 <!-- How the files are organized into the spine  -->
@@ -627,11 +632,31 @@
     <xsl:apply-templates select="*" mode="spine" />
 </xsl:template>
 
+<!-- A division companion joins the linear reading order exactly -->
+<!-- when it is a file; document order places an "introduction"  -->
+<!-- right after its division's summary page, and a "conclusion" -->
+<!-- after the last subdivision                                  -->
+<xsl:template match="&DIVISION-COMPANION;" mode="spine">
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk"/>
+    </xsl:variable>
+    <xsl:if test="$chunk = 'true'">
+        <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
+            <xsl:attribute name="idref">
+                <xsl:apply-templates select="." mode="html-id" />
+            </xsl:attribute>
+            <xsl:attribute name="linear">
+                <xsl:text>yes</xsl:text>
+            </xsl:attribute>
+        </xsl:element>
+    </xsl:if>
+</xsl:template>
+
 <!-- Simplest scenario is spine matches manifest, all with @linear="yes" -->
 <!-- Specialized divisions will only become files in the manifest at     -->
 <!-- chunk level 2, in other words, peers of chapters or sections        -->
 <!-- (book or chapter/appendix as parent, respectively)                  -->
-<xsl:template match="frontmatter|colophon|acknowledgement|biography|dedication|preface|chapter|appendix|index|section|exercises[parent::book|parent::chapter|parent::appendix]|reading-questions[parent::book|parent::chapter|parent::appendix]|chapter/solutions|appendix/solutions|backmatter/solutions|chapter/references|appendix/references|backmatter/references|glossary[parent::book|parent::chapter|parent::appendix]|conclusion[parent::chapter]|outcomes[preceding-sibling::section]" mode="spine">
+<xsl:template match="frontmatter|colophon|acknowledgement|biography|dedication|preface|chapter|appendix|index|section|exercises[parent::book|parent::chapter|parent::appendix]|reading-questions[parent::book|parent::chapter|parent::appendix]|chapter/solutions|appendix/solutions|backmatter/solutions|chapter/references|appendix/references|backmatter/references|glossary[parent::book|parent::chapter|parent::appendix]" mode="spine">
     <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="idref">
             <xsl:apply-templates select="." mode="html-id" />
@@ -805,6 +830,7 @@
                                     </xsl:attribute>
                                     <xsl:apply-templates select="." mode="title-simple" />
                                 </xsl:element>
+                                <xsl:apply-templates select="." mode="nav-companions"/>
                             </li>
                         </xsl:for-each>
                         <!-- following divisions identical for book v. article -->
@@ -840,6 +866,35 @@
             </body>
         </html>
     </exsl:document>
+</xsl:template>
+
+<!-- Division companions of a division, nested in the nav -->
+<!-- document, exactly when they are files of the spine   -->
+<xsl:template match="*" mode="nav-companions">
+    <xsl:variable name="companion-files">
+        <xsl:for-each select="introduction|conclusion|objectives|outcomes">
+            <xsl:apply-templates select="." mode="is-chunk"/>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:if test="contains($companion-files, 'true')">
+        <ol>
+            <xsl:for-each select="introduction|conclusion|objectives|outcomes">
+                <xsl:variable name="chunk">
+                    <xsl:apply-templates select="." mode="is-chunk"/>
+                </xsl:variable>
+                <xsl:if test="$chunk = 'true'">
+                    <li class="no-marker">
+                        <xsl:element name="a">
+                            <xsl:attribute name="href">
+                                <xsl:apply-templates select="." mode="containing-filename" />
+                            </xsl:attribute>
+                            <xsl:apply-templates select="." mode="division-companion-text" />
+                        </xsl:element>
+                    </li>
+                </xsl:if>
+            </xsl:for-each>
+        </ol>
+    </xsl:if>
 </xsl:template>
 
 <!-- An abstract named template accepts input text and   -->

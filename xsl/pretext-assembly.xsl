@@ -3357,6 +3357,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which have not been schema-compliant since circa 2017   -->
 <xsl:template match="sidebyside/*[&METADATA-FILTER;]" mode="repair"/>
 
+<!-- 2026-07-08  "title" deprecated on "introduction"/"conclusion" of a traditional division -->
+
+<!-- The title is dropped, silently; conversions provide a localized -->
+<!-- heading whenever a heading is called for.  Titles remain within -->
+<!-- specialized divisions, which are never structured, and so are   -->
+<!-- never summary pages (the situation that demands the heading)    -->
+<xsl:template match="introduction[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]/title|conclusion[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]/title" mode="repair"/>
+
 <!-- ########## -->
 <!-- Enrichment -->
 <!-- ########## -->
