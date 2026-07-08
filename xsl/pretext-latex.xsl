@@ -1478,4 +1478,138 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}}}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Exercises and solutions setup -->
+<xsl:template name="exercises-and-solutions">
+    <xsl:if test="$document-root//solutions or $b-needs-solution-styles">
+        <xsl:text>%% begin: environments for duplicates in solutions divisions&#xa;</xsl:text>
+        <!-- Solutions present, check for exercise types     -->
+        <!-- This may have false positives, but no real harm -->
+        <!--  -->
+        <!-- solutions to inline exercises -->
+        <xsl:if test="$document-root//exercise[boolean(&INLINE-EXERCISE-FILTER;)]">
+        <xsl:text>%% Solutions to inline exercises, style and environment&#xa;</xsl:text>
+            <xsl:text>\tcbset{ inlinesolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{inlinesolution}[4]</xsl:text>
+            <xsl:text>{inlinesolutionstyle, title={\hyperref[#4]{#1~#2}\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Division Solution -->
+        <!-- Explicitly breakable, run-in title -->
+        <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
+            <xsl:text>%% Solutions to division exercises, not in exercise group&#xa;</xsl:text>
+            <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolution}[4]</xsl:text>
+            <xsl:text>{divisionsolutionstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Division Solution, Exercise Group -->
+        <!-- Explicitly breakable, run-in title -->
+        <xsl:if test="$document-root//exercisegroup[not(@cols)]">
+            <xsl:text>%% Solutions to division exercises, in exercise group, no columns&#xa;</xsl:text>
+            <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, left skip=\ptxegindent, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolutioneg}[4]</xsl:text>
+            <xsl:text>{divisionsolutionegstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Division Solution, Exercise Group, Columnar -->
+        <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
+        <xsl:if test="$document-root//exercisegroup/@cols">
+            <xsl:text>%% Solutions to division exercises, in exercise group with columns&#xa;</xsl:text>
+            <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionegcolstyle/.style={bwminimalstyle, runintitlestyle,  exercisespacingstyle, after title={\space}, halign=flush left, unbreakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolutionegcol}[4]</xsl:text>
+            <xsl:text>{divisionsolutionegcolstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
+        </xsl:if>
+        <!-- solutions to PROJECT-LIKE -->
+        <!-- "project-rep" variable defined twice (each local) -->
+        <xsl:variable name="project-reps" select="
+            ($document-root//project)[1]|
+            ($document-root//activity)[1]|
+            ($document-root//exploration)[1]|
+            ($document-root//investigation)[1]"/>
+        <xsl:for-each select="$project-reps">
+            <xsl:variable name="elt-name">
+                <xsl:value-of select="local-name(.)"/>
+            </xsl:variable>
+            <!-- set the style -->
+            <xsl:text>\tcbset{ </xsl:text>
+            <xsl:value-of select="$elt-name"/>
+            <xsl:text>solutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
+            <!-- create the environment -->
+            <xsl:text>\newtcolorbox{</xsl:text>
+            <xsl:value-of select="$elt-name"/>
+            <xsl:text>solution}[4]</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:value-of select="$elt-name"/>
+            <xsl:text>solutionstyle, title={\hyperref[#4]{#1~#2}\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
+        </xsl:for-each>
+    </xsl:if>
+    <!-- Generic exercise lead-in -->
+    <xsl:if test="$document-root//exercises//exercise|$document-root//worksheet//exercise|$document-root//reading-questions//exercise">
+        <xsl:text>%% Divisional exercises (and worksheet) as LaTeX environments&#xa;</xsl:text>
+        <xsl:text>%% Third argument is option for extra workspace in worksheets&#xa;</xsl:text>
+        <xsl:text>%% Hanging indent occupies a 5ex width slot prior to left margin&#xa;</xsl:text>
+        <xsl:text>%% Experimentally this seems just barely sufficient for a bold "888."&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Division Exercise -->
+    <!-- Numbered, styled with a hanging indent -->
+    <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
+        <xsl:text>%% Division exercises, not in exercise group&#xa;</xsl:text>
+        <!-- Outdenting the problem number requires an "\hspace*" to avoid an edge case -->
+        <!-- https://tex.stackexchange.com/questions/722329/unwanted-space-in-tcbraster -->
+        <!-- https://tex.stackexchange.com/questions/89082/hspace-vs-hspace             -->
+        <xsl:text>\tcbset{ divisionexercisestyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
+        <xsl:text>{divisionexercisestyle, before title={\hspace*{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2}{}}, after title={\notblank{#2}{\space}{}}, phantom={</xsl:text>
+        <xsl:if test="$b-pageref">
+            <xsl:text>\label{#4}</xsl:text>
+        </xsl:if>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\par\rule{\ptxworkspacestrutwidth}{#3}\par\vfill}{\par}}}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Division Exercise, Exercise Group -->
+    <!-- The exercise itself carries the indentation, hence we can use breakable -->
+    <!-- boxes and get good page breaks (as these problems could be long)        -->
+    <xsl:if test="$document-root//exercisegroup[not(@cols)]">
+        <xsl:text>%% Division exercises, in exercise group, no columns&#xa;</xsl:text>
+        <!-- Outdenting the problem number requires an "\hspace*" to avoid an edge case -->
+        <!-- https://tex.stackexchange.com/questions/722329/unwanted-space-in-tcbraster -->
+        <!-- https://tex.stackexchange.com/questions/89082/hspace-vs-hspace             -->
+        <xsl:text>\tcbset{ divisionexerciseegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, left skip=\ptxegindent, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{divisionexerciseeg}[4]</xsl:text>
+        <xsl:text>{divisionexerciseegstyle, before title={\hspace*{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2}{}}, after title={\notblank{#2}{\space}{}}, phantom={</xsl:text>
+        <xsl:if test="$b-pageref">
+            <xsl:text>\label{#4}</xsl:text>
+        </xsl:if>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\par\rule{\ptxworkspacestrutwidth}{#3}\par\vfill}{\par}}}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Division Exercise, Exercise Group, Columnar -->
+    <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
+    <xsl:if test="$document-root//exercisegroup/@cols">
+        <xsl:text>%% Division exercises, in exercise group with columns&#xa;</xsl:text>
+        <!-- Outdenting the problem number requires an "\hspace*" to avoid an edge case -->
+        <!-- https://tex.stackexchange.com/questions/722329/unwanted-space-in-tcbraster -->
+        <!-- https://tex.stackexchange.com/questions/89082/hspace-vs-hspace             -->
+        <xsl:text>\tcbset{ divisionexerciseegcolstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, halign=flush left, unbreakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{divisionexerciseegcol}[4]</xsl:text>
+        <xsl:text>{divisionexerciseegcolstyle, before title={\hspace*{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2}{}}, after title={\notblank{#2}{\space}{}}, phantom={</xsl:text>
+        <xsl:if test="$b-pageref">
+            <xsl:text>\label{#4}</xsl:text>
+        </xsl:if>
+        <xsl:text>\hypertarget{#4}{}}, after upper={\notblank{#3}{\par\rule{\ptxworkspacestrutwidth}{#3}\par\vfill}{\par}}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//@workspace">
+        <xsl:text>%% Worksheets and handouts children may have workspaces&#xa;</xsl:text>
+        <xsl:text>\newlength{\ptxworkspacestrutwidth}&#xa;</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$b-latex-draft-mode">
+                <xsl:text>%% LaTeX draft mode, @workspace strut is visible&#xa;</xsl:text>
+                <xsl:text>\setlength{\ptxworkspacestrutwidth}{2pt}&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>%% @workspace strut is invisible&#xa;</xsl:text>
+                <xsl:text>\setlength{\ptxworkspacestrutwidth}{0pt}&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
+</xsl:template>
+
 </xsl:stylesheet>
