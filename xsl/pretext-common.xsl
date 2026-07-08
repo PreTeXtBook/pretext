@@ -11870,6 +11870,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;@include-source&quot; attribute has been deprecated and it will be ignored.  No replacement is planned.'"/>
     </xsl:call-template>
     <!--  -->
+    <!-- 2026-07-08  "title" deprecated on "introduction"/"conclusion" of a traditional division -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//introduction[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]/title | $document-root//conclusion[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]/title&quot;" />
+        <xsl:with-param name="date-string" select="'2026-07-08'" />
+        <xsl:with-param name="message" select="'a &quot;title&quot; on an &quot;introduction&quot; or &quot;conclusion&quot; of a traditional division has been deprecated, and it will be ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->
