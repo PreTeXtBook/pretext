@@ -468,7 +468,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Some aspects of the preamble are conditional,&#xa;</xsl:text>
     <xsl:text>%% the LaTeX engine is one such determinant&#xa;</xsl:text>
     <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\tabularfont}{}&#xa;</xsl:text>
+    <!-- The style-writer font hooks that shared preamble pieces -->
+    <!-- presume; under Beamer the theme controls fonts, so the  -->
+    <!-- no-op defaults are exactly right                        -->
+    <xsl:call-template name="automatic-font-control"/>
+    <xsl:text>%% Shared tcolorbox styles restore paragraph shape via \ptxsetparstyle;&#xa;</xsl:text>
+    <xsl:text>%% under Beamer the theme's paragraph shape should rule, so a no-op&#xa;</xsl:text>
+    <xsl:text>\newcommand{\ptxsetparstyle}{}&#xa;</xsl:text>
     <xsl:text>\usepackage[xparse, raster]{tcolorbox}&#xa;</xsl:text>
     <xsl:text>\tcbset{colback=white, colframe=white}&#xa;</xsl:text>
     <xsl:text>%% tcolorbox styles used by images and side-by-side panels&#xa;</xsl:text>
@@ -607,10 +613,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title">
         <xsl:text>%% Style of a title on a list item, for ordered and unordered lists&#xa;</xsl:text>
         <xsl:text>\newcommand{\ptxlititle}[1]{{\slshape#1}}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//xref">
-        <xsl:text>%% Font for cross-reference numbers, a no-op on slides&#xa;</xsl:text>
-        <xsl:text>\newcommand{\xreffont}{}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
     <xsl:if test="$latex.preamble.late != ''">
