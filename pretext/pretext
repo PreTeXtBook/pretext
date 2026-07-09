@@ -863,7 +863,7 @@ def main():
                 dest_dir,
                 method,
                 "pdf-only",
-                None,
+                "latex",
             )
         elif args.format == "pdf-plus":
             ptx.pdf(
@@ -875,10 +875,10 @@ def main():
                 dest_dir,
                 method,
                 "all",
-                None,
+                "latex",
             )
         elif args.format == "beamer":
-            ptx.beamer(
+            ptx.pdf(
                 xml_source,
                 publication_file,
                 stringparams,
@@ -887,6 +887,7 @@ def main():
                 dest_dir,
                 method,
                 "pdf-only",
+                "beamer",
             )
         elif args.format == "pdf-fo":
             ptx.pdf_fo(
@@ -904,7 +905,7 @@ def main():
                 extra_stylesheet,
                 out_file,
                 dest_dir,
-                None,
+                "latex",
             )
         elif args.format == "fo":
             ptx.fo(
@@ -924,7 +925,7 @@ def main():
                 dest_dir,
                 method,
                 "prebuild",
-                None,
+                "latex",
             )
         elif args.format == "braille-emboss":
             ptx.braille(xml_source, publication_file, stringparams, out_file, dest_dir, "emboss")
