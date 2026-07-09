@@ -4325,52 +4325,52 @@ def _pdf_fo_accessibility_repairs(pdfname):
 
 
 def _downgrade_svg2_for_batik(directory):
-    """Rewrite the SVG 2 constructs that Apache Batik cannot render.
+    """Rewrite SVG 2 constructs that Apache Batik (via FOP) cannot render.
 
-    Apache FOP rasterizes SVG with Batik, an SVG 1.1 implementation, so
-    SVG 2 syntax inside an image aborts the whole graphic.  Two such
-    constructs occur in PreFigure output; this rewrites the SVG copies
-    staged for FOP, leaving the managed source assets untouched.
-
-      * "orient" of "auto-start-reverse" on a "marker".  Its value
-        differs from "auto" only at a "marker-start" placement, so the
-        marker becomes plain "auto"; a marker actually placed at a start
-        also gets a companion rotated 180 degrees, with that start
-        reference repointed to the companion.
-
-      * a "use" element carrying a plain "href" rather than "xlink:href".
+    * orient="auto-start-reverse": changed to "auto"; elements that use
+      the marker as marker-start get a rotated (180°) copy (id suffix
+      "-start").
+    * Plain href on <use>: migrated to xlink:href.
     """
     # TODO (2026-07-03) This function may modify SVG 1.1 files coming
     # from PreFigure that are known to be good for Batik to ingest.
     # With access to source, we can determine filenames to avoid.
 
-    import glob
-    import copy
+    import glob, copy
     import lxml.etree as ET
 
-    svg_namespace = "http://www.w3.org/2000/svg"
-    xlink_namespace = "http://www.w3.org/1999/xlink"
-    ET.register_namespace("xlink", xlink_namespace)
-    use_tag = "{{{}}}use".format(svg_namespace)
-    marker_tag = "{{{}}}marker".format(svg_namespace)
-    group_tag = "{{{}}}g".format(svg_namespace)
-    xlink_href = "{{{}}}href".format(xlink_namespace)
+    SVG   = "http://www.w3.org/2000/svg"
+    XLINK = "http://www.w3.org/1999/xlink"
+    ET.register_namespace("xlink", XLINK)
+    tag   = lambda t: f"{{{SVG}}}{t}"
+    xhref = f"{{{XLINK}}}href"
 
-    for svg_file in glob.glob(os.path.join(directory, "**", "*.svg"), recursive=True):
+    def parse_style(el):
+        d = {}
+        for part in (el.get("style") or "").split(";"):
+            k, sep, v = part.partition(":")
+            if sep: d[k.strip()] = v.strip()
+        return d
+
+    def emit_style(d): return ";".join(f"{k}:{v}" for k, v in d.items())
+
+    def get_prop(el, prop):
+        return parse_style(el).get(prop) or el.get(prop)
+
+    for svg_file in glob.glob(
+        os.path.join(directory, "**", "*.svg"), recursive=True
+    ):
         try:
             tree = ET.parse(svg_file)
         except ET.XMLSyntaxError:
             continue
-        root = tree.getroot()
+        root    = tree.getroot()
         changed = False
 
-        # SVG 2 plain "href" on a "use" becomes SVG 1.1 "xlink:href"
-        for use in root.iter(use_tag):
-            target = use.get("href")
-            if target is not None and use.get(xlink_href) is None:
-                use.set(xlink_href, target)
-                del use.attrib["href"]
-                changed = True
+        for use in root.iter(tag("use")):
+            href = use.get("href")
+            if href and use.get(xhref) is None:
+                use.set(xhref, href); del use.attrib["href"]; changed = True
 
         # a marker placed at a "marker-start" needs a 180-degree twin,
         # since SVG 1.1 "auto" cannot express the reversal "auto-start-reverse"
@@ -4380,7 +4380,7 @@ def _downgrade_svg2_for_batik(directory):
             if element.get("marker-start")
         )
         reversed_twin = {}
-        for marker in list(root.iter(marker_tag)):
+        for marker in list(root.iter(tag("marker"))):
             if marker.get("orient") != "auto-start-reverse":
                 continue
             marker.set("orient", "auto")
@@ -4390,7 +4390,7 @@ def _downgrade_svg2_for_batik(directory):
             if reference and reference in start_references:
                 twin = copy.deepcopy(marker)
                 twin.set("id", "{}-start".format(marker_id))
-                rotation = ET.Element(group_tag)
+                rotation = ET.Element(tag("g"))
                 rotation.set(
                     "transform",
                     "rotate(180 {} {})".format(twin.get("refX", "0"), twin.get("refY", "0")),
