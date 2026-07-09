@@ -4506,6 +4506,28 @@ def _downgrade_svg2_for_batik(directory):
             if db:
                 del el.attrib["dominant-baseline"]; changed = True
 
+        # Mermaid git diagrams position branch labels via
+        #   <text><tspan dy="1em">label</tspan></text>
+        # (no y attribute on the <text> element).  Batik ignores the tspan's
+        # dy in this case and places the text at y=0 in the parent g's space.
+        # Fix: promote the first tspan's dy to an explicit y on the <text>
+        # element, so Batik picks up the correct baseline.
+        for el in root.iter(tag("text")):
+            if el.get("y") is not None:
+                continue
+            if el.get("dominant-baseline") or el.get("alignment-baseline"):
+                continue   # already handled above
+            tspans = [c for c in el if c.tag == tag("tspan")]
+            if not tspans:
+                continue
+            ts    = tspans[0]
+            ts_dy = ts.get("dy", "")
+            if not ts_dy:
+                continue
+            el.set("y", ts_dy)
+            del ts.attrib["dy"]
+            changed = True
+
         bad = {el.get("id"): el for el in root.iter(tag("marker"))
                if el.get("id") and is_svg2_marker(el)}
         if bad:
