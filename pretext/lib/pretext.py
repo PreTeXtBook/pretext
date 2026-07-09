@@ -3901,7 +3901,7 @@ def latex_package(xml, pub_file, stringparams, dest_dir):
 # This is not a build target, there is no such thing as a "latex build."
 # Instead, this is a conveience for developers who want to compare
 # different versions of this file during development and testing.
-def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, format_xsl):
+def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, latex_format):
     """Convert XML source to LaTeX in destination directory"""
 
     # to ensure provided stringparams aren't mutated unintentionally
@@ -3914,20 +3914,27 @@ def latex(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, format_xsl
     # Get potential extra XSL for LaTeX style from publication file
     latex_style = get_latex_style(xml, pub_file, stringparams)
 
-    # Optional extra XSL could be None, or sanitized full filename.
-    # "format_xsl" is a conversion-specific base stylesheet (e.g. Beamer),
-    # used when the caller has not overridden it with "extra_xsl".
+    # The base stylesheet for each LaTeX-family output format.  For "latex"
+    # a publisher's "latex-style" (a styled variant) or an author's extra XSL
+    # can still override this (below).
+    latex_format_stylesheets = {
+        "latex": "pretext-latex.xsl",
+        "beamer": "pretext-beamer.xsl",
+    }
+
+    # Choose the stylesheet in priority order: an author's extra XSL (from
+    # the command line) overrides everything; then a publisher's latex-style
+    # variant of the regular LaTeX; otherwise the base stylesheet for the
+    # requested LaTeX-family format.
     if extra_xsl:
         extraction_xslt = extra_xsl
         if latex_style:
             log.warning("Ignoring the publisher file's latex-style in favor of the extra XSL specified.")
-    elif format_xsl:
-        extraction_xslt = format_xsl
-    elif latex_style:
+    elif latex_style and (latex_format == "latex"):
         log.debug("Using LaTeX style: {}".format(latex_style))
         extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "latex", f"pretext-latex-{latex_style}.xsl")
     else:
-        extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "pretext-latex.xsl")
+        extraction_xslt = os.path.join(common.get_ptx_xsl_path(), latex_format_stylesheets[latex_format])
     # form output filename based on source filename,
     # unless an  out_file  has been specified
     derivedname = common.get_output_filename(xml, out_file, dest_dir, ".tex")
@@ -3992,7 +3999,7 @@ def _latex_compile(latex_cmd, log_file, source_name, max_passes=10, capture_outp
     return result
 
 
-def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outputs, format_xsl):
+def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outputs, latex_format):
     """
     Generate a PDF from an XML source using LaTeX as an intermediate format.
 
@@ -4032,7 +4039,7 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
     # make the LaTeX source file in scratch directory
     # (1) pass None as out_file to derive from XML source filename
     # (2) pass tmp_dir (scratch) as destination directory
-    latex(xml, pub_file, stringparams, extra_xsl, None, tmp_dir, format_xsl)
+    latex(xml, pub_file, stringparams, extra_xsl, None, tmp_dir, latex_format)
 
     # Create localized filenames for pdflatex conversion step
     # sourcename  needs to match behavior of latex() with above arguments
@@ -4089,17 +4096,6 @@ def pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outp
                 shutil.copy2(pdfname, out_file)
             else:
                 shutil.copy2(pdfname, dest_dir)
-
-
-def beamer(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outputs):
-    """Convert XML source "slideshow" to a LaTeX/Beamer PDF"""
-
-    # Beamer is a LaTeX-based slideshow presentation, so we reuse the entire
-    # PDF pipeline (LaTeX generation, managed-directory copy, compilation) and
-    # only substitute the Beamer stylesheet for the default LaTeX one.  A
-    # caller-supplied "extra_xsl" still takes precedence, as it does for "pdf".
-    beamer_xsl = os.path.join(common.get_ptx_xsl_path(), "pretext-beamer.xsl")
-    pdf(xml, pub_file, stringparams, extra_xsl, out_file, dest_dir, method, outputs, beamer_xsl)
 
 
 def _pdf_fo_accessibility_repairs(pdfname):
