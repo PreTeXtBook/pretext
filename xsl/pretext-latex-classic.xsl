@@ -143,7 +143,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="pdfpages-package"/>
     <!--<xsl:call-template name="division-titles"/>-->
     <xsl:call-template name="semantic-macros"/>
-    <xsl:call-template name="exercises-and-solutions"/>
     <xsl:call-template name="chapter-start-number"/>
     <xsl:call-template name="equation-numbering"/>
     <xsl:call-template name="image-tcolorbox"/>
@@ -946,17 +945,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Preamble template for elements needed to produce the frontmatter -->
 <xsl:template name="frontmatter-helpers">
-    <!-- If there is a <support> tag in an article, create a unnumbered footnote environment for it -->
-    <!-- NB: this is also part of the footnote-numbering named template (as of 2025-02-24), but we don't call that for -classic -->
-    <xsl:if test="$b-is-article and $bibinfo/support">
-        <xsl:text>%% add a \ptxsupport command as unnumbered footnote&#xa;</xsl:text>
-        <xsl:text>\let\ptxsvdthefootnote\thefootnote%&#xa;</xsl:text>
-        <xsl:text>\newcommand\ptxsupport[1]{%&#xa;</xsl:text>
-        <xsl:text>  \let\thefootnote\relax%&#xa;</xsl:text>
-        <xsl:text>  \footnotetext{#1}%&#xa;</xsl:text>
-        <xsl:text>  \let\thefootnote\ptxsvdthefootnote%&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:call-template name="support-footnote"/>
 </xsl:template>
 
 </xsl:stylesheet>

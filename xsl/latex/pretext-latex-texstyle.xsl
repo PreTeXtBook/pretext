@@ -210,7 +210,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="math-packages"/>
     <xsl:call-template name="pdfpages-package"/>
     <xsl:call-template name="semantic-macros"/>
-    <xsl:call-template name="exercises-and-solutions"/>
     <xsl:call-template name="chapter-start-number"/>
     <xsl:call-template name="equation-numbering"/>
     <xsl:call-template name="image-tcolorbox"/>

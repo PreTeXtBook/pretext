@@ -813,6 +813,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- The funding/support acknowledgment ("bibinfo/support") is an   -->
+<!-- unnumbered footnote on an article's title page: temporarily    -->
+<!-- hijack \thefootnote to suppress the mark, then restore it.     -->
+<!-- Shared: the regular conversion employs this via its            -->
+<!-- "footnote-numbering", classic via its "frontmatter-helpers"    -->
+<xsl:template name="support-footnote">
+    <xsl:if test="$b-is-article and $bibinfo/support">
+        <xsl:text>%% add a \ptxsupport command as unnumbered footnote&#xa;</xsl:text>
+        <xsl:text>\let\ptxsavedfootnote\thefootnote%&#xa;</xsl:text>
+        <xsl:text>\newcommand\ptxsupport[1]{%&#xa;</xsl:text>
+        <xsl:text>  \let\thefootnote\relax%&#xa;</xsl:text>
+        <xsl:text>  \footnotetext{#1}%&#xa;</xsl:text>
+        <xsl:text>  \let\thefootnote\ptxsavedfootnote%&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- Semantic Macros -->
 <xsl:template name="semantic-macros">
     <xsl:text>%% Begin: Semantic Macros&#xa;</xsl:text>
@@ -921,140 +938,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\ptxlititle}[1]{{\slshape#1}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Exercises and solutions setup -->
-<xsl:template name="exercises-and-solutions">
-    <xsl:if test="$document-root//solutions or $b-needs-solution-styles">
-        <xsl:text>%% begin: environments for duplicates in solutions divisions&#xa;</xsl:text>
-        <!-- Solutions present, check for exercise types     -->
-        <!-- This may have false positives, but no real harm -->
-        <!--  -->
-        <!-- solutions to inline exercises -->
-        <xsl:if test="$document-root//exercise[boolean(&INLINE-EXERCISE-FILTER;)]">
-        <xsl:text>%% Solutions to inline exercises, style and environment&#xa;</xsl:text>
-            <xsl:text>\tcbset{ inlinesolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{inlinesolution}[4]</xsl:text>
-            <xsl:text>{inlinesolutionstyle, title={\hyperref[#4]{#1~#2}\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
-        </xsl:if>
-        <!-- Division Solution -->
-        <!-- Explicitly breakable, run-in title -->
-        <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
-            <xsl:text>%% Solutions to division exercises, not in exercise group&#xa;</xsl:text>
-            <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{divisionsolution}[4]</xsl:text>
-            <xsl:text>{divisionsolutionstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
-        </xsl:if>
-        <!-- Division Solution, Exercise Group -->
-        <!-- Explicitly breakable, run-in title -->
-        <xsl:if test="$document-root//exercisegroup[not(@cols)]">
-            <xsl:text>%% Solutions to division exercises, in exercise group, no columns&#xa;</xsl:text>
-            <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, left skip=\ptxegindent, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{divisionsolutioneg}[4]</xsl:text>
-            <xsl:text>{divisionsolutionegstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
-        </xsl:if>
-        <!-- Division Solution, Exercise Group, Columnar -->
-        <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
-        <xsl:if test="$document-root//exercisegroup/@cols">
-            <xsl:text>%% Solutions to division exercises, in exercise group with columns&#xa;</xsl:text>
-            <xsl:text>%% Parameter #1 is type-name and is ignored&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionegcolstyle/.style={bwminimalstyle, runintitlestyle,  exercisespacingstyle, after title={\space}, halign=flush left, unbreakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{divisionsolutionegcol}[4]</xsl:text>
-            <xsl:text>{divisionsolutionegcolstyle, title={\hyperlink{#4}{#2}.\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
-        </xsl:if>
-        <!-- solutions to PROJECT-LIKE -->
-        <!-- "project-rep" variable defined twice (each local) -->
-        <xsl:variable name="project-reps" select="
-            ($document-root//project)[1]|
-            ($document-root//activity)[1]|
-            ($document-root//exploration)[1]|
-            ($document-root//investigation)[1]"/>
-        <xsl:for-each select="$project-reps">
-            <xsl:variable name="elt-name">
-                <xsl:value-of select="local-name(.)"/>
-            </xsl:variable>
-            <!-- set the style -->
-            <xsl:text>\tcbset{ </xsl:text>
-            <xsl:value-of select="$elt-name"/>
-            <xsl:text>solutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
-            <!-- create the environment -->
-            <xsl:text>\newtcolorbox{</xsl:text>
-            <xsl:value-of select="$elt-name"/>
-            <xsl:text>solution}[4]</xsl:text>
-            <xsl:text>{</xsl:text>
-            <xsl:value-of select="$elt-name"/>
-            <xsl:text>solutionstyle, title={\hyperref[#4]{#1~#2}\notblank{#3}{\space#3}{}}}&#xa;</xsl:text>
-        </xsl:for-each>
-    </xsl:if>
-    <!-- Generic exercise lead-in -->
-    <xsl:if test="$document-root//exercises//exercise|$document-root//worksheet//exercise|$document-root//reading-questions//exercise">
-        <xsl:text>%% Divisional exercises (and worksheet) as LaTeX environments&#xa;</xsl:text>
-        <xsl:text>%% Third argument is option for extra workspace in worksheets&#xa;</xsl:text>
-        <xsl:text>%% Hanging indent occupies a 5ex width slot prior to left margin&#xa;</xsl:text>
-        <xsl:text>%% Experimentally this seems just barely sufficient for a bold "888."&#xa;</xsl:text>
-    </xsl:if>
-    <!-- Division Exercise -->
-    <!-- Numbered, styled with a hanging indent -->
-    <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
-        <xsl:text>%% Division exercises, not in exercise group&#xa;</xsl:text>
-        <!-- Outdenting the problem number requires an "\hspace*" to avoid an edge case -->
-        <!-- https://tex.stackexchange.com/questions/722329/unwanted-space-in-tcbraster -->
-        <!-- https://tex.stackexchange.com/questions/89082/hspace-vs-hspace             -->
-        <xsl:text>\tcbset{ divisionexercisestyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
-        <xsl:text>{divisionexercisestyle, before title={\hspace*{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2}{}}, after title={\notblank{#2}{\space}{}}, phantom={</xsl:text>
-        <xsl:if test="$b-pageref">
-            <xsl:text>\label{#4}</xsl:text>
-        </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\par\rule{\ptxworkspacestrutwidth}{#3}\par\vfill}{\par}}}&#xa;</xsl:text>
-    </xsl:if>
-    <!-- Division Exercise, Exercise Group -->
-    <!-- The exercise itself carries the indentation, hence we can use breakable -->
-    <!-- boxes and get good page breaks (as these problems could be long)        -->
-    <xsl:if test="$document-root//exercisegroup[not(@cols)]">
-        <xsl:text>%% Division exercises, in exercise group, no columns&#xa;</xsl:text>
-        <!-- Outdenting the problem number requires an "\hspace*" to avoid an edge case -->
-        <!-- https://tex.stackexchange.com/questions/722329/unwanted-space-in-tcbraster -->
-        <!-- https://tex.stackexchange.com/questions/89082/hspace-vs-hspace             -->
-        <xsl:text>\tcbset{ divisionexerciseegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, left skip=\ptxegindent, breakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox{divisionexerciseeg}[4]</xsl:text>
-        <xsl:text>{divisionexerciseegstyle, before title={\hspace*{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2}{}}, after title={\notblank{#2}{\space}{}}, phantom={</xsl:text>
-        <xsl:if test="$b-pageref">
-            <xsl:text>\label{#4}</xsl:text>
-        </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\par\rule{\ptxworkspacestrutwidth}{#3}\par\vfill}{\par}}}&#xa;</xsl:text>
-    </xsl:if>
-    <!-- Division Exercise, Exercise Group, Columnar -->
-    <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
-    <xsl:if test="$document-root//exercisegroup/@cols">
-        <xsl:text>%% Division exercises, in exercise group with columns&#xa;</xsl:text>
-        <!-- Outdenting the problem number requires an "\hspace*" to avoid an edge case -->
-        <!-- https://tex.stackexchange.com/questions/722329/unwanted-space-in-tcbraster -->
-        <!-- https://tex.stackexchange.com/questions/89082/hspace-vs-hspace             -->
-        <xsl:text>\tcbset{ divisionexerciseegcolstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, halign=flush left, unbreakable, before upper app={\ptxsetparstyle} } }&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox{divisionexerciseegcol}[4]</xsl:text>
-        <xsl:text>{divisionexerciseegcolstyle, before title={\hspace*{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2}{}}, after title={\notblank{#2}{\space}{}}, phantom={</xsl:text>
-        <xsl:if test="$b-pageref">
-            <xsl:text>\label{#4}</xsl:text>
-        </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after upper={\notblank{#3}{\par\rule{\ptxworkspacestrutwidth}{#3}\par\vfill}{\par}}}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//@workspace">
-        <xsl:text>%% Worksheets and handouts children may have workspaces&#xa;</xsl:text>
-        <xsl:text>\newlength{\ptxworkspacestrutwidth}&#xa;</xsl:text>
-        <xsl:choose>
-            <xsl:when test="$b-latex-draft-mode">
-                <xsl:text>%% LaTeX draft mode, @workspace strut is visible&#xa;</xsl:text>
-                <xsl:text>\setlength{\ptxworkspacestrutwidth}{2pt}&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>%% @workspace strut is invisible&#xa;</xsl:text>
-                <xsl:text>\setlength{\ptxworkspacestrutwidth}{0pt}&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
 </xsl:template>
 
 <!-- Chapter start number -->
@@ -3884,81 +3767,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ####################################### -->
-<!-- Solutions Divisions, Content Generation -->
-<!-- ####################################### -->
-
-<!-- The "division-in-solutions" modal template from -common   -->
-<!-- calls the "duplicate-heading" modal template.             -->
-<!-- Stacked headings all share one size, fixed by the level   -->
-<!-- of the originating "solutions" division, regardless of    -->
-<!-- the depth each entry reflects.  This is consistent with   -->
-<!-- treating stacked headings as a single "squashed" heading. -->
-
-<xsl:template match="*" mode="duplicate-heading">
-    <xsl:param name="heading-level"/>
-    <xsl:param name="heading-stack" select="."/>
-    <xsl:variable name="text-size">
-        <xsl:call-template name="get-heading-text-size">
-            <xsl:with-param name="heading-level" select="$heading-level"/>
-        </xsl:call-template>
-    </xsl:variable>
-    <xsl:text>\par\medskip&#xa;\noindent\textbf{</xsl:text>
-    <xsl:value-of select="$text-size"/>
-    <xsl:text>{}</xsl:text>
-    <xsl:apply-templates select="$heading-stack" mode="duplicate-heading-content">
-        <xsl:with-param name="heading-stack" select="$heading-stack"/>
-    </xsl:apply-templates>
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="*" mode="duplicate-heading-content">
-    <xsl:param name="heading-stack"/>
-    <xsl:variable name="show-number">
-        <xsl:apply-templates select="." mode="duplicate-heading-show-number"/>
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="$show-number = 'false'">
-            <xsl:text>\textperiodcentered\space{}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="number" />
-            <xsl:text>\space\textperiodcentered\space{}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:apply-templates select="." mode="title-full" />
-    <!-- line break, but not on last -->
-    <xsl:if test="count(descendant::*[count(.|$heading-stack) = count($heading-stack)]) > 0">
-        <xsl:text>\\&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
-<xsl:template name="get-heading-text-size">
-    <xsl:param name="heading-level" select="6"/>
-    <xsl:choose>
-        <xsl:when test="$heading-level = 1">
-            <xsl:text>\Huge</xsl:text>
-        </xsl:when>
-        <xsl:when test="$heading-level = 2">
-            <xsl:text>\huge</xsl:text>
-        </xsl:when>
-        <xsl:when test="$heading-level = 3">
-            <xsl:text>\Large</xsl:text>
-        </xsl:when>
-        <xsl:when test="$heading-level = 4">
-            <xsl:text>\large</xsl:text>
-        </xsl:when>
-        <xsl:when test="$heading-level = 5">
-            <xsl:text>\normalsize</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\normalsize</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-
-
 <!-- ############### -->
 <!-- Arbitrary Lists -->
 <!-- ############### -->
@@ -4597,199 +4405,63 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{case}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- ############################################################# -->
-<!-- Infrastructure surrounding Exercises (but not main Divisions) -->
-<!-- ############################################################# -->
+<!-- ####################################### -->
+<!-- Unimplemented Constructs, Warning Stubs -->
+<!-- ####################################### -->
 
-<!-- ############ -->
-<!-- Subexercises -->
-<!-- ############ -->
+<!-- The LaTeX realization of "subexercises" and "exercisegroup"       -->
+<!-- structure within an "exercises" division, and of the content      -->
+<!-- generated for a "solutions" division, lives in pretext-latex.xsl. -->
+<!-- A conversion importing this stylesheet directly does not          -->
+<!-- implement these constructs, yet shared machinery (the structural  -->
+<!-- dispatch above, the solutions generator of pretext-common.xsl)    -->
+<!-- may still apply templates to them.  Each template below catches   -->
+<!-- one such application, alerts the author, and contributes nothing  -->
+<!-- to the output; otherwise the XSLT built-in rules would dump raw   -->
+<!-- text into the LaTeX.  The real templates in pretext-latex.xsl     -->
+<!-- override each of these stubs by import precedence.  (The classic  -->
+<!-- conversion, and texstyle importing it, intercept the containing   -->
+<!-- divisions with banner warnings, so these stubs serve future       -->
+<!-- conversions without such guards.)                                 -->
 
-<!-- A minimal division within an "exercises" division. -->
-
-<xsl:template match="subexercises">
-    <xsl:variable name="id">
-        <xsl:apply-templates select="." mode="unique-id"/>
-    </xsl:variable>
-    <xsl:apply-templates select="." mode="newpage"/>
-    <xsl:text>\paragraph{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}</xsl:text>
-    <xsl:if test="$b-pageref">
-        <xsl:text>\label{</xsl:text>
-        <xsl:value-of select="$id"/>
-        <xsl:text>}</xsl:text>
-    </xsl:if>
-    <xsl:text>\hypertarget{</xsl:text>
-    <xsl:value-of select="$id"/>
-    <xsl:text>}{}&#xa;</xsl:text>
-    <xsl:apply-templates select="idx|notation|introduction|exercisegroup|exercise|conclusion"/>
+<!-- Generic processing of an "exercises" division reaches these -->
+<xsl:template match="subexercises|exercisegroup">
+    <xsl:message>
+        <xsl:text>PTX:WARNING: this conversion does not implement "</xsl:text>
+        <xsl:value-of select="local-name(.)"/>
+        <xsl:text>" structure within an "exercises" division, so its content will be missing from your LaTeX output</xsl:text>
+    </xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 
-<!-- The generic driver in pretext-common.xsl decides if anything -->
-<!-- appears at all, and renders the items; the wrapping here      -->
-<xsl:template match="subexercises" mode="present-solutions-container">
-    <xsl:param name="b-has-statement"/>
-    <xsl:param name="content"/>
-
-    <xsl:if test="title">
-        <xsl:text>\paragraph</xsl:text>
-        <!-- keep optional title if LaTeX source is re-purposed -->
-        <xsl:text>[{</xsl:text>
-        <xsl:apply-templates select="." mode="title-short" />
-        <xsl:text>}]</xsl:text>
-        <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="title-full" />
-        <xsl:text>}</xsl:text>
-        <!-- no label, as this is a duplicate              -->
-        <!-- no title, no heading, so only line-break here -->
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$b-has-statement">
-        <xsl:apply-templates select="introduction" />
-    </xsl:if>
-    <xsl:copy-of select="$content"/>
-    <xsl:if test="$b-has-statement">
-        <xsl:apply-templates select="conclusion" />
-    </xsl:if>
-    <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
+<!-- The solutions generator duplicates headings of intervening divisions -->
+<xsl:template match="*" mode="duplicate-heading">
+    <xsl:message>
+        <xsl:text>PTX:WARNING: this conversion does not implement a "solutions" division, so a heading duplicated from the "</xsl:text>
+        <xsl:value-of select="local-name(.)"/>
+        <xsl:text>" will be missing from your LaTeX output</xsl:text>
+    </xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 
-<!-- ############### -->
-<!-- Exercise Groups -->
-<!-- ############### -->
-
-<!-- Exercise Group -->
-<!-- We interrupt a run of exercises with short discussion, -->
-<!-- typically instructions for a list of similar exercises -->
-<!-- discussion goes in an introduction and/or conclusion   -->
-<!-- When we point to these, we use custom hypertarget, etc -->
-<xsl:template match="exercisegroup">
-    <!-- Determine the number of columns -->
-    <!-- Restrict to 1-6 via the schema  -->
-    <xsl:variable name="ncols">
-        <xsl:choose>
-            <xsl:when test="@cols">
-                <xsl:value-of select="@cols"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>1</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- build it -->
-    <xsl:apply-templates select="." mode="newpage"/>
-    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
-    <xsl:text>\textbf{</xsl:text>
-    <!-- title may be default title -->
-    <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>}\space\space</xsl:text>
-    <xsl:apply-templates select="." mode="optional-label"/>
-    <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates select="introduction" />
-    <xsl:choose>
-        <xsl:when test="$ncols = 1">
-            <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{exercisegroupcol}</xsl:text>
-            <xsl:text>{</xsl:text>
-            <xsl:value-of select="$ncols"/>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- Each "idx" produces its own newline -->
-    <xsl:apply-templates select="idx"/>
-    <!-- an exercisegroup can only appear in an "exercises" division,    -->
-    <!-- the template for exercises//exercise will consult switches for  -->
-    <!-- visibility of components when born (not doing "solutions" here) -->
-    <xsl:apply-templates select="exercise"/>
-    <xsl:choose>
-        <xsl:when test="$ncols = 1">
-            <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\end{exercisegroupcol}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="conclusion">
-        <xsl:text>\par\noindent%&#xa;</xsl:text>
-        <xsl:apply-templates select="conclusion" />
-    </xsl:if>
-    <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
+<!-- The solutions generator wraps duplicated container structure -->
+<xsl:template match="subexercises|exercisegroup" mode="present-solutions-container">
+    <xsl:message>
+        <xsl:text>PTX:WARNING: this conversion does not implement a "solutions" division, so content duplicated within the "</xsl:text>
+        <xsl:value-of select="local-name(.)"/>
+        <xsl:text>" will be missing from your LaTeX output</xsl:text>
+    </xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 
-<!-- Exercise Group (in solutions division) -->
-<!-- Nothing produced if there is no content         -->
-<!-- Otherwise, no label, since duplicate            -->
-<!-- Introduction and conclusion iff with statements -->
-<!-- Echoed in a "solutions" division; the generic driver in     -->
-<!-- pretext-common.xsl decides if anything appears at all, and  -->
-<!-- renders the items; the wrapping here                        -->
-<xsl:template match="exercisegroup" mode="present-solutions-container">
-    <xsl:param name="b-has-statement"/>
-    <xsl:param name="content"/>
-
-    <!-- Determine the number of columns         -->
-    <!-- Restrict to 1-6 via the schema          -->
-    <!-- Override for solutions takes precedence -->
-    <xsl:variable name="ncols">
-        <xsl:choose>
-            <xsl:when test="@solutions-cols">
-                <xsl:value-of select="@solutions-cols"/>
-            </xsl:when>
-            <xsl:when test="@cols">
-                <xsl:value-of select="@cols"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>1</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:if test="title">
-        <xsl:text>\subparagraph</xsl:text>
-        <!-- keep optional title if LaTeX source is re-purposed -->
-        <xsl:text>[{</xsl:text>
-        <xsl:apply-templates select="." mode="title-short" />
-        <xsl:text>}]</xsl:text>
-        <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="title-full" />
-        <xsl:text>}</xsl:text>
-        <!-- no label, as this is a duplicate              -->
-        <!-- no title, no heading, so only line-break here -->
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$b-has-statement">
-        <xsl:apply-templates select="introduction" />
-    </xsl:if>
-    <!-- the container for the exercisegroup does not need to change -->
-    <!-- when in a solutions list.  The indentation might look odd   -->
-    <!-- without an introduction (when there are no statements), or  -->
-    <!-- it might remind the reader of the grouping                  -->
-    <xsl:choose>
-        <xsl:when test="$ncols = 1">
-            <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{exercisegroupcol}</xsl:text>
-            <xsl:text>{</xsl:text>
-            <xsl:value-of select="$ncols"/>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:copy-of select="$content"/>
-    <xsl:choose>
-        <xsl:when test="$ncols = 1">
-            <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\end{exercisegroupcol}&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="$b-has-statement">
-        <xsl:apply-templates select="conclusion" />
-    </xsl:if>
-    <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
+<!-- The solutions generator duplicates components of exercises and projects -->
+<xsl:template match="exercise|&PROJECT-LIKE;" mode="solutions">
+    <xsl:message>
+        <xsl:text>PTX:WARNING: this conversion does not implement a "solutions" division, so components duplicated from an exercise or project ("</xsl:text>
+        <xsl:value-of select="local-name(.)"/>
+        <xsl:text>") will be missing from your LaTeX output</xsl:text>
+    </xsl:message>
+    <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 
 <!-- ###################### -->
@@ -4966,159 +4638,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="postlude" />
     </xsl:if>
 </xsl:template>
-
-<!-- ############################################## -->
-<!-- Exercises and Projects for Solutions Divisions -->
-<!-- ############################################## -->
-
-<!-- A template formulates the various possible environments -->
-<!-- Just as above, but now a different mode                 -->
-<xsl:template match="exercise|&PROJECT-LIKE;" mode="solutions-environment-name">
-    <xsl:choose>
-        <!-- projects sit in divisions according to schema,  -->
-        <!-- just like inline exercises, so we catch them    -->
-        <!-- first, before differentiating exercises based   -->
-        <!-- on placement, just recycle PreTeXt element name -->
-        <xsl:when test="&PROJECT-FILTER;">
-            <xsl:value-of select="local-name(.)" />
-            <xsl:text>solution</xsl:text>
-        </xsl:when>
-        <!-- must now be an "exercise" -->
-        <xsl:when test="&INLINE-EXERCISE-FILTER;">
-            <xsl:text>inlinesolution</xsl:text>
-        </xsl:when>
-        <xsl:when test="ancestor::exercises or ancestor::worksheet or ancestor::reading-questions">
-            <xsl:text>divisionsolution</xsl:text>
-            <!-- "exercisegroup" and "exercisegroup/@cols" become  -->
-            <!-- progressively more complicated to organize -->
-            <xsl:if test="ancestor::exercisegroup">
-                <xsl:text>eg</xsl:text>
-            </xsl:if>
-            <xsl:if test="ancestor::exercisegroup/@cols">
-                <xsl:text>col</xsl:text>
-            </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>exercise-solution-without-environment-name</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Exercises and projects (as above) in solutions-->
-<!-- Nothing produced if there is no content       -->
-<!-- Otherwise, no label, since duplicate          -->
-<!-- Different environment, with hard-coded number -->
-<!-- Switches for solutions are generated          -->
-<!-- elsewhere and always supplied in call         -->
-<!-- NB: switches originate in solutions generator -->
-<xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]|&PROJECT-LIKE;|exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="solutions">
-    <xsl:param name="purpose"/>
-    <xsl:param name="admit"/>
-    <xsl:param name="b-component-heading"/>
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint"      />
-    <xsl:param name="b-has-answer"    />
-    <xsl:param name="b-has-solution"  />
-
-    <!-- Subsetting, especially in the back matter can yield no content at all    -->
-    <!-- Schema says there is always some sort of statement, explicit or implicit -->
-    <!-- We frequently build collections of "dry-run" output to determine if a    -->
-    <!-- collection of exercises (e.g. in an "exercisegroup") is empty or not.    -->
-    <!-- So it is *critical* that we get zero output for an exercise that has     -->
-    <!-- no content due to settings of switches.                                  -->
-
-     <xsl:variable name="dry-run">
-        <xsl:apply-templates select="." mode="dry-run">
-            <xsl:with-param name="admit" select="$admit"/>
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-            <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-        </xsl:apply-templates>
-    </xsl:variable>
-
-    <xsl:if test="not($dry-run = '')">
-        <!-- no project-like prelude, as duplicating in solutions division -->
-        <!-- The exact environment depends on the placement of the -->
-        <!-- "exercise" when located in an "exercises" division    -->
-        <xsl:variable name="env-name">
-            <xsl:apply-templates select="." mode="solutions-environment-name"/>
-        </xsl:variable>
-        <xsl:text>\begin{</xsl:text>
-        <xsl:value-of select="$env-name"/>
-        <xsl:text>}</xsl:text>
-        <!-- Always supply a type-name, even if the     -->
-        <!-- receiving environment does not utilize it. -->
-        <!-- Five categories, four are "exercise".      -->
-        <xsl:text>{</xsl:text>
-        <xsl:choose>
-            <!--divisional exercise -->
-            <xsl:when test="self::exercise and ancestor::exercises">
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'divisionalexercise'"/>
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- worksheet exercise -->
-            <xsl:when test="self::exercise and ancestor::worksheet">
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'worksheetexercise'"/>
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- reading question -->
-            <xsl:when test="self::exercise and ancestor::reading-questions">
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'readingquestion'"/>
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- inline exercise ("Checkpoint") by elimination -->
-            <xsl:when test="self::exercise">
-                <xsl:apply-templates select="." mode="type-name">
-                    <xsl:with-param name="string-id" select="'inlineexercise'"/>
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- now PROJECT-LIKE by elimination, don't need $string-id -->
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="type-name"/>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>}</xsl:text>
-        <!-- Always a hard-coded full number, never any workspace -->
-        <!-- indication, so unified across the four types         -->
-        <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="number" />
-        <xsl:text>}</xsl:text>
-        <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="title-full"/>
-        <xsl:text>}</xsl:text>
-        <!-- label of the exercise, to link back to it -->
-        <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="unique-id"/>
-        <xsl:text>}</xsl:text>
-        <xsl:text>%&#xa;</xsl:text>
-        <!-- Now the guts of the exercise, inside of its  -->
-        <!-- (variable) identification, environment, etc. -->
-        <!-- NB: this is where we say goodbye to the      -->
-        <!-- "solutions" modal templates and switch to    -->
-        <!-- the "exercise-components"templates with the  -->
-        <!-- $b-original flag.                            -->
-        <xsl:apply-templates select="." mode="exercise-components">
-            <xsl:with-param name="b-original" select="false()" />
-            <xsl:with-param name="purpose" select="$purpose" />
-            <xsl:with-param name="b-component-heading" select="$b-component-heading"/>
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-            <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-        </xsl:apply-templates>
-        <!-- closing % necessary, as newline between adjacent environments -->
-        <!-- will cause a slight indent on trailing exercise               -->
-        <xsl:text>\end{</xsl:text>
-        <xsl:value-of select="$env-name"/>
-        <xsl:text>}%&#xa;</xsl:text>
-        <!-- no project-like postlude, as duplicating in solutions division -->
-    </xsl:if>
-</xsl:template>
-
 
 <!-- ######################### -->
 <!-- Components of an Exercise -->
