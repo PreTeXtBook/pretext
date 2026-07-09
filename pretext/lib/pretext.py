@@ -4327,6 +4327,9 @@ def _pdf_fo_accessibility_repairs(pdfname):
 def _downgrade_svg2_for_batik(directory):
     """Rewrite SVG 2 constructs that Apache Batik (via FOP) cannot render.
 
+    * context-stroke / context-fill in marker content: for each referencing
+      element a resolved copy is created using that element's concrete
+      stroke / fill; copies with the same colour pair are shared.
     * orient="auto-start-reverse": changed to "auto"; elements that use
       the marker as marker-start get a rotated (180°) copy (id suffix
       "-start").
@@ -4336,14 +4339,16 @@ def _downgrade_svg2_for_batik(directory):
     # from PreFigure that are known to be good for Batik to ingest.
     # With access to source, we can determine filenames to avoid.
 
-    import glob, copy
+    import glob, copy, re
     import lxml.etree as ET
 
-    SVG   = "http://www.w3.org/2000/svg"
-    XLINK = "http://www.w3.org/1999/xlink"
+    SVG       = "http://www.w3.org/2000/svg"
+    XLINK     = "http://www.w3.org/1999/xlink"
     ET.register_namespace("xlink", XLINK)
-    tag   = lambda t: f"{{{SVG}}}{t}"
-    xhref = f"{{{XLINK}}}href"
+    tag       = lambda t: f"{{{SVG}}}{t}"
+    xhref     = f"{{{XLINK}}}href"
+    POSITIONS = ("marker-start", "marker-end", "marker-mid")
+    _URL_RE   = re.compile(r"^url\(#([^)]+)\)$")
 
     def parse_style(el):
         d = {}
@@ -4356,6 +4361,53 @@ def _downgrade_svg2_for_batik(directory):
 
     def get_prop(el, prop):
         return parse_style(el).get(prop) or el.get(prop)
+
+    def has_context_paint(marker):
+        return any(
+            get_prop(el, attr) in ("context-stroke", "context-fill")
+            for el in marker.iter() for attr in ("fill", "stroke")
+        )
+
+    def is_svg2_marker(m):
+        return has_context_paint(m) or m.get("orient") == "auto-start-reverse"
+
+    def resolve_paint(v, stroke, fill):
+        if v == "context-stroke": return stroke
+        if v == "context-fill":   return fill
+        return v
+
+    def make_marker(orig, new_id, stroke, fill, rotate):
+        m = copy.deepcopy(orig)
+        m.set("id", new_id)
+        if m.get("orient") == "auto-start-reverse":
+            m.set("orient", "auto")
+        if rotate:
+            g = ET.Element(tag("g"))
+            g.set("transform",
+                  f"rotate(180 {m.get('refX', '0')} {m.get('refY', '0')})")
+            for child in list(m): m.remove(child); g.append(child)
+            m.append(g)
+        for el in m.iter():
+            sty = parse_style(el)
+            sty2 = {k: resolve_paint(v, stroke, fill) for k, v in sty.items()}
+            if sty2 != sty: el.set("style", emit_style(sty2))
+            for attr in ("fill", "stroke"):
+                v = el.get(attr)
+                if v: el.set(attr, resolve_paint(v, stroke, fill))
+        return m
+
+    def get_marker_ref(el, pos):
+        sty = parse_style(el)
+        raw = (sty.get(pos) or el.get(pos) or "").strip()
+        mo  = _URL_RE.match(raw)
+        return mo.group(1) if mo else None
+
+    def set_marker_ref(el, pos, url):
+        sty = parse_style(el)
+        if pos in sty:
+            sty[pos] = url; el.set("style", emit_style(sty))
+        else:
+            el.set(pos, url)
 
     for svg_file in glob.glob(
         os.path.join(directory, "**", "*.svg"), recursive=True
@@ -4372,40 +4424,40 @@ def _downgrade_svg2_for_batik(directory):
             if href and use.get(xhref) is None:
                 use.set(xhref, href); del use.attrib["href"]; changed = True
 
-        # a marker placed at a "marker-start" needs a 180-degree twin,
-        # since SVG 1.1 "auto" cannot express the reversal "auto-start-reverse"
-        start_references = set(
-            element.get("marker-start")
-            for element in root.iter()
-            if element.get("marker-start")
-        )
-        reversed_twin = {}
-        for marker in list(root.iter(tag("marker"))):
-            if marker.get("orient") != "auto-start-reverse":
-                continue
-            marker.set("orient", "auto")
-            changed = True
-            marker_id = marker.get("id")
-            reference = "url(#{})".format(marker_id) if marker_id else None
-            if reference and reference in start_references:
-                twin = copy.deepcopy(marker)
-                twin.set("id", "{}-start".format(marker_id))
-                rotation = ET.Element(tag("g"))
-                rotation.set(
-                    "transform",
-                    "rotate(180 {} {})".format(twin.get("refX", "0"), twin.get("refY", "0")),
-                )
-                for child in list(twin):
-                    twin.remove(child)
-                    rotation.append(child)
-                twin.append(rotation)
-                marker.getparent().append(twin)
-                reversed_twin[reference] = "url(#{}-start)".format(marker_id)
+        bad = {el.get("id"): el for el in root.iter(tag("marker"))
+               if el.get("id") and is_svg2_marker(el)}
+        if bad:
+            defs = root.find(tag("defs"))
+            if defs is None:
+                defs = ET.SubElement(root, tag("defs"))
+            key_map  = {}   # (orig_id, stroke, fill, rotate) → new_id
+            new_mkrs = {}   # new_id → marker element
+            used_ids = set()
 
-        for element in root.iter():
-            replacement = reversed_twin.get(element.get("marker-start"))
-            if replacement is not None:
-                element.set("marker-start", replacement)
+            for el in root.iter():
+                for pos in POSITIONS:
+                    mid = get_marker_ref(el, pos)
+                    if not mid or mid not in bad: continue
+                    stroke = get_prop(el, "stroke") or "black"
+                    fill   = get_prop(el, "fill")   or "black"
+                    rotate = (pos == "marker-start" and
+                              bad[mid].get("orient") == "auto-start-reverse")
+                    key = (mid, stroke, fill, rotate)
+                    if key not in key_map:
+                        suffix = "start" if rotate else "end"
+                        base   = f"{mid}-{suffix}"
+                        nid    = base
+                        n      = 0
+                        while nid in used_ids: n += 1; nid = f"{base}-{n}"
+                        used_ids.add(nid)
+                        key_map[key] = nid
+                        new_mkrs[nid] = make_marker(bad[mid], nid, stroke, fill, rotate)
+                    set_marker_ref(el, pos, f"url(#{key_map[key]})")
+
+            for m in new_mkrs.values(): defs.append(m)
+            for m in bad.values():
+                if m.getparent() is not None: defs.remove(m)
+            changed = True
 
         if changed:
             tree.write(svg_file)
