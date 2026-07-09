@@ -4337,6 +4337,9 @@ def _downgrade_svg2_for_batik(directory):
     * fill="transparent" → fill="none"; hsl()/rgb() colour functions and
       CSS filter functions in <style> blocks rewritten to values Batik
       accepts.
+    * dominant-baseline="central/middle" and alignment-baseline on <text>:
+      converted to an explicit numeric y coordinate (alphabetic baseline),
+      with all dy attributes removed to avoid Batik dy/tspan quirks.
     """
     # TODO (2026-07-03) This function may modify SVG 1.1 files coming
     # from PreFigure that are known to be good for Batik to ingest.
@@ -4466,6 +4469,42 @@ def _downgrade_svg2_for_batik(directory):
             t = _FILTER_FN_RE.sub(_strip_filter_fn, t)
             if t != el.text:
                 el.text = t; changed = True
+
+        # alignment-baseline is not valid on <text> in SVG 1.1 and
+        # dominant-baseline is not reliably supported by Batik on <text>.
+        # For centering values, compute the intended visual centre from
+        # y + dy (resolving em to px), add a fixed 0.35em baseline offset
+        # for centering, write the result as a plain numeric y on the
+        # <text>, and strip all dy attributes.  Using explicit px avoids
+        # all the Batik dy/tspan interaction quirks.
+        def _em_px(val, font_px):
+            try:
+                if (val or "").endswith("em"): return float(val[:-2]) * font_px
+                if (val or "").endswith("px"): return float(val[:-2])
+                return 0.0
+            except (ValueError, TypeError):
+                return 0.0
+
+        for el in root.iter(tag("text")):
+            if el.get("alignment-baseline"):
+                del el.attrib["alignment-baseline"]; changed = True
+            db = el.get("dominant-baseline")
+            if db in ("central", "middle"):
+                sty = parse_style(el)
+                fs  = sty.get("font-size") or el.get("font-size", "16px")
+                try:
+                    font_px = float(fs[:-2]) if fs.endswith("px") else 16.0
+                except ValueError:
+                    font_px = 16.0
+                centre = float(el.get("y", 0)) + _em_px(el.get("dy"), font_px)
+                el.set("y", f"{centre + 0.35 * font_px:.4g}")
+                if "dy" in el.attrib: del el.attrib["dy"]
+                for ts in el:
+                    if ts.tag == tag("tspan") and "dy" in ts.attrib:
+                        del ts.attrib["dy"]
+                changed = True
+            if db:
+                del el.attrib["dominant-baseline"]; changed = True
 
         bad = {el.get("id"): el for el in root.iter(tag("marker"))
                if el.get("id") and is_svg2_marker(el)}
