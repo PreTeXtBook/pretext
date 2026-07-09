@@ -4334,21 +4334,27 @@ def _downgrade_svg2_for_batik(directory):
       the marker as marker-start get a rotated (180°) copy (id suffix
       "-start").
     * Plain href on <use>: migrated to xlink:href.
+    * fill="transparent" → fill="none"; hsl()/rgb() colour functions and
+      CSS filter functions in <style> blocks rewritten to values Batik
+      accepts.
     """
     # TODO (2026-07-03) This function may modify SVG 1.1 files coming
     # from PreFigure that are known to be good for Batik to ingest.
     # With access to source, we can determine filenames to avoid.
 
-    import glob, copy, re
+    import glob, copy, re, colorsys
     import lxml.etree as ET
 
-    SVG       = "http://www.w3.org/2000/svg"
-    XLINK     = "http://www.w3.org/1999/xlink"
+    SVG           = "http://www.w3.org/2000/svg"
+    XLINK         = "http://www.w3.org/1999/xlink"
     ET.register_namespace("xlink", XLINK)
-    tag       = lambda t: f"{{{SVG}}}{t}"
-    xhref     = f"{{{XLINK}}}href"
-    POSITIONS = ("marker-start", "marker-end", "marker-mid")
-    _URL_RE   = re.compile(r"^url\(#([^)]+)\)$")
+    tag           = lambda t: f"{{{SVG}}}{t}"
+    xhref         = f"{{{XLINK}}}href"
+    POSITIONS     = ("marker-start", "marker-end", "marker-mid")
+    _URL_RE       = re.compile(r"^url\(#([^)]+)\)$")
+    _HSL_RE       = re.compile(r"hsl\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%\s*\)")
+    _RGB_RE       = re.compile(r"rgb\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)")
+    _FILTER_FN_RE = re.compile(r"(filter\s*:)\s*([^;{}]+)")
 
     def parse_style(el):
         d = {}
@@ -4361,6 +4367,22 @@ def _downgrade_svg2_for_batik(directory):
 
     def get_prop(el, prop):
         return parse_style(el).get(prop) or el.get(prop)
+
+    def _hsl_to_hex(m):
+        h, s, l = float(m.group(1))/360, float(m.group(2))/100, float(m.group(3))/100
+        r, g, b = colorsys.hls_to_rgb(h, l, s)
+        return "#{:02x}{:02x}{:02x}".format(round(r*255), round(g*255), round(b*255))
+
+    def _rgb_to_hex(m):
+        return "#{:02x}{:02x}{:02x}".format(
+            round(float(m.group(1))), round(float(m.group(2))), round(float(m.group(3)))
+        )
+
+    def _strip_filter_fn(m):
+        val = m.group(2).strip()
+        if "(" in val and not val.startswith("url("):
+            return m.group(1) + "none"
+        return m.group(0)
 
     def has_context_paint(marker):
         return any(
@@ -4423,6 +4445,27 @@ def _downgrade_svg2_for_batik(directory):
             href = use.get("href")
             if href and use.get(xhref) is None:
                 use.set(xhref, href); del use.attrib["href"]; changed = True
+
+        # "transparent" is a CSS3 colour keyword, not SVG 1.1;
+        # hsl()/rgb() in presentation attributes are also rewritten here.
+        for el in root.iter():
+            if el.get("fill") == "transparent":
+                el.set("fill", "none"); changed = True
+            for attr in ("fill", "stroke"):
+                v = el.get(attr)
+                if v:
+                    nv = _HSL_RE.sub(_hsl_to_hex, v)
+                    nv = _RGB_RE.sub(_rgb_to_hex, nv)
+                    if nv != v:
+                        el.set(attr, nv); changed = True
+        for el in root.iter(tag("style")):
+            if not el.text: continue
+            t = el.text.replace("transparent", "none")
+            t = _HSL_RE.sub(_hsl_to_hex, t)
+            t = _RGB_RE.sub(_rgb_to_hex, t)
+            t = _FILTER_FN_RE.sub(_strip_filter_fn, t)
+            if t != el.text:
+                el.text = t; changed = True
 
         bad = {el.get("id"): el for el in root.iter(tag("marker"))
                if el.get("id") and is_svg2_marker(el)}
