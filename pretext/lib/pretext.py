@@ -4340,6 +4340,8 @@ def _downgrade_svg2_for_batik(directory):
     * dominant-baseline="central/middle" and alignment-baseline on <text>:
       converted to an explicit numeric y coordinate (alphabetic baseline),
       with all dy attributes removed to avoid Batik dy/tspan quirks.
+    * <foreignObject> containing XHTML spans (mermaid class diagrams):
+      replaced by SVG <text> elements with equivalent content and position.
     """
     # TODO (2026-07-03) This function may modify SVG 1.1 files coming
     # from PreFigure that are known to be good for Batik to ingest.
@@ -4350,6 +4352,7 @@ def _downgrade_svg2_for_batik(directory):
 
     SVG           = "http://www.w3.org/2000/svg"
     XLINK         = "http://www.w3.org/1999/xlink"
+    XHTML         = "http://www.w3.org/1999/xhtml"
     ET.register_namespace("xlink", XLINK)
     tag           = lambda t: f"{{{SVG}}}{t}"
     xhref         = f"{{{XLINK}}}href"
@@ -4358,6 +4361,7 @@ def _downgrade_svg2_for_batik(directory):
     _HSL_RE       = re.compile(r"hsl\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%\s*\)")
     _RGB_RE       = re.compile(r"rgb\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)")
     _FILTER_FN_RE = re.compile(r"(filter\s*:)\s*([^;{}]+)")
+    _TRANS_RE     = re.compile(r"translate\(\s*([-\d.]+)\s*,\s*([-\d.]+)\s*\)")
 
     def parse_style(el):
         d = {}
@@ -4526,6 +4530,42 @@ def _downgrade_svg2_for_batik(directory):
                 continue
             el.set("y", ts_dy)
             del ts.attrib["dy"]
+            changed = True
+
+        # Convert <foreignObject> elements used by mermaid class diagrams to
+        # SVG <text> elements that Batik can render.  Each foreignObject holds
+        # an XHTML div/span whose text content needs to become an SVG text
+        # node.  The foreignObject's transform gives its (tx, ty) offset within
+        # the parent <g>, and its width/height determine the text position.
+        # classTitle elements are horizontally centred; all others are left-
+        # aligned from the foreignObject's left edge.
+        fo_tag   = tag("foreignObject")
+        xspan    = f"{{{XHTML}}}span"
+        for fo in list(root.iter(fo_tag)):
+            text = "".join((el.text or "") for el in fo.iter(xspan)).strip()
+            if not text:
+                continue  # leave empty foreignObjects in place; Batik ignores them
+            t   = fo.get("transform", "")
+            m   = _TRANS_RE.search(t)
+            tx  = float(m.group(1)) if m else 0.0
+            ty  = float(m.group(2)) if m else 0.0
+            w   = float(fo.get("width",  0))
+            h   = float(fo.get("height", 18))
+            if fo.get("class") == "classTitle":
+                x, anchor = tx + w / 2, "middle"
+            else:
+                x, anchor = tx, "start"
+            y = ty + h - 3          # approximate SVG alphabetic baseline
+            tel = ET.Element(tag("text"))
+            tel.set("x", f"{x:.4g}")
+            tel.set("y", f"{y:.4g}")
+            tel.set("text-anchor", anchor)
+            tel.text = text
+            parent = fo.getparent()
+            if parent is not None:
+                idx = list(parent).index(fo)
+                parent.remove(fo)
+                parent.insert(idx, tel)
             changed = True
 
         bad = {el.get("id"): el for el in root.iter(tag("marker"))
