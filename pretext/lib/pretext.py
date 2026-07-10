@@ -4763,14 +4763,14 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
     else:
         # "local" validates against the production schema, and
         # "local-dev" against the development schema, each with a
-        # report meant for an author.  The "agent" method is the
-        # production schema with terse output meant for a program
-        # (and so is not elective from the "pretext/pretext" script).
+        # report meant for an author.  The "terse" method is the
+        # production schema with machine-readable output, one
+        # tab-separated message per line, meant for a program.
         if method == "local-dev":
             schema_file = "pretext-dev.rng"
         else:
             schema_file = "pretext.rng"
-        terse = method == "agent"
+        terse = method == "terse"
         _validate_local(
             xml_source, pub_file, stringparams, out_file, dest_dir, schema_file, terse
         )
@@ -4893,9 +4893,10 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
     jing_messages = result.stdout.splitlines()
 
     # The "validation-plus" stylesheet performs checks the RELAX-NG
-    # schema cannot express, and provides advice besides.  Applied to
-    # the same assembled source, so locations are consistent with the
-    # schema messages.  Single-line output, one message per line.
+    # schema cannot express, and provides extra advice and explanation
+    # besides.  Applied to the same assembled source, so locations are
+    # consistent with the schema messages.  Single-line output, one
+    # message per line.
     plus_xsl = os.path.join(
         common.get_ptx_path(), "schema", "pretext-validation-plus.xsl"
     )
@@ -4916,15 +4917,25 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
                 for sib in elt.itersiblings(preceding=True)
                 if isinstance(sib.tag, str) and ET.QName(sib).localname == name
             )
-            parts.append("{}[{}]".format(name, position))
+            # a count is only informative among like-named siblings
+            alone = position == 1 and not any(
+                isinstance(sib.tag, str) and ET.QName(sib).localname == name
+                for sib in elt.itersiblings()
+            )
+            if alone:
+                parts.append(name)
+            else:
+                parts.append("{}[{}]".format(name, position))
             elt = elt.getparent()
         return "/" + "/".join(reversed(parts))
 
     def _element_at_path(path):
-        # follow a numbered path (as validation-plus produces)
+        # follow a numbered path (as validation-plus produces); a
+        # segment without a bracketed count means the only element
+        # of that name at its location, so a count of one
         elt = tree_b.getroot()
         segments = path.strip("/").split("/")
-        segment_pattern = re.compile(r"(.*)\[(\d+)\]")
+        segment_pattern = re.compile(r"([^\[\]]+)(?:\[(\d+)\])?$")
         first = segment_pattern.match(segments[0])
         if not first or ET.QName(elt).localname != first.group(1):
             return None
@@ -4932,7 +4943,8 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
             match = segment_pattern.match(segment)
             if not match:
                 return None
-            name, position = match.group(1), int(match.group(2))
+            name = match.group(1)
+            position = int(match.group(2)) if match.group(2) else 1
             count = 0
             found = None
             for child in elt:
@@ -4981,8 +4993,11 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
         elt = opening[near] if near is not None else None
         filename = file_of.get(elt, main_file)
         path = _numbered_path(elt) if elt is not None else ""
+        # every schema message is one check, named "schema"
         if terse:
-            report.append("{}\t{}\t{}\t{}".format(filename, path, line_number, body))
+            report.append(
+                "{}\t{}\t{}\tschema\t{}".format(filename, path, line_number, body)
+            )
         else:
             report.append(body)
             report.append("    file: {}".format(filename))
@@ -4991,6 +5006,7 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
             excerpt = _excerpt(line_number)
             if excerpt:
                 report.append("    text: {}".format(excerpt))
+            report.append("    check: schema")
             report.append("")
     if not terse and not jing_messages:
         report.extend(["(no messages)", ""])
@@ -4998,18 +5014,27 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
     if not terse:
         report.extend([banner, "Messages: PreTeXt \"validation-plus\" stylesheet", banner, ""])
     plus_form = re.compile(r"^(PTX:[A-Z]+): (/\S+) (.*)$")
+    # the message id trails the message text, set off in brackets
+    id_form = re.compile(r"^(.*) \[([a-z0-9-]+)\]$")
     for message in plus_messages:
         match = plus_form.match(message)
         if not match:
             report.append(message)
             continue
         severity, path, body = match.group(1), match.group(2), match.group(3)
+        id_match = id_form.match(body)
+        if id_match:
+            body, check_id = id_match.group(1), id_match.group(2)
+        else:
+            check_id = "no-validation-message-id-assigned"
         elt = _element_at_path(path)
         filename = file_of.get(elt, main_file)
         line_number = elt.sourceline if elt is not None else ""
         if terse:
             report.append(
-                "{}\t{}\t{}\t{}: {}".format(filename, path, line_number, severity, body)
+                "{}\t{}\t{}\t{}\t{}: {}".format(
+                    filename, path, line_number, check_id, severity, body
+                )
             )
         else:
             report.append("{}: {}".format(severity, body))
@@ -5020,6 +5045,7 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
                 excerpt = _excerpt(elt.sourceline)
                 if excerpt:
                     report.append("    text: {}".format(excerpt))
+            report.append("    check: {}".format(check_id))
             report.append("")
     if not terse and not plus_messages:
         report.extend(["(no messages)", ""])
@@ -5051,8 +5077,8 @@ def _validation_report_preamble(schema_filename, assembled_source):
         "      (a schema can only describe parent-child relationships,",
         "      plus the attributes of each element)",
         "  (2) the PreTeXt \"validation-plus\" stylesheet made checks that",
-        "      no RELAX-NG schema could ever express, and offers advice",
-        "      besides",
+        "      no RELAX-NG schema could ever express, and offers extra",
+        "      advice and explanation besides",
         "",
         "Locations refer to the ASSEMBLED version of your source: your",
         "modular source files have been knitted together, and any version",
@@ -5063,12 +5089,15 @@ def _validation_report_preamble(schema_filename, assembled_source):
         "has been deposited at",
         "    {}".format(assembled_source),
         "",
-        "Each message locates its problem four ways:",
+        "Each message locates its problem four ways, and then names",
+        "the check that raised it:",
         "",
-        "    file:  the source file where the problem lies",
-        "    path:  the location within the assembled source",
-        "    line:  the line number within the assembled source",
-        "    text:  an excerpt of the offending content",
+        "    file:   the source file where the problem lies",
+        "    path:   the location within the assembled source",
+        "    line:   the line number within the assembled source",
+        "    text:   an excerpt of the offending content",
+        "    check:  a short name for the check (\"schema\" for any",
+        "            message from \"jing\")",
         "",
         "Only \"file\" points into your own source files.  In particular,",
         "\"line\" is a line number of the deposited assembled source named",
@@ -5076,13 +5105,15 @@ def _validation_report_preamble(schema_filename, assembled_source):
         "",
         "To read a \"path\", count elements of each name.  For example,",
         "",
-        "    /pretext[1]/book[1]/chapter[7]/section[2]/p[13]/em[2]",
+        "    /pretext/book/chapter[7]/section[2]/p[13]/em[2]",
         "",
         "is the second \"em\" within the thirteenth \"p\" (paragraph) of the",
         "second \"section\" of the seventh \"chapter\" of the book.  Counts",
         "are of elements with the same name: that paragraph is the",
         "thirteenth \"p\" of its section, though other elements may precede",
-        "it or intervene.",
+        "it or intervene.  An element without a count, like the \"book\"",
+        "above, is the only element of that name at its location, so a",
+        "count would just be clutter.",
         "",
         "",
     ]

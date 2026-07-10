@@ -39,6 +39,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="single.line.output" select="'no'"/>
 <xsl:variable name="b-single-line" select="$single.line.output = 'yes'"/>
 
+<!-- The stylesheet makes checks that no RELAX-NG schema could ever      -->
+<!-- express, and offers extra advice and explanation besides.  So a     -->
+<!-- check may deliberately overlap the schema, when an explanation      -->
+<!-- is more helpful than a bare schema violation.                       -->
+
 <!-- Walk the tree, so messages appear in document order, not topically.  -->
 <!-- Be sure to recurse into larger elements after interrupting to        -->
 <!-- process certain situations.  This is not necessary for templates     -->
@@ -65,6 +70,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="@filebase">
     <xsl:apply-templates select="parent::*" mode="messaging">
         <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message-id" select="'deprecated-filebase'"/>
         <xsl:with-param name="message">
             <xsl:text>The @filebase attribute is deprecated (2014-05-04) and no code&#xa;</xsl:text>
             <xsl:text>remains (2018-07-21), convert to using @xml:id for this purpose</xsl:text>
@@ -77,6 +83,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="cite">
     <xsl:apply-templates select="." mode="messaging">
         <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message-id" select="'deprecated-cite'"/>
         <xsl:with-param name="message">
             <xsl:text>The &lt;cite&gt; element is deprecated (2014-06-25) and no&#xa;</xsl:text>
             <xsl:text>code remains (2018-07-21), convert to an &lt;xref&gt;</xsl:text>
@@ -91,6 +98,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="circum">
     <xsl:apply-templates select="." mode="messaging">
         <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message-id" select="'deprecated-circum'"/>
         <xsl:with-param name="message">
             <xsl:text>The &lt;circum&gt; element is deprecated (2015-01-28) and no&#xa;</xsl:text>
             <xsl:text>code remains (2018-07-22), convert to a &lt;circumflex&gt;</xsl:text>
@@ -103,6 +111,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="sage[@copy]">
     <xsl:apply-templates select="." mode="messaging">
         <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message-id" select="'deprecated-sage-copy'"/>
         <xsl:with-param name="message">
             <xsl:text>@copy on a &quot;sage&quot; element was deprecated (2017-12-21)</xsl:text>
             <xsl:text>Use the xinclude mechanism with common code in an external file</xsl:text>
@@ -115,6 +124,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="image[@copy]">
     <xsl:apply-templates select="." mode="messaging">
         <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message-id" select="'deprecated-image-copy'"/>
         <xsl:with-param name="message">
             <xsl:text>@copy on an &quot;image&quot; element was deprecated (2017-12-21)</xsl:text>
             <xsl:text>Perhaps use the xinclude mechanism with common code in an external file</xsl:text>
@@ -136,6 +146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(id(@ref)/self::contributor)">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'author-xref-not-contributor'"/>
             <xsl:with-param name="message">
                 <xsl:text>An &lt;xref&gt; within an &lt;author&gt; is meant to point&#xa;</xsl:text>
                 <xsl:text>to a &lt;contributor&gt;, not to a &lt;</xsl:text>
@@ -154,6 +165,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="count(parent::docinfo/latex-image-preamble[not(@syntax)]) > 1">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'latex-image-preamble-duplicate'"/>
             <xsl:with-param name="message">
                 <xsl:text>There should be at most one &lt;latex-image-preamble&gt; without a&#xa;</xsl:text>
                 <xsl:text>@syntax within the &lt;docinfo&gt; element. There are more than one,&#xa;</xsl:text>
@@ -172,6 +184,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(ancestor::worksheet) and not(ancestor::handout)">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'workspace-attribute-ignored'"/>
             <xsl:with-param name="message">
                 <xsl:text>The @workspace attribute is only respected within a worksheet&#xa;</xsl:text>
                 <xsl:text>or a handout, and will be ignored here</xsl:text>
@@ -190,6 +203,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(ancestor::worksheet) and not(ancestor::handout)">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'sidebyside-exercise-placement'"/>
             <xsl:with-param name="message">
                 <xsl:text>An &lt;exercise&gt; as a panel of a &lt;sidebyside&gt; is only supported&#xa;</xsl:text>
                 <xsl:text>within a &lt;worksheet&gt; or a &lt;handout&gt;.  Here, results&#xa;</xsl:text>
@@ -209,6 +223,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="count(*[not(&METADATA-FILTER;)]) = 1">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'sidebyside-single-panel'"/>
             <xsl:with-param name="message">
                 <xsl:text>A &lt;sidebyside&gt; normally does not have a single panel.&#xa;</xsl:text>
                 <xsl:text>If this construct is only for layout control, try moving&#xa;</xsl:text>
@@ -236,6 +251,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$unnumbered-context">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'numbered-item-unnumbered-container'"/>
             <xsl:with-param name="message">
                 <xsl:text>A &lt;</xsl:text>
                 <xsl:value-of select="local-name(.)"/>
@@ -273,6 +289,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="row[(count(cell[not(@colspan)]) + sum(cell/@colspan)) != number($reference-count)]">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'tabular-ragged-rows'"/>
             <xsl:with-param name="message">
                 <xsl:text>The rows of this &lt;tabular&gt; do not all span the same number of columns&#xa;</xsl:text>
                 <xsl:text>(counting each cell as its @colspan, or as one column otherwise).&#xa;</xsl:text>
@@ -289,6 +306,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="parent::chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|slide|exercises|worksheet|reading-questions|solutions|references|glossary|backmatter and not(following-sibling::shorttitle)">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'title-math-no-shorttitle'"/>
             <xsl:with-param name="message">
                 <xsl:text>You have a title containing m but no shorttitle.&#xa;</xsl:text>
                 <xsl:text>Because this title will be used many places, errors may result.&#xa;</xsl:text>
@@ -300,40 +318,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
-<!-- Image elements should have meaningful descriptions.   -->
-<!-- We catch any "image" that does not either declare     -->
-<!-- @decorative="yes" or have a non-empty description.    -->
-<!-- Warn if there is a description and @decorative="yes". -->
-<!-- Warn if a description length is over 125 characters.  -->
+<!-- An accessible image carries a "shortdescription" (concise, it -->
+<!-- becomes alternative text), possibly augmented by a structured -->
+<!-- "description" (a longer account), or else is declared to be   -->
+<!-- decorative.  Examined exactly as authored: a legacy text-only -->
+<!-- "description" upgraded during a build is not upgraded here.   -->
 <xsl:template match="image">
-    <xsl:if test="not(@decorative = 'yes') and (not(description) or description = '')">
+    <xsl:if test="not(@decorative = 'yes') and (not(shortdescription) or shortdescription = '') and (not(description) or description = '')">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'image-description-missing'"/>
             <xsl:with-param name="message">
-                <xsl:text>You have an image without a description and do not declare the image to be decorative.&#xa;</xsl:text>
+                <xsl:text>You have an image without any description and do not declare the image to be decorative.&#xa;</xsl:text>
                 <xsl:text>Because of this, output may not be accessible.&#xa;</xsl:text>
                 <xsl:text>If the image does not add information that is not already present, use @decorative="yes".&#xa;</xsl:text>
-                <xsl:text>Otherwise, provide a &lt;description&gt;.</xsl:text>
+                <xsl:text>Otherwise, provide a &lt;shortdescription&gt; (concise, it becomes alternative text),&#xa;</xsl:text>
+                <xsl:text>perhaps augmented by a structured &lt;description&gt;.</xsl:text>
             </xsl:with-param>
         </xsl:apply-templates>
     </xsl:if>
-    <xsl:if test="@decorative = 'yes' and description and not(description = '')">
+    <!-- The schema also forbids descriptions of a decorative image, but -->
+    <!-- a schema violation cannot explain itself; this message can.     -->
+    <xsl:if test="@decorative = 'yes' and ((shortdescription and not(shortdescription = '')) or (description and not(description = '')))">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'image-decorative-with-description'"/>
             <xsl:with-param name="message">
-                <xsl:text>You have an image with @decorative="yes" that has a nonempty description.&#xa;</xsl:text>
-                <xsl:text>The description may not appear in output.&#xa;</xsl:text>
-                <xsl:text>Either remove the description, remove @decorative, or change @decorative to "no".</xsl:text>
+                <xsl:text>You have an image with @decorative="yes" that also has a &lt;shortdescription&gt; or &lt;description&gt;.&#xa;</xsl:text>
+                <xsl:text>These may not appear in output.&#xa;</xsl:text>
+                <xsl:text>Either remove them, remove @decorative, or change @decorative to "no".</xsl:text>
             </xsl:with-param>
         </xsl:apply-templates>
     </xsl:if>
-    <xsl:if test="string-length(description) > 125">
+    <xsl:if test="string-length(shortdescription) > 125">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'advice'"/>
+            <xsl:with-param name="message-id" select="'image-shortdescription-length'"/>
             <xsl:with-param name="message">
-                <xsl:text>You have an image description that is more than 125 characters long.&#xa;</xsl:text>
+                <xsl:text>You have an image &lt;shortdescription&gt; that is more than 125 characters long.&#xa;</xsl:text>
                 <xsl:text>Some screen readers will cut off reading alt text after the 125th character.&#xa;</xsl:text>
-                <xsl:text>Rewrite the description to be 125 characters or fewer.</xsl:text>
+                <xsl:text>Rewrite the &lt;shortdescription&gt; to be 125 characters or fewer,&#xa;</xsl:text>
+                <xsl:text>perhaps moving detail into a structured &lt;description&gt;.</xsl:text>
             </xsl:with-param>
         </xsl:apply-templates>
     </xsl:if>
@@ -350,6 +375,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(block/@order)">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'blocks-randomize-no-order'"/>
             <xsl:with-param name="message">
                 <xsl:text>A &lt;blocks&gt; element with @randomize="no" has no &lt;block&gt; carrying @order.&#xa;</xsl:text>
                 <xsl:text>The fixed rendering order will just be the authored order.&#xa;</xsl:text>
@@ -374,6 +400,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="var[not(ancestor::webwork)]">
     <xsl:apply-templates select="." mode="messaging">
         <xsl:with-param name="severity" select="'error'"/>
+        <xsl:with-param name="message-id" select="'var-outside-webwork'"/>
         <xsl:with-param name="message">
             <xsl:text>The &lt;var&gt; element is exclusive to a WeBWorK problem,&#xa;</xsl:text>
             <xsl:text>and so must only appear within a &lt;webwork&gt; element,&#xa;</xsl:text>
@@ -389,6 +416,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="webwork//tabular/col/@top">
     <xsl:apply-templates select="." mode="messaging">
         <xsl:with-param name="severity" select="'warn'"/>
+        <xsl:with-param name="message-id" select="'webwork-tabular-col-top'"/>
         <xsl:with-param name="message">
             <xsl:text>Column-specific top border attributes are not implemented for the&#xa;</xsl:text>
             <xsl:text>output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine</xsl:text>
@@ -399,6 +427,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="webwork//tabular/cell/@bottom">
     <xsl:apply-templates select="." mode="messaging">
         <xsl:with-param name="severity" select="'warn'"/>
+        <xsl:with-param name="message-id" select="'webwork-tabular-cell-bottom'"/>
         <xsl:with-param name="message">
             <xsl:text>Cell-specific bottom border border attributes are not implemented for the&#xa;</xsl:text>
             <xsl:text>output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine</xsl:text>
@@ -409,6 +438,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="webwork//tabular/*[@top='medium' or @bottom='medium' or @left='medium' or @right='medium' or @top='major' or @bottom='major' or @left='major' or @right='major']">
     <xsl:apply-templates select="." mode="messaging">
         <xsl:with-param name="severity" select="'warn'"/>
+        <xsl:with-param name="message-id" select="'webwork-tabular-rule-thickness'"/>
         <xsl:with-param name="message">
             <xsl:text>'medium' or 'major' table rule attributes will be handled as 'minor' in the&#xa;</xsl:text>
             <xsl:text>output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine</xsl:text>
@@ -443,6 +473,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="contains(., '&#x00B0;')">
             <xsl:apply-templates select="." mode="messaging">
                 <xsl:with-param name="severity" select="'warn'"/>
+                <xsl:with-param name="message-id" select="'unicode-degree'"/>
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains a Unicode character for a degree symbol (U+00B0, decimal 176).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
@@ -454,6 +485,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="contains(., '&#x00D7;')">
             <xsl:apply-templates select="." mode="messaging">
                 <xsl:with-param name="severity" select="'warn'"/>
+                <xsl:with-param name="message-id" select="'unicode-multiplication-sign'"/>
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains a Unicode character for a multiplication sign (U+00D7, decimal 215).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
@@ -465,6 +497,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="contains(., '&#x200B;')">
             <xsl:apply-templates select="." mode="messaging">
                 <xsl:with-param name="severity" select="'warn'"/>
+                <xsl:with-param name="message-id" select="'unicode-zero-width-space'"/>
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains a Unicode character for zero-width character (U+200B, decimal 8203).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
@@ -476,6 +509,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="contains(., '&#x2013;')">
             <xsl:apply-templates select="." mode="messaging">
                 <xsl:with-param name="severity" select="'warn'"/>
+                <xsl:with-param name="message-id" select="'unicode-en-dash'"/>
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains a Unicode character for an en-dash (U+2013, decimal 8211).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
@@ -489,6 +523,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="contains(., '&#x2014;')">
             <xsl:apply-templates select="." mode="messaging">
                 <xsl:with-param name="severity" select="'warn'"/>
+                <xsl:with-param name="message-id" select="'unicode-em-dash'"/>
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains a Unicode character for an em-dash (U+2014, decimal 8212).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
@@ -503,6 +538,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="contains(., '&#x2018;') or contains(., '&#x2019;')">
             <xsl:apply-templates select="." mode="messaging">
                 <xsl:with-param name="severity" select="'warn'"/>
+                <xsl:with-param name="message-id" select="'unicode-single-quotes'"/>
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains Unicode characters for single quotation marks (U+2018, decimal 8216; U+2019, decimal 8217).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
@@ -518,6 +554,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="contains(., '&#x201C;') or contains(., '&#x201D;')">
             <xsl:apply-templates select="." mode="messaging">
                 <xsl:with-param name="severity" select="'warn'"/>
+                <xsl:with-param name="message-id" select="'unicode-double-quotes'"/>
                 <xsl:with-param name="message">
                     <xsl:text>A run of text contains Unicode characters for double quotation marks (U+201C, decimal 8220; U+201D, decimal 8221).&#xa;</xsl:text>
                     <xsl:text>Likely this was introduced in a conversion of source material authored in a word-processor.&#xa;</xsl:text>
@@ -552,9 +589,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Messaging -->
 <!-- ######### -->
 
+<!-- Every message carries a "message-id": a short kebab-case mnemonic -->
+<!-- naming its check.  The id trails the message text, becomes a      -->
+<!-- field of machine-readable reports, and so clusters occurrences    -->
+<!-- of the same check.  The default value below signals an omission   -->
+<!-- (and could warrant a bug report): a new message must always       -->
+<!-- provide an id, something to check in a review of a pull request.  -->
 <xsl:template match="*|text()" mode="messaging">
     <xsl:param name="severity"/>
     <xsl:param name="message"/>
+    <xsl:param name="message-id" select="'no-validation-message-id-assigned'"/>
 
     <!-- Separator is noise for (sortable) single-line output -->
     <xsl:if test="not($b-single-line)">
@@ -592,6 +636,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$message"/>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- the message id trails, on the same line when consolidated -->
+    <xsl:choose>
+        <xsl:when test="$b-single-line">
+            <xsl:text>&#x20;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="$message-id"/>
+    <xsl:text>]</xsl:text>
     <!-- supply final newline always -->
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
@@ -604,9 +660,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$ancestors">
         <xsl:text>/</xsl:text>
         <xsl:value-of select="local-name(.)"/>
-        <xsl:text>[</xsl:text>
-        <xsl:number/>
-        <xsl:text>]</xsl:text>
+        <!-- A count is only informative among like-named siblings; for -->
+        <!-- an element that is the only one of its name, it is clutter -->
+        <xsl:variable name="elt-name" select="local-name(.)"/>
+        <xsl:if test="preceding-sibling::*[local-name() = $elt-name] or following-sibling::*[local-name() = $elt-name]">
+            <xsl:text>[</xsl:text>
+            <xsl:number/>
+            <xsl:text>]</xsl:text>
+        </xsl:if>
     </xsl:for-each>
 </xsl:template>
 

@@ -34,9 +34,9 @@
                 <cline>pretext/pretext -V -p publication.xml aota.xml</cline>
             </cd>This deposits two files, named for your source file.  One, ending <c>-validation.txt</c>, is a consolidated report: messages from <c>jing</c> checking the <acro>RELAX-NG</acro> schema, followed by messages from the validation-plus stylesheet (<xref ref="validation-plus"/>), each batch clearly delineated, and all prefaced by an explanation of how to read the report.  The other file, ending <c>-assembled.xml</c>, is the version of your source that was examined: your modular source files knitted together (<xref ref="processing-modular"/>), <em>after</em> any version support in your publication file has been applied (so, include <c>-p</c> if you use a publication file).  In particular, an element excluded from the version being built cannot raise a message.  There is no need for any of the <c>xinclude</c> command-line gymnastics described in the following subsections<mdash/>the script has already merged your modular source files.</p>
 
-            <p>Each message locates its problem four ways.  A <c>file</c> line names the source file where the problem lies, even when your project is modularized.  A <c>path</c> line locates the problem within the assembled source, counting elements of each name, so<cd>
-                <cline>path: /pretext[1]/book[1]/chapter[7]/section[2]/p[13]/em[2]</cline>
-            </cd>is the second <tag>em</tag> within the thirteenth <tag>p</tag> of the second <tag>section</tag> of the seventh <tag>chapter</tag> of the book.  (Counts are of elements with the same name: that paragraph is the thirteenth <tag>p</tag> of its section, though other elements may precede it or intervene.)  A <c>line</c> line gives a line number, and a <c>text</c> line excerpts the offending content.  Take care: only <c>file</c> points into your own source files<mdash/>the line number is a line of the deposited assembled source, never of one of your files, since assembly shifts everything about.</p>
+            <p>Each message locates its problem four ways, and then names the check that raised it.  A <c>file</c> line names the source file where the problem lies, even when your project is modularized.  A <c>path</c> line locates the problem within the assembled source, counting elements of each name, so<cd>
+                <cline>path: /pretext/book/chapter[7]/section[2]/p[13]/em[2]</cline>
+            </cd>is the second <tag>em</tag> within the thirteenth <tag>p</tag> of the second <tag>section</tag> of the seventh <tag>chapter</tag> of the book.  (Counts are of elements with the same name: that paragraph is the thirteenth <tag>p</tag> of its section, though other elements may precede it or intervene.  An element without a count, like the <tag>book</tag> above, is the only element of that name at its location, so a count would just be clutter.)  A <c>line</c> line gives a line number, and a <c>text</c> line excerpts the offending content.  Take care: only <c>file</c> points into your own source files<mdash/>the line number is a line of the deposited assembled source, never of one of your files, since assembly shifts everything about.  Finally, a <c>check</c> line carries a short name for the check raising the message, such as <c>image-description-missing</c>; every message from <c>jing</c> is named <c>schema</c>.</p>
 
             <p>The script locates <c>jing</c> through the <c>[executables]</c> section of its configuration file (see the notes at the top of <c>pretext/pretext.cfg</c> about making a copy in <c>user/pretext.cfg</c>).  The default entry,<cd>
                 <cline>jing = jing</cline>
@@ -44,25 +44,25 @@
                 <cline>jing = java -jar /usr/share/java/jing.jar</cline>
             </cd>Anything after the executable name is passed along as options, as for other configured executables.</p>
 
-            <p>Two other methods may be elected with the <c>-M</c> switch.  <c>-M local-dev</c> is identical, but checks against the development schema (<c>pretext-dev.rng</c>), which additionally describes new and experimental parts of the vocabulary.  <c>-M server</c> bundles your source files and ships them to a validation server for processing, so no <c>jing</c> installation is necessary at all.</p>
+            <p>Three other methods may be elected with the <c>-M</c> switch.  <c>-M local-dev</c> is identical, but checks against the development schema (<c>pretext-dev.rng</c>), which additionally describes new and experimental parts of the vocabulary.  <c>-M server</c> bundles your source files and ships them to a validation server for processing, so no <c>jing</c> installation is necessary at all.  <c>-M terse</c> produces the machine-readable report described in <xref ref="validation-terse"/>.</p>
 
             <p>Incidentally, the <c>lxml</c> library the script relies on has <acro>RELAX-NG</acro> validation built in, and you might wonder why it is not employed for this purpose.  It cannot process the <c>externalRef</c> construction the schema uses (for PreFigure diagrams), and even given a reduced schema it reports only a small fraction of the problems <c>jing</c> finds, with messages that suggest an arbitrary alternative rather than describe the error.</p>
         </subsection>
 
-        <subsection xml:id="validation-agent">
+        <subsection xml:id="validation-terse">
             <title>Validation for Programs</title>
 
-            <p>A program iteratively <em>producing</em> <pretext/> source<mdash/>a conversion of legacy material, say, or an <init>AI</init> agent translating another format<mdash/>wants the validation results, without the surrounding help meant for a human.  The library function underlying the <c>-V</c> switch accepts an <c>agent</c> method for exactly this purpose: the report is one line per message, four tab-separated fields<mdash/>file, path, line, message<mdash/>and nothing else.  (As in the human-readable report, the line number references the assembled version of the source, deposited alongside the report.)  This method is deliberately not elective from the <c>pretext/pretext</c> command line; instead a driver program calls the library directly.  The following complete driver prints the report on standard output, and is simple enough to serve as a model.<listing>
+            <p>A program iteratively <em>producing</em> <pretext/> source<mdash/>a conversion of legacy material, say, or an <init>AI</init> agent translating another format<mdash/>wants the validation results, without the surrounding help meant for a human.  The <c>terse</c> method serves exactly this purpose: the report is one line per message, five tab-separated fields<mdash/>file, path, line, check, message<mdash/>and nothing else.  (As in the human-readable report, the line number references the assembled version of the source, deposited alongside the report.  Sorting on the <c>check</c> field clusters occurrences of the same problem.)  Elect it with <c>-V -M terse</c> at the command line, or call the library directly, as in the following complete driver, which prints the report on standard output and is simple enough to serve as a model.<listing>
                 <title>A driver for machine-readable validation</title>
                 <program language="python">
                     <code>
 #!/usr/bin/env python3
 # A minimal driver for PreTeXt validation with machine-readable
 # output.  Each line of the report is tab-separated:
-# file, path, line, message.
+# file, path, line, check, message.
 #
 # Usage:
-#   python3 validate-agent.py /path/to/pretext source.xml [publication.xml]
+#   python3 validate-terse.py /path/to/pretext source.xml [publication.xml]
 
 import os.path
 import sys
@@ -81,7 +81,7 @@ from lib import common
 common.set_executables({"jing": "jing"})
 
 report = "validation-report.txt"
-ptx.validate(xml_source, publication, {}, report, None, "agent")
+ptx.validate(xml_source, publication, {}, report, None, "terse")
 with open(report) as f:
     sys.stdout.write(f.read())
                     </code>
