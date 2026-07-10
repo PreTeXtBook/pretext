@@ -4908,7 +4908,11 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
 
     # helpers for locating a message's element in tree "B"
 
-    def _numbered_path(elt):
+    def _numbered_path(elt, squelch):
+        # With "squelch" the path is presented for a human: a count is
+        # only informative among like-named siblings, so the count of
+        # an only child is omitted.  Without, every element carries
+        # its count, for uniform consumption by a program.
         parts = []
         while elt is not None and isinstance(elt.tag, str):
             name = ET.QName(elt).localname
@@ -4917,12 +4921,11 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
                 for sib in elt.itersiblings(preceding=True)
                 if isinstance(sib.tag, str) and ET.QName(sib).localname == name
             )
-            # a count is only informative among like-named siblings
             alone = position == 1 and not any(
                 isinstance(sib.tag, str) and ET.QName(sib).localname == name
                 for sib in elt.itersiblings()
             )
-            if alone:
+            if squelch and alone:
                 parts.append(name)
             else:
                 parts.append("{}[{}]".format(name, position))
@@ -4992,13 +4995,14 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
         near = max((n for n in opening if n <= line_number), default=None)
         elt = opening[near] if near is not None else None
         filename = file_of.get(elt, main_file)
-        path = _numbered_path(elt) if elt is not None else ""
         # every schema message is one check, named "schema"
         if terse:
+            path = _numbered_path(elt, False) if elt is not None else ""
             report.append(
                 "{}\t{}\t{}\tschema\t{}".format(filename, path, line_number, body)
             )
         else:
+            path = _numbered_path(elt, True) if elt is not None else ""
             report.append(body)
             report.append("    file: {}".format(filename))
             report.append("    path: {}".format(path))
@@ -5037,6 +5041,9 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
                 )
             )
         else:
+            # for a human, squelch the counts of only children
+            if elt is not None:
+                path = _numbered_path(elt, True)
             report.append("{}: {}".format(severity, body))
             report.append("    file: {}".format(filename))
             report.append("    path: {}".format(path))
