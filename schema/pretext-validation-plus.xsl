@@ -554,9 +554,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Messaging -->
 <!-- ######### -->
 
+<!-- Every message carries a "message-id": a short kebab-case mnemonic -->
+<!-- naming its check.  The id trails the message text, becomes a      -->
+<!-- field of machine-readable reports, and so clusters occurrences    -->
+<!-- of the same check.  The default value below signals an omission   -->
+<!-- (and could warrant a bug report): a new message must always       -->
+<!-- provide an id, something to check in a review of a pull request.  -->
 <xsl:template match="*|text()" mode="messaging">
     <xsl:param name="severity"/>
     <xsl:param name="message"/>
+    <xsl:param name="message-id" select="'no-validation-message-id-assigned'"/>
 
     <!-- Separator is noise for (sortable) single-line output -->
     <xsl:if test="not($b-single-line)">
@@ -594,6 +601,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$message"/>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- the message id trails, on the same line when consolidated -->
+    <xsl:choose>
+        <xsl:when test="$b-single-line">
+            <xsl:text>&#x20;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="$message-id"/>
+    <xsl:text>]</xsl:text>
     <!-- supply final newline always -->
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
