@@ -4916,15 +4916,25 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
                 for sib in elt.itersiblings(preceding=True)
                 if isinstance(sib.tag, str) and ET.QName(sib).localname == name
             )
-            parts.append("{}[{}]".format(name, position))
+            # a count is only informative among like-named siblings
+            alone = position == 1 and not any(
+                isinstance(sib.tag, str) and ET.QName(sib).localname == name
+                for sib in elt.itersiblings()
+            )
+            if alone:
+                parts.append(name)
+            else:
+                parts.append("{}[{}]".format(name, position))
             elt = elt.getparent()
         return "/" + "/".join(reversed(parts))
 
     def _element_at_path(path):
-        # follow a numbered path (as validation-plus produces)
+        # follow a numbered path (as validation-plus produces); a
+        # segment without a bracketed count means the only element
+        # of that name at its location, so a count of one
         elt = tree_b.getroot()
         segments = path.strip("/").split("/")
-        segment_pattern = re.compile(r"(.*)\[(\d+)\]")
+        segment_pattern = re.compile(r"([^\[\]]+)(?:\[(\d+)\])?$")
         first = segment_pattern.match(segments[0])
         if not first or ET.QName(elt).localname != first.group(1):
             return None
@@ -4932,7 +4942,8 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
             match = segment_pattern.match(segment)
             if not match:
                 return None
-            name, position = match.group(1), int(match.group(2))
+            name = match.group(1)
+            position = int(match.group(2)) if match.group(2) else 1
             count = 0
             found = None
             for child in elt:
@@ -5076,13 +5087,15 @@ def _validation_report_preamble(schema_filename, assembled_source):
         "",
         "To read a \"path\", count elements of each name.  For example,",
         "",
-        "    /pretext[1]/book[1]/chapter[7]/section[2]/p[13]/em[2]",
+        "    /pretext/book/chapter[7]/section[2]/p[13]/em[2]",
         "",
         "is the second \"em\" within the thirteenth \"p\" (paragraph) of the",
         "second \"section\" of the seventh \"chapter\" of the book.  Counts",
         "are of elements with the same name: that paragraph is the",
         "thirteenth \"p\" of its section, though other elements may precede",
-        "it or intervene.",
+        "it or intervene.  An element without a count, like the \"book\"",
+        "above, is the only element of that name at its location, so a",
+        "count would just be clutter.",
         "",
         "",
     ]
