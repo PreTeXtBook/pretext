@@ -189,10 +189,10 @@ def sanitize_method(method, component, format, validate):
         if not (method):
             return "local"
         # set, but illegal
-        elif not (method in ["local", "local-dev", "server"]):
+        elif not (method in ["local", "local-dev", "server", "terse"]):
             msg = "\n".join(
                 [
-                    'the method given for validation ("{}") is not "local", "local-dev", or "server",',
+                    'the method given for validation ("{}") is not "local", "local-dev", "server", or "terse",',
                     '              so using the default method instead ("local")',
                 ]
             )
@@ -539,6 +539,7 @@ def get_cli_arguments():
         ("local", 'employs an installed "jing" program (default)'),
         ("local-dev", 'as "local", but checks against the development schema'),
         ("server", "a round-trip to a validation server"),
+        ("terse", "machine-readable, one tab-separated message per line"),
     ]
     validate_help = "validate source, methods are:\n" + "\n".join(
         ["  {} - {}".format(info[0], info[1]) for info in validate_info]
