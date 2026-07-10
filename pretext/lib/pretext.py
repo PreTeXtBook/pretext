@@ -1696,21 +1696,21 @@ def qrcode(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         stringparams["publisher"] = pub_file
     if xmlid_root:
         stringparams["subtree"] = xmlid_root
-    import glob
     import xml.etree.ElementTree as ET
 
-    # Extraction writes sidecar XML files (one per element) into dest_dir
-    # via exsl:document, each containing standalone and in-context URLs.
-    common.xsltproc(extraction_xslt, xml_source, None, dest_dir, stringparams)
-    # Read sidecar XML files to get URLs for QR code generation
+    # Extraction writes a sidecar XML file per element (via exsl:document,
+    # holding the standalone and in-context URLs) and returns a manifest of
+    # exactly the elements that earn a QR code in the current document or
+    # subtree.  Iterating that manifest, rather than whatever "*-url.xml"
+    # files happen to be in dest_dir, ensures a stale sidecar (from an
+    # element since relabeled or removed) cannot spawn a QR code.
     pi_ns = {'pi': 'http://pretextbook.org/2020/pretext/internal'}
-    url_files = sorted(glob.glob(os.path.join(dest_dir, "*-url.xml")))
-    for url_file in url_files:
+    manifest = common.xsltproc(extraction_xslt, xml_source, None, dest_dir, stringparams)
+    for entry in manifest.getroot().findall('pi:qrcode', pi_ns):
+        the_id = entry.get('id')
+        url_file = os.path.join(dest_dir, the_id + "-url.xml")
         tree = ET.parse(url_file)
         url = tree.find('pi:standalone-url', pi_ns).text
-        # Derive visible-id from filename: {id}-url.xml
-        basename = os.path.splitext(os.path.basename(url_file))[0]
-        the_id = basename.rsplit('-url', 1)[0]
         path = os.path.join(dest_dir, the_id + ".png")
         log.info('creating URL with content "{}" as {}...'.format(url, path))
         # Using more elaborate (class) calls to simply get a zero border,
