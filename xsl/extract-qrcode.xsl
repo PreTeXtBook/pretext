@@ -54,7 +54,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
 
-<xsl:output method="text" encoding="UTF-8"/>
+<xsl:output method="xml" encoding="UTF-8"/>
 
 <!-- Avoid Catch-22: default assembly/pre-processor provides output  -->
 <!-- for a conversion to a static format, but that format will       -->
@@ -73,6 +73,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- by virtue of this stylesheet's higher import precedence.   -->
 <xsl:variable name="chunk-level" select="$html-chunk-level"/>
 <xsl:variable name="file-extension" select="'.html'"/>
+
+<!-- Wrap the ids below in a manifest of exactly the elements that  -->
+<!-- earn a QR code; the generator opens only these sidecar files.  -->
+<xsl:template match="*" mode="extraction-wrapper">
+    <pi:qrcodes>
+        <xsl:apply-imports/>
+    </pi:qrcodes>
+</xsl:template>
 
 <xsl:template match="audio[@source|@href]|video[@source|@href|@youtube|@youtubeplaylist|@vimeo]|interactive" mode="extraction">
     <!-- Sidecar XML file with pre-computed URLs for use      -->
@@ -95,6 +103,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </pi:embed-iframe-url>
         </pi:qrcode-urls>
     </exsl:document>
+    <!-- record the id in the returned manifest (see the wrapper above) -->
+    <pi:qrcode id="{$the-id}"/>
 </xsl:template>
 
 </xsl:stylesheet>
