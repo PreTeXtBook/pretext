@@ -4763,14 +4763,14 @@ def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
     else:
         # "local" validates against the production schema, and
         # "local-dev" against the development schema, each with a
-        # report meant for an author.  The "agent" method is the
-        # production schema with terse output meant for a program
-        # (and so is not elective from the "pretext/pretext" script).
+        # report meant for an author.  The "terse" method is the
+        # production schema with machine-readable output, one
+        # tab-separated message per line, meant for a program.
         if method == "local-dev":
             schema_file = "pretext-dev.rng"
         else:
             schema_file = "pretext.rng"
-        terse = method == "agent"
+        terse = method == "terse"
         _validate_local(
             xml_source, pub_file, stringparams, out_file, dest_dir, schema_file, terse
         )
