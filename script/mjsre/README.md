@@ -12,7 +12,9 @@ A `node` Javascript program to generate representations of
 mathematics as MathML, SVG, braille, and speech.
 
 ### `update-sre`
-bash script to manage npm installs, so SRE is not pinned to MJ.
+bash script to refresh the npm installation: discards
+`node_modules` and reinstalls the versions pinned by
+`package.json`.
 
 ### `package.json`
 Manages dependencies for npm installs.
