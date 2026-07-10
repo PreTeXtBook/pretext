@@ -39,6 +39,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="single.line.output" select="'no'"/>
 <xsl:variable name="b-single-line" select="$single.line.output = 'yes'"/>
 
+<!-- The stylesheet makes checks that no RELAX-NG schema could ever      -->
+<!-- express, and offers extra advice and explanation besides.  So a     -->
+<!-- check may deliberately overlap the schema, when an explanation      -->
+<!-- is more helpful than a bare schema violation.                       -->
+
 <!-- Walk the tree, so messages appear in document order, not topically.  -->
 <!-- Be sure to recurse into larger elements after interrupting to        -->
 <!-- process certain situations.  This is not necessary for templates     -->
@@ -332,6 +337,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:apply-templates>
     </xsl:if>
+    <!-- The schema also forbids descriptions of a decorative image, but -->
+    <!-- a schema violation cannot explain itself; this message can.     -->
     <xsl:if test="@decorative = 'yes' and ((shortdescription and not(shortdescription = '')) or (description and not(description = '')))">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>

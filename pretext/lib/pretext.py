@@ -4893,9 +4893,10 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
     jing_messages = result.stdout.splitlines()
 
     # The "validation-plus" stylesheet performs checks the RELAX-NG
-    # schema cannot express, and provides advice besides.  Applied to
-    # the same assembled source, so locations are consistent with the
-    # schema messages.  Single-line output, one message per line.
+    # schema cannot express, and provides extra advice and explanation
+    # besides.  Applied to the same assembled source, so locations are
+    # consistent with the schema messages.  Single-line output, one
+    # message per line.
     plus_xsl = os.path.join(
         common.get_ptx_path(), "schema", "pretext-validation-plus.xsl"
     )
@@ -5076,8 +5077,8 @@ def _validation_report_preamble(schema_filename, assembled_source):
         "      (a schema can only describe parent-child relationships,",
         "      plus the attributes of each element)",
         "  (2) the PreTeXt \"validation-plus\" stylesheet made checks that",
-        "      no RELAX-NG schema could ever express, and offers advice",
-        "      besides",
+        "      no RELAX-NG schema could ever express, and offers extra",
+        "      advice and explanation besides",
         "",
         "Locations refer to the ASSEMBLED version of your source: your",
         "modular source files have been knitted together, and any version",
