@@ -656,18 +656,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- If "self" is a text node, then this variable will not include it -->
     <!-- since it is not an element, but it will begin with the element   -->
     <!-- *containing* the text node of interest, and hence be locatable.  -->
+    <!-- Paths here are complete: every element carries its count, so a   -->
+    <!-- program may consume them uniformly.  Presentation for a human    -->
+    <!-- (the consolidated report of the "pretext/pretext" script) may    -->
+    <!-- squelch the count of an element with no like-named siblings.     -->
     <xsl:variable name="ancestors" select="ancestor-or-self::*"/>
     <xsl:for-each select="$ancestors">
         <xsl:text>/</xsl:text>
         <xsl:value-of select="local-name(.)"/>
-        <!-- A count is only informative among like-named siblings; for -->
-        <!-- an element that is the only one of its name, it is clutter -->
-        <xsl:variable name="elt-name" select="local-name(.)"/>
-        <xsl:if test="preceding-sibling::*[local-name() = $elt-name] or following-sibling::*[local-name() = $elt-name]">
-            <xsl:text>[</xsl:text>
-            <xsl:number/>
-            <xsl:text>]</xsl:text>
-        </xsl:if>
+        <xsl:text>[</xsl:text>
+        <xsl:number/>
+        <xsl:text>]</xsl:text>
     </xsl:for-each>
 </xsl:template>
 
