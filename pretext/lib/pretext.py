@@ -4992,8 +4992,11 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
         elt = opening[near] if near is not None else None
         filename = file_of.get(elt, main_file)
         path = _numbered_path(elt) if elt is not None else ""
+        # every schema message is one check, named "schema"
         if terse:
-            report.append("{}\t{}\t{}\t{}".format(filename, path, line_number, body))
+            report.append(
+                "{}\t{}\t{}\tschema\t{}".format(filename, path, line_number, body)
+            )
         else:
             report.append(body)
             report.append("    file: {}".format(filename))
@@ -5002,6 +5005,7 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
             excerpt = _excerpt(line_number)
             if excerpt:
                 report.append("    text: {}".format(excerpt))
+            report.append("    check: schema")
             report.append("")
     if not terse and not jing_messages:
         report.extend(["(no messages)", ""])
@@ -5009,18 +5013,27 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
     if not terse:
         report.extend([banner, "Messages: PreTeXt \"validation-plus\" stylesheet", banner, ""])
     plus_form = re.compile(r"^(PTX:[A-Z]+): (/\S+) (.*)$")
+    # the message id trails the message text, set off in brackets
+    id_form = re.compile(r"^(.*) \[([a-z0-9-]+)\]$")
     for message in plus_messages:
         match = plus_form.match(message)
         if not match:
             report.append(message)
             continue
         severity, path, body = match.group(1), match.group(2), match.group(3)
+        id_match = id_form.match(body)
+        if id_match:
+            body, check_id = id_match.group(1), id_match.group(2)
+        else:
+            check_id = "no-validation-message-id-assigned"
         elt = _element_at_path(path)
         filename = file_of.get(elt, main_file)
         line_number = elt.sourceline if elt is not None else ""
         if terse:
             report.append(
-                "{}\t{}\t{}\t{}: {}".format(filename, path, line_number, severity, body)
+                "{}\t{}\t{}\t{}\t{}: {}".format(
+                    filename, path, line_number, check_id, severity, body
+                )
             )
         else:
             report.append("{}: {}".format(severity, body))
@@ -5031,6 +5044,7 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
                 excerpt = _excerpt(elt.sourceline)
                 if excerpt:
                     report.append("    text: {}".format(excerpt))
+            report.append("    check: {}".format(check_id))
             report.append("")
     if not terse and not plus_messages:
         report.extend(["(no messages)", ""])
@@ -5074,12 +5088,15 @@ def _validation_report_preamble(schema_filename, assembled_source):
         "has been deposited at",
         "    {}".format(assembled_source),
         "",
-        "Each message locates its problem four ways:",
+        "Each message locates its problem four ways, and then names",
+        "the check that raised it:",
         "",
-        "    file:  the source file where the problem lies",
-        "    path:  the location within the assembled source",
-        "    line:  the line number within the assembled source",
-        "    text:  an excerpt of the offending content",
+        "    file:   the source file where the problem lies",
+        "    path:   the location within the assembled source",
+        "    line:   the line number within the assembled source",
+        "    text:   an excerpt of the offending content",
+        "    check:  a short name for the check (\"schema\" for any",
+        "            message from \"jing\")",
         "",
         "Only \"file\" points into your own source files.  In particular,",
         "\"line\" is a line number of the deposited assembled source named",
