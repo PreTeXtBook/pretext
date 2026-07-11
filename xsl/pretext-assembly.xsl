@@ -4691,20 +4691,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Natural override for YouTube videos               -->
 <!-- Better - standalone page, with "View on You Tube" -->
 
-<!-- NB: ampersand is escaped for LaTeX use, be careful with switch to QR codes via Python! -->
-<!-- POTENTIAL BUG: this should be un-LaTeX'ed for general use and then  -->
-<!-- sanitized on the receiving end in the LaTeX conversion, or maybe    -->
-<!-- the LaTeX conversion will do just fine if the right URL package is  -->
-<!-- used and the ampersand is handled correctly?                        -->
+<!-- NB: this is a genuine URL, with no escaping: consumers apply     -->
+<!-- their own (the LaTeX conversion escapes the ampersand for its    -->
+<!-- "\href", HTML-derived conversions use it as-is, and the QR code  -->
+<!-- generator must encode exactly what a phone's camera should see). -->
 
 <xsl:template match="video[@youtube|@youtubeplaylist]" mode="static-url">
     <xsl:apply-templates select="." mode="youtube-view-url" />
     <xsl:if test="@start">
-        <xsl:text>\&amp;start=</xsl:text>
+        <xsl:text>&amp;start=</xsl:text>
         <xsl:value-of select="@start" />
     </xsl:if>
     <xsl:if test="@end">
-        <xsl:text>\&amp;end=</xsl:text>
+        <xsl:text>&amp;end=</xsl:text>
         <xsl:value-of select="@end" />
     </xsl:if>
 </xsl:template>
