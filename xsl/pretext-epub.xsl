@@ -1112,12 +1112,16 @@
                 <xsl:when test="@pi:generated and ($extension = 'jpg')">
                     <xsl:text>image/jpeg</xsl:text>
                 </xsl:when>
+                <!-- these images switch to PNG for a Kindle build (see    -->
+                <!-- "best-file-extension") so the media type must express -->
+                <!-- the same choice, else a reading system (or validator) -->
+                <!-- tries to parse PNG bytes as XML                       -->
                 <xsl:when test="latex-image|asymptote|mermaid|pf:prefigure">
-                    <xsl:text>image/svg+xml</xsl:text>
+                    <xsl:call-template name="best-media-type"/>
                 </xsl:when>
                 <!-- A 2D "sageplot" is just like any other image built from source -->
                 <xsl:when test="sageplot[not(@variant) or (@variant = '2d')]">
-                    <xsl:text>image/svg+xml</xsl:text>
+                    <xsl:call-template name="best-media-type"/>
                 </xsl:when>
                 <!-- NB: a 3D "sageplot" only comes in PNG and HTML variants, -->
                 <!-- so we cannot manufacture the preferable SVG version,     -->
