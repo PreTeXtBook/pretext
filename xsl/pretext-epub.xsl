@@ -276,6 +276,13 @@
     </exsl:document>
 </xsl:template>
 
+<!-- The "backmatter" has no page of its own (see above), so   -->
+<!-- a summary page never links to it: the links pass through  -->
+<!-- to its children, each of which is a genuine page          -->
+<xsl:template match="backmatter" mode="summary-nav">
+    <xsl:apply-templates select="*" mode="summary-nav"/>
+</xsl:template>
+
 <!-- The book element gets mined in various ways,            -->
 <!-- but the "usual" HTML treatment can/should be thrown out -->
 <!-- At fixed level 2, this is a summary page from an        -->
