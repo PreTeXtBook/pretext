@@ -1565,11 +1565,11 @@
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$math.format = 'mml'">
-                <xsl:copy-of select="$math/div[@class = 'mathml']/math:math"/>
+                <xsl:apply-templates select="$math/div[@class = 'mathml']/math:math" mode="mml-edit"/>
             </xsl:when>
             <!-- Kindle does best with MathML format -->
             <xsl:when test="$b-kindle">
-                <xsl:copy-of select="$math/div[@class = 'mathml']/math:math"/>
+                <xsl:apply-templates select="$math/div[@class = 'mathml']/math:math" mode="mml-edit"/>
             </xsl:when>
             <!-- 2020-07-17: reprs needed a new "span.speech" wrapper -->
             <xsl:when test="$math.format = 'speech'">
@@ -1590,6 +1590,21 @@
 <!-- Identity template as a mode coursing through SVGs  -->
 <!-- We are stream editing to satisfy the EPUB standard -->
 <!-- Mostly killing attrributes                         -->
+<!-- MathJax mints an HTML id from an equation's \tag for its own -->
+<!-- \eqref linking, which PreTeXt never uses; a tag used twice    -->
+<!-- (symbols as tags invite this) would duplicate the id, so     -->
+<!-- they are dropped, from SVG and MathML alike                  -->
+<xsl:template match="@id[starts-with(., 'mjx-eqn')]" mode="svg-edit"/>
+
+<!-- MathML travels nearly as-is: an identity, less the ids -->
+<xsl:template match="@id[starts-with(., 'mjx-eqn')]" mode="mml-edit"/>
+
+<xsl:template match="node()|@*" mode="mml-edit">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="mml-edit"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="node()|@*" mode="svg-edit">
     <xsl:copy>
         <xsl:apply-templates select="node()|@*" mode="svg-edit"/>
