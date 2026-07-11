@@ -1190,9 +1190,18 @@
                 <xsl:when test="sageplot[@variant = '3d']">
                     <xsl:text>image/png</xsl:text>
                 </xsl:when>
+                <xsl:when test="@source and ($extension = 'pdf')">
+                    <xsl:text>application/pdf</xsl:text>
+                </xsl:when>
+                <xsl:when test="@pi:generated and ($extension = 'pdf')">
+                    <xsl:text>application/pdf</xsl:text>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:message>PTX:BUG:     EPUB image media-type not determined</xsl:message>
                     <xsl:apply-templates select="." mode="location-report" />
+                    <!-- an empty media-type is invalid; this is the -->
+                    <!-- honest generic type while the bug survives  -->
+                    <xsl:text>application/octet-stream</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
