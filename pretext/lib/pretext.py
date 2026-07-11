@@ -475,9 +475,9 @@ def asymptote_conversion(
                 # perhaps an older version is being employed
                 asy_cli = asy_executable_cmd + ["-f", outform, "-noV"]
                 if outform in ["pdf", "eps"]:
-                    asy_cli += ["-noprc", "-iconify", "-tex", "xelatex", "-batchMask"]
+                    asy_cli += ["-noprc", "-offscreen", "-tex", "xelatex", "-batchMask"]
                 elif outform in ["svg", "png"]:
-                    asy_cli += ["-render=4", "-tex", "xelatex", "-iconify"]
+                    asy_cli += ["-render=4", "-tex", "xelatex", "-offscreen"]
             if method == "server":
                 alberta = "http://asymptote.ualberta.ca:10007?f={}".format(outform)
             # loop over .asy files, doing conversions
