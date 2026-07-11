@@ -449,12 +449,15 @@
         <item id="table-contents"
               href="{$xhtml-dir}/table-contents.xhtml"
               media-type="application/xhtml+xml">
-            <!-- TODO: If the TOC expands to include more than -->
-            <!-- chapter and appendix, this will need revision. -->
+            <!-- The file has been written by now, so rather than    -->
+            <!-- predict which division titles the table of contents -->
+            <!-- displays, read it and see if any mathematics landed -->
+            <!-- there, exactly as "manifest-item" does per chunk    -->
+            <xsl:variable name="toc-contents" select="document(concat($tmpdir, '/', $content-dir, '/', $xhtml-dir, '/table-contents.xhtml'))"/>
             <xsl:attribute name="properties">
                 <xsl:choose>
-                    <xsl:when test="($b-is-book and ($document-root//chapter/title/m or $document-root//appendix/title/m))">
-                    <xsl:choose>
+                    <xsl:when test="$toc-contents//svg:svg | $toc-contents//math:math">
+                        <xsl:choose>
                             <xsl:when test="$math.format = 'mml' or
                                             $math.format = 'kindle'">
                                 <xsl:text>nav mathml</xsl:text>
@@ -462,6 +465,9 @@
                             <xsl:when test="$math.format = 'svg'">
                                 <xsl:text>nav svg</xsl:text>
                             </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>nav</xsl:text>
+                            </xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
