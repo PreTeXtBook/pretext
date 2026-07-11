@@ -1492,6 +1492,35 @@
     </xsl:for-each>
 </xsl:template>
 
+<!-- A hyperlink relative to the document (no scheme in the       -->
+<!-- address) points *into* the reading system's container, at a  -->
+<!-- file that is not packaged; the visible text appears, with no -->
+<!-- dead hyperlink                                                -->
+<xsl:template match="url[@href and not(contains(@href, ':'))]">
+    <xsl:choose>
+        <xsl:when test="node()">
+            <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@visual"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A data file packaged into a document is intended for reader  -->
+<!-- download, which no reading system offers; the reference      -->
+<!-- renders as its visible text, with no dead hyperlink          -->
+<xsl:template match="dataurl[@source and not(@href)]">
+    <xsl:choose>
+        <xsl:when test="node()">
+            <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@visual"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- #### -->
 <!-- Math -->
 <!-- #### -->
