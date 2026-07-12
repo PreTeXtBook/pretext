@@ -385,9 +385,20 @@ class BRF:
         orginal_cursor = self.cursor
         start_page = orginal_cursor.page_number()
         start_line = -orginal_cursor.remaining_lines()
-        # all changes (cursor movement, text-wrapping) will
-        # occur in the temporary/sandbox/throwaway cursor
-        sandbox_brf = copy.deepcopy(self)
+        # All changes (cursor movement, text-wrapping) occur in a
+        # throwaway renderer: empty, but positioned exactly where
+        # this one is.  Processing decisions depend only on the
+        # cursor, the line buffer, and the modes below -- never on
+        # accumulated output -- so the trial reproduces them
+        # faithfully at the cost of processing one segment.
+        page_format = 'emboss' if self.cursor.embossing() else 'electronic'
+        symbols = 'early' if self.symbols_early else 'late'
+        sandbox_brf = BRF(page_format, self.cursor.page_width, self.cursor.page_height, symbols)
+        sandbox_brf.cursor = copy.copy(self.cursor)
+        sandbox_brf.line_buffer = copy.copy(self.line_buffer)
+        sandbox_brf.toc_mode = self.toc_mode
+        sandbox_brf.toc_dict = dict(self.toc_dict)
+        sandbox_brf.in_nemeth_box = self.in_nemeth_box
         sandbox_cursor = sandbox_brf.cursor
         # Do the deal, in a sandbox
         # Type will be "Block" or "Segment"
