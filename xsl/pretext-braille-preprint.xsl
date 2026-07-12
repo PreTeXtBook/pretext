@@ -267,10 +267,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The entry template "waits" for the "$math-meld-rtf" and    -->
 <!-- "$segmented-rtf" global variables to form, then the actual -->
-<!-- output is a run of modal "meld-runin" templates as a sort  -->
-<!-- of post-processing step.                                   -->
+<!-- output comes from two post-processing passes: the modal    -->
+<!-- "meld-runin" templates absorb run-in titles into their     -->
+<!-- segments, and then the modal "flatten-runs" templates      -->
+<!-- dissolve nested font-change markup into a flat sequence    -->
+<!-- of "run" elements bearing composite "@typeform" values.    -->
 <xsl:template match="/">
-    <xsl:apply-templates select="exsl:node-set($segmented-rtf)/brf" mode="meld-runin"/>
+    <xsl:variable name="melded-runin-rtf">
+        <xsl:apply-templates select="exsl:node-set($segmented-rtf)/brf" mode="meld-runin"/>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($melded-runin-rtf)/brf" mode="flatten-runs"/>
+</xsl:template>
+
+<!-- ############################ -->
+<!-- Flatten Font Changes to Runs -->
+<!-- ############################ -->
+
+<!-- Font-change markup ("italic", "bold", "code") arrives from the -->
+<!-- earlier pass as elements, which may nest ("italic" containing  -->
+<!-- "code", say).  A formatter wants a flat sequence, so each text -->
+<!-- node becomes a "run" element whose "@typeform" records every   -->
+<!-- font change in effect, as space-separated tokens.  Text with   -->
+<!-- no font change rides along bare.  The font-change elements     -->
+<!-- themselves evaporate.  Mathematics ("math") is already braille -->
+<!-- cells and is preserved whole, its interior untouched.          -->
+
+<!-- Dissolve, children continue -->
+<xsl:template match="italic|bold|code" mode="flatten-runs">
+    <xsl:apply-templates select="node()" mode="flatten-runs"/>
+</xsl:template>
+
+<!-- Mathematics is opaque, xerox entirely -->
+<xsl:template match="math" mode="flatten-runs">
+    <xsl:copy-of select="."/>
+</xsl:template>
+
+<!-- Text nodes inside a segment (or a converted run-in title)  -->
+<!-- either ride bare (no font change) or become a "run".  The  -->
+<!-- ancestor axis sees the font-change elements because they   -->
+<!-- are still present in the tree under examination.           -->
+<xsl:template match="text()" mode="flatten-runs">
+    <xsl:variable name="typeform">
+        <xsl:if test="ancestor::italic">
+            <xsl:text>italic </xsl:text>
+        </xsl:if>
+        <xsl:if test="ancestor::bold">
+            <xsl:text>bold </xsl:text>
+        </xsl:if>
+        <xsl:if test="ancestor::code">
+            <xsl:text>code </xsl:text>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$typeform = ''">
+            <xsl:value-of select="."/>
+        </xsl:when>
+        <xsl:otherwise>
+            <run>
+                <xsl:attribute name="typeform">
+                    <xsl:value-of select="normalize-space($typeform)"/>
+                </xsl:attribute>
+                <xsl:value-of select="."/>
+            </run>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Xerox machine.  Elements and attributes only: text nodes have -->
+<!-- their own template above, and it must win the match.          -->
+<xsl:template match="*|@*" mode="flatten-runs">
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="flatten-runs"/>
+    </xsl:copy>
 </xsl:template>
 
 <!-- Process segments here, looking for run-in titles/headings -->

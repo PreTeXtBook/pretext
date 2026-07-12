@@ -315,11 +315,6 @@ class BRF:
     nemeth_open = "\u2838\u2829"
     nemeth_close = "\u2838\u2831"
 
-    # We need to connect the "trans1" emphasis scheme of the liblouis
-    # "en-ueb-g1.ctb" table with a typeform bit we can use to switch
-    # to this variant when we translate inline code phrases
-    trans1_bit = louis.getTypeformForEmphClass(["en-ueb-g2.ctb"], 'trans1')
-
     def __init__(self, page_format, width, height, symbols):
         self.out_buffer = ''
         self.accumulator = []
@@ -460,7 +455,7 @@ class BRF:
         # the line buffer for the last line prior to its formation.
         if finish_penultimate or finish_last:
             num = str(self.cursor.page_number())
-            braille_num = self.translate_segment('text', num)
+            braille_num = BRF.translate_print(num)
 
         # before leaving last line, add a page number, flush right
         if finish_last:
@@ -528,8 +523,15 @@ class BRF:
 
     def write_fragment(self, typeface, aline, math_punctuation, seg):
 
-        # Nemeth math needs special care, and is already braille
-        # Otherwise, have liblouis translate with correct typeface
+        # Body text arrives from the translation pass as braille
+        # already, so most fragments ride through untouched.  The
+        # exceptions: inline mathematics ("math") gets Nemeth
+        # indicators and space fusing; renderer-generated print
+        # ("print": page numbers, guide dots) translates here; and
+        # anything still holding Unicode braille cells (display
+        # mathematics under a "late" election, or print residue from
+        # Speech Rule Engine) goes through liblouis, where cells
+        # convert dot-for-dot and residue translates as print.
         # After this, `aline` is a BRF string, with spaces, nbsps
         if typeface == "math":
             aline = self.massage_math(aline, math_punctuation)
@@ -540,8 +542,8 @@ class BRF:
             # (a line still holding cells has print residue, and falls
             # through for the same translation as a late election)
             aline = aline.replace("\xA0", " ")
-        else:
-            aline = BRF.translate_segment(typeface, aline)
+        elif (typeface == "print") or BRF.contains_unicode_braille(aline):
+            aline = BRF.translate_print(aline)
 
         # When a word is output, it gets the space from the previous split,
         # unless it is the first word of a line and the prior space became
@@ -671,18 +673,20 @@ class BRF:
         if self.toc_mode:
             self.adjust_text_width(-6)
 
+        # The translation pass has already made braille of all the
+        # body text, so a segment holds braille text with "math"
+        # islands (inline mathematics awaiting Nemeth indicators
+        # and space fusing).  Anything else indicates the
+        # intermediate XML has structure this renderer cannot
+        # express.  Degrade rather than halt: immediate text is
+        # rendered as text, and content nested deeper is dropped.
         sxml = s.xml
         if sxml.text:
             self.write_fragment("text", sxml.text, None, s)
         children = list(sxml)
         for c in children:
-            # A child that is not a recognized typeface means the
-            # intermediate XML has structure nested inside a segment,
-            # which this renderer cannot express.  Degrade rather than
-            # halt: immediate text is rendered as plain text, and any
-            # content nested deeper is dropped from the output.
             typeface = c.tag
-            if typeface not in ("italic", "bold", "code", "math"):
+            if typeface != "math":
                 print('BUG: unexpected element "{}" inside a segment; its text is rendered plain and any nested content is dropped'.format(c.tag))
                 typeface = "text"
             if c.text:
@@ -710,7 +714,9 @@ class BRF:
                     guide_dots -= 1
                 if guide_dots > 0:
                     guide[1] = '\u2810' * guide_dots
-                self.write_fragment("text", ''.join(guide) + page_num, None, s)
+                # renderer-generated print: the page number digits
+                # (the guide dots are cells, converting dot-for-dot)
+                self.write_fragment("print", ''.join(guide) + page_num, None, s)
 
         # finished with a segment
         # flush buffer, move to new line, maybe a new page
@@ -913,39 +919,14 @@ class BRF:
         return any(("\u2801" <= c) and (c <= "\u28FF") for c in aline)
 
     @staticmethod
-    def translate_segment(typeface, aline):
-
+    def translate_print(aline):
+        # Renderer-generated print (page numbers, guide dots) and
+        # Unicode braille cells (which convert dot-for-dot) become
+        # BRF ASCII symbols.  Body text never passes through here:
+        # it arrives already translated, typeforms and all, from the
+        # translation pass (braille_translate.py).
         # g2 includes g1 explicitly
-        tableList = ["en-ueb-g2.ctb"]
-
-        # Typeforms bits
-        #    from Python, which is from C header, louis.h
-        # plain_text = 0x0000
-        # emph_1 = comp_emph_1 = italic = 0x0001 = 1
-        # emph_2 = comp_emph_2 = underline = 0x0002 = 2
-        # emph_3 = comp_emph_3 = bold = 0x0004 = 4
-        # computer_braille = 0x0400 = 1024
-        # no_contract = 0x1000 = 4096
-
-        # `BRF.trans1_bit` is a class variable provided by the louis
-        # package for switching into a transcriber-defined emphasis class
-        # 2023-03-09: apparently  0x0020 = 32  for "trans1" (could change?)
-
-        if typeface == "text":
-            typeforms = None
-        elif typeface == "italic":
-            typeforms = [1] * len(aline)
-        elif typeface == "bold":
-            typeforms = [4] * len(aline)
-        elif typeface == "code":
-            typeforms = [BRF.trans1_bit] * len(aline)
-        else:
-            # Callers vet typefaces, so this is a defensive fallback:
-            # translate as plain text rather than halt the conversion.
-            print('BUG: did not recognize typeface "{}"; translating as plain text'.format(typeface))
-            typeforms = None
-
-        return louis.translateString(tableList, aline, typeforms, 0)
+        return louis.translateString(["en-ueb-g2.ctb"], aline, None, 0)
 
     # End BRF object definition
 
@@ -958,6 +939,12 @@ def parse_segments(xml_simple, out_file, page_format):
 
     huge_parser = ET.XMLParser(huge_tree=True)
     src_tree = ET.parse(xml_simple, parser=huge_parser)
+
+    # This renderer requires input whose body text is braille
+    # already; rendering print text would silently produce
+    # unreadable output, so refuse it outright.
+    if src_tree.getroot().get("translated") != "yes":
+        raise ValueError("the braille renderer requires input from the translation pass, and this file has not been through it")
 
     # how braille cells are represented in the preprint:
     # "late" is Unicode braille cells (the default), "early" is
