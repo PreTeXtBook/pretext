@@ -14,6 +14,7 @@
                     Revealjs? &
                     Epub? &
                     Jupyter? &
+                    Braille? &
                     Webwork?
                 }
             
@@ -413,6 +414,14 @@
             Jupyter =
                 element jupyter {
                     attribute kernel { "sagemath" | "python3" }
+                }
+            
+            Braille =
+                element braille {
+                    element page {
+                        attribute width { xsd:positiveInteger }?,
+                        attribute height { xsd:positiveInteger }?
+                    }
                 }
             
             Webwork =

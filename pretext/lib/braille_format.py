@@ -970,8 +970,13 @@ def parse_segments(xml_simple, out_file, page_format):
     # BRF ASCII symbols (a developer convenience for debugging)
     symbols = src_tree.getroot().get("brf-symbols", "late")
 
+    # page geometry, elected in the publication file and validated
+    # upstream: cells in a line, lines on an embossed page
+    page_width = int(src_tree.getroot().get("page-width", "40"))
+    page_height = int(src_tree.getroot().get("page-height", "25"))
+
     # Embossed, page shape
-    brf = BRF(page_format, 40, 25, symbols)
+    brf = BRF(page_format, page_width, page_height, symbols)
 
     top_elts = src_tree.xpath("/brf/segment|/brf/block")
 
@@ -985,7 +990,7 @@ def parse_segments(xml_simple, out_file, page_format):
         brf.flush()
 
     # Prepare a new BRF object, but copy out ToC page numbers
-    front = BRF(page_format, 40, 25, symbols)
+    front = BRF(page_format, page_width, page_height, symbols)
     front.toc_mode = True
     front.toc_dict = brf.toc_dict
 

@@ -407,6 +407,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="brf-symbols">
             <xsl:value-of select="$brf-symbols"/>
         </xsl:attribute>
+        <!-- Page geometry, from the publication file (or the      -->
+        <!-- defaults), for the renderer: cells in a line, lines   -->
+        <!-- on an embossed page.                                  -->
+        <xsl:attribute name="page-width">
+            <xsl:value-of select="$braille-page-width"/>
+        </xsl:attribute>
+        <xsl:attribute name="page-height">
+            <xsl:value-of select="$braille-page-height"/>
+        </xsl:attribute>
         <!-- centered heading on line 1 -->
         <segment centered="yes" lines-after="1">Transcriber Notes</segment>
         <!-- Literal text for each note, control whitespace,  -->

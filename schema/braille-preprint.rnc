@@ -76,6 +76,10 @@ BrfFile =
         # braille of every piece of print text; the renderer
         # refuses a file without it
         attribute translated { string "yes" }?,
+        # page geometry, from the publication file (or defaults):
+        # cells in a line, and lines on an embossed page
+        attribute page-width { xsd:positiveInteger },
+        attribute page-height { xsd:positiveInteger },
         (Segment | Block)*
     }
 

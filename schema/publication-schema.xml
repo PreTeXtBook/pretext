@@ -88,7 +88,7 @@
         <title>Gross Structure</title>
 
         <p>
-            A publication file always has the root element <tag>publication</tag>.  After that, all elements are optional.  Those elements include common options, and options for numbering, latex, html, reveal.js, epub, source, and <webwork/>.  These can come in any order.
+            A publication file always has the root element <tag>publication</tag>.  After that, all elements are optional.  Those elements include common options, and options for numbering, latex, html, reveal.js, epub, braille, source, and <webwork/>.  These can come in any order.
         </p>
 
         <fragment xml:id="gross-structure">
@@ -105,6 +105,7 @@
                     Revealjs? &amp;
                     Epub? &amp;
                     Jupyter? &amp;
+                    Braille? &amp;
                     Webwork?
                 }
             </code>
@@ -640,6 +641,27 @@
         </fragment>
     </section>
 
+    <section>
+        <title>Braille Options</title>
+
+        <p>
+            These option(s) control the braille output.  The page geometry describes an embossed page: the number of cells in a line, and the number of lines on a page.  The default geometry is 40 cells by 25 lines, a common size for North American embossers.
+        </p>
+
+        <fragment xml:id="braille">
+            <title>Braille Options</title>
+            <code>
+            Braille =
+                element braille {
+                    element page {
+                        attribute width { xsd:positiveInteger }?,
+                        attribute height { xsd:positiveInteger }?
+                    }
+                }
+            </code>
+        </fragment>
+    </section>
+
 
     <section>
         <title><webwork/> Options</title>
@@ -686,6 +708,7 @@
             <fragref ref="revealjs" />
             <fragref ref="epub" />
             <fragref ref="jupyter" />
+            <fragref ref="braille" />
             <fragref ref="webwork" />
             <code>
             }
