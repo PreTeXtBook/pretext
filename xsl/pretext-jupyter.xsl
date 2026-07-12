@@ -61,8 +61,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- iPython files as output -->
 <xsl:variable name="file-extension" select="'.ipynb'" />
 
-<xsl:param name="jupyter.kernel" select="''" />
-
 <!-- Disable clipboardable -->
 <xsl:template name="insert-clipboardable-class"/>
 
@@ -275,20 +273,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- conversion must strip the suffix when writing final files. -->
     <exsl:document href="{$the-filename}.xml" method="xml" encoding="UTF-8">
         <notebook>
-            <!-- The kernel is communicated to the Python routine, which  -->
-            <!-- owns all remaining notebook-level metadata.  "sagemath"  -->
-            <!-- as the kernel name will be the latest kernel in the Sage -->
-            <!-- distribution Jupyter, and in CoCalc.                     -->
+            <!-- The kernel comes from the publication file (with a       -->
+            <!-- deprecated stringparam honored), and is communicated to  -->
+            <!-- the Python routine, which owns all remaining             -->
+            <!-- notebook-level metadata.                                 -->
             <xsl:attribute name="kernel">
-                <xsl:choose>
-                    <xsl:when test="contains('|python3|Python3|python 3|Python 3|py|Py|python|Python|'
-                        , concat('|', $jupyter.kernel, '|'))">
-                        <xsl:text>python3</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>sagemath</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:value-of select="$jupyter-kernel"/>
             </xsl:attribute>
             <xsl:copy-of select="$cell-list"/>
         </notebook>
