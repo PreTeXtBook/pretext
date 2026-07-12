@@ -3,6 +3,7 @@
 
 coloraide
 lxml
+nbformat
 pdfCropMargins >= 1.0.9, < 1.1
 playwright
 PyPDF2 >= 2.5, <2.6
