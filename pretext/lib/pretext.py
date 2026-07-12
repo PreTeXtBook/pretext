@@ -2762,6 +2762,64 @@ def _split_brf(filename):
 ####################
 
 
+def _sanitize_svg_for_epub(directory):
+    """Rewrite SVG images beneath a directory into EPUB-legal form
+
+    EPUB forbids a document type declaration with an external
+    identifier, and the external entity declarations riding along in
+    an SVG 1.1 DOCTYPE (Sage, and some editors, produce these).
+    Parsing and re-serializing sheds the DOCTYPE.  Two content
+    repairs ride along, for defects observed from image generators:
+    a "path" with no data draws nothing but is a validity error, so
+    it is removed; and a "role" attribute on the root must be one of
+    the three values EPUB sanctions for a foreign resource, so any
+    other value becomes "img".
+    """
+    import glob
+
+    parser = ET.XMLParser(load_dtd=False, no_network=True, resolve_entities=False)
+    for svg_file in glob.glob(os.path.join(directory, "**", "*.svg"), recursive=True):
+        try:
+            tree = ET.parse(svg_file, parser=parser)
+        except Exception:
+            log.warning("could not parse {} to sanitize it for EPUB; it will be employed unchanged and may cause validation errors".format(svg_file))
+            continue
+        root = tree.getroot()
+        svg_namespace = "http://www.w3.org/2000/svg"
+        xlink_namespace = "http://www.w3.org/1999/xlink"
+        # fragments referenced within the image, so an (empty) target
+        # is never removed out from under a "use" reference
+        referenced = set()
+        for element in root.iter():
+            for key in ["{{{}}}href".format(xlink_namespace), "href"]:
+                value = element.get(key)
+                if value and value.startswith("#"):
+                    referenced.add(value[1:])
+        for path in root.iter("{{{}}}path".format(svg_namespace)):
+            if not path.get("d"):
+                if path.get("id") in referenced:
+                    # an empty-but-referenced path is a legitimate
+                    # no-op (a font's space glyph, say) but the
+                    # attribute is required, so draw nothing, validly
+                    path.set("d", "M0 0")
+                else:
+                    parent = path.getparent()
+                    if parent is not None:
+                        parent.remove(path)
+        # a "name" attribute is not valid on any SVG element
+        # (mermaid decorates shapes with them)
+        for element in root.iter("{{{}}}*".format(svg_namespace)):
+            if element.get("name") is not None:
+                del element.attrib["name"]
+        if root.get("role") and root.get("role") not in ["application", "document", "img"]:
+            root.set("role", "img")
+        # serializing the root element omits the document type
+        # declaration; serializing the whole document would write
+        # back the declaration lxml recorded when reading the file
+        with open(svg_file, "wb") as handle:
+            handle.write(ET.tostring(root, xml_declaration=True, encoding="utf-8"))
+
+
 def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, stringparams):
     """Produce complete document in an EPUB container"""
 
@@ -3112,6 +3170,10 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
             # traceback.print_exc()
             log.warning(msg.format(sourcename, filename))
             log.warning(traceback.format_exc())
+
+    # staged SVG images arrive as generated, or as an author provides
+    # them; neither is guaranteed to satisfy EPUB's restrictions
+    _sanitize_svg_for_epub(xhtml_dir)
 
     # The build/temp directory has a lot of cruft
     # Leave it for the nozip option (debugging)
