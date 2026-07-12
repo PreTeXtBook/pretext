@@ -773,6 +773,14 @@
         <!-- Decide what to do with preview images, etc. -->
         <images>
             <xsl:for-each select="$document-root//image">
+                <xsl:variable name="write-filename">
+                    <xsl:apply-templates select="." mode="epub-base-filename">
+                        <xsl:with-param name="purpose" select="'write'"/>
+                    </xsl:apply-templates>
+                </xsl:variable>
+                <!-- a PDF-only image is replaced by a placeholder, -->
+                <!-- so the file itself is not copied in            -->
+                <xsl:if test="not(substring($write-filename, string-length($write-filename) - 3) = '.pdf')">
                 <image>
                     <!-- filename begins with directories from publisher file -->
                     <xsl:attribute name="sourcename">
@@ -786,6 +794,7 @@
                         </xsl:apply-templates>
                     </xsl:attribute>
                 </image>
+                </xsl:if>
             </xsl:for-each>
         </images>
     </packaging>
@@ -1133,6 +1142,14 @@
             <xsl:with-param name="filename" select="@source|@pi:generated" />
         </xsl:call-template>
     </xsl:variable>
+    <xsl:variable name="image-filename">
+        <xsl:apply-templates select="." mode="epub-base-filename">
+            <xsl:with-param name="purpose" select="'write'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <!-- a PDF-only image is never displayed, never packaged: -->
+    <!-- a placeholder appears in its place (see below)       -->
+    <xsl:if test="not(substring($image-filename, string-length($image-filename) - 3) = '.pdf')">
     <!-- item  element for manifest -->
     <xsl:element name="item" namespace="http://www.idpf.org/2007/opf">
         <!-- internal id of the image -->
@@ -1141,9 +1158,7 @@
         <xsl:attribute name="href">
             <xsl:value-of select="$xhtml-dir" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="epub-base-filename">
-                <xsl:with-param name="purpose" select="'write'"/>
-            </xsl:apply-templates>
+            <xsl:value-of select="$image-filename"/>
         </xsl:attribute>
         <!-- media attribute -->
         <xsl:attribute name="media-type">
@@ -1190,12 +1205,6 @@
                 <xsl:when test="sageplot[@variant = '3d']">
                     <xsl:text>image/png</xsl:text>
                 </xsl:when>
-                <xsl:when test="@source and ($extension = 'pdf')">
-                    <xsl:text>application/pdf</xsl:text>
-                </xsl:when>
-                <xsl:when test="@pi:generated and ($extension = 'pdf')">
-                    <xsl:text>application/pdf</xsl:text>
-                </xsl:when>
                 <xsl:otherwise>
                     <xsl:message>PTX:BUG:     EPUB image media-type not determined</xsl:message>
                     <xsl:apply-templates select="." mode="location-report" />
@@ -1206,6 +1215,7 @@
             </xsl:choose>
         </xsl:attribute>
     </xsl:element>
+    </xsl:if>
     <!-- likely a dead-end here, but we examine children anyway -->
     <xsl:apply-templates select="*" mode="manifest" />
 </xsl:template>
@@ -1240,33 +1250,50 @@
 </xsl:template>
 
 <!-- Now the actual image inclusion where born -->
+<!-- EPUB reading systems display no PDF, so an image available     -->
+<!-- only in that format (STACK exercises supply these) becomes a   -->
+<!-- placeholder, with a warning at build time.  The manifest       -->
+<!-- template asks the identical question, so the unusable file is  -->
+<!-- not packaged either.                                           -->
 <xsl:template match="image">
-    <xsl:element name="img">
-        <xsl:attribute name="src">
-            <xsl:apply-templates select="." mode="epub-base-filename">
-                <xsl:with-param name="purpose" select="'write'"/>
-            </xsl:apply-templates>
-        </xsl:attribute>
-        <xsl:if test="@width">
-            <xsl:attribute name="style">
-                <xsl:text>width: </xsl:text>
-                <xsl:value-of select="@width" />
-                <xsl:text>; margin: 0 auto;</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
-    </xsl:element>
-    <xsl:if test="description">
-        <details class="image-description">
-            <summary>
-                <xsl:call-template name="insert-symbol">
-                    <xsl:with-param name="name" select="'description'"/>
-                </xsl:call-template>
-            </summary>
-            <div>
-                <xsl:apply-templates select="description"/>
-            </div>
-        </details>
-    </xsl:if>
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="epub-base-filename">
+            <xsl:with-param name="purpose" select="'write'"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="substring($filename, string-length($filename) - 3) = '.pdf'">
+            <xsl:message>PTX:WARNING: an image is available only as a PDF, which an EPUB reading system will not display; a placeholder appears in its place</xsl:message>
+            <xsl:apply-templates select="." mode="location-report"/>
+            <p class="image-placeholder">[An image belongs here, but it is available only in PDF form, which EPUB does not display.]</p>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:element name="img">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="$filename"/>
+                </xsl:attribute>
+                <xsl:if test="@width">
+                    <xsl:attribute name="style">
+                        <xsl:text>width: </xsl:text>
+                        <xsl:value-of select="@width" />
+                        <xsl:text>; margin: 0 auto;</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
+            </xsl:element>
+            <xsl:if test="description">
+                <details class="image-description">
+                    <summary>
+                        <xsl:call-template name="insert-symbol">
+                            <xsl:with-param name="name" select="'description'"/>
+                        </xsl:call-template>
+                    </summary>
+                    <div>
+                        <xsl:apply-templates select="description"/>
+                    </div>
+                </details>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ######### -->
