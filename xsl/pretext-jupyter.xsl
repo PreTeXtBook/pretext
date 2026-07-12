@@ -396,11 +396,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="$latex-packages-mathjax" />
                     <!-- Sequence replacements if \gt and/or \amp need to go -->
                     <xsl:value-of select="str:replace($latex-macros,'\newcommand{\lt}{&lt;}&#xa;', '')"/>
+                    <!-- "math support" macros, mirroring the base HTML template -->
+                    <xsl:call-template name="fillin-math"/>
+                    <!-- legacy built-in support for "slanted|beveled|nice" fractions -->
+                    <xsl:if test="$b-has-sfrac">
+                        <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
+                    </xsl:if>
                 </xsl:with-param>
             </xsl:call-template>
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
+</xsl:template>
+
+<!-- An override of the template in pretext-common.xsl.  The        -->
+<!-- publisher's "shade" style needs \definecolor and \colorbox,    -->
+<!-- from a MathJax extension a notebook's configuration does not   -->
+<!-- load (and we cannot touch); an unknown macro renders literally -->
+<!-- as mathematics.  So "shade" degrades to the visually closest   -->
+<!-- style, "box", which is core TeX throughout.  The "underline"   -->
+<!-- style is also safe, and is reproduced verbatim.                -->
+<xsl:template name="fillin-math">
+    <xsl:choose>
+        <xsl:when test="$fillin-math-style = 'underline'">
+            <xsl:text>\newcommand{\fillinmath}[1]{\mathchoice</xsl:text>
+            <xsl:text>{\underline{\displaystyle     \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\textstyle        \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\scriptstyle      \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\scriptscriptstyle\phantom{\ \,#1\ \,}}}}&#xa;</xsl:text>
+        </xsl:when>
+        <!-- "box", and "shade" degraded to "box" -->
+        <xsl:otherwise>
+            <xsl:text>\newcommand{\fillinmath}[1]{\mathchoice</xsl:text>
+            <xsl:text>{\boxed{\displaystyle     \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\textstyle        \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\scriptstyle      \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\scriptscriptstyle\phantom{\,#1\,}}}}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
