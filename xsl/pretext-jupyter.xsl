@@ -221,8 +221,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to adjust the page-oriented flavor of the base HTML (which exists   -->
 <!-- as part of accommodating printing from a web browser). All children  -->
 <!-- of a "page" get processed, and elsewhere get recognized as items    -->
-<!-- deserving of their own cells.                                       -->
-<xsl:template match="worksheet/page">
+<!-- deserving of their own cells.  A "handout" structures its content   -->
+<!-- with "page" identically.                                            -->
+<xsl:template match="worksheet/page|handout/page">
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
@@ -402,6 +403,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Sage code -->
 <!-- Should evolve to accomodate general template -->
+<!-- A "sage" element whose parent produces cells (a division or   -->
+<!-- pseudo-division) becomes a genuine executable code cell.  But -->
+<!-- cells cannot nest, so a "sage" buried within a block (say an  -->
+<!-- "example") that is mid-formation as a single markdown cell    -->
+<!-- must not fire the cell machinery: it renders as a static      -->
+<!-- "pre" element within the block's HTML.  (Splitting such a     -->
+<!-- block into fragments around executable cells is the eventual  -->
+<!-- goal; this static form is the fallback.)                      -->
 <xsl:template match="sage">
     <!-- formulate lines of code -->
     <xsl:variable name="loc">
@@ -411,15 +420,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:variable>
-    <!-- we trim a final trailing newline -->
-    <!-- as we wrap into a single string  -->
-    <xsl:call-template name="code-cell">
-        <xsl:with-param name="content">
-            <xsl:call-template name="begin-string" />
+    <xsl:choose>
+        <!-- contexts whose children each become top-level cells,   -->
+        <!-- mirroring the block-level wildcard template            -->
+        <xsl:when test="parent::*[&STRUCTURAL-FILTER;] or parent::paragraphs or parent::page or parent::introduction[parent::*[&STRUCTURAL-FILTER;]] or parent::conclusion[parent::*[&STRUCTURAL-FILTER;]]">
+            <!-- we trim a final trailing newline -->
+            <!-- as we wrap into a single string  -->
+            <xsl:call-template name="code-cell">
+                <xsl:with-param name="content">
+                    <xsl:call-template name="begin-string" />
+                        <xsl:value-of select="substring($loc, 1, string-length($loc)-1)" />
+                    <xsl:call-template name="end-string" />
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <!-- interior to a block: a static rendering, as element  -->
+        <!-- nodes that serialize as part of the enclosing cell   -->
+        <xsl:otherwise>
+            <pre class="code-display">
                 <xsl:value-of select="substring($loc, 1, string-length($loc)-1)" />
-            <xsl:call-template name="end-string" />
-        </xsl:with-param>
-    </xsl:call-template>
+            </pre>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- #### -->
