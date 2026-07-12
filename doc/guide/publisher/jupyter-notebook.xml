@@ -7,8 +7,59 @@
 <!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<chapter xml:id="jupyter-notebook">
-    <title>(*)  Conversion to Jupyter Notebooks</title>
+<chapter xml:id="jupyter-notebook" label="jupyter-notebook">
+    <title>Conversion to Jupyter Notebooks</title>
+    <idx>Jupyter notebook</idx>
 
-        <p>TODO</p>
+    <introduction>
+        <p>A Jupyter notebook is a document, rendered in a web browser, that mixes formatted text with programming code that a reader can execute, edit, and execute again.  For a book with <tag>sage</tag> elements this is an attractive format: the narrative reads like the <init>HTML</init> version, while every piece of Sage code becomes <em>live</em>.  This conversion produces a collection of notebooks, one for each <q>page</q> that the online version would have, in the standard <c>ipynb</c> format that Jupyter, JupyterLab, CoCalc, and similar applications all read.</p>
+
+        <p>The text cells are built with the same machinery as the online version, so many of the publication file options for <init>HTML</init> (<xref ref="publication-file-online"/>) carry over to a Jupyter build.  The options below are the notebook-specific ones.</p>
+
+        <p>The conversion is experimental and incomplete.  Exotic constructions may be missing or may render as static placeholders, and a build will announce this.  But narrative, mathematics, images, tables, worksheets, and executable Sage code all translate well.</p>
+    </introduction>
+
+    <section xml:id="jupyter-building" label="jupyter-building">
+        <title>Building Notebooks</title>
+
+        <p>The <c>pretext/pretext</c> script has two formats for the conversion.<cd>
+            <cline>pretext/pretext -c doc -f jupyter -p publication.xml -d output/jupyter source.xml</cline>
+            <cline>pretext/pretext -c doc -f jupyter-zip -p publication.xml -d output/jupyter source.xml</cline>
+        </cd>Every notebook is validated against the official notebook schema as it is built, so a completed build is a well-formed one.  Images from your managed directories are copied alongside the notebooks, so the output is complete and portable: give a reader the whole directory, or serve it from a JupyterHub, or drop it into CoCalc.  The <c>jupyter-zip</c> format produces the same collection bundled as a single zip file, convenient to pass along.</p>
+
+        <p>The Python that runs the conversion needs the small <c>nbformat</c> package, which is listed in the script's requirements.</p>
+    </section>
+
+    <section xml:id="jupyter-kernel" label="jupyter-kernel">
+        <title>Electing a Kernel</title>
+        <idx><h>Jupyter notebook</h><h>kernel</h></idx>
+
+        <p>Every notebook names the <term>kernel</term> that executes its code cells.  Elect one in your publication file:<cd>
+            <cline>&lt;jupyter kernel="sagemath"/&gt;</cline>
+        </cd>The default, <c>sagemath</c>, names the latest Sage kernel in the Jupyter application of the Sage distribution, and in CoCalc, and is the right choice when your code is in <tag>sage</tag> elements.  The alternative, <c>python3</c>, is the standard Python kernel present in every Jupyter installation.  A reader whose Jupyter lacks the named kernel is offered a substitution by the application itself, so this choice is a sensible default, not a hard requirement.</p>
+    </section>
+
+    <section xml:id="jupyter-code-cells" label="jupyter-code-cells">
+        <title>Text Cells and Code Cells</title>
+
+        <p>A notebook is a flat list of cells, of just two kinds: formatted text, and executable code.  Each division heading, paragraph, theorem, figure, or similar item becomes a text cell.  A <tag>sage</tag> element that is a child of a division becomes an executable code cell.</p>
+
+        <p>When a <tag>sage</tag> element sits <em>inside</em> a block<mdash/>say an <tag>example</tag> with a computation between two paragraphs, or an <tag>exercise</tag> with code in its statement<mdash/>the block is split into consecutive cells: text, then executable code, then text again.  The code may sit at any depth, and every enclosing structure is closed before, and re-opened after, each code cell.  Styling draws the pieces together visually, and each cell records its parentage in the notebook's metadata, so the structure is never lost, merely flattened.  A <tag>sage</tag> listing marked as display-only is the exception: it is always presented statically, as in print.</p>
+
+        <p>Worksheets and handouts are especially at home in this format: each becomes a notebook a student can complete in place.</p>
+    </section>
+
+    <section xml:id="jupyter-styling" label="jupyter-styling">
+        <title>Styling, and the First Cell</title>
+
+        <p>The first cell of every notebook is a collapsed code cell holding a small amount of styling: borders on theorem-like blocks, authored table rules, side-by-side layout, and similar light touches.  The styling is entirely self-contained<mdash/>it makes no network requests, so reading a notebook is a private activity, and everything works offline.</p>
+
+        <p>Jupyter's security model decides when that styling takes effect.  In a <term>trusted</term> notebook (one the reader built, or has executed, or has explicitly trusted) the styling applies the moment the notebook opens.  In an unfamiliar notebook the reader runs the first cell once, and an instruction cell says exactly that.  Either way, every notebook is fully readable with no styling at all<mdash/>it is an enhancement, never a requirement.  Note that some hosted environments (Google Colab, notebook previews on websites) isolate or ignore such styling entirely; content is unaffected.</p>
+    </section>
+
+    <section xml:id="jupyter-compromises" label="jupyter-compromises">
+        <title>Compromises</title>
+
+        <p>The notebook format imposes limits, and this conversion chooses its compromises deliberately.  Knowls do not exist, so cross-references are ordinary hyperlinks.  The mathematics renderer inside a Jupyter application is fixed and cannot be configured, so your <latex/> macros travel in a small (empty-looking) cell near the top of each notebook, and a few <pretext/> constructions substitute equivalents from core <latex/> (a shaded fill-in blank, for example, renders as an empty box).  Interactive elements from the web version<mdash/>embedded video players, interactive exercises<mdash/>appear in their static forms, as they do in print.</p>
+    </section>
 </chapter>
