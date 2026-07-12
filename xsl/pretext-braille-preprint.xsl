@@ -1193,7 +1193,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Bibliographic items in a "references" division have a      -->
 <!-- bracketed number leading each new entry, then two spaces   -->
 <!-- of indentation for the remainder .                         -->
-<!-- TODO: expand to accomodate annotations ("note"), BANA 22.3 -->
+<!-- An annotation ("note") produces a block, so it cannot live -->
+<!-- inside the entry's segment; it follows as a sibling.       -->
+<!-- TODO: format annotations per BANA 22.3, rather than        -->
+<!-- reusing the boxed rendering of a REMARK-LIKE "note".       -->
 <xsl:template match="biblio[@type='raw']">
     <runin indentation="0" separator="&#x20;">
         <xsl:text>[</xsl:text>
@@ -1201,8 +1204,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>]</xsl:text>
     </runin>
     <segment indentation="0" runover="2">
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="node()[not(self::note)]"/>
     </segment>
+    <xsl:apply-templates select="note"/>
 </xsl:template>
 
 <!-- Override usual killing of title, but perhaps a generic -->
