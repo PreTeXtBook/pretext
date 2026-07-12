@@ -28,7 +28,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     extension-element-prefixes="exsl str"
+    exclude-result-prefixes="pi"
     >
 
 <!-- Trade on HTML markup, numbering, chunking, etc.        -->
@@ -423,20 +425,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: remove filter on paragraphs once we add stack for sidebyside -->
 <xsl:template match="*[parent::*[&STRUCTURAL-FILTER; or self::paragraphs[not(ancestor::sidebyside)] or self::introduction[parent::*[&STRUCTURAL-FILTER;]] or self::conclusion[parent::*[&STRUCTURAL-FILTER;]]]]|*[parent::page]" priority="-0.5">
     <!-- <xsl:message>G:<xsl:value-of select="local-name(.)" />:G</xsl:message> -->
-    <xsl:variable name="html-rtf">
-        <xsl:apply-imports />
-    </xsl:variable>
-    <xsl:variable name="demoted-rtf">
-        <xsl:apply-templates select="exsl:node-set($html-rtf)" mode="demote-headings"/>
-    </xsl:variable>
-    <xsl:variable name="html-node-set" select="exsl:node-set($demoted-rtf)" />
-    <xsl:call-template name="pretext-cell">
-        <xsl:with-param name="content">
-            <xsl:call-template name="begin-string" />
-                <xsl:apply-templates select="$html-node-set" mode="xml-to-string" />
-            <xsl:call-template name="end-string" />
-        </xsl:with-param>
-    </xsl:call-template>
+    <xsl:choose>
+        <!-- A block with executable "sage" anywhere within it cannot -->
+        <!-- be one markdown cell: the code deserves genuine,         -->
+        <!-- executable code cells.  Since cells never nest, the      -->
+        <!-- block splits into *fragments* around its code: each      -->
+        <!-- fragment is a complete, balanced rendering, and any      -->
+        <!-- element spanning a split (the block itself, a            -->
+        <!-- "statement", a "task") is re-opened in the next          -->
+        <!-- fragment.  A fragment-position class lets styling draw   -->
+        <!-- continuity (side borders) across the cells, and cell     -->
+        <!-- metadata records the same structure durably.             -->
+        <xsl:when test=".//sage[not(@type = 'display')]">
+            <!-- NB: "apply-imports" honors the current mode, so the -->
+            <!-- rendering must happen here, in the default mode     -->
+            <xsl:variable name="html-rtf">
+                <xsl:apply-imports/>
+            </xsl:variable>
+            <xsl:call-template name="fragmented-block">
+                <xsl:with-param name="rendered" select="$html-rtf"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="html-rtf">
+                <xsl:apply-imports />
+            </xsl:variable>
+            <xsl:variable name="demoted-rtf">
+                <xsl:apply-templates select="exsl:node-set($html-rtf)" mode="demote-headings"/>
+            </xsl:variable>
+            <xsl:variable name="html-node-set" select="exsl:node-set($demoted-rtf)" />
+            <xsl:call-template name="pretext-cell">
+                <xsl:with-param name="content">
+                    <xsl:call-template name="begin-string" />
+                        <xsl:apply-templates select="$html-node-set" mode="xml-to-string" />
+                    <xsl:call-template name="end-string" />
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- The HTML conversion threads a heading level to every block's  -->
@@ -479,6 +505,159 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- Split a block into markdown fragments around executable code  -->
+<!-- cells.  The block renders exactly as usual, except each       -->
+<!-- interior executable "sage" renders as an empty marker         -->
+<!-- element.  The rendered tree is then *sliced* at the markers:  -->
+<!-- slice k keeps the nodes that follow marker k (and precede     -->
+<!-- marker k+1), while any element that spans a marker (the       -->
+<!-- block's own wrapper, a "statement", a "task") is re-opened,   -->
+<!-- shallowly, in every slice it spans<mdash/>so each fragment is -->
+<!-- balanced HTML in the block's own dress, and the code may sit  -->
+<!-- at any depth.  The block's heading is part of the rendering,  -->
+<!-- so it lands in the first slice with no special treatment.     -->
+<xsl:template name="fragmented-block">
+    <!-- the block's ordinary rendering (markers included), made -->
+    <!-- by the caller; the context node remains the block       -->
+    <xsl:param name="rendered"/>
+    <xsl:variable name="element-name" select="local-name(.)"/>
+    <xsl:variable name="identifier">
+        <xsl:apply-templates select="." mode="html-id"/>
+    </xsl:variable>
+    <!-- settle heading levels before slicing -->
+    <xsl:variable name="demoted-rtf">
+        <xsl:apply-templates select="exsl:node-set($rendered)" mode="demote-headings"/>
+    </xsl:variable>
+    <xsl:variable name="marked" select="exsl:node-set($demoted-rtf)"/>
+    <!-- the code, in document order, mirroring the markers exactly -->
+    <xsl:variable name="code" select=".//sage[not(@type = 'display')]"/>
+    <xsl:variable name="code-count" select="count($code)"/>
+    <!-- the opening fragment always appears: it carries the heading -->
+    <xsl:call-template name="fragment-slice-cell">
+        <xsl:with-param name="marked" select="$marked"/>
+        <xsl:with-param name="slice-number" select="0"/>
+        <xsl:with-param name="element" select="$element-name"/>
+        <xsl:with-param name="identifier" select="$identifier"/>
+        <xsl:with-param name="part" select="'first'"/>
+    </xsl:call-template>
+    <!-- alternate code cells with the slices that follow them -->
+    <xsl:for-each select="$code">
+        <xsl:variable name="place" select="position()"/>
+        <!-- does any actual content trail the final marker? -->
+        <xsl:variable name="last-slice-rtf">
+            <xsl:if test="$place = $code-count">
+                <xsl:apply-templates select="$marked/*" mode="fragment-slice">
+                    <xsl:with-param name="slice-number" select="$code-count"/>
+                </xsl:apply-templates>
+            </xsl:if>
+        </xsl:variable>
+        <xsl:variable name="b-code-is-last" select="($place = $code-count) and not(exsl:node-set($last-slice-rtf)//text()[normalize-space(.) != ''] or exsl:node-set($last-slice-rtf)//img)"/>
+        <xsl:apply-templates select="." mode="sage-code-cell">
+            <xsl:with-param name="element" select="$element-name"/>
+            <xsl:with-param name="identifier" select="$identifier"/>
+            <xsl:with-param name="part">
+                <xsl:choose>
+                    <xsl:when test="$b-code-is-last">
+                        <xsl:text>last</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>interior</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
+        </xsl:apply-templates>
+        <xsl:if test="not($b-code-is-last)">
+            <xsl:call-template name="fragment-slice-cell">
+                <xsl:with-param name="marked" select="$marked"/>
+                <xsl:with-param name="slice-number" select="$place"/>
+                <xsl:with-param name="element" select="$element-name"/>
+                <xsl:with-param name="identifier" select="$identifier"/>
+                <xsl:with-param name="part">
+                    <xsl:choose>
+                        <xsl:when test="$place = $code-count">
+                            <xsl:text>last</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>interior</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- One slice of the marked rendering becomes one markdown cell, -->
+<!-- unless the slice holds no genuine content (adjacent code, or -->
+<!-- code that opens its block, leave gaps that nobody misses)    -->
+<xsl:template name="fragment-slice-cell">
+    <xsl:param name="marked"/>
+    <xsl:param name="slice-number"/>
+    <xsl:param name="element"/>
+    <xsl:param name="identifier"/>
+    <xsl:param name="part"/>
+    <xsl:variable name="slice-rtf">
+        <xsl:apply-templates select="$marked/*" mode="fragment-slice">
+            <xsl:with-param name="slice-number" select="$slice-number"/>
+            <xsl:with-param name="part" select="$part"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="slice" select="exsl:node-set($slice-rtf)"/>
+    <xsl:if test="($part = 'first') or $slice//text()[normalize-space(.) != ''] or $slice//img">
+        <xsl:call-template name="pretext-cell">
+            <xsl:with-param name="content">
+                <xsl:call-template name="begin-string" />
+                    <xsl:apply-templates select="$slice" mode="xml-to-string" />
+                <xsl:call-template name="end-string" />
+            </xsl:with-param>
+            <xsl:with-param name="element" select="$element"/>
+            <xsl:with-param name="identifier" select="$identifier"/>
+            <xsl:with-param name="part" select="$part"/>
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<!-- Slice a marked rendering.  An element containing markers is  -->
+<!-- re-opened (shallow copy) in every slice it spans; any other  -->
+<!-- node belongs to exactly the slice numbered by the count of   -->
+<!-- markers preceding it.  The markers themselves never survive. -->
+<xsl:template match="*" mode="fragment-slice">
+    <xsl:param name="slice-number"/>
+    <xsl:param name="part" select="''"/>
+    <xsl:choose>
+        <xsl:when test=".//pi:sage-marker">
+            <xsl:copy>
+                <!-- an HTML id may appear only once, so it stays -->
+                <!-- with the first slice of a spanning element   -->
+                <xsl:copy-of select="@*[not(name() = 'id') or ($slice-number = 0)]"/>
+                <!-- the outermost element of a slice advertises  -->
+                <!-- its position, for styling continuity         -->
+                <xsl:if test="not(parent::*) and not($part = '')">
+                    <xsl:attribute name="class">
+                        <xsl:value-of select="normalize-space(concat(@class, ' fragment-', $part))"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:apply-templates select="node()" mode="fragment-slice">
+                    <xsl:with-param name="slice-number" select="$slice-number"/>
+                </xsl:apply-templates>
+            </xsl:copy>
+        </xsl:when>
+        <xsl:when test="count(preceding::pi:sage-marker) = $slice-number">
+            <xsl:copy-of select="."/>
+        </xsl:when>
+        <!-- other slices claim this node -->
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="text()" mode="fragment-slice">
+    <xsl:param name="slice-number"/>
+    <xsl:if test="count(preceding::pi:sage-marker) = $slice-number">
+        <xsl:copy-of select="."/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="pi:sage-marker" mode="fragment-slice"/>
+
 <!-- Kill some templates temporarily -->
 <xsl:template name="inline-warning" />
 <xsl:template name="margin-warning" />
@@ -510,24 +689,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- contexts whose children each become top-level cells,   -->
         <!-- mirroring the block-level wildcard template            -->
         <xsl:when test="parent::*[&STRUCTURAL-FILTER;] or parent::paragraphs or parent::page or parent::introduction[parent::*[&STRUCTURAL-FILTER;]] or parent::conclusion[parent::*[&STRUCTURAL-FILTER;]]">
-            <!-- we trim a final trailing newline -->
-            <!-- as we wrap into a single string  -->
-            <xsl:call-template name="code-cell">
-                <xsl:with-param name="content">
-                    <xsl:call-template name="begin-string" />
-                        <xsl:value-of select="substring($loc, 1, string-length($loc)-1)" />
-                    <xsl:call-template name="end-string" />
-                </xsl:with-param>
-            </xsl:call-template>
+            <xsl:apply-templates select="." mode="sage-code-cell"/>
         </xsl:when>
-        <!-- interior to a block: a static rendering, as element  -->
-        <!-- nodes that serialize as part of the enclosing cell   -->
-        <xsl:otherwise>
+        <!-- a display-only listing is never executable: a static -->
+        <!-- rendering, as element nodes that serialize as part   -->
+        <!-- of the enclosing cell                                -->
+        <xsl:when test="@type = 'display'">
             <pre class="code-display">
                 <xsl:value-of select="substring($loc, 1, string-length($loc)-1)" />
             </pre>
+        </xsl:when>
+        <!-- interior to a block being split into fragments: the -->
+        <!-- rendering carries a marker where the code belongs,  -->
+        <!-- and the block's template slices at the markers and  -->
+        <!-- supplies the genuine code cells                     -->
+        <xsl:otherwise>
+            <pi:sage-marker/>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- An executable cell from a "sage" element, with optional -->
+<!-- structure metadata when it sits interior to a block     -->
+<xsl:template match="sage" mode="sage-code-cell">
+    <xsl:param name="element" select="''"/>
+    <xsl:param name="identifier" select="''"/>
+    <xsl:param name="part" select="''"/>
+    <!-- formulate lines of code -->
+    <xsl:variable name="loc">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text">
+                <xsl:value-of select="input" />
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- we trim a final trailing newline -->
+    <!-- as we wrap into a single string  -->
+    <xsl:call-template name="code-cell">
+        <xsl:with-param name="content">
+            <xsl:call-template name="begin-string" />
+                <xsl:value-of select="substring($loc, 1, string-length($loc)-1)" />
+            <xsl:call-template name="end-string" />
+        </xsl:with-param>
+        <xsl:with-param name="element" select="$element"/>
+        <xsl:with-param name="identifier" select="$identifier"/>
+        <xsl:with-param name="part" select="$part"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- #### -->
@@ -777,9 +984,31 @@ TODO: (overall)
 <!-- A Jupyter markdown cell intended -->
 <!-- to hold PreTeXt styled HTML      -->
 <!-- Serialization here is "by hand"  -->
+<!-- The three structure parameters describe a cell which is a  -->
+<!-- *fragment* of a PreTeXt element split around code cells;   -->
+<!-- they land in the notebook cell's metadata, preserving the  -->
+<!-- hierarchy that the flat cell list cannot express directly. -->
 <xsl:template name="pretext-cell">
     <xsl:param name="content" />
+    <xsl:param name="element" select="''"/>
+    <xsl:param name="identifier" select="''"/>
+    <xsl:param name="part" select="''"/>
     <cell type="markdown">
+        <xsl:if test="not($element = '')">
+            <xsl:attribute name="element">
+                <xsl:value-of select="$element"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="not($identifier = '')">
+            <xsl:attribute name="identifier">
+                <xsl:value-of select="$identifier"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="not($part = '')">
+            <xsl:attribute name="part">
+                <xsl:value-of select="$part"/>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:text>&lt;div class="mathbook-content"&gt;</xsl:text>
         <xsl:value-of select="$content" />
         <xsl:text>&lt;/div&gt;</xsl:text>
@@ -790,6 +1019,9 @@ TODO: (overall)
 <!-- to hold raw text/code        -->
 <xsl:template name="code-cell">
     <xsl:param name="content" />
+    <xsl:param name="element" select="''"/>
+    <xsl:param name="identifier" select="''"/>
+    <xsl:param name="part" select="''"/>
     <!-- "purpose" flags special cells (only 'styling' so far) for -->
     <!-- extra treatment by the Python routine: the styling cell   -->
     <!-- collapses, and ships with its output pre-rendered         -->
@@ -798,6 +1030,21 @@ TODO: (overall)
         <xsl:if test="not($purpose = '')">
             <xsl:attribute name="purpose">
                 <xsl:value-of select="$purpose"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="not($element = '')">
+            <xsl:attribute name="element">
+                <xsl:value-of select="$element"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="not($identifier = '')">
+            <xsl:attribute name="identifier">
+                <xsl:value-of select="$identifier"/>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="not($part = '')">
+            <xsl:attribute name="part">
+                <xsl:value-of select="$part"/>
             </xsl:attribute>
         </xsl:if>
         <xsl:value-of select="$content" />
