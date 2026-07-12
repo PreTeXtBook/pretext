@@ -127,7 +127,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We have entire cells for division headings. -->
 <xsl:template match="&STRUCTURAL;" mode="pretext-heading">
     <xsl:variable name="html-rtf">
-        <xsl:apply-templates select="." mode="section-heading" />
+        <!-- each division heads its own notebook, and the document -->
+        <!-- title is a level below the notebook's styling cell, so -->
+        <!-- level 2 mirrors the HTML conversion's chunked pages    -->
+        <xsl:apply-templates select="." mode="section-heading">
+            <xsl:with-param name="heading-level" select="2"/>
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:variable name="html-node-set" select="exsl:node-set($html-rtf)" />
     <xsl:call-template name="pretext-cell">
@@ -141,7 +146,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="paragraphs|introduction|conclusion" mode="pretext-heading">
     <xsl:variable name="html-rtf">
-        <xsl:apply-templates select="." mode="heading-title" />
+        <!-- a level below a division heading (see above) -->
+        <xsl:apply-templates select="." mode="heading-title">
+            <xsl:with-param name="heading-level" select="3"/>
+        </xsl:apply-templates>
     </xsl:variable>
     <xsl:variable name="html-node-set" select="exsl:node-set($html-rtf)" />
     <xsl:call-template name="pretext-cell">
@@ -383,7 +391,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="html-rtf">
         <xsl:apply-imports />
     </xsl:variable>
-    <xsl:variable name="html-node-set" select="exsl:node-set($html-rtf)" />
+    <xsl:variable name="demoted-rtf">
+        <xsl:apply-templates select="exsl:node-set($html-rtf)" mode="demote-headings"/>
+    </xsl:variable>
+    <xsl:variable name="html-node-set" select="exsl:node-set($demoted-rtf)" />
     <xsl:call-template name="pretext-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
@@ -391,6 +402,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
+</xsl:template>
+
+<!-- The HTML conversion threads a heading level to every block's  -->
+<!-- heading, but "xsl:apply-imports" (necessary above, to reuse   -->
+<!-- the entire HTML conversion for a block) cannot pass           -->
+<!-- parameters, an XSLT 1.0 limitation.  So every block heading   -->
+<!-- arrives at the default level, "h1".  The rendered HTML        -->
+<!-- itself, though, records the true nesting: each block's        -->
+<!-- wrapper element holds its heading as a child.  So the         -->
+<!-- accurate level is recovered from the rendering.  A division   -->
+<!-- heading (made elsewhere) is "h2"; a block directly below it   -->
+<!-- is "h3"; a block within a block (a "task" of a "project",     -->
+<!-- say) is "h4"; and so on, capped at "h6".  This is visual      -->
+<!-- fidelity, but more importantly it is the heading outline      -->
+<!-- that a screen reader's navigation presents.  Headings built   -->
+<!-- by other routes (divisions, "paragraphs", companion pages)    -->
+<!-- never pass through here, and keep their explicit levels.      -->
+<xsl:template match="node()|@*" mode="demote-headings">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="demote-headings"/>
+    </xsl:copy>
+</xsl:template>
+
+<xsl:template match="h1[contains(concat(' ', normalize-space(@class), ' '), ' heading ')]" mode="demote-headings">
+    <!-- each ancestor with a heading of its own is an enclosing -->
+    <!-- block; this heading's block is the innermost of them    -->
+    <xsl:variable name="enclosing-blocks" select="count(ancestor::*[*[starts-with(local-name(), 'h') and (string-length(local-name()) = 2) and contains(concat(' ', normalize-space(@class), ' '), ' heading ')]])"/>
+    <xsl:variable name="level">
+        <xsl:choose>
+            <xsl:when test="2 + $enclosing-blocks &gt; 6">
+                <xsl:text>6</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="2 + $enclosing-blocks"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="h{$level}">
+        <xsl:apply-templates select="node()|@*" mode="demote-headings"/>
+    </xsl:element>
 </xsl:template>
 
 <!-- Kill some templates temporarily -->
