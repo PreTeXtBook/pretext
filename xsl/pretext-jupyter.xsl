@@ -36,8 +36,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this will import -assembly and -common stylesheets -->
 <xsl:import href="./pretext-html.xsl" />
 
-<!-- Output is JSON, enriched with serialized HTML -->
-<xsl:output method="text" />
+<!-- Output is an XML description of a notebook: a "notebook"     -->
+<!-- element containing a flat list of "cell" elements, whose      -->
+<!-- content is serialized HTML (markdown cells) or program text  -->
+<!-- (code cells).  The Python routine  jupyter()  converts each   -->
+<!-- such file into the JSON of a Jupyter notebook via "nbformat", -->
+<!-- which owns all JSON escaping and schema conformance.          -->
+<xsl:output method="xml" encoding="UTF-8" />
 
 <!-- ######### -->
 <!-- Variables -->
@@ -252,85 +257,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- the real content of the page -->
         <xsl:copy-of select="$content" />
     </xsl:variable>
-    <exsl:document href="{$the-filename}" method="text">
-        <!-- <xsl:call-template name="converter-blurb-html" /> -->
-        <!-- begin outermost group -->
-        <xsl:text>{&#xa;</xsl:text>
-        <!-- cell list first, majority of notebook, metadata to finish -->
-        <xsl:text>"cells": [&#xa;</xsl:text>
-        <!-- Escape JSON strings now, be sure later adjustments -->
-        <!-- conform to JSON syntax in this regard              -->
-        <xsl:variable name="escaped-cell-list">
-            <xsl:call-template name="escape-json-string">
-                <xsl:with-param name="text" select="$cell-list"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <!-- Multiple strings in a cell are merged into one by    -->
-        <!-- combining adjoining end/begin pairs, leaving only    -->
-        <!-- leading and trailing delimiters (next substitution). -->
-        <!-- This is one solution of the problem of $n-1$         -->
-        <!-- separators for $n$ items.                            -->
-        <xsl:variable name="split-strings" select="str:replace($escaped-cell-list, $ESBS, '')" />
-        <xsl:variable name="finalize-strings" select="str:replace(str:replace($split-strings, $ES, '&quot;'), $BS, '&quot;')" />
-        <!-- The only pseudo-markup left is that of the two types -->
-        <!-- of cells possible in a Jupyter notebook.  We split   -->
-        <!-- just the adjacent brackets with comma-newline, so    -->
-        <!-- source has each cell entirely on its own line.  This -->
-        <!-- is the other solution of the problem of $n-1$        -->
-        <!-- separators for $n$ items.                            -->
-        <xsl:variable name="split-cells" select="str:replace($finalize-strings, $RBLB, $RBLB-comma)" />
-        <!-- Now we consider the actual markers and replace   -->
-        <!-- with the JSON that Jupyter expects as source.    -->
-        <!-- We are done, so "value-of" is good enough,       -->
-        <!-- rather than having a final $code-cells.  The     -->
-        <!-- four *-wrap variables here are just conveniences -->
-        <xsl:variable name="markdown-cells" select="str:replace(str:replace($split-cells, $BM, $begin-markdown-wrap), $EM, $end-markdown-wrap)" />
-        <xsl:value-of select="str:replace(str:replace($markdown-cells, $BC, $begin-code-wrap), $EC, $end-code-wrap)" />
-        <!-- end cell list -->
-        <xsl:text>&#xa;],&#xa;</xsl:text>
-        <!-- version identifiers -->
-        <xsl:text>"nbformat": 4, "nbformat_minor": 0, </xsl:text>
-        <!-- metadata copied from blank SMC notebook -->
-        <xsl:text>"metadata": {</xsl:text>
-        <xsl:text>"kernelspec": {</xsl:text>
-        <!-- TODO: configure kernel in "docinfo" -->
-        <!-- "display_name" seems ineffective, but is required -->
-        <xsl:text>"display_name": "", </xsl:text>
-        <!-- TODO: language not needed? -->
-        <!-- <xsl:text>"language": "python", </xsl:text> -->
-        <!-- TODO: make kernelspec configurable? -->
-        <!-- <xsl:text>"name": "python2"</xsl:text> -->
-        <!-- "sagemath" as  "name" will be latest kernel -->
-        <!-- in Sage distribution Jupyter, and in CoCalc -->
-        <xsl:choose>
-            <xsl:when test="contains('|python3|Python3|python 3|Python 3|py|Py|python|Python|'
-                , concat('|', $jupyter.kernel, '|'))">
-                <xsl:text>"name": "python3"</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>"name": "sagemath"</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- TODO: how much of the following is necessary before loading? -->
-        <xsl:text>}, </xsl:text>
-        <xsl:text>"language_info": {</xsl:text>
-        <xsl:text>"codemirror_mode": {</xsl:text>
-        <xsl:text>"name": "ipython", </xsl:text>
-        <xsl:text>"version": 3</xsl:text>
-        <xsl:text>}, </xsl:text>
-        <xsl:text>"file_extension": ".py", </xsl:text>
-        <xsl:text>"mimetype": "text/x-python", </xsl:text>
-        <xsl:text>"name": "python", </xsl:text>
-        <xsl:text>"nbconvert_exporter": "python", </xsl:text>
-        <xsl:text>"pygments_lexer": "ipython3", </xsl:text>
-        <xsl:text>"version": "3.6.4"</xsl:text>
-        <xsl:text>}, </xsl:text>
-        <xsl:text>"name": "</xsl:text>
-        <xsl:value-of select="$the-filename" />
-        <xsl:text>"</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-        <!-- end outermost group -->
-        <xsl:text>}</xsl:text>
+    <!-- The file written here is the *description* of a notebook,  -->
+    <!-- so an "xml" suffix is appended to the eventual notebook    -->
+    <!-- filename.  Hyperlinks within cell content are relative     -->
+    <!-- references to the final "ipynb" filenames, so the Python   -->
+    <!-- conversion must strip the suffix when writing final files. -->
+    <exsl:document href="{$the-filename}.xml" method="xml" encoding="UTF-8">
+        <notebook>
+            <!-- The kernel is communicated to the Python routine, which  -->
+            <!-- owns all remaining notebook-level metadata.  "sagemath"  -->
+            <!-- as the kernel name will be the latest kernel in the Sage -->
+            <!-- distribution Jupyter, and in CoCalc.                     -->
+            <xsl:attribute name="kernel">
+                <xsl:choose>
+                    <xsl:when test="contains('|python3|Python3|python 3|Python 3|py|Py|python|Python|'
+                        , concat('|', $jupyter.kernel, '|'))">
+                        <xsl:text>python3</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>sagemath</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:copy-of select="$cell-list"/>
+        </notebook>
     </exsl:document>
 </xsl:template>
 
@@ -506,6 +456,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For it to be effective will require the overall "ignore-math" -->
 <!-- class, and access to the MathJax configuration.               -->
 
+<!-- The notebook's MathJax reads mathematics from the *raw*        -->
+<!-- markdown source, before any HTML entity is decoded.  So        -->
+<!-- entity-escaping inside mathematics arrives literally: an       -->
+<!-- alignment ampersand serialized as "&amp;amp;" renders as a     -->
+<!-- visible "amp;".  Text within a math wrapper (the               -->
+<!-- "process-math" class) therefore serializes verbatim.  Bare     -->
+<!-- markup characters are not a hazard: PreTeXt requires \lt for   -->
+<!-- "less than" within mathematics, and MathJax lifts the math     -->
+<!-- from the source before the remainder is parsed as HTML.        -->
+<xsl:template match="text()[ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' process-math ')]]" mode="xml-to-string">
+    <xsl:value-of select="."/>
+</xsl:template>
+
 <!-- Images -->
 
 <!-- Jupyter seems to not allow an "object" tag.        -->
@@ -617,34 +580,17 @@ TODO: (overall)
 <!-- ############### -->
 
 <!-- Jupyter does a very good (but incomplete) job with inline -->
-<!-- verbatim text, requiring little care by authors.  But a   -->
-<!-- few gotchas need adjustment.  So we override.             -->
+<!-- verbatim text, requiring little care by authors.  So we   -->
+<!-- override.  The wrapper builds a genuine "code" element    -->
+<!-- whose content is plain text: the serialization step then  -->
+<!-- escapes any markup characters exactly once, so an author  -->
+<!-- may write about elements (like in the Author's Guide!)    -->
+<!-- and they arrive as visible text, never as interior HTML.  -->
 <xsl:template name="code-wrapper">
     <xsl:param name="content"/>
-
-    <!-- Jupyter notebook is careful about XML special characters, -->
-    <!-- but if you want to write about the escaped versions, they -->
-    <!-- just get converted to the real thing.  So in these five   -->
-    <!-- very special situations we escape the leading ampersand   -->
-    <!-- and whatever conversion is happening is satiated.         -->
-    <xsl:variable name="escaped-ampersand-fixed"    select="str:replace($content,                    '&amp;amp;',  '&amp;amp;amp;' )"/>
-    <xsl:variable name="escaped-leftbracket-fixed"  select="str:replace($escaped-ampersand-fixed,    '&amp;lt;',   '&amp;amp;lt;' )"/>
-    <xsl:variable name="escaped-rightbracket-fixed" select="str:replace($escaped-leftbracket-fixed,  '&amp;gt;',   '&amp;amp;gt;' )"/>
-    <xsl:variable name="escaped-apostrophe-fixed"   select="str:replace($escaped-rightbracket-fixed, '&amp;apos;', '&amp;amp;apos;' )"/>
-    <xsl:variable name="escaped-quote-fixed"        select="str:replace($escaped-apostrophe-fixed,   '&amp;quot;', '&amp;amp;quot;' )"/>
-
-    <!-- If you want to write about elements (like in the Author's     -->
-    <!-- Guide!) then you cannot have elements/tags sitting unaltered  -->
-    <!-- in verbatim text, since they now look like interior HTML.     -->
-    <!-- So we disrupt the leading left-bracket with an escaped        -->
-    <!-- version and let that convert to the character.                -->
-    <xsl:variable name="leftbracket-fixed" select="str:replace($escaped-quote-fixed, '&lt;', '&amp;lt;' )"/>
-
-    <!-- We wrap verbatim inline text with an HTML "code" element. -->
-    <!-- We enclose with PreTeXt's HTML, serializing by hand.      -->
-    <xsl:text>&lt;code class="code-inline tex2jax_ignore"&gt;</xsl:text>
-        <xsl:value-of select="$leftbracket-fixed"/>
-    <xsl:text>&lt;/code&gt;</xsl:text>
+    <code class="code-inline tex2jax_ignore">
+        <xsl:value-of select="$content"/>
+    </code>
 </xsl:template>
 
 <!-- #### -->
@@ -686,179 +632,38 @@ TODO: (overall)
     <xsl:text>"</xsl:text>
 </xsl:template>
 
-<!-- ########################## -->
-<!-- Intermediate Pseudo-Markup -->
-<!-- ########################## -->
-
-<!-- A Jupyter notebook is a flat sequence of cells, of type either     -->
-<!-- "markdown" or "code."  The content is primarily a list of strings. -->
-<!-- This presents two fundamental problems:                            -->
-<!--                                                                    -->
-<!--   1.  Lists of cells, or lists of strings, with  n  items          -->
-<!--       need exactly  n-1  commas.  It is hard to predict/find       -->
-<!--       the first or last element of a list.                         -->
-<!--                                                                    -->
-<!--   2.  Cells cannot be nested and content should not lie            -->
-<!--       outside of cells.                                            -->
-<!--                                                                    -->
-<!-- We use a sort of pseudo-markup.  Adjacency of items lets           -->
-<!-- us solve the comma problem.  We are also able to effectively       -->
-<!-- merge content into a cell, without knowing anything about          -->
-<!-- the following cell.                                                -->
-<!--                                                                    -->
-<!-- We pipeline a pseudo-markup as an intermediate text format.        -->
-<!--                                                                    -->
-<!-- Pseudo-markup language:                                            -->
-<!--                                                                    -->
-<!-- LB, RB: left and right brackets - should be UUIDs eventually       -->
-<!--                                                                    -->
-<!-- BS, ES: begin and end string                                       -->
-<!--                                                                    -->
-<!-- BM, EM, BC, EC: begin and end, markdown and code, cells            -->
-
-
-<!-- ####### -->
-<!-- Markers -->
-<!-- ####### -->
-
-<!-- This is pseudo-markup, starting with delimiters       -->
-<!-- analagous to < and > of XML.   Make these delimiters  -->
-<!-- exceedingly unique.  Comment out salt while debugging -->
-<!-- if it helps to see intermediate structure. Or leave   -->
-<!-- salt in, and grep final output for this "bad" string  -->
-<!-- that should not survive.                              -->
-
-<!-- Random-ish output from  mkpasswd  utility,           -->
-<!-- 2017-10-24 at AMS airport, Starbucks by faux gate D1 -->
-<xsl:variable name="salt" select="'x9rNtyUydoz3o'" />
-
-<xsl:variable name="LB">
-    <xsl:text>[[[</xsl:text>
-    <xsl:value-of select="$salt" />
-</xsl:variable>
-
-<xsl:variable name="RB">
-    <xsl:value-of select="$salt" />
-    <xsl:text>]]]</xsl:text>
-</xsl:variable>
-
-<!-- These are analagous to XML opening           -->
-<!-- ("begin", B) and closing ("end", E) elements -->
-
-<!-- Destined to be string -->
-<xsl:variable name="BS">
-    <xsl:value-of select="$LB" />
-    <xsl:text>BS</xsl:text>
-    <xsl:value-of select="$RB" />
-</xsl:variable>
-<xsl:variable name="ES">
-    <xsl:value-of select="$LB" />
-    <xsl:text>ES</xsl:text>
-    <xsl:value-of select="$RB" />
-</xsl:variable>
-
-<!-- Destined to be a Jupyter markdown cell in JSON output-->
-<xsl:variable name="BM">
-    <xsl:value-of select="$LB" />
-    <xsl:text>BM</xsl:text>
-    <xsl:value-of select="$RB" />
-</xsl:variable>
-<xsl:variable name="EM">
-    <xsl:value-of select="$LB" />
-    <xsl:text>EM</xsl:text>
-    <xsl:value-of select="$RB" />
-</xsl:variable>
-
-<!-- Destined to be a Jupyter code cell in JSON output-->
-<xsl:variable name="BC">
-    <xsl:value-of select="$LB" />
-    <xsl:text>BC</xsl:text>
-    <xsl:value-of select="$RB" />
-</xsl:variable>
-<xsl:variable name="EC">
-    <xsl:value-of select="$LB" />
-    <xsl:text>EC</xsl:text>
-    <xsl:value-of select="$RB" />
-</xsl:variable>
-
-<!-- These variables describe adjacent pseudo-markup -->
-<!-- that will be converted to JSON equivalents.     -->
-
-<xsl:variable name="ESBS">
-    <xsl:value-of select="$ES" />
-    <xsl:value-of select="$BS" />
-</xsl:variable>
-
-<xsl:variable name="RBLB">
-    <xsl:value-of select="$RB" />
-    <xsl:value-of select="$LB" />
-</xsl:variable>
-
-<!-- This is a convenience for the replacement that -->
-<!-- splits cells into lines within JSON file       -->
-<xsl:variable name="RBLB-comma">
-    <xsl:value-of select="$RB" />
-    <xsl:text>,&#xa;</xsl:text>
-    <xsl:value-of select="$LB" />
-</xsl:variable>
-
-<!-- Convenience templates -->
-<!-- These are primary interface to our creation          -->
-<!-- of pseudo-markup above, but are not the whole        -->
-<!-- story since we convert markup based on the variables -->
-
-<xsl:template name="begin-string">
-    <xsl:value-of select="$BS" />
-</xsl:template>
-
-<xsl:template name="end-string">
-    <xsl:value-of select="$ES" />
-</xsl:template>
-
-<xsl:template name="begin-markdown-cell">
-    <xsl:value-of select="$BM" />
-</xsl:template>
-
-<xsl:template name="end-markdown-cell">
-    <xsl:value-of select="$EM" />
-</xsl:template>
-
-<xsl:template name="begin-code-cell">
-    <xsl:value-of select="$BC" />
-</xsl:template>
-
-<xsl:template name="end-code-cell">
-    <xsl:value-of select="$EC" />
-</xsl:template>
-
-
 <!-- ################# -->
 <!-- Cell Construction -->
 <!-- ################# -->
 
-<xsl:variable name="begin-markdown-wrap">
-    <xsl:text>{"cell_type":"markdown", "metadata":{}, "source":[</xsl:text>
-</xsl:variable>
+<!-- A Jupyter notebook is a flat sequence of cells, of type either  -->
+<!-- "markdown" or "code", each holding one string.  We describe     -->
+<!-- each notebook as a "notebook" element holding a flat list of    -->
+<!-- "cell" elements; the Python conversion routine turns each       -->
+<!-- description into JSON with the "nbformat" library, which owns   -->
+<!-- string escaping, cell boilerplate, and schema conformance.      -->
+<!-- Cells cannot be nested, so cell-producing templates must never  -->
+<!-- fire while another cell's content is under construction.        -->
 
-<xsl:variable name="end-markdown-wrap">
-    <xsl:text>]}</xsl:text>
-</xsl:variable>
+<!-- The two templates immediately following are historical seams:  -->
+<!-- every string destined for a cell was once delimited by markers -->
+<!-- these templates produced.  A cell's content is now a single    -->
+<!-- string, so they are no-ops, retained since callers throughout  -->
+<!-- this stylesheet still frame content with them, and they mark   -->
+<!-- exactly the boundaries a future refinement (say, a markdown    -->
+<!-- flavor of cell content) might need to intercept.               -->
 
-<xsl:variable name="begin-code-wrap">
-    <xsl:text>{"cell_type":    "code", "execution_count":null, "metadata":{}, "source":[</xsl:text>
-</xsl:variable>
+<xsl:template name="begin-string"/>
 
-<xsl:variable name="end-code-wrap">
-    <xsl:text>], "outputs":[]}</xsl:text>
-</xsl:variable>
+<xsl:template name="end-string"/>
 
 <!-- A Jupyter markdown cell intended  -->
 <!-- to hold markdown or unstyled HTML -->
 <xsl:template name="markdown-cell">
     <xsl:param name="content" />
-    <xsl:call-template name="begin-markdown-cell" />
-    <xsl:value-of select="$content" />
-    <xsl:call-template name="end-markdown-cell" />
+    <cell type="markdown">
+        <xsl:value-of select="$content" />
+    </cell>
 </xsl:template>
 
 <!-- A Jupyter markdown cell intended -->
@@ -866,24 +671,20 @@ TODO: (overall)
 <!-- Serialization here is "by hand"  -->
 <xsl:template name="pretext-cell">
     <xsl:param name="content" />
-    <xsl:call-template name="begin-markdown-cell" />
-    <xsl:call-template name="begin-string" />
-    <xsl:text>&lt;div class="mathbook-content"&gt;</xsl:text>
-    <xsl:call-template name="end-string" />
-    <xsl:value-of select="$content" />
-    <xsl:call-template name="begin-string" />
-    <xsl:text>&lt;/div&gt;</xsl:text>
-    <xsl:call-template name="end-string" />
-    <xsl:call-template name="end-markdown-cell" />
+    <cell type="markdown">
+        <xsl:text>&lt;div class="mathbook-content"&gt;</xsl:text>
+        <xsl:value-of select="$content" />
+        <xsl:text>&lt;/div&gt;</xsl:text>
+    </cell>
 </xsl:template>
 
 <!-- A Jupyter code cell intended -->
 <!-- to hold raw text/code        -->
 <xsl:template name="code-cell">
     <xsl:param name="content" />
-    <xsl:call-template name="begin-code-cell" />
-    <xsl:value-of select="$content" />
-    <xsl:call-template name="end-code-cell" />
+    <cell type="code">
+        <xsl:value-of select="$content" />
+    </cell>
 </xsl:template>
 
 <!-- We don't want any permalinks -->
