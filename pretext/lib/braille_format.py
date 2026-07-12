@@ -320,13 +320,21 @@ class BRF:
     # to this variant when we translate inline code phrases
     trans1_bit = louis.getTypeformForEmphClass(["en-ueb-g2.ctb"], 'trans1')
 
-    def __init__(self, page_format, width, height):
+    def __init__(self, page_format, width, height, symbols):
         self.out_buffer = ''
         self.accumulator = []
         self.toc_dict = {}
         self.toc_mode = False
         self.cursor = Cursor(width, height, page_format)
         self.line_buffer = LineBuffer(width)
+        # "early": mathematics arrived as BRF ASCII symbols, so the
+        # renderer must not translate it.  "late": mathematics is
+        # Unicode braille cells, translated when written (dot-for-dot).
+        # The choice rides on the root element of the preprint.
+        self.symbols_early = (symbols == "early")
+        # True while the segments of a Nemeth display block are
+        # being written, since their content is mathematics
+        self.in_nemeth_box = False
 
     # Properties (boolean functions) reported
     # by the current line buffer or default/embedded cursor
@@ -525,6 +533,13 @@ class BRF:
         # After this, `aline` is a BRF string, with spaces, nbsps
         if typeface == "math":
             aline = self.massage_math(aline, math_punctuation)
+        elif self.symbols_early and self.in_nemeth_box and not(BRF.contains_unicode_braille(aline)):
+            # display mathematics, already BRF ASCII symbols; blank
+            # cells, arriving as no-break spaces, become the plain
+            # spaces that a late election gets from liblouis
+            # (a line still holding cells has print residue, and falls
+            # through for the same translation as a late election)
+            aline = aline.replace("\xA0", " ")
         else:
             aline = BRF.translate_segment(typeface, aline)
 
@@ -730,6 +745,12 @@ class BRF:
         nemeth_open = BRF.nemeth_open
         nemeth_close = BRF.nemeth_close
 
+        # Blank cells within the mathematics are just spaces-to-be:
+        # make them spaces now, so the fusing below treats every
+        # blank alike.  (Blank cells arrive as U+2800 under a late
+        # election, and as no-break spaces under an early one.)
+        aline = aline.replace("\u2800", " ").replace("\xA0", " ")
+
         # Join trailing punctuation to the closing indicator and
         # record influence on overall length for line-breaking.
         if punctuation:
@@ -737,6 +758,20 @@ class BRF:
             punct_len = len(punctuation)
         else:
             punct_len = 0
+
+        # The mathematics arrived as BRF ASCII symbols exactly when
+        # "early" was elected AND the preprint conversion found only
+        # braille cells (mathematics with print residue rides along
+        # as Unicode no matter the election, see the preprint XSL).
+        early_form = self.symbols_early and not(BRF.contains_unicode_braille(aline))
+
+        # For the early form, the Unicode indicator chunks (with
+        # punctuation attached) convert here, by the same translation
+        # they would otherwise receive below, and the mathematics
+        # itself rides along untouched.
+        if early_form:
+            nemeth_open = louis.translateString(["en-ueb-g2.ctb"], nemeth_open, None, 0)
+            nemeth_close = louis.translateString(["en-ueb-g2.ctb"], nemeth_close, None, 0)
 
         # Actual Nemeth braille, plus 3, plus 3 for indicators, and punctuation
         math_len = len(aline) + 6 + punct_len
@@ -753,6 +788,13 @@ class BRF:
         else:
             # fuse on the indicators, then break at any space
             aline = nemeth_open + "\xA0" + aline + "\xA0" + nemeth_close
+
+        # Already BRF ASCII symbols throughout (early form); blank
+        # cells arrived as no-break spaces, which the line-breaking
+        # decisions above do not break on, and which become plain
+        # spaces when a completed line is written out
+        if early_form:
+            return aline
 
         # Unicode characters translate, one for one, into BRF
         # characters and we assume punctuation does the same.
@@ -792,6 +834,10 @@ class BRF:
             self.advance_one_line()
             self.blank_line()
 
+        # Segments of a Nemeth display block hold mathematics, which
+        # matters when it arrived as BRF ASCII symbols ("early")
+        saved_nemeth_box = self.in_nemeth_box
+        self.in_nemeth_box = (blk.box == "nemeth")
         inner_segments = blk.xml.xpath("segment|block")
         for s in inner_segments:
             if s.tag == "segment":
@@ -800,6 +846,7 @@ class BRF:
             elif s.tag == "block":
                 innerblk = Block(s)
                 self.write_block(innerblk)
+        self.in_nemeth_box = saved_nemeth_box
 
         if blk.box == "standard":
             bottom_line = "g" * self.line_buffer.text_width
@@ -860,6 +907,12 @@ class BRF:
     # Static methods
 
     @staticmethod
+    def contains_unicode_braille(aline):
+        # The blank cell U+2800 is excluded: alone it says nothing,
+        # since genuine mathematics always carries patterned cells
+        return any(("\u2801" <= c) and (c <= "\u28FF") for c in aline)
+
+    @staticmethod
     def translate_segment(typeface, aline):
 
         # g2 includes g1 explicitly
@@ -900,14 +953,19 @@ class BRF:
 # Current entry point, sort of
 def parse_segments(xml_simple, out_file, page_format):
 
-    # Embossed, page shape
-    brf = BRF(page_format, 40,25)
-
     # this routine converts XML information into arguments
     # to Python routines, but not exclusively yet
 
     huge_parser = ET.XMLParser(huge_tree=True)
     src_tree = ET.parse(xml_simple, parser=huge_parser)
+
+    # how braille cells are represented in the preprint:
+    # "late" is Unicode braille cells (the default), "early" is
+    # BRF ASCII symbols (a developer convenience for debugging)
+    symbols = src_tree.getroot().get("brf-symbols", "late")
+
+    # Embossed, page shape
+    brf = BRF(page_format, 40, 25, symbols)
 
     top_elts = src_tree.xpath("/brf/segment|/brf/block")
 
@@ -921,7 +979,7 @@ def parse_segments(xml_simple, out_file, page_format):
         brf.flush()
 
     # Prepare a new BRF object, but copy out ToC page numbers
-    front = BRF(page_format, 40,25)
+    front = BRF(page_format, 40, 25, symbols)
     front.toc_mode = True
     front.toc_dict = brf.toc_dict
 
