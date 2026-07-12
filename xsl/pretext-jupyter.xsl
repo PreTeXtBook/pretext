@@ -296,37 +296,72 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a code cell with HTML magic         -->
 <!-- allows reader to activate styling   -->
 <!-- Code first, so it begins with focus -->
+<!-- The styling is deliberately self-contained: no network      -->
+<!-- requests (a reader's activity is nobody's business), no     -->
+<!-- scripts (host applications routinely remove them), and no   -->
+<!-- colors that fight a host application's light or dark theme. -->
+<!-- The notebook is fully readable if this cell is never run:   -->
+<!-- styling is a progressive enhancement, never structural.     -->
 <xsl:template name="load-css">
     <!-- HTML as one-off code cell   -->
     <!-- Serialize HTML by hand here -->
     <xsl:call-template name="code-cell">
+        <xsl:with-param name="purpose" select="'styling'"/>
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
             <xsl:text>%%html&#xa;</xsl:text>
-            <!-- for offline testing -->
-            <!-- <xsl:text>&lt;link href="./mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text> -->
-            <xsl:text>&lt;link href="https://pretextbook.org/beta/mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
-            <xsl:text>&lt;link href="https://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
-            <!-- A bad hack since "subtitle" is in masthead code, better CSS should take care of this -->
-            <xsl:if test="$document-root/subtitle">
-                <xsl:text>&lt;style&gt;.subtitle {font-size:medium; display:block}&lt;/style&gt;&#xa;</xsl:text>
-            </xsl:if>
-            <xsl:text>&lt;link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
-            <xsl:text>&lt;link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css" /&gt;</xsl:text>
-            <!-- Cell hider is unwrapped from some notebook display command that injects HTML: -->
-            <!-- https://nbviewer.jupyter.org/github/shashi/ijulia-notebooks/blob/master/funcgeo/Functional%20Geometry.ipynb -->
-            <xsl:text>&lt;!-- Hide this cell. --&gt;&#xa;</xsl:text>
-            <xsl:text>&lt;script&gt;&#xa;</xsl:text>
-            <xsl:text>var cell = $(".container .cell").eq(0), ia = cell.find(".input_area")&#xa;</xsl:text>
-            <xsl:text>if (cell.find(".toggle-button").length == 0) {&#xa;</xsl:text>
-            <xsl:text>ia.after(&#xa;</xsl:text>
-            <xsl:text>    $('&lt;button class="toggle-button"&gt;Toggle hidden code&lt;/button&gt;').click(&#xa;</xsl:text>
-            <xsl:text>        function (){ ia.toggle() }&#xa;</xsl:text>
-            <xsl:text>        )&#xa;</xsl:text>
-            <xsl:text>    )&#xa;</xsl:text>
-            <xsl:text>ia.hide()&#xa;</xsl:text>
-            <xsl:text>}&#xa;</xsl:text>
-            <xsl:text>&lt;/script&gt;&#xa;</xsl:text>
+            <xsl:text>&lt;style&gt;&#xa;</xsl:text>
+            <xsl:text>.mathbook-content {line-height: 1.4;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .heading {margin-bottom: 0.5em;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content article .heading {font-size: 1em; margin: 0 0 0.5em;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content code.code-inline {padding: 0 0.2em; border: 0.05em solid #bbbbbb; border-radius: 0.2em;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .heading .codenumber {margin-left: 0.25em;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .heading .title {margin-left: 0.25em; font-style: italic;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .subtitle {font-size: medium; display: block; font-weight: normal;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content article {border-left: 0.15em solid #888888; padding-left: 0.75em; margin: 0.75em 0;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content article .para:last-child {margin-bottom: 0;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content article.proof {border-left: 0.1em dotted #888888;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content article.fragment-first {margin-bottom: 0;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content article.fragment-interior, .mathbook-content article.fragment-last {margin-top: 0;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .para {margin-top: 0.75em;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content pre.code-display {border: 0.05em solid #888888; padding: 0.5em; overflow-x: auto;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content figure {margin: 1em auto; text-align: center;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .image-box {margin-left: auto; margin-right: auto;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content img.contained {width: 100%;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content figcaption {font-style: italic; margin-top: 0.25em;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content figcaption .type, .mathbook-content figcaption .codenumber {font-style: normal; font-weight: bold;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .summary-links li {list-style: none;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .summary-links a {display: block; margin: 0.5em 0; padding: 0.6em 0.9em; border: 0.05em solid #888888; border-radius: 0.5em; font-size: 1.2em; font-weight: bold; text-decoration: none;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .summary-links a .codenumber {margin-right: 0.5em;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .sbsrow {display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); column-gap: 3%; align-items: start;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .sbspanel.middle, .mathbook-content .sbspanel--middle {align-self: center;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .sbspanel.bottom, .mathbook-content .sbspanel--bottom {align-self: end;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content table {border-collapse: collapse;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content table td, .mathbook-content table th {padding: 0.2em 0.5em; border: 0 solid;}&#xa;</xsl:text>
+            <!-- host themes stripe and highlight table rows; authored -->
+            <!-- tables speak through their rules, never backgrounds.  -->
+            <!-- The full "background" shorthand, explicit alternating -->
+            <!-- selectors, and !important outrank any host theme.     -->
+            <xsl:text>.mathbook-content table tr, .mathbook-content table td, .mathbook-content table th {background: transparent !important;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content table tbody tr:nth-child(odd), .mathbook-content table tbody tr:nth-child(even), .mathbook-content table tbody tr:hover {background: transparent !important;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.t1, .mathbook-content th.t1 {border-top-width: 1px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.t2, .mathbook-content th.t2 {border-top-width: 2px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.t3, .mathbook-content th.t3 {border-top-width: 3px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.b1, .mathbook-content th.b1 {border-bottom-width: 1px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.b2, .mathbook-content th.b2 {border-bottom-width: 2px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.b3, .mathbook-content th.b3 {border-bottom-width: 3px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.l1, .mathbook-content th.l1 {border-left-width: 1px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.l2, .mathbook-content th.l2 {border-left-width: 2px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.l3, .mathbook-content th.l3 {border-left-width: 3px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.r1, .mathbook-content th.r1 {border-right-width: 1px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.r2, .mathbook-content th.r2 {border-right-width: 2px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.r3, .mathbook-content th.r3 {border-right-width: 3px;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.l {text-align: left;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.c {text-align: center;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content td.r {text-align: right;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content table tr.header-vertical th {writing-mode: vertical-rl; padding-left: 2em;}&#xa;</xsl:text>
+            <xsl:text>.mathbook-content .sbspanel img {max-width: 100%;}&#xa;</xsl:text>
+            <xsl:text>&lt;/style&gt;</xsl:text>
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
@@ -335,7 +370,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="markdown-cell">
         <xsl:with-param name="content">
             <xsl:call-template name="begin-string" />
-            <xsl:text>**Important:** to view this notebook properly you will need to execute the cell above, which assumes you have an Internet connection.  It should already be selected, or place your cursor anywhere above to select.  Then press the "Run" button in the menu bar above (the right-pointing arrowhead), or press Shift-Enter on your keyboard.</xsl:text>
+            <xsl:text>The collapsed code cell above adds some light styling, and in a trusted notebook it takes effect automatically.  If this page looks plain, run that cell once, with Shift-Enter or a Run button.  Everything below is fully readable either way, and nothing here requires an Internet connection.</xsl:text>
             <xsl:call-template name="end-string" />
         </xsl:with-param>
     </xsl:call-template>
@@ -755,7 +790,16 @@ TODO: (overall)
 <!-- to hold raw text/code        -->
 <xsl:template name="code-cell">
     <xsl:param name="content" />
+    <!-- "purpose" flags special cells (only 'styling' so far) for -->
+    <!-- extra treatment by the Python routine: the styling cell   -->
+    <!-- collapses, and ships with its output pre-rendered         -->
+    <xsl:param name="purpose" select="''"/>
     <cell type="code">
+        <xsl:if test="not($purpose = '')">
+            <xsl:attribute name="purpose">
+                <xsl:value-of select="$purpose"/>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:value-of select="$content" />
     </cell>
 </xsl:template>

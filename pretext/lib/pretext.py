@@ -3306,12 +3306,28 @@ def jupyter(xml_source, pub_file, stringparams, file_format, out_file, dest_dir)
             # by the stylesheet (containing element, its identifier,
             # fragment position); preserve them for tools and themes
             structure = {k: v for k, v in cell.attrib.items() if k != "type"}
+            # a special purpose is instruction to this routine,
+            # not structure worth preserving in the metadata
+            purpose = structure.pop("purpose", None)
             if cell.get("type") == "code":
                 new_cell = nbformat.v4.new_code_cell(source)
             else:
                 new_cell = nbformat.v4.new_markdown_cell(source)
             if structure:
                 new_cell.metadata["pretext"] = structure
+            if purpose == "styling":
+                # collapse the input in JupyterLab and Notebook (v7+),
+                # and hide it entirely in a Jupyter Book build
+                new_cell.metadata["jupyter"] = {"source_hidden": True}
+                new_cell.metadata["tags"] = ["hide-input"]
+                # ship the cell's effect as a pre-rendered output, so
+                # a *trusted* notebook is styled on opening, with no
+                # execution; the notebook's own security model decides,
+                # and an untrusted notebook just offers the cell to run
+                html = source.split("\n", 1)[1] if source.startswith("%%html") else source
+                new_cell.outputs.append(
+                    nbformat.v4.new_output("display_data", data={"text/html": html})
+                )
             notebook.cells.append(new_cell)
         # the final filename is the description's, less the "xml" suffix
         notebook_file = os.path.splitext(description)[0]
