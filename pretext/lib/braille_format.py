@@ -661,14 +661,21 @@ class BRF:
             self.write_fragment("text", sxml.text, None, s)
         children = list(sxml)
         for c in children:
+            # A child that is not a recognized typeface means the
+            # intermediate XML has structure nested inside a segment,
+            # which this renderer cannot express.  Degrade rather than
+            # halt: immediate text is rendered as plain text, and any
+            # content nested deeper is dropped from the output.
+            typeface = c.tag
+            if typeface not in ("italic", "bold", "code", "math"):
+                print('BUG: unexpected element "{}" inside a segment; its text is rendered plain and any nested content is dropped'.format(c.tag))
+                typeface = "text"
             if c.text:
                 if 'punctuation' in c.attrib:
                     math_punctuation = c.attrib['punctuation']
                 else:
                     math_punctuation = None
-                # Following can help debug nested segments
-                # print("SUSPECT TYPEFACE", c.tag, c.text)
-                self.write_fragment(c.tag, c.text, math_punctuation, s)
+                self.write_fragment(typeface, c.text, math_punctuation, s)
             if c.tail:
                 self.write_fragment("text", c.tail, None, s)
 
@@ -880,14 +887,10 @@ class BRF:
         elif typeface == "code":
             typeforms = [BRF.trans1_bit] * len(aline)
         else:
-            print('BUG: did not recognize typeface "{}"'.format(typeface) )
-            # May be the Python error:
-            #    UnboundLocalError: local variable 'typeforms' referenced before assignment
-            # When this error message reports "segment" as the typeface,
-            # it means there are nested segments.  Search this module for
-            # "SUSPECT TYPEFACE" to find a useful debugging statement to use.
-            # Setting "typeforms = None" here can keep processing alive but is
-            # likely to lead to incorrect reesults.
+            # Callers vet typefaces, so this is a defensive fallback:
+            # translate as plain text rather than halt the conversion.
+            print('BUG: did not recognize typeface "{}"; translating as plain text'.format(typeface))
+            typeforms = None
 
         return louis.translateString(tableList, aline, typeforms, 0)
 
