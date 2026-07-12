@@ -1507,6 +1507,32 @@
     </xsl:choose>
 </xsl:template>
 
+<!-- A MyOpenMath problem may arrive with a link whose address    -->
+<!-- *is* an entire data file (a "data:" address), defused with a -->
+<!-- "denied:" prefix during harvesting.  No reading system can   -->
+<!-- use it, so a placeholder states what is missing, naming the  -->
+<!-- type of the file, and the link's visible text as an          -->
+<!-- identifier, when there is one                                -->
+<xsl:template match="url[starts-with(@href, 'denied:')]">
+    <xsl:variable name="mime-type" select="substring-before(substring-after(@href, 'denied:data:'), ';')"/>
+    <xsl:text>[</xsl:text>
+    <xsl:choose>
+        <xsl:when test="not($mime-type = '')">
+            <xsl:value-of select="translate(substring-after($mime-type, '/'), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+            <xsl:text> data file not included here</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>Data file not included here</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="normalize-space(.) != ''">
+        <xsl:text>: "</xsl:text>
+        <xsl:value-of select="normalize-space(.)"/>
+        <xsl:text>"</xsl:text>
+    </xsl:if>
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
 <!-- A data file packaged into a document is intended for reader  -->
 <!-- download, which no reading system offers; the reference      -->
 <!-- renders as its visible text, with no dead hyperlink          -->
