@@ -3233,6 +3233,138 @@ def epub(xml_source, pub_file, out_file, dest_dir, file_format, math_format, str
         log.warning(msg.format(file_format))
 
 
+#######################
+# Conversion to Jupyter
+#######################
+
+def jupyter(xml_source, pub_file, stringparams, file_format, out_file, dest_dir):
+    """Produce a collection of Jupyter notebooks, one per chunk
+
+    file_format - 'collection' deposits the files in dest_dir;
+                  'zip' bundles them as a single zip file, deposited
+                  as out_file, else with a name derived from the
+                  source filename
+    """
+
+    # The XSL stylesheet writes one XML *description* of a notebook
+    # for each chunk of the document: a flat list of "cell" elements
+    # holding strings.  Here each description becomes the JSON of a
+    # Jupyter notebook via the "nbformat" package, which owns string
+    # escaping, cell boilerplate, and conformance with the notebook
+    # schema.  Every notebook is validated before it is written.
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    try:
+        import nbformat
+    except ImportError:
+        raise ImportError(__module_warning.format("nbformat"))
+    # filename globbing for the notebook descriptions
+    import glob
+
+    log.info("converting {} into Jupyter notebooks in {}".format(xml_source, dest_dir))
+
+    tmp_dir = common.get_temporary_directory()
+    log.debug("Jupyter notebook manufacture in temporary directory: {}".format(tmp_dir))
+    # The notebook descriptions are moved here once converted: out of
+    # the shipped product, but preserved for inspection (a temporary
+    # directory survives when verbosity is at the debug level)
+    description_dir = common.get_temporary_directory()
+    log.info("notebook descriptions are retained in {}".format(description_dir))
+
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    extraction_xslt = os.path.join(common.get_ptx_xsl_path(), "pretext-jupyter.xsl")
+    # stylesheet writes "*.ipynb.xml" notebook descriptions, one per
+    # chunk, into the scratch directory; the result tree is empty
+    common.xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+
+    # notebooks reference images relative to their own location
+    generated_abs, external_abs = common.get_managed_directories(xml_source, pub_file)
+    common.copy_managed_directories(tmp_dir, external_abs=external_abs, generated_abs=generated_abs)
+
+    # display names a reader sees in the Jupyter kernel menu
+    kernel_display = {"sagemath": "SageMath", "python3": "Python 3"}
+
+    invalid = []
+    descriptions = sorted(glob.glob(os.path.join(tmp_dir, "*.ipynb.xml")))
+    if not descriptions:
+        log.warning("PTX:BUG: the Jupyter conversion produced no notebook descriptions")
+    for description in descriptions:
+        tree = ET.parse(description)
+        root = tree.getroot()
+        notebook = nbformat.v4.new_notebook()
+        kernel = root.get("kernel")
+        notebook.metadata["kernelspec"] = {
+            "name": kernel,
+            "display_name": kernel_display.get(kernel, kernel),
+        }
+        for cell in root.iter("cell"):
+            source = cell.text if cell.text else ""
+            # attributes beyond the cell type are structure recorded
+            # by the stylesheet (containing element, its identifier,
+            # fragment position); preserve them for tools and themes
+            structure = {k: v for k, v in cell.attrib.items() if k != "type"}
+            # a special purpose is instruction to this routine,
+            # not structure worth preserving in the metadata
+            purpose = structure.pop("purpose", None)
+            if cell.get("type") == "code":
+                new_cell = nbformat.v4.new_code_cell(source)
+            else:
+                new_cell = nbformat.v4.new_markdown_cell(source)
+            if structure:
+                new_cell.metadata["pretext"] = structure
+            if purpose == "styling":
+                # collapse the input in JupyterLab and Notebook (v7+),
+                # and hide it entirely in a Jupyter Book build
+                new_cell.metadata["jupyter"] = {"source_hidden": True}
+                new_cell.metadata["tags"] = ["hide-input"]
+                # ship the cell's effect as a pre-rendered output, so
+                # a *trusted* notebook is styled on opening, with no
+                # execution; the notebook's own security model decides,
+                # and an untrusted notebook just offers the cell to run
+                html = source.split("\n", 1)[1] if source.startswith("%%html") else source
+                new_cell.outputs.append(
+                    nbformat.v4.new_output("display_data", data={"text/html": html})
+                )
+            notebook.cells.append(new_cell)
+        # the final filename is the description's, less the "xml" suffix
+        notebook_file = os.path.splitext(description)[0]
+        try:
+            nbformat.validate(notebook)
+        except Exception:
+            invalid.append(os.path.basename(notebook_file))
+            log.error('PTX:BUG: notebook "{}" failed validation.  Traceback follows:'.format(os.path.basename(notebook_file)))
+            log.error(traceback.format_exc())
+        nbformat.write(notebook, notebook_file)
+        # the description does not ship, but is retained for inspection
+        shutil.move(description, description_dir)
+    log.info("converted {} notebook descriptions, {} failed validation".format(len(descriptions), len(invalid)))
+
+    if file_format == "collection":
+        common.copy_build_directory(tmp_dir, dest_dir)
+        log.info("Jupyter notebooks deposited in {}".format(dest_dir))
+    elif file_format == "zip":
+        # working in the temporary directory gets simple paths in the
+        # zip file; the model is the HTML bundle above
+        with common.working_directory(tmp_dir):
+            zip_file = "jupyter-output.zip"
+            log.info("packaging a zip file temporarily as {}".format(os.path.join(tmp_dir, zip_file)))
+            with zipfile.ZipFile(zip_file, mode="w", compression=zipfile.ZIP_DEFLATED) as bundle:
+                for root, dirs, files in os.walk("."):
+                    for name in files:
+                        # avoid recursively zipping the zip file
+                        if name != zip_file:
+                            bundle.write(os.path.join(root, name))
+            derivedname = common.get_output_filename(xml_source, out_file, dest_dir, ".zip")
+            shutil.copy2(zip_file, derivedname)
+            log.info("Jupyter notebooks bundled as {}".format(derivedname))
+    else:
+        msg = 'PTX:BUG: conversion to Jupyter notebooks got an unrecognized file format ("{}").  No output results.'
+        log.warning(msg.format(file_format))
+
+
 ####################
 # Conversion to HTML
 ####################

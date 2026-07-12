@@ -13,6 +13,7 @@
                     Html? &
                     Revealjs? &
                     Epub? &
+                    Jupyter? &
                     Webwork?
                 }
             
@@ -407,6 +408,11 @@
                     element cover {
                         attribute front { text }
                     }
+                }
+            
+            Jupyter =
+                element jupyter {
+                    attribute kernel { "sagemath" | "python3" }
                 }
             
             Webwork =

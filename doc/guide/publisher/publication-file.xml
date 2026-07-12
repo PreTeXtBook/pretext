@@ -1118,6 +1118,25 @@
         </subsection>
     </section>
 
+    <section xml:id="publication-file-jupyter" label="publication-file-jupyter">
+        <title>Jupyter Options</title>
+        <idx>Jupyter publisher options</idx>
+        <idx><h>publisher options</h><h>Jupyter</h></idx>
+
+        <introduction>
+            <p>These options are specific to a conversion to Jupyter notebooks.  But because a notebook's text cells are built from <init>HTML</init>, many of the options in <xref ref="publication-file-online"/> can have an effect.  See <xref ref="jupyter-notebook"/> for an overview of the conversion.</p>
+        </introduction>
+
+        <subsection xml:id="jupyter-kernel-option" label="jupyter-kernel-option">
+            <title>Jupyter Kernel</title>
+            <idx><h>Jupyter notebook</h><h>kernel</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/jupyter/@kernel</cline>
+            </cd>attribute names the kernel that will execute the code cells of each notebook.  The value <c>sagemath</c> (the default) names the latest Sage kernel of the Sage distribution's Jupyter, and of CoCalc; the value <c>python3</c> names the standard Python kernel present in every Jupyter installation.  See <xref ref="jupyter-kernel"/> for more.</p>
+        </subsection>
+    </section>
+
     <section xml:id="publication-file-source">
         <title>Source Options</title>
         <idx>source publisher options</idx>

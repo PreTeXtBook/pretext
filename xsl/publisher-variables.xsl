@@ -3041,6 +3041,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- The kernel a Jupyter notebook opens with; "sagemath" -->
+<!-- names the latest kernel of the Sage distribution's   -->
+<!-- Jupyter, and of CoCalc                               -->
+<xsl:variable name="jupyter-kernel">
+    <xsl:choose>
+        <!-- The stringparam (deprecated 2026-07-10) once accepted many  -->
+        <!-- spellings of the Python kernel's name; each normalizes to   -->
+        <!-- "python3", with a warning.  The canonical values continue   -->
+        <!-- through the generic machinery, which has its own warning.   -->
+        <xsl:when test="not($jupyter.kernel = '') and not($jupyter.kernel = 'python3') and not($jupyter.kernel = 'sagemath') and contains('|Python3|python 3|Python 3|py|Py|python|Python|', concat('|', $jupyter.kernel, '|'))">
+            <xsl:text>python3</xsl:text>
+            <xsl:message>PTX:WARNING: the stringparam "jupyter.kernel" is deprecated (2026-07-10), and your value "<xsl:value-of select="$jupyter.kernel"/>" has been interpreted as "python3".  Move to the publication file entry, jupyter/@kernel, with the value "python3".</xsl:message>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$publisher-attribute-options/jupyter/pi:pub-attribute[@name='kernel']" mode="set-pubfile-variable"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ###################### -->
 <!-- LaTeX-Specific Options -->
@@ -3690,6 +3709,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="front" freeform="yes"/>
         </cover>
     </epub>
+    <jupyter>
+        <pi:pub-attribute name="kernel" default="sagemath" options="python3" legacy-stringparam="jupyter.kernel"/>
+    </jupyter>
     <latex>
         <pi:pub-attribute name="sides" options="one two" legacy-stringparam="latex.sides"/>
         <pi:pub-attribute name="print" default="no" options="yes" legacy-stringparam="latex.print"/>
@@ -3979,6 +4001,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="chunk.level" select="''" />
 <!-- 2021-01-03 toc.level to publisher file -->
 <xsl:param name="toc.level" select="''" />
+<!-- 2026-07-10 jupyter.kernel to publisher file -->
+<xsl:param name="jupyter.kernel" select="''" />
 
 <!-- Deprecated 2021-01-23, but still respected -->
 <xsl:param name="html.knowl.theorem" select="''" />

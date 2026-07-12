@@ -104,6 +104,7 @@
                     Html? &amp;
                     Revealjs? &amp;
                     Epub? &amp;
+                    Jupyter? &amp;
                     Webwork?
                 }
             </code>
@@ -622,6 +623,25 @@
 
 
     <section>
+        <title>Jupyter Options</title>
+
+        <p>
+            These option(s) control the Jupyter notebook output.
+        </p>
+
+        <fragment xml:id="jupyter">
+            <title>Jupyter Options</title>
+            <code>
+            Jupyter =
+                element jupyter {
+                    attribute kernel { "sagemath" | "python3" }
+                }
+            </code>
+        </fragment>
+    </section>
+
+
+    <section>
         <title><webwork/> Options</title>
 
         <p>
@@ -665,6 +685,7 @@
             <fragref ref="html" />
             <fragref ref="revealjs" />
             <fragref ref="epub" />
+            <fragref ref="jupyter" />
             <fragref ref="webwork" />
             <code>
             }

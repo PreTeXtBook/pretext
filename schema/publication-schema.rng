@@ -31,6 +31,9 @@
           <ref name="Epub"/>
         </optional>
         <optional>
+          <ref name="Jupyter"/>
+        </optional>
+        <optional>
           <ref name="Webwork"/>
         </optional>
       </interleave>
@@ -1269,6 +1272,16 @@
       <element name="cover">
         <attribute name="front"/>
       </element>
+    </element>
+  </define>
+  <define name="Jupyter">
+    <element name="jupyter">
+      <attribute name="kernel">
+        <choice>
+          <value>sagemath</value>
+          <value>python3</value>
+        </choice>
+      </attribute>
     </element>
   </define>
   <define name="Webwork">

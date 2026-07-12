@@ -421,6 +421,8 @@ def get_cli_arguments():
         ("epub-mml-nozip", "EPUB build files, math as MathML"),
         ("epub-speech-nozip", "EPUB build files, math as speech"),
         ("epub-kindle-nozip", "EPUB build files, math as MathML, PNG images"),
+        ("jupyter", "Jupyter notebooks, cells of text and code"),
+        ("jupyter-zip", "Jupyter notebooks, cells of text and code (single zip file)"),
         (
             "assembly-static",
             "PreTeXt source, after pre-processor, static exercises (for developers)",
@@ -932,6 +934,10 @@ def main():
             ptx.braille(xml_source, publication_file, stringparams, out_file, dest_dir, "emboss")
         elif args.format == "braille-electronic":
             ptx.braille(xml_source, publication_file, stringparams, out_file, dest_dir, "electronic")
+        elif args.format == "jupyter":
+            ptx.jupyter(xml_source, publication_file, stringparams, "collection", out_file, dest_dir)
+        elif args.format == "jupyter-zip":
+            ptx.jupyter(xml_source, publication_file, stringparams, "zip", out_file, dest_dir)
         elif args.format == "epub-svg":
             ptx.epub(xml_source, publication_file, out_file, dest_dir, "epub", "svg", stringparams)
         elif args.format == "epub-mml":
