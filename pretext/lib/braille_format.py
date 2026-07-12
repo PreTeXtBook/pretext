@@ -403,7 +403,15 @@ class BRF:
         # Do the deal, in a sandbox
         # Type will be "Block" or "Segment"
         if type(seg) == Segment:
+            # Processing marches a segment's first_line marker
+            # forward, so a trial must restore it, else the real
+            # rendering would begin with runover indentation in
+            # place of first-line indentation.  (A block builds
+            # its interior segments afresh on every processing,
+            # so a trial of a block disturbs nothing.)
+            first_line = seg.first_line
             sandbox_brf.process_segment(seg)
+            seg.first_line = first_line
         else:
             sandbox_brf.process_block(seg)
         # Attach some lines of content, virtually
