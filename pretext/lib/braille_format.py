@@ -17,181 +17,41 @@
 # along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
-# A routine PreTeXt package/module, so
-# natural to import at the module level
-# needs warning if not available
+# The braille renderer: the second of two passes.  The first pass
+# (braille_translate.py) made contracted UEB braille of all print
+# text, so this module knows nothing of translation; it knows cells,
+# lines, and pages.  It works in two stages:
+#
+#   * The LINE STAGE (LineComposer) forms the lines of one segment:
+#     word-wrapping, first-line indentation and runover, centering,
+#     Nemeth indicator fusing for inline mathematics.  It is
+#     position-aware -- the width of a line depends on whether it
+#     lands on the last line of an embossed page, where a page
+#     number lives -- but it writes nothing: it returns lines.
+#
+#   * The PAGE STAGE (PageComposer) pours lines onto pages: blank
+#     lines and their suppression at page tops, page-break avoidance
+#     for unbreakable material (arithmetic on line counts, computed
+#     by running the line stage as a trial), page numbers, and form
+#     feeds.
+#
+# The two stages communicate through Position objects (row on page,
+# page number), which advance deterministically, so a trial run of
+# the line stage answers "how many lines, crossing which pages?"
+# without rendering anything twice.
+
 import lxml.etree as ET
 
+# "common" holds the canonical __module_warning; we alias it here so the
+# warning below reads the same as everywhere else
+from . import common
+__module_warning = common.__module_warning
+
 # could import in a routine, but will do here in the module
-# Note: an import into the BRF class requires changes to the static method
 try:
     import louis
 except ImportError:
-    msg = 'The "louis" module, providing Python bindings for LibLouis, is required for Braille output.  See the PreTeXt Guide for instructions.'
-    raise ImportError(msg)
-
-# A  Cursor  object tracks location in a BRF file:
-# location in a line, line in a page, overall page number
-# It is initialized with the overall shape/body of a page
-# The location in a line is redundant given that it is easily
-# computable from the state of the line buffer.  But we can
-# base an assertion on a comparison of the two objects.  So
-# during active development we use both objects as a check
-# on the use of the line buffer.
-
-class Cursor:
-
-    def __init__(self, width, height, page_format):
-        # page shape, dimensions, at creation time
-        self.page_width = width
-        self.page_height = height
-        # Finally, we interpret `page_format`
-        if page_format == 'emboss':
-            self.emboss = True
-        elif page_format == 'electronic':
-            self.emboss = False
-        else:
-            print("BUG: page format not recognized, so embossing")
-            self.emboss = True
-        # we allow for variable length lines, in
-        # order to allow for insertion of page numbers
-        self.text_width = width
-        # initialize clean slate
-        # chars, lines are *remaining* room
-        # they will decrement to zero
-        self.chars_left = self.text_width
-        # Default brehavior is to form pages for embossing, which requires
-        # a lot of attention to page breaks and page numbers.  BUT, if we
-        # start with an absurd number of lines available, AND we never
-        # decrement the number of lines available then we will never think
-        # we are at the bottom of a page.  No page breaks, no adjustment of
-        # the page number, no writing out page numbers.   It is like the
-        # file is an infinitely long page.  See companion discussion
-        # at Cursor.advance_line().
-        if self.emboss:
-            self.lines_left = self.page_height
-        else:
-            self.lines_left = 2*self.page_height
-        # page_num is the page being produced
-        # increment as a new page begins
-        self.page_num = 1
-
-    # this includes the line currently under formation
-    def remaining_lines(self):
-        return self.lines_left
-
-    def remaining_characters(self):
-        return self.chars_left
-
-    def at_page_start(self):
-        return (self.chars_left == self.text_width) and (self.lines_left == self.page_height)
-
-    def page_number(self):
-        return self.page_num
-
-    def embossing(self):
-        return self.emboss
-
-    #########
-    # Actions
-    #########
-
-    def new_page(self):
-        # refresh lines remaining
-        self.lines_left = self.page_height
-        # increment page number
-        self.page_num += 1
-
-    def advance_line(self):
-        # decrement the lines available
-        # This is where we decrement the number of lines available
-        # on a page.  And it is the only place.  If not embossing,
-        # then no page, so we conspire to never change the lines
-        # available count.  It is like the file is an infinitely
-        # long page.  See companion discussion at Cursor.__init__().
-        if self.emboss:
-            self.lines_left -= 1
-        else:
-            pass
-
-        # Restore the number of available characters
-        self.chars_left = self.text_width
-
-        # falling off page end provokes new page
-        if self.lines_left == 0:
-            self.new_page()
-
-    # Note: it is possible to adjust text width
-    # while in the middle of forming a line
-    def adjust_text_width(self, adjustment):
-        self.text_width  += adjustment
-        self.chars_left  += adjustment
-
-    def advance(self, nchars):
-        # do not do this unless there is room
-        # does not provoke a new line
-        self.chars_left -= nchars
-        if self.chars_left < 0:
-            print("BUG: negative chars")
-
-# The line buffer is used to break a long line of words into
-# a sequence of lines that fit width-wise on a braille page.
-# The orignal `fragment` is assumed to have no line-breaks.
-# As we fill the line buffer, some spaces become newlines.
-# So in the usual parlance this is "text-wrapping".  However,
-# we also manage automatic page breaks once a page is full.
-
-
-class LineBuffer:
-
-    def __init__(self, width):
-        self.contents = ''
-        self.page_width = width
-        self.text_width = width
-
-    # Properties
-
-    def is_room(self, text):
-        return len(self.contents) + len(text) <= self.text_width
-
-    def is_empty(self):
-        return self.contents == ''
-
-    def remaining_chars(self):
-        return self.text_width - len(self.contents)
-
-    # Actions
-
-    def add(self, text):
-        self.contents += text
-
-    def adjust_text_width(self, adjustment):
-        self.text_width += adjustment
-
-    def flush(self, brf):
-        # Flushing the line buffer places the contents into
-        # the `out_buffer` of the BRF object provided.
-
-        # this does not write a newline character as we
-        # may want to end without provoking a new page
-        # Non-breaking spaces have done their job, and we
-        # do not want to see them in the BRF file.  Thanks,
-        # you are dismissed.
-        self.contents = self.contents.replace("\xA0", " ")
-
-        # Unlikely a non-breaking space may be at the end of a line,
-        # but we do this in a particular order just in case.
-        # Remove trailing spaces which are important for spacing off
-        # mixed content, but can end up at the end of a line where they
-        # are not needed.  This does not harm line-breaking, since if
-        # another word would fit, then the space would need to be there.
-        if not(self.contents == '') and self.contents[-1] == " ":
-            self.contents = self.contents[:-1]
-
-        # OK, the main event
-        brf.write(self.contents)
-        # Once written, reset contents
-        self.contents = ''
+    raise ImportError(__module_warning.format("louis"))
 
 
 class Segment:
@@ -199,9 +59,6 @@ class Segment:
     def __init__(self, s):
 
         self.xml = s
-
-        # For switching from indentation to runover
-        self.first_line = True
 
         # decipher, record attributes
         attrs = s.attrib
@@ -306,242 +163,162 @@ class Block:
             self.punctuation = None
 
 
-class BRF:
+class Position:
+    """Where the next line of content will land.
 
-    # spaces prior to a page number, duplicated in Cursor
+    row is 1-based: the line on the page about to be formed.  page
+    is the page number that row belongs to.  For electronic (single,
+    endless page) output, the row never advances past 1 of page 1 in
+    any meaningful way; see PageLayout.
+    """
+
+    def __init__(self, row, page):
+        self.row = row
+        self.page = page
+
+    def copy(self):
+        return Position(self.row, self.page)
+
+
+class PageLayout:
+    """The shape of a page, and what geometry implies for each line.
+
+    Embossed pages have a page number in the lower-right corner: the
+    last line of every page reserves separating space and the digits
+    of the number, so lines landing there are narrower.  Electronic
+    output is one endless page: no last lines, no numbers, no form
+    feeds.
+    """
+
+    # blank cells between content and a page number
     page_num_sep = 3
 
-    # Nemeth switch indicators, class variables for convenience
-    nemeth_open = "\u2838\u2829"
-    nemeth_close = "\u2838\u2831"
+    def __init__(self, width, height, page_format):
+        self.width = width
+        self.height = height
+        if page_format == 'emboss':
+            self.emboss = True
+        elif page_format == 'electronic':
+            self.emboss = False
+        else:
+            print("BUG: page format not recognized, so embossing")
+            self.emboss = True
 
-    def __init__(self, page_format, width, height, symbols):
-        self.out_buffer = ''
-        self.accumulator = []
-        self.toc_dict = {}
-        self.toc_mode = False
-        self.cursor = Cursor(width, height, page_format)
-        self.line_buffer = LineBuffer(width)
-        # "early": mathematics arrived as BRF ASCII symbols, so the
-        # renderer must not translate it.  "late": mathematics is
-        # Unicode braille cells, translated when written (dot-for-dot).
-        # The choice rides on the root element of the preprint.
-        self.symbols_early = (symbols == "early")
-        # True while the segments of a Nemeth display block are
-        # being written, since their content is mathematics
-        self.in_nemeth_box = False
+    def is_last_row(self, position):
+        return self.emboss and (position.row == self.height)
 
-    # Properties (boolean functions) reported
-    # by the current line buffer or default/embedded cursor
+    def text_width(self, position, reduction):
+        """Width available for content of the line at this position.
 
-    def is_room_on_line(self, text):
-        return self.line_buffer.is_room(text)
+        reduction is the caller's own reservation (centering margins,
+        table-of-contents page-number columns).
+        """
+        width = self.width - reduction
+        if self.is_last_row(position):
+            width -= (PageLayout.page_num_sep + len(braille_number(position.page)))
+        return width
+
+    def advance(self, position):
+        """The position of the line after this one."""
+        if self.emboss and (position.row == self.height):
+            return Position(1, position.page + 1)
+        else:
+            return Position(position.row + 1, position.page)
+
+    def at_page_start(self, position):
+        # The top of an embossed page.  Electronic output is never
+        # at a page start, not even at the very beginning -- so
+        # requested blank lines always appear.  (This mirrors
+        # long-standing behavior of the electronic layout.)
+        return self.emboss and (position.row == 1)
+
+
+# The UEB Grade 2 table includes Grade 1 explicitly
+_TABLES = ["en-ueb-g2.ctb"]
+
+# Nemeth switch indicators, Unicode braille cells
+NEMETH_OPEN = "⠸⠩"
+NEMETH_CLOSE = "⠸⠱"
+
+
+def translate_print(aline):
+    # Renderer-generated print (page numbers, guide dots) and
+    # Unicode braille cells (which convert dot-for-dot) become
+    # BRF ASCII symbols.  Body text never passes through here:
+    # it arrives already translated, typeforms and all, from the
+    # translation pass (braille_translate.py).
+    return louis.translateString(_TABLES, aline, None, 0)
+
+
+def contains_unicode_braille(aline):
+    # The blank cell U+2800 is excluded: alone it says nothing,
+    # since genuine mathematics always carries patterned cells
+    return any(("\u2801" <= c) and (c <= "\u28FF") for c in aline)
+
+
+# Page numbers appear on every embossed page, and every line of the
+# renderer's geometry needs their braille length, so memoize them
+_braille_numbers = {}
+
+def braille_number(number):
+    """The braille form of a page number (memoized)."""
+    if number not in _braille_numbers:
+        _braille_numbers[number] = translate_print(str(number))
+    return _braille_numbers[number]
+
+
+class LineComposer:
+    """The line stage: form the lines of one segment.
+
+    Position-aware but side-effect free: feed it the fragments of a
+    segment, collect completed lines (content only -- page numbers
+    and form feeds belong to the page stage).  Lines are accounted
+    against the layout as they complete, so widths follow the page
+    geometry, including the narrower last line of an embossed page.
+    """
+
+    def __init__(self, layout, position, seg, symbols_early, reduction):
+        self.layout = layout
+        self.position = position.copy()
+        self.seg = seg
+        self.symbols_early = symbols_early
+        # a standing reservation of cells (centering, ToC number column)
+        self.reduction = reduction
+        self.lines = []
+        self.contents = ''
+        self.first_line = True
+
+    # Properties
 
     def at_line_start(self):
-        return self.line_buffer.is_empty()
+        return self.contents == ''
 
-    # Designed for segments and blocks, to avoid poor placement
-    # near a page break.  Key is a trial/sandbox BRF object and
-    # its associated cursor.
-    #
-    #  * Trial does not provoke a page break.  Good.
-    #  * Trial provokes two page breaks.  Too bad, nothing to be done.
-    #  * Trial provokes exactly one page break.
-    #     - if content is more than a page, that's life
-    #     - see if content fits on a page, recommend a page advance
-    #
-    # Note: this is a bit disingenuous.  This allows both a segment
-    # and a block as an argument, on the assumption they have common
-    # attributes employed here.  Really they should be derived from
-    # a common object.  A switch on object type is necessary to call
-    # the two different BRF "process" methods, no matter what.
-    def needs_page_advance(self, seg):
-        import copy
+    def remaining_characters(self):
+        return self.layout.text_width(self.position, self.reduction) - len(self.contents)
 
-        # A "page" only makes sense if embossing
-        if not(self.cursor.embossing()):
-            return False
-
-        # If segment explicitly creates a new page,
-        # then the question of space is moot
-        if seg.ownpage or seg.newpage:
-            return False
-
-        # Line numbers could be actual line numbers for first and
-        # last line of content produced by the sandbox BRF.
-        # Formula would be
-        #
-        #     line-number = page-height - remaining-lines + 1
-        #
-        # We will subtract the starting line from the finishing line,
-        # so the page-heights and the "+1" will cancel out.  Thus
-        # definitions are just the negatives of the remaining lines.
-        #
-        # Segment processing always ends on a new line, so the finishing
-        # line has a "-1" to walk it back a line (and if the segment reset
-        # goes to a new page, then the remaining lines would be zero on
-        # the previous page, set to negative zero here).
-
-        orginal_cursor = self.cursor
-        start_page = orginal_cursor.page_number()
-        start_line = -orginal_cursor.remaining_lines()
-        # All changes (cursor movement, text-wrapping) occur in a
-        # throwaway renderer: empty, but positioned exactly where
-        # this one is.  Processing decisions depend only on the
-        # cursor, the line buffer, and the modes below -- never on
-        # accumulated output -- so the trial reproduces them
-        # faithfully at the cost of processing one segment.
-        page_format = 'emboss' if self.cursor.embossing() else 'electronic'
-        symbols = 'early' if self.symbols_early else 'late'
-        sandbox_brf = BRF(page_format, self.cursor.page_width, self.cursor.page_height, symbols)
-        sandbox_brf.cursor = copy.copy(self.cursor)
-        sandbox_brf.line_buffer = copy.copy(self.line_buffer)
-        sandbox_brf.toc_mode = self.toc_mode
-        sandbox_brf.toc_dict = dict(self.toc_dict)
-        sandbox_brf.in_nemeth_box = self.in_nemeth_box
-        sandbox_cursor = sandbox_brf.cursor
-        # Do the deal, in a sandbox
-        # Type will be "Block" or "Segment"
-        if type(seg) == Segment:
-            # Processing marches a segment's first_line marker
-            # forward, so a trial must restore it, else the real
-            # rendering would begin with runover indentation in
-            # place of first-line indentation.  (A block builds
-            # its interior segments afresh on every processing,
-            # so a trial of a block disturbs nothing.)
-            first_line = seg.first_line
-            sandbox_brf.process_segment(seg)
-            seg.first_line = first_line
-        else:
-            sandbox_brf.process_block(seg)
-        # Attach some lines of content, virtually
-        for i in range(seg.lines_following):
-            sandbox_cursor.advance_line()
-
-        finish_page = sandbox_cursor.page_number()
-        finish_line = -sandbox_cursor.remaining_lines() - 1
-        # Except, segment finishes ready-to-go,
-        # which could be the tip-top of the next page.
-        if sandbox_cursor.at_page_start():
-            finish_page -= 1
-            finish_line = -0
-
-        # Fine as-is, no page boundary has been broached
-        if (finish_page - start_page) == 0:
-            return False
-        # Really long, hopeless, a break doesn't help
-        elif (finish_page - start_page) > 1:
-            return False
-        # Exactly one page-break, so look to line numbers
-        # More than a page-full, since finish is later
-        elif finish_line - start_line >= 0:
-            return False
-        # There would be a break, and content would fit on the next
-        # page, so go for it and report the need for a page advance
-        else:
-            return True
-
+    def is_room(self, text):
+        return self.remaining_characters() - len(text) >= 0
 
     # Actions
 
-    def adjust_text_width(self, adjustment):
-        # Temporarily adjust the width of a page
-        # For example, to construct a centered heading,
-        # or to reserve space for a trailing page number.
-        # Argument is an adjustment to the current width
-        # (reduce with negative, then quickly restore with positive).
-        # A reduction must be while preparing a line, the ensuing
-        # expansion can (and often will) occur while mid-line.
-        if (adjustment < 0):
-            assert self.at_line_start(), "BUG: reducing text width, when not at a line start"
-        self.cursor.adjust_text_width(adjustment)
-        self.line_buffer.adjust_text_width(adjustment)
-
-    def write(self, text):
-        self.out_buffer += text
-
-    def advance_one_line(self):
-        # The last line needs a page number at its conclusion, so
-        # we need to (a) shorten the buffer going *into* forming
-        # that line, and (b) actually tack on the number. These
-        # booleans identify the line we are completing as we enter
-        # this method.
-        finish_penultimate = (self.cursor.remaining_lines() == 2)
-        finish_last = (self.cursor.remaining_lines() == 1)
-
-        # We need a braille version of the page number, for actual
-        # printing on the last line, or for adjusting the size of
-        # the line buffer for the last line prior to its formation.
-        if finish_penultimate or finish_last:
-            num = str(self.cursor.page_number())
-            braille_num = BRF.translate_print(num)
-
-        # before leaving last line, add a page number, flush right
-        if finish_last:
-            # a character (period?) here can aid debugging
-            gap = " " * (self.line_buffer.remaining_chars() + BRF.page_num_sep)
-            # this can exceed buffer, but we have no checks for that
-            self.line_buffer.add(gap + braille_num)
-
-        # flush the BRF's line buffer into its
-        # `out_buffer` while adding a newline
-        # TODO: have line_buffer return contents as
-        # a string, and .write() onto `out_buffer`
-        self.line_buffer.flush(self)
-        self.write("\n")
-
-        # Record the advance to new line.
-        # Note: this changes the number of remaining lines, which
-        # explains the two booleans above recording the situation
-        self.cursor.advance_line()
-
-        # If we flushed penultimate line, set up a reduced
-        # buffer for formation of the last line so there
-        # will be room for a page number
-        # Otherwise, restore the line buffer to its usual width
-        if finish_penultimate:
-            self.adjust_text_width( -(BRF.page_num_sep + len(braille_num)))
-        if finish_last:
-            self.adjust_text_width(  (BRF.page_num_sep + len(braille_num)))
-
-        # this can cause the cursor to move to the start of a new
-        # page if there were no more lines available on the page.
-        # So add FF (trl-L, ASCII 12, hex 0C) to the `out_buffer`
-        if self.cursor.at_page_start():
-            self.write("\x0C")
+    def break_line(self):
+        """Complete the line under formation, ready or not."""
+        # Non-breaking spaces have done their job, and we do not
+        # want to see them in the BRF file
+        contents = self.contents.replace("\xA0", " ")
+        # A trailing space is important for spacing off mixed
+        # content, but is not needed at the end of a line
+        if (contents != '') and (contents[-1] == " "):
+            contents = contents[:-1]
+        self.lines.append(contents)
+        self.contents = ''
+        self.position = self.layout.advance(self.position)
 
     def blank_line(self):
-        # We assume this method is only called when
-        # we are at the start of a fresh line, so
-        # flushing the line buffer does not produce
-        # any text (unless a page number is printed)
         assert self.at_line_start(), "BUG: creating a blank line, but not at the start of a line"
-        # `advance_one_line()` should flush an empty buffer,
-        # write a newline, and manage page number output
-        self.advance_one_line()
+        self.break_line()
 
-    def advance_page(self):
-        # It might look silly to call this complicated function when we
-        # could just drop a bunch of newlines into the `out_buffer`.
-        # But we can be sure a partial line is handled correctly and we
-        # can be sure a page number gets written properly in all cases.
-        # And the FF for the end of the page.
-
-        for i in range(self.cursor.remaining_lines()):
-            self.advance_one_line()
-        self.flush()
-        if self.cursor.embossing():
-            assert self.cursor.at_page_start(), "Page advance did not reach exactly the start of a new page"
-
-    def write_word(self, word):
-        # This assumes there is room on the current line
-        # so no adjustments are made to the cursor
-        assert self.line_buffer.remaining_chars() == self.cursor.remaining_characters(), "Cursor and LineBuffer have desynced"
-        self.cursor.advance(len(word))
-        self.line_buffer.add(word)
-
-    def write_fragment(self, typeface, aline, math_punctuation, seg):
-
+    def write_fragment(self, typeface, aline, math_punctuation):
         # Body text arrives from the translation pass as braille
         # already, so most fragments ride through untouched.  The
         # exceptions: inline mathematics ("math") gets Nemeth
@@ -554,221 +331,80 @@ class BRF:
         # After this, `aline` is a BRF string, with spaces, nbsps
         if typeface == "math":
             aline = self.massage_math(aline, math_punctuation)
-        elif self.symbols_early and self.in_nemeth_box and not(BRF.contains_unicode_braille(aline)):
+        elif self.symbols_early and (typeface == "display-math") and not(contains_unicode_braille(aline)):
             # display mathematics, already BRF ASCII symbols; blank
             # cells, arriving as no-break spaces, become the plain
             # spaces that a late election gets from liblouis
-            # (a line still holding cells has print residue, and falls
-            # through for the same translation as a late election)
             aline = aline.replace("\xA0", " ")
-        elif (typeface == "print") or BRF.contains_unicode_braille(aline):
-            aline = BRF.translate_print(aline)
+        elif (typeface == "print") or contains_unicode_braille(aline):
+            aline = translate_print(aline)
 
-        # When a word is output, it gets the space from the previous split,
-        # unless it is the first word of a line and the prior space became
-        # a newline character.
+        # When a word is output, it gets the space from the previous
+        # split, unless it is the first word of a line and the prior
+        # space became a newline character.
         prior_space = ""
 
-        # We chop down `aline` until there is nothing left.  When the first
-        # space is at the end of `aline` the split will yield an empty string
-        # as the second piece.  We do want this string to pass through the
-        # `while` again, to pick up the space we split on via `prior_space`.
-        # THEN the split yields just one piece and the while ends.  This is
-        # all a long excplnation of why we control the halting of the `while`
-        # loop rather than just testing that `aline` is empty.
-
+        # We chop down `aline` until there is nothing left.  When the
+        # first space is at the end of `aline` the split will yield an
+        # empty string as the second piece.  We do want this string to
+        # pass through the `while` again, to pick up the space we
+        # split on via `prior_space`.  THEN the split yields just one
+        # piece and the while ends.  This explains why we control the
+        # halting of the `while` loop rather than just testing that
+        # `aline` is empty.
         while aline != None:
             pieces = aline.split(" ", 1)
             word = pieces[0]
-            # if we add to current output line, how many characters would
-            # be left? A negative number is indicative of no room
-            # there *is* room for previous split and next word
             next_text = prior_space + word
 
-            # `aline` is non-empty, check if at line start
             # first line:  indent and flip switch permanently to False
             # later lines: use runover instead
             if self.at_line_start():
-                if seg.first_line:
-                    pad = seg.indentation
-                    seg.first_line = False
+                if self.first_line:
+                    pad = self.seg.indentation
+                    self.first_line = False
                 else:
-                    pad = seg.runover
+                    pad = self.seg.runover
                 next_text = (" " * pad) + next_text
 
-            if self.is_room_on_line(next_text):
-                # TODO: sanitize non-breaking space now, as it has
-                # served its purpose, but we don't want it in output
-                self.write_word(next_text)
+            if self.is_room(next_text):
+                self.contents += next_text
                 prior_space = " "
-                # update, or nullify, aline
                 if len(pieces) == 2:
                     aline = pieces[1]
                 else:
-                    # A 1-piece list after a split indicates there was no
-                    # space to split on, so `word` will have been written out.
-                    # Set `aline` to `None` as sentinel.  See above for rationale.
+                    # A 1-piece list after a split indicates there was
+                    # no space to split on, so `word` has been written
+                    # out.  Set `aline` to `None` as sentinel.
                     aline = None
             elif not(self.at_line_start()):
                 # no room, have a partial line already in place
                 # so move to a new line, i.e. "go around again"
                 # do not update  aline  as it can split again
                 prior_space = ""
-                self.advance_one_line()
+                self.break_line()
             else:
-                # this is bad - we are at the start of a new line already
-                # (on accident or by having gone around) and there is
-                # *still* not enough room
-                # So we brutally hypentate the word to just fit with a hyphen
-                whole_line = word[:(self.line_buffer.remaining_chars() - 1)] + "-"
-                # Put `aline` back together, but without the string `whole_line`.
-                # If there are more pieces we need to add back the space that
-                # disappeared in the split.  Otherwise this is the last word
-                # and it just got smaller.
-                aline = word[(self.line_buffer.remaining_chars() - 1):]
+                # at the start of a new line and there is *still* not
+                # enough room: brutally hyphenate the word to just fit
+                room = self.remaining_characters()
+                whole_line = word[:(room - 1)] + "-"
+                aline = word[(room - 1):]
                 if len(pieces) == 2:
                     aline += " " + pieces[1]
-                self.write_word(whole_line)
-
-    def center(self):
-        # Centered headings, may have blank lines
-        lines = self.out_buffer.split("\x0A")
-        nlines = len(lines)
-        # Replacing contents
-        self.out_buffer = ""
-        for i in range(nlines):
-            line = lines[i]
-            if line == "":
-                self.out_buffer += line
-            else:
-                pad = " " * ((self.line_buffer.text_width - len(line))//2)
-                self.out_buffer += pad + line
-            # Restore n-1 separators
-            if i != (nlines - 1):
-                self.out_buffer += "\x0A"
-
-    def process_segment(self, s):
-        '''For actual output, and for trial output with a disposable BRF'''
-
-        # Note: this routine will fill a buffer that is part of a BRF
-        # object.  It is independent of any file, so does not ever
-        # actually output anything.  There is a separate method for that.
-        # In this way, the method can be used in a trial fashion with a
-        # scratch/temporary BRF object to see how the Cursor behaves and
-        # thus if a segmant might cross a page boundary.
-
-        # Will always start a new segment at a fresh line
-        assert self.at_line_start(), "BUG: starting a segment, but not at the start of a line"
-
-        if s.newpage and self.cursor.embossing():
-            self.advance_page()
-
-        if s.ownpage and self.cursor.embossing():
-            self.advance_page()
-
-        # Lines before (but not if at the start of a page)
-        if not(self.cursor.at_page_start()):
-            for i in range(s.lines_before):
-                self.blank_line()
-
-        # Any page adjustments are now concluded, including a sandbox
-        # trial that may have necessitated a move to a new page.  If
-        # the segment is a heading it is about to be written on the
-        # page and the cursor knows the page number
-        if s.heading_id and self.cursor.embossing() and not(self.toc_mode):
-            self.toc_dict[s.heading_id] = self.cursor.page_number()
-
-        # Centered
-        # [BANA 2016],  4.4.2
-        # At least three blank cells must precede and follow a centered heading.
-        #
-        # So shrink line buffer to get extra space
-        if s.centered:
-            self.adjust_text_width(-6)
-
-        # If making segments/headings into ToC entries, then
-        # reserve 6 spaces to the right at all times, until
-        # just about to write the guide dots and page number
-        if self.toc_mode:
-            self.adjust_text_width(-6)
-
-        # The translation pass has already made braille of all the
-        # body text, so a segment holds braille text with "math"
-        # islands (inline mathematics awaiting Nemeth indicators
-        # and space fusing).  Anything else indicates the
-        # intermediate XML has structure this renderer cannot
-        # express.  Degrade rather than halt: immediate text is
-        # rendered as text, and content nested deeper is dropped.
-        sxml = s.xml
-        if sxml.text:
-            self.write_fragment("text", sxml.text, None, s)
-        children = list(sxml)
-        for c in children:
-            typeface = c.tag
-            if typeface != "math":
-                print('BUG: unexpected element "{}" inside a segment; its text is rendered plain and any nested content is dropped'.format(c.tag))
-                typeface = "text"
-            if c.text:
-                if 'punctuation' in c.attrib:
-                    math_punctuation = c.attrib['punctuation']
-                else:
-                    math_punctuation = None
-                self.write_fragment(typeface, c.text, math_punctuation, s)
-            if c.tail:
-                self.write_fragment("text", c.tail, None, s)
-
-        # Release width restriction to finish ToC entry
-        if self.toc_mode:
-            self.adjust_text_width(6)
-            # Page numbers iff embossing
-            if self.cursor.embossing():
-                page_num = str(self.toc_dict[s.heading_id])
-                guide_dots = self.cursor.remaining_characters() - (1 + len(page_num))
-                guide = ['', '', '']
-                if guide_dots > 0:
-                    guide[0] = ' '
-                    guide_dots -= 1
-                if guide_dots > 0:
-                    guide[2] = ' '
-                    guide_dots -= 1
-                if guide_dots > 0:
-                    guide[1] = '\u2810' * guide_dots
-                # renderer-generated print: the page number digits
-                # (the guide dots are cells, converting dot-for-dot)
-                self.write_fragment("print", ''.join(guide) + page_num, None, s)
-
-        # finished with a segment
-        # flush buffer, move to new line, maybe a new page
-        # BUT not if we landed in this state anyway
-        if not(self.at_line_start()):
-            self.advance_one_line()
-        # Necessary to restore for subsequent centering
-        if s.centered:
-            self.adjust_text_width(6)
-        # Lines after
-        for i in range(s.lines_after):
-            self.blank_line()
-        # post-process before any use
-        if s.centered:
-            self.center()
-
-        # Dedicated page, so off we go (reqires something was written on page)
-        if s.ownpage and self.cursor.embossing():
-            self.advance_page()
-
+                self.contents += whole_line
 
     def massage_math(self, aline, punctuation):
 
         # available width will change across lines,
         # so this assumption is mildly flawed
-        width = self.line_buffer.page_width
+        width = self.layout.width
 
-        # Unicode versions of Nemeth switch indicators.
-        # We control separating spaces below as a way to
-        # influence line-breaking for inline math
-        # Local versions for convenience and manipulation
-        nemeth_open = BRF.nemeth_open
-        nemeth_close = BRF.nemeth_close
+        # Local versions of the Unicode Nemeth switch indicators,
+        # for convenience and manipulation.  We control separating
+        # spaces below as a way to influence line-breaking for
+        # inline math.
+        nemeth_open = NEMETH_OPEN
+        nemeth_close = NEMETH_CLOSE
 
         # Blank cells within the mathematics are just spaces-to-be:
         # make them spaces now, so the fusing below treats every
@@ -788,15 +424,15 @@ class BRF:
         # "early" was elected AND the preprint conversion found only
         # braille cells (mathematics with print residue rides along
         # as Unicode no matter the election, see the preprint XSL).
-        early_form = self.symbols_early and not(BRF.contains_unicode_braille(aline))
+        early_form = self.symbols_early and not(contains_unicode_braille(aline))
 
         # For the early form, the Unicode indicator chunks (with
         # punctuation attached) convert here, by the same translation
         # they would otherwise receive below, and the mathematics
         # itself rides along untouched.
         if early_form:
-            nemeth_open = louis.translateString(["en-ueb-g2.ctb"], nemeth_open, None, 0)
-            nemeth_close = louis.translateString(["en-ueb-g2.ctb"], nemeth_close, None, 0)
+            nemeth_open = translate_print(nemeth_open)
+            nemeth_close = translate_print(nemeth_close)
 
         # Actual Nemeth braille, plus 3, plus 3 for indicators, and punctuation
         math_len = len(aline) + 6 + punct_len
@@ -815,142 +451,389 @@ class BRF:
             aline = nemeth_open + "\xA0" + aline + "\xA0" + nemeth_close
 
         # Already BRF ASCII symbols throughout (early form); blank
-        # cells arrived as no-break spaces, which the line-breaking
-        # decisions above do not break on, and which become plain
-        # spaces when a completed line is written out
+        # cells became plain spaces above, with all the other blanks
         if early_form:
             return aline
 
         # Unicode characters translate, one for one, into BRF
         # characters and we assume punctuation does the same.
-        # If not, we could map a few punctuation marks to Unicode.
-        # Or perhaps set argument to do uncontracted braille.
-        return louis.translateString(["en-ueb-g2.ctb"], aline, None, 0)
+        return translate_print(aline)
 
-    def process_block(self, blk):
 
-        if blk.ownpage and self.cursor.embossing():
-            self.advance_page()
+class PageComposer:
+    """The page stage: pour lines onto pages.
 
-        # We don't want to start block material right at the bottom of
-        # the page when there are not enough lines to really get moving.
-        # Never start when there is one line left.  Most box material needs
-        # three lines, a preceding blank line, a box line, and a heading
-        # (maybe four lines? but three seems OK experimentally).
-        # Likely this needs refinement.
+    Tracks one Position; emits content lines with page numbers on
+    the last line of each embossed page and a form feed at each page
+    end; decides page-break avoidance for unbreakable material by
+    counting the lines a trial of the line stage produces.
+    """
+
+    def __init__(self, layout, symbols_early):
+        self.layout = layout
+        self.symbols_early = symbols_early
+        self.position = Position(1, 1)
+        # completed physical lines, tail-joined by newlines
+        self.output = []
+        # headings noted for the table of contents: identifier to page
+        self.toc_dict = {}
+        # producing table-of-contents entries (with a column of page
+        # numbers on the right)?
+        self.toc_mode = False
+
+    # Properties
+
+    def at_page_start(self):
+        return self.layout.at_page_start(self.position)
+
+    def remaining_lines(self):
+        # lines left on this page, including the one about to form
+        return self.layout.height - self.position.row + 1
+
+    # Actions
+
+    def emit_line(self, contents):
+        """One completed content line onto the page."""
+        if self.layout.is_last_row(self.position):
+            # right-justify the page number after the content
+            number = braille_number(self.position.page)
+            gap = " " * (self.layout.width - len(contents) - len(number))
+            contents = contents + gap + number
+        self.output.append(contents)
+        rollover = self.layout.is_last_row(self.position)
+        self.position = self.layout.advance(self.position)
+        if rollover:
+            # close the page with a form feed, on its own "line"
+            # joined to the page's last newline
+            self.output[-1] += "\n\x0C"
+        else:
+            self.output[-1] += "\n"
+
+    def blank_line(self):
+        self.emit_line('')
+
+    def advance_page(self):
+        # fill the remainder of the page with blank lines (the last
+        # of which carries the page number), ending with a form
+        # feed.  Note: from the top of a fresh page this produces an
+        # entire blank (but numbered) page, deliberately.
+        if not(self.layout.emboss):
+            return
+        for i in range(self.remaining_lines()):
+            self.blank_line()
+
+    # Rendering: each piece has a "compose" (line stage, no output)
+    # and a "write" (decide page breaks, then emit)
+
+    def compose_segment(self, seg, position):
+        """The line stage for one segment: content lines, no page furniture."""
+        # centering and table-of-contents entries reserve cells
+        reduction = 0
+        if seg.centered:
+            # [BANA 2016], 4.4.2: at least three blank cells must
+            # precede and follow a centered heading
+            reduction += 6
+        if self.toc_mode:
+            # reserve a column for guide dots and a page number,
+            # released just before they are written
+            reduction += 6
+
+        composer = LineComposer(self.layout, position, seg, self.symbols_early, reduction)
+
+        sxml = seg.xml
+        if sxml.text:
+            composer.write_fragment("text", sxml.text, None)
+        for c in sxml:
+            typeface = c.tag
+            if typeface != "math":
+                print('BUG: unexpected element "{}" inside a segment; its text is rendered plain and any nested content is dropped'.format(c.tag))
+                typeface = "text"
+            if c.text:
+                if 'punctuation' in c.attrib:
+                    math_punctuation = c.attrib['punctuation']
+                else:
+                    math_punctuation = None
+                composer.write_fragment(typeface, c.text, math_punctuation)
+            if c.tail:
+                composer.write_fragment("text", c.tail, None)
+
+        # Finish the table-of-contents entry: release the reserved
+        # column, add guide dots and the target's page number
+        if self.toc_mode:
+            composer.reduction -= 6
+            if self.layout.emboss:
+                page_num = str(self.toc_dict[seg.heading_id])
+                guide_dots = composer.remaining_characters() - (1 + len(page_num))
+                guide = ['', '', '']
+                if guide_dots > 0:
+                    guide[0] = ' '
+                    guide_dots -= 1
+                if guide_dots > 0:
+                    guide[2] = ' '
+                    guide_dots -= 1
+                if guide_dots > 0:
+                    guide[1] = '⠐' * guide_dots
+                composer.write_fragment("print", ''.join(guide) + page_num, None)
+
+        # complete any partial line
+        if not(composer.at_line_start()):
+            composer.break_line()
+
+        lines = composer.lines
+        # center, in the full width (the reservation was symmetric)
+        if seg.centered:
+            centered = []
+            for line in lines:
+                if line == '':
+                    centered.append(line)
+                else:
+                    pad = " " * ((self.layout.width - len(line)) // 2)
+                    centered.append(pad + line)
+            lines = centered
+        return lines
+
+    def compose_display_segment(self, seg, position):
+        """The line stage for a segment of a Nemeth display block."""
+        composer = LineComposer(self.layout, position, seg, self.symbols_early, 0)
+        sxml = seg.xml
+        if sxml.text:
+            composer.write_fragment("display-math", sxml.text, None)
+        if not(composer.at_line_start()):
+            composer.break_line()
+        return composer.lines
+
+    def segment_lines(self, seg, position, in_nemeth_box):
+        if in_nemeth_box:
+            return self.compose_display_segment(seg, position)
+        else:
+            return self.compose_segment(seg, position)
+
+    def needs_page_advance(self, lines_count, lines_following):
+        """Would this content cross one page boundary it could avoid?
+
+        Content beginning at the current position, occupying
+        lines_count lines (blank lines included), keeping
+        lines_following more lines attached beyond that.
+        """
+        if not(self.layout.emboss):
+            return False
+        total = lines_count + lines_following
+        remaining = self.remaining_lines()
+        # fine as-is: no page boundary broached (landing exactly at
+        # the top of the next page does not count as broaching)
+        if total <= remaining:
+            return False
+        # hopeless: does not fit whole on a fresh page either
+        if total > self.layout.height:
+            return False
+        # would break, and would fit whole on the next page
+        return True
+
+    # The layout of blocks is written positionally below: the
+    # "lay_*" methods produce lines from a position, purely -- they
+    # serve as the trial machinery, and as the interior of blocks --
+    # while the "write_*" methods do the same work against the real
+    # position, emitting page furniture as they go.  Both make the
+    # identical decisions because both see only positions.
+
+    def lay_block(self, blk, position):
+        """Lines of a whole block laid from a position: (lines, position).
+
+        Interior segments make their own page-break-avoidance
+        decisions, positionally, just as they would at the top
+        level; interior blank-line demands are suppressed at page
+        tops; box rules follow the width of the line they land on.
+        """
+        lines = []
+        position = position.copy()
+
+        def emit(line):
+            nonlocal position
+            lines.append(line)
+            position = self.layout.advance(position)
+
+        def fill_page():
+            nonlocal position
+            if not(self.layout.emboss):
+                return
+            for i in range(self.layout.height - position.row + 1):
+                emit('')
+
+        if blk.box == "standard":
+            emit("7" * self.layout.text_width(position, 0))
+        elif blk.box == "nemeth":
+            emit(translate_print(NEMETH_OPEN))
+            emit('')
+
+        for child in blk.xml.xpath("segment|block"):
+            if child.tag == "segment":
+                seg = Segment(child)
+                if seg.newpage and self.layout.emboss:
+                    fill_page()
+                if seg.ownpage and self.layout.emboss:
+                    fill_page()
+                blanks = 0 if self.layout.at_page_start(position) else seg.lines_before
+                if not(seg.breakable) and self.layout.emboss and not(seg.ownpage or seg.newpage):
+                    trial_position = position.copy()
+                    for i in range(blanks):
+                        trial_position = self.layout.advance(trial_position)
+                    trial = self.segment_lines(seg, trial_position, blk.box == "nemeth")
+                    remaining = self.layout.height - position.row + 1
+                    total = blanks + len(trial) + seg.lines_after + seg.lines_following
+                    if (total > remaining) and (total <= self.layout.height):
+                        fill_page()
+                        blanks = 0
+                for i in range(blanks):
+                    emit('')
+                for line in self.segment_lines(seg, position, blk.box == "nemeth"):
+                    emit(line)
+                for i in range(seg.lines_after):
+                    emit('')
+                if seg.ownpage and self.layout.emboss:
+                    fill_page()
+            elif child.tag == "block":
+                inner = Block(child)
+                (inner_lines, position) = self.lay_inner_block(inner, position)
+                for line in inner_lines:
+                    lines.append(line)
+
+        if blk.box == "standard":
+            emit("g" * self.layout.text_width(position, 0))
+        elif blk.box == "nemeth":
+            emit('')
+            close_brf = NEMETH_CLOSE
+            if blk.punctuation:
+                close_brf += blk.punctuation
+            emit(translate_print(close_brf))
+
+        return (lines, position)
+
+    def lay_inner_block(self, blk, position):
+        """A block, with its surrounding decisions, laid from a position."""
+        lines = []
+        position = position.copy()
+
+        def emit(line):
+            nonlocal position
+            lines.append(line)
+            position = self.layout.advance(position)
+
+        def fill_page():
+            nonlocal position
+            if not(self.layout.emboss):
+                return
+            for i in range(self.layout.height - position.row + 1):
+                emit('')
+
+        if blk.ownpage and self.layout.emboss:
+            fill_page()
+        # avoid starting box material in the last sliver of a page
         initial_lines = 1
         if blk.box:
             initial_lines += 2
-        if (self.cursor.remaining_lines() < initial_lines) and self.cursor.embossing():
-            self.advance_page()
-
-        # Lines before (but not if at the start of a page)
-        if not(self.cursor.at_page_start()):
-            for i in range(blk.lines_before):
-                self.blank_line()
-
-        if blk.box == "standard":
-            top_line = "7" * self.line_buffer.text_width
-            self.write_word(top_line)
-            self.advance_one_line()
-        elif blk.box == "nemeth":
-            open_brf = louis.translateString(["en-ueb-g2.ctb"], BRF.nemeth_open, None, 0)
-            self.write_word(open_brf)
-            self.advance_one_line()
-            self.blank_line()
-
-        # Segments of a Nemeth display block hold mathematics, which
-        # matters when it arrived as BRF ASCII symbols ("early")
-        saved_nemeth_box = self.in_nemeth_box
-        self.in_nemeth_box = (blk.box == "nemeth")
-        inner_segments = blk.xml.xpath("segment|block")
-        for s in inner_segments:
-            if s.tag == "segment":
-                seg = Segment(s)
-                self.write_segment(seg)
-            elif s.tag == "block":
-                innerblk = Block(s)
-                self.write_block(innerblk)
-        self.in_nemeth_box = saved_nemeth_box
-
-        if blk.box == "standard":
-            bottom_line = "g" * self.line_buffer.text_width
-            self.write_word(bottom_line)
-            self.advance_one_line()
-        elif blk.box == "nemeth":
-            self.blank_line()
-            # add punctuation that was mined from trailing text
-            # node.  Note: only for Nemeth box/display math
-            close_brf = BRF.nemeth_close
-            if blk.punctuation:
-                close_brf += blk.punctuation
-            close_brf = louis.translateString(["en-ueb-g2.ctb"], close_brf, None, 0)
-            self.write_word(close_brf)
-            self.advance_one_line()
-
-        # Lines after
+        if self.layout.emboss and ((self.layout.height - position.row + 1) < initial_lines):
+            fill_page()
+        blanks = 0 if self.layout.at_page_start(position) else blk.lines_before
+        if not(blk.breakable) and self.layout.emboss and not(blk.ownpage):
+            trial_position = position.copy()
+            for i in range(blanks):
+                trial_position = self.layout.advance(trial_position)
+            (trial, _) = self.lay_block(blk, trial_position)
+            remaining = self.layout.height - position.row + 1
+            total = blanks + len(trial) + blk.lines_after + blk.lines_following
+            if (total > remaining) and (total <= self.layout.height):
+                fill_page()
+                blanks = 0
+        for i in range(blanks):
+            emit('')
+        (block_lines, position) = self.lay_block(blk, position)
+        for line in block_lines:
+            lines.append(line)
         for i in range(blk.lines_after):
-            self.blank_line()
-            self.flush()
-
-        # Dedicated page, so off we go (reqires something was written on page)
-        if blk.ownpage and self.cursor.embossing():
-            self.advance_page()
-
-
-    # The next two "write" routines simply check if a page advance
-    # is necessary/desirable for the block or segment in question,
-    # and then call the "process" versions, where the real action
-    # happens.  Then a flush.
+            emit('')
+        if blk.ownpage and self.layout.emboss:
+            fill_page()
+        return (lines, position)
 
     def write_segment(self, seg):
-        # See if a page advance will improve awkward page breaks
-        if not(seg.breakable) and self.needs_page_advance(seg):
+        if seg.newpage and self.layout.emboss:
             self.advance_page()
-        self.process_segment(seg)
-        self.flush()
+        if seg.ownpage and self.layout.emboss:
+            self.advance_page()
+
+        # blank lines before, suppressed at an embossed page top
+        blanks = 0 if self.at_page_start() else seg.lines_before
+
+        # page-break avoidance for unbreakable segments: count the
+        # lines of a trial laid from just past the blank lines
+        if not(seg.breakable) and self.layout.emboss and not(seg.ownpage or seg.newpage):
+            position = self.position.copy()
+            for i in range(blanks):
+                position = self.layout.advance(position)
+            trial = self.segment_lines(seg, position, False)
+            if self.needs_page_advance(blanks + len(trial) + seg.lines_after, seg.lines_following):
+                self.advance_page()
+                # a page top: blank lines are now suppressed
+                blanks = 0
+
+        for i in range(blanks):
+            self.blank_line()
+
+        # a heading is about to be written: record its page
+        if seg.heading_id and self.layout.emboss and not(self.toc_mode):
+            self.toc_dict[seg.heading_id] = self.position.page
+
+        for line in self.segment_lines(seg, self.position, False):
+            self.emit_line(line)
+
+        for i in range(seg.lines_after):
+            self.blank_line()
+
+        if seg.ownpage and self.layout.emboss:
+            self.advance_page()
 
     def write_block(self, blk):
-        # See if a page advance will improve awkward page breaks
-        if not(blk.breakable) and self.needs_page_advance(blk):
+        if blk.ownpage and self.layout.emboss:
             self.advance_page()
-        self.process_block(blk)
-        self.flush()
 
-    def flush(self):
-        # The `accumulator` *is* the final document, as a list of
-        # strings, so here we move the (completed) string for the
-        # segment into the list that will be concatenated.  And
-        # prepare the `out_buffer` for the next segment.
-        self.accumulator.append(self.out_buffer)
-        self.out_buffer = ''
+        # We don't want to start block material right at the bottom
+        # of the page when there are not enough lines to really get
+        # moving.  Most box material needs a blank line, a box line,
+        # and a heading.
+        initial_lines = 1
+        if blk.box:
+            initial_lines += 2
+        if self.layout.emboss and (self.remaining_lines() < initial_lines):
+            self.advance_page()
 
-    # Concatenate the strings of the `accumulator`
+        blanks = 0 if self.at_page_start() else blk.lines_before
+
+        if not(blk.breakable) and self.layout.emboss and not(blk.ownpage):
+            position = self.position.copy()
+            for i in range(blanks):
+                position = self.layout.advance(position)
+            (trial, _) = self.lay_block(blk, position)
+            if self.needs_page_advance(blanks + len(trial) + blk.lines_after, blk.lines_following):
+                self.advance_page()
+                blanks = 0
+
+        for i in range(blanks):
+            self.blank_line()
+
+        (block_lines, _) = self.lay_block(blk, self.position)
+        for line in block_lines:
+            self.emit_line(line)
+
+        for i in range(blk.lines_after):
+            self.blank_line()
+
+        if blk.ownpage and self.layout.emboss:
+            self.advance_page()
+
     def get_brf(self):
-        return ''.join(self.accumulator)
-
-    # Static methods
-
-    @staticmethod
-    def contains_unicode_braille(aline):
-        # The blank cell U+2800 is excluded: alone it says nothing,
-        # since genuine mathematics always carries patterned cells
-        return any(("\u2801" <= c) and (c <= "\u28FF") for c in aline)
-
-    @staticmethod
-    def translate_print(aline):
-        # Renderer-generated print (page numbers, guide dots) and
-        # Unicode braille cells (which convert dot-for-dot) become
-        # BRF ASCII symbols.  Body text never passes through here:
-        # it arrives already translated, typeforms and all, from the
-        # translation pass (braille_translate.py).
-        # g2 includes g1 explicitly
-        return louis.translateString(["en-ueb-g2.ctb"], aline, None, 0)
-
-    # End BRF object definition
+        return ''.join(self.output)
 
 
-# Current entry point, sort of
 def parse_segments(xml_simple, out_file, page_format):
 
     # this routine converts XML information into arguments
@@ -969,50 +852,44 @@ def parse_segments(xml_simple, out_file, page_format):
     # "late" is Unicode braille cells (the default), "early" is
     # BRF ASCII symbols (a developer convenience for debugging)
     symbols = src_tree.getroot().get("brf-symbols", "late")
+    symbols_early = (symbols == "early")
 
     # page geometry, elected in the publication file and validated
     # upstream: cells in a line, lines on an embossed page
     page_width = int(src_tree.getroot().get("page-width", "40"))
     page_height = int(src_tree.getroot().get("page-height", "25"))
 
-    # Embossed, page shape
-    brf = BRF(page_format, page_width, page_height, symbols)
+    layout = PageLayout(page_width, page_height, page_format)
 
-    top_elts = src_tree.xpath("/brf/segment|/brf/block")
-
-    for elt in top_elts:
+    # the body of the document
+    body = PageComposer(layout, symbols_early)
+    for elt in src_tree.xpath("/brf/segment|/brf/block"):
         if elt.tag == "segment":
-            seg = Segment(elt)
-            brf.write_segment(seg)
+            body.write_segment(Segment(elt))
         elif elt.tag == "block":
-            blk = Block(elt)
-            brf.write_block(blk)
-        brf.flush()
+            body.write_block(Block(elt))
 
-    # Prepare a new BRF object, but copy out ToC page numbers
-    front = BRF(page_format, page_width, page_height, symbols)
+    # The front matter (table of contents) knows the page number of
+    # each heading only after the body has been laid out, so it is
+    # rendered second, on its own pages, though it appears first in
+    # the file.
+    front = PageComposer(layout, symbols_early)
     front.toc_mode = True
-    front.toc_dict = brf.toc_dict
-
-    headings = src_tree.xpath("/brf/segment[@heading-id]")
-    for head in headings:
+    front.toc_dict = body.toc_dict
+    for head in src_tree.xpath("/brf/segment[@heading-id]"):
         seg = Segment(head)
         seg.newpage = False
         seg.ownpage = False
         seg.centered = False
         seg.breakable = False
-        # indentation, runover
         seg.lines_before = 0
         seg.lines_after = 0
         seg.lines_following = 0
         front.write_segment(seg)
-    # Fill out frontmatter final page
+    # fill out the final front-matter page
     if page_format == 'emboss':
         front.advance_page()
 
-    # We assume `out_file` has been error-checked
-    # It would be better to use a context manager
-    brf_file = open(out_file, "w")
-    brf_file.write(front.get_brf())
-    brf_file.write(brf.get_brf())
-    brf_file.close()
+    with open(out_file, "w") as brf_file:
+        brf_file.write(front.get_brf())
+        brf_file.write(body.get_brf())
