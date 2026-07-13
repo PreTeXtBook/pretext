@@ -36,9 +36,9 @@ function wrap_math(content) {
 async function collectData(qfile, qname, qprefix) {
   let res = "";
   await getQuestionFile(qfile, qname).then((response) => {
-    if (response.questionxml != "<quiz>\nnull\n</quiz>") {
+    if (response && response.questionDefinition) {
       res = {
-        questionDefinition: response.questionxml,
+        questionDefinition: response.questionDefinition,
         answers: collectAnswer(qprefix),
         seed: response.seed,
         renderInputs: inputPrefix,
@@ -499,35 +499,72 @@ function replaceFeedbackTags(text, qprefix) {
   return result;
 }
 
-// load and parse the question's source XML file
+// load the question's source file (Moodle XML quiz bank, or a single-question
+// STACK yaml file -- the API accepts both as questionDefinition)
 async function getQuestionFile(questionURL, questionName) {
   let res = "";
   if (questionURL) {
     await fetch(questionURL)
       .then(r => r.text())
-      .then((result) => { res = loadQuestionFromFile(result, questionName); });
+      .then((result) => {
+        res = /\.ya?ml$/i.test(questionURL)
+          ? loadQuestionFromYaml(result)
+          : loadQuestionFromXml(result, questionName);
+      });
   }
   return res;
 }
 
 // pull the named STACK question (or the first one) out of the quiz XML
-function loadQuestionFromFile(fileContents, questionName) {
+function loadQuestionFromXml(fileContents, questionName) {
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(fileContents, "text/xml");
-  let thequestion = null;
-  let randSeed = "";
   for (const question of xmlDoc.getElementsByTagName("question")) {
     if (question.getAttribute('type').toLowerCase() === 'stack' &&
         (!questionName || question.querySelectorAll("name text")[0].textContent === questionName)) {
-      thequestion = question.outerHTML;
+      let randSeed = "";
       const seeds = question.querySelectorAll('deployedseed');
       if (seeds.length) {
         randSeed = parseInt(seeds[Math.floor(Math.random() * seeds.length)].textContent);
       }
-      break;
+      return { questionDefinition: '<quiz>\n' + question.outerHTML + '\n</quiz>', seed: randSeed };
     }
   }
-  return { questionxml: '<quiz>\n' + thequestion + '\n</quiz>', seed: randSeed };
+  return { questionDefinition: null, seed: "" };
+}
+
+// a STACK yaml file holds a single question and can be sent to the API as-is;
+// questionName doesn't apply (there's nothing to pick between), so we just
+// pull a random variant out of its own deployedseed list, the same way
+// loadQuestionFromXml does for a quiz bank
+function loadQuestionFromYaml(fileContents) {
+  let randSeed = "";
+  const lines = fileContents.split(/\r?\n/);
+  const headerIndex = lines.findIndex((line) => /^deployedseed:\s*(\[.*\])?\s*$/.test(line));
+  if (headerIndex !== -1) {
+    const seeds = [];
+    const flowStyle = lines[headerIndex].match(/\[(.*)\]/);
+    if (flowStyle) {
+      for (const item of flowStyle[1].split(',')) {
+        const value = item.trim().replace(/^['"]|['"]$/g, '');
+        if (value) seeds.push(value);
+      }
+    } else {
+      // block style:
+      //   deployedseed:
+      //     - '1001758021'
+      //     - '165520961'
+      for (let i = headerIndex + 1; i < lines.length; i++) {
+        const item = lines[i].match(/^\s+-\s*['"]?(-?\d+)['"]?\s*$/);
+        if (!item) break;
+        seeds.push(item[1]);
+      }
+    }
+    if (seeds.length) {
+      randSeed = parseInt(seeds[Math.floor(Math.random() * seeds.length)]);
+    }
+  }
+  return { questionDefinition: fileContents, seed: randSeed };
 }
 
 function runMathJax() {
