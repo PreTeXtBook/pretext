@@ -2249,5 +2249,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </segment>
 </xsl:template>
 
+<!-- ############## -->
+<!-- Invalid Source -->
+<!-- ############## -->
+
+<!-- Constructions that violate the PreTeXt schema receive an error   -->
+<!-- message describing the violation, and leave a placeholder in the -->
+<!-- output, rather than being accommodated.  Generated content       -->
+<!-- (STACK static representations) is the known supplier: a "p"      -->
+<!-- within a "p", an "image" within a "p", and "div" (an HTML        -->
+<!-- element, not PreTeXt at all).                                    -->
+<!--                                                                  -->
+<!-- N.B. these templates are deliberately LAST in this stylesheet:   -->
+<!-- a nested "p" can also match the display-splitting template for   -->
+<!-- "p" at equal priority, and placement here settles the conflict   -->
+<!-- in favor of the error.                                           -->
+<xsl:template match="p/p|p/image|div">
+    <xsl:message>PTX:ERROR:   the braille conversion has encountered source that is not valid PreTeXt (a "<xsl:value-of select="local-name()"/>" element within a "<xsl:value-of select="local-name(parent::*)"/>"); a placeholder appears in the output in its place</xsl:message>
+    <xsl:text>[INVALID SOURCE]</xsl:text>
+</xsl:template>
 
 </xsl:stylesheet>
