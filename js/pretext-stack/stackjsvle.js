@@ -13,6 +13,11 @@
  * 5. vle_reset_question_registry() clears old registry state before a
  *    question re-renders, so reused iframe/input ids don't get treated as
  *    "already registered" and silently drop their response.
+ * 6. Incoming postMessage senders are identified via e.source (the actual
+ *    window that sent the message) instead of the API-supplied msg.src: the
+ *    STACK API restarts iframe-id numbering on every render/validate/grade
+ *    call, so msg.src can collide between two different questions' iframes
+ *    on a multi-question page.
  *
  * @copyright  2023 Aalto University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -24,9 +29,21 @@
 const QUESTION_IFRAMES = {};
 const QUESTION_INPUTS = {};
 const QUESTION_INPUTS_INPUT_EVENT = {};
-const IFRAME_TO_BOUNDARY = {}; // iframe id -> which question it belongs to
+const IFRAME_TO_BOUNDARY = {}; // our iframe key -> which question it belongs to
 
-let IFRAMES = {}; // flat lookup, all iframes regardless of question
+// The STACK API restarts iframe-id numbering on every render/validate/grade
+// call, so its ids aren't unique across different questions' iframes on a
+// multi-question page (or even across repeated calls for the same
+// question). We mint our own key per iframe for all internal bookkeeping,
+// keep the API's raw id around separately since that's what the iframe's
+// own script expects to see echoed back as "tgt", and resolve incoming
+// messages to our key via e.source (the actual sending window) rather than
+// trusting the message's self-reported msg.src.
+const IFRAME_RAW_ID = {}; // our iframe key -> raw id the STACK API assigned
+const WINDOW_TO_KEY = new WeakMap(); // iframe.contentWindow -> our iframe key
+let iframeKeySeq = 0;
+
+let IFRAMES = {}; // flat lookup, all iframes regardless of question, keyed by our internal key
 
 let DISABLE_CHANGES = false; // guards against echoing changes back to sender
 
@@ -48,9 +65,10 @@ function getQuestionRegistry(boundaryId) {
 // question" button) so stale iframe/input ids don't block re-registration
 function vle_reset_question_registry(boundaryId) {
   if (QUESTION_IFRAMES[boundaryId]) {
-    for (const iframeId of Object.keys(QUESTION_IFRAMES[boundaryId])) {
-      delete IFRAMES[iframeId];
-      delete IFRAME_TO_BOUNDARY[iframeId];
+    for (const key of Object.keys(QUESTION_IFRAMES[boundaryId])) {
+      delete IFRAMES[key];
+      delete IFRAME_TO_BOUNDARY[key];
+      delete IFRAME_RAW_ID[key];
     }
   }
   QUESTION_IFRAMES[boundaryId] = {};
@@ -163,13 +181,17 @@ window.addEventListener("message", (e) => {
   let msg = null;
   try { msg = JSON.parse(e.data); } catch (e) { return; }
 
-  // ignore anything that isn't a STACK-JS message from a known iframe
+  // ignore anything that isn't a STACK-JS message
   if (!(('version' in msg) && msg.version.startsWith('STACK-JS'))) return;
-  if (!(('src' in msg) && ('type' in msg) && (msg.src in IFRAMES))) return;
+  if (!(('src' in msg) && ('type' in msg))) return;
 
-  const boundaryId = IFRAME_TO_BOUNDARY[msg.src];
+  // resolve the sender via e.source, not the API-supplied msg.src -- see
+  // note on WINDOW_TO_KEY above
+  const key = WINDOW_TO_KEY.get(e.source);
+  if (key === undefined) return; // not an iframe we created
+
+  const boundaryId = IFRAME_TO_BOUNDARY[key];
   if (boundaryId) getQuestionRegistry(boundaryId);
-  const Q_IFRAMES = QUESTION_IFRAMES[boundaryId] || IFRAMES;
   const Q_INPUTS = QUESTION_INPUTS[boundaryId] || {};
   const Q_INPUTS_INPUT_EVENT = QUESTION_INPUTS_INPUT_EVENT[boundaryId] || {};
 
@@ -180,18 +202,18 @@ window.addEventListener("message", (e) => {
   switch (msg.type) {
   case 'register-input-listener':
     // iframe wants to bind to a real input on the page
-    input = vle_get_input_element(msg.name, msg.src);
+    input = vle_get_input_element(msg.name, key);
     if (input === null) {
       response.type = 'error';
       response.msg = 'Failed to connect to input: "' + msg.name + '"';
-      response.tgt = msg.src;
-      IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify(response), '*');
+      response.tgt = IFRAME_RAW_ID[key];
+      e.source.postMessage(JSON.stringify(response), '*');
       return;
     }
 
     response.type = 'initial-input';
     response.name = msg.name;
-    response.tgt = msg.src;
+    response.tgt = IFRAME_RAW_ID[key];
 
     // report current value back, format depends on input type
     if (input.nodeName.toLowerCase() === 'select') {
@@ -218,40 +240,40 @@ window.addEventListener("message", (e) => {
 
     if (input.id in Q_INPUTS) {
       // already tracking this input, just add this iframe as a listener
-      if (!Q_INPUTS[input.id].includes(msg.src)) {
+      if (!Q_INPUTS[input.id].includes(key)) {
         if (input.type !== 'radio') {
-          Q_INPUTS[input.id].push(msg.src);
+          Q_INPUTS[input.id].push(key);
         } else {
           for (const inp of document.querySelectorAll('input[type=radio][name=' + CSS.escape(input.name) + ']')) {
             if (!(inp.id in Q_INPUTS)) Q_INPUTS[inp.id] = [];
-            if (!Q_INPUTS[inp.id].includes(msg.src)) Q_INPUTS[inp.id].push(msg.src);
+            if (!Q_INPUTS[inp.id].includes(key)) Q_INPUTS[inp.id].push(key);
           }
         }
       }
-      IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify(response), '*');
+      e.source.postMessage(JSON.stringify(response), '*');
     } else {
       // first time seeing this input — wire up change listeners
       if (input.type !== 'radio') {
-        Q_INPUTS[input.id] = [msg.src];
+        Q_INPUTS[input.id] = [key];
         input.addEventListener('change', () => {
           if (DISABLE_CHANGES) return;
           const resp = { version: 'STACK-JS:1.0.0', type: 'changed-input', name: msg.name };
           resp['value'] = input.type === 'checkbox' ? input.checked : input.value;
           for (const tgt of Q_INPUTS[input.id]) {
-            resp['tgt'] = tgt;
+            resp['tgt'] = IFRAME_RAW_ID[tgt];
             if (IFRAMES[tgt]) IFRAMES[tgt].contentWindow.postMessage(JSON.stringify(resp), '*');
           }
         });
       } else {
         // radios: bind every option in the group together
         const radgroup = document.querySelectorAll('input[type=radio][name=' + CSS.escape(input.name) + ']');
-        for (const inp of radgroup) Q_INPUTS[inp.id] = [msg.src];
+        for (const inp of radgroup) Q_INPUTS[inp.id] = [key];
         radgroup.forEach(inp => {
           inp.addEventListener('change', () => {
             if (DISABLE_CHANGES || !inp.checked) return;
             const resp = { version: 'STACK-JS:1.0.0', type: 'changed-input', name: msg.name, value: inp.value };
             for (const tgt of Q_INPUTS[inp.id]) {
-              resp['tgt'] = tgt;
+              resp['tgt'] = IFRAME_RAW_ID[tgt];
               if (IFRAMES[tgt]) IFRAMES[tgt].contentWindow.postMessage(JSON.stringify(resp), '*');
             }
           });
@@ -261,34 +283,34 @@ window.addEventListener("message", (e) => {
       // optionally also track every keystroke, not just on blur/change
       if (('track-input' in msg) && msg['track-input'] && input.type !== 'radio') {
         if (input.id in Q_INPUTS_INPUT_EVENT) {
-          if (!Q_INPUTS_INPUT_EVENT[input.id].includes(msg.src)) {
-            Q_INPUTS_INPUT_EVENT[input.id].push(msg.src);
+          if (!Q_INPUTS_INPUT_EVENT[input.id].includes(key)) {
+            Q_INPUTS_INPUT_EVENT[input.id].push(key);
           }
         } else {
-          Q_INPUTS_INPUT_EVENT[input.id] = [msg.src];
+          Q_INPUTS_INPUT_EVENT[input.id] = [key];
           input.addEventListener('input', () => {
             if (DISABLE_CHANGES) return;
             const resp = { version: 'STACK-JS:1.0.0', type: 'changed-input', name: msg.name };
             resp['value'] = input.type === 'checkbox' ? input.checked : input.value;
             for (const tgt of Q_INPUTS_INPUT_EVENT[input.id]) {
-              resp['tgt'] = tgt;
+              resp['tgt'] = IFRAME_RAW_ID[tgt];
               if (IFRAMES[tgt]) IFRAMES[tgt].contentWindow.postMessage(JSON.stringify(resp), '*');
             }
           });
         }
       }
 
-      IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify(response), '*');
+      e.source.postMessage(JSON.stringify(response), '*');
     }
     break;
 
   case 'changed-input':
     // iframe wants to push a new value into a real input on the page
-    input = vle_get_input_element(msg.name, msg.src);
+    input = vle_get_input_element(msg.name, key);
     if (input === null) {
-      IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify({
+      e.source.postMessage(JSON.stringify({
         version: 'STACK-JS:1.0.0', type: 'error',
-        msg: 'Failed to modify input: "' + msg.name + '"', tgt: msg.src
+        msg: 'Failed to modify input: "' + msg.name + '"', tgt: IFRAME_RAW_ID[key]
       }), '*');
       return;
     }
@@ -304,8 +326,8 @@ window.addEventListener("message", (e) => {
     response.value = msg.value;
     if (Q_INPUTS[input.id]) {
       for (const tgt of Q_INPUTS[input.id]) {
-        if (tgt !== msg.src && IFRAMES[tgt]) {
-          response.tgt = tgt;
+        if (tgt !== key && IFRAMES[tgt]) {
+          response.tgt = IFRAME_RAW_ID[tgt];
           IFRAMES[tgt].contentWindow.postMessage(JSON.stringify(response), '*');
         }
       }
@@ -315,9 +337,9 @@ window.addEventListener("message", (e) => {
   case 'toggle-visibility':
     element = vle_get_element(msg.target);
     if (element === null) {
-      IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify({
+      e.source.postMessage(JSON.stringify({
         version: 'STACK-JS:1.0.0', type: 'error',
-        msg: 'Failed to find element: "' + msg.target + '"', tgt: msg.src
+        msg: 'Failed to find element: "' + msg.target + '"', tgt: IFRAME_RAW_ID[key]
       }), '*');
       return;
     }
@@ -331,8 +353,8 @@ window.addEventListener("message", (e) => {
     if (element === null) {
       response.type = 'error';
       response.msg = 'Failed to find element: "' + msg.target + '"';
-      response.tgt = msg.src;
-      IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify(response), '*');
+      response.tgt = IFRAME_RAW_ID[key];
+      e.source.postMessage(JSON.stringify(response), '*');
       return;
     }
     element.replaceChildren(vle_html_sanitize(msg.content));
@@ -343,26 +365,26 @@ window.addEventListener("message", (e) => {
     // iframe is asking what's currently in some element
     element = vle_get_element(msg.target);
     response.type = 'xfer-content';
-    response.tgt = msg.src;
+    response.tgt = IFRAME_RAW_ID[key];
     response.target = msg.target;
     response.content = element ? element.innerHTML : null;
-    IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify(response), '*');
+    e.source.postMessage(JSON.stringify(response), '*');
     break;
 
   case 'resize-frame':
     // iframe is telling us it needs more/less room
-    element = IFRAMES[msg.src].parentElement;
+    element = IFRAMES[key].parentElement;
     element.style.width = msg.width;
     element.style.height = msg.height;
-    IFRAMES[msg.src].style.width = '100%';
-    IFRAMES[msg.src].style.height = '100%';
+    IFRAMES[key].style.width = '100%';
+    IFRAMES[key].style.height = '100%';
     vle_update_dom(element);
     break;
 
   case 'ping':
     response.type = 'ping';
-    response.tgt = msg.src;
-    IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify(response), '*');
+    response.tgt = IFRAME_RAW_ID[key];
+    e.source.postMessage(JSON.stringify(response), '*');
     return;
 
   case 'initial-input':
@@ -373,8 +395,8 @@ window.addEventListener("message", (e) => {
   default:
     response.type = 'error';
     response.msg = 'Unknown message-type: "' + msg.type + '"';
-    response.tgt = msg.src;
-    IFRAMES[msg.src].contentWindow.postMessage(JSON.stringify(response), '*');
+    response.tgt = IFRAME_RAW_ID[key];
+    e.source.postMessage(JSON.stringify(response), '*');
   }
 });
 
@@ -406,13 +428,20 @@ function create_iframe(iframeid, content, targetdivid, title, scrolling, evil) {
 
   const targetDiv = document.getElementById(targetdivid);
   targetDiv.replaceChildren(frm);
-  IFRAMES[iframeid] = frm;
+
+  // iframeid is only unique within this one API call (see the note on
+  // IFRAME_RAW_ID above), so mint our own key for bookkeeping and keep the
+  // raw id around for messages the iframe's own script needs to recognise
+  const key = 'iframe-' + (iframeKeySeq++);
+  IFRAMES[key] = frm;
+  IFRAME_RAW_ID[key] = iframeid;
+  WINDOW_TO_KEY.set(frm.contentWindow, key);
 
   // remember which question this iframe belongs to
   const boundary = vle_get_question_boundary(targetDiv);
   if (boundary && boundary.id) {
-    IFRAME_TO_BOUNDARY[iframeid] = boundary.id;
+    IFRAME_TO_BOUNDARY[key] = boundary.id;
     const reg = getQuestionRegistry(boundary.id);
-    reg.iframes[iframeid] = frm;
+    reg.iframes[key] = frm;
   }
 }
