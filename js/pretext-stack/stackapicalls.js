@@ -312,9 +312,10 @@ function validate(element, qfile, qname, qprefix) {
             el.classList.add('empty');
           }
         }
-        if (typeof vle_reset_question_registry === 'function') {
-          vle_reset_question_registry(qprefix + 'boundary');
-        }
+        // no vle_reset_question_registry() here: validate() only patches a single
+        // validation span, not the question body, so any other iframe belonging
+        // to this question (e.g. a Parsons/drag-and-drop/JSXgraph widget) is still
+        // live and must keep its existing registry entries.
         createIframes(json.iframes);
         runMathJax();
       } catch (e) {
@@ -387,9 +388,10 @@ function answer(qfile, qname, qprefix, seed) {
             element.innerHTML = wrap_math(fb);
           }
         }
-        if (typeof vle_reset_question_registry === 'function') {
-          vle_reset_question_registry(qprefix + 'boundary');
-        }
+        // no vle_reset_question_registry() here: answer() only patches feedback/score
+        // elements, not the question body, so any other iframe belonging to this
+        // question (e.g. a Parsons/drag-and-drop/JSXgraph widget) is still live and
+        // must keep its existing registry entries.
         createIframes(json.iframes);
         runMathJax();
       } catch (e) {
