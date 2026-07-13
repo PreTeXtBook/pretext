@@ -2412,7 +2412,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     # use Python to translate all print text to contracted braille,
     # then to format the result as a real BRF
     from . import braille_translate
-    from . import braille_format as braille
+    from . import braille_format
 
     # Translate the preprint: all print text becomes UEB braille,
     # one liblouis call per stretch of text, typeforms and all
@@ -2424,7 +2424,7 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     # Build a BRF in the *temporary* directory: final or chunkable
     temp_brf = os.path.join(tmp_dir, "temporary.brf")
     # Python formatting call
-    braille.parse_segments(translated, temp_brf, page_format)
+    braille_format.parse_segments(translated, temp_brf, page_format)
 
     # move out of temporary directory as final product(s)
     # chunk level is either '0' or '1' (exclusive "if" follow)
