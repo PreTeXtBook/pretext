@@ -13,9 +13,6 @@
  * 5. vle_reset_question_registry() clears old registry state before a
  *    question re-renders, so reused iframe/input ids don't get treated as
  *    "already registered" and silently drop their response.
- * 6. create_iframe() adds allow-same-origin to the sandbox for trusted
- *    (non-evil) iframes, so <base href> actually governs relative URLs
- *    fetched from inside the iframe.
  *
  * @copyright  2023 Aalto University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -397,10 +394,13 @@ function create_iframe(iframeid, content, targetdivid, title, scrolling, evil) {
   frm.title = title;
   frm.referrerpolicy = 'no-referrer';
   if (!evil) {
-    // allow-same-origin lets <base href> control relative URL resolution
-    // inside the iframe — content here comes from our own STACK API, not
-    // arbitrary user input, so this is safe
-    frm.sandbox = 'allow-scripts allow-downloads allow-same-origin';
+    // NEVER add allow-same-origin here. This is a srcdoc iframe, so
+    // allow-same-origin would make it same-origin with THIS page (not the
+    // STACK API) -- combined with allow-scripts that lets iframe content read
+    // and modify our DOM, cookies, etc, defeating the sandbox entirely.
+    // <base href> (injected in createIframes) resolves relative URLs fine
+    // without it.
+    frm.sandbox = 'allow-scripts allow-downloads';
   }
   frm.srcdoc = content;
 
