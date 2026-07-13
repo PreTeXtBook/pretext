@@ -11441,6 +11441,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="stack-js">
 
     <xsl:if test="$b-has-stack">
+        <link rel="stylesheet" type="text/css" href="{$html.js.dir}/pretext-stack/stack.css"/>
         <script src="{$html.js.dir}/pretext-stack/stackjsvle.js" type="text/javascript"></script>
         <script src="{$html.js.dir}/pretext-stack/stackapicalls.js" type="text/javascript"></script>
         <script type="text/javascript">
