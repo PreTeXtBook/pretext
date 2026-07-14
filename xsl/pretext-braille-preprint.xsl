@@ -1420,6 +1420,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="note"/>
 </xsl:template>
 
+<!-- Structured bibliographic entries ("bibtex" type, or untyped   -->
+<!-- fallback) render their fields in document order, with the     -->
+<!-- same [BANA-2016, 22.2.1] margins as the raw flavor above, and -->
+<!-- the same treatment of an annotation: a "note" produces a      -->
+<!-- block, so it follows the entry as a sibling.                  -->
+<xsl:template match="biblio[not(@type = 'raw')]">
+    <runin indentation="0" separator="&#x20;">
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="." mode="serial-number"/>
+        <xsl:text>]</xsl:text>
+    </runin>
+    <segment indentation="0" runover="2">
+        <xsl:apply-templates select="*[not(self::note)]"/>
+    </segment>
+    <xsl:apply-templates select="note"/>
+</xsl:template>
+
 <!-- Override usual killing of title, but perhaps a generic -->
 <!-- template (without punctuation!) would be saner?        -->
 <xsl:template match="biblio/title">
