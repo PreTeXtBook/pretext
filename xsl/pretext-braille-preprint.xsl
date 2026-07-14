@@ -2398,8 +2398,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>NOTATIONLIST</xsl:text>
 </xsl:template>
 
+<!-- A real braille index awaits future work; until then the     -->
+<!-- omission is announced in place, rather than silent.  (The    -->
+<!-- prior placeholder was bare text, which the renderer cannot   -->
+<!-- anchor, so nothing at all appeared.)                         -->
 <xsl:template match="index-list">
-    <xsl:text>INDEXLIST</xsl:text>
+    <xsl:apply-templates select="." mode="transcriber-note">
+        <xsl:with-param name="message">
+            <xsl:text>The index is not reproduced in this braille edition.</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="poem">
@@ -2424,12 +2432,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:if test="//index-list">
-        <xsl:call-template name="missing-implementation">
-            <xsl:with-param name="element" select="'index-list'"/>
-            <xsl:with-param name="ntimes" select="count(//index-list)"/>
-        </xsl:call-template>
-    </xsl:if>
     <xsl:if test="//poem">
         <xsl:call-template name="missing-implementation">
             <xsl:with-param name="element" select="'poem'"/>
