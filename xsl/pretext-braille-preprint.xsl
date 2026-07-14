@@ -430,6 +430,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </segment>
         </xsl:if>
         <!--  -->
+        <!-- [BANA-2016, 8.6.2(b)] bullet symbols used in lists are -->
+        <!-- listed in a transcriber's note                          -->
+        <xsl:if test="//ul">
+            <segment indentation="2">
+                <xsl:text>Items of unordered lists retain their print markers, each followed by a period.  The symbols in use are: bullet (dots 456, 256), circle (dots 1246 and a grade one indicator, 123456), and square (dots 456, 1246, 3456, 145).</xsl:text>
+            </segment>
+        </xsl:if>
+        <!--  -->
         <!-- automatically infers we have a note already for "sidebyside" -->
         <xsl:if test="//sbsgroup">
             <segment indentation="2">
