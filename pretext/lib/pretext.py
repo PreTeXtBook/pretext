@@ -1788,15 +1788,16 @@ def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, out
         with open(mmd_config_file, 'w') as config_file:
             json.dump(mmd_config, config_file, indent=4)
         log.debug("Mermaid configuration file: {}".format(mmd_config_file))
+        # mmdc switches output on the filename extension; there is nothing
+        # to do for a format it cannot produce.  Guard once, before the
+        # loop, so every iteration below has a valid output filename.
+        if outformat not in ["png", "svg"]:
+            log.error("cannot make Mermaid diagrams in {} file format".format(outformat))
+            return
         # loop over each diagram
         for mmddiagram in glob.glob(os.path.join(tmp_dir, "*.mmd")):
             filebase, _ = os.path.splitext(mmddiagram)
-            # file format PNG or SVG
-            # mmdc executable just switches on filename extension
-            if outformat in ["png", "svg"]:
-                mmdout = "{}.{}".format(filebase, outformat)
-            else:
-                log.error("cannot make Mermaid diagrams in {} file format".format(outformat))
+            mmdout = "{}.{}".format(filebase, outformat)
             mmd_cmd = mmd_executable_cmd + ["-i", mmddiagram, "-o", mmdout, "-s", "4", "-c", "mermaid-config.json"]
             log.debug("mermaid conversion command: {}".format(" ".join(mmd_cmd)))
             subprocess.call(mmd_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
