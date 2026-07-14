@@ -106,6 +106,23 @@ log.fallback = _log_fallback
 log.bug = _log_bug
 log.fatal = _log_fatal
 
+
+# The level at which to re-log a stylesheet message, by its "PTX:TOKEN".
+# The bridge only *records* a message here; a FATAL one is logged like any
+# other and does not halt (the transform's own terminating exception carries
+# the halt), so every token, fatal included, routes the same way.
+_XSL_MESSAGE_LEVELS = {
+    'FATAL':     FATAL_LEVEL,
+    'BUG':       BUG_LEVEL,
+    'ERROR':     ERROR_LEVEL,
+    'FALLBACK':  FALLBACK_LEVEL,
+    'WARNING':   WARNING_LEVEL,
+    'DEPRECATE': WARNING_LEVEL,
+    'INFO':      INFO_LEVEL,
+    'DEBUG':     DEBUG_LEVEL,
+}
+
+import re
 import traceback
 import os
 import os.path
@@ -273,16 +290,23 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
                 log.info("messages from the log for XSL processing:")
             # print out any unprinted messages from error_log
             for line in xslt.error_log[start:end]:
-                if "PTX:FATAL" in line.message:
-                    log.critical(f"* {line.message}")
-                elif "PTX:ERROR" in line.message or "PTX:BUG" in line.message:
-                    log.error(f"* {line.message}")
-                elif "PTX:WARNING" in line.message or "PTX:DEPRECATE" in line.message:
-                    log.warning(f"* {line.message}")
-                elif "PTX:DEBUG" in line.message:
-                    log.debug(f"* {line.message}")
+                message = "* {}".format(line.message)
+                token = re.match(r'\s*PTX:([\w-]+)', line.message)
+                if token:
+                    level = _XSL_MESSAGE_LEVELS.get(token.group(1).upper())
+                    if level is not None:
+                        log.log(level, message)
+                    else:
+                        # a well-formed but unknown token (e.g. a "PTX:FO-TODO"
+                        # work marker); keep it quiet rather than mis-leveling
+                        log.debug(message)
+                elif re.match(r'\s*(?i:ptx|warning|error|fatal|bug|deprecate)\b', line.message):
+                    # looks like it meant to carry a severity token but is
+                    # malformed (a stylesheet-authoring slip); flag it
+                    log.bug("a PreTeXt stylesheet message has a malformed severity token: {}".format(line.message))
                 else:
-                    log.info(f"* {line.message}")
+                    # genuinely tokenless (e.g. a continuation line)
+                    log.info(message)
             start = end
         if texc is None:
             log.info("successful application of {}".format(xsl))
