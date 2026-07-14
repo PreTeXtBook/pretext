@@ -80,6 +80,7 @@
             <xi:include href="developer/css.xml"/>
             <xi:include href="developer/localization.xml"/>
             <xi:include href="developer/code-style.xml"/>
+            <xi:include href="developer/messaging.xml"/>
             <xi:include href="developer/debugging.xml"/>
             <xi:include href="developer/git.xml"/>
         </part>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--        PreTeXt Developer's Guide                         -->
+<!--                                                          -->
+<!-- Copyright (C) 2026                                       -->
+<!-- Robert A. Beezer                                         -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="messaging" label="messaging">
+    <title>Messages and Severity</title>
+
+    <introduction>
+        <p>PreTeXt reports to two audiences<mdash/>the author or publisher running a conversion, and the developer maintaining PreTeXt<mdash/>through a single stream of messages.  Every message carries a <term>severity</term> that says what happened and who should act.  This chapter fixes the vocabulary, so that when you write a message you never have to wonder which one to reach for.</p>
+    </introduction>
+
+    <section xml:id="messaging-severities" label="messaging-severities">
+        <title>The Seven Severities</title>
+
+        <p>The severities, from least to most consequential, are the following.  A severity is a statement about a <em>message</em>; only the last, <c>fatal</c>, is also an <em>action</em>.</p>
+
+        <p>
+            <dl>
+                <li><title>debug</title><p>Fine-grained trace, for pinpointing a problem.  Silent unless the reader asks for maximum verbosity.  (<q>xsltproc command: <ellipsis/></q>)</p></li>
+                <li><title>info</title><p>Coarse progress, so the reader sees the conversion advancing.  (<q>converting source to HTML</q>)</p></li>
+                <li><title>fallback</title><p>Input was bad or absent, but a sensible default was substituted, so the output is still complete.  (<q>no <c>@width</c>, assuming <c>100%</c></q>)</p></li>
+                <li><title>warning</title><p>Something the author should address.  (<q>a deprecated element was used</q>)</p></li>
+                <li><title>error</title><p>There is no good default, so a localized piece of the output is broken or missing, but processing continues.  (<q>cross-reference target does not exist</q>)</p></li>
+                <li><title>bug</title><p>An internal PreTeXt defect<mdash/>not the author's fault.  Please report it.  The renderer degrades and continues.  (<q>an <tag>otherwise</tag> meant to be unreachable</q>)</p></li>
+                <li><title>fatal</title><p>Processing halts and no output is expected.  (<q>the source is not valid PreTeXt</q>)</p></li>
+            </dl>
+        </p>
+
+        <p>The distinction between the last two is the crux, and worth stating twice.  <term>Bug</term> is a <em>severity</em>: it records that PreTeXt itself is at fault, and then execution continues by degrading gracefully.  <term>Fatal</term> is a <em>severity and an action</em>: it records the message and then stops the build.</p>
+
+        <p>Reach for <c>fatal</c> only as an <term>absolute last resort</term>.  An author waiting on a build<mdash/>perhaps minutes before a class<mdash/>is far better served by degraded output they can still use than by a halt with nothing to show.  Unless PreTeXt genuinely cannot produce anything sensible, prefer <c>error</c> (or <c>bug</c>) and carry on.  Halting is for source, or conditions, so broken that continuing would be meaningless.</p>
+    </section>
+
+    <section xml:id="messaging-python" label="messaging-python">
+        <title>Emitting a Message from Python</title>
+
+        <p>The shared logger provides one method per severity.<cd>
+        log.debug     log.info     log.fallback     log.warning
+        log.error     log.bug      log.fatal
+        </cd>All but the last simply record a message and return.  <c>log.fatal</c> records the message and then raises <c>PreTeXtFatal</c>, so the build stops.  Raising is the <em>only</em> way to signal a halt, which is what guarantees that <q>fatal</q> always means <q>halt.</q></p>
+
+        <p>A defect that cannot be worked around is the rare composition of the two<mdash/>record it as a bug, then stop.<cd>
+        log.bug("an impossible case was reached")
+        log.fatal("so the build cannot continue")
+        </cd></p>
+    </section>
+
+    <section xml:id="messaging-xsl" label="messaging-xsl">
+        <title>Emitting a Message from a Stylesheet</title>
+
+        <p>An <tag>xsl:message</tag> begins with the token that names its severity: <c>PTX:DEBUG</c>, <c>PTX:INFO</c>, <c>PTX:FALLBACK</c>, <c>PTX:WARNING</c>, <c>PTX:ERROR</c>, <c>PTX:BUG</c>, or <c>PTX:FATAL</c>.  A fatal message additionally carries <c>terminate="yes"</c>.  Deprecations are the one exception: they are emitted through a shared template and carry <c>PTX:DEPRECATE</c>, which is treated as a warning.</p>
+
+        <p>The Python layer reads the leading token of each stylesheet message and re-emits it at the corresponding severity.  A message whose token is malformed<mdash/>a stray space, the wrong case<mdash/>is itself reported as a bug, so an authoring slip is surfaced rather than silently demoted.</p>
+    </section>
+
+    <section xml:id="messaging-consumers" label="messaging-consumers">
+        <title>What a Consumer Learns</title>
+
+        <p>PreTeXt is normally driven as a library by a separate command-line program, which is in turn driven by tools such as an online textbook platform.  Such a tool sees only what reaches it: the severity of each logged message, and whether the build raised <c>PreTeXtFatal</c>.  From these the command-line layer can report the two outcomes an author cares about<mdash/>the build finished but had non-fatal errors, or the build did not happen at all<mdash/>without inspecting the text of any message.  For that to work, this library's obligation is simply to log every message at an honest severity, to route <em>all</em> messages through the shared logger, and to reserve <c>fatal</c> for a genuine halt.</p>
+    </section>
+
+    <section xml:id="messaging-sync" label="messaging-sync">
+        <title>Keeping This in Sync</title>
+
+        <p>The compact form of this severity table also lives as a comment where the levels are defined in the shared logging setup of the Python library.  The two are deliberately redundant: a change to a severity in one place must be matched in the other, and each carries a note pointing at its twin.</p>
+    </section>
+</chapter>
