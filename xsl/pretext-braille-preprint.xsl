@@ -1101,8 +1101,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="li">
+    <!-- [BANA-2016, 8.3.1] a simple list has 1-3 margins           -->
+    <!-- [BANA-2016, 8.5.1(b)] each nested level begins two cells   -->
+    <!-- to the right of the previous level, and ALL runovers begin -->
+    <!-- two cells to the right of the farthest indented level: one -->
+    <!-- level is 1-3; two levels are 1-5, 3-5; three levels are    -->
+    <!-- 1-7, 3-7, 5-7.  In the preprint's 0-based attributes:      -->
+    <!-- level k of an n-level list has indentation 2(k-1), and     -->
+    <!-- every segment of the list has runover 2n.                  -->
+    <!-- The level of this item, and the deepest level anywhere in  -->
+    <!-- the outermost list containing it.  (A list separated from  -->
+    <!-- an enclosing list by other structure still counts every    -->
+    <!-- list ancestor, deliberately: its margins nest visibly.)    -->
+    <xsl:variable name="level" select="count(ancestor::ol | ancestor::ul | ancestor::dl)"/>
+    <xsl:variable name="outermost-list" select="ancestor::*[self::ol or self::ul or self::dl][last()]"/>
+    <xsl:variable name="list-depth">
+        <xsl:for-each select="$outermost-list//li">
+            <xsl:sort select="count(ancestor::ol | ancestor::ul | ancestor::dl)" data-type="number" order="descending"/>
+            <xsl:if test="position() = 1">
+                <xsl:value-of select="count(ancestor::ol | ancestor::ul | ancestor::dl)"/>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="list-runover" select="2 * $list-depth"/>
     <!-- Marker as a "runin" element -->
-    <runin indentation="0" separator="&#x20;">
+    <runin indentation="{2 * ($level - 1)}" separator="&#x20;">
         <xsl:choose>
             <xsl:when test="parent::ol">
                 <xsl:apply-templates select="." mode="item-number"/>
@@ -1121,7 +1144,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- A structured list item carries paragraphs (and other  -->
         <!-- blocks), which make their own segments.               -->
         <xsl:when test="p">
-            <xsl:apply-templates select="node()"/>
+            <xsl:apply-templates select="node()">
+                <xsl:with-param name="list-runover" select="$list-runover"/>
+            </xsl:apply-templates>
         </xsl:when>
         <!-- An unstructured list item is a run of sentences,      -->
         <!-- exactly the content of a paragraph.  But with no      -->
@@ -1145,7 +1170,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:copy-of select="node()"/>
                 </p>
             </xsl:variable>
-            <xsl:apply-templates select="exsl:node-set($virtual-paragraph-rtf)/p"/>
+            <xsl:apply-templates select="exsl:node-set($virtual-paragraph-rtf)/p">
+                <xsl:with-param name="list-runover" select="$list-runover"/>
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -2161,9 +2188,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A paragraph without "displays" is straightforward and -->
 <!-- we can bypass the more complicated procedure next.    -->
 <xsl:template match="p">
+    <!-- Inside a list item ($list-runover is a number, not empty)  -->
+    <!-- every line of the paragraph belongs at the list's runover  -->
+    <!-- margin [BANA-2016, 8.5.1(b)]; the melded run-in marker     -->
+    <!-- supplies the first paragraph's first-line position.        -->
+    <xsl:param name="list-runover" select="''"/>
     <segment>
         <xsl:attribute name="indentation">
             <xsl:choose>
+                <xsl:when test="not($list-runover = '')">
+                    <xsl:value-of select="$list-runover"/>
+                </xsl:when>
                 <xsl:when test="@pi:indent = 'no'">
                     <xsl:text>0</xsl:text>
                 </xsl:when>
@@ -2172,6 +2207,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
+        <xsl:if test="not($list-runover = '')">
+            <xsl:attribute name="runover">
+                <xsl:value-of select="$list-runover"/>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates select="node()"/>
     </segment>
 </xsl:template>
@@ -2183,6 +2223,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: this is derived from a similar template in the HTML        -->
 <!-- conversion.                                                      -->
 <xsl:template match="p[ol|ul|dl|m[contains(math-nemeth, '&#xa;')]|md|cd]">
+    <!-- Inside a list item ($list-runover is a number, not empty)  -->
+    <!-- every piece of the paragraph belongs at the list's runover -->
+    <!-- margin [BANA-2016, 8.5.1(b)]; nested lists among the       -->
+    <!-- displays compute their own, deeper, margins.               -->
+    <xsl:param name="list-runover" select="''"/>
     <!-- will later loop over displays within paragraph      -->
     <!-- match guarantees at least one for $initial variable -->
     <xsl:variable name="displays" select="ul|ol|dl|m[contains(math-nemeth, '&#xa;')]|md|cd" />
@@ -2195,7 +2240,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$initial"/>
     </xsl:variable>
     <xsl:if test="not(normalize-space($initial-content) = '')">
-        <segment indentation="2">
+        <segment>
+            <xsl:attribute name="indentation">
+                <xsl:choose>
+                    <xsl:when test="not($list-runover = '')">
+                        <xsl:value-of select="$list-runover"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>2</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:if test="not($list-runover = '')">
+                <xsl:attribute name="runover">
+                    <xsl:value-of select="$list-runover"/>
+                </xsl:attribute>
+            </xsl:if>
             <xsl:apply-templates select="$initial"/>
         </segment>
     </xsl:if>
@@ -2219,6 +2279,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:variable>
                 <xsl:if test="not(normalize-space($common-content) = '')">
                     <segment>
+                        <xsl:if test="not($list-runover = '')">
+                            <xsl:attribute name="indentation">
+                                <xsl:value-of select="$list-runover"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="runover">
+                                <xsl:value-of select="$list-runover"/>
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:apply-templates select="$common"/>
                     </segment>
                 </xsl:if>
@@ -2230,6 +2298,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:variable>
                 <xsl:if test="not(normalize-space($final-content) = '')">
                     <segment>
+                        <xsl:if test="not($list-runover = '')">
+                            <xsl:attribute name="indentation">
+                                <xsl:value-of select="$list-runover"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="runover">
+                                <xsl:value-of select="$list-runover"/>
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:apply-templates select="$rightward"/>
                     </segment>
                 </xsl:if>
