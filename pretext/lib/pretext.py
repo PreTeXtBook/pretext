@@ -727,13 +727,7 @@ def individual_latex_image_conversion(latex_image, outformat, dest_dir, method):
                 ]
             ).format(latex_image)
             log.error(msg)
-            print(
-                "##################################################################"
-            )
-            print(result.stdout)
-            print(
-                "##################################################################"
-            )
+            log.debug(result.stdout)
             # and raise an exception so the calling function can add the image to the list of failed images
             raise Exception("LaTeX compilation of {} failed".format(latex_image))
         else:
@@ -1023,24 +1017,24 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                 if r.status_code == 200:
                     trace = r.text[r.text.find('{"code":') :]
             except Exception as e:
-                log.critical(traceback.format_exc())
-                log.critical(server_error_msg.format(url, visible_id))
+                log.debug(traceback.format_exc())
+                log.error(server_error_msg.format(url, visible_id))
         elif language == "java":
             try:
                 r = requests.post(url, data=dict(src=source), timeout=30)
                 if r.status_code == 200:
                     trace = r.text
             except Exception as e:
-                log.critical(traceback.format_exc())
-                log.critical(server_error_msg.format(url, visible_id))
+                log.debug(traceback.format_exc())
+                log.error(server_error_msg.format(url, visible_id))
         elif language == "python":
             try:
                 r = requests.post(url, data=dict(src=source), timeout=30)
                 if r.status_code == 200:
                     trace = r.text
             except Exception as e:
-                log.critical(traceback.format_exc())
-                log.critical(server_error_msg.format(url, visible_id))
+                log.debug(traceback.format_exc())
+                log.error(server_error_msg.format(url, visible_id))
 
         # should now have a trace, except for timing out
         # no trace, then do not even try to produce a file

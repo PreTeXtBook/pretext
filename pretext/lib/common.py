@@ -460,8 +460,7 @@ def _git_symbolic_to_hash(symbolic):
             # strip a trailing newline (OK assumption?)
             return f.readline()[:-1]
     except Exception as e:
-        log.critical(traceback.format_exc())
-        log.critical("the full PreTeXt repository may not be available, so determination of commits is not possible")
+        log.debug("the full PreTeXt repository is not available, so the source commit cannot be determined")
         return None
 
 
@@ -486,8 +485,7 @@ def get_git_head():
             # strip a trailing newline (OK assumption?)
             head = f.readline()[:-1]
     except Exception as e:
-        log.critical(traceback.format_exc())
-        log.critical("the full PreTeXt repository may not be available, so determination of commits is not possible")
+        log.debug("the full PreTeXt repository is not available, so the source commit cannot be determined")
         return (None, None)
 
     # head is normally a full symbolic reference

@@ -39,6 +39,8 @@ import lxml.etree as ET
 # warning below reads the same as everywhere else
 from . import common
 __module_warning = common.__module_warning
+# the shared PreTeXt logger (with .bug()/.fallback()/.fatal())
+log = common.log
 
 try:
     import louis
@@ -67,7 +69,7 @@ def _typeform_bits(typeform):
         if token in _TYPEFORM_BITS:
             bits |= _TYPEFORM_BITS[token]
         else:
-            print('BUG: the typeform token "{}" is not recognized, and is ignored'.format(token))
+            log.bug('the typeform token "{}" is not recognized, and is ignored'.format(token))
     return bits
 
 
@@ -122,7 +124,7 @@ def _translate_segment(segment):
         else:
             # translate anything unexpected as plain print text,
             # rather than lose content or halt a conversion
-            print('BUG: unexpected element "{}" inside a segment; its content is treated as plain text'.format(child.tag))
+            log.bug('unexpected element "{}" inside a segment; its content is treated as plain text'.format(child.tag))
             chunk.append((child, "text", 0))
             chunk.append((child, "tail", 0))
     _translate_chunk(chunk)

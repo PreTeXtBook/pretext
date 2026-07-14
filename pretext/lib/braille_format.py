@@ -46,6 +46,8 @@ import lxml.etree as ET
 # warning below reads the same as everywhere else
 from . import common
 __module_warning = common.__module_warning
+# the shared PreTeXt logger (with .bug()/.fallback()/.fatal())
+log = common.log
 
 # could import in a routine, but will do here in the module
 try:
@@ -201,7 +203,7 @@ class PageLayout:
         elif page_format == 'electronic':
             self.emboss = False
         else:
-            print("BUG: page format not recognized, so embossing")
+            log.bug("page format not recognized, so embossing")
             self.emboss = True
 
     def is_last_row(self, position):
@@ -546,7 +548,7 @@ class PageComposer:
         for c in sxml:
             typeface = c.tag
             if typeface != "math":
-                print('BUG: unexpected element "{}" inside a segment; its text is rendered plain and any nested content is dropped'.format(c.tag))
+                log.bug('unexpected element "{}" inside a segment; its text is rendered plain and any nested content is dropped'.format(c.tag))
                 typeface = "text"
             if c.text:
                 if 'punctuation' in c.attrib:
