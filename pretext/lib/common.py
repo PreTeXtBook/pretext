@@ -24,7 +24,87 @@
 # one-way:  common  <-  {webwork, stack, pretext}
 
 import logging
+
+# ------------------------------------------------------------------- #
+# PreTeXt message severity                                            #
+#                                                                     #
+# Every message travels through the shared "ptxlogger" at one of      #
+# these levels.  A level is a *severity* -- what happened and who     #
+# should act.  "fatal" is unique in being a severity *and* an action: #
+# it stops the build.                                                 #
+#                                                                     #
+#   log.debug     10  fine-grained trace, for pinpointing             #
+#                     ("xsltproc command: ...")                       #
+#   log.info      20  coarse progress                                 #
+#                     ("converting source to HTML")                   #
+#   log.fallback  25  bad or absent input, but a sensible default     #
+#                     was substituted; output is complete             #
+#                     ('no @width, assuming "100%"')                  #
+#   log.warning   30  should be addressed                             #
+#                     ("a deprecated element was used")               #
+#   log.error     40  no good default; localized breakage, output     #
+#                     is degraded but processing continues            #
+#                     ("cross-reference target does not exist")       #
+#   log.bug       45  an internal PreTeXt defect, NOT the author's    #
+#                     fault; please report.  A severity only:         #
+#                     execution continues (the renderer degrades)     #
+#                     ("an 'otherwise' meant to be unreachable")      #
+#   log.fatal     50  processing halts, no output expected.  A        #
+#                     severity AND an action: it logs, then raises    #
+#                     PreTeXtFatal ("invalid source, or a severe bug") #
+#                                                                     #
+# A defect that cannot be worked around is the rare composition of    #
+# the two: log.bug(...) to record it, then log.fatal(...) to stop.    #
+#                                                                     #
+# KEEP IN SYNC: this table is mirrored, with fuller prose, in the     #
+# "Messaging" chapter of the Developer Guide.  Changing a level here  #
+# means changing it there, and vice versa.                            #
+# ------------------------------------------------------------------- #
+
+# The full severity ladder in one place.  The standard five are Python's
+# own; "fallback" and "bug" are PreTeXt additions that interleave with them.
+DEBUG_LEVEL    = logging.DEBUG      # 10
+INFO_LEVEL     = logging.INFO       # 20
+FALLBACK_LEVEL = 25
+WARNING_LEVEL  = logging.WARNING    # 30
+ERROR_LEVEL    = logging.ERROR      # 40
+BUG_LEVEL      = 45
+FATAL_LEVEL    = logging.CRITICAL   # 50
+logging.addLevelName(FALLBACK_LEVEL, 'FALLBACK')
+logging.addLevelName(BUG_LEVEL, 'BUG')
+# We prefer "fatal" to Python's "critical" for level 50; a downstream
+# consumer (such as the CLI) is free to rebrand it.
+logging.addLevelName(FATAL_LEVEL, 'FATAL')
+
+
+class PreTeXtFatal(Exception):
+    '''The build cannot continue and no output is expected.  A fatal-severity
+    message (log.fatal) raises this; the program driving PreTeXt catches it
+    and reports the halt.  It is internal: an author never sees it directly.'''
+    pass
+
+
 log = logging.getLogger('ptxlogger')
+
+
+# Convenience methods for the two new levels, plus a "fatal" that is a
+# severity *and* an action.  Attached to the shared logger instance, so
+# every module that fetches "ptxlogger" gains them.
+def _log_fallback(message, *args, **kwargs):
+    if log.isEnabledFor(FALLBACK_LEVEL):
+        log._log(FALLBACK_LEVEL, message, args, **kwargs)
+
+def _log_bug(message, *args, **kwargs):
+    if log.isEnabledFor(BUG_LEVEL):
+        log._log(BUG_LEVEL, message, args, **kwargs)
+
+def _log_fatal(message, *args, **kwargs):
+    log._log(FATAL_LEVEL, message, args, **kwargs)
+    raise PreTeXtFatal(message)
+
+log.fallback = _log_fallback
+log.bug = _log_bug
+log.fatal = _log_fatal
 
 import traceback
 import os
