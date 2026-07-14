@@ -1126,7 +1126,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
         </xsl:choose>
     </runin>
-    <xsl:apply-templates select="node()"/>
+    <xsl:choose>
+        <!-- A structured list item carries paragraphs (and other  -->
+        <!-- blocks), which make their own segments.               -->
+        <xsl:when test="p">
+            <xsl:apply-templates select="node()"/>
+        </xsl:when>
+        <!-- An unstructured list item is a run of sentences,      -->
+        <!-- exactly the content of a paragraph.  But with no      -->
+        <!-- "p" there is no template to make a segment of it, and -->
+        <!-- unanchored content is lost.  So manufacture the       -->
+        <!-- missing paragraph around a copy of the content, and   -->
+        <!-- process that: the ordinary paragraph templates then   -->
+        <!-- apply, including the splitting of displayed items     -->
+        <!-- (display mathematics, a nested list) into siblings.   -->
+        <!--                                                       -->
+        <!-- TODO: the project direction is to manufacture such    -->
+        <!-- missing wrappers ("p", "statement") once, during      -->
+        <!-- assembly, marked with a "pi:" attribute, so authors   -->
+        <!-- keep their freedom while conversions see uniform      -->
+        <!-- structure.  When that arrives, this local device      -->
+        <!-- evaporates: the manufactured "p" is a real one here,  -->
+        <!-- and its flag guides any special list treatment.       -->
+        <xsl:otherwise>
+            <xsl:variable name="virtual-paragraph-rtf">
+                <p>
+                    <xsl:copy-of select="node()"/>
+                </p>
+            </xsl:variable>
+            <xsl:apply-templates select="exsl:node-set($virtual-paragraph-rtf)/p"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="ul/li" mode="unicode-list-marker">
