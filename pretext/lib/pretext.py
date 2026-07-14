@@ -5657,6 +5657,7 @@ __xml_header = '<?xml version="1.0" encoding="UTF-8"?>\n'
 
 # Re-export helpers relocated to "common.py" so the public ptx.NAME
 # interface used by the driver script is unchanged.
+PreTeXtFatal = common.PreTeXtFatal
 build_info_message = common.build_info_message
 download_file = common.download_file
 get_executable_cmd = common.get_executable_cmd
