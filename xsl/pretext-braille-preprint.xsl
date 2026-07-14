@@ -1141,9 +1141,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </runin>
     <xsl:choose>
-        <!-- A structured list item carries paragraphs (and other  -->
-        <!-- blocks), which make their own segments.               -->
-        <xsl:when test="p">
+        <!-- A structured list item carries paragraphs, or other   -->
+        <!-- block-shaped material, all of which make segments (or  -->
+        <!-- whole blocks) of their own.  The test mirrors the      -->
+        <!-- schema exactly: an "li" may hold BlockStatement, which -->
+        <!-- is BlockText (paragraph, blockquote, preformatted,     -->
+        <!-- image, video, audio, program, console, tabular), the   -->
+        <!-- figure family (figure, table, listing, list), aside,   -->
+        <!-- side-by-sides, and Sage cells.  Displayed items that   -->
+        <!-- can live within a paragraph (nested lists, display     -->
+        <!-- mathematics) are deliberately NOT in this test: mixed  -->
+        <!-- content holds them, and the paragraph machinery        -->
+        <!-- splits them out correctly.                             -->
+        <xsl:when test="p or blockquote or pre or image or video or audio or program or console or tabular or figure or table or listing or list or aside or sidebyside or sbsgroup or sage">
             <xsl:apply-templates select="node()">
                 <xsl:with-param name="list-runover" select="$list-runover"/>
             </xsl:apply-templates>
