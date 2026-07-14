@@ -67,6 +67,60 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Not so much "include" as "manipulate"            -->
 <xsl:param name="math.punctuation.include" select="'all'"/>
 
+<!-- Developer-only.  Braille arriving from Speech Rule Engine     -->
+<!-- (mathematics) is Unicode braille cells (U+2800 through        -->
+<!-- U+283F).  With "late" (the default) those cells ride through  -->
+<!-- the preprint intermediate unchanged and become BRF ASCII      -->
+<!-- symbols in the renderer.  With "early" the conversion to BRF  -->
+<!-- ASCII symbols happens here, so the preprint file itself is    -->
+<!-- readable by anyone fluent in BRF, at no change to the final   -->
+<!-- BRF.  The root element of the preprint records the choice so  -->
+<!-- the renderer can react.                                       -->
+<xsl:param name="debug.brf.symbols" select="'late'"/>
+<xsl:variable name="brf-symbols">
+    <xsl:choose>
+        <xsl:when test="($debug.brf.symbols = 'early') or ($debug.brf.symbols = 'late')">
+            <xsl:value-of select="$debug.brf.symbols"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING: the "debug.brf.symbols" string parameter must be "early" or "late", not "<xsl:value-of select="$debug.brf.symbols"/>", using "late" instead</xsl:message>
+            <xsl:text>late</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-braille-symbols-early" select="$brf-symbols = 'early'"/>
+
+<!-- The 64 Unicode braille cells, in numerical order, and their   -->
+<!-- BRF ASCII equivalents, generated with liblouis, which is what -->
+<!-- the renderer employs for the identical conversion when the    -->
+<!-- cells ride through as Unicode ("late").  Exception: the blank -->
+<!-- cell U+2800 maps to a NO-BREAK SPACE, not to a plain space:   -->
+<!-- it reads as a space, but the renderer can still distinguish   -->
+<!-- a (non-breaking) blank cell from an authored space when it    -->
+<!-- makes line-breaking decisions, and it becomes a plain space   -->
+<!-- in the final output, exactly as a blank cell does.            -->
+<xsl:variable name="unicode-braille-cells" select="'&#x2800;&#x2801;&#x2802;&#x2803;&#x2804;&#x2805;&#x2806;&#x2807;&#x2808;&#x2809;&#x280A;&#x280B;&#x280C;&#x280D;&#x280E;&#x280F;&#x2810;&#x2811;&#x2812;&#x2813;&#x2814;&#x2815;&#x2816;&#x2817;&#x2818;&#x2819;&#x281A;&#x281B;&#x281C;&#x281D;&#x281E;&#x281F;&#x2820;&#x2821;&#x2822;&#x2823;&#x2824;&#x2825;&#x2826;&#x2827;&#x2828;&#x2829;&#x282A;&#x282B;&#x282C;&#x282D;&#x282E;&#x282F;&#x2830;&#x2831;&#x2832;&#x2833;&#x2834;&#x2835;&#x2836;&#x2837;&#x2838;&#x2839;&#x283A;&#x283B;&#x283C;&#x283D;&#x283E;&#x283F;'"/>
+<xsl:variable name="ascii-braille-cells">&#xA0;a1b'k2l`cif/msp"e3h9o6r~djg&gt;ntq,*5&lt;-u8v.%{$+x!&amp;;:4|0z7(_?w}#y)=</xsl:variable>
+
+<!-- Convert Unicode braille cells to BRF ASCII symbols, when      -->
+<!-- elected ("early"); the text is otherwise undisturbed.         -->
+<!-- The conversion is all-or-nothing per text: when a             -->
+<!-- construction has no braille translation, Speech Rule Engine   -->
+<!-- can leave print residue among the cells, and such a mixture   -->
+<!-- must ride along whole (cells as Unicode) so the renderer      -->
+<!-- gives it the identical late treatment under either election.  -->
+<xsl:template name="brf-symbols-filter">
+    <xsl:param name="text"/>
+    <xsl:choose>
+        <xsl:when test="$b-braille-symbols-early and (translate($text, concat($unicode-braille-cells, ' &#xa;&#x9;&#xd;&#xa0;'), '') = '')">
+            <xsl:value-of select="translate($text, $unicode-braille-cells, $ascii-braille-cells)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$text"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ############################## -->
 <!-- Incorporate (Meld) Mathematics -->
 <!-- ############################## -->
@@ -213,10 +267,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The entry template "waits" for the "$math-meld-rtf" and    -->
 <!-- "$segmented-rtf" global variables to form, then the actual -->
-<!-- output is a run of modal "meld-runin" templates as a sort  -->
-<!-- of post-processing step.                                   -->
+<!-- output comes from two post-processing passes: the modal    -->
+<!-- "meld-runin" templates absorb run-in titles into their     -->
+<!-- segments, and then the modal "flatten-runs" templates      -->
+<!-- dissolve nested font-change markup into a flat sequence    -->
+<!-- of "run" elements bearing composite "@typeform" values.    -->
 <xsl:template match="/">
-    <xsl:apply-templates select="exsl:node-set($segmented-rtf)/brf" mode="meld-runin"/>
+    <xsl:variable name="melded-runin-rtf">
+        <xsl:apply-templates select="exsl:node-set($segmented-rtf)/brf" mode="meld-runin"/>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($melded-runin-rtf)/brf" mode="flatten-runs"/>
+</xsl:template>
+
+<!-- ############################ -->
+<!-- Flatten Font Changes to Runs -->
+<!-- ############################ -->
+
+<!-- Font-change markup ("italic", "bold", "code") arrives from the -->
+<!-- earlier pass as elements, which may nest ("italic" containing  -->
+<!-- "code", say).  A formatter wants a flat sequence, so each text -->
+<!-- node becomes a "run" element whose "@typeform" records every   -->
+<!-- font change in effect, as space-separated tokens.  Text with   -->
+<!-- no font change rides along bare.  The font-change elements     -->
+<!-- themselves evaporate.  Mathematics ("math") is already braille -->
+<!-- cells and is preserved whole, its interior untouched.          -->
+
+<!-- Dissolve, children continue -->
+<xsl:template match="italic|bold|code" mode="flatten-runs">
+    <xsl:apply-templates select="node()" mode="flatten-runs"/>
+</xsl:template>
+
+<!-- Mathematics is opaque, xerox entirely -->
+<xsl:template match="math" mode="flatten-runs">
+    <xsl:copy-of select="."/>
+</xsl:template>
+
+<!-- Text nodes inside a segment (or a converted run-in title)  -->
+<!-- either ride bare (no font change) or become a "run".  The  -->
+<!-- ancestor axis sees the font-change elements because they   -->
+<!-- are still present in the tree under examination.           -->
+<xsl:template match="text()" mode="flatten-runs">
+    <xsl:variable name="typeform">
+        <xsl:if test="ancestor::italic">
+            <xsl:text>italic </xsl:text>
+        </xsl:if>
+        <xsl:if test="ancestor::bold">
+            <xsl:text>bold </xsl:text>
+        </xsl:if>
+        <xsl:if test="ancestor::code">
+            <xsl:text>code </xsl:text>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$typeform = ''">
+            <xsl:value-of select="."/>
+        </xsl:when>
+        <xsl:otherwise>
+            <run>
+                <xsl:attribute name="typeform">
+                    <xsl:value-of select="normalize-space($typeform)"/>
+                </xsl:attribute>
+                <xsl:value-of select="."/>
+            </run>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Xerox machine.  Elements and attributes only: text nodes have -->
+<!-- their own template above, and it must win the match.          -->
+<xsl:template match="*|@*" mode="flatten-runs">
+    <xsl:copy>
+        <xsl:apply-templates select="@*|node()" mode="flatten-runs"/>
+    </xsl:copy>
 </xsl:template>
 
 <!-- Process segments here, looking for run-in titles/headings -->
@@ -279,6 +401,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Need an overall container   -->
     <!-- Maybe copy a language code? -->
     <brf>
+        <!-- Record how braille cells are represented ("early" is  -->
+        <!-- BRF ASCII symbols, "late" is Unicode braille cells)   -->
+        <!-- so the renderer can react to mathematics accordingly. -->
+        <xsl:attribute name="brf-symbols">
+            <xsl:value-of select="$brf-symbols"/>
+        </xsl:attribute>
+        <!-- Page geometry, from the publication file (or the      -->
+        <!-- defaults), for the renderer: cells in a line, lines   -->
+        <!-- on an embossed page.                                  -->
+        <xsl:attribute name="page-width">
+            <xsl:value-of select="$braille-page-width"/>
+        </xsl:attribute>
+        <xsl:attribute name="page-height">
+            <xsl:value-of select="$braille-page-height"/>
+        </xsl:attribute>
         <!-- centered heading on line 1 -->
         <segment centered="yes" lines-after="1">Transcriber Notes</segment>
         <!-- Literal text for each note, control whitespace,  -->
@@ -1193,7 +1330,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Bibliographic items in a "references" division have a      -->
 <!-- bracketed number leading each new entry, then two spaces   -->
 <!-- of indentation for the remainder .                         -->
-<!-- TODO: expand to accomodate annotations ("note"), BANA 22.3 -->
+<!-- An annotation ("note") produces a block, so it cannot live -->
+<!-- inside the entry's segment; it follows as a sibling.       -->
+<!-- TODO: format annotations per BANA 22.3, rather than        -->
+<!-- reusing the boxed rendering of a REMARK-LIKE "note".       -->
 <xsl:template match="biblio[@type='raw']">
     <runin indentation="0" separator="&#x20;">
         <xsl:text>[</xsl:text>
@@ -1201,8 +1341,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>]</xsl:text>
     </runin>
     <segment indentation="0" runover="2">
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="node()[not(self::note)]"/>
     </segment>
+    <xsl:apply-templates select="note"/>
 </xsl:template>
 
 <!-- Override usual killing of title, but perhaps a generic -->
@@ -1554,8 +1695,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="m[not(contains(math-nemeth, '&#xa;'))]">
     <!-- Unicode braille cells from Speech Rule Engine (SRE)   -->
     <!-- Not expecting any markup, so "value-of" is everything -->
+    <!-- Possibly converted to BRF ASCII symbols ("early")     -->
     <xsl:variable name="raw-braille">
-        <xsl:value-of select="math-nemeth"/>
+        <xsl:call-template name="brf-symbols-filter">
+            <xsl:with-param name="text" select="math-nemeth"/>
+        </xsl:call-template>
     </xsl:variable>
     <!-- We investigate actual source for very simple math   -->
     <!-- such as one-letter variable names as Latin letters  -->
@@ -1614,6 +1758,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="m[contains(math-nemeth, '&#xa;')]|md">
+    <!-- Lines are trimmed, and possibly converted to BRF ASCII -->
+    <!-- symbols ("early"), one at a time, below                -->
     <xsl:variable name="nemeth">
         <xsl:value-of select="math-nemeth"/>
         <xsl:text>&#xa;</xsl:text>
@@ -1635,11 +1781,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- done, nothing left to work on -->
         <xsl:when test="$display-math = ''"/>
         <xsl:otherwise>
-            <!-- first line into a segment -->
+            <!-- first line into a segment: trailing blank cells -->
+            <!-- trimmed first, and then a possible conversion to -->
+            <!-- BRF ASCII symbols ("early"), line by line, so a  -->
+            <!-- line of print residue rides along as Unicode     -->
+            <!-- without disqualifying its neighbors              -->
             <segment>
-                <xsl:call-template name="trim-nemeth-trailing-whitespace">
-                   <xsl:with-param name="text" select="substring-before($display-math, '&#xa;')"/>
-               </xsl:call-template>
+                <xsl:variable name="trimmed">
+                    <xsl:call-template name="trim-nemeth-trailing-whitespace">
+                        <xsl:with-param name="text" select="substring-before($display-math, '&#xa;')"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:call-template name="brf-symbols-filter">
+                    <xsl:with-param name="text" select="$trimmed"/>
+                </xsl:call-template>
             </segment>
             <!-- recurse on remainder -->
             <xsl:call-template name="segmentize-display-math">
@@ -2245,5 +2400,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </segment>
 </xsl:template>
 
+<!-- ############## -->
+<!-- Invalid Source -->
+<!-- ############## -->
+
+<!-- Constructions that violate the PreTeXt schema receive an error   -->
+<!-- message describing the violation, and leave a placeholder in the -->
+<!-- output, rather than being accommodated.  Generated content       -->
+<!-- (STACK static representations) is the known supplier: a "p"      -->
+<!-- within a "p", an "image" within a "p", and "div" (an HTML        -->
+<!-- element, not PreTeXt at all).                                    -->
+<!--                                                                  -->
+<!-- N.B. these templates are deliberately LAST in this stylesheet:   -->
+<!-- a nested "p" can also match the display-splitting template for   -->
+<!-- "p" at equal priority, and placement here settles the conflict   -->
+<!-- in favor of the error.                                           -->
+<xsl:template match="p/p|p/image|div">
+    <xsl:message>PTX:ERROR:   the braille conversion has encountered source that is not valid PreTeXt (a "<xsl:value-of select="local-name()"/>" element within a "<xsl:value-of select="local-name(parent::*)"/>"); a placeholder appears in the output in its place</xsl:message>
+    <xsl:text>[INVALID SOURCE]</xsl:text>
+</xsl:template>
 
 </xsl:stylesheet>

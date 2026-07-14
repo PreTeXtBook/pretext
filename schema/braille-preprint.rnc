@@ -1,0 +1,161 @@
+# ********************************************************************
+# Copyright 2026 Robert A. Beezer
+#
+# This file is part of PreTeXt.
+#
+# PreTeXt is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 or version 3 of the
+# License (at your option).
+#
+# PreTeXt is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+# *********************************************************************
+
+# The braille "preprint" vocabulary: the contract between the XSL
+# conversion (xsl/pretext-braille-preprint.xsl), the translation pass
+# (pretext/lib/braille_translate.py), and the renderer
+# (pretext/lib/braille_format.py).
+#
+# The same vocabulary describes the file at both stages:
+#
+#   * As produced by the XSL: text is print, font changes are "run"
+#     elements, mathematics is braille inside "math" elements, and
+#     the root carries @brf-symbols.
+#
+#   * As produced by the translation pass: all text is braille, the
+#     "run" elements have dissolved (typeform indicators are baked
+#     into the braille), and the root additionally carries
+#     @translated = "yes".
+#
+# Design rules, so the intermediate stays rendering-ready:
+#
+#   * A "segment" is a formatting atom: it begins on a new line and
+#     ends the line it finishes on.  It holds text and islands of
+#     mathematics -- never another segment, and never a block.
+#     When a paragraph contains block-shaped material (display
+#     mathematics, say), the XSL splits the paragraph, so the
+#     block-shaped material always arrives here as a sibling,
+#     between segments.
+#
+#   * Every layout property is expressed in whole characters (cells)
+#     and whole lines; there are no lengths, no percentages, and no
+#     document semantics (nothing knows what a "theorem" is here).
+#
+#   * Vertical space requests ("lines-before", "lines-after") do not
+#     collapse; the renderer suppresses them only at a page start.
+#
+# Validate an intermediate with, for example:
+#
+#   jing -c schema/braille-preprint.rnc <intermediate file>
+
+# One file, at either stage
+start = BrfFile
+
+# yes/no strings stand in for booleans throughout, and a missing
+# attribute always means the default noted for it
+YesNo = string "yes" | string "no"
+
+# a count of characters (cells) or lines, never negative
+Count = xsd:nonNegativeInteger
+
+BrfFile =
+    element brf {
+        # how braille cells are represented in "math" elements and
+        # in Nemeth display blocks: "late" is Unicode braille cells
+        # (U+2800 through U+283F), "early" is BRF ASCII symbols
+        # (a developer debugging convenience; final output is
+        # identical under either election)
+        attribute brf-symbols { string "early" | string "late" },
+        # present, and "yes", once the translation pass has made
+        # braille of every piece of print text; the renderer
+        # refuses a file without it
+        attribute translated { string "yes" }?,
+        # page geometry, from the publication file (or defaults):
+        # cells in a line, and lines on an embossed page
+        attribute page-width { xsd:positiveInteger },
+        attribute page-height { xsd:positiveInteger },
+        (Segment | Block)*
+    }
+
+# A segment: one formatting atom.  Mixed content: text (print before
+# translation, braille after), font-change runs (before translation
+# only), and islands of mathematics.
+Segment =
+    element segment {
+        # indentation of the first line, in cells (default 0)
+        attribute indentation { Count }?,
+        # indentation of every subsequent line, in cells (default 0)
+        attribute runover { Count }?,
+        # blank lines demanded before/after (default 0); not
+        # honored at the start of a page
+        attribute lines-before { Count }?,
+        attribute lines-after { Count }?,
+        # lines that must fit on the current page after this
+        # segment's last line, else the segment moves to a new page
+        # (default 0); this is how a heading stays with its content
+        attribute lines-following { Count }?,
+        # may this segment split across a page boundary? (default yes)
+        attribute breakable { YesNo }?,
+        # centered, within margins of three blank cells (default no)
+        attribute centered { YesNo }?,
+        # force a new page to begin here (default no)
+        attribute newpage { YesNo }?,
+        # demand a page of its own (default no)
+        attribute ownpage { YesNo }?,
+        # identifier connecting a heading to its table-of-contents
+        # entry, for page-number resolution after layout
+        attribute heading-id { text }?,
+        # artifact of an absorbed run-in title (ignored downstream)
+        attribute separator { text }?,
+        mixed { (Run | Math)* }
+    }
+
+# A run of text under one or more font changes, translation-pass
+# input only; the tokens compose (nested markup arrives flattened)
+Run =
+    element run {
+        attribute typeform {
+            list { (string "italic" | string "bold" | string "code")+ }
+        },
+        text
+    }
+
+# An island of mathematics: braille cells from Speech Rule Engine
+# (per @brf-symbols), never translated, wrapped in Nemeth switch
+# indicators and space-fused by the renderer
+Math =
+    element math {
+        # clause-ending print punctuation trailing the mathematics,
+        # to be joined to the closing Nemeth indicator
+        attribute punctuation { text }?,
+        text
+    }
+
+# A block: a container of segments (or nested blocks), giving box
+# drawing, page-break protection, and vertical spacing.  A Nemeth
+# display block's segments are lines of mathematics, already braille,
+# exempt from translation.
+Block =
+    element block {
+        # may the contents split across a page boundary? (default yes)
+        attribute breakable { YesNo }?,
+        # box drawing: "standard" is a full box of line-drawing
+        # cells; "nemeth" brackets the contents with Nemeth switch
+        # indicators (display mathematics)
+        attribute box { string "standard" | string "nemeth" }?,
+        # blank lines demanded before/after (default 0)
+        attribute lines-before { Count }?,
+        attribute lines-after { Count }?,
+        # demand a page of its own (default no)
+        attribute ownpage { YesNo }?,
+        # clause-ending print punctuation trailing display
+        # mathematics, joined to the closing Nemeth indicator
+        attribute punctuation { text }?,
+        (Segment | Block)*
+    }

@@ -3061,6 +3061,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 
+<!-- ######################## -->
+<!-- Braille-Specific Options -->
+<!-- ######################## -->
+
+<!-- Page geometry of embossed output: cells in a line, lines on a  -->
+<!-- page.  Freeform entries, validated here to positive integers,  -->
+<!-- with the common North American embosser page as the default.   -->
+
+<xsl:variable name="braille-page-width-entered">
+    <xsl:apply-templates select="$publisher-attribute-options/braille/page/pi:pub-attribute[@name='width']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="braille-page-width">
+    <xsl:choose>
+        <xsl:when test="(number($braille-page-width-entered) = round(number($braille-page-width-entered))) and (number($braille-page-width-entered) &gt; 0)">
+            <xsl:value-of select="round(number($braille-page-width-entered))"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING: the braille page width in the publication file ("<xsl:value-of select="$braille-page-width-entered"/>") must be a positive whole number of cells, using the default, 40</xsl:message>
+            <xsl:text>40</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="braille-page-height-entered">
+    <xsl:apply-templates select="$publisher-attribute-options/braille/page/pi:pub-attribute[@name='height']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="braille-page-height">
+    <xsl:choose>
+        <xsl:when test="(number($braille-page-height-entered) = round(number($braille-page-height-entered))) and (number($braille-page-height-entered) &gt; 0)">
+            <xsl:value-of select="round(number($braille-page-height-entered))"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING: the braille page height in the publication file ("<xsl:value-of select="$braille-page-height-entered"/>") must be a positive whole number of lines, using the default, 25</xsl:message>
+            <xsl:text>25</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+
 <!-- ###################### -->
 <!-- LaTeX-Specific Options -->
 <!-- ###################### -->
@@ -3750,6 +3789,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <stack>
         <pi:pub-attribute name="server" default="https://stack-api.maths.ed.ac.uk" freeform="yes"/>
     </stack>
+    <braille>
+        <page>
+            <pi:pub-attribute name="width" default="40" freeform="yes"/>
+            <pi:pub-attribute name="height" default="25" freeform="yes"/>
+        </page>
+    </braille>
     <revealjs>
         <appearance>
             <pi:pub-attribute name="theme" default="simple" freeform="yes"/>
