@@ -2273,17 +2273,9 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
                             await browser.close()
 
-                    # convert to PDF
-                    asyncio.get_event_loop().run_until_complete(write_pdf(svg_string))
-                    # asyncio.get_event_loop() warning: this code assumes we are running from an synchronous context.
-                    # If called from some asynch function, by an outside tool, this will break. As will other uses in this file.
-                    # For a possible emergency fix see:
-                    # https://github.com/RunestoneInteractive/rs/pull/723
-                    # nested_asyncio did not work for RS as there were conflicts with other libraries.
-                    # get_event_loop is deprecated, so at some point we need to replace it - a permanent fix at that point would be nice
-                    # Official advice appears to be "rewrite anything that uses async to be async all the way up"
-                    # https://discuss.python.org/t/calling-coroutines-from-sync-code-2/24093/5
-                    # this warning referenced in other places... search for 'asyncio.get_event_loop() warning'
+                    # convert to PDF; asyncio.run requires a synchronous caller
+                    # and raises if a containing tool already runs an event loop
+                    asyncio.run(write_pdf(svg_string))
 
                     # Try to read the SVG width and set PreTeXt width based on document width assumptions
                     if svg_width_parsed:
