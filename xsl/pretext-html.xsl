@@ -11441,7 +11441,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="stack-js">
 
     <xsl:if test="$b-has-stack">
-        <link rel="stylesheet" type="text/css" href="{$html.js.dir}/pretext-stack/stack.css"/>
+        <!-- stack.css isn't a jsbuilder target (that pipeline only handles JS,
+             see script/jsbuilder/README.md); it ships verbatim via
+             copy_html_js(), so it lives under the js/ root, not js/dist/ -->
+        <link rel="stylesheet" type="text/css" href="{$html.js.root}/pretext-stack/stack.css"/>
         <script src="{$html.js.dir}/pretext-stack/stackjsvle.js" type="text/javascript"></script>
         <script src="{$html.js.dir}/pretext-stack/stackapicalls.js" type="text/javascript"></script>
         <script type="text/javascript">
