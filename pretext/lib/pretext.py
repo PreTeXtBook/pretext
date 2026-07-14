@@ -2196,10 +2196,10 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                         img = PIL.Image.open(image_path)
                         imgwidthtag = min(100, round(img.width / 6))
                         img.close()
+                        image_element.set("width", "{}%".format(imgwidthtag))
                     except Exception as e:
-                        log.error(f"Unable to read image width of {image_path}: {e}")
+                        log.error("Unable to read image width of {}: {}".format(image_path, e))
 
-                    image_element.set("width", f"{imgwidthtag}%")
                     del image_element.attrib["source"]
                     image_element.set("{http://pretextbook.org/2020/pretext/internal}generated", imageloc)
                 except requests.exceptions.RequestException as e:
