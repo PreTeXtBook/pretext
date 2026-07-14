@@ -2395,7 +2395,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- structures.  We report AND include a textual place holder.       -->
 
 <xsl:template match="notation-list">
-    <xsl:text>NOTATIONLIST</xsl:text>
+    <segment>NOTATIONLIST</segment>
 </xsl:template>
 
 <!-- A real braille index awaits future work; until then the     -->
