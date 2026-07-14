@@ -162,7 +162,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="pretext-heading">
-    <xsl:message>pretext-heading unmatched <xsl:value-of select="local-name(.)" /></xsl:message>
+    <xsl:message>PTX:BUG: pretext-heading unmatched <xsl:value-of select="local-name(.)" /></xsl:message>
 </xsl:template>
 
 <!-- A division companion as its own notebook: a heading cell from -->

@@ -1670,7 +1670,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>&#x2193;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>WARNING:  &quot;icon&quot; with @name attribute value "<xsl:value-of select="@name"/>" does not have an implementation for braille.</xsl:message>
+            <xsl:message>PTX:WARNING: &quot;icon&quot; with @name attribute value "<xsl:value-of select="@name"/>" does not have an implementation for braille.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

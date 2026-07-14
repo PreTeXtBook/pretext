@@ -88,7 +88,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>3d</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message>PTX:ERROR:   a "sageplot" has a @variant attribute ("<xsl:value-of select="@variant"/>") for "<xsl:value-of select="$filebase"/>" whose value is not "2d" nor "3d".  The default ("2d") is being used, which could be incorrect</xsl:message>
+                <xsl:message>PTX:FALLBACK:   a "sageplot" has a @variant attribute ("<xsl:value-of select="@variant"/>") for "<xsl:value-of select="$filebase"/>" whose value is not "2d" nor "3d".  The default ("2d") is being used, which could be incorrect</xsl:message>
                 <xsl:text>2d</xsl:text>
             </xsl:otherwise>
         </xsl:choose>

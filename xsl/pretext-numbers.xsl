@@ -557,7 +557,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Should not drop in here.  Ever. -->
 <xsl:template match="*" mode="serial-number">
     <xsl:text>[NUM]</xsl:text>
-    <xsl:message>PTX:ERROR:   An object (<xsl:value-of select="local-name(.)" />) lacks a serial number, search output for "[NUM]"</xsl:message>
+    <xsl:message>PTX:BUG:   An object (<xsl:value-of select="local-name(.)" />) lacks a serial number, search output for "[NUM]"</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
 
@@ -800,7 +800,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Should not drop in here.  Ever. -->
 <xsl:template match="*" mode="structure-number">
     <xsl:text>[STRUCT]</xsl:text>
-    <xsl:message>PTX:ERROR:   An object (<xsl:value-of select="local-name(.)" />) lacks a structure number, search output for "[STRUCT]"</xsl:message>
+    <xsl:message>PTX:BUG:   An object (<xsl:value-of select="local-name(.)" />) lacks a structure number, search output for "[STRUCT]"</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
 

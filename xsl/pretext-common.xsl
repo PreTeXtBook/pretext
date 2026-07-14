@@ -5179,7 +5179,7 @@ Book (with parts), "section" at level 3
                 <xsl:when test="@marker='square'">square</xsl:when>
                 <xsl:when test="@marker=''">none</xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>ptx:ERROR: unordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
+                    <xsl:message>PTX:ERROR: unordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>

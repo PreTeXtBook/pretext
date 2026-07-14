@@ -100,7 +100,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: perhaps report content also, as a better assist, or the self/parent/ancestor biblio id -->
 <!-- TODO: refine to include un-implemented bits of "citeproc-py" (e/g static-ordering) -->
 <xsl:template match="*" mode="biblio-to-json">
-    <xsl:message>BUG: PreTeXt "biblio" markup using a "<xsl:value-of select="local-name()"/>" element is not implemented</xsl:message>
+    <xsl:message>PTX:BUG: PreTeXt "biblio" markup using a "<xsl:value-of select="local-name()"/>" element is not implemented</xsl:message>
 </xsl:template>
 
 <!-- Gross JSON array structure, duplicate an ID for the division -->
