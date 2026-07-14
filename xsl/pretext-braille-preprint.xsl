@@ -2356,9 +2356,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The "titlepage" and front "colophon" should be mined to form front -->
 <!-- matter material in the right places, etc.  We kill them for now so -->
-<!-- we don't see their children being overlooked.                      -->
+<!-- we don't see their children being overlooked.  "bibinfo" is pure   -->
+<!-- metadata (authors, date, edition), mined by a title page when one  -->
+<!-- is implemented; unhandled, its text leaks into the output stream   -->
+<!-- with no anchor, so it is silenced the same way.                    -->
 <xsl:template match="titlepage"/>
 <xsl:template match="frontmatter/colophon"/>
+<!-- TODO: a braille title page [BANA-2016, 2.3] should mine     -->
+<!-- "bibinfo" (title, authors, date, edition) rather than       -->
+<!-- leaving it silenced here.                                   -->
+<xsl:template match="bibinfo"/>
 
 <!-- Many pieces of the "backmatter" have templates designed for divisions -->
 <xsl:template match="backmatter">
