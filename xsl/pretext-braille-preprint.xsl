@@ -1091,13 +1091,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lists -->
 <!-- ##### -->
 
-<!-- Lists are containers full of list items.  All by   -->
-<!-- themselves they have no real impact on the braille -->
-<!-- output.  The list items are another matter.        -->
-<!-- 2023-04-06: very prelimnary, e.g. no runover       -->
-<!-- 2023-04-10: excessive nesting => excessive run-in  -->
+<!-- Lists are containers full of list items.  The container's -->
+<!-- one responsibility: [BANA-2016, 8.3.2(a)] a list is        -->
+<!-- preceded and followed by a blank line.  That means the     -->
+<!-- OUTERMOST list; a nested list runs on without a break.     -->
+<!-- (An empty segment demanding a line before it is the idiom  -->
+<!-- for one blank line, suppressed at the top of a page.)      -->
 <xsl:template match="ul|ol|dl">
+    <xsl:variable name="b-outermost" select="not(ancestor::ol or ancestor::ul or ancestor::dl)"/>
+    <xsl:if test="$b-outermost">
+        <segment lines-before="1"/>
+    </xsl:if>
     <xsl:apply-templates select="li"/>
+    <xsl:if test="$b-outermost">
+        <segment lines-before="1"/>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="li">
