@@ -1973,10 +1973,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
             log.debug("Starting event loop for playwright, after starting server")
             port, server = start_server()
             baseurl = "http://localhost:{}".format(port)
-            asyncio.get_event_loop().run_until_complete(
-                generate_previews(interactives, baseurl, dest_dir, timeout)
-            )
-            # if this blows up, search for 'asyncio.get_event_loop() warning' in this file
+            asyncio.run(generate_previews(interactives, baseurl, dest_dir, timeout))
         finally:
             # close the server
             log.info("Closing http.server thread")
