@@ -343,51 +343,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Process segments here, looking for run-in titles/headings -->
 <xsl:template match="segment" mode="meld-runin">
-    <!-- Look for "run-in" material just prior -->
-    <xsl:variable name="adjacent-runin" select="preceding-sibling::*[1][self::runin]"/>
+    <!-- Look for "run-in" material just prior: the whole maximal   -->
+    <!-- chain of consecutive "runin" siblings whose first          -->
+    <!-- following non-"runin" sibling is this very segment.  Each  -->
+    <!-- melds in, in order, with its separator.  Chains occur      -->
+    <!-- routinely: an exercise, or a list item, may begin with a   -->
+    <!-- nested list, stacking a marker for every level.            -->
+    <xsl:variable name="runin-chain" select="preceding-sibling::runin[generate-id(following-sibling::*[not(self::runin)][1]) = generate-id(current())]"/>
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="meld-runin"/>
-        <xsl:apply-templates select="$adjacent-runin/@indentation|$adjacent-runin/@lines-before" mode="meld-runin"/>
-        <xsl:apply-templates select="$adjacent-runin/node()" mode="meld-runin"/>
-        <xsl:value-of select="$adjacent-runin/@separator"/>
+        <!-- the chain's first runin positions the merged segment -->
+        <xsl:apply-templates select="$runin-chain[1]/@indentation|$runin-chain[1]/@lines-before" mode="meld-runin"/>
+        <xsl:for-each select="$runin-chain">
+            <xsl:apply-templates select="node()" mode="meld-runin"/>
+            <xsl:value-of select="@separator"/>
+        </xsl:for-each>
         <xsl:apply-templates select="node()" mode="meld-runin"/>
     </xsl:copy>
 </xsl:template>
 
-<!-- It is entirely possible for a segment to be preceded by     -->
-<!-- consecutive "runin" elements.  Three examples:              -->
-<!--                                                             -->
-<!--   "proof" then "case"                                       -->
-<!--   "hint" then "li" (and other SOLUTION-LIKE)                -->
-<!--   "exercise" then "li" (but should probably be "task"?)     -->
-<!--                                                             -->
-<!-- Likely a structure with an immediate "p" with an immediate  -->
-<!-- list could result in a run-in title for the structure and   -->
-<!-- a run-in title for the first list item.  Experimentation on -->
-<!-- 2023-04-05 with Judson's AATA did not reveal any runs of    -->
-<!-- three (or more) consecutive "runin" elements.  So our       -->
-<!-- solution is ad-hoc for the double case, with a bug report   -->
-<!-- for three or more.                                          -->
-<!-- We convert the first "runin" to a "segment" (rather than    -->
-<!-- killing it) and let the second "runin" get absorbed by the  -->
-<!-- subsequent "segment".                                       -->
-<xsl:template match="runin[following-sibling::*[1][self::runin]]" mode="meld-runin">
-    <segment>
-        <xsl:apply-templates select="@*|node()" mode="meld-runin"/>
-    </segment>
-    <xsl:if test="following-sibling::*[2][self::runin]">
-        <xsl:message>BUG: the braille conversion has encountered three "run-in" titles in a row,</xsl:message>
-        <xsl:message>which we had not expected.  Please report me.  Thank-you.</xsl:message>
-        <xsl:message>First: <xsl:value-of select="."/></xsl:message>
-        <xsl:message>Second: <xsl:value-of select="following-sibling::*[1][self::runin]"/></xsl:message>
-        <xsl:message>Third: <xsl:value-of select="following-sibling::*[2][self::runin]"/></xsl:message>
-    </xsl:if>
+<!-- A "runin" whose chain ends at a "segment" has been absorbed   -->
+<!-- above; it must not persist.  A "runin" whose chain does NOT   -->
+<!-- end at a segment (a block comes next, or nothing does) has no -->
+<!-- host to meld into, so it becomes a segment of its own rather  -->
+<!-- than disappear: content is never dropped silently.            -->
+<xsl:template match="runin" mode="meld-runin">
+    <xsl:choose>
+        <xsl:when test="following-sibling::*[not(self::runin)][1][self::segment]">
+            <!-- absorbed by that segment -->
+        </xsl:when>
+        <xsl:otherwise>
+            <segment>
+                <xsl:apply-templates select="@*|node()" mode="meld-runin"/>
+            </segment>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
-
-<!-- Every "runin" has been absorbed into a trailing "segment" or -->
-<!-- perhaps converted into a "segment".  This will prevent the   -->
-<!-- absorbed ones from persisting.                               -->
-<xsl:template match="runin" mode="meld-runin"/>
 
 <!-- Xerox machine -->
 <xsl:template match="@*|node()" mode="meld-runin">
