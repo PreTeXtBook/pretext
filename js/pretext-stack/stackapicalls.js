@@ -326,6 +326,11 @@ function validate(element, qfile, qname, qprefix) {
   collectData(qfile, qname, qprefix).then((data) => {
     if (!data) return;
     data.inputName = answerName;
+    // use the seed from the current rendering, not a new random one: some
+    // input types (e.g. dropdown) derive a per-seed permutation, so
+    // validating against a different seed reinterprets the submitted value
+    // as a different option and shows the wrong validation text
+    data.seed = getState(qprefix).submitSeed;
     http.send(JSON.stringify(data));
   });
 }
