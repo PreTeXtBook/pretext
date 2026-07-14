@@ -1856,6 +1856,12 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
         async with playwright.async_api.async_playwright() as pw:
             browser = await pw.chromium.launch()
             page = await browser.new_page()
+            # One uncooperative interactive should warn and be skipped, not
+            # abort the whole batch.  "fail_ms" bounds how long we wait on a
+            # broken interactive before abandoning it; it is separate from the
+            # fast/slow settle delay below, which paces a working interactive.
+            fail_ms = 5000
+            failures = []
             # First index contains original baseurl of hosted site (not used)
             for preview_fragment in interactives:
                 # loaded page url containing interactive
@@ -1870,17 +1876,24 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, met
                 msg = 'automatic screenshot of interactive with identifier "{}" on page {} to file {}'
                 log.info(msg.format(preview_fragment, input_page, filename))
 
-                # goto page and wait for content to load
-                await page.goto(input_page, wait_until='domcontentloaded')
-                # wait again, according to the value of the timeout,
-                # for more than just splash screens, etc
-                await page.wait_for_timeout(timeout)
-                # list of locations, need first (and only) one
-                elt = page.locator(xpath)
-                await elt.screenshot(path=filename, scale="css")
-
-                # copy
-                shutil.copy2(filename, dest_dir)
+                try:
+                    # goto page and wait for content to load
+                    await page.goto(input_page, wait_until='domcontentloaded', timeout=fail_ms)
+                    # wait again, according to the value of the timeout,
+                    # for more than just splash screens, etc
+                    await page.wait_for_timeout(timeout)
+                    # list of locations, need first (and only) one
+                    elt = page.locator(xpath)
+                    await elt.screenshot(path=filename, scale="css", timeout=fail_ms)
+                    # copy
+                    shutil.copy2(filename, dest_dir)
+                except Exception as e:
+                    failures.append(preview_fragment)
+                    msg = 'could not capture a preview image for the interactive with identifier "{}" ({}); a static substitute will be used'
+                    log.error(msg.format(preview_fragment, type(e).__name__))
+            if failures:
+                msg = '{} of {} interactive preview images captured; none produced for: {}'
+                log.error(msg.format(len(interactives) - len(failures), len(interactives), ", ".join(failures)))
             await browser.close()
 
     # Start http server in a thread
