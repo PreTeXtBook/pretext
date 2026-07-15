@@ -886,14 +886,14 @@
       <attribute name="number"/>
     </optional>
     <ref name="StatementExercise"/>
-    <optional>
-      <ref name="Feedback"/>
-    </optional>
     <element name="areas">
       <oneOrMore>
         <ref name="ParagraphAreas"/>
       </oneOrMore>
     </element>
+    <optional>
+      <ref name="Feedback"/>
+    </optional>
     <zeroOrMore>
       <ref name="Hint"/>
     </zeroOrMore>
@@ -913,23 +913,217 @@
       </oneOrMore>
     </element>
   </define>
-  <!-- Fill-in-the-blank exercises (new-style evaluation) -->
+  <!--
+    Fill-in-the-blank exercises: randomized setup, then evaluation.
+    Content model per the FITB maintainer (Brian Walton), issue #2980.
+  -->
   <define name="FillInBlank">
     <ref name="MetaDataTitleOptional"/>
     <optional>
       <attribute name="number"/>
     </optional>
     <ref name="StatementExercise"/>
-    <ref name="Evaluation"/>
-    <zeroOrMore>
-      <ref name="Hint"/>
-    </zeroOrMore>
-    <zeroOrMore>
-      <ref name="Answer"/>
-    </zeroOrMore>
-    <zeroOrMore>
-      <ref name="Solution"/>
-    </zeroOrMore>
+    <interleave>
+      <optional>
+        <ref name="Setup"/>
+      </optional>
+      <ref name="Evaluation"/>
+      <zeroOrMore>
+        <ref name="Hint"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Answer"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Solution"/>
+      </zeroOrMore>
+    </interleave>
+  </define>
+  <!--
+    Problem setup: named objects defined sequentially (later ones
+    may reference earlier ones), then optional raw-Javascript hooks.
+    A missing @seed makes any randomization unpredictable, so the
+    FITB machinery warns; but setup has non-randomizing uses too.
+  -->
+  <define name="Setup">
+    <element name="setup">
+      <optional>
+        <attribute name="seed"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="DEObject"/>
+      </zeroOrMore>
+      <optional>
+        <element name="setupScript">
+          <text/>
+        </element>
+      </optional>
+      <optional>
+        <element name="postRenderScript">
+          <text/>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="DEObject">
+    <element name="de-object">
+      <attribute name="name"/>
+      <attribute name="context">
+        <choice>
+          <value>number</value>
+          <value>formula</value>
+        </choice>
+      </attribute>
+      <choice>
+        <ref name="DERandom"/>
+        <ref name="DENumber"/>
+        <ref name="DEExpression"/>
+        <ref name="DEEvaluate"/>
+      </choice>
+    </element>
+  </define>
+  <!--
+    A random number; @distribution may grow beyond "discrete".
+    @by defaults to 1; @nonzero omitted means "no".
+  -->
+  <define name="DERandom">
+    <element name="de-random">
+      <attribute name="distribution">
+        <value>discrete</value>
+      </attribute>
+      <attribute name="min"/>
+      <attribute name="max"/>
+      <optional>
+        <attribute name="by"/>
+      </optional>
+      <optional>
+        <attribute name="nonzero">
+          <value>yes</value>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <!--
+    Text parses to a formula representing a constant (no free
+    variables).  N.B. @reduce here follows sample usage; the
+    maintainer's description lists it only on de-expression
+    and de-evaluate.
+  -->
+  <define name="DENumber">
+    <element name="de-number">
+      <optional>
+        <attribute name="reduce">
+          <value>yes</value>
+        </attribute>
+      </optional>
+      <text/>
+    </element>
+  </define>
+  <!-- A formula; the content model follows @mode -->
+  <define name="DEExpression">
+    <element name="de-expression">
+      <optional>
+        <attribute name="reduce">
+          <value>yes</value>
+        </attribute>
+      </optional>
+      <choice>
+        <group>
+          <optional>
+            <attribute name="mode">
+              <value>formula</value>
+            </attribute>
+          </optional>
+          <text/>
+        </group>
+        <group>
+          <attribute name="mode">
+            <value>substitution</value>
+          </attribute>
+          <ref name="DEFormula"/>
+          <ref name="DEVariableValued"/>
+        </group>
+        <group>
+          <attribute name="mode">
+            <value>derivative</value>
+          </attribute>
+          <ref name="DEFormula"/>
+          <ref name="DEVariableEmpty"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <!-- The evaluated (numeric) version of a formula -->
+  <define name="DEEvaluate">
+    <element name="de-evaluate">
+      <optional>
+        <attribute name="reduce">
+          <value>yes</value>
+        </attribute>
+      </optional>
+      <ref name="DEFormula"/>
+      <ref name="DEVariableValued"/>
+    </element>
+  </define>
+  <!--
+    A reference to some other formula, from which a new one is
+    derived.  (de-random and de-number are technically possible
+    here but have no practical use, so are not admitted.)
+  -->
+  <define name="DEFormula">
+    <element name="formula">
+      <choice>
+        <ref name="DEExpression"/>
+        <ref name="DEEvaluate"/>
+        <ref name="Eval"/>
+      </choice>
+    </element>
+  </define>
+  <!--
+    The variable of a substitution or evaluation carries its
+    value; plain-text values happen to work as raw Javascript
+    but are deliberately NOT valid
+  -->
+  <define name="DEVariableValued">
+    <element name="variable">
+      <attribute name="name"/>
+      <choice>
+        <ref name="Eval"/>
+        <ref name="DENumber"/>
+        <ref name="DEExpression"/>
+      </choice>
+    </element>
+  </define>
+  <!-- The variable of a differentiation is name-only -->
+  <define name="DEVariableEmpty">
+    <element name="variable">
+      <attribute name="name"/>
+      <empty/>
+    </element>
+  </define>
+  <!--
+    An inline reference to a named setup object: within
+    mathematics it renders as the TeX form of the object,
+    elsewhere as its plain string form.  Admitted anywhere
+    text or mathematics occurs (statements, solutions,
+    feedback of dynamic exercises are where it is useful).
+  -->
+  <define name="Eval">
+    <element name="eval">
+      <attribute name="obj"/>
+      <empty/>
+    </element>
+  </define>
+  <!-- eval joins the inline unions (development schema only) -->
+  <define name="TextParagraphItem" combine="choice">
+    <ref name="Eval"/>
+  </define>
+  <define name="MathInlineItem" combine="choice">
+    <ref name="Eval"/>
+  </define>
+  <define name="MathRowItem" combine="choice">
+    <ref name="Eval"/>
   </define>
   <define name="Evaluation">
     <element name="evaluation">
@@ -946,6 +1140,13 @@
       </oneOrMore>
     </element>
   </define>
+  <!--
+    An "evaluate" with @all="yes" tests correctness of ALL the
+    blanks (optional; meaningful with several blanks).  The
+    maintainer describes an optional trailing "feedback" here;
+    observed usage places feedback inside "test", so both are
+    admitted.
+  -->
   <define name="Evaluate">
     <element name="evaluate">
       <optional>
@@ -965,8 +1166,18 @@
       <oneOrMore>
         <ref name="FITBTest"/>
       </oneOrMore>
+      <optional>
+        <ref name="Feedback"/>
+      </optional>
     </element>
   </define>
+  <!--
+    At most one test should carry @correct="yes", determining
+    correctness of a submission (unclosed by this schema); with
+    none, the provided answer or answer object is the default
+    comparison.  A test holds a single numcmp or strcmp, OR any
+    number of jscmp/mathcmp/logic combined with an implied AND.
+  -->
   <define name="FITBTest">
     <element name="test">
       <optional>
@@ -977,7 +1188,17 @@
           </choice>
         </attribute>
       </optional>
-      <ref name="FITBComparison"/>
+      <choice>
+        <ref name="FITBNumcmp"/>
+        <ref name="FITBStrcmp"/>
+        <oneOrMore>
+          <choice>
+            <ref name="FITBJscmp"/>
+            <ref name="FITBMathcmp"/>
+            <ref name="FITBLogic"/>
+          </choice>
+        </oneOrMore>
+      </choice>
       <optional>
         <ref name="Feedback"/>
       </optional>
@@ -1047,16 +1268,39 @@
       <text/>
     </element>
   </define>
+  <!--
+    Compare the submission to the provided answer
+    (@use-answer), to a named setup object (@obj), or to one
+    constructed child object; two children compare with each
+    other instead.  Children use the same building blocks as
+    setup does.
+  -->
   <define name="FITBMathcmp">
     <element name="mathcmp">
       <optional>
-        <attribute name="obj"/>
+        <choice>
+          <attribute name="use-answer">
+            <value>yes</value>
+          </attribute>
+          <attribute name="obj"/>
+          <group>
+            <choice>
+              <ref name="DENumber"/>
+              <ref name="DEExpression"/>
+              <ref name="DEEvaluate"/>
+              <ref name="Eval"/>
+            </choice>
+            <optional>
+              <choice>
+                <ref name="DENumber"/>
+                <ref name="DEExpression"/>
+                <ref name="DEEvaluate"/>
+                <ref name="Eval"/>
+              </choice>
+            </optional>
+          </group>
+        </choice>
       </optional>
-      <mixed>
-        <zeroOrMore>
-          <ref name="AnyElement"/>
-        </zeroOrMore>
-      </mixed>
     </element>
   </define>
   <define name="FITBLogic">
@@ -1071,21 +1315,6 @@
       <oneOrMore>
         <ref name="FITBComparison"/>
       </oneOrMore>
-    </element>
-  </define>
-  <define name="AnyElement">
-    <element>
-      <anyName/>
-      <zeroOrMore>
-        <attribute>
-          <anyName/>
-        </attribute>
-      </zeroOrMore>
-      <mixed>
-        <zeroOrMore>
-          <ref name="AnyElement"/>
-        </zeroOrMore>
-      </mixed>
     </element>
   </define>
   <!--

@@ -4247,26 +4247,33 @@
       <ref name="Index"/>
     </zeroOrMore>
   </define>
+  <!--
+    The union is named so extensions (e.g. the development
+    schema) can widen it with a choice-combine ("|=")
+  -->
+  <define name="TextParagraphItem">
+    <choice>
+      <ref name="Character"/>
+      <ref name="Generator"/>
+      <ref name="Verbatim"/>
+      <ref name="Group"/>
+      <ref name="WWVariable"/>
+      <ref name="MathInline"/>
+      <ref name="Music"/>
+      <ref name="Reference"/>
+      <ref name="Custom"/>
+      <ref name="CodeDisplay"/>
+      <ref name="MathDisplay"/>
+      <ref name="List"/>
+      <ref name="Footnote"/>
+      <ref name="Notation"/>
+      <ref name="Index"/>
+    </choice>
+  </define>
   <define name="TextParagraph">
     <mixed>
       <zeroOrMore>
-        <choice>
-          <ref name="Character"/>
-          <ref name="Generator"/>
-          <ref name="Verbatim"/>
-          <ref name="Group"/>
-          <ref name="WWVariable"/>
-          <ref name="MathInline"/>
-          <ref name="Music"/>
-          <ref name="Reference"/>
-          <ref name="Custom"/>
-          <ref name="CodeDisplay"/>
-          <ref name="MathDisplay"/>
-          <ref name="List"/>
-          <ref name="Footnote"/>
-          <ref name="Notation"/>
-          <ref name="Index"/>
-        </choice>
+        <ref name="TextParagraphItem"/>
       </zeroOrMore>
     </mixed>
   </define>
@@ -4504,14 +4511,18 @@
       <empty/>
     </element>
   </define>
+  <!-- named so extensions can widen it ("|=") -->
+  <define name="MathInlineItem">
+    <choice>
+      <ref name="FillInMath"/>
+      <ref name="WWVariable"/>
+    </choice>
+  </define>
   <define name="MathInline">
     <element name="m">
       <mixed>
         <zeroOrMore>
-          <choice>
-            <ref name="FillInMath"/>
-            <ref name="WWVariable"/>
-          </choice>
+          <ref name="MathInlineItem"/>
         </zeroOrMore>
       </mixed>
     </element>
@@ -4561,14 +4572,18 @@
       </optional>
       <mixed>
         <zeroOrMore>
-          <choice>
-            <ref name="Xref"/>
-            <ref name="FillInMath"/>
-            <ref name="WWVariable"/>
-          </choice>
+          <ref name="MathRowItem"/>
         </zeroOrMore>
       </mixed>
     </element>
+  </define>
+  <!-- named so extensions can widen it ("|=") -->
+  <define name="MathRowItem">
+    <choice>
+      <ref name="Xref"/>
+      <ref name="FillInMath"/>
+      <ref name="WWVariable"/>
+    </choice>
   </define>
   <define name="MathIntertext">
     <element name="intertext">
@@ -4610,11 +4625,7 @@
           </optional>
           <mixed>
             <zeroOrMore>
-              <choice>
-                <ref name="Xref"/>
-                <ref name="FillInMath"/>
-                <ref name="WWVariable"/>
-              </choice>
+              <ref name="MathRowItem"/>
             </zeroOrMore>
           </mixed>
         </group>

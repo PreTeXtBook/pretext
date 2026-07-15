@@ -377,10 +377,10 @@
                 MetaDataTitleOptional,
                 attribute number {text}?,
                 StatementExercise,
-                Feedback?,
                 element areas {
                   ParagraphAreas+
                 },
+                Feedback?,
                 Hint*, Answer*, Solution*
 
             # General feedback element
@@ -389,29 +389,129 @@
                     MetaDataTitleOptional,
                     BlockSolution+
                 }
-            # Fill-in-the-blank exercises (new-style evaluation)
+            # Fill-in-the-blank exercises: randomized setup, then evaluation.
+            # Content model per the FITB maintainer (Brian Walton), issue #2980.
             FillInBlank =
                 MetaDataTitleOptional,
                 attribute number {text}?,
                 StatementExercise,
-                Evaluation,
-                Hint*, Answer*, Solution*
+                (Setup? & Evaluation & Hint* & Answer* & Solution*)
+            # Problem setup: named objects defined sequentially (later ones
+            # may reference earlier ones), then optional raw-Javascript hooks.
+            # A missing @seed makes any randomization unpredictable, so the
+            # FITB machinery warns; but setup has non-randomizing uses too.
+            Setup =
+                element setup {
+                    attribute seed {text}?,
+                    DEObject*,
+                    element setupScript {text}?,
+                    element postRenderScript {text}?
+                }
+            DEObject =
+                element de-object {
+                    attribute name {text},
+                    attribute context {"number" | "formula"},
+                    (DERandom | DENumber | DEExpression | DEEvaluate)
+                }
+            # A random number; @distribution may grow beyond "discrete".
+            # @by defaults to 1; @nonzero omitted means "no".
+            DERandom =
+                element de-random {
+                    attribute distribution {"discrete"},
+                    attribute min {text},
+                    attribute max {text},
+                    attribute by {text}?,
+                    attribute nonzero {"yes"}?,
+                    empty
+                }
+            # Text parses to a formula representing a constant (no free
+            # variables).  N.B. @reduce here follows sample usage; the
+            # maintainer's description lists it only on de-expression
+            # and de-evaluate.
+            DENumber =
+                element de-number {
+                    attribute reduce {"yes"}?,
+                    text
+                }
+            # A formula; the content model follows @mode
+            DEExpression =
+                element de-expression {
+                    attribute reduce {"yes"}?,
+                    (
+                        (attribute mode {"formula"}?, text) |
+                        (attribute mode {"substitution"}, DEFormula, DEVariableValued) |
+                        (attribute mode {"derivative"}, DEFormula, DEVariableEmpty)
+                    )
+                }
+            # The evaluated (numeric) version of a formula
+            DEEvaluate =
+                element de-evaluate {
+                    attribute reduce {"yes"}?,
+                    DEFormula,
+                    DEVariableValued
+                }
+            # A reference to some other formula, from which a new one is
+            # derived.  (de-random and de-number are technically possible
+            # here but have no practical use, so are not admitted.)
+            DEFormula =
+                element formula {
+                    DEExpression | DEEvaluate | Eval
+                }
+            # The variable of a substitution or evaluation carries its
+            # value; plain-text values happen to work as raw Javascript
+            # but are deliberately NOT valid
+            DEVariableValued =
+                element variable {
+                    attribute name {text},
+                    (Eval | DENumber | DEExpression)
+                }
+            # The variable of a differentiation is name-only
+            DEVariableEmpty =
+                element variable {
+                    attribute name {text},
+                    empty
+                }
+            # An inline reference to a named setup object: within
+            # mathematics it renders as the TeX form of the object,
+            # elsewhere as its plain string form.  Admitted anywhere
+            # text or mathematics occurs (statements, solutions,
+            # feedback of dynamic exercises are where it is useful).
+            Eval =
+                element eval {
+                    attribute obj {text},
+                    empty
+                }
+            # eval joins the inline unions (development schema only)
+            TextParagraphItem |= Eval
+            MathInlineItem |= Eval
+            MathRowItem |= Eval
             Evaluation =
                 element evaluation {
                     attribute answers-coupled {"yes"|"no"}?,
                     Evaluate+
                 }
+            # An "evaluate" with @all="yes" tests correctness of ALL the
+            # blanks (optional; meaningful with several blanks).  The
+            # maintainer describes an optional trailing "feedback" here;
+            # observed usage places feedback inside "test", so both are
+            # admitted.
             Evaluate =
                 element evaluate {
                     attribute name {text}?,
                     attribute submit {text}?,
                     attribute all {"yes"|"no"}?,
-                    FITBTest+
+                    FITBTest+,
+                    Feedback?
                 }
+            # At most one test should carry @correct="yes", determining
+            # correctness of a submission (unclosed by this schema); with
+            # none, the provided answer or answer object is the default
+            # comparison.  A test holds a single numcmp or strcmp, OR any
+            # number of jscmp/mathcmp/logic combined with an implied AND.
             FITBTest =
                 element test {
                     attribute correct {"yes"|"no"}?,
-                    FITBComparison,
+                    (FITBNumcmp | FITBStrcmp | (FITBJscmp | FITBMathcmp | FITBLogic)+),
                     Feedback?
                 }
             FITBComparison =
@@ -436,20 +536,24 @@
                 element jscmp {
                     text
                 }
+            # Compare the submission to the provided answer
+            # (@use-answer), to a named setup object (@obj), or to one
+            # constructed child object; two children compare with each
+            # other instead.  Children use the same building blocks as
+            # setup does.
             FITBMathcmp =
                 element mathcmp {
-                    attribute obj {text}?,
-                    mixed {AnyElement*}
+                    (
+                        attribute use-answer {"yes"} |
+                        attribute obj {text} |
+                        ((DENumber | DEExpression | DEEvaluate | Eval),
+                         (DENumber | DEExpression | DEEvaluate | Eval)?)
+                    )?
                 }
             FITBLogic =
                 element logic {
                     attribute op {"and"|"or"|"not"},
                     (FITBComparison)+
-                }
-            AnyElement =
-                element * {
-                    attribute * {text}*,
-                    mixed {AnyElement*}
                 }
             # Extended fillin with interactive attributes (extends the inline
             # text fill-in blank; the bare "FillIn" name was orphaned)
