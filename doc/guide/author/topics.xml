@@ -5160,7 +5160,57 @@
         <title>STACK Exercises</title>
         <idx>STACK exercise</idx>
 
-        <p><acro>STACK</acro> is an assessment system with online interactive exercioses.  This section will soon have instructions on how to embed these exercises.</p>
+        <p>
+            <acro>STACK</acro> is an assessment system with online, interactive exercises that use a computer algebra system to check a student's answer and provide feedback.
+        </p>
+
+        <p>
+            A STACK question must be included as an asset in <c>.xml</c> or <c>.yaml</c> format, one file per question, with the path given relative to the assets folder. For example:
+        </p>
+        <pre>
+            &lt;exercise xml:id="ex-my-stack-question"&gt;
+                &lt;title&gt;An optional title&lt;/title&gt;
+                &lt;stack label="stk-my-stack-question"
+                       source="stack/my-stack-question.xml"/&gt;
+            &lt;/exercise&gt;
+        </pre>
+        <p>
+            The <tag>exercise</tag>'s <attr>xml:id</attr> is what you use to cross-reference the exercise elsewhere in your project, while the <tag>stack</tag> element's <attr>label</attr> is used internally to name the files generated when producing a static version of the question (see below). Currently, a <tag>stack</tag> element only supports a <attr>source</attr> attribute; there is no way to author STACK question content inline. Although the schema does not require it, you should always supply a <attr>label</attr>: without one, the files generated for the question's static version are named from an automatically assigned, positional id instead of a stable one you chose, so their names can change from build to build as you add or remove other content.
+        </p>
+
+        <p>
+            In web output, STACK questions are embedded and let students submit answers and get feedback. There is currently no way to collect or review student submission data. For static outputs such as <init>PDF</init>, <pretext/> generates a static version of the question instead. Since STACK questions contain <init>HTML</init>, a heuristic is used to convert some <init>HTML</init> tags; any tags it doesn't recognize are simply ignored. Interactive elements, such as JSXGraph applets, are not currently supported, and a reference to the online version of the question is included in their place.
+        </p>
+
+        <warning>
+            <title>Not Every STACK Question Converts Cleanly to Static Output</title>
+            <p>
+                Because the conversion to a static version relies on a heuristic and does not support every <init>HTML</init> construct or interactive element a STACK question might use, a question that renders well in web output may still be missing pieces, or read awkwardly, in <init>PDF</init> and other static output. There is no automated check for this; after adding a STACK question, you should check the static output (with hints, answers, and feedback exposed, if applicable) to be sure it is complete and makes sense on its own.
+            </p>
+        </warning>
+
+        <p>
+            Questions must have deployed variants, unless they contain no randomization; this is a requirement of the STACK <init>API</init>. A static version of a question is not generated automatically&#8212;you need to run <c>pretext generate stack</c> explicitly. (This is expected to change in the future, so that static versions are generated automatically alongside other assets.)
+        </p>
+
+        <p>
+            Questions are rendered using a deployment of the STACK <init>API</init>. Its <init>URL</init> is given by the attribute
+            <c>/publication/stack/@server</c>
+            in the publication file. For testing, such as when compiling the minimal example, you can use a publicly deployed <init>API</init>, but for production use you should run your own deployment. Docker images are available; see the <url href="https://docs.stack-assessment.org/en/Installation/API/" visual="docs.stack-assessment.org/en/Installation/API">installation instructions</url> and the <url href="https://github.com/maths/moodle-qtype_stack/tree/master/api" visual="github.com/maths/moodle-qtype_stack/tree/master/api"><init>API</init>'s repository</url>.
+        </p>
+
+        <subsection xml:id="topic-stack-question-management">
+            <title>Question Management</title>
+
+            <p>
+                Currently, the most common way of authoring STACK questions is in Moodle, or a similar Learning Management System (<init>LMS</init>). It is possible to export a question bank from Moodle as a single <init>XML</init> file and split it into one STACK question <init>XML</init> file per question, but this makes maintenance difficult, since you have to re-export and re-split the file every time you want to make a change.
+            </p>
+
+            <p>
+                The recommended way to maintain a bank of questions for inclusion in a textbook is with <url href="https://github.com/maths/moodle-qbank_gitsync" visual="github.com/maths/moodle-qbank_gitsync">moodle-qbank_gitsync</url>. The setup is not straightforward, and requires administrator permissions in Moodle, but it exports the questions in a question bank as one <init>XML</init> file per question, organized into folders, along with a command-line tool to pull changes from, and push changes to, the Moodle server&#8212;making it easy to keep the <init>XML</init> files in sync with the questions on the Moodle server.
+            </p>
+        </subsection>
+
     </section>
 
     <section xml:id="topic-url">
