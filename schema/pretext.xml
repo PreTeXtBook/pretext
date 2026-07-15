@@ -526,7 +526,9 @@
         <fragment xml:id="paragraph">
             <title>Paragraphs</title>
             <code>
-            TextParagraph = mixed { (
+            # The union is named so extensions (e.g. the development
+            # schema) can widen it with a choice-combine ("|=")
+            TextParagraphItem =
                 Character |
                 Generator |
                 Verbatim |
@@ -541,7 +543,8 @@
                 List |
                 Footnote |
                 Notation |
-                Index)* }
+                Index
+            TextParagraph = mixed { TextParagraphItem* }
             Paragraph =
                 element p {
                     UniqueID?,
@@ -905,9 +908,11 @@
                              (attribute fill{text}?|attribute characters {xsd:integer}?),
                              empty
                          }
+            # named so extensions can widen it ("|=")
+            MathInlineItem = FillInMath | WWVariable
             MathInline =
                 element m {
-                    mixed {(FillInMath | WWVariable)*}
+                    mixed {MathInlineItem*}
                 }
             TagSymbol = "star" | "dstar" | "tstar" |
                         "dagger" | "ddagger" | "tdagger" |
@@ -922,8 +927,10 @@
                         attribute tag { TagSymbol }
                     )?,
                     attribute break {"yes" | "no"}?,
-                    mixed {(Xref | FillInMath | WWVariable)*}
+                    mixed {MathRowItem*}
                 }
+            # named so extensions can widen it ("|=")
+            MathRowItem = Xref | FillInMath | WWVariable
             MathIntertext = element intertext {TextLong}
             MathDisplay =
                 element md {
@@ -941,7 +948,7 @@
                                 attribute number {"yes" | "no"} |
                                 attribute tag { TagSymbol }
                             )?,
-                            mixed {(Xref | FillInMath | WWVariable)*}
+                            mixed {MathRowItem*}
                         ) |
                         # multi-line: "mrow" content, not itself a
                         # cross-reference target, so no @xml:id, no @label;
