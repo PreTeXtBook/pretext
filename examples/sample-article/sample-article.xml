@@ -10171,7 +10171,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <de-object name="base_yint" context="number">
                             <de-evaluate>
                                 <formula><eval obj="base_cubic"/></formula>
-                                <variable name="x">0</variable>
+                                <variable name="x"><de-number>0</de-number></variable>
                             </de-evaluate>
                         </de-object>
                         <de-object name="A" context="number">
@@ -10255,7 +10255,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <logic op="not">
                                         <mathcmp>
                                             <eval obj="composition"/>
-                                            <de-expression context="formula" mode="substitution">
+                                            <de-expression mode="substitution">
                                                 <formula><eval obj="fGiven"/></formula>
                                                 <variable name="x"><eval obj="gGiven"/></variable>
                                             </de-expression>
@@ -10263,7 +10263,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     </logic>
                                     <mathcmp>
                                         <eval obj="composition"/>
-                                        <de-expression context="formula" mode="substitution">
+                                        <de-expression mode="substitution">
                                             <formula><eval obj="gGiven"/></formula>
                                             <variable name="x"><eval obj="fGiven"/></variable>
                                         </de-expression>
@@ -10283,7 +10283,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <logic op="and">
                                     <mathcmp>
                                         <eval obj="composition"/>
-                                        <de-expression context="formula" mode="substitution">
+                                        <de-expression mode="substitution">
                                             <formula><eval obj="fGiven"/></formula>
                                             <variable name="x"><eval obj="gGiven"/></variable>
                                         </de-expression>
