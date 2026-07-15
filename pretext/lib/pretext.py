@@ -5410,8 +5410,14 @@ def _validate_server(xml_source, out_file, dest_dir):
     schema_filename = os.path.join(common.get_ptx_path(), "schema", "pretext.rng")
     pf_adapter_filename = os.path.join(common.get_ptx_path(), "schema", "pf-adapter.rng")
     pf_schema_filename = os.path.join(common.get_ptx_path(), "schema", "pf_schema.rng")
-    pf_preable_adapter_filename = os.path.join(common.get_ptx_path(), "schema", "pf-preamble-adapter.rng")
-    files = {'source': open(zip_filename,'rb'), 'rng': open(schema_filename,'rb'), 'pf_adapter': open(pf_adapter_filename,'rb'), 'pf_schema': open(pf_schema_filename,'rb'), 'pf_preamble_adapter': open(pf_preable_adapter_filename,'rb')}
+    pf_preamble_adapter_filename = os.path.join(common.get_ptx_path(), "schema", "pf-preamble-adapter.rng")
+    files = {
+        'source': open(zip_filename, 'rb'),
+        'rng': open(schema_filename, 'rb'),
+        'pf_adapter': open(pf_adapter_filename, 'rb'),
+        'pf_schema': open(pf_schema_filename, 'rb'),
+        'pf_preamble_adapter': open(pf_preamble_adapter_filename, 'rb'),
+    }
     data = {'mainfile': base}
     log.info("communicating with server at {}".format(server_url))
     r = requests.post(server_url, data=data, files=files)
