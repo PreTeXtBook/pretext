@@ -343,51 +343,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Process segments here, looking for run-in titles/headings -->
 <xsl:template match="segment" mode="meld-runin">
-    <!-- Look for "run-in" material just prior -->
-    <xsl:variable name="adjacent-runin" select="preceding-sibling::*[1][self::runin]"/>
+    <!-- Look for "run-in" material just prior: the whole maximal   -->
+    <!-- chain of consecutive "runin" siblings whose first          -->
+    <!-- following non-"runin" sibling is this very segment.  Each  -->
+    <!-- melds in, in order, with its separator.  Chains occur      -->
+    <!-- routinely: an exercise, or a list item, may begin with a   -->
+    <!-- nested list, stacking a marker for every level.            -->
+    <xsl:variable name="runin-chain" select="preceding-sibling::runin[generate-id(following-sibling::*[not(self::runin)][1]) = generate-id(current())]"/>
     <xsl:copy>
         <xsl:apply-templates select="@*" mode="meld-runin"/>
-        <xsl:apply-templates select="$adjacent-runin/@indentation|$adjacent-runin/@lines-before" mode="meld-runin"/>
-        <xsl:apply-templates select="$adjacent-runin/node()" mode="meld-runin"/>
-        <xsl:value-of select="$adjacent-runin/@separator"/>
+        <!-- the chain's first runin positions the merged segment -->
+        <xsl:apply-templates select="$runin-chain[1]/@indentation|$runin-chain[1]/@lines-before" mode="meld-runin"/>
+        <xsl:for-each select="$runin-chain">
+            <xsl:apply-templates select="node()" mode="meld-runin"/>
+            <xsl:value-of select="@separator"/>
+        </xsl:for-each>
         <xsl:apply-templates select="node()" mode="meld-runin"/>
     </xsl:copy>
 </xsl:template>
 
-<!-- It is entirely possible for a segment to be preceded by     -->
-<!-- consecutive "runin" elements.  Three examples:              -->
-<!--                                                             -->
-<!--   "proof" then "case"                                       -->
-<!--   "hint" then "li" (and other SOLUTION-LIKE)                -->
-<!--   "exercise" then "li" (but should probably be "task"?)     -->
-<!--                                                             -->
-<!-- Likely a structure with an immediate "p" with an immediate  -->
-<!-- list could result in a run-in title for the structure and   -->
-<!-- a run-in title for the first list item.  Experimentation on -->
-<!-- 2023-04-05 with Judson's AATA did not reveal any runs of    -->
-<!-- three (or more) consecutive "runin" elements.  So our       -->
-<!-- solution is ad-hoc for the double case, with a bug report   -->
-<!-- for three or more.                                          -->
-<!-- We convert the first "runin" to a "segment" (rather than    -->
-<!-- killing it) and let the second "runin" get absorbed by the  -->
-<!-- subsequent "segment".                                       -->
-<xsl:template match="runin[following-sibling::*[1][self::runin]]" mode="meld-runin">
-    <segment>
-        <xsl:apply-templates select="@*|node()" mode="meld-runin"/>
-    </segment>
-    <xsl:if test="following-sibling::*[2][self::runin]">
-        <xsl:message>BUG: the braille conversion has encountered three "run-in" titles in a row,</xsl:message>
-        <xsl:message>which we had not expected.  Please report me.  Thank-you.</xsl:message>
-        <xsl:message>First: <xsl:value-of select="."/></xsl:message>
-        <xsl:message>Second: <xsl:value-of select="following-sibling::*[1][self::runin]"/></xsl:message>
-        <xsl:message>Third: <xsl:value-of select="following-sibling::*[2][self::runin]"/></xsl:message>
-    </xsl:if>
+<!-- A "runin" whose chain ends at a "segment" has been absorbed   -->
+<!-- above; it must not persist.  A "runin" whose chain does NOT   -->
+<!-- end at a segment (a block comes next, or nothing does) has no -->
+<!-- host to meld into, so it becomes a segment of its own rather  -->
+<!-- than disappear: content is never dropped silently.            -->
+<xsl:template match="runin" mode="meld-runin">
+    <xsl:choose>
+        <xsl:when test="following-sibling::*[not(self::runin)][1][self::segment]">
+            <!-- absorbed by that segment -->
+        </xsl:when>
+        <xsl:otherwise>
+            <segment>
+                <xsl:apply-templates select="@*|node()" mode="meld-runin"/>
+            </segment>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
-
-<!-- Every "runin" has been absorbed into a trailing "segment" or -->
-<!-- perhaps converted into a "segment".  This will prevent the   -->
-<!-- absorbed ones from persisting.                               -->
-<xsl:template match="runin" mode="meld-runin"/>
 
 <!-- Xerox machine -->
 <xsl:template match="@*|node()" mode="meld-runin">
@@ -436,6 +427,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//sidebyside">
             <segment indentation="2">
                 <xsl:text>A "side-by-side" is a horizontal layout of document elements.  The components of a side-by-side are called "panels".  Typically panels are images or figures, but can also be items like program listings, tables, or paragraphs.  For braille, we let each panel use the full width of the page, so we announce the start, indicating the total number of panels.  Then we preface each panel with its number in the sequence.  Finally we announce the end because it may be hard to distinguish a final panel from the ensuing text.</xsl:text>
+            </segment>
+        </xsl:if>
+        <!--  -->
+        <!-- [BANA-2016, 8.6.2(b)] bullet symbols used in lists are -->
+        <!-- listed in a transcriber's note                          -->
+        <xsl:if test="//ul">
+            <segment indentation="2">
+                <xsl:text>Items of unordered lists retain their print markers, each followed by a period.  The symbols in use are: bullet (dots 456, 256), circle (dots 1246 and a grade one indicator, 123456), and square (dots 456, 1246, 3456, 145).</xsl:text>
             </segment>
         </xsl:if>
         <!--  -->
@@ -1100,18 +1099,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lists -->
 <!-- ##### -->
 
-<!-- Lists are containers full of list items.  All by   -->
-<!-- themselves they have no real impact on the braille -->
-<!-- output.  The list items are another matter.        -->
-<!-- 2023-04-06: very prelimnary, e.g. no runover       -->
-<!-- 2023-04-10: excessive nesting => excessive run-in  -->
+<!-- Lists are containers full of list items.  The container's -->
+<!-- one responsibility: [BANA-2016, 8.3.2(a)] a list is        -->
+<!-- preceded and followed by a blank line.  That means the     -->
+<!-- OUTERMOST list; a nested list runs on without a break.     -->
+<!-- (An empty segment demanding a line before it is the idiom  -->
+<!-- for one blank line, suppressed at the top of a page.)      -->
 <xsl:template match="ul|ol|dl">
+    <xsl:variable name="b-outermost" select="not(ancestor::ol or ancestor::ul or ancestor::dl)"/>
+    <xsl:if test="$b-outermost">
+        <segment lines-before="1"/>
+    </xsl:if>
     <xsl:apply-templates select="li"/>
+    <xsl:if test="$b-outermost">
+        <segment lines-before="1"/>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="li">
+    <!-- [BANA-2016, 8.3.1] a simple list has 1-3 margins           -->
+    <!-- [BANA-2016, 8.5.1(b)] each nested level begins two cells   -->
+    <!-- to the right of the previous level, and ALL runovers begin -->
+    <!-- two cells to the right of the farthest indented level: one -->
+    <!-- level is 1-3; two levels are 1-5, 3-5; three levels are    -->
+    <!-- 1-7, 3-7, 5-7.  In the preprint's 0-based attributes:      -->
+    <!-- level k of an n-level list has indentation 2(k-1), and     -->
+    <!-- every segment of the list has runover 2n.                  -->
+    <!-- The level of this item, and the deepest level anywhere in  -->
+    <!-- the outermost list containing it.  (A list separated from  -->
+    <!-- an enclosing list by other structure still counts every    -->
+    <!-- list ancestor, deliberately: its margins nest visibly.)    -->
+    <xsl:variable name="level" select="count(ancestor::ol | ancestor::ul | ancestor::dl)"/>
+    <xsl:variable name="outermost-list" select="ancestor::*[self::ol or self::ul or self::dl][last()]"/>
+    <xsl:variable name="list-depth">
+        <xsl:for-each select="$outermost-list//li">
+            <xsl:sort select="count(ancestor::ol | ancestor::ul | ancestor::dl)" data-type="number" order="descending"/>
+            <xsl:if test="position() = 1">
+                <xsl:value-of select="count(ancestor::ol | ancestor::ul | ancestor::dl)"/>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="list-runover" select="2 * $list-depth"/>
     <!-- Marker as a "runin" element -->
-    <runin indentation="0" separator="&#x20;">
+    <runin indentation="{2 * ($level - 1)}" separator="&#x20;">
         <xsl:choose>
             <xsl:when test="parent::ol">
                 <xsl:apply-templates select="." mode="item-number"/>
@@ -1126,7 +1156,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
         </xsl:choose>
     </runin>
-    <xsl:apply-templates select="node()"/>
+    <xsl:choose>
+        <!-- A structured list item carries paragraphs, or other   -->
+        <!-- block-shaped material, all of which make segments (or  -->
+        <!-- whole blocks) of their own.  The test mirrors the      -->
+        <!-- schema exactly: an "li" may hold BlockStatement, which -->
+        <!-- is BlockText (paragraph, blockquote, preformatted,     -->
+        <!-- image, video, audio, program, console, tabular), the   -->
+        <!-- figure family (figure, table, listing, list), aside,   -->
+        <!-- side-by-sides, and Sage cells.  Displayed items that   -->
+        <!-- can live within a paragraph (nested lists, display     -->
+        <!-- mathematics) are deliberately NOT in this test: mixed  -->
+        <!-- content holds them, and the paragraph machinery        -->
+        <!-- splits them out correctly.                             -->
+        <xsl:when test="p or blockquote or pre or image or video or audio or program or console or tabular or figure or table or listing or list or aside or sidebyside or sbsgroup or sage">
+            <xsl:apply-templates select="node()">
+                <xsl:with-param name="list-runover" select="$list-runover"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- An unstructured list item is a run of sentences,      -->
+        <!-- exactly the content of a paragraph.  But with no      -->
+        <!-- "p" there is no template to make a segment of it, and -->
+        <!-- unanchored content is lost.  So manufacture the       -->
+        <!-- missing paragraph around a copy of the content, and   -->
+        <!-- process that: the ordinary paragraph templates then   -->
+        <!-- apply, including the splitting of displayed items     -->
+        <!-- (display mathematics, a nested list) into siblings.   -->
+        <!--                                                       -->
+        <!-- TODO: the project direction is to manufacture such    -->
+        <!-- missing wrappers ("p", "statement") once, during      -->
+        <!-- assembly, marked with a "pi:" attribute, so authors   -->
+        <!-- keep their freedom while conversions see uniform      -->
+        <!-- structure.  When that arrives, this local device      -->
+        <!-- evaporates: the manufactured "p" is a real one here,  -->
+        <!-- and its flag guides any special list treatment.       -->
+        <xsl:otherwise>
+            <xsl:variable name="virtual-paragraph-rtf">
+                <p>
+                    <xsl:copy-of select="node()"/>
+                </p>
+            </xsl:variable>
+            <xsl:apply-templates select="exsl:node-set($virtual-paragraph-rtf)/p">
+                <xsl:with-param name="list-runover" select="$list-runover"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="ul/li" mode="unicode-list-marker">
@@ -1342,6 +1416,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </runin>
     <segment indentation="0" runover="2">
         <xsl:apply-templates select="node()[not(self::note)]"/>
+    </segment>
+    <xsl:apply-templates select="note"/>
+</xsl:template>
+
+<!-- Structured bibliographic entries ("bibtex" type, or untyped   -->
+<!-- fallback) render their fields in document order, with the     -->
+<!-- same [BANA-2016, 22.2.1] margins as the raw flavor above, and -->
+<!-- the same treatment of an annotation: a "note" produces a      -->
+<!-- block, so it follows the entry as a sibling.                  -->
+<xsl:template match="biblio[not(@type = 'raw')]">
+    <runin indentation="0" separator="&#x20;">
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="." mode="serial-number"/>
+        <xsl:text>]</xsl:text>
+    </runin>
+    <segment indentation="0" runover="2">
+        <xsl:apply-templates select="*[not(self::note)]"/>
     </segment>
     <xsl:apply-templates select="note"/>
 </xsl:template>
@@ -2140,9 +2231,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A paragraph without "displays" is straightforward and -->
 <!-- we can bypass the more complicated procedure next.    -->
 <xsl:template match="p">
+    <!-- Inside a list item ($list-runover is a number, not empty)  -->
+    <!-- every line of the paragraph belongs at the list's runover  -->
+    <!-- margin [BANA-2016, 8.5.1(b)]; the melded run-in marker     -->
+    <!-- supplies the first paragraph's first-line position.        -->
+    <xsl:param name="list-runover" select="''"/>
     <segment>
         <xsl:attribute name="indentation">
             <xsl:choose>
+                <xsl:when test="not($list-runover = '')">
+                    <xsl:value-of select="$list-runover"/>
+                </xsl:when>
                 <xsl:when test="@pi:indent = 'no'">
                     <xsl:text>0</xsl:text>
                 </xsl:when>
@@ -2151,6 +2250,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
+        <xsl:if test="not($list-runover = '')">
+            <xsl:attribute name="runover">
+                <xsl:value-of select="$list-runover"/>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates select="node()"/>
     </segment>
 </xsl:template>
@@ -2162,6 +2266,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: this is derived from a similar template in the HTML        -->
 <!-- conversion.                                                      -->
 <xsl:template match="p[ol|ul|dl|m[contains(math-nemeth, '&#xa;')]|md|cd]">
+    <!-- Inside a list item ($list-runover is a number, not empty)  -->
+    <!-- every piece of the paragraph belongs at the list's runover -->
+    <!-- margin [BANA-2016, 8.5.1(b)]; nested lists among the       -->
+    <!-- displays compute their own, deeper, margins.               -->
+    <xsl:param name="list-runover" select="''"/>
     <!-- will later loop over displays within paragraph      -->
     <!-- match guarantees at least one for $initial variable -->
     <xsl:variable name="displays" select="ul|ol|dl|m[contains(math-nemeth, '&#xa;')]|md|cd" />
@@ -2174,7 +2283,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$initial"/>
     </xsl:variable>
     <xsl:if test="not(normalize-space($initial-content) = '')">
-        <segment indentation="2">
+        <segment>
+            <xsl:attribute name="indentation">
+                <xsl:choose>
+                    <xsl:when test="not($list-runover = '')">
+                        <xsl:value-of select="$list-runover"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>2</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:if test="not($list-runover = '')">
+                <xsl:attribute name="runover">
+                    <xsl:value-of select="$list-runover"/>
+                </xsl:attribute>
+            </xsl:if>
             <xsl:apply-templates select="$initial"/>
         </segment>
     </xsl:if>
@@ -2198,6 +2322,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:variable>
                 <xsl:if test="not(normalize-space($common-content) = '')">
                     <segment>
+                        <xsl:if test="not($list-runover = '')">
+                            <xsl:attribute name="indentation">
+                                <xsl:value-of select="$list-runover"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="runover">
+                                <xsl:value-of select="$list-runover"/>
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:apply-templates select="$common"/>
                     </segment>
                 </xsl:if>
@@ -2209,6 +2341,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:variable>
                 <xsl:if test="not(normalize-space($final-content) = '')">
                     <segment>
+                        <xsl:if test="not($list-runover = '')">
+                            <xsl:attribute name="indentation">
+                                <xsl:value-of select="$list-runover"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="runover">
+                                <xsl:value-of select="$list-runover"/>
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:apply-templates select="$rightward"/>
                     </segment>
                 </xsl:if>
@@ -2233,9 +2373,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The "titlepage" and front "colophon" should be mined to form front -->
 <!-- matter material in the right places, etc.  We kill them for now so -->
-<!-- we don't see their children being overlooked.                      -->
+<!-- we don't see their children being overlooked.  "bibinfo" is pure   -->
+<!-- metadata (authors, date, edition), mined by a title page when one  -->
+<!-- is implemented; unhandled, its text leaks into the output stream   -->
+<!-- with no anchor, so it is silenced the same way.                    -->
 <xsl:template match="titlepage"/>
 <xsl:template match="frontmatter/colophon"/>
+<!-- TODO: a braille title page [BANA-2016, 2.3] should mine     -->
+<!-- "bibinfo" (title, authors, date, edition) rather than       -->
+<!-- leaving it silenced here.                                   -->
+<xsl:template match="bibinfo"/>
 
 <!-- Many pieces of the "backmatter" have templates designed for divisions -->
 <xsl:template match="backmatter">
@@ -2272,11 +2419,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- structures.  We report AND include a textual place holder.       -->
 
 <xsl:template match="notation-list">
-    <xsl:text>NOTATIONLIST</xsl:text>
+    <segment>NOTATIONLIST</segment>
 </xsl:template>
 
+<!-- A real braille index awaits future work; until then the     -->
+<!-- omission is announced in place, rather than silent.  (The    -->
+<!-- prior placeholder was bare text, which the renderer cannot   -->
+<!-- anchor, so nothing at all appeared.)                         -->
 <xsl:template match="index-list">
-    <xsl:text>INDEXLIST</xsl:text>
+    <xsl:apply-templates select="." mode="transcriber-note">
+        <xsl:with-param name="message">
+            <xsl:text>The index is not reproduced in this braille edition.</xsl:text>
+        </xsl:with-param>
+    </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="poem">
@@ -2301,12 +2456,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </xsl:if>
     <!--  -->
-    <xsl:if test="//index-list">
-        <xsl:call-template name="missing-implementation">
-            <xsl:with-param name="element" select="'index-list'"/>
-            <xsl:with-param name="ntimes" select="count(//index-list)"/>
-        </xsl:call-template>
-    </xsl:if>
     <xsl:if test="//poem">
         <xsl:call-template name="missing-implementation">
             <xsl:with-param name="element" select="'poem'"/>
