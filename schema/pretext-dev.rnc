@@ -377,10 +377,10 @@
                 MetaDataTitleOptional,
                 attribute number {text}?,
                 StatementExercise,
-                Feedback?,
                 element areas {
                   ParagraphAreas+
                 },
+                Feedback?,
                 Hint*, Answer*, Solution*
 
             # General feedback element

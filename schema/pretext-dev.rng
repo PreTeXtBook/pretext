@@ -886,14 +886,14 @@
       <attribute name="number"/>
     </optional>
     <ref name="StatementExercise"/>
-    <optional>
-      <ref name="Feedback"/>
-    </optional>
     <element name="areas">
       <oneOrMore>
         <ref name="ParagraphAreas"/>
       </oneOrMore>
     </element>
+    <optional>
+      <ref name="Feedback"/>
+    </optional>
     <zeroOrMore>
       <ref name="Hint"/>
     </zeroOrMore>
