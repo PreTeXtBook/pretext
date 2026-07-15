@@ -1,45 +1,93 @@
 (function() {
   "use strict";
+  var _debug = !!(window.ptxScormDebug || window.location.search.indexOf("ptxscormdebug") !== -1 || typeof localStorage !== "undefined" && localStorage.getItem("ptxscormdebug"));
+  function dbg(msg) {
+    if (_debug) console.log("[PTX-SCORM DEBUG] " + msg);
+  }
   var _api = null;
   var _ver = null;
   (function discoverApi() {
-    var win = window;
-    for (var i = 0; i < 10; i++) {
-      if (win.API_1484_11) {
-        _api = win.API_1484_11;
+    function checkWin(w, label) {
+      if (w.API_1484_11) {
+        _api = w.API_1484_11;
         _ver = "2004";
-        return;
+        dbg("Found SCORM 2004 API at " + label);
+        return true;
       }
-      if (win.API) {
-        _api = win.API;
+      if (w.API) {
+        _api = w.API;
         _ver = "1.2";
-        return;
+        dbg("Found SCORM 1.2 API at " + label);
+        return true;
+      }
+      dbg("No API at " + label);
+      return false;
+    }
+    var win = window;
+    for (var i = 0; i < 50; i++) {
+      try {
+        if (checkWin(win, "frame level " + i)) return;
+      } catch (e) {
+        dbg("Cross-origin frame at level " + i + " \u2014 skipping, continuing up.");
+        console.warn("[PTX-SCORM] Cross-origin frame at level " + i + " \u2014 cannot read API properties here, continuing to climb.");
       }
       if (win.parent === win) break;
       win = win.parent;
     }
-    console.warn("[PTX-SCORM] No SCORM API found. Exercises will work normally but scores will not be reported.");
+    try {
+      if (window.top !== win && checkWin(window.top, "window.top")) return;
+    } catch (e) {
+      dbg("window.top is cross-origin \u2014 cannot check for API there.");
+    }
+    try {
+      if (window.opener && checkWin(window.opener, "window.opener")) return;
+    } catch (e) {
+      dbg("window.opener is cross-origin \u2014 cannot check for API there.");
+    }
+    console.warn("[PTX-SCORM] No SCORM API found. Exercises will work normally but scores will not be reported. If this is inside a SCORM-capable LMS, verify the content was added as a SCORM package, not a plain file or web link.");
   })();
   function Get(key) {
     if (!_api) return "";
     var val = _ver === "2004" ? _api.GetValue(key) : _api.LMSGetValue(key);
-    return String(val);
+    var result = String(val);
+    var err = lastError();
+    dbg("Get(" + key + ") = " + JSON.stringify(result) + "  err=" + err);
+    return result;
   }
   function Set(key, val) {
     if (!_api) return;
+    var result;
     if (_ver === "2004") {
-      _api.SetValue(key, String(val));
+      result = _api.SetValue(key, String(val));
     } else {
-      _api.LMSSetValue(key, String(val));
+      result = _api.LMSSetValue(key, String(val));
     }
+    var err = lastError();
+    dbg("Set(" + key + ", " + JSON.stringify(String(val)) + ") = " + result + "  err=" + err);
   }
   function Commit() {
     if (!_api) return;
+    var result;
     if (_ver === "2004") {
-      _api.Commit("");
+      result = _api.Commit("");
     } else {
-      _api.LMSCommit("");
+      result = _api.LMSCommit("");
     }
+    var err = lastError();
+    dbg("Commit() = " + result + "  err=" + err);
+    return err === "0" && result !== "false";
+  }
+  function Terminate() {
+    if (!_api) return;
+    var result;
+    if (_ver === "2004") {
+      result = _api.Terminate("");
+    } else {
+      result = _api.LMSFinish("");
+    }
+    var err = lastError();
+    dbg("Terminate() = " + result + "  err=" + err);
+    _initialized = false;
   }
   function lastError() {
     if (!_api) return "0";
@@ -47,6 +95,7 @@
     return String(code);
   }
   var _initialized = false;
+  var _submitted = false;
   var _state = {
     correct: 0,
     // sum of percentage scores for graded questions
@@ -63,6 +112,7 @@
   var _doenetSentStateAt = {};
   var DOENET_INIT_WINDOW_MS = 8e3;
   var _totalQuestions = 0;
+  var _statusCompleted = false;
   var _learnerId = "";
   function lsKey() {
     return "ptx-scorm:" + (_learnerId || "anon") + ":" + window.location.pathname;
@@ -80,6 +130,33 @@
     } catch (e) {
       return null;
     }
+  }
+  var SUSPEND_ANSWER_LIMIT = 600;
+  var SUSPEND_TOTAL_LIMIT = 3800;
+  function buildSuspendData() {
+    var slim = {
+      correct: _state.correct,
+      graded: _state.graded,
+      iCount: _state.iCount,
+      answers: {}
+    };
+    Object.keys(_state.answers).forEach(function(divId) {
+      var a = _state.answers[divId];
+      var ans = a.answer;
+      if (typeof ans === "string" && ans.length > SUSPEND_ANSWER_LIMIT) {
+        ans = "";
+      }
+      slim.answers[divId] = { answer: ans, correct: a.correct, percent: a.percent };
+    });
+    var json = JSON.stringify(slim);
+    if (json.length > SUSPEND_TOTAL_LIMIT) {
+      Object.keys(slim.answers).forEach(function(divId) {
+        slim.answers[divId].answer = "";
+      });
+      json = JSON.stringify(slim);
+    }
+    dbg("suspend_data: " + json.length + " chars" + (json.length > SUSPEND_TOTAL_LIMIT ? "  (STILL OVER " + SUSPEND_TOTAL_LIMIT + ")" : ""));
+    return json;
   }
   function saveDoenetState(divId, state) {
     if (!divId || state === null || state === void 0) return;
@@ -132,10 +209,17 @@
       return;
     }
     _initialized = true;
-    var raw = Get("cmi.suspend_data");
+    dbg("Initialize() = " + result + "  err=" + err + "  ver=" + _ver);
+    var entryKey = _ver === "2004" ? "cmi.entry" : "cmi.core.entry";
+    var learnerId = Get(_ver === "2004" ? "cmi.learner_id" : "cmi.core.student_id");
+    var entry = Get(entryKey);
+    var rawForLog = Get("cmi.suspend_data");
+    dbg("entry=" + JSON.stringify(entry) + "  learner_id=" + JSON.stringify(learnerId) + "  suspend_data length=" + rawForLog.length);
+    var raw = rawForLog;
     if (raw) {
       try {
         Object.assign(_state, JSON.parse(raw));
+        dbg("Restored _state from suspend_data: correct=" + _state.correct + "  graded=" + _state.graded + "  answers=" + Object.keys(_state.answers || {}).length + " keys");
       } catch (e) {
         console.warn("[PTX-SCORM] Could not parse suspend_data:", e);
       }
@@ -144,10 +228,13 @@
     _state.iCount = isNaN(lmsCount) ? 0 : lmsCount;
     var completionKey = _ver === "2004" ? "cmi.completion_status" : "cmi.core.lesson_status";
     var currentStatus = Get(completionKey);
+    dbg("completion_status on entry = " + JSON.stringify(currentStatus));
     if (currentStatus === "not attempted" || currentStatus === "unknown" || currentStatus === "") {
       Set(completionKey, "incomplete");
       Commit();
     }
+    _statusCompleted = currentStatus === "completed" || currentStatus === "passed";
+    dbg("_statusCompleted=" + _statusCompleted);
     console.log("[PTX-SCORM] Session ready (SCORM " + _ver + ").  Prior interactions: " + _state.iCount + ",  Prior score: " + _state.correct + "/" + _state.graded);
   }
   var RUNESTONE_TO_SCORM_TYPE = {
@@ -171,13 +258,18 @@
     // ActiveCode with unit tests (auto-graded)
     shortanswer: "long-fill-in",
     // Short-answer / journal (no automatic grade)
-    splice: "performance",
+    // SPLICE/Doenet responses are JSON blobs.  SCORM 2004 validates
+    // learner_response per type, and "performance" demands a strict
+    // step[.]answer format — JSON is always rejected with error 406
+    // ("type mismatch").  Type "other" accepts a free characterstring.
+    splice: "other",
     // SPLICE protocol iframe activity (see Section 10)
     // DoenetActivity events: Runestone's SpliceWrapper fires logBookEvent with
     // event="SPLICE.reportScoreAndState" (carries score/percent/answer) and
     // event="SPLICE.sendEvent" (notification only, no score).  Only the former
     // should be recorded; the latter has no score and is silently ignored.
-    "SPLICE.reportScoreAndState": "performance"
+    "SPLICE.reportScoreAndState": "other"
+    // JSON response — see "splice" note above
   };
   var GRADEABLE_SELECTORS = [
     '[data-component="multiplechoice"]',
@@ -222,7 +314,11 @@
     return null;
   }
   function isoTimestamp() {
-    return (/* @__PURE__ */ new Date()).toISOString().replace(/\.\d{3}Z$/, "Z");
+    var d = /* @__PURE__ */ new Date();
+    function p(n) {
+      return ("0" + n).slice(-2);
+    }
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + "T" + p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
   }
   function hhmmssTime() {
     var d = /* @__PURE__ */ new Date();
@@ -244,7 +340,7 @@
       );
       return;
     }
-    if (_ver === "1.2" && scormType === "long-fill-in") {
+    if (_ver === "1.2" && (scormType === "long-fill-in" || scormType === "other")) {
       scormType = "fill-in";
     }
     var score = extractScore(ev);
@@ -310,7 +406,7 @@
     if (ev.state) {
       saveDoenetState(ev.div_id || "unknown", ev.state);
     }
-    var suspendJson = JSON.stringify(_state);
+    var suspendJson = buildSuspendData();
     Set("cmi.suspend_data", suspendJson);
     var setErr = lastError();
     if (setErr !== "0") {
@@ -325,6 +421,7 @@
     var logDenom = _totalQuestions > 0 ? _totalQuestions : _state.graded;
     var pctLabel = logDenom > 0 ? (_state.correct / logDenom * 100).toFixed(0) + "% (" + _state.correct.toFixed(2) + " / " + logDenom + ")" : "n/a";
     console.log("[PTX-SCORM] " + ev.event + ' "' + (ev.div_id || "?") + '" \u2192 ' + result + "  Score: " + pctLabel + "  (" + _state.iCount + " total interactions)");
+    updateScoreDisplay();
   }
   function installHook() {
     if (!window.RunestoneBase || window.RunestoneBase.__ptxScormHooked) return;
@@ -351,6 +448,7 @@
     requestParentResize();
     installWeBWorKSrcdocIntercept();
     installWeBWorKAjaxIntercept();
+    addSubmitButton();
     Object.keys(_state.answers).forEach(function(divId) {
       var container = document.getElementById(divId);
       if (!container || !container.dataset) return;
@@ -784,6 +882,7 @@
       Set(completionKey, "incomplete");
       Commit();
     }
+    _statusCompleted = currentStatus === "completed" || currentStatus === "passed";
     var map = {};
     var divIds = Object.keys(_state.answers || {});
     divIds.forEach(function(divId) {
@@ -810,7 +909,7 @@
       } else {
         Set("cmi.core.score.raw", (restoredScaled * 100).toFixed(1));
       }
-      Set("cmi.suspend_data", JSON.stringify(_state));
+      Set("cmi.suspend_data", buildSuspendData());
       Commit();
       console.log("[PTX-SCORM] Restored score: " + (restoredScaled * 100).toFixed(0) + "%  (" + _state.correct.toFixed(2) + " / " + denom + ")  [" + _state.graded + " answered, " + _totalQuestions + " total]");
     }
@@ -893,14 +992,131 @@
     window.RunestoneBase.__ptxScormRestoreHooked = true;
     console.log("[PTX-SCORM] Restore hook installed (" + n + " saved answers available).");
   }
-  window.addEventListener("beforeunload", function() {
-    if (!_initialized) return;
-    var json = JSON.stringify(_state);
-    Set("cmi.suspend_data", json);
-    Set(_ver === "2004" ? "cmi.exit" : "cmi.core.exit", "suspend");
+  function submitSession() {
+    if (!_api) {
+      console.warn("[PTX-SCORM] submitSession: no SCORM API \u2014 nothing to submit.");
+      return;
+    }
+    if (_submitted) {
+      dbg("submitSession: already submitted this session \u2014 ignoring repeat click.");
+      return;
+    }
+    initSession();
+    if (!_initialized) {
+      console.warn("[PTX-SCORM] submitSession: SCORM session is not open \u2014 nothing submitted.");
+      return;
+    }
+    var compKey = _ver === "2004" ? "cmi.completion_status" : "cmi.core.lesson_status";
+    Set(compKey, "completed");
+    _statusCompleted = true;
+    var denom = _totalQuestions > 0 ? _totalQuestions : _state.graded;
+    var scaled = denom > 0 ? _state.correct / denom : 0;
+    if (_ver === "2004") {
+      Set("cmi.score.scaled", scaled.toFixed(4));
+      Set("cmi.score.raw", (scaled * 100).toFixed(1));
+      Set("cmi.score.min", "0");
+      Set("cmi.score.max", "100");
+      Set("cmi.success_status", "passed");
+    } else {
+      Set("cmi.core.score.raw", (scaled * 100).toFixed(1));
+      Set("cmi.core.score.min", "0");
+      Set("cmi.core.score.max", "100");
+    }
     Commit();
     saveToLocalStorage();
-    console.log("[PTX-SCORM] Page unloading \u2014 state saved. exit=suspend set.");
+    _submitted = true;
+    dbg("submitSession() complete \u2014 grade committed (scaled=" + scaled.toFixed(4) + "), session left open for page-exit finalization.");
+    console.log("[PTX-SCORM] Assignment submitted \u2014 score committed. The attempt is finalized when you leave this page.");
+  }
+  var _scoreDisplayEl = null;
+  function updateScoreDisplay() {
+    if (!_scoreDisplayEl) return;
+    var denom = _totalQuestions > 0 ? _totalQuestions : _state.graded;
+    if (denom === 0) {
+      _scoreDisplayEl.style.display = "none";
+      return;
+    }
+    var pct = Math.round(_state.correct / denom * 100);
+    var points = Math.round(_state.correct * 100) / 100;
+    _scoreDisplayEl.style.display = "block";
+    _scoreDisplayEl.innerHTML = '<span style="font-size:1.15em;font-weight:bold;">Your current score: ' + pct + '%</span><br><span style="font-size:0.85em;color:#666;">' + points + " of " + denom + " point" + (denom === 1 ? "" : "s") + " \xB7 " + _state.graded + " of " + denom + " question" + (denom === 1 ? "" : "s") + " answered</span>";
+  }
+  function addSubmitButton() {
+    if (!_api) return;
+    var wrapper = document.createElement("div");
+    wrapper.id = "ptx-scorm-submit-wrapper";
+    wrapper.style.cssText = "margin:2em 0 1em;padding:1.2em 1em 0.8em;border-top:2px solid #ccc;text-align:center;";
+    var scoreDisplay = document.createElement("div");
+    scoreDisplay.id = "ptx-scorm-score";
+    scoreDisplay.style.cssText = "margin:0 0 0.9em;line-height:1.4;";
+    _scoreDisplayEl = scoreDisplay;
+    var btn = document.createElement("button");
+    btn.id = "ptx-scorm-submit-btn";
+    btn.type = "button";
+    btn.textContent = "Submit Assignment";
+    btn.style.cssText = [
+      "padding:0.55em 2em",
+      "font-size:1.05em",
+      "font-weight:bold",
+      "background:#006db0",
+      "color:#fff",
+      "border:none",
+      "border-radius:4px",
+      "cursor:pointer"
+    ].join(";");
+    var statusMsg = document.createElement("p");
+    statusMsg.style.cssText = "margin:0.6em 0 0;font-size:1em;font-weight:bold;color:#155724;display:none;";
+    btn.addEventListener("mouseover", function() {
+      this.style.background = "#00508a";
+    });
+    btn.addEventListener("mouseout", function() {
+      if (!_submitted) this.style.background = "#006db0";
+    });
+    btn.addEventListener("click", function() {
+      submitSession();
+      if (!_submitted) {
+        statusMsg.style.display = "block";
+        statusMsg.style.color = "#a33";
+        statusMsg.textContent = "Submission did not run \u2014 please reload the page and try again.";
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = "Submitted \u2713";
+      btn.style.background = "#5a9e6f";
+      btn.style.cursor = "default";
+      statusMsg.style.display = "block";
+      statusMsg.style.color = "#155724";
+      statusMsg.textContent = "Assignment submitted. You may now close this window.";
+    });
+    wrapper.appendChild(scoreDisplay);
+    wrapper.appendChild(btn);
+    wrapper.appendChild(statusMsg);
+    updateScoreDisplay();
+    var footer = document.getElementById("ptx-content-footer");
+    if (footer && footer.parentNode) {
+      footer.parentNode.insertBefore(wrapper, footer);
+    } else {
+      var content = document.getElementById("ptx-content") || document.querySelector("main") || document.body;
+      content.appendChild(wrapper);
+    }
+    console.log("[PTX-SCORM] Submit button added.");
+  }
+  function handlePageExit(isPersisted) {
+    if (isPersisted || !_initialized) return;
+    Set("cmi.suspend_data", buildSuspendData());
+    var exitKey = _ver === "2004" ? "cmi.exit" : "cmi.core.exit";
+    Set(exitKey, "suspend");
+    Commit();
+    Terminate();
+    saveToLocalStorage();
+    dbg("Page exit: suspend_data saved, exit=suspend, Terminated.");
+    console.log("[PTX-SCORM] Page unloading \u2014 state saved, session terminated (suspended).");
+  }
+  window.addEventListener("beforeunload", function() {
+    handlePageExit(false);
+  });
+  window.addEventListener("pagehide", function(event) {
+    handlePageExit(event.persisted);
   });
 })();
 //# sourceMappingURL=ptx_scorm_events.js.map
