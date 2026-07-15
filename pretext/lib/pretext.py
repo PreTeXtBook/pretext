@@ -5420,7 +5420,13 @@ def _validate_server(xml_source, out_file, dest_dir):
     }
     data = {'mainfile': base}
     log.info("communicating with server at {}".format(server_url))
-    r = requests.post(server_url, data=data, files=files)
+    try:
+        r = requests.post(server_url, data=data, files=files)
+    finally:
+        # release the file handles opened just above, whether or not the
+        # request succeeds (requests reads them but does not close them)
+        for open_file in files.values():
+            open_file.close()
 
     derivedname = common.get_output_filename(xml_source, out_file, dest_dir, ".jing")
     with open(derivedname, "w") as f:
