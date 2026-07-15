@@ -4960,41 +4960,27 @@ def pdf_fo(xml, pub_file, stringparams, out_file, dest_dir):
 #
 ########################
 
-def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
-    """Validate source against the RELAX-NG schema, locally or via a server"""
-
-    if method == "server":
-        _validate_server(xml_source, out_file, dest_dir)
-    else:
-        # "local" validates against the production schema, and
-        # "local-dev" against the development schema, each with a
-        # report meant for an author.  The "terse" method is the
-        # production schema with machine-readable output, one
-        # tab-separated message per line, meant for a program.
-        if method == "local-dev":
-            schema_file = "pretext-dev.rng"
-        else:
-            schema_file = "pretext.rng"
-        terse = method == "terse"
-        _validate_local(
-            xml_source, pub_file, stringparams, out_file, dest_dir, schema_file, terse
-        )
-
-
 # the "pi" namespace attribute recording an element's originating file
 PI_SOURCE_URI = "{http://pretextbook.org/2020/pretext/internal}source-uri"
 
 
-def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, schema_file, terse):
-    """Validate the assembled source with an installed "jing" program"""
+def validate(xml_source, pub_file, stringparams, out_file, dest_dir, method):
+    """Validate source against the RELAX-NG schema, locally or via a server"""
 
+    # "local" validates against the production schema and "local-dev"
+    # against the development schema, each with a report meant for an
+    # author.  "terse" is the production schema with machine-readable
+    # output, one tab-separated message per line, meant for a program.
+    # "server" is "local" with the "jing" run delegated to a remote
+    # service; the consolidated report is identical.
+    if method == "local-dev":
+        schema_file = "pretext-dev.rng"
+    else:
+        schema_file = "pretext.rng"
+    terse = method == "terse"
+    server = method == "server"
     # to ensure provided stringparams aren't mutated unintentionally
     stringparams = stringparams.copy()
-
-    # "jing" is a Java program, so a configuration can be simply the
-    # name of an executable ("jing", say, from a system package), or a
-    # command with options ("java -jar /usr/share/java/jing.jar", say)
-    jing_exec_cmd = common.get_executable_cmd("jing")
 
     # the consolidated report, and the assembled source deposited
     # alongside it (wherever the report lands)
@@ -5087,15 +5073,30 @@ def _validate_local(xml_source, pub_file, stringparams, out_file, dest_dir, sche
     # fresh schema from the PreTeXt distribution, in XML syntax
     schema_filename = os.path.join(common.get_ptx_path(), "schema", schema_file)
 
-    full_cmd = jing_exec_cmd + [schema_filename, assembled_source]
-    log.debug("jing command: {}".format(" ".join(full_cmd)))
-    result = subprocess.run(full_cmd, capture_output=True, text=True)
-    # jing exits 0 when the document is valid, 1 when messages result
-    if result.returncode == 0:
-        log.info("the source validates with no schema errors")
-    elif result.returncode > 1:
-        log.warning('the "jing" program failed (code {})'.format(result.returncode))
-    jing_messages = result.stdout.splitlines()
+    # The RELAX-NG check runs "jing" against the assembled source and
+    # yields its raw report as a list of lines.  A local run uses an
+    # installed "jing"; the "server" method sends the same assembled
+    # source to a remote "jing" service.  Either way the lines below feed
+    # an identical consolidated report.
+    if server:
+        jing_messages = _jing_server(schema_filename, assembled_source)
+        if jing_messages is None:
+            # the server could not be reached; a clear error was logged
+            return
+    else:
+        # "jing" is a Java program, so a configuration can be simply the
+        # name of an executable ("jing", from a system package), or a
+        # command with options ("java -jar /usr/share/java/jing.jar")
+        jing_exec_cmd = common.get_executable_cmd("jing")
+        full_cmd = jing_exec_cmd + [schema_filename, assembled_source]
+        log.debug("jing command: {}".format(" ".join(full_cmd)))
+        result = subprocess.run(full_cmd, capture_output=True, text=True)
+        # jing exits 0 when the document is valid, 1 when messages result
+        if result.returncode == 0:
+            log.info("the source validates with no schema errors")
+        elif result.returncode > 1:
+            log.warning('the "jing" program failed (code {})'.format(result.returncode))
+        jing_messages = result.stdout.splitlines()
 
     # The "validation-plus" stylesheet performs checks the RELAX-NG
     # schema cannot express, and provides extra advice and explanation
@@ -5331,107 +5332,72 @@ def _validation_report_preamble(schema_filename, assembled_source):
     ]
 
 
-def _validate_server(xml_source, out_file, dest_dir):
-    """Validate original source files with a round-trip to a server"""
+def _jing_server(schema_filename, assembled_source):
+    """Validate the assembled source with a remote "jing" service.
 
+    Returns the raw "jing" report as a list of lines -- a drop-in for the
+    output of a local "jing" run on the same file -- or None if the server
+    could not be reached (a clear error is logged in that case).
+    """
     try:
         import requests  # post()
     except ImportError:
         raise ImportError(__module_warning.format("requests"))
 
-    # JaaS server location
-    server_url = 'https://mathgenealogy.org:9000/validate'
-    # Alias for XInclude namespace
-    NSMAP = {"xi": "http://www.w3.org/2001/XInclude"}
-    # home for zip file construction
+    # A future move to a server more closely tied to the project need only
+    # change this URL (and, if the reply format changes, the parsing below).
+    server_url = "https://mathgenealogy.org:9000/validate"
+
+    # The service expects a zip of "source" with a named "mainfile", plus
+    # the schema and its PreFigure companions.  Here the "source" is the
+    # single, already-assembled file, so the locations in the report line
+    # up with the deposited assembled source, exactly as a local run does.
     tmp_dir = common.get_temporary_directory()
+    mainfile = os.path.basename(assembled_source)
+    zip_filename = os.path.join(tmp_dir, "validation-source.zip")
+    with zipfile.ZipFile(zip_filename, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
+        zip_file.write(assembled_source, arcname=mainfile)
 
-    # directory location of main source file, every filename collected
-    # below (in *_files lists) is relative to this directory
-    d = os.path.split(xml_source)[0]
-    base = os.path.split(xml_source)[1]
-
-    # Initialize with overall source file's
-    # name (base), relative to its location (d)
-    # all_files will be the eventual result
-    all_files = [base]
-    # new_files is refreshed for each pass of the while loop,
-    # non-empty ensures the while loop happens at least once
-    new_files = [base]
-    while new_files:
-        # accumulator to become the subsequent new_files
-        next_files = []
-        for f in new_files:
-            # construct full filename for parse operation
-            # do not xinclude, that would defeat the purpose
-            file_tree = ET.parse(os.path.join(d, f))
-            includes = file_tree.xpath("//xi:include", namespaces=NSMAP)
-            # @href attributes are relative to the location
-            #  of f, which we compute as f_dir
-            f_dir = os.path.split(f)[0]
-            for elt in includes:
-                # the href, required/expected/necessary
-                if "href" in elt.attrib:
-                    href = elt.attrib["href"]
-                else:
-                    raise ValueError("an xi:include element lacks the expected @href attribute")
-                # the normaized filename, relative to the main file location (d)
-                # this is where the eventual results are first created
-                rel_path = os.path.normpath(os.path.join(f_dir, href))
-                # always of interest, always add to result, even
-                # a text file might be needed to feed the schema
-                all_files.append(rel_path)
-                # if including a text file, then lxml inspection
-                # will fail, AND we don't need to examine it further,
-                # as it is a dead-end in the tree (can't xi:include anyway)
-                parsing = None
-                if 'parse' in elt.attrib:
-                    parsing = elt.attrib['parse']
-                # Usually we want to inspect a file for more includes,
-                # so we add most to the list of files to examine next
-                if not(parsing == 'text'):
-                    next_files.append(rel_path)
-        # recycle next_files into new_files, and next_file
-        # will be re-initialized as while loop resumes
-        new_files = next_files
-
-    # Build a zip file of the source, files with relative paths
-    # zipfile.ZIP_DEFLATED is the "usual  ZIP compression method"
-    zip_filename = os.path.join(tmp_dir, "test.zip")
-    log.info("packaging source temporarily as {}".format(zip_filename))
-    with common.working_directory(d):
-        with zipfile.ZipFile(zip_filename, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
-            # set() will avoid duplicate files included twice (or more)
-            for f in set(all_files):
-                zip_file.write(f)
-
-
-    # fresh schema from the PreTeXt distribution
-    schema_filename = os.path.join(common.get_ptx_path(), "schema", "pretext.rng")
-    pf_adapter_filename = os.path.join(common.get_ptx_path(), "schema", "pf-adapter.rng")
-    pf_schema_filename = os.path.join(common.get_ptx_path(), "schema", "pf_schema.rng")
-    pf_preamble_adapter_filename = os.path.join(common.get_ptx_path(), "schema", "pf-preamble-adapter.rng")
-    files = {
-        'source': open(zip_filename, 'rb'),
-        'rng': open(schema_filename, 'rb'),
-        'pf_adapter': open(pf_adapter_filename, 'rb'),
-        'pf_schema': open(pf_schema_filename, 'rb'),
-        'pf_preamble_adapter': open(pf_preamble_adapter_filename, 'rb'),
+    # The service resolves the schema's includes from these companion
+    # files, so they travel alongside the schema (see PR #3036).
+    schema_dir = os.path.join(common.get_ptx_path(), "schema")
+    field_paths = {
+        "source": zip_filename,
+        "rng": schema_filename,
+        "pf_adapter": os.path.join(schema_dir, "pf-adapter.rng"),
+        "pf_schema": os.path.join(schema_dir, "pf_schema.rng"),
+        "pf_preamble_adapter": os.path.join(schema_dir, "pf-preamble-adapter.rng"),
     }
-    data = {'mainfile': base}
-    log.info("communicating with server at {}".format(server_url))
+    data = {"mainfile": mainfile}
+    log.info("communicating with validation server at {}".format(server_url))
+    files = {field: open(path, "rb") for field, path in field_paths.items()}
     try:
-        r = requests.post(server_url, data=data, files=files)
-    finally:
-        # release the file handles opened just above, whether or not the
-        # request succeeds (requests reads them but does not close them)
-        for open_file in files.values():
-            open_file.close()
+        try:
+            r = requests.post(server_url, data=data, files=files, timeout=60)
+        finally:
+            # release the file handles (requests reads but does not close)
+            for open_file in files.values():
+                open_file.close()
+    except requests.exceptions.RequestException as e:
+        log.error("could not reach the validation server at {} ({})".format(server_url, e))
+        log.error("no validation report was produced; retry, or validate with a local method")
+        return None
 
-    derivedname = common.get_output_filename(xml_source, out_file, dest_dir, ".jing")
-    with open(derivedname, "w") as f:
-        f.writelines(r.text)
-    log.info("messages from validation in {}".format(derivedname))
+    if r.status_code != 200:
+        log.error("the validation server reported an error (code {}): {}".format(r.status_code, r.text.strip()))
+        return None
+
+    # Reduce the reply to the raw "jing" lines.  This service prefaces a
+    # report with a fixed sentence, and answers with a success sentence
+    # when there are no messages; a future service might return "jing"
+    # output verbatim.  Handle all three.
+    body = r.text
+    if "Report from jing follows:" in body:
+        body = body.split("Report from jing follows:", 1)[1]
+    elif "no schema violations" in body:
+        log.info("the source validates with no schema errors")
+        return []
+    return body.strip("\n").splitlines()
 
 
 ###################
