@@ -145,14 +145,26 @@ def _stack_download_assets(assets, api_url, asset_prefix_abs, stack_file):
         if response.status_code == 200:
             response.raw.decode_content = True
             asset_file = f"{asset_prefix_abs}-{filename}"
-            asset_file_out = asset_file.replace(".svg", ".pdf")
             log.debug(f"Extracting asset {asset_file} from {stack_file}.")
             if asset_file.endswith(".svg"):
+                # Save the SVG as received (used directly by EPUB/web output),
+                # and also derive a PDF (LaTeX/print) and PNG (Kindle, whose
+                # images are always PNG) so every output route gets its
+                # preferred format with no placeholder fallback (epubcheck
+                # MED-003 otherwise triggers when only a PDF is available).
+                with open(asset_file, "wb") as svgout:
+                    svgout.write(response.content)
                 with fitz.Document(stream=response.content) as doc:
                     log.info(f"converting {asset_file} to PDF")
                     pdfbytes = doc.convert_to_pdf()
-                    with open(asset_file_out, "wb") as pdfout:
+                    asset_file_pdf = asset_file.replace(".svg", ".pdf")
+                    with open(asset_file_pdf, "wb") as pdfout:
                         pdfout.write(pdfbytes)
+
+                    log.info(f"converting {asset_file} to PNG")
+                    png = doc.load_page(0).get_pixmap(dpi=300, alpha=True)
+                    asset_file_png = asset_file.replace(".svg", ".png")
+                    png.save(asset_file_png)
             else:
                 with open(asset_file, 'wb') as f:
                     f.write(response.content)
