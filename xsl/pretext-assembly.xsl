@@ -1646,7 +1646,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:copy-of select="$exercise-parent/statement//fillin[@name = $eval-name]"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:copy-of select="$exercise-parent/statement//fillin[$eval-position]"/>
+                <xsl:copy-of select="($exercise-parent/statement//fillin)[$eval-position]"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
