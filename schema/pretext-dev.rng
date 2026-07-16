@@ -1251,6 +1251,11 @@
         </attribute>
       </optional>
       <optional>
+        <attribute name="literal">
+          <value>yes</value>
+        </attribute>
+      </optional>
+      <optional>
         <attribute name="case">
           <value>insensitive</value>
         </attribute>

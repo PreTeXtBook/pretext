@@ -528,6 +528,7 @@
             FITBStrcmp =
                 element strcmp {
                     attribute use-answer {"yes"|"no"}?,
+                    attribute literal {"yes"}?,
                     attribute case {"insensitive"}?,
                     attribute strip {"no"}?,
                     text
