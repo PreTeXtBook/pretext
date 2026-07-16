@@ -644,5 +644,18 @@ function stackSetup() {
 }
 
 function getPlotUrl(file) {
-  return `${stack_api_url}/plots/${file}`;
+  return `${stack_api_url}/plot.php/${file}`;
 }
+
+// Newer STACK API deployments serve plots/files indirectly through plot.php
+// (rather than a direct link into the plots directory) so a submitted file
+// can't be accessed/run directly. Older deployments don't have plot.php and
+// still need the direct link. We can't tell which a given server supports
+// ahead of time, so we request the new path and, if it 404s, fall back to
+// the old one. 'error' doesn't bubble, so listen on the capture phase.
+document.addEventListener('error', (event) => {
+  const el = event.target;
+  if (el.tagName === 'IMG' && el.src.includes('/plot.php/')) {
+    el.src = el.src.replace('/plot.php/', '/plots/');
+  }
+}, true);
