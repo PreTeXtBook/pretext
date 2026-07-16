@@ -125,7 +125,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$version-root/letter">0</xsl:when>
         <xsl:when test="$version-root/memo">0</xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR: Table of Contents level not determined</xsl:message>
+            <xsl:message>PTX:BUG:   Table of Contents level not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -2966,7 +2966,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$version-root/letter">0</xsl:when>
         <xsl:when test="$version-root/memo">0</xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR: HTML chunk level not determined</xsl:message>
+            <xsl:message>PTX:BUG:   HTML chunk level not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>

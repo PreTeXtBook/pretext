@@ -3068,7 +3068,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="runestone-id"/>
-                    <xsl:message>PTX:ERROR:   runestone-targets template was called with an invalid @output-field value "<xsl:value-of select="$output-field"/>"</xsl:message>
+                    <xsl:message>PTX:BUG:     runestone-targets template was called with an invalid @output-field value "<xsl:value-of select="$output-field"/>"</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
             <!-- n - 1 separators, required by receiving Javascript -->

@@ -579,7 +579,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="$normalized-level=3">subsection</xsl:when>
         <xsl:when test="$normalized-level=4">subsubsection</xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR: Level computation is out-of-bounds (input as <xsl:value-of select="$level" />, normalized to <xsl:value-of select="$normalized-level" />)</xsl:message>
+            <xsl:message>PTX:BUG:   Level computation is out-of-bounds (input as <xsl:value-of select="$level" />, normalized to <xsl:value-of select="$normalized-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -3192,7 +3192,7 @@ Book (with parts), "section" at level 3
             <xsl:text>[</xsl:text>
             <xsl:value-of select="$str-id" />
             <xsl:text>]</xsl:text>
-            <xsl:message>PTX:WARNING: could not translate string with id "<xsl:value-of select="$str-id"/>" into language for code "<xsl:value-of select="$lang"/>"</xsl:message>
+            <xsl:message>PTX:BUG:     could not translate string with id "<xsl:value-of select="$str-id"/>" into language for code "<xsl:value-of select="$lang"/>"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -5676,7 +5676,7 @@ Book (with parts), "section" at level 3
             <exercise-component-report has-hint="{$b-has-reading-hint}" has-answer="{$b-has-reading-answer}" has-solution="{$b-has-reading-solution}"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR: can't determine exercise type</xsl:message>
+            <xsl:message>PTX:BUG:   can't determine exercise type</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:otherwise>
     </xsl:choose>
@@ -10330,7 +10330,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Final period when no following-siblings     -->
 
 <xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/*">
-    <xsl:message>PTX:WARNING:  a child of "biblio" (<xsl:value-of select="local-name()"/>) is not being processed.  Please report me so this can be fixed.</xsl:message>
+    <xsl:message>PTX:BUG:      a child of "biblio" (<xsl:value-of select="local-name()"/>) is not being processed.  Please report me so this can be fixed.</xsl:message>
 </xsl:template>
 
 <!-- Authors: no lead-in, names via the shared "contributor-names" -->
