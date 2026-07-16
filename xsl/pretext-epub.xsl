@@ -1263,7 +1263,7 @@
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="substring($filename, string-length($filename) - 3) = '.pdf'">
-            <xsl:message>PTX:WARNING: an image is available only as a PDF, which an EPUB reading system will not display; a placeholder appears in its place</xsl:message>
+            <xsl:message>PTX:ERROR:   an image is available only as a PDF, which an EPUB reading system will not display; a placeholder appears in its place</xsl:message>
             <xsl:apply-templates select="." mode="location-report"/>
             <p class="image-placeholder">[An image belongs here, but it is available only in PDF form, which EPUB does not display.]</p>
         </xsl:when>

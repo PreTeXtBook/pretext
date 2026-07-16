@@ -872,7 +872,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- This is an AWOL node, not empty content (which is allowed) -->
         <xsl:if test="not($the-lookup)">
             <xsl:text>[MISSING CUSTOM CONTENT HERE]</xsl:text>
-            <xsl:message>PTX:WARNING:   lookup for a "custom" element with @name set to "<xsl:value-of select="$the-ref"/>" has failed, while consulting the customization file "<xsl:value-of select="$customizations-file"/>".  Output will contain "[MISSING CUSTOM CONTENT HERE]" instead</xsl:message>
+            <xsl:message>PTX:ERROR:     lookup for a "custom" element with @name set to "<xsl:value-of select="$the-ref"/>" has failed, while consulting the customization file "<xsl:value-of select="$customizations-file"/>".  Output will contain "[MISSING CUSTOM CONTENT HERE]" instead</xsl:message>
             <xsl:apply-templates select="$the-custom" mode="location-report"/>
         </xsl:if>
         <!-- Copying the contents of "custom" via the "version" templates  -->

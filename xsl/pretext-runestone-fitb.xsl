@@ -890,7 +890,7 @@
                 <xsl:when test="name($curTest)='mathcmp' and $curTest/@use-answer='yes'">
                     <xsl:choose>
                         <xsl:when test="not($fillin/@ansobj)">
-                            <xsl:message>PTX:WARNING: Feedback for "<xsl:value-of select="@visible-id"/>" says to use given math answer, but @ansobj not defined. </xsl:message>
+                            <xsl:message>PTX:ERROR:   Feedback for "<xsl:value-of select="@visible-id"/>" says to use given math answer, but @ansobj not defined. </xsl:message>
                             <xsl:text>UNDEFINED</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>

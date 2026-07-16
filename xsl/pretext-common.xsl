@@ -719,7 +719,7 @@ Book (with parts), "section" at level 3
         <!-- check for bare # (present but \# is not) -->
         <xsl:if test="contains($inside, '#') and not(contains($inside, '\#'))">
             <xsl:message>
-                <xsl:text>PTX:WARNING:   a bare "#" inside \text{} in math must be escaped as "\#"</xsl:text>
+                <xsl:text>PTX:ERROR:     a bare "#" inside \text{} in math must be escaped as "\#"</xsl:text>
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>               </xsl:text>
                 <xsl:apply-templates select="." mode="location-report"/>
@@ -728,7 +728,7 @@ Book (with parts), "section" at level 3
         <!-- check for bare % -->
         <xsl:if test="contains($inside, '%') and not(contains($inside, '\%'))">
             <xsl:message>
-                <xsl:text>PTX:WARNING:   a bare "%" inside \text{} in math must be escaped as "\%"</xsl:text>
+                <xsl:text>PTX:ERROR:     a bare "%" inside \text{} in math must be escaped as "\%"</xsl:text>
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>               </xsl:text>
                 <xsl:apply-templates select="." mode="location-report"/>
@@ -737,7 +737,7 @@ Book (with parts), "section" at level 3
         <!-- check for bare & -->
         <xsl:if test="contains($inside, '&amp;') and not(contains($inside, '\&amp;'))">
             <xsl:message>
-                <xsl:text>PTX:WARNING:   a bare "&amp;" inside \text{} in math must be escaped as "\&amp;"</xsl:text>
+                <xsl:text>PTX:ERROR:     a bare "&amp;" inside \text{} in math must be escaped as "\&amp;"</xsl:text>
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>               </xsl:text>
                 <xsl:apply-templates select="." mode="location-report"/>
@@ -3016,7 +3016,7 @@ Book (with parts), "section" at level 3
         <!-- NaN does not equal *anything*, so tests if a number  -->
         <!-- http://stackoverflow.com/questions/6895870           -->
         <xsl:when test="not(number($the-aspect) = number($the-aspect)) or ($the-aspect &lt; 0)">
-            <xsl:message>PTX:WARNING: the @aspect attribute should be a ratio, like 4:3, or a positive number, not "<xsl:value-of select="$the-aspect" />"</xsl:message>
+            <xsl:message>PTX:ERROR:   the @aspect attribute should be a ratio, like 4:3, or a positive number, not "<xsl:value-of select="$the-aspect" />"</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
         <!-- survives as a number -->
@@ -5073,7 +5073,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="li[p|ol|ul|dl]/text()">
     <xsl:variable name="text" select="normalize-space(.)" />
     <xsl:if test="$text">
-        <xsl:message>PTX:WARNING: Unstructured content within a list item is being ignored ("<xsl:value-of select="$text" />")</xsl:message>
+        <xsl:message>PTX:ERROR:   Unstructured content within a list item is being ignored ("<xsl:value-of select="$text" />")</xsl:message>
          <xsl:apply-templates select=".." mode="location-report" />
     </xsl:if>
 </xsl:template>
@@ -5745,7 +5745,7 @@ Book (with parts), "section" at level 3
         <!-- template                                                  -->
         <xsl:variable name="scope" select="id(@scope)"/>
         <xsl:if test="not($scope)">
-            <xsl:message>PTX:WARNING: unresolved @scope ("<xsl:value-of select="@scope"/>") for a &lt;solutions&gt; division</xsl:message>
+            <xsl:message>PTX:ERROR:   unresolved @scope ("<xsl:value-of select="@scope"/>") for a &lt;solutions&gt; division</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:if>
         <xsl:if test="not($scope/self::book|$scope/self::article|$scope/self::chapter|$scope/self::section|$scope/self::subsection|$scope/self::subsubsection|$scope/self::exercises|$scope/self::worksheet|$scope/self::reading-questions)">
@@ -8575,7 +8575,7 @@ Book (with parts), "section" at level 3
 
 <!-- Warnings for a high-frequency mistake -->
 <xsl:template match="xref[not(@ref) and not(@first and @last) and not(@provisional)]">
-    <xsl:message>PTX:WARNING: A cross-reference (&lt;xref&gt;) must have a @ref attribute, a @first/@last attribute pair, or a @provisional attribute</xsl:message>
+    <xsl:message>PTX:ERROR:   A cross-reference (&lt;xref&gt;) must have a @ref attribute, a @first/@last attribute pair, or a @provisional attribute</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />
     <xsl:call-template name="inline-warning">
         <xsl:with-param name="warning">
@@ -8845,7 +8845,7 @@ Book (with parts), "section" at level 3
             </xsl:variable>
             <xsl:if test="$the-title = ''">
                 <xsl:message>
-                    <xsl:text>PTX:WARNING:    </xsl:text>
+                    <xsl:text>PTX:ERROR:      </xsl:text>
                     <xsl:text>An &lt;xref&gt; wants to build text using a title to identify the target, but the target (which has @xml:id "</xsl:text>
                     <xsl:value-of select="@ref"/>
                     <xsl:text>") has no title, not even a default title.</xsl:text>
@@ -8856,7 +8856,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="$text-style = 'custom'">
             <xsl:if test="not($b-has-content)">
                 <xsl:message>
-                    <xsl:text>PTX:WARNING:    </xsl:text>
+                    <xsl:text>PTX:ERROR:      </xsl:text>
                     <xsl:text>An &lt;xref&gt; wants to use custom text to describe the target, but no custom text was provided as the content of the "xref".</xsl:text>
                 </xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
@@ -8877,7 +8877,7 @@ Book (with parts), "section" at level 3
             </xsl:variable>
             <xsl:if test="($the-number = '') and not($b-is-contributor-target)">
                 <xsl:message>
-                    <xsl:text>PTX:WARNING:    </xsl:text>
+                    <xsl:text>PTX:ERROR:      </xsl:text>
                     <xsl:text>An &lt;xref&gt; wants to build text using a number to identify the target, but the target (which has @xml:id "</xsl:text>
                     <xsl:value-of select="@ref"/>
                     <xsl:text>") does not have a number. You could try 'text="title"' or 'text="custom"' on the "xref".</xsl:text>
@@ -9021,7 +9021,7 @@ Book (with parts), "section" at level 3
         <!-- catch this first and provide no text at all (could provide busted text?) -->
         <!-- anonymous lists live in "p", but this is an unreliable indication        -->
         <xsl:when test="($text-style = 'phrase-global' or $text-style = 'phrase-hybrid') and ($target/self::li and not($target/ancestor::list or $target/ancestor::objectives or $target/ancestor::outcomes or $target/ancestor::exercise))">
-            <xsl:message>PTX:WARNING: a cross-reference to a list item of an anonymous list ("<xsl:apply-templates select="$target" mode="serial-number" />") with 'phrase-global' and 'phrase-hybrid' styles for the xref text will yield no text at all, and possibly create unpredictable results in output</xsl:message>
+            <xsl:message>PTX:ERROR:   a cross-reference to a list item of an anonymous list ("<xsl:apply-templates select="$target" mode="serial-number" />") with 'phrase-global' and 'phrase-hybrid' styles for the xref text will yield no text at all, and possibly create unpredictable results in output</xsl:message>
         </xsl:when>
         <xsl:when test="$text-style = 'phrase-global' or $text-style = 'phrase-hybrid'">
             <!-- no content override in this case -->

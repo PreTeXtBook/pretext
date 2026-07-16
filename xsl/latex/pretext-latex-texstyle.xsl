@@ -623,7 +623,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING: The @authority attribute on a keyword element (in a texstyle file) is required and must be "author" or "msc".  Found "@authority="<xsl:value-of select="@authority"/>". </xsl:message>
+            <xsl:message>PTX:ERROR:   The @authority attribute on a keyword element (in a texstyle file) is required and must be "author" or "msc".  Found "@authority="<xsl:value-of select="@authority"/>". </xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

@@ -1784,7 +1784,7 @@
     <!-- warning if there is no content -->
     <xsl:if test="not(descendant::unit) and not(descendant::per) and not(descendant::mag)">
         <xsl:message>
-        <xsl:text>PTX:WARNING: magnitude or units needed</xsl:text>
+        <xsl:text>PTX:ERROR:   magnitude or units needed</xsl:text>
         </xsl:message>
     </xsl:if>
     <!-- print magnitude if there is one -->
@@ -1865,7 +1865,7 @@
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>
-                <xsl:text>PTX:WARNING: base unit needed</xsl:text>
+                <xsl:text>PTX:ERROR:   base unit needed</xsl:text>
             </xsl:message>
         </xsl:otherwise>
     </xsl:choose>
