@@ -85,17 +85,91 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisions -->
 <!-- ######### -->
 
-<xsl:template match="part|chapter|section|subsection|subsubsection|exercises|reading-questions|worksheet|handout|glossary|references|solutions">
+<!-- A heading is the division's usual "Type Number Title" line,     -->
+<!-- underlined in the manner of typewritten manuscripts (and,       -->
+<!-- happily, of markdown's setext headings for the top two          -->
+<!-- levels): one underline character per depth.                     -->
+<xsl:variable name="heading-underline-characters" select="'=-~^&quot;'"/>
+
+<xsl:template match="part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|reading-questions|worksheet|handout|glossary|references|solutions">
+    <!-- the heading line, assembled once so it can be measured.    -->
+    <!-- Unnumbered peripheral divisions (preface, colophon, ...)   -->
+    <!-- take just their title: the default title IS the type-name, -->
+    <!-- and "Preface Preface" serves nobody.                       -->
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="number"/>
+    </xsl:variable>
+    <xsl:variable name="heading">
+        <xsl:if test="not($the-number = '')">
+            <xsl:apply-templates select="." mode="type-name"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$the-number"/>
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <!-- Title is required (or default is supplied) -->
+        <xsl:apply-templates select="." mode="title-full"/>
+    </xsl:variable>
+    <!-- depth chooses the underline character; anything deeper  -->
+    <!-- than the repertoire reuses the last character           -->
+    <xsl:variable name="raw-level">
+        <xsl:apply-templates select="." mode="level"/>
+    </xsl:variable>
+    <xsl:variable name="level">
+        <xsl:choose>
+            <xsl:when test="$raw-level &gt; 5">
+                <xsl:text>5</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$raw-level"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <!-- empty line prior -->
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="number"/>
-    <!-- Title is required (or default is supplied) -->
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:value-of select="$heading"/>
     <xsl:text>&#xa;</xsl:text>
+    <xsl:value-of select="str:padding(string-length($heading), substring($heading-underline-characters, $level, 1))"/>
+    <xsl:text>&#xa;&#xa;</xsl:text>
     <!-- metadata-ish, eg "title", should be killed by default -->
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- The document itself: its title as the topmost heading, then  -->
+<!-- the content.  ("docinfo" is ignored by the entry template.)  -->
+<xsl:template match="book|article">
+    <xsl:variable name="heading">
+        <xsl:apply-templates select="." mode="title-full"/>
+    </xsl:variable>
+    <xsl:value-of select="$heading"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:value-of select="str:padding(string-length($heading), '*')"/>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- Whole-document containers with no heading of their own -->
+<xsl:template match="frontmatter|backmatter|mainmatter">
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- The title page is mined for a byline, rather than templates -->
+<xsl:template match="titlepage">
+    <xsl:for-each select="../../docinfo/../frontmatter/bibinfo/author/personname">
+        <xsl:apply-templates/>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- Bibliographic metadata: quiet, mined above -->
+<xsl:template match="bibinfo"/>
+
+<!-- Unstructured containers: just their content -->
+<xsl:template match="introduction|conclusion|statement|paragraphs|subexercises|exercisegroup">
+    <xsl:if test="title">
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
@@ -422,13 +496,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="*"/>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- General-purpose container, we  -->
-<!-- do not enforce possibilities -->
-<xsl:template match="statement">
-    <!-- structured -->
-    <xsl:apply-templates select="*"/>
 </xsl:template>
 
 <!-- THEOREM-LIKE only -->
