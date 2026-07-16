@@ -75,17 +75,301 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Entry Template -->
 <!-- Kickstart the process, ignore "docinfo"  -->
 <xsl:template match="/">
-    <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">Conversion to simple text is incomplete&#xa;But importing this stylesheet could be helpful for certain purposes&#xa;Override the entry template to make this warning go away</xsl:with-param>
-    </xsl:call-template>
     <xsl:apply-templates select="$document-root"/>
 </xsl:template>
 
 <!-- TEMPORARY: defined to stop errors, need stubs in -common -->
 <xsl:template name="inline-warning"/>
 <xsl:template name="margin-warning"/>
-<xsl:template match="sage" mode="sage-active-markup"/>
-<xsl:template name="sage-display-markup"/>
+
+<!-- ################ -->
+<!-- Producer's Notes -->
+<!-- ################ -->
+
+<!-- Content that text cannot express is announced, not dropped:  -->
+<!-- a bracketed note with a localized label, a fixed convention  -->
+<!-- a reader (or a consuming program) can recognize and strip.   -->
+<xsl:template name="producer-note">
+    <xsl:param name="message"/>
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="." mode="type-name">
+        <xsl:with-param name="string-id" select="'note'"/>
+    </xsl:apply-templates>
+    <xsl:text>: </xsl:text>
+    <xsl:copy-of select="$message"/>
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<!-- Structured lines ("department", "attribution", a "cell" of  -->
+<!-- "line") break onto new lines; -common's default is a        -->
+<!-- "[LINESEP]" marker demanding this implementation            -->
+<xsl:template name="line-separator">
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ######## -->
+<!-- Verbatim -->
+<!-- ######## -->
+
+<!-- A verbatim block: contents on their own lines, every line    -->
+<!-- indented four spaces (which is set-off in plain text, and    -->
+<!-- happens to be a code block in markdown).  A caller may       -->
+<!-- extend the indentation, say with a prompt.                   -->
+<xsl:template name="verbatim-block">
+    <xsl:param name="content"/>
+    <xsl:param name="indent" select="'    '"/>
+    <!-- the blank line preceding the block; a caller abutting -->
+    <!-- two blocks (Sage input, output) empties the second's  -->
+    <xsl:param name="lead" select="'&#xa;'"/>
+    <xsl:variable name="sanitized">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="$content"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="$lead"/>
+    <xsl:call-template name="add-indentation">
+        <xsl:with-param name="text" select="$sanitized"/>
+        <xsl:with-param name="indent" select="$indent"/>
+    </xsl:call-template>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="pre">
+    <xsl:call-template name="verbatim-block">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="interior"/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="cd">
+    <xsl:call-template name="verbatim-block">
+        <xsl:with-param name="content">
+            <xsl:choose>
+                <xsl:when test="cline">
+                    <xsl:apply-templates select="cline"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="."/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="program">
+    <xsl:call-template name="verbatim-block">
+        <xsl:with-param name="content">
+            <xsl:value-of select="code"/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="console">
+    <xsl:apply-templates select="input|output"/>
+</xsl:template>
+
+<xsl:template match="console/input">
+    <xsl:call-template name="verbatim-block">
+        <xsl:with-param name="content">
+            <xsl:value-of select="../@prompt"/>
+            <xsl:value-of select="."/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="console/output">
+    <xsl:call-template name="verbatim-block">
+        <xsl:with-param name="content">
+            <xsl:value-of select="."/>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Input carries a prompt on every line, named for the cell's -->
+<!-- language (Sage by default) in the manner of a session, so  -->
+<!-- it reads apart from the bare output, which follows after a -->
+<!-- single blank line                                          -->
+<xsl:template match="sage" mode="sage-active-markup">
+    <xsl:param name="in"/>
+    <xsl:param name="out"/>
+    <xsl:variable name="the-language">
+        <xsl:choose>
+            <xsl:when test="@language">
+                <xsl:value-of select="@language"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>sage</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="verbatim-block">
+        <xsl:with-param name="content" select="$in"/>
+        <xsl:with-param name="indent" select="concat('    ', $the-language, ': ')"/>
+    </xsl:call-template>
+    <xsl:if test="not($out = '')">
+        <xsl:call-template name="verbatim-block">
+            <xsl:with-param name="content" select="$out"/>
+            <xsl:with-param name="lead" select="''"/>
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="sage-display-markup">
+    <xsl:param name="in"/>
+    <xsl:call-template name="verbatim-block">
+        <xsl:with-param name="content" select="$in"/>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- ##### -->
+<!-- Media -->
+<!-- ##### -->
+
+<!-- An image is its author-provided description; failing that, a  -->
+<!-- note that an image was here                                   -->
+<xsl:template match="image">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:call-template name="producer-note">
+        <xsl:with-param name="message">
+            <xsl:choose>
+                <xsl:when test="shortdescription">
+                    <xsl:apply-templates select="shortdescription"/>
+                </xsl:when>
+                <xsl:when test="description">
+                    <xsl:apply-templates select="description"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>an image, undescribed by its author</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="shortdescription|description">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="video|audio|interactive|slate">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:call-template name="producer-note">
+        <xsl:with-param name="message">
+            <xsl:text>a </xsl:text>
+            <xsl:value-of select="local-name()"/>
+            <xsl:text> element is not realizable in this format</xsl:text>
+            <xsl:if test="@source|@href">
+                <xsl:text>; see </xsl:text>
+                <xsl:value-of select="@source|@href"/>
+            </xsl:if>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- A side-by-side is announced, its panels appear in sequence -->
+<xsl:template match="sidebyside">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:call-template name="producer-note">
+        <xsl:with-param name="message">
+            <xsl:text>the following </xsl:text>
+            <xsl:value-of select="count(*)"/>
+            <xsl:text> elements are arranged side-by-side in other formats</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- A group announces itself, with each member's panel count -->
+<xsl:template match="sbsgroup">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:call-template name="producer-note">
+        <xsl:with-param name="message">
+            <xsl:text>the following is a group of </xsl:text>
+            <xsl:value-of select="count(sidebyside)"/>
+            <xsl:text> side-by-side with </xsl:text>
+            <xsl:for-each select="sidebyside">
+                <xsl:value-of select="count(*)"/>
+                <xsl:if test="following-sibling::sidebyside">
+                    <xsl:text>, </xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+            <xsl:text> panels respectively</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="sidebyside"/>
+</xsl:template>
+
+<!-- ####### -->
+<!-- Tabular -->
+<!-- ####### -->
+
+<!-- Modest: each row a line, cells separated by double spaces.   -->
+<!-- No column alignment (yet), spanning cells simply run in.     -->
+<xsl:template match="tabular">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="row"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="row">
+    <xsl:text>    </xsl:text>
+    <xsl:for-each select="cell">
+        <xsl:apply-templates/>
+        <xsl:if test="following-sibling::cell">
+            <xsl:text>  </xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ###### -->
+<!-- Poetry -->
+<!-- ###### -->
+
+<xsl:template match="poem">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:if test="title">
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="stanza"/>
+</xsl:template>
+
+<xsl:template match="stanza">
+    <xsl:apply-templates select="line"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="stanza/line">
+    <xsl:text>    </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- #### -->
+<!-- URLs -->
+<!-- #### -->
+
+<!-- visible text (when there is some), address in angle brackets -->
+<xsl:template match="url">
+    <xsl:choose>
+        <xsl:when test="node()">
+            <xsl:apply-templates/>
+            <xsl:text> &lt;</xsl:text>
+            <xsl:value-of select="@href"/>
+            <xsl:text>&gt;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>&lt;</xsl:text>
+            <xsl:value-of select="@href"/>
+            <xsl:text>&gt;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- ######### -->
 <!-- Divisions -->
@@ -712,18 +996,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Captioned Items -->
 <!-- ############### -->
 
-<xsl:template match="figure">
+<!-- A figure — or a table, listing, or named list — presents its -->
+<!-- content, and then a caption line: type, number, and the      -->
+<!-- caption (or the title, for the types that have titles)       -->
+<xsl:template match="&FIGURE-LIKE;">
     <!-- space with a blank line if not -->
     <!-- first in a structured element  -->
     <!-- barring metadata-ish           -->
     <xsl:if test="preceding-sibling::*[not(self::title)]">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="*[not(self::caption or self::title)]"/>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="." mode="number"/>
     <xsl:text>: </xsl:text>
-    <xsl:apply-templates select="caption"/>
+    <xsl:choose>
+        <xsl:when test="caption">
+            <xsl:apply-templates select="caption"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
