@@ -10598,19 +10598,33 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <xsl:template name="warning-line-by-line">
     <xsl:param name="warning" />
-    <xsl:variable name="after" select="substring-before($warning,'&#xa;')"/>
+    <!-- the first line, which may be all of the text -->
+    <xsl:variable name="first-line">
+        <xsl:choose>
+            <xsl:when test="contains($warning, '&#xa;')">
+                <xsl:value-of select="substring-before($warning, '&#xa;')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$warning"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
-        <!-- no line breaks in warning, just print it -->
-        <xsl:when test="substring-before($warning,'&#xa;') = ''">
-            <xsl:message><xsl:value-of select="$warning" /></xsl:message>
+        <!-- a message with no content is reported strangely  -->
+        <!-- by the processing library, a space displays well -->
+        <xsl:when test="$first-line = ''">
+            <xsl:message><xsl:text> </xsl:text></xsl:message>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message><xsl:value-of select="substring-before($warning,'&#xa;')" /></xsl:message>
-            <xsl:call-template name="warning-line-by-line">
-                <xsl:with-param name="warning" select="substring-after($warning,'&#xa;')" />
-            </xsl:call-template>
+            <xsl:message><xsl:value-of select="$first-line"/></xsl:message>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- and the lines after the first, if any -->
+    <xsl:if test="contains($warning, '&#xa;')">
+        <xsl:call-template name="warning-line-by-line">
+            <xsl:with-param name="warning" select="substring-after($warning, '&#xa;')"/>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 <!-- Report the location of an element or attribute, for use after a   -->
