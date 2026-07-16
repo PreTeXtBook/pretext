@@ -2012,7 +2012,7 @@ Book (with parts), "section" at level 3
             <xsl:if test="$wsdebug and not($text-processed = $middle-cleaned)">
                 <!-- DEBUGGING follows, maybe move outward later -->
                 <xsl:message>
-                    <xsl:text>****&#xa;</xsl:text>
+                    <xsl:text>PTX:DEBUG: whitespace diagnostic&#xa;</xsl:text>
                     <xsl:text>O:</xsl:text>
                     <xsl:value-of select="." />
                     <xsl:text>:O&#xa;</xsl:text>
@@ -4523,7 +4523,7 @@ Book (with parts), "section" at level 3
     <!-- count the elements destined for panels  -->
     <xsl:variable name="number-panels" select="count(*)" />
     <xsl:if test="$sbsdebug">
-        <xsl:message>N:<xsl:value-of select="$number-panels" />:N</xsl:message>
+        <xsl:message>PTX:DEBUG: N:<xsl:value-of select="$number-panels" />:N</xsl:message>
     </xsl:if>
     <!-- Add to RTF -->
     <number-panels>
@@ -4569,7 +4569,7 @@ Book (with parts), "section" at level 3
         </xsl:choose>
     </xsl:variable>
     <xsl:if test="$sbsdebug">
-        <xsl:message>VA:<xsl:value-of select="$valigns" />:VA</xsl:message>
+        <xsl:message>PTX:DEBUG: VA:<xsl:value-of select="$valigns" />:VA</xsl:message>
     </xsl:if>
     <!-- check length (author-supplied could be wrong) -->
     <xsl:variable name="nspaces-valigns" select="string-length($valigns) - string-length(translate($valigns, ' ', ''))" />
@@ -4729,7 +4729,7 @@ Book (with parts), "section" at level 3
         </xsl:choose>
     </xsl:variable>
     <xsl:if test="$sbsdebug">
-        <xsl:message>M:<xsl:value-of select="$left-margin" />:<xsl:value-of select="$right-margin" />:M</xsl:message>
+        <xsl:message>PTX:DEBUG: M:<xsl:value-of select="$left-margin" />:<xsl:value-of select="$right-margin" />:M</xsl:message>
     </xsl:if>
     <!-- error check for reasonable values -->
     <!-- When there are three values, the "left" margin still -->
@@ -4774,7 +4774,7 @@ Book (with parts), "section" at level 3
         </xsl:choose>
     </xsl:variable>
     <xsl:if test="$sbsdebug">
-        <xsl:message>W:<xsl:value-of select="$widths" />:W</xsl:message>
+        <xsl:message>PTX:DEBUG: W:<xsl:value-of select="$widths" />:W</xsl:message>
     </xsl:if>
     <!-- check length (author-supplied could be wrong) -->
     <xsl:variable name="nspaces-widths" select="string-length($widths) - string-length(translate($widths, ' ', ''))" />
@@ -4813,7 +4813,7 @@ Book (with parts), "section" at level 3
         <xsl:text>%</xsl:text>
     </xsl:variable>
     <xsl:if test="$sbsdebug">
-        <xsl:message>SW:<xsl:value-of select="$space-width" />:SW</xsl:message>
+        <xsl:message>PTX:DEBUG: SW:<xsl:value-of select="$space-width" />:SW</xsl:message>
     </xsl:if>
     <!-- overall error check on space width -->
     <xsl:choose>

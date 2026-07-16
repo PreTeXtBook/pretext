@@ -1070,11 +1070,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Look at each "biblio" in the external file -->
         <xsl:for-each select="$biblios/pretext-biblios/biblio">
             <xsl:variable name="the-id" select="@xml:id"/>
-            <xsl:message>@xml:id of &lt;biblio&gt; in bibliography file: <xsl:value-of select="$the-id"/></xsl:message>
+            <xsl:message>PTX:DEBUG: @xml:id of &lt;biblio&gt; in bibliography file: <xsl:value-of select="$the-id"/></xsl:message>
             <!-- Building duplicate, so look at $original for    -->
             <!-- "xref" pointing to the current context "biblio" -->
             <xsl:if test="$original//xref[@ref = $the-id]">
-                <xsl:message>  Located this &lt;biblio&gt; cited in original source</xsl:message>
+                <xsl:message>PTX:DEBUG:  Located this &lt;biblio&gt; cited in original source</xsl:message>
                 <xsl:apply-templates select="." mode="assembly"/>
             </xsl:if>
         </xsl:for-each>
