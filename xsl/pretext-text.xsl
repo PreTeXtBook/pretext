@@ -62,6 +62,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="text"/>
 
+<!-- Elect the absorption of clause-ending punctuation into      -->
+<!-- display mathematics (only), where our templates re-place it -->
+<!-- on the final row; inline mathematics keeps its punctuation  -->
+<!-- in the prose, where it reads naturally.                     -->
+<xsl:param name="math.punctuation.include" select="'display'"/>
+
 <!-- if chunking, this is the extension of the files produced -->
 <xsl:variable name="file-extension" select="'.txt'"/>
 
@@ -399,15 +405,67 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- #### -->
 <!-- Math -->
-<!-- Until we think of something better, we just -->
-<!-- bracket raw LaTeX that appears inline       -->
-<!-- This can be overridden, if necessary        -->
+<!-- #### -->
+
+<!-- Mathematics never renders in plain text: throughout this     -->
+<!-- section the output is the LaTeX an author wrote, verbatim,   -->
+<!-- with no processor in prospect.                               -->
+
+<!-- LaTeX is the lingua franca of plain-text mathematics, so     -->
+<!-- authored LaTeX rides along verbatim between dollar signs.    -->
+<!-- Two simple cases need no dressing at all: a single Latin     -->
+<!-- letter (a variable name), and an integer.  (The same         -->
+<!-- analysis the braille conversion performs.)                   -->
 <xsl:template name="inline-math-wrapper">
     <xsl:param name="math"/>
-    <xsl:text>[</xsl:text>
-    <xsl:value-of select="$math"/>
-    <xsl:text>]</xsl:text>
+    <xsl:variable name="clean" select="normalize-space($math)"/>
+    <xsl:choose>
+        <xsl:when test="(string-length($clean) = 1) and contains(&ALPHABET;, $clean)">
+            <xsl:value-of select="$clean"/>
+        </xsl:when>
+        <xsl:when test="not($clean = '') and (translate($clean, &DIGIT;, '') = '')">
+            <xsl:value-of select="$clean"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>$</xsl:text>
+            <xsl:value-of select="$clean"/>
+            <xsl:text>$</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Display mathematics: set off by blank lines, each row       -->
+<!-- indented, LaTeX verbatim.  Alignment marks and such are     -->
+<!-- part of the mathematics and remain.                         -->
+<xsl:template match="md">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="mrow|intertext"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="md[not(mrow)]">
+    <xsl:text>&#xa;    </xsl:text>
+    <xsl:value-of select="normalize-space(text())"/>
+    <!-- clause-ending punctuation absorbed by the display, restored -->
+    <xsl:apply-templates select="." mode="get-clause-punctuation-mark"/>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="mrow">
+    <xsl:text>    </xsl:text>
+    <xsl:value-of select="normalize-space(.)"/>
+    <!-- the display's absorbed punctuation lands on the last row -->
+    <xsl:if test="not(following-sibling::mrow)">
+        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation-mark"/>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="md/intertext">
+    <xsl:apply-templates/>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ################# -->
