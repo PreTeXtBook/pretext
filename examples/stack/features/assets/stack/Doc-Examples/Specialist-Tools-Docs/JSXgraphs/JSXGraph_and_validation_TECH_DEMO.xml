@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>JSXGraph and validation [TECH DEMO]</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<h4>Graph construction trainer</h4><p>Build a directed graph such that:</p><ol><li>There exists at least one vertex into which there exists a direct edge coming from all other vertices.</li><li>There exists a set of three vertices that have direct bi-directional connections with each other.</li><li>There exists at least one vertex to which no edge points to.</li></ol>
+
+[[comment]] 
+The actual graphing logic is fairly generic, so modifying the code makes little sense
+this is why all the relevant bits that might require overriding use the template logic where we
+can define a value for a given portion that will then be used instead of the default value. In this
+case, we override the default initial configuration.
+[[/comment]]
+[[template name="graph_init_code"]]
+create_node(1,4);
+create_node(-6,3);
+create_node(-1,-2);
+create_edge(nodes[1], nodes[2]);
+create_edge(nodes[1], nodes[3]);
+[[/template]]
+
+[[jsxgraph input-ref-ans1="state" width="40em" aspect-ratio="1.4"]]
+[[style]]
+[[comment]]Add some extra CSS style to the JSXGraph iframe[[/comment]]
+div.connectButton button {
+ font-size: 1.8em;
+}
+div.disconnectButton button{
+ font-size: 1.5em;
+ color: red;
+}
+[[/style]]
+
+/* Slightly cut down the decimals in the output.*/
+JXG.Options.point.snapToGrid = true;
+JXG.Options.point.snapSizeX = 0.5;
+JXG.Options.point.snapSizeY = 0.5;
+
+/* A perfectly normal board. With keyboard accessibility tuned. */
+const board = JXG.JSXGraph.initBoard(divid, {showNavigation:false, boundingbox: [-10, 6, 10, -10], keyboard: {enabled: true, panShift:false, panCtrl:false}});
+/* Keyboard navigation needs tabindices, here even items that are hidden or 
+   fixed and thus don't need them have been given an explicit value of "null", when
+   we do not want them to be keyboard focusable.*/
+/* Labels next to the nodes should be automatically positioned. */
+board.options.label.autoPosition = true;
+board.options.label.autoPositionMaxDistance = 45;
+
+/* Some circles representing the UI. */
+const source = board.create('circle',[board.create('point',[-7,-7],{visible: false}),2.0], {  strokeColor:'black',frozen:true, fixed:true, method:'pointRadius',hasInnerPoints:true, tabindex:null});
+const areaA = board.create('circle',[board.create('point',[-3,-6],{visible: false}),1.0], {  strokeColor:'black',frozen:true, fixed:true, method:'pointRadius',hasInnerPoints:true, dash:3, tabindex:null});
+board.create('text',[-3,-6, "A"], {fixed:true, fontSize:"2em", anchorX:'middle', tabindex:null});
+const areaB = board.create('circle',[board.create('point',[1,-6],{visible: false}),1.0], {  strokeColor:'black',frozen:true, fixed:true, method:'pointRadius',hasInnerPoints:true, dash:3, tabindex:null});
+board.create('text',[1,-6, "B"], {fixed:true, fontSize:"2em", anchorX:'middle', tabindex:null});
+/* Some UI buttons later when we have the other logic ready. */
+
+/* These represent the graph state. So called bookkeeping. */
+let nodes = [board.create('point',[0,0], {visible:false, tabindex:null})]; /* hidden point as a padding, so that we start indexing nodes from 1. */
+let edges = {}; /* A map from node to map of node to arrow
+
+/* Convenience functions for finding a node by id. These are JSXGraph object ids. */
+function get_node_index(id) {
+	return nodes.findIndex((node) => node.id == id);
+}
+function get_node_by_id(id) {
+	return nodes[get_node_index(id)];
+}
+
+/* Common UI-logic bits. */
+function is_node_within(node, circle) {
+	return JXG.Math.Geometry.distance([node.X(),node.Y()],[circle.center.X(),circle.center.Y()]) < circle.Radius();
+}
+function get_nodes_within(circle) {
+	return nodes.filter((node) => is_node_within(node, circle));
+}
+
+
+/* The serialiser function. Basically, dump those two lists out in a suitable structure. */
+const serialiser = () => {
+	let serNodes=[];
+	let serEdges=[];
+	for (let i = 1; i < nodes.length; i++) {
+		serNodes.push([nodes[i].X(), nodes[i].Y()]);
+	}
+	for (const [from, others] of Object.entries(edges)) {
+		for (const [to, edge] of Object.entries(others)) {
+		  	serEdges.push([get_node_index(from), get_node_index(to)]);
+		}
+	}
+	/* Sort that list, for the Maxima side use. */
+	serEdges.sort((a,b) => {
+		let c = a[0] - b[0];
+		if (c === 0) {
+			c = a[1] - b[1];
+		}
+		return c;
+		});
+
+        /* Note how for lists of floats Maxima syntax is exactly the same as JSON. */
+	return "directed_graph(" + JSON.stringify(serNodes) + "," + JSON.stringify(serEdges) + ")";
+};
+
+/* Before the deserialiser we really need to have the tools for manipulation of
+   the state. The deserialiser may create or delete nodes and edges, and we will
+   be doing that elsewhere as well.
+
+   So here are some basic functions.
+*/
+function create_edge(pointA, pointB) {
+        /* Initialise bookkeeping. */
+	if (!(pointA.id in edges)) {
+		edges[pointA.id] = {};
+	}
+	if (pointB.id in (edges[pointA.id])) {
+		/* That edge already exists do not recreate. */
+		return;
+	}
+	/* Create the segment and update the books... */
+	/* let edge = board.create('arrow', [pointA, pointB], {}); */
+        /* To make this more complex lets pick something else as the edges end points, the previous line would work just as well. */
+        let edge = board.create('arrow', [
+           () => {
+             let d = JXG.Math.Geometry.distance([pointA.X(), pointA.Y()], [pointB.X(), pointB.Y()]);
+             if (d>0) {
+              d = 0.32/d;
+             }
+             return([pointA.X() + d*(pointB.X()-pointA.X()), pointA.Y() + d*(pointB.Y()-pointA.Y())]);
+           },
+           () => {
+             let d = JXG.Math.Geometry.distance([pointA.X(), pointA.Y()], [pointB.X(), pointB.Y()]);
+             if (d>0) {
+              d = 0.32/d;
+             }
+             return([pointB.X() - d*(pointB.X()-pointA.X()), pointB.Y() - d*(pointB.Y()-pointA.Y())]);
+           }
+        ], {tabindex:null}); 
+	edges[pointA.id][pointB.id] = edge;
+
+	/* Ensure serialisation of the new state. By triggering an update. */
+	nodes[0].trigger(['update']);
+}
+
+function delete_edge(pointA, pointB) {
+	if (!(pointA.id in edges)) {
+		/* No such edge. */
+		return;
+	}
+	if (pointB.id in (edges[pointA.id])) {
+		/* Remove the edge from the board. */
+		board.removeObject(edges[pointA.id][pointB.id]);
+		/* And from the books. */
+		delete edges[pointA.id][pointB.id];
+	}
+
+	/* Ensure update. */
+	nodes[0].trigger(['update']);
+}
+
+function delete_node(point) {
+	const i = get_node_index(point.id);
+	if (i <= 0) {
+                /* First node is the special padding node, it is hidden and acts as a handle,
+                     we must ensure that no mater what we do not delete it. */
+		return;
+	}
+	/* Delete edges starting from this node. */
+	if (point.id in edges) {
+		for (const [to, edge] of Object.entries(edges[point.id])) {
+			board.removeObject(edge);  	
+		}
+		delete edges[point.id];
+	}
+
+	/* Delete edges ending to this node. */
+	for (const [from, others] of Object.entries(edges)) {
+		for (const [to, edge] of Object.entries(others)) {
+			if (to === point.id) {
+				board.removeObject(edge);
+				delete edges[from][to];
+			}
+		}
+	}
+
+	/* Remove from board. */
+	board.removeObject(point);
+        /* Remove from the books. */
+	nodes = nodes.filter((node) => node != point);
+
+        /* Update labels. We want to have continuous numbering, so that we do not need to keep track of holes in it. */
+        nodes.forEach((n,i) => {n.setAttribute({
+          tabindex:i+5, /* Have the UI buttons occupy the lower indices.*/
+          name:''+i
+        });});
+
+	/* Ensure update. */
+	nodes[0].trigger(['update']);
+}
+
+function create_node(x,y) {
+	var node = board.create('point',[x,y],{name:''+nodes.length, tabindex: nodes.length+4});
+	/* We need to add some UI logic to this node. */
+	node.on('up', () => {
+		if (is_node_within(node, source)) {
+			/* Returned to source, delete it. */
+			delete_node(node);
+		} 
+	});
+        /* Keyboard accessibility requires some extra cases to be handled.*/
+	node.on('keydrag', () => {
+		if (is_node_within(node, source)) {
+			/* Returned to source, delete it. */
+			delete_node(node);
+		} 
+	});
+	nodes.push(node);
+
+	/* As this is a new node that we need to track in the binding we need to register it. */
+	stack_jxg.register_object(state, node, serialiser);
+
+	/* Ensure update. */
+	node.trigger(['up', 'update']);
+}
+
+/* The deserialiser, i.e. the hard part when we can create elements. */
+const deserialiser = (value) => {
+        /* Do some syntax tuning by replacing the wrapper we used. Note that this is not perfect.
+         * That ending `)` might not be unique if the input contains parenthesis, so if students are 
+         * primarily writing in their answers you might need to be more careful here.
+         */
+	let newState = JSON.parse(value.replace('directed_graph(','[').replace(')',']'));
+        let serNodes = newState[0];
+        let serEdges = newState[1];
+
+	/* First sync the nodes. That padding node is the reason for the +1. */
+	while (serNodes.length + 1 < nodes.length) {
+		/* We have extra nodes present in the current state, delete them. */
+		delete_node(nodes[nodes.length - 1]);
+	}
+	for (let i = 0; i < serNodes.length; i++) {
+		if (i+1 < nodes.length) {
+			/* Reposition existing node. */
+			nodes[i+1].setPosition(JXG.COORDS_BY_USER, serNodes[i]);
+		} else {
+			/* Create new node. */
+			create_node(serNodes[i][0], serNodes[i][1]);
+		}
+	}
+
+	/* Then the edges. We basically need to check each existing for deletion
+	   and each new for creation. The easy way to get the list of edges in
+	   the same format is to get it through the `serialiser`. */
+	const oldEdges = JSON.parse(serialiser().replace('directed_graph(','[').replace(')',']'))[1];
+	for (let edge of oldEdges) {
+		if (serEdges.indexOf(edge) < 0) {
+			delete_edge(nodes[edge[0]], nodes[edge[1]]);
+		}
+	}
+	for (let edge of serEdges) {
+		if (oldEdges.indexOf(edge) < 0) {
+			create_edge(nodes[edge[0]], nodes[edge[1]]);
+		}	
+	}
+	board.update();
+};
+
+/* Then lets add a magical point for creating new nodes. If one drags it outside 
+   the circle it will create a new node at that place before returning back. */
+const magicPoint = board.create('point', [source.center.X(), source.center.Y()], {name: '', size: 0.2, sizeUnit: 'user', 'tabindex':0});
+magicPoint.on('up', () => {
+	if (!is_node_within(magicPoint, source)) {
+		create_node(magicPoint.X(), magicPoint.Y());
+	}
+	/* Always return to the source. */
+	magicPoint.setPosition(JXG.COORDS_BY_USER, [source.center.X(), source.center.Y()]);
+	board.update();
+});
+
+/* To deal with accessibility related to keyboard interaction we need to have some alternative for "up"
+  moving the point by keyboard does not lead to "up" but we can try to track where it is.
+ */
+magicPoint.on('keydrag', (evt) => {
+if (!is_node_within(magicPoint, source)) {
+ magicPoint.trigger(['up']);
+}
+});
+
+/* Add logic to the UI with buttons. */
+const connectAB = board.create('button',[-4,-8, 'A → B', () => {
+      for (let nA of get_nodes_within(areaA)) {
+          for (let nB of get_nodes_within(areaB)) { 
+             create_edge(nA, nB);
+          }
+       }
+}],{"cssClass":"connectButton", "highlightCssClass": "connectButton", "tabindex":1});
+const disconnectAB = board.create('button',[-4,-9, 'A ↛ B', () => {
+      for (let nA of get_nodes_within(areaA)) {
+          for (let nB of get_nodes_within(areaB)) { 
+             delete_edge(nA, nB);
+          }
+       }
+}],{"cssClass":"disconnectButton", "highlightCssClass": "disconnectButton", "tabindex":2});
+const connectBA = board.create('button',[0,-8, 'B → A', () => {
+      for (let nB of get_nodes_within(areaB)) {
+          for (let nA of get_nodes_within(areaA)) { 
+             create_edge(nB, nA);
+          }
+       }
+}],{"cssClass":"connectButton", "highlightCssClass": "connectButton", "tabindex":3});
+const disconnectBA = board.create('button',[0,-9, 'B ↛ A', () => {
+      for (let nB of get_nodes_within(areaB)) {
+          for (let nA of get_nodes_within(areaA)) { 
+             delete_edge(nB, nA);
+          }
+       }
+}],{"cssClass":"disconnectButton", "highlightCssClass": "disconnectButton", "tabindex":4});
+
+/* To overide the default style of buttons we can simply clear the style... */
+for (let btn of [connectAB, connectBA, disconnectAB, disconnectBA]) {
+ btn.rendNodeButton.style = '';
+}
+
+/* In the end lets create the default state, like with all the binding functions
+   we must call the binding function after the default has been set. 
+
+   Having this as a template eases reuse. */
+[[template mode="default" name="graph_init_code"]]
+create_node(1.0,2.0);
+create_node(0.0,2.0);
+create_node(1.0,1.0);
+create_edge(nodes[1], nodes[2]);
+create_edge(nodes[1], nodes[3]);
+create_edge(nodes[2], nodes[3]);
+[[/template]]
+
+/* Now in our example the `create_node`-function already registered those points for binding.
+   so the only object we give it is the padding point that we also use as a handle for triggering
+   sync if all other elements have been eliminated. */
+stack_jxg.custom_bind(state, serialiser, deserialiser, [nodes[0]]);
+
+/* After that many changes it may make sense to call board update... */
+board.update();
+[[/jsxgraph]]
+
+<p><i>To add new vertices, drag them from the big circle, and to remove vertices, drag them into the big circle. To construct edges, place the vertices at the ends of the edge to the circles labelled A and B and press the button with the correct arrow.</i></p><p>[[input:ans1]] [[validation:ans1]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text/>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2024012900</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[/* This example question demonstrates the use of inert functions as opposed to JSON
+ * as the serialisation format for custom binding JSXGraphs. The primary reason for
+ * doing this is that unlike JSON we can actually tune the presentation of such things.
+ * Why we want to do that is because having the validation box present means that we
+ * also have the input interpretation presentation there and showing raw JSON could
+ * cause some confusion for some students. Also, should the input be directly accessible
+ * to the students they are more likely to be able to modify it if it is in the more
+ * familiar CAS syntax.
+ *
+ * All that is pointless if we do not want to show that validation box or if we do not 
+ * want to provide that alternative accessible input option through the serialised form.
+ *
+ * But if we do show the validation box we can also use the logic behind it to actually
+ * validate the input, which is the primary point of this example. We do that by using
+ * the new bespoke validation feature.
+ */
+
+/* Do note that this question is heavily over engineered and somewhat overly commented
+ * This is very intentional, should you find a way to break this question do let us know
+ * as this might end up being a sample that lives long.
+ */
+
+/*
+ * DGO = Directed Graph Object, our inert function wrapper where the first
+ * encapsulated object is a list of vertex/node positions and the second a list of 
+ * directed edges represented as pairs of node indices.
+ * 
+ * For easier logic we build some tools for turning that inert function to something 
+ * more usable, for example into an adjacency matrix or to a list of connected subgraphs.
+ */
+dgo_to_adj_matrix(dgo):=block([simp,nodes,edges,AM],
+ simp:true,
+ [nodes,edges]:args(dgo),
+ AM:zeromatrix(length(nodes),length(nodes)),
+ for edge in edges do (
+  AM[edge[1],edge[2]]:1
+ ),
+ AM
+);
+
+/*
+ * This function builds subsets of the node indices based on the edge connections 
+ * between nodes. Those subsets represent disjoint parts of the graph.
+ * Nodes that have no edges will not be present in the output.
+ */
+dgo_to_subgraphs(dgo):=block([simp,nodes,edges,n,R,tmp],
+ simp:true,
+ [nodes,edges]:args(dgo),
+ R:map(setify, edges),
+ for n:1 thru length(nodes) do (
+  tmp:sublist(R,lambda([x], elementp(n,x))),
+  if length(tmp) > 1 then (
+   tmp:apply(union, tmp),
+   R:append([tmp], sublist(R,lambda([x], not elementp(n,x))))
+  )
+ ),
+ R
+);
+
+
+/* 
+ * Due to old ideas about preambles and simplified validation sessions we need to 
+ * repeat the logic in the texput rule. Basically, we do not have access to our 
+ * `dgo_to_adj_matrix`-function inside this texput rule. And it needs to be a bit 
+ * more careful as it might be called with invalid indices.
+ *
+ * Note that inline CASText cannot be used inside texput rules, texput rules are
+ * a lower level construct, so we need to do our string construction by hand.
+ * 
+ * Should you wish to localise things here and are missing the CASText [[lang]]-block 
+ * note that you should still be able to use constructs like these:
+ *  
+ *  if %_STACK_LANG = "fi" then "..." else "..."
+ *
+ */
+texput(directed_graph, lambda([dgo],block([simp,AM,nodes,edges,N],
+ simp:true,nodes:[],edges:[],N:0,
+ if length(args(dgo)) = 2 then [nodes,edges]:args(dgo),
+ if listp(nodes) then N: length(nodes),
+ AM:zeromatrix(N,N),
+ if listp(edges) then for edge in edges do (
+  if listp(edge) and length(edge) = 2 and integerp(edge[1]) and integerp(edge[2]) and edge[1]>0 and edge[2]>0 and not edge[1] > N and not edge[2] > N then (
+   AM[edge[1],edge[2]]:1
+  )
+ ),
+ if length(edges) > 0 then 
+  sconcat("\\textrm{Set of ",N," vertices and ",length(edges)," edges, having this adjacency matrix:}", tex1(AM))
+ else if N > 0 then
+  sconcat("\\textrm{Set of ",N," vertices and no edges.}")  
+ else 
+  "\\textrm{No vertices or edges}"
+)));
+
+/* Random utility */
+rowsum(mat):= lsum(x,x,args(transpose(mat)));
+colsum(mat):= lsum(x,x,args(mat));
+
+/* Lets do some validation for the input. 
+ * All we need to do is to build some functions that take the input and either say how
+ * it is bad or return true to signal that it is good.
+ */
+require_dgo(dgo):=block(
+ if not is(safe_op(dgo) = "directed_graph") or not is(length(dgo) = 2) then
+  "The answer to this question needs to be a call to the function <code>directed_graph(list_of_node_xy_positions, list_of_edges_defined_by_pairs_of_indices)</code>"
+ else
+  true
+);
+
+require_2_nodes(dgo):=block([nodes,edges],
+ [nodes,edges]:args(dgo),
+ if (not listp(nodes)) or is(length(nodes) < 2) then 
+  "Your answer needs to have at least two vertices and probably more. Defined as a list of two element lists describing XY-coordinate pairs as the first argument to the function." 
+ else 
+  true
+);
+
+require_edges(dgo):=block([nodes,edges],
+ [nodes,edges]:args(dgo),
+ if (not listp(edges)) or is(length(edges) < 1) then 
+  "Your answer needs to have some edges. To define edges give a list of two element lists as the second argument to the function. The two element pairs declare the indices of the vertices at ends of those edges." 
+ else 
+  true
+);
+
+not_too_many_nodes(dgo):=block([nodes,edges],
+ [nodes,edges]:args(dgo),
+ if length(nodes) > 9 then 
+  "You seem to have too many vertices, please do not try to overload the system with excess vertices." 
+ else 
+  true
+);
+
+/* If people do manual entry we might get some unexpected values. */
+check_pairs(dgo):=block([simp,nodes,edges],
+ simp:true,
+ [nodes,edges]:args(dgo),
+ if length(sublist(nodes, lambda([x], not (listp(x) and is(length(x)=2) and numberp(x[1]) and numberp(x[2]))))) > 0 then
+  "The list of vertices needs to consist of 2 element lists of numerical values."
+ else if length(sublist(edges, lambda([x], not (listp(x) and is(length(x)=2) and integerp(x[1]) and integerp(x[2]))))) > 0 then
+  "The list of edges needs to consist of 2 element lists of integer values."
+ else
+  true
+);
+
+
+check_indices(dgo):=block([simp,nodes,edges,N,tmp],
+ simp:true,
+ [nodes,edges]:args(dgo),
+ tmp:apply(union,map(setify,edges)),
+ if not is(subset(tmp, integerp) = tmp) then
+  "All indices of nodes, when defining edges, must be positive integers."
+ else if lmax(tmp) > length(nodes) then
+  castext("You have only defined {#length(nodes)#} vertices, thus you cannot define an edge to a vertex with an index number of {#lmax(tmp)#}")
+ else if lmin(tmp) < 1 then
+  castext("The lowest vertex index is 1, no edge can end at index {#lmin(tmp)#}")
+ else 
+  true
+);
+
+/* This test is fairly pointless, but if Maxima is a new language to you, do pay attention
+ * to the way the return statement works when mixed with a loop.
+ */
+no_edges_to_self(dgo):=block([simp,nodes,edges,tmp],
+ simp:true,
+ [nodes,edges]:args(dgo),
+ tmp: for edge in edges do (
+  if is(edge[1] = edge[2]) then 
+   return(castext("This question does not accept self-loops, please remove it from vertex {#edge[2]#}."))
+ ),
+ if tmp = done then
+  true
+ else
+  tmp
+);
+
+require_no_orphans(dgo):=block([adjmatrix,simp,ecounts,orphans],
+ simp:true,
+ adjmatrix:dgo_to_adj_matrix(dgo),
+ ecounts: rowsum(adjmatrix) + colsum(adjmatrix),
+ orphans: sublist_indices(ecounts, lambda([x],is(x=0))),
+ if length(orphans) = 0 then 
+  true
+ else if length(orphans) = 1 then
+  castext("All vertices must have edges either in or out, vertex {#orphans[1]#} does not have any.")
+ else 
+  castext("All vertices must have edges either in or out, vertices {@stack_disp_comma_separate(orphans)@} do not have any.")
+);
+
+require_singular_graph(dgo):=block([simp,subgraphs],
+ simp:true,
+ subgraphs:dgo_to_subgraphs(dgo),
+ if length(subgraphs) > 1 then
+  castext("The answer needs to be a singular graph, your answer contains parts that are not connected together. For example, vertices {@stack_disp_comma_separate(listify(subgraphs[1]))@} do not connect to {@stack_disp_comma_separate(listify(subgraphs[2]))@}.")
+ else
+  true
+);
+
+/* Then we combine those separate functions into a single one, in this case using the sequential
+ * utility validator so that we stop on the first failure as checking the latter ones becomes 
+ * irrelevant after it.
+ * 
+ * This function will then be given as a special extra parameter to the input.
+ */
+ans1_validator(ex):= stack_seq_validator(ex, [require_dgo, require_2_nodes, require_edges, not_too_many_nodes, check_pairs, check_indices, no_edges_to_self, require_no_orphans, require_singular_graph]);]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prt1]]</text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text/>
+    </questionnote>
+    <questiondescription format="html">
+      <text/>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+    <input>
+      <name>ans1</name>
+      <type>algebraic</type>
+      <tans>directed_graph([[0,3],[-2.5,-2],[4,-2],[-7,1]],[[1,2],[1,3],[2,1],[2,3],[3,1],[3,2],[4,2]])</tans>
+      <boxsize>50</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords>directed_graph</allowwords>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>2</showvalidation>
+      <options>validator:ans1_validator</options>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text>/* No need to care about the shape of the answer here, the validators ensure that
+ * at this point ans1 is what we expect.
+ */
+[nodes,edges]:args(ans1);
+N:length(nodes);
+adj_matrix:dgo_to_adj_matrix(ans1);
+
+/* Now we will see if we can find the connections we expect from the matrix. 
+ * Note that for the first two to function we needed to forbid self-loops. 
+ */
+
+/* Those that fulfill constraint 1. */
+c1: sublist_indices(colsum(adj_matrix), lambda([x],ev(is(x=N-1),simp)));
+
+/* Those that fulfill constraint 2. To understand this understand what `powerset` does. */
+c2: subset(powerset(setify(makelist(x,x,1,N)),3), lambda([x],block([indices,simp,tmp],
+ simp:true,
+ indices:listify(x),
+ tmp:matrix([adj_matrix[indices[1],indices[1]], adj_matrix[indices[1],indices[2]] , adj_matrix[indices[1],indices[3]]],
+            [adj_matrix[indices[2],indices[1]], adj_matrix[indices[2],indices[2]] , adj_matrix[indices[2],indices[3]]],
+            [adj_matrix[indices[3],indices[1]], adj_matrix[indices[3],indices[2]] , adj_matrix[indices[3],indices[3]]]),
+ is(tmp=matrix([0,1,1],[1,0,1],[1,1,0]))
+))
+);
+
+/* Those that fulfill constraint 3. */
+c3: sublist_indices(colsum(adj_matrix), lambda([x],ev(is(x=0),simp)));</text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Constraint 1</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>c1</sans>
+        <tans>[]</tans>
+        <testoptions/>
+        <quiet>1</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty/>
+        <truenextnode>1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>You seem to be missing a node fulfilling constraint 1.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>1/3</falsescore>
+        <falsepenalty/>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description>Constraint 2</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>c2</sans>
+        <tans>{}</tans>
+        <testoptions/>
+        <quiet>1</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty/>
+        <truenextnode>2</truenextnode>
+        <trueanswernote>prt1-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>No set of three nodes fulfilling constraint 2 were found.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>+</falsescoremode>
+        <falsescore>1/3</falsescore>
+        <falsepenalty/>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt1-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description>Constraint 3</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>c3</sans>
+        <tans>[]</tans>
+        <testoptions/>
+        <quiet>1</quiet>
+        <truescoremode>+</truescoremode>
+        <truescore>0</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text><![CDATA[<p>No nodes fulfilling constraint 3 were found.</p>]]></text>
+        </truefeedback>
+        <falsescoremode>+</falsescoremode>
+        <falsescore>1/3</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+    </prt>
+    <qtest>
+      <testcase>1</testcase>
+      <description>Test case assuming the teacher's input gets full marks.</description>
+      <testinput>
+        <name>ans1</name>
+        <value>directed_graph([[0,3],[-2.5,-2],[4,-2],[-7,1]],[[1,2],[1,3],[2,1],[2,3],[3,1],[3,2],[4,2]])</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-3-F</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>2</testcase>
+      <description>Missing condition 3</description>
+      <testinput>
+        <name>ans1</name>
+        <value>directed_graph([[2.5,-0.5],[-3.5,0],[-1,1.5]],[[1,2],[1,3],[2,1],[2,3],[3,1],[3,2]])</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>0.6670010</expectedscore>
+        <expectedpenalty/>
+        <expectedanswernote>prt1-3-T</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>3</testcase>
+      <description><![CDATA[Missing condition 1 & 2]]></description>
+      <testinput>
+        <name>ans1</name>
+        <value>directed_graph([[2,1],[-4.5,0],[-1,1.5],[-7,-3]],[[1,3],[2,1],[2,3],[3,1],[3,2],[4,2]])</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>0.3330000</expectedscore>
+        <expectedpenalty/>
+        <expectedanswernote>prt1-3-F</expectedanswernote>
+      </expected>
+    </qtest>
+    <qtest>
+      <testcase>4</testcase>
+      <description>Clover</description>
+      <testinput>
+        <name>ans1</name>
+        <value>directed_graph([[-4.5,4],[-4,-0.5],[-1,1.5],[-6,-3.5],[-3,-3.5],[-0.5,-1],[-7,1],[-6.5,-1.5]],[[1,2],[1,3],[2,1],[2,3],[2,5],[2,6],[2,7],[2,8],[3,1],[3,2],[4,2],[5,2],[5,6],[6,2],[6,5],[7,2],[7,8],[8,2],[8,7]])</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-3-F</expectedanswernote>
+      </expected>
+    </qtest>
+  </question>
+</quiz>

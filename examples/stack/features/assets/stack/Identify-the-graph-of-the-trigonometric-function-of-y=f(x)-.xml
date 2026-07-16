@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>Identify the graph of the trigonometric function of y=f(x).</text>
+    </name>
+    <questiontext format="moodle_auto_format">
+      <text><![CDATA[<p>Consider the graph of the trigonometric function \(y=f(x)\).</p>
+<p>
+[[jsxgraph]]
+var board = JXG.JSXGraph.initBoard(divid, {
+  boundingbox: [-3 * Math.PI - 1, {#aa+1#}, 4 * Math.PI + 1, {#-aa-1#}],
+  keepaspectratio: false,
+  showCopyright: false,
+  pan: false
+});
+var f = board.jc.snippet('{#fx#}', true, 'x', true);
+board.create('functiongraph', [f, -3 * Math.PI - 1, 4 * Math.PI + 1]);
+var xaxis = board.create('axis', [
+  [0, 0],
+  [1, 0]
+]);
+board.create('ticks', [xaxis, Math.PI/4], {
+  strokeColor: '#ccc',
+  majorHeight: -1,
+  minorTicks: 1,
+  drawZero: false
+});
+var yaxis = board.create('axis', [
+  [0, 0],
+  [0, 1]
+]);
+var txt = board.create('text', [Math.PI - 0.5, 0.2, "180"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [2 * Math.PI - 0.5, 0.2, "360"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [3 * Math.PI - 0.5, 0.2, "540"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [4 * Math.PI - 0.5, 0.2, "720"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [-Math.PI -0.9, 0.2, "-180"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [-2 * Math.PI - 0.9, 0.2, "-360"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [-3 * Math.PI - 0.9, 0.2, "-540"], {
+  fontSize: 15,
+  fixed: true
+});
+
+[[/jsxgraph]]
+</p>
+<p>Find an expression for \(f(x)\) in the form \(f(x)=a\cdot \sin(x)\) or \(f(x)=a\cdot \cos(x)\), where \(a\in \mathbb{Z}\).</p>
+<p>\(f(x)=\) [[input:ans1]] [[validation:ans1]] [[feedback:prt1]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text><![CDATA[<h3>Worked Solution</h3>
+<p>We first determine the value of \(a\), which defines the amplitude, or the vertical stretch of the graph. The range of the sine and cosine graphs is \([-1,1]\). Since the maximum of this graph is {@aa@} and the minimum {@-aa@}, the value of \(a\) has to be {@aa@} as this is the stretch factor.</p>
+<p>Now we determine whether the function is a sine or cosine function. We can find this by looking at the \(y-\)intercept and recalling that the graph of the function \(f(x)={@aa*sin(x)@}\) goes through the origin, i.e. \((0,0)\), since the sine graph goes through the origin. Similarly, the graph of the function \(f(x)={@aa*cos(x)@}\) goes through \((0,{@aa@})\) since the cosine graph passes through the point \((0,1)\). In this case, the graph passes through \((0,{@aa@})\) and we conclude that the correct expression for \(f(x)\) is \(f(x)={@ta1@}\).</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2025073100</text>
+    </stackversion>
+    <questionvariables>
+      <text>aa:rand(4)+2;
+bb:rand([0,1]);
+fx:if bb=0 then aa*sin(x) else aa*cos(x);
+ta1:fx;</text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text/>
+    </specificfeedback>
+    <questionnote format="moodle_auto_format">
+      <text><![CDATA[<p>1. Find an expression for \(f(x)\) in the form \(f(x)=a\cdot \sin(x)\) or \(f(x)=a\cdot \cos(x)\), where \(a\in \mathbb{Z}\).</p>
+<p>\( f(x)={@ta1@} \)</p>]]></text>
+    </questionnote>
+    <questiondescription format="moodle_auto_format">
+      <text><![CDATA[<p id="author">Nixson Kiplagat</p>
+<p id="concept">N/A</p>
+<p id="reviewer"> Emmaculate Odhiambo </p>
+<p id="reviewer">Wastalas Motognon</p>
+<p id="description">Identify the graph of the trigonometric function in the form \( y=f(x) \), where \( f(x)=a⋅sin(x) \) or \( f(x)=a⋅cos(x) \), where \( a \in Z \).</p>]]></text>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>none</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>arccos</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+    <input>
+      <name>ans1</name>
+      <type>algebraic</type>
+      <tans>ta1</tans>
+      <boxsize>5</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>3</showvalidation>
+      <options/>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text>/*Node 1: Checks for the correct student answer*/
+yintcpt:ev(fx,x=0);</text>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description>Checks for the correct student answer</description>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans1</sans>
+        <tans>ta1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>1605418927</deployedseed>
+    <deployedseed>85393198</deployedseed>
+    <deployedseed>1768630692</deployedseed>
+    <deployedseed>456087195</deployedseed>
+    <deployedseed>2040469398</deployedseed>
+    <deployedseed>1867044178</deployedseed>
+    <deployedseed>409518128</deployedseed>
+    <deployedseed>260376136</deployedseed>
+    <qtest>
+      <testcase>1</testcase>
+      <description/>
+      <testinput>
+        <name>ans1</name>
+        <value>ta1</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-1-T</expectedanswernote>
+      </expected>
+    </qtest>
+  </question>
+</quiz>

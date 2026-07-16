@@ -11441,6 +11441,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="stack-js">
 
     <xsl:if test="$b-has-stack">
+        <!-- stack.css isn't a jsbuilder target (that pipeline only handles JS,
+             see script/jsbuilder/README.md); it ships verbatim via
+             copy_html_js(), so it lives under the js/ root, not js/dist/ -->
+        <link rel="stylesheet" type="text/css" href="{$html.js.root}/pretext-stack/stack.css"/>
         <script src="{$html.js.dir}/pretext-stack/stackjsvle.js" type="text/javascript"></script>
         <script src="{$html.js.dir}/pretext-stack/stackapicalls.js" type="text/javascript"></script>
         <script type="text/javascript">
@@ -11463,6 +11467,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- empty when not using managed directories -->
             <xsl:value-of select="$external-directory"/>
             <xsl:value-of select="@source"/>
+        </xsl:attribute>
+        <xsl:attribute name="id">
+            <xsl:choose>
+                <xsl:when test="@label != ''">
+                    <xsl:value-of select="@label"/>
+                </xsl:when>
+                <xsl:when test="@xml:id != ''">
+                    <xsl:value-of select="@xml:id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:ERROR: A STACK question must have either a @label or @xml:id</xsl:message>
+                    <xsl:message>attribute to provide a unique identifier for the question.</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:attribute>
         <xsl:if test="@qname != ''">
             <xsl:attribute name="data-qname">
