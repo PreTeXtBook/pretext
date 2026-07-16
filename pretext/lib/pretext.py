@@ -3762,7 +3762,7 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
         log.debug("Theme options:" + json.dumps(theme_opts))
         result = subprocess.run(node_exec_cmd + [script, "-t", full_name, "-o", css_dest, "-c", json.dumps(theme_opts)], capture_output=True, timeout=60)
         if result.stdout:
-            log.debug(result.stdout.decode())
+            log.debug(result.stdout.decode().rstrip())
         if result.stderr:
             error_message = result.stderr.decode()
             raise Exception("Failed to build custom theme")
