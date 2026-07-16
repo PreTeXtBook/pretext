@@ -7182,7 +7182,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$fig-placement = 'block'"/>
         <xsl:otherwise>
-            <xsl:message>PTX:BUG: figure placement not recognized, plase report me</xsl:message>
+            <xsl:message>PTX:BUG: figure placement not recognized, please report me</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
     <!-- always element name and suffix -->

@@ -1154,7 +1154,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:variable name="id">
                                     <xsl:apply-templates select="." mode="unique-id"/>
                                 </xsl:variable>
-                                <xsl:message>PTX:WARNING:  Parsons problems need a @langauge that is a valid activecode language to be runnable</xsl:message>
+                                <xsl:message>PTX:WARNING:  Parsons problems need a @language that is a valid activecode language to be runnable</xsl:message>
                                 <xsl:message>              id: <xsl:value-of select="$id"></xsl:value-of></xsl:message>
                             </xsl:otherwise>
                         </xsl:choose>
