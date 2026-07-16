@@ -404,7 +404,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>
-                <xsl:text>PTX:WARNING: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
+                <xsl:text>PTX:FALLBACK: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
                 <xsl:value-of select="$whitespace" />
                 <xsl:text>'.  Using the default ('flexible').</xsl:text>
             </xsl:message>
@@ -2921,7 +2921,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="normalized-width" select="normalize-space($raw-width)" />
     <xsl:choose>
         <xsl:when test="not(substring($normalized-width, string-length($normalized-width)) = '%')">
-            <xsl:message>PTX:WARNING:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />, using 100% instead"</xsl:message>
+            <xsl:message>PTX:FALLBACK:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />, using 100% instead"</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
             <!-- replace by 100% -->
             <xsl:text>100%</xsl:text>
@@ -3810,7 +3810,7 @@ Book (with parts), "section" at level 3
         </xsl:when>
         <xsl:when test="$b-host-runestone and not(@authored-label)">
             <xsl:message>
-                <xsl:text>PTX:WARNING:  While building for a Runestone server, a PreTeXt "</xsl:text>
+                <xsl:text>PTX:FALLBACK:  While building for a Runestone server, a PreTeXt "</xsl:text>
                 <xsl:value-of select="local-name(.)"/>
                 <xsl:text>" element&#xa;</xsl:text>
                 <xsl:text>has been encountered without a @label attribute.  For reasons of backward-compatibility &#xa;</xsl:text>
@@ -5622,7 +5622,7 @@ Book (with parts), "section" at level 3
             <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 0) = '%'">
                 <xsl:variable name="approximate-inches" select="concat(substring($raw-workspace, 1, string-length($raw-workspace) - 1) div 10, 'in')"/>
                 <xsl:value-of select="$approximate-inches"/>
-                <xsl:message>PTX:WARNING:  as of 2020-03-17 worksheet exercises' workspace should be specified in 'in' or in 'cm'.  Approximating a page fraction of <xsl:value-of select="@workspace"/> by <xsl:value-of select="$approximate-inches"/>.</xsl:message>
+                <xsl:message>PTX:FALLBACK:  as of 2020-03-17 worksheet exercises' workspace should be specified in 'in' or in 'cm'.  Approximating a page fraction of <xsl:value-of select="@workspace"/> by <xsl:value-of select="$approximate-inches"/>.</xsl:message>
                 <xsl:apply-templates select="." mode="location-report"/>
             </xsl:when>
             <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 1) = 'in'">
@@ -5632,7 +5632,7 @@ Book (with parts), "section" at level 3
                 <xsl:value-of select="$raw-workspace"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message>PTX:WARNING:  a worksheet exercises', project-likes' or tasks' workspace should be specified with units of 'in' or 'cm', and not as "<xsl:value-of select="@workspace"/>".  Using a default of "2in".</xsl:message>
+                <xsl:message>PTX:FALLBACK:  a worksheet exercises', project-likes' or tasks' workspace should be specified with units of 'in' or 'cm', and not as "<xsl:value-of select="@workspace"/>".  Using a default of "2in".</xsl:message>
                 <xsl:text>2in</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
@@ -9027,7 +9027,7 @@ Book (with parts), "section" at level 3
             <!-- no content override in this case -->
             <!-- maybe we can relax this somehow? -->
             <xsl:if test="$b-has-content">
-                <xsl:message>PTX:WARNING: providing content ("<xsl:value-of select="." />") for an "xref" element is ignored for 'phrase-global' and 'phrase-hybrid' styles for xref text</xsl:message>
+                <xsl:message>PTX:FALLBACK: providing content ("<xsl:value-of select="." />") for an "xref" element is ignored for 'phrase-global' and 'phrase-hybrid' styles for xref text</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:if>
             <!-- type-local first, no matter what    -->
@@ -10940,7 +10940,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>P100Y</xsl:text>
-            <xsl:message>PTX:WARNING:   "author.deprecations.all" should be "yes" or "no", not "<xsl:value-of select="$author.deprecations.all"/>", using the default value of "yes"</xsl:message>
+            <xsl:message>PTX:FALLBACK:   "author.deprecations.all" should be "yes" or "no", not "<xsl:value-of select="$author.deprecations.all"/>", using the default value of "yes"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>

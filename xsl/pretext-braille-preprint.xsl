@@ -83,7 +83,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$debug.brf.symbols"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING: the "debug.brf.symbols" string parameter must be "early" or "late", not "<xsl:value-of select="$debug.brf.symbols"/>", using "late" instead</xsl:message>
+            <xsl:message>PTX:FALLBACK: the "debug.brf.symbols" string parameter must be "early" or "late", not "<xsl:value-of select="$debug.brf.symbols"/>", using "late" instead</xsl:message>
             <xsl:text>late</xsl:text>
         </xsl:otherwise>
     </xsl:choose>

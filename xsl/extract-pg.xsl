@@ -2815,7 +2815,7 @@
             <xsl:text>!{\vrule width 0.11em}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING:  left or right attribute not recognized: use none, minor, medium, major</xsl:message>
+            <xsl:message>PTX:FALLBACK:  left or right attribute not recognized: use none, minor, medium, major</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -2838,7 +2838,7 @@
             <xsl:text>3</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING:  top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
+            <xsl:message>PTX:FALLBACK:  top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

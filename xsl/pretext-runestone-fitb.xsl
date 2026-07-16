@@ -83,7 +83,7 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <!-- Report if a seed is not provided-->
-                                <xsl:message>PTX:WARNING:   Dynamic exercise "<xsl:value-of select="@visible-id"/>" is missing setup @seed for static content generation.</xsl:message>
+                                <xsl:message>PTX:FALLBACK:   Dynamic exercise "<xsl:value-of select="@visible-id"/>" is missing setup @seed for static content generation.</xsl:message>
                                 <xsl:text>1234</xsl:text>
                             </xsl:otherwise>
                         </xsl:choose>

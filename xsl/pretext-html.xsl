@@ -424,7 +424,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="$html-index-page-entered-ref"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:message>PTX:WARNING:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$html-index-page-entered-ref"/>" is not a complete web page at the current chunking level (level <xsl:value-of select="$chunk-level"/>).  Defaults will be used instead</xsl:message>
+                        <xsl:message>PTX:FALLBACK:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$html-index-page-entered-ref"/>" is not a complete web page at the current chunking level (level <xsl:value-of select="$chunk-level"/>).  Defaults will be used instead</xsl:message>
                         <xsl:text/>
                     </xsl:otherwise>
                 </xsl:choose>
