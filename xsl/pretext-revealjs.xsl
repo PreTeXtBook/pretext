@@ -511,11 +511,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="warning">Conversion to reveal.js presentations/slideshows is experimental&#xa;Requests for additional specific constructions welcome&#xa;Additional PreTeXt elements are subject to change</xsl:with-param>
     </xsl:call-template>
     <xsl:if test="not($theme = '')">
-        <xsl:message >PTX:WARNING: the temporary "theme" stringparam is deprecated and is being ignored by the conversion to a Reveal.js slideshow.  Please switch to using a publisher file to set this option, see documentation in The Guide.  The default theme is "simple".</xsl:message>
+        <xsl:message >PTX:DEPRECATE: the temporary "theme" stringparam is deprecated and is being ignored by the conversion to a Reveal.js slideshow.  Please switch to using a publisher file to set this option, see documentation in The Guide.  The default theme is "simple".</xsl:message>
         <xsl:text>simple</xsl:text>
     </xsl:if>
     <xsl:if test="not($local = '')">
-        <xsl:message >PTX:WARNING: the temporary "local" stringparam is deprecated and is being ignored.  Please switch to using a publisher file to set this option, see documentation in The Guide.  The default behavior is to get resources from a CDN.</xsl:message>
+        <xsl:message >PTX:DEPRECATE: the temporary "local" stringparam is deprecated and is being ignored.  Please switch to using a publisher file to set this option, see documentation in The Guide.  The default behavior is to get resources from a CDN.</xsl:message>
     </xsl:if>
 </xsl:template>
 

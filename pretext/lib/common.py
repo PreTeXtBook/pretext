@@ -24,8 +24,105 @@
 # one-way:  common  <-  {webwork, stack, pretext}
 
 import logging
+
+# ------------------------------------------------------------------- #
+# PreTeXt message severity                                            #
+#                                                                     #
+# Every message travels through the shared "ptxlogger" at one of      #
+# these levels.  A level is a *severity* -- what happened and who     #
+# should act.  "fatal" is unique in being a severity *and* an action: #
+# it stops the build.                                                 #
+#                                                                     #
+#   log.debug     10  fine-grained trace, for pinpointing             #
+#                     ("xsltproc command: ...")                       #
+#   log.info      20  coarse progress                                 #
+#                     ("converting source to HTML")                   #
+#   log.fallback  25  bad or absent input, but a sensible default     #
+#                     was substituted; output is complete             #
+#                     ('no @width, assuming "100%"')                  #
+#   log.warning   30  should be addressed                             #
+#                     ("a deprecated element was used")               #
+#   log.error     40  no good default; localized breakage, output     #
+#                     is degraded but processing continues            #
+#                     ("cross-reference target does not exist")       #
+#   log.bug       45  an internal PreTeXt defect, NOT the author's    #
+#                     fault; please report.  A severity only:         #
+#                     execution continues (the renderer degrades)     #
+#                     ("an 'otherwise' meant to be unreachable")      #
+#   log.fatal     50  processing halts, no output expected.  A        #
+#                     severity AND an action: it logs, then raises    #
+#                     PreTeXtFatal ("invalid source, or a severe bug") #
+#                                                                     #
+# A defect that cannot be worked around is the rare composition of    #
+# the two: log.bug(...) to record it, then log.fatal(...) to stop.    #
+#                                                                     #
+# KEEP IN SYNC: this table is mirrored, with fuller prose, in the     #
+# "Messaging" chapter of the Developer Guide.  Changing a level here  #
+# means changing it there, and vice versa.                            #
+# ------------------------------------------------------------------- #
+
+# The full severity ladder in one place.  The standard five are Python's
+# own; "fallback" and "bug" are PreTeXt additions that interleave with them.
+DEBUG_LEVEL    = logging.DEBUG      # 10
+INFO_LEVEL     = logging.INFO       # 20
+FALLBACK_LEVEL = 25
+WARNING_LEVEL  = logging.WARNING    # 30
+ERROR_LEVEL    = logging.ERROR      # 40
+BUG_LEVEL      = 45
+FATAL_LEVEL    = logging.CRITICAL   # 50
+logging.addLevelName(FALLBACK_LEVEL, 'FALLBACK')
+logging.addLevelName(BUG_LEVEL, 'BUG')
+# We prefer "fatal" to Python's "critical" for level 50; a downstream
+# consumer (such as the CLI) is free to rebrand it.
+logging.addLevelName(FATAL_LEVEL, 'FATAL')
+
+
+class PreTeXtFatal(Exception):
+    '''The build cannot continue and no output is expected.  A fatal-severity
+    message (log.fatal) raises this; the program driving PreTeXt catches it
+    and reports the halt.  It is internal: an author never sees it directly.'''
+    pass
+
+
 log = logging.getLogger('ptxlogger')
 
+
+# Convenience methods for the two new levels, plus a "fatal" that is a
+# severity *and* an action.  Attached to the shared logger instance, so
+# every module that fetches "ptxlogger" gains them.
+def _log_fallback(message, *args, **kwargs):
+    if log.isEnabledFor(FALLBACK_LEVEL):
+        log._log(FALLBACK_LEVEL, message, args, **kwargs)
+
+def _log_bug(message, *args, **kwargs):
+    if log.isEnabledFor(BUG_LEVEL):
+        log._log(BUG_LEVEL, message, args, **kwargs)
+
+def _log_fatal(message, *args, **kwargs):
+    log._log(FATAL_LEVEL, message, args, **kwargs)
+    raise PreTeXtFatal(message)
+
+log.fallback = _log_fallback
+log.bug = _log_bug
+log.fatal = _log_fatal
+
+
+# The level at which to re-log a stylesheet message, by its "PTX:TOKEN".
+# The bridge only *records* a message here; a FATAL one is logged like any
+# other and does not halt (the transform's own terminating exception carries
+# the halt), so every token, fatal included, routes the same way.
+_XSL_MESSAGE_LEVELS = {
+    'FATAL':     FATAL_LEVEL,
+    'BUG':       BUG_LEVEL,
+    'ERROR':     ERROR_LEVEL,
+    'FALLBACK':  FALLBACK_LEVEL,
+    'WARNING':   WARNING_LEVEL,
+    'DEPRECATE': WARNING_LEVEL,
+    'INFO':      INFO_LEVEL,
+    'DEBUG':     DEBUG_LEVEL,
+}
+
+import re
 import traceback
 import os
 import os.path
@@ -190,19 +287,26 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
             # start will be reset to non-zero, so this is
             # one-time only, and never if there are no messages
             if (start == 0) and (end > 0):
-                log.info("messages from the log for XSL processing:")
+                log.info("messages from the log for XSL processing (prefaced with a *):")
             # print out any unprinted messages from error_log
             for line in xslt.error_log[start:end]:
-                if "PTX:FATAL" in line.message:
-                    log.critical(f"* {line.message}")
-                elif "PTX:ERROR" in line.message or "PTX:BUG" in line.message:
-                    log.error(f"* {line.message}")
-                elif "PTX:WARNING" in line.message or "PTX:DEPRECATE" in line.message:
-                    log.warning(f"* {line.message}")
-                elif "PTX:DEBUG" in line.message:
-                    log.debug(f"* {line.message}")
+                message = "* {}".format(line.message)
+                token = re.match(r'\s*PTX:([\w-]+)', line.message)
+                if token:
+                    level = _XSL_MESSAGE_LEVELS.get(token.group(1).upper())
+                    if level is not None:
+                        log.log(level, message)
+                    else:
+                        # a well-formed but unknown token (e.g. a "PTX:FO-TODO"
+                        # work marker); keep it quiet rather than mis-leveling
+                        log.debug(message)
+                elif re.match(r'\s*(?i:ptx|warning|error|fatal|bug|deprecate)\b', line.message):
+                    # looks like it meant to carry a severity token but is
+                    # malformed (a stylesheet-authoring slip); flag it
+                    log.bug("a PreTeXt stylesheet message has a malformed severity token: {}".format(line.message))
                 else:
-                    log.info(f"* {line.message}")
+                    # genuinely tokenless (e.g. a continuation line)
+                    log.info(message)
             start = end
         if texc is None:
             log.info("successful application of {}".format(xsl))
@@ -356,8 +460,7 @@ def _git_symbolic_to_hash(symbolic):
             # strip a trailing newline (OK assumption?)
             return f.readline()[:-1]
     except Exception as e:
-        log.critical(traceback.format_exc())
-        log.critical("the full PreTeXt repository may not be available, so determination of commits is not possible")
+        log.debug("the full PreTeXt repository is not available, so the source commit cannot be determined")
         return None
 
 
@@ -382,8 +485,7 @@ def get_git_head():
             # strip a trailing newline (OK assumption?)
             head = f.readline()[:-1]
     except Exception as e:
-        log.critical(traceback.format_exc())
-        log.critical("the full PreTeXt repository may not be available, so determination of commits is not possible")
+        log.debug("the full PreTeXt repository is not available, so the source commit cannot be determined")
         return (None, None)
 
     # head is normally a full symbolic reference

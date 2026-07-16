@@ -727,13 +727,7 @@ def individual_latex_image_conversion(latex_image, outformat, dest_dir, method):
                 ]
             ).format(latex_image)
             log.error(msg)
-            print(
-                "##################################################################"
-            )
-            print(result.stdout)
-            print(
-                "##################################################################"
-            )
+            log.debug(result.stdout)
             # and raise an exception so the calling function can add the image to the list of failed images
             raise Exception("LaTeX compilation of {} failed".format(latex_image))
         else:
@@ -1023,24 +1017,24 @@ def tracer(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
                 if r.status_code == 200:
                     trace = r.text[r.text.find('{"code":') :]
             except Exception as e:
-                log.critical(traceback.format_exc())
-                log.critical(server_error_msg.format(url, visible_id))
+                log.debug(traceback.format_exc())
+                log.error(server_error_msg.format(url, visible_id))
         elif language == "java":
             try:
                 r = requests.post(url, data=dict(src=source), timeout=30)
                 if r.status_code == 200:
                     trace = r.text
             except Exception as e:
-                log.critical(traceback.format_exc())
-                log.critical(server_error_msg.format(url, visible_id))
+                log.debug(traceback.format_exc())
+                log.error(server_error_msg.format(url, visible_id))
         elif language == "python":
             try:
                 r = requests.post(url, data=dict(src=source), timeout=30)
                 if r.status_code == 200:
                     trace = r.text
             except Exception as e:
-                log.critical(traceback.format_exc())
-                log.critical(server_error_msg.format(url, visible_id))
+                log.debug(traceback.format_exc())
+                log.error(server_error_msg.format(url, visible_id))
 
         # should now have a trace, except for timing out
         # no trace, then do not even try to produce a file
@@ -1788,15 +1782,16 @@ def mermaid_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir, out
         with open(mmd_config_file, 'w') as config_file:
             json.dump(mmd_config, config_file, indent=4)
         log.debug("Mermaid configuration file: {}".format(mmd_config_file))
+        # mmdc switches output on the filename extension; there is nothing
+        # to do for a format it cannot produce.  Guard once, before the
+        # loop, so every iteration below has a valid output filename.
+        if outformat not in ["png", "svg"]:
+            log.error("cannot make Mermaid diagrams in {} file format".format(outformat))
+            return
         # loop over each diagram
         for mmddiagram in glob.glob(os.path.join(tmp_dir, "*.mmd")):
             filebase, _ = os.path.splitext(mmddiagram)
-            # file format PNG or SVG
-            # mmdc executable just switches on filename extension
-            if outformat in ["png", "svg"]:
-                mmdout = "{}.{}".format(filebase, outformat)
-            else:
-                log.error("cannot make Mermaid diagrams in {} file format".format(outformat))
+            mmdout = "{}.{}".format(filebase, outformat)
             mmd_cmd = mmd_executable_cmd + ["-i", mmddiagram, "-o", mmdout, "-s", "4", "-c", "mermaid-config.json"]
             log.debug("mermaid conversion command: {}".format(" ".join(mmd_cmd)))
             subprocess.call(mmd_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
@@ -2195,10 +2190,10 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
                         img = PIL.Image.open(image_path)
                         imgwidthtag = min(100, round(img.width / 6))
                         img.close()
+                        image_element.set("width", "{}%".format(imgwidthtag))
                     except Exception as e:
-                        log.error(f"Unable to read image width of {image_path}: {e}")
+                        log.error("Unable to read image width of {}: {}".format(image_path, e))
 
-                    image_element.set("width", f"{imgwidthtag}%")
                     del image_element.attrib["source"]
                     image_element.set("{http://pretextbook.org/2020/pretext/internal}generated", imageloc)
                 except requests.exceptions.RequestException as e:
@@ -3767,7 +3762,7 @@ def _build_custom_theme(xml, theme_name, theme_opts, tmp_dir):
         log.debug("Theme options:" + json.dumps(theme_opts))
         result = subprocess.run(node_exec_cmd + [script, "-t", full_name, "-o", css_dest, "-c", json.dumps(theme_opts)], capture_output=True, timeout=60)
         if result.stdout:
-            log.debug(result.stdout.decode())
+            log.debug(result.stdout.decode().rstrip())
         if result.stderr:
             error_message = result.stderr.decode()
             raise Exception("Failed to build custom theme")
@@ -5662,6 +5657,7 @@ __xml_header = '<?xml version="1.0" encoding="UTF-8"?>\n'
 
 # Re-export helpers relocated to "common.py" so the public ptx.NAME
 # interface used by the driver script is unchanged.
+PreTeXtFatal = common.PreTeXtFatal
 build_info_message = common.build_info_message
 download_file = common.download_file
 get_executable_cmd = common.get_executable_cmd

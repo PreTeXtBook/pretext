@@ -26,6 +26,8 @@
 
 from lib import pretext as ptx
 
+import sys
+
 # Set up logging (replacing _verbose/_debug).
 # Use log.info(<string>) or log.debug(<string>).
 # Also available now are log.critical(), log.error(), and log.warning().
@@ -1006,5 +1008,11 @@ def main():
     ptx.release_temporary_directories(any_log_level=False)
 
 
-# Do it - lone top-level command
-main()
+# Do it - lone top-level command.  A fatal message halts the build by
+# raising PreTeXtFatal; it has already been logged, so we exit with an
+# error status but without a Python traceback (a traceback is for an
+# unexpected internal failure, not a deliberate, reported halt).
+try:
+    main()
+except ptx.PreTeXtFatal:
+    sys.exit(1)

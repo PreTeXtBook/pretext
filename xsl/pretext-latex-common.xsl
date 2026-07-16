@@ -140,7 +140,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR: Table of Contents level (for LateX conversion) not determined</xsl:message>
+            <xsl:message>PTX:BUG:   Table of Contents level (for LaTeX conversion) not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -2361,7 +2361,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="*" mode="division-environment-name">
-    <xsl:message>NO DIVISION ENVIRONMENT NAME for <xsl:value-of select="local-name(.)"/></xsl:message>
+    <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") lacks a LaTeX division environment name</xsl:message>
 </xsl:template>
 
 <!-- Possibly numberless?  When employed, we can tell if a specialized -->
@@ -7182,7 +7182,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$fig-placement = 'block'"/>
         <xsl:otherwise>
-            <xsl:message>PTX:BUG: figure placement not recognized, plase report me</xsl:message>
+            <xsl:message>PTX:BUG: figure placement not recognized, please report me</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
     <!-- always element name and suffix -->

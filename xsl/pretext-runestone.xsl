@@ -1154,7 +1154,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:variable name="id">
                                     <xsl:apply-templates select="." mode="unique-id"/>
                                 </xsl:variable>
-                                <xsl:message>PTX:WARNING:  Parsons problems need a @langauge that is a valid activecode language to be runnable</xsl:message>
+                                <xsl:message>PTX:WARNING:  Parsons problems need a @language that is a valid activecode language to be runnable</xsl:message>
                                 <xsl:message>              id: <xsl:value-of select="$id"></xsl:value-of></xsl:message>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -2413,7 +2413,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                                 <xsl:if test="tests/iotest">
                                     <xsl:choose>
                                         <xsl:when test="not(normalize-space(tests/text()) = '')">
-                                            <xsl:message>WARNING: You can either write text based tests or use iotests, but not both. iotests ignored in <xsl:value-of select="$rsid"/>.</xsl:message>
+                                            <xsl:message>PTX:FALLBACK: You can either write text based tests or use iotests, but not both. iotests ignored in <xsl:value-of select="$rsid"/>.</xsl:message>
                                         </xsl:when>
                                         <xsl:otherwise>
                                             <xsl:text>===iotests===&#x0a;</xsl:text>
@@ -3068,7 +3068,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="runestone-id"/>
-                    <xsl:message>PTX:ERROR:   runestone-targets template was called with an invalid @output-field value "<xsl:value-of select="$output-field"/>"</xsl:message>
+                    <xsl:message>PTX:BUG:     runestone-targets template was called with an invalid @output-field value "<xsl:value-of select="$output-field"/>"</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
             <!-- n - 1 separators, required by receiving Javascript -->

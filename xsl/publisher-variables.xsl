@@ -125,7 +125,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$version-root/letter">0</xsl:when>
         <xsl:when test="$version-root/memo">0</xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR: Table of Contents level not determined</xsl:message>
+            <xsl:message>PTX:BUG:   Table of Contents level not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -358,7 +358,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-inline/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-inline/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -378,7 +378,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.text.statement" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.inline.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.statement" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.inline.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.statement" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -394,7 +394,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-inline/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-inline/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -414,7 +414,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.text.hint" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.inline.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.hint" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.inline.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.hint" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -430,7 +430,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-inline/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-inline/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -450,7 +450,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.text.answer" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.inline.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.answer" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.inline.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.answer" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -466,7 +466,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-inline/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-inline/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-inline/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -486,7 +486,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.text.solution" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.inline.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.solution" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.inline.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.solution" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -502,7 +502,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-divisional/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-divisional/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -522,7 +522,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.divisional.statement" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.divisional.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.statement" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.divisional.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.statement" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -538,7 +538,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-divisional/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-divisional/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -558,7 +558,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.divisional.hint" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.divisional.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.hint" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.divisional.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.hint" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -574,7 +574,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-divisional/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-divisional/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -594,7 +594,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.divisional.answer" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.divisional.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.answer" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.divisional.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.answer" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -610,7 +610,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-divisional/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-divisional/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-divisional/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -630,7 +630,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.divisional.solution" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.divisional.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.solution" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.divisional.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.solution" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -646,7 +646,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-worksheet/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-worksheet/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -666,7 +666,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.worksheet.statement" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.worksheet.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.statement" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.worksheet.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.statement" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -682,7 +682,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-worksheet/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-worksheet/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -702,7 +702,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.worksheet.hint" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.worksheet.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.hint" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.worksheet.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.hint" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -718,7 +718,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-worksheet/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-worksheet/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -738,7 +738,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.worksheet.answer" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.worksheet.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.answer" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.worksheet.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.answer" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -754,7 +754,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-worksheet/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-worksheet/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-worksheet/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -774,7 +774,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.worksheet.solution" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.worksheet.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.solution" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.worksheet.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.solution" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -790,7 +790,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-reading/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-reading/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -810,7 +810,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.reading.statement" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.reading.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.statement" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.reading.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.statement" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -826,7 +826,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-reading/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-reading/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -846,7 +846,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.reading.hint" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.reading.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.hint" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.reading.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.hint" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -862,7 +862,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-reading/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-reading/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -882,7 +882,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.reading.answer" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.reading.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.answer" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.reading.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.answer" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -898,7 +898,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-reading/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-reading/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-reading/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -918,7 +918,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.reading.solution" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: exercise.reading.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.solution" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: exercise.reading.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.solution" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -934,7 +934,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-project/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-project/@statement in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@statement"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -949,7 +949,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$project.statement" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: project.statement parameter should be "yes" or "no", not "<xsl:value-of select="$project.statement" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: project.statement parameter should be "yes" or "no", not "<xsl:value-of select="$project.statement" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -965,7 +965,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-project/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-project/@hint in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@hint"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -985,7 +985,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$project.hint" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: project.hint parameter should be "yes" or "no", not "<xsl:value-of select="$project.hint" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: project.hint parameter should be "yes" or "no", not "<xsl:value-of select="$project.hint" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -1001,7 +1001,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-project/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-project/@answer in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@answer"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -1021,7 +1021,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$project.answer" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: project.answer parameter should be "yes" or "no", not "<xsl:value-of select="$project.answer" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: project.answer parameter should be "yes" or "no", not "<xsl:value-of select="$project.answer" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -1037,7 +1037,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING:   the exercise component visibility setting (common/exercise-project/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   the exercise component visibility setting (common/exercise-project/@solution in the publisher file) must be "yes" or "no", not "<xsl:value-of select="$publication/common/exercise-project/@solution"/>".  Proceeding with the default, which is "yes".</xsl:message>
                     <xsl:text>yes</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -1057,7 +1057,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$project.solution" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:WARNING: project.solution parameter should be "yes" or "no", not "<xsl:value-of select="$project.solution" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >PTX:FALLBACK: project.solution parameter should be "yes" or "no", not "<xsl:value-of select="$project.solution" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -1132,7 +1132,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- leading path separator is an error -->
         <xsl:when test="substring($raw-input, 1, 1) = '/'">
-            <xsl:message>PTX:ERROR:   an external-image directory (source/directories/@external in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
+            <xsl:message>PTX:FALLBACK:   an external-image directory (source/directories/@external in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
             <xsl:text/>
         </xsl:when>
         <!-- trailing path separator is good and -->
@@ -1157,7 +1157,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-managed-directories">
             <xsl:choose>
                 <xsl:when test="substring($raw-input, 1, 1) = '/'">
-                    <xsl:message>PTX:WARNING:   a generated-image directory (source/directories/@generated in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   a generated-image directory (source/directories/@generated in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
                     <xsl:text/>
                 </xsl:when>
                 <!-- trailing path separator is good -->
@@ -1201,7 +1201,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>no</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR:   the publisher file specifies one of source/directories/@external and source/directories/@generated, but not both. Proceeding as if neither was specified.</xsl:message>
+            <xsl:message>PTX:FALLBACK:   the publisher file specifies one of source/directories/@external and source/directories/@generated, but not both. Proceeding as if neither was specified.</xsl:message>
             <xsl:text>no</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -1255,7 +1255,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="substring($raw-input, 1, 1) = '/'">
-            <xsl:message>PTX:ERROR:   a data directory (source/directories/@data in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
+            <xsl:message>PTX:FALLBACK:   a data directory (source/directories/@data in the publisher file) must be a relative path and not begin with "/" as in "<xsl:value-of select="$raw-input"/>".  Proceeding with the default, which is an empty string, and may lead to unexpected results.</xsl:message>
             <xsl:text/>
         </xsl:when>
         <!-- trailing path separator is good -->
@@ -1384,8 +1384,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:when test="$publication/source/@webwork-problems">
                 <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
-                <xsl:message>PTX:ERROR:   the publication file entry  source/@webwork-problems  is</xsl:message>
-                <xsl:message>             deprecated, please move to using managed directories</xsl:message>
+                <xsl:message>PTX:DEPRECATE: the publication file entry  source/@webwork-problems  is</xsl:message>
+                <xsl:message>               deprecated, please move to using managed directories</xsl:message>
             </xsl:when>
             <!-- no specification, so empty string for filename -->
             <!-- this will be noted where it is employed        -->
@@ -1501,7 +1501,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- NaN does not equal *anything*, so tests if a number -->
                     <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:WARNING:   numbering level for divisions given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:message>PTX:FALLBACK:   numbering level for divisions given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
                         <xsl:value-of select="$max-feasible"/>
                         </xsl:when>
                     <xsl:otherwise>
@@ -1522,7 +1522,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- check $candidate against upper bound, $max-feasible -->
     <xsl:choose>
         <xsl:when test="$candidate-maxlevel > $max-feasible">
-            <xsl:message>PTX:WARNING:   numbering level set for divisions ("<xsl:value-of select="$candidate-maxlevel"/>") is greater than the maximum possible ("<xsl:value-of select="$max-feasible"/>") for this document type.  The default value will be used instead</xsl:message>
+            <xsl:message>PTX:FALLBACK:   numbering level set for divisions ("<xsl:value-of select="$candidate-maxlevel"/>") is greater than the maximum possible ("<xsl:value-of select="$max-feasible"/>") for this document type.  The default value will be used instead</xsl:message>
             <xsl:value-of select="$max-feasible"/>
         </xsl:when>
         <xsl:otherwise>
@@ -1564,7 +1564,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- NaN does not equal *anything*, so tests if a number -->
                     <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:WARNING:   numbering level for blocks given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:message>PTX:FALLBACK:   numbering level for blocks given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
                         <xsl:value-of select="$default-blocks"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -1585,7 +1585,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- check $candidate-blocks against upper bound, $numbering-maxlevel -->
     <xsl:choose>
         <xsl:when test="$candidate-blocks > $numbering-maxlevel">
-            <xsl:message>PTX:WARNING:   numbering level set for blocks ("<xsl:value-of select="$candidate-blocks"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:message>PTX:FALLBACK:   numbering level set for blocks ("<xsl:value-of select="$candidate-blocks"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
             <xsl:value-of select="$default-blocks"/>
         </xsl:when>
         <xsl:otherwise>
@@ -1623,7 +1623,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- NaN does not equal *anything*, so tests if a number -->
                     <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:WARNING:   numbering level for projects given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:message>PTX:FALLBACK:   numbering level for projects given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
                         <xsl:value-of select="$default-projects"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -1644,7 +1644,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- check $candidate-projects against upper bound, $numbering-maxlevel -->
     <xsl:choose>
         <xsl:when test="$candidate-projects > $numbering-maxlevel">
-            <xsl:message>PTX:WARNING:   numbering level set for projects ("<xsl:value-of select="$candidate-projects"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:message>PTX:FALLBACK:   numbering level set for projects ("<xsl:value-of select="$candidate-projects"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
             <xsl:value-of select="$default-projects"/>
         </xsl:when>
         <xsl:otherwise>
@@ -1679,7 +1679,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- NaN does not equal *anything*, so tests if a number -->
                     <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:WARNING:   numbering level for equations given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:message>PTX:FALLBACK:   numbering level for equations given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
                         <xsl:value-of select="$default-equations"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -1700,7 +1700,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- check $candidate-equations against upper bound, $numbering-maxlevel -->
     <xsl:choose>
         <xsl:when test="$candidate-equations > $numbering-maxlevel">
-            <xsl:message>PTX:WARNING:   numbering level set for equations ("<xsl:value-of select="$candidate-equations"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:message>PTX:FALLBACK:   numbering level set for equations ("<xsl:value-of select="$candidate-equations"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
             <xsl:value-of select="$default-equations"/>
         </xsl:when>
         <xsl:otherwise>
@@ -1735,7 +1735,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- NaN does not equal *anything*, so tests if a number -->
                     <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:WARNING:   numbering level for footnotes given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:message>PTX:FALLBACK:   numbering level for footnotes given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
                         <xsl:value-of select="$default-footnotes"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -1756,7 +1756,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- check $candidate-footnotes against upper bound, $numbering-maxlevel -->
     <xsl:choose>
         <xsl:when test="$candidate-footnotes > $numbering-maxlevel">
-            <xsl:message>PTX:WARNING:   numbering level set for footnotes ("<xsl:value-of select="$candidate-footnotes"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:message>PTX:FALLBACK:   numbering level set for footnotes ("<xsl:value-of select="$candidate-footnotes"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
             <xsl:value-of select="$default-footnotes"/>
         </xsl:when>
         <xsl:otherwise>
@@ -1791,7 +1791,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- NaN does not equal *anything*, so tests if a number -->
                     <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:WARNING:   numbering level for figures given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:message>PTX:FALLBACK:   numbering level for figures given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
                         <xsl:value-of select="$default-figures"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -1812,7 +1812,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- check $candidate-figures against upper bound, $numbering-maxlevel -->
     <xsl:choose>
         <xsl:when test="$candidate-figures > $numbering-maxlevel">
-            <xsl:message>PTX:WARNING:   numbering level set for figures ("<xsl:value-of select="$candidate-figures"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:message>PTX:FALLBACK:   numbering level set for figures ("<xsl:value-of select="$candidate-figures"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
             <xsl:value-of select="$default-figures"/>
         </xsl:when>
         <xsl:otherwise>
@@ -1847,7 +1847,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- NaN does not equal *anything*, so tests if a number -->
                     <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:WARNING:   numbering level for inline exercises given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:message>PTX:FALLBACK:   numbering level for inline exercises given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
                         <xsl:value-of select="$default-exercises"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -1868,7 +1868,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- check $candidate-exercises against upper bound, $numbering-maxlevel -->
     <xsl:choose>
         <xsl:when test="$candidate-exercises > $numbering-maxlevel">
-            <xsl:message>PTX:WARNING:   numbering level set for inline exercises ("<xsl:value-of select="$candidate-exercises"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:message>PTX:FALLBACK:   numbering level set for inline exercises ("<xsl:value-of select="$candidate-exercises"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
             <xsl:value-of select="$default-exercises"/>
         </xsl:when>
         <xsl:otherwise>
@@ -1903,7 +1903,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- NaN does not equal *anything*, so tests if a number -->
                     <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                        <xsl:message>PTX:WARNING:   numbering level for open problems given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:message>PTX:FALLBACK:   numbering level for open problems given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
                         <xsl:value-of select="$default-openproblems"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -1920,7 +1920,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- check $candidate-openproblems against upper bound, $numbering-maxlevel -->
     <xsl:choose>
         <xsl:when test="$candidate-openproblems > $numbering-maxlevel">
-            <xsl:message>PTX:WARNING:   numbering level set for open problems ("<xsl:value-of select="$candidate-openproblems"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:message>PTX:FALLBACK:   numbering level set for open problems ("<xsl:value-of select="$candidate-openproblems"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
             <xsl:value-of select="$default-openproblems"/>
         </xsl:when>
         <xsl:otherwise>
@@ -1945,7 +1945,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:choose>
                 <!-- NaN does not equal *anything*, so tests if a number -->
                 <xsl:when test="not(number($the-number) = number($the-number)) or ($the-number &lt; 0)">
-                    <xsl:message>PTX:WARNING:   starting number for chapters given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                    <xsl:message>PTX:FALLBACK:   starting number for chapters given in the publisher file ("<xsl:value-of select="$the-number"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
                     <xsl:value-of select="1"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1972,10 +1972,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="not($version-root/book/part)">
             <xsl:choose>
                 <xsl:when test="$publication/numbering/divisions/@part-structure">
-                    <xsl:message>PTX:WARNING: your document is not a book with parts, so the publisher file  numbering/divisions/@part-structure  entry is being ignored</xsl:message>
+                    <xsl:message>PTX:FALLBACK: your document is not a book with parts, so the publisher file  numbering/divisions/@part-structure  entry is being ignored</xsl:message>
                 </xsl:when>
                 <xsl:when test="$version-docinfo/numbering/division/@part">
-                    <xsl:message>PTX:WARNING: your document is not a book with parts, and docinfo/numbering/division/@part is deprecated anyway and is being ignored</xsl:message>
+                    <xsl:message>PTX:DEPRECATE: your document is not a book with parts, and docinfo/numbering/division/@part is deprecated anyway and is being ignored</xsl:message>
                 </xsl:when>
             </xsl:choose>
             <!-- flag this situation -->
@@ -1992,7 +1992,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>decorative</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: the publisher file  numbering/divisions/@part-structure  entry should be "decorative" or "structural", not "<xsl:value-of select="$publication/numbering/divisions/@part-structure" />".  The default will be used instead.</xsl:message>
+                    <xsl:message>PTX:FALLBACK: the publisher file  numbering/divisions/@part-structure  entry should be "decorative" or "structural", not "<xsl:value-of select="$publication/numbering/divisions/@part-structure" />".  The default will be used instead.</xsl:message>
                     <xsl:text>decorative</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -2007,7 +2007,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>decorative</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: the  docinfo/numbering/division/@part  entry should be "decorative" or "structural", not "<xsl:value-of select="$version-docinfo/numbering/division/@part"/>".  The default will be used instead.</xsl:message>
+                    <xsl:message>PTX:FALLBACK: the  docinfo/numbering/division/@part  entry should be "decorative" or "structural", not "<xsl:value-of select="$version-docinfo/numbering/division/@part"/>".  The default will be used instead.</xsl:message>
                     <xsl:text>decorative</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -2095,14 +2095,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <!-- sounds good, but no, not the right build -->
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: HTML calculator/@activecode in publisher file requests "<xsl:value-of select="$entered-lang"/>", but this language is not supported unless the publisher file also indicates the build is meant to be hosted on a Runestone server. Proceeding with the default value for current build: "<xsl:value-of select="$activecode-default"/>"</xsl:message>
+                    <xsl:message>PTX:FALLBACK: HTML calculator/@activecode in publisher file requests "<xsl:value-of select="$entered-lang"/>", but this language is not supported unless the publisher file also indicates the build is meant to be hosted on a Runestone server. Proceeding with the default value for current build: "<xsl:value-of select="$activecode-default"/>"</xsl:message>
                     <xsl:value-of select="$activecode-default"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
         <!-- an attempt was made, but failed to be any sort of language -->
         <xsl:when test="$publication/html/calculator/@activecode">
-            <xsl:message>PTX:WARNING: HTML calculator/@activecode in publisher file should be a programming language or "none", not "<xsl:value-of select="$publication/html/calculator/@activecode"/>". Proceeding with the default value for current build: "<xsl:value-of select="$activecode-default"/>"</xsl:message>
+            <xsl:message>PTX:FALLBACK: HTML calculator/@activecode in publisher file should be a programming language or "none", not "<xsl:value-of select="$publication/html/calculator/@activecode"/>". Proceeding with the default value for current build: "<xsl:value-of select="$activecode-default"/>"</xsl:message>
             <xsl:value-of select="$activecode-default"/>
         </xsl:when>
         <!-- no attempt to specify build-dependent default value -->
@@ -2144,7 +2144,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- bad choice, set to empty string -->
         <xsl:when test="not(id($entered-ref))">
-            <xsl:message>PTX:WARNING:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$entered-ref"/>" is not an @xml:id anywhere in the document.  Defaults will be used instead</xsl:message>
+            <xsl:message>PTX:FALLBACK:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$entered-ref"/>" is not an @xml:id anywhere in the document.  Defaults will be used instead</xsl:message>
             <xsl:text/>
         </xsl:when>
         <xsl:otherwise>
@@ -2216,7 +2216,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- attempted to set, but wrong -->
         <xsl:when test="$publication/html/webwork/@inline">
-            <xsl:message>PTX:WARNING: HTML WeBWorK @inline setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@inline"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:message>PTX:FALLBACK: HTML WeBWorK @inline setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@inline"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
             <xsl:value-of select="$ww-default"/>
         </xsl:when>
         <!-- backwards compatibility: 'yes' indicated static,     -->
@@ -2247,7 +2247,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- attempted to set, but wrong -->
         <xsl:when test="$publication/html/webwork/@divisional">
-            <xsl:message>PTX:WARNING: HTML WeBWorK @divisional setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@divisional"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:message>PTX:FALLBACK: HTML WeBWorK @divisional setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@divisional"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
             <xsl:value-of select="$ww-default"/>
         </xsl:when>
         <!-- backwards compatibility: 'yes' indicated static,     -->
@@ -2278,7 +2278,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- attempted to set, but wrong -->
         <xsl:when test="$publication/html/webwork/@reading">
-            <xsl:message>PTX:WARNING: HTML WeBWorK @reading setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@reading"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:message>PTX:FALLBACK: HTML WeBWorK @reading setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@reading"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
             <xsl:value-of select="$ww-default"/>
         </xsl:when>
         <!-- backwards compatibility: 'yes' indicated static,     -->
@@ -2309,7 +2309,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- attempted to set, but wrong -->
         <xsl:when test="$publication/html/webwork/@worksheet">
-            <xsl:message>PTX:WARNING: HTML WeBWorK @worksheet setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@worksheet"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:message>PTX:FALLBACK: HTML WeBWorK @worksheet setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@worksheet"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
             <xsl:value-of select="$ww-default"/>
         </xsl:when>
         <!-- backwards compatibility: 'yes' indicated static,     -->
@@ -2340,7 +2340,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- attempted to set, but wrong -->
         <xsl:when test="$publication/html/webwork/@project">
-            <xsl:message>PTX:WARNING: HTML WeBWorK @project setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@project"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
+            <xsl:message>PTX:FALLBACK: HTML WeBWorK @project setting in publisher file should be "static" or "dynamic", not "<xsl:value-of select="$publication/html/webwork/@project"/>". Proceeding with default value: "<xsl:value-of select="$ww-default"/>"</xsl:message>
             <xsl:value-of select="$ww-default"/>
         </xsl:when>
         <!-- backwards compatibility: 'yes' indicated static,     -->
@@ -2543,7 +2543,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$publisher-attribute-options/html/tableofcontents/pi:pub-attribute[@name='preexpanded-levels']" mode="set-pubfile-variable"/>
     </xsl:variable>
     <xsl:if test="not($b-html-toc-focused) and $preexpanded-value > 0">
-        <xsl:message>PTX:WARNING:   the preexpanded-levels setting (html/tableofcontents/@preexpanded-levels in the publisher file) has no effect if the table of contents is not set to focused mode (/html/tableofcontents/@focused is "yes")."</xsl:message>
+        <xsl:message>PTX:FALLBACK:   the preexpanded-levels setting (html/tableofcontents/@preexpanded-levels in the publisher file) has no effect if the table of contents is not set to focused mode (/html/tableofcontents/@focused is "yes")."</xsl:message>
     </xsl:if>
     <xsl:value-of select="$preexpanded-value"/>
 </xsl:variable>
@@ -2583,7 +2583,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="debug.html.theme-name"  select="''" />
 
 <xsl:variable name="html-theme-name">
-    <xsl:variable name="warning-message">PTX:WARNING: The "FROMSTYLE" style requested in publication/html/css is deprecated. Your book will be built with theme="TOSTYLE". See the PreTeXt Guide for options for the newer HTML themes and their specification .</xsl:variable>
+    <xsl:variable name="warning-message">PTX:DEPRECATE: The "FROMSTYLE" style requested in publication/html/css is deprecated. Your book will be built with theme="TOSTYLE". See the PreTeXt Guide for options for the newer HTML themes and their specification .</xsl:variable>
     <xsl:choose>
         <xsl:when test="$debug.html.theme-name != ''">
             <xsl:value-of select="$debug.html.theme-name"/>
@@ -2882,7 +2882,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- set, but not correct, so inform and use default -->
         <xsl:when test="$publication/html/search/@variant">
-            <xsl:message>PTX:WARNING: HTML search/@variant in publisher file should be "none", "textbook", "reference" or "default", not "<xsl:value-of select="$publication/html/search/@variant"/>". Proceeding with default value: "<xsl:value-of select="$default-native-search"/>"</xsl:message>
+            <xsl:message>PTX:FALLBACK: HTML search/@variant in publisher file should be "none", "textbook", "reference" or "default", not "<xsl:value-of select="$publication/html/search/@variant"/>". Proceeding with default value: "<xsl:value-of select="$default-native-search"/>"</xsl:message>
             <xsl:value-of select="$default-native-search"/>
         </xsl:when>
         <!-- unset, so use default -->
@@ -2966,7 +2966,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$version-root/letter">0</xsl:when>
         <xsl:when test="$version-root/memo">0</xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR: HTML chunk level not determined</xsl:message>
+            <xsl:message>PTX:BUG:   HTML chunk level not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -3052,7 +3052,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- through the generic machinery, which has its own warning.   -->
         <xsl:when test="not($jupyter.kernel = '') and not($jupyter.kernel = 'python3') and not($jupyter.kernel = 'sagemath') and contains('|Python3|python 3|Python 3|py|Py|python|Python|', concat('|', $jupyter.kernel, '|'))">
             <xsl:text>python3</xsl:text>
-            <xsl:message>PTX:WARNING: the stringparam "jupyter.kernel" is deprecated (2026-07-10), and your value "<xsl:value-of select="$jupyter.kernel"/>" has been interpreted as "python3".  Move to the publication file entry, jupyter/@kernel, with the value "python3".</xsl:message>
+            <xsl:message>PTX:DEPRECATE: the stringparam "jupyter.kernel" is deprecated (2026-07-10), and your value "<xsl:value-of select="$jupyter.kernel"/>" has been interpreted as "python3".  Move to the publication file entry, jupyter/@kernel, with the value "python3".</xsl:message>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="$publisher-attribute-options/jupyter/pi:pub-attribute[@name='kernel']" mode="set-pubfile-variable"/>
@@ -3078,7 +3078,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="round(number($braille-page-width-entered))"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING: the braille page width in the publication file ("<xsl:value-of select="$braille-page-width-entered"/>") must be a positive whole number of cells, using the default, 40</xsl:message>
+            <xsl:message>PTX:FALLBACK: the braille page width in the publication file ("<xsl:value-of select="$braille-page-width-entered"/>") must be a positive whole number of cells, using the default, 40</xsl:message>
             <xsl:text>40</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -3093,7 +3093,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="round(number($braille-page-height-entered))"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING: the braille page height in the publication file ("<xsl:value-of select="$braille-page-height-entered"/>") must be a positive whole number of lines, using the default, 25</xsl:message>
+            <xsl:message>PTX:FALLBACK: the braille page height in the publication file ("<xsl:value-of select="$braille-page-height-entered"/>") must be a positive whole number of lines, using the default, 25</xsl:message>
             <xsl:text>25</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -3178,7 +3178,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- attempted to set, but wrong -->
         <xsl:when test="$publication/latex/page/@right-alignment">
-            <xsl:message>PTX:WARNING: LaTeX right-alignment setting in publisher file should be "flush" or "ragged", not "<xsl:value-of select="$publication/latex/page/@right-alignment"/>". Proceeding with default value: "<xsl:value-of select="$default-align"/>"</xsl:message>
+            <xsl:message>PTX:FALLBACK: LaTeX right-alignment setting in publisher file should be "flush" or "ragged", not "<xsl:value-of select="$publication/latex/page/@right-alignment"/>". Proceeding with default value: "<xsl:value-of select="$default-align"/>"</xsl:message>
             <xsl:value-of select="$default-align"/>
         </xsl:when>
         <!-- or respect deprecated stringparam in use, text.alignment -->
@@ -3248,7 +3248,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>pt</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>PTX:WARNING: LaTeX @font-size in publication file should be 8, 9, 10, 11, 12, 14, 17 or 20 points, not "<xsl:value-of select="$publication/latex/@font-size"/>".  Proceeding with default value: "10"</xsl:message>
+                    <xsl:message>PTX:FALLBACK: LaTeX @font-size in publication file should be 8, 9, 10, 11, 12, 14, 17 or 20 points, not "<xsl:value-of select="$publication/latex/@font-size"/>".  Proceeding with default value: "10"</xsl:message>
                     <xsl:text>10pt</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
@@ -3267,7 +3267,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$latex.font.size='20pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
                 <xsl:otherwise>
                     <xsl:text>10pt</xsl:text>
-                    <xsl:message>PTX:ERROR   the *deprecated* latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />".  Using the default ("10pt")</xsl:message>
+                    <xsl:message>PTX:FALLBACK:  the *deprecated* latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />".  Using the default ("10pt")</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -3291,7 +3291,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- attempted to set, but not a recognized key -->
         <xsl:when test="$publication/pdf/@font">
-            <xsl:message>PTX:WARNING: PDF (XSL-FO) font setting in publisher file should be "latin-modern", not "<xsl:value-of select="$publication/pdf/@font"/>". Proceeding with default value: "<xsl:value-of select="$default-pdf-font"/>"</xsl:message>
+            <xsl:message>PTX:FALLBACK: PDF (XSL-FO) font setting in publisher file should be "latin-modern", not "<xsl:value-of select="$publication/pdf/@font"/>". Proceeding with default value: "<xsl:value-of select="$default-pdf-font"/>"</xsl:message>
             <xsl:value-of select="$default-pdf-font"/>
         </xsl:when>
         <!-- no attempt at all, so default -->
@@ -3371,7 +3371,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:choose>
                 <!-- fail when no base URL is given -->
                 <xsl:when test="not($b-has-baseurl)">
-                    <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
+                    <xsl:message>PTX:WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -3384,7 +3384,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- set, but not correct, so inform and use default -->
         <xsl:when test="$publication/latex/asymptote/@links">
-            <xsl:message>PTX WARNING: LaTeX links to Asymptote publisher file should be "yes" (links to HTML) or "no" (no links), not "<xsl:value-of select="$publication/latex/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
+            <xsl:message>PTX:FALLBACK: LaTeX links to Asymptote publisher file should be "yes" (links to HTML) or "no" (no links), not "<xsl:value-of select="$publication/latex/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
             <xsl:text>no</xsl:text>
         </xsl:when>
         <!-- unset, use the default, which is "no" since -->
@@ -3406,7 +3406,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:choose>
                 <!-- fail when no base URL is given -->
                 <xsl:when test="not($b-has-baseurl)">
-                    <xsl:message>PTX WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
+                    <xsl:message>PTX:WARNING: baseurl must be set in publisher file to enable links from Asymptote images</xsl:message>
                     <xsl:text>no</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -3419,7 +3419,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- set, but not correct, so inform and use default -->
         <xsl:when test="$publication/html/asymptote/@links">
-            <xsl:message>PTX WARNING: HTML links to Asymptote publisher file should be "yes" (adds link below image) or "no" (no links), not "<xsl:value-of select="$publication/latex/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
+            <xsl:message>PTX:FALLBACK: HTML links to Asymptote publisher file should be "yes" (adds link below image) or "no" (no links), not "<xsl:value-of select="$publication/latex/asymptote/@links"/>". Proceeding with default value: "no" (no links)</xsl:message>
             <xsl:text>no</xsl:text>
         </xsl:when>
         <!-- unset, use the default, which is "no" since -->
@@ -3844,14 +3844,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- it is among the legal options, use it and issue warning         -->
         <xsl:when test="not($pubfile-attribute) and @legacy-stringparam and (@freeform = 'yes' or dyn:evaluate(concat('$', @legacy-stringparam)) = $all-options)">
             <xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>
-            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" will be used. However you should move to using a publisher file entry for  <xsl:value-of select="$full-path"/>  instead.</xsl:message>
+            <xsl:message>PTX:DEPRECATE: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" will be used. However you should move to using a publisher file entry for  <xsl:value-of select="$full-path"/>  instead.</xsl:message>
         </xsl:when>
         <!-- if nothing is declared in the publisher file, not even as null  -->
         <!-- and if there is an old stringparam that we still honor, and if  -->
         <!-- it is among the legacy options, use default and issue warning   -->
         <xsl:when test="not($pubfile-attribute) and @legacy-stringparam and dyn:evaluate(concat('$', @legacy-stringparam)) = $legacy-options">
             <xsl:value-of select="$the-default"/>
-            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" has been retired. You should move to using a publisher file entry  <xsl:value-of select="$full-path"/>  with possible values: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
+            <xsl:message>PTX:DEPRECATE: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" has been retired. You should move to using a publisher file entry  <xsl:value-of select="$full-path"/>  with possible values: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
         </xsl:when>
         <!-- if nothing is declared in the publisher file, not even as null  -->
         <!-- and if there is an old stringparam that we still honor, but its -->
@@ -3859,7 +3859,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- then use default and issue warning                              -->
         <xsl:when test="not($pubfile-attribute) and @legacy-stringparam and dyn:evaluate(concat('$', @legacy-stringparam)) != ''">
             <xsl:value-of select="$the-default"/>
-            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" is not a legal option. You should move to using a publisher file entry  <xsl:value-of select="$full-path"/>  with possible values: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
+            <xsl:message>PTX:DEPRECATE: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" is not a legal option. You should move to using a publisher file entry  <xsl:value-of select="$full-path"/>  with possible values: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
         </xsl:when>
         <!-- if nothing is declared in the publisher file or it is declared  -->
         <!-- as null, use the default, which might be null                   -->
@@ -3879,13 +3879,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- if it's among the legacy options, use default and issue warning  -->
         <xsl:when test="$pubfile-attribute = $legacy-options">
             <xsl:value-of select="$the-default"/>
-            <xsl:message>PTX:WARNING: your value "<xsl:value-of select="$pubfile-attribute"/>"  for the publisher file entry  <xsl:value-of select="$path"/>  has been retired; possible values are <xsl:apply-templates select="$all-options" mode="quoted-list"/>. The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
+            <xsl:message>PTX:FALLBACK: your value "<xsl:value-of select="$pubfile-attribute"/>"  for the publisher file entry  <xsl:value-of select="$path"/>  has been retired; possible values are <xsl:apply-templates select="$all-options" mode="quoted-list"/>. The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
         </xsl:when>
         <!-- pubfile has some string that is not among legal options, and    -->
         <!-- freeform is disallowed, so give a warning and use default       -->
         <xsl:otherwise>
             <xsl:value-of select="$the-default"/>
-            <xsl:message>PTX:WARNING: the publisher file  <xsl:value-of select="$path"/>  entry should not have value "<xsl:value-of select="$pubfile-attribute"/>".  Possible values are: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
+            <xsl:message>PTX:FALLBACK: the publisher file  <xsl:value-of select="$path"/>  entry should not have value "<xsl:value-of select="$pubfile-attribute"/>".  Possible values are: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

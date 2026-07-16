@@ -83,7 +83,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$debug.brf.symbols"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING: the "debug.brf.symbols" string parameter must be "early" or "late", not "<xsl:value-of select="$debug.brf.symbols"/>", using "late" instead</xsl:message>
+            <xsl:message>PTX:FALLBACK: the "debug.brf.symbols" string parameter must be "early" or "late", not "<xsl:value-of select="$debug.brf.symbols"/>", using "late" instead</xsl:message>
             <xsl:text>late</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -257,12 +257,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And we sneak in a warning that this conversion is underway, but not complete. -->
 <xsl:template name="warning-unimplemented">
-    <xsl:message>** Some PreTeXt elements lack full implementation in the braille conversion.</xsl:message>
-    <xsl:message>** Smaller items will simply be missing from your output.</xsl:message>
-    <xsl:message>** Larger items may have all-caps placeholders in your output.</xsl:message>
-    <xsl:message>** These will all be reported as "Overlooked" in the log.</xsl:message>
-    <xsl:message>** Please report the complete list in the PreTeXt support forum,</xsl:message>
-    <xsl:message>** so we can prioritize making the output for your project complete.</xsl:message>
+    <xsl:message>PTX:INFO: Some PreTeXt elements lack full implementation in the braille conversion.</xsl:message>
+    <xsl:message>PTX:INFO: Smaller items will simply be missing from your output.</xsl:message>
+    <xsl:message>PTX:INFO: Larger items may have all-caps placeholders in your output.</xsl:message>
+    <xsl:message>PTX:INFO: These will all be reported as "Overlooked" in the log.</xsl:message>
+    <xsl:message>PTX:INFO: Please report the complete list in the PreTeXt support forum,</xsl:message>
+    <xsl:message>PTX:INFO: so we can prioritize making the output for your project complete.</xsl:message>
 </xsl:template>
 
 <!-- The entry template "waits" for the "$math-meld-rtf" and    -->
@@ -1670,7 +1670,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>&#x2193;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>WARNING:  &quot;icon&quot; with @name attribute value "<xsl:value-of select="@name"/>" does not have an implementation for braille.</xsl:message>
+            <xsl:message>PTX:WARNING: &quot;icon&quot; with @name attribute value "<xsl:value-of select="@name"/>" does not have an implementation for braille.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -2483,11 +2483,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="element"/>
     <xsl:param name="ntimes"/>
 
-    <xsl:message>Unimplemented: <xsl:value-of select="$element"/> (<xsl:value-of select="$ntimes"/> times)</xsl:message>
+    <xsl:message>PTX:INFO: Unimplemented: <xsl:value-of select="$element"/> (<xsl:value-of select="$ntimes"/> times)</xsl:message>
 </xsl:template>
 
 <xsl:template match="*" mode="overlooked">
-    <xsl:message>Overlooked: <xsl:value-of select="local-name()"/></xsl:message>
+    <xsl:message>PTX:INFO: Overlooked: <xsl:value-of select="local-name()"/></xsl:message>
 </xsl:template>
 
 <!-- *Every* element needs an implementation, or it ends up here being -->

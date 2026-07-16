@@ -251,6 +251,6 @@ if (options['help']) {
   } else {
     await ctx.rebuild();
     await ctx.dispose();
-    console.log('CSS build complete!');
+    console.log('CSS build complete');
   }
 }

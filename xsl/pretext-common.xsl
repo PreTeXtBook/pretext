@@ -404,7 +404,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>
-                <xsl:text>PTX:WARNING: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
+                <xsl:text>PTX:FALLBACK: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
                 <xsl:value-of select="$whitespace" />
                 <xsl:text>'.  Using the default ('flexible').</xsl:text>
             </xsl:message>
@@ -579,7 +579,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="$normalized-level=3">subsection</xsl:when>
         <xsl:when test="$normalized-level=4">subsubsection</xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR: Level computation is out-of-bounds (input as <xsl:value-of select="$level" />, normalized to <xsl:value-of select="$normalized-level" />)</xsl:message>
+            <xsl:message>PTX:BUG:   Level computation is out-of-bounds (input as <xsl:value-of select="$level" />, normalized to <xsl:value-of select="$normalized-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -719,7 +719,7 @@ Book (with parts), "section" at level 3
         <!-- check for bare # (present but \# is not) -->
         <xsl:if test="contains($inside, '#') and not(contains($inside, '\#'))">
             <xsl:message>
-                <xsl:text>PTX:WARNING:   a bare "#" inside \text{} in math must be escaped as "\#"</xsl:text>
+                <xsl:text>PTX:ERROR:     a bare "#" inside \text{} in math must be escaped as "\#"</xsl:text>
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>               </xsl:text>
                 <xsl:apply-templates select="." mode="location-report"/>
@@ -728,7 +728,7 @@ Book (with parts), "section" at level 3
         <!-- check for bare % -->
         <xsl:if test="contains($inside, '%') and not(contains($inside, '\%'))">
             <xsl:message>
-                <xsl:text>PTX:WARNING:   a bare "%" inside \text{} in math must be escaped as "\%"</xsl:text>
+                <xsl:text>PTX:ERROR:     a bare "%" inside \text{} in math must be escaped as "\%"</xsl:text>
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>               </xsl:text>
                 <xsl:apply-templates select="." mode="location-report"/>
@@ -737,7 +737,7 @@ Book (with parts), "section" at level 3
         <!-- check for bare & -->
         <xsl:if test="contains($inside, '&amp;') and not(contains($inside, '\&amp;'))">
             <xsl:message>
-                <xsl:text>PTX:WARNING:   a bare "&amp;" inside \text{} in math must be escaped as "\&amp;"</xsl:text>
+                <xsl:text>PTX:ERROR:     a bare "&amp;" inside \text{} in math must be escaped as "\&amp;"</xsl:text>
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>               </xsl:text>
                 <xsl:apply-templates select="." mode="location-report"/>
@@ -2012,7 +2012,7 @@ Book (with parts), "section" at level 3
             <xsl:if test="$wsdebug and not($text-processed = $middle-cleaned)">
                 <!-- DEBUGGING follows, maybe move outward later -->
                 <xsl:message>
-                    <xsl:text>****&#xa;</xsl:text>
+                    <xsl:text>PTX:DEBUG: whitespace diagnostic&#xa;</xsl:text>
                     <xsl:text>O:</xsl:text>
                     <xsl:value-of select="." />
                     <xsl:text>:O&#xa;</xsl:text>
@@ -2921,7 +2921,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="normalized-width" select="normalize-space($raw-width)" />
     <xsl:choose>
         <xsl:when test="not(substring($normalized-width, string-length($normalized-width)) = '%')">
-            <xsl:message>PTX:WARNING:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />, using 100% instead"</xsl:message>
+            <xsl:message>PTX:FALLBACK:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />, using 100% instead"</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
             <!-- replace by 100% -->
             <xsl:text>100%</xsl:text>
@@ -3016,7 +3016,7 @@ Book (with parts), "section" at level 3
         <!-- NaN does not equal *anything*, so tests if a number  -->
         <!-- http://stackoverflow.com/questions/6895870           -->
         <xsl:when test="not(number($the-aspect) = number($the-aspect)) or ($the-aspect &lt; 0)">
-            <xsl:message>PTX:WARNING: the @aspect attribute should be a ratio, like 4:3, or a positive number, not "<xsl:value-of select="$the-aspect" />"</xsl:message>
+            <xsl:message>PTX:ERROR:   the @aspect attribute should be a ratio, like 4:3, or a positive number, not "<xsl:value-of select="$the-aspect" />"</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
         <!-- survives as a number -->
@@ -3192,7 +3192,7 @@ Book (with parts), "section" at level 3
             <xsl:text>[</xsl:text>
             <xsl:value-of select="$str-id" />
             <xsl:text>]</xsl:text>
-            <xsl:message>PTX:WARNING: could not translate string with id "<xsl:value-of select="$str-id"/>" into language for code "<xsl:value-of select="$lang"/>"</xsl:message>
+            <xsl:message>PTX:BUG:     could not translate string with id "<xsl:value-of select="$str-id"/>" into language for code "<xsl:value-of select="$lang"/>"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -3810,7 +3810,7 @@ Book (with parts), "section" at level 3
         </xsl:when>
         <xsl:when test="$b-host-runestone and not(@authored-label)">
             <xsl:message>
-                <xsl:text>PTX:WARNING:  While building for a Runestone server, a PreTeXt "</xsl:text>
+                <xsl:text>PTX:FALLBACK:  While building for a Runestone server, a PreTeXt "</xsl:text>
                 <xsl:value-of select="local-name(.)"/>
                 <xsl:text>" element&#xa;</xsl:text>
                 <xsl:text>has been encountered without a @label attribute.  For reasons of backward-compatibility &#xa;</xsl:text>
@@ -3955,7 +3955,7 @@ Book (with parts), "section" at level 3
 <!-- or is defined to be a null string in a particular conversion stylesheet, in which    -->
  <!-- case no extra space is added. -->
 <xsl:template name="case-cycle-delimiter-space">
-    <xsl:message>PTX:BUG A "case" has "direction" equal to "cycle", but the conversion for this output target does not have a "delimiter space" symbol defined. The maintainer for this output target may wish to know about this (or may wish to set the "delimiter space" symbol to be a null string to suppress this warning message).</xsl:message>
+    <xsl:message>PTX:BUG: A "case" has "direction" equal to "cycle", but the conversion for this output target does not have a "delimiter space" symbol defined. The maintainer for this output target may wish to know about this (or may wish to set the "delimiter space" symbol to be a null string to suppress this warning message).</xsl:message>
     <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 
@@ -4341,7 +4341,7 @@ Book (with parts), "section" at level 3
     <xsl:if test="$normalized-aspect = 0">
         <xsl:message>PTX:FATAL:   an @aspect attribute equal to zero will cause serious errors.</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
-        <xsl:message terminate="yes">Quitting...</xsl:message>
+        <xsl:message terminate="yes">PTX:FATAL:   Quitting...</xsl:message>
     </xsl:if>
 
     <!-- Perhaps save for debugging -->
@@ -4523,7 +4523,7 @@ Book (with parts), "section" at level 3
     <!-- count the elements destined for panels  -->
     <xsl:variable name="number-panels" select="count(*)" />
     <xsl:if test="$sbsdebug">
-        <xsl:message>N:<xsl:value-of select="$number-panels" />:N</xsl:message>
+        <xsl:message>PTX:DEBUG: N:<xsl:value-of select="$number-panels" />:N</xsl:message>
     </xsl:if>
     <!-- Add to RTF -->
     <number-panels>
@@ -4569,7 +4569,7 @@ Book (with parts), "section" at level 3
         </xsl:choose>
     </xsl:variable>
     <xsl:if test="$sbsdebug">
-        <xsl:message>VA:<xsl:value-of select="$valigns" />:VA</xsl:message>
+        <xsl:message>PTX:DEBUG: VA:<xsl:value-of select="$valigns" />:VA</xsl:message>
     </xsl:if>
     <!-- check length (author-supplied could be wrong) -->
     <xsl:variable name="nspaces-valigns" select="string-length($valigns) - string-length(translate($valigns, ' ', ''))" />
@@ -4577,7 +4577,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="$nspaces-valigns &lt; $number-panels">
             <xsl:message>PTX:FATAL:   a &lt;sidebyside&gt; or &lt;sbsgroup&gt; does not have enough "@valigns" (maybe you did not specify enough?)</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
-            <xsl:message terminate="yes">             That's fatal.  Sorry.  Quitting...</xsl:message>
+            <xsl:message terminate="yes">PTX:FATAL:   Quitting...</xsl:message>
         </xsl:when>
         <xsl:when test="$nspaces-valigns &gt; $number-panels">
             <xsl:message>PTX:WARNING: a &lt;sidebyside&gt; or &lt;sbsgroup&gt; has extra "@valigns" (did you confuse singular and plural attribute names?)</xsl:message>
@@ -4729,7 +4729,7 @@ Book (with parts), "section" at level 3
         </xsl:choose>
     </xsl:variable>
     <xsl:if test="$sbsdebug">
-        <xsl:message>M:<xsl:value-of select="$left-margin" />:<xsl:value-of select="$right-margin" />:M</xsl:message>
+        <xsl:message>PTX:DEBUG: M:<xsl:value-of select="$left-margin" />:<xsl:value-of select="$right-margin" />:M</xsl:message>
     </xsl:if>
     <!-- error check for reasonable values -->
     <!-- When there are three values, the "left" margin still -->
@@ -4774,7 +4774,7 @@ Book (with parts), "section" at level 3
         </xsl:choose>
     </xsl:variable>
     <xsl:if test="$sbsdebug">
-        <xsl:message>W:<xsl:value-of select="$widths" />:W</xsl:message>
+        <xsl:message>PTX:DEBUG: W:<xsl:value-of select="$widths" />:W</xsl:message>
     </xsl:if>
     <!-- check length (author-supplied could be wrong) -->
     <xsl:variable name="nspaces-widths" select="string-length($widths) - string-length(translate($widths, ' ', ''))" />
@@ -4782,7 +4782,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="$nspaces-widths &lt; $number-panels">
             <xsl:message>PTX:FATAL:   a &lt;sidebyside&gt; or &lt;sbsgroup&gt; does not have enough "@widths" (maybe you did not specify enough?)</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
-            <xsl:message terminate="yes">             That's fatal.  Sorry.  Quitting...</xsl:message>
+            <xsl:message terminate="yes">PTX:FATAL:   Quitting...</xsl:message>
         </xsl:when>
         <xsl:when test="$nspaces-widths &gt; $number-panels">
             <xsl:message>PTX:WARNING: a &lt;sidebyside&gt; or &lt;sbsgroup&gt; has extra "@widths" (did you confuse singular and plural attribute names?)</xsl:message>
@@ -4813,7 +4813,7 @@ Book (with parts), "section" at level 3
         <xsl:text>%</xsl:text>
     </xsl:variable>
     <xsl:if test="$sbsdebug">
-        <xsl:message>SW:<xsl:value-of select="$space-width" />:SW</xsl:message>
+        <xsl:message>PTX:DEBUG: SW:<xsl:value-of select="$space-width" />:SW</xsl:message>
     </xsl:if>
     <!-- overall error check on space width -->
     <xsl:choose>
@@ -5073,7 +5073,7 @@ Book (with parts), "section" at level 3
 <xsl:template match="li[p|ol|ul|dl]/text()">
     <xsl:variable name="text" select="normalize-space(.)" />
     <xsl:if test="$text">
-        <xsl:message>PTX:WARNING: Unstructured content within a list item is being ignored ("<xsl:value-of select="$text" />")</xsl:message>
+        <xsl:message>PTX:ERROR:   Unstructured content within a list item is being ignored ("<xsl:value-of select="$text" />")</xsl:message>
          <xsl:apply-templates select=".." mode="location-report" />
     </xsl:if>
 </xsl:template>
@@ -5179,7 +5179,7 @@ Book (with parts), "section" at level 3
                 <xsl:when test="@marker='square'">square</xsl:when>
                 <xsl:when test="@marker=''">none</xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>ptx:ERROR: unordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
+                    <xsl:message>PTX:ERROR: unordered list label (<xsl:value-of select="@marker" />) not recognized</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
@@ -5622,7 +5622,7 @@ Book (with parts), "section" at level 3
             <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 0) = '%'">
                 <xsl:variable name="approximate-inches" select="concat(substring($raw-workspace, 1, string-length($raw-workspace) - 1) div 10, 'in')"/>
                 <xsl:value-of select="$approximate-inches"/>
-                <xsl:message>PTX:WARNING:  as of 2020-03-17 worksheet exercises' workspace should be specified in 'in' or in 'cm'.  Approximating a page fraction of <xsl:value-of select="@workspace"/> by <xsl:value-of select="$approximate-inches"/>.</xsl:message>
+                <xsl:message>PTX:FALLBACK:  as of 2020-03-17 worksheet exercises' workspace should be specified in 'in' or in 'cm'.  Approximating a page fraction of <xsl:value-of select="@workspace"/> by <xsl:value-of select="$approximate-inches"/>.</xsl:message>
                 <xsl:apply-templates select="." mode="location-report"/>
             </xsl:when>
             <xsl:when test="substring($raw-workspace, string-length($raw-workspace) - 1) = 'in'">
@@ -5632,7 +5632,7 @@ Book (with parts), "section" at level 3
                 <xsl:value-of select="$raw-workspace"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message>PTX:WARNING:  a worksheet exercises', project-likes' or tasks' workspace should be specified with units of 'in' or 'cm', and not as "<xsl:value-of select="@workspace"/>".  Using a default of "2in".</xsl:message>
+                <xsl:message>PTX:FALLBACK:  a worksheet exercises', project-likes' or tasks' workspace should be specified with units of 'in' or 'cm', and not as "<xsl:value-of select="@workspace"/>".  Using a default of "2in".</xsl:message>
                 <xsl:text>2in</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
@@ -5676,7 +5676,7 @@ Book (with parts), "section" at level 3
             <exercise-component-report has-hint="{$b-has-reading-hint}" has-answer="{$b-has-reading-answer}" has-solution="{$b-has-reading-solution}"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:ERROR: can't determine exercise type</xsl:message>
+            <xsl:message>PTX:BUG:   can't determine exercise type</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:otherwise>
     </xsl:choose>
@@ -5745,7 +5745,7 @@ Book (with parts), "section" at level 3
         <!-- template                                                  -->
         <xsl:variable name="scope" select="id(@scope)"/>
         <xsl:if test="not($scope)">
-            <xsl:message>PTX:WARNING: unresolved @scope ("<xsl:value-of select="@scope"/>") for a &lt;solutions&gt; division</xsl:message>
+            <xsl:message>PTX:ERROR:   unresolved @scope ("<xsl:value-of select="@scope"/>") for a &lt;solutions&gt; division</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:if>
         <xsl:if test="not($scope/self::book|$scope/self::article|$scope/self::chapter|$scope/self::section|$scope/self::subsection|$scope/self::subsubsection|$scope/self::exercises|$scope/self::worksheet|$scope/self::reading-questions)">
@@ -8575,7 +8575,7 @@ Book (with parts), "section" at level 3
 
 <!-- Warnings for a high-frequency mistake -->
 <xsl:template match="xref[not(@ref) and not(@first and @last) and not(@provisional)]">
-    <xsl:message>PTX:WARNING: A cross-reference (&lt;xref&gt;) must have a @ref attribute, a @first/@last attribute pair, or a @provisional attribute</xsl:message>
+    <xsl:message>PTX:ERROR:   A cross-reference (&lt;xref&gt;) must have a @ref attribute, a @first/@last attribute pair, or a @provisional attribute</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />
     <xsl:call-template name="inline-warning">
         <xsl:with-param name="warning">
@@ -8845,7 +8845,7 @@ Book (with parts), "section" at level 3
             </xsl:variable>
             <xsl:if test="$the-title = ''">
                 <xsl:message>
-                    <xsl:text>PTX:WARNING:    </xsl:text>
+                    <xsl:text>PTX:ERROR:      </xsl:text>
                     <xsl:text>An &lt;xref&gt; wants to build text using a title to identify the target, but the target (which has @xml:id "</xsl:text>
                     <xsl:value-of select="@ref"/>
                     <xsl:text>") has no title, not even a default title.</xsl:text>
@@ -8856,7 +8856,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="$text-style = 'custom'">
             <xsl:if test="not($b-has-content)">
                 <xsl:message>
-                    <xsl:text>PTX:WARNING:    </xsl:text>
+                    <xsl:text>PTX:ERROR:      </xsl:text>
                     <xsl:text>An &lt;xref&gt; wants to use custom text to describe the target, but no custom text was provided as the content of the "xref".</xsl:text>
                 </xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
@@ -8877,7 +8877,7 @@ Book (with parts), "section" at level 3
             </xsl:variable>
             <xsl:if test="($the-number = '') and not($b-is-contributor-target)">
                 <xsl:message>
-                    <xsl:text>PTX:WARNING:    </xsl:text>
+                    <xsl:text>PTX:ERROR:      </xsl:text>
                     <xsl:text>An &lt;xref&gt; wants to build text using a number to identify the target, but the target (which has @xml:id "</xsl:text>
                     <xsl:value-of select="@ref"/>
                     <xsl:text>") does not have a number. You could try 'text="title"' or 'text="custom"' on the "xref".</xsl:text>
@@ -9021,13 +9021,13 @@ Book (with parts), "section" at level 3
         <!-- catch this first and provide no text at all (could provide busted text?) -->
         <!-- anonymous lists live in "p", but this is an unreliable indication        -->
         <xsl:when test="($text-style = 'phrase-global' or $text-style = 'phrase-hybrid') and ($target/self::li and not($target/ancestor::list or $target/ancestor::objectives or $target/ancestor::outcomes or $target/ancestor::exercise))">
-            <xsl:message>PTX:WARNING: a cross-reference to a list item of an anonymous list ("<xsl:apply-templates select="$target" mode="serial-number" />") with 'phrase-global' and 'phrase-hybrid' styles for the xref text will yield no text at all, and possibly create unpredictable results in output</xsl:message>
+            <xsl:message>PTX:ERROR:   a cross-reference to a list item of an anonymous list ("<xsl:apply-templates select="$target" mode="serial-number" />") with 'phrase-global' and 'phrase-hybrid' styles for the xref text will yield no text at all, and possibly create unpredictable results in output</xsl:message>
         </xsl:when>
         <xsl:when test="$text-style = 'phrase-global' or $text-style = 'phrase-hybrid'">
             <!-- no content override in this case -->
             <!-- maybe we can relax this somehow? -->
             <xsl:if test="$b-has-content">
-                <xsl:message>PTX:WARNING: providing content ("<xsl:value-of select="." />") for an "xref" element is ignored for 'phrase-global' and 'phrase-hybrid' styles for xref text</xsl:message>
+                <xsl:message>PTX:FALLBACK: providing content ("<xsl:value-of select="." />") for an "xref" element is ignored for 'phrase-global' and 'phrase-hybrid' styles for xref text</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:if>
             <!-- type-local first, no matter what    -->
@@ -9089,7 +9089,7 @@ Book (with parts), "section" at level 3
                 <!-- we can get here by a variety of routes.)          -->
                 <xsl:when test="$b-has-content">
                     <xsl:message>
-                        <xsl:text>PTX:WARNING:    </xsl:text>
+                        <xsl:text>PTX:DEPRECATE:  </xsl:text>
                         <xsl:text>An &lt;xref&gt; requests a 'title' as its text but also provides alternate content.  The construction is deprecated as of 2020-02-18.  Instead, specify that xref/@text should be 'custom', either globally or on a per-xref basis.</xsl:text>
                     </xsl:message>
                     <xsl:apply-templates select="." mode="location-report" />
@@ -10330,7 +10330,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Final period when no following-siblings     -->
 
 <xsl:template match="biblio[not(@type = 'raw') and not(@type = 'bibtex')]/*">
-    <xsl:message>PTX:WARNING:  a child of "biblio" (<xsl:value-of select="local-name()"/>) is not being processed.  Please report me so this can be fixed.</xsl:message>
+    <xsl:message>PTX:BUG:      a child of "biblio" (<xsl:value-of select="local-name()"/>) is not being processed.  Please report me so this can be fixed.</xsl:message>
 </xsl:template>
 
 <!-- Authors: no lead-in, names via the shared "contributor-names" -->
@@ -10598,19 +10598,33 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <xsl:template name="warning-line-by-line">
     <xsl:param name="warning" />
-    <xsl:variable name="after" select="substring-before($warning,'&#xa;')"/>
+    <!-- the first line, which may be all of the text -->
+    <xsl:variable name="first-line">
+        <xsl:choose>
+            <xsl:when test="contains($warning, '&#xa;')">
+                <xsl:value-of select="substring-before($warning, '&#xa;')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$warning"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
-        <!-- no line breaks in warning, just print it -->
-        <xsl:when test="substring-before($warning,'&#xa;') = ''">
-            <xsl:message><xsl:value-of select="$warning" /></xsl:message>
+        <!-- a message with no content is reported strangely  -->
+        <!-- by the processing library, a space displays well -->
+        <xsl:when test="$first-line = ''">
+            <xsl:message><xsl:text> </xsl:text></xsl:message>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message><xsl:value-of select="substring-before($warning,'&#xa;')" /></xsl:message>
-            <xsl:call-template name="warning-line-by-line">
-                <xsl:with-param name="warning" select="substring-after($warning,'&#xa;')" />
-            </xsl:call-template>
+            <xsl:message><xsl:value-of select="$first-line"/></xsl:message>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- and the lines after the first, if any -->
+    <xsl:if test="contains($warning, '&#xa;')">
+        <xsl:call-template name="warning-line-by-line">
+            <xsl:with-param name="warning" select="substring-after($warning, '&#xa;')"/>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 <!-- Report the location of an element or attribute, for use after a   -->
@@ -10736,7 +10750,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>    1.  Code generation is functional, but does not respect indentation&#xa;</xsl:text>
                 <xsl:text>    2.  LaTeX generation is functional, could be improved, 2020-11-11&#xa;</xsl:text>
-                <xsl:text>    2.  HTML generation is functional, could be improved, 2020-11-11&#xa;</xsl:text>
+                <xsl:text>    3.  HTML generation is functional, could be improved, 2020-11-11&#xa;</xsl:text>
             </xsl:with-param>
         </xsl:call-template>
     </xsl:if>
@@ -10940,7 +10954,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>P100Y</xsl:text>
-            <xsl:message>PTX:WARNING:   "author.deprecations.all" should be "yes" or "no", not "<xsl:value-of select="$author.deprecations.all"/>", using the default value of "yes"</xsl:message>
+            <xsl:message>PTX:FALLBACK:   "author.deprecations.all" should be "yes" or "no", not "<xsl:value-of select="$author.deprecations.all"/>", using the default value of "yes"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>

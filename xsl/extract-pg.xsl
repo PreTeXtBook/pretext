@@ -1784,7 +1784,7 @@
     <!-- warning if there is no content -->
     <xsl:if test="not(descendant::unit) and not(descendant::per) and not(descendant::mag)">
         <xsl:message>
-        <xsl:text>PTX:WARNING: magnitude or units needed</xsl:text>
+        <xsl:text>PTX:ERROR:   magnitude or units needed</xsl:text>
         </xsl:message>
     </xsl:if>
     <!-- print magnitude if there is one -->
@@ -1865,7 +1865,7 @@
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>
-                <xsl:text>PTX:WARNING: base unit needed</xsl:text>
+                <xsl:text>PTX:ERROR:   base unit needed</xsl:text>
             </xsl:message>
         </xsl:otherwise>
     </xsl:choose>
@@ -2815,7 +2815,7 @@
             <xsl:text>!{\vrule width 0.11em}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING:  left or right attribute not recognized: use none, minor, medium, major</xsl:message>
+            <xsl:message>PTX:FALLBACK:  left or right attribute not recognized: use none, minor, medium, major</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -2838,7 +2838,7 @@
             <xsl:text>3</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:WARNING:  top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
+            <xsl:message>PTX:FALLBACK:  top or bottom attribute not recognized: use none, minor, medium, major</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
