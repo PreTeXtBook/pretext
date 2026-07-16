@@ -106,6 +106,7 @@
                     Epub? &amp;
                     Jupyter? &amp;
                     Braille? &amp;
+                    Text? &amp;
                     Webwork?
                 }
             </code>
@@ -664,6 +665,24 @@
 
 
     <section>
+        <title>Text Options</title>
+
+        <p>
+            These option(s) control the plain text and markdown outputs.  The character repertoire is <c>unicode</c> (the default) for genuine dashes, quotations marks, and the like, or <c>ascii</c> for stand-ins drawn from the 7-bit repertoire.
+        </p>
+
+        <fragment xml:id="text">
+            <title>Text Options</title>
+            <code>
+            Text =
+                element text {
+                    attribute characters { "unicode" | "ascii" }?
+                }
+            </code>
+        </fragment>
+    </section>
+
+    <section>
         <title><webwork/> Options</title>
 
         <p>
@@ -709,6 +728,7 @@
             <fragref ref="epub" />
             <fragref ref="jupyter" />
             <fragref ref="braille" />
+            <fragref ref="text" />
             <fragref ref="webwork" />
             <code>
             }
