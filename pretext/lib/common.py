@@ -287,7 +287,7 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
             # start will be reset to non-zero, so this is
             # one-time only, and never if there are no messages
             if (start == 0) and (end > 0):
-                log.info("messages from the log for XSL processing:")
+                log.info("messages from the log for XSL processing (prefaced with a *):")
             # print out any unprinted messages from error_log
             for line in xslt.error_log[start:end]:
                 message = "* {}".format(line.message)
