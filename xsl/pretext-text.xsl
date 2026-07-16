@@ -410,6 +410,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
+<!-- ################# -->
+<!-- Prose Text Nodes  -->
+<!-- ################# -->
+
+<!-- Authors hard-wrap and indent their source; none of that      -->
+<!-- belongs in the output.  -common's "text()" template handles  -->
+<!-- punctuation migration and whitespace at the edges of nodes,  -->
+<!-- and offers this hook for conversion-specific processing:     -->
+<!-- every interior newline (with the indentation following it)   -->
+<!-- collapses to a single space, so a paragraph becomes one long -->
+<!-- line, ready for any pager to soft-wrap.  The workhorse,      -->
+<!-- "flatten-line-breaks", lives with the text utilities.        -->
+<xsl:template name="text-processing">
+    <xsl:param name="text"/>
+    <xsl:call-template name="flatten-line-breaks">
+        <xsl:with-param name="text" select="$text"/>
+    </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="p">
     <!-- space with a blank line if not -->
     <!-- first in a structured element  -->

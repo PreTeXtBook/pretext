@@ -932,6 +932,31 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Collapse each newline, and the horizontal space around -->
+<!-- it, to a single space: hard-wrapped, indented source   -->
+<!-- becomes one long line                                  -->
+<xsl:template name="flatten-line-breaks">
+    <xsl:param name="text"/>
+    <xsl:choose>
+        <xsl:when test="contains($text, '&#xa;')">
+            <xsl:call-template name="strip-trailing-whitespace">
+                <xsl:with-param name="text" select="substring-before($text, '&#xa;')"/>
+            </xsl:call-template>
+            <xsl:text> </xsl:text>
+            <xsl:call-template name="flatten-line-breaks">
+                <xsl:with-param name="text">
+                    <xsl:call-template name="strip-leading-whitespace">
+                        <xsl:with-param name="text" select="substring-after($text, '&#xa;')"/>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$text"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- spurious newlines introduce whitespace on either side -->
 <!-- we split at newlines, strip consecutive whitesapce on either side, -->
 <!-- and replace newlines by spaces (could restore a single newline) -->
