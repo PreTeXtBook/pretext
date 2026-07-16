@@ -2330,7 +2330,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 
 def text(xml, pub_file, stringparams, out_file, dest_dir, text_format):
     """
-    Convert XML source to a plain text rendering.
+    Convert XML source to a plain text or markdown rendering.
 
     Args:
         xml (str): Path to the XML source file.
@@ -2338,13 +2338,13 @@ def text(xml, pub_file, stringparams, out_file, dest_dir, text_format):
         stringparams (dict): Dictionary of string parameters to control the transformation.
         out_file (str or None): Path to the output file.  If None, the file lands in dest_dir.
         dest_dir (str): Directory for the output file when out_file is not specified.
-        text_format (str): "text", naming the stylesheet and the file extension.
+        text_format (str): "text" or "markdown", naming the stylesheet and the file extension.
 
     Returns:
         None
 
     Side Effects:
-        - Generates a text file in the specified destination.
+        - Generates a text (or markdown) file in the specified destination.
     """
 
     # to ensure provided stringparams aren't mutated unintentionally
@@ -2356,9 +2356,11 @@ def text(xml, pub_file, stringparams, out_file, dest_dir, text_format):
 
     text_format_stylesheets = {
         "text": "pretext-text.xsl",
+        "markdown": "pretext-markdown.xsl",
     }
     text_format_extensions = {
         "text": ".txt",
+        "markdown": ".md",
     }
 
     msg = "converting {} to {} format in {}"
