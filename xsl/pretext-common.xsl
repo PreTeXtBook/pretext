@@ -10736,7 +10736,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <xsl:text>&#xa;</xsl:text>
                 <xsl:text>    1.  Code generation is functional, but does not respect indentation&#xa;</xsl:text>
                 <xsl:text>    2.  LaTeX generation is functional, could be improved, 2020-11-11&#xa;</xsl:text>
-                <xsl:text>    2.  HTML generation is functional, could be improved, 2020-11-11&#xa;</xsl:text>
+                <xsl:text>    3.  HTML generation is functional, could be improved, 2020-11-11&#xa;</xsl:text>
             </xsl:with-param>
         </xsl:call-template>
     </xsl:if>
