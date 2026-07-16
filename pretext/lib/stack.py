@@ -130,11 +130,18 @@ def _stack_download_assets(assets, api_url, asset_prefix_abs, stack_file):
     except ImportError:
         raise ImportError(__module_warning.format("pyMuPDF"))
 
-    # Download assets (images, plots)
+    # Download assets (images, plots). Newer STACK API deployments serve
+    # these indirectly through plot.php (so a submitted file can't be
+    # accessed/run directly); older deployments only have the direct link.
+    # Try the new path first and fall back to the old one if it's not there.
     for filename, urlname in assets.items():
-        plots_url = api_url.replace('/render', '/plots')
-        full_url = f"{plots_url}/{urlname}";
+        plot_php_url = api_url.replace('/render', '/plot.php')
+        full_url = f"{plot_php_url}/{urlname}";
         response = requests.get(full_url)
+        if response.status_code != 200:
+            plots_url = api_url.replace('/render', '/plots')
+            full_url = f"{plots_url}/{urlname}";
+            response = requests.get(full_url)
         if response.status_code == 200:
             response.raw.decode_content = True
             asset_file = f"{asset_prefix_abs}-{filename}"
