@@ -303,6 +303,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="sidebyside"/>
 </xsl:template>
 
+<!-- ######### -->
+<!-- Footnotes -->
+<!-- ######### -->
+
+<!-- A numbered mark in place; the text collects at the end of  -->
+<!-- the division (see the division template)                   -->
+<xsl:template match="fn">
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="." mode="serial-number"/>
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<xsl:template match="fn" mode="collected">
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="." mode="serial-number"/>
+    <xsl:text>] </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 <!-- ####### -->
 <!-- Tabular -->
 <!-- ####### -->
@@ -472,6 +492,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;&#xa;</xsl:text>
     <!-- metadata-ish, eg "title", should be killed by default -->
     <xsl:apply-templates select="*"/>
+    <!-- footnotes belonging to this division (and not to a  -->
+    <!-- deeper one) collect here, at its end                -->
+    <xsl:variable name="the-notes" select=".//fn[count(ancestor::*[&STRUCTURAL-FILTER;][1]|current()) = 1]"/>
+    <xsl:if test="$the-notes">
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:apply-templates select="$the-notes" mode="collected"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- The document itself: its title as the topmost heading, then  -->
