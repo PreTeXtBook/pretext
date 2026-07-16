@@ -3955,7 +3955,7 @@ Book (with parts), "section" at level 3
 <!-- or is defined to be a null string in a particular conversion stylesheet, in which    -->
  <!-- case no extra space is added. -->
 <xsl:template name="case-cycle-delimiter-space">
-    <xsl:message>PTX:BUG A "case" has "direction" equal to "cycle", but the conversion for this output target does not have a "delimiter space" symbol defined. The maintainer for this output target may wish to know about this (or may wish to set the "delimiter space" symbol to be a null string to suppress this warning message).</xsl:message>
+    <xsl:message>PTX:BUG: A "case" has "direction" equal to "cycle", but the conversion for this output target does not have a "delimiter space" symbol defined. The maintainer for this output target may wish to know about this (or may wish to set the "delimiter space" symbol to be a null string to suppress this warning message).</xsl:message>
     <xsl:apply-templates select="." mode="location-report"/>
 </xsl:template>
 

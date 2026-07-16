@@ -403,7 +403,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- But first, we see if there is a coding error, due to            -->
     <!-- the critical chunk level variable being overridden              -->
     <xsl:if test="$chunk-level = ''">
-        <xsl:message>PTX:BUG     the $chunk-level variable has been left undefined&#xa;due to a change in a stylesheet that imports the HTML conversion&#xa;and the computation of an index page may fail spectacularly (infinite recursion?)"</xsl:message>
+        <xsl:message>PTX:BUG:    the $chunk-level variable has been left undefined&#xa;due to a change in a stylesheet that imports the HTML conversion&#xa;and the computation of an index page may fail spectacularly (infinite recursion?)"</xsl:message>
     </xsl:if>
     <xsl:variable name="sanitized-ref">
         <xsl:choose>

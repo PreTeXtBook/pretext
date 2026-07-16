@@ -3267,7 +3267,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$latex.font.size='20pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
                 <xsl:otherwise>
                     <xsl:text>10pt</xsl:text>
-                    <xsl:message>PTX:FALLBACK   the *deprecated* latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />".  Using the default ("10pt")</xsl:message>
+                    <xsl:message>PTX:FALLBACK:  the *deprecated* latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />".  Using the default ("10pt")</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
