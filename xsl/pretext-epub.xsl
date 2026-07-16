@@ -205,7 +205,7 @@
         <xsl:call-template name="banner-warning">
             <xsl:with-param name="warning">PTX:FATAL: EPUB creation is only implemented for a "book" or an "article",&#xa;not a "<xsl:value-of select="local-name($document-root)"/>", and we cannot recover</xsl:with-param>
         </xsl:call-template>
-        <xsl:message terminate="yes">Quitting...</xsl:message>
+        <xsl:message terminate="yes">PTX:FATAL:   Quitting...</xsl:message>
     </xsl:if>
     <!-- analyze authored source -->
     <xsl:apply-templates select="$original" mode="generic-warnings"/>

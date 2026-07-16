@@ -4341,7 +4341,7 @@ Book (with parts), "section" at level 3
     <xsl:if test="$normalized-aspect = 0">
         <xsl:message>PTX:FATAL:   an @aspect attribute equal to zero will cause serious errors.</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
-        <xsl:message terminate="yes">Quitting...</xsl:message>
+        <xsl:message terminate="yes">PTX:FATAL:   Quitting...</xsl:message>
     </xsl:if>
 
     <!-- Perhaps save for debugging -->
@@ -4577,7 +4577,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="$nspaces-valigns &lt; $number-panels">
             <xsl:message>PTX:FATAL:   a &lt;sidebyside&gt; or &lt;sbsgroup&gt; does not have enough "@valigns" (maybe you did not specify enough?)</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
-            <xsl:message terminate="yes">             That's fatal.  Sorry.  Quitting...</xsl:message>
+            <xsl:message terminate="yes">PTX:FATAL:   Quitting...</xsl:message>
         </xsl:when>
         <xsl:when test="$nspaces-valigns &gt; $number-panels">
             <xsl:message>PTX:WARNING: a &lt;sidebyside&gt; or &lt;sbsgroup&gt; has extra "@valigns" (did you confuse singular and plural attribute names?)</xsl:message>
@@ -4782,7 +4782,7 @@ Book (with parts), "section" at level 3
         <xsl:when test="$nspaces-widths &lt; $number-panels">
             <xsl:message>PTX:FATAL:   a &lt;sidebyside&gt; or &lt;sbsgroup&gt; does not have enough "@widths" (maybe you did not specify enough?)</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
-            <xsl:message terminate="yes">             That's fatal.  Sorry.  Quitting...</xsl:message>
+            <xsl:message terminate="yes">PTX:FATAL:   Quitting...</xsl:message>
         </xsl:when>
         <xsl:when test="$nspaces-widths &gt; $number-panels">
             <xsl:message>PTX:WARNING: a &lt;sidebyside&gt; or &lt;sbsgroup&gt; has extra "@widths" (did you confuse singular and plural attribute names?)</xsl:message>

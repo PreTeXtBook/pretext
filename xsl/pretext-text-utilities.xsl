@@ -1136,7 +1136,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$characters = ''">
             <xsl:message>PTX:FATAL:   Unable to find an unused character in:&#xa;<xsl:value-of select="$string" />&#xa;using characters from: <xsl:value-of select="$charset" /></xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
-            <xsl:message terminate="yes">             That's fatal.  Sorry.  Quitting...</xsl:message>
+            <xsl:message terminate="yes">PTX:FATAL:   Quitting...</xsl:message>
         </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="substring($characters, 1, 1)"/>
