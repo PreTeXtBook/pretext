@@ -504,23 +504,82 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Environments -->
 <!-- ############ -->
 
-<xsl:template match="&REMARK-LIKE;">
+<!-- A block's heading sits on its own line, set off from the   -->
+<!-- content by a blank line; the markdown flavor overrides to  -->
+<!-- embolden it                                                -->
+<xsl:template name="block-heading-line">
+    <xsl:param name="heading"/>
+    <xsl:copy-of select="$heading"/>
+    <xsl:text>&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<!-- The heading line of a block: type, number when there is one, -->
+<!-- a parenthesized creator for the theorem-like and axiom-like, -->
+<!-- title when there is one                                      -->
+<xsl:template match="*" mode="block-heading">
+    <xsl:call-template name="block-heading-line">
+        <xsl:with-param name="heading">
+            <xsl:apply-templates select="." mode="type-name"/>
+            <xsl:variable name="the-number">
+                <xsl:apply-templates select="." mode="number"/>
+            </xsl:variable>
+            <xsl:if test="not($the-number = '')">
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$the-number"/>
+            </xsl:if>
+            <xsl:if test="creator and (&THEOREM-FILTER; or &AXIOM-FILTER;)">
+                <xsl:text> (</xsl:text>
+                <xsl:apply-templates select="." mode="creator-full"/>
+                <xsl:text>)</xsl:text>
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="title">
+                    <xsl:text> </xsl:text>
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>.</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="&REMARK-LIKE;|&DEFINITION-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|&GOAL-LIKE;|assemblage">
     <!-- space with a blank line if not -->
     <!-- first in a structured element  -->
     <!-- barring metadata-ish           -->
     <xsl:if test="preceding-sibling::*[not(self::title)]">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="number"/>
-    <xsl:if test="title">
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="." mode="title-full"/>
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="block-heading"/>
     <!-- structured -->
     <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<xsl:template match="&PROJECT-LIKE;|&OPENPROBLEM-LIKE;">
+    <xsl:if test="preceding-sibling::*[not(self::title)]">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="block-heading"/>
+    <xsl:apply-templates select="introduction|statement|task|conclusion|&SOLUTION-LIKE;"/>
+</xsl:template>
+
+<xsl:template match="task">
+    <xsl:if test="preceding-sibling::*[not(self::title)]">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="serial-number"/>
+    <xsl:text>.</xsl:text>
+    <xsl:if test="title">
+        <xsl:text> (</xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:text>)</xsl:text>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::title)]"/>
 </xsl:template>
 
 <xsl:template match="&EXAMPLE-LIKE;">
@@ -530,21 +589,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="preceding-sibling::*[not(self::title)]">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="number"/>
-    <xsl:if test="title">
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="." mode="title-full"/>
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="block-heading"/>
     <xsl:choose>
         <xsl:when test="statement">
             <xsl:apply-templates select="statement"/>
             <xsl:apply-templates select="&SOLUTION-LIKE;"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="*[self::hint|self::answer|self::solution]"/>
+            <xsl:apply-templates select="*[not(self::title)]"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -556,14 +608,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="preceding-sibling::*[not(self::title)]">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="number"/>
-    <xsl:if test="title">
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="." mode="title-full"/>
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="block-heading"/>
     <xsl:choose>
         <xsl:when test="statement">
             <xsl:apply-templates select="statement"/>
@@ -577,8 +622,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- THEOREM-LIKE only -->
 <xsl:template match="&PROOF-LIKE;">
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>.&#xa;</xsl:text>
+    <!-- set off from a preceding statement -->
+    <xsl:if test="preceding-sibling::*[not(self::title)]">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:call-template name="block-heading-line">
+        <xsl:with-param name="heading">
+            <xsl:apply-templates select="." mode="type-name"/>
+            <xsl:text>.</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
     <!-- structured -->
     <xsl:apply-templates select="*"/>
 </xsl:template>
@@ -586,6 +639,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######### -->
 <!-- Exercises -->
 <!-- ######### -->
+
+<!-- An inline exercise (a "Checkpoint") reads as a block, with  -->
+<!-- the full heading treatment; a divisional exercise keeps its -->
+<!-- run-in serial number below, reading as a numbered item      -->
+<xsl:template match="exercise[&INLINE-EXERCISE-FILTER;]">
+    <xsl:if test="preceding-sibling::*[not(self::title)]">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="block-heading"/>
+    <xsl:choose>
+        <xsl:when test="statement">
+            <xsl:apply-templates select="statement"/>
+            <xsl:apply-templates select="&SOLUTION-LIKE;"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="*[self::hint|self::answer|self::solution]"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <xsl:template match="exercise">
     <!-- space with a blank line if not -->
@@ -614,20 +686,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="&SOLUTION-LIKE;">
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:variable name="the-number">
-        <xsl:apply-templates select="." mode="non-singleton-number" />
-    </xsl:variable>
-    <!-- An empty value means element is a singleton -->
-    <!-- else the serial number comes through        -->
-    <xsl:if test="not($the-number = '')">
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="." mode="serial-number" />
+    <!-- set off from a preceding statement -->
+    <xsl:if test="preceding-sibling::*[not(self::title)]">
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>. </xsl:text>
+    <xsl:call-template name="block-heading-line">
+        <xsl:with-param name="heading">
+            <xsl:apply-templates select="." mode="type-name"/>
+            <xsl:variable name="the-number">
+                <xsl:apply-templates select="." mode="non-singleton-number" />
+            </xsl:variable>
+            <!-- An empty value means element is a singleton -->
+            <!-- else the serial number comes through        -->
+            <xsl:if test="not($the-number = '')">
+                <xsl:text> </xsl:text>
+                <xsl:apply-templates select="." mode="serial-number" />
+            </xsl:if>
+            <xsl:text>.</xsl:text>
+        </xsl:with-param>
+    </xsl:call-template>
     <xsl:apply-templates select="*"/>
-    <!-- not needed if structured -->
-    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ############### -->
