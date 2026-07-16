@@ -118,61 +118,211 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$content"/>
 </xsl:template>
 
+<!-- ########## -->
 <!-- Characters -->
+<!-- ########## -->
 
-<!-- Idea: variables from "choose" on $text.encoding variable      -->
-<!-- to use cheap ASCII versions (or stand-ins, like [PER-MILLE]), -->
-<!-- versus more realistic Unicode versions                        -->
+<!-- Each character element renders per the publication file's       -->
+<!-- character repertoire: a genuine Unicode character, or a 7-bit   -->
+<!-- ASCII stand-in in the long plain-text tradition.  The file is   -->
+<!-- UTF-8 either way; with the "ascii" election that fact is        -->
+<!-- invisible.  ($b-text-unicode arrives from the publication       -->
+<!-- machinery; "unicode" is the default.)                           -->
 
-<!-- N.B. Quotation marks are localized by language in other       -->
-<!-- conversions (HTML, LaTeX) and skipped in other conversions    -->
-<!-- (braille).  They would likely need to use Unicode characters  -->
-<!-- like  «, »  rather than cheap 7-bit ASCII versions, like      -->
-<!-- <<, >>.  So this would force the issue of a Unicode (8-bit    -->
-<!-- and more-than) switch and supporting that.  So as of          -->
-<!-- 2026-02-18 we are punting.                                    -->
+<!-- TODO: quotation marks should localize by language in the        -->
+<!-- unicode repertoire, as other conversions do.                    -->
 
-<!-- ASCII we just use a regular space -->
 <xsl:template name="nbsp-character">
-    <xsl:text> </xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#xa0;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text> </xsl:text></xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template name="ndash-character">
-    <xsl:text>-</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2013;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>-</xsl:text></xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template name="mdash-character">
-    <xsl:text>-</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2014;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>--</xsl:text></xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- The abstract template for "mdash" consults a publisher option -->
 <!-- for thin space, or no space, surrounding an em-dash.  So the  -->
 <!-- "thin-space-character" is needed for that purpose, and does   -->
 <!-- not have an associated empty PTX element.                     -->
-
-<!-- ASCII we just use a full space -->
 <xsl:template name="thin-space-character">
-    <xsl:text> </xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2009;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text> </xsl:text></xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*" mode="lsq-character">
-    <xsl:text>'</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2018;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>'</xsl:text></xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*" mode="rsq-character">
-    <xsl:text>'</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2019;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>'</xsl:text></xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*" mode="lq-character">
-    <xsl:text>"</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x201C;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>"</xsl:text></xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*" mode="rq-character">
-    <xsl:text>"</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x201D;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>"</xsl:text></xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template name="ellipsis-character">
-    <xsl:text>...</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2026;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>...</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="copyright-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#xa9;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>(c)</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="registered-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#xae;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>(R)</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="trademark-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2122;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>(TM)</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="degree-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#xb0;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>deg</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="prime-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2032;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>'</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="dblprime-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2033;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>''</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="langle-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x27e8;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>&lt;</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="rangle-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x27e9;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>&gt;</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="midpoint-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#xb7;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>*</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="pilcrow-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#xb6;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>[pilcrow]</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="section-mark-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#xa7;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>[section]</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="minus-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2212;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>-</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="times-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#xd7;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>x</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="obelus-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#xf7;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>/</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="plusminus-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#xb1;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>+/-</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="permille-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2030;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>o/oo</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="solidus-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2044;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>/</xsl:text></xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="swungdash-character">
+    <xsl:choose>
+        <xsl:when test="$b-text-unicode"><xsl:text>&#x2053;</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>~</xsl:text></xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Math -->
