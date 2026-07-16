@@ -9089,7 +9089,7 @@ Book (with parts), "section" at level 3
                 <!-- we can get here by a variety of routes.)          -->
                 <xsl:when test="$b-has-content">
                     <xsl:message>
-                        <xsl:text>PTX:WARNING:    </xsl:text>
+                        <xsl:text>PTX:DEPRECATE:  </xsl:text>
                         <xsl:text>An &lt;xref&gt; requests a 'title' as its text but also provides alternate content.  The construction is deprecated as of 2020-02-18.  Instead, specify that xref/@text should be 'custom', either globally or on a per-xref basis.</xsl:text>
                     </xsl:message>
                     <xsl:apply-templates select="." mode="location-report" />

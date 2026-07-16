@@ -1384,8 +1384,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:when test="$publication/source/@webwork-problems">
                 <xsl:value-of select="str:replace($publication/source/@webwork-problems, '&#x20;', '%20')"/>
-                <xsl:message>PTX:ERROR:   the publication file entry  source/@webwork-problems  is</xsl:message>
-                <xsl:message>             deprecated, please move to using managed directories</xsl:message>
+                <xsl:message>PTX:DEPRECATE: the publication file entry  source/@webwork-problems  is</xsl:message>
+                <xsl:message>               deprecated, please move to using managed directories</xsl:message>
             </xsl:when>
             <!-- no specification, so empty string for filename -->
             <!-- this will be noted where it is employed        -->
@@ -1975,7 +1975,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:message>PTX:WARNING: your document is not a book with parts, so the publisher file  numbering/divisions/@part-structure  entry is being ignored</xsl:message>
                 </xsl:when>
                 <xsl:when test="$version-docinfo/numbering/division/@part">
-                    <xsl:message>PTX:WARNING: your document is not a book with parts, and docinfo/numbering/division/@part is deprecated anyway and is being ignored</xsl:message>
+                    <xsl:message>PTX:DEPRECATE: your document is not a book with parts, and docinfo/numbering/division/@part is deprecated anyway and is being ignored</xsl:message>
                 </xsl:when>
             </xsl:choose>
             <!-- flag this situation -->
@@ -2583,7 +2583,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="debug.html.theme-name"  select="''" />
 
 <xsl:variable name="html-theme-name">
-    <xsl:variable name="warning-message">PTX:WARNING: The "FROMSTYLE" style requested in publication/html/css is deprecated. Your book will be built with theme="TOSTYLE". See the PreTeXt Guide for options for the newer HTML themes and their specification .</xsl:variable>
+    <xsl:variable name="warning-message">PTX:DEPRECATE: The "FROMSTYLE" style requested in publication/html/css is deprecated. Your book will be built with theme="TOSTYLE". See the PreTeXt Guide for options for the newer HTML themes and their specification .</xsl:variable>
     <xsl:choose>
         <xsl:when test="$debug.html.theme-name != ''">
             <xsl:value-of select="$debug.html.theme-name"/>
@@ -3052,7 +3052,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- through the generic machinery, which has its own warning.   -->
         <xsl:when test="not($jupyter.kernel = '') and not($jupyter.kernel = 'python3') and not($jupyter.kernel = 'sagemath') and contains('|Python3|python 3|Python 3|py|Py|python|Python|', concat('|', $jupyter.kernel, '|'))">
             <xsl:text>python3</xsl:text>
-            <xsl:message>PTX:WARNING: the stringparam "jupyter.kernel" is deprecated (2026-07-10), and your value "<xsl:value-of select="$jupyter.kernel"/>" has been interpreted as "python3".  Move to the publication file entry, jupyter/@kernel, with the value "python3".</xsl:message>
+            <xsl:message>PTX:DEPRECATE: the stringparam "jupyter.kernel" is deprecated (2026-07-10), and your value "<xsl:value-of select="$jupyter.kernel"/>" has been interpreted as "python3".  Move to the publication file entry, jupyter/@kernel, with the value "python3".</xsl:message>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="$publisher-attribute-options/jupyter/pi:pub-attribute[@name='kernel']" mode="set-pubfile-variable"/>
@@ -3844,14 +3844,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- it is among the legal options, use it and issue warning         -->
         <xsl:when test="not($pubfile-attribute) and @legacy-stringparam and (@freeform = 'yes' or dyn:evaluate(concat('$', @legacy-stringparam)) = $all-options)">
             <xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>
-            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" will be used. However you should move to using a publisher file entry for  <xsl:value-of select="$full-path"/>  instead.</xsl:message>
+            <xsl:message>PTX:DEPRECATE: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" will be used. However you should move to using a publisher file entry for  <xsl:value-of select="$full-path"/>  instead.</xsl:message>
         </xsl:when>
         <!-- if nothing is declared in the publisher file, not even as null  -->
         <!-- and if there is an old stringparam that we still honor, and if  -->
         <!-- it is among the legacy options, use default and issue warning   -->
         <xsl:when test="not($pubfile-attribute) and @legacy-stringparam and dyn:evaluate(concat('$', @legacy-stringparam)) = $legacy-options">
             <xsl:value-of select="$the-default"/>
-            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" has been retired. You should move to using a publisher file entry  <xsl:value-of select="$full-path"/>  with possible values: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
+            <xsl:message>PTX:DEPRECATE: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" has been retired. You should move to using a publisher file entry  <xsl:value-of select="$full-path"/>  with possible values: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
         </xsl:when>
         <!-- if nothing is declared in the publisher file, not even as null  -->
         <!-- and if there is an old stringparam that we still honor, but its -->
@@ -3859,7 +3859,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- then use default and issue warning                              -->
         <xsl:when test="not($pubfile-attribute) and @legacy-stringparam and dyn:evaluate(concat('$', @legacy-stringparam)) != ''">
             <xsl:value-of select="$the-default"/>
-            <xsl:message>PTX:WARNING: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" is not a legal option. You should move to using a publisher file entry  <xsl:value-of select="$full-path"/>  with possible values: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
+            <xsl:message>PTX:DEPRECATE: the stringparam "<xsl:value-of select="@legacy-stringparam"/>" is deprecated. Also your value, "<xsl:value-of select="dyn:evaluate(concat('$', @legacy-stringparam))"/>" is not a legal option. You should move to using a publisher file entry  <xsl:value-of select="$full-path"/>  with possible values: <xsl:apply-templates select="$all-options" mode="quoted-list"/>.  The default, "<xsl:value-of select="$the-default"/>", will be used instead.</xsl:message>
         </xsl:when>
         <!-- if nothing is declared in the publisher file or it is declared  -->
         <!-- as null, use the default, which might be null                   -->
