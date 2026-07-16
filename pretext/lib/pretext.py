@@ -2323,6 +2323,57 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     log.info("MyOpenMath static problem download complete")
 
 
+####################
+# Conversion to Text
+####################
+
+
+def text(xml, pub_file, stringparams, out_file, dest_dir, text_format):
+    """
+    Convert XML source to a plain text rendering.
+
+    Args:
+        xml (str): Path to the XML source file.
+        pub_file (str or None): Path to the publisher configuration file, or None if not used.
+        stringparams (dict): Dictionary of string parameters to control the transformation.
+        out_file (str or None): Path to the output file.  If None, the file lands in dest_dir.
+        dest_dir (str): Directory for the output file when out_file is not specified.
+        text_format (str): "text", naming the stylesheet and the file extension.
+
+    Returns:
+        None
+
+    Side Effects:
+        - Generates a text file in the specified destination.
+    """
+
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+
+    # support publisher file, not subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+
+    text_format_stylesheets = {
+        "text": "pretext-text.xsl",
+    }
+    text_format_extensions = {
+        "text": ".txt",
+    }
+
+    msg = "converting {} to {} format in {}"
+    log.info(msg.format(xml, text_format, dest_dir))
+
+    conversion_xslt = os.path.join(
+        common.get_ptx_xsl_path(), text_format_stylesheets[text_format]
+    )
+    derivedname = common.get_output_filename(
+        xml, out_file, dest_dir, text_format_extensions[text_format]
+    )
+    common.xsltproc(conversion_xslt, xml, derivedname, None, stringparams)
+    log.info("{} file deposited as {}".format(text_format, derivedname))
+
+
 #######################
 # Conversion to Braille
 #######################
