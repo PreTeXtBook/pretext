@@ -4535,6 +4535,140 @@ TEST_CASE( "Test the add function" ) {
         </exercise>
     </exercises>
 
+    <exercises xml:id="fill-in-literal-exercises">
+        <title>Fill-In, Literal String Answers</title>
+
+        <introduction>
+            <p>For a string answer, <pretext/> compares the reader's response against the answer as a literal string.  So characters that have special meaning in a regular expression, such as <c>.</c>, <c>(</c>, or <c>+</c>, are matched exactly rather than acting as wildcards or operators.  These examples exercise that behavior across a range of such characters, whether the correct answer is compared explicitly (with <c>use-answer</c> or <c>literal</c>) or left to be supplied automatically from the <c>fillin</c>.</p>
+        </introduction>
+
+        <exercise label="fillin-literal-period">
+            <title>Fill-In, Decimal Point</title>
+            <statement>
+                <p>Give the value of <m>\pi</m>, rounded to two decimal places.
+                <fillin mode="string" answer="3.14"/></p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <strcmp use-answer="yes"/>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-literal-address">
+            <title>Fill-In, A Dotted Address</title>
+            <statement>
+                <p>Enter the IPv4 address <c>192.168.1.1</c>, including its dots.
+                <fillin mode="string" answer="192.168.1.1"/></p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <strcmp use-answer="yes"/>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-literal-formula">
+            <title>Fill-In, A Formula with Several Symbols</title>
+            <statement>
+                <p>Enter the formula <c>f(x) = x^2 + 1</c> exactly, using a caret for the exponent.
+                <fillin mode="string" answer="f(x) = x^2 + 1"/></p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <strcmp use-answer="yes"/>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-literal-path">
+            <title>Fill-In, A File Path</title>
+            <statement>
+                <p>Enter the Windows path <c>C:\Users</c>, with a backslash.
+                <fillin mode="string" answer="C:\Users"/></p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <strcmp use-answer="yes"/>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-literal-price">
+            <title>Fill-In, A Price</title>
+            <statement>
+                <p>Write one hundred dollars with a leading dollar sign, as <c>$100</c>.
+                <fillin mode="string" answer="$100"/></p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <strcmp use-answer="yes"/>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-literal-case">
+            <title>Fill-In, Literal Match Ignoring Case</title>
+            <statement>
+                <p>Enter the placeholder <c>foo(bar)</c>, in any mix of upper- and lower-case letters.
+                <fillin mode="string" answer="foo(bar)"/></p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <strcmp use-answer="yes" case="insensitive"/>
+                        <feedback>
+                            <p>Case is ignored, but the parentheses are part of the answer and are matched literally.</p>
+                        </feedback>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-literal-explicit">
+            <title>Fill-In, Explicit Literal Test</title>
+            <statement>
+                <p>Enter the placeholder <c>foo(bar)</c>, including the parentheses.  Here the comparison states the pattern directly and marks it as a literal match with <c>literal="yes"</c>.
+                <fillin mode="string" answer="foo(bar)"/></p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <test correct="yes">
+                        <strcmp literal="yes">foo(bar)</strcmp>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+
+        <exercise label="fillin-literal-synthesized">
+            <title>Fill-In, Answer Taken from the Fillin</title>
+            <statement>
+                <p>Enter the placeholder <c>foo(bar)</c>, including the parentheses.  Here no correct test is written at all: the correct answer is taken from the <c>fillin</c> and compared literally, while the test below only supplies a hint.
+                <fillin mode="string" answer="foo(bar)"/></p>
+            </statement>
+            <evaluation>
+                <evaluate>
+                    <test>
+                        <strcmp>foobar</strcmp>
+                        <feedback>
+                            <p>The parentheses are part of the answer.</p>
+                        </feedback>
+                    </test>
+                </evaluate>
+            </evaluation>
+        </exercise>
+    </exercises>
+
     <exercises xml:id="runestone-hodgepodge">
         <title>Hodgepodge</title>
 
