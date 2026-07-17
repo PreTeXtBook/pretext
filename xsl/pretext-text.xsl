@@ -855,6 +855,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="preceding-sibling::*[not(self::title)]">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <!-- within a list item or task, a paragraph indents to the -->
+    <!-- item's content, except the one leading a list item,    -->
+    <!-- which runs in right after the marker                   -->
+    <xsl:if test="(ancestor::li or ancestor::task) and not(parent::li and not(preceding-sibling::*[not(self::title)]))">
+        <xsl:apply-templates select="." mode="item-indent"/>
+    </xsl:if>
     <!-- mixed-content -->
     <xsl:apply-templates/>
     <!-- end onto a newline -->
@@ -926,18 +932,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="introduction|statement|task|conclusion|&SOLUTION-LIKE;"/>
 </xsl:template>
 
+<!-- A task is an item of a list, in the manner of "ol/li": its   -->
+<!-- serial marker indented to its depth, its content indented    -->
+<!-- one level deeper (the item-indent and paragraph machinery of -->
+<!-- the Lists section counts "task" ancestors too).  Markdown    -->
+<!-- prefixes a genuine list marker so renderers nest properly.   -->
+<xsl:template match="task" mode="item-marker">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates select="." mode="serial-number"/>
+    <xsl:text>)</xsl:text>
+</xsl:template>
+
 <xsl:template match="task">
     <xsl:if test="preceding-sibling::*[not(self::title)]">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="serial-number"/>
-    <xsl:text>.</xsl:text>
+    <xsl:apply-templates select="." mode="item-indent"/>
+    <xsl:apply-templates select="." mode="item-marker"/>
     <xsl:if test="title">
-        <xsl:text> (</xsl:text>
+        <xsl:text> </xsl:text>
         <xsl:apply-templates select="." mode="title-full"/>
-        <xsl:text>)</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::title)]"/>
@@ -1108,29 +1122,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lists -->
 <!-- ##### -->
 
+<!-- The indentation of an item at its depth: four spaces per   -->
+<!-- level of containing item, list or task alike, which is the -->
+<!-- nesting convention markdown recognizes                     -->
+<xsl:template match="*" mode="item-indent">
+    <xsl:value-of select="str:padding(4 * (count(ancestor::li) + count(ancestor::task)), ' ')"/>
+</xsl:template>
+
 <xsl:template match="ul|ol|dl">
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="li"/>
 </xsl:template>
 
-<xsl:template match="ol/li">
-    <xsl:apply-templates select="." mode="serial-number"/>
+<!-- A structured item's blocks (paragraphs, nested lists) supply -->
+<!-- their own trailing newlines; an unstructured item needs one  -->
+<xsl:template match="li" mode="finish-item">
+    <xsl:if test="not(p or ol or ul or dl)">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- The marker of an ordered list item is its own number in the -->
+<!-- authored format ("item-number"), not the dotted hierarchy   -->
+<!-- ("serial-number", which cross-references still use); the    -->
+<!-- nesting shows in the indentation                            -->
+<xsl:template match="ol/li" mode="item-marker">
+    <xsl:apply-templates select="." mode="item-number"/>
     <xsl:text>. </xsl:text>
+</xsl:template>
+
+<xsl:template match="ol/li">
+    <xsl:apply-templates select="." mode="item-indent"/>
+    <xsl:apply-templates select="." mode="item-marker"/>
     <xsl:apply-templates/>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="finish-item"/>
 </xsl:template>
 
 <xsl:template match="ul/li">
+    <xsl:apply-templates select="." mode="item-indent"/>
     <xsl:text>* </xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="finish-item"/>
 </xsl:template>
 
 <xsl:template match="dl/li">
+    <xsl:apply-templates select="." mode="item-indent"/>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text> </xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="finish-item"/>
 </xsl:template>
 
 </xsl:stylesheet>
