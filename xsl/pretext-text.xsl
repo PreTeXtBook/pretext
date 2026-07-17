@@ -371,6 +371,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Hooks for generated lists (list of figures, etc.): the  -->
+<!-- entries suffice, no surrounding apparatus               -->
+<xsl:template name="list-of-begin"/>
+<xsl:template name="list-of-end"/>
+
+<!-- ############ -->
+<!-- Bibliography -->
+<!-- ############ -->
+
+<!-- Font modes required by -common's bibliography machinery.    -->
+<!-- Plain text has no fonts: content rides through unadorned.   -->
+<!-- (The markdown conversion overrides these with emphasis.)    -->
+<xsl:template match="*" mode="italic">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="*" mode="bold">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="*" mode="monospace">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template name="biblio-period">
+    <xsl:text>.</xsl:text>
+</xsl:template>
+
+<!-- Literal code phrases ("c") funnel through this wrapper;   -->
+<!-- plain text passes the content through unadorned.  (The    -->
+<!-- markdown conversion overrides with backtick spans.)       -->
+<xsl:template name="code-wrapper">
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<!-- Every bibliography flavor funnels through this wrapper in    -->
+<!-- -common: a bracketed number, then the entry's content        -->
+<xsl:template match="biblio" mode="bibentry-wrapper">
+    <xsl:param name="content"/>
+    <xsl:if test="preceding-sibling::biblio">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="." mode="serial-number"/>
+    <xsl:text>] </xsl:text>
+    <xsl:copy-of select="$content"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 <!-- ######### -->
 <!-- Divisions -->
 <!-- ######### -->
