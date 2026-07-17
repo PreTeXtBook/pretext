@@ -306,6 +306,61 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>**&#xa;&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ##### -->
+<!-- Index -->
+<!-- ##### -->
+
+<!-- Each entry is a list item, nested two spaces per subentry     -->
+<!-- level, so entries do not run together as a single paragraph   -->
+<xsl:template name="present-index-heading">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="heading-group"/>
+    <xsl:param name="b-write-locators"/>
+    <xsl:param name="heading-level"/>
+    <xsl:param name="content"/>
+    <xsl:value-of select="substring('    ', 1, 2 * ($heading-level - 1))"/>
+    <xsl:text>- </xsl:text>
+    <xsl:copy-of select="$content"/>
+    <xsl:if test="$b-write-locators">
+        <xsl:call-template name="locator-list">
+            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+            <xsl:with-param name="heading-group" select="$heading-group"/>
+            <xsl:with-param name="cross-reference-separator" select="', '"/>
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- the "see"/"see also" words italicize -->
+<xsl:template name="present-index-italics">
+    <xsl:param name="content"/>
+    <xsl:text>*</xsl:text>
+    <xsl:copy-of select="$content"/>
+    <xsl:text>*</xsl:text>
+</xsl:template>
+
+<!-- a chunked build links each locator to the file of its enclosure -->
+<xsl:template match="index-list" mode="index-locator">
+    <xsl:param name="enclosure"/>
+    <xsl:param name="the-number"/>
+    <xsl:choose>
+        <xsl:when test="$chunk-level &gt; 0">
+            <xsl:text>[</xsl:text>
+            <xsl:apply-templates select="$enclosure" mode="type-name"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$the-number"/>
+            <xsl:text>](</xsl:text>
+            <xsl:apply-templates select="$enclosure" mode="containing-filename"/>
+            <xsl:text>)</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$enclosure" mode="type-name"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$the-number"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ######## -->
 <!-- Chunking -->
 <!-- ######## -->

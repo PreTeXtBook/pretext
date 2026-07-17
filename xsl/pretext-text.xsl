@@ -400,6 +400,122 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- ##### -->
+<!-- Index -->
+<!-- ##### -->
+
+<!-- An "idx" element is invisible where it is authored; the index -->
+<!-- machinery of -common mines them all to manufacture the index  -->
+<!-- division, which renders through the presentation templates    -->
+<!-- below (modeled on the -fo implementations).                   -->
+<xsl:template match="idx"/>
+
+<!-- the assembled index needs no wrapper -->
+<xsl:template name="present-index">
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<!-- a blank line separates letter groups -->
+<xsl:template name="present-letter-group">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="letter-group"/>
+    <xsl:param name="current-letter"/>
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- one line of the index: two spaces of indentation per level -->
+<!-- of subentry, locators trailing the deepest heading         -->
+<xsl:template name="present-index-heading">
+    <xsl:param name="the-index-list"/>
+    <xsl:param name="heading-group"/>
+    <xsl:param name="b-write-locators"/>
+    <xsl:param name="heading-level"/>
+    <xsl:param name="content"/>
+    <xsl:value-of select="str:padding(2 * ($heading-level - 1), ' ')"/>
+    <xsl:copy-of select="$content"/>
+    <xsl:if test="$b-write-locators">
+        <xsl:call-template name="locator-list">
+            <xsl:with-param name="the-index-list" select="$the-index-list"/>
+            <xsl:with-param name="heading-group" select="$heading-group"/>
+            <xsl:with-param name="cross-reference-separator" select="', '"/>
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- the pieces of a locator: processed content suffices -->
+<xsl:template name="present-index-locator">
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<xsl:template name="present-index-see">
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<xsl:template name="present-index-see-also">
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<!-- italics for a "see" word: plain text has no italics -->
+<xsl:template name="present-index-italics">
+    <xsl:param name="content"/>
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
+<!-- One locator: climb from the "idx" to the nearest enclosure   -->
+<!-- that is structural or a block AND has a number (the HTML     -->
+<!-- conversion's approach; there are no page numbers to cite),   -->
+<!-- then present it through the "index-locator" flavor template  -->
+<xsl:template match="index-list" mode="index-enclosure">
+    <xsl:param name="enclosure"/>
+    <xsl:variable name="structural">
+        <xsl:apply-templates select="$enclosure" mode="is-structural"/>
+    </xsl:variable>
+    <xsl:variable name="block">
+        <xsl:apply-templates select="$enclosure" mode="is-block"/>
+    </xsl:variable>
+    <xsl:variable name="the-number">
+        <xsl:if test="($structural = 'true') or ($block = 'true')">
+            <xsl:apply-templates select="$enclosure" mode="number"/>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- climbed past the document root (an "idx" in an unnumbered  -->
+        <!-- peripheral of the root): the type of the root must suffice -->
+        <xsl:when test="not($enclosure)">
+            <xsl:apply-templates select="$document-root" mode="type-name"/>
+        </xsl:when>
+        <xsl:when test="not($the-number = '')">
+            <xsl:apply-templates select="." mode="index-locator">
+                <xsl:with-param name="enclosure" select="$enclosure"/>
+                <xsl:with-param name="the-number" select="$the-number"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- climb; the "index-list" context rides along -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="index-enclosure">
+                <xsl:with-param name="enclosure" select="$enclosure/parent::*"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- "Theorem 2.1", "Section 3": the type announces what the -->
+<!-- number leads to; the markdown flavor adds the link      -->
+<xsl:template match="index-list" mode="index-locator">
+    <xsl:param name="enclosure"/>
+    <xsl:param name="the-number"/>
+    <xsl:apply-templates select="$enclosure" mode="type-name"/>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$the-number"/>
+</xsl:template>
+
 <!-- Hooks for generated lists (list of figures, etc.): the  -->
 <!-- entries suffice, no surrounding apparatus               -->
 <xsl:template name="list-of-begin"/>
@@ -517,7 +633,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|reading-questions|worksheet|handout|glossary|references|solutions">
+<xsl:template match="part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|reading-questions|worksheet|handout|glossary|references|solutions|index">
     <xsl:apply-templates select="." mode="heading-lines"/>
     <!-- metadata-ish, eg "title", should be killed by default -->
     <xsl:apply-templates select="*"/>
