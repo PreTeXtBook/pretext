@@ -5436,36 +5436,36 @@ def _jing_server(schema_filename, assembled_source):
     # change this URL (and, if the reply format changes, the parsing below).
     server_url = "https://mathgenealogy.org:9000/validate"
 
-    # The service expects a zip of "source" with a named "mainfile", plus
-    # the schema and its PreFigure companions.  Here the "source" is the
+    # The service expects "assembled_source" and "schema" plus the PreFigure
+    # companions of the schema.  Here the "assembled_source" is the
     # single, already-assembled file, so the locations in the report line
     # up with the deposited assembled source, exactly as a local run does.
     tmp_dir = common.get_temporary_directory()
-    mainfile = os.path.basename(assembled_source)
-    zip_filename = os.path.join(tmp_dir, "validation-source.zip")
-    with zipfile.ZipFile(zip_filename, mode="w", compression=zipfile.ZIP_DEFLATED) as zip_file:
-        zip_file.write(assembled_source, arcname=mainfile)
 
     # The service resolves the schema's includes from these companion
     # files, so they travel alongside the schema (see PR #3036).
+    # The service expects all keys other than "assembled_source" and "schema"
+    # to be the basename of any auxiliary schema files.
     schema_dir = os.path.join(common.get_ptx_path(), "schema")
     field_paths = {
-        "source": zip_filename,
-        "rng": schema_filename,
-        "pf_adapter": os.path.join(schema_dir, "pf-adapter.rng"),
-        "pf_schema": os.path.join(schema_dir, "pf_schema.rng"),
-        "pf_preamble_adapter": os.path.join(schema_dir, "pf-preamble-adapter.rng"),
+        "assembled_source": assembled_source,
+        "schema": schema_filename,
+        "pf-adapter.rng": os.path.join(schema_dir, "pf-adapter.rng"),
+        "pf_schema.rng": os.path.join(schema_dir, "pf_schema.rng"),
+        "pf-preamble-adapter.rng": os.path.join(schema_dir, "pf-preamble-adapter.rng"),
     }
-    data = {"mainfile": mainfile}
+
     log.info("communicating with validation server at {}".format(server_url))
-    files = {field: open(path, "rb") for field, path in field_paths.items()}
+    # The service is expecting to receive the files as strings in form fields,
+    # so read files into strings stored in the data dictionary.
+    # Use with so files are automatically closed after reading.
+    data = dict()
+    for field, path in field_paths.items():
+        with open(path, "r", encoding="utf-8") as file:
+            data[field] = file.read()
+
     try:
-        try:
-            r = requests.post(server_url, data=data, files=files, timeout=60)
-        finally:
-            # release the file handles (requests reads but does not close)
-            for open_file in files.values():
-                open_file.close()
+        r = requests.post(server_url, data=data, timeout=60)
     except requests.exceptions.RequestException as e:
         log.error("could not reach the validation server at {} ({})".format(server_url, e))
         log.error("no validation report was produced; retry, or validate with a local method")
