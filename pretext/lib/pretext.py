@@ -2383,6 +2383,18 @@ def text(xml, pub_file, stringparams, out_file, dest_dir, text_format):
         log.info("{} file deposited as {}".format(text_format, derivedname))
     else:
         log.info("{} files deposited in {}".format(text_format, dest_dir))
+    # Markdown references image files with relative paths matching the
+    # HTML conversion, so the managed directories ride along
+    if text_format == "markdown":
+        generated_abs, external_abs = common.get_managed_directories(xml, pub_file)
+        if external_abs:
+            shutil.copytree(
+                external_abs, os.path.join(dest_dir, "external"), dirs_exist_ok=True
+            )
+        if generated_abs:
+            shutil.copytree(
+                generated_abs, os.path.join(dest_dir, "generated"), dirs_exist_ok=True
+            )
 
 
 #######################

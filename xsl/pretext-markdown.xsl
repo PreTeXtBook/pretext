@@ -30,7 +30,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
+    xmlns:pf="https://prefigure.org"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     extension-element-prefixes="exsl str"
+    exclude-result-prefixes="pf pi"
 >
 
 <!-- The markdown conversion IS the text conversion, plus the     -->
@@ -255,6 +258,172 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- physical line a pipe table demands                         -->
 <xsl:template name="line-separator">
     <xsl:text>&lt;br&gt;</xsl:text>
+</xsl:template>
+
+<!-- ###### -->
+<!-- Images -->
+<!-- ###### -->
+
+<!-- A filename without an extension presumes a manufactured -->
+<!-- SVG, exactly as the HTML conversion does                -->
+<xsl:template name="presumed-svg">
+    <xsl:param name="filename"/>
+    <xsl:variable name="extension">
+        <xsl:call-template name="file-extension">
+            <xsl:with-param name="filename" select="$filename"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="$extension = ''">
+        <xsl:text>.svg</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- The relative path of an image's file, matching both the HTML  -->
+<!-- conversion's references and the managed directories deposited -->
+<!-- alongside a markdown build; empty when there is no file to    -->
+<!-- point at (an interactive Asymptote diagram, say)              -->
+<xsl:template match="image" mode="markdown-path">
+    <xsl:choose>
+        <xsl:when test="@pi:generated">
+            <xsl:value-of select="$generated-directory"/>
+            <xsl:value-of select="@pi:generated"/>
+            <xsl:call-template name="presumed-svg">
+                <xsl:with-param name="filename" select="@pi:generated"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="@source">
+            <xsl:value-of select="$external-directory"/>
+            <xsl:value-of select="@source"/>
+            <xsl:call-template name="presumed-svg">
+                <xsl:with-param name="filename" select="@source"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="latex-image">
+            <xsl:value-of select="$generated-directory"/>
+            <xsl:text>latex-image/</xsl:text>
+            <xsl:apply-templates select="latex-image" mode="image-source-basename"/>
+            <xsl:text>.svg</xsl:text>
+        </xsl:when>
+        <xsl:when test="sageplot[not(@variant = '3d')]">
+            <xsl:value-of select="$generated-directory"/>
+            <xsl:text>sageplot/</xsl:text>
+            <xsl:apply-templates select="sageplot" mode="image-source-basename"/>
+            <xsl:text>.svg</xsl:text>
+        </xsl:when>
+        <xsl:when test="pf:prefigure">
+            <xsl:value-of select="$generated-directory"/>
+            <xsl:text>prefigure/</xsl:text>
+            <xsl:apply-templates select="pf:prefigure" mode="image-source-basename"/>
+            <xsl:text>.svg</xsl:text>
+        </xsl:when>
+        <xsl:otherwise/>
+    </xsl:choose>
+</xsl:template>
+
+<!-- An image is always a raw-HTML "img" (legal CommonMark, and    -->
+<!-- markdown's own syntax has no size or placement), so an        -->
+<!-- authored @width in percent is honored (100% is the default).  -->
+<!-- Centered by default, via an "align" wrapper that forge        -->
+<!-- sanitizers keep (they strip "style").  An *authored* margin   -->
+<!-- of 10% or less pins the image to that edge instead.  Without  -->
+<!-- a file to reference, the producer's note of the text          -->
+<!-- conversion stands.                                            -->
+<xsl:template match="image">
+    <xsl:variable name="path">
+        <xsl:apply-templates select="." mode="markdown-path"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="not($path = '')">
+            <xsl:variable name="rtf-layout">
+                <xsl:apply-templates select="." mode="layout-parameters"/>
+            </xsl:variable>
+            <xsl:variable name="layout" select="exsl:node-set($rtf-layout)"/>
+            <!-- A panel of a "sidebyside" is not aligned (it sits on -->
+            <!-- the left edge, as any panel does); otherwise the     -->
+            <!-- layout reports margins as bare numbers, anything     -->
+            <!-- unresolvable is NaN, both comparisons fail, and      -->
+            <!-- centering wins                                       -->
+            <xsl:variable name="alignment">
+                <xsl:choose>
+                    <xsl:when test="ancestor::sidebyside"/>
+                    <xsl:when test="@margins and (number($layout/left-margin) &lt;= 10)">
+                        <xsl:text>left</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="@margins and (number($layout/right-margin) &lt;= 10)">
+                        <xsl:text>right</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>center</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <!-- The layouts report bare numbers; the "img" attribute -->
+            <!-- carries a percentage (a bare number would be pixels).-->
+            <!-- A panel image takes its width from the enclosing     -->
+            <!-- "sidebyside" layout, locating its panel as -common   -->
+            <!-- does (a "figure" or "stack" wrapper is the panel)    -->
+            <xsl:variable name="width">
+                <xsl:choose>
+                    <xsl:when test="ancestor::sidebyside">
+                        <xsl:variable name="rtf-sbs-layout">
+                            <xsl:apply-templates select="ancestor::sidebyside" mode="layout-parameters"/>
+                        </xsl:variable>
+                        <xsl:variable name="sbs-layout" select="exsl:node-set($rtf-sbs-layout)"/>
+                        <xsl:variable name="panel-number">
+                            <xsl:choose>
+                                <xsl:when test="parent::figure or parent::stack">
+                                    <xsl:value-of select="count(parent::*/preceding-sibling::*) + 1"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="count(preceding-sibling::*) + 1"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <!-- this layout's widths carry their percent signs -->
+                        <xsl:value-of select="translate($sbs-layout/width[number($panel-number)], '%', '')"/>
+                        <xsl:text>%</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="not($layout/width = '')">
+                        <xsl:value-of select="$layout/width"/>
+                        <xsl:text>%</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>100%</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="alternative-text">
+                <xsl:choose>
+                    <xsl:when test="shortdescription">
+                        <xsl:apply-templates select="shortdescription"/>
+                    </xsl:when>
+                    <xsl:when test="description">
+                        <xsl:value-of select="normalize-space(description)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>image</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:text>&#xa;&lt;p</xsl:text>
+            <xsl:if test="not($alignment = '')">
+                <xsl:text> align="</xsl:text>
+                <xsl:value-of select="$alignment"/>
+                <xsl:text>"</xsl:text>
+            </xsl:if>
+            <xsl:text>&gt;&lt;img src="</xsl:text>
+            <xsl:value-of select="$path"/>
+            <xsl:text>" alt="</xsl:text>
+            <!-- a double quote in a description would end the attribute -->
+            <xsl:value-of select="translate($alternative-text, '&quot;', &quot;'&quot;)"/>
+            <xsl:text>" width="</xsl:text>
+            <xsl:value-of select="$width"/>
+            <xsl:text>"&gt;&lt;/p&gt;&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-imports/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ##### -->
