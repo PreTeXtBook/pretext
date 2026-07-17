@@ -4092,7 +4092,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="project-nodes"/>
     <xsl:param name="exercise-nodes"/>
     <xsl:param name="openproblem-nodes"/>
-    <xsl:variable name="b-terminal" select="not(part|chapter|appendix|section|subsection|subsubsection|preface)"/>
+    <!-- terminal: holds content directly, so it has no child divisions of  -->
+    <!-- any kind.  Specialized divisions ("worksheet", "handout", etc.)     -->
+    <!-- count here just like the traditional ones, else a division whose    -->
+    <!-- children are specialized divisions is wrongly deemed terminal and   -->
+    <!-- pools their blocks into one scope instead of one scope apiece.      -->
+    <xsl:variable name="b-terminal" select="not(part|chapter|appendix|section|subsection|subsubsection|preface|exercises|worksheet|handout|reading-questions|references|glossary|solutions)"/>
     <xsl:variable name="b-open-eq"          select="not($eq-nodes)          and ($b-terminal or (@level &gt;= $numbering-equations))"/>
     <xsl:variable name="b-open-fn"          select="not($fn-nodes)          and ($b-terminal or (@level &gt;= $numbering-footnotes))"/>
     <xsl:variable name="b-open-blocks"      select="not($blocks-nodes)      and ($b-terminal or (@level &gt;= $numbering-blocks))"/>
