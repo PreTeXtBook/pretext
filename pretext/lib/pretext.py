@@ -2338,7 +2338,9 @@ def text(xml, pub_file, stringparams, out_file, dest_dir, text_format):
         stringparams (dict): Dictionary of string parameters to control the transformation.
         out_file (str or None): Path to the output file.  If None, the file lands in dest_dir.
         dest_dir (str): Directory for the output file when out_file is not specified.
-        text_format (str): "text" or "markdown", naming the stylesheet and the file extension.
+        text_format (str): "text", "markdown", or "markdown-zip", naming the
+            stylesheet and the file extension.  The last bundles a markdown
+            rendering (with its image directories) as a single zip file.
 
     Returns:
         None
@@ -2357,10 +2359,12 @@ def text(xml, pub_file, stringparams, out_file, dest_dir, text_format):
     text_format_stylesheets = {
         "text": "pretext-text.xsl",
         "markdown": "pretext-markdown.xsl",
+        "markdown-zip": "pretext-markdown.xsl",
     }
     text_format_extensions = {
         "text": ".txt",
         "markdown": ".md",
+        "markdown-zip": ".md",
     }
 
     msg = "converting {} to {} format in {}"
@@ -2369,32 +2373,47 @@ def text(xml, pub_file, stringparams, out_file, dest_dir, text_format):
     conversion_xslt = os.path.join(
         common.get_ptx_xsl_path(), text_format_stylesheets[text_format]
     )
+    # A zip bundle is staged in a temporary directory, inside a folder
+    # named for the source, so the archive unpacks tidily
+    b_zip = text_format == "markdown-zip"
+    if b_zip:
+        basename = os.path.splitext(os.path.basename(xml))[0]
+        staging_parent = common.get_temporary_directory()
+        work_dir = os.path.join(staging_parent, basename)
+        os.mkdir(work_dir)
+    else:
+        work_dir = dest_dir
     # One transform serves both shapes of output.  A positive chunking
     # election (common/chunking/@level in the publication file) makes
-    # the stylesheet write one file per division into the destination
+    # the stylesheet write one file per division into the working
     # directory and leave the result tree empty; otherwise the result
     # tree is the entire rendering, deposited as a single file
-    result_tree = common.xsltproc(conversion_xslt, xml, None, dest_dir, stringparams)
+    result_tree = common.xsltproc(conversion_xslt, xml, None, work_dir, stringparams)
     if str(result_tree):
         derivedname = common.get_output_filename(
-            xml, out_file, dest_dir, text_format_extensions[text_format]
+            xml, None if b_zip else out_file, work_dir, text_format_extensions[text_format]
         )
         result_tree.write_output(derivedname)
         log.info("{} file deposited as {}".format(text_format, derivedname))
     else:
-        log.info("{} files deposited in {}".format(text_format, dest_dir))
+        log.info("{} files deposited in {}".format(text_format, work_dir))
     # Markdown references image files with relative paths matching the
     # HTML conversion, so the managed directories ride along
-    if text_format == "markdown":
+    if text_format in ("markdown", "markdown-zip"):
         generated_abs, external_abs = common.get_managed_directories(xml, pub_file)
         if external_abs:
             shutil.copytree(
-                external_abs, os.path.join(dest_dir, "external"), dirs_exist_ok=True
+                external_abs, os.path.join(work_dir, "external"), dirs_exist_ok=True
             )
         if generated_abs:
             shutil.copytree(
-                generated_abs, os.path.join(dest_dir, "generated"), dirs_exist_ok=True
+                generated_abs, os.path.join(work_dir, "generated"), dirs_exist_ok=True
             )
+    if b_zip:
+        zip_filename = shutil.make_archive(
+            os.path.join(dest_dir, basename), "zip", staging_parent, basename
+        )
+        log.info("markdown bundle deposited as {}".format(zip_filename))
 
 
 #######################
