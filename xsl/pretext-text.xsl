@@ -73,9 +73,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Entry Template -->
-<!-- Kickstart the process, ignore "docinfo"  -->
+<!-- Kickstart the process, ignore "docinfo".  A positive chunk  -->
+<!-- level (the common election) writes a tree of files instead  -->
+<!-- of a single stream; see the Chunking section below.         -->
 <xsl:template match="/">
-    <xsl:apply-templates select="$document-root"/>
+    <xsl:choose>
+        <xsl:when test="$chunk-level &gt; 0">
+            <xsl:apply-templates select="$document-root" mode="chunking"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="$document-root"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- TEMPORARY: defined to stop errors, need stubs in -common -->
@@ -451,23 +460,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- levels): one underline character per depth.                     -->
 <xsl:variable name="heading-underline-characters" select="'=-~^&quot;'"/>
 
-<xsl:template match="part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|reading-questions|worksheet|handout|glossary|references|solutions">
-    <!-- the heading line, assembled once so it can be measured.    -->
-    <!-- Unnumbered peripheral divisions (preface, colophon, ...)   -->
-    <!-- take just their title: the default title IS the type-name, -->
-    <!-- and "Preface Preface" serves nobody.                       -->
+<!-- The text of a heading: "Type Number Title".                -->
+<!-- Unnumbered peripheral divisions (preface, colophon, ...)   -->
+<!-- take just their title: the default title IS the type-name, -->
+<!-- and "Preface Preface" serves nobody.                       -->
+<xsl:template match="*" mode="heading-text">
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="number"/>
     </xsl:variable>
+    <xsl:if test="not($the-number = '')">
+        <xsl:apply-templates select="." mode="type-name"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$the-number"/>
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <!-- Title is required (or default is supplied) -->
+    <xsl:apply-templates select="." mode="title-full"/>
+</xsl:template>
+
+<!-- The heading and its underline, assembled once so the -->
+<!-- heading can be measured                               -->
+<xsl:template match="*" mode="heading-lines">
     <xsl:variable name="heading">
-        <xsl:if test="not($the-number = '')">
-            <xsl:apply-templates select="." mode="type-name"/>
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="$the-number"/>
-            <xsl:text> </xsl:text>
-        </xsl:if>
-        <!-- Title is required (or default is supplied) -->
-        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:apply-templates select="." mode="heading-text"/>
     </xsl:variable>
     <!-- depth chooses the underline character; anything deeper  -->
     <!-- than the repertoire reuses the last character           -->
@@ -490,10 +505,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:value-of select="str:padding(string-length($heading), substring($heading-underline-characters, $level, 1))"/>
     <xsl:text>&#xa;&#xa;</xsl:text>
-    <!-- metadata-ish, eg "title", should be killed by default -->
-    <xsl:apply-templates select="*"/>
-    <!-- footnotes belonging to this division (and not to a  -->
-    <!-- deeper one) collect here, at its end                -->
+</xsl:template>
+
+<!-- Footnotes belonging to a division (and not to a deeper -->
+<!-- one) collect at its end                                -->
+<xsl:template match="*" mode="division-footnotes">
     <xsl:variable name="the-notes" select=".//fn[count(ancestor::*[&STRUCTURAL-FILTER;][1]|current()) = 1]"/>
     <xsl:if test="$the-notes">
         <xsl:text>&#xa;</xsl:text>
@@ -501,9 +517,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|reading-questions|worksheet|handout|glossary|references|solutions">
+    <xsl:apply-templates select="." mode="heading-lines"/>
+    <!-- metadata-ish, eg "title", should be killed by default -->
+    <xsl:apply-templates select="*"/>
+    <xsl:apply-templates select="." mode="division-footnotes"/>
+</xsl:template>
+
 <!-- The document itself: its title as the topmost heading, then  -->
 <!-- the content.  ("docinfo" is ignored by the entry template.)  -->
-<xsl:template match="book|article">
+<xsl:template match="book|article" mode="heading-lines">
     <xsl:variable name="heading">
         <xsl:apply-templates select="." mode="title-full"/>
     </xsl:variable>
@@ -511,12 +534,167 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:value-of select="str:padding(string-length($heading), '*')"/>
     <xsl:text>&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="book|article">
+    <xsl:apply-templates select="." mode="heading-lines"/>
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
 <!-- Whole-document containers with no heading of their own -->
 <xsl:template match="frontmatter|backmatter|mainmatter">
     <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- ######## -->
+<!-- Chunking -->
+<!-- ######## -->
+
+<!-- The common election (common/chunking/@level in the publication -->
+<!-- file): a positive level writes each division at that depth as  -->
+<!-- its own file, driven by the generic chunking machinery of      -->
+<!-- -common.  No election produces the document as a single file.  -->
+<xsl:variable name="chunk-level">
+    <xsl:choose>
+        <xsl:when test="$chunk-level-entered != ''">
+            <xsl:value-of select="$chunk-level-entered"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Every chunk of a chunked build, in reading order, each known -->
+<!-- by its (unique) filename: the basis of each file's           -->
+<!-- navigation line                                              -->
+<xsl:variable name="chunk-list-rtf">
+    <xsl:if test="$chunk-level &gt; 0">
+        <xsl:for-each select="($document-root|$document-root//*)[&STRUCTURAL-FILTER;]">
+            <xsl:variable name="is-chunk">
+                <xsl:apply-templates select="." mode="is-chunk"/>
+            </xsl:variable>
+            <xsl:if test="$is-chunk = 'true'">
+                <chunk>
+                    <xsl:attribute name="filename">
+                        <xsl:apply-templates select="." mode="containing-filename"/>
+                    </xsl:attribute>
+                </chunk>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:if>
+</xsl:variable>
+<xsl:variable name="chunk-list" select="exsl:node-set($chunk-list-rtf)/chunk"/>
+
+<!-- The file every navigation line points back to: the -->
+<!-- summary page of the document root (or the root as  -->
+<!-- one big chunk, for a shallow document)             -->
+<xsl:variable name="contents-filename">
+    <xsl:if test="$chunk-level &gt; 0">
+        <xsl:apply-templates select="$document-root" mode="containing-filename"/>
+    </xsl:if>
+</xsl:variable>
+
+<!-- Realize one file: the content, then a navigation line -->
+<xsl:template match="*" mode="file-wrap">
+    <xsl:param name="content"/>
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="containing-filename"/>
+    </xsl:variable>
+    <exsl:document href="{$filename}" method="text" encoding="UTF-8">
+        <xsl:copy-of select="$content"/>
+        <xsl:apply-templates select="." mode="navigation-line"/>
+    </exsl:document>
+</xsl:template>
+
+<!-- A division above the chunk frontier becomes a summary page:  -->
+<!-- its heading, its unstructured content, and one line naming   -->
+<!-- the file of each structural child                            -->
+<xsl:template match="&STRUCTURAL;" mode="intermediate">
+    <xsl:apply-templates select="." mode="file-wrap">
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="heading-lines"/>
+            <xsl:apply-templates select="introduction"/>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:for-each select="*[&STRUCTURAL-FILTER;]">
+                <xsl:apply-templates select="." mode="summary-entry"/>
+            </xsl:for-each>
+            <xsl:apply-templates select="conclusion"/>
+            <xsl:apply-templates select="." mode="division-footnotes"/>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- One line of a summary page, naming a subsidiary file; the -->
+<!-- markdown flavor overrides with a genuine link             -->
+<xsl:template match="*" mode="summary-entry">
+    <xsl:text>- </xsl:text>
+    <xsl:apply-templates select="." mode="heading-text"/>
+    <xsl:text> (</xsl:text>
+    <xsl:apply-templates select="." mode="containing-filename"/>
+    <xsl:text>)&#xa;</xsl:text>
+</xsl:template>
+
+<!-- The file of the division containing a chunk, when that is  -->
+<!-- neither the chunk itself nor the contents page: worthwhile -->
+<!-- in a deeply chunked document.  The document root has no    -->
+<!-- containing division, so nothing at all.                    -->
+<xsl:template match="*" mode="up-filename">
+    <xsl:if test="parent::*[&STRUCTURAL-FILTER;]">
+        <xsl:variable name="parent-filename">
+            <xsl:apply-templates select=".." mode="containing-filename"/>
+        </xsl:variable>
+        <xsl:if test="not($parent-filename = $contents-filename)">
+            <xsl:value-of select="$parent-filename"/>
+        </xsl:if>
+    </xsl:if>
+</xsl:template>
+
+<!-- The trailing navigation line of a file that has a neighbor;   -->
+<!-- labels localize, and the markdown flavor overrides with links -->
+<xsl:template match="*" mode="navigation-line">
+    <xsl:variable name="the-filename">
+        <xsl:apply-templates select="." mode="containing-filename"/>
+    </xsl:variable>
+    <xsl:variable name="entry" select="$chunk-list[@filename = $the-filename]"/>
+    <xsl:variable name="previous" select="$entry/preceding-sibling::chunk[1]"/>
+    <xsl:variable name="next" select="$entry/following-sibling::chunk[1]"/>
+    <xsl:variable name="up">
+        <xsl:apply-templates select="." mode="up-filename"/>
+    </xsl:variable>
+    <xsl:if test="$previous or $next">
+        <xsl:text>&#xa;[</xsl:text>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'toc'"/>
+        </xsl:apply-templates>
+        <xsl:text>: </xsl:text>
+        <xsl:value-of select="$contents-filename"/>
+        <xsl:if test="$previous">
+            <xsl:text> | </xsl:text>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'previous'"/>
+            </xsl:apply-templates>
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="$previous/@filename"/>
+        </xsl:if>
+        <xsl:if test="not($up = '')">
+            <xsl:text> | </xsl:text>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'up'"/>
+            </xsl:apply-templates>
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="$up"/>
+        </xsl:if>
+        <xsl:if test="$next">
+            <xsl:text> | </xsl:text>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'next'"/>
+            </xsl:apply-templates>
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="$next/@filename"/>
+        </xsl:if>
+        <xsl:text>]&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- The title page is mined for a byline, rather than templates -->

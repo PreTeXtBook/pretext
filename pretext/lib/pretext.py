@@ -2367,11 +2367,20 @@ def text(xml, pub_file, stringparams, out_file, dest_dir, text_format):
     conversion_xslt = os.path.join(
         common.get_ptx_xsl_path(), text_format_stylesheets[text_format]
     )
-    derivedname = common.get_output_filename(
-        xml, out_file, dest_dir, text_format_extensions[text_format]
-    )
-    common.xsltproc(conversion_xslt, xml, derivedname, None, stringparams)
-    log.info("{} file deposited as {}".format(text_format, derivedname))
+    # One transform serves both shapes of output.  A positive chunking
+    # election (common/chunking/@level in the publication file) makes
+    # the stylesheet write one file per division into the destination
+    # directory and leave the result tree empty; otherwise the result
+    # tree is the entire rendering, deposited as a single file
+    result_tree = common.xsltproc(conversion_xslt, xml, None, dest_dir, stringparams)
+    if str(result_tree):
+        derivedname = common.get_output_filename(
+            xml, out_file, dest_dir, text_format_extensions[text_format]
+        )
+        result_tree.write_output(derivedname)
+        log.info("{} file deposited as {}".format(text_format, derivedname))
+    else:
+        log.info("{} files deposited in {}".format(text_format, dest_dir))
 
 
 #######################
