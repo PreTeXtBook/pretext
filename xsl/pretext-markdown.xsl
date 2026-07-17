@@ -129,6 +129,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- division (content, collected footnotes) is inherited.      -->
 <xsl:template match="book|article" mode="heading-lines">
     <xsl:text># </xsl:text>
+    <xsl:apply-templates select="." mode="fragment-anchor"/>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>&#xa;&#xa;</xsl:text>
 </xsl:template>
@@ -150,8 +151,141 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:value-of select="substring('######', 1, $level + 1)"/>
     <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="fragment-anchor"/>
     <xsl:apply-templates select="." mode="heading-text"/>
     <xsl:text>&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ##################### -->
+<!-- Anchors and Fragments -->
+<!-- ##################### -->
+
+<!-- The @xml:id of every element some "xref" points at,          -->
+<!-- delimited for exact-match testing; the enumeration mirrors   -->
+<!-- the HTML conversion's knowl manufacture (which could migrate -->
+<!-- to -common one day, and both would share it)                 -->
+<xsl:variable name="xref-target-ids-rtf">
+    <xsl:for-each select="$document-root//xref">
+        <xsl:choose>
+            <!-- just use @first, clean-up spaces -->
+            <xsl:when test="@first and @last">
+                <xid>
+                    <xsl:value-of select="normalize-space(@first)"/>
+                </xid>
+                <xid>
+                    <xsl:value-of select="normalize-space(@last)"/>
+                </xid>
+            </xsl:when>
+            <!-- a space-separated or comma-separated list -->
+            <xsl:when test="@ref and (contains(normalize-space(@ref), ' ') or contains(@ref, ','))">
+                <xsl:call-template name="split-ref-list">
+                    <xsl:with-param name="list" select="concat(normalize-space(translate(@ref, ',', ' ')), ' ')"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="@ref">
+                <xid>
+                    <xsl:value-of select="normalize-space(@ref)"/>
+                </xid>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:for-each>
+</xsl:variable>
+
+<xsl:template name="split-ref-list">
+    <xsl:param name="list"/>
+    <xsl:choose>
+        <xsl:when test="$list = ''"/>
+        <xsl:otherwise>
+            <xid>
+                <xsl:value-of select="substring-before($list, ' ')"/>
+            </xid>
+            <xsl:call-template name="split-ref-list">
+                <xsl:with-param name="list" select="substring-after($list, ' ')"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:variable name="xref-target-list">
+    <xsl:text>|</xsl:text>
+    <xsl:for-each select="exsl:node-set($xref-target-ids-rtf)/xid">
+        <xsl:value-of select="."/>
+        <xsl:text>|</xsl:text>
+    </xsl:for-each>
+</xsl:variable>
+
+<!-- An invisible landing spot, as raw inline HTML (legal          -->
+<!-- CommonMark), riding inside a heading line so it never forms   -->
+<!-- an HTML block.  Emitted only where a link may land: elements  -->
+<!-- some "xref" targets, and elements containing an "idx" (the    -->
+<!-- index's locators climb to them) — so a document with no       -->
+<!-- cross-references produces markdown with no anchors at all.    -->
+<xsl:template match="*" mode="fragment-anchor">
+    <xsl:if test="(@xml:id and contains($xref-target-list, concat('|', @xml:id, '|'))) or .//idx">
+        <xsl:text>&lt;a id="</xsl:text>
+        <xsl:apply-templates select="." mode="unique-id"/>
+        <xsl:text>"&gt;&lt;/a&gt;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- The address of an element: its file when chunked (elided     -->
+<!-- within that same file), and its fragment anchor.  A fragment -->
+<!-- without an anchor still lands on the right file.             -->
+<xsl:template name="markdown-url">
+    <xsl:param name="origin"/>
+    <xsl:param name="target"/>
+    <xsl:if test="$chunk-level &gt; 0">
+        <xsl:variable name="origin-file">
+            <xsl:apply-templates select="$origin" mode="containing-filename"/>
+        </xsl:variable>
+        <xsl:variable name="target-file">
+            <xsl:apply-templates select="$target" mode="containing-filename"/>
+        </xsl:variable>
+        <xsl:if test="not($origin-file = $target-file)">
+            <xsl:value-of select="$target-file"/>
+        </xsl:if>
+    </xsl:if>
+    <xsl:text>#</xsl:text>
+    <xsl:apply-templates select="$target" mode="unique-id"/>
+</xsl:template>
+
+<!-- A cross-reference is a genuine link to its target's address -->
+<xsl:template match="xref" mode="xref-link">
+    <xsl:param name="target"/>
+    <xsl:param name="content"/>
+    <xsl:choose>
+        <!-- no target, or no text to carry a link: leave it be -->
+        <xsl:when test="not($target) or $content = ''">
+            <xsl:value-of select="$content"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>[</xsl:text>
+            <xsl:value-of select="$content"/>
+            <xsl:text>](</xsl:text>
+            <xsl:call-template name="markdown-url">
+                <xsl:with-param name="origin" select="."/>
+                <xsl:with-param name="target" select="$target"/>
+            </xsl:call-template>
+            <xsl:text>)</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A bibliography entry carries its anchor, a frequent target.  -->
+<!-- (Not "apply-imports": XSLT 1.0 would not forward the         -->
+<!-- content parameter.)                                          -->
+<xsl:template match="biblio" mode="bibentry-wrapper">
+    <xsl:param name="content"/>
+    <xsl:if test="preceding-sibling::biblio">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="fragment-anchor"/>
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="." mode="serial-number"/>
+    <xsl:text>] </xsl:text>
+    <xsl:copy-of select="$content"/>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ######## -->
@@ -568,9 +702,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Blocks -->
 <!-- ###### -->
 
-<!-- A block's heading line, emboldened -->
+<!-- A block's heading line, emboldened, and carrying the -->
+<!-- block's anchor -->
 <xsl:template name="block-heading-line">
     <xsl:param name="heading"/>
+    <xsl:apply-templates select="." mode="fragment-anchor"/>
     <xsl:text>**</xsl:text>
     <xsl:copy-of select="$heading"/>
     <xsl:text>**&#xa;&#xa;</xsl:text>
@@ -693,26 +829,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>*</xsl:text>
 </xsl:template>
 
-<!-- a chunked build links each locator to the file of its enclosure -->
+<!-- each locator links to its enclosure's address -->
 <xsl:template match="index-list" mode="index-locator">
     <xsl:param name="enclosure"/>
     <xsl:param name="the-number"/>
-    <xsl:choose>
-        <xsl:when test="$chunk-level &gt; 0">
-            <xsl:text>[</xsl:text>
-            <xsl:apply-templates select="$enclosure" mode="type-name"/>
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="$the-number"/>
-            <xsl:text>](</xsl:text>
-            <xsl:apply-templates select="$enclosure" mode="containing-filename"/>
-            <xsl:text>)</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="$enclosure" mode="type-name"/>
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="$the-number"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>[</xsl:text>
+    <xsl:apply-templates select="$enclosure" mode="type-name"/>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$the-number"/>
+    <xsl:text>](</xsl:text>
+    <xsl:call-template name="markdown-url">
+        <xsl:with-param name="origin" select="."/>
+        <xsl:with-param name="target" select="$enclosure"/>
+    </xsl:call-template>
+    <xsl:text>)</xsl:text>
 </xsl:template>
 
 <!-- ######## -->

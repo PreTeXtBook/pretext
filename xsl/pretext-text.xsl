@@ -116,6 +116,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- A landing spot for a link with a fragment identifier: -->
+<!-- nothing in plain text, realized by the markdown flavor -->
+<xsl:template match="*" mode="fragment-anchor"/>
+
 <!-- Macro definitions preceding a page's mathematics: nothing -->
 <!-- in plain text (the mathematics is authored LaTeX, macros  -->
 <!-- and all), realized by the markdown flavor for renderers   -->
@@ -833,13 +837,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Bibliographic metadata: quiet, mined above -->
 <xsl:template match="bibinfo"/>
 
-<!-- Unstructured containers: just their content -->
+<!-- Unstructured containers: just their content; an addressable -->
+<!-- one is a landing spot, glued to its title or first content   -->
+<!-- so the anchor never sits alone on a line                     -->
 <xsl:template match="introduction|conclusion|statement|paragraphs|subexercises|exercisegroup">
-    <xsl:if test="title">
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:apply-templates select="." mode="title-full"/>
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="title">
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:if test="@xml:id">
+                <xsl:apply-templates select="." mode="fragment-anchor"/>
+            </xsl:if>
+            <xsl:apply-templates select="." mode="title-full"/>
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:if test="@xml:id">
+                <xsl:apply-templates select="." mode="fragment-anchor"/>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
@@ -1344,6 +1360,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="preceding-sibling::*[not(self::title)]">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="." mode="fragment-anchor"/>
     <xsl:apply-templates select="." mode="serial-number"/>
     <xsl:text>.</xsl:text>
     <xsl:if test="title">
@@ -1401,6 +1418,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="*[not(self::caption or self::title)]"/>
+    <xsl:apply-templates select="." mode="fragment-anchor"/>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="." mode="number"/>
@@ -1457,6 +1475,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="ol/li">
     <xsl:apply-templates select="." mode="item-indent"/>
     <xsl:apply-templates select="." mode="item-marker"/>
+    <!-- an addressable item is a landing spot -->
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="fragment-anchor"/>
+    </xsl:if>
     <xsl:apply-templates/>
     <xsl:apply-templates select="." mode="finish-item"/>
 </xsl:template>
