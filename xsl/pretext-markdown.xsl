@@ -63,7 +63,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- over-escaping is always safe, if unlovely; the set below is  -->
 <!-- the characters that can OPEN a construction mid-prose, plus  -->
 <!-- the dollar sign, which mathematics has claimed.              -->
-<xsl:variable name="markdown-escapes" select="'\`*_[]&lt;&amp;$'"/>
+<xsl:variable name="markdown-escapes" select="'\`*_[]&lt;&amp;$|'"/>
 
 <xsl:template name="text-processing">
     <xsl:param name="text"/>
@@ -258,6 +258,66 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- physical line a pipe table demands                         -->
 <xsl:template name="line-separator">
     <xsl:text>&lt;br&gt;</xsl:text>
+</xsl:template>
+
+<!-- ###### -->
+<!-- Tables -->
+<!-- ###### -->
+
+<!-- A tabular of simple cells becomes a pipe table: the authored -->
+<!-- header row when there is one (a row of empty header cells    -->
+<!-- otherwise, which renderers accept), a delimiter row, then    -->
+<!-- the body.  A tabular with structured cells (paragraphs)      -->
+<!-- keeps the plain conversion's row-per-line form.  Cell text   -->
+<!-- is safe in a cell: "|" is in the escaping set.               -->
+<xsl:template match="tabular">
+    <xsl:choose>
+        <xsl:when test="row/cell/p">
+            <xsl:apply-imports/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:choose>
+                <xsl:when test="row[1][@header = 'yes']">
+                    <xsl:apply-templates select="row[1]" mode="pipe-row"/>
+                    <xsl:apply-templates select="row[1]" mode="pipe-delimiter"/>
+                    <xsl:apply-templates select="row[position() &gt; 1]" mode="pipe-row"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="row[1]" mode="pipe-empty-header"/>
+                    <xsl:apply-templates select="row[1]" mode="pipe-delimiter"/>
+                    <xsl:apply-templates select="row" mode="pipe-row"/>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="row" mode="pipe-row">
+    <xsl:text>|</xsl:text>
+    <xsl:for-each select="cell">
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates/>
+        <xsl:text> |</xsl:text>
+    </xsl:for-each>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="row" mode="pipe-delimiter">
+    <xsl:text>|</xsl:text>
+    <xsl:for-each select="cell">
+        <xsl:text>---|</xsl:text>
+    </xsl:for-each>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="row" mode="pipe-empty-header">
+    <xsl:text>|</xsl:text>
+    <xsl:for-each select="cell">
+        <xsl:text>   |</xsl:text>
+    </xsl:for-each>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ###### -->
