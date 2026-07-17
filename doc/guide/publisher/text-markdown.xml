@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2026  Robert A. Beezer                     -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="text-markdown" label="text-markdown">
+    <title>Conversion to Text and Markdown</title>
+    <idx>markdown</idx>
+    <idx>plain text</idx>
+
+    <introduction>
+        <p>Two closely-related conversions produce the lightest-weight output <pretext/> offers: plain text, and markdown.  The markdown version is the plain text version, plus the small set of conventions that make the structure of a document recognizable to a renderer: headings, emphasis, links, code blocks.  Either way you get files a human can read with no tools at all beyond a pager or an editor, and that a program can consume without any parsing to speak of.  A whole document can be a single file, or the chunking election of the publication file will produce one file per division, each with a trailing navigation line, along with summary pages (<xref ref="common-chunking-options"/>).</p>
+
+        <p>Some uses we have in mind.  Websites that host source-code repositories will render markdown automatically, so a project can provide a browsable version of a book right alongside its source, with working cross-references, images, and mathematics, and no web server involved.  Markdown is also the native language of <init>AI</init> assistants and their tools: a compact, faithful rendering of your book<mdash/>or of one section of it, chunked<mdash/>is exactly the right thing to place in front of such a tool.  And plain text is the universal solvent: it can be searched with the simplest tools, quoted in email or a discussion forum, compared line-by-line between versions, or fed to the next program in a pipeline.</p>
+    </introduction>
+
+    <section xml:id="text-markdown-coverage" label="text-markdown-coverage">
+        <title>What to Expect</title>
+
+        <p>A surprising amount of a <pretext/> document survives the trip.  Lists nest, with their authored numbering or markers, to any depth, and the items of a <tag>task</tag> subdivision nest right along with them.  A <tag>tabular</tag> of simple cells becomes a genuine table (<xref ref="text-markdown-commonmark"/>).  Images appear, placed and sized according to your layout elections.  Cross-references are working links, within a file and across the files of a chunked build.  The index is genuine: collected, sorted, and grouped by letter, with each locator a link announcing its target (<q>Theorem 2.1</q>).  Footnotes are marked in place and collected at the end of the division owning them.  Program listings, console sessions, and Sage cells are code blocks, with input prompted by its language.  Mathematics renders (<xref ref="text-markdown-commonmark"/>).</p>
+
+        <p>Understand, though, that certain constructions <em>cannot</em> be supported, and no amount of cleverness will change this.  Text is a linear medium, so there is no side-by-side layout: the panels of a <tag>sidebyside</tag> appear in sequence, after a note announcing the arrangement.  An elaborate <tag>tabular</tag><mdash/>spanning cells, rules, alignment<mdash/>reduces to simple rows.  Interactives, video, and audio cannot function in a static text file; each is announced, with a <init>URL</init> when one is readily available.  There are no knowls, no fonts, no color.  The general principle: a construction that cannot be expressed is announced in-band by a bracketed note, in a fixed recognizable format, rather than being silently dropped.</p>
+    </section>
+
+    <section xml:id="text-markdown-commonmark" label="text-markdown-commonmark">
+        <title>CommonMark, Tables, Mathematics, Renderers</title>
+        <idx>CommonMark</idx>
+
+        <p>Markdown began as a loose collection of conventions, and renderers came to disagree about the fine points.  CommonMark is the careful specification that resolved this, and it is the contract this conversion honors: the output is valid CommonMark, and an escaping layer guarantees that punctuation you author can never be mistaken for markup.  What a particular renderer does beyond the specification is its own affair, and so everything in this section is subject to your renderer of choice.</p>
+
+        <p>Tables are the notable case.  CommonMark itself has no table syntax; the nearly-universal extension is the <term>pipe table</term>, where cells of a row are separated by vertical bars.  A <tag>tabular</tag> of simple cells is emitted in this form, and virtually every renderer<mdash/>repository-hosting websites, editors, notebook interfaces<mdash/>will display a real table.  A strict CommonMark renderer without the extension shows the same content as readable pipe-separated lines, so nothing is lost.</p>
+
+        <p>Mathematics is authored <latex/> riding between dollar signs, the convention MathJax-enabled renderers recognize.  Each page of a markdown build opens with an invisible block of macro definitions, so your macros, and <pretext/>'s, work throughout the page.  With a MathJax-capable renderer (many repository-hosting websites and editors qualify) the mathematics simply renders; anywhere else it reads as the <latex/> you wrote, which is the long-standing convention for mathematics in plain text anyway.  The plain text conversion does exactly that, and nothing more, on the same reasoning.</p>
+
+        <p>Finally, images and their layout use a small amount of raw <init>HTML</init>, as do the invisible anchors that cross-reference links land on.  Raw <init>HTML</init> is legal CommonMark, and renderers overwhelmingly accept these particular tags, but an aggressively-sanitizing renderer may strip them.</p>
+    </section>
+
+    <section xml:id="text-markdown-characters" label="text-markdown-characters">
+        <title>Character Repertoire</title>
+
+        <p>By default these conversions use genuine Unicode characters: curly quotation marks, en- and em-dashes, an ellipsis, and so on.  In the long tradition of plain text, you may elect 7-bit <init>ASCII</init> stand-ins instead (<c>--</c> for an em-dash, straight quotes, <c>(c)</c> for a copyright symbol).  The election is the <c>@characters</c> attribute of the <tag>text</tag> element of the publication file, with values <c>unicode</c> (the default) and <c>ascii</c>; see <xref ref="publication-file-text"/>.  It applies to both conversions, and the files are encoded as <init>UTF-8</init> either way.</p>
+    </section>
+
+    <section xml:id="text-markdown-processing" label="text-markdown-processing">
+        <title>Processing</title>
+
+        <p>The <c>pretext/pretext</c> script (<xref ref="pretext-script"/>) performs these conversions with the formats <c>text</c> and <c>markdown</c>, for example<cd>
+            <cline>pretext/pretext -c doc -f markdown -p publication.xml book.ptx</cline>
+        </cd>A positive chunking level in the publication file produces a file per division; otherwise the result is a single file named for your source.  A markdown build also deposits the directories of external and generated images alongside the markdown files, since the output references images at the same relative paths the <init>HTML</init> conversion uses.  A third format, <c>markdown-zip</c>, bundles the entire markdown build, image directories included, into a single zip archive named for your source<mdash/>convenient for handing a whole book to somebody (or something) else.</p>
+    </section>
+</chapter>

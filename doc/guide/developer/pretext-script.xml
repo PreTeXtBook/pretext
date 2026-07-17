@@ -214,6 +214,11 @@ The script should be run on the entire document, even if all the images are in o
                 </li>
 
                 <li>
+                    <title>Text and Markdown</title>
+                    <p>The formats <c>text</c>, <c>markdown</c>, and <c>markdown-zip</c> produce a plain text rendering, a CommonMark rendering, and a single zip archive bundling the markdown with its image directories, respectively.  The chunking election of the publication file is honored: one file, or a file per division with navigation.  See <xref ref="text-markdown"/> for an overview.</p>
+                </li>
+
+                <li>
                     <title><latex/> Graphics</title>
                     <p><latex/> has a variety of languages for specifying images, such as xypic, pgfplots, and TikZ.  By including the necessary packages or setup commands in <c>docinfo/latex-preamble</c>, these can all be generated at once, in the manner of the example earlier.</p>
                 </li>
