@@ -116,6 +116,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Macro definitions preceding a page's mathematics: nothing -->
+<!-- in plain text (the mathematics is authored LaTeX, macros  -->
+<!-- and all), realized by the markdown flavor for renderers   -->
+<xsl:template match="*" mode="latex-macros"/>
+
 <!-- ######## -->
 <!-- Verbatim -->
 <!-- ######## -->
@@ -654,6 +659,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="book|article">
     <xsl:apply-templates select="." mode="heading-lines"/>
+    <xsl:apply-templates select="." mode="latex-macros"/>
     <xsl:apply-templates select="*"/>
 </xsl:template>
 
@@ -711,13 +717,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:variable>
 
-<!-- Realize one file: the content, then a navigation line -->
+<!-- Realize one file: macro support for its mathematics -->
+<!-- (nothing in plain text), the content, then a        -->
+<!-- navigation line                                     -->
 <xsl:template match="*" mode="file-wrap">
     <xsl:param name="content"/>
     <xsl:variable name="filename">
         <xsl:apply-templates select="." mode="containing-filename"/>
     </xsl:variable>
     <exsl:document href="{$filename}" method="text" encoding="UTF-8">
+        <xsl:apply-templates select="." mode="latex-macros"/>
         <xsl:copy-of select="$content"/>
         <xsl:apply-templates select="." mode="navigation-line"/>
     </exsl:document>

@@ -231,10 +231,46 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Display mathematics in dollar-fenced blocks, which GitHub    -->
 <!-- and Jupyter renderers typeset; four-space indentation would  -->
-<!-- read as a code block, so rows sit flush left                 -->
-<xsl:template match="md">
+<!-- read as a code block, so rows sit flush left.  Inside the    -->
+<!-- fence the rows ride a genuine *inner* alignment environment  -->
+<!-- (aligned, gathered, alignedat) chosen by -common's analysis, -->
+<!-- since an ampersand (or "\amp") is only legal inside one, and -->
+<!-- rows separate with the "\\" a renderer requires.             -->
+<xsl:template match="md[mrow]">
+    <xsl:variable name="raw-alignment">
+        <xsl:apply-templates select="." mode="displaymath-alignment">
+            <xsl:with-param name="b-needs-tags" select="false()"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="environment">
+        <xsl:choose>
+            <xsl:when test="contains($raw-alignment, 'alignat')">
+                <xsl:text>alignedat</xsl:text>
+            </xsl:when>
+            <xsl:when test="contains($raw-alignment, 'align')">
+                <xsl:text>aligned</xsl:text>
+            </xsl:when>
+            <xsl:when test="contains($raw-alignment, 'gather')">
+                <xsl:text>gathered</xsl:text>
+            </xsl:when>
+            <!-- "equation": a single row, no environment needed -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:text>&#xa;$$&#xa;</xsl:text>
+    <xsl:if test="not($environment = '')">
+        <xsl:text>\begin{</xsl:text>
+        <xsl:value-of select="$environment"/>
+        <xsl:text>}</xsl:text>
+        <xsl:apply-templates select="." mode="alignat-columns"/>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="mrow|intertext"/>
+    <xsl:if test="not($environment = '')">
+        <xsl:text>\end{</xsl:text>
+        <xsl:value-of select="$environment"/>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>$$&#xa;</xsl:text>
 </xsl:template>
 
@@ -247,9 +283,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="mrow">
     <xsl:value-of select="normalize-space(.)"/>
-    <xsl:if test="not(following-sibling::mrow)">
-        <xsl:apply-templates select="parent::md" mode="get-clause-punctuation-mark"/>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="following-sibling::mrow">
+            <xsl:text>\\</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::md" mode="get-clause-punctuation-mark"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
@@ -533,6 +574,90 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>**</xsl:text>
     <xsl:copy-of select="$heading"/>
     <xsl:text>**&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ############ -->
+<!-- Macro Support -->
+<!-- ############ -->
+
+<!-- Legacy fraction detection, as in the HTML conversion -->
+<xsl:variable name="b-has-sfrac" select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])"/>
+
+<!-- The author's math packages, massaged to MathJax "\require"   -->
+<!-- form.  A duplicate of the variable in the HTML conversion    -->
+<!-- (which this stylesheet does not import); a migration to      -->
+<!-- -common would leave one definition.                          -->
+<xsl:variable name="latex-packages-mathjax">
+    <xsl:for-each select="$docinfo/math-package">
+        <!-- must be specified, but can be empty/null -->
+        <xsl:if test="not(normalize-space(@mathjax-name)) = ''">
+            <xsl:text>\require{</xsl:text>
+            <xsl:value-of select="@mathjax-name"/>
+            <xsl:apply-templates/>
+            <xsl:text>}</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:variable>
+
+<!-- A page with mathematics opens with an invisible display-math -->
+<!-- block: MathJax package requirements, the author's macros,    -->
+<!-- and PreTeXt's own (\lt, \gt, and notably \amp).  MathJax     -->
+<!-- renders a definitions-only block as nothing at all, and the  -->
+<!-- definitions persist for every formula on the page, so each   -->
+<!-- page is self-sufficient.  (The Jupyter conversion does the   -->
+<!-- same in a notebook's first cell.  KaTeX-based renderers do   -->
+<!-- not persist definitions between zones; the block is still    -->
+<!-- invisible there, so no harm done.)                           -->
+<xsl:template match="*" mode="latex-macros">
+    <xsl:if test=".//m or .//md">
+        <xsl:variable name="definitions">
+            <xsl:value-of select="$latex-packages-mathjax"/>
+            <!-- the AMS "CD" commutative-diagram environment lives in  -->
+            <!-- a MathJax extension needing no author declaration; the -->
+            <!-- mixed-case v2 name persists as an alias in the later   -->
+            <!-- component-based loaders                                -->
+            <xsl:if test=".//m[contains(., '\begin{CD}')] or .//md[contains(., '\begin{CD}')]">
+                <xsl:text>\require{AMScd}</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="$latex-macros"/>
+            <xsl:call-template name="fillin-math"/>
+            <!-- legacy built-in support for "slanted|beveled|nice" fractions -->
+            <xsl:if test="$b-has-sfrac">
+                <xsl:text>\newcommand{\sfrac}[2]{{#1}/{#2}}&#xa;</xsl:text>
+            </xsl:if>
+        </xsl:variable>
+        <!-- one physical line: every markdown engine recognizes a  -->
+        <!-- single-line "$$...$$", and spaces are nothing to TeX    -->
+        <xsl:text>&#xa;$$</xsl:text>
+        <xsl:value-of select="normalize-space(translate($definitions, '&#xa;', ' '))"/>
+        <xsl:text>$$&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- An override of the template in pretext-common.xsl, in the      -->
+<!-- manner of the Jupyter conversion: the publisher's "shade"      -->
+<!-- style needs \definecolor and \colorbox from a MathJax          -->
+<!-- extension a generic renderer does not load, and one undefined  -->
+<!-- macro poisons the whole definitions block.  So "shade"         -->
+<!-- degrades to "box", which needs nothing beyond \boxed.          -->
+<xsl:template name="fillin-math">
+    <xsl:choose>
+        <xsl:when test="$fillin-math-style = 'underline'">
+            <xsl:text>\newcommand{\fillinmath}[1]{\mathchoice</xsl:text>
+            <xsl:text>{\underline{\displaystyle     \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\textstyle        \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\scriptstyle      \phantom{\ \,#1\ \,}}}</xsl:text>
+            <xsl:text>{\underline{\scriptscriptstyle\phantom{\ \,#1\ \,}}}}&#xa;</xsl:text>
+        </xsl:when>
+        <!-- "box", and "shade" degraded to "box" -->
+        <xsl:otherwise>
+            <xsl:text>\newcommand{\fillinmath}[1]{\mathchoice</xsl:text>
+            <xsl:text>{\boxed{\displaystyle     \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\textstyle        \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\scriptstyle      \phantom{\,#1\,}}}</xsl:text>
+            <xsl:text>{\boxed{\scriptscriptstyle\phantom{\,#1\,}}}}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ##### -->
