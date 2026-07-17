@@ -121,15 +121,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######## -->
 
 <!-- ATX headings: honest levels, one octothorpe per depth, the -->
-<!-- document title at level one, divisions one deeper          -->
-<xsl:template match="book|article">
+<!-- document title at level one, divisions one deeper.  Only   -->
+<!-- the heading lines change flavor; the structure of a        -->
+<!-- division (content, collected footnotes) is inherited.      -->
+<xsl:template match="book|article" mode="heading-lines">
     <xsl:text># </xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>&#xa;&#xa;</xsl:text>
-    <xsl:apply-templates select="*"/>
 </xsl:template>
 
-<xsl:template match="part|chapter|appendix|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|reading-questions|worksheet|handout|glossary|references|solutions">
+<xsl:template match="*" mode="heading-lines">
     <xsl:variable name="raw-level">
         <xsl:apply-templates select="." mode="level"/>
     </xsl:variable>
@@ -146,23 +147,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:value-of select="substring('######', 1, $level + 1)"/>
     <xsl:text> </xsl:text>
-    <xsl:variable name="the-number">
-        <xsl:apply-templates select="." mode="number"/>
-    </xsl:variable>
-    <xsl:if test="not($the-number = '')">
-        <xsl:apply-templates select="." mode="type-name"/>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$the-number"/>
-        <xsl:text> </xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:apply-templates select="." mode="heading-text"/>
     <xsl:text>&#xa;&#xa;</xsl:text>
-    <xsl:apply-templates select="*"/>
-    <xsl:variable name="the-notes" select=".//fn[generate-id(ancestor::*[&STRUCTURAL-FILTER;][1]) = generate-id(current())]"/>
-    <xsl:if test="$the-notes">
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:apply-templates select="$the-notes" mode="collected"/>
-    </xsl:if>
 </xsl:template>
 
 <!-- ######## -->
@@ -271,18 +257,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&lt;br&gt;</xsl:text>
 </xsl:template>
 
-<!-- ###### -->
-<!-- Blocks -->
-<!-- ###### -->
-
-<!-- A block's heading line, emboldened -->
-<xsl:template name="block-heading-line">
-    <xsl:param name="heading"/>
-    <xsl:text>**</xsl:text>
-    <xsl:copy-of select="$heading"/>
-    <xsl:text>**&#xa;&#xa;</xsl:text>
-</xsl:template>
-
 <!-- ##### -->
 <!-- Lists -->
 <!-- ##### -->
@@ -318,6 +292,82 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>- (</xsl:text>
     <xsl:apply-templates select="." mode="serial-number"/>
     <xsl:text>)</xsl:text>
+</xsl:template>
+
+<!-- ###### -->
+<!-- Blocks -->
+<!-- ###### -->
+
+<!-- A block's heading line, emboldened -->
+<xsl:template name="block-heading-line">
+    <xsl:param name="heading"/>
+    <xsl:text>**</xsl:text>
+    <xsl:copy-of select="$heading"/>
+    <xsl:text>**&#xa;&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ######## -->
+<!-- Chunking -->
+<!-- ######## -->
+
+<!-- A summary page's line for a subsidiary file is a genuine link -->
+<xsl:template match="*" mode="summary-entry">
+    <xsl:text>- [</xsl:text>
+    <xsl:apply-templates select="." mode="heading-text"/>
+    <xsl:text>](</xsl:text>
+    <xsl:apply-templates select="." mode="containing-filename"/>
+    <xsl:text>)&#xa;</xsl:text>
+</xsl:template>
+
+<!-- The navigation line links its labels; a lone paragraph, -->
+<!-- pipe-separated like the plain-text form                 -->
+<xsl:template match="*" mode="navigation-line">
+    <xsl:variable name="the-filename">
+        <xsl:apply-templates select="." mode="containing-filename"/>
+    </xsl:variable>
+    <xsl:variable name="entry" select="$chunk-list[@filename = $the-filename]"/>
+    <xsl:variable name="previous" select="$entry/preceding-sibling::chunk[1]"/>
+    <xsl:variable name="next" select="$entry/following-sibling::chunk[1]"/>
+    <xsl:variable name="up">
+        <xsl:apply-templates select="." mode="up-filename"/>
+    </xsl:variable>
+    <xsl:if test="$previous or $next">
+        <xsl:text>&#xa;[</xsl:text>
+        <xsl:apply-templates select="." mode="type-name">
+            <xsl:with-param name="string-id" select="'toc'"/>
+        </xsl:apply-templates>
+        <xsl:text>](</xsl:text>
+        <xsl:value-of select="$contents-filename"/>
+        <xsl:text>)</xsl:text>
+        <xsl:if test="$previous">
+            <xsl:text> | [</xsl:text>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'previous'"/>
+            </xsl:apply-templates>
+            <xsl:text>](</xsl:text>
+            <xsl:value-of select="$previous/@filename"/>
+            <xsl:text>)</xsl:text>
+        </xsl:if>
+        <xsl:if test="not($up = '')">
+            <xsl:text> | [</xsl:text>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'up'"/>
+            </xsl:apply-templates>
+            <xsl:text>](</xsl:text>
+            <xsl:value-of select="$up"/>
+            <xsl:text>)</xsl:text>
+        </xsl:if>
+        <xsl:if test="$next">
+            <xsl:text> | [</xsl:text>
+            <xsl:apply-templates select="." mode="type-name">
+                <xsl:with-param name="string-id" select="'next'"/>
+            </xsl:apply-templates>
+            <xsl:text>](</xsl:text>
+            <xsl:value-of select="$next/@filename"/>
+            <xsl:text>)</xsl:text>
+        </xsl:if>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
