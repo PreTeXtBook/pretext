@@ -1006,9 +1006,8 @@
   </define>
   <!--
     Text parses to a formula representing a constant (no free
-    variables).  N.B. @reduce here follows sample usage; the
-    maintainer's description lists it only on de-expression
-    and de-evaluate.
+    variables).  @reduce determines if the internal
+    representation is simplified or not.
   -->
   <define name="DENumber">
     <element name="de-number">
@@ -1083,7 +1082,7 @@
   <!--
     The variable of a substitution or evaluation carries its
     value; plain-text values happen to work as raw Javascript
-    but are deliberately NOT valid
+    automatically wrapped in de-number
   -->
   <define name="DEVariableValued">
     <element name="variable">
@@ -1092,6 +1091,7 @@
         <ref name="Eval"/>
         <ref name="DENumber"/>
         <ref name="DEExpression"/>
+        <ref name="DEEvaluate"/>
       </choice>
     </element>
   </define>
