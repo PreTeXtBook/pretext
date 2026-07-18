@@ -15,6 +15,7 @@
                     Epub? &
                     Jupyter? &
                     Braille? &
+                    Text? &
                     Webwork?
                 }
             
@@ -422,6 +423,11 @@
                         attribute width { xsd:positiveInteger }?,
                         attribute height { xsd:positiveInteger }?
                     }
+                }
+            
+            Text =
+                element text {
+                    attribute characters { "unicode" | "ascii" }?
                 }
             
             Webwork =

@@ -407,6 +407,9 @@ def get_cli_arguments():
         ("tactile", "Tactile PreFigure diagrams with braille labels"),
         ("speech", "Speech (math elements)"),
         ("source", "Standalone source files"),
+        ("text", "plain text rendering (experimental)"),
+        ("markdown", "markdown rendering (CommonMark, experimental)"),
+        ("markdown-zip", "markdown rendering and image directories, bundled as a zip file"),
         ("latex", "LaTeX source file (only, an intermediate format for developers)"),
         ("latex-plus", "LaTeX source file and all necessary build files"),
         ("fo", "XSL-FO source file (only, an intermediate format for developers, experimental)"),
@@ -901,6 +904,15 @@ def main():
                 stringparams,
                 out_file,
                 dest_dir,
+            )
+        elif args.format in ["text", "markdown", "markdown-zip"]:
+            ptx.text(
+                xml_source,
+                publication_file,
+                stringparams,
+                out_file,
+                dest_dir,
+                args.format,
             )
         elif args.format == "latex":
             ptx.latex(

@@ -58,6 +58,7 @@
             <xi:include href="publisher/braille.xml"/>
             <xi:include href="publisher/slides.xml"/>
             <xi:include href="publisher/jupyter-notebook.xml"/>
+            <xi:include href="publisher/text-markdown.xml"/>
             <xi:include href="publisher/instructor-version.xml"/>
             <xi:include href="publisher/ancillaries.xml"/>
             <xi:include href="publisher/webwork.xml"/>

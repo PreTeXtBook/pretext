@@ -3061,6 +3061,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 
+<!-- ##################### -->
+<!-- Text-Specific Options -->
+<!-- ##################### -->
+
+<!-- The character repertoire of the plain text and markdown        -->
+<!-- conversions: genuine Unicode characters (dashes, quotation     -->
+<!-- marks, ...) or 7-bit ASCII stand-ins.                          -->
+<xsl:variable name="text-characters">
+    <xsl:apply-templates select="$publisher-attribute-options/text/pi:pub-attribute[@name='characters']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-text-unicode" select="$text-characters = 'unicode'"/>
+
+
 <!-- ######################## -->
 <!-- Braille-Specific Options -->
 <!-- ######################## -->
@@ -3795,6 +3808,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <pi:pub-attribute name="height" default="25" freeform="yes"/>
         </page>
     </braille>
+    <text>
+        <pi:pub-attribute name="characters" default="unicode" options="ascii"/>
+    </text>
     <revealjs>
         <appearance>
             <pi:pub-attribute name="theme" default="simple" freeform="yes"/>

@@ -1137,6 +1137,25 @@
         </subsection>
     </section>
 
+    <section xml:id="publication-file-text" label="publication-file-text">
+        <title>Text and Markdown Options</title>
+        <idx>text publisher options</idx>
+        <idx><h>publisher options</h><h>text and markdown</h></idx>
+
+        <introduction>
+            <p>These options apply to the plain text conversion, and to the markdown conversion built on top of it.  See <xref ref="text-markdown"/> for an overview of both.</p>
+        </introduction>
+
+        <subsection xml:id="text-characters-option" label="text-characters-option">
+            <title>Character Repertoire</title>
+            <idx><h>plain text</h><h>character repertoire</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/text/@characters</cline>
+            </cd>attribute elects the character repertoire.  The value <c>unicode</c> (the default) uses genuine Unicode characters, such as curly quotation marks and em-dashes; the value <c>ascii</c> restricts output to 7-bit <init>ASCII</init>, using traditional plain-text stand-ins instead.  See <xref ref="text-markdown-characters"/> for more.</p>
+        </subsection>
+    </section>
+
     <section xml:id="publication-file-source">
         <title>Source Options</title>
         <idx>source publisher options</idx>

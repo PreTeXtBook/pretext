@@ -37,6 +37,9 @@
           <ref name="Braille"/>
         </optional>
         <optional>
+          <ref name="Text"/>
+        </optional>
+        <optional>
           <ref name="Webwork"/>
         </optional>
       </interleave>
@@ -1301,6 +1304,18 @@
           </attribute>
         </optional>
       </element>
+    </element>
+  </define>
+  <define name="Text">
+    <element name="text">
+      <optional>
+        <attribute name="characters">
+          <choice>
+            <value>unicode</value>
+            <value>ascii</value>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
   <define name="Webwork">
