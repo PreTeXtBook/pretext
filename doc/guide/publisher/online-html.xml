@@ -26,7 +26,7 @@
                 <cline>platypus.mammal-institute.org/aota/html</cline>
             </cd>then most modern web servers will automatically return the page<cd>
                 <cline>platypus.mammal-institute.org/aota/html/index.html</cline>
-            </cd>So you can advertise the shorter version to potential readers.  What is in <c>index.html</c>?  Simple code to <term>redirect</term> to another one of your pages.  Which one?  Any one you like!</p>
+            </cd>So you can advertise the shorter version to potential readers.  What is in <c>index.html</c>?  Simple code to <term>redirect</term> to another one of your pages.  Which one?  Any one you like! <idx>landing page</idx></p>
 
             <p>Within the <tag>publication</tag> element of your publication file (<xref ref="publication-file"/>) include an <tag>html</tag> element, with a child element <tag>index-page</tag> having an attribute <attr>ref</attr>.  The value must be the <attr>xml:id</attr> of a division which is rendered as an entire web page at the requested level of chunking.  See <xref ref="online-index-page"/>  for details on specifying this option.</p>
 

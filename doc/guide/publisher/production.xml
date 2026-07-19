@@ -27,8 +27,8 @@
     </section>
 
     <section>
-        <title>(*) Landing Page</title>
-        <p>TODO</p>
+        <title>Landing Page</title>
+        <p>Each book can have its own designated landing page,<idx>landing page</idx> it can be anywhere in the book.  This is controlled by an entry in the publisher file. See <xref ref="online-index-page" /> for more details.</p>
     </section>
 
     <section>
