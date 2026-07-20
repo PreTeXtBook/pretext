@@ -3200,7 +3200,7 @@
             PlainTitle =
                 element plaintitle {text}
             Creator =
-                element creator {TextShort}
+                element creator {(TextShort | Xref)*}
             XMLLang = attribute xml:lang {text}
             MetaDataTarget =
                 UniqueID?,
