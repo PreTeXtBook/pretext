@@ -120,6 +120,9 @@
                         <xsl:text>,&#xa;"dyn_imports": [</xsl:text>
                         <xsl:text>"BTM"</xsl:text>
                         <!-- Future: add additional packages here -->
+                        <xsl:if test="setup/jsimports">
+                          <xsl:apply-templates select="setup/jsimports/jslibrary" mode="js-import"/>
+                        </xsl:if>
                         <xsl:text>]</xsl:text>
                     </xsl:if>
                     <!-- Names assigned to the blanks.      -->
@@ -186,6 +189,30 @@
     <xsl:text>: </xsl:text>
     <xsl:value-of select="$blankNum - 1"/>
 </xsl:template>
+
+<xsl:template match="jslibrary" mode="js-import">
+  <xsl:variable name="import-path">
+    <xsl:choose>
+      <xsl:when test="@source">
+        <xsl:value-of select="$external-directory"/>
+        <xsl:value-of select="@source"/>
+      </xsl:when>
+      <xsl:when test="@url">
+        <xsl:value-of select="@url"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>PTX:WARNING Extension file for JS import not correctly formatted</xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:if test="string-length($import-path) > 0">
+    <xsl:text>, </xsl:text>
+    <xsl:call-template name="quote-string">
+      <xsl:with-param name="text" select="$import-path" />
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
 
 <!-- #eval in a dynamic exercise (has setup) is to evaluate -->
 <!-- an expression that has been previously generated. If   -->
@@ -286,6 +313,16 @@
         <xsl:apply-templates select="de-environment" mode="runestone-setup"/>
     <xsl:text>});&#xa;</xsl:text>
     <xsl:text>var RNG = v._mobjs.menv.rng;&#xa;</xsl:text>
+    <!-- Option to define v._config for any data purposes -->
+    <xsl:if test="setup/config-json">
+      <xsl:text>v._config = JSON.parse("</xsl:text>
+      <xsl:call-template name="escape-json-string">
+          <xsl:with-param name="text">
+              <xsl:value-of select="setup/config-json"/>
+          </xsl:with-param>
+      </xsl:call-template>
+      <xsl:text>");&#xa;</xsl:text>
+    </xsl:if>
     <!-- Generate all of the XML-declared math objects -->
     <xsl:apply-templates select="setup/de-object" mode="runestone-setup"/>
 </xsl:template>
@@ -346,7 +383,10 @@
         <xsl:text>, </xsl:text>
     </xsl:if>
      <xsl:choose>
-        <xsl:when test="@mode='math-formula'">
+        <xsl:when test="@parser">
+          <xsl:value-of select="@parser"/>
+        </xsl:when>
+        <xsl:when test="@mode='math'">
             <xsl:text>v._mobjs.getParser()</xsl:text>
         </xsl:when>
         <xsl:when test="@mode='number'">
