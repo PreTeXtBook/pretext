@@ -10082,7 +10082,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-dynamic-exercises">
             <title>Dynamic Exercises</title>
 
-            <p>This section demonstrates the use of dynamic randomized exercises built upon the framework of Runestone components. These demonstration problems incorporate a library supporting mathematical expressions both for varying the content of the statement of the exercises as well as the checking of submitted answers.</p>
+            <p>This section demonstrates the use of dynamic randomized exercises built upon the framework of Runestone components. These demonstration problems incorporate a library supporting mathematical expressions both for varying the content of the statement of the exercises as well as the checking of submitted answers. Then there is an example where a custom library is used for defining and parsing answer objects without using the built-in math library, and which also illustrates the use of a config structure passed in JSON format.</p>
 
             <exercises>
                 <title>Dynamic Fill-In</title>
@@ -10404,6 +10404,66 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <solution include-automatic="no">
                         <p>Both <m><eval obj="n"/></m> and its negative are accepted; the automatic solution is declined in favor of this sentence.</p>
                     </solution>
+                </exercise>
+                <exercise label="find-row-echelon">
+                    <statement>
+                        <p>
+                            Consider the matrix defined by
+                            <md>
+                                A = <eval obj="baseMatrix"/>
+                            </md>
+                            Find the reduced row echelon form of <m>A</m>.
+                        </p>
+                        <p>
+                            <m>\mathrm{rref}(A) = </m> <fillin name="rref" mode="math" parser="parseMatrix" ansobj="rrefMatrix"/>
+                        </p>
+                        <p>
+                            A matrix is entered by listing the rows separated by commas between brackets [ and ], and for each row listing entries separated by commas between additional brackets.
+                            The matrix
+                            <m>\begin{bmatrix} 1 \amp 3 \amp 5 \\ 2 \amp 4 \amp 6 \end{bmatrix}</m>
+                            would be entered as <c>[ [1, 3, 5], [2, 4, 6] ]</c>.
+                        </p>
+                    </statement>
+                    <solution>
+                        <p>
+                            Row reduction of <m>A</m> gives
+                            <md>
+                                \mathrm{rref}(A) = <eval obj="rrefMatrix"/>
+                            </md>
+                        </p>
+                    </solution>
+                    <setup>
+                        <jsimports>
+                            <jslibrary source="code/fitb/btm-matrix-library.js"/>
+                        </jsimports>
+                        <config-json>{ "rows": 3, "cols": 3, "rank": 2 }</config-json>
+                        <setupScript>
+                            <![CDATA[
+                            v.baseMatrix = getRandomMatrix(RNG, _config.rows, _config.cols, _config.rank, true);
+                            v.rrefMatrix = getRREF(v.baseMatrix);
+                            ]]>
+                        </setupScript>
+                    </setup>
+                    <evaluation>
+                        <evaluate name="rref">
+                            <test correct="yes">
+                                <jscmp>
+                                    testMatrixEqual(ans, rrefMatrix)
+                                </jscmp>
+                            </test>
+                            <test>
+                                <jscmp>
+                                    isRowEchelon(ans)
+                                </jscmp>
+                                <jscmp>
+                                    testRowEquivalent(ans, baseMatrix)
+                                </jscmp>
+                                <feedback>
+                                    <p>Your matrix <md><eval obj="ans"/></md> is a valid row echelon form that is row equivalent to the original matrix, but it is not in reduced row echelon form.</p>
+                                </feedback>
+                            </test>
+                        </evaluate>
+                    </evaluation>
                 </exercise>
             </exercises>
         </section>
