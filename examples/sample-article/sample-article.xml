@@ -10027,7 +10027,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <section xml:id="section-dynamic-exercises">
             <title>Dynamic Exercises</title>
 
-            <p>This section demonstrates the use of dynamic randomized exercises built upon the framework of Runestone components. These demonstration problems incorporate a library supporting mathematical expressions both for varying the content of the statement of the exercises as well as the checking of submitted answers.</p>
+            <p>This section demonstrates the use of dynamic randomized exercises built upon the framework of Runestone components. These demonstration problems incorporate a library supporting mathematical expressions both for varying the content of the statement of the exercises as well as the checking of submitted answers. Then there is an example where a custom library is used for defining and parsing answer objects without using the built-in math library, and which also illustrates the use of a config structure passed in JSON format.</p>
 
             <exercises>
                 <title>Dynamic Fill-In</title>
@@ -10304,6 +10304,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </test>
                         </evaluate>
                     </evaluation>
+                </exercise>
+                <exercise label="find-row-echelon">
+                  <setup>
+                    <jsimports>
+                      <jslibrary source="code/btm-matrix-library.js" />
+                    </jsimports>
+                    <config-json>{ "date": "20 Jul 2026" }</config-json>
+                    <setupScript>
+                      <![CDATA[ 
+                      v.baseMatrix = randomMatrix(RNG, 3, 3, 2, true);
+                      v.rrefMatrix = rrefMatrix(v.baseMatrix);
+                      ]]>
+                    </setupScript>
+                  </setup>
+                  <statement>
+                    <p>
+                      Consider the matrix defined by
+                      <md>
+                        A = <eval obj="baseMatrix"/>
+                      </md>
+                      Find the reduced row echelon form of <m>A</m>.
+                    </p>
+                    <p>
+                      <m>\mathrm{rref}(A) = </m> <fillin name="rref" parser="parseMatrix"/>
+                    </p>
+                    <p>
+                      A matrix is entered by listing the rows separated by commas between brackets [ and ], and for each row listing entries separated by commas between additional brackets.
+                      The matrix
+                      <m>\begin{bmatrix} 1 \amp 3 \amp 5 \\ 2 \amp 4 \amp 6 \end{bmatrix}</m>
+                      would be entered as <c>[ [1, 3, 5], [2, 4, 6] ]</c>.
+                    </p>
+                    <p>
+                      Version date: <eval obj="_config.date"/>.
+                    </p>
+                  </statement>
+                  <evaluation>
+                    <evaluate name="rref">
+                      <test correct="yes">
+                        <jscmp>
+                          testMatrixEqual(ans, rrefMatrix)
+                        </jscmp>
+                      </test>
+                    </evaluate>
+                  </evaluation>
                 </exercise>
             </exercises>
         </section>
