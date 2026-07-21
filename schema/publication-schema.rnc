@@ -17,6 +17,7 @@
                     Braille? &
                     Text? &
                     Webwork?
+                    Dynamics?
                 }
 
             Common =
@@ -466,6 +467,15 @@
                     attribute user { text }?,
                     attribute password { text }?,
                     attribute task-reveal { "preceding-correct" | "all" }?
+                }
+
+            Dynamics =
+                element dynamics {
+                    element remote-libraries {
+                        element library {
+                            attribute url { xsd:string { pattern = "https://.*" } }
+                        }*
+                    }?
                 }
 
             }

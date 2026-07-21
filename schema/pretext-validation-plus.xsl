@@ -195,6 +195,68 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
+<!-- A "jslibrary" says where a dynamic exercise's Javascript extension library    -->
+<!-- comes from: @source for one of the project's external directory, @url for     -->
+<!-- one fetched from elsewhere.  The schema requires exactly one.                 -->
+<!--                                                                               -->
+<!-- Each check below is on structure.                                             -->
+<xsl:template match="jslibrary">
+    <!-- A scheme is a name, then a colon, before any slash.  -->
+    <!-- So "https://x" has scheme and "code/lib.js" does not, and neither does "a/b:c".      -->
+    <xsl:variable name="url-scheme" select="(substring-before(@url, ':') != '') and not(contains(substring-before(@url, ':'), '/'))"/>
+    <xsl:variable name="source-scheme" select="(substring-before(@source, ':') != '') and not(contains(substring-before(@source, ':'), '/'))"/>
+
+    <!-- A @source looks like a @url   -->
+    <xsl:if test="@source and $source-scheme">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'error'"/>
+            <xsl:with-param name="message-id" select="'jslibrary-source-with-scheme'"/>
+            <xsl:with-param name="message">
+                <xsl:text>The @source of a &lt;jslibrary&gt; is a location within the project's&#xa;</xsl:text>
+                <xsl:text>external directory, but appears to be a url.&#xa;</xsl:text>
+                <xsl:text>This one begins "</xsl:text>
+                <xsl:value-of select="substring-before(@source, ':')"/>
+                <xsl:text>:", which names a library somewhere else.&#xa;</xsl:text>
+                <xsl:text>Use @url for a library that is fetched rather than kept with the&#xa;</xsl:text>
+                <xsl:text>project.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+
+    <!-- A @url has no scheme so looks like a @source  -->
+    <xsl:if test="@url and not($url-scheme) and not(starts-with(@url, '//'))">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'error'"/>
+            <xsl:with-param name="message-id" select="'jslibrary-url-not-remote'"/>
+            <xsl:with-param name="message">
+                <xsl:text>The @url of a &lt;jslibrary&gt; names a library to fetch, so it should begin&#xa;</xsl:text>
+                <xsl:text>with a scheme: "https://". Use @source for a library kept with&#xa;</xsl:text>
+                <xsl:text>the project, written relative to the external directory.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+
+    <!-- A @url must begin with "https://" -->
+    <xsl:if test="@url and ($url-scheme or starts-with(@url, '//')) and not(starts-with(@url, 'https://'))">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'error'"/>
+            <xsl:with-param name="message-id" select="'jslibrary-insecure-url'"/>
+            <xsl:with-param name="message">
+                <xsl:text>The @url of a &lt;jslibrary&gt; must begin with "https://".  A static&#xa;</xsl:text>
+                <xsl:text>build runs an imported library on the machine building the book,&#xa;</xsl:text>
+                <xsl:text>not sandboxed in a reader's browser, so source is fetched only over&#xa;</xsl:text>
+                <xsl:text>a channel that is both authenticated and private.  An insecure&#xa;</xsl:text>
+                <xsl:text>"http://" @url would also break the HTML version, once the book&#xa;</xsl:text>
+                <xsl:text>itself is served over "https://", since browsers block insecure&#xa;</xsl:text>
+                <xsl:text>subresource loads on a secure page.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!--                                                              -->
+    <!-- there is no recursing further, a "jslibrary" is always empty -->
+    <!--                                                              -->
+</xsl:template>
+
 <!-- An "exercise" as a panel of a "sidebyside" supports compact -->
 <!-- layout of a "worksheet" or a "handout", where workspace is  -->
 <!-- relevant.  The schema allows the arrangement anywhere a     -->
@@ -469,6 +531,131 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- recurse further -->
     <xsl:apply-templates/>
+</xsl:template>
+
+
+<!-- A fill-in-the-blank "evaluation" pairs one "evaluate" with each   -->
+<!-- "fillin" of the sibling "statement", by @name where both carry    -->
+<!-- one and by position otherwise.  So the two counts must agree.  An -->
+<!-- "evaluate" with @all="yes" supplies a single test across all the  -->
+<!-- blanks at once, so it takes no slot and is excluded from the      -->
+<!-- count.  An "evaluate" may be empty of "test" elements (the        -->
+<!-- correct test is then synthesized from the @answer or @ansobj of   -->
+<!-- the paired "fillin"), but the element itself must be present:     -->
+<!-- that is why this is a count of elements and not of tests.         -->
+<!--                                                                   -->
+<!-- No RELAX-NG grammar can express this.  It relates the number of   -->
+<!-- children of one element to the number of descendants, at          -->
+<!-- arbitrary depth in mixed content, of a sibling.                   -->
+<!--                                                                   -->
+<!-- Both checks below run against the assembled "version" tree, the   -->
+<!-- second pass of assembly.  That is safe because no pass creates or -->
+<!-- removes an "evaluate" or a "fillin"; the later "exercise" pass    -->
+<!-- only adds a "test" inside an "evaluate" that already exists.  A   -->
+<!-- check on the presence of a correct "test" could NOT live here,    -->
+<!-- since synthesis has not yet happened at this point.               -->
+<xsl:template match="evaluation">
+    <!-- Too few leaves blanks with no feedback path at all, so it is  -->
+    <!-- an error; too many only leaves elements unconsumed, so it is  -->
+    <!-- a warning.                                                    -->
+    <xsl:if test="count(evaluate[not(@all = 'yes')]) &lt; count(../statement//fillin)">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'error'"/>
+            <xsl:with-param name="message-id" select="'evaluation-too-few-evaluate'"/>
+            <xsl:with-param name="message">
+                <xsl:text>This &lt;evaluation&gt; has </xsl:text>
+                <xsl:value-of select="count(evaluate[not(@all = 'yes')])"/>
+                <xsl:text> &lt;evaluate&gt; elements, but the corresponding&#xa;</xsl:text>
+                <xsl:text>&lt;statement&gt; has </xsl:text>
+                <xsl:value-of select="count(../statement//fillin)"/>
+                <xsl:text> &lt;fillin&gt; elements; they must correspond one-to-one.&#xa;</xsl:text>
+                <xsl:text>Blanks without an &lt;evaluate&gt; have no way to be judged.  An&#xa;</xsl:text>
+                <xsl:text>&lt;evaluate&gt; may be left empty when the paired &lt;fillin&gt; carries&#xa;</xsl:text>
+                <xsl:text>@answer or @ansobj, but it must still be present.  Note that an&#xa;</xsl:text>
+                <xsl:text>&lt;evaluate&gt; with @all="yes" is not counted, since it tests all&#xa;</xsl:text>
+                <xsl:text>of the blanks together rather than one of them.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="count(evaluate[not(@all = 'yes')]) &gt; count(../statement//fillin)">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'evaluation-too-many-evaluate'"/>
+            <xsl:with-param name="message">
+                <xsl:text>This &lt;evaluation&gt; has </xsl:text>
+                <xsl:value-of select="count(evaluate[not(@all = 'yes')])"/>
+                <xsl:text> &lt;evaluate&gt; elements, but the corresponding&#xa;</xsl:text>
+                <xsl:text>&lt;statement&gt; has only </xsl:text>
+                <xsl:value-of select="count(../statement//fillin)"/>
+                <xsl:text> &lt;fillin&gt; elements; they must correspond&#xa;</xsl:text>
+                <xsl:text>one-to-one.  The surplus will be ignored.  Note that an&#xa;</xsl:text>
+                <xsl:text>&lt;evaluate&gt; with @all="yes" is not counted, since it tests all&#xa;</xsl:text>
+                <xsl:text>of the blanks together rather than one of them.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- A global test across all the blanks presumes there are        -->
+    <!-- several.  With a single blank the conversion discards it, so  -->
+    <!-- an author who put the only correct test there would be left   -->
+    <!-- with no way to judge the answer.                              -->
+    <xsl:if test="evaluate[@all = 'yes'] and (count(../statement//fillin) = 1)">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'evaluation-all-single-blank'"/>
+            <xsl:with-param name="message">
+                <xsl:text>This &lt;evaluation&gt; has an &lt;evaluate&gt; with @all="yes", but the&#xa;</xsl:text>
+                <xsl:text>corresponding &lt;statement&gt; has only one &lt;fillin&gt;.  A global test&#xa;</xsl:text>
+                <xsl:text>across all of the blanks is only meaningful with several, so this&#xa;</xsl:text>
+                <xsl:text>element will be ignored.  Move its &lt;test&gt; into the &lt;evaluate&gt;&#xa;</xsl:text>
+                <xsl:text>for the blank.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- A "fillin" inside mathematics is a rule to write on: the schema     -->
+<!-- allows it only @fill or @characters, never @mode, @answer or        -->
+<!-- @ansobj.  In an ordinary exercise that is exactly right.  In the    -->
+<!-- statement of an interactive fill-in exercise it cannot work, since  -->
+<!-- every blank there must pair with an "evaluate" and be answerable,   -->
+<!-- and there is no mechanism in PreTeXt for placing an "input" inside  -->
+<!-- mathematics rendered by MathJax.  Such a blank is counted, consumes -->
+<!-- an "evaluate", and then renders as nothing at all.                  -->
+<!--                                                                     -->
+<!-- No RELAX-NG grammar can express this either.  The blank is legal    -->
+<!-- where it sits; what makes it wrong is an "evaluation" element that  -->
+<!-- is a sibling of an ancestor, arbitrarily far up.                    -->
+<!--                                                                     -->
+<!-- The test for "interactive fill-in" mirrors pretext-assembly.xsl:    -->
+<!-- an "evaluation" alongside the statement, and no "var" in the        -->
+<!-- statement (a "var" makes it the older "fillin-basic" type instead,  -->
+<!-- where a decorative blank in mathematics is unremarkable).  The      -->
+<!-- @exercise-interactive attribute cannot be used here: it is not set  -->
+<!-- until a later pass than the one this stylesheet runs against.       -->
+<!-- Blanks in a "hint", "answer" or "solution" have no "statement"      -->
+<!-- ancestor, so they do not reach the test.                            -->
+<xsl:template match="fillin[ancestor::m or ancestor::md]">
+    <xsl:if test="ancestor::statement[1]/../evaluation and not(ancestor::statement[1]//var)">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'error'"/>
+            <xsl:with-param name="message-id" select="'fillin-in-mathematics'"/>
+            <xsl:with-param name="message">
+                <xsl:text>This &lt;fillin&gt; is inside mathematics, in the &lt;statement&gt; of an&#xa;</xsl:text>
+                <xsl:text>interactive fill-in exercise.  Every blank in such a statement must&#xa;</xsl:text>
+                <xsl:text>pair with an &lt;evaluate&gt; and be answerable, and a blank inside&#xa;</xsl:text>
+                <xsl:text>mathematics cannot be: there is no way to place an input field&#xa;</xsl:text>
+                <xsl:text>within mathematics rendered by MathJax, and the schema does not&#xa;</xsl:text>
+                <xsl:text>allow @mode, @answer or @ansobj there in any case.  This blank&#xa;</xsl:text>
+                <xsl:text>will consume an &lt;evaluate&gt; and then render as nothing.&#xa;</xsl:text>
+                <xsl:text>Move it outside the mathematics, as in&#xa;</xsl:text>
+                <xsl:text>    &lt;m&gt;f(x) = &lt;/m&gt; &lt;fillin mode="math" ansobj="answer"/&gt;</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
 
@@ -792,5 +979,3 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 </xsl:stylesheet>
-
-
