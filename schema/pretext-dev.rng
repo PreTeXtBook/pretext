@@ -963,6 +963,33 @@
           <text/>
         </element>
       </optional>
+      <optional>
+        <!--
+          jsimports: external JS files loaded via dynamic import
+          when the exercise is opened.  Use @source for project-
+          local files (relative path inside assets) or @url for
+          files on the internet (absolute URL).
+        -->
+        <element name="jsimports">
+          <oneOrMore>
+            <element name="jslibrary">
+              <choice>
+                <attribute name="source"/>
+                <attribute name="url"/>
+              </choice>
+            </element>
+          </oneOrMore>
+        </element>
+      </optional>
+      <optional>
+        <!--
+          config-json: a JSON object literal passed to the exercise
+          as v._config; must be valid JSON text content.
+        -->
+        <element name="config-json">
+          <text/>
+        </element>
+      </optional>
     </element>
   </define>
   <define name="DEObject">
@@ -1348,6 +1375,13 @@
       </optional>
       <optional>
         <attribute name="answer"/>
+      </optional>
+      <optional>
+        <!--
+          @parser names a JS function called on the user's response
+          text; when present it takes precedence over @mode.
+        -->
+        <attribute name="parser"/>
       </optional>
       <optional>
         <attribute name="mode">
