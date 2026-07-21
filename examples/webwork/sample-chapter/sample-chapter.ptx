@@ -130,7 +130,7 @@
                         <p>A simple, but functional example to begin with. If you are just learning how to add, you can test yourself here.</p>
                     </introduction>
 
-                    <webwork xml:id="webwork-add-numbers">
+                    <webwork xml:id="webwork-add-numbers" seed="6">
                         <description>
                             Add two positive single-digit integers.
                         </description>
@@ -207,7 +207,7 @@
                         </ul></p>
                     </introduction>
 
-                    <webwork>
+                    <webwork seed="14">
                         <pg-code>
                             $a = random(1, 9, 1);
                             $b = random(1, 9, 1);
@@ -250,7 +250,7 @@
                         <p>Hints can be inserted into exercises. Whether a hint is visible in the HTML depends on the value of <c>$showHint</c> in <c>PGcourse.pl</c> in the <webwork /> course that is hosting these exercises. How the hint is displayed in the pdf output is controlled in the usual way that an PTX hint is controlled.</p>
                     </introduction>
 
-                    <webwork>
+                    <webwork seed="16">
                         <pg-code>
                             do {
                                 $a = list_random(2,3,5,6);
@@ -285,7 +285,7 @@
                     <introduction>
                         <p>This problem has no randomization at all, not even if it were exported to be part of a problem set on a <webwork /> server. As such, it really doesn't need any lines of Perl code in its setup, so you have the option of skipping that part of the authoring process.</p>
                     </introduction>
-                    <webwork>
+                    <webwork seed="18">
                         <statement>
                             <p><m>1+2=</m> <var name="3" width="5" /></p>
                         </statement>
@@ -305,7 +305,7 @@
                             problem that is rendered.
                         </p>
                     </introduction>
-                    <webwork><![CDATA[DOCUMENT();
+                    <webwork seed="19"><![CDATA[DOCUMENT();
 
 loadMacros(
   "PGstandard.pl",
@@ -340,7 +340,7 @@ ENDDOCUMENT();
                             to not have to manage whitespace.
                         </p>
                     </introduction>
-                    <webwork><xi:include parse="text" href="pg/Adding_SingleDigit_Integers.pg"/></webwork>
+                    <webwork seed="20"><xi:include parse="text" href="pg/Adding_SingleDigit_Integers.pg"/></webwork>
                 </exercise>
 
                 <project label="copy-webwork-add-numbers">
@@ -441,7 +441,7 @@ ENDDOCUMENT();
 
                 <exercise xml:id="quadratic-equation" label="quadratic-equation">
                     <title>Solving Quadratic Equations</title>
-                    <webwork xml:id="webwork-solve-quadratic">
+                    <webwork xml:id="webwork-solve-quadratic" seed="28">
                         <description>
                             <line>Find a quadratic equation's solutions.</line>
                             <line>One positive integer solution and one negative fraction solution.</line>
@@ -538,7 +538,7 @@ ENDDOCUMENT();
                             This exercise tests that nested tasks work.
                         </p>
                     </introduction>
-                    <webwork>
+                    <webwork seed="29">
                         <description>
                             <line>Find a quadratic equation's solutions.</line>
                             <line>One positive integer solution and one negative fraction solution.</line>
@@ -762,7 +762,7 @@ ENDDOCUMENT();
                             <p>Consult <xref ref="definition-antiderivative" /> and the <xref ref="theorem-FTC" text="title" /> to assist you with the following problem.</p>
                         </introduction>
 
-                        <webwork source="Library/ma122DB/set12/s5_4_26.pg" />
+                        <webwork source="Library/ma122DB/set12/s5_4_26.pg" seed="39"/>
 
                         <conclusion>
                             <p>Unless the OPL has changed this problem out from under us, note the <q>SOLUTION</q> appearing in the solution. That is hard-coded into the OPL version of the problem. This is an example of something undesirable that may happen when using OPL problems that were not originally written with <pretext /> in mind.</p>
@@ -787,7 +787,7 @@ ENDDOCUMENT();
                     <exercise label="ww-discuss-inverse-processes">
                         <title>Inverse Processes</title>
 
-                        <webwork>
+                        <webwork seed="44">
                             <statement>
                                 <p><q>Differentiation and integration are inverse processes.</q>  Cite <alert>specific results</alert> from this section in an explanation of how they justify this (somewhat imprecise) claim.</p>
                                 <p><var form="essay" width="40"/></p>
@@ -809,7 +809,7 @@ ENDDOCUMENT();
                         </introduction>
 
                         <exercise label="antiderivative-sin">
-                            <webwork>
+                            <webwork seed="46">
                                 <pg-code>
                                     $answer = FormulaUpToConstant("-cos(x)");
                                 </pg-code>
@@ -825,7 +825,7 @@ ENDDOCUMENT();
                         </exercise>
 
                         <exercise label="antiderivative-exp">
-                            <webwork>
+                            <webwork seed="47">
                                 <pg-code>
                                     $answer = FormulaUpToConstant("e^x");
                                 </pg-code>
@@ -855,7 +855,7 @@ ENDDOCUMENT();
                             </p>
                         </introduction>
 
-                        <webwork>
+                        <webwork seed="51">
                             <pg-code>
                                 $answer = Formula('2x');
                                 $showwork = '[@ explanation_box(message => "Show your work.") @]*';
@@ -892,7 +892,7 @@ ENDDOCUMENT();
                             The latter may have attribute <attr>alignment</attr> with options <c>gather</c>, <c>align</c>, or <c>alignat</c>.
                         </p>
                     </introduction>
-                    <webwork>
+                    <webwork seed="52">
                         <statement>
                             <p>
                                 If <m>a=5</m> and <m>b=12</m>, then <md>a^2+b^2=13^2</md>.
@@ -928,7 +928,7 @@ ENDDOCUMENT();
                             With an <tag>md</tag> you might have <tag>intertext</tag> among the rows.
                         </p>
                     </introduction>
-                    <webwork>
+                    <webwork seed="53">
                         <statement>
                             <p>
                                 Here, we solve an equation.
@@ -983,7 +983,7 @@ ENDDOCUMENT();
                         <p>Note also that the solution to this problem uses an external link.</p>
                     </introduction>
 
-                    <webwork>
+                    <webwork seed="54">
 
                         <pg-code>
                             $rational = PopUp(
@@ -1007,7 +1007,7 @@ ENDDOCUMENT();
                 <exercise label="choose-one">
                     <title>Choose one</title>
 
-                    <webwork>
+                    <webwork seed="55">
 
                         <pg-code>
                             $theorem = RadioButtons(
@@ -1030,7 +1030,7 @@ ENDDOCUMENT();
 
                 <exercise label="options-subset">
                     <title>Choose a Subset of Options</title>
-                    <webwork>
+                    <webwork seed="56">
                         <pg-code>
                             $checks = CheckboxList(
                                 [
@@ -1065,7 +1065,7 @@ ENDDOCUMENT();
 
                 <exercise label="options-subset-auto-label">
                     <title>Choose a Subset of Options with Automated Labeling</title>
-                    <webwork>
+                    <webwork seed="57">
                         <pg-code>
                             $checks = CheckboxList(
                                 [
@@ -1101,7 +1101,7 @@ ENDDOCUMENT();
 
                 <exercise label="options-subset-explicit-labeling">
                     <title>Choose a Subset of Options with Explicit Labeling</title>
-                    <webwork>
+                    <webwork seed="58">
                         <pg-code>
                             $checks = CheckboxList(
                                 [
@@ -1144,7 +1144,7 @@ ENDDOCUMENT();
                 <exercise label="table-completion">
                     <title>Complete this Table</title>
 
-                    <webwork>
+                    <webwork seed="62">
                         <pg-code>
                             @a = (random(2,9,1),random(2,9,1));
                             @b = (random(2,9,1),random(2,9,1));
@@ -1218,7 +1218,7 @@ ENDDOCUMENT();
                 </p>
                 <exercise label="static-latex-image">
                     <title>A static <tag>latex-image</tag> graph</title>
-                    <webwork>
+                    <webwork seed="65">
                         <pg-code>
                             Context("IntegerFunctions");
                             Context()->variables->are(n=>'Real');
@@ -1274,7 +1274,7 @@ ENDDOCUMENT();
                             In this problem, the height and width of the rectangle are randomized.
                         </p>
                     </introduction>
-                    <webwork>
+                    <webwork seed="66">
                         <pg-code>
                             $a = random(4,6,1);
                             $b = $a + random(2,4,1);
@@ -1310,7 +1310,7 @@ ENDDOCUMENT();
                             This exercise has graph styling that is affected by that.
                         </p>
                     </introduction>
-                    <webwork>
+                    <webwork seed="67">
                         <pg-code>
                             @roots = (-3..3)[NchooseK(7,3)];
                             @roots = num_sort(@roots);
@@ -1349,7 +1349,7 @@ ENDDOCUMENT();
                             This exercise is to test that special characters behave.
                         </p>
                     </introduction>
-                    <webwork>
+                    <webwork seed="68">
                         <statement>
                             <p>
                                 The code below has a printed dollar sign, a printed percent sign,
@@ -1380,7 +1380,7 @@ ENDDOCUMENT();
 
                 <exercise label="solving-with-graph">
                     <title>Solve using a graph</title>
-                    <webwork>
+                    <webwork seed="69">
                         <pg-code>
                             $a = random(1,3,1);
                             $gr = init_graph(-1,-1,4,4,
@@ -1445,7 +1445,7 @@ ENDDOCUMENT();
                             </image>
                         </introduction>
                         <exercise label="box-diagonal-five">
-                            <webwork>
+                            <webwork seed="70">
                                 <statement>
                                     <p>
                                         Find <m>D</m> when <m>L=4</m> and <m>W=3</m>.
@@ -1466,7 +1466,7 @@ ENDDOCUMENT();
                             </webwork>
                         </exercise>
                         <exercise label="box-diagonal-thirteen">
-                            <webwork>
+                            <webwork seed="71">
                                 <statement>
                                     <p>
                                         Find <m>D</m> when <m>L=12</m> and <m>W=5</m>.
@@ -1504,7 +1504,7 @@ ENDDOCUMENT();
                 <exercise label="ww-PGML-format">
                     <title>PGML Formatting</title>
 
-                    <webwork>
+                    <webwork seed="72">
                         <statement>
                             <p>Smart double quotes: <q>Life is about making an impact, not making an income.</q></p>
                             <p>Smart single quotes: <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq></p>
@@ -1573,7 +1573,7 @@ ENDDOCUMENT();
                 <p>Here we make MathObject String answers to see how they turn out in answer elements.</p>
 
                 <exercise label="mathobject-string-answers">
-                    <webwork>
+                    <webwork seed="73">
                         <pg-code>
                             $xmlchars = q(&lt;>&amp;'";);
                             $latex0 = '#%&amp;&lt;>\^_`|~';
@@ -1633,7 +1633,7 @@ ENDDOCUMENT();
                 </p>
 
                 <exercise label="pgml-data-attribute">
-                    <webwork>
+                    <webwork seed="74">
                         <pg-code>
                             $statement = 'some PGML math: [`\frac{1}{2}+\frac{3}{2}=2`]; and some *bold text*';
                         </pg-code>
@@ -1657,7 +1657,7 @@ ENDDOCUMENT();
                 <exercise label="number-or-function">
                     <title>Answer is a number or a function</title>
 
-                    <webwork>
+                    <webwork seed="76">
 
                         <pg-code>
                             $a = non_zero_random(-9,9,1);
@@ -1697,7 +1697,7 @@ ENDDOCUMENT();
                 <exercise label="function-with-domain-issues">
                     <title>Answer is a function with domain issues</title>
 
-                    <webwork>
+                    <webwork seed="77">
 
                         <pg-code>
                             $a = random(2,5,1);
@@ -1739,7 +1739,7 @@ ENDDOCUMENT();
                 <exercise label="multiple-choice-popup-or-radio-buttons">
                     <title>Multiple Choice by Popup, Radio Buttons, or Checkboxes</title>
 
-                    <webwork>
+                    <webwork seed="78">
                         <pg-code>
                             $color1 = PopUp(["?","Red","Blue","Green"], 2);
                             $color2 = RadioButtons(["Red","Blue","Green","None of these"], 1);
@@ -1765,7 +1765,7 @@ ENDDOCUMENT();
                 </exercise>
 
                 <exercise label="radio-buttons-with-math">
-                    <webwork>
+                    <webwork seed="79">
                         <pg-code>
                               $expressions = RadioButtons(['\(x\)','\(x^2\)','\(2^x\)'], 2);
                         </pg-code>
@@ -1787,7 +1787,7 @@ ENDDOCUMENT();
                 <exercise label="tables">
                     <title>Tables</title>
 
-                    <webwork>
+                    <webwork seed="80">
 
                         <pg-code>
                             $x = Real(5);
@@ -1846,7 +1846,7 @@ ENDDOCUMENT();
 
                 <exercise label="answer-arrays">
                     <title>Answer Arrays</title>
-                    <webwork>
+                    <webwork seed="81">
                       <pg-code>
                         Context("Point");
                         $p = Point(0,0);
@@ -1882,7 +1882,7 @@ ENDDOCUMENT();
 
                 <exercise label="pretext-source-with-server-images">
                     <title><pretext/> problem source with server-generated images</title>
-                    <webwork>
+                    <webwork seed="82">
                         <pg-code>
                             for my $i(0..7){$gr[$i] = init_graph(-1,-1,4,4,axes=>[0,0],grid=>[5,5],size=>[150,150]);};
                             add_functions($gr[0], "1 for x in &lt;-1,4> using color:blue and weight:2");
@@ -1924,7 +1924,7 @@ ENDDOCUMENT();
                     <introduction>
                         <p>One long exercise, where ordered sublists test the specification of their labels.</p>
                     </introduction>
-                    <webwork>
+                    <webwork seed="83">
                         <statement>
                             <p><ol>
                                 <li>Simple item</li>
@@ -2188,7 +2188,7 @@ ENDDOCUMENT();
 
                 <exercise label="list-indentation-with-images-and-tables">
                     <title>Checking Proper Indentation In Lists with Images and Tables</title>
-                    <webwork>
+                    <webwork seed="84">
                         <pg-code>
                             $g=init_graph(-1,-1,1,1,axes=>[0,0]);
                         </pg-code>
@@ -2271,7 +2271,7 @@ ENDDOCUMENT();
 
                 <exercise label="deep-nested-lists">
                     <title>Deep-nested lists</title>
-                    <webwork>
+                    <webwork seed="85">
                         <statement>
                             <p>Ordered list.</p>
                             <p><ol>
@@ -2320,7 +2320,7 @@ ENDDOCUMENT();
                             It should throw a PTX warning during the representations build.
                         </p>
                     </introduction>
-                    <webwork>
+                    <webwork seed="86">
                         <statement>
                         </statement>
                     </webwork>
@@ -2335,7 +2335,7 @@ ENDDOCUMENT();
                             So if working, it should move on to the next delimiter option.
                         </p>
                     </introduction>
-                    <webwork>
+                    <webwork seed="87">
                         <statement>
                             <tabular>
                                 <row>
@@ -2358,7 +2358,7 @@ ENDDOCUMENT();
                     <title>Inline Exercises</title>
                     <p>Some <q>inline</q> exercises, as distinguished from the <q>divisional</q> exercises below.</p>
                     <exercise label="inline-bare">
-                        <webwork>
+                        <webwork seed="88">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2366,7 +2366,7 @@ ENDDOCUMENT();
                     </exercise>
                     <exercise label="inline-title">
                         <title>Has a Title</title>
-                        <webwork>
+                        <webwork seed="89">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2376,7 +2376,7 @@ ENDDOCUMENT();
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
-                        <webwork>
+                        <webwork seed="90">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2387,14 +2387,14 @@ ENDDOCUMENT();
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
-                        <webwork>
+                        <webwork seed="91">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
                         </webwork>
                     </exercise>
                     <exercise label="inline-conclusion">
-                        <webwork>
+                        <webwork seed="92">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2405,7 +2405,7 @@ ENDDOCUMENT();
                     </exercise>
                     <exercise label="inline-title-conclusion">
                         <title>Has a Title</title>
-                        <webwork>
+                        <webwork seed="93">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2418,7 +2418,7 @@ ENDDOCUMENT();
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
-                        <webwork>
+                        <webwork seed="94">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2432,7 +2432,7 @@ ENDDOCUMENT();
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
-                        <webwork>
+                        <webwork seed="95">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2446,7 +2446,7 @@ ENDDOCUMENT();
                 <exercises>
                     <title>Divisional Exercises</title>
                     <exercise label="divisional-bare">
-                        <webwork>
+                        <webwork seed="96">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2454,7 +2454,7 @@ ENDDOCUMENT();
                     </exercise>
                     <exercise label="divisional-title">
                         <title>Has a Title</title>
-                        <webwork>
+                        <webwork seed="97">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2464,7 +2464,7 @@ ENDDOCUMENT();
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
-                        <webwork>
+                        <webwork seed="98">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2475,14 +2475,14 @@ ENDDOCUMENT();
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
-                        <webwork>
+                        <webwork seed="99">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
                         </webwork>
                     </exercise>
                     <exercise label="divisional-conclusion">
-                        <webwork>
+                        <webwork seed="100">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2493,7 +2493,7 @@ ENDDOCUMENT();
                     </exercise>
                     <exercise label="divisional-title-conclusion">
                         <title>Has a Title</title>
-                        <webwork>
+                        <webwork seed="101">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2506,7 +2506,7 @@ ENDDOCUMENT();
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
-                        <webwork>
+                        <webwork seed="102">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2520,7 +2520,7 @@ ENDDOCUMENT();
                         <introduction>
                             <p>Has an introduction.</p>
                         </introduction>
-                        <webwork>
+                        <webwork seed="103">
                             <statement>
                                 <p><m>1+1=2</m></p>
                             </statement>
@@ -2534,7 +2534,7 @@ ENDDOCUMENT();
                             <p>These are inside an exercisegroup.</p>
                         </introduction>
                         <exercise label="exercisegroup-bare">
-                            <webwork>
+                            <webwork seed="104">
                                 <statement>
                                     <p><m>1+1=2</m></p>
                                 </statement>
@@ -2542,7 +2542,7 @@ ENDDOCUMENT();
                         </exercise>
                         <exercise label="exercisegroup-title">
                             <title>Has a Title</title>
-                            <webwork>
+                            <webwork seed="105">
                                 <statement>
                                     <p><m>1+1=2</m></p>
                                 </statement>
@@ -2552,7 +2552,7 @@ ENDDOCUMENT();
                             <introduction>
                                 <p>Has an introduction.</p>
                             </introduction>
-                            <webwork>
+                            <webwork seed="106">
                                 <statement>
                                     <p><m>1+1=2</m></p>
                                 </statement>
@@ -2563,14 +2563,14 @@ ENDDOCUMENT();
                             <introduction>
                                 <p>Has an introduction.</p>
                             </introduction>
-                            <webwork>
+                            <webwork seed="107">
                                 <statement>
                                     <p><m>1+1=2</m></p>
                                 </statement>
                             </webwork>
                         </exercise>
                         <exercise label="exercisegroup-conclusion">
-                            <webwork>
+                            <webwork seed="108">
                                 <statement>
                                     <p><m>1+1=2</m></p>
                                 </statement>
@@ -2581,7 +2581,7 @@ ENDDOCUMENT();
                         </exercise>
                         <exercise label="exercisegroup-title-conclusion">
                             <title>Has a Title</title>
-                            <webwork>
+                            <webwork seed="109">
                                 <statement>
                                     <p><m>1+1=2</m></p>
                                 </statement>
@@ -2594,7 +2594,7 @@ ENDDOCUMENT();
                             <introduction>
                                 <p>Has an introduction.</p>
                             </introduction>
-                            <webwork>
+                            <webwork seed="110">
                                 <statement>
                                     <p><m>1+1=2</m></p>
                                 </statement>
@@ -2608,7 +2608,7 @@ ENDDOCUMENT();
                             <introduction>
                                 <p>Has an introduction.</p>
                             </introduction>
-                            <webwork>
+                            <webwork seed="111">
                                 <statement>
                                     <p><m>1+1=2</m></p>
                                 </statement>
@@ -2657,7 +2657,7 @@ ENDDOCUMENT();
                             </p>
                         </introduction>
                         <exercise label="an-exercisegroup-exercise">
-                            <webwork>
+                            <webwork seed="112">
                                 <statement>
                                     <p>
                                         What is <m>1+1</m>?
