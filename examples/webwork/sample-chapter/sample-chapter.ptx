@@ -2672,6 +2672,160 @@ ENDDOCUMENT();
                 </exercises>
             </section>
 
+            <section>
+                <title>Sidebyside Testing</title>
+                <exercise label="sidebyside-simple">
+                    <webwork seed="1">
+                        <statement>
+                            <sidebyside>
+                                <p>
+                                    A first paragraph.
+                                </p>
+                                <p>
+                                    A second paragraph that is supposed to be so long that it wraps
+                                    to a second line in all output formats.
+                                </p>
+                            </sidebyside>
+                        </statement>
+                    </webwork>
+                </exercise>
+
+                <exercise label="sidebyside-three-panel">
+                    <webwork seed="1">
+                        <statement>
+                            <sidebyside>
+                                <p>
+                                    A first paragraph.
+                                </p>
+                                <p>
+                                    A second paragraph that is supposed to be so long that it wraps
+                                    to a second line in all output formats.
+                                </p>
+                                <p>
+                                    A third paragraph.
+                                </p>
+                            </sidebyside>
+                        </statement>
+                    </webwork>
+                </exercise>
+
+                <exercise label="sidebyside-with-layout">
+                    <webwork seed="1">
+                        <statement>
+                            <sidebyside widths="20% 50% 20%" valign="medium">
+                                <p>
+                                    A first paragraph.
+                                </p>
+                                <p>
+                                    A second paragraph that is supposed to be so long that it wraps
+                                    to a second line in all output formats.
+                                </p>
+                                <p>
+                                    A third paragraph.
+                                </p>
+                            </sidebyside>
+                        </statement>
+                    </webwork>
+                </exercise>
+
+                <exercise label="sidebyside-image-tabular">
+                    <webwork seed="1">
+                        <statement>
+                            <sidebyside>
+                                <tabular>
+                                    <row>
+                                        <cell><m>(0,0)</m></cell>
+                                        <cell><m>(0,1)</m></cell>
+                                    </row>
+                                    <row>
+                                        <cell><m>(1,0)</m></cell>
+                                        <cell><m>(1,1)</m></cell>
+                                    </row>
+                                </tabular>
+                                <image>
+                                    <latex-image>
+                                        \begin{tikzpicture}
+                                            \draw[fill=blue!20] (0,0) -| (1,1) -| cycle;
+                                        \end{tikzpicture}
+                                    </latex-image>
+                                    <shortdescription>a blue square</shortdescription>
+                                </image>
+                            </sidebyside>
+                        </statement>
+                    </webwork>
+                </exercise>
+
+                <exercise label="sidebyside-one-of-each">
+                    <webwork seed="1">
+                        <statement>
+                            <sidebyside>
+                                <tabular>
+                                    <row>
+                                        <cell><m>(0,0)</m></cell>
+                                        <cell><m>(0,1)</m></cell>
+                                    </row>
+                                    <row>
+                                        <cell><m>(1,0)</m></cell>
+                                        <cell><m>(1,1)</m></cell>
+                                    </row>
+                                </tabular>
+                                <image>
+                                    <latex-image>
+                                        \begin{tikzpicture}
+                                            \draw[fill=blue!20] (0,0) -| (1,1) -| cycle;
+                                        \end{tikzpicture}
+                                    </latex-image>
+                                    <shortdescription>a blue square</shortdescription>
+                                </image>
+                                <p>
+                                    Hello World!
+                                </p>
+                                <pre>
+                                    Hello World!
+                                </pre>
+                            </sidebyside>
+                        </statement>
+                    </webwork>
+                </exercise>
+
+                <exercise label="sidebyside-stack">
+                    <webwork seed="1">
+                        <statement>
+                            <sidebyside>
+                                <stack>
+                                    <tabular>
+                                        <row>
+                                            <cell><m>(0,0)</m></cell>
+                                            <cell><m>(0,1)</m></cell>
+                                        </row>
+                                        <row>
+                                            <cell><m>(1,0)</m></cell>
+                                            <cell><m>(1,1)</m></cell>
+                                        </row>
+                                    </tabular>
+                                    <image>
+                                        <latex-image>
+                                            \begin{tikzpicture}
+                                                \draw[fill=blue!20] (0,0) -| (1,1) -| cycle;
+                                            \end{tikzpicture}
+                                        </latex-image>
+                                        <shortdescription>a blue square</shortdescription>
+                                    </image>
+                                </stack>
+                                <stack>
+                                    <p>
+                                        First paragraph.
+                                    </p>
+                                    <pre>
+                                        Second paragraph.
+                                    </pre>
+                                </stack>
+                            </sidebyside>
+                        </statement>
+                    </webwork>
+                </exercise>
+            </section>
+
             <section xml:id="section-deprecations">
                 <title>Deprecations</title>
 
