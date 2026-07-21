@@ -6,7 +6,7 @@ screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/2_3-Stress_Tests.p
 description       = Stress Tests
 problemListV2
 problem_start
-source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_3-Stress_Tests/2_3_1-PTX_problem_source_with_servergenerated_images.pg
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_3-Stress_Tests/2_3_1-PreTeXt_problem_source_with_servergenerated_images.pg
 problem_id = 1
 problem_end
 problem_start
