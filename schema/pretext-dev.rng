@@ -1128,34 +1128,51 @@
     </element>
   </define>
   <!--
-    Fill-in-the-blank exercises: randomized setup, then evaluation.
-    Content model per the FITB maintainer (Brian Walton), issue #2980.
+    Fill-in-the-blank exercises: a setup and an evaluation
+    accompany the statement.  Content model per the FITB
+    maintainer (Brian Walton), issue #2980.
+    "setup" and "evaluation" are data rather than content:
+    neither is rendered where it sits, so their placement
+    carries no meaning and is left to the author.  They may
+    precede the "statement" (natural when the statement
+    refers to objects the setup defines) or trail the
+    solutions.  The remaining order is the usual one for an
+    exercise, with "statement" ahead of any "hint", "answer"
+    or "solution"; nesting that sequence inside the
+    interleave is what preserves it.
   -->
   <define name="FillInBlank">
     <ref name="MetaDataTitleOptional"/>
     <optional>
       <attribute name="number"/>
     </optional>
-    <ref name="StatementExercise"/>
     <interleave>
       <optional>
         <ref name="Setup"/>
       </optional>
       <ref name="Evaluation"/>
-      <zeroOrMore>
-        <ref name="Hint"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Answer"/>
-      </zeroOrMore>
-      <zeroOrMore>
-        <ref name="Solution"/>
-      </zeroOrMore>
+      <group>
+        <ref name="StatementExercise"/>
+        <interleave>
+          <zeroOrMore>
+            <ref name="Hint"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="Answer"/>
+          </zeroOrMore>
+          <zeroOrMore>
+            <ref name="Solution"/>
+          </zeroOrMore>
+        </interleave>
+      </group>
     </interleave>
   </define>
   <!--
-    Problem setup: named objects defined sequentially (later ones
+    Problem setup: imported javascript libraries, a configuration JSON for passing data,
+    named objects defined sequentially (later ones
     may reference earlier ones), then optional raw-Javascript hooks.
+    External libraries can be passed as relative path to asset (using @source),
+    or as an https:// url to the library (using @url).
     A missing @seed makes any randomization unpredictable, so the
     FITB machinery warns; but setup has non-randomizing uses too.
   -->
@@ -1163,6 +1180,23 @@
     <element name="setup">
       <optional>
         <attribute name="seed"/>
+      </optional>
+      <optional>
+        <element name="jsimports">
+          <oneOrMore>
+            <element name="jslibrary">
+              <choice>
+                <attribute name="source"/>
+                <attribute name="url"/>
+              </choice>
+            </element>
+          </oneOrMore>
+        </element>
+      </optional>
+      <optional>
+        <element name="config-json">
+          <text/>
+        </element>
       </optional>
       <zeroOrMore>
         <ref name="DEObject"/>
@@ -1372,6 +1406,14 @@
     maintainer describes an optional trailing "feedback" here;
     observed usage places feedback inside "test", so both are
     admitted.
+    A bare "evaluate", with no "test" at all, is deliberately
+    allowed: when the paired "fillin" carries an @answer or an
+    @ansobj, the correct test is implicit and gets synthesized
+    (the assembly "exercise" pass, or the Runestone conversion
+    for @ansobj).  The element itself is still required, one
+    per blank, since the pairing is positional; the
+    validation-plus stylesheet checks that count, which no
+    grammar can express.
   -->
   <define name="Evaluate">
     <element name="evaluate">
@@ -1389,9 +1431,9 @@
           </choice>
         </attribute>
       </optional>
-      <oneOrMore>
+      <zeroOrMore>
         <ref name="FITBTest"/>
-      </oneOrMore>
+      </zeroOrMore>
       <optional>
         <ref name="Feedback"/>
       </optional>
@@ -1581,6 +1623,9 @@
       </optional>
       <optional>
         <attribute name="answer"/>
+      </optional>
+      <optional>
+        <attribute name="parser"/>
       </optional>
       <optional>
         <attribute name="mode">
