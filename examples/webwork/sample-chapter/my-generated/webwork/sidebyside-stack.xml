@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='utf-8'?>
+<webwork-reps version="2" webwork2_major_version="2" webwork2_minor_version="20" xml:id="extracted-sidebyside-stack" assembly-id="sidebyside-stack">
+  <static seed="1">
+    <statement><sidebyside xmlns:pi="http://pretextbook.org/2020/pretext/internal" valign="top" widths="50% 50%">
+<stack>
+<tabular>
+<col/>
+<col/>
+<row>
+<cell><m>(0,0)</m></cell>
+<cell><m>(0,1)</m></cell>
+</row>
+<row>
+<cell><m>(1,0)</m></cell>
+<cell><m>(1,1)</m></cell>
+</row>
+</tabular>
+<image pi:generated="webwork/images/sidebyside-stack-image-1" width="100%">
+<shortdescription>a blue square</shortdescription>
+</image>
+</stack>
+<stack>
+<p>First paragraph.</p>
+<pre>
+<cline>Second paragraph.</cline>
+</pre>
+</stack>
+</sidebyside>
+</statement>
+  </static>
+  <rendering-data problemSource="Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_6-Sidebyside_Testing/2_6_6.pg" origin="generated" domain="https://webwork-ptx.aimath.org" course-id="anonymous" user-id="anonymous" passwd="anonymous" language="en-US"/>
+  <pg><![CDATA[
+#############################################
+###       Generated from PreTeXt source      
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.6.6)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "niceTables.pl",
+  "PGlateximage.pl",
+  "WWSC.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+
+$image_1 = createLaTeXImage();
+$image_1->addToPreamble(latexImagePreamble());
+$image_1->BEGIN_LATEX_IMAGE
+\begin{tikzpicture}
+    \draw[fill=blue!20] (0,0) -| (1,1) -| cycle;
+\end{tikzpicture}
+
+END_LATEX_IMAGE
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+[#
+    [.
+[#
+    [.
+        [@DataTable([[PGML('[`(0,0)`]'),PGML('[`(0,1)`]'),],[PGML('[`(1,0)`]'),PGML('[`(1,1)`]'),],],align=>'*{2}{l}',valign=>'middle',);@]*
+
+    .]*
+    [.
+        [@image(insertGraph($image_1), width=>600, alt=>qq"a blue square")@]* 
+
+    .]*
+#]*
+
+    .]
+    [.
+[#
+    [.
+        First paragraph.
+
+    .]*
+    [.
+```
+Second paragraph.
+```
+
+    .]*
+#]*
+
+    .]
+#]*{align => 'p{0.5}p{0.5}'}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();
+]]></pg>
+</webwork-reps>

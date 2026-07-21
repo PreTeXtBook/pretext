@@ -1,0 +1,87 @@
+#############################################
+###       Generated from PreTeXt source      
+###                                          
+###         https://pretextbook.org          
+###                                          
+#############################################
+## DBsubject()
+## DBchapter()
+## DBsection()
+## Level()
+## KEYWORDS()
+## TitleText1()
+## EditionText1()
+## AuthorText1()
+## Section1(not reported)
+## Problem1(2.6.5)
+## Author()
+## Institution()
+## Language(en-US)
+
+DOCUMENT();
+
+############################################################
+# Load Macros
+############################################################
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "AnswerFormatHelp.pl",
+  "niceTables.pl",
+  "PGlateximage.pl",
+  "WWSC.pl",
+  "PGcourse.pl",
+);
+COMMENT('Authored in PreTeXt');
+
+############################################################
+# Header
+############################################################
+TEXT(beginproblem());
+
+############################################################
+# PG Setup Code
+############################################################
+Context('Numeric');
+
+$image_1 = createLaTeXImage();
+$image_1->addToPreamble(latexImagePreamble());
+$image_1->BEGIN_LATEX_IMAGE
+\begin{tikzpicture}
+    \draw[fill=blue!20] (0,0) -| (1,1) -| cycle;
+\end{tikzpicture}
+
+END_LATEX_IMAGE
+
+############################################################
+# Body
+############################################################
+
+BEGIN_PGML
+[#
+    [.
+        [@DataTable([[PGML('[`(0,0)`]'),PGML('[`(0,1)`]'),],[PGML('[`(1,0)`]'),PGML('[`(1,1)`]'),],],align=>'*{2}{l}',valign=>'middle',);@]*
+
+    .]
+    [.
+        [@image(insertGraph($image_1), width=>600, alt=>qq"a blue square")@]* 
+
+    .]
+    [.
+        Hello World!
+    .]
+    [.
+```
+Hello World!
+```
+
+    .]
+#]*{align => 'p{0.25}p{0.25}p{0.25}p{0.25}'}
+
+END_PGML
+
+############################################################
+# End Problem
+############################################################
+
+ENDDOCUMENT();

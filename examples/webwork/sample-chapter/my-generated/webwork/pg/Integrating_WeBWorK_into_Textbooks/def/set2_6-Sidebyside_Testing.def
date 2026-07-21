@@ -1,0 +1,31 @@
+openDate          = 01/01/2027 at 12:00am
+dueDate           = 12/31/2027 at 10:00pm
+answerDate        = 12/31/2027 at 10:00pm
+paperHeaderFile   = Integrating_WeBWorK_into_Textbooks/header/2_6-Sidebyside_Testing.pg
+screenHeaderFile  = Integrating_WeBWorK_into_Textbooks/header/2_6-Sidebyside_Testing.pg
+description       = Sidebyside Testing
+problemListV2
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_6-Sidebyside_Testing/2_6_1.pg
+problem_id = 1
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_6-Sidebyside_Testing/2_6_2.pg
+problem_id = 2
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_6-Sidebyside_Testing/2_6_3.pg
+problem_id = 3
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_6-Sidebyside_Testing/2_6_4.pg
+problem_id = 4
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_6-Sidebyside_Testing/2_6_5.pg
+problem_id = 5
+problem_end
+problem_start
+source_file = Integrating_WeBWorK_into_Textbooks/2-Technical_Examples/2_6-Sidebyside_Testing/2_6_6.pg
+problem_id = 6
+problem_end
