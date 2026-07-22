@@ -209,11 +209,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <sidebyside>
                         <figure xml:id="fg-2a-chA">
                             <caption>First sub-figure.</caption>
-                            <sidebyside><p>Left panel.</p></sidebyside>
+                            <image>
+                                <latex-image>
+                                    \begin{tikzpicture}
+                                        \draw (0,0) rectangle (2,1) node[midway] {Left panel};
+                                    \end{tikzpicture}
+                                </latex-image>
+                            </image>
                         </figure>
                         <figure xml:id="fg-2b-chA">
                             <caption>Second sub-figure.</caption>
-                            <sidebyside><p>Right panel.</p></sidebyside>
+                            <image>
+                                <latex-image>
+                                    \begin{tikzpicture}
+                                        \draw (0,0) rectangle (2,1) node[midway] {Right panel};
+                                    \end{tikzpicture}
+                                </latex-image>
+                            </image>
                         </figure>
                     </sidebyside>
                 </figure>
