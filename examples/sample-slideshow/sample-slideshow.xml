@@ -293,6 +293,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </slide>
 
             <slide>
+                <title>Numbered Mathematics</title>
+
+                <p>A numbered equation on a slide, whose display also uses a macro defined in <tag>docinfo</tag>.<md number="yes">
+                    <mrow>\definiteintegral{0}{1}{x^2}{x} = \frac{1}{3}</mrow>
+                </md></p>
+            </slide>
+
+            <slide>
                 <title>A Table</title>
 
                 <p>A <tag>tabular</tag> inside a <tag>table</tag>, whose title serves as a caption.</p>
