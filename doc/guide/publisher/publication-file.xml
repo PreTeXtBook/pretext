@@ -1250,7 +1250,7 @@
                     <cline>/publication/webwork/@server</cline>
                 </cd>
                 It should include the protocol (e.g.<nbsp/><c>http</c> or <c>https</c>) and not
-                include a trailing slash. The server should be version 2.16 or later. The default
+                include a trailing slash. The server should be version 2.19 or later. The default
                 value is <c>https://webwork-ptx.aimath.org</c>. See
                 <xref ref="webwork-representations"/>.
             </p>
@@ -1287,9 +1287,6 @@
                     <cline>/publication/webwork/@password</cline>
                 </cd>
                 The default value is <c>anonymous</c>. See <xref ref="webwork-representations"/>.
-                (If the <c>webwork2</c> server is version 2.18 or earlier, instead of
-                <attr>password</attr>, there should be both <attr>coursepassword</attr>
-                and <attr>userpassword</attr>.)
             </p>
         </subsection>
 

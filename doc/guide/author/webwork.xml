@@ -17,23 +17,22 @@
 
   <introduction>
     <p>
-      With a <webwork/> server
-      (version 2.16 or higher, or <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>)
-      and a little setup work, you can embed <webwork/> exercises in your <pretext/> project.
-      HTML output can have interactive problem cells or print problems in <q>static</q> form.
-      PDF output will print static versions.
-      And all such exercises can be archived into a file tree to be uploaded onto a <webwork/> server
-      for use in the <q>traditional</q> way.
+      With a <webwork/> server (version 2.19 or higher, or
+      <url href="https://webwork-ptx.aimath.org" visual="webwork-ptx.aimath.org"/>) and a little
+      setup work, you can embed <webwork/> exercises in your <pretext/> project. HTML output can
+      have interactive problem cells or print problems in <q>static</q> form. PDF output will print
+      static versions. And all such exercises can be archived into a file tree to be uploaded onto a
+      <webwork/> server for use in the <q>traditional</q> way.
     </p>
     <p>
-      Although we expect that version 2.16 and above are supported,
-      we recommend that you use the <url href="https://github.com/openwebwork/webwork2/blob/main/VERSION">current</url>
-      (or one previous) version of <webwork/> whenever possible.
-      Should bugs be discovered, it may be difficult to address them with older versions of <webwork/>.
+      Although we expect that version 2.19 and above are supported, we recommend that you use the
+      <url href="https://github.com/openwebwork/webwork2/blob/main/VERSION">current</url> (or one
+      previous) version of <webwork/> whenever possible. Should bugs be discovered, it may be
+      difficult to address them with older versions of <webwork/>.
     </p>
     <p>
-      See <xref ref="webwork-publisher"/> for how to configure a <webwork/> course and server to process your <webwork/> problems,
-      and then how to process them.
+      See <xref ref="webwork-publisher"/> for how to configure a <webwork/> course and server to
+      process your <webwork/> problems, and then how to process them.
     </p>
   </introduction>
 

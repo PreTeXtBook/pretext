@@ -18,7 +18,7 @@
   <introduction>
     <p>
       You can embed <webwork/> exercises in your <pretext/> project. This requires using a
-      <c>webwork2</c> server that is version 2.16 or later. The server could be the AIM <webwork/>
+      <c>webwork2</c> server that is version 2.19 or later. The server could be the AIM <webwork/>
       server that has been set up for this purpose, so to get started, there is no need to establish
       your own <c>webwork2</c> server.
     </p>
@@ -186,7 +186,7 @@
     </p>
     <p>
       We assume a mild familiarity with administrating a <webwork/> server. The version of
-      <webwork/> needs to be 2.16 or later for use with <pretext/>.
+      <webwork/> needs to be 2.19 or later for use with <pretext/>.
     </p>
     <p>
       The only thing you need to do at the serverlevel is set the web server to use certain headers
@@ -194,82 +194,26 @@
       display content from this web server as embedded content inside pages from another web server
       (in particular, where you are hosting you <pretext/> book).
     </p>
-    <paragraphs>
-      <title><webwork/> 2.16 or 2.17</title>
-      <p>
-        In <c>webwork2/conf/</c> there should be the apache configuration file
-        <c>webwork-apache2.4-config</c>. This file needs to include the lines:
-      </p>
-      <pre>
-        <![CDATA[
-        <IfModule mod_headers.c>
-            <Location /webwork2/html2xml>
-                Header set Access-Control-Allow-Origin "*"
-            </Location>
-            <Location /webwork2_files>
-                Header set Access-Control-Allow-Origin "*"
-            </Location>
-        </IfModule>
-        ]]>
-      </pre>
-      <p>
-        Note there is the distribution file <c>webwork-apache2.4-config.dist</c>, which has these
-        lines (or similar lines) commented out.
-      </p>
-      <p>
-        You may also need to enable headers by executing something like <c>sudo a2enmod headers</c>
-        from the command line.
-      </p>
-    </paragraphs>
-    <paragraphs>
-      <title><webwork/> 2.18</title>
-      <p>
-        Edit <c>webwork2/conf/webwork2.mojolicious.yml</c> and uncomment these lines:
-      </p>
-      <pre>
-        extra_headers:
-        #  /webwork2/render_rpc:
-        #    Access-Control-Allow-Origin: '*'
-           /webwork2/html2xml:
-             Access-Control-Allow-Origin: '*'
-           /webwork2_files:
-             Access-Control-Allow-Origin: '*'
-           /pg_files:
-             Access-Control-Allow-Origin: '*'
-      </pre>
-      <p>
-        Note the <c>render_rpc</c> lines can remain commented out, unless you have some other reason
-        to uncomment them.
-      </p>
-      <p>
-        You will need to restart the <c>webwork2</c> service.
-      </p>
-    </paragraphs>
-    <paragraphs>
-      <title><webwork/> 2.19</title>
-      <p>
-        Edit <c>webwork2/conf/webwork2.mojolicious.yml</c> and uncomment these lines:
-      </p>
-      <pre>
-        extra_headers:
-           /webwork2/render_rpc:
-             Access-Control-Allow-Origin: '*'
-        #  /webwork2/html2xml:
-        #    Access-Control-Allow-Origin: '*'
-           /webwork2_files:
-             Access-Control-Allow-Origin: '*'
-           /pg_files:
-             Access-Control-Allow-Origin: '*'
-      </pre>
-      <p>
-        Note the <c>html2xml</c> lines can remain commented out, unless you have some other reason
-        to uncomment them.
-      </p>
-      <p>
-        Also in this same file, set <c>allow_unsecured_rpc: 1</c>.
-        You will need to restart the <c>webwork2</c> service.
-      </p>
-    </paragraphs>
+    <p>
+      Edit <c>webwork2/conf/webwork2.mojolicious.yml</c> and uncomment these lines:
+    </p>
+    <pre>
+      extra_headers:
+          /webwork2/render_rpc:
+            Access-Control-Allow-Origin: '*'
+          /webwork2_files:
+            Access-Control-Allow-Origin: '*'
+          /pg_files:
+            Access-Control-Allow-Origin: '*'
+    </pre>
+    <p>
+      There may be additional lines concerning the <c>html2xml</c> endpoint, and those can remain
+      commented out unless you have some other reason to uncomment them.
+    </p>
+    <p>
+      Also in this same file, set <c>allow_unsecured_rpc: 1</c>. You will need to restart the
+      <c>webwork2</c> service.
+    </p>
   </section>
 
   <section xml:id="webwork-course-configuration">
@@ -284,7 +228,7 @@
     <p>
       If you are configuring your own <webwork/> server to use with <pretext/>, we assume a mild
       familiarity with administrating a <webwork/> server. The version of <webwork/> needs to be
-      2.16 or later for use with <pretext/>.
+      2.19 or later for use with <pretext/>.
     </p>
     <p>
       Using the <c>admin</c> course, create a course named <c>anonymous</c>. (You could name it
@@ -311,51 +255,6 @@
       $pg{specialPGEnvironmentVars}{ALWAYS_SHOW_HINT_PERMISSION_LEVEL} = 100;
       $pg{specialPGEnvironmentVars}{ALWAYS_SHOW_SOLUTION_PERMISSION_LEVEL} = 100;
     </pre>
-    <paragraphs>
-      <title><webwork/> 2.16, 2.17, or 2.18 (not needed for 2.19 or later)</title>
-      <p>
-        In the <c>templates/macros/</c> folder, edit <c>PGcourse.pl</c> (or create it if need be)
-        and add the following lines.
-      </p>
-      <pre>
-        #### Replace essay boxes with a message
-        my $essay_message = 'If you were logged into a WeBWorK course '
-            . 'and this problem were assigned to you, '
-            . 'you would be able to submit an essay answer '
-            . 'that would be graded later by a human being.';
-
-        sub essay_box {
-          my $out = MODES(
-            TeX => '',
-            Latex2HTML => '',
-            HTML => qq!&lt;p>$essay_message&lt;/p>!,
-            PTX => '',
-          );
-          $out;
-        };
-
-        sub explanation_box {
-          return if ($envir{waiveExplanations});
-          my $out = MODES(
-            TeX => '',
-            Latex2HTML => '',
-            HTML => qq!&lt;p>$essay_message&lt;/p>!,
-            PTX => '',
-          );
-          $out;
-        };
-
-        #### Suppress essay help link
-        sub essay_help {};
-
-        #### How many attempts until hint is available
-        $showHint = -1;
-        # May be a bug that WeBWorK requires -1 instead of 0
-        # for immediate access to hints
-
-        1;
-      </pre>
-    </paragraphs>
     <p>
       Now <pretext/> will be able to communicate with this course to retrieve what is needed.
     </p>
@@ -456,7 +355,7 @@
         If absent, these default to <c>https://webwork-ptx.aimath.org</c>, <c>anonymous</c>,
         <c>anonymous</c>, <c>anonymous</c>, and <c>anonymous</c> respectively. If you specify a
         server, you must correctly specify the protocol (<c>http</c> versus <c>https</c>). And it
-        must be version 2.16 or later. Do not include a trailing slash.
+        must be version 2.19 or later. Do not include a trailing slash.
       </p>
     </subsection>
 
