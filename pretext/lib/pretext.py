@@ -4626,7 +4626,7 @@ def _downgrade_svg2_for_batik(directory):
     * orient="auto-start-reverse": changed to "auto"; elements that use
       the marker as marker-start get a rotated (180°) copy (id suffix
       "-start").
-    * Plain href on <use>: migrated to xlink:href.
+    * Plain href on any SVG element: migrated to xlink:href.
     * fill="transparent" → fill="none"; hsl()/rgb() colour functions and
       CSS filter functions in <style> blocks rewritten to values Batik
       accepts.
@@ -4742,6 +4742,8 @@ def _downgrade_svg2_for_batik(directory):
         changed = False
 
         for el in root.iter():
+            if not (isinstance(el.tag, str) and el.tag.startswith("{" + SVG + "}")):
+                continue
             href = el.get("href")
             if href and el.get(xhref) is None:
                 el.set(xhref, href); del el.attrib["href"]; changed = True
