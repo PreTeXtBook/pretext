@@ -2420,8 +2420,6 @@
         <choice>
           <ref name="Tabular"/>
           <ref name="Image"/>
-          <ref name="Video"/>
-          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -2478,8 +2476,6 @@
           <ref name="Poem"/>
           <ref name="Tabular"/>
           <ref name="Image"/>
-          <ref name="Video"/>
-          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -2499,8 +2495,6 @@
           <ref name="Poem"/>
           <ref name="Tabular"/>
           <ref name="Image"/>
-          <ref name="Video"/>
-          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>

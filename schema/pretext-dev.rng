@@ -124,8 +124,6 @@
         <choice>
           <ref name="Tabular"/>
           <ref name="Image"/>
-          <ref name="Video"/>
-          <ref name="Audio"/>
           <ref name="Program"/>
           <ref name="Console"/>
           <ref name="Paragraph"/>
@@ -264,10 +262,7 @@
     <element name="sidebyside">
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
-        <choice>
-          <ref name="Interactive"/>
-          <ref name="Slate"/>
-        </choice>
+        <ref name="Slate"/>
       </oneOrMore>
     </element>
   </define>
@@ -275,10 +270,7 @@
     <element name="sidebyside">
       <ref name="SidebySideAttributes"/>
       <oneOrMore>
-        <choice>
-          <ref name="Interactive"/>
-          <ref name="Slate"/>
-        </choice>
+        <ref name="Slate"/>
       </oneOrMore>
     </element>
   </define>

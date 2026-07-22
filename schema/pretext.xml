@@ -1827,6 +1827,8 @@
 
         <p>An <tag>exercise</tag> may be a panel, in support of compact layout of a <tag>worksheet</tag> or a <tag>handout</tag>, where workspace is relevant.  The schema does not restrict the arrangement to those locations, but the validation-plus stylesheet warns about others.</p>
 
+        <p>An <tag>audio</tag>, <tag>video</tag>, or <tag>interactive</tag> may never be a panel, nor part of a <tag>stack</tag>.  Static conversions represent each of these elements as a <c>sidebyside</c> holding a preview image, a QR code, and links, and one <c>sidebyside</c> must never nest inside another.  The schema precludes these elements as children; the validation-plus stylesheet checks every depth (such as within a <tag>figure</tag> occupying a panel).</p>
+
         <p>A group of side-by-sides is designed to stack vertically with common controls on widths, etc.  Its implementation is entirely experimental right now, even if we are relatively confident of the markup.</p>
 
         <fragment xml:id="sidebyside">
@@ -1837,8 +1839,6 @@
                     (
                         Tabular |
                         Image |
-                        Video |
-                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -1863,8 +1863,6 @@
                         Poem |
                         Tabular |
                         Image |
-                        Video |
-                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -1881,8 +1879,6 @@
                         Poem |
                         Tabular |
                         Image |
-                        Video |
-                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -2109,8 +2105,6 @@
                     (
                         Tabular |
                         Image |
-                        Video |
-                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -2184,12 +2178,12 @@
 
             SideBySide |= element sidebyside {
                 SidebySideAttributes,
-                (Interactive | Slate)+
+                Slate+
             }
 
             SideBySideNoNumber |= element sidebyside {
                 SidebySideAttributes,
-                (Interactive | Slate)+
+                Slate+
             }
 
             Exercises |= element exercises {
