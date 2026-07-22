@@ -4018,6 +4018,132 @@ def html(xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_fi
     time_logger.log("build completed")
 
 
+def _inline_reveal_resources(html_file, local_dir, reveal_root):
+    """Inline CSS/JS resources so a slideshow is a single HTML file"""
+
+    # The slideshow references reveal.js files at a CDN (the
+    # "reveal_root" prefix) plus local stylesheets (PreTeXt's own, and
+    # any publisher custom CSS).  Each stylesheet "link" becomes a
+    # "style" element, each reveal.js "script" reference becomes an
+    # inline "script", and font files referenced from within a
+    # stylesheet become data: URIs.  Online services (Sage cells, say)
+    # are left alone.  Requires a network connection at build time.
+    #
+    # The replacements are textual, on machine-generated tags of known
+    # shape.  A parse-and-reserialize of the whole document damages
+    # everything the serializer normalizes (the banner comments ahead
+    # of the "html" element, a synthesized Content-Type "meta", the
+    # final newline), so the surgery must touch nothing but the tags.
+
+    import base64
+    import mimetypes
+    import re
+    import urllib.parse
+
+    import requests
+
+    # mimetypes may not know modern font types
+    font_types = {
+        ".woff2": "font/woff2",
+        ".woff": "font/woff",
+        ".ttf": "font/ttf",
+        ".otf": "font/otf",
+    }
+
+    def fetch(url):
+        # prefer the minified variant the CDN generates on demand
+        base, dot, extension = url.rpartition(".")
+        candidates = ["{}.min.{}".format(base, extension), url] if dot else [url]
+        for candidate in candidates:
+            response = requests.get(candidate, timeout=30)
+            if response.status_code == 200:
+                return response
+        raise OSError(
+            "failed to retrieve {} while embedding slideshow resources".format(url)
+        )
+
+    def embed_css_urls(css_text, css_url):
+        # a url(...) reference relative to its stylesheet (a font,
+        # typically) becomes a data: URI; absolute references and
+        # existing data: URIs are left alone
+        def replacement(match):
+            reference = match.group(1).strip("'\" ")
+            if reference.startswith(("data:", "http:", "https:", "//", "#")):
+                return match.group(0)
+            target = urllib.parse.urljoin(css_url, reference)
+            response = requests.get(target, timeout=30)
+            if response.status_code != 200:
+                log.warning(
+                    "could not retrieve {} referenced by an embedded stylesheet".format(
+                        target
+                    )
+                )
+                return match.group(0)
+            extension = "." + target.rpartition(".")[2].lower()
+            mime = font_types.get(extension) or mimetypes.guess_type(target)[0] or "application/octet-stream"
+            encoded = base64.b64encode(response.content).decode("ascii")
+            return "url(data:{};base64,{})".format(mime, encoded)
+
+        return re.sub(r"url\(([^)]+)\)", replacement, css_text)
+
+    def guard(text, element):
+        # inside a raw-text element only the closing tag terminates
+        # early; escape the sequence should it ever occur (inside a
+        # string literal, in practice, where the escape is equivalent)
+        sequence = "</{}".format(element)
+        if sequence in text.lower():
+            log.warning(
+                "escaping a premature closing sequence while embedding a {} element".format(
+                    element
+                )
+            )
+            text = re.sub(
+                "</{}".format(element), "<\\\\/{}".format(element), text, flags=re.I
+            )
+        return text
+
+    with open(html_file, "r") as page_file:
+        page = page_file.read()
+
+    # every stylesheet "link", whatever its attribute order
+    for tag in re.findall(r'<link[^>]*rel="stylesheet"[^>]*>', page):
+        href_match = re.search(r'href="([^"]*)"', tag)
+        if not href_match:
+            continue
+        href = href_match.group(1)
+        if href.startswith(reveal_root):
+            response = fetch(href)
+            css = embed_css_urls(response.text, response.url)
+        elif href.startswith(("http:", "https:", "//")):
+            # publisher custom CSS hosted remotely
+            response = requests.get(href, timeout=30)
+            if response.status_code != 200:
+                log.warning("could not retrieve {} for embedding".format(href))
+                continue
+            css = embed_css_urls(response.text, response.url)
+        else:
+            # local stylesheet, staged in the build directory
+            with open(os.path.join(local_dir, href), "r") as css_file:
+                css = css_file.read()
+        page = page.replace(tag, "<style>\n{}\n</style>".format(guard(css, "style")))
+
+    # a "script" loaded by reference and nothing more; online services
+    # (never at the reveal.js location) stay untouched
+    for tag, src in re.findall(r'(<script src="([^"]*)"></script>)', page):
+        if src.startswith(reveal_root):
+            js = fetch(src).text
+        elif not src.startswith(("http:", "https:", "//")):
+            # local script, staged in the build directory
+            with open(os.path.join(local_dir, src), "r") as js_file:
+                js = js_file.read()
+        else:
+            continue
+        page = page.replace(tag, "<script>\n{}\n</script>".format(guard(js, "script")))
+
+    with open(html_file, "w") as page_file:
+        page_file.write(page)
+
+
 def revealjs(
     xml, pub_file, stringparams, xmlid_root, file_format, extra_xsl, out_file, dest_dir
 ):
@@ -4083,6 +4209,13 @@ def revealjs(
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     derivedname = common.get_output_filename(xml, out_file, dest_dir, ".html")
     common.xsltproc(extraction_xslt, xml, derivedname, tmp_dir, stringparams)
+    # The publication file may elect embedded resources: the reveal.js
+    # files, and all stylesheets, are folded into the one HTML file
+    resources_host = common.get_publisher_variable(pub_vars, "reveal-resources-host")
+    if resources_host == "embedded":
+        reveal_root = common.get_publisher_variable(pub_vars, "reveal-root")
+        log.info("embedding reveal.js resources for a single-file slideshow")
+        _inline_reveal_resources(derivedname, tmp_dir, reveal_root)
     # with multiple files, we need to copy a tree
     # see comments at  copy_build_directory()
     # before replacing with  shutil.copytree()
