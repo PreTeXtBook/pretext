@@ -4741,10 +4741,10 @@ def _downgrade_svg2_for_batik(directory):
         root    = tree.getroot()
         changed = False
 
-        for use in root.iter(tag("use")):
-            href = use.get("href")
-            if href and use.get(xhref) is None:
-                use.set(xhref, href); del use.attrib["href"]; changed = True
+        for el in root.iter():
+            href = el.get("href")
+            if href and el.get(xhref) is None:
+                el.set(xhref, href); del el.attrib["href"]; changed = True
 
         # "transparent" is a CSS3 colour keyword, not SVG 1.1;
         # hsl()/rgb() in presentation attributes are also rewritten here.
