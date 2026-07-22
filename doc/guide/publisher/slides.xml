@@ -93,7 +93,7 @@
                 To set up a Reveal.js slideshow to run locally, you need to have certain files available locally.  We describe here the exact mechanics of doing this.
             </p>
             <p>
-                Suppose you have done the <pretext/> conversion, and have created a single <c>slides.html</c> file, which you have placed in a directory named <c>talk</c>.  Now download or clone the git repository for Reveal.js (<url href="https://github.com/hakimel/reveal.js/" visual="github.com/hakimel/reveal.js"/>).  This has a <c>dist</c> directory with four files, such as <c>reveal.css</c>, and also directory of themes, named <c>theme</c>.  Copy these files and the directory to <c>talk</c>.  Another directory in the repository is named <c>plugin</c>.  Copy this directory to <c>talk</c> as well.
+                Suppose you have done the <pretext/> conversion, and have created a single <c>slides.html</c> file, which you have placed in a directory named <c>talk</c>.  Now download or clone the git repository for Reveal.js (<url href="https://github.com/hakimel/reveal.js/" visual="github.com/hakimel/reveal.js"/>).  This has a <c>dist</c> directory containing the files you need: <c>reset.css</c>, <c>reveal.css</c>, and <c>reveal.js</c>, along with a directory of themes named <c>theme</c> and a directory of single-file plugins named <c>plugin</c>.  Copy the contents of <c>dist</c> to <c>talk</c>.
             </p>
             <p>
                 This process will duplicate more files than you need.  Suppose your talk is produced to use the <c>solarized</c> theme (<xref ref="revealjs-appearance-options"/>), and includes some math.  Then as an example of how the copying should go, and as an example of the bare minimum necessary, your <c>talk</c> directory should be organized as follows.
@@ -108,9 +108,7 @@
                 theme
                     solarized.css
                 plugin
-                    math
-                        math.js
-                        plugin.js
+                    math.js
             </pre>
         </paragraphs>
     </section>

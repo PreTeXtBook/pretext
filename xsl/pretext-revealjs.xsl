@@ -129,13 +129,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="syntax-highlight"/>
 
-            <!-- load reveal.js resources; w/ v 4.1.2 -->
-            <!-- these seem to be *always* minified   -->
+            <!-- load reveal.js resources; w/ v 6.x                 -->
+            <!-- paths are relative to the distribution's "dist"    -->
+            <!-- directory, whose layout a "local" resource host    -->
+            <!-- must reproduce                                     -->
             <link href="{$reveal-root}/reset.css" rel="stylesheet"></link>
             <link href="{$reveal-root}/reveal.css" rel="stylesheet"></link>
             <link href="{$reveal-root}/theme/{$reveal-theme}.css" rel="stylesheet"></link>
             <script src="{$reveal-root}/reveal.js"></script>
-            <script src="{$reveal-root}/plugin/math/math.js"></script>
+            <script src="{$reveal-root}/plugin/math.js"></script>
 
             <link href="_static/pretext/css/pretext-reveal.css" rel="stylesheet"></link>
           <style>
@@ -214,19 +216,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- markup, since we use environments exclusively.   -->
             <!-- N.B. default HTML adds a "zero-width" space into -->
             <!-- a \( authored in a non-math context.             -->
-            <!-- N.B. This may need to be changed for MathJax 3   -->
+            <!-- The MathJax version matches the main HTML        -->
+            <!-- conversion; the "mathjax4" adapter of the math   -->
+            <!-- plugin loads it from the URL given and passes    -->
+            <!-- the "tex" object into the MathJax configuration. -->
 
-            <!-- Suggested by  https://revealjs.com/math/, 2021-09-19 -->
-            <xsl:text>  math: {&#xa;</xsl:text>
-            <xsl:text>    mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',&#xa;</xsl:text>
-            <xsl:text>    config: 'TeX-AMS_HTML-full',&#xa;</xsl:text>
-            <xsl:text>    // other options are passed into MathJax.Hub.Config()&#xa;</xsl:text>
-            <xsl:text>    tex2jax: {&#xa;</xsl:text>
+            <!-- Suggested by  https://revealjs.com/math/, 2026-07-22 -->
+            <xsl:text>  mathjax4: {&#xa;</xsl:text>
+            <xsl:text>    mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js',&#xa;</xsl:text>
+            <xsl:text>    tex: {&#xa;</xsl:text>
             <xsl:text>      inlineMath:  [['\\(','\\)']],&#xa;</xsl:text>
             <xsl:text>      displayMath: [],&#xa;</xsl:text>
             <xsl:text>    }&#xa;</xsl:text>
             <xsl:text>  },&#xa;</xsl:text>
-            <xsl:text>  plugins: [ RevealMath ]&#xa;</xsl:text>
+            <xsl:text>  plugins: [ RevealMath.MathJax4 ]&#xa;</xsl:text>
             <xsl:text>});&#xa;</xsl:text>
         </script>
     </html>
