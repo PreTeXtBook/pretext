@@ -11265,11 +11265,18 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;jsxgraph&quot; element has been deprecated, but remains functional, rework with the &quot;interactive&quot; element'" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2018-04-06  jsxgraph no longer a panel of a sidebyside -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//sidebyside/jsxgraph&quot;" />
+        <xsl:with-param name="date-string" select="'2018-04-06'" />
+        <xsl:with-param name="message" select="'a &quot;jsxgraph&quot; can no longer appear within a &quot;sidebyside&quot;, rework with the &quot;interactive&quot; element; as of 2026-07-22 the &quot;jsxgraph&quot; will be silently ignored'" />
+    </xsl:call-template>
+    <!--  -->
     <!-- 2018-05-02  paragraphs purely as a lightweight division -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="&quot;$document-root//sidebyside/paragraphs&quot;" />
         <xsl:with-param name="date-string" select="'2018-04-06'" />
-        <xsl:with-param name="message" select="'a &quot;paragraphs&quot; can no longer appear within a &quot;sidebyside&quot;, replace with a &quot;stack&quot; containing multiple elements, such as &quot;p&quot;'" />
+        <xsl:with-param name="message" select="'a &quot;paragraphs&quot; can no longer appear within a &quot;sidebyside&quot;, replace with a &quot;stack&quot; containing multiple elements, such as &quot;p&quot;; as of 2026-07-22 the &quot;paragraphs&quot; and its content will be silently ignored'" />
     </xsl:call-template>
     <!-- 2018-05-18  WeBWorK refactor no longer needs setup/var elements for static representations-->
     <xsl:call-template name="deprecation-message">
