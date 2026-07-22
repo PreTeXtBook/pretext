@@ -555,6 +555,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- Composition of a "sidebyside" is inherited from the text       -->
+<!-- conversion: in a linear format panels simply follow one        -->
+<!-- another.  The one place layout means anything here is an       -->
+<!-- image's width percentage, so the -common "layout-parameters"   -->
+<!-- machinery is consulted exactly there (see the "image" template -->
+<!-- below).                                                        -->
+
 <!-- An image is always a raw-HTML "img" (legal CommonMark, and    -->
 <!-- markdown's own syntax has no size or placement), so an        -->
 <!-- authored @width in percent is honored (100% is the default).  -->

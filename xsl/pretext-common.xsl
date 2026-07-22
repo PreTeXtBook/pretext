@@ -4906,6 +4906,32 @@ Book (with parts), "section" at level 3
 <!-- SideBySide Main Template -->
 <!-- ######################## -->
 
+<!-- Panels are converted first, each through the modal             -->
+<!-- "panel-panel" template, and the results accumulate into a      -->
+<!-- single result-tree fragment.  That fragment, plus the computed -->
+<!-- layout, goes to the modal "compose-panels" template, which can -->
+<!-- wrap the finished panels but cannot place structure between    -->
+<!-- them.  The "panel-panel" parameters are the union of what the  -->
+<!-- implementations need, so any one implementation may ignore     -->
+<!-- some of them.  This two-phase contract fits a conversion whose -->
+<!-- target expresses the entire layout declaratively on a          -->
+<!-- container: HTML (CSS grid on a wrapping div; EPUB and Jupyter  -->
+<!-- inherit), LaTeX (arguments of the "sidebyside" environment;    -->
+<!-- Beamer and the solution manual inherit), and Reveal.js (CSS    -->
+<!-- table display).  A target that must interleave structure among -->
+<!-- the panels (XSL-FO: margin and gap table cells) or that has no -->
+<!-- horizontal layout at all (text, and Markdown by import;        -->
+<!-- braille) instead overrides this template entirely and reuses   -->
+<!-- the "layout-parameters" computation where meaningful; each     -->
+<!-- such stylesheet documents its reasons.  The panel vocabulary   -->
+<!-- is context-dependent beyond what the schema expresses: an      -->
+<!-- "exercise" panel only within a "worksheet" or "handout", a     -->
+<!-- "slate" panel only within an "interactive", and never an       -->
+<!-- "audio", "video", or "interactive", whose static               -->
+<!-- representation is itself a manufactured "sidebyside", which    -->
+<!-- must not nest.  The validation-plus stylesheet enforces all    -->
+<!-- three restrictions.                                            -->
+
 <xsl:template match="sidebyside">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="heading-level"/>
@@ -4948,23 +4974,10 @@ Book (with parts), "section" at level 3
     <xsl:message>~~~~~~~~~~~~~~~~~~~~</xsl:message>
      -->
 
-    <!-- "paragraphs" deprecated within sidebyside, 2018-05-02 -->
-    <!-- jsxgraph deprecated?  Check                           -->
+    <xsl:variable name="panels" select="&SBSPANEL;" />
 
-    <xsl:variable name="panels" select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs" />
-
-    <!-- We build up lists of various parts of a panel      -->
-    <!-- It has setup (LaTeX), headers (titles), panels,    -->
-    <!-- and captions.  These then go to "compose-panels".  -->
-    <!-- Implementations need to define modal templates     -->
-    <!--   panel-header, panel-panel, panel-caption         -->
-    <!-- The parameters passed to each is the union of what -->
-    <!-- is needed for LaTeX and HTML implementations.      -->
-    <!-- Final results are collectively sent to modal       -->
-    <!--   compose-panels                                   -->
-    <!-- template to be arranged                            -->
-    <!-- TODO: Instead we could pass the $layout to the four,    -->
-    <!-- and infer the $panel-number in the receiving templates. -->
+    <!-- TODO: Instead we could pass the $layout to "panel-panel",  -->
+    <!-- and infer the $panel-number in the receiving templates.    -->
 
     <xsl:variable name="panel-panels">
         <xsl:for-each select="$panels">
@@ -5039,7 +5052,7 @@ Book (with parts), "section" at level 3
     <xsl:param name="width" />
     <xsl:param name="heading-level"/>
 
-    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|audio|video|interactive|slate|program|console|exercise">
+    <xsl:apply-templates select="&STACKABLE;">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="width" select="$width"/>
         <xsl:with-param name="heading-level" select="$heading-level"/>
@@ -11889,6 +11902,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="&quot;$document-root//introduction[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]/title | $document-root//conclusion[parent::article or parent::chapter or parent::appendix or parent::section or parent::subsection]/title&quot;" />
         <xsl:with-param name="date-string" select="'2026-07-08'" />
         <xsl:with-param name="message" select="'a &quot;title&quot; on an &quot;introduction&quot; or &quot;conclusion&quot; of a traditional division has been deprecated, and it will be ignored.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2026-07-22  "audio", "video", "interactive" precluded within "sidebyside" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="&quot;$document-root//sidebyside//audio | $document-root//sidebyside//video | $document-root//sidebyside//interactive&quot;" />
+        <xsl:with-param name="date-string" select="'2026-07-22'" />
+        <xsl:with-param name="message" select="'an &quot;audio&quot;, &quot;video&quot;, or &quot;interactive&quot; element may not appear within a &quot;sidebyside&quot;, at any depth.  Content may go missing with no further warning.  Relocate the element outside the &quot;sidebyside&quot;.'"/>
     </xsl:call-template>
     <!--  -->
 </xsl:template>

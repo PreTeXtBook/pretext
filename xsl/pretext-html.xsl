@@ -7098,11 +7098,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- We take in all three rows and package       -->
-<!-- them up inside an overriding "sidebyside"   -->
-<!-- div containing three "sbsrow" divs.  Purely -->
-<!--  a container, never a target, so no xml:id  -->
-<!-- in source, so no HTML id on div.sidebyside  -->
+<!-- The finished panels arrive as one opaque fragment and are      -->
+<!-- copied, untouched, into a "sidebyside" div holding a single    -->
+<!-- "sbsrow" grid div.  All layout (margins, column widths, column -->
+<!-- gap) is declared as CSS on the containers, so wrapping the     -->
+<!-- panels as a unit is exactly the right granularity.  Purely a   -->
+<!-- container, never a target, so no xml:id in source, no HTML id  -->
+<!-- on the div.                                                    -->
 <xsl:template match="sidebyside" mode="compose-panels">
     <xsl:param name="layout" />
     <xsl:param name="panels" />

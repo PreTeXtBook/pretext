@@ -891,8 +891,6 @@
                     (
                         Tabular |
                         Image |
-                        Video |
-                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -917,8 +915,6 @@
                         Poem |
                         Tabular |
                         Image |
-                        Video |
-                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -935,8 +931,6 @@
                         Poem |
                         Tabular |
                         Image |
-                        Video |
-                        Audio |
                         Program |
                         Console |
                         Paragraph |

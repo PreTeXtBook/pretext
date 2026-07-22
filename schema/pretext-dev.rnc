@@ -49,8 +49,6 @@
                     (
                         Tabular |
                         Image |
-                        Video |
-                        Audio |
                         Program |
                         Console |
                         Paragraph |
@@ -124,12 +122,12 @@
 
             SideBySide |= element sidebyside {
                 SidebySideAttributes,
-                (Interactive | Slate)+
+                Slate+
             }
 
             SideBySideNoNumber |= element sidebyside {
                 SidebySideAttributes,
-                (Interactive | Slate)+
+                Slate+
             }
 
             Exercises |= element exercises {

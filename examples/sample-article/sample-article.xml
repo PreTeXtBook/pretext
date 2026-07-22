@@ -8913,24 +8913,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </interactive>
                 </figure>
 
-                <p>Here are the two new examples.  They have been included in a <c>sidebyside</c> layout element with equal widths (see <xref ref="section-side-by-side"/>) so they can be placed horizontally across the page.  They are not wrapped as figures, so cannot be cross-referenced.  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples" visual="jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">JSXGraph example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
-
-                <sidebyside widths="40% 40%">
-                    <interactive xml:id="interactive-fermats-spiral" platform="jsxgraph" source="code/jsxgraph/fermats-spiral.js">
-                        <slate xml:id="jsxgraph-fermats-spiral" surface="jsxboard"/>
-                        <instructions>
-                            <p>Drag the slider to change the curve.</p>
-                        </instructions>
-                    </interactive>
-
-                    <interactive xml:id="interactive-bspline" platform="jsxgraph" source="code/jsxgraph/bspline.js">
-                        <slate xml:id="jsxgraph-bspline" surface="jsxboard"/>
-                        <instructions>
-                            <p>Any of the 8 red control points may be moved anywhere.</p>
-                        </instructions>
-                    </interactive>
-                </sidebyside>
-
                 <p>A test where the JSXGraph code indicates it needs MathJax to render.</p>
 
                 <figure xml:id="figure-jsx-arc-graph">
@@ -10402,12 +10384,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <audio xml:id="audio-piano-trill-two" href="http://www.kozco.com/tech/piano2-CoolEdit.mp3" margins="30% 15%"/>
 
-            <p>Now in a <tag>sidebyside</tag> with an <q>Organ Finale</q> WAV file on the left, and on the right, Bach in OGG format at a very low bit rate (32 kps).  From <url href="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/index-e.html" visual="www.music.helsinki.fi/tmt/opetus/uusmedia/esim/index-e.html"/>.</p>
-
-            <sidebyside>
-                <audio xml:id="audio-organ-finale" href="https://www.kozco.com/tech/organfinale.wav" width="30%"/>
-                <audio xml:id="audio-bach" href="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02-32k.ogg" width="60%"/>
-            </sidebyside>
         </section>
 
         <section xml:id="section-video" label="section-video">
@@ -10422,7 +10398,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection>
                 <title>Video Files</title>
 
-                <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students, in WebM format.  Support is limited to HTML5-capable browsers.  The file format can be MP4, Ogg, or WebM, though this may vary depending upon the browser.  Use a <tag>video</tag> element, within either a <tag>figure</tag> (numbered, captioned) or a <tag>sidebyside</tag> for more precise control.   The <attr>source</attr> attribute in this first example <em>does not</em> include an extension, and so three possibilities above will be searched for preferentially (you need only provide the video in one format, but providing additional versions will increase the chances every browser will find a compatible format).</p>
+                <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students, in WebM format.  Support is limited to HTML5-capable browsers.  The file format can be MP4, Ogg, or WebM, though this may vary depending upon the browser.  Use a <tag>video</tag> element within a <tag>figure</tag> (numbered, captioned).   The <attr>source</attr> attribute in this first example <em>does not</em> include an extension, and so three possibilities above will be searched for preferentially (you need only provide the video in one format, but providing additional versions will increase the chances every browser will find a compatible format).</p>
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
@@ -10533,118 +10509,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <video xml:id="led-zeppelin-kashmir-solo" youtube="hAzdgU_kpGo" width="50%" preview="preview/jimmy-page.jpg"/>
 
-                <p>We can pack two videos side-by-side, with a lot of horizontal control, using two panels in the <c>sidebyside</c> element.  We have simply chosen here to not provide a caption (overall, or separately) as an illustration.  The sizes are purposely a bit odd.  See <xref ref="section-side-by-side"/> for much more on side-by-side panels.  These videos come from the <q>Topic</q> and <q>VEVO</q> areas of YouTube (respectively) and both have start/end times.</p>
-
-                <sidebyside margins="auto" widths="20% 40%" valign="middle">
-                    <!-- Liza Minelli -->
-                    <video xml:id="minelli-newyork-newyork" youtube="5-pyc_z7WbY" start="16" end="35"/>
-                    <!-- Sara Bareilles -->
-                    <video xml:id="bareilles-love-song" youtube="qi7Yh16dA0w" start="60" end="120"/>
-                </sidebyside>
-
-                <p>These next two videos are evenly spaced, one from YouTube, one from a source file hosted by the author.  Now with separate captions, but identical margins (through very different choices of layout parameters than in the preceding pair of videos).</p>
-
-                <sidebyside margins="10%" widths="35% 35%">
-                    <!-- drone flight again-->
-                    <figure>
-                        <caption>Drone Flight</caption>
-                        <video xml:id="drone-flight-sbs" youtube="VsHMjWORFvI"/>
-                    </figure>
-                    <!-- UPS promo -->
-                    <figure>
-                        <caption>UPS Promo</caption>
-                        <video xml:id="ups-promo-sbs" source="video/ups-visitor-guide-360" preview="preview/ups-promo-frame-one.jpg"/>
-                    </figure>
-                </sidebyside>
-
                 <p>A YouTube <q>playlist</q> can be built in one of two ways. You may specify the <c>youtube</c> attribute to be a space-separated list of several video IDs. Alternatively, you may set the <c>youtubeplaylist</c> attribute to a YouTube playlist ID.</p>
 
-                <sidebyside margins="0%" widths="47% 47%">
-                    <figure>
-                        <caption>Individual IDs specified in an <q>itemized</q> playlist</caption>
-                        <video xml:id="zeppelin-playlist" youtube="6tlSx0jkuLM FeJkDewhTEw"/>
-                        <!-- https://www.youtube.com/embed?playlist=6tlSx0jkuLM,FeJkDewhTEw -->
-                    </figure>
-                    <figure>
-                        <caption>YouTube playlist ID specified in a <q>named</q> playlist</caption>
-                        <video label="zeppelin-playlist-named" youtubeplaylist="PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_"/>
-                        <!-- https://www.youtube.com/embed?listType=playlist&list=PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_ -->
-                    </figure>
-                </sidebyside>
-
-                <p>We test three equally-wide YouTube videos in a <tag>sidebyside</tag> with a few variations.</p>
-
-                <sidebyside margins="0%" width="30%">
-                    <figure>
-                        <caption>Medium Length</caption>
-                        <video xml:id="pre-roll-countdown-1" youtube="Srmdij0CU1U"/>
-                    </figure>
-                    <figure>
-                        <caption>Short</caption>
-                        <video xml:id="pre-roll-countdown-2" youtube="Srmdij0CU1U" start="2" end="4"/>
-                    </figure>
-                    <figure>
-                        <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
-                        <video xml:id="pre-roll-countdown-3" youtube="Srmdij0CU1U"/>
-                    </figure>
-                </sidebyside>
-
-                <p>We test three equally-wide YouTube videos in a <tag>sidebyside</tag> with a few variations, and now contained in a <tag>figure</tag>.</p>
-
                 <figure>
-                    <caption>Author-Hosted videos as Sub-Figures</caption>
-                    <sidebyside margins="0%" width="30%">
-                        <figure>
-                            <caption>Medium Length</caption>
-                            <video xml:id="pre-roll-countdown-4" youtube="Srmdij0CU1U"/>
-                        </figure>
-                        <figure>
-                            <caption>Short</caption>
-                            <video xml:id="pre-roll-countdown-5" youtube="Srmdij0CU1U" start="2" end="4"/>
-                        </figure>
-                        <figure>
-                            <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
-                            <video xml:id="pre-roll-countdown-6" youtube="Srmdij0CU1U"/>
-                        </figure>
-                    </sidebyside>
+                    <caption>Individual IDs specified in an <q>itemized</q> playlist</caption>
+                    <video xml:id="zeppelin-playlist" youtube="6tlSx0jkuLM FeJkDewhTEw" width="70%"/>
+                    <!-- https://www.youtube.com/embed?playlist=6tlSx0jkuLM,FeJkDewhTEw -->
                 </figure>
 
-                <p>We test three equally-wide author-hosted videos in a <tag>sidebyside</tag> with a few variations.</p>
-
-                <sidebyside margins="0%" width="30%">
-                    <figure>
-                        <caption>Medium Length</caption>
-                        <video xml:id="ups-promo-1" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
-                    </figure>
-                    <figure>
-                        <caption>Short</caption>
-                        <video xml:id="ups-promo-2" source="video/ups-visitor-guide-360" start="4" end="10" preview="preview/ups-promo-preview.jpg"/>
-                    </figure>
-                    <figure>
-                        <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
-                        <video xml:id="ups-promo-3" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
-                    </figure>
-                </sidebyside>
-
-                <p>We test three equally-wide author-hosted videos in a <tag>sidebyside</tag> with a few variations, and now contained in a <tag>figure</tag>.</p>
-
                 <figure>
-                    <caption>YouTube videos as Sub-Figures</caption>
-                    <sidebyside margins="0%" width="30%">
-                        <figure>
-                            <caption>Medium Length</caption>
-                            <video xml:id="ups-promo-4" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
-                        </figure>
-                        <figure>
-                            <caption>Short</caption>
-                            <video xml:id="ups-promo-5" source="video/ups-visitor-guide-360" start="4" end="10" preview="preview/ups-promo-preview.jpg"/>
-                        </figure>
-                        <figure>
-                            <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
-                            <video xml:id="ups-promo-6" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
-                        </figure>
-                    </sidebyside>
+                    <caption>YouTube playlist ID specified in a <q>named</q> playlist</caption>
+                    <video label="zeppelin-playlist-named" youtubeplaylist="PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_" width="70%"/>
+                    <!-- https://www.youtube.com/embed?listType=playlist&list=PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_ -->
                 </figure>
+
             </subsection>
 
             <subsection>
@@ -13499,16 +13377,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </sidebyside>
             </figure>
 
-            <p>Now we have some more interactive elements.</p>
-
-            <sidebyside  margins="5%" widths="40% 45%">
-                <!-- Hosted -->
-                <video label="ups-promo-side-by-side" source="video/ups-visitor-guide-360" width="80%" preview="preview/ups-promo-frame-one.jpg"/>
-                <!-- Airborne Toxic Event -->
-                <video xml:id="airborne-midnight-1" youtube="UYPoMjR6-Ao"/>
-            </sidebyside>
-
-            <p>Videos can be placed quite compactly for HTML output, but we display a fair amount of information for a YouTube video in print, and therefore two videos side-by-side gets pretty crowded.  The examples above have the bare minimum amount of information attached (not in an overarching <c>figure</c>), and the bare amount which which is displayed in print.  We could relax our common spacing to make it a bit better.  Read about <q>side-by-side</q> groups (<c>sbsgroup</c>) and experiment with stacking several sub-captioned videos into an overall captioned figure (<xref ref="subsection-sbsgroup"/>).  For other examples see <xref ref="section-video"/> and <xref ref="atomic-video"/>.</p>
         </section>
 
         <section xml:id="open-problems" label="section-open-problems">
@@ -13841,12 +13709,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <subsection xml:id="atomic-video">
                 <title><tag>video</tag></title>
 
-                <p>An <tag>video</tag> can be placed in five different ways:<ol>
-                    <li>all by itself, as a peer of <tag>p</tag> typically, with layout control,</li>
-                    <li>inside a <tag>figure</tag>, earning a number and caption,</li>
-                    <li>inside a <tag>sidebyside</tag>, with size and layout configured,</li>
-                    <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag>, with size and layout configured, with a number and caption, and</li>
-                    <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag> inside a <tag>figure</tag>, with size and layout configured, with a number and caption, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
+                <p>A <tag>video</tag> can be placed in two different ways:<ol>
+                    <li>all by itself, as a peer of <tag>p</tag> typically, with layout control, and</li>
+                    <li>inside a <tag>figure</tag>, earning a number and caption.</li>
                 </ol>Examples of each, and more.</p>
 
                 <p>Videos can be realized in many forms, and can come from a variety of sources.  See <xref ref="section-video"/> for tests of some of that variety.  Here we are testing placement within surroundings and testing the schema for location.  But we do have two videos in each test, one provided as a local file and one embedded from a service.</p>
@@ -13880,13 +13745,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
                 <video xml:id="pre-roll-countdown-9" youtube="Srmdij0CU1U" margins="20% 40%"/>
 
-                <p>As a plain component of a <tag>sidebyside</tag>.  Widths here are 20% and 30%, margins and gaps are automatic, default alignment on top edges.  Nulla pharetra imperdiet elit, in sodales nibh blandit ultricies. Maecenas efficitur ac felis ut pharetra.</p>
-
-                <sidebyside widths="20% 30%">
-                    <video xml:id="ups-promo-10" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
-                    <video xml:id="pre-roll-countdown-10" youtube="Srmdij0CU1U"/>
-                </sidebyside>
-
                 <p>Inside a <tag>figure</tag> with no adjustments, so default behavior.  Note how a <tag>figure</tag> occupies the entire width of the page, so then does the caption.</p>
 
                 <figure>
@@ -13915,34 +13773,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <video xml:id="pre-roll-countdown-12" youtube="Srmdij0CU1U" margins="30% 60%"/>
                 </figure>
 
-                <p>Inside figures inside a <tag>sidebyside</tag>.  Same widths as previous <tag>sidebyside</tag> but alignment on bottoms of the panels, to partially align captions.  Note how the captions are constrained in width by the width of the panels of the side-by-side.</p>
-
-                <sidebyside widths="20% 30%" valign="bottom">
-                    <figure>
-                        <caption>Pre-Roll Countdown</caption>
-                        <video xml:id="pre-roll-countdown-13" youtube="Srmdij0CU1U"/>
-                    </figure>
-                    <figure>
-                        <caption>University of Puget Sound Promotional Video</caption>
-                        <video xml:id="ups-promo-13" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
-                    </figure>
-                </sidebyside>
-
-                <p>Identical code to previous example, but now wrapped in an overall <tag>figure</tag>, which has its own caption and number, leaving the interior figures to be sub-numbered.  Cross-references use the full number: <xref ref="ups-video"/>.</p>
-
-                <figure>
-                    <caption>Amalgamation of Videos</caption>
-                    <sidebyside widths="20% 30%" valign="bottom">
-                        <figure>
-                            <caption>Pre-Roll Countdown</caption>
-                            <video xml:id="pre-roll-countdown-14" youtube="Srmdij0CU1U"/>
-                        </figure>
-                        <figure xml:id="ups-video">
-                            <caption>University of Puget Sound Promotional Video</caption>
-                            <video xml:id="ups-promo-14" source="video/ups-visitor-guide-360" preview="preview/ups-promo-preview.jpg"/>
-                        </figure>
-                    </sidebyside>
-                </figure>
             </subsection>
 
             <subsection xml:id="atomic-program">

@@ -286,7 +286,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- A side-by-side is announced, its panels appear in sequence -->
+<!-- A linear format has no horizontal layout, so the -common      -->
+<!-- composition machinery, whose entire product is the            -->
+<!-- distribution of horizontal space, is deliberately unused.  A  -->
+<!-- side-by-side is announced with a producer note and its panels -->
+<!-- are realized in order by their ordinary templates.  This      -->
+<!-- template is the shared realization for linear formats: the    -->
+<!-- Markdown conversion inherits it by import.                    -->
 <xsl:template match="sidebyside">
     <xsl:text>&#xa;</xsl:text>
     <xsl:call-template name="producer-note">
