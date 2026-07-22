@@ -215,12 +215,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates/>
 </xsl:template>
 
-<!-- ########## -->
-<!-- Advisories -->
-<!-- ########## -->
+<!-- An "audio", "video", or "interactive" is represented in a static -->
+<!-- format by a manufactured "sidebyside" holding a preview image, a -->
+<!-- QR code, and links (see the "representations" pass in assembly). -->
+<!-- Within a "sidebyside" that representation would nest, and panels -->
+<!-- vanish silently.  The schema precludes these elements as panels  -->
+<!-- or "stack" content; this check catches every depth, such as      -->
+<!-- within a "figure" occupying a panel.                             -->
+<xsl:template match="audio|video|interactive">
+    <xsl:if test="ancestor::sidebyside">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'error'"/>
+            <xsl:with-param name="message-id" select="'sidebyside-media'"/>
+            <xsl:with-param name="message">
+                <xsl:text>An &lt;audio&gt;, &lt;video&gt;, or &lt;interactive&gt; may not appear within&#xa;</xsl:text>
+                <xsl:text>a &lt;sidebyside&gt;, at any depth.  Static formats represent each of&#xa;</xsl:text>
+                <xsl:text>these elements as a &lt;sidebyside&gt; holding a preview image, a QR&#xa;</xsl:text>
+                <xsl:text>code, and links, and one &lt;sidebyside&gt; cannot appear within&#xa;</xsl:text>
+                <xsl:text>another.  Content may go missing.  Relocate the element outside&#xa;</xsl:text>
+                <xsl:text>the &lt;sidebyside&gt;.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
 
-<xsl:template match="sidebyside[not(parent::interactive)]">
-    <xsl:if test="count(*[not(&METADATA-FILTER;)]) = 1">
+<!-- A "slate" lays out the panels of an "interactive" and has no   -->
+<!-- meaning elsewhere.  The dev schema cannot express the context, -->
+<!-- so we restrict it here.                                        -->
+<xsl:template match="sidebyside/slate|stack/slate">
+    <xsl:if test="not(ancestor::interactive)">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'warn'"/>
+            <xsl:with-param name="message-id" select="'sidebyside-slate-placement'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A &lt;slate&gt; as a panel of a &lt;sidebyside&gt;, or within a &lt;stack&gt;,&#xa;</xsl:text>
+                <xsl:text>is only supported within an &lt;interactive&gt;.  Here, results&#xa;</xsl:text>
+                <xsl:text>may be unpredictable.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse further -->
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- One "sidebyside" never appears within another, through any      -->
+<!-- amount of intervening structure (a "figure" occupying a panel,  -->
+<!-- say): no conversion realizes a nested panel layout.  The same   -->
+<!-- template carries an advisory: a "sidebyside" with a single      -->
+<!-- panel is usually better authored as layout control on the panel -->
+<!-- element itself; the layout of "slate"s within an "interactive"  -->
+<!-- is exempt, where a single panel is routine.                     -->
+<xsl:template match="sidebyside">
+    <xsl:if test="ancestor::sidebyside">
+        <xsl:apply-templates select="." mode="messaging">
+            <xsl:with-param name="severity" select="'error'"/>
+            <xsl:with-param name="message-id" select="'sidebyside-nested'"/>
+            <xsl:with-param name="message">
+                <xsl:text>A &lt;sidebyside&gt; may not appear within another &lt;sidebyside&gt;,&#xa;</xsl:text>
+                <xsl:text>no matter how much structure intervenes.  No conversion can&#xa;</xsl:text>
+                <xsl:text>realize a nested panel layout.  Relocate the inner content.</xsl:text>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="not(parent::interactive) and (count(*[not(&METADATA-FILTER;)]) = 1)">
         <xsl:apply-templates select="." mode="messaging">
             <xsl:with-param name="severity" select="'warn'"/>
             <xsl:with-param name="message-id" select="'sidebyside-single-panel'"/>
@@ -236,6 +295,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- recurse further -->
     <xsl:apply-templates/>
 </xsl:template>
+
+<!-- ########## -->
+<!-- Advisories -->
+<!-- ########## -->
 
 <!-- A "figure", "table", "listing", or (named) "list" is numbered and  -->
 <!-- carries a caption or title.  Some locations are meant for strictly -->
