@@ -40,7 +40,6 @@ def webwork_to_xml(
 ):
     # import what we will need
     import urllib.parse  # urlparse()
-    import base64  # b64encode()
     import copy
     import tarfile
 
@@ -171,7 +170,6 @@ def webwork_to_xml(
 
     webwork2_domain_webwork2 = webwork2_domain + "/webwork2/"
     webwork2_render_rpc = webwork2_domain_webwork2 + "render_rpc"
-    webwork2_html2xml = webwork2_domain_webwork2 + "html2xml"
 
     webwork2_version = None
     webwork2_major_version = None
@@ -197,7 +195,6 @@ def webwork_to_xml(
 
     # Establish WW server version, for live rendering if nothing else
     # First try to identify the WW version according to what a response hash says it is.
-    # This should work for 2.17 and beyond.
     try:
         params_for_version_determination = dict(
             problemSeed=1,
@@ -209,18 +206,14 @@ def webwork_to_xml(
             disableCookies='1',
             outputformat='raw'
         )
-        # Try render_rpc first.  If that fails, then fall back to html2xml.
         render_rpc_response = requests.get(url=webwork2_render_rpc, params=params_for_version_determination)
         if render_rpc_response.status_code == 200:
             version_determination_json = render_rpc_response.json()
-        else:
-            version_determination_json = requests.get(
-                url=webwork2_html2xml, params=params_for_version_determination).json()
-        if "ww_version" in version_determination_json:
-            webwork2_version = version_determination_json["ww_version"]
-            webwork2_version_match = re.search(
-                r"((\d+)\.(\d+)(\+develop)?)", webwork2_version, re.I
-            )
+            if "ww_version" in version_determination_json:
+                webwork2_version = version_determination_json["ww_version"]
+                webwork2_version_match = re.search(
+                    r"((\d+)\.(\d+)(\+develop)?)", webwork2_version, re.I
+                )
     except Exception as e:
         root_cause = str(e)
         msg = ("PTX:ERROR:   There was a problem contacting the WeBWorK server.\n")
@@ -256,7 +249,7 @@ def webwork_to_xml(
         )
         raise ValueError(msg.format(webwork2_version, webwork2_domain))
 
-    webwork2_path = webwork2_render_rpc if (webwork2_major_version == 2 and webwork2_minor_version >= 19) else webwork2_html2xml
+    webwork2_path = webwork2_render_rpc
 
     # initialize dictionaries for all the problem features
     origin = {}
@@ -277,9 +270,9 @@ def webwork_to_xml(
             pghuman[problem.get("id")] = problem.find("pghuman").text
             pgdense[problem.get("id")] = problem.find("pgdense").text
 
-    if webwork2_major_version != 2 or webwork2_minor_version < 16:
+    if webwork2_major_version != 2 or webwork2_minor_version < 19:
         msg = (
-            "PTX:ERROR:   PreTeXt supports WeBWorK 2.16 and later, and it appears you are attempting to use version: {}\n"
+            "PTX:ERROR:   PreTeXt supports WeBWorK 2.19 and later, and it appears you are attempting to use version: {}\n"
             + "                         Server: {}\n"
             + "                         You may want to use the AIM WeBWorK server at webwork-ptx.aimath.org.\n"
         )
@@ -343,23 +336,6 @@ def webwork_to_xml(
             )
         log.info(msg)
 
-        # If and only if the server is version 2.16, we adjust PG code to use PGtikz.pl
-        # instead of PGlateximage.pl
-        if webwork2_major_version == 2 and webwork2_minor_version == 16 and origin[problem] == "generated":
-            pgdense[problem] = pgdense[problem].replace('PGlateximage.pl','PGtikz.pl')
-            pgdense[problem] = pgdense[problem].replace('createLaTeXImage','createTikZImage')
-            pgdense[problem] = pgdense[problem].replace('BEGIN_LATEX_IMAGE','BEGIN_TIKZ')
-            pgdense[problem] = pgdense[problem].replace('END_LATEX_IMAGE','END_TIKZ')
-            pghuman[problem] = pghuman[problem].replace('PGlateximage.pl','PGtikz.pl')
-            pghuman[problem] = pghuman[problem].replace('createLaTeXImage','createTikZImage')
-            pghuman[problem] = pghuman[problem].replace('BEGIN_LATEX_IMAGE','BEGIN_TIKZ')
-            pghuman[problem] = pghuman[problem].replace('END_LATEX_IMAGE','END_TIKZ')
-            # We crudely remove tikzpicture environment delimiters
-            pgdense[problem] = pgdense[problem].replace('\\begin{tikzpicture}','')
-            pgdense[problem] = pgdense[problem].replace('\\end{tikzpicture}','')
-            pghuman[problem] = pghuman[problem].replace('\\begin{tikzpicture}','')
-            pghuman[problem] = pghuman[problem].replace('\\end{tikzpicture}','')
-
         # The code in pgdense[problem] may have `$refreshCachedImages=1;`
         # We want to keep this for the code that is sent to the server for static harvesting,
         # but kill this for the code that is used repeatedly by embedded problems in HTML
@@ -369,12 +345,6 @@ def webwork_to_xml(
         # to something inert
         if origin[problem] == "generated":
             embed_problem = re.sub(r'(refreshCachedImages)(?![\w\d])', r'\1Inert', pgdense[problem])
-
-        # make base64 for PTX problems for webwork prior to 2.19
-        if origin[problem] == "generated":
-            if webwork2_minor_version < 19:
-                pgbase64 = base64.b64encode(bytes(pgdense[problem], "utf-8")).decode("utf-8")
-                embed_problem_base64 = base64.b64encode(bytes(embed_problem, "utf-8")).decode("utf-8")
 
         if static_processing == 'local' and origin[problem] != 'webwork2':
             socket_params = { "problemSeed": seed[problem], "problemUUID": problem }
@@ -401,47 +371,24 @@ def webwork_to_xml(
             # Construct URL to get static version from server
             # First establish how the acctual problem code
             # should be delivered to whatever will render it
-            if webwork2_minor_version >= 19:
-                if origin[problem] == "webwork2":
-                    server_params_source = {"sourceFilePath":path[problem]}
-                else:
-                    server_params_source = {"rawProblemSource":pgdense[problem]}
+            if origin[problem] == "webwork2":
+                server_params_source = {"sourceFilePath":path[problem]}
             else:
-                # server_params_source is tuple rather than dictionary to enforce consistent order in url parameters
-                if origin[problem] == "webwork2":
-                    server_params_source = (("sourceFilePath", path[problem]))
-                else:
-                    server_params_source = (("problemSource", pgbase64))
+                server_params_source = {"rawProblemSource":pgdense[problem]}
 
-            if webwork2_minor_version >= 19:
-                server_params = {
-                    "showSolutions": "1",
-                    "showHints": "1",
-                    "displayMode": "PTX",
-                    "courseID": courseID,
-                    "user": user,
-                    "passwd": passwd,
-                    "outputformat": "ptx",
-                    "disableCookies": '1',
-                    "problemSeed": seed[problem],
-                    "problemUUID": problem,
-                }
-                server_params.update(server_params_source)
-            else:
-                # server_params is tuple rather than dictionary to enforce consistent order in url parameters
-                server_params = (
-                    ("answersSubmitted", "0"),
-                    ("showSolutions", "1"),
-                    ("showHints", "1"),
-                    ("displayMode", "PTX"),
-                    ("courseID", courseID),
-                    ("userID", user),
-                    ("course_password", passwd),
-                    ("outputformat", "ptx"),
-                    server_params_source,
-                    ("problemSeed", seed[problem]),
-                    ("problemUUID", problem),
-                )
+            server_params = {
+                "showSolutions": "1",
+                "showHints": "1",
+                "displayMode": "PTX",
+                "courseID": courseID,
+                "user": user,
+                "passwd": passwd,
+                "outputformat": "ptx",
+                "disableCookies": '1',
+                "problemSeed": seed[problem],
+                "problemUUID": problem,
+            }
+            server_params.update(server_params_source)
 
             msg = "sending {} to server to save in {}: origin is '{}'"
             log.info(msg.format(problem, ww_reps_dir, origin[problem]))
@@ -460,10 +407,7 @@ def webwork_to_xml(
 
             # Ready, go out on the wire
             try:
-                if webwork2_minor_version >= 19:
-                    response = webwork2_session.post(webwork2_path, data=server_params)
-                else:
-                    response = webwork2_session.get(webwork2_path, params=server_params)
+                response = webwork2_session.post(webwork2_path, data=server_params)
                 log.debug("Getting problem response from: " + response.url)
 
             except requests.exceptions.RequestException as e:
@@ -504,7 +448,7 @@ def webwork_to_xml(
         badness_tip = ""
         badness_type = ""
         badness_base64 = ""
-        # NB: in WeBWorK 2.17+, the response from a nonexistent problem is not distinguishable from
+        # NB: in WeBWorK 2.19+, the response from a nonexistent problem is not distinguishable from
         # the response from a problem that has broken code. So even when a file is empty, file_empty
         # will be false and instead no_compile will be true.
         if file_empty:
@@ -843,7 +787,7 @@ def webwork_to_xml(
             static_webwork_level(static, response_root)
 
         # Add rendering-data element with attribute data for rendering a problem
-        if (badness or origin[problem] == "generated" or (webwork2_minor_version < 19 and origin[problem] != "webwork2")):
+        if (badness or origin[problem] == "generated"):
             source_key = "problemSource"
         else:
             source_key = "sourceFilePath"
@@ -854,13 +798,10 @@ def webwork_to_xml(
             if origin[problem] == "webwork2":
                 source_value = path[problem]
             else:
-                if webwork2_minor_version < 19:
-                    source_value = embed_problem_base64
+                if copied_from[problem] is not None:
+                    source_value = path[copied_from[problem]]
                 else:
-                    if copied_from[problem] is not None:
-                        source_value = path[copied_from[problem]]
-                    else:
-                        source_value = path[problem]
+                    source_value = path[problem]
 
         rendering_data = ET.SubElement(webwork_reps, "rendering-data")
         rendering_data.set(source_key, source_value)
