@@ -236,7 +236,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>  transition: 'fade',&#xa;</xsl:text>
             <xsl:text>  width: "100%",&#xa;</xsl:text>
             <xsl:text>  height: "100%",&#xa;</xsl:text>
-            <xsl:text>  margin: "0.025",&#xa;</xsl:text>
+            <!-- "margin" must be a JavaScript number.  The PDF export     -->
+            <!-- computes its page size as (slide dimension)*(1 + margin); -->
+            <!-- a quoted value concatenates instead of adding, producing  -->
+            <!-- pages ten times too large, and a print dialog then        -->
+            <!-- shrinks each slide to a small fraction of the paper.      -->
+            <xsl:text>  margin: 0.025,&#xa;</xsl:text>
             <xsl:choose>
                 <!-- Embedded mathematics is finished SVG images: -->
                 <!-- no math plugin, no typesetting configuration -->
