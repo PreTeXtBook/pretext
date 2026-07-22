@@ -386,7 +386,10 @@
 <xsl:template match="evaluation" mode="get-multianswer-check">
     <xsl:variable name="responseTree" select="../statement//fillin" />
     <xsl:if test="count($responseTree) > 1 and evaluate[@all='yes']/test">
-        <xsl:apply-templates select="evaluate[@all='yes']/test" mode="create-test-feedback">
+        <xsl:if test="count(evaluate[@all='yes']/test) > 1">
+            <xsl:message>PTX:FALLBACK: evaluate[@all='yes'] in "<xsl:value-of select="../@visible-id"/>" has multiple test elements; only the first will be used as the correctness check.</xsl:message>
+        </xsl:if>
+        <xsl:apply-templates select="evaluate[@all='yes']/test[1]" mode="create-test-feedback">
             <xsl:with-param name="b-correct" select="'yes'"/>
             <xsl:with-param name="fillin" select="$responseTree"/>
         </xsl:apply-templates>
@@ -412,6 +415,9 @@
     <xsl:text>[</xsl:text>
     <xsl:choose>
         <xsl:when test="string-length($multiAns) > 0">
+            <xsl:if test="test[@correct='yes']">
+                <xsl:message>PTX:WARNING: evaluate element has test[@correct="yes"] that will be ignored because evaluate[@all="yes"] is active in "<xsl:value-of select="ancestor::*[@visible-id][1]/@visible-id"/>".</xsl:message>
+            </xsl:if>
             <xsl:value-of select="$multiAns"/>
         </xsl:when>
         <xsl:when test="test[@correct='yes']">
@@ -1010,8 +1016,10 @@
 <!-- will parse the expression for a number appropriately,     -->
 <!-- which could be written as an expression involving symbols -->
 <!-- or a random number                                        -->
-<xsl:template match="de-number" mode="evaluate">
+<xsl:template name="create-de-number">
     <xsl:param name="setupMode" />
+    <xsl:param name="reduce" />
+    <xsl:param name="content" />
     <xsl:variable name="prefix">
         <xsl:if test="$setupMode">
             <xsl:text>v.</xsl:text>
@@ -1024,10 +1032,21 @@
     <xsl:value-of select="$de_env"/>
     <xsl:text>.parseExpression(</xsl:text>
     <xsl:call-template name="quote-strip-string">
-        <xsl:with-param name="text" select="."/>
+        <xsl:with-param name="text" select="$content"/>
     </xsl:call-template>
     <xsl:text>, "number")</xsl:text>
-    <xsl:text>.reduce().simplifyConstants()</xsl:text>
+    <xsl:if test="$reduce='yes'">
+        <xsl:text>.reduce().simplifyConstants()</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="de-number" mode="evaluate">
+    <xsl:param name="setupMode" />
+    <xsl:call-template name="create-de-number">
+        <xsl:with-param name="setupMode" select="$setupMode"/>
+        <xsl:with-param name="reduce" select="@reduce"/>
+        <xsl:with-param name="content" select="."/>
+    </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="de-evaluate" mode="evaluate">
@@ -1188,13 +1207,16 @@
     </xsl:call-template>
     <xsl:text>: </xsl:text>
     <xsl:choose>
-        <xsl:when test="eval or de-number or de-expression">
-            <xsl:apply-templates select="eval|de-number|de-expression" mode="evaluate">
+        <xsl:when test="eval or de-number or de-expression or de-evaluate">
+            <xsl:apply-templates select="eval|de-number|de-expression|de-evaluate" mode="evaluate">
                 <xsl:with-param name="setupMode" select="$setupMode" />
             </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="." />
+            <xsl:call-template name="create-de-number">
+                <xsl:with-param name="setupMode" select="$setupMode" />
+                <xsl:with-param name="content" select="." />
+            </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

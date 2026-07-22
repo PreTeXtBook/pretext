@@ -2573,9 +2573,7 @@
                     empty
                 }
             # Text parses to a formula representing a constant (no free
-            # variables).  N.B. @reduce here follows sample usage; the
-            # maintainer's description lists it only on de-expression
-            # and de-evaluate.
+            # variables).  @reduce determines if the internal representation is simplified or not.
             DENumber =
                 element de-number {
                     attribute reduce {"yes"}?,
@@ -2606,12 +2604,11 @@
                     DEExpression | DEEvaluate | Eval
                 }
             # The variable of a substitution or evaluation carries its
-            # value; plain-text values happen to work as raw Javascript
-            # but are deliberately NOT valid
+            # value; plain-text values happen to work as raw Javascript automatically wrapped in de-number
             DEVariableValued =
                 element variable {
                     attribute name {text},
-                    (Eval | DENumber | DEExpression)
+                    (Eval | DENumber | DEExpression | DEEvaluate)
                 }
             # The variable of a differentiation is name-only
             DEVariableEmpty =
