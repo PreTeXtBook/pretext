@@ -4948,10 +4948,7 @@ Book (with parts), "section" at level 3
     <xsl:message>~~~~~~~~~~~~~~~~~~~~</xsl:message>
      -->
 
-    <!-- "paragraphs" deprecated within sidebyside, 2018-05-02 -->
-    <!-- jsxgraph deprecated?  Check                           -->
-
-    <xsl:variable name="panels" select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs" />
+    <xsl:variable name="panels" select="&SBSPANEL;" />
 
     <!-- We build up lists of various parts of a panel      -->
     <!-- It has setup (LaTeX), headers (titles), panels,    -->
@@ -5039,7 +5036,7 @@ Book (with parts), "section" at level 3
     <xsl:param name="width" />
     <xsl:param name="heading-level"/>
 
-    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|audio|video|interactive|slate|program|console|exercise">
+    <xsl:apply-templates select="&STACKABLE;">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="width" select="$width"/>
         <xsl:with-param name="heading-level" select="$heading-level"/>

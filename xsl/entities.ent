@@ -149,6 +149,17 @@
 <!ENTITY FUNDAMENTAL-BLOCK-FILTER "(&DEFINITION-FILTER;) or (&THEOREM-FILTER;) or (&AXIOM-FILTER;) or (&REMARK-FILTER;) or (&COMPUTATION-FILTER;) or (&EXAMPLE-FILTER;)">
 <!ENTITY TOP-FIGURE-FILTER "(&FIGURE-FILTER;) and not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)">
 
+<!-- Panels of a "sidebyside", and content of a "stack" panel.  The   -->
+<!-- lists mirror the schema, plus grandfathered items the code still -->
+<!-- tolerates: "audio", "video", "interactive" (precluded            -->
+<!-- 2026-07-22, may someday be removed), "jsxgraph" (deprecated      -->
+<!-- 2018-04-06), and "paragraphs" within a "sidebyside" (deprecated  -->
+<!-- 2018-04-06).  An "exercise" panel (worksheet or handout only)    -->
+<!-- and a "slate" panel (within an "interactive" only) are policed   -->
+<!-- by the validation-plus stylesheet.                               -->
+<!ENTITY SBSPANEL "p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs">
+<!ENTITY STACKABLE "tabular|image|p|pre|ol|ul|dl|audio|video|interactive|slate|program|console">
+
 <!-- appendages of examples, exercises, tasks -->
 <!ENTITY SOLUTION-LIKE "hint|answer|solution">
 <!ENTITY SOLUTION-FILTER "self::hint or self::answer or self::solution">

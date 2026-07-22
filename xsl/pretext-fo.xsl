@@ -3083,11 +3083,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- whole layout from the authored attributes: per-panel widths   -->
 <!-- and vertical alignments, outer margins, and the uniform space -->
 <!-- between panels.  Margins and inter-panel spaces become empty  -->
-<!-- columns.  The panel element list mirrors the one in the       -->
-<!-- "sidebyside" main template of pretext-common.xsl.             -->
+<!-- columns.  The panel vocabulary is the "SBSPANEL" entity.      -->
 <xsl:template match="sidebyside">
     <xsl:apply-templates select="." mode="forced-pagebreak"/>
-    <xsl:variable name="panels" select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs"/>
+    <xsl:variable name="panels" select="&SBSPANEL;"/>
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters"/>
     </xsl:variable>
@@ -3152,9 +3151,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- A "stack" stacks several items vertically within one panel; -->
-<!-- the child list again mirrors pretext-common.xsl.            -->
+<!-- the child list is the "STACKABLE" entity.                   -->
 <xsl:template match="sidebyside/stack">
-    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|audio|video|interactive|slate|program|console|exercise"/>
+    <xsl:apply-templates select="&STACKABLE;"/>
 </xsl:template>
 
 <!-- A "sbsgroup" is as pure a container as there can be: the -->
