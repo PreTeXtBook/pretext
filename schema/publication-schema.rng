@@ -1265,12 +1265,22 @@
   </define>
   <define name="Resources">
     <element name="resources">
-      <attribute name="host">
-        <choice>
-          <value>local</value>
-          <value>cdn</value>
-        </choice>
-      </attribute>
+      <optional>
+        <attribute name="host">
+          <choice>
+            <value>local</value>
+            <value>cdn</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="math">
+          <choice>
+            <value>online</value>
+            <value>embedded</value>
+          </choice>
+        </attribute>
+      </optional>
     </element>
   </define>
   <define name="Epub">
