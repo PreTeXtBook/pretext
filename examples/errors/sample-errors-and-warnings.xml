@@ -270,6 +270,41 @@ systems.
         </section>
 
         <section>
+            <title>Media and Nesting in a Side-by-Side</title>
+
+            <p>An <c>audio</c>, <c>video</c>, or <c>interactive</c> may not appear anywhere inside a <c>sidebyside</c>: not as a panel, and not buried deeper, such as inside a <c>figure</c> occupying a panel.</p>
+
+            <sidebyside widths="40% 40%">
+                <video youtube="Srmdij0CU1U"/>
+                <figure>
+                    <caption>A figure-wrapped video is no better.</caption>
+                    <video youtube="Srmdij0CU1U"/>
+                </figure>
+            </sidebyside>
+
+            <p>One <c>sidebyside</c> may not appear within another, no matter how much structure intervenes.</p>
+
+            <sidebyside widths="45% 45%">
+                <p>An ordinary panel.</p>
+                <figure>
+                    <caption>A figure whose content nests a side-by-side.</caption>
+                    <sidebyside>
+                        <p>Inner left panel.</p>
+                        <p>Inner right panel.</p>
+                    </sidebyside>
+                </figure>
+            </sidebyside>
+
+            <p>A <c>slate</c> only has meaning within an <c>interactive</c>.</p>
+
+            <sidebyside widths="40% 40%">
+                <slate surface="jsxboard"/>
+                <p>An ordinary panel.</p>
+            </sidebyside>
+
+        </section>
+
+        <section>
             <title>WeBWorK</title>
 
             <p>A WeBWorK problem will need a server.  You will get a warning if you do not specify one.  But you should not be warned just because you use the empty element to get the stylized version, like this: <webwork/>.  So you can test warnings by commenting out one or the other instance.</p>
