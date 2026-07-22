@@ -1038,6 +1038,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- pages, rather than across, since horizontal real estate is limited  -->
 <!-- and images are going full (own) page.                               -->
 <!-- From discussion with Michael Cantino and Al Maneki, 2023-03-30      -->
+<!--                                                                     -->
+<!-- This is the same linear composition as the text conversion (no      -->
+<!-- horizontal layout, so the -common machinery is unused), but         -->
+<!-- with braille-idiomatic transcriber notes, so the two                -->
+<!-- conversions share the design, not the code.                         -->
 
 <xsl:template match="sidebyside">
     <xsl:variable name="npanels" select="count(*)"/>

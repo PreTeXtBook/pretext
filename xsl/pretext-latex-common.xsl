@@ -7325,8 +7325,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- We take in all three rows of a LaTeX    -->
-<!-- table and package them up appropriately -->
+<!-- The finished panels arrive as one block of text and are        -->
+<!-- placed, untouched, inside the "sidebyside" environment, whose  -->
+<!-- arguments carry the whole layout: panel count, margins, and    -->
+<!-- gap.  The "sbspanel" sub-environments produced by              -->
+<!-- "panel-panel" carry each panel's width and vertical alignment, -->
+<!-- so wrapping the panels as a unit is exactly the right          -->
+<!-- granularity.                                                   -->
 <xsl:template match="sidebyside" mode="compose-panels">
     <xsl:param name="layout" />
     <xsl:param name="panels" />

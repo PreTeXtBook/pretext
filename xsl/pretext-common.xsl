@@ -4906,6 +4906,32 @@ Book (with parts), "section" at level 3
 <!-- SideBySide Main Template -->
 <!-- ######################## -->
 
+<!-- Panels are converted first, each through the modal             -->
+<!-- "panel-panel" template, and the results accumulate into a      -->
+<!-- single result-tree fragment.  That fragment, plus the computed -->
+<!-- layout, goes to the modal "compose-panels" template, which can -->
+<!-- wrap the finished panels but cannot place structure between    -->
+<!-- them.  The "panel-panel" parameters are the union of what the  -->
+<!-- implementations need, so any one implementation may ignore     -->
+<!-- some of them.  This two-phase contract fits a conversion whose -->
+<!-- target expresses the entire layout declaratively on a          -->
+<!-- container: HTML (CSS grid on a wrapping div; EPUB and Jupyter  -->
+<!-- inherit), LaTeX (arguments of the "sidebyside" environment;    -->
+<!-- Beamer and the solution manual inherit), and Reveal.js (CSS    -->
+<!-- table display).  A target that must interleave structure among -->
+<!-- the panels (XSL-FO: margin and gap table cells) or that has no -->
+<!-- horizontal layout at all (text, and Markdown by import;        -->
+<!-- braille) instead overrides this template entirely and reuses   -->
+<!-- the "layout-parameters" computation where meaningful; each     -->
+<!-- such stylesheet documents its reasons.  The panel vocabulary   -->
+<!-- is context-dependent beyond what the schema expresses: an      -->
+<!-- "exercise" panel only within a "worksheet" or "handout", a     -->
+<!-- "slate" panel only within an "interactive", and never an       -->
+<!-- "audio", "video", or "interactive", whose static               -->
+<!-- representation is itself a manufactured "sidebyside", which    -->
+<!-- must not nest.  The validation-plus stylesheet enforces all    -->
+<!-- three restrictions.                                            -->
+
 <xsl:template match="sidebyside">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="heading-level"/>
@@ -4950,18 +4976,8 @@ Book (with parts), "section" at level 3
 
     <xsl:variable name="panels" select="&SBSPANEL;" />
 
-    <!-- We build up lists of various parts of a panel      -->
-    <!-- It has setup (LaTeX), headers (titles), panels,    -->
-    <!-- and captions.  These then go to "compose-panels".  -->
-    <!-- Implementations need to define modal templates     -->
-    <!--   panel-header, panel-panel, panel-caption         -->
-    <!-- The parameters passed to each is the union of what -->
-    <!-- is needed for LaTeX and HTML implementations.      -->
-    <!-- Final results are collectively sent to modal       -->
-    <!--   compose-panels                                   -->
-    <!-- template to be arranged                            -->
-    <!-- TODO: Instead we could pass the $layout to the four,    -->
-    <!-- and infer the $panel-number in the receiving templates. -->
+    <!-- TODO: Instead we could pass the $layout to "panel-panel",  -->
+    <!-- and infer the $panel-number in the receiving templates.    -->
 
     <xsl:variable name="panel-panels">
         <xsl:for-each select="$panels">

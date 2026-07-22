@@ -416,8 +416,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Side-By-Side -->
-<!-- Built by implementing two abstract   -->
-<!-- templates from the -common templates -->
+<!-- Same container-declared composition as HTML and LaTeX,        -->
+<!-- realized here with CSS table display: margins are declared on -->
+<!-- the wrapper div, and each panel div carries its width and     -->
+<!-- vertical alignment.  Built by implementing the two abstract   -->
+<!-- templates ("panel-panel", "compose-panels") of the -common    -->
+<!-- machinery.                                                    -->
 
 <!-- Overall wrapper of a sidebyside  -->
 <xsl:template match="sidebyside" mode="compose-panels">
