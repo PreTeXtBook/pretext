@@ -4060,6 +4060,25 @@ def revealjs(
         with open(css_dest, 'w+') as file:
             file.write(filedata)
 
+    # The publication file may elect embedded mathematics: every "m"
+    # and "md" is replaced by an SVG image with a speech string, both
+    # manufactured here, and the slideshow does not load MathJax
+    pub_vars = common.get_publisher_variable_report(xml, pub_file, stringparams)
+    math_source = common.get_publisher_variable(pub_vars, "reveal-math-source")
+    if math_source == "embedded":
+        # a separate scratch directory: the whole of  tmp_dir  is copied
+        # to the output, and these files should not ride along
+        math_tmp_dir = common.get_temporary_directory()
+        math_representations = os.path.join(math_tmp_dir, "math-representations-svg.xml")
+        speech_representations = os.path.join(math_tmp_dir, "math-representations-speech.xml")
+        msg = "converting raw LaTeX from {} into clean {} format placed into {}"
+        log.debug(msg.format(xml, "svg", math_representations))
+        mathjax_latex(xml, pub_file, math_representations, None, "svg", False)
+        log.debug(msg.format(xml, "speech", speech_representations))
+        mathjax_latex(xml, pub_file, speech_representations, None, "speech", False)
+        stringparams["mathfile"] = math_representations.replace(os.sep, "/")
+        stringparams["speechfile"] = speech_representations.replace(os.sep, "/")
+
     # Write output into temporary directory
     log.info("converting {} to HTML in {}".format(xml, tmp_dir))
     derivedname = common.get_output_filename(xml, out_file, dest_dir, ".html")

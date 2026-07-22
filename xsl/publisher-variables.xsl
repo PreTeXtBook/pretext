@@ -3557,6 +3557,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$publisher-attribute-options/revealjs/navigation/pi:pub-attribute[@name='mode']" mode="set-pubfile-variable"/>
 </xsl:variable>
 
+<!-- "online" (default) loads MathJax in the browser; "embedded"   -->
+<!-- replaces each piece of mathematics with an SVG image, with a  -->
+<!-- speech string, both manufactured at build time, so the        -->
+<!-- slideshow performs no typesetting at all                      -->
+<xsl:variable name="reveal-math-source">
+    <xsl:apply-templates select="$publisher-attribute-options/revealjs/resources/pi:pub-attribute[@name='math']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-reveal-embedded-math" select="$reveal-math-source = 'embedded'"/>
+
 <!-- Reveal.js Resources file location -->
 
 <!-- String to prefix  reveal.js  resources -->
@@ -3828,6 +3837,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <navigation>
             <pi:pub-attribute name="mode" default="default" options="linear grid"/>
         </navigation>
+        <!-- "@host" is also authored on "resources", but its values -->
+        <!-- are not an enumeration (an arbitrary path is legal), so -->
+        <!-- it is consulted directly by the "reveal-root" variable  -->
+        <resources>
+            <pi:pub-attribute name="math" default="online" options="embedded"/>
+        </resources>
     </revealjs>
 </pi:publisher>
 

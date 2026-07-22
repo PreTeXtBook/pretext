@@ -31,10 +31,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
+    xmlns:svg="http://www.w3.org/2000/svg"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
     extension-element-prefixes="exsl date str"
+    exclude-result-prefixes="svg"
 >
 
 <!-- Necessary to get some HTML constructions,    -->
@@ -51,6 +53,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Used to identify build target in templates shared with plain  -->
 <!-- HTML conversion (preferably avoid using this).                -->
 <xsl:variable name="b-reveal-build" select="true()" />
+
+<!-- Embedded mathematics: files of per-equation SVG and speech     -->
+<!-- representations, keyed by id, manufactured at build time by    -->
+<!-- the "mathjax_latex()" routine and passed in here as string     -->
+<!-- parameters.  Both are empty for online mathematics (the        -->
+<!-- default), and then the derived variables are empty node-sets,  -->
+<!-- never consulted.                                               -->
+<xsl:param name="mathfile" select="''"/>
+<xsl:param name="speechfile" select="''"/>
+<xsl:variable name="math-repr" select="document($mathfile)/pi:math-representations"/>
+<xsl:variable name="speech-repr" select="document($speechfile)/pi:math-representations"/>
 
 <!-- Reveal.js output is one monolithic page, so heading levels are -->
 <!-- threaded, not chunked.  The slideshow title (h1) and subtitle  -->
@@ -137,10 +150,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <link href="{$reveal-root}/reveal.css" rel="stylesheet"></link>
             <link href="{$reveal-root}/theme/{$reveal-theme}.css" rel="stylesheet"></link>
             <script src="{$reveal-root}/reveal.js"></script>
-            <script src="{$reveal-root}/plugin/math.js"></script>
+            <!-- embedded mathematics needs no typesetting, so no math plugin -->
+            <xsl:if test="not($b-reveal-embedded-math)">
+                <script src="{$reveal-root}/plugin/math.js"></script>
+            </xsl:if>
 
             <link href="_static/pretext/css/pretext-reveal.css" rel="stylesheet"></link>
           <style>
+            <xsl:if test="$b-reveal-embedded-math">
+                <!-- layout for build-time SVG images of mathematics; the -->
+                <!-- class names are those of the EPUB conversion, which  -->
+                <!-- pioneered this device                                -->
+                <xsl:text>span.mjpage { display: inline; }&#xa;</xsl:text>
+                <xsl:text>span.mjpage__block { display: block; text-align: center; margin: 0.5em 0; }&#xa;</xsl:text>
+            </xsl:if>
           </style>
           <xsl:call-template name="diagcess-header"/>
 
@@ -159,9 +182,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
         <body>
             <div class="reveal ptx-content">
-                <!-- For mathematics/MathJax, must be located -->
-                <!-- within div.reveal to be effective        -->
-                <xsl:apply-templates select="." mode="latex-macros"/>
+                <!-- For mathematics/MathJax, must be located  -->
+                <!-- within div.reveal to be effective.  With  -->
+                <!-- embedded mathematics the macros are baked -->
+                <!-- into the SVG images at build time, so the -->
+                <!-- hidden macro division would be inert.     -->
+                <xsl:if test="not($b-reveal-embedded-math)">
+                    <xsl:apply-templates select="." mode="latex-macros"/>
+                </xsl:if>
                 <div class="slides">
                      <xsl:apply-templates select="frontmatter"/>
                     <xsl:apply-templates select="section|slide"/>
@@ -209,27 +237,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>  width: "100%",&#xa;</xsl:text>
             <xsl:text>  height: "100%",&#xa;</xsl:text>
             <xsl:text>  margin: "0.025",&#xa;</xsl:text>
-            <!-- Explicitly enable AMS-style inline \(...\),      -->
-            <!-- and explicitly disable TeX-style inline $...$    -->
-            <!-- The main HTML conversion does not do anything    -->
-            <!-- special for display math, so we disable any such -->
-            <!-- markup, since we use environments exclusively.   -->
-            <!-- N.B. default HTML adds a "zero-width" space into -->
-            <!-- a \( authored in a non-math context.             -->
-            <!-- The MathJax version matches the main HTML        -->
-            <!-- conversion; the "mathjax4" adapter of the math   -->
-            <!-- plugin loads it from the URL given and passes    -->
-            <!-- the "tex" object into the MathJax configuration. -->
-
-            <!-- Suggested by  https://revealjs.com/math/, 2026-07-22 -->
-            <xsl:text>  mathjax4: {&#xa;</xsl:text>
-            <xsl:text>    mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js',&#xa;</xsl:text>
-            <xsl:text>    tex: {&#xa;</xsl:text>
-            <xsl:text>      inlineMath:  [['\\(','\\)']],&#xa;</xsl:text>
-            <xsl:text>      displayMath: [],&#xa;</xsl:text>
-            <xsl:text>    }&#xa;</xsl:text>
-            <xsl:text>  },&#xa;</xsl:text>
-            <xsl:text>  plugins: [ RevealMath.MathJax4 ]&#xa;</xsl:text>
+            <xsl:choose>
+                <!-- Embedded mathematics is finished SVG images: -->
+                <!-- no math plugin, no typesetting configuration -->
+                <xsl:when test="$b-reveal-embedded-math">
+                    <xsl:text>  plugins: []&#xa;</xsl:text>
+                </xsl:when>
+                <!-- Explicitly enable AMS-style inline \(...\),      -->
+                <!-- and explicitly disable TeX-style inline $...$    -->
+                <!-- The main HTML conversion does not do anything    -->
+                <!-- special for display math, so we disable any such -->
+                <!-- markup, since we use environments exclusively.   -->
+                <!-- N.B. default HTML adds a "zero-width" space into -->
+                <!-- a \( authored in a non-math context.             -->
+                <!-- The MathJax version matches the main HTML        -->
+                <!-- conversion; the "mathjax4" adapter of the math   -->
+                <!-- plugin loads it from the URL given and passes    -->
+                <!-- the "tex" object into the MathJax configuration. -->
+                <!-- Suggested by  https://revealjs.com/math/, 2026-07-22 -->
+                <xsl:otherwise>
+                    <xsl:text>  mathjax4: {&#xa;</xsl:text>
+                    <xsl:text>    mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js',&#xa;</xsl:text>
+                    <xsl:text>    tex: {&#xa;</xsl:text>
+                    <xsl:text>      inlineMath:  [['\\(','\\)']],&#xa;</xsl:text>
+                    <xsl:text>      displayMath: [],&#xa;</xsl:text>
+                    <xsl:text>    }&#xa;</xsl:text>
+                    <xsl:text>  },&#xa;</xsl:text>
+                    <xsl:text>  plugins: [ RevealMath.MathJax4 ]&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>});&#xa;</xsl:text>
         </script>
     </html>
@@ -524,6 +560,126 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($local = '')">
         <xsl:message >PTX:DEPRECATE: the temporary "local" stringparam is deprecated and is being ignored.  Please switch to using a publisher file to set this option, see documentation in The Guide.  The default behavior is to get resources from a CDN.</xsl:message>
     </xsl:if>
+</xsl:template>
+
+<!-- #################### -->
+<!-- Embedded Mathematics -->
+<!-- #################### -->
+
+<!-- Online mathematics (the default) is authored LaTeX passed      -->
+<!-- through, inherited from the HTML conversion, for the math      -->
+<!-- plugin and MathJax to typeset in the browser.  Embedded        -->
+<!-- mathematics substitutes an SVG image and a speech string,      -->
+<!-- both manufactured at build time, so the slideshow performs no  -->
+<!-- typesetting at all: the same device as the EPUB conversion,    -->
+<!-- whose templates these mirror.  Every "md" has "mrow" children  -->
+<!-- once the assembly repairs an authored one-line "md", so the    -->
+<!-- match covers all mathematics.  Slides never link to an         -->
+<!-- equation (a cross-reference renders as its text), so no HTML   -->
+<!-- id is placed, unlike EPUB.                                     -->
+<xsl:template match="m|md[mrow]">
+    <xsl:choose>
+        <xsl:when test="$b-reveal-embedded-math">
+            <!-- NB: math-representation file writes with "visible-id" -->
+            <xsl:variable name="id">
+                <xsl:apply-templates select="." mode="unique-id"/>
+            </xsl:variable>
+            <xsl:variable name="math" select="$math-repr/pi:math[@id = $id]"/>
+            <xsl:variable name="speech" select="$speech-repr/pi:math[@id = $id]"/>
+            <span>
+                <xsl:attribute name="class">
+                    <xsl:choose>
+                        <xsl:when test="$math/@context = 'inline'">
+                            <xsl:text>mjpage</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="$math/@context = 'displaymath'">
+                            <xsl:text>mjpage mjpage__block</xsl:text>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:apply-templates select="$math/div[@class = 'svg']/svg:svg" mode="svg-edit">
+                    <xsl:with-param name="speech" select="$speech"/>
+                    <xsl:with-param name="base-id" select="$id"/>
+                </xsl:apply-templates>
+            </span>
+        </xsl:when>
+        <!-- online: the usual LaTeX-within-delimiters construction -->
+        <xsl:otherwise>
+            <xsl:apply-imports/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- MathJax mints an HTML id from an equation's \tag for its own  -->
+<!-- \eqref linking, which PreTeXt never uses; a tag used twice    -->
+<!-- (symbols as tags invite this) would duplicate the id, so they -->
+<!-- are dropped                                                   -->
+<xsl:template match="@id[starts-with(., 'mjx-eqn')]" mode="svg-edit"/>
+
+<!-- Identity for the SVG stream-edit -->
+<xsl:template match="node()|@*" mode="svg-edit">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="svg-edit"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- We enrich the main "svg" element with a speech string.      -->
+<!--   1.  Since this is the "entry template" for this mode,     -->
+<!--       this is the only place we accept the "speech" param.  -->
+<!--   2.  MathJax seems to use SVGs inside of SVGs for placing  -->
+<!--       numbers/tags of numbered equations, so we only enrich -->
+<!--       "top-level" SVG - that is the point of the filter.    -->
+<!--   3.  The id of the math element will be used as the base   -->
+<!--       of (unique) ids necessary to point to the speech.     -->
+<!--       Pattern 11 at:                                        -->
+<!--       https://www.deque.com/blog/creating-accessible-svgs/  -->
+<!--   4.  Seems                                                 -->
+<!--           "title" + @aria-labelledby                        -->
+<!--           "desc"  + @aria-describedby                       -->
+<!--       cover all the bases.  It is suggested that the two    -->
+<!--       elements alone would be recognized by screen readers. -->
+<xsl:template match="svg:svg[not(ancestor::svg:svg)]" mode="svg-edit">
+    <xsl:param name="speech"/>
+    <xsl:param name="base-id"/>
+
+    <!-- manufacture id values for consistency, uniqueness -->
+    <xsl:variable name="title-id">
+        <xsl:value-of select="$base-id"/>
+        <xsl:text>-title</xsl:text>
+    </xsl:variable>
+    <xsl:variable name="desc-id">
+        <xsl:value-of select="$base-id"/>
+        <xsl:text>-desc</xsl:text>
+    </xsl:variable>
+
+    <xsl:copy>
+        <!-- attributes first -->
+        <xsl:apply-templates select="@*" mode="svg-edit"/>
+        <xsl:attribute name="role">
+            <xsl:text>img</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="aria-labelledby">
+            <xsl:value-of select="$title-id"/>
+        </xsl:attribute>
+        <xsl:attribute name="aria-describedby">
+            <xsl:value-of select="$desc-id"/>
+        </xsl:attribute>
+        <!-- now additional metadata, of sorts -->
+        <xsl:element name="title" namespace="http://www.w3.org/2000/svg">
+            <xsl:attribute name="id">
+                <xsl:value-of select="$title-id"/>
+            </xsl:attribute>
+            <xsl:text>Math Expression</xsl:text>
+        </xsl:element>
+        <xsl:element name="desc" namespace="http://www.w3.org/2000/svg">
+            <xsl:attribute name="id">
+                <xsl:value-of select="$desc-id"/>
+            </xsl:attribute>
+            <xsl:value-of select="$speech"/>
+        </xsl:element>
+        <!-- and all the rest of the nodes -->
+        <xsl:apply-templates select="node()" mode="svg-edit"/>
+    </xsl:copy>
 </xsl:template>
 
 </xsl:stylesheet>
