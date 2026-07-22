@@ -83,6 +83,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <xsl:value-of select="$reveal-math-source"/>
     <xsl:text>&#xa;</xsl:text>
+    <!-- 2026-07-22 Reveal.js effective resources host, and the resource -->
+    <!-- location prefix (the CDN root when the host is "embedded")      -->
+    <xsl:text>reveal-resources-host</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$reveal-resources-host"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>reveal-root</xsl:text>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="$reveal-root"/>
+    <xsl:text>&#xa;</xsl:text>
     <!-- 2024-07-07 QR code image -->
     <xsl:text>qrcode-image</xsl:text>
     <xsl:text> </xsl:text>

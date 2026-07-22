@@ -1270,6 +1270,7 @@
           <choice>
             <value>local</value>
             <value>cdn</value>
+            <value>embedded</value>
           </choice>
         </attribute>
       </optional>

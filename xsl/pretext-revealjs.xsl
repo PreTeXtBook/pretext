@@ -32,11 +32,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:pf="https://prefigure.org"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
     extension-element-prefixes="exsl date str"
-    exclude-result-prefixes="svg"
+    exclude-result-prefixes="svg pf"
 >
 
 <!-- Necessary to get some HTML constructions,    -->
@@ -165,7 +166,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>span.mjpage__block { display: block; text-align: center; margin: 0.5em 0; }&#xa;</xsl:text>
             </xsl:if>
           </style>
-          <xsl:call-template name="diagcess-header"/>
+          <!-- no diagcess machinery with embedded mathematics: an  -->
+          <!-- annotated PreFigure diagram is then a static image   -->
+          <xsl:if test="not($b-reveal-embedded-math)">
+              <xsl:call-template name="diagcess-header"/>
+          </xsl:if>
 
           <!-- custom-css, if specified, should be last -->
           <xsl:if test="not($reveal-custom-css = '')">
@@ -195,7 +200,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="section|slide"/>
                 </div>
             </div>
-            <xsl:call-template name="diagcess-footer"/>
+            <xsl:if test="not($b-reveal-embedded-math)">
+                <xsl:call-template name="diagcess-footer"/>
+            </xsl:if>
         </body>
 
         <script>
@@ -609,6 +616,39 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </span>
         </xsl:when>
         <!-- online: the usual LaTeX-within-delimiters construction -->
+        <xsl:otherwise>
+            <xsl:apply-imports/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- An annotated PreFigure diagram is normally embedded for the    -->
+<!-- diagcess library: an interactive, keyboard-driven exploration  -->
+<!-- for a screen reader.  With embedded mathematics the slideshow  -->
+<!-- has already traded such interactivity for fixed alternatives,  -->
+<!-- so the diagram becomes a static image (its plain SVG), and the -->
+<!-- diagcess machinery is omitted entirely.                        -->
+<xsl:template match="image[pf:prefigure[pf:diagram/pf:annotations]]" mode="image-inclusion">
+    <xsl:choose>
+        <xsl:when test="$b-reveal-embedded-math">
+            <xsl:variable name="base-pathname">
+                <xsl:value-of select="$generated-directory"/>
+                <xsl:if test="$b-managed-directories">
+                    <xsl:text>prefigure/</xsl:text>
+                </xsl:if>
+                <xsl:apply-templates select="pf:prefigure" mode="image-source-basename"/>
+            </xsl:variable>
+            <xsl:apply-templates select="." mode="svg-png-wrapper">
+                <xsl:with-param name="image-filename" select="concat($base-pathname, '.svg')"/>
+            </xsl:apply-templates>
+            <!-- possibly annotate with archive links -->
+            <xsl:apply-templates select="." mode="archive">
+                <xsl:with-param name="base-pathname" select="$base-pathname"/>
+            </xsl:apply-templates>
+            <!-- possibly give a long description -->
+            <xsl:apply-templates select="." mode="description"/>
+        </xsl:when>
+        <!-- online: the diagcess embedding, inherited -->
         <xsl:otherwise>
             <xsl:apply-imports/>
         </xsl:otherwise>
