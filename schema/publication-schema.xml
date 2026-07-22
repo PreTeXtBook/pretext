@@ -597,7 +597,7 @@
 
             Resources =
                 element resources {
-                    attribute host { "local" | "cdn" }?,
+                    attribute host { "local" | "cdn" | "embedded" }?,
                     attribute math { "online" | "embedded" }?
                 }
             </code>
