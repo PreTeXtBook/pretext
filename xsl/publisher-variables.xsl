@@ -3560,13 +3560,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "online" (default) loads MathJax in the browser; "embedded"   -->
 <!-- replaces each piece of mathematics with an SVG image, with a  -->
 <!-- speech string, both manufactured at build time, so the        -->
-<!-- slideshow performs no typesetting at all                      -->
+<!-- slideshow performs no typesetting at all.  The default flips  -->
+<!-- to "embedded" when the resources are embedded (a custom       -->
+<!-- default template below), since a network-detached slideshow   -->
+<!-- cannot load MathJax.                                          -->
 <xsl:variable name="reveal-math-source">
     <xsl:apply-templates select="$publisher-attribute-options/revealjs/resources/pi:pub-attribute[@name='math']" mode="set-pubfile-variable"/>
 </xsl:variable>
 <xsl:variable name="b-reveal-embedded-math" select="$reveal-math-source = 'embedded'"/>
 
+<xsl:template match="revealjs/resources/pi:pub-attribute[@name='math']" mode="get-default-pub-variable">
+    <xsl:choose>
+        <xsl:when test="$publication/revealjs/resources/@host = 'embedded'">
+            <xsl:text>embedded</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>online</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Reveal.js Resources file location -->
+
+<!-- The *effective* host.  Embedded resources require embedded      -->
+<!-- mathematics: an authored "math" left unspecified defaults to    -->
+<!-- "embedded" (above), but an explicit online election contradicts -->
+<!-- the request for a network-detached file, so the whole slideshow -->
+<!-- falls back to fully online, with an error.                      -->
+<xsl:variable name="reveal-resources-host">
+    <xsl:choose>
+        <xsl:when test="($publication/revealjs/resources/@host = 'embedded') and not($b-reveal-embedded-math)">
+            <xsl:message>PTX:ERROR:   the publisher file elects embedded reveal.js resources (revealjs/resources/@host) but online mathematics (revealjs/resources/@math).  A network-detached slideshow cannot load MathJax, so both entries will be treated as online.  Remove the "math" entry, or set it to "embedded", to embed the resources.</xsl:message>
+            <xsl:text>cdn</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/resources/@host">
+            <xsl:value-of select="$publication/revealjs/resources/@host"/>
+        </xsl:when>
+        <!-- default to the CDN if no specification -->
+        <xsl:otherwise>
+            <xsl:text>cdn</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-reveal-embedded-resources" select="$reveal-resources-host = 'embedded'"/>
 
 <!-- String to prefix  reveal.js  resources -->
 <xsl:variable name="reveal-root">
@@ -3582,20 +3618,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- if publisher.xml file has CDN option specified, use it       -->
         <!-- keep this URL updated, but not for the deprecation situation -->
-        <xsl:when test="$publication/revealjs/resources/@host = 'cdn'">
+        <!-- Embedded resources emit the same CDN references: the         -->
+        <!-- pretext/pretext script replaces them with the file contents, -->
+        <!-- and any other processing degrades gracefully to the CDN.     -->
+        <xsl:when test="($reveal-resources-host = 'cdn') or ($reveal-resources-host = 'embedded')">
             <xsl:value-of select="$cdn-url"/>
         </xsl:when>
         <!-- if publisher.xml file has the local option specified, use it -->
-        <xsl:when test="$publication/revealjs/resources/@host = 'local'">
+        <xsl:when test="$reveal-resources-host = 'local'">
             <xsl:text>.</xsl:text>
         </xsl:when>
         <!-- Experimental - just some file path/url -->
-        <xsl:when test="$publication/revealjs/resources/@host">
-            <xsl:value-of select="$publication/revealjs/resources/@host"/>
-        </xsl:when>
-        <!-- default to the CDN if no specification -->
         <xsl:otherwise>
-            <xsl:value-of select="$cdn-url"/>
+            <xsl:value-of select="$reveal-resources-host"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
