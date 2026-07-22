@@ -152,12 +152,11 @@
 <!-- Panels of a "sidebyside", and content of a "stack" panel.  The   -->
 <!-- lists mirror the schema, plus grandfathered items the code still -->
 <!-- tolerates: "audio", "video", "interactive" (precluded            -->
-<!-- 2026-07-22, may someday be removed), "jsxgraph" (deprecated      -->
-<!-- 2018-04-06), and "paragraphs" within a "sidebyside" (deprecated  -->
-<!-- 2018-04-06).  An "exercise" panel (worksheet or handout only)    -->
-<!-- and a "slate" panel (within an "interactive" only) are policed   -->
-<!-- by the validation-plus stylesheet.                               -->
-<!ENTITY SBSPANEL "p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs">
+<!-- 2026-07-22, may someday be removed).  An "exercise" panel        -->
+<!-- (worksheet or handout only) and a "slate" panel (within an       -->
+<!-- "interactive" only) are policed by the validation-plus           -->
+<!-- stylesheet.                                                      -->
+<!ENTITY SBSPANEL "p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack">
 <!ENTITY STACKABLE "tabular|image|p|pre|ol|ul|dl|audio|video|interactive|slate|program|console">
 
 <!-- appendages of examples, exercises, tasks -->
