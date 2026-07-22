@@ -3563,8 +3563,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="reveal-root">
     <!-- CDN is used twice, so just edit here -->
     <!-- NB: deprecation is frozen -->
+    <!-- The "@6" is a semantic-version range: jsdelivr serves the    -->
+    <!-- newest 6.x release, so fixes arrive automatically while a    -->
+    <!-- breaking 7.0 cannot.  Same pattern as the MathJax "@4" URLs. -->
     <xsl:variable name="cdn-url">
-        <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.2</xsl:text>
+        <xsl:text>https://cdn.jsdelivr.net/npm/reveal.js@6/dist</xsl:text>
     </xsl:variable>
 
     <xsl:choose>
