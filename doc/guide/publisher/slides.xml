@@ -51,6 +51,9 @@
             See <xref ref="revealjs-resources-options"/> for details on specifying these options, and see below for directions on how to organize the Reveal.js support files.
         </p>
         <p>
+            A third possibility is a <term>single-file</term> slideshow: elect <c>host="embedded"</c> on the <tag>resources</tag> element of your publication file, and the build retrieves the reveal.js files from the <init>CDN</init> once and folds them into the <init>HTML</init> file itself, along with every stylesheet and the fonts a theme uses.  Embedded resources require embedded mathematics (next), so this election implies <c>math="embedded"</c> as well; an explicit <c>math="online"</c> alongside is a contradiction, draws an error, and the slideshow is built fully online instead.  The result is one <init>HTML</init> file that presents in a browser with no network connection at all<mdash/>with the usual exceptions for genuinely online services: Sage cells, embedded interactives, and the syntax highlighting of program listings each fetch their own resources when the network is available, and degrade quietly when it is not.  Any images in your slides are still separate files in the managed directories alongside the <init>HTML</init> file.  Building this way requires a network connection, and each build embeds the newest release of the reveal.js major version.
+        </p>
+        <p>
             By default, Reveal.js will render <latex/> syntax with MathJax,
             entirely similar to how MathJax is used in the <pretext/> conversion to <init>HTML</init>.
             This is accomplished with the Reveal.js <c>math</c> plugin, which is loaded automatically as part of your output.  When you specify that resources come from a CDN, then this plugin will also get MathJax from a CDN.
