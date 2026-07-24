@@ -774,7 +774,6 @@
         <xsl:with-param name="block-title">Header</xsl:with-param>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
-    <xsl:text>TEXT(beginproblem());&#xa;</xsl:text>
     <xsl:if test="not($b-human-readable)">
         <!-- see select-latex-macros template -->
         <xsl:variable name="macros">

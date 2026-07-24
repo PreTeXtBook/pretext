@@ -69,7 +69,6 @@ COMMENT(q"Find a quadratic equation's solutions.", 'One positive integer solutio
 ############################################################
 # Header
 ############################################################
-TEXT(beginproblem());
 
 ############################################################
 # PG Setup Code
