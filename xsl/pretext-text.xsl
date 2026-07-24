@@ -899,21 +899,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- unicode repertoire, as other conversions do.                    -->
 
 <!-- A character reads its elected column of the representation -->
-<!-- table in  pretext-common.xsl.  A row without an "ascii"     -->
-<!-- stand-in is outside the text repertoire altogether, and     -->
-<!-- warns under either election, so gaps stay visible.          -->
+<!-- table in  pretext-common.xsl.  The unicode repertoire is    -->
+<!-- complete; a row without an "ascii" stand-in warns under the -->
+<!-- ascii election, so those gaps stay visible.                 -->
 <xsl:template match="char" mode="character">
     <xsl:choose>
-        <xsl:when test="not(@ascii)">
-            <xsl:call-template name="warn-unimplemented-character">
-                <xsl:with-param name="char-name" select="@name"/>
-            </xsl:call-template>
-        </xsl:when>
         <xsl:when test="$b-text-unicode">
             <xsl:value-of select="@unicode"/>
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="@ascii">
             <xsl:value-of select="@ascii"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="warn-unimplemented-character">
+                <xsl:with-param name="char-name" select="@name"/>
+            </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
