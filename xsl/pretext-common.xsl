@@ -9642,6 +9642,7 @@ Book (with parts), "section" at level 3
 
 <xsl:variable name="character-rtf">
     <!-- U+00A0: NO-BREAK SPACE -->
+    <!-- (the "&nbsp;" entity is undefined in XSL; always the numeric reference) -->
     <char name="nbsp"          unicode="&#x00a0;"   latex="~" latex-ending="no"               ascii=" "/>
     <!-- U+2013: EN DASH -->
     <char name="ndash"         unicode="&#x2013;"   latex="\textendash"                       ascii="-"/>
@@ -9684,8 +9685,13 @@ Book (with parts), "section" at level 3
     <!-- U+2117: SOUND RECORDING COPYRIGHT -->
     <char name="phonomark"     unicode="&#x2117;"   latex="\textcircledP"/>
     <!-- U+1F12F: COPYLEFT SYMBOL -->
+    <!-- (may not be universally available in fonts; Open C (U+0254) -->
+    <!-- plus Combining Circle (U+20DD) can imitate)                 -->
     <char name="copyleft"      unicode="&#x1f12f;"  latex="\textcopyleft"/>
     <!-- U+00AE: REGISTERED SIGN -->
+    <!-- (Bringhurst: should be superscript; not so in a font is a   -->
+    <!-- font mistake, but a "sup" wrapper renders way too small in  -->
+    <!-- a correct font)                                             -->
     <char name="registered"    unicode="&#x00ae;"   latex="\textregistered"                   ascii="(R)"/>
     <!-- U+2122: TRADE MARK SIGN -->
     <char name="trademark"     unicode="&#x2122;"   latex="\texttrademark"                    ascii="(TM)"/>
