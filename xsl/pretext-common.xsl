@@ -7354,63 +7354,63 @@ Book (with parts), "section" at level 3
 <!-- additional popular packages (e.g. numpy, pandas) -->
 <!-- are available.                                   -->
 
-<!-- Our strings (@ptx) are always all-lowercase, no symbols, no punctuation -->
+<!-- Our strings (@name) are always all-lowercase, no symbols, no punctuation -->
 <xsl:variable name="programming-language-rtf">
     <!-- Procedural -->
-    <language ptx="basic"       active=""            listings="Basic"            prism="basic"/>
-    <language ptx="c"           active="c"           listings="C"                prism="c"/>
-    <language ptx="cpp"         active="cpp"         listings="C++"              prism="cpp"/>
-    <language ptx="go"          active=""            listings="C"                prism="go"/>
-    <language ptx="java"        active="java"        listings="Java"             prism="java"/>
-    <language ptx="javascript"  active="javascript"  listings=""                 prism="javascript"/>
-    <language ptx="kotlin"      active="kotlin"      listings=""                 prism="kotlin"/>
-    <language ptx="lua"         active=""            listings="Lua"              prism="lua"/>
-    <language ptx="pascal"      active=""            listings="Pascal"           prism="pascal"/>
-    <language ptx="perl"        active=""            listings="Perl"             prism="perl"/>
-    <language ptx="python"      active="python"      listings="Python"           prism="py"/>
-    <language ptx="python3"     active="python3"     listings="Python"           prism="py"/>
-    <language ptx="r"           active=""            listings="R"                prism="r"/>
-    <language ptx="s"           active=""            listings="S"                prism="s"/>
-    <language ptx="sas"         active=""            listings="SAS"              prism="s"/>
-    <language ptx="sage"        active=""            listings="Python"           prism="py"/>
-    <language ptx="splus"       active=""            listings="[Plus]S"          prism="s"/>
-    <language ptx="vbasic"      active=""            listings="[Visual]Basic"    prism="visual-basic"/>
-    <language ptx="vbscript"    active=""            listings="VBscript"         prism="visual-basic"/>
+    <language name="basic"      active=""            listings="Basic"            prism="basic"/>
+    <language name="c"          active="c"           listings="C"                prism="c"/>
+    <language name="cpp"        active="cpp"         listings="C++"              prism="cpp"/>
+    <language name="go"         active=""            listings="C"                prism="go"/>
+    <language name="java"       active="java"        listings="Java"             prism="java"/>
+    <language name="javascript" active="javascript"  listings=""                 prism="javascript"/>
+    <language name="kotlin"     active="kotlin"      listings=""                 prism="kotlin"/>
+    <language name="lua"        active=""            listings="Lua"              prism="lua"/>
+    <language name="pascal"     active=""            listings="Pascal"           prism="pascal"/>
+    <language name="perl"       active=""            listings="Perl"             prism="perl"/>
+    <language name="python"     active="python"      listings="Python"           prism="py"/>
+    <language name="python3"    active="python3"     listings="Python"           prism="py"/>
+    <language name="r"          active=""            listings="R"                prism="r"/>
+    <language name="s"          active=""            listings="S"                prism="s"/>
+    <language name="sas"        active=""            listings="SAS"              prism="s"/>
+    <language name="sage"       active=""            listings="Python"           prism="py"/>
+    <language name="splus"      active=""            listings="[Plus]S"          prism="s"/>
+    <language name="vbasic"     active=""            listings="[Visual]Basic"    prism="visual-basic"/>
+    <language name="vbscript"   active=""            listings="VBscript"         prism="visual-basic"/>
     <!-- Others (esp. functional)  -->
-    <language ptx="clojure"     active=""            listings="Lisp"             prism="clojure"/>
-    <language ptx="lisp"        active=""            listings="Lisp"             prism="lisp"/>
-    <language ptx="clisp"       active=""            listings="Lisp"             prism="lisp"/>
-    <language ptx="elisp"       active=""            listings="Lisp"             prism="elisp"/>
-    <language ptx="scheme"      active=""            listings="Lisp"             prism="scheme"/>
-    <language ptx="racket"      active=""            listings="Lisp"             prism="racket"/>
-    <language ptx="sql"         active="sql"         listings="SQL"              prism="sql"/>
-    <language ptx="llvm"        active=""            listings="LLVM"             prism="llvm"/>
-    <language ptx="matlab"      active=""            listings="Matlab"           prism="matlab"/>
-    <language ptx="octave"      active="octave"      listings="Octave"           prism="matlab"/>
-    <language ptx="ml"          active=""            listings="ML"               prism=""/>
-    <language ptx="ocaml"       active=""            listings="[Objective]Caml"  prism="ocaml"/>
-    <language ptx="fsharp"      active=""            listings="ML"               prism="fsharp"/>
+    <language name="clojure"    active=""            listings="Lisp"             prism="clojure"/>
+    <language name="lisp"       active=""            listings="Lisp"             prism="lisp"/>
+    <language name="clisp"      active=""            listings="Lisp"             prism="lisp"/>
+    <language name="elisp"      active=""            listings="Lisp"             prism="elisp"/>
+    <language name="scheme"     active=""            listings="Lisp"             prism="scheme"/>
+    <language name="racket"     active=""            listings="Lisp"             prism="racket"/>
+    <language name="sql"        active="sql"         listings="SQL"              prism="sql"/>
+    <language name="llvm"       active=""            listings="LLVM"             prism="llvm"/>
+    <language name="matlab"     active=""            listings="Matlab"           prism="matlab"/>
+    <language name="octave"     active="octave"      listings="Octave"           prism="matlab"/>
+    <language name="ml"         active=""            listings="ML"               prism=""/>
+    <language name="ocaml"      active=""            listings="[Objective]Caml"  prism="ocaml"/>
+    <language name="fsharp"     active=""            listings="ML"               prism="fsharp"/>
     <!-- Text Manipulation -->
-    <language ptx="css"         active=""            listings=""                 prism="css"/>
-    <language ptx="latex"       active=""            listings="[LaTeX]TeX"       prism="latex"/>
-    <language ptx="html"        active="html"        listings="HTML"             prism="html"/>
-    <language ptx="tex"         active=""            listings="[plain]TeX"       prism="tex"/>
-    <language ptx="xml"         active=""            listings="XML"              prism="xml"/>
-    <language ptx="xslt"        active=""            listings="XSLT"             prism="xml"/>
+    <language name="css"        active=""            listings=""                 prism="css"/>
+    <language name="latex"      active=""            listings="[LaTeX]TeX"       prism="latex"/>
+    <language name="html"       active="html"        listings="HTML"             prism="html"/>
+    <language name="tex"        active=""            listings="[plain]TeX"       prism="tex"/>
+    <language name="xml"        active=""            listings="XML"              prism="xml"/>
+    <language name="xslt"       active=""            listings="XSLT"             prism="xml"/>
 </xsl:variable>
 
 <xsl:variable name="programming-language-table"
     select="exsl:node-set($programming-language-rtf)"/>
 
 <!-- Define the key for indexing into the data list -->
-<xsl:key name="proglang" match="language" use="@ptx" />
+<xsl:key name="programming-language-key" match="language" use="@name"/>
 
 <!-- Define variables for default active language - will be picked up by -->
 <!-- RS manifest and can be a different string than the raw language. -->
 <xsl:variable name="default-active-programming-language">
     <xsl:if test="$version-docinfo/programs/@language">
         <xsl:for-each select="$programming-language-table">
-            <xsl:value-of select="key('proglang', $version-docinfo/programs/@language)/@active" />
+            <xsl:value-of select="key('programming-language-key', $version-docinfo/programs/@language)/@active" />
         </xsl:for-each>
     </xsl:if>
 </xsl:variable>
@@ -7447,7 +7447,7 @@ Book (with parts), "section" at level 3
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
     <xsl:for-each select="$programming-language-table">
-        <xsl:value-of select="key('proglang', $language)/@active" />
+        <xsl:value-of select="key('programming-language-key', $language)/@active" />
     </xsl:for-each>
 </xsl:template>
 
@@ -7458,7 +7458,7 @@ Book (with parts), "section" at level 3
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
     <xsl:for-each select="$programming-language-table">
-        <xsl:value-of select="key('proglang', $language)/@listings" />
+        <xsl:value-of select="key('programming-language-key', $language)/@listings" />
     </xsl:for-each>
 </xsl:template>
 
@@ -7469,7 +7469,7 @@ Book (with parts), "section" at level 3
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
     <xsl:for-each select="$programming-language-table">
-        <xsl:value-of select="key('proglang', $language)/@prism" />
+        <xsl:value-of select="key('programming-language-key', $language)/@prism" />
     </xsl:for-each>
 </xsl:template>
 
