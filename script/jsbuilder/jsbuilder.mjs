@@ -239,6 +239,13 @@ function getAllTargets() {
       in: path.join(jsRoot, 'lti_iframe_resizer.js'),
     },
 
+    // GDScript 2.0 changes for prism
+    {
+      name: 'prism/gdscript-prism',
+      group: 'script',
+      in: path.join(jsRoot, 'prism/gdscript-prism.js'),
+    },
+
     // Standalone knowl script: used by the WeBWorK problem iframe to enable
     // knowl expansion inside problem content.  knowl.js is also bundled into
     // pretext-core.js (for the main page), but the WW iframe loads it

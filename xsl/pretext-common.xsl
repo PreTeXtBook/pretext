@@ -7365,6 +7365,7 @@ Book (with parts), "section" at level 3
     <language ptx="basic"       active=""            listings="Basic"            prism="basic"/>
     <language ptx="c"           active="c"           listings="C"                prism="c"/>
     <language ptx="cpp"         active="cpp"         listings="C++"              prism="cpp"/>
+    <language ptx="gdscript"    active="gdscript"    listings="Python"           prism="gdscript"/>
     <language ptx="go"          active=""            listings="C"                prism="go"/>
     <language ptx="java"        active="java"        listings="Java"             prism="java"/>
     <language ptx="javascript"  active="javascript"  listings=""                 prism="javascript"/>

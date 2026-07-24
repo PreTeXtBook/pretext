@@ -93,6 +93,9 @@ import re
 # contextmanager tools
 import contextlib
 
+# gdscript needs
+import pathlib
+
 import time
 
 # cleanup multiline strings used as source code
@@ -131,6 +134,7 @@ from . import common
 __module_warning = common.__module_warning
 from . import webwork
 from . import stack
+from . import godot_helper
 
 # Not much can be done without the "lxml" module which mimics
 # the "xsltproc" executable (they share the same libraries)
@@ -1576,6 +1580,154 @@ def references(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
 
 ##############################
 #
+#  GDScript interactive packing
+#
+##############################
+
+def gd_pack(source_dir, dest_zip_file, pack_name,version):
+    source_path = pathlib.Path(source_dir).resolve()
+    try:
+        godot_cmd = common.get_executable_cmd("godot")
+    except Exception as e:
+        log.error("{}".format(e))
+        godot_cmd = "godot"
+
+    godot_cmd = godot_helper.resolve_godot(godot_cmd,version)
+    godot_helper.ensure_export_templates(version)
+
+    PROJECT_FILENAME = "project.godot"
+    EXPORTS_FILENAME  = "export_presets.cfg"
+    EXPORT_FILENAME  = "export_preset.cfg"
+    # Work on a disposable copy of the project so we never modify source_dir.
+    tmp_dir = common.get_temporary_directory()
+    log.debug("temporary directory for Godot pack build: {}".format(tmp_dir))
+    shutil.copytree(source_path, tmp_dir, dirs_exist_ok=True)
+
+    source_config_path = os.path.join(tmp_dir,"practice_solutions",pack_name,EXPORT_FILENAME)
+
+    # Define the destination path for the config file in the project folder
+    target_config_path = os.path.join(tmp_dir, EXPORTS_FILENAME)
+    # Define the destination path for the project file in the project folder
+    target_project_path = os.path.join(tmp_dir, PROJECT_FILENAME)
+
+    godot_template_path = os.path.join(get_ptx_path(), "pretext","lib","godot")
+    template_project_path = os.path.join(godot_template_path,PROJECT_FILENAME)
+    shutil.copy2(source_config_path,target_config_path)
+    shutil.copy2(template_project_path,target_project_path)
+
+    # dry run: Godot needs this pass to build/import files that are
+    # missing before it can export the pack in the step below.
+    command = [
+        godot_cmd,
+        "--headless",
+        "--path", tmp_dir,
+        "--editor",
+        "--quit"
+    ]
+
+    # Execute the command
+    result = subprocess.run(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+
+    # Check for success or failure of dry run
+    if result.returncode == 0:
+        log.info("Trial successful!")
+        log.info(result.stdout)
+        log.info(result.stderr)
+    else:
+        log.error("Trial failed. Godot Output:")
+        log.error(result.stdout)
+        log.error(result.stderr)
+        raise OSError(result.stderr)
+    command = [
+        godot_cmd,
+        "--headless",
+        "--path", tmp_dir,
+        "--export-pack", pack_name,
+        dest_zip_file
+    ]
+
+    # Execute the command
+    result = subprocess.run(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+    # Check for success or failure
+    if result.returncode == 0:
+        log.info("Export successful! File saved to: {}".format(dest_zip_file))
+        log.info(result.stdout)
+        log.info(result.stderr)
+    else:
+        log.error("Export failed. Godot Output:")
+        log.error(result.stdout)
+        log.error(result.stderr)
+        raise OSError(result.stderr)
+
+def gdscript_pck(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
+    # to ensure provided stringparams aren't mutated unintentionally
+    stringparams = stringparams.copy()
+    source_dir = common.get_source_path(xml_source)
+    log.info(
+        "exporting GDScript interactives from {} for placement in {}".format(
+            source_dir, dest_dir
+        )
+    )
+    ptx_xsl_dir = common.get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, "extract-gdscript.xsl")
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams["publisher"] = pub_file
+    if xmlid_root:
+        stringparams["subtree"] = xmlid_root
+    # Build list of id's into a scratch directory/file
+    tmp_dir = common.get_temporary_directory()
+    id_filename = os.path.join(tmp_dir, "gdscript-ids.txt")
+    log.debug("GDScript id list temporarily in {}".format(id_filename))
+    # this builds the gdscript names
+    common.xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
+    # "run" an assignment for the list of quads of strings
+    with open(id_filename, "r") as id_file:
+        # read lines, but only lines that are comma delimited
+        quads = [p.strip() for p in id_file.readlines() if "," in p]
+    for quad in quads:
+        src = path = name = version = None
+        try:
+            # first item is destination name, second item is source,
+            # third item is scene to derive export name
+            quad_a = quad.split(",")
+            src = os.path.join(source_dir,quad_a[1])
+            # this is the path to the destination file
+            path = os.path.join(dest_dir, quad_a[0] + ".zip")
+            # split third item on path separator
+            parts = quad_a[2].split("/")
+            # the second to last part should be the problem name
+            name = parts[-2]
+            # get the version
+            version = quad_a[3]
+            log.info("exporting {} as {} using {} ...".format(src, path, name))
+            gd_pack(src, path,name,version)
+        except Exception as e:
+            log.error(
+                "GDScript pack export failed for quad {} "
+                "(src={}, dest={}, pack_name={}, version={}): "
+                "{}: {}".format(
+                    quad, src, path, name, version,
+                    type(e).__name__, e
+                )
+            )
+            log.debug(traceback.format_exc())
+
+    log.info("GDScript pck exporting complete")
+
+
+##############################
+#
 #  You Tube thumbnail scraping
 #
 ##############################
@@ -2005,6 +2157,7 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
 
     # explore source for various PreTeXt elements needing assistance
     # no element => empty list => boolean is False
+    has_gdscript = bool(src_tree.xpath("/pretext/*[not(docinfo)]//program[@pck and @interactive='activecode']"))
     has_latex_image = bool(src_tree.xpath("/pretext/*[not(docinfo)]//latex-image"))
     has_asymptote = bool(src_tree.xpath("/pretext/*[not(docinfo)]//asymptote"))
     has_sageplot = bool(src_tree.xpath("/pretext/*[not(docinfo)]//sageplot"))
@@ -2076,6 +2229,15 @@ def all_images(xml, pub_file, stringparams, xmlid_root):
         # conversions look for this PNG as a fallback absent SVG or PDF
         sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, "pdf", None)
         sage_conversion(xml, pub_file, stringparams, xmlid_root, dest_dir, "svg", None)
+
+    # gdscript pck
+    #
+    if has_gdscript:
+        dest_dir = os.path.join(generated_dir, "gdscript", "")
+        if not (os.path.isdir(dest_dir)):
+            os.mkdir(dest_dir)
+        # call gdscript_pck
+        gdscript_pck(xml, pub_file, stringparams, xmlid_root, dest_dir)
 
     # YouTube previews
     #

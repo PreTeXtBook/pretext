@@ -2067,6 +2067,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- languages *always* supported, including "none" -->
         <xsl:when test="($entered-lang = 'none') or
                         ($entered-lang = 'python') or
+                        ($entered-lang = 'gdscript') or
                         ($entered-lang = 'javascript') or
                         ($entered-lang = 'html') or
                         ($entered-lang = 'sql')">

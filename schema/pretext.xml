@@ -1351,6 +1351,8 @@
                     attribute line-numbers {"yes"|"no"}?,
                     attribute linker-args {text}?,
                     attribute timelimit {text}?,
+                    attribute pck {text}?,
+                    attribute scene {text}?,
                     (
                         text
                     |

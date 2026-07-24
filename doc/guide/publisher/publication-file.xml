@@ -612,6 +612,7 @@
                         <li><c>javascript</c> (JavaScript)</li>
                         <li><c>html</c> (<init>HTML</init>)</li>
                         <li><c>sql</c> (<init>SQL</init>)</li>
+                        <li><c>gdscript</c> (<init>GDScript</init>)</li>
                         <li><c>c</c> (C, Runestone server only)</li>
                         <li><c>cpp</c> (C++, Runestone server only)</li>
                         <li><c>java</c> (Java, Runestone server only)</li>
