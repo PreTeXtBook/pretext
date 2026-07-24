@@ -26,9 +26,20 @@
         <p>TODO</p>
     </section>
 
-    <section>
-        <title>(*) Landing Page</title>
-        <p>TODO</p>
+    <section xml:id="landing-page">
+        <title>Landing Page</title>
+        <idx><h>landing page</h></idx>
+        <idx><h>project website</h></idx>
+        <idx><h>website</h><h>for a project</h></idx>
+        <idx><h>GitHub Pages</h></idx>
+
+        <p>A single book can yield many different outputs<mdash/>an online <init>HTML</init> version, a <init>PDF</init> for the screen or for print (<xref ref="print-on-demand"/>), perhaps an <init>EPUB</init> or a packet of worksheets.  We think every project deserves one thing more: a <term>landing page</term>, the home page of a small website devoted to the project as a whole.  It is the front door<mdash/>the one stable, memorable <init>URL</init> you advertise on a syllabus, cite in a talk, or hand to a colleague<mdash/>and from it a reader can reach whichever version they prefer.</p>
+
+        <p>A landing page is <em>not</em> the <init>HTML</init> index page (<xref ref="index-page"/>).  That index page is the <c>index.html</c> file <pretext/> builds <em>inside</em> your <init>HTML</init> output so that a directory <init>URL</init> resolves to a sensible first page of the book; it belongs to a single output.  A landing page sits <em>above</em> all of your outputs and introduces the project itself: a short description, a cover image, links to the current online version and to a downloadable <init>PDF</init>, perhaps errata or news, and a way to contact you or to adopt the book.</p>
+
+        <p>Because the landing page is what endures as versions come and go, and as hosting arrangements change, it is worth situating at a domain name you own and control (<xref ref="web-hosting"/>), so the project can move without breaking the links others have already made to it.</p>
+
+        <p>The PreTeXt-CLI can assemble such a site for you.  When you deploy more than one target (<xref ref="processing-CLI-deploy"/>), you place your landing page in a <c>site</c> folder at the root of your project, and <c>pretext deploy</c> stages that page together with each target's output as a single website.  For hosting, <url href="https://pages.github.com/" visual="pages.github.com/">GitHub Pages</url> is a natural, free home (<xref ref="web-hosting"/>).  This holds even when the book itself is hosted elsewhere: a Runestone book, for instance, already lives in a GitHub repository, so GitHub Pages is immediately available to carry the project's landing page.</p>
     </section>
 
     <section>
