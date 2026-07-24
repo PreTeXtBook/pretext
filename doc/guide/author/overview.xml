@@ -564,6 +564,15 @@
         <idx>STACK exercise</idx>
 
         <p><acro>STACK</acro> is an online assessment system, and these exercises can be embedded in a <pretext/> document. <acro>STACK</acro> is an acronym for <q>System for Teaching and Assessment using a Computer algebra Kernel.</q>  See <xref ref="topic-stack"/> for details.</p>
+
+        <p>STACK questions must be included as assets in <c>.xml</c> or <c>.yaml</c> format, one file per question. See <xref ref="topic-stack"/> for how this is done and best practices.</p>
+
+        <p>In the web output, STACK questions will be embedded and allow students to submit answer and get feedback.
+        Currently there is no way of collecting student submission data though.
+        For static outputs such as PDF, <pretext/> will try to generate a static version of the question.
+        As STACK questions contain HTML, it will use a heuristic to convert some HTML tags.
+        Others will simply be ignored. Interactive elements such as JSXGraph are currently not supported
+        and a reference to the online version is included instead of the question text.</p>
     </section>
 
     <section xml:id="overview-url">
