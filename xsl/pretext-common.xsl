@@ -34,9 +34,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:str="http://exslt.org/strings"
     xmlns:dyn="http://exslt.org/dynamic"
     extension-element-prefixes="pi exsl date str dyn"
-    xmlns:mb="https://pretextbook.org/"
     xmlns:pf="https://prefigure.org"
-    exclude-result-prefixes="mb"
 >
 
 <!-- PreTeXt common templates                             -->
@@ -7331,12 +7329,9 @@ Book (with parts), "section" at level 3
 
 
 <!-- Programming Language Names -->
-<!-- Packages for listing and syntax highlighting             -->
-<!-- have their own ideas about the names of languages        -->
-<!-- We use keys to perform the translation                   -->
-<!-- See: https://gist.github.com/frabad/4189876              -->
-<!-- for motivation and document() syntax for standalone file -->
-<!-- Also: see contributors in FCLA work                      -->
+<!-- Packages for listing and syntax highlighting      -->
+<!-- have their own ideas about the names of languages -->
+<!-- We use keys to perform the translation            -->
 
 <!-- The data: attribute is our usage, elements belong to     -->
 <!-- other packages. Blank means not explicitly supported.    -->
@@ -7360,7 +7355,7 @@ Book (with parts), "section" at level 3
 <!-- are available.                                   -->
 
 <!-- Our strings (@ptx) are always all-lowercase, no symbols, no punctuation -->
-<mb:programming>
+<xsl:variable name="programming-language-rtf">
     <!-- Procedural -->
     <language ptx="basic"       active=""            listings="Basic"            prism="basic"/>
     <language ptx="c"           active="c"           listings="C"                prism="c"/>
@@ -7402,20 +7397,19 @@ Book (with parts), "section" at level 3
     <language ptx="tex"         active=""            listings="[plain]TeX"       prism="tex"/>
     <language ptx="xml"         active=""            listings="XML"              prism="xml"/>
     <language ptx="xslt"        active=""            listings="XSLT"             prism="xml"/>
-</mb:programming>
+</xsl:variable>
+
+<xsl:variable name="programming-language-table"
+    select="exsl:node-set($programming-language-rtf)"/>
 
 <!-- Define the key for indexing into the data list -->
 <xsl:key name="proglang" match="language" use="@ptx" />
-<!-- And make a variable with the context for key lookups useing that key -->
-<!-- doing the 'document('')/*/mb:programming' repeatedly is expensive.   -->
-<!-- (Especially in program|pf[prism-language]                            -->
-<xsl:variable name="proglang-key-context" select="exsl:node-set(document('')/*/mb:programming)"/>
 
 <!-- Define variables for default active language - will be picked up by -->
 <!-- RS manifest and can be a different string than the raw language. -->
 <xsl:variable name="default-active-programming-language">
     <xsl:if test="$version-docinfo/programs/@language">
-        <xsl:for-each select="$proglang-key-context">
+        <xsl:for-each select="$programming-language-table">
             <xsl:value-of select="key('proglang', $version-docinfo/programs/@language)/@active" />
         </xsl:for-each>
     </xsl:if>
@@ -7452,7 +7446,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
-    <xsl:for-each select="$proglang-key-context">
+    <xsl:for-each select="$programming-language-table">
         <xsl:value-of select="key('proglang', $language)/@active" />
     </xsl:for-each>
 </xsl:template>
@@ -7463,21 +7457,10 @@ Book (with parts), "section" at level 3
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
-    <xsl:for-each select="$proglang-key-context">
+    <xsl:for-each select="$programming-language-table">
         <xsl:value-of select="key('proglang', $language)/@listings" />
     </xsl:for-each>
 </xsl:template>
-
-<!-- This works, without keys, and could be adapted to range over actual data in text -->
-<!-- For example, this approach is used for contributors to FCLA                      -->
-<!--
-<xsl:template match="*" mode="listings-language">
-    <xsl:variable name="language">
-        <xsl:value-of select="@language"/>
-    </xsl:variable>
-    <xsl:value-of select="document('')/*/mb:programming/language[@ptx=$language]/listings"/>
-</xsl:template>
--->
 
 <!-- A whole <program> node comes in,  -->
 <!-- text of prism name comes out -->
@@ -7485,7 +7468,7 @@ Book (with parts), "section" at level 3
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="get-programming-language"/>
     </xsl:variable>
-    <xsl:for-each select="$proglang-key-context">
+    <xsl:for-each select="$programming-language-table">
         <xsl:value-of select="key('proglang', $language)/@prism" />
     </xsl:for-each>
 </xsl:template>
