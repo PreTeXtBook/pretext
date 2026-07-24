@@ -1366,7 +1366,7 @@
     //       ans1: "student answer value",         // newer WW versions
     //       ...
     //     },
-    //     ww_version: "2.18"                     // or "2.16", "2.20", etc.
+    //     ww_version: "2.19"                     // or "2.20", etc.
     //   }
     //
     // Score calculation mirrors Runestone's processCurrentAnswers():
@@ -1649,7 +1649,6 @@
 
         // ── Reconstruct answerObj (matches Runestone's this.answerObj) ────────
         // Newer WeBWorK (2.20+) stores student answers in inputs_ref[key].
-        // Older versions (2.16–2.18) store them in rh_result.answers[key].student_value
         // or rh_result.answers[key].original_student_ans.
         // MathQuill answers are keyed "MaThQuIlL_<key>" and go into mqAnswers.
         var answerValues = {};

@@ -1213,7 +1213,7 @@ ENDDOCUMENT();
                     and ask the reader to extract some information from that graph.
                 </p>
                 <p>
-                    If your <webwork/> server is version 2.16 or later,
+                    If your <webwork/> server is version 2.19 or later,
                     <webwork/> problems can process <tag>latex-image</tag> code. Here is an example.
                 </p>
                 <exercise label="static-latex-image">
