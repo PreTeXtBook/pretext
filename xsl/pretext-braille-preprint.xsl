@@ -1499,62 +1499,64 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- as quotation mark styles, since we are limited ourselves to   -->
 <!-- English language documents by larger decisions elsewhere.     -->
 
-<!-- Unicode Character 'NO-BREAK SPACE' (U+00A0)   -->
-<!-- yields a template for "nbsp" in -common       -->
-<!-- liblouis seems to pass this through in-kind   -->
-<!-- Used in the manufacture of a cross-reference, -->
-<!-- we will want to strip just before it ends up  -->
-<!-- in BRF .                                      -->
-<xsl:template name="nbsp-character">
-    <xsl:text>&#x00A0;</xsl:text>
+<!-- Each character reads the Unicode column of the representation -->
+<!-- table in  pretext-common.xsl.  A "braille" column entry       -->
+<!-- substitutes where liblouis lacks the true code point; the      -->
+<!-- entry "none" marks a character outside this repertoire,        -->
+<!-- which warns, keeping the gap visible.                          -->
+<!--                                                                -->
+<!-- Cells described in the liblouis table, for each Unicode        -->
+<!-- character rendered here:                                       -->
+<!--                                                                -->
+<!--   nbsp (U+00A0): passed through in-kind; used in the           -->
+<!--     manufacture of a cross-reference, we will want to strip    -->
+<!--     just before it ends up in BRF                              -->
+<!--   ndash (U+2013): 6-36                                         -->
+<!--   mdash (U+2014): 6-36                                         -->
+<!--   thin-space (U+2009): 0, a braille space                     -->
+<!--   copyright (U+00A9): 45-14                                    -->
+<!--   registered (U+00AE): 45-1235                                 -->
+<!--   trademark (U+2122): 45-2345                                  -->
+<!--   degree (U+00B0): 45-245                                      -->
+<!--   prime (U+2032): 2356                                         -->
+<!--   dblprime (U+2033): 2356-2356                                 -->
+<!--   langle (U+3008): 4-126                                       -->
+<!--   rangle (U+3009): 4-345                                       -->
+<!--   ellipsis (U+2026): 256-256-256; [BANA-2016] Appendix G,      -->
+<!--     UEB is three periods/256                                   -->
+<!--   midpoint (U+00B7): 4-16                                      -->
+<!--   swungdash: faked with TILDE (U+007E)                         -->
+<!--   pilcrow (U+00B6): 45-1234                                    -->
+<!--   section-mark (U+00A7): 45-234                                -->
+<!--   minus (U+2212): 5-36                                         -->
+<!--   times (U+00D7): 5-236                                        -->
+<!--   solidus: faked with SOLIDUS (U+002F)                         -->
+<!--   obelus (U+00F7): 5-34                                        -->
+<!--   plusminus (U+00B1): 456-235                                  -->
+<xsl:template match="char" mode="character">
+    <xsl:choose>
+        <xsl:when test="@braille = 'none'">
+            <xsl:call-template name="warn-unimplemented-character">
+                <xsl:with-param name="char-name" select="@name"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="@braille">
+            <xsl:value-of select="@braille"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="@unicode"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<!-- Unicode Character 'EN DASH' (U+2013) -->
-<!-- Liblouis: 6-36                       -->
-<xsl:template name="ndash-character">
-    <xsl:text>&#x2013;</xsl:text>
+<!-- the CJK angle brackets: the liblouis table defines cells -->
+<!-- (above) only for these, not for the mathematical pair    -->
+<!-- carried by the representation table                      -->
+<xsl:template match="char[@name = 'langle']" mode="character">
+    <xsl:text>&#x3008;</xsl:text>
 </xsl:template>
-
-<!-- Unicode Character 'EM DASH' (U+2014) -->
-<!-- Liblouis: 6-36                       -->
-<xsl:template name="mdash-character">
-    <xsl:text>&#x2014;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'COPYRIGHT SIGN' (U+00A9) -->
-<!-- Liblouis: 45-14                             -->
-<xsl:template name="copyright-character">
-    <xsl:text>&#x00A9;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'REGISTERED SIGN' (U+00AE) -->
-<!-- Liblouis: 45-1235                            -->
-<xsl:template name="registered-character">
-    <xsl:text>&#x00AE;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'TRADE MARK SIGN' (U+2122) -->
-<!-- Liblouis: 45-2345                            -->
-<xsl:template name="trademark-character">
-    <xsl:text>&#x2122;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'DEGREE SIGN' (U+00B0) -->
-<!-- Liblouis: 45-245                         -->
-<xsl:template name="degree-character">
-    <xsl:text>&#x00B0;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'PRIME' (U+2032) -->
-<!-- Liblouis: 2356                     -->
-<xsl:template name="prime-character">
-    <xsl:text>&#x2032;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'DOUBLE PRIME' (U+2033) -->
-<!-- Liblouis: 2356-2356                       -->
-<xsl:template name="dblprime-character">
-    <xsl:text>&#x2033;</xsl:text>
+<xsl:template match="char[@name = 'rangle']" mode="character">
+    <xsl:text>&#x3009;</xsl:text>
 </xsl:template>
 
 <!-- Unicode Character 'LEFT SINGLE QUOTATION MARK' (U+2018) -->
@@ -1581,80 +1583,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x201D;</xsl:text>
 </xsl:template>
 
-<!-- Unicode Character 'LEFT ANGLE BRACKET' (U+3008) -->
-<!-- Liblouis: 4-126                                 -->
-<xsl:template name="langle-character">
-    <xsl:text>&#x3008;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'RIGHT ANGLE BRACKET' (U+3009) -->
-<!-- Liblouis: 4-345                                  -->
-<xsl:template name="rangle-character">
-    <xsl:text>&#x3009;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'HORIZONTAL ELLIPSIS' (U+2026) -->
-<!-- Liblouis: 256-256-256                            -->
-<!-- [BANA-2016] Appendix G, UEB is three periods/256 -->
-<xsl:template name="ellipsis-character">
-    <xsl:text>&#x2026;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'MIDDLE DOT' (U+00B7) -->
-<!-- Liblouis: 4-16                          -->
-<xsl:template name="midpoint-character">
-    <xsl:text>&#x00B7;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'SWUNG DASH' (U+2053) -->
-<!-- instead faking it with                  -->
-<!-- Unicode Character 'TILDE' (U+007E)      -->
-<xsl:template name="swungdash-character">
-    <xsl:text>&#x007E;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'PILCROW SIGN' (U+00B6) -->
-<!-- Liblouis: 45-1234                         -->
-<xsl:template name="pilcrow-character">
-    <xsl:text>&#x00B6;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'SECTION SIGN' (U+00A7) -->
-<!-- Liblouis: 45-234                          -->
-<xsl:template name="section-mark-character">
-    <xsl:text>&#x00A7;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'MINUS SIGN' (U+2212) -->
-<!-- Liblouis: 5-36                          -->
-<xsl:template name="minus-character">
-    <xsl:text>&#x2212;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'MULTIPLICATION SIGN' (U+00D7) -->
-<!-- Liblouis: 5-236                                  -->
-<xsl:template name="times-character">
-    <xsl:text>&#x00D7;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'FRACTION SLASH' (U+2044) -->
-<!-- instead faking it with                      -->
-<!-- Unicode Character 'SOLIDUS' (U+002F)        -->
-<xsl:template name="solidus-character">
-    <xsl:text>&#x002F;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'DIVISION SIGN' (U+00F7) -->
-<!-- Liblouis: 5-34                             -->
-<xsl:template name="obelus-character">
-    <xsl:text>&#x00F7;</xsl:text>
-</xsl:template>
-
-<!-- Unicode Character 'PLUS-MINUS SIGN' (U+00B1) -->
-<!-- Liblouis: 456-235                            -->
-<xsl:template name="plusminus-character">
-    <xsl:text>&#x00B1;</xsl:text>
-</xsl:template>
 
 <!-- Icons -->
 <!-- Just the four arrows, unsure about the rest -->

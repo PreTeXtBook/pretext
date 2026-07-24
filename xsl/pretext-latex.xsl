@@ -986,7 +986,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- mining one "copyright" element at a time.               -->
     <xsl:for-each select="$bibinfo/copyright">
         <xsl:text>\noindent</xsl:text>
-        <xsl:call-template name="copyright-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'copyright'"/>
+        </xsl:call-template>
         <xsl:apply-templates select="year" />
         <xsl:text>\quad{}</xsl:text>
         <xsl:apply-templates select="holder" />

@@ -2829,7 +2829,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:for-each select="line">
                 <fo:block text-align="end">
                     <xsl:if test="position() = 1">
-                        <xsl:call-template name="mdash-character"/>
+                        <xsl:call-template name="character">
+                            <xsl:with-param name="name" select="'mdash'"/>
+                        </xsl:call-template>
                     </xsl:if>
                     <xsl:apply-templates/>
                 </fo:block>
@@ -2837,7 +2839,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <fo:block text-align="end">
-                <xsl:call-template name="mdash-character"/>
+                <xsl:call-template name="character">
+                    <xsl:with-param name="name" select="'mdash'"/>
+                </xsl:call-template>
                 <xsl:apply-templates/>
             </fo:block>
         </xsl:otherwise>
@@ -3512,19 +3516,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </fo:inline>
 </xsl:template>
 
-<!-- The Unicode code points below match the HTML conversion. -->
-<xsl:template name="nbsp-character">
-    <xsl:text>&#xa0;</xsl:text>
-</xsl:template>
-<xsl:template name="ndash-character">
-    <xsl:text>&#x2013;</xsl:text>
-</xsl:template>
-<xsl:template name="mdash-character">
-    <xsl:text>&#x2014;</xsl:text>
+<!-- Most characters read the Unicode code point straight from the -->
+<!-- representation table in  pretext-common.xsl; the code points   -->
+<!-- match the HTML conversion.  The exceptions below borrow the    -->
+<!-- symbol font for glyphs missing from the main (serif) face, or  -->
+<!-- are otherwise particular to this conversion.                   -->
+<xsl:template match="char" mode="character">
+    <xsl:choose>
+        <xsl:when test="@unicode">
+            <xsl:value-of select="@unicode"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="warn-unimplemented-character">
+                <xsl:with-param name="char-name" select="@name"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 <!-- the thin space is missing from the main (serif) face, so it -->
 <!-- borrows the symbol font, as the narrow no-break space does   -->
-<xsl:template name="thin-space-character">
+<xsl:template match="char[@name = 'thin-space']" mode="character">
     <fo:inline font-family="{$font-family-symbol}">
         <xsl:text>&#x2009;</xsl:text>
     </fo:inline>
@@ -3538,73 +3549,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <!-- the white square brackets are missing from the main (serif)  -->
 <!-- face, so they borrow the symbol font, as the tombstone does  -->
-<xsl:template name="ldblbracket-character">
+<xsl:template match="char[@name = 'ldblbracket']" mode="character">
     <fo:inline font-family="{$font-family-symbol}">
         <xsl:text>&#x27e6;</xsl:text>
     </fo:inline>
 </xsl:template>
-<xsl:template name="rdblbracket-character">
+<xsl:template match="char[@name = 'rdblbracket']" mode="character">
     <fo:inline font-family="{$font-family-symbol}">
         <xsl:text>&#x27e7;</xsl:text>
     </fo:inline>
 </xsl:template>
-<!-- the *mathematical* angle brackets (U+27E8, U+27E9), missing  -->
-<!-- from the main (serif) face, so they borrow the symbol font;  -->
-<!-- the CJK pair (U+3008, U+3009) is in no embedded font at all   -->
-<xsl:template name="langle-character">
+<!-- the mathematical angle brackets are missing from the main -->
+<!-- (serif) face, so they borrow the symbol font, as the      -->
+<!-- tombstone does                                            -->
+<xsl:template match="char[@name = 'langle']" mode="character">
     <fo:inline font-family="{$font-family-symbol}">
         <xsl:text>&#x27e8;</xsl:text>
     </fo:inline>
 </xsl:template>
-<xsl:template name="rangle-character">
+<xsl:template match="char[@name = 'rangle']" mode="character">
     <fo:inline font-family="{$font-family-symbol}">
         <xsl:text>&#x27e9;</xsl:text>
     </fo:inline>
 </xsl:template>
-<xsl:template name="ellipsis-character">
-    <xsl:text>&#x2026;</xsl:text>
-</xsl:template>
-<xsl:template name="midpoint-character">
-    <xsl:text>&#xb7;</xsl:text>
-</xsl:template>
 <!-- the swung dash is missing from the main (serif) face, so it -->
 <!-- borrows the symbol font, as the tombstone does              -->
-<xsl:template name="swungdash-character">
+<xsl:template match="char[@name = 'swungdash']" mode="character">
     <fo:inline font-family="{$font-family-symbol}">
         <xsl:text>&#x2053;</xsl:text>
     </fo:inline>
 </xsl:template>
-<xsl:template name="permille-character">
-    <xsl:text>&#x2030;</xsl:text>
-</xsl:template>
-<xsl:template name="pilcrow-character">
-    <xsl:text>&#xb6;</xsl:text>
-</xsl:template>
-<xsl:template name="section-mark-character">
-    <xsl:text>&#xa7;</xsl:text>
-</xsl:template>
-<xsl:template name="minus-character">
-    <xsl:text>&#x2212;</xsl:text>
-</xsl:template>
-<xsl:template name="times-character">
-    <xsl:text>&#xd7;</xsl:text>
-</xsl:template>
-<xsl:template name="solidus-character">
-    <xsl:text>&#x2044;</xsl:text>
-</xsl:template>
-<xsl:template name="obelus-character">
-    <xsl:text>&#xf7;</xsl:text>
-</xsl:template>
-<xsl:template name="plusminus-character">
-    <xsl:text>&#xb1;</xsl:text>
-</xsl:template>
-<xsl:template name="copyright-character">
-    <xsl:text>&#xa9;</xsl:text>
-</xsl:template>
 <!-- the sound-recording and service marks borrow the symbol font -->
-<xsl:template name="phonomark-character">
+<xsl:template match="char[@name = 'phonomark']" mode="character">
     <fo:inline font-family="{$font-family-symbol}">
         <xsl:text>&#x2117;</xsl:text>
+    </fo:inline>
+</xsl:template>
+<xsl:template match="char[@name = 'servicemark']" mode="character">
+    <fo:inline font-family="{$font-family-symbol}">
+        <xsl:text>&#x2120;</xsl:text>
     </fo:inline>
 </xsl:template>
 <!-- The copyleft symbol (U+1F12F) is in no embeddable font, so it  -->
@@ -3612,38 +3595,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- parentheses.  The main font lacks the reversed "c", and it sits -->
 <!-- between the parentheses with no surrounding space, so it is     -->
 <!-- named from the symbol font explicitly, as the primes are.       -->
-<xsl:template name="copyleft-character">
+<xsl:template match="char[@name = 'copyleft']" mode="character">
     <xsl:text>(</xsl:text>
     <fo:inline font-family="{$font-family-symbol}">
         <xsl:text>&#x2184;</xsl:text>
     </fo:inline>
     <xsl:text>)</xsl:text>
 </xsl:template>
-<xsl:template name="registered-character">
-    <xsl:text>&#xae;</xsl:text>
-</xsl:template>
-<xsl:template name="trademark-character">
-    <xsl:text>&#x2122;</xsl:text>
-</xsl:template>
-<xsl:template name="servicemark-character">
-    <fo:inline font-family="{$font-family-symbol}">
-        <xsl:text>&#x2120;</xsl:text>
-    </fo:inline>
-</xsl:template>
-<xsl:template name="degree-character">
-    <xsl:text>&#xb0;</xsl:text>
-</xsl:template>
 <!-- the prime and double prime (minutes and seconds, feet and       -->
 <!-- inches) are missing from the main (serif) face; because they     -->
 <!-- sit *within* a measurement, with no surrounding space, FOP's     -->
 <!-- per-word font selection cannot reach the symbol font for them,   -->
 <!-- so each is named explicitly, as the tombstone is.                -->
-<xsl:template name="prime-character">
+<xsl:template match="char[@name = 'prime']" mode="character">
     <fo:inline font-family="{$font-family-symbol}">
         <xsl:text>&#x2032;</xsl:text>
     </fo:inline>
 </xsl:template>
-<xsl:template name="dblprime-character">
+<xsl:template match="char[@name = 'dblprime']" mode="character">
     <fo:inline font-family="{$font-family-symbol}">
         <xsl:text>&#x2033;</xsl:text>
     </fo:inline>
@@ -4251,11 +4220,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <fo:block>
-            <xsl:call-template name="langle-character"/>
+            <xsl:call-template name="character">
+                <xsl:with-param name="name" select="'langle'"/>
+            </xsl:call-template>
             <xsl:apply-templates select="." mode="number"/>
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="." mode="title-full"/>
-            <xsl:call-template name="rangle-character"/>
+            <xsl:call-template name="character">
+                <xsl:with-param name="name" select="'rangle'"/>
+            </xsl:call-template>
             <xsl:text> </xsl:text>
             <xsl:text>&#x2261;</xsl:text>
         </fo:block>
@@ -4293,7 +4266,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$target" mode="unique-id"/>
     </xsl:variable>
     <fo:block start-indent="2em">
-        <xsl:call-template name="langle-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'langle'"/>
+        </xsl:call-template>
         <xsl:apply-templates select="$target" mode="title-full"/>
         <xsl:text> </xsl:text>
         <fo:inline font-size="70%">
@@ -4305,7 +4280,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </fo:basic-link>
             <xsl:text>]</xsl:text>
         </fo:inline>
-        <xsl:call-template name="rangle-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'rangle'"/>
+        </xsl:call-template>
     </fo:block>
 </xsl:template>
 

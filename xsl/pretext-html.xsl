@@ -1279,7 +1279,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="bibinfo/copyright">
     <div class="para copyright">
-        <xsl:call-template name="copyright-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'copyright'"/>
+        </xsl:call-template>
         <xsl:apply-templates select="year" />
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="holder" />
@@ -5323,11 +5325,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-generic">
         <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
-            <xsl:call-template name="langle-character"/>
+            <xsl:call-template name="character">
+                <xsl:with-param name="name" select="'langle'"/>
+            </xsl:call-template>
             <xsl:apply-templates select="." mode="number"/>
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="." mode="title-full"/>
-            <xsl:call-template name="rangle-character"/>
+            <xsl:call-template name="character">
+                <xsl:with-param name="name" select="'rangle'"/>
+            </xsl:call-template>
             <!--  U+2261 ≡ IDENTICAL TO -->
             <xsl:text> &#x2261;</xsl:text>
         </xsl:with-param>
@@ -8847,56 +8853,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </s>
 </xsl:template>
 
-<!-- Copyright symbol -->
-<xsl:template name="copyright-character">
-    <xsl:text>&#xa9;</xsl:text>
-</xsl:template>
-
-<!-- Phonomark symbol -->
-<xsl:template name="phonomark-character">
-    <xsl:text>&#x2117;</xsl:text>
-</xsl:template>
-
-<!-- Copyleft symbol -->
-<!-- May not be universally available in fonts                 -->
-<!-- Open C (U+254) plus Combining Circle (U+20dd) can imitate -->
-<xsl:template name="copyleft-character">
-    <xsl:text>&#x1f12f;</xsl:text>
-</xsl:template>
-
-<!-- Registered symbol -->
-<!-- Bringhurst: should be superscript                    -->
-<!-- We consider it a font mistake if not superscripted,  -->
-<!-- since if we use a "sup" tag then a correct font will -->
-<!-- get way too small                                    -->
-<xsl:template name="registered-character">
-    <xsl:text>&#xae;</xsl:text>
-</xsl:template>
-
-<!-- Trademark symbol -->
-<xsl:template name="trademark-character">
-    <xsl:text>&#x2122;</xsl:text>
-</xsl:template>
-
-<!-- Servicemark symbol -->
-<xsl:template name="servicemark-character">
-    <xsl:text>&#x2120;</xsl:text>
-</xsl:template>
-
-<!-- Degree -->
-<xsl:template name="degree-character">
-    <xsl:text>&#xb0;</xsl:text>
-</xsl:template>
-
-<!-- Prime -->
-<xsl:template name="prime-character">
-    <xsl:text>&#x2032;</xsl:text>
-</xsl:template>
-
-<xsl:template name="dblprime-character">
-    <xsl:text>&#x2033;</xsl:text>
-</xsl:template>
-
 <!-- Characters for Tagging Equations -->
 
 <!-- 'SIX POINTED BLACK STAR' (U+2736) -->
@@ -9192,109 +9148,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Left Double Bracket -->
-<!-- MATHEMATICAL LEFT WHITE SQUARE BRACKET -->
-<xsl:template name="ldblbracket-character">
-    <xsl:text>&#x27e6;</xsl:text>
-</xsl:template>
-
-<!-- Right Double Bracket -->
-<!-- MATHEMATICAL RIGHT WHITE SQUARE BRACKET -->
-<xsl:template name="rdblbracket-character">
-    <xsl:text>&#x27e7;</xsl:text>
-</xsl:template>
-
-<!-- Left Angle Bracket -->
-<!-- LEFT ANGLE BRACKET -->
-<!-- U+2329 was once used and caused a validator warning      -->
-<!-- "Text run is not in Unicode Normalization Form C" (NFC)  -->
-<xsl:template name="langle-character">
-    <xsl:text>&#x3008;</xsl:text>
-</xsl:template>
-
-<!-- Right Angle Bracket -->
-<!-- RIGHT ANGLE BRACKET -->
-<!-- U+232A was once used and caused a validator warning      -->
-<!-- "Text run is not in Unicode Normalization Form C" (NFC)  -->
-<xsl:template name="rangle-character">
-    <xsl:text>&#x3009;</xsl:text>
-</xsl:template>
-
 
 <!-- Other Miscellaneous Symbols, Constructions -->
-
-<!-- Ellipsis (dots), for text, not math -->
-<xsl:template name="ellipsis-character">
-    <xsl:text>&#x2026;</xsl:text>
-</xsl:template>
-
-<!-- Midpoint -->
-<!-- A centered dot used sometimes like a decorative dash -->
-<!-- Bringhurst: Not Unicode +387, "GREEK ANO TELEIA"     -->
-<xsl:template name="midpoint-character">
-    <xsl:text>&#xb7;</xsl:text>
-</xsl:template>
-
-<!-- Swung Dash -->
-<!-- A decorative dash, like a tilde, but bigger, and centered -->
-<xsl:template name="swungdash-character">
-    <xsl:text>&#x2053;</xsl:text>
-</xsl:template>
-
-<!-- Per Mille -->
-<!-- Or, per thousand, like a percent sign -->
-<xsl:template name="permille-character">
-    <xsl:text>&#x2030;</xsl:text>
-</xsl:template>
-
-<!-- Pilcrow -->
-<!-- Often used to mark the start of a paragraph -->
-<xsl:template name="pilcrow-character">
-    <xsl:text>&#xb6;</xsl:text>
-</xsl:template>
-
-<!-- Section Mark -->
-<!-- The stylized double-S to indicate section numbers -->
-<xsl:template name="section-mark-character">
-    <xsl:text>&#xa7;</xsl:text>
-</xsl:template>
-
-<!-- Minus -->
-<!-- A hyphen/dash for use in text as subtraction or negation-->
-<xsl:template name="minus-character">
-    <xsl:text>&#x2212;</xsl:text>
-</xsl:template>
-
-<!-- Times -->
-<!-- A "multiplication sign" symbol for use in text   -->
-<!-- Styled to enhance, consensus at Google Group was -->
-<!-- font-size: larger; vertical-align: -.2ex;        -->
-<xsl:template name="times-character">
-    <xsl:element name="span">
-        <xsl:attribute name="class">
-            <xsl:text>times-sign</xsl:text>
-        </xsl:attribute>
-        <xsl:text>&#xd7;</xsl:text>
-    </xsl:element>
-</xsl:template>
-
-<!-- Solidus -->
-<!-- Fraction bar, not as steep as a forward slash -->
-<xsl:template name="solidus-character">
-    <xsl:text>&#x2044;</xsl:text>
-</xsl:template>
-
-<!-- Obelus -->
-<!-- A "division" symbol for use in text -->
-<xsl:template name="obelus-character">
-    <xsl:text>&#xf7;</xsl:text>
-</xsl:template>
-
-<!-- Plus/Minus -->
-<!-- The combined symbol -->
-<xsl:template name="plusminus-character">
-    <xsl:text>&#xb1;</xsl:text>
-</xsl:template>
 
 <!-- Foreign words/idioms -->
 <!-- Rutter, Web Typography, p.50 advocates a "span" with      -->
@@ -9490,35 +9345,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Special Characters -->
 <!-- ################## -->
 
-<!-- These are specific instances of abstract templates        -->
-<!-- See the similar section of  pretext-common.xsl  for more -->
+<!-- Each character is the bare Unicode code point, read from the -->
+<!-- representation table in  pretext-common.xsl; an exception    -->
+<!-- needing markup overrides the modal template, per character   -->
 
-<!-- Non-breaking space, which "joins" two words as a unit            -->
-<!-- Using &nbsp; does not travel well into node-set() in common file -->
-<!-- http://stackoverflow.com/questions/31870                         -->
-<!-- /using-a-html-entity-in-xslt-e-g-nbsp                            -->
-<!-- Should create UTF-8 anyway:                                      -->
-<!-- https://html.spec.whatwg.org/multipage/semantics.html#charset    -->
-
-<xsl:template name="nbsp-character">
-    <xsl:text>&#xa0;</xsl:text>
+<xsl:template match="char" mode="character">
+    <xsl:choose>
+        <xsl:when test="@unicode">
+            <xsl:value-of select="@unicode"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="warn-unimplemented-character">
+                <xsl:with-param name="char-name" select="@name"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<xsl:template name="ndash-character">
-    <xsl:text>&#8211;</xsl:text>
-</xsl:template>
-
-<xsl:template name="mdash-character">
-    <xsl:text>&#8212;</xsl:text>
-</xsl:template>
-
-<!-- The abstract template for "mdash" consults a publisher option -->
-<!-- for thin space, or no space, surrounding an em-dash.  So the  -->
-<!-- "thin-space-character" is needed for that purpose, and does   -->
-<!-- not have an associated empty PTX element.                     -->
-
-<xsl:template name="thin-space-character">
-    <xsl:text>&#8201;</xsl:text>
+<!-- Times -->
+<!-- A "multiplication sign" symbol for use in text   -->
+<!-- Styled to enhance, consensus at Google Group was -->
+<!-- font-size: larger; vertical-align: -.2ex;        -->
+<xsl:template match="char[@name = 'times']" mode="character">
+    <xsl:element name="span">
+        <xsl:attribute name="class">
+            <xsl:text>times-sign</xsl:text>
+        </xsl:attribute>
+        <xsl:text>&#xd7;</xsl:text>
+    </xsl:element>
 </xsl:template>
 
 <!--       -->
@@ -9623,7 +9477,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fragref">
     <xsl:variable name="target" select="id(@ref)"/>
     <span>
-        <xsl:call-template name="langle-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'langle'"/>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="xref-link">
             <xsl:with-param name="target" select="$target" />
             <!-- "fragref" is isomorpic to "xref" as a link -->
@@ -9634,7 +9490,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="$target" mode="number"/>
-        <xsl:call-template name="rangle-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'rangle'"/>
+        </xsl:call-template>
     </span>
     <br/>
 </xsl:template>
