@@ -1487,9 +1487,15 @@ Book (with parts), "section" at level 3
     <xsl:if test="$rows &gt; 1 or $cols &gt; 1">
         <xsl:text> (</xsl:text>
         <xsl:value-of select="$rows"/>
-        <xsl:call-template name="nbsp-character"/>
-        <xsl:call-template name="times-character"/>
-        <xsl:call-template name="nbsp-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'nbsp'"/>
+        </xsl:call-template>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'times'"/>
+        </xsl:call-template>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'nbsp'"/>
+        </xsl:call-template>
         <xsl:value-of select="$cols"/>
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="." mode="type-name">
@@ -8292,7 +8298,9 @@ Book (with parts), "section" at level 3
                     <xsl:choose>
                         <xsl:when test="$b-is-biblio-target">
                             <xsl:text>,</xsl:text>
-                            <xsl:call-template name="nbsp-character"/>
+                            <xsl:call-template name="character">
+                                <xsl:with-param name="name" select="'nbsp'"/>
+                            </xsl:call-template>
                             <!-- this info should not be in an attribute! -->
                             <xsl:apply-templates select="@detail" />
                         </xsl:when>
@@ -8411,7 +8419,9 @@ Book (with parts), "section" at level 3
                         <xsl:apply-templates/>
                     </xsl:with-param>
                 </xsl:apply-templates>
-                <xsl:call-template name="ndash-character"/>
+                <xsl:call-template name="character">
+                    <xsl:with-param name="name" select="'ndash'"/>
+                </xsl:call-template>
                 <xsl:apply-templates select="." mode="xref-text" >
                     <xsl:with-param name="target" select="$target-two" />
                     <xsl:with-param name="text-style" select="$text-style-two" />
@@ -9122,7 +9132,9 @@ Book (with parts), "section" at level 3
             <xsl:text> </xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:call-template name="nbsp-character"/>
+            <xsl:call-template name="character">
+                <xsl:with-param name="name" select="'nbsp'"/>
+            </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -9268,7 +9280,9 @@ Book (with parts), "section" at level 3
                     <!-- connector, internationalize -->
                     <xsl:text> of </xsl:text>
                     <xsl:apply-templates select="$highest-match" mode="type-name" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:call-template name="character">
+                        <xsl:with-param name="name" select="'nbsp'"/>
+                    </xsl:call-template>
                     <xsl:apply-templates select="$highest-match" mode="xref-number">
                         <xsl:with-param name="xref" select="." />
                     </xsl:apply-templates>
@@ -9343,7 +9357,9 @@ Book (with parts), "section" at level 3
             <!-- connector, internationalize -->
             <xsl:text> of </xsl:text>
             <xsl:apply-templates select="$targets-list" mode="type-name" />
-            <xsl:call-template name="nbsp-character"/>
+            <xsl:call-template name="character">
+                <xsl:with-param name="name" select="'nbsp'"/>
+            </xsl:call-template>
             <xsl:apply-templates select="$targets-list" mode="xref-number">
                 <xsl:with-param name="xref" select="." />
             </xsl:apply-templates>
@@ -9554,41 +9570,12 @@ Book (with parts), "section" at level 3
 <!-- Dashes and hyphens - worth reviewing       -->
 <!-- http://www.cs.tut.fi/~jkorpela/dashes.html -->
 
-<xsl:template name="nbsp-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'nbsp'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="nbsp">
-    <xsl:call-template name="nbsp-character"/>
-</xsl:template>
-
-<xsl:template name="ndash-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'ndash'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="ndash">
-    <xsl:call-template name="ndash-character"/>
-</xsl:template>
-
 <!-- An mdash may have thin space around it, otherwise it        -->
 <!-- should have none.  It might be difficult to enforce this    -->
 <!-- (we could!), but we don't.  Instead, we make the thin-space -->
-<!-- version a publisher option.  So we need two base characters -->
-<!-- as abstract templates and do everything else here.          -->
-
-<xsl:template name="mdash-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'mdash'"/>
-    </xsl:call-template>
-</xsl:template>
-
-<xsl:template name="thin-space-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'thin-space'"/>
-    </xsl:call-template>
-</xsl:template>
+<!-- version a publisher option.  So the "thin-space" character  -->
+<!-- joins the representation table for that purpose, and the    -->
+<!-- assembly of the pieces happens here.                        -->
 
 <!-- The variable, surrounding space. This approach is   -->
 <!-- executed once, so not local to template for "mdash" -->
@@ -9598,20 +9585,20 @@ Book (with parts), "section" at level 3
             <xsl:text />
         </xsl:when>
         <xsl:when test="$emdash-space='thin'">
-            <xsl:call-template name="thin-space-character"/>
+            <xsl:call-template name="character">
+                <xsl:with-param name="name" select="'thin-space'"/>
+            </xsl:call-template>
         </xsl:when>
     </xsl:choose>
 </xsl:variable>
 
 <xsl:template match="mdash">
     <xsl:value-of select="$emdash-space-char"/>
-    <xsl:call-template name="mdash-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'mdash'"/>
+    </xsl:call-template>
     <xsl:value-of select="$emdash-space-char"/>
 </xsl:template>
-
-<!-- ################## -->
-<!-- Special Characters -->
-<!-- ################## -->
 
 
 <!-- These are characters which may look really bad                 -->
@@ -9750,6 +9737,16 @@ Book (with parts), "section" at level 3
     </xsl:call-template>
 </xsl:template>
 
+<!-- The empty source elements share one dispatcher; "mdash" is an  -->
+<!-- exception (publisher-elected surrounding space), and the       -->
+<!-- "thin-space" row has no element of its own (it exists for the  -->
+<!-- "mdash" machinery and internal use)                            -->
+<xsl:template match="nbsp|ndash|ldblbracket|rdblbracket|langle|rangle|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|minus|times|solidus|obelus|plusminus|copyright|phonomark|copyleft|registered|trademark|servicemark|degree|prime|dblprime">
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="local-name()"/>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- A given document may use for different characters for quotations:         -->
 <!--                                                                           -->
 <!--     left/right (open/close)  by  primary/secondary                        -->
@@ -9801,267 +9798,34 @@ Book (with parts), "section" at level 3
     <xsl:apply-templates select="." mode="rq-character"/>
 </xsl:template>
 
-<!-- Left Double Bracket -->
-<xsl:template name="ldblbracket-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'ldblbracket'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="ldblbracket">
-    <xsl:call-template name="ldblbracket-character"/>
-</xsl:template>
 
-<!-- Right Double Bracket -->
-<xsl:template name="rdblbracket-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'rdblbracket'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="rdblbracket">
-    <xsl:call-template name="rdblbracket-character"/>
-</xsl:template>
 
-<!-- Left Angle Bracket -->
-<xsl:template name="langle-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'langle'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="langle">
-    <xsl:call-template name="langle-character"/>
-</xsl:template>
 
-<!-- Right Angle Bracket -->
-<xsl:template name="rangle-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'rangle'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="rangle">
-    <xsl:call-template name="rangle-character"/>
-</xsl:template>
 
-<!-- Ellipsis (dots), for text, not math -->
-<xsl:template name="ellipsis-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'ellipsis'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="ellipsis">
-    <xsl:call-template name="ellipsis-character"/>
-</xsl:template>
 
-<!-- Midpoint -->
-<!-- A centered dot used sometimes like a decorative dash -->
-<xsl:template name="midpoint-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'midpoint'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="midpoint">
-    <xsl:call-template name="midpoint-character"/>
-</xsl:template>
 
-<!-- Swung Dash -->
-<!-- A decorative dash, like a tilde, but bigger, and centered -->
-<xsl:template name="swungdash-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'swungdash'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="swungdash">
-    <xsl:call-template name="swungdash-character"/>
-</xsl:template>
 
-<!-- Per Mille -->
-<!-- Or, per thousand, like a percent sign -->
-<xsl:template name="permille-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'permille'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="permille">
-    <xsl:call-template name="permille-character"/>
-</xsl:template>
 
-<!-- Pilcrow -->
-<!-- Often used to mark the start of a paragraph -->
-<xsl:template name="pilcrow-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'pilcrow'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="pilcrow">
-    <xsl:call-template name="pilcrow-character"/>
-</xsl:template>
 
-<!-- Section Mark -->
-<!-- The stylized double-S to indicate section numbers -->
-<xsl:template name="section-mark-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'section-mark'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="section-mark">
-    <xsl:call-template name="section-mark-character"/>
-</xsl:template>
 
-<!-- Minus -->
-<!-- A hyphen/dash for use in text as subtraction or negation-->
-<xsl:template name="minus-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'minus'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="minus">
-    <xsl:call-template name="minus-character"/>
-</xsl:template>
 
-<!-- Times -->
-<!-- A "multiplication sign" symbol for use in text -->
-<xsl:template name="times-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'times'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="times">
-    <xsl:call-template name="times-character"/>
-</xsl:template>
 
-<!-- Solidus -->
-<!-- Fraction bar, not as steep as a forward slash -->
-<xsl:template name="solidus-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'solidus'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="solidus">
-    <xsl:call-template name="solidus-character"/>
-</xsl:template>
 
-<!-- Obelus -->
-<!-- A "division" symbol for use in text -->
-<xsl:template name="obelus-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'obelus'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="obelus">
-    <xsl:call-template name="obelus-character"/>
-</xsl:template>
 
-<!-- Plus/Minus -->
-<!-- The combined symbol -->
-<xsl:template name="plusminus-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'plusminus'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="plusminus">
-    <xsl:call-template name="plusminus-character"/>
-</xsl:template>
 
-<!-- Copyright -->
-<!-- Bringhurst: on baseline (i.e. not superscript) -->
-<xsl:template name="copyright-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'copyright'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="copyright">
-    <xsl:call-template name="copyright-character"/>
-</xsl:template>
 
-<!-- Phonomark -->
-<!-- copyright on sound recordings                 -->
-<!-- Bringhurst: counterpart copyright on baseline -->
-<xsl:template name="phonomark-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'phonomark'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="phonomark">
-    <xsl:call-template name="phonomark-character"/>
-</xsl:template>
 
-<!-- Copyleft -->
-<!-- Bringhurst: counterpart copyright on baseline -->
-<xsl:template name="copyleft-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'copyleft'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="copyleft">
-    <xsl:call-template name="copyleft-character"/>
-</xsl:template>
 
-<!-- Registered -->
-<!-- Bringhurst: should be superscript -->
-<xsl:template name="registered-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'registered'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="registered">
-    <xsl:call-template name="registered-character"/>
-</xsl:template>
 
-<!-- Trademark -->
-<!-- Bringhurst: should be superscript -->
-<xsl:template name="trademark-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'trademark'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="trademark">
-    <xsl:call-template name="trademark-character"/>
-</xsl:template>
 
-<!-- Servicemark -->
-<!-- Bringhurst: counterpart trademark should be superscript -->
-<xsl:template name="servicemark-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'servicemark'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="servicemark">
-    <xsl:call-template name="servicemark-character"/>
-</xsl:template>
 
 <!-- Coordinates, Temperature, English distance -->
 <!-- Intended for simple non-technical uses, without too -->
 <!-- much overhead.  The SI unit markup would be better  -->
 <!-- suited for scientific or technical work.            -->
 
-<!-- Degree -->
-<xsl:template name="degree-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'degree'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="degree">
-    <xsl:call-template name="degree-character"/>
-</xsl:template>
 
-<!-- Prime -->
-<xsl:template name="prime-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'prime'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="prime">
-    <xsl:call-template name="prime-character"/>
-</xsl:template>
 
-<!-- Double Prime -->
-<xsl:template name="dblprime-character">
-    <xsl:call-template name="character">
-        <xsl:with-param name="name" select="'dblprime'"/>
-    </xsl:call-template>
-</xsl:template>
-<xsl:template match="dblprime">
-    <xsl:call-template name="dblprime-character"/>
-</xsl:template>
 
 <!-- Characters for Tagging Equations -->
 
@@ -10122,15 +9886,23 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 <xsl:template match="dblbrackets">
-    <xsl:call-template name="ldblbracket-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'ldblbracket'"/>
+    </xsl:call-template>
     <xsl:apply-templates/>
-    <xsl:call-template name="rdblbracket-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'rdblbracket'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="angles">
-    <xsl:call-template name="langle-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'langle'"/>
+    </xsl:call-template>
     <xsl:apply-templates/>
-    <xsl:call-template name="rangle-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'rangle'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- ########## -->
@@ -10302,7 +10074,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template match="biblio[@type='raw']/number">
     <xsl:text>no</xsl:text>
     <xsl:call-template name="biblio-period"/>
-    <xsl:call-template name="thin-space-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'thin-space'"/>
+    </xsl:call-template>
     <xsl:apply-templates/>
 </xsl:template>
 
@@ -10405,7 +10179,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template match="biblio[@type='bibtex']/number">
     <xsl:text>no</xsl:text>
     <xsl:call-template name="biblio-period"/>
-    <xsl:call-template name="thin-space-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'thin-space'"/>
+    </xsl:call-template>
     <xsl:apply-templates select="text()"/>
     <xsl:apply-templates select="." mode="bibtex-separator">
         <xsl:with-param name="separator" select="' '"/>
@@ -10434,7 +10210,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template match="biblio[@type='bibtex']/pages[@start]">
     <xsl:text>pp</xsl:text>
     <xsl:call-template name="biblio-period"/>
-    <xsl:call-template name="thin-space-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'thin-space'"/>
+    </xsl:call-template>
     <xsl:value-of select="@start"/><xsl:text>-</xsl:text><xsl:value-of select="@end"/>
     <xsl:apply-templates select="." mode="bibtex-separator">
         <xsl:with-param name="separator" select="', '"/>

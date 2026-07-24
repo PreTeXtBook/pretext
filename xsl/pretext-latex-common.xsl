@@ -5938,7 +5938,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\nopagebreak\par%&#xa;</xsl:text>
     <xsl:text>\hfill</xsl:text>
     <xsl:if test="parent::blockquote">
-        <xsl:call-template name="mdash-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'mdash'"/>
+        </xsl:call-template>
         <!-- remove the left-side column spacing -->
         <xsl:text>{\setlength{\tabcolsep}{0pt}</xsl:text>
     </xsl:if>
@@ -6417,7 +6419,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is an override of the base *template*           -->
 <xsl:template match="title//swungdash|shortitle//swungdash">
     <xsl:text>\protect</xsl:text>
-    <xsl:call-template name="swungdash-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'swungdash'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- All Latin abbreviations are defined in -common    -->
@@ -9090,11 +9094,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- always possible to label (universal PTX capability) -->
     <xsl:text>\noindent\phantomsection</xsl:text>
     <xsl:apply-templates select="." mode="label"/>
-    <xsl:call-template name="langle-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'langle'"/>
+    </xsl:call-template>
     <xsl:apply-templates select="." mode="number"/>
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:call-template name="rangle-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'rangle'"/>
+    </xsl:call-template>
     <xsl:text> </xsl:text>
     <xsl:call-template name="inline-math-wrapper">
         <xsl:with-param name="math" select="'\equiv'"/>
@@ -9142,7 +9150,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- with a hyperlink to the target (as a page number for print)          -->
 <xsl:template match="fragref">
     <xsl:variable name="target" select="id(@ref)"/>
-    <xsl:call-template name="langle-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'langle'"/>
+    </xsl:call-template>
     <xsl:apply-templates select="$target" mode="title-full"/>
     <xsl:text> </xsl:text>
     <xsl:text>{\scriptsize </xsl:text>
@@ -9151,7 +9161,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$target" mode="unique-id"/>
     <xsl:text>}]</xsl:text>
     <xsl:text>}</xsl:text>
-    <xsl:call-template name="rangle-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'rangle'"/>
+    </xsl:call-template>
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
 

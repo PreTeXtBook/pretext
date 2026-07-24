@@ -1279,7 +1279,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="bibinfo/copyright">
     <div class="para copyright">
-        <xsl:call-template name="copyright-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'copyright'"/>
+        </xsl:call-template>
         <xsl:apply-templates select="year" />
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="holder" />
@@ -5323,11 +5325,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-generic">
         <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="heading-title">
-            <xsl:call-template name="langle-character"/>
+            <xsl:call-template name="character">
+                <xsl:with-param name="name" select="'langle'"/>
+            </xsl:call-template>
             <xsl:apply-templates select="." mode="number"/>
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="." mode="title-full"/>
-            <xsl:call-template name="rangle-character"/>
+            <xsl:call-template name="character">
+                <xsl:with-param name="name" select="'rangle'"/>
+            </xsl:call-template>
             <!--  U+2261 ≡ IDENTICAL TO -->
             <xsl:text> &#x2261;</xsl:text>
         </xsl:with-param>
@@ -9471,7 +9477,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="fragref">
     <xsl:variable name="target" select="id(@ref)"/>
     <span>
-        <xsl:call-template name="langle-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'langle'"/>
+        </xsl:call-template>
         <xsl:apply-templates select="." mode="xref-link">
             <xsl:with-param name="target" select="$target" />
             <!-- "fragref" is isomorpic to "xref" as a link -->
@@ -9482,7 +9490,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:apply-templates>
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="$target" mode="number"/>
-        <xsl:call-template name="rangle-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'rangle'"/>
+        </xsl:call-template>
     </span>
     <br/>
 </xsl:template>

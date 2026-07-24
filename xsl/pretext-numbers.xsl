@@ -389,7 +389,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- group as its serial number.     -->
 <xsl:template match="exercisegroup" mode="serial-number">
     <xsl:apply-templates select="exercise[1]" mode="serial-number" />
-    <xsl:call-template name="ndash-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'ndash'"/>
+    </xsl:call-template>
     <xsl:apply-templates select="exercise[last()]" mode="serial-number" />
 </xsl:template>
 

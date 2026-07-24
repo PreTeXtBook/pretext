@@ -1754,20 +1754,28 @@
 
 <xsl:template match="dblbrackets">
     <xsl:param name="b-human-readable" />
-    <xsl:call-template name="ldblbracket-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'ldblbracket'"/>
+    </xsl:call-template>
     <xsl:apply-templates>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:call-template name="rdblbracket-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'rdblbracket'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="angles">
     <xsl:param name="b-human-readable" />
-    <xsl:call-template name="langle-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'langle'"/>
+    </xsl:call-template>
     <xsl:apply-templates>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:call-template name="rangle-character"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'rangle'"/>
+    </xsl:call-template>
 </xsl:template>
 
 

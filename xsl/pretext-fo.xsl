@@ -2829,7 +2829,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:for-each select="line">
                 <fo:block text-align="end">
                     <xsl:if test="position() = 1">
-                        <xsl:call-template name="mdash-character"/>
+                        <xsl:call-template name="character">
+                            <xsl:with-param name="name" select="'mdash'"/>
+                        </xsl:call-template>
                     </xsl:if>
                     <xsl:apply-templates/>
                 </fo:block>
@@ -2837,7 +2839,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <fo:block text-align="end">
-                <xsl:call-template name="mdash-character"/>
+                <xsl:call-template name="character">
+                    <xsl:with-param name="name" select="'mdash'"/>
+                </xsl:call-template>
                 <xsl:apply-templates/>
             </fo:block>
         </xsl:otherwise>
@@ -4217,11 +4221,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <fo:block space-before="1em" space-after="1em">
         <xsl:apply-templates select="." mode="link-id-attribute"/>
         <fo:block>
-            <xsl:call-template name="langle-character"/>
+            <xsl:call-template name="character">
+                <xsl:with-param name="name" select="'langle'"/>
+            </xsl:call-template>
             <xsl:apply-templates select="." mode="number"/>
             <xsl:text> </xsl:text>
             <xsl:apply-templates select="." mode="title-full"/>
-            <xsl:call-template name="rangle-character"/>
+            <xsl:call-template name="character">
+                <xsl:with-param name="name" select="'rangle'"/>
+            </xsl:call-template>
             <xsl:text> </xsl:text>
             <xsl:text>&#x2261;</xsl:text>
         </fo:block>
@@ -4259,7 +4267,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$target" mode="unique-id"/>
     </xsl:variable>
     <fo:block start-indent="2em">
-        <xsl:call-template name="langle-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'langle'"/>
+        </xsl:call-template>
         <xsl:apply-templates select="$target" mode="title-full"/>
         <xsl:text> </xsl:text>
         <fo:inline font-size="70%">
@@ -4271,7 +4281,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </fo:basic-link>
             <xsl:text>]</xsl:text>
         </fo:inline>
-        <xsl:call-template name="rangle-character"/>
+        <xsl:call-template name="character">
+            <xsl:with-param name="name" select="'rangle'"/>
+        </xsl:call-template>
     </fo:block>
 </xsl:template>
 
