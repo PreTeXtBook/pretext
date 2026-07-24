@@ -9555,8 +9555,8 @@ Book (with parts), "section" at level 3
 <!-- http://www.cs.tut.fi/~jkorpela/dashes.html -->
 
 <xsl:template name="nbsp-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'nbsp'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'nbsp'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="nbsp">
@@ -9564,8 +9564,8 @@ Book (with parts), "section" at level 3
 </xsl:template>
 
 <xsl:template name="ndash-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'ndash'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'ndash'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="ndash">
@@ -9579,14 +9579,14 @@ Book (with parts), "section" at level 3
 <!-- as abstract templates and do everything else here.          -->
 
 <xsl:template name="mdash-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'mdash'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'mdash'"/>
     </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="thin-space-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'thin-space'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'thin-space'"/>
     </xsl:call-template>
 </xsl:template>
 
@@ -9627,6 +9627,109 @@ Book (with parts), "section" at level 3
      <xsl:text>[[[</xsl:text>
      <xsl:value-of select="$char-name"/>
      <xsl:text>]]]</xsl:text>
+</xsl:template>
+
+<!-- The table of character representations: one row per character, -->
+<!-- one column per representation, each read by a conversion's     -->
+<!-- modal "character" template; a character whose rendering needs  -->
+<!-- more than a column value (fonts, wrapper markup) gets a        -->
+<!-- per-character template overriding that mode.  Column notes:    -->
+<!--   "unicode"  the bare code point                               -->
+<!--   "latex"    macro or construction; the reader appends an      -->
+<!--              empty group ({}) unless  latex-ending="no"        -->
+<!--   "ascii"    7-bit stand-in for text's ascii election;         -->
+<!--              absent = unimplemented, warns                     -->
+
+<xsl:variable name="character-rtf">
+    <!-- U+00A0: NO-BREAK SPACE -->
+    <char name="nbsp"          unicode="&#x00a0;"   latex="~" latex-ending="no"               ascii=" "/>
+    <!-- U+2013: EN DASH -->
+    <char name="ndash"         unicode="&#x2013;"   latex="\textendash"                       ascii="-"/>
+    <!-- U+2014: EM DASH -->
+    <char name="mdash"         unicode="&#x2014;"   latex="\textemdash"                       ascii="--"/>
+    <!-- U+2009: THIN SPACE -->
+    <char name="thin-space"    unicode="&#x2009;"   latex="\," latex-ending="no"              ascii=" "/>
+    <!-- U+27E6: MATHEMATICAL LEFT WHITE SQUARE BRACKET -->
+    <char name="ldblbracket"   unicode="&#x27e6;"   latex="\textlbrackdbl"/>
+    <!-- U+27E7: MATHEMATICAL RIGHT WHITE SQUARE BRACKET -->
+    <char name="rdblbracket"   unicode="&#x27e7;"   latex="\textrbrackdbl"/>
+    <!-- U+3008: LEFT ANGLE BRACKET -->
+    <char name="langle"        unicode="&#x3008;"   latex="\textlangle"                       ascii="&lt;"/>
+    <!-- U+3009: RIGHT ANGLE BRACKET -->
+    <char name="rangle"        unicode="&#x3009;"   latex="\textrangle"                       ascii="&gt;"/>
+    <!-- U+2026: HORIZONTAL ELLIPSIS -->
+    <char name="ellipsis"      unicode="&#x2026;"   latex="\textellipsis"                     ascii="..."/>
+    <!-- U+00B7: MIDDLE DOT -->
+    <char name="midpoint"      unicode="&#x00b7;"   latex="\textperiodcentered"               ascii="*"/>
+    <!-- U+2053: SWUNG DASH -->
+    <char name="swungdash"     unicode="&#x2053;"   latex="\ptxswungdash"                     ascii="~"/>
+    <!-- U+2030: PER MILLE SIGN -->
+    <char name="permille"      unicode="&#x2030;"   latex="\textperthousand"                  ascii="o/oo"/>
+    <!-- U+00B6: PILCROW SIGN -->
+    <char name="pilcrow"       unicode="&#x00b6;"   latex="\textpilcrow"                      ascii="[pilcrow]"/>
+    <!-- U+00A7: SECTION SIGN -->
+    <char name="section-mark"  unicode="&#x00a7;"   latex="\textsection"                      ascii="[section]"/>
+    <!-- U+2212: MINUS SIGN -->
+    <char name="minus"         unicode="&#x2212;"   latex="\textminus"                        ascii="-"/>
+    <!-- U+00D7: MULTIPLICATION SIGN -->
+    <char name="times"         unicode="&#x00d7;"   latex="\texttimes"                        ascii="x"/>
+    <!-- U+2044: FRACTION SLASH -->
+    <char name="solidus"       unicode="&#x2044;"   latex="\textfractionsolidus"              ascii="/"/>
+    <!-- U+00F7: DIVISION SIGN -->
+    <char name="obelus"        unicode="&#x00f7;"   latex="\textdiv"                          ascii="/"/>
+    <!-- U+00B1: PLUS-MINUS SIGN -->
+    <char name="plusminus"     unicode="&#x00b1;"   latex="\textpm"                           ascii="+/-"/>
+    <!-- U+00A9: COPYRIGHT SIGN -->
+    <char name="copyright"     unicode="&#x00a9;"   latex="\textcopyright"                    ascii="(c)"/>
+    <!-- U+2117: SOUND RECORDING COPYRIGHT -->
+    <char name="phonomark"     unicode="&#x2117;"   latex="\textcircledP"/>
+    <!-- U+1F12F: COPYLEFT SYMBOL -->
+    <char name="copyleft"      unicode="&#x1f12f;"  latex="\textcopyleft"/>
+    <!-- U+00AE: REGISTERED SIGN -->
+    <char name="registered"    unicode="&#x00ae;"   latex="\textregistered"                   ascii="(R)"/>
+    <!-- U+2122: TRADE MARK SIGN -->
+    <char name="trademark"     unicode="&#x2122;"   latex="\texttrademark"                    ascii="(TM)"/>
+    <!-- U+2120: SERVICE MARK -->
+    <char name="servicemark"   unicode="&#x2120;"   latex="\textservicemark"/>
+    <!-- U+00B0: DEGREE SIGN -->
+    <char name="degree"        unicode="&#x00b0;"   latex="\textdegree"                       ascii="deg"/>
+    <!-- U+2032: PRIME -->
+    <char name="prime"         unicode="&#x2032;"   latex="\textquotesingle"                  ascii="'"/>
+    <!-- U+2033: DOUBLE PRIME -->
+    <char name="dblprime"      unicode="&#x2033;"   latex="\textquotesingle\textquotesingle"  ascii="''"/>
+</xsl:variable>
+
+<xsl:variable name="character-table"
+    select="exsl:node-set($character-rtf)"/>
+
+<xsl:key name="character-key" match="char" use="@name"/>
+
+<!-- Look up a character by name, then render it with the modal  -->
+<!-- "character" implementation in effect.  An unknown name is a -->
+<!-- defect in a calling template, not an authoring error.       -->
+<xsl:template name="character">
+    <xsl:param name="name"/>
+    <!-- a key resolves within the document holding the context -->
+    <!-- node, so step inside the table, a node-set of one node -->
+    <xsl:for-each select="$character-table">
+        <xsl:variable name="the-row" select="key('character-key', $name)"/>
+        <xsl:choose>
+            <xsl:when test="$the-row">
+                <xsl:apply-templates select="$the-row" mode="character"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:BUG:   the character named "<xsl:value-of select="$name"/>" is not in the character table</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- A conversion without a modal "character" implementation gets -->
+<!-- a warning for every character in the table                   -->
+<xsl:template match="char" mode="character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="@name"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- A given document may use for different characters for quotations:         -->
@@ -9682,8 +9785,8 @@ Book (with parts), "section" at level 3
 
 <!-- Left Double Bracket -->
 <xsl:template name="ldblbracket-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'ldblbracket'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'ldblbracket'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="ldblbracket">
@@ -9692,8 +9795,8 @@ Book (with parts), "section" at level 3
 
 <!-- Right Double Bracket -->
 <xsl:template name="rdblbracket-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'rdblbracket'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'rdblbracket'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="rdblbracket">
@@ -9702,8 +9805,8 @@ Book (with parts), "section" at level 3
 
 <!-- Left Angle Bracket -->
 <xsl:template name="langle-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'langle'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'langle'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="langle">
@@ -9712,8 +9815,8 @@ Book (with parts), "section" at level 3
 
 <!-- Right Angle Bracket -->
 <xsl:template name="rangle-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'rangle'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'rangle'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="rangle">
@@ -9722,8 +9825,8 @@ Book (with parts), "section" at level 3
 
 <!-- Ellipsis (dots), for text, not math -->
 <xsl:template name="ellipsis-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'ellipsis'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'ellipsis'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="ellipsis">
@@ -9733,8 +9836,8 @@ Book (with parts), "section" at level 3
 <!-- Midpoint -->
 <!-- A centered dot used sometimes like a decorative dash -->
 <xsl:template name="midpoint-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'midpoint'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'midpoint'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="midpoint">
@@ -9744,8 +9847,8 @@ Book (with parts), "section" at level 3
 <!-- Swung Dash -->
 <!-- A decorative dash, like a tilde, but bigger, and centered -->
 <xsl:template name="swungdash-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'swungdash'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'swungdash'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="swungdash">
@@ -9755,8 +9858,8 @@ Book (with parts), "section" at level 3
 <!-- Per Mille -->
 <!-- Or, per thousand, like a percent sign -->
 <xsl:template name="permille-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'permille'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'permille'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="permille">
@@ -9766,8 +9869,8 @@ Book (with parts), "section" at level 3
 <!-- Pilcrow -->
 <!-- Often used to mark the start of a paragraph -->
 <xsl:template name="pilcrow-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'pilcrow'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'pilcrow'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="pilcrow">
@@ -9777,8 +9880,8 @@ Book (with parts), "section" at level 3
 <!-- Section Mark -->
 <!-- The stylized double-S to indicate section numbers -->
 <xsl:template name="section-mark-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'section-mark'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'section-mark'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="section-mark">
@@ -9788,8 +9891,8 @@ Book (with parts), "section" at level 3
 <!-- Minus -->
 <!-- A hyphen/dash for use in text as subtraction or negation-->
 <xsl:template name="minus-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'minus'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'minus'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="minus">
@@ -9799,8 +9902,8 @@ Book (with parts), "section" at level 3
 <!-- Times -->
 <!-- A "multiplication sign" symbol for use in text -->
 <xsl:template name="times-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'times'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'times'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="times">
@@ -9810,8 +9913,8 @@ Book (with parts), "section" at level 3
 <!-- Solidus -->
 <!-- Fraction bar, not as steep as a forward slash -->
 <xsl:template name="solidus-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'solidus'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'solidus'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="solidus">
@@ -9821,8 +9924,8 @@ Book (with parts), "section" at level 3
 <!-- Obelus -->
 <!-- A "division" symbol for use in text -->
 <xsl:template name="obelus-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'obelus'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'obelus'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="obelus">
@@ -9832,8 +9935,8 @@ Book (with parts), "section" at level 3
 <!-- Plus/Minus -->
 <!-- The combined symbol -->
 <xsl:template name="plusminus-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'plusminus'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'plusminus'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="plusminus">
@@ -9843,8 +9946,8 @@ Book (with parts), "section" at level 3
 <!-- Copyright -->
 <!-- Bringhurst: on baseline (i.e. not superscript) -->
 <xsl:template name="copyright-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'copyright'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'copyright'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="copyright">
@@ -9855,8 +9958,8 @@ Book (with parts), "section" at level 3
 <!-- copyright on sound recordings                 -->
 <!-- Bringhurst: counterpart copyright on baseline -->
 <xsl:template name="phonomark-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'phonomark'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'phonomark'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="phonomark">
@@ -9866,8 +9969,8 @@ Book (with parts), "section" at level 3
 <!-- Copyleft -->
 <!-- Bringhurst: counterpart copyright on baseline -->
 <xsl:template name="copyleft-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'copyleft'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'copyleft'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="copyleft">
@@ -9877,8 +9980,8 @@ Book (with parts), "section" at level 3
 <!-- Registered -->
 <!-- Bringhurst: should be superscript -->
 <xsl:template name="registered-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'registered'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'registered'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="registered">
@@ -9888,8 +9991,8 @@ Book (with parts), "section" at level 3
 <!-- Trademark -->
 <!-- Bringhurst: should be superscript -->
 <xsl:template name="trademark-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'trademark'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'trademark'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="trademark">
@@ -9899,8 +10002,8 @@ Book (with parts), "section" at level 3
 <!-- Servicemark -->
 <!-- Bringhurst: counterpart trademark should be superscript -->
 <xsl:template name="servicemark-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'servicemark'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'servicemark'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="servicemark">
@@ -9914,8 +10017,8 @@ Book (with parts), "section" at level 3
 
 <!-- Degree -->
 <xsl:template name="degree-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'degree'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'degree'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="degree">
@@ -9924,8 +10027,8 @@ Book (with parts), "section" at level 3
 
 <!-- Prime -->
 <xsl:template name="prime-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'prime'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'prime'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="prime">
@@ -9934,8 +10037,8 @@ Book (with parts), "section" at level 3
 
 <!-- Double Prime -->
 <xsl:template name="dblprime-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'dblprime'"/>
+    <xsl:call-template name="character">
+        <xsl:with-param name="name" select="'dblprime'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="dblprime">
