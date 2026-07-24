@@ -720,7 +720,6 @@
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Header</xsl:with-param>
     </xsl:call-template>
-    <xsl:text>TEXT(beginproblem());&#xa;</xsl:text>
     <xsl:if test="not($b-human-readable)">
         <!-- see select-latex-macros template -->
         <xsl:variable name="macros">
