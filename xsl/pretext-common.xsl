@@ -11514,13 +11514,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;baseurl/@href&quot; element in the &quot;docinfo&quot; has been replaced and is now specified in the publisher file with &quot;html/baseurl/@href&quot;, as documented in the PreTeXt Guide.  If you have multiple values due to multiple &quot;docinfo&quot; controlled by versions, then results will be very unpredictable.'"/>
     </xsl:call-template>
     <!--  -->
-    <!-- 2021-01-07  deprecate sidebyside within a webwork -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="&quot;$document-root//webwork//sidebyside&quot;" />
-        <xsl:with-param name="date-string" select="'2021-01-07'" />
-        <xsl:with-param name="message" select="'a &quot;sidebyside&quot; as a descendant of a &quot;webwork&quot; has been replaced and now &quot;image&quot; and &quot;tabular&quot; elements should be used directly.'"/>
-    </xsl:call-template>
-
     <!-- 2021-02-14  deprecate using docinfo for part structure -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="&quot;$docinfo/numbering/division/@part&quot;" />

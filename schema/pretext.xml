@@ -1846,6 +1846,15 @@
                         List
                     )+
                 }
+            StackWW =
+                element stack {
+                    (
+                        Tabular |
+                        Image |
+                        Paragraph |
+                        Preformatted |
+                    )+
+                }
             SidebySideAttributes =
                 Component?,
                 attribute margins {text}?,
@@ -1885,6 +1894,17 @@
                         Preformatted |
                         List |
                         Stack
+                    )+
+                }
+            SideBySideWW =
+                element sidebyside {
+                    SidebySideAttributes,
+                    (
+                        Tabular |
+                        Image |
+                        Paragraph |
+                        Preformatted |
+                        StackWW
                     )+
                 }
             SideBySideGroup =
@@ -3053,7 +3073,8 @@
                         Paragraph |
                         Preformatted |
                         Tabular |
-                        ImageWW
+                        ImageWW |
+                        SideBySideWW
             StatementExerciseWW =
                 element statement {
                     (BlockStatementWW|WWInstruction)+
