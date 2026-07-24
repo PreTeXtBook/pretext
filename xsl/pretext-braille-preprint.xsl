@@ -1549,6 +1549,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- the CJK angle brackets: the liblouis table defines cells -->
+<!-- (above) only for these, not for the mathematical pair    -->
+<!-- carried by the representation table                      -->
+<xsl:template match="char[@name = 'langle']" mode="character">
+    <xsl:text>&#x3008;</xsl:text>
+</xsl:template>
+<xsl:template match="char[@name = 'rangle']" mode="character">
+    <xsl:text>&#x3009;</xsl:text>
+</xsl:template>
+
 <!-- Unicode Character 'LEFT SINGLE QUOTATION MARK' (U+2018) -->
 <!-- Liblouis: 6-236                                         -->
 <xsl:template match="*" mode="lsq-character">

@@ -918,21 +918,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- the *mathematical* angle brackets, rather than the table's -->
-<!-- CJK pair, matching the XSL-FO conversion's choice          -->
-<xsl:template match="char[@name = 'langle']" mode="character">
-    <xsl:choose>
-        <xsl:when test="$b-text-unicode"><xsl:text>&#x27e8;</xsl:text></xsl:when>
-        <xsl:otherwise><xsl:text>&lt;</xsl:text></xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-<xsl:template match="char[@name = 'rangle']" mode="character">
-    <xsl:choose>
-        <xsl:when test="$b-text-unicode"><xsl:text>&#x27e9;</xsl:text></xsl:when>
-        <xsl:otherwise><xsl:text>&gt;</xsl:text></xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <xsl:template match="*" mode="lsq-character">
     <xsl:choose>
         <xsl:when test="$b-text-unicode"><xsl:text>&#x2018;</xsl:text></xsl:when>

@@ -9647,10 +9647,10 @@ Book (with parts), "section" at level 3
     <char name="ldblbracket"   unicode="&#x27e6;"   latex="\textlbrackdbl"                    braille="none"/>
     <!-- U+27E7: MATHEMATICAL RIGHT WHITE SQUARE BRACKET -->
     <char name="rdblbracket"   unicode="&#x27e7;"   latex="\textrbrackdbl"                    braille="none"/>
-    <!-- U+3008: LEFT ANGLE BRACKET -->
-    <char name="langle"        unicode="&#x3008;"   latex="\textlangle"                       ascii="&lt;"/>
-    <!-- U+3009: RIGHT ANGLE BRACKET -->
-    <char name="rangle"        unicode="&#x3009;"   latex="\textrangle"                       ascii="&gt;"/>
+    <!-- U+27E8: MATHEMATICAL LEFT ANGLE BRACKET -->
+    <char name="langle"        unicode="&#x27e8;"   latex="\textlangle"                       ascii="&lt;"/>
+    <!-- U+27E9: MATHEMATICAL RIGHT ANGLE BRACKET -->
+    <char name="rangle"        unicode="&#x27e9;"   latex="\textrangle"                       ascii="&gt;"/>
     <!-- U+2026: HORIZONTAL ELLIPSIS -->
     <char name="ellipsis"      unicode="&#x2026;"   latex="\textellipsis"                     ascii="..."        webwork="..."/>
     <!-- U+00B7: MIDDLE DOT -->

@@ -3559,10 +3559,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#x27e7;</xsl:text>
     </fo:inline>
 </xsl:template>
-<!-- the *mathematical* angle brackets (U+27E8, U+27E9), missing  -->
-<!-- from the main (serif) face, so they borrow the symbol font;  -->
-<!-- the CJK pair (U+3008, U+3009) of the table is in no embedded  -->
-<!-- font at all                                                   -->
+<!-- the mathematical angle brackets are missing from the main -->
+<!-- (serif) face, so they borrow the symbol font, as the      -->
+<!-- tombstone does                                            -->
 <xsl:template match="char[@name = 'langle']" mode="character">
     <fo:inline font-family="{$font-family-symbol}">
         <xsl:text>&#x27e8;</xsl:text>
