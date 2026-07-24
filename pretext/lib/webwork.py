@@ -336,16 +336,6 @@ def webwork_to_xml(
             )
         log.info(msg)
 
-        # The code in pgdense[problem] may have `$refreshCachedImages=1;`
-        # We want to keep this for the code that is sent to the server for static harvesting,
-        # but kill this for the code that is used repeatedly by embedded problems in HTML
-        # So here we branch a copy for embedding where we kill `$refreshCachedImages=1;`
-        # But we can't literally just remove that, since an author may have used something
-        # like `$refreshCachedImages  =  'true' ;` so instead, we change `$refreshCachedImages`
-        # to something inert
-        if origin[problem] == "generated":
-            embed_problem = re.sub(r'(refreshCachedImages)(?![\w\d])', r'\1Inert', pgdense[problem])
-
         if static_processing == 'local' and origin[problem] != 'webwork2':
             socket_params = { "problemSeed": seed[problem], "problemUUID": problem }
 
