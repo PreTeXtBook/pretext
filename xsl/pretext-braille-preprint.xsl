@@ -1513,6 +1513,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     just before it ends up in BRF                              -->
 <!--   ndash (U+2013): 6-36                                         -->
 <!--   mdash (U+2014): 6-36                                         -->
+<!--   thin-space (U+2009): 0, a braille space                     -->
 <!--   copyright (U+00A9): 45-14                                    -->
 <!--   registered (U+00AE): 45-1235                                 -->
 <!--   trademark (U+2122): 45-2345                                  -->

@@ -9642,7 +9642,7 @@ Book (with parts), "section" at level 3
     <!-- U+2014: EM DASH -->
     <char name="mdash"         unicode="&#x2014;"   latex="\textemdash"                       ascii="--"         webwork="[$MDASH]*"/>
     <!-- U+2009: THIN SPACE -->
-    <char name="thin-space"    unicode="&#x2009;"   latex="\," latex-ending="no"              ascii=" "          webwork=" " braille="none"/>
+    <char name="thin-space"    unicode="&#x2009;"   latex="\," latex-ending="no"              ascii=" "          webwork=" "/>
     <!-- U+27E6: MATHEMATICAL LEFT WHITE SQUARE BRACKET -->
     <char name="ldblbracket"   unicode="&#x27e6;"   latex="\textlbrackdbl"                    braille="none"/>
     <!-- U+27E7: MATHEMATICAL RIGHT WHITE SQUARE BRACKET -->
