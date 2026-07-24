@@ -312,7 +312,7 @@
         </subsection>
 
 
-        <subsection>
+        <subsection xml:id="processing-CLI-deploy">
             <title>Hosting your project: <c>pretext deploy</c></title>
             <idx><h>hosting</h></idx>
             <idx><h>CLI</h><h><c>deploy</c></h></idx>
