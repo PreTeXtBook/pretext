@@ -6406,13 +6406,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Vertical Bar -->
-<!-- Bringhurst: a "pipe" is a broken bar -->
-<!-- Exists as \textbrokenbar             -->
-<xsl:template name="bar-character">
-    <xsl:text>\textbar{}</xsl:text>
-</xsl:template>
-
 <!-- Other Miscellaneous Symbols, Constructions -->
 
 <!-- Protect the version of the macro appearing in titles -->
