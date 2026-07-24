@@ -9639,6 +9639,8 @@ Book (with parts), "section" at level 3
 <!--              empty group ({}) unless  latex-ending="no"        -->
 <!--   "ascii"    7-bit stand-in for text's ascii election;         -->
 <!--              absent = unimplemented, warns                     -->
+<!--   "webwork"  PGML form for WeBWorK problem extraction;         -->
+<!--              absent = unimplemented, warns                     -->
 <!--   "braille"  absent = liblouis uses the "unicode" value;       -->
 <!--              a value = a substitute character, since liblouis  -->
 <!--              cannot use the true one; "none" = no rendering    -->
@@ -9647,13 +9649,13 @@ Book (with parts), "section" at level 3
 <xsl:variable name="character-rtf">
     <!-- U+00A0: NO-BREAK SPACE -->
     <!-- (the "&nbsp;" entity is undefined in XSL; always the numeric reference) -->
-    <char name="nbsp"          unicode="&#x00a0;"   latex="~" latex-ending="no"               ascii=" "/>
+    <char name="nbsp"          unicode="&#x00a0;"   latex="~" latex-ending="no"               ascii=" "          webwork="[$NBSP]*"/>
     <!-- U+2013: EN DASH -->
-    <char name="ndash"         unicode="&#x2013;"   latex="\textendash"                       ascii="-"/>
+    <char name="ndash"         unicode="&#x2013;"   latex="\textendash"                       ascii="-"          webwork="[$NDASH]*"/>
     <!-- U+2014: EM DASH -->
-    <char name="mdash"         unicode="&#x2014;"   latex="\textemdash"                       ascii="--"/>
+    <char name="mdash"         unicode="&#x2014;"   latex="\textemdash"                       ascii="--"         webwork="[$MDASH]*"/>
     <!-- U+2009: THIN SPACE -->
-    <char name="thin-space"    unicode="&#x2009;"   latex="\," latex-ending="no"              ascii=" "          braille="none"/>
+    <char name="thin-space"    unicode="&#x2009;"   latex="\," latex-ending="no"              ascii=" "          webwork=" " braille="none"/>
     <!-- U+27E6: MATHEMATICAL LEFT WHITE SQUARE BRACKET -->
     <char name="ldblbracket"   unicode="&#x27e6;"   latex="\textlbrackdbl"                    braille="none"/>
     <!-- U+27E7: MATHEMATICAL RIGHT WHITE SQUARE BRACKET -->
@@ -9663,7 +9665,7 @@ Book (with parts), "section" at level 3
     <!-- U+3009: RIGHT ANGLE BRACKET -->
     <char name="rangle"        unicode="&#x3009;"   latex="\textrangle"                       ascii="&gt;"/>
     <!-- U+2026: HORIZONTAL ELLIPSIS -->
-    <char name="ellipsis"      unicode="&#x2026;"   latex="\textellipsis"                     ascii="..."/>
+    <char name="ellipsis"      unicode="&#x2026;"   latex="\textellipsis"                     ascii="..."        webwork="..."/>
     <!-- U+00B7: MIDDLE DOT -->
     <!-- (sometimes like a decorative dash; tex.stackexchange.com/questions/19180) -->
     <char name="midpoint"      unicode="&#x00b7;"   latex="\textperiodcentered"               ascii="*"/>

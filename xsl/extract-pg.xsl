@@ -2057,12 +2057,6 @@
 <!-- * \    Always escape backslash.                                 -->
 <!-- #################################################### -->
 
-<!-- Ellipsis -->
-<!-- Just three periods -->
-<xsl:template name="ellipsis-character">
-    <xsl:text>...</xsl:text>
-</xsl:template>
-
 <!-- ############### -->
 <!-- Text Processing -->
 <!-- ############### -->
@@ -2194,33 +2188,23 @@
     <xsl:text>```&#xa;&#xa;</xsl:text>
 </xsl:template>
 
-<!-- The next three are WW macros that PGML will format  -->
-<!-- properly for WW HTML or LaTeX output, and so we use -->
-<!-- them as the desired characters                      -->
-
-<!-- Nonbreaking space -->
-<xsl:template name="nbsp-character">
-    <xsl:text>[$NBSP]*</xsl:text>
-</xsl:template>
-
-<!-- En dash           -->
-<xsl:template name="ndash-character">
-    <xsl:text>[$NDASH]*</xsl:text>
-</xsl:template>
-
-<!-- Em dash           -->
-<xsl:template name="mdash-character">
-    <xsl:text>[$MDASH]*</xsl:text>
-</xsl:template>
-
-<!-- The abstract template for "mdash" consults a publisher option -->
-<!-- for thin space, or no space, surrounding an em-dash.  So the  -->
-<!-- "thin-space-character" is needed for that purpose, and does   -->
-<!-- not have an associated empty PTX element.                     -->
-<!-- Cannot find such a thing documented for PGML, so just normal  -->
-
-<xsl:template name="thin-space-character">
-    <xsl:text> </xsl:text>
+<!-- Each character reads the "webwork" column of the representation -->
+<!-- table in  pretext-common.xsl.  The space and dash entries are    -->
+<!-- WW macros that PGML will format properly for WW HTML or LaTeX    -->
+<!-- output; the thin space has no documented PGML form, so it is a   -->
+<!-- normal space.  A character without a column entry warns, so the  -->
+<!-- gaps stay visible.                                               -->
+<xsl:template match="char" mode="character">
+    <xsl:choose>
+        <xsl:when test="@webwork">
+            <xsl:value-of select="@webwork"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="warn-unimplemented-character">
+                <xsl:with-param name="char-name" select="@name"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
