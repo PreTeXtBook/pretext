@@ -403,7 +403,19 @@
                     attribute seed {text}?,
                     DEObject*,
                     element setupScript {text}?,
-                    element postRenderScript {text}?
+                    element postRenderScript {text}?,
+                    # jsimports: external JS files loaded via dynamic import
+                    # when the exercise is opened.  Use @source for project-
+                    # local files (relative path inside assets) or @url for
+                    # files on the internet (absolute URL).
+                    element jsimports {
+                        element jslibrary {
+                            (attribute source {text} | attribute url {text})
+                        }+
+                    }?,
+                    # config-json: a JSON object literal passed to the exercise
+                    # as v._config; must be valid JSON text content.
+                    element config-json {text}?
                 }
             DEObject =
                 element de-object {
@@ -563,6 +575,9 @@
                     attribute rows {xsd:integer}?,
                     attribute width {text}?,
                     attribute answer {text}?,
+                    # @parser names a JS function called on the user's response
+                    # text; when present it takes precedence over @mode.
+                    attribute parser {text}?,
                     attribute mode {"string"|"number"|"math"}?,
                     attribute name {text}?,
                     attribute ansobj {text}?,
