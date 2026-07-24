@@ -9639,6 +9639,10 @@ Book (with parts), "section" at level 3
 <!--              empty group ({}) unless  latex-ending="no"        -->
 <!--   "ascii"    7-bit stand-in for text's ascii election;         -->
 <!--              absent = unimplemented, warns                     -->
+<!--   "braille"  absent = liblouis uses the "unicode" value;       -->
+<!--              a value = a substitute character, since liblouis  -->
+<!--              cannot use the true one; "none" = no rendering    -->
+<!--              at all, warns                                     -->
 
 <xsl:variable name="character-rtf">
     <!-- U+00A0: NO-BREAK SPACE -->
@@ -9649,11 +9653,11 @@ Book (with parts), "section" at level 3
     <!-- U+2014: EM DASH -->
     <char name="mdash"         unicode="&#x2014;"   latex="\textemdash"                       ascii="--"/>
     <!-- U+2009: THIN SPACE -->
-    <char name="thin-space"    unicode="&#x2009;"   latex="\," latex-ending="no"              ascii=" "/>
+    <char name="thin-space"    unicode="&#x2009;"   latex="\," latex-ending="no"              ascii=" "          braille="none"/>
     <!-- U+27E6: MATHEMATICAL LEFT WHITE SQUARE BRACKET -->
-    <char name="ldblbracket"   unicode="&#x27e6;"   latex="\textlbrackdbl"/>
+    <char name="ldblbracket"   unicode="&#x27e6;"   latex="\textlbrackdbl"                    braille="none"/>
     <!-- U+27E7: MATHEMATICAL RIGHT WHITE SQUARE BRACKET -->
-    <char name="rdblbracket"   unicode="&#x27e7;"   latex="\textrbrackdbl"/>
+    <char name="rdblbracket"   unicode="&#x27e7;"   latex="\textrbrackdbl"                    braille="none"/>
     <!-- U+3008: LEFT ANGLE BRACKET -->
     <char name="langle"        unicode="&#x3008;"   latex="\textlangle"                       ascii="&lt;"/>
     <!-- U+3009: RIGHT ANGLE BRACKET -->
@@ -9664,9 +9668,9 @@ Book (with parts), "section" at level 3
     <!-- (sometimes like a decorative dash; tex.stackexchange.com/questions/19180) -->
     <char name="midpoint"      unicode="&#x00b7;"   latex="\textperiodcentered"               ascii="*"/>
     <!-- U+2053: SWUNG DASH -->
-    <char name="swungdash"     unicode="&#x2053;"   latex="\ptxswungdash"                     ascii="~"/>
+    <char name="swungdash"     unicode="&#x2053;"   latex="\ptxswungdash"                     ascii="~"          braille="~"/>
     <!-- U+2030: PER MILLE SIGN -->
-    <char name="permille"      unicode="&#x2030;"   latex="\textperthousand"                  ascii="o/oo"/>
+    <char name="permille"      unicode="&#x2030;"   latex="\textperthousand"                  ascii="o/oo"       braille="none"/>
     <!-- U+00B6: PILCROW SIGN -->
     <char name="pilcrow"       unicode="&#x00b6;"   latex="\textpilcrow"                      ascii="[pilcrow]"/>
     <!-- U+00A7: SECTION SIGN -->
@@ -9677,7 +9681,7 @@ Book (with parts), "section" at level 3
     <char name="times"         unicode="&#x00d7;"   latex="\texttimes"                        ascii="x"/>
     <!-- U+2044: FRACTION SLASH -->
     <!-- (the LaTeX form should not allow a linebreak; not tested) -->
-    <char name="solidus"       unicode="&#x2044;"   latex="\textfractionsolidus"              ascii="/"/>
+    <char name="solidus"       unicode="&#x2044;"   latex="\textfractionsolidus"              ascii="/"          braille="/"/>
     <!-- U+00F7: DIVISION SIGN -->
     <char name="obelus"        unicode="&#x00f7;"   latex="\textdiv"                          ascii="/"/>
     <!-- U+00B1: PLUS-MINUS SIGN -->
@@ -9686,11 +9690,11 @@ Book (with parts), "section" at level 3
     <!-- (LaTeX form: tex.stackexchange.com/questions/1676) -->
     <char name="copyright"     unicode="&#x00a9;"   latex="\textcopyright"                    ascii="(c)"/>
     <!-- U+2117: SOUND RECORDING COPYRIGHT -->
-    <char name="phonomark"     unicode="&#x2117;"   latex="\textcircledP"/>
+    <char name="phonomark"     unicode="&#x2117;"   latex="\textcircledP"                     braille="none"/>
     <!-- U+1F12F: COPYLEFT SYMBOL -->
     <!-- (may not be universally available in fonts; Open C (U+0254) -->
     <!-- plus Combining Circle (U+20DD) can imitate)                 -->
-    <char name="copyleft"      unicode="&#x1f12f;"  latex="\textcopyleft"/>
+    <char name="copyleft"      unicode="&#x1f12f;"  latex="\textcopyleft"                     braille="none"/>
     <!-- U+00AE: REGISTERED SIGN -->
     <!-- (Bringhurst: should be superscript; not so in a font is a   -->
     <!-- font mistake, but a "sup" wrapper renders way too small in  -->
@@ -9699,7 +9703,7 @@ Book (with parts), "section" at level 3
     <!-- U+2122: TRADE MARK SIGN -->
     <char name="trademark"     unicode="&#x2122;"   latex="\texttrademark"                    ascii="(TM)"/>
     <!-- U+2120: SERVICE MARK -->
-    <char name="servicemark"   unicode="&#x2120;"   latex="\textservicemark"/>
+    <char name="servicemark"   unicode="&#x2120;"   latex="\textservicemark"                  braille="none"/>
     <!-- U+00B0: DEGREE SIGN -->
     <char name="degree"        unicode="&#x00b0;"   latex="\textdegree"                       ascii="deg"/>
     <!-- U+2032: PRIME -->
