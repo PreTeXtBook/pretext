@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text>Identify the graph of the trigonometric function of y=f(x)</text>
+    </name>
+    <questiontext format="moodle_auto_format">
+      <text><![CDATA[<p>Consider the graph of the trigonometric function \(y=f(x)\), \(x\) is in degrees.</p>
+<p>
+[[jsxgraph]]
+var board = JXG.JSXGraph.initBoard(divid, {
+  boundingbox: [-3 * Math.PI - 1, 5, 4 * Math.PI + 1, -5],
+  keepaspectratio: false,
+  showCopyright: false,
+  pan: false
+});
+var f = board.jc.snippet('{#fx#}', true, 'x', true);
+board.create('functiongraph', [f, -3 * Math.PI - 1, 4 * Math.PI + 1]);
+var xaxis = board.create('axis', [
+  [0, 0],
+  [1, 0]
+]);
+//xaxis.removeAllTicks();
+board.create('ticks', [xaxis, Math.PI/4], {
+  strokeColor: '#ccc',
+  majorHeight: -1,
+  minorTicks: 1,
+  drawZero: false
+});
+var yaxis = board.create('axis', [
+  [0, 0],
+  [0, 1]
+]);
+var txt = board.create('text', [Math.PI - 0.5, 0.2, "180"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [2 * Math.PI - 0.5, 0.2, "360"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [3 * Math.PI - 0.5, 0.2, "540"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [4 * Math.PI - 0.5, 0.2, "720"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [-Math.PI -0.9, 0.2, "-180"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [-2 * Math.PI - 0.9, 0.2, "-360"], {
+  fontSize: 15,
+  fixed: true
+});
+var txt = board.create('text', [-3 * Math.PI - 0.9, 0.2, "-540"], {
+  fontSize: 15,
+  fixed: true
+});
+
+[[/jsxgraph]]
+</p>
+<p>1. Find an expression for \(f(x)\) in the form \(f(x)=a\cdot \sin(x-b)\), where \(a\) is the amplitude and \(b\in \mathbb{Z}\).</p>
+<p>\(f(x)=\) [[input:ans1]] [[validation:ans1]] [[feedback:prt1]]</p>
+<p>2. Find an expression for \(f(x)\) in the form \(f(x)=a\cdot \cos(x-b)\), where \(a,b\in \mathbb{Z}\).</p>
+<p>\(f(x)=\) [[input:ans2]] [[validation:ans2]] [[feedback:prt2]]</p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text><![CDATA[<p><b><h3>Worked Solution:</h3></b></p>
+<p>First recall that the sine graph passes through the origin and increases towards the point \((90,1)\) before starting to decrease. We will focus on this aspect to find the value of \(b\).</p>
+<p>Also, the sine graph has a maximum of 1 and a minimum of -1. When the sine function is multiplied by a constant, its amplitude changes by that factor and the maximum becomes that same constant. We will use this to find the value of \(a\).</p>
+<p>The maximum value of the graph of \(f(x)\) is {@aa@}, so the graph is being stretched vertically from \(y=\sin(x)\) to \(y={@aa@}\cdot \sin(x)\) and the value of \(a\) is {@aa@}.</p>
+<p>If we look at the section of the graph which crosses the \(x-\)axis and increases towards its maximum, we see that it has been shifted to the right from the origin by {@bb*180/%pi@}, so the value of \(b\) is {@bb*180/%pi@}.</p>
+<p>Therefore, the function can be written as \(f(x) = {@ta11@}\). </p>
+
+<p>2.) First recall that the cosine graph has a maximum at the point \((0,1)\) and decreases towards the point \((90,0)\) where it crosses the \(x-\)axis. We will focus on this aspect to find the value of \(b\).</p>
+<p>Also, the cosine graph has a maximum of 1 and a minimum of -1. When the cosine function is multiplied by a constant, its amplitude changes by that factor and the maximum becomes that same constant. We will use this to find the value of \(a\).</p>
+<p>The maximum value of the graph of \(f(x)\) is {@aa@}, so the graph is being stretched vertically from \(y=\cos(x)\) to \(y={@aa@}\cdot \cos(x)\) and the value of \(a\) is {@aa@}.</p>
+<p>If we look at the section of the graph which decreases from the maximum towards the \(x-\)axis, we see that it has been shifted to the right from the origin by {@minshift@}, so the value of \(b\) is {@minshift@}.</p>
+<p>Therefore, the function can be written as \(f(x) = {@aa*cos(x-minshift)@}\).</p>]]></text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2023060500</text>
+    </stackversion>
+    <questionvariables>
+      <text><![CDATA[aa:rand(3)+2;
+bb:(rand(7)+1)*%pi/4;
+fx:aa*sin(x-float(bb));
+ta11:aa*sin(x-bb*180/%pi);
+ta12:-aa*sin(x-180-bb*180/%pi);
+ta13:aa*sin(x+360-bb*180/%pi);
+ta14:-aa*sin(x+180-bb*180/%pi);
+ta15:-aa*sin(x+540-bb*180/%pi);
+ta21:aa*cos(x-90-bb*180/%pi);
+ta22:-aa*cos(x-270-bb*180/%pi);
+ta23:aa*cos(x+270-bb*180/%pi);
+ta24:-aa*cos(x+90-bb*180/%pi);
+ta25:-aa*cos(x+450-bb*180/%pi);
+ta3:abs(aa);
+minshift: if 90+bb*180/%pi>=360 then -270+bb*180/%pi else 90+bb*180/%pi;]]></text>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text/>
+    </specificfeedback>
+    <questionnote format="moodle_auto_format">
+      <text><![CDATA[<p>1. \(f(x)={@ta11@}</p>
+<p>2.  \(f(x)={@ta21@}</p>]]></text>
+    </questionnote>
+    <questiondescription format="moodle_auto_format">
+      <text/>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>arccos</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+    <input>
+      <name>ans1</name>
+      <type>algebraic</type>
+      <tans>ta11</tans>
+      <boxsize>10</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>3</showvalidation>
+      <options/>
+    </input>
+    <input>
+      <name>ans2</name>
+      <type>algebraic</type>
+      <tans>ta21</tans>
+      <boxsize>10</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>1</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>1</mustverify>
+      <showvalidation>3</showvalidation>
+      <options/>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text/>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans1</sans>
+        <tans>ta11</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>+</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans1</sans>
+        <tans>ta12</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>+</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt1-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans1</sans>
+        <tans>ta13</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt1-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans1</sans>
+        <tans>ta14</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-4-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>4</falsenextnode>
+        <falseanswernote>prt1-4-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>4</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans1</sans>
+        <tans>ta15</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-5-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-5-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+    </prt>
+    <prt>
+      <name>prt2</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text/>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans2</sans>
+        <tans>ta21</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>+</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>1</falsenextnode>
+        <falseanswernote>prt2-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>1</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans2</sans>
+        <tans>ta22</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-2-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>2</falsenextnode>
+        <falseanswernote>prt2-2-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>2</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans2</sans>
+        <tans>ta23</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-3-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>3</falsenextnode>
+        <falseanswernote>prt2-3-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>3</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans2</sans>
+        <tans>ta24</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-4-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>-</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>4</falsenextnode>
+        <falseanswernote>prt2-4-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+      <node>
+        <name>4</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans2</sans>
+        <tans>ta25</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt2-5-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt2-5-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+    </prt>
+    <deployedseed>1564818949</deployedseed>
+    <deployedseed>1017944393</deployedseed>
+    <deployedseed>1004281449</deployedseed>
+    <deployedseed>1163477571</deployedseed>
+    <deployedseed>1441642357</deployedseed>
+    <deployedseed>1920338697</deployedseed>
+    <deployedseed>540318187</deployedseed>
+    <deployedseed>1535797874</deployedseed>
+    <deployedseed>1212167976</deployedseed>
+    <deployedseed>262701943</deployedseed>
+    <deployedseed>1244878772</deployedseed>
+    <deployedseed>1607376126</deployedseed>
+    <deployedseed>852255278</deployedseed>
+    <deployedseed>999262785</deployedseed>
+    <deployedseed>1413336592</deployedseed>
+    <qtest>
+      <testcase>1</testcase>
+      <description/>
+      <testinput>
+        <name>ans1</name>
+        <value>ta11</value>
+      </testinput>
+      <testinput>
+        <name>ans2</name>
+        <value>ta21</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-1-T</expectedanswernote>
+      </expected>
+      <expected>
+        <name>prt2</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt2-6-T</expectedanswernote>
+      </expected>
+    </qtest>
+  </question>
+</quiz>

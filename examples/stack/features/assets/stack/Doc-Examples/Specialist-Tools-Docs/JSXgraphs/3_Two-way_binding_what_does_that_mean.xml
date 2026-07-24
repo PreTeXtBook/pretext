@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="stack">
+    <name>
+      <text><![CDATA[3. "Two-way binding", what does that mean?]]></text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>In the previous example the binding transfers the position of both something in the graph to the input and retrieves the stored value of the input on page reload. Basically, one way binding is when the action in a graph changes setting the input value. For two way binding we also track the input value after the page has loaded so that if it changes due to any action we change the graph.</p><p><b>Now why would we want to do that when the graph itself sets the value!?</b></p><ul><li>We might want to provide the input field as a visible editable field so that if the student cannot drag e.g. the slider in the graph they can write the value into the input and the graph reacts as if the thing was moved there, this may be necessary in some cases, but it is not that useful generally.</li><li>More likely is the case where we have multiple graphs connected to the same input and we want them to move in sync when something is done in any one of them.</li><li>We could also have scripting outside the graph that could act on the value on the input(s) in some way and connecting to that might be difficult, but it is much simpler to connect to the input directly and our binding does just that.</li></ul><p>This time you will need to open the questions source to see the code for these graphs, the key here being that each of them reference that same input and bind their slider to it.</p><table><tr><td>Area slider: [[input:ans1]] [[validation:ans1]]<br/>
+Test point: [[input:ans2]] [[validation:ans2]]</td><td>
+[[jsxgraph width='400px' height='400px' input-ref-ans1='ans1Ref' input-ref-ans2='ans2Ref']]
+var board = JXG.JSXGraph.initBoard(divid, {boundingbox: [-4.5, 4.5, 4.5, -4.5], showNavigation:false, grid:true});
+
+var s1 =  board.create('slider',[[-4,4],[-1,4],[1,1,7]],{name: 'Area', snapWidth: 1, ticks: { drawLabels: true }});
+stack_jxg.bind_slider(ans1Ref, s1);
+
+var p = board.create('point', [4, 3]);
+stack_jxg.bind_point(ans2Ref, p);
+
+var c = board.create('point',[0,0],{visible: false});
+
+var circle = board.create('circle',[c,Math.sqrt(s1.Value()/Math.PI)], {frozen:true, fixed:true, method:'pointRadius'});
+circle.setRadius(function() {return Math.sqrt(s1.Value()/Math.PI);});
+
+board.update();
+[[/jsxgraph]]
+</td></tr><tr><td>
+[[jsxgraph width='400px' height='400px' input-ref-ans1='ans1Ref' input-ref-ans2='ans2Ref']]
+var board = JXG.JSXGraph.initBoard(divid, {boundingbox: [-4.5, 4.5, 4.5, -4.5], showNavigation:false, grid:true});
+
+var s1 =  board.create('slider',[[-4,4],[-1,4],[1,1,7]],{name: 'Area', snapWidth: 1, ticks: { drawLabels: true }});
+stack_jxg.bind_slider(ans1Ref, s1);
+
+var p = board.create('point', [4, 3]);
+stack_jxg.bind_point(ans2Ref, p);
+
+var hw = function(){
+ return Math.sqrt(s1.Value())/2.0;
+}
+
+var p1 = board.create('point',[function(){return hw();},function(){return hw();}],{visible: false});
+var p2 = board.create('point',[function(){return hw();},function(){return -hw();}],{visible: false});
+var p3 = board.create('point',[function(){return -hw();},function(){return -hw();}],{visible: false});
+var p4 = board.create('point',[function(){return -hw();},function(){return hw();}],{visible: false});
+
+var ploygon = board.create('polygon',[p1,p2,p3,p4],{frozen:true, fixed:true});
+
+board.update();
+[[/jsxgraph]]
+</td><td>
+[[jsxgraph width='400px' height='400px' input-ref-ans1='ans1Ref' input-ref-ans2='ans2Ref']]
+var board = JXG.JSXGraph.initBoard(divid, {boundingbox: [-4.5, 4.5, 4.5, -4.5], showNavigation:false, grid:true});
+
+var s1 =  board.create('slider',[[-4,4],[-1,4],[1,1,7]],{name: 'Area', snapWidth: 1, ticks: { drawLabels: true }});
+stack_jxg.bind_slider(ans1Ref, s1);
+
+var p = board.create('point', [4, 3]);
+stack_jxg.bind_point(ans2Ref, p);
+
+var c = board.create('point',[0,0],{visible: false});
+
+var circle = board.create('circle',[c,Math.sqrt(s1.Value()/Math.PI)], {frozen:true, fixed:true, method:'pointRadius'});
+circle.setRadius(function() {return Math.sqrt(s1.Value()/Math.PI);});
+
+board.update();
+[[/jsxgraph]]
+</td></tr></table><p><i>Note that in this example if you write a valid value that the slider does not allow the slider will map that value to a value it allows and the binding to the other way will fix the input value. Basically, this slider has specific fixed ticks and those are enforced even in the input.</i></p>]]></text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text/>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <idnumber/>
+    <stackversion>
+      <text>2020040300</text>
+    </stackversion>
+    <questionvariables>
+      <text/>
+    </questionvariables>
+    <specificfeedback format="html">
+      <text>[[feedback:prt1]]</text>
+    </specificfeedback>
+    <questionnote format="html">
+      <text/>
+    </questionnote>
+    <questiondescription format="html">
+      <text/>
+    </questiondescription>
+    <questionsimplify>1</questionsimplify>
+    <assumepositive>0</assumepositive>
+    <assumereal>0</assumereal>
+    <prtcorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:green;"><i class="fa fa-check"></i></span> Correct answer, well done.]]></text>
+    </prtcorrect>
+    <prtpartiallycorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:orange;"><i class="fa fa-adjust"></i></span> Your answer is partially correct.]]></text>
+    </prtpartiallycorrect>
+    <prtincorrect format="html">
+      <text><![CDATA[<span style="font-size: 1.5em; color:red;"><i class="fa fa-times"></i></span> Incorrect answer.]]></text>
+    </prtincorrect>
+    <decimals>.</decimals>
+    <scientificnotation>*10</scientificnotation>
+    <multiplicationsign>dot</multiplicationsign>
+    <sqrtsign>1</sqrtsign>
+    <complexno>i</complexno>
+    <inversetrig>cos-1</inversetrig>
+    <logicsymbol>lang</logicsymbol>
+    <matrixparens>[</matrixparens>
+    <isbroken>0</isbroken>
+    <variantsselectionseed/>
+    <input>
+      <name>ans1</name>
+      <type>algebraic</type>
+      <tans>1</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options/>
+    </input>
+    <input>
+      <name>ans2</name>
+      <type>algebraic</type>
+      <tans>[1,1]</tans>
+      <boxsize>15</boxsize>
+      <strictsyntax>1</strictsyntax>
+      <insertstars>0</insertstars>
+      <syntaxhint/>
+      <syntaxattribute>0</syntaxattribute>
+      <forbidwords/>
+      <allowwords/>
+      <forbidfloat>0</forbidfloat>
+      <requirelowestterms>0</requirelowestterms>
+      <checkanswertype>0</checkanswertype>
+      <mustverify>0</mustverify>
+      <showvalidation>0</showvalidation>
+      <options/>
+    </input>
+    <prt>
+      <name>prt1</name>
+      <value>1.0000000</value>
+      <autosimplify>1</autosimplify>
+      <feedbackstyle>1</feedbackstyle>
+      <feedbackvariables>
+        <text/>
+      </feedbackvariables>
+      <node>
+        <name>0</name>
+        <description/>
+        <answertest>AlgEquiv</answertest>
+        <sans>ans1</sans>
+        <tans>ans1</tans>
+        <testoptions/>
+        <quiet>0</quiet>
+        <truescoremode>=</truescoremode>
+        <truescore>1.0000000</truescore>
+        <truepenalty/>
+        <truenextnode>-1</truenextnode>
+        <trueanswernote>prt1-1-T</trueanswernote>
+        <truefeedback format="html">
+          <text/>
+        </truefeedback>
+        <falsescoremode>=</falsescoremode>
+        <falsescore>0.0000000</falsescore>
+        <falsepenalty/>
+        <falsenextnode>-1</falsenextnode>
+        <falseanswernote>prt1-1-F</falseanswernote>
+        <falsefeedback format="html">
+          <text/>
+        </falsefeedback>
+      </node>
+    </prt>
+    <qtest>
+      <testcase>1</testcase>
+      <description>Test case assuming the teacher's input gets full marks.</description>
+      <testinput>
+        <name>ans1</name>
+        <value>1</value>
+      </testinput>
+      <testinput>
+        <name>ans2</name>
+        <value>[1,1]</value>
+      </testinput>
+      <expected>
+        <name>prt1</name>
+        <expectedscore>1.0000000</expectedscore>
+        <expectedpenalty>0.0000000</expectedpenalty>
+        <expectedanswernote>prt1-1-T</expectedanswernote>
+      </expected>
+    </qtest>
+  </question>
+</quiz>
