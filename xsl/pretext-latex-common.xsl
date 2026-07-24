@@ -926,6 +926,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
     <xsl:if test="$document-root//swungdash">
         <xsl:text>%% A character like a tilde, but different&#xa;</xsl:text>
+        <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
         <xsl:text>\newcommand{\ptxswungdash}{\raisebox{-2.25ex}{\scalebox{2}{\~{}}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:call-template name="quantity-support"/>
@@ -6380,24 +6381,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Left Double Bracket -->
-<xsl:template name="ldblbracket-character">
-    <xsl:text>\textlbrackdbl{}</xsl:text>
-</xsl:template>
-
-<!-- Right Double Bracket -->
-<xsl:template name="rdblbracket-character">
-    <xsl:text>\textrbrackdbl{}</xsl:text>
-</xsl:template>
-
-<!-- Left Angle Bracket -->
-<xsl:template name="langle-character">
-    <xsl:text>\textlangle{}</xsl:text>
-</xsl:template>
-
-<!-- Right Angle Bracket -->
-<xsl:template name="rangle-character">
-    <xsl:text>\textrangle{}</xsl:text>
+<!-- Each character is a LaTeX macro or construction, read from   -->
+<!-- the representation table in  pretext-common.xsl.  Per the    -->
+<!-- note above, an argument-less macro finishes with an empty     -->
+<!-- group, supplied here; a row declares  latex-ending="no"  when -->
+<!-- its value is not such a macro                                 -->
+<!-- TODO: Perhaps use LaTeX double and triple hyphen variants of  -->
+<!-- en-dash and em-dash under some option for human-variant LaTeX -->
+<xsl:template match="char" mode="character">
+    <xsl:choose>
+        <xsl:when test="@latex">
+            <xsl:value-of select="@latex"/>
+            <xsl:if test="not(@latex-ending = 'no')">
+                <xsl:text>{}</xsl:text>
+            </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="warn-unimplemented-character">
+                <xsl:with-param name="char-name" select="@name"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Vertical Bar -->
@@ -6409,78 +6413,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Other Miscellaneous Symbols, Constructions -->
 
-<!-- Ellipsis (dots), for text, not math -->
-<xsl:template name="ellipsis-character">
-    <xsl:text>\textellipsis{}</xsl:text>
-</xsl:template>
-
-<!-- Midpoint -->
-<!-- A centered dot used sometimes like a decorative dash -->
-<!-- http://tex.stackexchange.com/questions/19180/which-dot-character-to-use-in-which-context -->
-<xsl:template name="midpoint-character">
-    <xsl:text>\textperiodcentered{}</xsl:text>
-</xsl:template>
-
-<!-- Swung Dash -->
-<!-- A decorative dash, like a tilde, but bigger, and centered -->
-<!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/  -->
-<xsl:template name="swungdash-character">
-    <xsl:text>\ptxswungdash{}</xsl:text>
-</xsl:template>
 <!-- Protect the version of the macro appearing in titles -->
 <!-- This is an override of the base *template*           -->
 <xsl:template match="title//swungdash|shortitle//swungdash">
     <xsl:text>\protect</xsl:text>
     <xsl:call-template name="swungdash-character"/>
-</xsl:template>
-
-<!-- Per Mille -->
-<!-- Or, per thousand, like a percent sign -->
-<xsl:template name="permille-character">
-    <xsl:text>\textperthousand{}</xsl:text>
-</xsl:template>
-
-<!-- Pilcrow -->
-<!-- Often used to mark the start of a paragraph -->
-<xsl:template name="pilcrow-character">
-    <xsl:text>\textpilcrow{}</xsl:text>
-</xsl:template>
-
-<!-- Section Mark -->
-<!-- The stylized double-S to indicate section numbers -->
-<xsl:template name="section-mark-character">
-    <xsl:text>\textsection{}</xsl:text>
-</xsl:template>
-
-<!-- Minus -->
-<!-- A hyphen/dash for use in text as subtraction or negation-->
-<xsl:template name="minus-character">
-    <xsl:text>\textminus{}</xsl:text>
-</xsl:template>
-
-<!-- Times -->
-<!-- A "multiplication sign" symbol for use in text -->
-<xsl:template name="times-character">
-    <xsl:text>\texttimes{}</xsl:text>
-</xsl:template>
-
-<!-- Solidus -->
-<!-- Fraction bar, not as steep as a forward slash -->
-<!-- This should not allow a linebreak, not tested -->
-<xsl:template name="solidus-character">
-    <xsl:text>\textfractionsolidus{}</xsl:text>
-</xsl:template>
-
-<!-- Obelus -->
-<!-- A "division" symbol for use in text -->
-<xsl:template name="obelus-character">
-    <xsl:text>\textdiv{}</xsl:text>
-</xsl:template>
-
-<!-- Plus/Minus -->
-<!-- The combined symbol -->
-<xsl:template name="plusminus-character">
-    <xsl:text>\textpm{}</xsl:text>
 </xsl:template>
 
 <!-- All Latin abbreviations are defined in -common    -->
@@ -6499,59 +6436,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="abbreviation-period">
     <xsl:text>.\@</xsl:text>
-</xsl:template>
-
-<!-- Copyright symbol -->
-<!-- http://tex.stackexchange.com/questions/1676/             -->
-<!-- how-to-get-good-looking-copyright-and-registered-symbols -->
-<xsl:template name="copyright-character">
-    <xsl:text>\textcopyright{}</xsl:text>
-</xsl:template>
-
-<!-- Phonomark symbol -->
-<xsl:template name="phonomark-character">
-    <xsl:text>\textcircledP{}</xsl:text>
-</xsl:template>
-
-<!-- Copyleft symbol -->
-<xsl:template name="copyleft-character">
-    <xsl:text>\textcopyleft{}</xsl:text>
-</xsl:template>
-
-<!-- Registered symbol -->
-<xsl:template name="registered-character">
-    <xsl:text>\textregistered{}</xsl:text>
-</xsl:template>
-
-<!-- Trademark symbol -->
-<xsl:template name="trademark-character">
-    <xsl:text>\texttrademark{}</xsl:text>
-</xsl:template>
-
-<!-- Servicemark symbol -->
-<xsl:template name="servicemark-character">
-    <xsl:text>\textservicemark{}</xsl:text>
-</xsl:template>
-
-<!-- Degree -->
-<xsl:template name="degree-character">
-    <xsl:text>\textdegree{}</xsl:text>
-</xsl:template>
-
-<!-- Prime -->
-<!-- A construction such as  \(^{\prime}\)  looks much better,     -->
-<!-- but will require a lot of extra care in the "text-processing" -->
-<!-- template since all this math-mode will need to be protected   -->
-<!-- at the outset.  Bringhurst opines that many text fonts lack   -->
-<!-- a prime and/or double-prime glyph, and LaTeX does not seem    -->
-<!-- to have any good way to realize them without using math-mode. -->
-<xsl:template name="prime-character">
-    <xsl:text>\textquotesingle{}</xsl:text>
-</xsl:template>
-
-<!-- Double Prime -->
-<xsl:template name="dblprime-character">
-    <xsl:text>\textquotesingle\textquotesingle{}</xsl:text>
 </xsl:template>
 
 <!-- Characters for Tagging Equations -->
@@ -6746,37 +6630,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="lq-character"/>
     <xsl:apply-templates/>
     <xsl:apply-templates select="." mode="rq-character"/>
-</xsl:template>
-
-<!-- ################-->
-<!-- Other Characters -->
-<!-- ################ -->
-
-<!-- These are specific instances of abstract templates        -->
-<!-- See the similar section of  pretext-common.xsl  for more -->
-
-<!-- TODO: Perhaps use LaTeX double and triple hyphen variants of  -->
-<!-- en-dash and em-dash under some option for human-variant LaTeX -->
-
-<xsl:template name="nbsp-character">
-    <xsl:text>~</xsl:text>
-</xsl:template>
-
-<xsl:template name="ndash-character">
-    <xsl:text>\textendash{}</xsl:text>
-</xsl:template>
-
-<xsl:template name="mdash-character">
-    <xsl:text>\textemdash{}</xsl:text>
-</xsl:template>
-
-<!-- The abstract template for "mdash" consults a publisher option -->
-<!-- for thin space, or no space, surrounding an em-dash.  So the  -->
-<!-- "thin-space-character" is needed for that purpose, and does   -->
-<!-- not have an associated empty PTX element.                     -->
-
-<xsl:template name="thin-space-character">
-    <xsl:text>\,</xsl:text>
 </xsl:template>
 
 <!-- Sage Cells -->

@@ -9661,6 +9661,7 @@ Book (with parts), "section" at level 3
     <!-- U+2026: HORIZONTAL ELLIPSIS -->
     <char name="ellipsis"      unicode="&#x2026;"   latex="\textellipsis"                     ascii="..."/>
     <!-- U+00B7: MIDDLE DOT -->
+    <!-- (sometimes like a decorative dash; tex.stackexchange.com/questions/19180) -->
     <char name="midpoint"      unicode="&#x00b7;"   latex="\textperiodcentered"               ascii="*"/>
     <!-- U+2053: SWUNG DASH -->
     <char name="swungdash"     unicode="&#x2053;"   latex="\ptxswungdash"                     ascii="~"/>
@@ -9675,12 +9676,14 @@ Book (with parts), "section" at level 3
     <!-- U+00D7: MULTIPLICATION SIGN -->
     <char name="times"         unicode="&#x00d7;"   latex="\texttimes"                        ascii="x"/>
     <!-- U+2044: FRACTION SLASH -->
+    <!-- (the LaTeX form should not allow a linebreak; not tested) -->
     <char name="solidus"       unicode="&#x2044;"   latex="\textfractionsolidus"              ascii="/"/>
     <!-- U+00F7: DIVISION SIGN -->
     <char name="obelus"        unicode="&#x00f7;"   latex="\textdiv"                          ascii="/"/>
     <!-- U+00B1: PLUS-MINUS SIGN -->
     <char name="plusminus"     unicode="&#x00b1;"   latex="\textpm"                           ascii="+/-"/>
     <!-- U+00A9: COPYRIGHT SIGN -->
+    <!-- (LaTeX form: tex.stackexchange.com/questions/1676) -->
     <char name="copyright"     unicode="&#x00a9;"   latex="\textcopyright"                    ascii="(c)"/>
     <!-- U+2117: SOUND RECORDING COPYRIGHT -->
     <char name="phonomark"     unicode="&#x2117;"   latex="\textcircledP"/>
@@ -9700,6 +9703,9 @@ Book (with parts), "section" at level 3
     <!-- U+00B0: DEGREE SIGN -->
     <char name="degree"        unicode="&#x00b0;"   latex="\textdegree"                       ascii="deg"/>
     <!-- U+2032: PRIME -->
+    <!-- (a LaTeX math construction looks better, but needs protection    -->
+    <!-- during text-processing; Bringhurst: many text fonts lack a prime -->
+    <!-- and/or double-prime glyph)                                       -->
     <char name="prime"         unicode="&#x2032;"   latex="\textquotesingle"                  ascii="'"/>
     <!-- U+2033: DOUBLE PRIME -->
     <char name="dblprime"      unicode="&#x2033;"   latex="\textquotesingle\textquotesingle"  ascii="''"/>
