@@ -1996,7 +1996,9 @@
     const codeBox = ev.target.closest(".clipboardable");
     if (!navigator.clipboard || !codeBox) return;
     const button = ev.target.closest(".code-copy");
-    const preContent = codeBox.querySelector("pre").textContent;
+    const pre = codeBox.querySelector("pre").cloneNode(true);
+    pre.querySelectorAll(".unselectable").forEach((el2) => el2.remove());
+    const preContent = pre.textContent;
     navigator.clipboard.writeText(preContent);
     button.classList.toggle("copied");
     setTimeout(() => button.classList.toggle("copied"), 1e3);
