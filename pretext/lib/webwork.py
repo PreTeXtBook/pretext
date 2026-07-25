@@ -812,7 +812,7 @@ def webwork_to_xml(
 
         if origin[problem] == "generated":
             if badness:
-                pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nTEXT(beginproblem());\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
+                pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
                 formatted_pg = pg_shell.format(
                     badness_msg.format(path[problem], seed[problem], badness_tip)
                 )
