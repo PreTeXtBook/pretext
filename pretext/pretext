@@ -610,6 +610,11 @@ def main():
         "Python version: {} (expecting 3.10 or newer)".format(ptx.python_version())
     )
 
+    # Report versions of the Python packages we depend upon
+    log.debug(
+        "Python module versions: {}".format(ptx.python_module_versions())
+    )
+
     # Check discovering directory locations as
     # realized by PreTeXt installation
     # Necessary for locating configuration files (next)
