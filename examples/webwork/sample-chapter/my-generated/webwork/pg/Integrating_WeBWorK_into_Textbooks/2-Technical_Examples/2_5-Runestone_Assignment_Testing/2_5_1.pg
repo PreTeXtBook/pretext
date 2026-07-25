@@ -61,10 +61,12 @@ This introduction should appear ahead of the exercise when it shows up in the As
 
 >> [@DataTable(
   [
-    [PGML('[`(0,0)`]'),
+    [
+     PGML('[`(0,0)`]'),
      PGML('[`(0,1)`]'),
     ],
-    [PGML('[`(1,0)`]'),
+    [
+     PGML('[`(1,0)`]'),
      PGML('[`(1,1)`]'),
     ],
   ],

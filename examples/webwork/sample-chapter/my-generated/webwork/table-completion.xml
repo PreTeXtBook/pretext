@@ -129,19 +129,22 @@ Complete this multiplication table.
 
 >> [@DataTable(
   [
-    [[PGML('[`\times`]'),
+    [
+     [PGML('[`\times`]'),
       rowbottom => '3',
       midrule => '1',],
      PGML('[`[$a[0]]`]'),
      PGML('[`[$a[1]]`]'),
     ],
-    [[PGML('[`[$b[0]]`]'),
+    [
+     [PGML('[`[$b[0]]`]'),
       rowbottom => '1',
       midrule => '1',],
      PGML('[_]{$p[0]}{5}'),
      PGML('[_]{$p[2]}{5}'),
     ],
-    [[PGML('[`[$b[1]]`]'),
+    [
+     [PGML('[`[$b[1]]`]'),
       rowbottom => '1',
       midrule => '1',],
      PGML('[_]{$p[1]}{5}'),
@@ -160,19 +163,22 @@ END_PGML
 BEGIN_PGML_SOLUTION
 >> [@DataTable(
   [
-    [[PGML('[`\times`]'),
+    [
+     [PGML('[`\times`]'),
       rowbottom => '3',
       midrule => '1',],
      PGML('[`[$a[0]]`]'),
      PGML('[`[$a[1]]`]'),
     ],
-    [[PGML('[`[$b[0]]`]'),
+    [
+     [PGML('[`[$b[0]]`]'),
       rowbottom => '1',
       midrule => '1',],
      PGML('[`[$p[0]]`]'),
      PGML('[`[$p[2]]`]'),
     ],
-    [[PGML('[`[$b[1]]`]'),
+    [
+     [PGML('[`[$b[1]]`]'),
       rowbottom => '1',
       midrule => '1',],
      PGML('[`[$p[1]]`]'),

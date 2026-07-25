@@ -28,7 +28,7 @@
 <p><fillin characters="15" name="AnSwEr0005"/></p>
 </li>
 </ol></p>
-<p>In answers, because of <tex/> and MathJax divergence, the first two should come out in verbatim. (And so should any string containing even one of those characters.) The latter three should come out in regular text.</p>
+<p>In answers, because of <latex/> and MathJax divergence, the first two should come out in verbatim. (And so should any string containing even one of those characters.) The latter three should come out in regular text.</p>
 </statement>
     <answer>
       <p>
