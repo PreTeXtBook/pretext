@@ -1188,7 +1188,11 @@ document.addEventListener("click", (ev) => {
     const codeBox = ev.target.closest(".clipboardable");
     if (!navigator.clipboard || !codeBox) return;
     const button = ev.target.closest(".code-copy");
-    const preContent = codeBox.querySelector("pre").textContent;
+    // Copy a clone with "unselectable" content removed (e.g. a console prompt),
+    // so the copied text matches what a manual selection would capture.
+    const pre = codeBox.querySelector("pre").cloneNode(true);
+    pre.querySelectorAll(".unselectable").forEach((el) => el.remove());
+    const preContent = pre.textContent;
     navigator.clipboard.writeText(preContent);
     button.classList.toggle("copied")
     setTimeout(() => button.classList.toggle("copied"), 1000);
