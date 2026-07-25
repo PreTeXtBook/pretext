@@ -49,7 +49,8 @@ Context('Numeric');
 BEGIN_PGML
 >> [@DataTable(
   [
-    [PGML(q"What's up, Doc?"),
+    [
+     PGML(q"What's up, Doc?"),
     ],
   ],
       align => '*{1}{l}',

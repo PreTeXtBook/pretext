@@ -52,15 +52,18 @@ A table with minimal XML source.
 
 >> [@DataTable(
   [
-    [PGML('A'),
+    [
+     PGML('A'),
      PGML('B'),
      PGML('C'),
     ],
-    [PGML('D'),
+    [
+     PGML('D'),
      PGML('E'),
      PGML('F'),
     ],
-    [PGML('G'),
+    [
+     PGML('G'),
      PGML('H'),
      PGML('I'),
     ],
@@ -72,12 +75,14 @@ Finish this table.
 
 >> [@DataTable(
   [
-    [[PGML('1'),
+    [
+     [PGML('1'),
       halign => 'r',],
      PGML('two'),
      PGML('[`\lfloor\pi\rfloor`]'),
     ],
-    [[PGML('[`\text{I}+\text{I}`]  
+    [
+     [PGML('[`\text{I}+\text{I}`]  
 [`{}+\text{I}+\text{I}`]  
 '),
       rowbottom => '3',
@@ -87,7 +92,8 @@ Finish this table.
      PGML('[_]{$x}{5}'),
      PGML('six'),
     ],
-    [[PGML('[`2^3-1`]'),
+    [
+     [PGML('[`2^3-1`]'),
       rowbottom => '3',
       midrule => '1',],
      [PGML('VIII'),

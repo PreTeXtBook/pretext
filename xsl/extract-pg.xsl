@@ -298,15 +298,12 @@
 <!-- but in the PG source we can't really form a link to a target outside  -->
 <!-- the problem.                                                          -->
 
-<!-- This routine won't work well in -common since the human-readable      -->
-<!-- parameter would need to tunnel through all the "xref" templates to    -->
-<!-- arrive at the link template.  One solution is to remove the (nice)    -->
-<!-- device of showing the main title in the human forms of the problem    -->
+<!-- This routine could be replaced with the one in -common if we remove   -->
+<!-- the device of showing the main title.                                 -->
 
 <xsl:template match="*" mode="xref-link">
     <xsl:param name="content" />
     <xsl:param name="xref" />
-    <xsl:param name="b-human-readable" />
     <xsl:copy-of select="$content" />
     <xsl:if test="/mathbook/book|/mathbook/article">
         <xsl:text> in </xsl:text>
@@ -367,22 +364,18 @@
 
 <xsl:template match="webwork[statement]">
     <xsl:param name="b-human-readable" />
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="converter-blurb-webwork" />
-        <xsl:call-template name="webwork-metadata" />
-    </xsl:if>
+    <xsl:call-template name="converter-blurb-webwork" />
+    <xsl:call-template name="webwork-metadata" />
     <xsl:text>DOCUMENT();&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pg-macros">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>COMMENT('</xsl:text>
-        <xsl:apply-templates select="." mode="type-name">
-            <xsl:with-param name="string-id" select="'authored'"/>
-        </xsl:apply-templates>
-        <xsl:text>');&#xa;</xsl:text>
-        <xsl:apply-templates select="description"/>
-    </xsl:if>
+    <xsl:text>COMMENT('</xsl:text>
+    <xsl:apply-templates select="." mode="type-name">
+        <xsl:with-param name="string-id" select="'authored'"/>
+    </xsl:apply-templates>
+    <xsl:text>');&#xa;</xsl:text>
+    <xsl:apply-templates select="description"/>
     <xsl:call-template name="pg-header">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
@@ -398,30 +391,24 @@
     <xsl:apply-templates select="solution">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:call-template name="end-problem">
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-    </xsl:call-template>
+    <xsl:call-template name="end-problem"/>
 </xsl:template>
 
 <xsl:template match="webwork[task]">
     <xsl:param name="b-human-readable" />
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="converter-blurb-webwork" />
-        <xsl:call-template name="webwork-metadata" />
-    </xsl:if>
+    <xsl:call-template name="converter-blurb-webwork" />
+    <xsl:call-template name="webwork-metadata" />
     <xsl:text>DOCUMENT();&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pg-macros">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>COMMENT('</xsl:text>
-        <xsl:apply-templates select="." mode="type-name">
-            <xsl:with-param name="string-id" select="'authored'"/>
-        </xsl:apply-templates>
-        <xsl:text>');&#xa;</xsl:text>
-        <xsl:text>COMMENT('This problem is scaffolded with multiple parts');&#xa;</xsl:text>
-        <xsl:apply-templates select="description"/>
-    </xsl:if>
+    <xsl:text>COMMENT('</xsl:text>
+    <xsl:apply-templates select="." mode="type-name">
+        <xsl:with-param name="string-id" select="'authored'"/>
+    </xsl:apply-templates>
+    <xsl:text>');&#xa;</xsl:text>
+    <xsl:text>COMMENT('This problem is scaffolded with multiple parts');&#xa;</xsl:text>
+    <xsl:apply-templates select="description"/>
     <xsl:call-template name="pg-header">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
@@ -430,7 +417,6 @@
     </xsl:apply-templates>
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Body</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:if test="ancestor::exercisegroup/introduction|introduction">
         <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
@@ -446,7 +432,6 @@
     </xsl:if>
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Scaffold</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>Scaffold::Begin(</xsl:text>
     <xsl:text>numbered =&gt; 1,</xsl:text>
@@ -461,19 +446,13 @@
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>);</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="task">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>Scaffold::End();</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:if test="conclusion">
         <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
         <xsl:apply-templates select="conclusion">
@@ -481,25 +460,20 @@
         </xsl:apply-templates>
         <xsl:text>&#xa;END_PGML&#xa;</xsl:text>
     </xsl:if>
-    <xsl:call-template name="end-problem">
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-    </xsl:call-template>
+    <xsl:call-template name="end-problem"/>
 </xsl:template>
 
 <xsl:template match="task[statement]">
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Section</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>Section::Begin("</xsl:text>
     <xsl:if test="title">
         <xsl:apply-templates select="." mode="title-xref"/>
     </xsl:if>
     <xsl:text>");</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="statement">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
@@ -509,29 +483,22 @@
     <xsl:apply-templates select="solution">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>Section::End();</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="task[task]">
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Section</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>Section::Begin("</xsl:text>
     <xsl:if test="title">
         <xsl:apply-templates select="." mode="title-xref"/>
     </xsl:if>
     <xsl:text>");</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:if test="introduction">
         <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
         <xsl:apply-templates select="introduction">
@@ -541,22 +508,15 @@
     </xsl:if>
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Scaffold</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>Scaffold::Begin(numbered=&gt;1);</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="task">
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:apply-templates>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>Scaffold::End();</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:if test="conclusion">
         <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
         <xsl:apply-templates select="conclusion">
@@ -564,28 +524,21 @@
         </xsl:apply-templates>
         <xsl:text>&#xa;END_PGML&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>Section::End();</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="webwork" mode="pg-code">
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">PG Setup Code</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <!-- All our problems load MathObjects, and so should have at least    -->
     <!-- one explicit Context() load.                                      -->
     <xsl:if test="not(contains(.//pg-code,'Context('))">
         <xsl:text>Context('Numeric');</xsl:text>
-        <xsl:if test="$b-human-readable">
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:if>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <!-- pg-code verbatim, but trim indentation -->
     <xsl:if test=".//pg-code">
@@ -606,7 +559,6 @@
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Body</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
     <xsl:if test="$b-human-readable">
@@ -634,7 +586,6 @@
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Solution</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>&#xa;BEGIN_PGML_SOLUTION&#xa;</xsl:text>
     <xsl:apply-templates select="*">
@@ -645,14 +596,10 @@
 
 <!-- default template, for hint -->
 <xsl:template match="hint">
-    <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Hint</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>#Set value of $showHint in PGcourse.pl for course-wide attempt threshhold for revealing hints&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>#Set value of $showHint in PGcourse.pl for course-wide attempt threshhold for revealing hints&#xa;</xsl:text>
     <xsl:text>&#xa;BEGIN_PGML_HINT&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <xsl:text>&#xa;END_PGML_HINT&#xa;</xsl:text>
@@ -772,7 +719,6 @@
     <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Header</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>TEXT(beginproblem());&#xa;</xsl:text>
     <xsl:if test="not($b-human-readable)">
@@ -804,9 +750,7 @@
             <xsl:text>));&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -815,15 +759,11 @@
 <!-- ############## -->
 
 <xsl:template name="end-problem">
-    <xsl:param name="b-human-readable" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">End Problem</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
     <xsl:text>&#xa;ENDDOCUMENT();</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ############## -->
@@ -837,18 +777,15 @@
 
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Load Macros</xsl:with-param>
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
 
     <!-- two standard macros always used -->
     <xsl:variable name="standard-macros">
         <xsl:call-template name="macro-padding">
             <xsl:with-param name="string" select="'PGstandard.pl'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
         </xsl:call-template>
         <xsl:call-template name="macro-padding">
             <xsl:with-param name="string" select="'PGML.pl'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
         </xsl:call-template>
     </xsl:variable>
 
@@ -862,7 +799,6 @@
         <xsl:if test="$pg.answer.form.help = 'yes'">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'AnswerFormatHelp.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
 
@@ -872,25 +808,21 @@
         <xsl:if test=".//tabular">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'niceTables.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
         <xsl:if test=".//image[@pg-name]">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PGgraphmacros.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
         <xsl:if test=".//latex-image or ($b-human-readable and ancestor::exercisegroup/introduction//latex-image)">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PGlateximage.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
         <xsl:if test="task">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'scaffold.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
 
@@ -900,13 +832,11 @@
         <xsl:if test=".//instruction or contains($pg-code,'RandomVariableName') or contains($pg-code,'RandomName') or contains($pg-code,'numberWord')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PCCmacros.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
         <xsl:if test=".//var[@form='essay'] or contains($pg-code,'explanation_box')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PGessaymacros.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
 
@@ -915,19 +845,16 @@
         <xsl:if test="contains($pg-code,'AnswerHints')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'answerHints.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
         <xsl:if test="contains($pg-code,'bizarro')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'bizarroArithmetic.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
         <xsl:if test="contains($pg-code,'NchooseK')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'PGchoicemacros.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
 
@@ -963,7 +890,6 @@
             <xsl:if test="contains($pg-code, .)">
                 <xsl:call-template name="macro-padding">
                     <xsl:with-param name="string" select="concat('parser', ., '.pl')"/>
-                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
                 </xsl:call-template>
             </xsl:if>
         </xsl:for-each>
@@ -973,25 +899,21 @@
         <xsl:if test="contains($pg-code, 'parserFunction')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'parserFunction.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
         <xsl:if test="contains($pg-code, 'parser::Prime')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'parserPrime.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
         <xsl:if test="contains($pg-code, 'parser::Root')">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'parserRoot.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
         <xsl:if test="contains($pg-code, 'Overline') or contains($pg-code, 'BoldMath' or contains($pg-code, 'non_zero_point') or contains($pg-code, 'non_zero_vector'))">
             <xsl:call-template name="macro-padding">
                 <xsl:with-param name="string" select="'parserVectorUtils.pl'"/>
-                <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             </xsl:call-template>
         </xsl:if>
 
@@ -1037,7 +959,6 @@
             <xsl:if test="contains($pg-code, .)">
                 <xsl:call-template name="macro-padding">
                     <xsl:with-param name="string" select="concat('context', ., '.pl')"/>
-                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
                 </xsl:call-template>
             </xsl:if>
         </xsl:for-each>
@@ -1076,7 +997,6 @@
                 <xsl:otherwise>
                     <xsl:call-template name="macro-padding">
                         <xsl:with-param name="string" select="."/>
-                        <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
@@ -1097,22 +1017,18 @@
         </xsl:variable>
         <xsl:call-template name="macro-padding">
             <xsl:with-param name="string" select="$ptx-pg-macros-filename"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
         </xsl:call-template>
     </xsl:variable>
     <!-- always finish with PG course macro -->
     <xsl:variable name="course-macros">
         <xsl:call-template name="macro-padding">
             <xsl:with-param name="string" select="'PGcourse.pl'"/>
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
         </xsl:call-template>
     </xsl:variable>
     <!-- put them together with a wrapper -->
     <xsl:variable name="load-macros">
         <xsl:text>loadMacros(</xsl:text>
-        <xsl:if test="$b-human-readable">
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:if>
+        <xsl:text>&#xa;</xsl:text>
         <xsl:value-of select="$standard-macros" />
         <xsl:value-of select="$implied-macros" />
         <xsl:value-of select="$user-macros" />
@@ -1121,9 +1037,7 @@
         </xsl:if>
         <xsl:value-of select="$course-macros" />
         <xsl:text>);</xsl:text>
-        <xsl:if test="$b-human-readable">
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:if>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:variable>
     <xsl:value-of select="$load-macros" />
     <!-- if images are used, explicitly refresh or stale images will be used in HTML -->
@@ -1134,16 +1048,11 @@
 
 <xsl:template name="macro-padding">
     <xsl:param name="string"/>
-    <xsl:param name="b-human-readable"/>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>  </xsl:text>
-    </xsl:if>
+    <xsl:text>  </xsl:text>
     <xsl:text>"</xsl:text>
     <xsl:value-of select="$string"/>
     <xsl:text>",</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ############## -->
@@ -1172,10 +1081,7 @@
 <!-- PGML answer input               -->
 <!-- Example: [_____]{$ans}          -->
 <xsl:template match="statement//var[@width|@form]">
-    <xsl:param name="b-human-readable" />
-    <xsl:apply-templates select="." mode="field">
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-    </xsl:apply-templates>
+    <xsl:apply-templates select="." mode="field"/>
     <xsl:apply-templates select="." mode="form-help"/>
 </xsl:template>
 
@@ -1183,7 +1089,6 @@
 <!-- with variant for MathObjects like Matrix, Vector, ColumnVector      -->
 <!-- where the shape of the MathObject guides the array of answer blanks -->
 <xsl:template match="var[@width|@form]" mode="field">
-    <xsl:param name="b-human-readable" />
     <xsl:variable name="width">
         <xsl:choose>
             <xsl:when test="@width">
@@ -1232,12 +1137,8 @@
 <!-- Requires:  PGessaymacros.pl, automatically loaded -->
 <!-- http://webwork.maa.org/moodle/mod/forum/discuss.php?d=3370 -->
 <xsl:template match="var[@form='essay']" mode="field">
-    <xsl:param name="b-human-readable" />
     <xsl:text>[@ANS(essay_cmp());</xsl:text>
-    <!-- NECESSARY? -->
-    <xsl:if test="$b-human-readable">
-        <xsl:text> </xsl:text>
-    </xsl:if>
+    <xsl:text> </xsl:text>
     <xsl:text>essay_box(</xsl:text>
     <xsl:choose>
         <xsl:when test="@height">
@@ -1532,16 +1433,13 @@
 <!-- use will be caught by a deprectation warning -->
 <!-- as well as fail a schema validation.         -->
 <xsl:template match="image|tabular|sidebyside">
-    <xsl:param name="b-human-readable" />
     <xsl:if test="preceding-sibling::p">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
     <xsl:if test="not(ancestor::li)">
         <xsl:text>&gt;&gt; </xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="self::image|self::tabular|self::sidebyside/image|self::sidebyside/tabular" mode="components">
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-    </xsl:apply-templates>
+    <xsl:apply-templates select="self::image|self::tabular|self::sidebyside/image|self::sidebyside/tabular" mode="components"/>
     <xsl:if test="not(ancestor::li)">
         <xsl:text> &lt;&lt;</xsl:text>
     </xsl:if>
@@ -1630,11 +1528,9 @@
 <xsl:template match="md[not(@pi:authored-one-line)]" mode="body">
     <xsl:param name="b-human-readable"/>
     <xsl:variable name="complete-latex">
-        <xsl:if test="$b-human-readable">
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:if test="ancestor::ul|ancestor::ol">
-                <xsl:call-template name="potential-list-indent" />
-            </xsl:if>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:if test="ancestor::ul|ancestor::ol">
+            <xsl:call-template name="potential-list-indent" />
         </xsl:if>
         <xsl:text>\begin{</xsl:text>
         <xsl:apply-templates select="." mode="displaymath-alignment"/>
@@ -1939,28 +1835,12 @@
 
 <!-- TeX logo  -->
 <xsl:template match="tex">
-    <xsl:param name="b-human-readable" />
-    <xsl:choose>
-        <xsl:when test="$b-human-readable">
-            <xsl:text>[@MODES(HTML =&gt; '\(\mathrm\TeX\)', TeX =&gt; '\TeX', PTX =&gt; '&lt;tex/&gt;')@]*</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>[@MODES(HTML=&gt;'\(\mathrm\TeX\)',TeX=&gt;'\TeX', PTX=&gt;'&lt;tex/&gt;')@]*</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>[@MODES(HTML =&gt; '\(\mathrm\TeX\)', TeX =&gt; '\TeX', PTX =&gt; '&lt;tex/&gt;')@]*</xsl:text>
 </xsl:template>
 
 <!-- LaTeX logo  -->
 <xsl:template match="latex">
-    <xsl:param name="b-human-readable" />
-    <xsl:choose>
-        <xsl:when test="$b-human-readable">
-            <xsl:text>[$LATEX]*</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>[$TEX]*</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>[$LATEX]*</xsl:text>
 </xsl:template>
 
 <!-- PGML is content with "dumb" quotes and will do    -->
@@ -2317,36 +2197,18 @@
 <!-- Tables -->
 <!-- ###### -->
 
-<xsl:template match="table">
-    <xsl:param name="b-human-readable" />
-    <xsl:apply-templates select="*[not(self::caption)]">
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-    </xsl:apply-templates>
-</xsl:template>
-
 <xsl:template match="tabular" mode="components">
-    <xsl:param name="b-human-readable" />
-
     <xsl:text>[@DataTable(</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:call-template name="potential-list-indent" />
-        <xsl:text>  </xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:call-template name="potential-list-indent" />
+    <xsl:text>  </xsl:text>
     <xsl:text>[</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="row">
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-    </xsl:apply-templates>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="potential-list-indent" />
-        <xsl:text>  </xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="row"/>
+    <xsl:call-template name="potential-list-indent" />
+    <xsl:text>  </xsl:text>
     <xsl:text>],</xsl:text>
     <xsl:call-template name="key-value">
-        <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
         <xsl:with-param name="key" select="'align'"/>
         <xsl:with-param name="value">
             <xsl:apply-templates select="." mode="texalignment"/>
@@ -2355,7 +2217,6 @@
     <!-- niceTables default for valign is top -->
     <xsl:if test="@valign = str:tokenize('bottom middle') or not(@valign) or @valign = ''">
         <xsl:call-template name="key-value">
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             <xsl:with-param name="key" select="'valign'"/>
             <xsl:with-param name="value">
                 <xsl:choose>
@@ -2372,7 +2233,6 @@
     <!-- is there a top border? -->
     <xsl:if test="@top = str:tokenize('minor medium major', ' ')">
         <xsl:call-template name="key-value">
-            <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
             <xsl:with-param name="key" select="'top'"/>
             <xsl:with-param name="value">
                 <xsl:call-template name="pg-hrule-specification">
@@ -2381,9 +2241,7 @@
             </xsl:with-param>
         </xsl:call-template>
     </xsl:if>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="potential-list-indent" />
-    </xsl:if>
+    <xsl:call-template name="potential-list-indent" />
     <xsl:text>);@]*</xsl:text>
 </xsl:template>
 
@@ -2488,34 +2346,22 @@
     <xsl:value-of select="concat(number(substring-before($percent-width,'%')) div 100 * 6.25, 'in')"/>
 </xsl:template>
 
-
 <xsl:template match="tabular/row">
-    <xsl:param name="b-human-readable" />
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="potential-list-indent" />
-        <xsl:text>    </xsl:text>
-    </xsl:if>
+    <xsl:call-template name="potential-list-indent" />
+    <xsl:text>    </xsl:text>
     <xsl:text>[</xsl:text>
-    <xsl:apply-templates select="cell">
-        <xsl:with-param name="b-human-readable" select="$b-human-readable" />
-    </xsl:apply-templates>
-    <xsl:if test="$b-human-readable">
-        <xsl:call-template name="potential-list-indent" />
-        <xsl:text>    </xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="cell"/>
+    <xsl:call-template name="potential-list-indent" />
+    <xsl:text>    </xsl:text>
     <xsl:text>],</xsl:text>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 
 <xsl:template match="cell">
-    <xsl:param name="b-human-readable" />
-    <xsl:if test="$b-human-readable and preceding-sibling::cell">
-        <xsl:call-template name="potential-list-indent" />
-        <xsl:text>     </xsl:text>
-    </xsl:if>
+    <xsl:call-template name="potential-list-indent" />
+    <xsl:text>     </xsl:text>
 
     <!-- A goal is to minimize length of code, so we work hard here to ascertain -->
     <!-- when a given cell specification like valign can be omitted, because the -->
@@ -2707,9 +2553,7 @@
             <xsl:text>PGML(</xsl:text>
             <xsl:apply-templates select="." mode="delimit"/>
             <xsl:text>),</xsl:text>
-            <xsl:if test="$b-human-readable">
-                <xsl:text>&#xa;</xsl:text>
-            </xsl:if>
+            <xsl:text>&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>[PGML(</xsl:text>
@@ -2718,7 +2562,6 @@
             <!-- declare rowbottom if needed -->
             <xsl:if test="$row-bottom != 'none' and not(preceding-sibling::cell)">
                 <xsl:call-template name="key-value">
-                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
                     <xsl:with-param name="key" select="'rowbottom'"/>
                     <xsl:with-param name="value">
                         <xsl:call-template name="pg-hrule-specification">
@@ -2728,7 +2571,6 @@
                 </xsl:call-template>
                 <!-- this is redundant, but it here for backward compatibility -->
                 <xsl:call-template name="key-value">
-                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
                     <xsl:with-param name="key" select="'midrule'"/>
                     <xsl:with-param name="value" select="1"/>
                 </xsl:call-template>
@@ -2736,7 +2578,6 @@
              <!-- declare bottom if needed -->
              <xsl:if test="$cell-bottom != $row-bottom">
                 <xsl:call-template name="key-value">
-                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
                     <xsl:with-param name="key" select="'bottom'"/>
                     <xsl:with-param name="value">
                         <xsl:call-template name="pg-hrule-specification">
@@ -2748,7 +2589,6 @@
             <!-- declare valign if needed -->
             <xsl:if test="$row-valign != $tabular-valign and not(preceding-sibling::cell)">
                 <xsl:call-template name="key-value">
-                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
                     <xsl:with-param name="key" select="'valign'"/>
                     <xsl:with-param name="value" select="$row-valign"/>
                 </xsl:call-template>
@@ -2756,7 +2596,6 @@
             <!-- declare halign if needed -->
             <xsl:if test="$cell-halign != $col-halign and not(ancestor::tabular[1]/col[$left-col]/@width) or ($row-left != $tabular-left and not(preceding-sibling::cell)) or ($cell-right != $col-right)">
                 <xsl:call-template name="key-value">
-                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
                     <xsl:with-param name="key" select="'halign'"/>
                     <xsl:with-param name="value">
                         <xsl:if test="$row-left != $tabular-left and not(preceding-sibling::cell)">
@@ -2778,16 +2617,13 @@
             <!-- declare colspan if present-->
             <xsl:if test="@colspan">
                 <xsl:call-template name="key-value">
-                    <xsl:with-param name="b-human-readable" select="$b-human-readable"/>
                     <xsl:with-param name="key" select="'colspan'"/>
                     <xsl:with-param name="value" select="@colspan"/>
                 </xsl:call-template>
             </xsl:if>
             <!-- close cell's array reference bracket -->
             <xsl:text>],</xsl:text>
-            <xsl:if test="$b-human-readable">
-                <xsl:text>&#xa;</xsl:text>
-            </xsl:if>
+            <xsl:text>&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -2837,23 +2673,13 @@
 
 
 <xsl:template name="key-value">
-    <xsl:param name="b-human-readable"/>
     <xsl:param name="key"/>
     <xsl:param name="value"/>
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:call-template name="potential-list-indent" />
-        <xsl:text>      </xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:call-template name="potential-list-indent" />
+    <xsl:text>      </xsl:text>
     <xsl:value-of select="$key"/>
-    <xsl:choose>
-        <xsl:when test="$b-human-readable">
-            <xsl:text> =&gt; </xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>=&gt;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text> =&gt; </xsl:text>
     <xsl:text>'</xsl:text>
     <xsl:value-of select="$value"/>
     <xsl:text>',</xsl:text>
@@ -2867,15 +2693,12 @@
 <!-- Very good for readability, very bad for base64 length -->
 <xsl:template name="begin-block">
     <xsl:param name="block-title"/>
-    <xsl:param name="b-human-readable" />
-    <xsl:if test="$b-human-readable">
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>############################################################&#xa;</xsl:text>
-        <xsl:text># </xsl:text>
-        <xsl:value-of select="$block-title"/>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>############################################################&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>############################################################&#xa;</xsl:text>
+    <xsl:text># </xsl:text>
+    <xsl:value-of select="$block-title"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>############################################################&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Base indentation for lines of code in the middle of a list -->

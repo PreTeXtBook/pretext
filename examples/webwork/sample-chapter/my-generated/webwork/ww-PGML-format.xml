@@ -24,9 +24,9 @@
 <cline>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]   </cline>
 </pre>
 <p>Some raw characters, XML/HTML:    &amp; &lt; &gt; <lq/> <lsq/></p>
-<p>Some raw characters, <tex/>:    # $ % ^ &amp; _ { } ~ \</p>
+<p>Some raw characters, <latex/>:    # $ % ^ &amp; _ { } ~ \</p>
 <p>Some raw characters, PGML:        \ * # { } [ ]</p>
-<p>Some characters that need special handling for PGML conversion to HTML or <tex/>:</p>
+<p>Some characters that need special handling for PGML conversion to HTML or <latex/>:</p>
 <p>A non<nbsp/>breaking space (invisble where a hyphen should be)</p>
 <p>An ndash<ndash/>right here.</p>
 <p>An mdash<mdash/>right here.</p>

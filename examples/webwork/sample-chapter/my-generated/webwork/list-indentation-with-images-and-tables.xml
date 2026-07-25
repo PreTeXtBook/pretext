@@ -152,10 +152,12 @@ a.  Structured item
 
     [@DataTable(
       [
-        [PGML('a'),
+        [
+         PGML('a'),
          PGML('b'),
         ],
-        [PGML('c'),
+        [
+         PGML('c'),
          PGML('d'),
         ],
       ],
@@ -164,12 +166,14 @@ a.  Structured item
 
 a.  [@DataTable(
       [
-        [[PGML('1'),
+        [
+         [PGML('1'),
           halign => 'r',],
          PGML('two'),
          PGML('[`\lfloor\pi\rfloor`]'),
         ],
-        [[PGML('[`\text{I}+\text{I}`]  
+        [
+         [PGML('[`\text{I}+\text{I}`]  
 [`{}+\text{I}+\text{I}`]  
 '),
           rowbottom => '3',
@@ -179,7 +183,8 @@ a.  [@DataTable(
          PGML('[`5`]'),
          PGML('six'),
         ],
-        [[PGML('[`2^3-1`]'),
+        [
+         [PGML('[`2^3-1`]'),
           rowbottom => '3',
           midrule => '1',],
          [PGML('VIII'),
@@ -196,10 +201,12 @@ a.  Structured item
 
     [@DataTable(
       [
-        [PGML('a'),
+        [
+         PGML('a'),
          PGML('b'),
         ],
-        [PGML('c'),
+        [
+         PGML('c'),
          PGML('d'),
         ],
       ],
