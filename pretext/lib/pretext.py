@@ -5657,6 +5657,41 @@ def python_version():
     return "{}.{}".format(sys.version_info[0], sys.version_info[1])
 
 
+def python_module_versions():
+    """Report installed versions of the Python packages PreTeXt depends on"""
+
+    # Package names come from the distribution's "requirements.txt", so the
+    # report tracks the actual dependency list.  Versions come from the
+    # installed package metadata, not the version specifiers in the file, so
+    # the report shows what is really in use.  Intended for the debugging log,
+    # to aid in diagnosing an author's or publisher's setup.
+    import importlib.metadata  # version(), PackageNotFoundError
+
+    # "requirements.txt" sits alongside this module's package directory
+    requirements = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "requirements.txt"
+    )
+    try:
+        with open(requirements, "r") as requirements_file:
+            lines = requirements_file.readlines()
+    except OSError:
+        return "unable to read {}".format(requirements)
+
+    reports = []
+    for line in lines:
+        line = line.strip()
+        if (line == "") or line.startswith("#"):
+            continue
+        # a requirement is a package name followed by an optional version
+        # specifier, extras, or environment marker; keep the leading name
+        name = re.split(r"[<>=!~;\[\s]", line, maxsplit=1)[0]
+        try:
+            reports.append("{} {}".format(name, importlib.metadata.version(name)))
+        except importlib.metadata.PackageNotFoundError:
+            reports.append("{} (not installed)".format(name))
+    return ", ".join(reports)
+
+
 def check_python_version():
     """Raise an error for Python 2 (or less); warn for Python 3 before 3.10"""
 
