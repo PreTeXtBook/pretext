@@ -409,9 +409,12 @@ def webwork_to_xml(
             response = response.text
 
         # Check for errors with PG processing
-        # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
-        file_empty = "ERROR:  This problem file was empty!" in response
+        # Get booleans signaling badness: no_compile, bad_xml, no_statement
 
+        # This will be true if there is an actual syntax issue with compiling the problem, but also
+        # if the problem file is simply missing. TODO: We could get more specifics about what went
+        # wrong if we repeat the request, but ask for HTML instead of PTX. That will carry details,
+        # and would be helpful to report to a PTX author/publisher.
         no_compile = (
             "ERROR caught by Translator while processing" in response
         )
@@ -427,7 +430,7 @@ def webwork_to_xml(
         if not bad_xml:
             if response_root.find(".//statement") is None:
                 no_statement = True
-        badness = file_empty or no_compile or bad_xml or no_statement
+        badness = no_compile or bad_xml or no_statement
 
         # Custom responses for each type of badness
         # message for terminal log
@@ -438,15 +441,7 @@ def webwork_to_xml(
         badness_tip = ""
         badness_type = ""
         badness_base64 = ""
-        # NB: in WeBWorK 2.19+, the response from a nonexistent problem is not distinguishable from
-        # the response from a problem that has broken code. So even when a file is empty, file_empty
-        # will be false and instead no_compile will be true.
-        if file_empty:
-            badness_msg = "PTX:ERROR: WeBWorK problem {} was empty\n"
-            badness_tip = ""
-            badness_type = "empty"
-            badness_base64 = "RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBGaWxlIFdhcyBFbXB0eQoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7"
-        elif no_compile:
+        if no_compile:
             badness_msg = (
                 "PTX:ERROR: WeBWorK problem {} with seed {} is either empty or failed to compile  \n{}\n"
             )
@@ -456,17 +451,17 @@ def webwork_to_xml(
                 else "  Use -a to halt with returned content"
             )
             badness_type = "compile"
-            badness_base64 = "RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEb2VzIE5vdCBFeGlzdCBPciBEaWQgTm90IENvbXBpbGUKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw=="
+            badness_base64 = "RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygnUEdzdGFuZGFyZC5wbCcpOwpURVhUKCdXZUJXb3JLIFByb2JsZW0gRG9lcyBOb3QgRXhpc3QgT3IgRGlkIE5vdCBDb21waWxlJyk7CkVORERPQ1VNRU5UKCk7"
         elif bad_xml:
             badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} does not return valid XML  \n  It may not be PTX compatible  \n{}\n"
             badness_tip = "  Use -a to halt with returned content"
             badness_type = "xml"
-            badness_base64 = "RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEdlbmVyYXRlIFZhbGlkIFhNTAoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7"
+            badness_base64 = "RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygnUEdzdGFuZGFyZC5wbCcpOwpURVhUKCdXZUJXb3JLIFByb2JsZW0gRGlkIE5vdCBHZW5lcmF0ZSBWYWxpZCBYTUwnKTsKRU5ERE9DVU1FTlQoKTs="
         elif no_statement:
             badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} does not have a statement tag \n  Maybe it uses something other than BEGIN_TEXT or BEGIN_PGML to print the statement in its PG code \n{}\n"
             badness_tip = "  Use -a to halt with returned content"
             badness_type = "statement"
-            badness_base64 = "RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEhhdmUgYSBbfHN0YXRlbWVudHxdKiBUYWcKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw=="
+            badness_base64 = "RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygnUEdzdGFuZGFyZC5wbCcpOwpURVhUKCdXZUJXb3JLIFByb2JsZW0gRGlkIE5vdCBIYXZlIGEgInN0YXRlbWVudCIgVGFnJyk7CkVORERPQ1VNRU5UKCk7"
 
         # If we are aborting upon recoverable errors...
         if abort_early:
@@ -812,7 +807,7 @@ def webwork_to_xml(
 
         if origin[problem] == "generated":
             if badness:
-                pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nTEXT(beginproblem());\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
+                pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
                 formatted_pg = pg_shell.format(
                     badness_msg.format(path[problem], seed[problem], badness_tip)
                 )
