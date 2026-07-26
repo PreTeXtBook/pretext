@@ -1539,27 +1539,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (c) string for messages (e.g. "footnotes").               -->
 <!-- The numbered-object families (blocks, projects, equations,   -->
 <!-- footnotes, figures, inline exercises, open problems) share   -->
-<!-- one default numbering level, set by the document type.       -->
+<!-- one default numbering level: set by the document type, and   -->
+<!-- never more than the division depth the publisher elected     -->
+<!-- ($numbering-maxlevel), so an unconfigured document always    -->
+<!-- has a conforming value.                                      -->
 <xsl:variable name="default-numbering-level">
+    <xsl:variable name="document-type-level">
+        <xsl:choose>
+            <xsl:when test="$version-root/book/part">3</xsl:when>
+            <xsl:when test="$version-root/book">2</xsl:when>
+            <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
+            <xsl:when test="$version-root/article">0</xsl:when>
+            <xsl:when test="$version-root/slideshow">0</xsl:when>
+            <xsl:when test="$version-root/letter">0</xsl:when>
+            <xsl:when test="$version-root/memo">0</xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:BUG: a document type needs a default numbering level defined</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$version-root/book/part">3</xsl:when>
-        <xsl:when test="$version-root/book">2</xsl:when>
-        <xsl:when test="$version-root/article/section|$version-root/article/worksheet">1</xsl:when>
-        <xsl:when test="$version-root/article">0</xsl:when>
-        <xsl:when test="$version-root/slideshow">0</xsl:when>
-        <xsl:when test="$version-root/letter">0</xsl:when>
-        <xsl:when test="$version-root/memo">0</xsl:when>
+        <xsl:when test="$document-type-level > $numbering-maxlevel">
+            <xsl:value-of select="$numbering-maxlevel"/>
+        </xsl:when>
         <xsl:otherwise>
-            <xsl:message>PTX:BUG: a document type needs a default numbering level defined</xsl:message>
+            <xsl:value-of select="$document-type-level"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
 
 <!-- Resolve one family's numbering level: the publisher file's  -->
 <!-- entry, else a legacy analog (a string parameter, or in some -->
-<!-- cases a "docinfo" attribute), else the shared default; the  -->
-<!-- value must be numeric, non-negative, and no more than       -->
-<!-- $numbering-maxlevel.                                        -->
+<!-- cases a "docinfo" attribute), else the shared default.  An  -->
+<!-- authored value must be numeric, non-negative, and no more   -->
+<!-- than $numbering-maxlevel; the default conforms by           -->
+<!-- construction, so only an authored value can provoke a       -->
+<!-- message.                                                    -->
 <xsl:template name="numbering-level">
     <xsl:param name="family"/>
     <xsl:param name="entered"/>
@@ -1571,7 +1586,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <!-- NaN does not equal *anything*, so tests if a number -->
                     <xsl:when test="not(number($entered) = number($entered)) or ($entered &lt; 0)">
-                        <xsl:message>PTX:FALLBACK:   numbering level for <xsl:value-of select="$family"/> given in the publisher file ("<xsl:value-of select="$entered"/>") is not a number or is negative.  The default value will be used instead</xsl:message>
+                        <xsl:message>PTX:FALLBACK:   numbering level for <xsl:value-of select="$family"/> given in the publisher file ("<xsl:value-of select="$entered"/>") is not a number or is negative.  The default value ("<xsl:value-of select="$default-numbering-level"/>") will be used instead</xsl:message>
                         <xsl:value-of select="$default-numbering-level"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -1583,16 +1598,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$legacy != ''">
                 <xsl:value-of select="$legacy"/>
             </xsl:when>
-            <!-- use the default -->
+            <!-- use the conforming default, no message possible -->
             <xsl:otherwise>
                 <xsl:value-of select="$default-numbering-level"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- check the candidate against the upper bound, $numbering-maxlevel -->
+    <!-- an authored candidate may exceed the upper bound, $numbering-maxlevel -->
     <xsl:choose>
         <xsl:when test="$candidate > $numbering-maxlevel">
-            <xsl:message>PTX:FALLBACK:   numbering level set for <xsl:value-of select="$family"/> ("<xsl:value-of select="$candidate"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value will be used instead</xsl:message>
+            <xsl:message>PTX:FALLBACK:   numbering level set for <xsl:value-of select="$family"/> ("<xsl:value-of select="$candidate"/>") is greater than the maximum possible levels ("<xsl:value-of select="$numbering-maxlevel"/>") configured.  The default value ("<xsl:value-of select="$default-numbering-level"/>") will be used instead</xsl:message>
             <xsl:value-of select="$default-numbering-level"/>
         </xsl:when>
         <xsl:otherwise>
