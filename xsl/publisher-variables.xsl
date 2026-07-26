@@ -2045,6 +2045,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 <xsl:variable name="b-has-calculator" select="not($html-calculator = 'none')" />
 
+<!-- Third-party annotation of the HTML output.  Default is "none".  -->
+<!-- Only "hypothesis" (Hypothes.is) is supported at present.        -->
+<xsl:variable name="html-annotation">
+    <xsl:apply-templates select="$publisher-attribute-options/html/annotation/pi:pub-attribute[@name='platform']" mode="set-pubfile-variable"/>
+</xsl:variable>
+<xsl:variable name="b-activate-hypothesis" select="$html-annotation = 'hypothesis'" />
+
 <!-- Scratch ActiveCode Window -->
 <!-- Pop-up a window for testing program code.  So "calculator-like" but we      -->
 <!-- reserve the word "calculator" for the hand-held type (even if more modern). -->
@@ -3718,6 +3725,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <calculator>
             <pi:pub-attribute name="model" default="none" options="geogebra-classic geogebra-graphing geogebra-geometry geogebra-3d" legacy-stringparam="html.calculator"/>
         </calculator>
+        <annotation>
+            <pi:pub-attribute name="platform" default="none" options="hypothesis"/>
+        </annotation>
         <css>
             <pi:pub-attribute name="palette" freeform="yes"/>
         </css>
