@@ -47,6 +47,14 @@
             <p>The top of page banner normally features the title, subtitle, and author. If the subtitle or author list are long, or not particularly relevant for a given work, the publisher may wish to not render them at the top of each page. Of course, this information will still always be available at least once in places equivalent to a title page in the <q>front</q> of your document.  See <xref ref="online-banner"/> for details on specifying what to display.</p>
         </subsection>
 
+        <subsection xml:id="online-html-annotation">
+            <title>Annotation</title>
+            <idx><h>Hypothes.is</h></idx>
+            <idx><h>annotation</h></idx>
+
+            <p>A publisher may enable a third-party web-annotation service, which lets readers of the <init>HTML</init> output highlight passages and attach notes.  This is a publisher decision, so it is configured in the publication file rather than in the source.  At present the only supported service is <url href="https://web.hypothes.is/" visual="hypothes.is"/>, enabled by setting the <attr>platform</attr> attribute to <c>hypothesis</c>.  See <xref ref="online-annotation"/> for the exact publication-file entry.</p>
+        </subsection>
+
         <subsection xml:id="online-embedded-calculator">
             <title>Embedded Calculator</title>
             <idx><h>calculator</h><h>embedded in <init>HTML</init></h></idx>
